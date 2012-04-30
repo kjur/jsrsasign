@@ -1,0 +1,128 @@
+<html>
+<head>
+<title>jsrsasign - RSA Signing and Verification in JavaScript</title>
+</head>
+<body>
+<h1>jsrsasign - RSA Signing and Verification in JavaScript</h1>
+
+<div align="right">Kenji Urushima<br/>Last Update: Apr 30, 2012</div>
+<p>
+The 'jsrsasign'(RSA-Sign JavaScript Library) is a open source free pure JavaScript implementation of 
+<a href="http://www.rsa.com/rsalabs/node.asp?id=2125" target="_blank">PKCS#1 v2.1 RSASSA-PKCS1-v1_5</a> RSA signing and validation algorithm.
+</p>
+
+<h3>NEWS</h3>
+Release 1.2 is now available on Apr 30, 2012 for fixing critical zero padding bug and supporting some other hash
+functions.
+
+<h3>DEMO</h3>
+<ul>
+<li><a href="sample-rsasign.html">Sample Application for RSA signing with JavaScript</a>
+<br clear="all"/>
+<img src="sample-rsasign.png" width="480px" style="border: 2px #dddddd solid;"/>
+<br clear="all"/>
+</li>
+</ul>
+
+<h3>SOURCE CODES</h3>
+<p>
+The 'rsa-sign' library contains following source codes. 
+<ul>
+<li><b><a href="rsa-sign.js">rsa-sign.js</a></b> - RSAKey class extension for RSA signing and verification.</li>
+<li><b><a href="x509.js">x509.js</a></b> - X509 class to read subject public key from a PEM formatted X.509 certificate.</li>
+<li><b><a href="rsa-pem.js">rsa-pem.js</a></b> - RSAKey class extension to read PKCS#1 RSA private key PEM file</li>
+<li><b><a href="asn1hex.js">asn1hex.js</a></b> - simple ASN.1 parser to read hexadecimal encoded ASN.1 DER</li>
+</ul>
+</p>
+
+<h3>LICENSE</h3>
+The 'jsrsasign'(RSA-Sign JavaScript Library) is licensed under the terms of the MIT license
+ reproduced below.
+<ul>
+<li><a href="LICENSE.txt">LICENSE.txt - RSA-Sign JavaScript Library LICENSE</a></li>
+</ul>
+
+<h3>How to sign</h3>
+<pre><blockquote style="background:lightgray">
+var rsa = new RSAKey();
+rsa.readPrivateKeyFromPEMString(_PEM_PRIVATE_KEY_STRING_);
+var hSig = rsa.signString("aaa", "sha1"); // sign a string "aaa" with key
+</blockquote></pre>
+
+<h3>How to verify signature</h3>
+<pre><blockquote style="background:lightgray">
+vr x509 = new X509();
+x509.readCertPEM(_PEM_X509CERT_STRING_);
+var result = x509.subjectPublicKeyRSA.verifyString("aaa", _HEX_SIGNATURE_);
+</blockquote></pre>
+
+<h3>How to add supported signature algorithms</h3>
+The script "rsa-sign.js" currently supports 
+SHA1withRSA,
+SHA256withRSA,
+SHA512withRSA,
+MD5withRSA and 
+RIPEMD160withRSA
+signature algorithms. However you can extend other signature algorithms
+such like MD2withRSA or SHA384withRSA by just specifying two variables in it.
+<pre><blockquote style="background:lightgray">
+_RSASIGN_DIHEAD['md2'] = "30..."; // Hexadecimal DigestInfo prefix for MD5
+_RSASIGN_HASHHEXFUNC['md2'] = md2hex; // function which returns value in hex.
+</blockquote></pre>
+
+<h3>Required Third Party Source Codes</h3>
+<p>
+<ul>
+<li><a href="http://www-cs-students.stanford.edu/~tjw/jsbn/" target="_blank">Tom Wu's jsbn library - BigInteger and RSA</a>
+<ul>
+<li>base64.js - String encoder for Base64 and Hex</li>
+<li>jsbn.js - basic BigInteger class</li>
+<li>jsbn2.js - BigInteger class extension</li>
+<li>prng4.js - Random number generator</li>
+<li>rng.js - Random number generator</li>
+<li>rsa.js - RSAKey class for RSA public key encryption.</li>
+<li>rsa2.js - RSA class extension for RSA private key decryption.</li>
+</ul>
+</li>
+<li>
+<a href="http://pajhome.org.uk/crypt/md5/" target="_blank">Paul Johnston's JavaScript MD5</a>
+<ul>
+<li>You can download MD5, SHA1, SHA256, SHA512 and RIPEMD-160 implementation of JavaScript.</a>
+</ul>
+<i>NOTE: As for hash algorithm, you can use any other hash implementations. 
+The requirement is to provide a function which returns hexadecimal
+string as the result.</i>
+</li>
+</ul>
+</p>
+
+<h3>Release</h3>
+<ul>
+<li>Release 1.2: Apr 30, 2012 - Critical zero padding bug fix and some other hash support</li>
+<li>Release 1.1: Sep 25, 2010 - Web contents update</li>
+<li>Release 1.0: Jun 03, 2010 - Initial release</li>
+</ul>
+<a href="ChangeLog.txt">See 'ChangeLog.txt' in detail.</a>
+
+<p></p>
+<center>
+Copyright &copy; 2010-2012 Kenji Urushima. All rights reserved.
+</center>
+
+<div align="right">
+<a href="http://blog.livedoor.jp/k_urushima/" target="_blank" alt="kjur's blog">
+<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_livedoor_blog.gif" border="0" width="20"/>
+</a>
+<a href="http://www9.atwiki.jp/kurushima/" target="_blank" alt="kjur's wiki">
+<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_atwiki.gif" border="0" width="20"/>
+</a>
+<a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
+<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
+</a>
+<a href="http://x5.choumusubi.com/bin/gg?069823300">
+<img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
+</a>
+</div>
+
+</body>
+</html>
