@@ -1,5 +1,5 @@
 
- The 'RSA-Sign JavaScript Library' (jsrsasig) THRID PARTY LICENSE:
+ The 'RSA-Sign JavaScript Library' (jsrsasig) THIRD PARTY LICENSE:
 
 							Apr 30, 2012
 
