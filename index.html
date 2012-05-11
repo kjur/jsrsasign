@@ -35,10 +35,16 @@
 <!-- now editing -->
 <h3>NEWS</h3>
 <dl>
+<dt><b>2012-May-11</b>: 
+<dd>Release 1.3 is now available.
+<ul>
+<li>enhanced X509 class support for getting basic certificate fields.</li>
+<li>enhanced ASN1HEX class to refer decendant ASN.1 data</li>
+</ul>
 <dt><b>2012-May-03</b>: 
 <dd>Release 1.2.1 is released. Minified scripts are added.
 <dt><b>2012-Apr-30</b>:
-<dd>Release 1.2 is now available for fixing critical zero padding bug and supporting some other hash functions.
+<dd>Release 1.2 is available for fixing critical zero padding bug and supporting some other hash functions.
 </dl>
 
 <h3>DEMO</h3>
@@ -52,10 +58,16 @@
 
 <h3>DOWNLOAD</h3>
 <ul>
+<li><a href="jsrsasign-1.3.tgz">Release 1.3</a>: Mar 11, 2012 - X509 and ASN1HEX class enhancement</li>
 <li><a href="jsrsasign-1.2.1.tgz">Release 1.2.1</a>: Mar 3, 2012 - minified scripts (*.min.js) added</li>
 <li><a href="jsrsasign-1.2.tgz">Release 1.2</a>: Apr 30, 2012 - Critical zero padding bug fix and some other hash support</li>
 <li><a href="jsrsasign-1.1.tgz">Release 1.1</a>: Sep 25, 2010 - Web contents update</li>
-<li>Release 1.0: Jun 03, 2010 - Initial release</li>
+<li>Release 1.0: Jun 03, 2010 - Initial release at
+<a href="http://www9.atwiki.jp/kurushima/pub/jsrsa/" target="_blank">old site
+(www9.atwiki.jp/kurushima/pub/jsrsa/)
+</a>.
+</li>
+
 </ul>
 <a href="http://github.com/kjur/jsrsasign/blob/master/ChangeLog.txt">See 'ChangeLog.txt' in detail.</a>
 
@@ -66,14 +78,14 @@ The 'jsrsasign' library contains following source codes.
 <li><b><a href="rsasign-1.2.js">rsa-sign.js</a></b> - RSAKey class extension for RSA signing and verification.
 <a href="rsasign-1.2.min.js">(mini)</a>
 </li>
-<li><b><a href="x509-1.0.js">x509.js</a></b> - X509 class to read subject public key from a PEM formatted X.509 certificate.
-<a href="x509-1.0.min.js">(mini)</a>
+<li><b><a href="x509-1.1.js">x509.js</a></b> - X509 class to read subject public key from a PEM formatted X.509 certificate.
+<a href="x509-1.1.min.js">(mini)</a>
 </li>
-<li><b><a href="rsapem-1.0.js">rsa-pem.js</a></b> - RSAKey class extension to read PKCS#1 RSA private key PEM file
-<a href="rsapem-1.0.min.js">(mini)</a>
+<li><b><a href="rsapem-1.1.js">rsa-pem.js</a></b> - RSAKey class extension to read PKCS#1 RSA private key PEM file
+<a href="rsapem-1.1.min.js">(mini)</a>
 </li>
-<li><b><a href="asn1hex-1.0.js">asn1hex.js</a></b> - simple ASN.1 parser to read hexadecimal encoded ASN.1 DER
-<a href="asn1hex-1.0.min.js">(mini)</a>
+<li><b><a href="asn1hex-1.1.js">asn1hex.js</a></b> - simple ASN.1 parser to read hexadecimal encoded ASN.1 DER
+<a href="asn1hex-1.1.min.js">(mini)</a>
 </li>
 </ul>
 As for github repository, see <a href="https://github.com/kjur/jsrsasign">https://github.com/kjur/jsrsasign</a>.
@@ -126,8 +138,6 @@ _RSASIGN_HASHHEXFUNC['md2'] = md2hex; // function which returns value in hex.
 <li>base64.js - String encoder for Base64 and Hex</li>
 <li>jsbn.js - basic BigInteger class</li>
 <li>jsbn2.js - BigInteger class extension</li>
-<li>prng4.js - Random number generator</li>
-<li>rng.js - Random number generator</li>
 <li>rsa.js - RSAKey class for RSA public key encryption.</li>
 <li>rsa2.js - RSA class extension for RSA private key decryption.</li>
 </ul>
