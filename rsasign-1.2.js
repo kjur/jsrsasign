@@ -4,12 +4,12 @@
 // rsa-sign.js - adding signing functions to RSAKey class.
 //
 //
-// version: 1.2 (30 Apr 2012)
+// version: 1.2.1 (08 May 2012)
 //
 // Copyright (c) 2010-2012 Kenji Urushima (kenji.urushima@gmail.com)
 //
 // This software is licensed under the terms of the MIT License.
-// http://www.opensource.org/licenses/mit-license.php
+// http://kjur.github.com/jsrsasign/license/
 //
 // The above copyright and license notice shall be 
 // included in all copies or substantial portions of the Software.
@@ -29,7 +29,12 @@
 // 2048 /  512
 // 4096 / 1024
 
-// As for _RSASGIN_DIHEAD values for each hash algorithm, see PKCS#1 v2.1 spec (p38).
+/**
+ * @property {Dictionary} _RSASIGN_DIHEAD
+ * @description Array of head part of hexadecimal DigestInfo value for hash algorithms.
+ * You can add any DigestInfo hash algorith for signing.
+ * See PKCS#1 v2.1 spec (p38).
+ */
 var _RSASIGN_DIHEAD = [];
 _RSASIGN_DIHEAD['sha1'] =      "3021300906052b0e03021a05000414";
 _RSASIGN_DIHEAD['sha256'] =    "3031300d060960864801650304020105000420";
@@ -38,6 +43,12 @@ _RSASIGN_DIHEAD['sha512'] =    "3051300d060960864801650304020305000440";
 _RSASIGN_DIHEAD['md2'] =       "3020300c06082a864886f70d020205000410";
 _RSASIGN_DIHEAD['md5'] =       "3020300c06082a864886f70d020505000410";
 _RSASIGN_DIHEAD['ripemd160'] = "3021300906052b2403020105000414";
+
+/**
+ * @property {Dictionary} _RSASIGN_HASHHEXFUNC
+ * @description Array of functions which calculate hash and returns it as hexadecimal.
+ * You can add any hash algorithm implementations.
+ */
 var _RSASIGN_HASHHEXFUNC = [];
 _RSASIGN_HASHHEXFUNC['sha1'] =      function(s){return hex_sha1(s);};  // http://pajhome.org.uk/crypt/md5/md5.html
 _RSASIGN_HASHHEXFUNC['sha256'] =    function(s){return hex_sha256(s);} // http://pajhome.org.uk/crypt/md5/md5.html
@@ -80,6 +91,15 @@ function _zeroPaddingOfSignature(hex, bitLength) {
   return s + hex;
 }
 
+/**
+ * sign for a message string with RSA private key.<br/>
+ * @name signString
+ * @memberOf RSAKey#
+ * @function
+ * @param {String} s message string to be signed.
+ * @param {String} hashAlg hash algorithm name for signing.<br/>
+ * @return returns hexadecimal string of signature value.
+ */
 function _rsasign_signString(s, hashAlg) {
   //alert("this.n.bitLength() = " + this.n.bitLength());
   var hPM = _rsasign_getHexPaddedDigestInfoForString(s, this.n.bitLength(), hashAlg);
@@ -145,22 +165,16 @@ function _rsasign_verifyHexSignatureForMessage(hSig, sMsg) {
   return result;
 }
 
-//
-// METHOD: verifyString(sMsg, hSig)
-//
-//   Verifies a message sMsg of a signature hSig with a public key of
-//   this object and 
-//
-// ARGS:
-//   sMsg - string message to verify signature
-//   hSig - hexadecimal string of signature value.
-//          non-hexadecimal charactors including new lines
-//          will be ignored.
-//
-// RETURN:
-//   1 - valid
-//   0 - invalid
-//   
+/**
+ * verifies a sigature for a message string with RSA public key.<br/>
+ * @name verifyString
+ * @memberOf RSAKey#
+ * @function
+ * @param {String} sMsg message string to be verified.
+ * @param {String} hSig hexadecimal string of siganture.<br/>
+ *                 non-hexadecimal charactors including new lines will be ignored.
+ * @return returns 1 if valid, otherwise 0
+ */
 function _rsasign_verifyString(sMsg, hSig) {
   hSig = hSig.replace(_RE_HEXDECONLY, '');
   if (hSig.length != this.n.bitLength() / 4) return 0;
@@ -190,3 +204,8 @@ RSAKey.prototype.verifyHexSignatureForMessage = _rsasign_verifyHexSignatureForMe
 RSAKey.prototype.verify = _rsasign_verifyString;
 RSAKey.prototype.verifyHexSignatureForByteArrayMessage = _rsasign_verifyHexSignatureForMessage;
 
+/**
+ * @name RSAKey
+ * @class
+ * @description Tom Wu's RSA Key class and extension
+ */

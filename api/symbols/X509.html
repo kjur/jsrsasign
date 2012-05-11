@@ -1,0 +1,774 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="generator" content="JsDoc Toolkit" />
+		
+		<title>jsrsasign 1.2 JavaScript API Reference - X509</title>
+
+		<style type="text/css">
+			/* default.css */
+body
+{
+	font: 12px "Lucida Grande", Tahoma, Arial, Helvetica, sans-serif;
+	width: 800px;
+}
+
+.header
+{
+	clear: both;
+	background-color: #ccc;
+	padding: 8px;
+}
+
+h1
+{
+	font-size: 150%;
+	font-weight: bold;
+	padding: 0;
+	margin: 1em 0 0 .3em;
+}
+
+hr
+{
+	border: none 0;
+	border-top: 1px solid #7F8FB1;
+	height: 1px;
+}
+
+pre.code
+{
+	display: block;
+	padding: 8px;
+	border: 1px dashed #ccc;
+}
+
+#index
+{
+	margin-top: 24px;
+	float: left;
+	width: 160px;
+	position: absolute;
+	left: 8px;
+	background-color: #F3F3F3;
+	padding: 8px;
+}
+
+#content
+{
+	margin-left: 190px;
+	width: 600px;
+}
+
+.classList
+{
+	list-style-type: none;
+	padding: 0;
+	margin: 0 0 0 8px;
+	font-family: arial, sans-serif;
+	font-size: 1em;
+	overflow: auto;
+}
+
+.classList li
+{
+	padding: 0;
+	margin: 0 0 8px 0;
+}
+
+.summaryTable { width: 100%; }
+
+h1.classTitle
+{
+	font-size:170%;
+	line-height:130%;
+}
+
+h2 { font-size: 110%; }
+caption, div.sectionTitle
+{
+	background-color: #7F8FB1;
+	color: #fff;
+	font-size:130%;
+	text-align: left;
+	padding: 2px 6px 2px 6px;
+	border: 1px #7F8FB1 solid;
+}
+
+div.sectionTitle { margin-bottom: 8px; }
+.summaryTable thead { display: none; }
+
+.summaryTable td
+{
+	vertical-align: top;
+	padding: 4px;
+	border-bottom: 1px #7F8FB1 solid;
+	border-right: 1px #7F8FB1 solid;
+}
+
+/*col#summaryAttributes {}*/
+.summaryTable td.attributes
+{
+	border-left: 1px #7F8FB1 solid;
+	width: 140px;
+	text-align: right;
+}
+
+td.attributes, .fixedFont
+{
+	line-height: 15px;
+	color: #002EBE;
+	font-family: "Courier New",Courier,monospace;
+	font-size: 13px;
+}
+
+.summaryTable td.nameDescription
+{
+	text-align: left;
+	font-size: 13px;
+	line-height: 15px;
+}
+
+.summaryTable td.nameDescription, .description
+{
+	line-height: 15px;
+	padding: 4px;
+	padding-left: 4px;
+}
+
+.summaryTable { margin-bottom: 8px; }
+
+ul.inheritsList
+{
+	list-style: square;
+	margin-left: 20px;
+	padding-left: 0;
+}
+
+.detailList {
+	margin-left: 20px; 
+	line-height: 15px;
+}
+.detailList dt { margin-left: 20px; }
+
+.detailList .heading
+{
+	font-weight: bold;
+	padding-bottom: 6px;
+	margin-left: 0;
+}
+
+.light, td.attributes, .light a:link, .light a:visited
+{
+	color: #777;
+	font-style: italic;
+}
+
+.fineprint
+{
+	text-align: right;
+	font-size: 10px;
+}
+		</style>
+	</head>
+
+	<body>
+<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<div id="header" style="background: #7F8FB1; color: white; margin: -10px">
+&nbsp; <b><a href="http://kjur.github.com/jsrsasign/" style="color: white">jsrsasign</a></b> 1.2 JavaScript API Reference
+</div>
+
+		<!-- end static/header.html -->
+
+<!-- ============================== classes index ============================ -->
+		<div id="index">
+			<!-- begin publish.classesIndex -->
+			<div align="center"><a href="../index.html">Class Index</a>
+| <a href="../files.html">File Index</a></div>
+<hr />
+<h2>Classes</h2>
+<ul class="classList">
+	
+	<li><i><a href="../symbols/global__.html">global__</a></i></li>
+	
+	<li><a href="../symbols/ASN1HEX.html">ASN1HEX</a></li>
+	
+	<li><a href="../symbols/RSAKey.html">RSAKey</a></li>
+	
+	<li><a href="../symbols/X509.html">X509</a></li>
+	
+</ul>
+<hr />
+			<!-- end publish.classesIndex -->
+		</div>
+		
+		<div id="content">
+<!-- ============================== class title ============================ -->
+			<h1 class="classTitle">
+				
+				Class X509
+			</h1>
+
+<!-- ============================== class summary ========================== -->			
+			<p class="description">
+				<br />Version
+					1.0.1 (08 May 2012).<br />
+				
+				
+			
+				X.509 certificate class
+				
+				
+					<br /><i>Defined in: </i> <a href="../symbols/src/x509-1.1.js.html">x509-1.1.js</a>.
+				
+			</p>
+
+<!-- ============================== constructor summary ==================== -->			
+			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class X509.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/X509.html#constructor">X509</a></b>()
+							</div>
+							<div class="description">X.509 certificate class.</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+
+<!-- ============================== properties summary ===================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class X509.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/X509.html#hex">hex</a></b>
+								</div>
+								<div class="description">hexacedimal string for X.509 certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/X509.html#subjectPublicKeyRSA">subjectPublicKeyRSA</a></b>
+								</div>
+								<div class="description">Tom Wu's RSAKey object</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/X509.html#subjectPublicKeyRSA_hE">subjectPublicKeyRSA_hE</a></b>
+								</div>
+								<div class="description">hexadecimal string for public exponent of RSA public key</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/X509.html#subjectPublicKeyRSA_hN">subjectPublicKeyRSA_hN</a></b>
+								</div>
+								<div class="description">hexadecimal string for modulus of RSA public key</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
+
+<!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class X509.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getIssuerHex">getIssuerHex</a></b>()
+								</div>
+								<div class="description">get hexadecimal string of issuer field of certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getIssuerString">getIssuerString</a></b>()
+								</div>
+								<div class="description">get string of issuer field of certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getNotAfter">getNotAfter</a></b>()
+								</div>
+								<div class="description">get notAfter field string of certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getNotBefore">getNotBefore</a></b>()
+								</div>
+								<div class="description">get notBefore field string of certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getSerialNumberHex">getSerialNumberHex</a></b>()
+								</div>
+								<div class="description">get hexadecimal string of serialNumber field of certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getSubjectHex">getSubjectHex</a></b>()
+								</div>
+								<div class="description">get hexadecimal string of subject field of certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getSubjectString">getSubjectString</a></b>()
+								</div>
+								<div class="description">get string of subject field of certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#readCertPEM">readCertPEM</a></b>(sCertPEM)
+								</div>
+								<div class="description">read PEM formatted X.509 certificate from string.</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
+<!-- ============================== events summary ======================== -->
+			
+
+<!-- ============================== constructor details ==================== -->		
+			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>X509</b>()
+				</div>
+				
+				<div class="description">
+					X.509 certificate class.<br/>
+					<br /><i>Author: </i>Kenji Urushima.
+				</div>
+				
+				
+				
+				
+					
+					
+					
+					
+					
+					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="http://kjur.github.com/jsrsasigns/">'jwrsasign'(RSA Sign JavaScript Library) home page http://kjur.github.com/jsrsasign/</a></dd>
+						
+						</dl>
+					
+
+			</div>
+			
+
+<!-- ============================== field details ========================== -->		
+			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="hex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>hex</b>
+					
+					</div>
+					<div class="description">
+						hexacedimal string for X.509 certificate.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="subjectPublicKeyRSA"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
+					<b>subjectPublicKeyRSA</b>
+					
+					</div>
+					<div class="description">
+						Tom Wu's RSAKey object
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="subjectPublicKeyRSA_hE"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>subjectPublicKeyRSA_hE</b>
+					
+					</div>
+					<div class="description">
+						hexadecimal string for public exponent of RSA public key
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="subjectPublicKeyRSA_hN"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>subjectPublicKeyRSA_hN</b>
+					
+					</div>
+					<div class="description">
+						hexadecimal string for modulus of RSA public key
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
+			
+
+<!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name="getIssuerHex"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getIssuerHex</b>()
+					
+					</div>
+					<div class="description">
+						get hexadecimal string of issuer field of certificate.<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getIssuerString"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getIssuerString</b>()
+					
+					</div>
+					<div class="description">
+						get string of issuer field of certificate.<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getNotAfter"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getNotAfter</b>()
+					
+					</div>
+					<div class="description">
+						get notAfter field string of certificate.<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getNotBefore"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getNotBefore</b>()
+					
+					</div>
+					<div class="description">
+						get notBefore field string of certificate.<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getSerialNumberHex"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getSerialNumberHex</b>()
+					
+					</div>
+					<div class="description">
+						get hexadecimal string of serialNumber field of certificate.<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getSubjectHex"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getSubjectHex</b>()
+					
+					</div>
+					<div class="description">
+						get hexadecimal string of subject field of certificate.<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getSubjectString"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getSubjectString</b>()
+					
+					</div>
+					<div class="description">
+						get string of subject field of certificate.<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="readCertPEM"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>readCertPEM</b>(sCertPEM)
+					
+					</div>
+					<div class="description">
+						read PEM formatted X.509 certificate from string.<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sCertPEM</b>
+									
+								</dt>
+								<dd>string for PEM formatted X.509 certificate</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					
+				
+			
+			
+<!-- ============================== event details ========================= -->		
+			
+			
+			<hr />
+		</div>
+
+		
+<!-- ============================== footer ================================= -->
+		<div class="fineprint" style="clear:both">
+                        &copy; 2012 Kenji Urushima, All rights reserved<br/>
+			
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 11 2012 21:04:07 GMT+0900 (JST)
+		</div>
+	</body>
+</html>
