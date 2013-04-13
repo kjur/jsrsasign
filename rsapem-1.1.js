@@ -4,9 +4,9 @@
 // rsa-pem.js - adding function for reading/writing PKCS#1 PEM private key
 //              to RSAKey class.
 //
-// version: 1.1 (2012-May-10)
+// version: 1.1.1 (2013-Apr-12)
 //
-// Copyright (c) 2010-2012 Kenji Urushima (kenji.urushima@gmail.com)
+// Copyright (c) 2010-2013 Kenji Urushima (kenji.urushima@gmail.com)
 //
 // This software is licensed under the terms of the MIT License.
 // http://kjur.github.com/jsrsasign/license/
@@ -25,6 +25,13 @@
 //   new lines from PEM formatted RSA private key string.
 //
 
+/**
+ * @fileOverview
+ * @name rsapem-1.1.js
+ * @author Kenji Urushima kenji.urushima@gmail.com
+ * @version 1.1
+ * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
+ */
 function _rsapem_pemToBase64(sPEMPrivateKey) {
   var s = sPEMPrivateKey;
   s = s.replace("-----BEGIN RSA PRIVATE KEY-----", "");
@@ -65,6 +72,19 @@ function _rsapem_getHexValueArrayOfChildrenFromHex(hPrivateKey) {
 }
 
 /**
+ * read RSA private key from a ASN.1 hexadecimal string
+ * @name readPrivateKeyFromASN1HexString
+ * @memberOf RSAKey#
+ * @function
+ * @param {String} keyHex ASN.1 hexadecimal string of PKCS#1 private key.
+ * @since 1.1.1
+ */
+function _rsapem_readPrivateKeyFromASN1HexString(keyHex) {
+  var a = _rsapem_getHexValueArrayOfChildrenFromHex(keyHex);
+  this.setPrivateEx(a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8]);
+}
+
+/**
  * read PKCS#1 private key from a string
  * @name readPrivateKeyFromPEMString
  * @memberOf RSAKey#
@@ -79,3 +99,4 @@ function _rsapem_readPrivateKeyFromPEMString(keyPEM) {
 }
 
 RSAKey.prototype.readPrivateKeyFromPEMString = _rsapem_readPrivateKeyFromPEMString;
+RSAKey.prototype.readPrivateKeyFromASN1HexString = _rsapem_readPrivateKeyFromASN1HexString;

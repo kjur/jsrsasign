@@ -19,6 +19,14 @@
 //   rsa.js
 //   asn1hex.js
 
+/**
+ * @fileOverview
+ * @name x509-1.1.js
+ * @author Kenji Urushima kenji.urushima@gmail.com
+ * @version 1.1
+ * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
+ */
+
 function _x509_pemToBase64(sCertPEM) {
   var s = sCertPEM;
   s = s.replace("-----BEGIN CERTIFICATE-----", "");
