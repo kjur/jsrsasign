@@ -30,6 +30,14 @@
 // 4096 / 1024
 
 /**
+ * @fileOverview
+ * @name rsasign-1.2.js
+ * @author Kenji Urushima kenji.urushima@gmail.com
+ * @version 1.1
+ * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
+ */
+
+/**
  * @property {Dictionary} _RSASIGN_DIHEAD
  * @description Array of head part of hexadecimal DigestInfo value for hash algorithms.
  * You can add any DigestInfo hash algorith for signing.

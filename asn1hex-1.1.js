@@ -27,6 +27,15 @@
 //   - ASN.1 type octet length MUST be 1. 
 //     (i.e. ASN.1 primitives like SET, SEQUENCE, INTEGER, OCTETSTRING ...)
 //   - 
+
+/**
+ * @fileOverview
+ * @name asn1hex-1.1.js
+ * @author Kenji Urushima kenji.urushima@gmail.com
+ * @version 1.1
+ * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
+ */
+
 /**
  * get byte length for ASN.1 L(length) bytes
  * @name getByteLengthOfL_AtObj
