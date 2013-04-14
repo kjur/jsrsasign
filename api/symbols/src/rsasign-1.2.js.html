@@ -40,7 +40,7 @@
 <span class='line'> 33</span>  * @fileOverview
 <span class='line'> 34</span>  * @name rsasign-1.2.js
 <span class='line'> 35</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 36</span>  * @version 1.1
+<span class='line'> 36</span>  * @version 1.2
 <span class='line'> 37</span>  * @license &lt;a href="http://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 38</span>  */</span><span class="WHIT">
 <span class='line'> 39</span> 
@@ -198,8 +198,8 @@
 <span class='line'>191</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">biDecryptedSig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.doPublic</span><span class="PUNC">(</span><span class="NAME">biSig</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>192</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hDigestInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">biDecryptedSig.toString</span><span class="PUNC">(</span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">replace</span><span class="PUNC">(</span><span class="REGX">/^1f+00/</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>193</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">digestInfoAry</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_rsasign_getAlgNameAndHashFromHexDisgestInfo</span><span class="PUNC">(</span><span class="NAME">hDigestInfo</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>194</span> </span><span class="WHIT">  </span><span class="WHIT">
-<span class='line'>195</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">digestInfoAry.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>194</span> </span><span class="WHIT">  
+<span class='line'>195</span>   </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">digestInfoAry.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>196</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">digestInfoAry</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>197</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">diHashValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">digestInfoAry</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>198</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ff</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_RSASIGN_HASHHEXFUNC</span><span class="PUNC">[</span><span class="NAME">algName</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
@@ -221,7 +221,7 @@
 <span class='line'>214</span> 
 <span class='line'>215</span> </span><span class="COMM">/**
 <span class='line'>216</span>  * @name RSAKey
-<span class='line'>217</span>  * @class
+<span class='line'>217</span>  * @class key of RSA public key algorithm
 <span class='line'>218</span>  * @description Tom Wu's RSA Key class and extension
 <span class='line'>219</span>  */</span><span class="WHIT">
 <span class='line'>220</span> </span></pre></body></html>

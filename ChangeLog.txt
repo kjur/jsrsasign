@@ -1,5 +1,9 @@
 
-ChangeLog for jsrsasig
+ChangeLog for jsrsasign
+
+* Changes between 1.3.1 and 2.0.0 [Apr 14, 2013]
+  - newly added pkcs5pkey.js and PKCS5PKEY class to support 
+    passcode encrypted PKCS#5 private key.
 
 * Changes between 1.3 and 1.3.1 [Apr 14, 2013]
   - rsapem.js updated to 1.1 to 1.1.1

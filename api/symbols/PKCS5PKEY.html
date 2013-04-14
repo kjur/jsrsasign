@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 2.0.0 JavaScript API Reference - X509</title>
+		<title>jsrsasign 2.0.0 JavaScript API Reference - PKCS5PKEY</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -210,26 +210,24 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class X509
+				Class PKCS5PKEY
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
-				<br />Version
-					1.0.1 (08 May 2012).<br />
 				
 				
 			
-				X.509 certificate class
+				class for reading passcode protected PKCS#5 private key.
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/x509-1.1.js.html">x509-1.1.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/pkcs5pkey-1.0.js.html">pkcs5pkey-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class X509.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class PKCS5PKEY.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -242,9 +240,9 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/X509.html#constructor">X509</a></b>()
+								<b><a href="../symbols/PKCS5PKEY.html#constructor">PKCS5PKEY</a></b>()
 							</div>
-							<div class="description">X.509 certificate class.</div>
+							<div class="description">passcode protected PKCS#5 private key reader class.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -255,7 +253,7 @@ ul.inheritsList
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class X509.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class PKCS5PKEY.">
 					<caption>Field Summary</caption>
 					<thead>
 						<tr>
@@ -266,42 +264,13 @@ ul.inheritsList
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								<b><a href="../symbols/X509.html#hex">hex</a></b>
+								PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.version">version</a></b>
 								</div>
-								<div class="description">hexacedimal string for X.509 certificate.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/X509.html#subjectPublicKeyRSA">subjectPublicKeyRSA</a></b>
-								</div>
-								<div class="description">Tom Wu's RSAKey object</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/X509.html#subjectPublicKeyRSA_hE">subjectPublicKeyRSA_hE</a></b>
-								</div>
-								<div class="description">hexadecimal string for public exponent of RSA public key</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/X509.html#subjectPublicKeyRSA_hN">subjectPublicKeyRSA_hN</a></b>
-								</div>
-								<div class="description">hexadecimal string for modulus of RSA public key</div>
+								<div class="description">decrypt private key by shared key
+version string of PKCS5PKEY class</div>
 							</td>
 						</tr>
 					
@@ -316,7 +285,7 @@ ul.inheritsList
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class X509.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class PKCS5PKEY.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -327,74 +296,39 @@ ul.inheritsList
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getIssuerHex">getIssuerHex</a></b>()
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getDecryptedKeyHex">getDecryptedKeyHex</a></b>(sEncryptedPEM, passcode)
 								</div>
-								<div class="description">get hexadecimal string of issuer field of certificate.</div>
+								<div class="description">decrypt PEM formatted protected PKCS#5 private key with passcode</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getIssuerString">getIssuerString</a></b>()
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getDecryptedKeyHexByKeyIV">getDecryptedKeyHexByKeyIV</a></b>(encryptedKeyHex, algName, sharedKeyHex, ivHex)
 								</div>
-								<div class="description">get string of issuer field of certificate.</div>
+								<div class="description">decrypt private key by shared key</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getNotAfter">getNotAfter</a></b>()
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getKeyAndUnusedIvByPasscodeAndIvsalt">getKeyAndUnusedIvByPasscodeAndIvsalt</a></b>(algName, passcode, hexadecimal)
 								</div>
-								<div class="description">get notAfter field string of certificate.</div>
+								<div class="description">the same function as OpenSSL EVP_BytsToKey to generate shared key and IV</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getNotBefore">getNotBefore</a></b>()
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.parsePKCS5PEM">parsePKCS5PEM</a></b>(sEncryptedPEM)
 								</div>
-								<div class="description">get notBefore field string of certificate.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getSerialNumberHex">getSerialNumberHex</a></b>()
-								</div>
-								<div class="description">get hexadecimal string of serialNumber field of certificate.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getSubjectHex">getSubjectHex</a></b>()
-								</div>
-								<div class="description">get hexadecimal string of subject field of certificate.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getSubjectString">getSubjectString</a></b>()
-								</div>
-								<div class="description">get string of subject field of certificate.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#readCertPEM">readCertPEM</a></b>(sCertPEM)
-								</div>
-								<div class="description">read PEM formatted X.509 certificate from string.</div>
+								<div class="description">parse PEM formatted passcode protected PKCS#5 private key
+Resulted hash has following attributes.</div>
 							</td>
 						</tr>
 					
@@ -415,12 +349,20 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>X509</b>()
+						<b>PKCS5PKEY</b>()
 				</div>
 				
 				<div class="description">
-					X.509 certificate class.<br/>
-					<br /><i>Author: </i>Kenji Urushima.
+					passcode protected PKCS#5 private key reader class. 
+Currently supports only RSA private key and
+following symmetric key algorithms to protect private key.
+<ul>
+<li>DES-EDE3-CBC</li>
+<li>AES-256-CBC</li>
+<li>AES-192-CBC</li>
+<li>AES-128-CBC</li>
+</ul>
+					
 				</div>
 				
 				
@@ -432,13 +374,6 @@ ul.inheritsList
 					
 					
 					
-					
-						<dl class="detailList">
-						<dt class="heading">See:</dt>
-						
-							<dd><a href="http://kjur.github.com/jsrsasigns/">'jwrsasign'(RSA Sign JavaScript Library) home page http://kjur.github.com/jsrsasign/</a></dd>
-						
-						</dl>
 					
 
 			</div>
@@ -450,81 +385,16 @@ ul.inheritsList
 					Field Detail
 				</div>
 				
-					<a name="hex"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>hex</b>
-					
-					</div>
-					<div class="description">
-						hexacedimal string for X.509 certificate.
-						
-						
-					</div>
+					<a name=".version"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="subjectPublicKeyRSA"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
-					<b>subjectPublicKeyRSA</b>
+					<span class="light">PKCS5PKEY.</span><b>version</b>
 					
 					</div>
 					<div class="description">
-						Tom Wu's RSAKey object
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="subjectPublicKeyRSA_hE"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>subjectPublicKeyRSA_hE</b>
-					
-					</div>
-					<div class="description">
-						hexadecimal string for public exponent of RSA public key
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="subjectPublicKeyRSA_hN"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>subjectPublicKeyRSA_hN</b>
-					
-					</div>
-					<div class="description">
-						hexadecimal string for modulus of RSA public key
+						decrypt private key by shared key
+version string of PKCS5PKEY class
 						
 						
 					</div>
@@ -546,190 +416,15 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="getIssuerHex"> </a>
-					<div class="fixedFont">
+					<a name=".getDecryptedKeyHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
-					
-					<b>getIssuerHex</b>()
-					
-					</div>
-					<div class="description">
-						get hexadecimal string of issuer field of certificate.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getIssuerString"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getIssuerString</b>()
+					<span class="light">{String}</span>
+					<span class="light">PKCS5PKEY.</span><b>getDecryptedKeyHex</b>(sEncryptedPEM, passcode)
 					
 					</div>
 					<div class="description">
-						get string of issuer field of certificate.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getNotAfter"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getNotAfter</b>()
-					
-					</div>
-					<div class="description">
-						get notAfter field string of certificate.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getNotBefore"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getNotBefore</b>()
-					
-					</div>
-					<div class="description">
-						get notBefore field string of certificate.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getSerialNumberHex"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getSerialNumberHex</b>()
-					
-					</div>
-					<div class="description">
-						get hexadecimal string of serialNumber field of certificate.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getSubjectHex"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getSubjectHex</b>()
-					
-					</div>
-					<div class="description">
-						get hexadecimal string of subject field of certificate.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getSubjectString"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getSubjectString</b>()
-					
-					</div>
-					<div class="description">
-						get string of subject field of certificate.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="readCertPEM"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>readCertPEM</b>(sCertPEM)
-					
-					</div>
-					<div class="description">
-						read PEM formatted X.509 certificate from string.<br/>
+						decrypt PEM formatted protected PKCS#5 private key with passcode
 						
 						
 					</div>
@@ -741,16 +436,195 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>sCertPEM</b>
+									<span class="light fixedFont">{String}</span> <b>sEncryptedPEM</b>
 									
 								</dt>
-								<dd>string for PEM formatted X.509 certificate</dd>
+								<dd>PEM formatted protected passcode protected PKCS#5 private key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>passcode</b>
+									
+								</dt>
+								<dd>passcode to decrypt private key (ex. 'password')</dd>
 							
 							</dl>
 						
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of decrypted RSA priavte key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getDecryptedKeyHexByKeyIV"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">PKCS5PKEY.</span><b>getDecryptedKeyHexByKeyIV</b>(encryptedKeyHex, algName, sharedKeyHex, ivHex)
+					
+					</div>
+					<div class="description">
+						decrypt private key by shared key
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>encryptedKeyHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of encrypted private key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>algName</b>
+									
+								</dt>
+								<dd>name of symmetric key algorithm (ex. 'DES-EBE3-CBC')</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sharedKeyHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of symmetric key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>ivHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of initial vector(IV).</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of decrypted privated key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getKeyAndUnusedIvByPasscodeAndIvsalt"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Hash}</span>
+					<span class="light">PKCS5PKEY.</span><b>getKeyAndUnusedIvByPasscodeAndIvsalt</b>(algName, passcode, hexadecimal)
+					
+					</div>
+					<div class="description">
+						the same function as OpenSSL EVP_BytsToKey to generate shared key and IV
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>algName</b>
+									
+								</dt>
+								<dd>name of symmetric key algorithm (ex. 'DES-EBE3-CBC')</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>passcode</b>
+									
+								</dt>
+								<dd>passcode to decrypt private key (ex. 'password')</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hexadecimal</b>
+									
+								</dt>
+								<dd>string of IV. heading 8 bytes will be used for passcode salt</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Hash}</span> hash of key and unused IV (ex. {keyhex:2fe3..., ivhex:3fad..})</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".parsePKCS5PEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Hash}</span>
+					<span class="light">PKCS5PKEY.</span><b>parsePKCS5PEM</b>(sEncryptedPEM)
+					
+					</div>
+					<div class="description">
+						parse PEM formatted passcode protected PKCS#5 private key
+Resulted hash has following attributes.
+<ul>
+<li>cipher - symmetric key algorithm name (ex. 'DES-EBE3-CBC', 'AES-256-CBC')</li>
+<li>ivsalt - IV used for decrypt. Its heading 8 bytes will be used for passcode salt.</li>
+<li>type - asymmetric key algorithm name of private key described in PEM header.</li>
+<li>data - base64 encoded encrypted private key.</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sEncryptedPEM</b>
+									
+								</dt>
+								<dd>PEM formatted protected passcode protected PKCS#5 private key</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Hash}</span> hash of key information</dd>
+							
+							</dl>
 						
 						
 						

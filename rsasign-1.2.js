@@ -33,7 +33,7 @@
  * @fileOverview
  * @name rsasign-1.2.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.1
+ * @version 1.2
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -214,6 +214,6 @@ RSAKey.prototype.verifyHexSignatureForByteArrayMessage = _rsasign_verifyHexSigna
 
 /**
  * @name RSAKey
- * @class
+ * @class key of RSA public key algorithm
  * @description Tom Wu's RSA Key class and extension
  */
