@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.0 JavaScript API Reference - global__</title>
+		<title>jsrsasign 3.0.0 JavaScript API Reference - KJUR.asn1.x509.GeneralName</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -298,7 +298,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Built-In Namespace global__
+				Class KJUR.asn1.x509.GeneralName
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -306,53 +306,43 @@ ul.inheritsList
 				
 				
 			
+				GeneralName ASN.1 structure class
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.GeneralName.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.x509.GeneralName.html#constructor">KJUR.asn1.x509.GeneralName</a></b>()
+							</div>
+							<div class="description">GeneralName ASN.1 structure class
+<br/>
+As for argument 'params' for constructor, you can specify one of
+following properties:
+<ul>
+<li>rfc822 - rfc822Name[1] (ex.</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
 
 <!-- ============================== properties summary ===================== -->
-			
-				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class global__.">
-					<caption>Field Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_DIHEAD">_RSASIGN_DIHEAD</a></b>
-								</div>
-								<div class="description">Array of head part of hexadecimal DigestInfo value for hash algorithms.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_HASHHEXFUNC">_RSASIGN_HASHHEXFUNC</a></b>
-								</div>
-								<div class="description">Array of functions which calculate hash and returns it as hexadecimal.</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
-				
-				
 			
 
 <!-- ============================== methods summary ======================== -->
@@ -362,66 +352,60 @@ ul.inheritsList
 
 <!-- ============================== constructor details ==================== -->		
 			
-
-<!-- ============================== field details ========================== -->		
-			
+			<div class="details"><a name="constructor"> </a>
 				<div class="sectionTitle">
-					Field Detail
+					Class Detail
 				</div>
 				
-					<a name="_RSASIGN_DIHEAD"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>_RSASIGN_DIHEAD</b>
-					
-					</div>
-					<div class="description">
-						Array of head part of hexadecimal DigestInfo value for hash algorithms.
-You can add any DigestInfo hash algorith for signing.
-See PKCS#1 v2.1 spec (p38).
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
+				<div class="fixedFont">
+						<b>KJUR.asn1.x509.GeneralName</b>()
+				</div>
 				
-					<a name="_RSASIGN_HASHHEXFUNC"> </a>
-					<div class="fixedFont">
+				<div class="description">
+					GeneralName ASN.1 structure class
+<br/>
+As for argument 'params' for constructor, you can specify one of
+following properties:
+<ul>
+<li>rfc822 - rfc822Name[1] (ex. user1@foo.com)</li>
+<li>dns - dNSName[2] (ex. foo.com)</li>
+<li>uri - uniformResourceIdentifier[6] (ex. http://foo.com/)</li>
+</ul>
+NOTE: Currently this only supports 'uniformResourceIdentifier'.
+<h4>EXAMPLE AND ASN.1 SYNTAX</h4>
 					
-					
-					<b>_RSASIGN_HASHHEXFUNC</b>
-					
-					</div>
-					<div class="description">
-						Array of functions which calculate hash and returns it as hexadecimal.
-You can add any hash algorithm implementations.
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					
+				</div>
 				
+				
+				
+				<pre class="code">var gn = new KJUR.asn1.x509.GeneralName({'uri': 'http://aaa.com/'});
+
+GeneralName ::= CHOICE {
+        otherName                       [0]     OtherName,
+        rfc822Name                      [1]     IA5String,
+        dNSName                         [2]     IA5String,
+        x400Address                     [3]     ORAddress,
+        directoryName                   [4]     Name,
+        ediPartyName                    [5]     EDIPartyName,
+        uniformResourceIdentifier       [6]     IA5String,
+        iPAddress                       [7]     OCTET STRING,
+        registeredID                    [8]     OBJECT IDENTIFIER }</pre>
+				
+				
+				
+				
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
+			
+
+<!-- ============================== field details ========================== -->		
 			
 
 <!-- ============================== method details ========================= -->		
@@ -438,7 +422,7 @@ You can add any hash algorithm implementations.
 		<div class="fineprint" style="clear:both">
                         &copy; 2012 Kenji Urushima, All rights reserved<br/>
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:51 GMT+0900 (JST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:52 GMT+0900 (JST)
 		</div>
 	</body>
 </html>

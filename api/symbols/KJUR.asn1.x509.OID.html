@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.0 JavaScript API Reference - global__</title>
+		<title>jsrsasign 3.0.0 JavaScript API Reference - KJUR.asn1.x509.OID</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -298,7 +298,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Built-In Namespace global__
+				Class KJUR.asn1.x509.OID
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -306,19 +306,45 @@ ul.inheritsList
 				
 				
 			
+				static object for OID
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
+			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.OID.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.x509.OID.html#constructor">KJUR.asn1.x509.OID</a></b>()
+							</div>
+							<div class="description">static object for OID
+<dl>
+<dt><b>atype2oidList</b>
+<dd>currently supports 'C', 'O', 'OU', 'ST', 'L' and 'CN' only.</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 			
 
 <!-- ============================== properties summary ===================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class global__.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class KJUR.asn1.x509.OID.">
 					<caption>Field Summary</caption>
 					<thead>
 						<tr>
@@ -332,9 +358,9 @@ ul.inheritsList
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_DIHEAD">_RSASIGN_DIHEAD</a></b>
+								<b><a href="../symbols/KJUR.asn1.x509.OID.html#atype2oidList">atype2oidList</a></b>
 								</div>
-								<div class="description">Array of head part of hexadecimal DigestInfo value for hash algorithms.</div>
+								<div class="description">for short attribyte type name and oid (i.e.</div>
 							</td>
 						</tr>
 					
@@ -342,9 +368,19 @@ ul.inheritsList
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_HASHHEXFUNC">_RSASIGN_HASHHEXFUNC</a></b>
+								<b><a href="../symbols/KJUR.asn1.x509.OID.html#name2oidList">name2oidList</a></b>
 								</div>
-								<div class="description">Array of functions which calculate hash and returns it as hexadecimal.</div>
+								<div class="description">for oid name and oid (i.e.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.x509.OID.html#objCache">objCache</a></b>
+								</div>
+								<div class="description">for caching name and DERObjectIdentifier object</div>
 							</td>
 						</tr>
 					
@@ -357,10 +393,85 @@ ul.inheritsList
 
 <!-- ============================== methods summary ======================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.x509.OID.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.OID.<b><a href="../symbols/KJUR.asn1.x509.OID.html#.atype2obj">atype2obj</a></b>(atype)
+								</div>
+								<div class="description">get DERObjectIdentifier by registered attribyte type name such like 'C' or 'CN'
+</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.OID.<b><a href="../symbols/KJUR.asn1.x509.OID.html#.name2obj">name2obj</a></b>(name)
+								</div>
+								<div class="description">get DERObjectIdentifier by registered OID name
+</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
 <!-- ============================== events summary ======================== -->
 			
 
 <!-- ============================== constructor details ==================== -->		
+			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>KJUR.asn1.x509.OID</b>()
+				</div>
+				
+				<div class="description">
+					static object for OID
+<dl>
+<dt><b>atype2oidList</b>
+<dd>currently supports 'C', 'O', 'OU', 'ST', 'L' and 'CN' only.
+<dt><b>name2oidList</b>
+<dd>currently supports 'SHA1withRSA', 'rsaEncryption' and some extension OIDs
+</dl>
+					
+				</div>
+				
+				
+				
+				<pre class="code"></pre>
+				
+				
+				
+				
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
 			
 
 <!-- ============================== field details ========================== -->		
@@ -369,20 +480,15 @@ ul.inheritsList
 					Field Detail
 				</div>
 				
-					<a name="_RSASIGN_DIHEAD"> </a>
+					<a name="atype2oidList"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>_RSASIGN_DIHEAD</b>
+					<span class="light">{Assoc Array}</span>
+					<b>atype2oidList</b>
 					
 					</div>
 					<div class="description">
-						Array of head part of hexadecimal DigestInfo value for hash algorithms.
-You can add any DigestInfo hash algorith for signing.
-See PKCS#1 v2.1 spec (p38).
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
+						for short attribyte type name and oid (i.e. 'C' and '2.5.4.6')
 						
 						
 					</div>
@@ -396,19 +502,37 @@ See PKCS#1 v2.1 spec (p38).
 
 					<hr />
 				
-					<a name="_RSASIGN_HASHHEXFUNC"> </a>
+					<a name="name2oidList"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>_RSASIGN_HASHHEXFUNC</b>
+					<span class="light">{Assoc Array}</span>
+					<b>name2oidList</b>
 					
 					</div>
 					<div class="description">
-						Array of functions which calculate hash and returns it as hexadecimal.
-You can add any hash algorithm implementations.
+						for oid name and oid (i.e. 'keyUsage' and '2.5.29.15')
 						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="objCache"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Assoc Array}</span>
+					<b>objCache</b>
+					
+					</div>
+					<div class="description">
+						for caching name and DERObjectIdentifier object
 						
 						
 					</div>
@@ -426,6 +550,93 @@ You can add any hash algorithm implementations.
 
 <!-- ============================== method details ========================= -->		
 			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".atype2obj"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.OID.</span><b>atype2obj</b>(atype)
+					
+					</div>
+					<div class="description">
+						get DERObjectIdentifier by registered attribyte type name such like 'C' or 'CN'
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var asn1ObjOID = OID.atype2obj('CN');</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>atype</b>
+									
+								</dt>
+								<dd>short attribute type name such like 'C' or 'CN'</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".name2obj"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.OID.</span><b>name2obj</b>(name)
+					
+					</div>
+					<div class="description">
+						get DERObjectIdentifier by registered OID name
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var asn1ObjOID = OID.name2obj('SHA1withRSA');</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>name</b>
+									
+								</dt>
+								<dd>OID</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					
+				
+			
 			
 <!-- ============================== event details ========================= -->		
 			
@@ -438,7 +649,7 @@ You can add any hash algorithm implementations.
 		<div class="fineprint" style="clear:both">
                         &copy; 2012 Kenji Urushima, All rights reserved<br/>
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:51 GMT+0900 (JST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:52 GMT+0900 (JST)
 		</div>
 	</body>
 </html>

@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.0 JavaScript API Reference - global__</title>
+		<title>jsrsasign 3.0.0 JavaScript API Reference - KJUR.asn1.x509.GeneralNames</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -298,7 +298,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Built-In Namespace global__
+				Class KJUR.asn1.x509.GeneralNames
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -306,45 +306,64 @@ ul.inheritsList
 				
 				
 			
+				GeneralNames ASN.1 structure class
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.GeneralNames.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.x509.GeneralNames.html#constructor">KJUR.asn1.x509.GeneralNames</a></b>()
+							</div>
+							<div class="description">GeneralNames ASN.1 structure class
+<br/>
+<h4>EXAMPLE AND ASN.1 SYNTAX</h4></div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
 
 <!-- ============================== properties summary ===================== -->
 			
+
+<!-- ============================== methods summary ======================== -->
+			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class global__.">
-					<caption>Field Summary</caption>
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.x509.GeneralNames.">
+					<caption>Method Summary</caption>
 					<thead>
 						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
 						</tr>
 					</thead>
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_DIHEAD">_RSASIGN_DIHEAD</a></b>
+								<div class="fixedFont">KJUR.asn1.x509.GeneralNames.<b><a href="../symbols/KJUR.asn1.x509.GeneralNames.html#.setByParamArray">setByParamArray</a></b>(paramsArray)
 								</div>
-								<div class="description">Array of head part of hexadecimal DigestInfo value for hash algorithms.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_HASHHEXFUNC">_RSASIGN_HASHHEXFUNC</a></b>
-								</div>
-								<div class="description">Array of functions which calculate hash and returns it as hexadecimal.</div>
+								<div class="description">set a array of <a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a> parameters
+<br/>
+<h4>EXAMPLES</h4></div>
 							</td>
 						</tr>
 					
@@ -354,77 +373,99 @@ ul.inheritsList
 				
 				
 			
-
-<!-- ============================== methods summary ======================== -->
-			
 <!-- ============================== events summary ======================== -->
 			
 
 <!-- ============================== constructor details ==================== -->		
 			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>KJUR.asn1.x509.GeneralNames</b>()
+				</div>
+				
+				<div class="description">
+					GeneralNames ASN.1 structure class
+<br/>
+<h4>EXAMPLE AND ASN.1 SYNTAX</h4>
+					
+				</div>
+				
+				
+				
+				<pre class="code">var gns = new KJUR.asn1.x509.GeneralNames([{'uri': 'http://aaa.com/'}, {'uri': 'http://bbb.com/'}]); 
+
+GeneralNames ::= SEQUENCE SIZE (1..MAX) OF GeneralName</pre>
+				
+				
+				
+				
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
+			
 
 <!-- ============================== field details ========================== -->		
 			
-				<div class="sectionTitle">
-					Field Detail
-				</div>
-				
-					<a name="_RSASIGN_DIHEAD"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>_RSASIGN_DIHEAD</b>
-					
-					</div>
-					<div class="description">
-						Array of head part of hexadecimal DigestInfo value for hash algorithms.
-You can add any DigestInfo hash algorith for signing.
-See PKCS#1 v2.1 spec (p38).
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="_RSASIGN_HASHHEXFUNC"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>_RSASIGN_HASHHEXFUNC</b>
-					
-					</div>
-					<div class="description">
-						Array of functions which calculate hash and returns it as hexadecimal.
-You can add any hash algorithm implementations.
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					
-				
-			
 
 <!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".setByParamArray"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.GeneralNames.</span><b>setByParamArray</b>(paramsArray)
+					
+					</div>
+					<div class="description">
+						set a array of <a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a> parameters
+<br/>
+<h4>EXAMPLES</h4>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var gns = new KJUR.asn1.x509.GeneralNames();
+gns.setByParamArray([{'uri': 'http://aaa.com/'}, {'uri': 'http://bbb.com/'}]);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>paramsArray</b>
+									
+								</dt>
+								<dd>Array of <a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					
+				
 			
 			
 <!-- ============================== event details ========================= -->		
@@ -438,7 +479,7 @@ You can add any hash algorithm implementations.
 		<div class="fineprint" style="clear:both">
                         &copy; 2012 Kenji Urushima, All rights reserved<br/>
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:51 GMT+0900 (JST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:52 GMT+0900 (JST)
 		</div>
 	</body>
 </html>

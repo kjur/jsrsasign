@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.0 JavaScript API Reference - global__</title>
+		<title>jsrsasign 3.0.0 JavaScript API Reference - KJUR.asn1.DERUTCTime</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -298,53 +298,84 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Built-In Namespace global__
+				Class KJUR.asn1.DERUTCTime
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
+				<br />Extends
+					<a href="../symbols/KJUR.asn1.DERAbstractTime.html">KJUR.asn1.DERAbstractTime</a>.<br />
 				
 			
+				class for ASN.1 DER UTCTime
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1-1.0.js.html">asn1-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
+			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.DERUTCTime.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.DERUTCTime.html#constructor">KJUR.asn1.DERUTCTime</a></b>(params)
+							</div>
+							<div class="description">class for ASN.1 DER UTCTime
+<br/>
+As for argument 'params' for constructor, you can specify one of
+following properties:
+<ul>
+<li>str - specify initial ASN.1 value(V) by a string (ex.</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 			
 
 <!-- ============================== properties summary ===================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class global__.">
-					<caption>Field Summary</caption>
+				
+				
+				<dl class="inheritsList">
+				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
+				</dl>
+				
+			
+
+<!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.DERUTCTime.">
+					<caption>Method Summary</caption>
 					<thead>
 						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
 						</tr>
 					</thead>
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_DIHEAD">_RSASIGN_DIHEAD</a></b>
+								<div class="fixedFont">KJUR.asn1.DERUTCTime.<b><a href="../symbols/KJUR.asn1.DERUTCTime.html#.setByDate">setByDate</a></b>(dateObject)
 								</div>
-								<div class="description">Array of head part of hexadecimal DigestInfo value for hash algorithms.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_HASHHEXFUNC">_RSASIGN_HASHHEXFUNC</a></b>
-								</div>
-								<div class="description">Array of functions which calculate hash and returns it as hexadecimal.</div>
+								<div class="description">set value by a Date object</div>
 							</td>
 						</tr>
 					
@@ -353,78 +384,119 @@ ul.inheritsList
 				
 				
 				
-			
-
-<!-- ============================== methods summary ======================== -->
+				<dl class="inheritsList">
+				
+				</dl>
+				
 			
 <!-- ============================== events summary ======================== -->
 			
 
 <!-- ============================== constructor details ==================== -->		
 			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>KJUR.asn1.DERUTCTime</b>(params)
+				</div>
+				
+				<div class="description">
+					class for ASN.1 DER UTCTime
+<br/>
+As for argument 'params' for constructor, you can specify one of
+following properties:
+<ul>
+<li>str - specify initial ASN.1 value(V) by a string (ex.'130430235959Z')</li>
+<li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
+<li>date - specify Date object.</li>
+</ul>
+NOTE: 'params' can be omitted.
+<h4>EXAMPLES</h4>
+					
+				</div>
+				
+				
+				
+				<pre class="code">var d1 = new KJUR.asn1.DERUTCTime();
+d1.setString('130430125959Z');
+
+var d2 = new KJUR.asn1.DERUTCTime({'str': '130430125959Z'});
+
+var d3 = new KJUR.asn1.DERUTCTime({'date': new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0))});</pre>
+				
+				
+				
+				
+					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Array}</span>  <b>params</b>
+								
+							</dt>
+								<dd>associative array of parameters (ex. {'str': '130430235959Z'})</dd>
+						
+						</dl>
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
+			
 
 <!-- ============================== field details ========================== -->		
 			
-				<div class="sectionTitle">
-					Field Detail
-				</div>
-				
-					<a name="_RSASIGN_DIHEAD"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>_RSASIGN_DIHEAD</b>
-					
-					</div>
-					<div class="description">
-						Array of head part of hexadecimal DigestInfo value for hash algorithms.
-You can add any DigestInfo hash algorith for signing.
-See PKCS#1 v2.1 spec (p38).
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="_RSASIGN_HASHHEXFUNC"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>_RSASIGN_HASHHEXFUNC</b>
-					
-					</div>
-					<div class="description">
-						Array of functions which calculate hash and returns it as hexadecimal.
-You can add any hash algorithm implementations.
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					
-				
-			
 
 <!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".setByDate"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.DERUTCTime.</span><b>setByDate</b>(dateObject)
+					
+					</div>
+					<div class="description">
+						set value by a Date object
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Date}</span> <b>dateObject</b>
+									
+								</dt>
+								<dd>Date object to set ASN.1 value(V)</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					
+				
 			
 			
 <!-- ============================== event details ========================= -->		
@@ -438,7 +510,7 @@ You can add any hash algorithm implementations.
 		<div class="fineprint" style="clear:both">
                         &copy; 2012 Kenji Urushima, All rights reserved<br/>
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:51 GMT+0900 (JST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:52 GMT+0900 (JST)
 		</div>
 	</body>
 </html>

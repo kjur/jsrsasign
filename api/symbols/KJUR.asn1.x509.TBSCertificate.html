@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.0 JavaScript API Reference - X509</title>
+		<title>jsrsasign 3.0.0 JavaScript API Reference - KJUR.asn1.x509.TBSCertificate</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -298,26 +298,26 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class X509
+				Class KJUR.asn1.x509.TBSCertificate
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
-				<br />Version
-					1.0.1 (08 May 2012).<br />
 				
+				<br />Extends
+					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
-				X.509 certificate class
+				ASN.1 TBSCertificate structure class
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/x509-1.1.js.html">x509-1.1.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class X509.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.TBSCertificate.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -330,9 +330,11 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/X509.html#constructor">X509</a></b>()
+								<b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#constructor">KJUR.asn1.x509.TBSCertificate</a></b>(params)
 							</div>
-							<div class="description">X.509 certificate class.</div>
+							<div class="description">ASN.1 TBSCertificate structure class
+<br/>
+<h4>EXAMPLE</h4></div>
 						</td>
 					</tr>
 				</tbody>
@@ -343,60 +345,11 @@ ul.inheritsList
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class X509.">
-					<caption>Field Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/X509.html#hex">hex</a></b>
-								</div>
-								<div class="description">hexacedimal string for X.509 certificate.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/X509.html#subjectPublicKeyRSA">subjectPublicKeyRSA</a></b>
-								</div>
-								<div class="description">Tom Wu's RSAKey object</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/X509.html#subjectPublicKeyRSA_hE">subjectPublicKeyRSA_hE</a></b>
-								</div>
-								<div class="description">hexadecimal string for public exponent of RSA public key</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/X509.html#subjectPublicKeyRSA_hN">subjectPublicKeyRSA_hN</a></b>
-								</div>
-								<div class="description">hexadecimal string for modulus of RSA public key</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
 				
 				
+				<dl class="inheritsList">
+				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
+				</dl>
 				
 			
 
@@ -404,7 +357,7 @@ ul.inheritsList
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class X509.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.x509.TBSCertificate.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -415,74 +368,82 @@ ul.inheritsList
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getIssuerHex">getIssuerHex</a></b>()
+								<div class="fixedFont">KJUR.asn1.x509.TBSCertificate.<b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#.appendExtension">appendExtension</a></b>(extObj)
 								</div>
-								<div class="description">get hexadecimal string of issuer field of certificate.</div>
+								<div class="description">append X.509v3 extension to this object
+</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getIssuerString">getIssuerString</a></b>()
+								<div class="fixedFont">KJUR.asn1.x509.TBSCertificate.<b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#.setIssuerByParam">setIssuerByParam</a></b>(x500NameParam)
 								</div>
-								<div class="description">get string of issuer field of certificate.</div>
+								<div class="description">set issuer name field by parameter
+</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getNotAfter">getNotAfter</a></b>()
+								<div class="fixedFont">KJUR.asn1.x509.TBSCertificate.<b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#.setNotAfterByParam">setNotAfterByParam</a></b>(timeParam)
 								</div>
-								<div class="description">get notAfter field string of certificate.</div>
+								<div class="description">set notAfter field by parameter
+</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getNotBefore">getNotBefore</a></b>()
+								<div class="fixedFont">KJUR.asn1.x509.TBSCertificate.<b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#.setNotBeforeByParam">setNotBeforeByParam</a></b>(timeParam)
 								</div>
-								<div class="description">get notBefore field string of certificate.</div>
+								<div class="description">set notBefore field by parameter
+</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getSerialNumberHex">getSerialNumberHex</a></b>()
+								<div class="fixedFont">KJUR.asn1.x509.TBSCertificate.<b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#.setSerialNumberByParam">setSerialNumberByParam</a></b>(intParam)
 								</div>
-								<div class="description">get hexadecimal string of serialNumber field of certificate.</div>
+								<div class="description">set serial number field by parameter
+</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getSubjectHex">getSubjectHex</a></b>()
+								<div class="fixedFont">KJUR.asn1.x509.TBSCertificate.<b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#.setSignatureAlgByParam">setSignatureAlgByParam</a></b>(algIdParam)
 								</div>
-								<div class="description">get hexadecimal string of subject field of certificate.</div>
+								<div class="description">set signature algorithm field by parameter
+</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getSubjectString">getSubjectString</a></b>()
+								<div class="fixedFont">KJUR.asn1.x509.TBSCertificate.<b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#.setSubjectByParam">setSubjectByParam</a></b>(x500NameParam)
 								</div>
-								<div class="description">get string of subject field of certificate.</div>
+								<div class="description">set subject name field by parameter
+</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#readCertPEM">readCertPEM</a></b>(sCertPEM)
+								<div class="fixedFont">KJUR.asn1.x509.TBSCertificate.<b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#.setSubjectPublicKeyByParam">setSubjectPublicKeyByParam</a></b>(subjPKeyParam)
 								</div>
-								<div class="description">read PEM formatted X.509 certificate from string.</div>
+								<div class="description">set subject public key info field by parameter
+</div>
 							</td>
 						</tr>
 					
@@ -490,6 +451,10 @@ ul.inheritsList
 				</table>
 				
 				
+				
+				<dl class="inheritsList">
+				
+				</dl>
 				
 			
 <!-- ============================== events summary ======================== -->
@@ -503,129 +468,55 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>X509</b>()
+						<b>KJUR.asn1.x509.TBSCertificate</b>(params)
 				</div>
 				
 				<div class="description">
-					X.509 certificate class.<br/>
-					<br /><i>Author: </i>Kenji Urushima.
+					ASN.1 TBSCertificate structure class
+<br/>
+<h4>EXAMPLE</h4>
+					
 				</div>
 				
 				
 				
+				<pre class="code"> var o = new KJUR.asn1.x509.TBSCertificate();
+ o.setSerialNumberByParam({'int': 4});
+ o.setSignatureAlgByParam({'name': 'SHA1withRSA'});
+ o.setIssuerByParam({'str': '/C=US/O=a'});
+ o.setNotBeforeByParam({'str': '130504235959Z'});
+ o.setNotAfterByParam({'str': '140504235959Z'});
+ o.setSubjectByParam({'str': '/C=US/CN=b'});
+ o.setSubjectPublicKeyByParam({'rsakey': rsaKey});
+ o.appendExtension(new KJUR.asn1.x509.BasicConstraints({'cA':true}));
+ o.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));</pre>
+				
+				
+				
 				
 					
-					
-					
-					
-					
-					
-					
 						<dl class="detailList">
-						<dt class="heading">See:</dt>
+						<dt class="heading">Parameters:</dt>
 						
-							<dd><a href="http://kjur.github.com/jsrsasigns/">'jwrsasign'(RSA Sign JavaScript Library) home page http://kjur.github.com/jsrsasign/</a></dd>
+							<dt>
+								<span class="light fixedFont">{Array}</span>  <b>params</b>
+								
+							</dt>
+								<dd>associative array of parameters (ex. {})</dd>
 						
 						</dl>
+					
+					
+					
+					
+					
+					
 					
 
 			</div>
 			
 
 <!-- ============================== field details ========================== -->		
-			
-				<div class="sectionTitle">
-					Field Detail
-				</div>
-				
-					<a name="hex"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>hex</b>
-					
-					</div>
-					<div class="description">
-						hexacedimal string for X.509 certificate.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="subjectPublicKeyRSA"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
-					<b>subjectPublicKeyRSA</b>
-					
-					</div>
-					<div class="description">
-						Tom Wu's RSAKey object
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="subjectPublicKeyRSA_hE"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>subjectPublicKeyRSA_hE</b>
-					
-					</div>
-					<div class="description">
-						hexadecimal string for public exponent of RSA public key
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="subjectPublicKeyRSA_hN"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>subjectPublicKeyRSA_hN</b>
-					
-					</div>
-					<div class="description">
-						hexadecimal string for modulus of RSA public key
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					
-				
 			
 
 <!-- ============================== method details ========================= -->		
@@ -634,193 +525,24 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="getIssuerHex"> </a>
-					<div class="fixedFont">
+					<a name=".appendExtension"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<b>getIssuerHex</b>()
+					<span class="light">KJUR.asn1.x509.TBSCertificate.</span><b>appendExtension</b>(extObj)
 					
 					</div>
 					<div class="description">
-						get hexadecimal string of issuer field of certificate.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
+						append X.509v3 extension to this object
 
-					<hr />
-				
-					<a name="getIssuerString"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getIssuerString</b>()
-					
-					</div>
-					<div class="description">
-						get string of issuer field of certificate.<br/>
 						
 						
 					</div>
 					
 					
 					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getNotAfter"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getNotAfter</b>()
-					
-					</div>
-					<div class="description">
-						get notAfter field string of certificate.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getNotBefore"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getNotBefore</b>()
-					
-					</div>
-					<div class="description">
-						get notBefore field string of certificate.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getSerialNumberHex"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getSerialNumberHex</b>()
-					
-					</div>
-					<div class="description">
-						get hexadecimal string of serialNumber field of certificate.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getSubjectHex"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getSubjectHex</b>()
-					
-					</div>
-					<div class="description">
-						get hexadecimal string of subject field of certificate.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getSubjectString"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getSubjectString</b>()
-					
-					</div>
-					<div class="description">
-						get string of subject field of certificate.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="readCertPEM"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>readCertPEM</b>(sCertPEM)
-					
-					</div>
-					<div class="description">
-						read PEM formatted X.509 certificate from string.<br/>
-						
-						
-					</div>
+					<pre class="code">tbsc.appendExtension(new KJUR.asn1.x509.BasicConstraints({'cA':true, 'critical': true}));
+tbsc.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));</pre>
 					
 					
 					
@@ -829,10 +551,10 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>sCertPEM</b>
+									<span class="light fixedFont">{Extension}</span> <b>extObj</b>
 									
 								</dt>
-								<dd>string for PEM formatted X.509 certificate</dd>
+								<dd>X.509v3 Extension object</dd>
 							
 							</dl>
 						
@@ -841,6 +563,335 @@ ul.inheritsList
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name=".setIssuerByParam"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.TBSCertificate.</span><b>setIssuerByParam</b>(x500NameParam)
+					
+					</div>
+					<div class="description">
+						set issuer name field by parameter
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">tbsc.setIssuerParam({'str': '/C=US/CN=b'});</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>x500NameParam</b>
+									
+								</dt>
+								<dd>X500Name parameter</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name=".setNotAfterByParam"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.TBSCertificate.</span><b>setNotAfterByParam</b>(timeParam)
+					
+					</div>
+					<div class="description">
+						set notAfter field by parameter
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">tbsc.setNotAfterByParam({'str': '130508235959Z'});</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>timeParam</b>
+									
+								</dt>
+								<dd>Time parameter</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.Time.html">KJUR.asn1.x509.Time</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name=".setNotBeforeByParam"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.TBSCertificate.</span><b>setNotBeforeByParam</b>(timeParam)
+					
+					</div>
+					<div class="description">
+						set notBefore field by parameter
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">tbsc.setNotBeforeByParam({'str': '130508235959Z'});</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>timeParam</b>
+									
+								</dt>
+								<dd>Time parameter</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.Time.html">KJUR.asn1.x509.Time</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name=".setSerialNumberByParam"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.TBSCertificate.</span><b>setSerialNumberByParam</b>(intParam)
+					
+					</div>
+					<div class="description">
+						set serial number field by parameter
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">tbsc.setSerialNumberByParam({'int': 3});</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>intParam</b>
+									
+								</dt>
+								<dd>DERInteger param</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".setSignatureAlgByParam"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.TBSCertificate.</span><b>setSignatureAlgByParam</b>(algIdParam)
+					
+					</div>
+					<div class="description">
+						set signature algorithm field by parameter
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">tbsc.setSignatureAlgByParam({'name': 'SHA1withRSA'});</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>algIdParam</b>
+									
+								</dt>
+								<dd>AlgorithmIdentifier parameter</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".setSubjectByParam"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.TBSCertificate.</span><b>setSubjectByParam</b>(x500NameParam)
+					
+					</div>
+					<div class="description">
+						set subject name field by parameter
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">tbsc.setSubjectParam({'str': '/C=US/CN=b'});</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>x500NameParam</b>
+									
+								</dt>
+								<dd>X500Name parameter</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name=".setSubjectPublicKeyByParam"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.TBSCertificate.</span><b>setSubjectPublicKeyByParam</b>(subjPKeyParam)
+					
+					</div>
+					<div class="description">
+						set subject public key info field by parameter
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">tbsc.setSubjectPublicKeyByParam({'rsakey': pubKey});</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>subjPKeyParam</b>
+									
+								</dt>
+								<dd>SubjectPublicKeyInfo parameter</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html">KJUR.asn1.x509.SubjectPublicKeyInfo</a></dd>
+							
+							</dl>
 						
 
 					
@@ -858,7 +909,7 @@ ul.inheritsList
 		<div class="fineprint" style="clear:both">
                         &copy; 2012 Kenji Urushima, All rights reserved<br/>
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:53 GMT+0900 (JST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:52 GMT+0900 (JST)
 		</div>
 	</body>
 </html>

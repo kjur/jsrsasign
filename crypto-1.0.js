@@ -1,0 +1,421 @@
+/*! crypto-1.0.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+ */
+/*
+ * crypto.js - Cryptographic Algorithm Provider class
+ *
+ * Copyright (c) 2013 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * http://kjur.github.com/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ */
+
+/**
+ * @fileOverview
+ * @name crypto-1.0.js
+ * @author Kenji Urushima kenji.urushima@gmail.com
+ * @version 1.0.0 (2013-Mar-07)
+ * @since 2.2
+ * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
+ */
+
+/** 
+ * kjur's class library name space
+ * @name KJUR
+ * @namespace kjur's class library name space
+ */
+if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
+/**
+ * kjur's cryptographic algorithm provider library name space
+ * @name KJUR.crypto
+ * @namespace kjur's cryptographic algorithm provider library name space
+ */
+if (typeof KJUR.crypto == "undefined" || !KJUR.crypto) KJUR.crypto = {};
+
+/**
+ * static object for cryptographic function utilities
+ * @name KJUR.crypto.Util
+ * @class static object for cryptographic function utilities
+ * @property {Array} DIGESTINFOHEAD PKCS#1 DigestInfo heading hexadecimal bytes for each hash algorithms
+ * @description
+ */
+KJUR.crypto.Util = new function() {
+    this.DIGESTINFOHEAD = {
+	'sha1':      "3021300906052b0e03021a05000414",
+	'sha256':    "3031300d060960864801650304020105000420",
+	'sha384':    "3041300d060960864801650304020205000430",
+	'sha512':    "3051300d060960864801650304020305000440",
+	'md2':       "3020300c06082a864886f70d020205000410",
+	'md5':       "3020300c06082a864886f70d020505000410",
+	'ripemd160': "3021300906052b2403020105000414"
+    };
+
+    /**
+     * get hexadecimal DigestInfo
+     * @name getDigestInfoHex
+     * @memberOf KJUR.crypto.Util
+     * @function
+     * @param {String} hHash hexadecimal hash value
+     * @param {String} alg hash algorithm name (ex. 'sha1')
+     * @return {String} hexadecimal string DigestInfo ASN.1 structure
+     */
+    this.getDigestInfoHex = function(hHash, alg) {
+	if (typeof this.DIGESTINFOHEAD[alg] == "undefined")
+	    throw "alg not supported in Util.DIGESTINFOHEAD: " + alg;
+	return this.DIGESTINFOHEAD[alg] + hHash;
+    };
+
+    /**
+     * get PKCS#1 padded hexadecimal DigestInfo
+     * @name getPaddedDigestInfoHex
+     * @memberOf KJUR.crypto.Util
+     * @function
+     * @param {String} hHash hexadecimal hash value
+     * @param {String} alg hash algorithm name (ex. 'sha1')
+     * @param {Integer} keySize key bit length (ex. 1024)
+     * @return {String} hexadecimal string of PKCS#1 padded DigestInfo
+     */
+    this.getPaddedDigestInfoHex = function(hHash, alg, keySize) {
+	var hDigestInfo = this.getDigestInfoHex(hHash, alg);
+	var pmStrLen = keySize / 4;
+
+	var hHead = "0001";
+	var hTail = "00" + hDigestInfo;
+	var hMid = "";
+	var fLen = pmStrLen - hHead.length - hTail.length;
+	for (var i = 0; i < fLen; i += 2) {
+	    hMid += "ff";
+	}
+	var hPaddedMessage = hHead + hMid + hTail;
+	return hPaddedMessage;
+    };
+};
+
+/**
+ * MessageDigest class which is very similar to java.security.MessageDigest class
+ * @name KJUR.crypto.MessageDigest
+ * @class MessageDigest class which is very similar to java.security.MessageDigest class
+ * @description
+ * 
+ * @example
+ * var md = new KJUR.crypto.MessageDigest({"alg": "sha1", "prov": "cryptojs"});
+ * // append data
+ * md.updateHex('1f2d3e')
+ * md.updateString('aaa')
+ * // get message digest
+ * md.digest()
+ * md.digestHex('5f6de0')
+ * md.digestString('aaa')
+ *
+ * @see http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core-min.js
+ * @see http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js
+ */
+KJUR.crypto.MessageDigest = function(params) {
+    var md = null;
+    var algName = null;
+    var provName = null;
+
+    /**
+     * set hash algorithm and provider
+     * @name setAlgAndProvider
+     * @memberOf KJUR.crypto.MessageDigest
+     * @function
+     * @param {String} alg hash algorithm name
+     * @param {String} prov provider name
+     * @description
+     * Currently this only supports 'sha1' for algorithm and 
+     * 'cryptojs' for provider.
+     * @example
+     * md.setAlgAndProvider('sha1', 'cryptojs');
+     */
+    this.setAlgAndProvider = function(alg, prov) {
+	if (alg == 'sha1' && prov == 'cryptojs') {
+	    this.md = CryptoJS.algo.SHA1.create();
+	    this.updateString = function(str) {
+		this.md.update(str);
+	    };
+	    this.updateHex = function(hex) {
+		var wHex = CryptoJS.enc.Hex.parse(hex);
+		this.md.update(wHex);
+	    };
+	    this.digest = function() {
+		var hash = this.md.finalize();
+		return hash.toString(CryptoJS.enc.Hex);
+	    };
+	    this.digestString = function(str) {
+		this.updateString(str);
+		return this.digest();
+	    };
+	    this.digestHex = function(hex) {
+		this.updateHex(hex);
+		return this.digest();
+	    };
+	}
+    };
+
+    /**
+     * update digest by specified string
+     * @name updateString
+     * @memberOf KJUR.crypto.MessageDigest
+     * @function
+     * @param {String} str string to update
+     * @description
+     * @example
+     * md.updateString('New York');
+     */
+    this.updateString = function(str) {
+	throw "updateString(str) not supported for this alg/prov: " + this.algName + "/" + this.provName;
+    };
+
+    /**
+     * update digest by specified hexadecimal string
+     * @name updateHex
+     * @memberOf KJUR.crypto.MessageDigest
+     * @function
+     * @param {String} hex hexadecimal string to update
+     * @description
+     * @example
+     * md.updateHex('0afe36');
+     */
+    this.updateHex = function(hex) {
+	throw "updateHex(hex) not supported for this alg/prov: " + this.algName + "/" + this.provName;
+    };
+
+    /**
+     * completes hash calculation and returns hash result
+     * @name digest
+     * @memberOf KJUR.crypto.MessageDigest
+     * @function
+     * @description
+     * @example
+     * md.digest()
+     */
+    this.digest = function() {
+	throw "digest() not supported for this alg/prov: " + this.algName + "/" + this.provName;
+    };
+
+    /**
+     * performs final update on the digest using string, then completes the digest computation
+     * @name digestString
+     * @memberOf KJUR.crypto.MessageDigest
+     * @function
+     * @param {String} str string to final update
+     * @description
+     * @example
+     * md.digestString('aaa')
+     */
+    this.digestString = function(str) {
+	throw "digestString(str) not supported for this alg/prov: " + this.algName + "/" + this.provName;
+    };
+
+    /**
+     * performs final update on the digest using hexadecimal string, then completes the digest computation
+     * @name digestHex
+     * @memberOf KJUR.crypto.MessageDigest
+     * @function
+     * @param {String} hex hexadecimal string to final update
+     * @description
+     * @example
+     * md.digestHex('0f2abd')
+     */
+    this.digestHex = function(hex) {
+	throw "digestHex(hex) not supported for this alg/prov: " + this.algName + "/" + this.provName;
+    };
+
+    if (typeof params != "undefined") {
+	if (typeof params['alg'] != "undefined") {
+	    this.algName = params['alg'];
+	    this.provName = params['prov'];
+	    this.setAlgAndProvider(params['alg'], params['prov']);
+	}
+    }
+};
+
+
+/**
+ * Signature class which is very similar to java.security.Signature class
+ * @name KJUR.crypto.Signature
+ * @class Signature class which is very similar to java.security.Signature class
+ * @description
+ *
+ * @example
+ * var sig = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
+ * // initialize
+ * sig.initSign(prvKey)
+ * sig.initVerifyByCert(cert) // not yet supported
+ * sig.initVerifyByPubKey(pubKey)
+ * // append data
+ * sig.updateHex(hex)
+ * sig.updateString(str)
+ * // get signature
+ * sig.sign()
+ * sig.signHex(hex)
+ * sig.signString(str)
+ * // verify
+ * verifyHex(sigValHex) // not yet supported
+ */
+KJUR.crypto.Signature = function(params) {
+    var prvKey = null;
+    var md = null;
+    var sig = null;
+    var algName = null;
+    var provName = null;
+    var algProvName = null;
+    var mdAlgName = null;
+    var pubkeyAlgName = null;
+    var mode = null;
+
+    var sHashHex = null; // hex hash value for hex
+    var hDigestInfo = null;
+    var hPaddedDigestInfo = null;
+    var hSign = null;
+
+    this._setAlgNames = function() {
+	if (this.algName.match(/^(.+)with(.+)$/)) {
+	    this.mdAlgName = RegExp.$1.toLowerCase();
+	    this.pubkeyAlgName = RegExp.$2.toLowerCase();
+	}
+    };
+
+    this._zeroPaddingOfSignature = function(hex, bitLength) {
+	var s = "";
+	var nZero = bitLength / 4 - hex.length;
+	for (var i = 0; i < nZero; i++) {
+	    s = s + "0";
+	}
+	return s + hex;
+    };
+
+    /**
+     * set signature algorithm and provider
+     * @name setAlgAndProvider
+     * @memberOf KJUR.crypto.Signature
+     * @function
+     * @param {String} alg signature algorithm name
+     * @param {String} prov provider name
+     * @description
+     * Currently this only supports 'SHA1withRSA' for algorithm and 
+     * 'cryptojs/jsrsa' for provider.
+     * @example
+     * md.setAlgAndProvider('SHA1withRSA', 'cryptojs/jsrsa');
+     */
+    this.setAlgAndProvider = function(alg, prov) {
+	if (alg == 'SHA1withRSA' && prov == 'cryptojs/jsrsa') {
+	    this.md = CryptoJS.algo.SHA1.create();
+
+	    this.initSign = function(prvKey) {
+		this.prvKey = prvKey;
+	    };
+
+	    this.updateString = function(str) {
+		this.md.update(str);
+	    };
+	    this.updateHex = function(hex) {
+		var wHex = CryptoJS.enc.Hex.parse(hex);
+		this.md.update(wHex);
+	    };
+	    this.digest = function() {
+		var hash = this.md.finalize();
+		return hash.toString(CryptoJS.enc.Hex);
+	    };
+	    this.digestString = function(str) {
+		this.updateString(str);
+		return this.digest();
+	    };
+	    this.digestHex = function(hex) {
+		this.updateHex(hex);
+		return this.digest();
+	    };
+	    this.sign = function() {
+                var util = KJUR.crypto.Util;
+		var keyLen = this.prvKey.n.bitLength();
+		this.sHashHex = this.md.finalize();
+		this.hDigestInfo = util.getDigestInfoHex(this.sHashHex, this.mdAlgName);
+		this.hPaddedDigestInfo = util.getPaddedDigestInfoHex(this.sHashHex, this.mdAlgName, keyLen);
+
+		var biPaddedDigestInfo = parseBigInt(this.hPaddedDigestInfo, 16);
+		this.hoge = biPaddedDigestInfo.toString(16);
+		var biSign = this.prvKey.doPrivate(biPaddedDigestInfo);
+		this.hSign = this._zeroPaddingOfSignature(biSign.toString(16), keyLen);
+		return this.hSign;
+	    };
+	}
+    };
+
+    /**
+     * Initialize this object for signing
+     * @name initSign
+     * @memberOf KJUR.crypto.Signature
+     * @function
+     * @param {RSAKey} prvKey RSAKey object of private key
+     * @description
+     * @example
+     * sig.initSign(prvKey)
+     */
+    this.initSign = function(prvKey) {
+	throw "initSign(prvKey) not supported for this alg:prov=" + this.algProvName;
+    };
+
+    /**
+     * Updates the data to be signed or verified by a string
+     * @name updateString
+     * @memberOf KJUR.crypto.Signature
+     * @function
+     * @param {String} str string to use for the update
+     * @description
+     * @example
+     * sig.updateString('aaa')
+     */
+    this.updateString = function(str) {
+	throw "updateString(str) not supported for this alg:prov=" + this.algProvName;
+    };
+
+    /**
+     * Updates the data to be signed or verified by a hexadecimal string
+     * @name updateHex
+     * @memberOf KJUR.crypto.Signature
+     * @function
+     * @param {String} hex hexadecimal string to use for the update
+     * @description
+     * @example
+     * sig.updateHex('1f2f3f')
+     */
+    this.updateHex = function(hex) {
+	throw "updateHex(hex) not supported for this alg:prov=" + this.algProvName;
+    };
+
+    this.signString = function(str) {
+	throw "digestString(str) not supported for this alg:prov=" + this.algProvName;
+    };
+
+    this.signHex = function(hex) {
+	throw "digestHex(hex) not supported for this alg:prov=" + this.algProvName;
+    };
+
+    /**
+     * Returns the signature bytes of all data updates as a hexadecimal string
+     * @name sign
+     * @memberOf KJUR.crypto.Signature
+     * @function
+     * @return the signature bytes as a hexadecimal string
+     * @description
+     * @example
+     * var hSigValue = sig.sign()
+     */
+    this.sign = function() {
+	throw "sign() not supported for this alg:prov=" + this.algProvName;
+    };
+
+    if (typeof params != "undefined") {
+	if (typeof params['alg'] != "undefined") {
+	    this.algName = params['alg'];
+	    this.provName = params['prov'];
+	    this.algProvName = params['alg'] + ":" + params['prov'];
+	    this.setAlgAndProvider(params['alg'], params['prov']);
+	    this._setAlgNames();
+	}
+    }
+};
+
