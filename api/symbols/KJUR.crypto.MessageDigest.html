@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.0 JavaScript API Reference - global__</title>
+		<title>jsrsasign 3.0.0 JavaScript API Reference - KJUR.crypto.MessageDigest</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -298,7 +298,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Built-In Namespace global__
+				Class KJUR.crypto.MessageDigest
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -306,45 +306,113 @@ ul.inheritsList
 				
 				
 			
+				MessageDigest class which is very similar to java.security.MessageDigest class
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/crypto-1.0.js.html">crypto-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.crypto.MessageDigest.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/KJUR.crypto.MessageDigest.html#constructor">KJUR.crypto.MessageDigest</a></b>()
+							</div>
+							<div class="description">MessageDigest class which is very similar to java.security.MessageDigest class
+</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
 
 <!-- ============================== properties summary ===================== -->
 			
+
+<!-- ============================== methods summary ======================== -->
+			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class global__.">
-					<caption>Field Summary</caption>
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.crypto.MessageDigest.">
+					<caption>Method Summary</caption>
 					<thead>
 						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
 						</tr>
 					</thead>
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_DIHEAD">_RSASIGN_DIHEAD</a></b>
+								<div class="fixedFont">KJUR.crypto.MessageDigest.<b><a href="../symbols/KJUR.crypto.MessageDigest.html#.digest">digest</a></b>()
 								</div>
-								<div class="description">Array of head part of hexadecimal DigestInfo value for hash algorithms.</div>
+								<div class="description">completes hash calculation and returns hash result
+</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_HASHHEXFUNC">_RSASIGN_HASHHEXFUNC</a></b>
+								<div class="fixedFont">KJUR.crypto.MessageDigest.<b><a href="../symbols/KJUR.crypto.MessageDigest.html#.digestHex">digestHex</a></b>(hex)
 								</div>
-								<div class="description">Array of functions which calculate hash and returns it as hexadecimal.</div>
+								<div class="description">performs final update on the digest using hexadecimal string, then completes the digest computation
+</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.MessageDigest.<b><a href="../symbols/KJUR.crypto.MessageDigest.html#.digestString">digestString</a></b>(str)
+								</div>
+								<div class="description">performs final update on the digest using string, then completes the digest computation
+</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.MessageDigest.<b><a href="../symbols/KJUR.crypto.MessageDigest.html#.setAlgAndProvider">setAlgAndProvider</a></b>(alg, prov)
+								</div>
+								<div class="description">set hash algorithm and provider
+Currently this only supports 'sha1' for algorithm and 
+'cryptojs' for provider.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.MessageDigest.<b><a href="../symbols/KJUR.crypto.MessageDigest.html#.updateHex">updateHex</a></b>(hex)
+								</div>
+								<div class="description">update digest by specified hexadecimal string
+</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.MessageDigest.<b><a href="../symbols/KJUR.crypto.MessageDigest.html#.updateString">updateString</a></b>(str)
+								</div>
+								<div class="description">update digest by specified string
+</div>
 							</td>
 						</tr>
 					
@@ -354,41 +422,92 @@ ul.inheritsList
 				
 				
 			
-
-<!-- ============================== methods summary ======================== -->
-			
 <!-- ============================== events summary ======================== -->
 			
 
 <!-- ============================== constructor details ==================== -->		
 			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>KJUR.crypto.MessageDigest</b>()
+				</div>
+				
+				<div class="description">
+					MessageDigest class which is very similar to java.security.MessageDigest class
+
+					
+				</div>
+				
+				
+				
+				<pre class="code">var md = new KJUR.crypto.MessageDigest({"alg": "sha1", "prov": "cryptojs"});
+// append data
+md.updateHex('1f2d3e')
+md.updateString('aaa')
+// get message digest
+md.digest()
+md.digestHex('5f6de0')
+md.digestString('aaa')</pre>
+				
+				
+				
+				
+					
+					
+					
+					
+					
+					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd>http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core-min.js</dd>
+						
+							<dd>http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js</dd>
+						
+						</dl>
+					
+
+			</div>
+			
 
 <!-- ============================== field details ========================== -->		
 			
+
+<!-- ============================== method details ========================= -->		
+			
 				<div class="sectionTitle">
-					Field Detail
+					Method Detail
 				</div>
 				
-					<a name="_RSASIGN_DIHEAD"> </a>
-					<div class="fixedFont">
+					<a name=".digest"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<b>_RSASIGN_DIHEAD</b>
+					<span class="light">KJUR.crypto.MessageDigest.</span><b>digest</b>()
 					
 					</div>
 					<div class="description">
-						Array of head part of hexadecimal DigestInfo value for hash algorithms.
-You can add any DigestInfo hash algorith for signing.
-See PKCS#1 v2.1 spec (p38).
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
+						completes hash calculation and returns hash result
+
 						
 						
 					</div>
 					
 					
-
+					
+					<pre class="code">md.digest()</pre>
+					
+					
+					
+						
+						
+						
 						
 						
 						
@@ -396,25 +515,211 @@ See PKCS#1 v2.1 spec (p38).
 
 					<hr />
 				
-					<a name="_RSASIGN_HASHHEXFUNC"> </a>
-					<div class="fixedFont">
+					<a name=".digestHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<b>_RSASIGN_HASHHEXFUNC</b>
+					<span class="light">KJUR.crypto.MessageDigest.</span><b>digestHex</b>(hex)
 					
 					</div>
 					<div class="description">
-						Array of functions which calculate hash and returns it as hexadecimal.
-You can add any hash algorithm implementations.
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
+						performs final update on the digest using hexadecimal string, then completes the digest computation
+
 						
 						
 					</div>
 					
 					
+					
+					<pre class="code">md.digestHex('0f2abd')</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hex</b>
+									
+								</dt>
+								<dd>hexadecimal string to final update</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
 
+					<hr />
+				
+					<a name=".digestString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.MessageDigest.</span><b>digestString</b>(str)
+					
+					</div>
+					<div class="description">
+						performs final update on the digest using string, then completes the digest computation
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">md.digestString('aaa')</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>str</b>
+									
+								</dt>
+								<dd>string to final update</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".setAlgAndProvider"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.MessageDigest.</span><b>setAlgAndProvider</b>(alg, prov)
+					
+					</div>
+					<div class="description">
+						set hash algorithm and provider
+Currently this only supports 'sha1' for algorithm and 
+'cryptojs' for provider.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">md.setAlgAndProvider('sha1', 'cryptojs');</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>alg</b>
+									
+								</dt>
+								<dd>hash algorithm name</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>prov</b>
+									
+								</dt>
+								<dd>provider name</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".updateHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.MessageDigest.</span><b>updateHex</b>(hex)
+					
+					</div>
+					<div class="description">
+						update digest by specified hexadecimal string
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">md.updateHex('0afe36');</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hex</b>
+									
+								</dt>
+								<dd>hexadecimal string to update</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".updateString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.MessageDigest.</span><b>updateString</b>(str)
+					
+					</div>
+					<div class="description">
+						update digest by specified string
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">md.updateString('New York');</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>str</b>
+									
+								</dt>
+								<dd>string to update</dd>
+							
+							</dl>
+						
+						
+						
 						
 						
 						
@@ -422,9 +727,6 @@ You can add any hash algorithm implementations.
 
 					
 				
-			
-
-<!-- ============================== method details ========================= -->		
 			
 			
 <!-- ============================== event details ========================= -->		
@@ -438,7 +740,7 @@ You can add any hash algorithm implementations.
 		<div class="fineprint" style="clear:both">
                         &copy; 2012 Kenji Urushima, All rights reserved<br/>
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:51 GMT+0900 (JST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:53 GMT+0900 (JST)
 		</div>
 	</body>
 </html>

@@ -1,7 +1,22 @@
 
 ChangeLog for jsrsasign
 
-* Changes between 1.3.1 and 2.0.0 [Apr 14, 2013]
+* Changes between 2.0.0 and 3.0.0
+  - New features:
+    - crypto-1.0.js: MessageDigest and Signature class like Java JCE
+    - asn1-1.0.js  : ASN.1 Primitive Encoder class
+    - asn1x509-1.0.js: ASN.1 class for X.509 certificate
+  - merge David Halls's contribution. 
+    (https://github.com/davedoesdev, Thanks! Dave.)
+    - rsa.js: update for PKCS#1 OAEP support
+    - rsa2.js: update for PKCS#1 OAEP support
+    - rsasign-1.2.js: add PSS support (1.2.1)
+    - jsbn.js: small fix
+    - jsbn2.js: update for probable prime fix, bnSquare
+    - base64.js: small fix
+  - gradually moving to CryptoJS library from other hash library
+
+* Changes between 1.3.1 and 2.0.0 [Apr 14, 2013]0
   - newly added pkcs5pkey.js and PKCS5PKEY class to support 
     passcode encrypted PKCS#5 private key.
 

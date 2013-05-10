@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.0 JavaScript API Reference - global__</title>
+		<title>jsrsasign 3.0.0 JavaScript API Reference - KJUR.crypto.Util</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -298,7 +298,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Built-In Namespace global__
+				Class KJUR.crypto.Util
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -306,19 +306,43 @@ ul.inheritsList
 				
 				
 			
+				static object for cryptographic function utilities
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/crypto-1.0.js.html">crypto-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
+			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.crypto.Util.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/KJUR.crypto.Util.html#constructor">KJUR.crypto.Util</a></b>()
+							</div>
+							<div class="description">static object for cryptographic function utilities
+</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 			
 
 <!-- ============================== properties summary ===================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class global__.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class KJUR.crypto.Util.">
 					<caption>Field Summary</caption>
 					<thead>
 						<tr>
@@ -332,19 +356,9 @@ ul.inheritsList
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_DIHEAD">_RSASIGN_DIHEAD</a></b>
+								<b><a href="../symbols/KJUR.crypto.Util.html#DIGESTINFOHEAD">DIGESTINFOHEAD</a></b>
 								</div>
-								<div class="description">Array of head part of hexadecimal DigestInfo value for hash algorithms.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_HASHHEXFUNC">_RSASIGN_HASHHEXFUNC</a></b>
-								</div>
-								<div class="description">Array of functions which calculate hash and returns it as hexadecimal.</div>
+								<div class="description">PKCS#1 DigestInfo heading hexadecimal bytes for each hash algorithms</div>
 							</td>
 						</tr>
 					
@@ -357,10 +371,74 @@ ul.inheritsList
 
 <!-- ============================== methods summary ======================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.crypto.Util.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Util.<b><a href="../symbols/KJUR.crypto.Util.html#.getDigestInfoHex">getDigestInfoHex</a></b>(hHash, alg)
+								</div>
+								<div class="description">get hexadecimal DigestInfo</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Util.<b><a href="../symbols/KJUR.crypto.Util.html#.getPaddedDigestInfoHex">getPaddedDigestInfoHex</a></b>(hHash, alg, keySize)
+								</div>
+								<div class="description">get PKCS#1 padded hexadecimal DigestInfo</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
 <!-- ============================== events summary ======================== -->
 			
 
 <!-- ============================== constructor details ==================== -->		
+			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>KJUR.crypto.Util</b>()
+				</div>
+				
+				<div class="description">
+					static object for cryptographic function utilities
+
+					
+				</div>
+				
+				
+				
+				
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
 			
 
 <!-- ============================== field details ========================== -->		
@@ -369,46 +447,15 @@ ul.inheritsList
 					Field Detail
 				</div>
 				
-					<a name="_RSASIGN_DIHEAD"> </a>
+					<a name="DIGESTINFOHEAD"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>_RSASIGN_DIHEAD</b>
+					<span class="light">{Array}</span>
+					<b>DIGESTINFOHEAD</b>
 					
 					</div>
 					<div class="description">
-						Array of head part of hexadecimal DigestInfo value for hash algorithms.
-You can add any DigestInfo hash algorith for signing.
-See PKCS#1 v2.1 spec (p38).
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="_RSASIGN_HASHHEXFUNC"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>_RSASIGN_HASHHEXFUNC</b>
-					
-					</div>
-					<div class="description">
-						Array of functions which calculate hash and returns it as hexadecimal.
-You can add any hash algorithm implementations.
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
+						PKCS#1 DigestInfo heading hexadecimal bytes for each hash algorithms
 						
 						
 					</div>
@@ -426,6 +473,115 @@ You can add any hash algorithm implementations.
 
 <!-- ============================== method details ========================= -->		
 			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".getDigestInfoHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.Util.</span><b>getDigestInfoHex</b>(hHash, alg)
+					
+					</div>
+					<div class="description">
+						get hexadecimal DigestInfo
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hHash</b>
+									
+								</dt>
+								<dd>hexadecimal hash value</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>alg</b>
+									
+								</dt>
+								<dd>hash algorithm name (ex. 'sha1')</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string DigestInfo ASN.1 structure</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getPaddedDigestInfoHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.Util.</span><b>getPaddedDigestInfoHex</b>(hHash, alg, keySize)
+					
+					</div>
+					<div class="description">
+						get PKCS#1 padded hexadecimal DigestInfo
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hHash</b>
+									
+								</dt>
+								<dd>hexadecimal hash value</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>alg</b>
+									
+								</dt>
+								<dd>hash algorithm name (ex. 'sha1')</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>keySize</b>
+									
+								</dt>
+								<dd>key bit length (ex. 1024)</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of PKCS#1 padded DigestInfo</dd>
+							
+							</dl>
+						
+						
+						
+
+					
+				
+			
 			
 <!-- ============================== event details ========================= -->		
 			
@@ -438,7 +594,7 @@ You can add any hash algorithm implementations.
 		<div class="fineprint" style="clear:both">
                         &copy; 2012 Kenji Urushima, All rights reserved<br/>
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:51 GMT+0900 (JST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:53 GMT+0900 (JST)
 		</div>
 	</body>
 </html>

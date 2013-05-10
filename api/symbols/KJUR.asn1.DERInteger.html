@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.0 JavaScript API Reference - global__</title>
+		<title>jsrsasign 3.0.0 JavaScript API Reference - KJUR.asn1.DERInteger</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -298,53 +298,109 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Built-In Namespace global__
+				Class KJUR.asn1.DERInteger
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
+				<br />Extends
+					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
+				class for ASN.1 DER Integer
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1-1.0.js.html">asn1-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
+			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.DERInteger.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.DERInteger.html#constructor">KJUR.asn1.DERInteger</a></b>()
+							</div>
+							<div class="description">class for ASN.1 DER Integer
+<br/>
+As for argument 'params' for constructor, you can specify one of
+following properties:
+<ul>
+<li>int - specify initial ASN.1 value(V) by integer value</li>
+<li>bigint - specify initial ASN.1 value(V) by BigInteger object</li>
+<li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
+</ul>
+NOTE: 'params' can be omitted.</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 			
 
 <!-- ============================== properties summary ===================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class global__.">
-					<caption>Field Summary</caption>
+				
+				
+				<dl class="inheritsList">
+				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
+				</dl>
+				
+			
+
+<!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.DERInteger.">
+					<caption>Method Summary</caption>
 					<thead>
 						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
 						</tr>
 					</thead>
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_DIHEAD">_RSASIGN_DIHEAD</a></b>
+								<div class="fixedFont">KJUR.asn1.DERInteger.<b><a href="../symbols/KJUR.asn1.DERInteger.html#.setByBigInteger">setByBigInteger</a></b>(bigIntegerValue)
 								</div>
-								<div class="description">Array of head part of hexadecimal DigestInfo value for hash algorithms.</div>
+								<div class="description">set value by Tom Wu's BigInteger object</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_HASHHEXFUNC">_RSASIGN_HASHHEXFUNC</a></b>
+								<div class="fixedFont">KJUR.asn1.DERInteger.<b><a href="../symbols/KJUR.asn1.DERInteger.html#.setByInteger">setByInteger</a></b>(integer)
 								</div>
-								<div class="description">Array of functions which calculate hash and returns it as hexadecimal.</div>
+								<div class="description">set value by integer value</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.DERInteger.<b><a href="../symbols/KJUR.asn1.DERInteger.html#.setValueHex">setValueHex</a></b>(hexadecimal)
+								</div>
+								<div class="description">set value by integer value
+<br/>
+NOTE: Value shall be represented by minimum octet length of
+two's complement representation.</div>
 							</td>
 						</tr>
 					
@@ -353,42 +409,91 @@ ul.inheritsList
 				
 				
 				
-			
-
-<!-- ============================== methods summary ======================== -->
+				<dl class="inheritsList">
+				
+				</dl>
+				
 			
 <!-- ============================== events summary ======================== -->
 			
 
 <!-- ============================== constructor details ==================== -->		
 			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>KJUR.asn1.DERInteger</b>()
+				</div>
+				
+				<div class="description">
+					class for ASN.1 DER Integer
+<br/>
+As for argument 'params' for constructor, you can specify one of
+following properties:
+<ul>
+<li>int - specify initial ASN.1 value(V) by integer value</li>
+<li>bigint - specify initial ASN.1 value(V) by BigInteger object</li>
+<li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
+</ul>
+NOTE: 'params' can be omitted.
+					
+				</div>
+				
+				
+				
+				
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
+			
 
 <!-- ============================== field details ========================== -->		
 			
+
+<!-- ============================== method details ========================= -->		
+			
 				<div class="sectionTitle">
-					Field Detail
+					Method Detail
 				</div>
 				
-					<a name="_RSASIGN_DIHEAD"> </a>
-					<div class="fixedFont">
+					<a name=".setByBigInteger"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<b>_RSASIGN_DIHEAD</b>
+					<span class="light">KJUR.asn1.DERInteger.</span><b>setByBigInteger</b>(bigIntegerValue)
 					
 					</div>
 					<div class="description">
-						Array of head part of hexadecimal DigestInfo value for hash algorithms.
-You can add any DigestInfo hash algorith for signing.
-See PKCS#1 v2.1 spec (p38).
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
+						set value by Tom Wu's BigInteger object
 						
 						
 					</div>
 					
 					
-
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>bigIntegerValue</b>
+									
+								</dt>
+								<dd>to set</dd>
+							
+							</dl>
+						
+						
+						
 						
 						
 						
@@ -396,25 +501,74 @@ See PKCS#1 v2.1 spec (p38).
 
 					<hr />
 				
-					<a name="_RSASIGN_HASHHEXFUNC"> </a>
-					<div class="fixedFont">
+					<a name=".setByInteger"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<b>_RSASIGN_HASHHEXFUNC</b>
+					<span class="light">KJUR.asn1.DERInteger.</span><b>setByInteger</b>(integer)
 					
 					</div>
 					<div class="description">
-						Array of functions which calculate hash and returns it as hexadecimal.
-You can add any hash algorithm implementations.
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
+						set value by integer value
 						
 						
 					</div>
 					
 					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>integer</b>
+									
+								</dt>
+								<dd>value to set</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
 
+					<hr />
+				
+					<a name=".setValueHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.DERInteger.</span><b>setValueHex</b>(hexadecimal)
+					
+					</div>
+					<div class="description">
+						set value by integer value
+<br/>
+NOTE: Value shall be represented by minimum octet length of
+two's complement representation.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hexadecimal</b>
+									
+								</dt>
+								<dd>string of integer value</dd>
+							
+							</dl>
+						
+						
+						
 						
 						
 						
@@ -422,9 +576,6 @@ You can add any hash algorithm implementations.
 
 					
 				
-			
-
-<!-- ============================== method details ========================= -->		
 			
 			
 <!-- ============================== event details ========================= -->		

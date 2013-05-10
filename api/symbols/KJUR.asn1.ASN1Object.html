@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.0 JavaScript API Reference - global__</title>
+		<title>jsrsasign 3.0.0 JavaScript API Reference - KJUR.asn1.ASN1Object</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -298,7 +298,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Built-In Namespace global__
+				Class KJUR.asn1.ASN1Object
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -306,19 +306,43 @@ ul.inheritsList
 				
 				
 			
+				base class for ASN.1 DER encoder object
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1-1.0.js.html">asn1-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
+			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.ASN1Object.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.ASN1Object.html#constructor">KJUR.asn1.ASN1Object</a></b>()
+							</div>
+							<div class="description">base class for ASN.1 DER encoder object
+</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 			
 
 <!-- ============================== properties summary ===================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class global__.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class KJUR.asn1.ASN1Object.">
 					<caption>Field Summary</caption>
 					<thead>
 						<tr>
@@ -332,9 +356,9 @@ ul.inheritsList
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_DIHEAD">_RSASIGN_DIHEAD</a></b>
+								<b><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a></b>
 								</div>
-								<div class="description">Array of head part of hexadecimal DigestInfo value for hash algorithms.</div>
+								<div class="description">hexadecimal string of ASN.1 TLV length(L)</div>
 							</td>
 						</tr>
 					
@@ -342,9 +366,39 @@ ul.inheritsList
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_HASHHEXFUNC">_RSASIGN_HASHHEXFUNC</a></b>
+								<b><a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a></b>
 								</div>
-								<div class="description">Array of functions which calculate hash and returns it as hexadecimal.</div>
+								<div class="description">hexadecimal string of ASN.1 TLV tag(T)</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a></b>
+								</div>
+								<div class="description">hexadecimal string of ASN.1 TLV</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a></b>
+								</div>
+								<div class="description">hexadecimal string of ASN.1 TLV value(V)</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></b>
+								</div>
+								<div class="description">flag whether internal data was changed</div>
 							</td>
 						</tr>
 					
@@ -357,10 +411,83 @@ ul.inheritsList
 
 <!-- ============================== methods summary ======================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.ASN1Object.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.ASN1Object.<b><a href="../symbols/KJUR.asn1.ASN1Object.html#.getEncodedHex">getEncodedHex</a></b>()
+								</div>
+								<div class="description">get hexadecimal string of ASN.1 TLV bytes</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.ASN1Object.<b><a href="../symbols/KJUR.asn1.ASN1Object.html#.getLengthHexFromValue">getLengthHexFromValue</a></b>()
+								</div>
+								<div class="description">get hexadecimal ASN.1 TLV length(L) bytes from TLV value(V)</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.ASN1Object.<b><a href="../symbols/KJUR.asn1.ASN1Object.html#.getValueHex">getValueHex</a></b>()
+								</div>
+								<div class="description">get hexadecimal string of ASN.1 TLV value(V) bytes</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
 <!-- ============================== events summary ======================== -->
 			
 
 <!-- ============================== constructor details ==================== -->		
+			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>KJUR.asn1.ASN1Object</b>()
+				</div>
+				
+				<div class="description">
+					base class for ASN.1 DER encoder object
+
+					
+				</div>
+				
+				
+				
+				
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
 			
 
 <!-- ============================== field details ========================== -->		
@@ -369,20 +496,15 @@ ul.inheritsList
 					Field Detail
 				</div>
 				
-					<a name="_RSASIGN_DIHEAD"> </a>
+					<a name="hL"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>_RSASIGN_DIHEAD</b>
+					<span class="light">{String}</span>
+					<b>hL</b>
 					
 					</div>
 					<div class="description">
-						Array of head part of hexadecimal DigestInfo value for hash algorithms.
-You can add any DigestInfo hash algorith for signing.
-See PKCS#1 v2.1 spec (p38).
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
+						hexadecimal string of ASN.1 TLV length(L)
 						
 						
 					</div>
@@ -396,19 +518,81 @@ See PKCS#1 v2.1 spec (p38).
 
 					<hr />
 				
-					<a name="_RSASIGN_HASHHEXFUNC"> </a>
+					<a name="hT"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>_RSASIGN_HASHHEXFUNC</b>
+					<span class="light">{String}</span>
+					<b>hT</b>
 					
 					</div>
 					<div class="description">
-						Array of functions which calculate hash and returns it as hexadecimal.
-You can add any hash algorithm implementations.
+						hexadecimal string of ASN.1 TLV tag(T)
 						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="hTLV"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>hTLV</b>
+					
+					</div>
+					<div class="description">
+						hexadecimal string of ASN.1 TLV
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="hV"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>hV</b>
+					
+					</div>
+					<div class="description">
+						hexadecimal string of ASN.1 TLV value(V)
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="isModified"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Boolean}</span>
+					<b>isModified</b>
+					
+					</div>
+					<div class="description">
+						flag whether internal data was changed
 						
 						
 					</div>
@@ -425,6 +609,107 @@ You can add any hash algorithm implementations.
 			
 
 <!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".getEncodedHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.asn1.ASN1Object.</span><b>getEncodedHex</b>()
+					
+					</div>
+					<div class="description">
+						get hexadecimal string of ASN.1 TLV bytes
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of ASN.1 TLV</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getLengthHexFromValue"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.asn1.ASN1Object.</span><b>getLengthHexFromValue</b>()
+					
+					</div>
+					<div class="description">
+						get hexadecimal ASN.1 TLV length(L) bytes from TLV value(V)
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of ASN.1 TLV length(L)</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getValueHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.asn1.ASN1Object.</span><b>getValueHex</b>()
+					
+					</div>
+					<div class="description">
+						get hexadecimal string of ASN.1 TLV value(V) bytes
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of ASN.1 TLV value(V) bytes</dd>
+							
+							</dl>
+						
+						
+						
+
+					
+				
 			
 			
 <!-- ============================== event details ========================= -->		

@@ -17,7 +17,7 @@ function hex2b64(h) {
     c = parseInt(h.substring(i,i+2),16);
     ret += b64map.charAt(c >> 2) + b64map.charAt((c & 3) << 4);
   }
-  while((ret.length & 3) > 0) ret += b64pad;
+  if (b64pad) while((ret.length & 3) > 0) ret += b64pad;
   return ret;
 }
 

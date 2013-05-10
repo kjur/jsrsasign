@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.0 JavaScript API Reference - global__</title>
+		<title>jsrsasign 3.0.0 JavaScript API Reference - KJUR.asn1.x509.Certificate</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -298,53 +298,98 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Built-In Namespace global__
+				Class KJUR.asn1.x509.Certificate
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
+				<br />Extends
+					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
+				X.509 Certificate class to sign and generate hex encoded certificate
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
+			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.Certificate.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.x509.Certificate.html#constructor">KJUR.asn1.x509.Certificate</a></b>(params)
+							</div>
+							<div class="description">X.509 Certificate class to sign and generate hex encoded certificate
+<br/>
+As for argument 'params' for constructor, you can specify one of
+following properties:
+<ul>
+<li>tbscertobj - specify <a href="../symbols/KJUR.asn1.x509.TBSCertificate.html">KJUR.asn1.x509.TBSCertificate</a> object</li>
+<li>rsaprvkey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object CA private key</li>
+</ul>
+NOTE: 'params' can be omitted.</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 			
 
 <!-- ============================== properties summary ===================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class global__.">
-					<caption>Field Summary</caption>
+				
+				
+				<dl class="inheritsList">
+				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
+				</dl>
+				
+			
+
+<!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.x509.Certificate.">
+					<caption>Method Summary</caption>
 					<thead>
 						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
 						</tr>
 					</thead>
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_DIHEAD">_RSASIGN_DIHEAD</a></b>
+								<div class="fixedFont">KJUR.asn1.x509.Certificate.<b><a href="../symbols/KJUR.asn1.x509.Certificate.html#.getPEMString">getPEMString</a></b>()
 								</div>
-								<div class="description">Array of head part of hexadecimal DigestInfo value for hash algorithms.</div>
+								<div class="description">get PEM formatted certificate string after signed
+</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_HASHHEXFUNC">_RSASIGN_HASHHEXFUNC</a></b>
+								<div class="fixedFont">KJUR.asn1.x509.Certificate.<b><a href="../symbols/KJUR.asn1.x509.Certificate.html#.sign">sign</a></b>()
 								</div>
-								<div class="description">Array of functions which calculate hash and returns it as hexadecimal.</div>
+								<div class="description">sign TBSCertificate and set signature value internally
+</div>
 							</td>
 						</tr>
 					
@@ -353,68 +398,149 @@ ul.inheritsList
 				
 				
 				
-			
-
-<!-- ============================== methods summary ======================== -->
+				<dl class="inheritsList">
+				
+				</dl>
+				
 			
 <!-- ============================== events summary ======================== -->
 			
 
 <!-- ============================== constructor details ==================== -->		
 			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>KJUR.asn1.x509.Certificate</b>(params)
+				</div>
+				
+				<div class="description">
+					X.509 Certificate class to sign and generate hex encoded certificate
+<br/>
+As for argument 'params' for constructor, you can specify one of
+following properties:
+<ul>
+<li>tbscertobj - specify <a href="../symbols/KJUR.asn1.x509.TBSCertificate.html">KJUR.asn1.x509.TBSCertificate</a> object</li>
+<li>rsaprvkey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object CA private key</li>
+</ul>
+NOTE: 'params' can be omitted.
+<h4>EXAMPLE</h4>
+					
+				</div>
+				
+				
+				
+				<pre class="code">var prvKey = new RSAKey(); // CA's private key
+prvKey.readPrivateKeyFromASN1HexString("3080...");
+var cert = new KJUR.asn1x509.Certificate({'tbscertobj': tbs, 'rsaprvkey': prvKey});
+cert.sign(); // issue certificate by CA's private key
+var hCert = cert.getEncodedHex();
+
+// Certificate  ::=  SEQUENCE  {
+//     tbsCertificate       TBSCertificate,
+//     signatureAlgorithm   AlgorithmIdentifier,
+//     signature            BIT STRING  }</pre>
+				
+				
+				
+				
+					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Array}</span>  <b>params</b>
+								
+							</dt>
+								<dd>associative array of parameters (ex. {'tbscertobj': obj, 'rsaprvkey': key})</dd>
+						
+						</dl>
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
+			
 
 <!-- ============================== field details ========================== -->		
 			
+
+<!-- ============================== method details ========================= -->		
+			
 				<div class="sectionTitle">
-					Field Detail
+					Method Detail
 				</div>
 				
-					<a name="_RSASIGN_DIHEAD"> </a>
-					<div class="fixedFont">
+					<a name=".getPEMString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<b>_RSASIGN_DIHEAD</b>
+					<span class="light">KJUR.asn1.x509.Certificate.</span><b>getPEMString</b>()
 					
 					</div>
 					<div class="description">
-						Array of head part of hexadecimal DigestInfo value for hash algorithms.
-You can add any DigestInfo hash algorith for signing.
-See PKCS#1 v2.1 spec (p38).
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
+						get PEM formatted certificate string after signed
+
 						
 						
 					</div>
 					
 					
-
+					
+					<pre class="code">var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbs, 'rsaprvkey': prvKey});
+cert.sign();
+var sPEM =  cert.getPEMString();</pre>
+					
+					
+					
 						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>PEM formatted string of certificate</dd>
+							
+							</dl>
 						
 						
 						
 
 					<hr />
 				
-					<a name="_RSASIGN_HASHHEXFUNC"> </a>
-					<div class="fixedFont">
+					<a name=".sign"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<b>_RSASIGN_HASHHEXFUNC</b>
+					<span class="light">KJUR.asn1.x509.Certificate.</span><b>sign</b>()
 					
 					</div>
 					<div class="description">
-						Array of functions which calculate hash and returns it as hexadecimal.
-You can add any hash algorithm implementations.
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
+						sign TBSCertificate and set signature value internally
+
 						
 						
 					</div>
 					
 					
-
+					
+					<pre class="code">var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbs, 'rsaprvkey': prvKey});
+cert.sign();</pre>
+					
+					
+					
+						
+						
+						
 						
 						
 						
@@ -422,9 +548,6 @@ You can add any hash algorithm implementations.
 
 					
 				
-			
-
-<!-- ============================== method details ========================= -->		
 			
 			
 <!-- ============================== event details ========================= -->		
@@ -438,7 +561,7 @@ You can add any hash algorithm implementations.
 		<div class="fineprint" style="clear:both">
                         &copy; 2012 Kenji Urushima, All rights reserved<br/>
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:51 GMT+0900 (JST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri May 10 2013 22:18:52 GMT+0900 (JST)
 		</div>
 	</body>
 </html>

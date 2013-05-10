@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.0 JavaScript API Reference - global__</title>
+		<title>jsrsasign 3.0.0 JavaScript API Reference - KJUR.asn1.DERAbstractTime</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -298,53 +298,98 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Built-In Namespace global__
+				Class KJUR.asn1.DERAbstractTime
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
+				<br />Extends
+					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
+				base class for ASN.1 DER Generalized/UTCTime class
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1-1.0.js.html">asn1-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
+			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.DERAbstractTime.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.DERAbstractTime.html#constructor">KJUR.asn1.DERAbstractTime</a></b>(params)
+							</div>
+							<div class="description">base class for ASN.1 DER Generalized/UTCTime class
+</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 			
 
 <!-- ============================== properties summary ===================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class global__.">
-					<caption>Field Summary</caption>
+				
+				
+				<dl class="inheritsList">
+				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
+				</dl>
+				
+			
+
+<!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.DERAbstractTime.">
+					<caption>Method Summary</caption>
 					<thead>
 						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
 						</tr>
 					</thead>
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_DIHEAD">_RSASIGN_DIHEAD</a></b>
+								<div class="fixedFont">KJUR.asn1.DERAbstractTime.<b><a href="../symbols/KJUR.asn1.DERAbstractTime.html#.getString">getString</a></b>()
 								</div>
-								<div class="description">Array of head part of hexadecimal DigestInfo value for hash algorithms.</div>
+								<div class="description">get string value of this string object</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/global__.html#_RSASIGN_HASHHEXFUNC">_RSASIGN_HASHHEXFUNC</a></b>
+								<div class="fixedFont">KJUR.asn1.DERAbstractTime.<b><a href="../symbols/KJUR.asn1.DERAbstractTime.html#.setByDateValue">setByDateValue</a></b>(year, month, day, hour, min, sec)
 								</div>
-								<div class="description">Array of functions which calculate hash and returns it as hexadecimal.</div>
+								<div class="description">set value by a Date object</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.DERAbstractTime.<b><a href="../symbols/KJUR.asn1.DERAbstractTime.html#.setString">setString</a></b>(newS)
+								</div>
+								<div class="description">set value by a string</div>
 							</td>
 						</tr>
 					
@@ -353,42 +398,163 @@ ul.inheritsList
 				
 				
 				
-			
-
-<!-- ============================== methods summary ======================== -->
+				<dl class="inheritsList">
+				
+				</dl>
+				
 			
 <!-- ============================== events summary ======================== -->
 			
 
 <!-- ============================== constructor details ==================== -->		
 			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>KJUR.asn1.DERAbstractTime</b>(params)
+				</div>
+				
+				<div class="description">
+					base class for ASN.1 DER Generalized/UTCTime class
+
+					
+				</div>
+				
+				
+				
+				
+					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Array}</span>  <b>params</b>
+								
+							</dt>
+								<dd>associative array of parameters (ex. {'str': '130430235959Z'})</dd>
+						
+						</dl>
+					
+					
+					
+					
+					
+					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a> - superclass</dd>
+						
+						</dl>
+					
+
+			</div>
+			
 
 <!-- ============================== field details ========================== -->		
 			
+
+<!-- ============================== method details ========================= -->		
+			
 				<div class="sectionTitle">
-					Field Detail
+					Method Detail
 				</div>
 				
-					<a name="_RSASIGN_DIHEAD"> </a>
-					<div class="fixedFont">
+					<a name=".getString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
-					
-					<b>_RSASIGN_DIHEAD</b>
+					<span class="light">{String}</span>
+					<span class="light">KJUR.asn1.DERAbstractTime.</span><b>getString</b>()
 					
 					</div>
 					<div class="description">
-						Array of head part of hexadecimal DigestInfo value for hash algorithms.
-You can add any DigestInfo hash algorith for signing.
-See PKCS#1 v2.1 spec (p38).
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
+						get string value of this string object
 						
 						
 					</div>
 					
 					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> string value of this time object</dd>
+							
+							</dl>
+						
+						
+						
 
+					<hr />
+				
+					<a name=".setByDateValue"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.DERAbstractTime.</span><b>setByDateValue</b>(year, month, day, hour, min, sec)
+					
+					</div>
+					<div class="description">
+						set value by a Date object
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>year</b>
+									
+								</dt>
+								<dd>year of date (ex. 2013)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>month</b>
+									
+								</dt>
+								<dd>month of date between 1 and 12 (ex. 12)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>day</b>
+									
+								</dt>
+								<dd>day of month</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>hour</b>
+									
+								</dt>
+								<dd>hours of date</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>min</b>
+									
+								</dt>
+								<dd>minutes of date</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>sec</b>
+									
+								</dt>
+								<dd>seconds of date</dd>
+							
+							</dl>
+						
+						
+						
 						
 						
 						
@@ -396,25 +562,35 @@ See PKCS#1 v2.1 spec (p38).
 
 					<hr />
 				
-					<a name="_RSASIGN_HASHHEXFUNC"> </a>
-					<div class="fixedFont">
+					<a name=".setString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<b>_RSASIGN_HASHHEXFUNC</b>
+					<span class="light">KJUR.asn1.DERAbstractTime.</span><b>setString</b>(newS)
 					
 					</div>
 					<div class="description">
-						Array of functions which calculate hash and returns it as hexadecimal.
-You can add any hash algorithm implementations.
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
+						set value by a string
 						
 						
 					</div>
 					
 					
-
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>newS</b>
+									
+								</dt>
+								<dd>value by a string to set such like "130430235959Z"</dd>
+							
+							</dl>
+						
+						
+						
 						
 						
 						
@@ -422,9 +598,6 @@ You can add any hash algorithm implementations.
 
 					
 				
-			
-
-<!-- ============================== method details ========================= -->		
 			
 			
 <!-- ============================== event details ========================= -->		
