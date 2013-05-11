@@ -1,7 +1,7 @@
 
 ChangeLog for jsrsasign
 
-* next version
+* Changes between 3.0.0 and 3.0.1
   - crypto-1.0js update to 1.0.1
     - MessageDigest class now support md5, sha224, sha256, sha384, 
       sha512 and ripemd160 of 'cryptojs' provider.
