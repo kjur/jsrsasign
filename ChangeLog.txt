@@ -1,6 +1,18 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 3.0.0 and 3.0.1
+  - crypto-1.0js update to 1.0.1
+    - MessageDigest class now support md5, sha224, sha256, sha384, 
+      sha512 and ripemd160 of 'cryptojs' provider.
+    - Signature class now support {MD5,SHA224,SHA256,SHA384,
+      SHA512,RIPEMD160}withRSA of 'cryptojs/jsrsa' provider.
+    - Signature class constructor now supports 
+      'prvkeypem' parameter to specify signing private key.
+  - asn1x509-1.0.js update to 1.0.1
+    - Certificate.setRsaPrvKeyByPEMandPass(pem,pass) method added and
+      supports new constructor property 'rsaprvpem' and 'rsaprvpas'.
+
 * Changes between 2.0.0 and 3.0.0
   - New features:
     - crypto-1.0.js: MessageDigest and Signature class like Java JCE

@@ -1,0 +1,317 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script language="JavaScript" type="text/javascript" src="../jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rng.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsa2.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../sha1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../sha256.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+
+<script>
+$(document).ready(function(){
+
+var k_n =  "00d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021";
+var k_e =  "010001";
+var k_d =  "03dfeadd993a89bd86151a4a0cb3bf3b628c9c07d1f9be1727accc19ea19ecb6e98b7316d0d6b093d72455a5f46551aac5b4885f90afa7fca31c7a70c3e41b505af0fe00a32e28988ccf44f02dee005e40289d2be0604f978bbc2b86e96d7792c5207ad3fc0f40589000955c039c61655cea36e177123b8a747b30f9d93e74f1";
+var k_p =  "00ee6d7fe55461600ffc58b9c873e7a61ced51d7fb9f015243527b04b3c0945b72e7aa9275d15b08fded25eaa6761f2aa66aefc767105d74496b2bfcd30a8beed7";
+var k_q =  "00e0f56a0effce6406d6af8b325d936ffcca65e2be6cbb360c3140fd53c076248467ae198664fccbc76dcdf49e21109f9787cb5229573cd233a4aef1a54aff81c7";
+var k_dp = "6933ad8c0dd84d5fa053b1ddcdae77b029d2c3ff0560bae073a34e26d6215fdc6a75ebdbca7d65914d333ebf263d883f17ce26e8c5e2c66da2b92cfc1d9a32cf";
+var k_dq = "462da9698679ff9076970ae8aa729d64124c18a1695039fb31be618928287319ef324bfa3634fae97b22de261a909208f6af0231ad6a66f4ff72282675b021ef";
+var k_co = "40d5f2a22cee18496d8926815f1e07dbd11d5cd6160c9f524b97f4ef40516c022576a461deb70dbe963a04a26a15aa5d6b50e375c9dc64408c8b34ff18cadcd7";
+
+var hSigAAA = "6f7df91d8f973a0619d525c319337741130b77b21f9667dc7d1d74853b644cbe5e6b0e84aacc2faee883d43affb811fc653b67c38203d4f206d1b838c4714b6b2cf17cd621303c21bac96090df3883e58784a0576e501c10cdefb12b6bf887e548f6b07b09ae80d8416151d7dab7066d645e2eee57ac5f7af2a70ee0724c8e47";
+
+var hSigAAAkZ1SHA256 = "c27ebd5c0193244f7d3f08405b6821c2085ee522c630aad3e1a14e4ae2dee034f47e480fb37a729e074f98fb8b70dd387666b4b9def14c3b5e2a814cf13bc6fca24f252f396fdcf0aca55c0ca7782e9d07ca887714761ee0bdb8364a1816c2e43b0ceef5a507b8a939d8bbad1f38ee5dfdd30f04b21eeeb406b9d2d5478fac87";
+
+// "z1.pkcs1.pem"
+var sKey1PEM = "" + 
+"-----BEGIN RSA PRIVATE KEY-----\n" + 
+"MIICWwIBAAKBgQDRhGF7X4A0ZVlEg594WmODVVUIiiPQs04aLmvfg8SborHss5gQ\n" + 
+"Xu0aIdUT6nb5rTh5hD2yfpF2WIW6M8z0WxRhwicgXwi80H1aLPf6lEPPLvN29EhQ\n" + 
+"NjBpkFkAJUbS8uuhJEeKw0cE49g80eBBF4BCqSL6PFQbP9/rByxdxEoAIQIDAQAB\n" + 
+"AoGAA9/q3Zk6ib2GFRpKDLO/O2KMnAfR+b4XJ6zMGeoZ7Lbpi3MW0Nawk9ckVaX0\n" + 
+"ZVGqxbSIX5Cvp/yjHHpww+QbUFrw/gCjLiiYjM9E8C3uAF5AKJ0r4GBPl4u8K4bp\n" + 
+"bXeSxSB60/wPQFiQAJVcA5xhZVzqNuF3EjuKdHsw+dk+dPECQQDubX/lVGFgD/xY\n" + 
+"uchz56Yc7VHX+58BUkNSewSzwJRbcueqknXRWwj97SXqpnYfKqZq78dnEF10SWsr\n" + 
+"/NMKi+7XAkEA4PVqDv/OZAbWr4syXZNv/Mpl4r5suzYMMUD9U8B2JIRnrhmGZPzL\n" + 
+"x23N9J4hEJ+Xh8tSKVc80jOkrvGlSv+BxwJAaTOtjA3YTV+gU7Hdza53sCnSw/8F\n" + 
+"YLrgc6NOJtYhX9xqdevbyn1lkU0zPr8mPYg/F84m6MXixm2iuSz8HZoyzwJARi2p\n" + 
+"aYZ5/5B2lwroqnKdZBJMGKFpUDn7Mb5hiSgocxnvMkv6NjT66Xsi3iYakJII9q8C\n" + 
+"Ma1qZvT/cigmdbAh7wJAQNXyoizuGEltiSaBXx4H29EdXNYWDJ9SS5f070BRbAIl\n" + 
+"dqRh3rcNvpY6BKJqFapda1DjdcncZECMizT/GMrc1w==\n" + 
+"-----END RSA PRIVATE KEY-----\n";
+
+//=========================================================================
+module("Padding Test");
+
+test("charCodeAt test", function() {
+  expect(1);
+  var s = new String("aaa");
+  equals(s.charCodeAt(0), 97, "aaa 0 61");
+});
+
+test("_rsasign_getHexPaddedDigestInfoForString aaa 1024/sha1", function() {
+  var hExpected = "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
+  var hPM = _rsasign_getHexPaddedDigestInfoForString("aaa", 1024, 'sha1');
+  expect(2);
+  equals(hPM.length, 256, "check padded message length 128byte*2chars=256chars");
+  equals(hPM, hExpected,
+         "check padded message for string aaa with SHA1withRSA 1024bit" );
+});
+
+test("_rsasign_getHexPaddedDigestInfoForString aaa ByteArray 1024/sha1", function() {
+  var hExpected = "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
+  var s = new String("aaa");
+  //var a = new Array(s.charCodeAt(0), s.charCodeAt(1), s.charCodeAt(2));
+  var a = new Array(97, 97, 97);
+  var hPM = _rsasign_getHexPaddedDigestInfoForString(a, 1024, 'sha1');
+  expect(2);
+  equals(hPM.length, 256, "check padded message length 128byte*2chars=256chars");
+  equals(hPM, hExpected,
+         "check padded message for string aaa of ByteArray with SHA1withRSA 1024bit" );
+});
+
+test("_rsasign_getHexPaddedDigestInfoForString aaa 1024/sha256", function() {
+  var hExpected = "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003031300d0609608648016503040201050004209834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0";
+  var hPM = _rsasign_getHexPaddedDigestInfoForString("aaa", 1024, 'sha256');
+  expect(2);
+  equals(hPM.length, 256, "check padded message length 128byte*2chars=256chars");
+  equals(hPM, hExpected,
+         "check padded message for string aaa with SHA256withRSA 1024bit" );
+});
+
+test("_rsasign_getHexPaddedDigestInfoForString aaa ByteArray 1024/sha256", function() {
+  var hExpected = "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003031300d0609608648016503040201050004209834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0";
+  var s = "aaa";
+  var a = Array(s.charCodeAt(0), s.charCodeAt(1), s.charCodeAt(2));
+  var hPM = _rsasign_getHexPaddedDigestInfoForString(a, 1024, 'sha256');
+  expect(2);
+  equals(hPM.length, 256, "check padded message length 128byte*2chars=256chars");
+  equals(hPM, hExpected,
+         "check padded message for string aaa ByteArray with SHA256withRSA 1024bit" );
+});
+
+test("_rsasign_getHexPaddedDigestInfoForString aaa 512/sha1", function() {
+  var hExpected = "0001ffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
+  var hPM = _rsasign_getHexPaddedDigestInfoForString("aaa", 512, 'sha1');
+  expect(2);
+  equals(hPM.length, 128, "check padded message length 64byte*2chars=128chars");
+  equals(hPM, hExpected,
+         "check padded message for string aaa with SHA1withRSA 512bit" );
+});
+
+test("_rsasign_getHexPaddedDigestInfoForString aaa 2048/sha1", function() {
+  var hExpected = "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
+  var hPM = _rsasign_getHexPaddedDigestInfoForString("aaa", 2048, 'sha1');
+  expect(2);
+  equals(hPM.length, 512, "check padded message length 256byte*2chars=512chars");
+  equals(hPM, hExpected,
+         "check padded message for string aaa with SHA1withRSA 2048bit" );
+});
+
+test("_rsasign_getHexPaddedDigestInfoForString aaa 4096/sha1", function() {
+  var hExpected = "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
+  var hPM = _rsasign_getHexPaddedDigestInfoForString("aaa", 4096, 'sha1');
+  expect(2);
+  equals(hPM.length, 1024, "check padded message length 512byte*2chars=1024chars");
+  equals(hPM, hExpected,
+         "check padded message for string aaa with SHA1withRSA 4096bit" );
+});
+
+//=========================================================================
+module("Signature Test");
+
+test("RSAKey.signString(aaa,sha1)", function() {
+  expect(2);
+
+  var rsa = new RSAKey();
+  rsa.setPrivateEx(k_n, k_e, k_d, k_p, k_q, k_dp, k_dq, k_co);
+  equals(rsa.n.bitLength(), 1024, "check key size");
+
+  //var hSig = rsa.signStringWithSHA1("aaa");
+  var hSig = rsa.signString("aaa", 'sha1');
+  equals(hSig, hSigAAA,
+         "String 'aaa' is signed properly with SHA1withRSA algorithm." );
+});
+
+test("RSAKey.signString(aaa,sha1) via readPEM", function() {
+  expect(2);
+
+  var rsa = new RSAKey();
+  rsa.readPrivateKeyFromPEMString(sKey1PEM);
+  equals(rsa.n.bitLength(), 1024, "check key size");
+
+  //var hSig = rsa.signStringWithSHA1("aaa");
+  var hSig = rsa.signString("aaa", 'sha1');
+  equals(hSig, hSigAAA,
+         "String 'aaa' is signed properly with SHA1withRSA algorithm. (2)" );
+});
+
+test("RSAKey.signString(aaa ByteArray,sha1) via readPEM", function() {
+  expect(2);
+
+  var rsa = new RSAKey();
+  rsa.readPrivateKeyFromPEMString(sKey1PEM);
+  equals(rsa.n.bitLength(), 1024, "check key size");
+
+  //var hSig = rsa.signStringWithSHA1("aaa");
+  var s = "aaa";
+  var a = Array(s.charCodeAt(0), s.charCodeAt(1), s.charCodeAt(2));
+
+  var hSig = rsa.signString(a, 'sha1');
+  equals(hSig, hSigAAA,
+         "String ByteArray of 'aaa' is signed properly with SHA1withRSA algorithm. (2)" );
+});
+
+test("RSAKey.signString(ByteArray[255,255,255] ,sha1) via readPEM", function() {
+  expect(2);
+
+  var rsa = new RSAKey();
+  rsa.readPrivateKeyFromPEMString(sKey1PEM);
+  equals(rsa.n.bitLength(), 1024, "check key size");
+
+  //var hSig = rsa.signStringWithSHA1("aaa");
+  var a = Array(255, 255, 255);
+
+  var hSig = rsa.signString(a, 'sha1');
+  // expected value of signature can be created by following commands
+  // % echo -n ffffff | hex2bin | openssl dgst -sign z1024.pkcs1.pem -sha1 -hex
+  equals(hSig, "9368d4720f7a011ebe5e4386b50106b037535a54625513e9894c0a23b6d5f35e41e0e2c974abb02ac6518a7ad0216957736a4864ca2fe1448b7d79c7eac6bf0115244941ff2a45b8ff5ce8fe7149096c60ea0e3e6f55265397eb0c726b52c884b08a265c9f47d2d4f5232faa2ac1217a07dc1a6c041763240b4000d53aa4c951",
+         "String ByteArray of '[255,255,255]' is signed properly with SHA1withRSA algorithm. (2)" );
+});
+
+test("RSAKey.signString(aaa,sha256) via readPEM", function() {
+  expect(2);
+
+  var rsa = new RSAKey();
+  rsa.readPrivateKeyFromPEMString(sKey1PEM);
+  equals(rsa.n.bitLength(), 1024, "check key size");
+
+  //var hSig = rsa.signStringWithSHA256("aaa");
+  var hSig = rsa.signString("aaa", 'sha256');
+  equals(hSig, hSigAAAkZ1SHA256,
+         "String 'aaa' is signed properly with SHA256withRSA algorithm. (2)" );
+});
+
+//=========================================================================
+module("Verifier Test");
+
+test("_rsasign_getDecryptSignatureBI", function() {
+  var hSig = "6f7df91d8f973a0619d525c319337741130b77b21f9667dc7d1d74853b644cbe5e6b0e84aacc2faee883d43affb811fc653b67c38203d4f206d1b838c4714b6b2cf17cd621303c21bac96090df3883e58784a0576e501c10cdefb12b6bf887e548f6b07b09ae80d8416151d7dab7066d645e2eee57ac5f7af2a70ee0724c8e47";
+  var biSig = parseBigInt(hSig, 16);
+  var k_n =  "00d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021";
+  var k_e =  "010001";
+  var biDecSig = _rsasign_getDecryptSignatureBI(biSig, k_n, k_e);
+
+  var hSigExpected = "1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
+
+  expect(2);
+  equals(biDecSig.toString(16), hSigExpected, "checking decrypted signature.");
+  equals(biDecSig.toString(16).length, (1024 / 4) - 3, "check bitLength of decrypted signature.");
+});
+
+test("_rsasign_getHexDigestInfoFromSig", function() {
+  var hSig = "6f7df91d8f973a0619d525c319337741130b77b21f9667dc7d1d74853b644cbe5e6b0e84aacc2faee883d43affb811fc653b67c38203d4f206d1b838c4714b6b2cf17cd621303c21bac96090df3883e58784a0576e501c10cdefb12b6bf887e548f6b07b09ae80d8416151d7dab7066d645e2eee57ac5f7af2a70ee0724c8e47";
+  var biSig = parseBigInt(hSig, 16);
+  var k_n =  "00d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021";
+  var k_e =  "010001";
+  var hDi = _rsasign_getHexDigestInfoFromSig(biSig, k_n, k_e);
+  var hDiExpected = "3021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
+
+  equals(hDi, hDiExpected, "checking digestInfo.");
+});
+
+test("_rsasign_getAlgNameAndHashFromHexDisgestInfo", function() {
+  var hDigestInfo = "3021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
+  var a = _rsasign_getAlgNameAndHashFromHexDisgestInfo(hDigestInfo);
+  expect(3);
+  equals(a.length, 2, "check result length.");
+  equals(a[0], 'sha1', "check algName");
+  equals(a[1], '7e240de74fb1ed08fa08d38063f6a6a91462a815', 'check hash value');
+});
+
+test("_rsasign_verifySignatureWithArgs", function() {
+  var hSig = "6f7df91d8f973a0619d525c319337741130b77b21f9667dc7d1d74853b644cbe5e6b0e84aacc2faee883d43affb811fc653b67c38203d4f206d1b838c4714b6b2cf17cd621303c21bac96090df3883e58784a0576e501c10cdefb12b6bf887e548f6b07b09ae80d8416151d7dab7066d645e2eee57ac5f7af2a70ee0724c8e47";
+  var biSig = parseBigInt(hSig, 16);
+  var k_n =  "00d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021";
+  var k_e =  "010001";
+  var sMsg = "aaa";
+
+  var result = _rsasign_verifySignatureWithArgs(sMsg, biSig, k_n, k_e);
+
+  expect(2);
+  equals(hex_sha1("aaa"), '7e240de74fb1ed08fa08d38063f6a6a91462a815',
+         'check hex_sha1 works properly.');
+  equals(result, true, 'check signature verification result');
+});
+
+test("RSAKey.verifyHexSignatureForMessage aaa hSig", function() {
+  var hSig = "6f7df91d8f973a0619d525c319337741130b77b21f9667dc7d1d74853b644cbe5e6b0e84aacc2faee883d43affb811fc653b67c38203d4f206d1b838c4714b6b2cf17cd621303c21bac96090df3883e58784a0576e501c10cdefb12b6bf887e548f6b07b09ae80d8416151d7dab7066d645e2eee57ac5f7af2a70ee0724c8e47";
+  var k_n =  "00d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021";
+  var k_e =  "010001";
+  var sMsg = "aaa";
+
+  var rsa = new RSAKey();
+  rsa.setPublic(k_n, k_e);
+
+  var result = rsa.verifyHexSignatureForMessage(hSig, sMsg);
+  //var result = true;
+
+  equals(result, true, 'check signature verification result');
+});
+
+test("RSAKey.verifyHexSignatureForMessage aaa ByteArray hSig", function() {
+  var hSig = "6f7df91d8f973a0619d525c319337741130b77b21f9667dc7d1d74853b644cbe5e6b0e84aacc2faee883d43affb811fc653b67c38203d4f206d1b838c4714b6b2cf17cd621303c21bac96090df3883e58784a0576e501c10cdefb12b6bf887e548f6b07b09ae80d8416151d7dab7066d645e2eee57ac5f7af2a70ee0724c8e47";
+  var k_n =  "00d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021";
+  var k_e =  "010001";
+  var sMsg = String.fromCharCode(97, 97, 97);
+
+  var rsa = new RSAKey();
+  rsa.setPublic(k_n, k_e);
+
+  var result = rsa.verifyHexSignatureForMessage(hSig, sMsg);
+
+  equals(result, true, 'signature of message ByteArray aaa is successfully verified.');
+});
+
+//=========================================================================
+/*
+module("Misc");
+
+test("array test 1", function() {
+  // a .. code97
+  var a1 = Array(97, 97, 97);
+  var a2 = Array(97, 97, 98);
+  expect(4);
+  equals(a1, a1, "test1");
+  equals(a1, a2, "test2");
+  equals(a1 == a2, true, "test3");
+  equals(a1 == a1, true, "test4");
+});
+ */
+
+});
+</script>
+  
+</head>
+<body>
+<h1 id="qunit-header">QUnit for RSAKey signing add-on 'rsa-sign.js'</h1>
+<h2 id="qunit-banner"></h2>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+</body>
+</html>

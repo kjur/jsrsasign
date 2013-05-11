@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script language="JavaScript" type="text/javascript" src="../jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../sha1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../x509-1.1.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  var sCer1PEM = "" +
+"-----BEGIN CERTIFICATE-----\n" + 
+"MIIBqDCCAVKgAwIBAgIJAJ53Xn2fQ6vJMA0GCSqGSIb3DQEBBQUAMBoxCzAJBgNV\n" + 
+"BAYTAkpQMQswCQYDVQQKEwJ6MjAeFw0xMDA1MzEwNjE3NTZaFw0yMDA1MjgwNjE3\n" + 
+"NTZaMBoxCzAJBgNVBAYTAkpQMQswCQYDVQQKEwJ6MjBcMA0GCSqGSIb3DQEBAQUA\n" + 
+"A0sAMEgCQQC5sAMpUF/i7WDsVondzfW5TQWrQW4WQ7HKP5b8Ry7rH2LtR2iX8Vmu\n" + 
+"mLfzrezseXHetfZNmiWQHE3HpJdy5aArAgMBAAGjezB5MB0GA1UdDgQWBBS7MIUo\n" + 
+"gYmDIf2DOqOcwYCKCb3GjDBKBgNVHSMEQzBBgBS7MIUogYmDIf2DOqOcwYCKCb3G\n" + 
+"jKEepBwwGjELMAkGA1UEBhMCSlAxCzAJBgNVBAoTAnoyggkAnndefZ9Dq8kwDAYD\n" + 
+"VR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAANBAFhZ88q7ZS7THEcPJ8ogQ+78nyAn\n" + 
+"DN7F1FsLp7jE9oM3kYQl6KYy0pwch6Wd6ypW86pel4JFOEr+LnVGODaoxFE=\n" + 
+    "-----END CERTIFICATE-----\n";
+
+  var sCer1B64 = "MIIBqDCCAVKgAwIBAgIJAJ53Xn2fQ6vJMA0GCSqGSIb3DQEBBQUAMBoxCzAJBgNVBAYTAkpQMQswCQYDVQQKEwJ6MjAeFw0xMDA1MzEwNjE3NTZaFw0yMDA1MjgwNjE3NTZaMBoxCzAJBgNVBAYTAkpQMQswCQYDVQQKEwJ6MjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQC5sAMpUF/i7WDsVondzfW5TQWrQW4WQ7HKP5b8Ry7rH2LtR2iX8VmumLfzrezseXHetfZNmiWQHE3HpJdy5aArAgMBAAGjezB5MB0GA1UdDgQWBBS7MIUogYmDIf2DOqOcwYCKCb3GjDBKBgNVHSMEQzBBgBS7MIUogYmDIf2DOqOcwYCKCb3GjKEepBwwGjELMAkGA1UEBhMCSlAxCzAJBgNVBAoTAnoyggkAnndefZ9Dq8kwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAANBAFhZ88q7ZS7THEcPJ8ogQ+78nyAnDN7F1FsLp7jE9oM3kYQl6KYy0pwch6Wd6ypW86pel4JFOEr+LnVGODaoxFE=";
+
+  var hCer1 = "308201a830820152a0030201020209009e775e7d9f43abc9300d06092a864886f70d0101050500301a310b3009060355040613024a50310b3009060355040a13027a32301e170d3130303533313036313735365a170d3230303532383036313735365a301a310b3009060355040613024a50310b3009060355040a13027a32305c300d06092a864886f70d0101010500034b003048024100b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b0203010001a37b3079301d0603551d0e04160414bb30852881898321fd833aa39cc1808a09bdc68c304a0603551d23044330418014bb30852881898321fd833aa39cc1808a09bdc68ca11ea41c301a310b3009060355040613024a50310b3009060355040a13027a328209009e775e7d9f43abc9300c0603551d13040530030101ff300d06092a864886f70d01010505000341005859f3cabb652ed31c470f27ca2043eefc9f20270cdec5d45b0ba7b8c4f68337918425e8a632d29c1c87a59deb2a56f3aa5e978245384afe2e75463836a8c451";
+
+  var sCer2PEM = "" +
+"-----BEGIN CERTIFICATE-----\n" + 
+"MIIBvTCCASYCCQD55fNzc0WF7TANBgkqhkiG9w0BAQUFADAjMQswCQYDVQQGEwJK\n" + 
+"UDEUMBIGA1UEChMLMDAtVEVTVC1SU0EwHhcNMTAwNTI4MDIwODUxWhcNMjAwNTI1\n" + 
+"MDIwODUxWjAjMQswCQYDVQQGEwJKUDEUMBIGA1UEChMLMDAtVEVTVC1SU0EwgZ8w\n" + 
+"DQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBANGEYXtfgDRlWUSDn3haY4NVVQiKI9Cz\n" + 
+"Thoua9+DxJuiseyzmBBe7Roh1RPqdvmtOHmEPbJ+kXZYhbozzPRbFGHCJyBfCLzQ\n" + 
+"fVos9/qUQ88u83b0SFA2MGmQWQAlRtLy66EkR4rDRwTj2DzR4EEXgEKpIvo8VBs/\n" + 
+"3+sHLF3ESgAhAgMBAAEwDQYJKoZIhvcNAQEFBQADgYEAEZ6mXFFq3AzfaqWHmCy1\n" + 
+"ARjlauYAa8ZmUFnLm0emg9dkVBJ63aEqARhtok6bDQDzSJxiLpCEF6G4b/Nv/M/M\n" + 
+"LyhP+OoOTmETMegAVQMq71choVJyOFE5BtQa6M/lCHEOya5QUfoRF2HF9EjRF44K\n" + 
+"3OK+u3ivTSj3zwjtpudY5Xo=\n" + 
+"-----END CERTIFICATE-----\n";
+
+  var sCer2B64 = "MIIBvTCCASYCCQD55fNzc0WF7TANBgkqhkiG9w0BAQUFADAjMQswCQYDVQQGEwJKUDEUMBIGA1UEChMLMDAtVEVTVC1SU0EwHhcNMTAwNTI4MDIwODUxWhcNMjAwNTI1MDIwODUxWjAjMQswCQYDVQQGEwJKUDEUMBIGA1UEChMLMDAtVEVTVC1SU0EwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBANGEYXtfgDRlWUSDn3haY4NVVQiKI9CzThoua9+DxJuiseyzmBBe7Roh1RPqdvmtOHmEPbJ+kXZYhbozzPRbFGHCJyBfCLzQfVos9/qUQ88u83b0SFA2MGmQWQAlRtLy66EkR4rDRwTj2DzR4EEXgEKpIvo8VBs/3+sHLF3ESgAhAgMBAAEwDQYJKoZIhvcNAQEFBQADgYEAEZ6mXFFq3AzfaqWHmCy1ARjlauYAa8ZmUFnLm0emg9dkVBJ63aEqARhtok6bDQDzSJxiLpCEF6G4b/Nv/M/MLyhP+OoOTmETMegAVQMq71choVJyOFE5BtQa6M/lCHEOya5QUfoRF2HF9EjRF44K3OK+u3ivTSj3zwjtpudY5Xo=";
+
+  var hCer2 = "308201bd30820126020900f9e5f373734585ed300d06092a864886f70d01010505003023310b3009060355040613024a5031143012060355040a130b30302d544553542d525341301e170d3130303532383032303835315a170d3230303532353032303835315a3023310b3009060355040613024a5031143012060355040a130b30302d544553542d52534130819f300d06092a864886f70d010101050003818d0030818902818100d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a00210203010001300d06092a864886f70d010105050003818100119ea65c516adc0cdf6aa587982cb50118e56ae6006bc6665059cb9b47a683d76454127adda12a01186da24e9b0d00f3489c622e908417a1b86ff36ffccfcc2f284ff8ea0e4e611331e80055032aef5721a1527238513906d41ae8cfe508710ec9ae5051fa111761c5f448d1178e0adce2bebb78af4d28f7cf08eda6e758e57a";
+
+  var sCer3PEM = "" + // z0512.cer
+"-----BEGIN CERTIFICATE-----\n" + 
+"MIIBqDCCAVKgAwIBAgIJAJ53Xn2fQ6vJMA0GCSqGSIb3DQEBBQUAMBoxCzAJBgNV\n" + 
+"BAYTAkpQMQswCQYDVQQKEwJ6MjAeFw0xMDA1MzEwNjE3NTZaFw0yMDA1MjgwNjE3\n" + 
+"NTZaMBoxCzAJBgNVBAYTAkpQMQswCQYDVQQKEwJ6MjBcMA0GCSqGSIb3DQEBAQUA\n" + 
+"A0sAMEgCQQC5sAMpUF/i7WDsVondzfW5TQWrQW4WQ7HKP5b8Ry7rH2LtR2iX8Vmu\n" + 
+"mLfzrezseXHetfZNmiWQHE3HpJdy5aArAgMBAAGjezB5MB0GA1UdDgQWBBS7MIUo\n" + 
+"gYmDIf2DOqOcwYCKCb3GjDBKBgNVHSMEQzBBgBS7MIUogYmDIf2DOqOcwYCKCb3G\n" + 
+"jKEepBwwGjELMAkGA1UEBhMCSlAxCzAJBgNVBAoTAnoyggkAnndefZ9Dq8kwDAYD\n" + 
+"VR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAANBAFhZ88q7ZS7THEcPJ8ogQ+78nyAn\n" + 
+"DN7F1FsLp7jE9oM3kYQl6KYy0pwch6Wd6ypW86pel4JFOEr+LnVGODaoxFE=\n" + 
+"-----END CERTIFICATE-----\n";
+
+  var hSig3 = "" + 
+"a30ea363514246b686a25529e6446d79ed3081b9709c6213f0611a495456b5b5\n" + 
+"6efb33e92ad1c00348c84c6335d01425a1033e0c5006b377ab0d6b34c9322d62\n";
+    
+test("_x509_pemToBase64", function() {
+  var sResult = _x509_pemToBase64(sCer1PEM);
+  equals(sResult, sCer1B64, "testing pem-base64 conversion.");
+});
+
+test("_x509_pemToHex", function() {
+  var sResult = _x509_pemToHex(sCer1PEM);
+  equals(sResult, hCer1, "testing pem-hex conversion.");
+});
+
+test("_x509_getSubjectPublicKeyInfoPosFromCertHex", function() {
+  var pSPK = _x509_getSubjectPublicKeyInfoPosFromCertHex(hCer1);
+  equals(pSPK, 127 * 2, "check position of subject public key info.");
+});
+
+test("_x509_getSubjectPublicKeyPosFromCertHex", function() {
+  var pSPK = _x509_getSubjectPublicKeyPosFromCertHex(hCer1);
+  equals(pSPK, 147 * 2, "check position of subject public key without encapsulation.");
+});
+
+test("_x509_getPublicKeyHexArrayFromCertHex", function() {
+  var a = _x509_getPublicKeyHexArrayFromCertHex(hCer1);
+  expect(3);
+  equals(a.length, 2, "check array length.");
+  equals(a[0], "00b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
+  equals(a[1], "010001", "check E");
+});
+
+test("_x509_getPublicKeyHexArrayFromCertPEM", function() {
+  var a = _x509_getPublicKeyHexArrayFromCertPEM(sCer1PEM);
+  expect(3);
+  equals(a.length, 2, "check array length.");
+  equals(a[0], "00b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
+  equals(a[1], "010001", "check E");
+});
+
+test("_x509_getPublicKeyHexArrayFromCertPEM sCer2PEM", function() {
+  expect(8);
+  equals(_x509_pemToBase64(sCer2PEM), sCer2B64, "check pem to base64.");
+  equals(_x509_pemToHex(sCer2PEM), hCer2, "check pem to hex.");
+  var pTbsCert = _x509_getHexTbsCertificateFromCert(hCer2);
+  equals(pTbsCert, 8, "check tbsCert position.");
+  equals(_x509_getSubjectPublicKeyInfoPosFromCertHex(hCer2), 280,
+         "check subjectPublicKeyInfo position.");
+  var a = _asnhex_getPosArrayOfChildren_AtObj(hCer2, pTbsCert); 
+  equals(a.join("/"), "16/38/68/142/206/280", "check postion array of tbsCert.");
+
+  var a = _x509_getPublicKeyHexArrayFromCertPEM(sCer2PEM);
+  equals(a.length, 2, "check array length.");
+  equals(a[0], "00d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021", "check N");
+  equals(a[1], "010001", "check E");
+});
+
+test("X509.readCertPEM", function() {
+  var c = new X509();
+  c.readCertPEM(sCer1PEM);
+  expect(4);
+  equals(c.subjectPublicKeyRSA_hN, "00b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
+  equals(c.subjectPublicKeyRSA_hE, "010001", "check E");
+  equals(c.subjectPublicKeyRSA.n.toString(16), "b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
+  equals(c.subjectPublicKeyRSA.e.toString(16), "10001", "check E");
+});
+
+test("X509.subjectPublicKeyRSA.verifyString integration test", function() {
+  RSAKey.prototype.verifyString = _rsasign_verifyString;
+  var c = new X509();
+  c.readCertPEM(sCer1PEM);
+  expect(2);
+  equals(c.subjectPublicKeyRSA.verifyString("aaa", hSig3), true, "check sig is valid");
+  equals(c.subjectPublicKeyRSA.verifyString("aab", hSig3), false, "check sig is invalid.");
+});
+
+test("X509.getSerialNumber/Issuer/Subject/NotBefore/NotAfter test", function() {
+  RSAKey.prototype.verifyString = _rsasign_verifyString;
+  var c = new X509();
+  c.readCertPEM(sCer1PEM);
+  expect(8);
+  equals(c.getSerialNumberHex(), "009e775e7d9f43abc9", "sn = 02");
+  equals(c.getIssuerHex(), "301a310b3009060355040613024a50310b3009060355040a13027a32", "issuer");
+  equals(c.getSubjectHex(), "301a310b3009060355040613024a50310b3009060355040a13027a32", "subject");
+  equals(c.getNotBefore(), "100531061756Z", "notbefore");
+  equals(c.getNotAfter(), "200528061756Z", "notafter");
+  equals(_x509_hex2dn(c.getSubjectHex()), "/C=JP/O=z2", "subjecthex2str");
+  equals(c.getIssuerString(), "/C=JP/O=z2", "issuer str");
+  equals(c.getSubjectString(), "/C=JP/O=z2", "subject str");
+});
+
+test("hoge", function() {
+  RSAKey.prototype.verifyString = _rsasign_verifyString;
+  var r = new RSAKey();
+  expect(4);
+  equals(hex2b64, null, "check 4");
+  equals(_rsasign_verifyString, null, "check 3");
+  equals(r.signString, null, "check signString function");
+  equals(r.verifyString, null, "check verifyString function");
+});
+
+});
+</script>
+  
+</head>
+<body>
+<h1 id="qunit-header">QUnit for X.509 Certificate 'x509.js'</h1>
+<h2 id="qunit-banner"></h2>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+</body>
+<center><p>&copy; 2010 Kenji Urushima</p></center>
+</html>

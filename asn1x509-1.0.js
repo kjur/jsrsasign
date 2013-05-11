@@ -1,4 +1,4 @@
-/*! asn1x509-1.0.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.1.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.0 (2013-May-01)
+ * @version 1.0.1 (2013-May-11)
  * @since 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -144,6 +144,29 @@ KJUR.asn1.x509.Certificate = function(params) {
     var hexSig = null;
     var rsaPrvKey = null;
 
+    
+    /**
+     * set PKCS#5 encrypted RSA PEM private key as CA key
+     * @name setRsaPrvKeyByPEMandPass
+     * @memberOf KJUR.asn1.x509.Certificate
+     * @function
+     * @param {String} rsaPEM string of PKCS#5 encrypted RSA PEM private key
+     * @param {String} passPEM passcode string to decrypt private key
+     * @since 1.0.1
+     * @description
+     * <br/>
+     * <h4>EXAMPLES</h4>
+     * @example
+     * var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbs});
+     * cert.setRsaPrvKeyByPEMandPass("-----BEGIN RSA PRIVATE..(snip)", "password");
+     */
+    this.setRsaPrvKeyByPEMandPass = function(rsaPEM, passPEM) {
+	var caKeyHex = PKCS5PKEY.getDecryptedKeyHex(rsaPEM, passPEM);
+	var caKey = new RSAKey();
+	caKey.readPrivateKeyFromASN1HexString(caKeyHex);  
+	this.rsaPrvKey = caKey;
+    };
+
     /**
      * sign TBSCertificate and set signature value internally
      * @name sign
@@ -200,8 +223,12 @@ KJUR.asn1.x509.Certificate = function(params) {
 	if (typeof params['tbscertobj'] != "undefined") {
 	    this.asn1TBSCert = params['tbscertobj'];
 	}
-	if (typeof params['rsaprvkey'] != "undefind") {
+	if (typeof params['rsaprvkey'] != "undefined") {
 	    this.rsaPrvKey = params['rsaprvkey'];
+	}
+	if ((typeof params['rsaprvpem'] != "undefined") &&
+	    (typeof params['rsaprvpas'] != "undefined")) {
+	    this.setRsaPrvKeyByPEMandPass(params['rsaprvpem'], params['rsaprvpas']);
 	}
     }
 };
@@ -1065,6 +1092,8 @@ KJUR.asn1.x509.OID = new function(params) {
 	'CN':	'2.5.4.3',
     };
     this.name2oidList = {
+	'sha384':			'2.16.840.1.101.3.4.2.2',
+	'sha224':			'2.16.840.1.101.3.4.2.4',
 	'SHA1withRSA':			'1.2.840.113549.1.1.5',
         'rsaEncryption':		'1.2.840.113549.1.1.1',
 	'subjectKeyIdentifier':		'2.5.29.14',
