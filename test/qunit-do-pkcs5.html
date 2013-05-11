@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script language="JavaScript" type="text/javascript" src="../jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rng.js"></script>
+<script language="JavaScript" type="text/javascript" src="../base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../sha1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
+
+<!-- jsrsasign pkcs5pkey external codes -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1/build/rollups/aes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1/build/rollups/tripledes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/enc-base64.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+
+<script src="../pkcs5pkey-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+
+var sk10pem = "" +
+"-----BEGIN RSA PRIVATE KEY-----\n" +
+"Proc-Type: 4,ENCRYPTED\n" +
+"DEK-Info: AES-256-CBC,40555967F759530864FE022E257DE34E\n" +
+"\n" +
+"jV7uXajRw4cccDaliagcqiLOiQEUCe19l761pXRxzgQP+DH4rCi12T4puTdZyy6l\n" +
+"eJHcSHZ/IC9N9iS3XNLgm/rRdUBahf0l1HOerHY76xIb74tB9v1S6sZe/IaOIYTO\n" +
+"E/t63rzNmj33AzEup5xMyzuAninLL3jJGKwcwkTG5u+n8p7fuMPcML0L7beVBkvZ\n" +
+"oXyySfMVB8h4u7yyZdhjU3O4K8QX1g1jntGJpQsh4ikfjM+3ddG/qaBrwzTBfC0C\n" +
+"F9SUbv+Sz0nZX60PhAYEDhb7194ol7F5Y4QZuDhf6K6d1v8r5b9RqDo98INqwdsD\n" +
+"1El24sGa3eBXi3lnpAytX7dOOBQKRh1uJyL3IuKyuFcNJj3OOGjBkR6imZwD895e\n" +
+"qxLS+BASmyGm4DME6m+kltZ12LXwPgNU6+d+XQ4NXSA=\n" +
+"-----END RSA PRIVATE KEY-----\n";
+
+var sk10pem_passcode = "hogehoge";
+
+var sk10b64 = "" +
+"jV7uXajRw4cccDaliagcqiLOiQEUCe19l761pXRxzgQP+DH4rCi12T4puTdZyy6l" +
+"eJHcSHZ/IC9N9iS3XNLgm/rRdUBahf0l1HOerHY76xIb74tB9v1S6sZe/IaOIYTO" +
+"E/t63rzNmj33AzEup5xMyzuAninLL3jJGKwcwkTG5u+n8p7fuMPcML0L7beVBkvZ" +
+"oXyySfMVB8h4u7yyZdhjU3O4K8QX1g1jntGJpQsh4ikfjM+3ddG/qaBrwzTBfC0C" +
+"F9SUbv+Sz0nZX60PhAYEDhb7194ol7F5Y4QZuDhf6K6d1v8r5b9RqDo98INqwdsD" +
+"1El24sGa3eBXi3lnpAytX7dOOBQKRh1uJyL3IuKyuFcNJj3OOGjBkR6imZwD895e" +
+"qxLS+BASmyGm4DME6m+kltZ12LXwPgNU6+d+XQ4NXSA=";
+
+var sk10dechex = "30820139020100024100b1e5aa7d6827b8c69037b269907bd8f4a7a1e6b798776e3be519fbda2966260dd56f6f3389d489a276a0a1e1b19e51328bc2d6a623f24be6b2e6718f3b292d5b02030100010240763582206ac15a4ab7320b5f921e797fb894205706fcf546df6970acfaad61c2db1fb6f9e335a1867c0f7c40a2ad39aa92b9312459bbf90d5eab831793c69321022100e584720c8f676623e94e7fb8616e667d66cd379559ffe36acd9068495e68adc5022100c66c72386fbdeded99c5963422d7380c19100757a4dcec581bd645d3d924409f0220101798337f3e7dafd8e4d319a763293673a5c1d6ebe7801775f0410f9bd9f50d02201bff2b329959a41b9549d2c2b273c97db37f9679a05267aa9aeae5d959570b23022043ea618b8f31af3aa762171cf2b5e9d563c5041a99a2217b6c692f807e18f81a";
+
+// ======= TEST =============================================================================================
+
+test("version", function() {
+  equals(PKCS5PKEY.version, "1.0.0", "check version.");
+});
+
+// k1.[0-1].{hex|pem|der}
+test("parsePKCS5PEM_k1.0key", function() {
+  var info = PKCS5PKEY.parsePKCS5PEM(sk10pem, sk10pem_passcode);
+  var dataHex = CryptoJS.enc.Hex.stringify(CryptoJS.enc.Base64.parse(info.data));
+  expect(5);
+  equals(info.type, "RSA", "k1.0 type is 'RSA'.");
+  equals(info.cipher, "AES-256-CBC", "cipher attribute is the same");
+  equals(info.ivsalt, "40555967F759530864FE022E257DE34E", "ivsalt attribute is the same.");
+  equals(info.data, sk10b64, "data is the same");
+  equals(dataHex, "8d5eee5da8d1c3871c7036a589a81caa22ce89011409ed7d97beb5a57471ce040ff831f8ac28b5d93e29b93759cb2ea57891dc48767f202f4df624b75cd2e09bfad175405a85fd25d4739eac763beb121bef8b41f6fd52eac65efc868e2184ce13fb7adebccd9a3df703312ea79c4ccb3b809e29cb2f78c918ac1cc244c6e6efa7f29edfb8c3dc30bd0bedb795064bd9a17cb249f31507c878bbbcb265d8635373b82bc417d60d639ed189a50b21e2291f8ccfb775d1bfa9a06bc334c17c2d0217d4946eff92cf49d95fad0f8406040e16fbd7de2897b179638419b8385fe8ae9dd6ff2be5bf51a83a3df0836ac1db03d44976e2c19adde0578b7967a40cad5fb74e38140a461d6e2722f722e2b2b8570d263dce3868c1911ea2999c03f3de5eab12d2f810129b21a6e03304ea6fa496d675d8b5f03e0354ebe77e5d0e0d5d20", "data(hex) is the same");
+});
+
+test("getKeyAndUnusedIvByPasscodeAndIvsalt", function() {
+  var keyiv = PKCS5PKEY.getKeyAndUnusedIvByPasscodeAndIvsalt("AES-256-CBC", "hogehoge", "40555967F759530864FE022E257DE34E");
+  expect(2);
+  equals(keyiv.keyhex, "523c7720b6a5544d7ef212ccb5e9f78cddff8a91b8c335ce7219abbb44e6a883", "check version.");
+  equals(keyiv.ivhex, "0432604dae9830352f5a02736c8684e4", "check version.");
+});
+
+test("decryptKeyB64", function() {
+  var keyB64 = sk10b64;
+  var alg = "AES-256-CBC";
+  var keyhex = "523c7720b6a5544d7ef212ccb5e9f78cddff8a91b8c335ce7219abbb44e6a883";
+  var ivhex = "40555967f759530864fe022e257de34e";
+  //var ivhex = "0432604dae9830352f5a02736c8684e4";
+  var decrypted = PKCS5PKEY.decryptKeyB64(keyB64, alg, keyhex, ivhex);
+  equals(decrypted, sk10dechex, "key is the same.");
+});
+
+test("getDecryptedKeyHex_k10", function() {
+  var decrypted = PKCS5PKEY.getDecryptedKeyHex(sk10pem, "hogehoge");
+  equals(decrypted, sk10dechex, "key is the same.");
+});
+
+});
+-->
+</script>
+  
+</head>
+<body>
+<h1 id="qunit-header">QUnit for PKCS5 private key reader 'pkcs5pkey.js'</h1>
+<h2 id="qunit-banner"></h2>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+</body>
+</html>

@@ -1,4 +1,4 @@
-/*! crypto-1.0.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! crypto-1.0.1.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.0 (2013-Mar-07)
+ * @version 1.0.1 (2013-Mar-12)
  * @since 2.2
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -44,6 +44,7 @@ if (typeof KJUR.crypto == "undefined" || !KJUR.crypto) KJUR.crypto = {};
 KJUR.crypto.Util = new function() {
     this.DIGESTINFOHEAD = {
 	'sha1':      "3021300906052b0e03021a05000414",
+        'sha224':    "302d300d06096086480165030402040500041c",
 	'sha256':    "3031300d060960864801650304020105000420",
 	'sha384':    "3041300d060960864801650304020205000430",
 	'sha512':    "3051300d060960864801650304020305000440",
@@ -79,7 +80,10 @@ KJUR.crypto.Util = new function() {
      */
     this.getPaddedDigestInfoHex = function(hHash, alg, keySize) {
 	var hDigestInfo = this.getDigestInfoHex(hHash, alg);
-	var pmStrLen = keySize / 4;
+	var pmStrLen = keySize / 4; // minimum PM length
+
+	if (hDigestInfo.length + 22 > pmStrLen) // len(0001+ff(*8)+00+hDigestInfo)=22
+	    throw "key is too short for SigAlg: keylen=" + keySize + "," + alg;
 
 	var hHead = "0001";
 	var hTail = "00" + hDigestInfo;
@@ -97,8 +101,11 @@ KJUR.crypto.Util = new function() {
  * MessageDigest class which is very similar to java.security.MessageDigest class
  * @name KJUR.crypto.MessageDigest
  * @class MessageDigest class which is very similar to java.security.MessageDigest class
+ * @param {Array} params parameters for constructor
  * @description
- * 
+ * <br/>
+ * Currently this supports md5, sha1, sha224, sha256, sha384,
+ * sha512 and ripemd160 for algorithm and 'cryptojs' for provider.
  * @example
  * var md = new KJUR.crypto.MessageDigest({"alg": "sha1", "prov": "cryptojs"});
  * // append data
@@ -108,7 +115,6 @@ KJUR.crypto.Util = new function() {
  * md.digest()
  * md.digestHex('5f6de0')
  * md.digestString('aaa')
- *
  * @see http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core-min.js
  * @see http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js
  */
@@ -116,6 +122,15 @@ KJUR.crypto.MessageDigest = function(params) {
     var md = null;
     var algName = null;
     var provName = null;
+    var _CryptoJSMdName = {
+	'md5': 'CryptoJS.algo.MD5',
+	'sha1': 'CryptoJS.algo.SHA1',
+	'sha224': 'CryptoJS.algo.SHA224',
+	'sha256': 'CryptoJS.algo.SHA256',
+	'sha384': 'CryptoJS.algo.SHA384',
+	'sha512': 'CryptoJS.algo.SHA512',
+	'ripemd160': 'CryptoJS.algo.RIPEMD160'
+    };
 
     /**
      * set hash algorithm and provider
@@ -125,14 +140,22 @@ KJUR.crypto.MessageDigest = function(params) {
      * @param {String} alg hash algorithm name
      * @param {String} prov provider name
      * @description
-     * Currently this only supports 'sha1' for algorithm and 
-     * 'cryptojs' for provider.
+     * <br/>
+     * <h4>EXAMPLES</h4>
      * @example
+     * // for SHA1
      * md.setAlgAndProvider('sha1', 'cryptojs');
+     * // for RIPEMD160
+     * md.setAlgAndProvider('ripemd160', 'cryptojs');
      */
     this.setAlgAndProvider = function(alg, prov) {
-	if (alg == 'sha1' && prov == 'cryptojs') {
-	    this.md = CryptoJS.algo.SHA1.create();
+	if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(alg) != -1 &&
+	    prov == 'cryptojs') {
+	    try {
+		this.md = eval(_CryptoJSMdName[alg]).create();
+	    } catch (ex) {
+		throw "setAlgAndProvider hash alg set fail alg=" + alg + "/" + ex;
+	    }
 	    this.updateString = function(str) {
 		this.md.update(str);
 	    };
@@ -238,8 +261,19 @@ KJUR.crypto.MessageDigest = function(params) {
  * Signature class which is very similar to java.security.Signature class
  * @name KJUR.crypto.Signature
  * @class Signature class which is very similar to java.security.Signature class
+ * @param {Array} params parameters for constructor
  * @description
- *
+ * <br/>
+ * As for params of constructor's argument, it can be specify following attributes:
+ * <ul>
+ * <li>alg - signature algorithm name (ex. {MD5,SHA1,SHA224,SHA256,SHA384,SHA512,RIPEMD160}withRSA)</li>
+ * <li>provider - currently 'cryptojs/jsrsa' only</li>
+ * <li>prvkeypem - PEM string of signer's private key. If this specified, no need to call initSign(prvKey).</li>
+ * </ul>
+ * <h4>SUPPORTED ALGORITHMS AND PROVIDERS</h4>
+ * Signature class now supports {MD5,SHA1,SHA224,SHA256,SHA384,SHA512,RIPEMD160}
+ * withRSA algorithm in 'cryptojs/jsrsa' provider.
+ * <h4>EXAMPLES</h4>
  * @example
  * var sig = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
  * // initialize
@@ -258,7 +292,7 @@ KJUR.crypto.MessageDigest = function(params) {
  */
 KJUR.crypto.Signature = function(params) {
     var prvKey = null;
-    var md = null;
+    var md = null; // KJUR.crypto.MessageDigest object
     var sig = null;
     var algName = null;
     var provName = null;
@@ -296,50 +330,53 @@ KJUR.crypto.Signature = function(params) {
      * @param {String} alg signature algorithm name
      * @param {String} prov provider name
      * @description
-     * Currently this only supports 'SHA1withRSA' for algorithm and 
-     * 'cryptojs/jsrsa' for provider.
+     * <br/>
+     * <h4>EXAMPLES</h4>
      * @example
      * md.setAlgAndProvider('SHA1withRSA', 'cryptojs/jsrsa');
      */
     this.setAlgAndProvider = function(alg, prov) {
-	if (alg == 'SHA1withRSA' && prov == 'cryptojs/jsrsa') {
-	    this.md = CryptoJS.algo.SHA1.create();
+	this._setAlgNames();
+	if (prov != 'cryptojs/jsrsa')
+	    throw "provider not supported: " + prov;
+
+	if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(this.mdAlgName) != -1) {
+	    try {
+		this.md = new KJUR.crypto.MessageDigest({'alg':this.mdAlgName,'prov':'cryptojs'});
+	    } catch (ex) {
+		throw "setAlgAndProvider hash alg set fail alg=" + this.mdAlgName + "/" + ex;
+	    }
 
 	    this.initSign = function(prvKey) {
 		this.prvKey = prvKey;
 	    };
 
 	    this.updateString = function(str) {
-		this.md.update(str);
+		this.md.updateString(str);
 	    };
 	    this.updateHex = function(hex) {
-		var wHex = CryptoJS.enc.Hex.parse(hex);
-		this.md.update(wHex);
-	    };
-	    this.digest = function() {
-		var hash = this.md.finalize();
-		return hash.toString(CryptoJS.enc.Hex);
-	    };
-	    this.digestString = function(str) {
-		this.updateString(str);
-		return this.digest();
-	    };
-	    this.digestHex = function(hex) {
-		this.updateHex(hex);
-		return this.digest();
+		this.md.updateHex(hex);
 	    };
 	    this.sign = function() {
                 var util = KJUR.crypto.Util;
 		var keyLen = this.prvKey.n.bitLength();
-		this.sHashHex = this.md.finalize();
+		this.sHashHex = this.md.digest();
 		this.hDigestInfo = util.getDigestInfoHex(this.sHashHex, this.mdAlgName);
-		this.hPaddedDigestInfo = util.getPaddedDigestInfoHex(this.sHashHex, this.mdAlgName, keyLen);
-
+		this.hPaddedDigestInfo = 
+                    util.getPaddedDigestInfoHex(this.sHashHex, this.mdAlgName, keyLen);
 		var biPaddedDigestInfo = parseBigInt(this.hPaddedDigestInfo, 16);
 		this.hoge = biPaddedDigestInfo.toString(16);
 		var biSign = this.prvKey.doPrivate(biPaddedDigestInfo);
 		this.hSign = this._zeroPaddingOfSignature(biSign.toString(16), keyLen);
 		return this.hSign;
+	    };
+	    this.signString = function(str) {
+		this.updateString(str);
+		this.sign();
+	    };
+	    this.signHex = function(hex) {
+		this.updateHex(hex);
+		this.sign();
 	    };
 	}
     };
@@ -415,6 +452,19 @@ KJUR.crypto.Signature = function(params) {
 	    this.algProvName = params['alg'] + ":" + params['prov'];
 	    this.setAlgAndProvider(params['alg'], params['prov']);
 	    this._setAlgNames();
+	}
+	if (typeof params['prvkeypem'] != "undefined") {
+	    if (typeof params['prvkeypas'] != "undefined") {
+		throw "both prvkeypem and prvkeypas parameters not supported";
+	    } else {
+		try {
+		    var prvKey = new RSAKey();
+		    prvKey.readPrivateKeyFromPEMString(params['prvkeypem']);
+		    this.initSign(prvKey);
+		} catch (ex) {
+		    throw "fatal error to load pem private key: " + ex;
+		}
+	    }
 	}
     }
 };

@@ -40,13 +40,7 @@ function doIssue() {
 
   f1.newcert1.value = "issuing ...";
 
-  // set up CA private key
-  var caKeyPEM = f1.cakey1.value;
-  var caKeyPass = f1.cakeypass1.value;
-  var caKeyHex = PKCS5PKEY.getDecryptedKeyHex(caKeyPEM, caKeyPass);
-  var caKey = new RSAKey();
-  caKey.readPrivateKeyFromASN1HexString(caKeyHex);  
-
+  // 1. generate TBSCertificate
   var tbsc = new KJUR.asn1.x509.TBSCertificate();
   tbsc.setSerialNumberByParam({'int': parseInt(f1.serial1.value)});
   tbsc.setSignatureAlgByParam({'name': 'SHA1withRSA'});
@@ -90,7 +84,10 @@ function doIssue() {
     tbsc.appendExtension(new KJUR.asn1.x509.CRLDistributionPoints(param));
   }
 
-  var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbsc, 'rsaprvkey': caKey});
+  // generate and sign certificate
+  var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbsc,
+                                             'rsaprvpem': f1.cakey1.value,
+                                             'rsaprvpas': f1.cakeypass1.value});
   cert.sign();
   f1.newcert1.value = cert.getPEMString();
 }
