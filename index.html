@@ -19,12 +19,17 @@
           <a id="forkme_banner" href="https://github.com/kjur/jsrsasign">Fork Me on GitHub</a>
 
           <h1 id="project_title">jsrsasign</h1>
-          <h2 id="project_tagline">The 'jsrsasign' (RSA-Sign JavaScript Library) is a open source free pure JavaScript implementation of <a href="http://www.rsa.com/rsalabs/node.asp?id=2125" target="_blank">PKCS#1 v2.1 RSASSA-PKCS1-v1_5</a> RSA signing and validation algorithm. This library also supports to load encrypted PKCS#5 RSA private key.</h2>
+          <h2 id="project_tagline">opensource free RSA signing/validation, ASN.1 and X.509 certificate library in pure JavaScript</h2>
 
           <section id="downloads">
             <a class="zip_download_link" href="https://github.com/kjur/jsrsasign/zipball/master">Download this project as a .zip file</a>
             <a class="tar_download_link" href="https://github.com/kjur/jsrsasign/tarball/master">Download this project as a tar.gz file</a>
           </section>
+          <a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
+          <a href="https://github.com/kjur/jsrsasign/tags/" target="_blank">DOWNLOADS</a> | 
+          <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+          <a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+          <a href="http://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
         </header>
     </div>
 
@@ -33,13 +38,34 @@
       <section id="main_content" class="inner">
 
 <!-- now editing -->
+<h3>FEATURES</h3>
+The 'jsrsasign' library provides following features in pure JavaScript.
+<ul>
+<li>RSAKey - RSAKey extension for RSA signing and validation (<a href="http://www.rsa.com/rsalabs/node.asp?id=2125" target="_blank">PKCS#1 v2.1 RSASSA-PKCS1-v1_5</a>)</li>
+<li>Signature - digital signtature</li>
+<li>MessageDigest - cryptographic hash calculation</li>
+<li>ASN.1 encoder/generator</li>
+<li>ASN.1 structure for X.509 ceritificate generation</li>
+<li>simple ASN.1 data parser</li>
+<li>simple X.509 certificate parser/reader</li>
+<li>PKCS5PKEY - PEM formatted PKCS#5 password protected RSA private key</li>
+</ul>
+
 <h3>NEWS</h3>
 <dl>
+<dt><b>2013-May-12</b>: 
+<dd>Release 3.0.2 is now available.
+<ul>
+<li>Signature class now supports signature verification.</li>
+</ul>
+
 <dt><b>2013-May-12</b>: 
 <dd>Release 3.0.1 is now available.
 <ul>
 <li>MessageDigest/Signature class now supports MD5, SHA224, SHA256, SHA384, SHA512, RIPEMD160
 algorithms</li>
+<li><a href="index_ut.html">QUnit unit test codes</a> also be published. This may be useful
+for examples.
 </ul>
 
 <dt><b>2013-May-10</b>: 
@@ -58,14 +84,13 @@ algorithms</li>
 </dl>
 Old news is <a href="index_oldnews.html">here</a>.
 
-<h3>ONLINE TOOL</h3>
+<h3><a name="demo">ONLINE TOOL & DEMO</a></h3>
 <ul>
 <li><a href="tool_ca.html" target="_blank">JavaScript Certification Authority (NEW!!!)</a></li>
 <li><a href="tool_pkcs5view.html" target="_blank">Encrypted PKCS#5 Private Key Viewer</a></li>
 <li><a href="tool_certview.html" target="_blank">Online Certificate Viewer</a></li>
 </ul>
 
-<h3>DEMO</h3>
 <ul>
 <li><a href="sample-rsasign.html">Sample Application for RSA signing with JavaScript</a>
 <br clear="all"/>

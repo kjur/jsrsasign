@@ -1,4 +1,4 @@
-/*! crypto-1.0.1.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! crypto-1.0.2.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.1 (2013-Mar-12)
+ * @version 1.0.2 (2013-Mar-12)
  * @since 2.2
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -140,8 +140,6 @@ KJUR.crypto.MessageDigest = function(params) {
      * @param {String} alg hash algorithm name
      * @param {String} prov provider name
      * @description
-     * <br/>
-     * <h4>EXAMPLES</h4>
      * @example
      * // for SHA1
      * md.setAlgAndProvider('sha1', 'cryptojs');
@@ -262,6 +260,7 @@ KJUR.crypto.MessageDigest = function(params) {
  * @name KJUR.crypto.Signature
  * @class Signature class which is very similar to java.security.Signature class
  * @param {Array} params parameters for constructor
+ * @property {String} state Current state of this signature object whether 'SIGN', 'VERIFY' or null
  * @description
  * <br/>
  * As for params of constructor's argument, it can be specify following attributes:
@@ -271,27 +270,26 @@ KJUR.crypto.MessageDigest = function(params) {
  * <li>prvkeypem - PEM string of signer's private key. If this specified, no need to call initSign(prvKey).</li>
  * </ul>
  * <h4>SUPPORTED ALGORITHMS AND PROVIDERS</h4>
- * Signature class now supports {MD5,SHA1,SHA224,SHA256,SHA384,SHA512,RIPEMD160}
+ * Signature class supports {MD5,SHA1,SHA224,SHA256,SHA384,SHA512,RIPEMD160}
  * withRSA algorithm in 'cryptojs/jsrsa' provider.
  * <h4>EXAMPLES</h4>
  * @example
+ * // signature generation
  * var sig = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
- * // initialize
- * sig.initSign(prvKey)
- * sig.initVerifyByCert(cert) // not yet supported
- * sig.initVerifyByPubKey(pubKey)
- * // append data
- * sig.updateHex(hex)
- * sig.updateString(str)
- * // get signature
- * sig.sign()
- * sig.signHex(hex)
- * sig.signString(str)
- * // verify
- * verifyHex(sigValHex) // not yet supported
+ * sig.initSign(prvKey);
+ * sig.updateString('aaa');
+ * var hSigVal = sig.sign();
+ *
+ * // signature validation
+ * var sig2 = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
+ * sig2.initVerifyByCertificatePEM(cert)
+ * sig.updateString('aaa');
+ * var isValid = sig2.verify(hSigVal);
  */
 KJUR.crypto.Signature = function(params) {
-    var prvKey = null;
+    var prvKey = null; // RSAKey for signing
+    var pubKey = null; // RSAKey for verifying
+
     var md = null; // KJUR.crypto.MessageDigest object
     var sig = null;
     var algName = null;
@@ -299,7 +297,7 @@ KJUR.crypto.Signature = function(params) {
     var algProvName = null;
     var mdAlgName = null;
     var pubkeyAlgName = null;
-    var mode = null;
+    var state = null;
 
     var sHashHex = null; // hex hash value for hex
     var hDigestInfo = null;
@@ -330,8 +328,6 @@ KJUR.crypto.Signature = function(params) {
      * @param {String} alg signature algorithm name
      * @param {String} prov provider name
      * @description
-     * <br/>
-     * <h4>EXAMPLES</h4>
      * @example
      * md.setAlgAndProvider('SHA1withRSA', 'cryptojs/jsrsa');
      */
@@ -349,6 +345,19 @@ KJUR.crypto.Signature = function(params) {
 
 	    this.initSign = function(prvKey) {
 		this.prvKey = prvKey;
+		this.state = "SIGN";
+	    };
+
+	    this.initVerifyByPublicKey = function(rsaPubKey) {
+		this.pubKey = rsaPubKey;
+		this.state = "VERIFY";
+	    };
+
+	    this.initVerifyByCertificatePEM = function(certPEM) {
+		var x509 = new X509();
+		x509.readCertPEM(certPEM);
+		this.pubKey = x509.subjectPublicKeyRSA;
+		this.state = "VERIFY";
 	    };
 
 	    this.updateString = function(str) {
@@ -364,8 +373,10 @@ KJUR.crypto.Signature = function(params) {
 		this.hDigestInfo = util.getDigestInfoHex(this.sHashHex, this.mdAlgName);
 		this.hPaddedDigestInfo = 
                     util.getPaddedDigestInfoHex(this.sHashHex, this.mdAlgName, keyLen);
+
 		var biPaddedDigestInfo = parseBigInt(this.hPaddedDigestInfo, 16);
 		this.hoge = biPaddedDigestInfo.toString(16);
+
 		var biSign = this.prvKey.doPrivate(biPaddedDigestInfo);
 		this.hSign = this._zeroPaddingOfSignature(biSign.toString(16), keyLen);
 		return this.hSign;
@@ -378,7 +389,56 @@ KJUR.crypto.Signature = function(params) {
 		this.updateHex(hex);
 		this.sign();
 	    };
+	    this.verify = function(hSigVal) {
+                var util = KJUR.crypto.Util;
+		var keyLen = this.pubKey.n.bitLength();
+		this.sHashHex = this.md.digest();
+
+		var biSigVal = parseBigInt(hSigVal, 16);
+		var biPaddedDigestInfo = this.pubKey.doPublic(biSigVal);
+		this.hPaddedDigestInfo = biPaddedDigestInfo.toString(16);
+                var s = this.hPaddedDigestInfo;
+                s = s.replace(/^1ff+00/, '');
+
+		var hDIHEAD = KJUR.crypto.Util.DIGESTINFOHEAD[this.mdAlgName];
+                if (s.indexOf(hDIHEAD) != 0) {
+		    return false;
+		}
+		var hHashFromDI = s.substr(hDIHEAD.length);
+		//alert(hHashFromDI + "\n" + this.sHashHex);
+		return (hHashFromDI == this.sHashHex);
+	    };
 	}
+    };
+
+    /**
+     * Initialize this object for verifying with a public key
+     * @name initVerifyByPublicKey
+     * @memberOf KJUR.crypto.Signature
+     * @function
+     * @param {RSAKey} rsaPubKey RSAKey object of public key
+     * @since 1.0.2
+     * @description
+     * @example
+     * sig.initVerifyByPublicKey(prvKey)
+     */
+    this.initVerifyByPublicKey = function(rsaPubKey) {
+	throw "initVerifyByPublicKey(rsaPubKeyy) not supported for this alg:prov=" + this.algProvName;
+    };
+
+    /**
+     * Initialize this object for verifying with a certficate
+     * @name initVerifyByCertificatePEM
+     * @memberOf KJUR.crypto.Signature
+     * @function
+     * @param {String} certPEM PEM formatted string of certificate
+     * @since 1.0.2
+     * @description
+     * @example
+     * sig.initVerifyByCertificatePEM(certPEM)
+     */
+    this.initVerifyByCertificatePEM = function(certPEM) {
+	throw "initVerifyByCertificatePEM(certPEM) not supported for this alg:prov=" + this.algProvName;
     };
 
     /**
@@ -423,14 +483,6 @@ KJUR.crypto.Signature = function(params) {
 	throw "updateHex(hex) not supported for this alg:prov=" + this.algProvName;
     };
 
-    this.signString = function(str) {
-	throw "digestString(str) not supported for this alg:prov=" + this.algProvName;
-    };
-
-    this.signHex = function(hex) {
-	throw "digestHex(hex) not supported for this alg:prov=" + this.algProvName;
-    };
-
     /**
      * Returns the signature bytes of all data updates as a hexadecimal string
      * @name sign
@@ -443,6 +495,51 @@ KJUR.crypto.Signature = function(params) {
      */
     this.sign = function() {
 	throw "sign() not supported for this alg:prov=" + this.algProvName;
+    };
+
+    /**
+     * performs final update on the sign using string, then returns the signature bytes of all data updates as a hexadecimal string
+     * @name signString
+     * @memberOf KJUR.crypto.Signature
+     * @function
+     * @param {String} str string to final update
+     * @return the signature bytes of a hexadecimal string
+     * @description
+     * @example
+     * var hSigValue = sig.signString('aaa')
+     */
+    this.signString = function(str) {
+	throw "digestString(str) not supported for this alg:prov=" + this.algProvName;
+    };
+
+    /**
+     * performs final update on the sign using hexadecimal string, then returns the signature bytes of all data updates as a hexadecimal string
+     * @name signHex
+     * @memberOf KJUR.crypto.Signature
+     * @function
+     * @param {String} hex hexadecimal string to final update
+     * @return the signature bytes of a hexadecimal string
+     * @description
+     * @example
+     * var hSigValue = sig.signHex('1fdc33')
+     */
+    this.signHex = function(hex) {
+	throw "digestHex(hex) not supported for this alg:prov=" + this.algProvName;
+    };
+
+    /**
+     * verifies the passed-in signature.
+     * @name verify
+     * @memberOf KJUR.crypto.Signature
+     * @function
+     * @param {String} str string to final update
+     * @return {Boolean} true if the signature was verified, otherwise false
+     * @description
+     * @example
+     * var isValid = sig.verify('1fbcefdca4823a7(snip)')
+     */
+    this.verify = function(hSigVal) {
+	throw "verify(hSigVal) not supported for this alg:prov=" + this.algProvName;
     };
 
     if (typeof params != "undefined") {
