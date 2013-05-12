@@ -1,4 +1,4 @@
-/*! asn1x509-1.0.1.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.2.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.1 (2013-May-11)
+ * @version 1.0.2 (2013-May-12)
  * @since 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -571,6 +571,49 @@ KJUR.asn1.x509.CRLDistributionPoints = function(params) {
 };
 YAHOO.lang.extend(KJUR.asn1.x509.CRLDistributionPoints, KJUR.asn1.x509.Extension);
 
+/**
+ * KeyUsage ASN.1 structure class
+ * @name KJUR.asn1.x509.ExtKeyUsage
+ * @class ExtKeyUsage ASN.1 structure class
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.x509.Extension
+ * @description
+ * @example
+ * var e1 = 
+ *     new KJUR.asn1.x509.ExtKeyUsage({'critical': true,
+ *                                     'array':
+ *                                     [{'oid': '2.5.29.37.0',  // anyExtendedKeyUsage
+ *                                       'name': 'clientAuth'}]});
+ *
+ * // id-ce-extKeyUsage OBJECT IDENTIFIER ::= { id-ce 37 }
+ * // ExtKeyUsageSyntax ::= SEQUENCE SIZE (1..MAX) OF KeyPurposeId
+ * // KeyPurposeId ::= OBJECT IDENTIFIER
+ */
+KJUR.asn1.x509.ExtKeyUsage = function(params) {
+    KJUR.asn1.x509.ExtKeyUsage.superclass.constructor.call(this, params);
+
+    this.setPurposeArray = function(purposeArray) {
+	this.asn1ExtnValue = new KJUR.asn1.DERSequence();
+	for (var i = 0; i < purposeArray.length; i++) {
+	    var o = new KJUR.asn1.DERObjectIdentifier(purposeArray[i]);
+	    this.asn1ExtnValue.appendASN1Object(o);
+	}
+    };
+
+    this.getExtnValueHex = function() {
+	return this.asn1ExtnValue.getEncodedHex();
+    };
+
+    this.oid = "2.5.29.37";
+    if (typeof params != "undefined") {
+	if (typeof params['array'] != "undefined") {
+            this.setPurposeArray(params['array']);
+	}
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.x509.ExtKeyUsage, KJUR.asn1.x509.Extension);
+
+
 // === END   X.509v3 Extensions Related =======================================
 
 // === BEGIN X500Name Related =================================================
@@ -1097,12 +1140,21 @@ KJUR.asn1.x509.OID = new function(params) {
 	'SHA1withRSA':			'1.2.840.113549.1.1.5',
         'rsaEncryption':		'1.2.840.113549.1.1.1',
 	'subjectKeyIdentifier':		'2.5.29.14',
+
 	'keyUsage':			'2.5.29.15',
 	'basicConstraints':		'2.5.29.19',
 	'cRLDistributionPoints':	'2.5.29.31',
 	'certificatePolicies':		'2.5.29.32',
 	'authorityKeyIdentifier':	'2.5.29.35',
 	'extKeyUsage':			'2.5.29.37',
+
+	'anyExtendedKeyUsage':		'2.5.29.37.0',
+	'serverAuth':			'1.3.6.1.5.5.7.3.1',
+	'clientAuth':			'1.3.6.1.5.5.7.3.2',
+	'codeSigning':			'1.3.6.1.5.5.7.3.3',
+	'emailProtection':		'1.3.6.1.5.5.7.3.4',
+	'timeStamping':			'1.3.6.1.5.5.7.3.8',
+	'ocspSigning':			'1.3.6.1.5.5.7.3.9',
     };
 
     this.objCache = {};

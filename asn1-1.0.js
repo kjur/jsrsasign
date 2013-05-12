@@ -1,4 +1,4 @@
-/*! asn1-1.0.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1-1.0.1.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.0 (2013-Apr-30)
+ * @version 1.0.1 (2013-May-12)
  * @since 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -763,6 +763,26 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
 	this.hV = h;
     };
 
+    /**
+     * set value by a OID name
+     * @name setValueName
+     * @memberOf KJUR.asn1.DERObjectIdentifier
+     * @function
+     * @param {String} oidName OID name (ex. 'serverAuth')
+     * @since 1.0.1
+     * @description
+     * OID name shall be defined in 'KJUR.asn1.x509.OID.name2oidList'.
+     * Otherwise raise error.
+     */
+    this.setValueName = function(oidName) {
+	if (typeof KJUR.asn1.x509.OID.name2oidList[oidName] != "undefined") {
+	    var oid = KJUR.asn1.x509.OID.name2oidList[oidName];
+	    this.setValueOidString(oid);
+	} else {
+	    throw "DERObjectIdentifier oidName undefined: " + oidName;
+	}
+    };
+
     this.getFreshValueHex = function() {
 	return this.hV;
     };
@@ -772,6 +792,8 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
 	    this.setValueOidString(params['oid']);
 	} else if (typeof params['hex'] != "undefined") {
 	    this.setValueHex(params['hex']);
+	} else if (typeof params['name'] != "undefined") {
+	    this.setValueName(params['name']);
 	}
     }
 };
