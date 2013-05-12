@@ -1,6 +1,10 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 3.0.2 and 3.0.3
+  - asn1x509-1.0.js update to 1.0.1
+    - ExtKeyUsage extension class added.
+
 * Changes between 3.0.1 and 3.0.2
   - crypto-1.0.js update to 1.0.2
     - Signature now supports signature verification:
