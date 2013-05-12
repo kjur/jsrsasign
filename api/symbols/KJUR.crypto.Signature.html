@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.0 JavaScript API Reference - KJUR.crypto.Signature</title>
+		<title>jsrsasign 3.0.2 JavaScript API Reference - KJUR.crypto.Signature</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -177,7 +177,7 @@ ul.inheritsList
 <!-- ============================== header ================================= -->	
 		<!-- begin static/header.html -->
 		<div id="header" style="background: #7F8FB1; color: white; margin: -10px">
-&nbsp; <b><a href="http://kjur.github.com/jsrsasign/" style="color: white">jsrsasign</a></b> 3.0.0 JavaScript API Reference
+&nbsp; <b><a href="http://kjur.github.com/jsrsasign/" style="color: white">jsrsasign</a></b> 3.0.2 JavaScript API Reference
 </div>
 
 		<!-- end static/header.html -->
@@ -343,6 +343,34 @@ As for params of constructor's argument, it can be specify following attributes:
 
 <!-- ============================== properties summary ===================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class KJUR.crypto.Signature.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/KJUR.crypto.Signature.html#state">state</a></b>
+								</div>
+								<div class="description">Current state of this signature object whether 'SIGN', 'VERIFY' or null</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
 
 <!-- ============================== methods summary ======================== -->
 			
@@ -371,11 +399,30 @@ As for params of constructor's argument, it can be specify following attributes:
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Signature.<b><a href="../symbols/KJUR.crypto.Signature.html#.initVerifyByCertificatePEM">initVerifyByCertificatePEM</a></b>(certPEM)
+								</div>
+								<div class="description">Initialize this object for verifying with a certficate
+</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Signature.<b><a href="../symbols/KJUR.crypto.Signature.html#.initVerifyByPublicKey">initVerifyByPublicKey</a></b>(rsaPubKey)
+								</div>
+								<div class="description">Initialize this object for verifying with a public key
+</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.crypto.Signature.<b><a href="../symbols/KJUR.crypto.Signature.html#.setAlgAndProvider">setAlgAndProvider</a></b>(alg, prov)
 								</div>
 								<div class="description">set signature algorithm and provider
-<br/>
-<h4>EXAMPLES</h4></div>
+</div>
 							</td>
 						</tr>
 					
@@ -385,6 +432,26 @@ As for params of constructor's argument, it can be specify following attributes:
 								<div class="fixedFont">KJUR.crypto.Signature.<b><a href="../symbols/KJUR.crypto.Signature.html#.sign">sign</a></b>()
 								</div>
 								<div class="description">Returns the signature bytes of all data updates as a hexadecimal string
+</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Signature.<b><a href="../symbols/KJUR.crypto.Signature.html#.signHex">signHex</a></b>(hex)
+								</div>
+								<div class="description">performs final update on the sign using hexadecimal string, then returns the signature bytes of all data updates as a hexadecimal string
+</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Signature.<b><a href="../symbols/KJUR.crypto.Signature.html#.signString">signString</a></b>(str)
+								</div>
+								<div class="description">performs final update on the sign using string, then returns the signature bytes of all data updates as a hexadecimal string
 </div>
 							</td>
 						</tr>
@@ -406,6 +473,15 @@ As for params of constructor's argument, it can be specify following attributes:
 								</div>
 								<div class="description">Updates the data to be signed or verified by a string
 </div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Signature.<b><a href="../symbols/KJUR.crypto.Signature.html#.verify">verify</a></b>(str)
+								</div>
+								<div class="description">verifies the passed-in signature.</div>
 							</td>
 						</tr>
 					
@@ -439,7 +515,7 @@ As for params of constructor's argument, it can be specify following attributes:
 <li>prvkeypem - PEM string of signer's private key. If this specified, no need to call initSign(prvKey).</li>
 </ul>
 <h4>SUPPORTED ALGORITHMS AND PROVIDERS</h4>
-Signature class now supports {MD5,SHA1,SHA224,SHA256,SHA384,SHA512,RIPEMD160}
+Signature class supports {MD5,SHA1,SHA224,SHA256,SHA384,SHA512,RIPEMD160}
 withRSA algorithm in 'cryptojs/jsrsa' provider.
 <h4>EXAMPLES</h4>
 					
@@ -447,20 +523,17 @@ withRSA algorithm in 'cryptojs/jsrsa' provider.
 				
 				
 				
-				<pre class="code">var sig = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
-// initialize
-sig.initSign(prvKey)
-sig.initVerifyByCert(cert) // not yet supported
-sig.initVerifyByPubKey(pubKey)
-// append data
-sig.updateHex(hex)
-sig.updateString(str)
-// get signature
-sig.sign()
-sig.signHex(hex)
-sig.signString(str)
-// verify
-verifyHex(sigValHex) // not yet supported</pre>
+				<pre class="code">// signature generation
+var sig = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
+sig.initSign(prvKey);
+sig.updateString('aaa');
+var hSigVal = sig.sign();
+
+// signature validation
+var sig2 = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
+sig2.initVerifyByCertificatePEM(cert)
+sig.updateString('aaa');
+var isValid = sig2.verify(hSigVal);</pre>
 				
 				
 				
@@ -488,6 +561,33 @@ verifyHex(sigValHex) // not yet supported</pre>
 			
 
 <!-- ============================== field details ========================== -->		
+			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="state"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>state</b>
+					
+					</div>
+					<div class="description">
+						Current state of this signature object whether 'SIGN', 'VERIFY' or null
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
 			
 
 <!-- ============================== method details ========================= -->		
@@ -537,6 +637,100 @@ verifyHex(sigValHex) // not yet supported</pre>
 
 					<hr />
 				
+					<a name=".initVerifyByCertificatePEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.Signature.</span><b>initVerifyByCertificatePEM</b>(certPEM)
+					
+					</div>
+					<div class="description">
+						Initialize this object for verifying with a certficate
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">sig.initVerifyByCertificatePEM(certPEM)</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>certPEM</b>
+									
+								</dt>
+								<dd>PEM formatted string of certificate</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>1.0.2</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".initVerifyByPublicKey"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.Signature.</span><b>initVerifyByPublicKey</b>(rsaPubKey)
+					
+					</div>
+					<div class="description">
+						Initialize this object for verifying with a public key
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">sig.initVerifyByPublicKey(prvKey)</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> <b>rsaPubKey</b>
+									
+								</dt>
+								<dd>RSAKey object of public key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>1.0.2</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name=".setAlgAndProvider"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -546,8 +740,7 @@ verifyHex(sigValHex) // not yet supported</pre>
 					</div>
 					<div class="description">
 						set signature algorithm and provider
-<br/>
-<h4>EXAMPLES</h4>
+
 						
 						
 					</div>
@@ -614,6 +807,102 @@ verifyHex(sigValHex) // not yet supported</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd>the signature bytes as a hexadecimal string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".signHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.Signature.</span><b>signHex</b>(hex)
+					
+					</div>
+					<div class="description">
+						performs final update on the sign using hexadecimal string, then returns the signature bytes of all data updates as a hexadecimal string
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var hSigValue = sig.signHex('1fdc33')</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hex</b>
+									
+								</dt>
+								<dd>hexadecimal string to final update</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>the signature bytes of a hexadecimal string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".signString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.Signature.</span><b>signString</b>(str)
+					
+					</div>
+					<div class="description">
+						performs final update on the sign using string, then returns the signature bytes of all data updates as a hexadecimal string
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var hSigValue = sig.signString('aaa')</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>str</b>
+									
+								</dt>
+								<dd>string to final update</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>the signature bytes of a hexadecimal string</dd>
 							
 							</dl>
 						
@@ -702,6 +991,54 @@ verifyHex(sigValHex) // not yet supported</pre>
 						
 						
 
+					<hr />
+				
+					<a name=".verify"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<span class="light">KJUR.crypto.Signature.</span><b>verify</b>(str)
+					
+					</div>
+					<div class="description">
+						verifies the passed-in signature.
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var isValid = sig.verify('1fbcefdca4823a7(snip)')</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>str</b>
+									
+								</dt>
+								<dd>string to final update</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if the signature was verified, otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+
 					
 				
 			
@@ -717,7 +1054,7 @@ verifyHex(sigValHex) // not yet supported</pre>
 		<div class="fineprint" style="clear:both">
                         &copy; 2012 Kenji Urushima, All rights reserved<br/>
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun May 12 2013 02:45:43 GMT+0900 (JST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 
 		</div>
 	</body>
 </html>

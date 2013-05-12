@@ -25,6 +25,7 @@
 <script language="JavaScript" type="text/javascript" src="../rsa2.js"></script>
 <script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../x509-1.1.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -108,7 +109,7 @@ test("Signature class test", function() {
   expect(20);
 
   var prvKey = new RSAKey();
-  prvKey.readPrivateKeyFromASN1HexString("3082013a020100024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001024078bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d022100fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f022100e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07022100d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b3702201849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa902207d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9");
+  prvKey.readPrivateKeyFromASN1HexString("3082013a020100024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001024078bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d022100fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f022100e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07022100d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b3702201849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa902207d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9"); //=z1.prv.hex
   equals(prvKey.n.bitLength(), 512, "prvKey.n.length");
 
   var sig1 = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
@@ -124,6 +125,8 @@ test("Signature class test", function() {
 
   // TSign.sig.bin
   equals(sig1.hSign, "d764dcacb137f2e92d9b4b73494995e16a4dae4dc5b27ecde744c9a1ecaaef9c99041544eae2108dca6559ae79d2fb3d87fa2b87699efa6dc8f3d0d2672c3b07", "updateString(aaa),sign hSign");
+
+  // ================================
 
   // hash alg name variations
   var s2 = new KJUR.crypto.Signature({"alg": "MD5withRSA", "prov": "cryptojs/jsrsa"});
@@ -153,6 +156,39 @@ test("Signature class test", function() {
   equals(s5.hPaddedDigestInfo, "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003041300d0609608648016503040202050004308e07e5bdd64aa37536c1f257a6b44963cc327b7d7dcb2cb47a22073d33414462bfa184487cf372ce0a19dfc83f8336d8", "sha384 aaa hPaddedDigestInfo");
   equals(s5.hSign, "0189dd20d5d589510d22035c41d89fdb79a75843989295233b35e015fe8d6a2283e78abc9526382583b599450f4602bee2899313a13e3df768e4361d823d25061109cb98783a1a34dd4738643afa002313e3a41857b11758b3b8e5b1e5b83081712d9bd042560ce8282768344aadcedab26b73afc11ebfb20490da5f54e89806", "sha384 aaa hSign"); // =TSign3.bin.hex
   //equals(s5.hPaddedDigestInfo.length, s5.hSign.length, "s5 len(hPaddedDigestInfo)=len(hSign)");
+});
+
+test("Signature class verify test1", function() {
+  expect(3);
+  var pubKey = new RSAKey();
+  pubKey.setPublic("e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd59", "10001"); //=z1.pub
+  var s1 = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
+  s1.initVerifyByPublicKey(pubKey);
+  s1.updateString('aaa');
+  var r1 = s1.verify("d764dcacb137f2e92d9b4b73494995e16a4dae4dc5b27ecde744c9a1ecaaef9c99041544eae2108dca6559ae79d2fb3d87fa2b87699efa6dc8f3d0d2672c3b07");
+  equals(s1.sHashHex, '7e240de74fb1ed08fa08d38063f6a6a91462a815', "document hash aaa sHashHex");
+  equals(s1.hPaddedDigestInfo, '1ffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815', "decrypted PaddedDigestInfo from Sig");
+  equals(r1, true, "SHA1withRSA aaa verify");
+});
+
+test("Signature class verify test2(by cert)", function() {
+  expect(1);
+  var certPEM = "-----BEGIN CERTIFICATE-----\n" + 
+"MIIBdTCCAR+gAwIBAgIBBTANBgkqhkiG9w0BAQUFADAaMQswCQYDVQQGEwJVUzEL\n" + 
+"MAkGA1UECgwCYTEwHhcNMTMwNTA0MDM0MTQxWhcNMjMwNTA0MDM0MTQxWjAaMQsw\n" + 
+"CQYDVQQGEwJVUzELMAkGA1UECgwCYTEwXDANBgkqhkiG9w0BAQEFAANLADBIAkEA\n" + 
+"6GZN0rQFKRIVaPOzm8l6Yue6PAm6vcTw3NjfkOt5C5u2RaK3DjESdHtNPEG1FCSJ\n" + 
+"URX++I951D6uWxpONRj9WQIDAQABo1AwTjAdBgNVHQ4EFgQUxUc+4gDI561wA9/1\n" + 
+"QguM3fTCDhUwHwYDVR0jBBgwFoAUxUc+4gDI561wA9/1QguM3fTCDhUwDAYDVR0T\n" + 
+"BAUwAwEB/zANBgkqhkiG9w0BAQUFAANBALL2k69LjwOYfDXv3TXJUAFGUqto+Noj\n" + 
+"CJLP08fOfNBZy+KAIy0GsrNU/3uRViqbuGqAnH9kFFwHQjOAFrAe8XQ=\n" + 
+"-----END CERTIFICATE-----\n";
+
+  var s1 = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
+  s1.initVerifyByCertificatePEM(certPEM);
+  s1.updateString('aaa');
+  var r1 = s1.verify("d764dcacb137f2e92d9b4b73494995e16a4dae4dc5b27ecde744c9a1ecaaef9c99041544eae2108dca6559ae79d2fb3d87fa2b87699efa6dc8f3d0d2672c3b07");
+  equals(r1, true, "SHA1withRSA aaa verify");
 });
 
 });
