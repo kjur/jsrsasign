@@ -176,34 +176,9 @@ almost no restrictions.
 <li><a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-ASN1-DER-Primitive-Encoder" target="_blank">ASN1 DER Primitive Encoder tutorial</a></li>
 <li><a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-ASN.1-structure-classes-of-X.509-certificate" target="_blank">ASN.1 structure classes for X.509 certificate tutorial</a></li>
 <li><a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-reading-PKCS%235-RSA-private-key-with-password" target="_blank">Reading PKCS#5 RSA private key with password tutorial</a></li>
+<li><a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-to-sign-and-verify-with-RSAKey-extension" target="_blank">Signing and verifying with RSAKey extension (*DEPRECATED*)</a></li>
 <li><a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial" target="_blank">List of programming tutorials</a></li>
 </ul>
-
-<h3>How to sign</h3>
-<pre><code>var rsa = new RSAKey();
-rsa.readPrivateKeyFromPEMString(_PEM_PRIVATE_KEY_STRING_);
-var hSig = rsa.signString("aaa", "sha1"); // sign a string "aaa" with key
-</code></pre>
-
-<h3>How to verify signature</h3>
-<pre><code>var x509 = new X509();
-x509.readCertPEM(_PEM_X509CERT_STRING_);
-var result = x509.subjectPublicKeyRSA.verifyString("aaa", _HEX_SIGNATURE_);
-</code></pre>
-
-<h3>How to add supported signature algorithms</h3>
-The script "rsa-sign.js" currently supports 
-SHA1withRSA,
-SHA256withRSA,
-SHA512withRSA,
-MD5withRSA and 
-RIPEMD160withRSA
-signature algorithms. However you can extend other signature algorithms
-such like MD2withRSA or SHA384withRSA by just specifying two variables in it.
-
-<pre><code>_RSASIGN_DIHEAD['md2'] = "30..."; // Hexadecimal DigestInfo prefix for MD5
-_RSASIGN_HASHHEXFUNC['md2'] = md2hex; // function which returns value in hex.
-</code></pre>
 
 <h3>MY RELATED PROJECT</h3>
 <ul>
