@@ -171,19 +171,13 @@ almost no restrictions.
 
 <h3>PROGRAMMING TUTORIALS</h3>
 <ul>
-<li><a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-MessageDigest-class">MessageDigest class tutorial</a></li>
-<li><a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-Signature-class">Signature class tutorial</a></li>
-<li><a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-ASN1-DER-Primitive-Encoder">ASN1 DER Primitive Encoder tutorial</a></li>
-<li><a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-ASN.1-structure-classes-of-X.509-certificate">ASN.1 structure classes for X.509 certificate tutorial</a></li>
-<li><a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">List of programming tutorials</a></li>
+<li><a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-MessageDigest-class" target="_blank">MessageDigest class tutorial</a></li>
+<li><a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-Signature-class" target="_blank">Signature class tutorial</a></li>
+<li><a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-ASN1-DER-Primitive-Encoder" target="_blank">ASN1 DER Primitive Encoder tutorial</a></li>
+<li><a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-ASN.1-structure-classes-of-X.509-certificate" target="_blank">ASN.1 structure classes for X.509 certificate tutorial</a></li>
+<li><a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-reading-PKCS%235-RSA-private-key-with-password" target="_blank">Reading PKCS#5 RSA private key with password tutorial</a></li>
+<li><a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial" target="_blank">List of programming tutorials</a></li>
 </ul>
-
-<h3>How to load passcode encrypted RSA private key</h3>
-<pre><code>var encryptedKey = '-----BEGIN RSA PRIVATE KEY--(snip)Proc-Type: 4,ENCRYPTED(snip)';
-var decryptedKeyHex = PKCS5PKEY.getDecryptedKeyHex(encryptedKey, passcode);
-var rsa = new RSAKey();
-rsa.readPrivateKeyFromASN1HexString(decryptedKeyHex);
-</code></pre>
 
 <h3>How to sign</h3>
 <pre><code>var rsa = new RSAKey();
