@@ -1,4 +1,4 @@
-/*! crypto-1.0.2.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! crypto-1.0.3.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
@@ -94,6 +94,76 @@ KJUR.crypto.Util = new function() {
 	}
 	var hPaddedMessage = hHead + hMid + hTail;
 	return hPaddedMessage;
+    };
+
+    /**
+     * get hexadecimal SHA1 hash of string
+     * @name sha1
+     * @memberOf KJUR.crypto.Util
+     * @function
+     * @param {String} s input string to be hashed
+     * @return {String} hexadecimal string of hash value
+     * @since 1.0.3
+     */
+    this.sha1 = function(s) {
+        var md = new KJUR.crypto.MessageDigest({'alg':'sha1', 'prov':'cryptojs'});
+        return md.digestString(s);
+    };
+
+    /**
+     * get hexadecimal SHA256 hash of string
+     * @name sha256
+     * @memberOf KJUR.crypto.Util
+     * @function
+     * @param {String} s input string to be hashed
+     * @return {String} hexadecimal string of hash value
+     * @since 1.0.3
+     */
+    this.sha256 = function(s) {
+        var md = new KJUR.crypto.MessageDigest({'alg':'sha256', 'prov':'cryptojs'});
+        return md.digestString(s);
+    };
+
+    /**
+     * get hexadecimal SHA512 hash of string
+     * @name sha512
+     * @memberOf KJUR.crypto.Util
+     * @function
+     * @param {String} s input string to be hashed
+     * @return {String} hexadecimal string of hash value
+     * @since 1.0.3
+     */
+    this.sha512 = function(s) {
+        var md = new KJUR.crypto.MessageDigest({'alg':'sha512', 'prov':'cryptojs'});
+        return md.digestString(s);
+    };
+
+    /**
+     * get hexadecimal MD5 hash of string
+     * @name md5
+     * @memberOf KJUR.crypto.Util
+     * @function
+     * @param {String} s input string to be hashed
+     * @return {String} hexadecimal string of hash value
+     * @since 1.0.3
+     */
+    this.md5 = function(s) {
+        var md = new KJUR.crypto.MessageDigest({'alg':'md5', 'prov':'cryptojs'});
+        return md.digestString(s);
+    };
+
+    /**
+     * get hexadecimal RIPEMD160 hash of string
+     * @name ripemd160
+     * @memberOf KJUR.crypto.Util
+     * @function
+     * @param {String} s input string to be hashed
+     * @return {String} hexadecimal string of hash value
+     * @since 1.0.3
+     */
+    this.ripemd160 = function(s) {
+        var md = new KJUR.crypto.MessageDigest({'alg':'ripemd160', 'prov':'cryptojs'});
+        return md.digestString(s);
     };
 };
 

@@ -13,13 +13,16 @@
 <script language="JavaScript" type="text/javascript" src="../rsa.js"></script>
 <script language="JavaScript" type="text/javascript" src="../rsa2.js"></script>
 
-<script language="JavaScript" type="text/javascript" src="../sha1.js"></script>
-<script language="JavaScript" type="text/javascript" src="../sha256.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha256.js"></script>
 
 <script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
 <script language="JavaScript" type="text/javascript" src="../base64.js"></script>
 <script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../crypto-1.0.js"></script>
 
 <script>
 $(document).ready(function(){
@@ -73,18 +76,6 @@ test("_rsasign_getHexPaddedDigestInfoForString aaa 1024/sha1", function() {
          "check padded message for string aaa with SHA1withRSA 1024bit" );
 });
 
-test("_rsasign_getHexPaddedDigestInfoForString aaa ByteArray 1024/sha1", function() {
-  var hExpected = "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
-  var s = new String("aaa");
-  //var a = new Array(s.charCodeAt(0), s.charCodeAt(1), s.charCodeAt(2));
-  var a = new Array(97, 97, 97);
-  var hPM = _rsasign_getHexPaddedDigestInfoForString(a, 1024, 'sha1');
-  expect(2);
-  equals(hPM.length, 256, "check padded message length 128byte*2chars=256chars");
-  equals(hPM, hExpected,
-         "check padded message for string aaa of ByteArray with SHA1withRSA 1024bit" );
-});
-
 test("_rsasign_getHexPaddedDigestInfoForString aaa 1024/sha256", function() {
   var hExpected = "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003031300d0609608648016503040201050004209834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0";
   var hPM = _rsasign_getHexPaddedDigestInfoForString("aaa", 1024, 'sha256');
@@ -92,17 +83,6 @@ test("_rsasign_getHexPaddedDigestInfoForString aaa 1024/sha256", function() {
   equals(hPM.length, 256, "check padded message length 128byte*2chars=256chars");
   equals(hPM, hExpected,
          "check padded message for string aaa with SHA256withRSA 1024bit" );
-});
-
-test("_rsasign_getHexPaddedDigestInfoForString aaa ByteArray 1024/sha256", function() {
-  var hExpected = "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003031300d0609608648016503040201050004209834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0";
-  var s = "aaa";
-  var a = Array(s.charCodeAt(0), s.charCodeAt(1), s.charCodeAt(2));
-  var hPM = _rsasign_getHexPaddedDigestInfoForString(a, 1024, 'sha256');
-  expect(2);
-  equals(hPM.length, 256, "check padded message length 128byte*2chars=256chars");
-  equals(hPM, hExpected,
-         "check padded message for string aaa ByteArray with SHA256withRSA 1024bit" );
 });
 
 test("_rsasign_getHexPaddedDigestInfoForString aaa 512/sha1", function() {
@@ -159,39 +139,6 @@ test("RSAKey.signString(aaa,sha1) via readPEM", function() {
   var hSig = rsa.signString("aaa", 'sha1');
   equals(hSig, hSigAAA,
          "String 'aaa' is signed properly with SHA1withRSA algorithm. (2)" );
-});
-
-test("RSAKey.signString(aaa ByteArray,sha1) via readPEM", function() {
-  expect(2);
-
-  var rsa = new RSAKey();
-  rsa.readPrivateKeyFromPEMString(sKey1PEM);
-  equals(rsa.n.bitLength(), 1024, "check key size");
-
-  //var hSig = rsa.signStringWithSHA1("aaa");
-  var s = "aaa";
-  var a = Array(s.charCodeAt(0), s.charCodeAt(1), s.charCodeAt(2));
-
-  var hSig = rsa.signString(a, 'sha1');
-  equals(hSig, hSigAAA,
-         "String ByteArray of 'aaa' is signed properly with SHA1withRSA algorithm. (2)" );
-});
-
-test("RSAKey.signString(ByteArray[255,255,255] ,sha1) via readPEM", function() {
-  expect(2);
-
-  var rsa = new RSAKey();
-  rsa.readPrivateKeyFromPEMString(sKey1PEM);
-  equals(rsa.n.bitLength(), 1024, "check key size");
-
-  //var hSig = rsa.signStringWithSHA1("aaa");
-  var a = Array(255, 255, 255);
-
-  var hSig = rsa.signString(a, 'sha1');
-  // expected value of signature can be created by following commands
-  // % echo -n ffffff | hex2bin | openssl dgst -sign z1024.pkcs1.pem -sha1 -hex
-  equals(hSig, "9368d4720f7a011ebe5e4386b50106b037535a54625513e9894c0a23b6d5f35e41e0e2c974abb02ac6518a7ad0216957736a4864ca2fe1448b7d79c7eac6bf0115244941ff2a45b8ff5ce8fe7149096c60ea0e3e6f55265397eb0c726b52c884b08a265c9f47d2d4f5232faa2ac1217a07dc1a6c041763240b4000d53aa4c951",
-         "String ByteArray of '[255,255,255]' is signed properly with SHA1withRSA algorithm. (2)" );
 });
 
 test("RSAKey.signString(aaa,sha256) via readPEM", function() {
@@ -254,7 +201,7 @@ test("_rsasign_verifySignatureWithArgs", function() {
   var result = _rsasign_verifySignatureWithArgs(sMsg, biSig, k_n, k_e);
 
   expect(2);
-  equals(hex_sha1("aaa"), '7e240de74fb1ed08fa08d38063f6a6a91462a815',
+  equals(KJUR.crypto.Util.sha1("aaa"), '7e240de74fb1ed08fa08d38063f6a6a91462a815',
          'check hex_sha1 works properly.');
   equals(result, true, 'check signature verification result');
 });
