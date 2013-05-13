@@ -415,6 +415,15 @@ version string of PKCS5PKEY class</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromPlainPKCS8PEM">getRSAKeyFromPlainPKCS8PEM</a></b>(PEM)
+								</div>
+								<div class="description">read unencrypted PEM formatted protected PKCS#8 private key and returns RSAKey</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.parsePKCS5PEM">parsePKCS5PEM</a></b>(sEncryptedPEM)
 								</div>
 								<div class="description">parse PEM formatted passcode protected PKCS#5 private key
@@ -663,6 +672,55 @@ version string of PKCS5PKEY class
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Hash}</span> hash of key and unused IV (ex. {keyhex:2fe3..., ivhex:3fad..})</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getRSAKeyFromPlainPKCS8PEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
+					<span class="light">PKCS5PKEY.</span><b>getRSAKeyFromPlainPKCS8PEM</b>(PEM)
+					
+					</div>
+					<div class="description">
+						read unencrypted PEM formatted protected PKCS#8 private key and returns RSAKey
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>PEM</b>
+									
+								</dt>
+								<dd>formatted plain PKCS#8 private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>1.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> RSA private key loaded</dd>
 							
 							</dl>
 						
