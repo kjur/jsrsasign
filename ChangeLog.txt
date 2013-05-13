@@ -1,6 +1,11 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 3.0.4 and 3.0.5
+  - pkcs5peky-1.0 update 1.0.0 to 1.0.1
+    method getRSAKeyFromPlainPKCS8PEM added to PKCS5PKEY class to load
+    unencrypted PEM formatted PKCS#8 private key.
+
 * Changes between 3.0.3 and 3.0.4
   - rsasign-1.2.js update 1.2.1 to 1.2.2
     - hash algs used were changed from  to MessageDigest(CryptoJS base). 
