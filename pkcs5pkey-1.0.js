@@ -1,10 +1,10 @@
-/*! pkcs5pkey-1.0.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! pkcs5pkey-1.0.1.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 //
 // pkcs5pkey.js - reading passcode protected PKCS#5 PEM formatted RSA private key
 //
 //
-// version: 1.0.0 (14 Apr 2013)
+// version: 1.0.1 (13 May 2013)
 //
 // Copyright (c) 2013 Kenji Urushima (kenji.urushima@gmail.com)
 //
@@ -206,6 +206,7 @@ var PKCS5PKEY = function() {
         decryptKeyB64: function(privateKeyB64, sharedKeyAlgName, sharedKeyHex, ivsaltHex) {
 	    return _decryptKeyB64(privateKeyB64, sharedKeyAlgName, sharedKeyHex, ivsaltHex);
         },
+
 	/**
          * decrypt PEM formatted protected PKCS#5 private key with passcode
 	 * @name getDecryptedKeyHex
@@ -233,6 +234,42 @@ var PKCS5PKEY = function() {
             var decryptedKey = _decryptKeyB64(privateKeyB64, sharedKeyAlgName, sharedKeyHex, ivsaltHex);
 	    return decryptedKey;
 	},
+
+	/**
+         * read unencrypted PEM formatted protected PKCS#8 private key and returns RSAKey
+	 * @name getRSAKeyFromPlainPKCS8PEM
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} PEM formatted plain PKCS#8 private key
+	 * @return {RSAKey} RSA private key loaded
+         * @since 1.0.1
+	 */
+        getRSAKeyFromPlainPKCS8PEM: function(pkcs8PEM) {
+            if (pkcs8PEM.match(/ENCRYPTED/))
+                throw "pem shall be not ENCRYPTED";
+	    if (! pkcs8PEM.match(/BEGIN PRIVATE KEY/))
+                throw "pkcs8PEM doesn't include 'BEGIN PRIVATE KEY'";
+            var s = pkcs8PEM;
+	    s = s.replace(/^-----BEGIN PRIVATE KEY-----/, '');
+	    s = s.replace(/^-----END PRIVATE KEY-----/, '');
+	    var sB64 = s.replace(/\s+/g, '');
+	    var prvKeyWA = CryptoJS.enc.Base64.parse(sB64);
+	    var prvKeyHex = CryptoJS.enc.Hex.stringify(prvKeyWA);
+	    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(prvKeyHex, 0);
+	    if (a1.length != 3)
+		throw "outer DERSequence shall have 3 elements: " + a1.length;
+            var algIdTLV =ASN1HEX.getHexOfTLV_AtObj(prvKeyHex, a1[1]);
+	    if (algIdTLV != "300d06092a864886f70d0101010500") // AlgId rsaEncryption
+		throw "PKCS8 AlgorithmIdentifier is not rsaEnc: " + algIdTLV;
+            var algIdTLV = ASN1HEX.getHexOfTLV_AtObj(prvKeyHex, a1[1]);
+	    var octetStr = ASN1HEX.getHexOfTLV_AtObj(prvKeyHex, a1[2]);
+	    var p5KeyHex = ASN1HEX.getHexOfV_AtObj(octetStr, 0);
+            //alert(p5KeyHex);
+	    var rsaKey = new RSAKey();
+	    rsaKey.readPrivateKeyFromASN1HexString(p5KeyHex);
+	    return rsaKey;
+        },
+
 	addAlgorithm: function(functionObject, algName, keyLen, ivLen) {
 	}
     };

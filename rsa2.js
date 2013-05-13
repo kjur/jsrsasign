@@ -134,7 +134,13 @@ function RSASetPrivate(N,E,D) {
 
 // Set the private key fields N, e, d and CRT params from hex strings
 function RSASetPrivateEx(N,E,D,P,Q,DP,DQ,C) {
-  if(N != null && E != null && N.length > 0 && E.length > 0) {
+  //alert("RSASetPrivateEx called");
+  if (N == null) throw "RSASetPrivateEx N == null";
+  if (E == null) throw "RSASetPrivateEx E == null";
+  if (N.length == 0) throw "RSASetPrivateEx N.length == 0";
+  if (E.length == 0) throw "RSASetPrivateEx E.length == 0";
+
+  if (N != null && E != null && N.length > 0 && E.length > 0) {
     this.n = parseBigInt(N,16);
     this.e = parseInt(E,16);
     this.d = parseBigInt(D,16);
@@ -143,9 +149,9 @@ function RSASetPrivateEx(N,E,D,P,Q,DP,DQ,C) {
     this.dmp1 = parseBigInt(DP,16);
     this.dmq1 = parseBigInt(DQ,16);
     this.coeff = parseBigInt(C,16);
+  } else {
+    alert("Invalid RSA private key in RSASetPrivateEx");
   }
-  else
-    alert("Invalid RSA private key");
 }
 
 // Generate a new random private key B bits long, using public expt E

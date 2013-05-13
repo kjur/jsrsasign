@@ -99,6 +99,26 @@ test("getDecryptedKeyHex_k10", function() {
   equals(decrypted, sk10dechex, "key is the same.");
 });
 
+test("getRSAKeyFromPlainPKCS8PEM", function() {
+  var s = // =z1.prv.p8.pem
+"-----BEGIN PRIVATE KEY-----\n" + 
+"MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEA6GZN0rQFKRIVaPOz\n" + 
+"m8l6Yue6PAm6vcTw3NjfkOt5C5u2RaK3DjESdHtNPEG1FCSJURX++I951D6uWxpO\n" + 
+"NRj9WQIDAQABAkB4u8VMZGeV6aYjyw+RLH+faGFxFWDle63iHe0vfZV5+GJy+rnn\n" + 
+"GrJygsJ2DEBNrmrIo6uFLPa81WL5r/gkeiZNAiEA/pvUUIZrMlVhT96XanasCx1Y\n" + 
+"MN2mT1NZuUbYUSvBI58CIQDpq2gPXwXbsPQxGw5vQ2j0h0oSOJedi8YAw1xvIHB8\n" + 
+"BwIhANVJy2mNwX1P4w5ahPOt6GADPB7rf2fShkZcn9gX1Fs3AiAYSbS7REk7mJ0J\n" + 
+"LaLGdd9G63kLg85eldSy55uIAXsvqQIgfSYaliVtSbAgyx1Yfs3hJ+CTpNKzTNv/\n" + 
+"Fx80EltYV6k=\n" + 
+"-----END PRIVATE KEY-----\n";
+  var pkey = PKCS5PKEY.getRSAKeyFromPlainPKCS8PEM(s);
+  expect(3);
+  equals(pkey.n.toString(16), "e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd59", "n of key is the same.");
+  equals(pkey.e.toString(16), "10001", "e of key is the same.");
+  equals(pkey.d.toString(16), "78bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d", "d of key is the same.");
+
+});
+
 });
 -->
 </script>
