@@ -242,7 +242,7 @@ test("ExtKeyUsage class test", function() {
  	new KJUR.asn1.x509.ExtKeyUsage({'array':
 	                                [{'oid': '2.5.29.37.0'},  // anyExtendedKeyUsage
 					 {'name': 'clientAuth'}]});
-  equals(eku1.getEncodedHex(), "300f0603551d25040830060604551d2500", "constructor array");
+  equals(eku1.getEncodedHex(), "30190603551d25041230100604551d250006082b06010505070302", "constructor array");
 });
 
 

@@ -65,6 +65,13 @@ test("Util class (static) test", function() {
          "getPaddedDigestInfoHex sha1(aaa)");
 });
 
+test("Util class (static) hash test", function() {
+  var o = KJUR.crypto.Util;
+  expect(2);
+  equals(o.sha1('aaa'), '7e240de74fb1ed08fa08d38063f6a6a91462a815', 'sha1 aaa');
+  equals(o.md5('aaa'), '47bce5c74f589f4867dbd57e9ca9f808', 'md5 aaa');
+});
+
 test("MessageDigest test", function() {
   expect(10);
 
