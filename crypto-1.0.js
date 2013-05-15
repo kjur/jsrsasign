@@ -29,8 +29,17 @@
 if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
 /**
  * kjur's cryptographic algorithm provider library name space
+ * <p>
+ * This namespace privides following crytpgrahic classes.
+ * <ul>
+ * <li>{@link KJUR.crypto.MessageDigest} - Java JCE(cryptograhic extension) style MessageDigest class</li>
+ * <li>{@link KJUR.crypto.Signature} - Java JCE(cryptograhic extension) style Signature class</li>
+ * <li>{@link KJUR.crypto.Util} - cryptographic utility functions and properties</li>
+ * </ul>
+ * NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
+ * </p>
  * @name KJUR.crypto
- * @namespace kjur's cryptographic algorithm provider library name space
+ * @namespace
  */
 if (typeof KJUR.crypto == "undefined" || !KJUR.crypto) KJUR.crypto = {};
 

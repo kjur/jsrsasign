@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.2 JavaScript API Reference - KJUR.asn1.DERSequence</title>
+		<title>jsrsasign 3.0.2 JavaScript API Reference - KJUR.asn1.x509.CRLEntry</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -306,26 +306,26 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.DERSequence
+				Class KJUR.asn1.x509.CRLEntry
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
 				<br />Extends
-					<a href="../symbols/KJUR.asn1.DERAbstractStructured.html">KJUR.asn1.DERAbstractStructured</a>.<br />
+					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
-				class for ASN.1 DER Sequence
+				ASN.1 CRLEntry structure class for CRL
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1-1.0.js.html">asn1-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.DERSequence.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.CRLEntry.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -338,16 +338,10 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.DERSequence.html#constructor">KJUR.asn1.DERSequence</a></b>()
+								<b><a href="../symbols/KJUR.asn1.x509.CRLEntry.html#constructor">KJUR.asn1.x509.CRLEntry</a></b>(params)
 							</div>
-							<div class="description">class for ASN.1 DER Sequence
-<br/>
-As for argument 'params' for constructor, you can specify one of
-following properties:
-<ul>
-<li>array - specify array of ASN1Object to set elements of content</li>
-</ul>
-NOTE: 'params' can be omitted.</div>
+							<div class="description">ASN.1 CRLEntry structure class for CRL
+</div>
 						</td>
 					</tr>
 				</tbody>
@@ -361,12 +355,54 @@ NOTE: 'params' can be omitted.</div>
 				
 				
 				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.DERAbstractStructured.html">KJUR.asn1.DERAbstractStructured</a>: </dt><dd><a href="../symbols/KJUR.asn1.DERAbstractStructured.html#asn1Array">asn1Array</a></dd><dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
+				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
 				</dl>
 				
 			
 
 <!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.x509.CRLEntry.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.CRLEntry.<b><a href="../symbols/KJUR.asn1.x509.CRLEntry.html#.setCertSerial">setCertSerial</a></b>(intParam)
+								</div>
+								<div class="description">set DERInteger parameter for serial number of revoked certificate
+</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.CRLEntry.<b><a href="../symbols/KJUR.asn1.x509.CRLEntry.html#.setRevocationDate">setRevocationDate</a></b>(timeParam)
+								</div>
+								<div class="description">set Time parameter for revocation date
+</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+				<dl class="inheritsList">
+				
+				</dl>
+				
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -379,26 +415,46 @@ NOTE: 'params' can be omitted.</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.DERSequence</b>()
+						<b>KJUR.asn1.x509.CRLEntry</b>(params)
 				</div>
 				
 				<div class="description">
-					class for ASN.1 DER Sequence
-<br/>
-As for argument 'params' for constructor, you can specify one of
-following properties:
-<ul>
-<li>array - specify array of ASN1Object to set elements of content</li>
-</ul>
-NOTE: 'params' can be omitted.
+					ASN.1 CRLEntry structure class for CRL
+
 					
 				</div>
 				
 				
 				
+				<pre class="code">var e = new KJUR.asn1.x509.CRLEntry({'time': {'str': '130514235959Z'}, 'sn': {'int': 234}});
+
+// revokedCertificates     SEQUENCE OF SEQUENCE  {
+//     userCertificate         CertificateSerialNumber,
+//     revocationDate          Time,
+//     crlEntryExtensions      Extensions OPTIONAL
+//                             -- if present, version MUST be v2 }</pre>
+				
+				
+				
 				
 					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Array}</span>  <b>params</b>
+								
+							</dt>
+								<dd>associative array of parameters (ex. {})</dd>
+						
+						</dl>
 					
+					
+					
+						<dl class="detailList">
+						<dt class="heading">Since:</dt>
+							<dd>1.0.3</dd>
+						</dl>
 					
 					
 					
@@ -412,6 +468,93 @@ NOTE: 'params' can be omitted.
 			
 
 <!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".setCertSerial"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.CRLEntry.</span><b>setCertSerial</b>(intParam)
+					
+					</div>
+					<div class="description">
+						set DERInteger parameter for serial number of revoked certificate
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">entry.setCertSerial({'int': 3});</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>intParam</b>
+									
+								</dt>
+								<dd>DERInteger parameter for certificate serial number</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".setRevocationDate"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.CRLEntry.</span><b>setRevocationDate</b>(timeParam)
+					
+					</div>
+					<div class="description">
+						set Time parameter for revocation date
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">entry.setRevocationDate({'str': '130508235959Z'});</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>timeParam</b>
+									
+								</dt>
+								<dd>Time parameter for revocation date</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					
+				
 			
 			
 <!-- ============================== event details ========================= -->		
