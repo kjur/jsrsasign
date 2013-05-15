@@ -23,7 +23,17 @@
 
 /** 
  * kjur's class library name space
- * @name KJUR
+ * <p>
+ * This name space provides following name spaces:
+ * <ul>
+ * <li>{@link KJUR.asn1} - ASN.1 primitive hexadecimal encoder</li>
+ * <li>{@link KJUR.asn1.x509} - ASN.1 structure for X.509 certificate and CRL</li>
+ * <li>{@link KJUR.crypto} - Java Cryptographic Extension(JCE) style MessageDigest/Signature 
+ * class and utilities</li>
+ * </ul>
+ * </p> 
+ * NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
+  * @name KJUR
  * @namespace kjur's class library name space
  */
 if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
@@ -65,6 +75,7 @@ if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
  * <li>{@link KJUR.asn1.DERTaggedObject}</li>
  * </ul>
  * </p>
+ * NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
  * @name KJUR.asn1
  * @namespace
  */

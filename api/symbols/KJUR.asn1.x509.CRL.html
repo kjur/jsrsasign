@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.2 JavaScript API Reference - KJUR.asn1.DERSequence</title>
+		<title>jsrsasign 3.0.2 JavaScript API Reference - KJUR.asn1.x509.CRL</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -306,26 +306,26 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.DERSequence
+				Class KJUR.asn1.x509.CRL
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
 				<br />Extends
-					<a href="../symbols/KJUR.asn1.DERAbstractStructured.html">KJUR.asn1.DERAbstractStructured</a>.<br />
+					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
-				class for ASN.1 DER Sequence
+				X.509 CRL class to sign and generate hex encoded certificate
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1-1.0.js.html">asn1-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.DERSequence.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.CRL.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -338,14 +338,15 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.DERSequence.html#constructor">KJUR.asn1.DERSequence</a></b>()
+								<b><a href="../symbols/KJUR.asn1.x509.CRL.html#constructor">KJUR.asn1.x509.CRL</a></b>(params)
 							</div>
-							<div class="description">class for ASN.1 DER Sequence
+							<div class="description">X.509 CRL class to sign and generate hex encoded CRL
 <br/>
 As for argument 'params' for constructor, you can specify one of
 following properties:
 <ul>
-<li>array - specify array of ASN1Object to set elements of content</li>
+<li>tbsobj - specify <a href="../symbols/KJUR.asn1.x509.TBSCertList.html">KJUR.asn1.x509.TBSCertList</a> object to be signed</li>
+<li>rsaprvkey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object CA private key</li>
 </ul>
 NOTE: 'params' can be omitted.</div>
 						</td>
@@ -361,12 +362,65 @@ NOTE: 'params' can be omitted.</div>
 				
 				
 				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.DERAbstractStructured.html">KJUR.asn1.DERAbstractStructured</a>: </dt><dd><a href="../symbols/KJUR.asn1.DERAbstractStructured.html#asn1Array">asn1Array</a></dd><dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
+				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
 				</dl>
 				
 			
 
 <!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.x509.CRL.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.CRL.<b><a href="../symbols/KJUR.asn1.x509.CRL.html#.getPEMString">getPEMString</a></b>()
+								</div>
+								<div class="description">get PEM formatted CRL string after signed
+</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.CRL.<b><a href="../symbols/KJUR.asn1.x509.CRL.html#.setRsaPrvKeyByPEMandPass">setRsaPrvKeyByPEMandPass</a></b>(rsaPEM, passPEM)
+								</div>
+								<div class="description">set PKCS#5 encrypted RSA PEM private key as CA key
+<br/>
+<h4>EXAMPLES</h4></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.CRL.<b><a href="../symbols/KJUR.asn1.x509.CRL.html#.sign">sign</a></b>()
+								</div>
+								<div class="description">sign TBSCertList and set signature value internally
+</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+				<dl class="inheritsList">
+				
+				</dl>
+				
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -379,26 +433,57 @@ NOTE: 'params' can be omitted.</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.DERSequence</b>()
+						<b>KJUR.asn1.x509.CRL</b>(params)
 				</div>
 				
 				<div class="description">
-					class for ASN.1 DER Sequence
+					X.509 CRL class to sign and generate hex encoded CRL
 <br/>
 As for argument 'params' for constructor, you can specify one of
 following properties:
 <ul>
-<li>array - specify array of ASN1Object to set elements of content</li>
+<li>tbsobj - specify <a href="../symbols/KJUR.asn1.x509.TBSCertList.html">KJUR.asn1.x509.TBSCertList</a> object to be signed</li>
+<li>rsaprvkey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object CA private key</li>
 </ul>
 NOTE: 'params' can be omitted.
+<h4>EXAMPLE</h4>
 					
 				</div>
 				
 				
 				
+				<pre class="code">var prvKey = new RSAKey(); // CA's private key
+prvKey.readPrivateKeyFromASN1HexString("3080...");
+var crl = new KJUR.asn1x509.CRL({'tbsobj': tbs, 'rsaprvkey': prvKey});
+crl.sign(); // issue CRL by CA's private key
+var hCRL = crl.getEncodedHex();
+
+// CertificateList  ::=  SEQUENCE  {
+//     tbsCertList          TBSCertList,
+//     signatureAlgorithm   AlgorithmIdentifier,
+//     signatureValue       BIT STRING  }</pre>
+				
+				
+				
 				
 					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Array}</span>  <b>params</b>
+								
+							</dt>
+								<dd>associative array of parameters (ex. {'tbsobj': obj, 'rsaprvkey': key})</dd>
+						
+						</dl>
 					
+					
+					
+						<dl class="detailList">
+						<dt class="heading">Since:</dt>
+							<dd>1.0.3</dd>
+						</dl>
 					
 					
 					
@@ -412,6 +497,129 @@ NOTE: 'params' can be omitted.
 			
 
 <!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".getPEMString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.CRL.</span><b>getPEMString</b>()
+					
+					</div>
+					<div class="description">
+						get PEM formatted CRL string after signed
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var cert = new KJUR.asn1.x509.CRL({'tbsobj': tbs, 'rsaprvkey': prvKey});
+cert.sign();
+var sPEM =  cert.getPEMString();</pre>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>PEM formatted string of certificate</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".setRsaPrvKeyByPEMandPass"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.CRL.</span><b>setRsaPrvKeyByPEMandPass</b>(rsaPEM, passPEM)
+					
+					</div>
+					<div class="description">
+						set PKCS#5 encrypted RSA PEM private key as CA key
+<br/>
+<h4>EXAMPLES</h4>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code"></pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>rsaPEM</b>
+									
+								</dt>
+								<dd>string of PKCS#5 encrypted RSA PEM private key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>passPEM</b>
+									
+								</dt>
+								<dd>passcode string to decrypt private key</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".sign"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.CRL.</span><b>sign</b>()
+					
+					</div>
+					<div class="description">
+						sign TBSCertList and set signature value internally
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var cert = new KJUR.asn1.x509.CRL({'tbsobj': tbs, 'rsaprvkey': prvKey});
+cert.sign();</pre>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					
+				
 			
 			
 <!-- ============================== event details ========================= -->		

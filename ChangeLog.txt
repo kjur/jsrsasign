@@ -1,6 +1,11 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 3.0.5 and 3.1.0
+  - asn1x509-1.0.js update 1.0.2 to 1.0.3
+    CRL, TBSCertList and CRLEntry class added to KJUR.asn1.x509
+    to issue CRL.
+
 * Changes between 3.0.4 and 3.0.5
   - pkcs5peky-1.0 update 1.0.0 to 1.0.1
     method getRSAKeyFromPlainPKCS8PEM added to PKCS5PKEY class to load

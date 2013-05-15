@@ -1,4 +1,4 @@
-/*! asn1x509-1.0.2.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.3.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,13 +16,14 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.2 (2013-May-12)
+ * @version 1.0.3 (2013-May-15)
  * @since 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
 /** 
  * kjur's class library name space
+ * // already documented in asn1-1.0.js
  * @name KJUR
  * @namespace kjur's class library name space
  */
@@ -30,41 +31,7 @@ if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
 
 /**
  * kjur's ASN.1 class library name space
- * <p>
- * This is ITU-T X.690 ASN.1 DER encoder class library and
- * class structure and methods is very similar to 
- * org.bouncycastle.asn1 package of 
- * well known BouncyCaslte Cryptography Library.
- *
- * <h4>PROVIDING ASN.1 PRIMITIVES</h4>
- * Here are ASN.1 DER primitive classes.
- * <ul>
- * <li>{@link KJUR.asn1.DERBoolean}</li>
- * <li>{@link KJUR.asn1.DERInteger}</li>
- * <li>{@link KJUR.asn1.DERBitString}</li>
- * <li>{@link KJUR.asn1.DEROctetString}</li>
- * <li>{@link KJUR.asn1.DERNull}</li>
- * <li>{@link KJUR.asn1.DERObjectIdentifier}</li>
- * <li>{@link KJUR.asn1.DERUTF8String}</li>
- * <li>{@link KJUR.asn1.DERNumericString}</li>
- * <li>{@link KJUR.asn1.DERPrintableString}</li>
- * <li>{@link KJUR.asn1.DERTeletexString}</li>
- * <li>{@link KJUR.asn1.DERIA5String}</li>
- * <li>{@link KJUR.asn1.DERUTCTime}</li>
- * <li>{@link KJUR.asn1.DERGeneralizedTime}</li>
- * <li>{@link KJUR.asn1.DERSequence}</li>
- * <li>{@link KJUR.asn1.DERSet}</li>
- * </ul>
- *
- * <h4>OTHER ASN.1 CLASSES</h4>
- * <ul>
- * <li>{@link KJUR.asn1.ASN1Object}</li>
- * <li>{@link KJUR.asn1.DERAbstractString}</li>
- * <li>{@link KJUR.asn1.DERAbstractTime}</li>
- * <li>{@link KJUR.asn1.DERAbstractStructured}</li>
- * <li>{@link KJUR.asn1.DERTaggedObject}</li>
- * </ul>
- * </p>
+ * // already documented in asn1-1.0.js
  * @name KJUR.asn1
  * @namespace
  */
@@ -93,6 +60,9 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * <li>{@link KJUR.asn1.x509.GeneralNames}</li>
  * <li>{@link KJUR.asn1.x509.DistributionPointName}</li>
  * <li>{@link KJUR.asn1.x509.DistributionPoint}</li>
+ * <li>{@link KJUR.asn1.x509.CRL}</li>
+ * <li>{@link KJUR.asn1.x509.TBSCertList}</li>
+ * <li>{@link KJUR.asn1.x509.CRLEntry}</li>
  * <li>{@link KJUR.asn1.x509.OID}</li>
  * </ul>
  * <h4>SUPPORTED EXTENSIONS</h4>
@@ -100,7 +70,9 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * <li>{@link KJUR.asn1.x509.BasicConstraints}</li>
  * <li>{@link KJUR.asn1.x509.KeyUsage}</li>
  * <li>{@link KJUR.asn1.x509.CRLDistributionPoints}</li>
+ * <li>{@link KJUR.asn1.x509.ExtKeyUsage}</li>
  * </ul>
+ * NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
  * @name KJUR.asn1.x509
  * @namespace
  */
@@ -615,6 +587,350 @@ YAHOO.lang.extend(KJUR.asn1.x509.ExtKeyUsage, KJUR.asn1.x509.Extension);
 
 
 // === END   X.509v3 Extensions Related =======================================
+
+// === BEGIN CRL Related ===================================================
+/**
+ * X.509 CRL class to sign and generate hex encoded CRL
+ * @name KJUR.asn1.x509.CRL
+ * @class X.509 CRL class to sign and generate hex encoded certificate
+ * @param {Array} params associative array of parameters (ex. {'tbsobj': obj, 'rsaprvkey': key})
+ * @extends KJUR.asn1.ASN1Object
+ * @since 1.0.3
+ * @description
+ * <br/>
+ * As for argument 'params' for constructor, you can specify one of
+ * following properties:
+ * <ul>
+ * <li>tbsobj - specify {@link KJUR.asn1.x509.TBSCertList} object to be signed</li>
+ * <li>rsaprvkey - specify {@link RSAKey} object CA private key</li>
+ * </ul>
+ * NOTE: 'params' can be omitted.
+ * <h4>EXAMPLE</h4>
+ * @example
+ * var prvKey = new RSAKey(); // CA's private key
+ * prvKey.readPrivateKeyFromASN1HexString("3080...");
+ * var crl = new KJUR.asn1x509.CRL({'tbsobj': tbs, 'rsaprvkey': prvKey});
+ * crl.sign(); // issue CRL by CA's private key
+ * var hCRL = crl.getEncodedHex();
+ *
+ * // CertificateList  ::=  SEQUENCE  {
+ * //     tbsCertList          TBSCertList,
+ * //     signatureAlgorithm   AlgorithmIdentifier,
+ * //     signatureValue       BIT STRING  }
+ */
+KJUR.asn1.x509.CRL = function(params) {
+    KJUR.asn1.x509.CRL.superclass.constructor.call(this);
+
+    var asn1TBSCertList = null;
+    var asn1SignatureAlg = null;
+    var asn1Sig = null;
+    var hexSig = null;
+    var rsaPrvKey = null;
+    
+    /**
+     * set PKCS#5 encrypted RSA PEM private key as CA key
+     * @name setRsaPrvKeyByPEMandPass
+     * @memberOf KJUR.asn1.x509.CRL
+     * @function
+     * @param {String} rsaPEM string of PKCS#5 encrypted RSA PEM private key
+     * @param {String} passPEM passcode string to decrypt private key
+     * @description
+     * <br/>
+     * <h4>EXAMPLES</h4>
+     * @example
+     */
+    this.setRsaPrvKeyByPEMandPass = function(rsaPEM, passPEM) {
+	var caKeyHex = PKCS5PKEY.getDecryptedKeyHex(rsaPEM, passPEM);
+	var caKey = new RSAKey();
+	caKey.readPrivateKeyFromASN1HexString(caKeyHex);  
+	this.rsaPrvKey = caKey;
+    };
+
+    /**
+     * sign TBSCertList and set signature value internally
+     * @name sign
+     * @memberOf KJUR.asn1.x509.CRL
+     * @function
+     * @description
+     * @example
+     * var cert = new KJUR.asn1.x509.CRL({'tbsobj': tbs, 'rsaprvkey': prvKey});
+     * cert.sign();
+     */
+    this.sign = function() {
+	this.asn1SignatureAlg = this.asn1TBSCertList.asn1SignatureAlg;
+
+	sig = new KJUR.crypto.Signature({'alg': 'SHA1withRSA', 'prov': 'cryptojs/jsrsa'});
+	sig.initSign(this.rsaPrvKey);
+	sig.updateHex(this.asn1TBSCertList.getEncodedHex());
+	this.hexSig = sig.sign();
+
+	this.asn1Sig = new KJUR.asn1.DERBitString({'hex': '00' + this.hexSig});
+	
+	var seq = new KJUR.asn1.DERSequence({'array': [this.asn1TBSCertList,
+						       this.asn1SignatureAlg,
+						       this.asn1Sig]});
+	this.hTLV = seq.getEncodedHex();
+	this.isModified = false;
+    };
+
+    this.getEncodedHex = function() {
+	if (this.isModified == false && this.hTLV != null) return this.hTLV;
+	throw "not signed yet";
+    };
+
+    /**
+     * get PEM formatted CRL string after signed
+     * @name getPEMString
+     * @memberOf KJUR.asn1.x509.CRL
+     * @function
+     * @return PEM formatted string of certificate
+     * @description
+     * @example
+     * var cert = new KJUR.asn1.x509.CRL({'tbsobj': tbs, 'rsaprvkey': prvKey});
+     * cert.sign();
+     * var sPEM =  cert.getPEMString();
+     */
+    this.getPEMString = function() {
+	var hCert = this.getEncodedHex();
+	var wCert = CryptoJS.enc.Hex.parse(hCert);
+	var b64Cert = CryptoJS.enc.Base64.stringify(wCert);
+	var pemBody = b64Cert.replace(/(.{64})/g, "$1\r\n");
+	return "-----BEGIN X509 CRL-----\r\n" + pemBody + "\r\n-----END X509 CRL-----\r\n";
+    };
+
+    if (typeof params != "undefined") {
+	if (typeof params['tbsobj'] != "undefined") {
+	    this.asn1TBSCertList = params['tbsobj'];
+	}
+	if (typeof params['rsaprvkey'] != "undefined") {
+	    this.rsaPrvKey = params['rsaprvkey'];
+	}
+	if ((typeof params['rsaprvpem'] != "undefined") &&
+	    (typeof params['rsaprvpas'] != "undefined")) {
+	    this.setRsaPrvKeyByPEMandPass(params['rsaprvpem'], params['rsaprvpas']);
+	}
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.x509.CRL, KJUR.asn1.ASN1Object);
+
+/**
+ * ASN.1 TBSCertList structure class for CRL
+ * @name KJUR.asn1.x509.TBSCertList
+ * @class ASN.1 TBSCertList structure class for CRL
+ * @param {Array} params associative array of parameters (ex. {})
+ * @extends KJUR.asn1.ASN1Object
+ * @since 1.0.3
+ * @description
+ * <br/>
+ * <h4>EXAMPLE</h4>
+ * @example
+ *  var o = new KJUR.asn1.x509.TBSCertList();
+ *  o.setSignatureAlgByParam({'name': 'SHA1withRSA'});
+ *  o.setIssuerByParam({'str': '/C=US/O=a'});
+ *  o.setNotThisUpdateByParam({'str': '130504235959Z'});
+ *  o.setNotNextUpdateByParam({'str': '140504235959Z'});
+ *  o.addRevokedCert({'int': 4}, {'str':'130514235959Z'}));
+ *  o.addRevokedCert({'hex': '0f34dd'}, {'str':'130514235959Z'}));
+ * 
+ * // TBSCertList  ::=  SEQUENCE  {
+ * //        version                 Version OPTIONAL,
+ * //                                     -- if present, MUST be v2
+ * //        signature               AlgorithmIdentifier,
+ * //        issuer                  Name,
+ * //        thisUpdate              Time,
+ * //        nextUpdate              Time OPTIONAL,
+ * //        revokedCertificates     SEQUENCE OF SEQUENCE  {
+ * //             userCertificate         CertificateSerialNumber,
+ * //             revocationDate          Time,
+ * //             crlEntryExtensions      Extensions OPTIONAL
+ * //                                      -- if present, version MUST be v2
+ * //                                  }  OPTIONAL,
+ * //        crlExtensions           [0]  EXPLICIT Extensions OPTIONAL
+ */
+KJUR.asn1.x509.TBSCertList = function(params) {
+    KJUR.asn1.x509.TBSCertList.superclass.constructor.call(this);
+    var aRevokedCert = null;
+
+    /**
+     * set signature algorithm field by parameter
+     * @name setSignatureAlgByParam
+     * @memberOf KJUR.asn1.x509.TBSCertList
+     * @function
+     * @param {Array} algIdParam AlgorithmIdentifier parameter
+     * @description
+     * @example
+     * tbsc.setSignatureAlgByParam({'name': 'SHA1withRSA'});
+     */
+    this.setSignatureAlgByParam = function(algIdParam) {
+	this.asn1SignatureAlg = new KJUR.asn1.x509.AlgorithmIdentifier(algIdParam);
+    };
+
+    /**
+     * set issuer name field by parameter
+     * @name setIssuerByParam
+     * @memberOf KJUR.asn1.x509.TBSCertList
+     * @function
+     * @param {Array} x500NameParam X500Name parameter
+     * @description
+     * @example
+     * tbsc.setIssuerParam({'str': '/C=US/CN=b'});
+     * @see KJUR.asn1.x509.X500Name
+     */
+    this.setIssuerByParam = function(x500NameParam) {
+	this.asn1Issuer = new KJUR.asn1.x509.X500Name(x500NameParam);
+    };
+
+    /**
+     * set thisUpdate field by parameter
+     * @name setThisUpdateByParam
+     * @memberOf KJUR.asn1.x509.TBSCertList
+     * @function
+     * @param {Array} timeParam Time parameter
+     * @description
+     * @example
+     * tbsc.setThisUpdateByParam({'str': '130508235959Z'});
+     * @see KJUR.asn1.x509.Time
+     */
+    this.setThisUpdateByParam = function(timeParam) {
+	this.asn1ThisUpdate = new KJUR.asn1.x509.Time(timeParam);
+    };
+
+    /**
+     * set nextUpdate field by parameter
+     * @name setNextUpdateByParam
+     * @memberOf KJUR.asn1.x509.TBSCertList
+     * @function
+     * @param {Array} timeParam Time parameter
+     * @description
+     * @example
+     * tbsc.setNextUpdateByParam({'str': '130508235959Z'});
+     * @see KJUR.asn1.x509.Time
+     */
+    this.setNextUpdateByParam = function(timeParam) {
+	this.asn1NextUpdate = new KJUR.asn1.x509.Time(timeParam);
+    };
+
+    /**
+     * add revoked certficate by parameter
+     * @name addRevokedCert
+     * @memberOf KJUR.asn1.x509.TBSCertList
+     * @function
+     * @param {Array} snParam DERInteger parameter for certificate serial number
+     * @param {Array} timeParam Time parameter for revocation date
+     * @description
+     * @example
+     * tbsc.addRevokedCert({'int': 3}, {'str': '130508235959Z'});
+     * @see KJUR.asn1.x509.Time
+     */
+    this.addRevokedCert = function(snParam, timeParam) {
+	var param = {};
+	if (snParam != undefined && snParam != null) param['sn'] = snParam;
+	if (timeParam != undefined && timeParam != null) param['time'] = timeParam;
+	var o = new KJUR.asn1.x509.CRLEntry(param);
+	this.aRevokedCert.push(o);
+    };
+
+    this.getEncodedHex = function() {
+	this.asn1Array = new Array();
+
+	if (this.asn1Version != null) this.asn1Array.push(this.asn1Version);
+	this.asn1Array.push(this.asn1SignatureAlg);
+	this.asn1Array.push(this.asn1Issuer);
+	this.asn1Array.push(this.asn1ThisUpdate);
+	if (this.asn1NextUpdate != null) this.asn1Array.push(this.asn1NextUpdate);
+
+	if (this.aRevokedCert.length > 0) {
+	    var seq = new KJUR.asn1.DERSequence({'array': this.aRevokedCert});
+	    this.asn1Array.push(seq);
+	}
+
+	var o = new KJUR.asn1.DERSequence({"array": this.asn1Array});
+	this.hTLV = o.getEncodedHex();
+	this.isModified = false;
+	return this.hTLV;
+    };
+
+    this._initialize = function() {
+	this.asn1Version = null;
+	this.asn1SignatureAlg = null;
+	this.asn1Issuer = null;
+	this.asn1ThisUpdate = null;
+	this.asn1NextUpdate = null;
+	this.aRevokedCert = new Array();
+    };
+
+    this._initialize();
+};
+YAHOO.lang.extend(KJUR.asn1.x509.TBSCertList, KJUR.asn1.ASN1Object);
+
+/**
+ * ASN.1 CRLEntry structure class for CRL
+ * @name KJUR.asn1.x509.CRLEntry
+ * @class ASN.1 CRLEntry structure class for CRL
+ * @param {Array} params associative array of parameters (ex. {})
+ * @extends KJUR.asn1.ASN1Object
+ * @since 1.0.3
+ * @description
+ * @example
+ * var e = new KJUR.asn1.x509.CRLEntry({'time': {'str': '130514235959Z'}, 'sn': {'int': 234}});
+ * 
+ * // revokedCertificates     SEQUENCE OF SEQUENCE  {
+ * //     userCertificate         CertificateSerialNumber,
+ * //     revocationDate          Time,
+ * //     crlEntryExtensions      Extensions OPTIONAL
+ * //                             -- if present, version MUST be v2 }
+ */
+KJUR.asn1.x509.CRLEntry = function(params) {
+    KJUR.asn1.x509.CRLEntry.superclass.constructor.call(this);
+    var sn = null;
+    var time = null;
+
+    /**
+     * set DERInteger parameter for serial number of revoked certificate 
+     * @name setCertSerial
+     * @memberOf KJUR.asn1.x509.CRLEntry
+     * @function
+     * @param {Array} intParam DERInteger parameter for certificate serial number
+     * @description
+     * @example
+     * entry.setCertSerial({'int': 3});
+     */
+    this.setCertSerial = function(intParam) {
+	this.sn = new KJUR.asn1.DERInteger(intParam);
+    };
+
+    /**
+     * set Time parameter for revocation date
+     * @name setRevocationDate
+     * @memberOf KJUR.asn1.x509.CRLEntry
+     * @function
+     * @param {Array} timeParam Time parameter for revocation date
+     * @description
+     * @example
+     * entry.setRevocationDate({'str': '130508235959Z'});
+     */
+    this.setRevocationDate = function(timeParam) {
+	this.time = new KJUR.asn1.x509.Time(timeParam);
+    };
+
+    this.getEncodedHex = function() {
+	var o = new KJUR.asn1.DERSequence({"array": [this.sn, this.time]});
+	this.TLV = o.getEncodedHex();
+	return this.TLV;
+    };
+    
+    if (typeof params != "undefined") {
+	if (typeof params['time'] != "undefined") {
+	    this.setRevocationDate(params['time']);
+	}
+	if (typeof params['sn'] != "undefined") {
+	    this.setCertSerial(params['sn']);
+	}
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.x509.CRLEntry, KJUR.asn1.ASN1Object);
+
+// === END   CRL Related ===================================================
 
 // === BEGIN X500Name Related =================================================
 /**

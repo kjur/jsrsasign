@@ -249,7 +249,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.Certificate.html">KJUR.asn1.x509.Certificate</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.CRL.html">KJUR.asn1.x509.CRL</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.CRLDistributionPoints.html">KJUR.asn1.x509.CRLDistributionPoints</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.CRLEntry.html">KJUR.asn1.x509.CRLEntry</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.DistributionPoint.html">KJUR.asn1.x509.DistributionPoint</a></li>
 	
@@ -272,6 +276,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html">KJUR.asn1.x509.SubjectPublicKeyInfo</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html">KJUR.asn1.x509.TBSCertificate</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.TBSCertList.html">KJUR.asn1.x509.TBSCertList</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.Time.html">KJUR.asn1.x509.Time</a></li>
 	
@@ -382,7 +388,52 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.<b>getPEMString</b>()
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.asn1.x509.<b>setByString</b>(dnStr)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.<b>setIssuerByParam</b>(x500NameParam)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.<b>setRsaPrvKeyByPEMandPass</b>(rsaPEM, passPEM)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.<b>setSignatureAlgByParam</b>(algIdParam)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.<b>sign</b>()
 								</div>
 								<div class="description"></div>
 							</td>
@@ -431,6 +482,9 @@ ul.inheritsList
 <li><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.DistributionPointName.html">KJUR.asn1.x509.DistributionPointName</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.DistributionPoint.html">KJUR.asn1.x509.DistributionPoint</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.CRL.html">KJUR.asn1.x509.CRL</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.TBSCertList.html">KJUR.asn1.x509.TBSCertList</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.CRLEntry.html">KJUR.asn1.x509.CRLEntry</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a></li>
 </ul>
 <h4>SUPPORTED EXTENSIONS</h4>
@@ -438,7 +492,9 @@ ul.inheritsList
 <li><a href="../symbols/KJUR.asn1.x509.BasicConstraints.html">KJUR.asn1.x509.BasicConstraints</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.CRLDistributionPoints.html">KJUR.asn1.x509.CRLDistributionPoints</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.ExtKeyUsage.html">KJUR.asn1.x509.ExtKeyUsage</a></li>
 </ul>
+NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
 					
 				</div>
 				
@@ -515,6 +571,31 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name=".getPEMString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.</span><b>getPEMString</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name=".setByString"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -541,6 +622,145 @@ ul.inheritsList
 								<dd></dd>
 							
 							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".setIssuerByParam"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.</span><b>setIssuerByParam</b>(x500NameParam)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>x500NameParam</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".setRsaPrvKeyByPEMandPass"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.</span><b>setRsaPrvKeyByPEMandPass</b>(rsaPEM, passPEM)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>rsaPEM</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<b>passPEM</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".setSignatureAlgByParam"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.</span><b>setSignatureAlgByParam</b>(algIdParam)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>algIdParam</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".sign"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.</span><b>sign</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
 						
 						
 						

@@ -4,8 +4,7 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="jsrsasign : The 'jsrsasign' (RSA-Sign JavaScript Library) is a open source free pure JavaScript implementation of PKCS#1 v2.1 RSASSA-PKCS1-v1_5 RSA signing and validation algorithm. This library also supports to load encrypted PKCS#5 RSA private key." />
-
+    <meta name="description" content="opensource free RSA signing/validation, ASN.1, PKCS#5/8 private key X.509 certificate and CRL library in pure JavaScript" />
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
     <title>jsrsasign - RSA Signing and Verification in JavaScript</title>
@@ -19,7 +18,7 @@
           <a id="forkme_banner" href="https://github.com/kjur/jsrsasign">Fork Me on GitHub</a>
 
           <h1 id="project_title">jsrsasign</h1>
-          <h2 id="project_tagline">opensource free RSA signing/validation, ASN.1 and X.509 certificate library in pure JavaScript</h2>
+          <h2 id="project_tagline">opensource free RSA signing/validation, ASN.1, PKCS#5/8 private key X.509 certificate and CRL library in pure JavaScript</h2>
 
           <section id="downloads">
             <a class="zip_download_link" href="https://github.com/kjur/jsrsasign/zipball/master">Download this project as a .zip file</a>
@@ -53,6 +52,12 @@ The 'jsrsasign' library provides following features in pure JavaScript.
 
 <h3>NEWS</h3>
 <dl>
+<dt><b>2013-May-16</b>: 
+<dd>Release 3.1.0 is now available.
+<ul>
+<li>CRL class added to issue CRL.</li>
+</ul>
+
 <dt><b>2013-May-13</b>: 
 <dd>Release 3.0.5 is now available.
 <ul>
@@ -94,12 +99,6 @@ for examples.
 <li>New feature: ASN.1 encoder class, MessageDigest, Signature class like Java JCE, certificate issuance.</li>
 <li>Merged contribution by David Halls. Thank you Dave!. Now jsrsasign supports PKCS#1 PSS and OAEP</li>
 <li><a href="tool_ca.html" target="_blank">'JavaScript Certification Authority' sample tool</a> added.
-</ul>
-<dt><b>2013-Apr-14</b>: 
-<dd>Release 2.0.0 is now available.
-<ul>
-<li>Now support reading passcode encrypted PKCS#5 RSA private key in pkcs5pkey.js. See
-  <a href="tool_pkcs5view.html" target="_blank">PKCS#5 sample</a>.</li>
 </ul>
 </dl>
 Old news is <a href="index_oldnews.html">here</a>.
