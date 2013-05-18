@@ -1,7 +1,7 @@
 jsrsasign
 =========
 
-The 'jsrsasign' (RSA-Sign JavaScript Library) is a open source free pure JavaScript implementation of PKCS#1 v2.1 RSASSA-PKCS1-v1_5 RSA signing and validation algorithm.
+The 'jsrsasign' (RSA-Sign JavaScript Library) is an opensource free RSA signing/validation, ASN.1, PKCS#5/8 private key X.509 certificate and CRL library in pure JavaScript.
 
 Public page is http://kjur.github.com/jsrsasign .
 
