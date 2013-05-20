@@ -3,8 +3,11 @@
 <html>
 <head>
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="qunit.js"></script>
-<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<!-- script type="text/javascript" src="qunit.js" /script -->
+<!-- link rel="stylesheet" href="qunit.css" type="text/css" media="screen" -->
+<script src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="screen"/>
 
 <script language="JavaScript" type="text/javascript" src="../jsbn.js"></script>
 <script language="JavaScript" type="text/javascript" src="../jsbn2.js"></script>
@@ -17,14 +20,18 @@
 <script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
-<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
+
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1-1.0.js"></script>
 
 <!-- jsrsasign pkcs5pkey external codes -->
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1/build/rollups/aes.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1/build/rollups/tripledes.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/core.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/enc-base64.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/cipher-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/aes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/tripledes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
 
 <script src="../pkcs5pkey-1.0.js"></script>
 
@@ -33,18 +40,18 @@
 $(document).ready(function(){
 
 var sk10pem = "" +
-"-----BEGIN RSA PRIVATE KEY-----\n" +
-"Proc-Type: 4,ENCRYPTED\n" +
-"DEK-Info: AES-256-CBC,40555967F759530864FE022E257DE34E\n" +
-"\n" +
-"jV7uXajRw4cccDaliagcqiLOiQEUCe19l761pXRxzgQP+DH4rCi12T4puTdZyy6l\n" +
-"eJHcSHZ/IC9N9iS3XNLgm/rRdUBahf0l1HOerHY76xIb74tB9v1S6sZe/IaOIYTO\n" +
-"E/t63rzNmj33AzEup5xMyzuAninLL3jJGKwcwkTG5u+n8p7fuMPcML0L7beVBkvZ\n" +
-"oXyySfMVB8h4u7yyZdhjU3O4K8QX1g1jntGJpQsh4ikfjM+3ddG/qaBrwzTBfC0C\n" +
-"F9SUbv+Sz0nZX60PhAYEDhb7194ol7F5Y4QZuDhf6K6d1v8r5b9RqDo98INqwdsD\n" +
-"1El24sGa3eBXi3lnpAytX7dOOBQKRh1uJyL3IuKyuFcNJj3OOGjBkR6imZwD895e\n" +
-"qxLS+BASmyGm4DME6m+kltZ12LXwPgNU6+d+XQ4NXSA=\n" +
-"-----END RSA PRIVATE KEY-----\n";
+"-----BEGIN RSA PRIVATE KEY-----\r\n" +
+"Proc-Type: 4,ENCRYPTED\r\n" +
+"DEK-Info: AES-256-CBC,40555967F759530864FE022E257DE34E\r\n" +
+"\r\n" +
+"jV7uXajRw4cccDaliagcqiLOiQEUCe19l761pXRxzgQP+DH4rCi12T4puTdZyy6l\r\n" +
+"eJHcSHZ/IC9N9iS3XNLgm/rRdUBahf0l1HOerHY76xIb74tB9v1S6sZe/IaOIYTO\r\n" +
+"E/t63rzNmj33AzEup5xMyzuAninLL3jJGKwcwkTG5u+n8p7fuMPcML0L7beVBkvZ\r\n" +
+"oXyySfMVB8h4u7yyZdhjU3O4K8QX1g1jntGJpQsh4ikfjM+3ddG/qaBrwzTBfC0C\r\n" +
+"F9SUbv+Sz0nZX60PhAYEDhb7194ol7F5Y4QZuDhf6K6d1v8r5b9RqDo98INqwdsD\r\n" +
+"1El24sGa3eBXi3lnpAytX7dOOBQKRh1uJyL3IuKyuFcNJj3OOGjBkR6imZwD895e\r\n" +
+"qxLS+BASmyGm4DME6m+kltZ12LXwPgNU6+d+XQ4NXSA=\r\n" +
+"-----END RSA PRIVATE KEY-----\r\n";
 
 var sk10pem_passcode = "hogehoge";
 
@@ -62,7 +69,7 @@ var sk10dechex = "30820139020100024100b1e5aa7d6827b8c69037b269907bd8f4a7a1e6b798
 // ======= TEST =============================================================================================
 
 test("version", function() {
-  equals(PKCS5PKEY.version, "1.0.0", "check version.");
+  equal(PKCS5PKEY.version, "1.0.0", "check version.");
 });
 
 // k1.[0-1].{hex|pem|der}
@@ -70,18 +77,18 @@ test("parsePKCS5PEM_k1.0key", function() {
   var info = PKCS5PKEY.parsePKCS5PEM(sk10pem, sk10pem_passcode);
   var dataHex = CryptoJS.enc.Hex.stringify(CryptoJS.enc.Base64.parse(info.data));
   expect(5);
-  equals(info.type, "RSA", "k1.0 type is 'RSA'.");
-  equals(info.cipher, "AES-256-CBC", "cipher attribute is the same");
-  equals(info.ivsalt, "40555967F759530864FE022E257DE34E", "ivsalt attribute is the same.");
-  equals(info.data, sk10b64, "data is the same");
-  equals(dataHex, "8d5eee5da8d1c3871c7036a589a81caa22ce89011409ed7d97beb5a57471ce040ff831f8ac28b5d93e29b93759cb2ea57891dc48767f202f4df624b75cd2e09bfad175405a85fd25d4739eac763beb121bef8b41f6fd52eac65efc868e2184ce13fb7adebccd9a3df703312ea79c4ccb3b809e29cb2f78c918ac1cc244c6e6efa7f29edfb8c3dc30bd0bedb795064bd9a17cb249f31507c878bbbcb265d8635373b82bc417d60d639ed189a50b21e2291f8ccfb775d1bfa9a06bc334c17c2d0217d4946eff92cf49d95fad0f8406040e16fbd7de2897b179638419b8385fe8ae9dd6ff2be5bf51a83a3df0836ac1db03d44976e2c19adde0578b7967a40cad5fb74e38140a461d6e2722f722e2b2b8570d263dce3868c1911ea2999c03f3de5eab12d2f810129b21a6e03304ea6fa496d675d8b5f03e0354ebe77e5d0e0d5d20", "data(hex) is the same");
+  equal(info.type, "RSA", "k1.0 type is 'RSA'.");
+  equal(info.cipher, "AES-256-CBC", "cipher attribute is the same");
+  equal(info.ivsalt, "40555967F759530864FE022E257DE34E", "ivsalt attribute is the same.");
+  equal(info.data, sk10b64, "data is the same");
+  equal(dataHex, "8d5eee5da8d1c3871c7036a589a81caa22ce89011409ed7d97beb5a57471ce040ff831f8ac28b5d93e29b93759cb2ea57891dc48767f202f4df624b75cd2e09bfad175405a85fd25d4739eac763beb121bef8b41f6fd52eac65efc868e2184ce13fb7adebccd9a3df703312ea79c4ccb3b809e29cb2f78c918ac1cc244c6e6efa7f29edfb8c3dc30bd0bedb795064bd9a17cb249f31507c878bbbcb265d8635373b82bc417d60d639ed189a50b21e2291f8ccfb775d1bfa9a06bc334c17c2d0217d4946eff92cf49d95fad0f8406040e16fbd7de2897b179638419b8385fe8ae9dd6ff2be5bf51a83a3df0836ac1db03d44976e2c19adde0578b7967a40cad5fb74e38140a461d6e2722f722e2b2b8570d263dce3868c1911ea2999c03f3de5eab12d2f810129b21a6e03304ea6fa496d675d8b5f03e0354ebe77e5d0e0d5d20", "data(hex) is the same");
 });
 
 test("getKeyAndUnusedIvByPasscodeAndIvsalt", function() {
   var keyiv = PKCS5PKEY.getKeyAndUnusedIvByPasscodeAndIvsalt("AES-256-CBC", "hogehoge", "40555967F759530864FE022E257DE34E");
   expect(2);
-  equals(keyiv.keyhex, "523c7720b6a5544d7ef212ccb5e9f78cddff8a91b8c335ce7219abbb44e6a883", "check version.");
-  equals(keyiv.ivhex, "0432604dae9830352f5a02736c8684e4", "check version.");
+  equal(keyiv.keyhex, "523c7720b6a5544d7ef212ccb5e9f78cddff8a91b8c335ce7219abbb44e6a883", "check version.");
+  equal(keyiv.ivhex, "0432604dae9830352f5a02736c8684e4", "check version.");
 });
 
 test("decryptKeyB64", function() {
@@ -91,12 +98,18 @@ test("decryptKeyB64", function() {
   var ivhex = "40555967f759530864fe022e257de34e";
   //var ivhex = "0432604dae9830352f5a02736c8684e4";
   var decrypted = PKCS5PKEY.decryptKeyB64(keyB64, alg, keyhex, ivhex);
-  equals(decrypted, sk10dechex, "key is the same.");
+  equal(decrypted, sk10dechex, "key is the same.");
 });
 
 test("getDecryptedKeyHex_k10", function() {
   var decrypted = PKCS5PKEY.getDecryptedKeyHex(sk10pem, "hogehoge");
-  equals(decrypted, sk10dechex, "key is the same.");
+  equal(decrypted, sk10dechex, "key is the same.");
+});
+
+test("getRSAKeyFromEncryptedPKCS5PEM_k10", function() {
+  var k = PKCS5PKEY.getRSAKeyFromEncryptedPKCS5PEM(sk10pem, "hogehoge");
+  expect(1);
+  equal(k.e.toString(16), "10001", "e of key");
 });
 
 test("getRSAKeyFromPlainPKCS8PEM", function() {
@@ -113,11 +126,74 @@ test("getRSAKeyFromPlainPKCS8PEM", function() {
 "-----END PRIVATE KEY-----\n";
   var pkey = PKCS5PKEY.getRSAKeyFromPlainPKCS8PEM(s);
   expect(3);
-  equals(pkey.n.toString(16), "e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd59", "n of key is the same.");
-  equals(pkey.e.toString(16), "10001", "e of key is the same.");
-  equals(pkey.d.toString(16), "78bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d", "d of key is the same.");
+  equal(pkey.n.toString(16), "e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd59", "n of key is the same.");
+  equal(pkey.e.toString(16), "10001", "e of key is the same.");
+  equal(pkey.d.toString(16), "78bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d", "d of key is the same.");
 
 });
+
+test("getEryptedPKCS5PEMFromPrvKeyHex/1 key encryption", function() {
+  var p = PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(sk10dechex, "hogehoge", "AES-256-CBC", "40555967F759530864FE022E257DE34E");
+  equal(p, sk10pem, "encrypted");
+});
+
+test("getEryptedPKCS5PEMFromPrvKeyHex/2 without IV", function() {
+  var pem = PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(sk10dechex, "moge", "AES-256-CBC");
+  // when AES-256-CBC, iv shall be 16 bytes (i.e. 32 chars)
+  equal(pem.match(/DEK-Info: AES-256-CBC,([0-9A-F]{32})\s+/) != null, true, "iv len match: iv=" + RegExp.$1 );
+});
+
+test("getEryptedPKCS5PEMFromPrvKeyHex/3 without Alg and IV", function() {
+  var pem = PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(sk10dechex, "moge");
+  // when AES-256-CBC, iv shall be 16 bytes (i.e. 32 chars)
+  equal(pem.match(/DEK-Info: AES-256-CBC,([0-9A-F]{32})\s+/) != null, true, "iv len match: iv=" + RegExp.$1 );
+});
+
+test("getEryptedPKCS5PEMFromPrvKeyHex/4 alg check", function() {
+  expect(2);
+  // 1. no such alg
+  throws(
+    function() {
+      PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex("1234af", "password", "FOOALG", "012345");
+    }, 
+    "except: not supports alg FOOALG"
+  );
+  equal(PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex("1234af", "password", "AES-256-CBC", "012345") != null,
+        true,
+        "supports alg AES-128-CBC");
+});
+
+test("getEryptedPKCS5PEMFromRSAKey/1 key encryption", function() {
+  var k = new RSAKey();
+  k.readPrivateKeyFromASN1HexString(sk10dechex);
+  var p = PKCS5PKEY.getEryptedPKCS5PEMFromRSAKey(k, "hogehoge", "AES-256-CBC", "40555967F759530864FE022E257DE34E");
+  equal(p, sk10pem, "encrypted");
+});
+
+test("getEryptedPKCS5PEMFromRSAKey/2 without IV", function() {
+  var k = new RSAKey();
+  k.readPrivateKeyFromASN1HexString(sk10dechex);
+  var pem = PKCS5PKEY.getEryptedPKCS5PEMFromRSAKey(k, "moge", "AES-256-CBC");
+  // when AES-256-CBC, iv shall be 16 bytes (i.e. 32 chars)
+  equal(pem.match(/DEK-Info: AES-256-CBC,([0-9A-F]{32})\s+/) != null, true, "iv len match: iv=" + RegExp.$1 );
+});
+
+test("getEryptedPKCS5PEMFromRSAKey/3 without Alg and IV", function() {
+  var k = new RSAKey();
+  k.readPrivateKeyFromASN1HexString(sk10dechex);
+  var pem = PKCS5PKEY.getEryptedPKCS5PEMFromRSAKey(k, "moge");
+  // when AES-256-CBC, iv shall be 16 bytes (i.e. 32 chars)
+  equal(pem.match(/DEK-Info: AES-256-CBC,([0-9A-F]{32})\s+/) != null, true, "iv len match: iv=" + RegExp.$1 );
+});
+
+test("getEryptedPKCS5PEMFromRSAKey/4 with key generation", function() {
+  var k = new RSAKey();
+  k.generate(512, '10001');
+  var pem = PKCS5PKEY.getEryptedPKCS5PEMFromRSAKey(k, "moge");
+  // when AES-256-CBC, iv shall be 16 bytes (i.e. 32 chars)
+  equal(pem.match(/DEK-Info: AES-256-CBC,([0-9A-F]{32})\s+/) != null, true, "iv len match: iv=" + RegExp.$1 );
+});
+
 
 });
 -->
