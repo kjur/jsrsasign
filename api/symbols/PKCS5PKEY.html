@@ -314,7 +314,7 @@ ul.inheritsList
 				
 				
 			
-				class for reading passcode protected PKCS#5 private key.
+				class for PKCS#5 and PKCS#8 private key
 				
 				
 					<br /><i>Defined in: </i> <a href="../symbols/src/pkcs5pkey-1.0.js.html">pkcs5pkey-1.0.js</a>.
@@ -338,7 +338,15 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/PKCS5PKEY.html#constructor">PKCS5PKEY</a></b>()
 							</div>
-							<div class="description">passcode protected PKCS#5 private key reader class.</div>
+							<div class="description"><br/>
+<a href="../symbols/PKCS5PKEY.html">PKCS5PKEY</a> class has following features:
+<ul>
+<li>read and parse PEM formatted encrypted PKCS#5 private key
+<li>generate PEM formatted encrypted PKCS#5 private key
+<li>read and parse PEM formatted plain PKCS#8 private key
+</ul>
+Currently supports only RSA private key and
+following symmetric key algorithms to protect private key.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -412,6 +420,30 @@ version string of PKCS5PKEY class</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getEryptedPKCS5PEMFromPrvKeyHex">getEryptedPKCS5PEMFromPrvKeyHex</a></b>(hPrvKey, passcode, sharedKeyAlgName, ivsaltHex)
+								</div>
+								<div class="description">get PEM formatted encrypted PKCS#5 private key from hexadecimal string of plain private key
+<br/>
+generate PEM formatted encrypted PKCS#5 private key by hexadecimal string encoded
+ASN.1 object of plain RSA private key.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getEryptedPKCS5PEMFromRSAKey">getEryptedPKCS5PEMFromRSAKey</a></b>(pKey, passcode, alg, ivsaltHex)
+								</div>
+								<div class="description">get PEM formatted encrypted PKCS#5 private key from RSAKey object of private key
+<br/>
+generate PEM formatted encrypted PKCS#5 private key by
+<a href="../symbols/RSAKey.html">RSAKey</a> object of RSA private key and passcode.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getKeyAndUnusedIvByPasscodeAndIvsalt">getKeyAndUnusedIvByPasscodeAndIvsalt</a></b>(algName, passcode, hexadecimal)
 								</div>
 								<div class="description">the same function as OpenSSL EVP_BytsToKey to generate shared key and IV</div>
@@ -421,9 +453,27 @@ version string of PKCS5PKEY class</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromPlainPKCS8PEM">getRSAKeyFromPlainPKCS8PEM</a></b>(PEM)
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromEncryptedPKCS5PEM">getRSAKeyFromEncryptedPKCS5PEM</a></b>(pkcs8PEM)
 								</div>
-								<div class="description">read unencrypted PEM formatted protected PKCS#8 private key and returns RSAKey</div>
+								<div class="description">read PEM formatted encrypted PKCS#5 private key and returns RSAKey object</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromPlainPKCS8PEM">getRSAKeyFromPlainPKCS8PEM</a></b>(pkcs8PEM)
+								</div>
+								<div class="description">read PEM formatted unencrypted PKCS#8 private key and returns RSAKey object</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.newEryptedPKCS5PEM">newEryptedPKCS5PEM</a></b>(passcode, keyLen, hPublicExponent, alg)
+								</div>
+								<div class="description">generate RSAKey and PEM formatted encrypted PKCS#5 private key</div>
 							</td>
 						</tr>
 					
@@ -458,7 +508,13 @@ Resulted hash has following attributes.</div>
 				</div>
 				
 				<div class="description">
-					passcode protected PKCS#5 private key reader class. 
+					<br/>
+<a href="../symbols/PKCS5PKEY.html">PKCS5PKEY</a> class has following features:
+<ul>
+<li>read and parse PEM formatted encrypted PKCS#5 private key
+<li>generate PEM formatted encrypted PKCS#5 private key
+<li>read and parse PEM formatted plain PKCS#8 private key
+</ul>
 Currently supports only RSA private key and
 following symmetric key algorithms to protect private key.
 <ul>
@@ -469,6 +525,18 @@ following symmetric key algorithms to protect private key.
 </ul>
 					
 				</div>
+				
+				
+				
+				<pre class="code">Here is an example of PEM formatted encrypted PKCS#5 private key.
+-----BEGIN RSA PRIVATE KEY-----
+Proc-Type: 4,ENCRYPTED
+DEK-Info: AES-256-CBC,40555967F759530864FE022E257DE34E
+
+jV7uXajRw4cccDaliagcqiLOiQEUCe19l761pXRxzgQP+DH4rCi12T4puTdZyy6l
+         ...(snip)...
+qxLS+BASmyGm4DME6m+kltZ12LXwPgNU6+d+XQ4NXSA=
+-----END RSA PRIVATE KEY-----</pre>
 				
 				
 				
@@ -631,6 +699,171 @@ version string of PKCS5PKEY class
 
 					<hr />
 				
+					<a name=".getEryptedPKCS5PEMFromPrvKeyHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">PKCS5PKEY.</span><b>getEryptedPKCS5PEMFromPrvKeyHex</b>(hPrvKey, passcode, sharedKeyAlgName, ivsaltHex)
+					
+					</div>
+					<div class="description">
+						get PEM formatted encrypted PKCS#5 private key from hexadecimal string of plain private key
+<br/>
+generate PEM formatted encrypted PKCS#5 private key by hexadecimal string encoded
+ASN.1 object of plain RSA private key.
+Following arguments can be omitted.
+<ul>
+<li>alg - AES-256-CBC will be used if omitted.</li>
+<li>ivsaltHex - automatically generate IV and salt which length depends on algorithm</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var pem = 
+  PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password");
+var pem2 = 
+  PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC");
+var pem3 = 
+  PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC", "1f3d02...");</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hPrvKey</b>
+									
+								</dt>
+								<dd>hexadecimal string of plain private key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>passcode</b>
+									
+								</dt>
+								<dd>pass code to protect private key (ex. password)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sharedKeyAlgName</b>
+									
+								</dt>
+								<dd>algorithm name to protect private key (ex. AES-256-CBC)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>ivsaltHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of IV and salt</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.2</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> string of PEM formatted encrypted PKCS#5 private key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getEryptedPKCS5PEMFromRSAKey"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">PKCS5PKEY.</span><b>getEryptedPKCS5PEMFromRSAKey</b>(pKey, passcode, alg, ivsaltHex)
+					
+					</div>
+					<div class="description">
+						get PEM formatted encrypted PKCS#5 private key from RSAKey object of private key
+<br/>
+generate PEM formatted encrypted PKCS#5 private key by
+<a href="../symbols/RSAKey.html">RSAKey</a> object of RSA private key and passcode.
+Following argument can be omitted.
+<ul>
+<li>alg - AES-256-CBC will be used if omitted.</li>
+<li>ivsaltHex - automatically generate IV and salt which length depends on algorithm</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var pkey = new RSAKey();
+pkey.generate(1024, '10001'); // generate 1024bit RSA private key with public exponent 'x010001'
+var pem = PKCS5PKEY.getEryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> <b>pKey</b>
+									
+								</dt>
+								<dd>RSAKey object of private key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>passcode</b>
+									
+								</dt>
+								<dd>pass code to protect private key (ex. password)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>alg</b>
+									
+								</dt>
+								<dd>algorithm name to protect private key (default AES-256-CBC)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>ivsaltHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of IV and salt (default generated random IV)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.2</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> string of PEM formatted encrypted PKCS#5 private key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".getKeyAndUnusedIvByPasscodeAndIvsalt"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -686,15 +919,15 @@ version string of PKCS5PKEY class
 
 					<hr />
 				
-					<a name=".getRSAKeyFromPlainPKCS8PEM"> </a>
+					<a name=".getRSAKeyFromEncryptedPKCS5PEM"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
-					<span class="light">PKCS5PKEY.</span><b>getRSAKeyFromPlainPKCS8PEM</b>(PEM)
+					<span class="light">PKCS5PKEY.</span><b>getRSAKeyFromEncryptedPKCS5PEM</b>(pkcs8PEM)
 					
 					</div>
 					<div class="description">
-						read unencrypted PEM formatted protected PKCS#8 private key and returns RSAKey
+						read PEM formatted encrypted PKCS#5 private key and returns RSAKey object
 						
 						
 					</div>
@@ -706,10 +939,10 @@ version string of PKCS5PKEY class
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>PEM</b>
+									<span class="light fixedFont">{String}</span> <b>pkcs8PEM</b>
 									
 								</dt>
-								<dd>formatted plain PKCS#8 private key</dd>
+								<dd>PEM formatted unencrypted PKCS#8 private key</dd>
 							
 							</dl>
 						
@@ -717,7 +950,7 @@ version string of PKCS5PKEY class
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
-								<dd>1.0.1</dd>
+								<dd>pkcs5pkey 1.0.2</dd>
 							</dl>
 							</dl>
 						
@@ -726,7 +959,129 @@ version string of PKCS5PKEY class
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> RSA private key loaded</dd>
+								<dd><span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> loaded RSAKey object of RSA private key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getRSAKeyFromPlainPKCS8PEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
+					<span class="light">PKCS5PKEY.</span><b>getRSAKeyFromPlainPKCS8PEM</b>(pkcs8PEM)
+					
+					</div>
+					<div class="description">
+						read PEM formatted unencrypted PKCS#8 private key and returns RSAKey object
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pkcs8PEM</b>
+									
+								</dt>
+								<dd>PEM formatted unencrypted PKCS#8 private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> loaded RSAKey object of RSA private key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".newEryptedPKCS5PEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">PKCS5PKEY.</span><b>newEryptedPKCS5PEM</b>(passcode, keyLen, hPublicExponent, alg)
+					
+					</div>
+					<div class="description">
+						generate RSAKey and PEM formatted encrypted PKCS#5 private key
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var pem1 = PKCS5PKEY.newEncryptedPKCS5PEM("password");           // RSA1024bit/10001/AES-256-CBC
+var pem2 = PKCS5PKEY.newEncryptedPKCS5PEM("password", 512);      // RSA 512bit/10001/AES-256-CBC
+var pem3 = PKCS5PKEY.newEncryptedPKCS5PEM("password", 512, '3'); // RSA 512bit/    3/AES-256-CBC</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>passcode</b>
+									
+								</dt>
+								<dd>pass code to protect private key (ex. password)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>keyLen</b>
+									
+								</dt>
+								<dd>key bit length of RSA key to be generated. (default 1024)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hPublicExponent</b>
+									
+								</dt>
+								<dd>hexadecimal string of public exponent (default 10001)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>alg</b>
+									
+								</dt>
+								<dd>shared key algorithm to encrypt private key (default AES-258-CBC)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.2</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> string of PEM formatted encrypted PKCS#5 private key</dd>
 							
 							</dl>
 						

@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 3.1.0 and 3.1.1
+  - pkcs5pkey-1.0.js update 1.0.1 to 1.0.2
+    - method 'getRSAKeyFromEncryptedPKCS5PEM', 'getEryptedPKCS5PEMFromPrvKeyHex'
+      'getEryptedPKCS5PEMFromRSAKey' and 'newEncryptedPKCS5PEM'
+      added to PKCS5PKEY to get encrypted PEM key.
+
 * Changes between 3.0.5 and 3.1.0
   - asn1x509-1.0.js update 1.0.2 to 1.0.3
     CRL, TBSCertList and CRLEntry class added to KJUR.asn1.x509
