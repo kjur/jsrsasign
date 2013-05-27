@@ -32,6 +32,10 @@
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/tripledes.js"></script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64.js"></script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+<!-- for PKCS5 PBKDF2 -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/hmac.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/pbkdf2.js"></script>
 
 <script src="../pkcs5pkey-1.0.js"></script>
 
@@ -66,7 +70,28 @@ var sk10b64 = "" +
 
 var sk10dechex = "30820139020100024100b1e5aa7d6827b8c69037b269907bd8f4a7a1e6b798776e3be519fbda2966260dd56f6f3389d489a276a0a1e1b19e51328bc2d6a623f24be6b2e6718f3b292d5b02030100010240763582206ac15a4ab7320b5f921e797fb894205706fcf546df6970acfaad61c2db1fb6f9e335a1867c0f7c40a2ad39aa92b9312459bbf90d5eab831793c69321022100e584720c8f676623e94e7fb8616e667d66cd379559ffe36acd9068495e68adc5022100c66c72386fbdeded99c5963422d7380c19100757a4dcec581bd645d3d924409f0220101798337f3e7dafd8e4d319a763293673a5c1d6ebe7801775f0410f9bd9f50d02201bff2b329959a41b9549d2c2b273c97db37f9679a05267aa9aeae5d959570b23022043ea618b8f31af3aa762171cf2b5e9d563c5041a99a2217b6c692f807e18f81a";
 
-// ======= TEST =============================================================================================
+var sk12pem = "" +
+"-----BEGIN ENCRYPTED PRIVATE KEY-----\r\n" +
+"MIIBpjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQIU9Y9p2EfWucCAggA\r\n" +
+"MBQGCCqGSIb3DQMHBAhdNa9kLcmywQSCAWAoZaR4ib7mOcfpJQr7lyp/ume0srhJ\r\n" +
+"6G1GuYaZzh/At3EHVrPtH9i8OaLiS/nIitWTdd1tITzWAIGNy1jDasvLUEk+agH2\r\n" +
+"FGOuGfN86bNVUVbtHxkzpslNbcZcsNZtDvrDRJoZo2nAlcNW1tICpfzMTCBl/1Pl\r\n" +
+"LNqit+IdcZVYRU8DJB0+AsaXevxBp7ifpthfHq2+9kCcSCqnonAH3pnsGlcBNinP\r\n" +
+"M4L2QQ6YMMSRl7nCZNT4/AJg+OyKGzNgQpcRfgrxsQXA8/4GrAcMF0YqaRS6Am6M\r\n" +
+"y42+85E5qsMYmQQu+PZDDOfmaNomwT5fA4TAp0nJP0zX8gBTBLywMubPlmuMWo4N\r\n" +
+"XlHKSl4Wn1sQlJOhWOAIsamdtXYPryDcQGEeiHb9Y83f9di4e9JlViZVkv+iPcGv\r\n" +
+"IjsZNp6zmlqf/RXnETsJjGd0TXRWaEdu+XOOyVyPskX2177X9DUJoD31\r\n" +
+"-----END ENCRYPTED PRIVATE KEY-----\r\n";
+
+var sk12pem_passcode = "hoge";
+
+var sk12hex = "308201a6304006092a864886f70d01050d3033301b06092a864886f70d01050c300e040853d63da7611f5ae702020800301406082a864886f70d030704085d35af642dc9b2c1048201602865a47889bee639c7e9250afb972a7fba67b4b2b849e86d46b98699ce1fc0b7710756b3ed1fd8bc39a2e24bf9c88ad59375dd6d213cd600818dcb58c36acbcb50493e6a01f61463ae19f37ce9b3555156ed1f1933a6c94d6dc65cb0d66d0efac3449a19a369c095c356d6d202a5fccc4c2065ff53e52cdaa2b7e21d719558454f03241d3e02c6977afc41a7b89fa6d85f1eadbef6409c482aa7a27007de99ec1a57013629cf3382f6410e9830c49197b9c264d4f8fc0260f8ec8a1b33604297117e0af1b105c0f3fe06ac070c17462a6914ba026e8ccb8dbef39139aac31899042ef8f6430ce7e668da26c13e5f0384c0a749c93f4cd7f2005304bcb032e6cf966b8c5a8e0d5e51ca4a5e169f5b109493a158e008b1a99db5760faf20dc40611e8876fd63cddff5d8b87bd26556265592ffa23dc1af223b19369eb39a5a9ffd15e7113b098c67744d745668476ef9738ec95c8fb245f6d7bed7f43509a03df5"; // hexadecimal of k1.2.der
+
+var sk12ciphertext = "2865a47889bee639c7e9250afb972a7fba67b4b2b849e86d46b98699ce1fc0b7710756b3ed1fd8bc39a2e24bf9c88ad59375dd6d213cd600818dcb58c36acbcb50493e6a01f61463ae19f37ce9b3555156ed1f1933a6c94d6dc65cb0d66d0efac3449a19a369c095c356d6d202a5fccc4c2065ff53e52cdaa2b7e21d719558454f03241d3e02c6977afc41a7b89fa6d85f1eadbef6409c482aa7a27007de99ec1a57013629cf3382f6410e9830c49197b9c264d4f8fc0260f8ec8a1b33604297117e0af1b105c0f3fe06ac070c17462a6914ba026e8ccb8dbef39139aac31899042ef8f6430ce7e668da26c13e5f0384c0a749c93f4cd7f2005304bcb032e6cf966b8c5a8e0d5e51ca4a5e169f5b109493a158e008b1a99db5760faf20dc40611e8876fd63cddff5d8b87bd26556265592ffa23dc1af223b19369eb39a5a9ffd15e7113b098c67744d745668476ef9738ec95c8fb245f6d7bed7f43509a03df5"; // hexadecimal encrypted key(=ciphertext) of k1.2.der
+
+var sk12plainhex = "30820155020100300d06092a864886f70d01010105000482013f3082013b020100024100dc6d990d4a71c769ec704db7cce04da8b8f15bfad7b6e3e129e191c30df7db0243635a8ffb293a6e4a74599911c0d15ae8e72d9c84bd8dcf19ffee839fd051670203010001024100ac15f412e8378393323f4aad5f890d97d72ab6c0528039cfa33eb2e930927bab09994944a11e1cdcf4153f1c8d9c1825bdeed0a1e86b1c268b42e1c348ad3f61022100f474097558bfd1ab88f80737e07236ca25e93c4a38f1b37bf7138c84ebf94dfb022100e6d70ba0280830e2da884114184425cb4ffd02598e5167654ac8c5cb558d0a8502202c69c4aa2854b98063e344547797e8b2738edba054963d58e17c10c4b9a6d2ef02205712264072d924176d7697958cd1a7afd8ac0686e137b35871ace96e99066a41022100ec36209834b8826b005ba599d8c3fced3d50022b81303a9532faed7d70c07424"; // hexadecimal of k1.2.dec.der
+
+// ======= TEST ===================================================================================
 
 test("version", function() {
   equal(PKCS5PKEY.version, "1.0.0", "check version.");
@@ -194,6 +219,44 @@ test("getEryptedPKCS5PEMFromRSAKey/4 with key generation", function() {
   equal(pem.match(/DEK-Info: AES-256-CBC,([0-9A-F]{32})\s+/) != null, true, "iv len match: iv=" + RegExp.$1 );
 });
 
+test("getHexFromPEM", function() {
+  var s = "-----BEGIN AAA TEST-----\r\n" +
+          "YWFh\r\n" +
+          "-----END AAA TEST-----\r\n";
+  equal(PKCS5PKEY.getHexFromPEM(s, "AAA TEST"), "616161", "aaa"); 
+});
+
+test("parseHexOfEncryptedPKCS8", function() {
+  var info = PKCS5PKEY.parseHexOfEncryptedPKCS8(sk12hex);
+
+  expect(5);
+  equal(info.ciphertext, sk12ciphertext, "ciphertext");
+  equal(info.encryptionSchemeAlg, "TripleDES", "encryptionSchemeAlg");
+  equal(info.encryptionSchemeIV, "5d35af642dc9b2c1", "encryptionSchemeIV");
+  equal(info.pbkdf2Salt, "53d63da7611f5ae7", "pbkdf2Salt");
+  equal(info.pbkdf2Iter, 2048, "pbkdf2Iter");
+});
+
+test("getPBKDF2KeyHexFromParam", function() {
+  var info = PKCS5PKEY.parseHexOfEncryptedPKCS8(sk12hex);
+  var hKey = PKCS5PKEY.getPBKDF2KeyHexFromParam(info, "hoge");
+  equal(hKey, "c540389de62486834ff3a208a9ab457291df38f4372ad920", "getPBKDF2KeyHexFromParam");
+});
+
+test("getPlainPKCS8HexFromEncryptedPKCS8PEM", function() {
+  var h = PKCS5PKEY.getPlainPKCS8HexFromEncryptedPKCS8PEM(sk12pem, "hoge");
+  equal(h, sk12plainhex, "sk12pem -> sk12plainhex");
+});
+
+test("getRSAKeyFromEncryptedPKCS8PEM", function() {
+  var k = PKCS5PKEY.getRSAKeyFromEncryptedPKCS8PEM(sk12pem, "hoge");
+  expect(3);
+  // n,e,d,p,q,dmp1,dmq1,coeff
+  equal(k.n.toString(16), "dc6d990d4a71c769ec704db7cce04da8b8f15bfad7b6e3e129e191c30df7db0243635a8ffb293a6e4a74599911c0d15ae8e72d9c84bd8dcf19ffee839fd05167", "rsaKey.n");
+  equal(k.e.toString(16), "10001", "rsaKey.e");
+  equal(k.d.toString(16), "ac15f412e8378393323f4aad5f890d97d72ab6c0528039cfa33eb2e930927bab09994944a11e1cdcf4153f1c8d9c1825bdeed0a1e86b1c268b42e1c348ad3f61", "rsaKey.d");
+});
+
 
 });
 -->
@@ -207,3 +270,5 @@ test("getEryptedPKCS5PEMFromRSAKey/4 with key generation", function() {
 <ol id="qunit-tests"></ol>
 </body>
 </html>
+
+

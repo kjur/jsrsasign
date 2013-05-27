@@ -1,10 +1,6 @@
-/*! pkcs5pkey-1.0.2.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! pkcs5pkey-1.0.3.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
-//
 // pkcs5pkey.js - reading passcode protected PKCS#5 PEM formatted RSA private key
-//
-//
-// version: 1.0.2 (20 May 2013)
 //
 // Copyright (c) 2013 Kenji Urushima (kenji.urushima@gmail.com)
 //
@@ -18,7 +14,7 @@
  * @fileOverview
  * @name pkcs5pkey-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version pkcs5pkey 1.0.2 (2013-May-20)
+ * @version pkcs5pkey 1.0.3 (2013-May-27)
  * @since jsrsasign 2.0.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -33,6 +29,7 @@
  * <li>read and parse PEM formatted encrypted PKCS#5 private key
  * <li>generate PEM formatted encrypted PKCS#5 private key
  * <li>read and parse PEM formatted plain PKCS#8 private key
+ * <li>read and parse PEM formatted encrypted PKCS#8 private key by PBKDF2/HmacSHA1/3DES
  * </ul>
  * Currently supports only RSA private key and
  * following symmetric key algorithms to protect private key.
@@ -58,7 +55,6 @@ var PKCS5PKEY = function() {
     // *****************************************************************
     // *** PRIVATE PROPERTIES AND METHODS *******************************
     // *****************************************************************
-
     // shared key decryption ------------------------------------------
     var decryptAES = function(dataHex, keyHex, ivHex) {
 	return decryptGeneral(CryptoJS.AES, dataHex, keyHex, ivHex);
@@ -100,7 +96,14 @@ var PKCS5PKEY = function() {
 	return encryptedB64;
     };
 
-    // other methods --------------------------------------------------
+    // other methods and properties ----------------------------------------
+    var ALGLIST = {
+	'AES-256-CBC': { 'proc': decryptAES, 'eproc': encryptAES, keylen: 32, ivlen: 16 },
+	'AES-192-CBC': { 'proc': decryptAES, 'eproc': encryptAES, keylen: 24, ivlen: 16 },
+	'AES-128-CBC': { 'proc': decryptAES, 'eproc': encryptAES, keylen: 16, ivlen: 16 },
+	'DES-EDE3-CBC': { 'proc': decrypt3DES, 'eproc': encrypt3DES, keylen: 24, ivlen: 8 }
+    };
+
     var getFuncByName = function(algName) {
 	return ALGLIST[algName]['proc'];
     };
@@ -109,13 +112,6 @@ var PKCS5PKEY = function() {
 	var wa = CryptoJS.lib.WordArray.random(numBytes);
 	var hex = CryptoJS.enc.Hex.stringify(wa);
 	return hex;
-    };
-
-    var ALGLIST = {
-	'AES-256-CBC': { 'proc': decryptAES, 'eproc': encryptAES, keylen: 32, ivlen: 16 },
-	'AES-192-CBC': { 'proc': decryptAES, 'eproc': encryptAES, keylen: 24, ivlen: 16 },
-	'AES-128-CBC': { 'proc': decryptAES, 'eproc': encryptAES, keylen: 16, ivlen: 16 },
-	'DES-EDE3-CBC': { 'proc': decrypt3DES, 'eproc': encrypt3DES, keylen: 24, ivlen: 8 }
     };
 
     var _parsePKCS5PEM = function(sPKCS5PEM) {
@@ -220,6 +216,20 @@ var PKCS5PKEY = function() {
 	 * @description version string of PKCS5PKEY class
 	 */
 	version: "1.0.0",
+
+        getHexFromPEM: function(sPEM, sHead) {
+	    var s = sPEM;
+	    if (s.indexOf("BEGIN " + sHead) == -1) {
+		throw "can't find PEM header: " + sHead;
+	    }
+	    s = s.replace("-----BEGIN " + sHead + "-----", "");
+	    s = s.replace("-----END " + sHead + "-----", "");
+	    var sB64 = s.replace(/\s+/g, '');
+	    var dataWA = CryptoJS.enc.Base64.parse(sB64);
+	    var dataHex = CryptoJS.enc.Hex.stringify(dataWA);
+	    return dataHex;
+	},
+
 	/**
          * decrypt private key by shared key
 	 * @name getDecryptedKeyHexByKeyIV
@@ -235,6 +245,7 @@ var PKCS5PKEY = function() {
 	    var f1 = getFuncByName(algName);
 	    return f1(encryptedKeyHex, sharedKeyHex, ivHex);
 	},
+
 	/**
          * parse PEM formatted passcode protected PKCS#5 private key
 	 * @name parsePKCS5PEM
@@ -305,7 +316,8 @@ var PKCS5PKEY = function() {
 	 * @name getRSAKeyFromEncryptedPKCS5PEM
 	 * @memberOf PKCS5PKEY
 	 * @function
-	 * @param {String} pkcs8PEM PEM formatted unencrypted PKCS#8 private key
+	 * @param {String} sEncryptedP5PEM PEM formatted encrypted PKCS#5 private key
+	 * @param {String} passcode passcode to decrypt private key
 	 * @return {RSAKey} loaded RSAKey object of RSA private key
          * @since pkcs5pkey 1.0.2
 	 */
@@ -469,14 +481,21 @@ var PKCS5PKEY = function() {
         getRSAKeyFromPlainPKCS8PEM: function(pkcs8PEM) {
             if (pkcs8PEM.match(/ENCRYPTED/))
                 throw "pem shall be not ENCRYPTED";
-	    if (! pkcs8PEM.match(/BEGIN PRIVATE KEY/))
-                throw "pkcs8PEM doesn't include 'BEGIN PRIVATE KEY'";
-            var s = pkcs8PEM;
-	    s = s.replace(/^-----BEGIN PRIVATE KEY-----/, '');
-	    s = s.replace(/^-----END PRIVATE KEY-----/, '');
-	    var sB64 = s.replace(/\s+/g, '');
-	    var prvKeyWA = CryptoJS.enc.Base64.parse(sB64);
-	    var prvKeyHex = CryptoJS.enc.Hex.stringify(prvKeyWA);
+            var prvKeyHex = this.getHexFromPEM(pkcs8PEM, "PRIVATE KEY");
+            var rsaKey = this.getRSAKeyFromPlainPKCS8Hex(prvKeyHex);
+	    return rsaKey;
+        },
+
+	/**
+         * provide hexadecimal string of unencrypted PKCS#8 private key and returns RSAKey object
+	 * @name getRSAKeyFromPlainPKCS8Hex
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} prvKeyHex hexadecimal string of unencrypted PKCS#8 private key
+	 * @return {RSAKey} loaded RSAKey object of RSA private key
+         * @since pkcs5pkey 1.0.3
+	 */
+        getRSAKeyFromPlainPKCS8Hex: function(prvKeyHex) {
 	    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(prvKeyHex, 0);
 	    if (a1.length != 3)
 		throw "outer DERSequence shall have 3 elements: " + a1.length;
@@ -492,7 +511,193 @@ var PKCS5PKEY = function() {
 	    return rsaKey;
         },
 
-	addAlgorithm: function(functionObject, algName, keyLen, ivLen) {
-	}
+	/**
+         * generate PBKDF2 key hexstring with specified passcode and information
+	 * @name parseHexOfEncryptedPKCS8
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} passcode passcode to decrypto private key
+	 * @return {Array} info associative array of PKCS#8 parameters
+         * @since pkcs5pkey 1.0.3
+	 * @description
+	 * The associative array which is returned by this method has following properties:
+	 * <ul>
+	 * <li>info.pbkdf2Salt - hexadecimal string of PBKDF2 salt</li>
+	 * <li>info.pkbdf2Iter - iteration count</li>
+	 * <li>info.ciphertext - hexadecimal string of encrypted private key</li>
+	 * <li>info.encryptionSchemeAlg - encryption algorithm name (currently TripleDES only)</li>
+	 * <li>info.encryptionSchemeIV - initial vector for encryption algorithm</li>
+	 * </ul>
+	 * Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.
+	 * <ul>
+	 * <li>keyDerivationFunc = pkcs5PBKDF2 with HmacSHA1</li>
+	 * <li>encryptionScheme = des-EDE3-CBC(i.e. TripleDES</li>
+	 * </ul>
+	 * @example
+	 * // to convert plain PKCS#5 private key to encrypted PKCS#8 private
+	 * // key with PBKDF2 with TripleDES
+	 * % openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem
+	 */
+        parseHexOfEncryptedPKCS8: function(sHEX) {
+            var info = {};
+	    
+	    var a0 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, 0);
+	    if (a0.length != 2)
+		throw "malformed format: SEQUENCE(0).items != 2: " + a0.length;
+
+	    // 1. ciphertext
+	    info.ciphertext = ASN1HEX.getHexOfV_AtObj(sHEX, a0[1]);
+
+	    // 2. pkcs5PBES2
+	    var a0_0 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0[0]); 
+	    if (a0_0.length != 2)
+		throw "malformed format: SEQUENCE(0.0).items != 2: " + a0_0.length;
+
+	    // 2.1 check if pkcs5PBES2(1 2 840 113549 1 5 13)
+	    if (ASN1HEX.getHexOfV_AtObj(sHEX, a0_0[0]) != "2a864886f70d01050d")
+		throw "this only supports pkcs5PBES2";
+
+	    // 2.2 pkcs5PBES2 param
+            var a0_0_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0[1]); 
+	    if (a0_0.length != 2)
+		throw "malformed format: SEQUENCE(0.0.1).items != 2: " + a0_0_1.length;
+
+	    // 2.2.1 encryptionScheme
+	    var a0_0_1_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1[1]); 
+	    if (a0_0_1_1.length != 2)
+		throw "malformed format: SEQUENCE(0.0.1.1).items != 2: " + a0_0_1_1.length;
+	    if (ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_1[0]) != "2a864886f70d0307")
+		throw "this only supports TripleDES";
+	    info.encryptionSchemeAlg = "TripleDES";
+
+	    // 2.2.1.1 IV of encryptionScheme
+	    info.encryptionSchemeIV = ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_1[1]);
+
+	    // 2.2.2 keyDerivationFunc
+	    var a0_0_1_0 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1[0]); 
+	    if (a0_0_1_0.length != 2)
+		throw "malformed format: SEQUENCE(0.0.1.0).items != 2: " + a0_0_1_0.length;
+	    if (ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_0[0]) != "2a864886f70d01050c")
+		throw "this only supports pkcs5PBKDF2";
+
+	    // 2.2.2.1 pkcs5PBKDF2 param
+	    var a0_0_1_0_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1_0[1]); 
+	    if (a0_0_1_0_1.length < 2)
+		throw "malformed format: SEQUENCE(0.0.1.0.1).items < 2: " + a0_0_1_0_1.length;
+
+	    // 2.2.2.1.1 PBKDF2 salt
+	    info.pbkdf2Salt = ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_0_1[0]);
+
+	    // 2.2.2.1.2 PBKDF2 iter
+	    var iterNumHex = ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_0_1[1]);
+	    try {
+		info.pbkdf2Iter = parseInt(iterNumHex, 16);
+	    } catch(ex) {
+		throw "malformed format pbkdf2Iter: " + iterNumHex;
+	    }
+
+	    return info;
+	},
+
+	/**
+         * generate PBKDF2 key hexstring with specified passcode and information
+	 * @name getPBKDF2KeyHexFromParam
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {Array} info result of {@link parseHexOfEncryptedPKCS8} which has preference of PKCS#8 file
+	 * @param {String} passcode passcode to decrypto private key
+	 * @return {String} hexadecimal string of PBKDF2 key
+         * @since pkcs5pkey 1.0.3
+	 * @description
+	 * As for info, this uses following properties:
+	 * <ul>
+	 * <li>info.pbkdf2Salt - hexadecimal string of PBKDF2 salt</li>
+	 * <li>info.pkbdf2Iter - iteration count</li>
+	 * </ul>
+	 * Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.
+	 * <ul>
+	 * <li>keyDerivationFunc = pkcs5PBKDF2 with HmacSHA1</li>
+	 * <li>encryptionScheme = des-EDE3-CBC(i.e. TripleDES</li>
+	 * </ul>
+	 * @example
+	 * // to convert plain PKCS#5 private key to encrypted PKCS#8 private
+	 * // key with PBKDF2 with TripleDES
+	 * % openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem
+	 */
+	getPBKDF2KeyHexFromParam: function(info, passcode) {
+	    var pbkdf2SaltWS = CryptoJS.enc.Hex.parse(info.pbkdf2Salt);
+	    var pbkdf2Iter = info.pbkdf2Iter;
+	    var pbkdf2KeyWS = CryptoJS.PBKDF2(passcode, 
+					      pbkdf2SaltWS, 
+					      { keySize: 192/32, iterations: pbkdf2Iter });
+	    var pbkdf2KeyHex = CryptoJS.enc.Hex.stringify(pbkdf2KeyWS);
+	    return pbkdf2KeyHex;
+	},
+
+	/**
+         * read PEM formatted encrypted PKCS#8 private key and returns hexadecimal string of plain PKCS#8 private key
+	 * @name getPlainPKCS8HexFromEncryptedPKCS8PEM
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} pkcs8PEM PEM formatted encrypted PKCS#8 private key
+	 * @param {String} passcode passcode to decrypto private key
+	 * @return {String} hexadecimal string of plain PKCS#8 private key
+         * @since pkcs5pkey 1.0.3
+	 * @description
+	 * Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.
+	 * <ul>
+	 * <li>keyDerivationFunc = pkcs5PBKDF2 with HmacSHA1</li>
+	 * <li>encryptionScheme = des-EDE3-CBC(i.e. TripleDES</li>
+	 * </ul>
+	 * @example
+	 * // to convert plain PKCS#5 private key to encrypted PKCS#8 private
+	 * // key with PBKDF2 with TripleDES
+	 * % openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem
+	 */
+	getPlainPKCS8HexFromEncryptedPKCS8PEM: function(pkcs8PEM, passcode) {
+	    // 1. derHex - PKCS#8 private key encrypted by PBKDF2
+            var derHex = this.getHexFromPEM(pkcs8PEM, "ENCRYPTED PRIVATE KEY");
+	    // 2. info - PKCS#5 PBES info
+	    var info = this.parseHexOfEncryptedPKCS8(derHex);
+	    // 3. hKey - PBKDF2 key
+	    var pbkdf2KeyHex = PKCS5PKEY.getPBKDF2KeyHexFromParam(info, passcode);
+	    // 4. decrypt ciphertext by PBKDF2 key
+	    var encrypted = {};
+	    encrypted.ciphertext = CryptoJS.enc.Hex.parse(info.ciphertext);
+	    var pbkdf2KeyWS = CryptoJS.enc.Hex.parse(pbkdf2KeyHex);
+	    var des3IVWS = CryptoJS.enc.Hex.parse(info.encryptionSchemeIV);
+	    var decWS = CryptoJS.TripleDES.decrypt(encrypted, pbkdf2KeyWS, { iv: des3IVWS });
+	    var decHex = CryptoJS.enc.Hex.stringify(decWS);
+	    return decHex;
+	},
+
+	/**
+         * read PEM formatted encrypted PKCS#8 private key and returns RSAKey object
+	 * @name getRSAKeyFromEncryptedPKCS8PEM
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} pkcs8PEM PEM formatted encrypted PKCS#8 private key
+	 * @param {String} passcode passcode to decrypto private key
+	 * @return {RSAKey} loaded RSAKey object of RSA private key
+         * @since pkcs5pkey 1.0.3
+	 * @description
+	 * Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.
+	 * <ul>
+	 * <li>keyDerivationFunc = pkcs5PBKDF2 with HmacSHA1</li>
+	 * <li>encryptionScheme = des-EDE3-CBC(i.e. TripleDES</li>
+	 * </ul>
+	 * @example
+	 * // to convert plain PKCS#5 private key to encrypted PKCS#8 private
+	 * // key with PBKDF2 with TripleDES
+	 * % openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem
+	 */
+        getRSAKeyFromEncryptedPKCS8PEM: function(pkcs8PEM, passcode) {
+	    var prvKeyHex = this.getPlainPKCS8HexFromEncryptedPKCS8PEM(pkcs8PEM, passcode);
+	    var rsaKey = this.getRSAKeyFromPlainPKCS8Hex(prvKeyHex);
+	    return rsaKey;
+        },
+
+	//addAlgorithm: function(functionObject, algName, keyLen, ivLen) {
+	//}
     };
 }();
