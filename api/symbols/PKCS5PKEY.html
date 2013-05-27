@@ -344,6 +344,7 @@ ul.inheritsList
 <li>read and parse PEM formatted encrypted PKCS#5 private key
 <li>generate PEM formatted encrypted PKCS#5 private key
 <li>read and parse PEM formatted plain PKCS#8 private key
+<li>read and parse PEM formatted encrypted PKCS#8 private key by PBKDF2/HmacSHA1/3DES
 </ul>
 Currently supports only RSA private key and
 following symmetric key algorithms to protect private key.</div>
@@ -453,9 +454,53 @@ generate PEM formatted encrypted PKCS#5 private key by
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromEncryptedPKCS5PEM">getRSAKeyFromEncryptedPKCS5PEM</a></b>(pkcs8PEM)
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getPBKDF2KeyHexFromParam">getPBKDF2KeyHexFromParam</a></b>(info, passcode)
+								</div>
+								<div class="description">generate PBKDF2 key hexstring with specified passcode and information
+As for info, this uses following properties:
+<ul>
+<li>info.pbkdf2Salt - hexadecimal string of PBKDF2 salt</li>
+<li>info.pkbdf2Iter - iteration count</li>
+</ul>
+Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getPlainPKCS8HexFromEncryptedPKCS8PEM">getPlainPKCS8HexFromEncryptedPKCS8PEM</a></b>(pkcs8PEM, passcode)
+								</div>
+								<div class="description">read PEM formatted encrypted PKCS#8 private key and returns hexadecimal string of plain PKCS#8 private key
+Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromEncryptedPKCS5PEM">getRSAKeyFromEncryptedPKCS5PEM</a></b>(sEncryptedP5PEM, passcode)
 								</div>
 								<div class="description">read PEM formatted encrypted PKCS#5 private key and returns RSAKey object</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromEncryptedPKCS8PEM">getRSAKeyFromEncryptedPKCS8PEM</a></b>(pkcs8PEM, passcode)
+								</div>
+								<div class="description">read PEM formatted encrypted PKCS#8 private key and returns RSAKey object
+Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromPlainPKCS8Hex">getRSAKeyFromPlainPKCS8Hex</a></b>(prvKeyHex)
+								</div>
+								<div class="description">provide hexadecimal string of unencrypted PKCS#8 private key and returns RSAKey object</div>
 							</td>
 						</tr>
 					
@@ -474,6 +519,24 @@ generate PEM formatted encrypted PKCS#5 private key by
 								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.newEryptedPKCS5PEM">newEryptedPKCS5PEM</a></b>(passcode, keyLen, hPublicExponent, alg)
 								</div>
 								<div class="description">generate RSAKey and PEM formatted encrypted PKCS#5 private key</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.parseHexOfEncryptedPKCS8">parseHexOfEncryptedPKCS8</a></b>(passcode)
+								</div>
+								<div class="description">generate PBKDF2 key hexstring with specified passcode and information
+The associative array which is returned by this method has following properties:
+<ul>
+<li>info.pbkdf2Salt - hexadecimal string of PBKDF2 salt</li>
+<li>info.pkbdf2Iter - iteration count</li>
+<li>info.ciphertext - hexadecimal string of encrypted private key</li>
+<li>info.encryptionSchemeAlg - encryption algorithm name (currently TripleDES only)</li>
+<li>info.encryptionSchemeIV - initial vector for encryption algorithm</li>
+</ul>
+Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.</div>
 							</td>
 						</tr>
 					
@@ -514,6 +577,7 @@ Resulted hash has following attributes.</div>
 <li>read and parse PEM formatted encrypted PKCS#5 private key
 <li>generate PEM formatted encrypted PKCS#5 private key
 <li>read and parse PEM formatted plain PKCS#8 private key
+<li>read and parse PEM formatted encrypted PKCS#8 private key by PBKDF2/HmacSHA1/3DES
 </ul>
 Currently supports only RSA private key and
 following symmetric key algorithms to protect private key.
@@ -919,11 +983,148 @@ var pem = PKCS5PKEY.getEryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
 
 					<hr />
 				
+					<a name=".getPBKDF2KeyHexFromParam"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">PKCS5PKEY.</span><b>getPBKDF2KeyHexFromParam</b>(info, passcode)
+					
+					</div>
+					<div class="description">
+						generate PBKDF2 key hexstring with specified passcode and information
+As for info, this uses following properties:
+<ul>
+<li>info.pbkdf2Salt - hexadecimal string of PBKDF2 salt</li>
+<li>info.pkbdf2Iter - iteration count</li>
+</ul>
+Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.
+<ul>
+<li>keyDerivationFunc = pkcs5PBKDF2 with HmacSHA1</li>
+<li>encryptionScheme = des-EDE3-CBC(i.e. TripleDES</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">// to convert plain PKCS#5 private key to encrypted PKCS#8 private
+// key with PBKDF2 with TripleDES
+% openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>info</b>
+									
+								</dt>
+								<dd>result of parseHexOfEncryptedPKCS8 which has preference of PKCS#8 file</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>passcode</b>
+									
+								</dt>
+								<dd>passcode to decrypto private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of PBKDF2 key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getPlainPKCS8HexFromEncryptedPKCS8PEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">PKCS5PKEY.</span><b>getPlainPKCS8HexFromEncryptedPKCS8PEM</b>(pkcs8PEM, passcode)
+					
+					</div>
+					<div class="description">
+						read PEM formatted encrypted PKCS#8 private key and returns hexadecimal string of plain PKCS#8 private key
+Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.
+<ul>
+<li>keyDerivationFunc = pkcs5PBKDF2 with HmacSHA1</li>
+<li>encryptionScheme = des-EDE3-CBC(i.e. TripleDES</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">// to convert plain PKCS#5 private key to encrypted PKCS#8 private
+// key with PBKDF2 with TripleDES
+% openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pkcs8PEM</b>
+									
+								</dt>
+								<dd>PEM formatted encrypted PKCS#8 private key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>passcode</b>
+									
+								</dt>
+								<dd>passcode to decrypto private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of plain PKCS#8 private key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".getRSAKeyFromEncryptedPKCS5PEM"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
-					<span class="light">PKCS5PKEY.</span><b>getRSAKeyFromEncryptedPKCS5PEM</b>(pkcs8PEM)
+					<span class="light">PKCS5PKEY.</span><b>getRSAKeyFromEncryptedPKCS5PEM</b>(sEncryptedP5PEM, passcode)
 					
 					</div>
 					<div class="description">
@@ -939,10 +1140,16 @@ var pem = PKCS5PKEY.getEryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>pkcs8PEM</b>
+									<span class="light fixedFont">{String}</span> <b>sEncryptedP5PEM</b>
 									
 								</dt>
-								<dd>PEM formatted unencrypted PKCS#8 private key</dd>
+								<dd>PEM formatted encrypted PKCS#5 private key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>passcode</b>
+									
+								</dt>
+								<dd>passcode to decrypt private key</dd>
 							
 							</dl>
 						
@@ -951,6 +1158,121 @@ var pem = PKCS5PKEY.getEryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
 								<dd>pkcs5pkey 1.0.2</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> loaded RSAKey object of RSA private key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getRSAKeyFromEncryptedPKCS8PEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
+					<span class="light">PKCS5PKEY.</span><b>getRSAKeyFromEncryptedPKCS8PEM</b>(pkcs8PEM, passcode)
+					
+					</div>
+					<div class="description">
+						read PEM formatted encrypted PKCS#8 private key and returns RSAKey object
+Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.
+<ul>
+<li>keyDerivationFunc = pkcs5PBKDF2 with HmacSHA1</li>
+<li>encryptionScheme = des-EDE3-CBC(i.e. TripleDES</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">// to convert plain PKCS#5 private key to encrypted PKCS#8 private
+// key with PBKDF2 with TripleDES
+% openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pkcs8PEM</b>
+									
+								</dt>
+								<dd>PEM formatted encrypted PKCS#8 private key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>passcode</b>
+									
+								</dt>
+								<dd>passcode to decrypto private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> loaded RSAKey object of RSA private key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getRSAKeyFromPlainPKCS8Hex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
+					<span class="light">PKCS5PKEY.</span><b>getRSAKeyFromPlainPKCS8Hex</b>(prvKeyHex)
+					
+					</div>
+					<div class="description">
+						provide hexadecimal string of unencrypted PKCS#8 private key and returns RSAKey object
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>prvKeyHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of unencrypted PKCS#8 private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.3</dd>
 							</dl>
 							</dl>
 						
@@ -1082,6 +1404,74 @@ var pem3 = PKCS5PKEY.newEncryptedPKCS5PEM("password", 512, '3'); // RSA 512bit/ 
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> string of PEM formatted encrypted PKCS#5 private key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".parseHexOfEncryptedPKCS8"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">PKCS5PKEY.</span><b>parseHexOfEncryptedPKCS8</b>(passcode)
+					
+					</div>
+					<div class="description">
+						generate PBKDF2 key hexstring with specified passcode and information
+The associative array which is returned by this method has following properties:
+<ul>
+<li>info.pbkdf2Salt - hexadecimal string of PBKDF2 salt</li>
+<li>info.pkbdf2Iter - iteration count</li>
+<li>info.ciphertext - hexadecimal string of encrypted private key</li>
+<li>info.encryptionSchemeAlg - encryption algorithm name (currently TripleDES only)</li>
+<li>info.encryptionSchemeIV - initial vector for encryption algorithm</li>
+</ul>
+Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.
+<ul>
+<li>keyDerivationFunc = pkcs5PBKDF2 with HmacSHA1</li>
+<li>encryptionScheme = des-EDE3-CBC(i.e. TripleDES</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">// to convert plain PKCS#5 private key to encrypted PKCS#8 private
+// key with PBKDF2 with TripleDES
+% openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>passcode</b>
+									
+								</dt>
+								<dd>passcode to decrypto private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> info associative array of PKCS#8 parameters</dd>
 							
 							</dl>
 						

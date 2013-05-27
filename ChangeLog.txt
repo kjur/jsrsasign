@@ -1,6 +1,15 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 3.1.1 and 3.1.2 (2013-May-27)
+  - pkcs5pkey-1.0.js update 1.0.2 to 1.0.3
+    - following method added to support loading encrypted PKCS#8 priavte key
+      - getRSAKeyFromEncryptedPKCS8PEM
+      - getPlainPKCS8HexFromEncryptedPKCS8PEM
+      - getPBKDF2KeyHexFromParam
+      - parseHexOfEncryptedPKCS8
+      - getRSAKeyFromPlainPKCS8Hex
+
 * Changes between 3.1.0 and 3.1.1
   - pkcs5pkey-1.0.js update 1.0.1 to 1.0.2
     - method 'getRSAKeyFromEncryptedPKCS5PEM', 'getEryptedPKCS5PEMFromPrvKeyHex'
