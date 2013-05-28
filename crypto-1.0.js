@@ -1,4 +1,4 @@
-/*! crypto-1.0.3.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! crypto-1.0.4.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.2 (2013-Mar-12)
+ * @version 1.0.4 (2013-Mar-28)
  * @since 2.2
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -183,19 +183,32 @@ KJUR.crypto.Util = new function() {
  * @param {Array} params parameters for constructor
  * @description
  * <br/>
- * Currently this supports md5, sha1, sha224, sha256, sha384,
- * sha512 and ripemd160 for algorithm and 'cryptojs' for provider.
+ * Currently this supports following algorithm and providers combination:
+ * <ul>
+ * <li>md5 - cryptojs</li>
+ * <li>sha1 - cryptojs</li>
+ * <li>sha224 - cryptojs</li>
+ * <li>sha256 - cryptojs</li>
+ * <li>sha384 - cryptojs</li>
+ * <li>sha512 - cryptojs</li>
+ * <li>ripemd160 - cryptojs</li>
+ * <li>sha256 - sjcl (NEW from crypto.js 1.0.4)</li>
+ * </ul>
  * @example
- * var md = new KJUR.crypto.MessageDigest({"alg": "sha1", "prov": "cryptojs"});
- * // append data
- * md.updateHex('1f2d3e')
+ * // CryptoJS provider sample
+ * &lt;script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"&gt;&lt;/script&gt;
+ * &lt;script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"&gt;&lt;/script&gt;
+ * &lt;script src="crypto-1.0.js"&gt;&lt;/script&gt;
+ * var md = new KJUR.crypto.MessageDigest({alg: "sha1", prov: "cryptojs"});
  * md.updateString('aaa')
- * // get message digest
- * md.digest()
- * md.digestHex('5f6de0')
- * md.digestString('aaa')
- * @see http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core-min.js
- * @see http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js
+ * var mdHex = md.digest()
+ *
+ * // SJCL(Stanford JavaScript Crypto Library) provider sample
+ * &lt;script src="http://bitwiseshiftleft.github.io/sjcl/sjcl.js"&gt;&lt;/script&gt;
+ * &lt;script src="crypto-1.0.js"&gt;&lt;/script&gt;
+ * var md = new KJUR.crypto.MessageDigest({alg: "sha256", prov: "sjcl"}); // sjcl supports sha256 only
+ * md.updateString('aaa')
+ * var mdHex = md.digest()
  */
 KJUR.crypto.MessageDigest = function(params) {
     var md = null;
@@ -243,6 +256,33 @@ KJUR.crypto.MessageDigest = function(params) {
 	    this.digest = function() {
 		var hash = this.md.finalize();
 		return hash.toString(CryptoJS.enc.Hex);
+	    };
+	    this.digestString = function(str) {
+		this.updateString(str);
+		return this.digest();
+	    };
+	    this.digestHex = function(hex) {
+		this.updateHex(hex);
+		return this.digest();
+	    };
+	}
+	if (':sha256:'.indexOf(alg) != -1 &&
+	    prov == 'sjcl') {
+	    try {
+		this.md = new sjcl.hash.sha256();
+	    } catch (ex) {
+		throw "setAlgAndProvider hash alg set fail alg=" + alg + "/" + ex;
+	    }
+	    this.updateString = function(str) {
+		this.md.update(str);
+	    };
+	    this.updateHex = function(hex) {
+		var baHex = sjcl.codec.hex.toBits(hex);
+		this.md.update(baHex);
+	    };
+	    this.digest = function() {
+		var hash = this.md.finalize();
+		return sjcl.codec.hex.fromBits(hash);
 	    };
 	    this.digestString = function(str) {
 		this.updateString(str);
