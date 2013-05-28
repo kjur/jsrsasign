@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script src="http://bitwiseshiftleft.github.io/sjcl/sjcl.js"></script>
+<script src="../crypto-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+
+test("sjcl.hash.sha256 basic test", function() {
+  //alert(sjcl);
+  //alert(sjcl.hash);
+  //alert(sjcl.hash.sha256);
+  equals(sjcl.codec.hex.fromBits(sjcl.hash.sha256.hash("aaa")), 
+         "9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0",
+         "sha256 aaa");
+});
+
+test("MessageDigest updateString", function() {
+  var md = new KJUR.crypto.MessageDigest({alg: 'sha256', prov: 'sjcl'});
+  md.updateString('aaa');
+  equals(md.digest(),
+         "9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0",
+         "MessageDigest(sha256/sjcl)");
+});
+
+test("MessageDigest updateHex", function() {
+  var md = new KJUR.crypto.MessageDigest({alg: 'sha256', prov: 'sjcl'});
+  md.updateHex('616161');
+  equals(md.digest(),
+         "9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0",
+         "MessageDigest(sha256/sjcl)");
+});
+
+});
+-->
+</script>
+  
+</head>
+<body>
+<h1 id="qunit-header">QUnit for 'crypto.js' with sjcl</h1>
+<h2 id="qunit-banner"></h2>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+</body>
+</html>

@@ -1,6 +1,11 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 3.1.2 and 3.1.3 (2013-May-28)
+  - crypto-1.0.js update 1.0.3 to 1.0.4
+    - support "sjcl" (i.e. Stanford JavaScript Crypto Library) 
+      provider with sha256 in MessageDigest class
+
 * Changes between 3.1.1 and 3.1.2 (2013-May-27)
   - pkcs5pkey-1.0.js update 1.0.2 to 1.0.3
     - following method added to support loading encrypted PKCS#8 priavte key
