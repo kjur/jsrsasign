@@ -1,4 +1,4 @@
-/*! asn1x509-1.0.3.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.4.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.3 (2013-May-15)
+ * @version 1.0.4 (2013-May-30)
  * @since 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1516,6 +1516,39 @@ KJUR.asn1.x509.OID = new function(params) {
 	this.objCache[atype] = obj;
 	return obj;
     };
+};
+
+/**
+ * ASN1 utilities class
+ * @name KJUR.asn1.x509.X509Util
+ * @classs X509 utilities class
+ */
+KJUR.asn1.x509.X509Util = new function() {
+    /**
+     * get PKCS#8 PEM public key string from RSAKey object
+     * @name getPKCS8PubKeyPEMfromRSAKey
+     * @memberOf KJUR.asn1.x509.X509Util
+     * @function
+     * @param {RSAKey} rsaKey RSA public key of {@link RSAKey} object
+     * @description
+     * @example
+     * var pem = KJUR.asn1.x509.X509Util.getPKCS8PubKeyPEMfromRSAKey(pubKey);
+     */
+   this.getPKCS8PubKeyPEMfromRSAKey = function(rsaKey) {
+       var pem = null;
+       var hN = KJUR.asn1.ASN1Util.bigIntToMinTwosComplementsHex(rsaKey.n);
+       var hE = KJUR.asn1.ASN1Util.integerToByteHex(rsaKey.e);
+       var iN = new KJUR.asn1.DERInteger({hex: hN});
+       var iE = new KJUR.asn1.DERInteger({hex: hE});
+       var asn1PubKey = new KJUR.asn1.DERSequence({array: [iN, iE]});
+       var hPubKey = asn1PubKey.getEncodedHex();
+       var o1 = new KJUR.asn1.x509.AlgorithmIdentifier({name: 'rsaEncryption'});
+       var o2 = new KJUR.asn1.DERBitString({hex: '00' + hPubKey});
+       var seq = new KJUR.asn1.DERSequence({array: [o1, o2]});
+       var hP8 = seq.getEncodedHex();
+       var pem = KJUR.asn1.ASN1Util.getPEMStringFromHex(hP8, "PUBLIC KEY");
+       return pem;
+   };
 };
 
 /*
