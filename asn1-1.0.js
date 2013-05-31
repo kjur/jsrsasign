@@ -1,4 +1,4 @@
-/*! asn1-1.0.1.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1-1.0.2.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.1 (2013-May-12)
+ * @version 1.0.2 (2013-May-30)
  * @since 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -81,10 +81,16 @@ if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
  */
 if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
 
+/**
+ * ASN1 utilities class
+ * @name KJUR.asn1.ASN1Util
+ * @classs ASN1 utilities class
+ * @since asn1 1.0.2
+ */
 KJUR.asn1.ASN1Util = new function() {
     this.integerToByteHex = function(i) {
 	var h = i.toString(16);
-	if (h.length == 1) h = '0' + h;
+	if ((h.length % 2) == 1) h = '0' + h;
 	return h;
     };
     this.bigIntToMinTwosComplementsHex = function(bigIntegerValue) {
@@ -116,6 +122,31 @@ KJUR.asn1.ASN1Util = new function() {
 	    h = biNeg.toString(16).replace(/^-/, '');
 	}
 	return h;
+    };
+    /**
+     * get PEM string from hexadecimal data and header string
+     * @name getPEMStringFromHex
+     * @memberOf KJUR.asn1.ASN1Util
+     * @function
+     * @param {String} dataHex hexadecimal string of PEM body
+     * @param {String} pemHeader PEM header string (ex. 'RSA PRIVATE KEY')
+     * @return {String} PEM formatted string of input data
+     * @description
+     * @example
+     * var pem  = KJUR.asn1.ASN1Util.getPEMStringFromHex('616161', 'RSA PRIVATE KEY');
+     * // value of pem will be:
+     * -----BEGIN PRIVATE KEY-----
+     * YWFh
+     * -----END PRIVATE KEY-----
+     */
+    this.getPEMStringFromHex = function(dataHex, pemHeader) {
+	var dataWA = CryptoJS.enc.Hex.parse(dataHex);
+	var dataB64 = CryptoJS.enc.Base64.stringify(dataWA);
+	var pemBody = dataB64.replace(/(.{64})/g, "$1\r\n");
+        pemBody = pemBody.replace(/\r\n$/, '');
+	return "-----BEGIN " + pemHeader + "-----\r\n" + 
+               pemBody + 
+               "\r\n-----END " + pemHeader + "-----\r\n";
     };
 };
 

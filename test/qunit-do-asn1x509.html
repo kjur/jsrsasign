@@ -292,6 +292,20 @@ test("CRLEntry class test", function() {
   equals(e.getEncodedHex(), "3012020103170d3133303531343233353935395a", "constructor/1");
 });
 
+test("X509Util.getPKCS8PubKeyPEMfromRSAKey", function() {
+  var s = "" +
+"-----BEGIN PUBLIC KEY-----\r\n" + 
+"MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOtpGHibL8Ue+MXPPufkcrNES40rCT5L\r\n" + 
+"RIU9MjTZ8/7owG5bAsiFA9Xxh3uZK1T5QA64jNJVbp2ojHAtNyWPuwsCAwEAAQ==\r\n" + 
+"-----END PUBLIC KEY-----\r\n";
+
+  var rsaKey = new RSAKey();
+  rsaKey.setPublic("eb6918789b2fc51ef8c5cf3ee7e472b3444b8d2b093e4b44853d3234d9f3fee8c06e5b02c88503d5f1877b992b54f9400eb88cd2556e9da88c702d37258fbb0b", "10001"); // z1.pubp8.der
+  var pem = KJUR.asn1.x509.X509Util.getPKCS8PubKeyPEMfromRSAKey(rsaKey);
+
+  equals(pem, s, "z1.pubp8.pem");
+});
+
 });
 -->
 </script>

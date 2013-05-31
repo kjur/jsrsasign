@@ -6,12 +6,18 @@
 <script type="text/javascript" src="qunit.js"></script>
 <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
 
+<!-- getPEM -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core-min.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
+
 <script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
 <script src="http://kjur.github.io/jsrsasign/jsbn.js"></script>
 <script src="http://kjur.github.io/jsrsasign/jsbn2.js"></script>
 <script src="http://kjur.github.io/jsjws/base64.js"></script>
 <script src="http://kjur.github.io/jsjws/base64x-1.1.min.js"></script>
 <script src="../asn1-1.0.js"></script>
+
+
 
 <script type="text/javascript">
 <!--
@@ -245,6 +251,15 @@ test("TaggedObject Test", function() {
   var d4a = new KJUR.asn1.DERUTF8String({'str':'a'});
   var d4 = new KJUR.asn1.DERTaggedObject({'obj':d2a});
   equals(d4.getEncodedHex(), "a0030c0161", "constructor with defaults");
+});
+
+test("ASN1Util.getPEMStringFromHex", function() {
+  var s = "" +
+"-----BEGIN HOGE HOGE-----\r\n" +
+"YWFh\r\n" +
+"-----END HOGE HOGE-----\r\n";
+
+  equals(KJUR.asn1.ASN1Util.getPEMStringFromHex("616161", "HOGE HOGE"), s, "aaa");
 });
 
 });

@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 3.1.3 and 3.1.4 (2013-May-31)
+  - asn1-1.0.js update 1.0.1 to 1.0.2
+    - method ASN1Util.getPEMStringFromHex added
+  - asn1x509-1.0.js update 1.0.3 to 1.0.4
+    - mehtod X509Util.getPKCS8PubKeyPEMfromRSAKey added
+
 * Changes between 3.1.2 and 3.1.3 (2013-May-28)
   - crypto-1.0.js update 1.0.3 to 1.0.4
     - support "sjcl" (i.e. Stanford JavaScript Crypto Library) 
