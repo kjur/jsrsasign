@@ -6,12 +6,17 @@
 <script type="text/javascript" src="qunit.js"></script>
 <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
 
-<script language="JavaScript" type="text/javascript" src="../jsbn.js"></script>
-<script language="JavaScript" type="text/javascript" src="../jsbn2.js"></script>
-<script language="JavaScript" type="text/javascript" src="../rsa.js"></script>
-<script language="JavaScript" type="text/javascript" src="../rsa2.js"></script>
-<script language="JavaScript" type="text/javascript" src="../sha1.js"></script>
-<script language="JavaScript" type="text/javascript" src="../base64.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core-min.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/sha1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../crypto-1.0.js"></script>
 <script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
@@ -159,6 +164,7 @@ test("X509.getSerialNumber/Issuer/Subject/NotBefore/NotAfter test", function() {
   equals(c.getSubjectString(), "/C=JP/O=z2", "subject str");
 });
 
+/*
 test("hoge", function() {
   RSAKey.prototype.verifyString = _rsasign_verifyString;
   var r = new RSAKey();
@@ -168,6 +174,7 @@ test("hoge", function() {
   equals(r.signString, null, "check signString function");
   equals(r.verifyString, null, "check verifyString function");
 });
+ */
 
 });
 </script>
