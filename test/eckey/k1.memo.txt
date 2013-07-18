@@ -1,0 +1,18 @@
+# EC key generation
+openssl ecparam -genkey -name prime256v1 -out k1.pem (prime256v1=secp256r1)
+openssl ec -in k1.pem -text -noout
+openssl ec -in k1.pem -pubout -out k1.pub.pem
+
+# generate self signed certificate
+openssl req -new -x509 -days 3650 -sha256 -key k1.pem -subj /C=US/O=K1 -out k1.self.cer
+
+# signing by EC private key
+openssl dgst -sha256 -sign k1.pem -out k1.sig.aaa.1 aaa.txt 
+openssl dgst -sha256 -sign k1.pem -out k1.sig.aaa.2 aaa.txt
+
+# validation by EC public key
+openssl dgst -verify k1.pub.pem -sha256 -signature k1.sig.aaa.1 aaa.txt
+
+# signing and verifying SHA1withECDSA(secp256r1)
+openssl dgst -sha1 -sign k1.pem -out k1.sig.aaa.3 aaa.txt
+openssl dgst -verify k1.pub.pem -sha1 -signature k1.sig.aaa.3 aaa.txt

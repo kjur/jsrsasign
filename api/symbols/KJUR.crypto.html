@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.2 JavaScript API Reference - KJUR.crypto</title>
+		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.crypto</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -177,7 +177,7 @@ ul.inheritsList
 <!-- ============================== header ================================= -->	
 		<!-- begin static/header.html -->
 		<div id="header" style="background: #7F8FB1; color: white; margin: -10px">
-&nbsp; <b><a href="http://kjur.github.com/jsrsasign/" style="color: white">jsrsasign</a></b> 3.0.2 JavaScript API Reference
+&nbsp; <b><a href="http://kjur.github.com/jsrsasign/" style="color: white">jsrsasign</a></b> 4.0.0 JavaScript API Reference
 </div>
 
 		<!-- end static/header.html -->
@@ -285,6 +285,10 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.crypto.html">KJUR.crypto</a></li>
 	
+	<li><a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a></li>
+	
+	<li><a href="../symbols/KJUR.crypto.ECParameterDB.html">KJUR.crypto.ECParameterDB</a></li>
+	
 	<li><a href="../symbols/KJUR.crypto.MessageDigest.html">KJUR.crypto.MessageDigest</a></li>
 	
 	<li><a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a></li>
@@ -317,7 +321,7 @@ ul.inheritsList
 				
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/crypto-1.0.js.html">crypto-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/crypto-1.1.js.html">crypto-1.1.js</a>.
 				
 			</p>
 
@@ -394,7 +398,7 @@ This namespace privides following crytpgrahic classes.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>initSign</b>(prvKey)
+								<div class="fixedFont">KJUR.crypto.<b>initSign</b>(params)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -412,9 +416,27 @@ This namespace privides following crytpgrahic classes.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>initVerifyByPublicKey</b>(rsaPubKey)
+								<div class="fixedFont">KJUR.crypto.<b>initVerifyByPublicKey</b>(params)
 								</div>
 								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.<b><a href="../symbols/KJUR.crypto.html#.parseSig">parseSig</a></b>(sig)
+								</div>
+								<div class="description">Parses a byte array containing a DER-encoded signature.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.<b><a href="../symbols/KJUR.crypto.html#.serializeSig">serializeSig</a></b>(r, s)
+								</div>
+								<div class="description">Serialize a signature into DER format.</div>
 							</td>
 						</tr>
 					
@@ -639,7 +661,7 @@ NOTE: Please ignore method summary and document of this namespace. This caused b
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">KJUR.crypto.</span><b>initSign</b>(prvKey)
+					<span class="light">KJUR.crypto.</span><b>initSign</b>(params)
 					
 					</div>
 					<div class="description">
@@ -655,7 +677,7 @@ NOTE: Please ignore method summary and document of this namespace. This caused b
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>prvKey</b>
+									<b>params</b>
 									
 								</dt>
 								<dd></dd>
@@ -711,7 +733,7 @@ NOTE: Please ignore method summary and document of this namespace. This caused b
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">KJUR.crypto.</span><b>initVerifyByPublicKey</b>(rsaPubKey)
+					<span class="light">KJUR.crypto.</span><b>initVerifyByPublicKey</b>(params)
 					
 					</div>
 					<div class="description">
@@ -727,7 +749,100 @@ NOTE: Please ignore method summary and document of this namespace. This caused b
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>rsaPubKey</b>
+									<b>params</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".parseSig"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.</span><b>parseSig</b>(sig)
+					
+					</div>
+					<div class="description">
+						Parses a byte array containing a DER-encoded signature.
+
+This function will return an object of the form:
+
+{
+  r: BigInteger,
+  s: BigInteger
+}
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/ecdsa-modified-1.0.js.html">ecdsa-modified-1.0.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>sig</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".serializeSig"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.</span><b>serializeSig</b>(r, s)
+					
+					</div>
+					<div class="description">
+						Serialize a signature into DER format.
+
+Takes two BigIntegers representing r and s and returns a byte array.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/ecdsa-modified-1.0.js.html">ecdsa-modified-1.0.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>r</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<b>s</b>
 									
 								</dt>
 								<dd></dd>

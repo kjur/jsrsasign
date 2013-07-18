@@ -1,0 +1,9 @@
+# EC key generation
+openssl ecparam -genkey -name secp384r1 -out k6.pem
+openssl ec -in k6.pem -pubout -out k6.pub.pem
+
+# signing by EC private key
+openssl dgst -sha256 -sign k6.pem -out k6.sig.aaa.1 aaa.txt 
+
+# validation by EC public key
+openssl dgst -verify k6.pub.pem -sha256 -signature k6.sig.aaa.1 aaa.txt

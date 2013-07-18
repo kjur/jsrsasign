@@ -1,0 +1,256 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! ecparam-1.0.0.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+<span class='line'>  2</span>  */</span><span class="WHIT">
+<span class='line'>  3</span> </span><span class="COMM">/*
+<span class='line'>  4</span>  * ecparam.js - Elliptic Curve Cryptography Curve Parameter Definition class
+<span class='line'>  5</span>  *
+<span class='line'>  6</span>  * Copyright (c) 2013 Kenji Urushima (kenji.urushima@gmail.com)
+<span class='line'>  7</span>  *
+<span class='line'>  8</span>  * This software is licensed under the terms of the MIT License.
+<span class='line'>  9</span>  * http://kjur.github.com/jsrsasign/license
+<span class='line'> 10</span>  *
+<span class='line'> 11</span>  * The above copyright and license notice shall be 
+<span class='line'> 12</span>  * included in all copies or substantial portions of the Software.
+<span class='line'> 13</span>  */</span><span class="WHIT">
+<span class='line'> 14</span> 
+<span class='line'> 15</span> </span><span class="COMM">/**
+<span class='line'> 16</span>  * @fileOverview
+<span class='line'> 17</span>  * @name ecparam-1.1.js
+<span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
+<span class='line'> 19</span>  * @version 1.0.0 (2013-Jul-17)
+<span class='line'> 20</span>  * @since jsrsasign 4.0
+<span class='line'> 21</span>  * @license &lt;a href="http://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
+<span class='line'> 22</span>  */</span><span class="WHIT">
+<span class='line'> 23</span> 
+<span class='line'> 24</span> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">KJUR</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">KJUR</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">KJUR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">KJUR.crypto</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">KJUR.crypto</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">KJUR.crypto</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 26</span> 
+<span class='line'> 27</span> </span><span class="COMM">/**
+<span class='line'> 28</span>  * static object for elliptic curve names and parameters
+<span class='line'> 29</span>  * @name KJUR.crypto.ECParameterDB
+<span class='line'> 30</span>  * @class static object for elliptic curve names and parameters
+<span class='line'> 31</span>  * @description
+<span class='line'> 32</span>  * This class provides parameters for named elliptic curves.
+<span class='line'> 33</span>  * Currently it supoprts following curve names and aliases however 
+<span class='line'> 34</span>  * the name marked (*) are available for {@link KJUR.crypto.ECDSA} and
+<span class='line'> 35</span>  * {@link KJUR.crypto.Signature} classes.
+<span class='line'> 36</span>  * &lt;ul>
+<span class='line'> 37</span>  * &lt;li>secp128r1&lt;/li>
+<span class='line'> 38</span>  * &lt;li>secp160r1&lt;/li>
+<span class='line'> 39</span>  * &lt;li>secp160k1&lt;/li>
+<span class='line'> 40</span>  * &lt;li>secp192r1&lt;/li>
+<span class='line'> 41</span>  * &lt;li>secp192k1&lt;/li>
+<span class='line'> 42</span>  * &lt;li>secp224r1&lt;/li>
+<span class='line'> 43</span>  * &lt;li>secp256r1, NIST P-256, P-256, prime256v1 (*)&lt;/li>
+<span class='line'> 44</span>  * &lt;li>secp256k1 (*)&lt;/li>
+<span class='line'> 45</span>  * &lt;li>secp384r1, NIST P-384, P-384 (*)&lt;/li>
+<span class='line'> 46</span>  * &lt;li>secp521r1, NIST P-521, P-521&lt;/li>
+<span class='line'> 47</span>  * &lt;/ul>
+<span class='line'> 48</span>  * You can register new curves by using 'register' method.
+<span class='line'> 49</span>  */</span><span class="WHIT">
+<span class='line'> 50</span> </span><span class="NAME">KJUR.crypto.ECParameterDB</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">db</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aliasDB</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 53</span> 
+<span class='line'> 54</span> </span><span class="WHIT">    </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">hex2bi</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 55</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">BigInteger</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 56</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 57</span> </span><span class="WHIT">    </span><span class="WHIT">
+<span class='line'> 58</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 59</span>      * get curve inforamtion associative array for curve name or alias
+<span class='line'> 60</span>      * @name getByName
+<span class='line'> 61</span>      * @memberOf KJUR.crypto.ECParameterDB
+<span class='line'> 62</span>      * @function
+<span class='line'> 63</span>      * @param {String} nameOrAlias curve name or alias name
+<span class='line'> 64</span>      * @return {Array} associative array of curve parameters
+<span class='line'> 65</span>      * @example
+<span class='line'> 66</span>      * var param = KJUR.crypto.ECParameterDB.getByName('prime256v1');
+<span class='line'> 67</span>      * var keylen = param['keylen'];
+<span class='line'> 68</span>      * var n = param['n'];
+<span class='line'> 69</span>      */</span><span class="WHIT">
+<span class='line'> 70</span> </span><span class="WHIT">    </span><span class="NAME">this.getByName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">nameOrAlias</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 71</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">nameOrAlias</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 72</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">aliasDB</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 73</span> </span><span class="WHIT">	    </span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aliasDB</span><span class="PUNC">[</span><span class="NAME">nameOrAlias</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 74</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 75</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">db</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 76</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">db</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 78</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"unregistered EC curve name: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 79</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 80</span> 
+<span class='line'> 81</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 82</span>      * register new curve
+<span class='line'> 83</span>      * @name regist
+<span class='line'> 84</span>      * @memberOf KJUR.crypto.ECParameterDB
+<span class='line'> 85</span>      * @function
+<span class='line'> 86</span>      * @param {String} name name of curve
+<span class='line'> 87</span>      * @param {Integer} keylen key length
+<span class='line'> 88</span>      * @param {String} pHex hexadecimal value of p
+<span class='line'> 89</span>      * @param {String} aHex hexadecimal value of a
+<span class='line'> 90</span>      * @param {String} bHex hexadecimal value of b
+<span class='line'> 91</span>      * @param {String} nHex hexadecimal value of n
+<span class='line'> 92</span>      * @param {String} hHex hexadecimal value of h
+<span class='line'> 93</span>      * @param {String} gxHex hexadecimal value of Gx
+<span class='line'> 94</span>      * @param {String} gyHex hexadecimal value of Gy
+<span class='line'> 95</span>      * @param {Array} aliasList array of string for curve names aliases
+<span class='line'> 96</span>      * @param {String} oid Object Identifier for the curve
+<span class='line'> 97</span>      * @param {String} info information string for the curve
+<span class='line'> 98</span>      */</span><span class="WHIT">
+<span class='line'> 99</span> </span><span class="WHIT">    </span><span class="NAME">this.regist</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keylen</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pHex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aHex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">bHex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">nHex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">hHex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">gxHex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">gyHex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aliasList</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">info</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>100</span> </span><span class="WHIT">        </span><span class="NAME">db</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>101</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hex2bi</span><span class="PUNC">(</span><span class="NAME">pHex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>102</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hex2bi</span><span class="PUNC">(</span><span class="NAME">aHex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">b</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hex2bi</span><span class="PUNC">(</span><span class="NAME">bHex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hex2bi</span><span class="PUNC">(</span><span class="NAME">nHex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">h</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hex2bi</span><span class="PUNC">(</span><span class="NAME">hHex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">curve</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ECCurveFp</span><span class="PUNC">(</span><span class="NAME">p</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">b</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>107</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">G</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">curve.decodePointHex</span><span class="PUNC">(</span><span class="STRN">"04"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">gxHex</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">gyHex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="WHIT">	</span><span class="NAME">db</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="STRN">'name'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>109</span> </span><span class="WHIT">	</span><span class="NAME">db</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="STRN">'keylen'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">keylen</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="WHIT">        </span><span class="NAME">db</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="STRN">'curve'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">curve</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="WHIT">        </span><span class="NAME">db</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="STRN">'G'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">G</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>112</span> </span><span class="WHIT">        </span><span class="NAME">db</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="STRN">'n'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">n</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>113</span> </span><span class="WHIT">        </span><span class="NAME">db</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="STRN">'h'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">h</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>114</span> </span><span class="WHIT">        </span><span class="NAME">db</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="STRN">'oid'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>115</span> </span><span class="WHIT">        </span><span class="NAME">db</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="STRN">'info'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">info</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>116</span> 
+<span class='line'>117</span> </span><span class="WHIT">        </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">aliasList.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="WHIT">	    </span><span class="NAME">aliasDB</span><span class="PUNC">[</span><span class="NAME">aliasList</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>119</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>120</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>121</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>122</span> 
+<span class='line'>123</span> </span><span class="NAME">KJUR.crypto.ECParameterDB.regist</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>124</span> </span><span class="WHIT">  </span><span class="STRN">"secp128r1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// name / p = 2^128 - 2^97 - 1</span><span class="WHIT">
+<span class='line'>125</span> </span><span class="WHIT">  </span><span class="NUMB">128</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>126</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFDFFFFFFFFFFFFFFFFFFFFFFFF"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// p</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFDFFFFFFFFFFFFFFFFFFFFFFFC"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// a</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="WHIT">  </span><span class="STRN">"E87579C11079F43DD824993C2CEE5ED3"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// b</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFE0000000075A30D1B9038A115"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// n</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="WHIT">  </span><span class="STRN">"1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// h</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="WHIT">  </span><span class="STRN">"161FF7528B899B2D0C28607CA52C5B86"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gx</span><span class="WHIT">
+<span class='line'>132</span> </span><span class="WHIT">  </span><span class="STRN">"CF5AC8395BAFEB13C02DA292DDED7A83"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gy</span><span class="WHIT">
+<span class='line'>133</span> </span><span class="WHIT">  </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// alias</span><span class="WHIT">
+<span class='line'>134</span> </span><span class="WHIT">  </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// oid (underconstruction)</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="WHIT">  </span><span class="STRN">"secp128r1 : SECG curve over a 128 bit prime field"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// info</span><span class="WHIT">
+<span class='line'>136</span> 
+<span class='line'>137</span> </span><span class="NAME">KJUR.crypto.ECParameterDB.regist</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="WHIT">  </span><span class="STRN">"secp160k1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// name / p = 2^160 - 2^32 - 2^14 - 2^12 - 2^9 - 2^8 - 2^7 - 2^3 - 2^2 - 1</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="WHIT">  </span><span class="NUMB">160</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>140</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFAC73"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// p</span><span class="WHIT">
+<span class='line'>141</span> </span><span class="WHIT">  </span><span class="STRN">"0"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// a</span><span class="WHIT">
+<span class='line'>142</span> </span><span class="WHIT">  </span><span class="STRN">"7"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// b</span><span class="WHIT">
+<span class='line'>143</span> </span><span class="WHIT">  </span><span class="STRN">"0100000000000000000001B8FA16DFAB9ACA16B6B3"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// n</span><span class="WHIT">
+<span class='line'>144</span> </span><span class="WHIT">  </span><span class="STRN">"1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// h</span><span class="WHIT">
+<span class='line'>145</span> </span><span class="WHIT">  </span><span class="STRN">"3B4C382CE37AA192A4019E763036F4F5DD4D7EBB"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gx</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="WHIT">  </span><span class="STRN">"938CF935318FDCED6BC28286531733C3F03C4FEE"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gy</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="WHIT">  </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// alias</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="WHIT">  </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// oid</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="WHIT">  </span><span class="STRN">"secp160k1 : SECG curve over a 160 bit prime field"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// info</span><span class="WHIT">
+<span class='line'>150</span> 
+<span class='line'>151</span> </span><span class="NAME">KJUR.crypto.ECParameterDB.regist</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="WHIT">  </span><span class="STRN">"secp160r1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// name / p = 2^160 - 2^31 - 1</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="WHIT">  </span><span class="NUMB">160</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7FFFFFFF"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// p</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7FFFFFFC"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// a</span><span class="WHIT">
+<span class='line'>156</span> </span><span class="WHIT">  </span><span class="STRN">"1C97BEFC54BD7A8B65ACF89F81D4D4ADC565FA45"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// b</span><span class="WHIT">
+<span class='line'>157</span> </span><span class="WHIT">  </span><span class="STRN">"0100000000000000000001F4C8F927AED3CA752257"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// n</span><span class="WHIT">
+<span class='line'>158</span> </span><span class="WHIT">  </span><span class="STRN">"1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// h</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="WHIT">  </span><span class="STRN">"4A96B5688EF573284664698968C38BB913CBFC82"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gx</span><span class="WHIT">
+<span class='line'>160</span> </span><span class="WHIT">  </span><span class="STRN">"23A628553168947D59DCC912042351377AC5FB32"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gy</span><span class="WHIT">
+<span class='line'>161</span> </span><span class="WHIT">  </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// alias</span><span class="WHIT">
+<span class='line'>162</span> </span><span class="WHIT">  </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// oid</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="WHIT">  </span><span class="STRN">"secp160r1 : SECG curve over a 160 bit prime field"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// info</span><span class="WHIT">
+<span class='line'>164</span> 
+<span class='line'>165</span> </span><span class="NAME">KJUR.crypto.ECParameterDB.regist</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>166</span> </span><span class="WHIT">  </span><span class="STRN">"secp192k1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// name / p = 2^192 - 2^32 - 2^12 - 2^8 - 2^7 - 2^6 - 2^3 - 1</span><span class="WHIT">
+<span class='line'>167</span> </span><span class="WHIT">  </span><span class="NUMB">192</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>168</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFEE37"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// p</span><span class="WHIT">
+<span class='line'>169</span> </span><span class="WHIT">  </span><span class="STRN">"0"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// a</span><span class="WHIT">
+<span class='line'>170</span> </span><span class="WHIT">  </span><span class="STRN">"3"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// b</span><span class="WHIT">
+<span class='line'>171</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFE26F2FC170F69466A74DEFD8D"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// n</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="WHIT">  </span><span class="STRN">"1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// h</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="WHIT">  </span><span class="STRN">"DB4FF10EC057E9AE26B07D0280B7F4341DA5D1B1EAE06C7D"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gx</span><span class="WHIT">
+<span class='line'>174</span> </span><span class="WHIT">  </span><span class="STRN">"9B2F2F6D9C5628A7844163D015BE86344082AA88D95E2F9D"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gy</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="WHIT">  </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// alias</span><span class="WHIT">
+<span class='line'>176</span> 
+<span class='line'>177</span> </span><span class="NAME">KJUR.crypto.ECParameterDB.regist</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="WHIT">  </span><span class="STRN">"secp192r1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// name / p = 2^192 - 2^64 - 1</span><span class="WHIT">
+<span class='line'>179</span> </span><span class="WHIT">  </span><span class="NUMB">192</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>180</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFF"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// p</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFC"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// a</span><span class="WHIT">
+<span class='line'>182</span> </span><span class="WHIT">  </span><span class="STRN">"64210519E59C80E70FA7E9AB72243049FEB8DEECC146B9B1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// b</span><span class="WHIT">
+<span class='line'>183</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFF99DEF836146BC9B1B4D22831"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// n</span><span class="WHIT">
+<span class='line'>184</span> </span><span class="WHIT">  </span><span class="STRN">"1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// h</span><span class="WHIT">
+<span class='line'>185</span> </span><span class="WHIT">  </span><span class="STRN">"188DA80EB03090F67CBF20EB43A18800F4FF0AFD82FF1012"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gx</span><span class="WHIT">
+<span class='line'>186</span> </span><span class="WHIT">  </span><span class="STRN">"07192B95FFC8DA78631011ED6B24CDD573F977A11E794811"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gy</span><span class="WHIT">
+<span class='line'>187</span> </span><span class="WHIT">  </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// alias</span><span class="WHIT">
+<span class='line'>188</span> 
+<span class='line'>189</span> </span><span class="NAME">KJUR.crypto.ECParameterDB.regist</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>190</span> </span><span class="WHIT">  </span><span class="STRN">"secp224r1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// name / p = 2^224 - 2^96 + 1</span><span class="WHIT">
+<span class='line'>191</span> </span><span class="WHIT">  </span><span class="NUMB">224</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>192</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000000000000001"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// p</span><span class="WHIT">
+<span class='line'>193</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFFFFFFFFFE"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// a</span><span class="WHIT">
+<span class='line'>194</span> </span><span class="WHIT">  </span><span class="STRN">"B4050A850C04B3ABF54132565044B0B7D7BFD8BA270B39432355FFB4"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// b</span><span class="WHIT">
+<span class='line'>195</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFFFFFF16A2E0B8F03E13DD29455C5C2A3D"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// n</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="WHIT">  </span><span class="STRN">"1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// h</span><span class="WHIT">
+<span class='line'>197</span> </span><span class="WHIT">  </span><span class="STRN">"B70E0CBD6BB4BF7F321390B94A03C1D356C21122343280D6115C1D21"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gx</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="WHIT">  </span><span class="STRN">"BD376388B5F723FB4C22DFE6CD4375A05A07476444D5819985007E34"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gy</span><span class="WHIT">
+<span class='line'>199</span> </span><span class="WHIT">  </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// alias</span><span class="WHIT">
+<span class='line'>200</span> 
+<span class='line'>201</span> </span><span class="NAME">KJUR.crypto.ECParameterDB.regist</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>202</span> </span><span class="WHIT">  </span><span class="STRN">"secp256k1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// name / p = 2^256 - 2^32 - 2^9 - 2^8 - 2^7 - 2^6 - 2^4 - 1</span><span class="WHIT">
+<span class='line'>203</span> </span><span class="WHIT">  </span><span class="NUMB">256</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>204</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// p</span><span class="WHIT">
+<span class='line'>205</span> </span><span class="WHIT">  </span><span class="STRN">"0"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// a</span><span class="WHIT">
+<span class='line'>206</span> </span><span class="WHIT">  </span><span class="STRN">"7"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// b</span><span class="WHIT">
+<span class='line'>207</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// n</span><span class="WHIT">
+<span class='line'>208</span> </span><span class="WHIT">  </span><span class="STRN">"1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// h</span><span class="WHIT">
+<span class='line'>209</span> </span><span class="WHIT">  </span><span class="STRN">"79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gx</span><span class="WHIT">
+<span class='line'>210</span> </span><span class="WHIT">  </span><span class="STRN">"483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gy</span><span class="WHIT">
+<span class='line'>211</span> </span><span class="WHIT">  </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// alias</span><span class="WHIT">
+<span class='line'>212</span> 
+<span class='line'>213</span> </span><span class="NAME">KJUR.crypto.ECParameterDB.regist</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>214</span> </span><span class="WHIT">  </span><span class="STRN">"secp256r1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// name / p = 2^224 (2^32 - 1) + 2^192 + 2^96 - 1</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="WHIT">  </span><span class="NUMB">256</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>216</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// p</span><span class="WHIT">
+<span class='line'>217</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFF00000001000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFC"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// a</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="WHIT">  </span><span class="STRN">"5AC635D8AA3A93E7B3EBBD55769886BC651D06B0CC53B0F63BCE3C3E27D2604B"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// b</span><span class="WHIT">
+<span class='line'>219</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632551"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// n</span><span class="WHIT">
+<span class='line'>220</span> </span><span class="WHIT">  </span><span class="STRN">"1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// h</span><span class="WHIT">
+<span class='line'>221</span> </span><span class="WHIT">  </span><span class="STRN">"6B17D1F2E12C4247F8BCE6E563A440F277037D812DEB33A0F4A13945D898C296"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gx</span><span class="WHIT">
+<span class='line'>222</span> </span><span class="WHIT">  </span><span class="STRN">"4FE342E2FE1A7F9B8EE7EB4A7C0F9E162BCE33576B315ECECBB6406837BF51F5"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gy</span><span class="WHIT">
+<span class='line'>223</span> </span><span class="WHIT">  </span><span class="PUNC">[</span><span class="STRN">"NIST P-256"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"P-256"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"prime256v1"</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// alias</span><span class="WHIT">
+<span class='line'>224</span> 
+<span class='line'>225</span> </span><span class="NAME">KJUR.crypto.ECParameterDB.regist</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>226</span> </span><span class="WHIT">  </span><span class="STRN">"secp384r1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// name</span><span class="WHIT">
+<span class='line'>227</span> </span><span class="WHIT">  </span><span class="NUMB">384</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>228</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFF0000000000000000FFFFFFFF"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// p</span><span class="WHIT">
+<span class='line'>229</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFF0000000000000000FFFFFFFC"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// a</span><span class="WHIT">
+<span class='line'>230</span> </span><span class="WHIT">  </span><span class="STRN">"B3312FA7E23EE7E4988E056BE3F82D19181D9C6EFE8141120314088F5013875AC656398D8A2ED19D2A85C8EDD3EC2AEF"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// b</span><span class="WHIT">
+<span class='line'>231</span> </span><span class="WHIT">  </span><span class="STRN">"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC7634D81F4372DDF581A0DB248B0A77AECEC196ACCC52973"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// n</span><span class="WHIT">
+<span class='line'>232</span> </span><span class="WHIT">  </span><span class="STRN">"1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// h</span><span class="WHIT">
+<span class='line'>233</span> </span><span class="WHIT">  </span><span class="STRN">"AA87CA22BE8B05378EB1C71EF320AD746E1D3B628BA79B9859F741E082542A385502F25DBF55296C3A545E3872760AB7"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gx</span><span class="WHIT">
+<span class='line'>234</span> </span><span class="WHIT">  </span><span class="STRN">"3617de4a96262c6f5d9e98bf9292dc29f8f41dbd289a147ce9da3113b5f0b8c00a60b1ce1d7e819d7a431d7c90ea0e5f"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gy</span><span class="WHIT">
+<span class='line'>235</span> </span><span class="WHIT">  </span><span class="PUNC">[</span><span class="STRN">"NIST P-384"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"P-384"</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// alias</span><span class="WHIT">
+<span class='line'>236</span> 
+<span class='line'>237</span> </span><span class="NAME">KJUR.crypto.ECParameterDB.regist</span><span class="PUNC">(</span><span class="WHIT">
+<span class='line'>238</span> </span><span class="WHIT">  </span><span class="STRN">"secp521r1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// name</span><span class="WHIT">
+<span class='line'>239</span> </span><span class="WHIT">  </span><span class="NUMB">521</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>240</span> </span><span class="WHIT">  </span><span class="STRN">"1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// p</span><span class="WHIT">
+<span class='line'>241</span> </span><span class="WHIT">  </span><span class="STRN">"1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// a</span><span class="WHIT">
+<span class='line'>242</span> </span><span class="WHIT">  </span><span class="STRN">"051953EB9618E1C9A1F929A21A0B68540EEA2DA725B99B315F3B8B489918EF109E156193951EC7E937B1652C0BD3BB1BF073573DF883D2C34F1EF451FD46B503F00"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// b</span><span class="WHIT">
+<span class='line'>243</span> </span><span class="WHIT">  </span><span class="STRN">"1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA51868783BF2F966B7FCC0148F709A5D03BB5C9B8899C47AEBB6FB71E91386409"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// n</span><span class="WHIT">
+<span class='line'>244</span> </span><span class="WHIT">  </span><span class="STRN">"1"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// h</span><span class="WHIT">
+<span class='line'>245</span> </span><span class="WHIT">  </span><span class="STRN">"C6858E06B70404E9CD9E3ECB662395B4429C648139053FB521F828AF606B4D3DBAA14B5E77EFE75928FE1DC127A2FFA8DE3348B3C1856A429BF97E7E31C2E5BD66"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gx</span><span class="WHIT">
+<span class='line'>246</span> </span><span class="WHIT">  </span><span class="STRN">"011839296a789a3bc0045c8a5fb42c7d1bd998f54449579b446817afbd17273e662c97ee72995ef42640c550b9013fad0761353c7086a272c24088be94769fd16650"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// gy</span><span class="WHIT">
+<span class='line'>247</span> </span><span class="WHIT">  </span><span class="PUNC">[</span><span class="STRN">"NIST P-521"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"P-521"</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// alias</span><span class="WHIT">
+<span class='line'>248</span> 
+<span class='line'>249</span> </span></pre></body></html>

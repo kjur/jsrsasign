@@ -1,0 +1,15 @@
+# EC key generation
+openssl ecparam -genkey -name secp192k1 -out k2.pem
+openssl ec -in k2.pem -text -noout
+openssl ec -in k2.pem -pubout -out k2.pub.pem
+
+# generate self signed certificate
+openssl req -new -x509 -days 3650 -sha256 -key k1.pem -subj /C=US/O=K1 -out k1.self.cer
+
+# signing by EC private key
+openssl dgst -sha256 -sign k2.pem -out k2.sig.aaa.1 aaa.txt 
+
+# validation by EC public key
+openssl dgst -verify k2.pub.pem -sha256 -signature k2.sig.aaa.1 aaa.txt
+
+
