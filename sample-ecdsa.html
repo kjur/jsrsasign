@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="jsrsasign : The 'jsrsasign' (RSA-Sign JavaScript Library) is a open source free pure JavaScript implementation of PKCS#1 v2.1 RSASSA-PKCS1-v1_5 RSA signing and validation algorithm." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <title>ECDSA sample</title>
+<!-- for pkcs5pkey -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/cipher-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/tripledes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64.js"></script>
+<!-- for crypto -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha256.js"></script>
+<!-- for crypto, asn1, asn1x509 -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<!-- for asn1x509(stohex) -->
+<script src="http://kjur.github.io/jsjws/base64x-1.1.min.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/rng.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="rsasign-1.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="x509-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="pkcs5pkey-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="asn1-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="asn1x509-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="crypto-1.1.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="ext/ec.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/ec-patch.js"></script>
+<script language="JavaScript" type="text/javascript" src="ecdsa-modified-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="ecparam-1.0.js"></script>
+<script language="JavaScript" type="text/javascript">
+function doGenerate() {
+  var f1 = document.form1;
+  var curve = f1.curve1.value;
+  var ec = new KJUR.crypto.ECDSA({"curve": curve});
+  var keypair = ec.generateKeyPairHex();
+
+  f1.prvkey1.value = keypair.ecprvhex;
+  f1.pubkey1.value = keypair.ecpubhex;
+}
+
+function doSign() {
+  var f1 = document.form1;
+  var prvkey = f1.prvkey1.value;
+  var curve = f1.curve1.value;
+  var sigalg = f1.sigalg1.value;
+  var msg1 = f1.msg1.value;
+
+  var sig = new KJUR.crypto.Signature({"alg": sigalg, "prov": "cryptojs/jsrsa"});
+  sig.initSign({'ecprvhex': prvkey, 'eccurvename': curve});
+  sig.updateString(msg1);
+  var sigValueHex = sig.sign();
+  
+  f1.sigval1.value = sigValueHex;
+}
+
+function doVerify() {
+  var f1 = document.form1;
+  var pubkey = f1.pubkey1.value;
+  var curve = f1.curve1.value;
+  var sigalg = f1.sigalg1.value;
+  var msg1 = f1.msg1.value;
+  var sigval = f1.sigval1.value;
+
+  var sig = new KJUR.crypto.Signature({"alg": sigalg, "prov": "cryptojs/jsrsa"});
+  sig.initVerifyByPublicKey({'ecpubhex': pubkey, 'eccurvename': curve});
+  sig.updateString(msg1);
+  var result = sig.verify(sigval);
+  if (result) {
+    alert("valid ECDSA signature");
+  } else {
+    alert("invalid ECDSA signature");
+  }
+}
+</script>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <h1 id="project_title">ECDSA sample</h1>
+          <h2 id="project_tagline">generating EC keypair, signing and verifying ECDSA signature</h2>
+
+          <a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
+          <a href="https://github.com/kjur/jsrsasign/tags/" target="_blank">DOWNLOADS</a> | 
+          <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+          <a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+          <a href="http://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+<!-- now editing -->
+<form name="form1">
+<h4>(Step1) choose supported EC curve name and generate key pair</h4>
+ECC curve name: 
+<select name="curve1">
+<option value="secp256r1">secp256r1 (= NIST P-256, P-256, prime256v1)
+<option value="secp256k1">secp256k1
+<option value="secp384r1">secp384r1 (= NIST P-384, P-384)
+</select><br/>
+<input type="button" value="generate EC key pair" onClick="doGenerate();"/><br/>
+<p>
+EC private key (hex): <input type="text" name="prvkey1" value="" size="100"/><br/>
+EC public key (hex): <input type="text" name="pubkey1" value="" size="100"/><br/>
+</p>
+
+<!-- ============================================================== -->
+
+<h4>(Step2) Sign message</h4>
+Signature Algorithm: 
+<select name="sigalg1">
+<option value="SHA256withECDSA">SHA256withECDSA
+<option value="SHA1withECDSA">SHA1withECDSA
+</select><br/>
+
+Message string to be signed: 
+<input type="text" name="msg1" value="aaa" size="100"/><br/>
+<input type="button" value="sign message" onClick="doSign();"/><br/>
+<p>
+Signature value (hex): <input type="text" name="sigval1" value="" size="100"/><br/>
+</p>
+
+<h4>(Step3) Verify signature</h4>
+<input type="button" value="verify it!" onClick="doVerify();"/>
+<input type="reset" value="reset"/>
+
+</form>
+
+<h4>NOTE: To use key pairs generated by OpenSSL</h4>
+When you want to use a key pair which generated by OpenSSL, please
+follow the instructions:
+
+<blockquote><pre>
+# generate secp256r1 curve EC key pair
+% openssl ecparam -genkey -name secp256r1 -out k.pem
+
+# print private key and public key
+% openssl ec -in k.pem -nout -text
+
+Private-Key: (256 bit)
+priv:
+    11:b5:73:7c:f9:d9:3f:17:c0:cb:1a:84:65:5d:39:
+    95:a0:28:24:09:7e:ff:a5:ed:d8:ee:26:38:1e:b5:
+    d6:c3
+pub:
+    04:a0:15:32:a3:c0:90:00:53:de:60:fb:ef:ef:cc:
+    a5:87:93:30:15:98:d3:08:b4:1e:6f:4e:36:4e:38:
+    8c:27:11:be:f4:32:c5:99:14:8c:94:14:3d:4f:f4:
+    6c:2c:b7:3e:3e:6a:41:d7:ee:f2:3c:04:7e:a1:1e:
+    60:66:7d:e4:25
+ASN1 OID: prime256v1
+</pre></blockquote>
+
+Please delete colons ':' and new lines for the private key and the public key
+and fill "EC private key (hex)" and "EC public key (hex)" in above form and
+choose proper curve name, 
+then you can use them for signing and verification.
+
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2013 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>

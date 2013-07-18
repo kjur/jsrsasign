@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 3.0.2 JavaScript API Reference - KJUR.crypto.Signature</title>
+		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.crypto.Signature</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -177,7 +177,7 @@ ul.inheritsList
 <!-- ============================== header ================================= -->	
 		<!-- begin static/header.html -->
 		<div id="header" style="background: #7F8FB1; color: white; margin: -10px">
-&nbsp; <b><a href="http://kjur.github.com/jsrsasign/" style="color: white">jsrsasign</a></b> 3.0.2 JavaScript API Reference
+&nbsp; <b><a href="http://kjur.github.com/jsrsasign/" style="color: white">jsrsasign</a></b> 4.0.0 JavaScript API Reference
 </div>
 
 		<!-- end static/header.html -->
@@ -285,6 +285,10 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.crypto.html">KJUR.crypto</a></li>
 	
+	<li><a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a></li>
+	
+	<li><a href="../symbols/KJUR.crypto.ECParameterDB.html">KJUR.crypto.ECParameterDB</a></li>
+	
 	<li><a href="../symbols/KJUR.crypto.MessageDigest.html">KJUR.crypto.MessageDigest</a></li>
 	
 	<li><a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a></li>
@@ -317,7 +321,7 @@ ul.inheritsList
 				Signature class which is very similar to java.security.Signature class
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/crypto-1.0.js.html">crypto-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/crypto-1.1.js.html">crypto-1.1.js</a>.
 				
 			</p>
 
@@ -397,10 +401,14 @@ As for params of constructor's argument, it can be specify following attributes:
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.Signature.<b><a href="../symbols/KJUR.crypto.Signature.html#.initSign">initSign</a></b>(prvKey)
+								<div class="fixedFont">KJUR.crypto.Signature.<b><a href="../symbols/KJUR.crypto.Signature.html#.initSign">initSign</a></b>(param)
 								</div>
 								<div class="description">Initialize this object for signing
-</div>
+Private key information will be provided as 'param' parameter and the value will be
+following:
+<ul>
+<li><a href="../symbols/RSAKey.html">RSAKey</a> object for RSA signing</li>
+<li>associative array for ECDSA signing (ex.</div>
 							</td>
 						</tr>
 					
@@ -417,10 +425,14 @@ As for params of constructor's argument, it can be specify following attributes:
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.Signature.<b><a href="../symbols/KJUR.crypto.Signature.html#.initVerifyByPublicKey">initVerifyByPublicKey</a></b>(rsaPubKey)
+								<div class="fixedFont">KJUR.crypto.Signature.<b><a href="../symbols/KJUR.crypto.Signature.html#.initVerifyByPublicKey">initVerifyByPublicKey</a></b>(param)
 								</div>
 								<div class="description">Initialize this object for verifying with a public key
-</div>
+Public key information will be provided as 'param' parameter and the value will be
+following:
+<ul>
+<li><a href="../symbols/RSAKey.html">RSAKey</a> object for RSA verification</li>
+<li>associative array for ECDSA verification (ex.</div>
 							</td>
 						</tr>
 					
@@ -523,25 +535,62 @@ As for params of constructor's argument, it can be specify following attributes:
 <li>prvkeypem - PEM string of signer's private key. If this specified, no need to call initSign(prvKey).</li>
 </ul>
 <h4>SUPPORTED ALGORITHMS AND PROVIDERS</h4>
-Signature class supports {MD5,SHA1,SHA224,SHA256,SHA384,SHA512,RIPEMD160}
-withRSA algorithm in 'cryptojs/jsrsa' provider.
+This Signature class supports following signature algorithm and provider names:
+<ul>
+<li>MD5withRSA - cryptojs/jsrsa</li>
+<li>SHA1withRSA - cryptojs/jsrsa</li>
+<li>SHA224withRSA - cryptojs/jsrsa</li>
+<li>SHA256withRSA - cryptojs/jsrsa</li>
+<li>SHA384withRSA - cryptojs/jsrsa</li>
+<li>SHA512withRSA - cryptojs/jsrsa</li>
+<li>RIPEMD160withRSA - cryptojs/jsrsa</li>
+<li>MD5withECDSA - cryptojs/jsrsa</li>
+<li>SHA1withECDSA - cryptojs/jsrsa</li>
+<li>SHA224withECDSA - cryptojs/jsrsa</li>
+<li>SHA256withECDSA - cryptojs/jsrsa</li>
+<li>SHA384withECDSA - cryptojs/jsrsa</li>
+<li>SHA512withECDSA - cryptojs/jsrsa</li>
+<li>RIPEMD160withECDSA - cryptojs/jsrsa</li>
+</ul>
+Here are supported elliptic cryptographic curve names and their aliases for ECDSA:
+<ul>
+<li>secp256k1</li>
+<li>secp256r1, NIST P-256, P-256, prime256v1</li>
+<li>secp384r1, NIST P-384, P-384</li>
+</ul>
 <h4>EXAMPLES</h4>
 					
 				</div>
 				
 				
 				
-				<pre class="code">// signature generation
+				<pre class="code">// RSA signature generation
 var sig = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
 sig.initSign(prvKey);
 sig.updateString('aaa');
 var hSigVal = sig.sign();
 
-// signature validation
+// RSA signature validation
 var sig2 = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
 sig2.initVerifyByCertificatePEM(cert)
 sig.updateString('aaa');
-var isValid = sig2.verify(hSigVal);</pre>
+var isValid = sig2.verify(hSigVal);
+
+// EC key generation
+var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+var keypair = ec.generateKeyPairHex();
+
+// ECDSA signing
+var sig = new KJUR.crypto.Signature({'alg':'SHA1withECDSA', 'prov':'cryptojs/jsrsa'});
+sig.initSign({'ecprvhex': keypair.ecprvhex, 'eccurvename': 'secp256r1'});
+sig.updateString('aaa');
+var sigValueHex = sig.sign();
+
+// ECDSA verifying
+var sig2 = new KJUR.crypto.Signature({'alg':'SHA1withECDSA', 'prov':'cryptojs/jsrsa'});
+sig.initVerifyByPublicKey({'ecpubhex': keypair.ecpubhex, 'eccurvename': 'secp256r1'});
+sig.updateString('aaa');
+var isValid = sig.verify(sigValueHex);</pre>
 				
 				
 				
@@ -608,12 +657,17 @@ var isValid = sig2.verify(hSigVal);</pre>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">KJUR.crypto.Signature.</span><b>initSign</b>(prvKey)
+					<span class="light">KJUR.crypto.Signature.</span><b>initSign</b>(param)
 					
 					</div>
 					<div class="description">
 						Initialize this object for signing
-
+Private key information will be provided as 'param' parameter and the value will be
+following:
+<ul>
+<li><a href="../symbols/RSAKey.html">RSAKey</a> object for RSA signing</li>
+<li>associative array for ECDSA signing (ex. <code>{'ecprvhex': '1d3f..', 'eccurvename': 'secp256r1'}</code>)</li>
+</ul>
 						
 						
 					</div>
@@ -629,10 +683,10 @@ var isValid = sig2.verify(hSigVal);</pre>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> <b>prvKey</b>
+									<span class="light fixedFont">{Object}</span> <b>param</b>
 									
 								</dt>
-								<dd>RSAKey object of private key</dd>
+								<dd>RSAKey object of public key or associative array for ECDSA</dd>
 							
 							</dl>
 						
@@ -696,19 +750,24 @@ var isValid = sig2.verify(hSigVal);</pre>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">KJUR.crypto.Signature.</span><b>initVerifyByPublicKey</b>(rsaPubKey)
+					<span class="light">KJUR.crypto.Signature.</span><b>initVerifyByPublicKey</b>(param)
 					
 					</div>
 					<div class="description">
 						Initialize this object for verifying with a public key
-
+Public key information will be provided as 'param' parameter and the value will be
+following:
+<ul>
+<li><a href="../symbols/RSAKey.html">RSAKey</a> object for RSA verification</li>
+<li>associative array for ECDSA verification (ex. <code>{'ecpubhex': '041f..', 'eccurvename': 'secp256r1'}</code>)</li>
+</ul>
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">sig.initVerifyByPublicKey(prvKey)</pre>
+					<pre class="code">sig.initVerifyByPublicKey(rsaPrvKey)</pre>
 					
 					
 					
@@ -717,10 +776,10 @@ var isValid = sig2.verify(hSigVal);</pre>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> <b>rsaPubKey</b>
+									<span class="light fixedFont">{Object}</span> <b>param</b>
 									
 								</dt>
-								<dd>RSAKey object of public key</dd>
+								<dd>RSAKey object of public key or associative array for ECDSA</dd>
 							
 							</dl>
 						

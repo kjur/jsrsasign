@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.asn1.DERUTF8String</title>
+		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.crypto.ECParameterDB</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -310,26 +310,24 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.DERUTF8String
+				Class KJUR.crypto.ECParameterDB
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
-				<br />Extends
-					<a href="../symbols/KJUR.asn1.DERAbstractString.html">KJUR.asn1.DERAbstractString</a>.<br />
 				
 			
-				class for ASN.1 DER UTF8String
+				static object for elliptic curve names and parameters
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1-1.0.js.html">asn1-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/ecparam-1.0.js.html">ecparam-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.DERUTF8String.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.crypto.ECParameterDB.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -342,10 +340,10 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.DERUTF8String.html#constructor">KJUR.asn1.DERUTF8String</a></b>(params)
+								<b><a href="../symbols/KJUR.crypto.ECParameterDB.html#constructor">KJUR.crypto.ECParameterDB</a></b>()
 							</div>
-							<div class="description">class for ASN.1 DER UTF8String
-</div>
+							<div class="description">static object for elliptic curve names and parameters
+This class provides parameters for named elliptic curves.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -354,17 +352,44 @@ ul.inheritsList
 
 <!-- ============================== properties summary ===================== -->
 			
-				
-				
-				
-				
-				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.DERAbstractString.html">KJUR.asn1.DERAbstractString</a>: </dt><dd><a href="../symbols/KJUR.asn1.DERAbstractString.html#s">s</a></dd><dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
-				</dl>
-				
-			
 
 <!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.crypto.ECParameterDB.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.ECParameterDB.<b><a href="../symbols/KJUR.crypto.ECParameterDB.html#.getByName">getByName</a></b>(nameOrAlias)
+								</div>
+								<div class="description">get curve inforamtion associative array for curve name or alias</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.ECParameterDB.<b><a href="../symbols/KJUR.crypto.ECParameterDB.html#.regist">regist</a></b>(name, keylen, pHex, aHex, bHex, nHex, hHex, gxHex, gyHex, aliasList, oid, info)
+								</div>
+								<div class="description">register new curve</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -377,12 +402,12 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.DERUTF8String</b>(params)
+						<b>KJUR.crypto.ECParameterDB</b>()
 				</div>
 				
 				<div class="description">
-					class for ASN.1 DER UTF8String
-
+					static object for elliptic curve names and parameters
+This class provides parameters for named elliptic curves.Currently it supoprts following curve names and aliases however the name marked (*) are available for <a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a> and<a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a> classes.<ul><li>secp128r1</li><li>secp160r1</li><li>secp160k1</li><li>secp192r1</li><li>secp192k1</li><li>secp224r1</li><li>secp256r1, NIST P-256, P-256, prime256v1 (*)</li><li>secp256k1 (*)</li><li>secp384r1, NIST P-384, P-384 (*)</li><li>secp521r1, NIST P-521, P-521</li></ul>You can register new curves by using 'register' method.
 					
 				</div>
 				
@@ -390,29 +415,11 @@ ul.inheritsList
 				
 				
 					
-						<dl class="detailList">
-						<dt class="heading">Parameters:</dt>
-						
-							<dt>
-								<span class="light fixedFont">{Array}</span>  <b>params</b>
-								
-							</dt>
-								<dd>associative array of parameters (ex. {'str': 'aaa'})</dd>
-						
-						</dl>
 					
 					
 					
 					
 					
-					
-					
-						<dl class="detailList">
-						<dt class="heading">See:</dt>
-						
-							<dd><a href="../symbols/KJUR.asn1.DERAbstractString.html">KJUR.asn1.DERAbstractString</a> - superclass</dd>
-						
-						</dl>
 					
 
 			</div>
@@ -422,6 +429,160 @@ ul.inheritsList
 			
 
 <!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".getByName"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">KJUR.crypto.ECParameterDB.</span><b>getByName</b>(nameOrAlias)
+					
+					</div>
+					<div class="description">
+						get curve inforamtion associative array for curve name or alias
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var param = KJUR.crypto.ECParameterDB.getByName('prime256v1');var keylen = param['keylen'];var n = param['n'];</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>nameOrAlias</b>
+									
+								</dt>
+								<dd>curve name or alias name</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> associative array of curve parameters</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".regist"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.ECParameterDB.</span><b>regist</b>(name, keylen, pHex, aHex, bHex, nHex, hHex, gxHex, gyHex, aliasList, oid, info)
+					
+					</div>
+					<div class="description">
+						register new curve
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>name</b>
+									
+								</dt>
+								<dd>name of curve</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>keylen</b>
+									
+								</dt>
+								<dd>key length</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pHex</b>
+									
+								</dt>
+								<dd>hexadecimal value of p</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>aHex</b>
+									
+								</dt>
+								<dd>hexadecimal value of a</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>bHex</b>
+									
+								</dt>
+								<dd>hexadecimal value of b</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>nHex</b>
+									
+								</dt>
+								<dd>hexadecimal value of n</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hHex</b>
+									
+								</dt>
+								<dd>hexadecimal value of h</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>gxHex</b>
+									
+								</dt>
+								<dd>hexadecimal value of Gx</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>gyHex</b>
+									
+								</dt>
+								<dd>hexadecimal value of Gy</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>aliasList</b>
+									
+								</dt>
+								<dd>array of string for curve names aliases</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>oid</b>
+									
+								</dt>
+								<dd>Object Identifier for the curve</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>info</b>
+									
+								</dt>
+								<dd>information string for the curve</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					
+				
 			
 			
 <!-- ============================== event details ========================= -->		

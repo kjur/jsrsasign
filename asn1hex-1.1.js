@@ -1,9 +1,9 @@
-/*! asn1hex-1.1.js (c) 2012 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1hex-1.1.1.js (c) 2012 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 //
 // asn1hex.js - Hexadecimal represented ASN.1 string library
 //
-// version: 1.1 (09-May-2012)
+// version: 1.1.1 (17-Jul-2013)
 //
 // Copyright (c) 2010-2012 Kenji Urushima (kenji.urushima@gmail.com)
 //
@@ -91,9 +91,9 @@ function _asnhex_getIntOfL_AtObj(s, pos) {
   if (hLength == '') return -1;
   var bi;
   if (parseInt(hLength.substring(0, 1)) < 8) {
-     bi = parseBigInt(hLength, 16);
+     bi = new BigInteger(hLength, 16);
   } else {
-     bi = parseBigInt(hLength.substring(2), 16);
+     bi = new BigInteger(hLength.substring(2), 16);
   }
   return bi.intValue();
 }

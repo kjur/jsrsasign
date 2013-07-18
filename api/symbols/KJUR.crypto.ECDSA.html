@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.asn1.DERUTF8String</title>
+		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.crypto.ECDSA</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -310,26 +310,24 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.DERUTF8String
+				Class KJUR.crypto.ECDSA
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
-				<br />Extends
-					<a href="../symbols/KJUR.asn1.DERAbstractString.html">KJUR.asn1.DERAbstractString</a>.<br />
 				
 			
-				class for ASN.1 DER UTF8String
+				class for EC key generation,  ECDSA signing and verifcation
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1-1.0.js.html">asn1-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/ecdsa-modified-1.0.js.html">ecdsa-modified-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.DERUTF8String.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.crypto.ECDSA.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -342,10 +340,12 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.DERUTF8String.html#constructor">KJUR.asn1.DERUTF8String</a></b>(params)
+								<b><a href="../symbols/KJUR.crypto.ECDSA.html#constructor">KJUR.crypto.ECDSA</a></b>()
 							</div>
-							<div class="description">class for ASN.1 DER UTF8String
-</div>
+							<div class="description">class for EC key generation,  ECDSA signing and verifcation
+<p>
+CAUTION: Most of the case, you don't need to use this class except
+for generating an EC key pair.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -354,17 +354,62 @@ ul.inheritsList
 
 <!-- ============================== properties summary ===================== -->
 			
-				
-				
-				
-				
-				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.DERAbstractString.html">KJUR.asn1.DERAbstractString</a>: </dt><dd><a href="../symbols/KJUR.asn1.DERAbstractString.html#s">s</a></dd><dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
-				</dl>
-				
-			
 
 <!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.crypto.ECDSA.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.generateKeyPairHex">generateKeyPairHex</a></b>()
+								</div>
+								<div class="description">generate a EC key pair</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.parseSigHex">parseSigHex</a></b>(sigHex)
+								</div>
+								<div class="description">parse ASN.1 DER encoded ECDSA signature</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.signHex">signHex</a></b>(hashHex, privHex)
+								</div>
+								<div class="description">signing to message hash</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.verifyHex">verifyHex</a></b>(hashHex, sigHex, pubkeyHex)
+								</div>
+								<div class="description">verifying signature with message hash and public key</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -377,12 +422,25 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.DERUTF8String</b>(params)
+						<b>KJUR.crypto.ECDSA</b>()
 				</div>
 				
 				<div class="description">
-					class for ASN.1 DER UTF8String
-
+					class for EC key generation,  ECDSA signing and verifcation
+<p>
+CAUTION: Most of the case, you don't need to use this class except
+for generating an EC key pair. Please use <a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a> class instead.
+</p>
+<p>
+This class was originally developped by Stefan Thomas for Bitcoin JavaScript library.
+(See https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/src/ecdsa.js
+Currently this class supports following named curves and their aliases.
+<ul>
+<li>secp256r1, NIST P-256, P-256, prime256v1 (*)</li>
+<li>secp256k1 (*)</li>
+<li>secp384r1, NIST P-384, P-384 (*)</li>
+</ul>
+</p>
 					
 				</div>
 				
@@ -390,29 +448,11 @@ ul.inheritsList
 				
 				
 					
-						<dl class="detailList">
-						<dt class="heading">Parameters:</dt>
-						
-							<dt>
-								<span class="light fixedFont">{Array}</span>  <b>params</b>
-								
-							</dt>
-								<dd>associative array of parameters (ex. {'str': 'aaa'})</dd>
-						
-						</dl>
 					
 					
 					
 					
 					
-					
-					
-						<dl class="detailList">
-						<dt class="heading">See:</dt>
-						
-							<dd><a href="../symbols/KJUR.asn1.DERAbstractString.html">KJUR.asn1.DERAbstractString</a> - superclass</dd>
-						
-						</dl>
 					
 
 			</div>
@@ -422,6 +462,238 @@ ul.inheritsList
 			
 
 <!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".generateKeyPairHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">KJUR.crypto.ECDSA.</span><b>generateKeyPairHex</b>()
+					
+					</div>
+					<div class="description">
+						generate a EC key pair
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+var keypair = ec.generateKeyPairHex();
+var pubhex = keypair.ecpubhex; // hexadecimal string of EC private key (=d)
+var prvhex = keypair.ecprvhex; // hexadecimal string of EC public key</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>ecdsa-modified 1.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> associative array of hexadecimal string of private and public key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".parseSigHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">KJUR.crypto.ECDSA.</span><b>parseSigHex</b>(sigHex)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 DER encoded ECDSA signature
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+var sig = ec.parseSigHex('30...');
+var biR = sig.r; // BigInteger object for 'r' field of signature.
+var biS = sig.s; // BigInteger object for 's' field of signature.</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sigHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of ECDSA signature value</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>ecdsa-modified 1.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> associative array of signature field r and s</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".signHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.ECDSA.</span><b>signHex</b>(hashHex, privHex)
+					
+					</div>
+					<div class="description">
+						signing to message hash
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+var sigValue = ec.signHex(hash, prvKey);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hashHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of hash value of signing message</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>privHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of EC private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>ecdsa-modified 1.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of ECDSA signature</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".verifyHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<span class="light">KJUR.crypto.ECDSA.</span><b>verifyHex</b>(hashHex, sigHex, pubkeyHex)
+					
+					</div>
+					<div class="description">
+						verifying signature with message hash and public key
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+var result = ec.verifyHex(msgHashHex, sigHex, pubkeyHex);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hashHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of hash value of signing message</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sigHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of signature value</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pubkeyHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of public key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>ecdsa-modified 1.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if the signature is valid, otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+
+					
+				
 			
 			
 <!-- ============================== event details ========================= -->		

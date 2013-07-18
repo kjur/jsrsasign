@@ -4,7 +4,7 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="opensource free RSA signing/validation, ASN.1, PKCS#5/8 private key X.509 certificate and CRL library in pure JavaScript" />
+    <meta name="description" content="opensource free RSA and ECDSA signing/validation, ASN.1, PKCS#5/8 private key X.509 certificate and CRL library in pure JavaScript" />
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
     <title>jsrsasign - RSA Signing and Verification in JavaScript</title>
@@ -18,7 +18,7 @@
           <a id="forkme_banner" href="https://github.com/kjur/jsrsasign">Fork Me on GitHub</a>
 
           <h1 id="project_title">jsrsasign</h1>
-          <h2 id="project_tagline">opensource free RSA signing/validation, ASN.1, PKCS#5/8 private key X.509 certificate and CRL library in pure JavaScript</h2>
+          <h2 id="project_tagline">opensource free RSA and ECDSA signing/validation, ASN.1, PKCS#5/8 private key X.509 certificate and CRL library in pure JavaScript</h2>
 
           <section id="downloads">
             <a class="zip_download_link" href="https://github.com/kjur/jsrsasign/zipball/master">Download this project as a .zip file</a>
@@ -41,7 +41,8 @@
 The 'jsrsasign' library provides following features in pure JavaScript.
 <ul>
 <li>RSAKey - RSAKey extension for RSA signing and validation (<a href="http://www.rsa.com/rsalabs/node.asp?id=2125" target="_blank">PKCS#1 v2.1 RSASSA-PKCS1-v1_5</a>)</li>
-<li>Signature - digital signtature class wrapper of Java JCE style</li>
+<li>ECDSA - ECDSA signing and validation (NEW!!!)</li>
+<li>Signature - RSA/ECDSA digital signtature class wrapper of Java JCE style</li>
 <li>MessageDigest - cryptographic hash calculation class wrapper of Java JCE style</li>
 <li>ASN.1 encoder/generator</li>
 <li>ASN.1 structure for X.509 ceritificate and CRL generation</li>
@@ -52,6 +53,16 @@ The 'jsrsasign' library provides following features in pure JavaScript.
 
 <h3>NEWS</h3>
 <dl>
+<dt><b>2013-Jul-18</b>: 
+<dd>Release 4.0.0 is now available.
+<ul>
+<li>ECC key generation and ECDSA signing and verification support</li>
+<li>Currently supports secp256r1, secp256k1 and secp384r1 curves</li>
+<li>You can specify other curves such like secp192r1 or NIST P-521 however
+it can't be signed nor verified properly with other curves. 
+I appreciate if you fix the bugs.</li>
+</ul>
+
 <dt><b>2013-May-29</b>: 
 <dd>Release 3.1.3 is now available.
 <ul>
@@ -81,12 +92,13 @@ Old news is <a href="index_oldnews.html">here</a>.
 
 <h3><a name="demo">ONLINE TOOL & DEMO</a></h3>
 <ul>
-<li><a href="tool_ca.html" target="_blank">JavaScript Certification Authority (NEW!!!)</a></li>
+<li><a href="tool_ca.html" target="_blank">JavaScript Certification Authority</a></li>
 <li><a href="tool_pkcs5view.html" target="_blank">Encrypted PKCS#5 Private Key Viewer</a></li>
 <li><a href="tool_certview.html" target="_blank">Online Certificate Viewer</a></li>
 </ul>
 
 <ul>
+<li><a href="sample-ecdsa.html">Sample Application for ECDSA signing with JavaScript(NEW!!!)</a>
 <li><a href="sample-rsasign.html">Sample Application for RSA signing with JavaScript</a>
 <br clear="all"/>
 <img src="sample-rsasign.png" width="480px" style="border: 2px #dddddd solid;"/>
@@ -117,8 +129,8 @@ The 'jsrsasign' library contains following source codes.
 <li><b><a href="asn1x509-1.0.js">asn1x509.js</a></b> - ASN.1 structured for X.509 certificate.
 <a href="asn1x509-1.0.min.js">(mini)</a>
 </li>
-<li><b><a href="crypto-1.0.js">crypto.js</a></b> - MessageDigest and Signature class like Java JCE.
-<a href="crypto-1.0.min.js">(mini)</a>
+<li><b><a href="crypto-1.1.js">crypto.js</a></b> - MessageDigest and Signature class like Java JCE.
+<a href="crypto-1.1.min.js">(mini)</a>
 </li>
 <li><b><a href="pkcs5pkey-1.0.js">pkcs5pkey.js</a></b> - encrypted PKCS#5 private key reader.
 <a href="pkcs5pkey-1.0.min.js">(mini)</a>
@@ -135,6 +147,17 @@ The 'jsrsasign' library contains following source codes.
 <li><b><a href="asn1hex-1.1.js">asn1hex.js</a></b> - simple ASN.1 parser to read hexadecimal encoded ASN.1 DER
 <a href="asn1hex-1.1.min.js">(mini)</a>
 </li>
+
+
+<li><b><a href="ecdsa-modified-1.0.js">ecdsa-modified.js</a></b> - modified version of BitcoinJS ECDSA codes
+<a href="ecdsa-modified-1.0.min.js">(mini)</a>
+</li>
+
+<li><b><a href="ecparam-1.0.js">ecparam.js</a></b> - ECC parameters
+<a href="ecparam-1.0.min.js">(mini)</a>
+</li>
+
+
 </ul>
 As for github repository, see <a href="https://github.com/kjur/jsrsasign">https://github.com/kjur/jsrsasign</a>.
 </p>
@@ -236,8 +259,16 @@ xmldsig signatures in a browser
 <li>rng.js - Random number generator</li>
 <li>rsa.js - RSAKey class for RSA public key encryption.</li>
 <li>rsa2.js - RSA class extension for RSA private key decryption.</li>
+<li>ec.js - elliptic curve cryptography.</li>
 </ul>
 </li>
+
+<li><a href="https://github.com/bitcoinjs/bitcoinjs-lib/" target="_blank">BitcoinJS library - ECC, ECDSA</a>
+<ul>
+<li>ecdsa.js - ECDSA support</li>
+</ul>
+</li>
+
 <li>
 <a href="http://pajhome.org.uk/crypt/md5/" target="_blank">Paul Johnston's JavaScript MD5</a><br/>
 Some hash algorithm script is included however not used since 3.0.4.

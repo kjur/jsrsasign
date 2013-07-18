@@ -1,6 +1,15 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 3.1.5 and 4.0.0 (2013-Jul-18)
+  - newly added ECC key and ECDSA support
+    - MODIFY crypto-1.1.js - Signature class now supports ECDSA
+    - NEW ecdsa-modified-1.0.js - modifed version of Bitcoin ecdsa.js
+    - NEW ecparam-1.0.js - ECC curve parameters definition
+    - NEW ext/ec.js - Tom Wu's EC library
+    - NEW ext/ec-patch.js - patch to Tom Wu's EC library by Bitcoin
+    - supported curves are secp{256r1,256k1,384r1}
+
 * Changes between 3.1.4 and 3.1.5 (2013-Jun-11)
   - move third party library to ext directory.
   - fix script URLs in sample-rsasign.html 

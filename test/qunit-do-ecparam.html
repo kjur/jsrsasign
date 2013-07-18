@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+<!-- crypto-js, yahoo -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha256.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<!-- tom wo's -->
+<script src="../ext/jsbn.js"></script>
+<script src="../ext/jsbn2.js"></script>
+<script src="../ext/prng4.js"></script>
+<script src="../ext/rng.js"></script>
+<script src="../ext/ec.js"></script>
+<!-- bitcoin -->
+<script src="../ext/ec-patch.js"></script>
+<!-- kjur -->
+<script src="../asn1hex-1.1.js"></script>
+<script src="../asn1-1.0.js"></script>
+<script src="../crypto-1.1.js"></script>
+<script src="../ecdsa-modified-1.0.js"></script>
+<script src="../ecparam-1.0.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+test("ECParameterDB NIST P-256", function() {
+  var db = KJUR.crypto.ECParameterDB;
+  expect(5);
+  equals(typeof db.getByName("secp256r1"), "object", "secp256r1 defined");
+  equals(typeof db.getByName("NIST P-256"), "object", "alias NIST P-256 defined");
+  equals(typeof db.getByName("P-256"), "object", "alias P-256 defined");
+  equals(typeof db.getByName("prime256v1"), "object", "alias prime256v1 defined");
+  var ecparam = db.getByName("prime256v1");
+  equals(ecparam['n'].toString(16), "ffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551", "prime256v1:n = ");
+});
+
+});
+</script>
+  
+</head>
+<body>
+<h1 id="qunit-header">QUnit for 'ecparam-1.0.js'</h1>
+<h2 id="qunit-banner"></h2>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+
+<p>
+ECC related QUnit test pages: 
+<a href="qunit-do-crypto.html">crypto.js</a> | 
+<a href="qunit-do-crypto-ecdsa.html">crypto.js Signature class for ECDSA</a> | 
+<a href="qunit-do-ecdsamod.html">ecdsa-modified.js</a> | 
+<a href="qunit-do-ecparam.html">ecparam.js</a> | 
+</p>
+
+</body>
+</html>
