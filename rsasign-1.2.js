@@ -1,10 +1,10 @@
-/*! rsasign-1.2.2.js (c) 2012 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! rsasign-1.2.3.js (c) 2012 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 //
 // rsa-sign.js - adding signing functions to RSAKey class.
 //
 //
-// version: 1.2.2 (13 May 2013)
+// version: 1.2.3 (2013 Jul 21)
 //
 // Copyright (c) 2010-2013 Kenji Urushima (kenji.urushima@gmail.com)
 //
@@ -33,7 +33,7 @@
  * @fileOverview
  * @name rsasign-1.2.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.2.2
+ * @version 1.2.3
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -159,7 +159,7 @@ function _rsasign_signStringPSS(s, hashAlg, sLen) {
     var i;
 
     if (sLen === -1) {
-        sLen = hLen; // same has hash length
+        sLen = hLen; // same as hash length
     } else if ((sLen === -2) || (sLen === undefined)) {
         sLen = emLen - hLen - 2; // maximum
     } else if (sLen < -2) {
@@ -292,8 +292,8 @@ function _rsasign_verifyString(sMsg, hSig) {
  *                 non-hexadecimal charactors including new lines will be ignored.
  * @return returns 1 if valid, otherwise 0
  */
-function _rsasign_verifyStringPSS(sMsg, hSig, hashAlg, sLen) {
-    if (hSig.length !== this.n.bitLength() / 4) {
+function _rsasign_verifyStringPSS(sMsg, biSig, hashAlg, sLen) {
+    if (biSig.bitLength() > this.n.bitLength()) {
         return false;
     }
 
@@ -305,9 +305,9 @@ function _rsasign_verifyStringPSS(sMsg, hSig, hashAlg, sLen) {
     var i;
 
     if (sLen === -1) {
-        sLen = hLen; // same has hash length
+        sLen = hLen; // same as hash length
     } else if ((sLen === -2) || (sLen === undefined)) {
-        sLen = emLen - hLen - 2; // maximum
+        sLen = emLen - hLen - 2; // recover
     } else if (sLen < -2) {
         throw "invalid salt length";
     }
@@ -316,7 +316,7 @@ function _rsasign_verifyStringPSS(sMsg, hSig, hashAlg, sLen) {
         throw "data too long";
     }
 
-    var em = this.doPublic(parseBigInt(hSig, 16)).toByteArray();
+    var em = this.doPublic(biSig).toByteArray();
 
     for (i = 0; i < em.length; i += 1) {
         em[i] &= 0xff;
