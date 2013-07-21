@@ -1,10 +1,10 @@
-/*! rsasign-1.2.2.js (c) 2012 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! rsasign-1.2.3.js (c) 2012 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 //
 // rsa-sign.js - adding signing functions to RSAKey class.
 //
 //
-// version: 1.2.2 (13 May 2013)
+// version: 1.2.3 (2013 Jul 21)
 //
 // Copyright (c) 2010-2013 Kenji Urushima (kenji.urushima@gmail.com)
 //
@@ -33,7 +33,7 @@
  * @fileOverview
  * @name rsasign-1.2.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.2.2
+ * @version 1.2.3
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -151,15 +151,16 @@ function pss_mgf1_str(seed, len, hash) {
  * @return returns hexadecimal string of signature value.
  */
 function _rsasign_signStringPSS(s, hashAlg, sLen) {
-    var hashFunc = _RSASIGN_HASHRAWFUNC[hashAlg];
-    var mHash = hashFunc(s);
+    var hashFunc = _RSASIGN_HASHHEXFUNC[hashAlg];
+    var hHash = hashFunc(s);
+    var mHash = hextorstr(hHash);
     var hLen = mHash.length;
     var emBits = this.n.bitLength() - 1;
     var emLen = Math.ceil(emBits / 8);
     var i;
 
     if (sLen === -1) {
-        sLen = hLen; // same has hash length
+        sLen = hLen; // same as hash length
     } else if ((sLen === -2) || (sLen === undefined)) {
         sLen = emLen - hLen - 2; // maximum
     } else if (sLen < -2) {
@@ -178,7 +179,7 @@ function _rsasign_signStringPSS(s, hashAlg, sLen) {
         salt = String.fromCharCode.apply(String, salt);
     }
 
-    var H = hashFunc('\x00\x00\x00\x00\x00\x00\x00\x00' + mHash + salt);
+    var H = hextorstr(hashFunc('\x00\x00\x00\x00\x00\x00\x00\x00' + mHash + salt));
     var PS = [];
 
     for (i = 0; i < emLen - sLen - hLen - 2; i += 1) {
@@ -202,9 +203,8 @@ function _rsasign_signStringPSS(s, hashAlg, sLen) {
 
     maskedDB.push(0xbc);
 
-    return _zeroPaddingOfSignature(
-            this.doPrivate(new BigInteger(maskedDB)).toString(16),
-            this.n.bitLength());
+    return _zeroPaddingOfSignature(this.doPrivate(new BigInteger(maskedDB)).toString(16),
+				   this.n.bitLength());
 }
 
 // ========================================================================
@@ -292,22 +292,23 @@ function _rsasign_verifyString(sMsg, hSig) {
  *                 non-hexadecimal charactors including new lines will be ignored.
  * @return returns 1 if valid, otherwise 0
  */
-function _rsasign_verifyStringPSS(sMsg, hSig, hashAlg, sLen) {
-    if (hSig.length !== this.n.bitLength() / 4) {
+function _rsasign_verifyStringPSS(sMsg, biSig, hashAlg, sLen) {
+    if (biSig.bitLength() > this.n.bitLength()) {
         return false;
     }
 
-    var hashFunc = _RSASIGN_HASHRAWFUNC[hashAlg];
-    var mHash = hashFunc(sMsg);
+    var hashFunc = _RSASIGN_HASHHEXFUNC[hashAlg];
+    var hHash = hashFunc(sMsg);
+    var mHash = hextorstr(hHash);
     var hLen = mHash.length;
     var emBits = this.n.bitLength() - 1;
     var emLen = Math.ceil(emBits / 8);
     var i;
 
     if (sLen === -1) {
-        sLen = hLen; // same has hash length
+        sLen = hLen; // same as hash length
     } else if ((sLen === -2) || (sLen === undefined)) {
-        sLen = emLen - hLen - 2; // maximum
+        sLen = emLen - hLen - 2; // recover
     } else if (sLen < -2) {
         throw "invalid salt length";
     }
@@ -316,7 +317,7 @@ function _rsasign_verifyStringPSS(sMsg, hSig, hashAlg, sLen) {
         throw "data too long";
     }
 
-    var em = this.doPublic(parseBigInt(hSig, 16)).toByteArray();
+    var em = this.doPublic(biSig).toByteArray();
 
     for (i = 0; i < em.length; i += 1) {
         em[i] &= 0xff;
@@ -362,8 +363,8 @@ function _rsasign_verifyStringPSS(sMsg, hSig, hashAlg, sLen) {
         throw "0x01 marker not found";
     }
 
-    return H === hashFunc('\x00\x00\x00\x00\x00\x00\x00\x00' + mHash +
-                          String.fromCharCode.apply(String, DB.slice(-sLen)));
+    return rstrtohex(H) === hashFunc('\x00\x00\x00\x00\x00\x00\x00\x00' + mHash +
+				     String.fromCharCode.apply(String, DB.slice(-sLen)));
 }
 
 RSAKey.prototype.signString = _rsasign_signString;

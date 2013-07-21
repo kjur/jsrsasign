@@ -1,6 +1,13 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.0.0 to 4.0.1
+  - rsasign-1.2.js
+    - small fix for PSS by Dave's contribution (github.com/davedoesdev)
+    - However still having issue in PSS
+  - NEW base64x-1.1.js 
+    - moved from github.com/kjur/jsjws
+
 * Changes between 3.1.5 and 4.0.0 (2013-Jul-18)
   - newly added ECC key and ECDSA support
     - MODIFY crypto-1.1.js - Signature class now supports ECDSA
