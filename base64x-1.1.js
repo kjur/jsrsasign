@@ -277,6 +277,22 @@ function hextorstr(sHex) {
     return s;
 }
 
+/**
+ * convert a raw string including non printable characters to hexadecimal encoded string.<br/>
+ * @param {String} s raw string
+ * @return {String} hexadecimal encoded string
+ * @since 1.1.2
+ * @example
+ * rstrtohex("a\x00a") &rarr; "610061"
+ */
+function rstrtohex(s) {
+    var result = "";
+    for (var i = 0; i < s.length; i++) {
+	result += ("0" + String.charCodeAt(s.substr(i, 1)).toString(16)).slice(-2);
+    }
+    return result;
+}
+
 // ==== URIComponent / hex ================================
 /**
  * convert a URLComponent string such like "%67%68" to a hexadecimal string.<br/>

@@ -20,6 +20,12 @@ test("hextorstr", function() {
   equals(hextorstr("00010203"), "\x00\x01\x02\x03", "\\x00\\x01\\x02\\x03");
 });
 
+test("rstrtohex", function() {
+  expect(2);
+  equals(rstrtohex("aaa"), "616161", "aaa");
+  equals(rstrtohex("\x00\x01\x02\x03"), "00010203", "00010203");
+});
+
 });
 </script>
   
