@@ -130,11 +130,11 @@ function pss_mgf1_str(seed, len, hash) {
     var mask = '', i = 0;
 
     while (mask.length < len) {
-        mask += hash(seed + String.fromCharCode.apply(String, [
+        mask += hextorstr(hash(seed + String.fromCharCode.apply(String, [
                 (i & 0xff000000) >> 24,
                 (i & 0x00ff0000) >> 16,
                 (i & 0x0000ff00) >> 8,
-                i & 0x000000ff]));
+                i & 0x000000ff])));
         i += 1;
     }
 
@@ -363,8 +363,8 @@ function _rsasign_verifyStringPSS(sMsg, biSig, hashAlg, sLen) {
         throw "0x01 marker not found";
     }
 
-    return rstrtohex(H) === hashFunc('\x00\x00\x00\x00\x00\x00\x00\x00' + mHash +
-				     String.fromCharCode.apply(String, DB.slice(-sLen)));
+    return H === hextorstr(hashFunc('\x00\x00\x00\x00\x00\x00\x00\x00' + mHash +
+				     String.fromCharCode.apply(String, DB.slice(-sLen))));
 }
 
 RSAKey.prototype.signString = _rsasign_signString;
