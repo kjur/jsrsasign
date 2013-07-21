@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.asn1.x509.CRLEntry</title>
+		<title>jsrsasign 4.0.0 JavaScript API Reference - Base64x</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -312,26 +312,26 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.x509.CRLEntry
+				Class Base64x
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
+				<br />Version
+					1.1 (07 May 2012).<br />
 				
-				<br />Extends
-					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
-				ASN.1 CRLEntry structure class for CRL
+				Base64URL and supplementary functions for Tom Wu's base64.js library
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.CRLEntry.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Base64x.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -344,10 +344,9 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.x509.CRLEntry.html#constructor">KJUR.asn1.x509.CRLEntry</a></b>(params)
+								<b><a href="../symbols/Base64x.html#constructor">Base64x</a></b>()
 							</div>
-							<div class="description">ASN.1 CRLEntry structure class for CRL
-</div>
+							<div class="description">Base64URL and supplementary functions for Tom Wu's base64.js library.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -356,59 +355,8 @@ ul.inheritsList
 
 <!-- ============================== properties summary ===================== -->
 			
-				
-				
-				
-				
-				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
-				</dl>
-				
-			
 
 <!-- ============================== methods summary ======================== -->
-			
-				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.x509.CRLEntry.">
-					<caption>Method Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.CRLEntry.<b><a href="../symbols/KJUR.asn1.x509.CRLEntry.html#.setCertSerial">setCertSerial</a></b>(intParam)
-								</div>
-								<div class="description">set DERInteger parameter for serial number of revoked certificate
-</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.CRLEntry.<b><a href="../symbols/KJUR.asn1.x509.CRLEntry.html#.setRevocationDate">setRevocationDate</a></b>(timeParam)
-								</div>
-								<div class="description">set Time parameter for revocation date
-</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
-				
-				
-				<dl class="inheritsList">
-				
-				</dl>
-				
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -421,50 +369,39 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.x509.CRLEntry</b>(params)
+						<b>Base64x</b>()
 				</div>
 				
 				<div class="description">
-					ASN.1 CRLEntry structure class for CRL
-
-					
+					Base64URL and supplementary functions for Tom Wu's base64.js library.<br/>This class is just provide information about global functionsdefined in 'base64x.js'. The 'base64x.js' script file providesglobal functions for converting following data each other.<ul><li>(ASCII) String</li><li>UTF8 String including CJK, Latin and other characters</li><li>byte array</li><li>hexadecimal encoded String</li><li>Full URIComponent encoded String (such like "%69%94")</li><li>Base64 encoded String</li><li>Base64URL encoded String</li></ul>All functions in 'base64x.js' are defined in <a href="../symbols/global__.html">global__</a> and notin this class.
+					<br /><i>Author: </i>Kenji Urushima.
 				</div>
 				
 				
 				
-				<pre class="code">var e = new KJUR.asn1.x509.CRLEntry({'time': {'str': '130514235959Z'}, 'sn': {'int': 234}});
-
-// revokedCertificates     SEQUENCE OF SEQUENCE  {
-//     userCertificate         CertificateSerialNumber,
-//     revocationDate          Time,
-//     crlEntryExtensions      Extensions OPTIONAL
-//                             -- if present, version MUST be v2 }</pre>
-				
-				
-				
 				
 					
-						<dl class="detailList">
-						<dt class="heading">Parameters:</dt>
-						
-							<dt>
-								<span class="light fixedFont">{Array}</span>  <b>params</b>
-								
-							</dt>
-								<dd>associative array of parameters (ex. {})</dd>
-						
-						</dl>
+					
+					
 					
 					
 					
 						<dl class="detailList">
-						<dt class="heading">Since:</dt>
-							<dd>1.0.3</dd>
+						<dt class="heading">Requires:</dt>
+						
+							<dd>base64.js</dd>
+						
 						</dl>
 					
 					
-					
-					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="http://kjur.github.com/jsjws/">'jwjws'(JWS JavaScript Library) home page http://kjur.github.com/jsjws/</a></dd>
+						
+							<dd><a href="http://kjur.github.com/jsrsasigns/">'jwrsasign'(RSA Sign JavaScript Library) home page http://kjur.github.com/jsrsasign/</a></dd>
+						
+						</dl>
 					
 
 			</div>
@@ -474,93 +411,6 @@ ul.inheritsList
 			
 
 <!-- ============================== method details ========================= -->		
-			
-				<div class="sectionTitle">
-					Method Detail
-				</div>
-				
-					<a name=".setCertSerial"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.x509.CRLEntry.</span><b>setCertSerial</b>(intParam)
-					
-					</div>
-					<div class="description">
-						set DERInteger parameter for serial number of revoked certificate
-
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">entry.setCertSerial({'int': 3});</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Array}</span> <b>intParam</b>
-									
-								</dt>
-								<dd>DERInteger parameter for certificate serial number</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".setRevocationDate"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.x509.CRLEntry.</span><b>setRevocationDate</b>(timeParam)
-					
-					</div>
-					<div class="description">
-						set Time parameter for revocation date
-
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">entry.setRevocationDate({'str': '130508235959Z'});</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Array}</span> <b>timeParam</b>
-									
-								</dt>
-								<dd>Time parameter for revocation date</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					
-				
 			
 			
 <!-- ============================== event details ========================= -->		
