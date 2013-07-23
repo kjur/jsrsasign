@@ -133,6 +133,11 @@ KJUR.crypto.Util = new function() {
         return md.digestString(s);
     };
 
+    this.sha256Hex = function(s) {
+        var md = new KJUR.crypto.MessageDigest({'alg':'sha256', 'prov':'cryptojs'});
+        return md.digestHex(s);
+    };
+
     /**
      * get hexadecimal SHA512 hash of string
      * @name sha512
@@ -145,6 +150,11 @@ KJUR.crypto.Util = new function() {
     this.sha512 = function(s) {
         var md = new KJUR.crypto.MessageDigest({'alg':'sha512', 'prov':'cryptojs'});
         return md.digestString(s);
+    };
+
+    this.sha512Hex = function(s) {
+        var md = new KJUR.crypto.MessageDigest({'alg':'sha512', 'prov':'cryptojs'});
+        return md.digestHex(s);
     };
 
     /**
