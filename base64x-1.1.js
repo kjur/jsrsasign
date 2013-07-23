@@ -288,7 +288,7 @@ function hextorstr(sHex) {
 function rstrtohex(s) {
     var result = "";
     for (var i = 0; i < s.length; i++) {
-	result += ("0" + String.charCodeAt(s.substr(i, 1)).toString(16)).slice(-2);
+	result += ("0" + s.charCodeAt(i).toString(16)).slice(-2);
     }
     return result;
 }
