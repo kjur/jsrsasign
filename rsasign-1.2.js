@@ -63,6 +63,8 @@ _RSASIGN_HASHHEXFUNC['sha256'] =    function(s){return KJUR.crypto.Util.sha256(s
 _RSASIGN_HASHHEXFUNC['sha512'] =    function(s){return KJUR.crypto.Util.sha512(s);}
 _RSASIGN_HASHHEXFUNC['md5'] =       function(s){return KJUR.crypto.Util.md5(s);};
 _RSASIGN_HASHHEXFUNC['ripemd160'] = function(s){return KJUR.crypto.Util.ripemd160(s);};
+_RSASIGN_HASHHEXFUNC['sha256Hex'] =    function(s){return KJUR.crypto.Util.sha256Hex(s);}
+_RSASIGN_HASHHEXFUNC['sha512Hex'] =    function(s){return KJUR.crypto.Util.sha512Hex(s);}
 
 //_RSASIGN_HASHHEXFUNC['sha1'] =   function(s){return sha1.hex(s);}   // http://user1.matsumoto.ne.jp/~goma/js/hash.html
 //_RSASIGN_HASHHEXFUNC['sha256'] = function(s){return sha256.hex;}    // http://user1.matsumoto.ne.jp/~goma/js/hash.html
@@ -130,11 +132,11 @@ function pss_mgf1_str(seed, len, hash) {
     var mask = '', i = 0;
 
     while (mask.length < len) {
-        mask += hash(seed + String.fromCharCode.apply(String, [
+        mask += hextorstr(hash(rstrtohex(seed + String.fromCharCode.apply(String, [
                 (i & 0xff000000) >> 24,
                 (i & 0x00ff0000) >> 16,
                 (i & 0x0000ff00) >> 8,
-                i & 0x000000ff]));
+                i & 0x000000ff]))));
         i += 1;
     }
 
@@ -151,8 +153,8 @@ function pss_mgf1_str(seed, len, hash) {
  * @return returns hexadecimal string of signature value.
  */
 function _rsasign_signStringPSS(s, hashAlg, sLen) {
-    var hashFunc = _RSASIGN_HASHHEXFUNC[hashAlg];
-    var hHash = hashFunc(s);
+    var hashFunc = _RSASIGN_HASHHEXFUNC[hashAlg + 'Hex'];
+    var hHash = hashFunc(rstrtohex(s));
     var mHash = hextorstr(hHash);
     var hLen = mHash.length;
     var emBits = this.n.bitLength() - 1;
@@ -179,7 +181,7 @@ function _rsasign_signStringPSS(s, hashAlg, sLen) {
         salt = String.fromCharCode.apply(String, salt);
     }
 
-    var H = hextorstr(hashFunc('\x00\x00\x00\x00\x00\x00\x00\x00' + mHash + salt));
+    var H = hextorstr(hashFunc(rstrtohex('\x00\x00\x00\x00\x00\x00\x00\x00' + mHash + salt)));
     var PS = [];
 
     for (i = 0; i < emLen - sLen - hLen - 2; i += 1) {
@@ -297,8 +299,8 @@ function _rsasign_verifyStringPSS(sMsg, biSig, hashAlg, sLen) {
         return false;
     }
 
-    var hashFunc = _RSASIGN_HASHHEXFUNC[hashAlg];
-    var hHash = hashFunc(sMsg);
+    var hashFunc = _RSASIGN_HASHHEXFUNC[hashAlg + 'Hex'];
+    var hHash = hashFunc(rstrtohex(sMsg));
     var mHash = hextorstr(hHash);
     var hLen = mHash.length;
     var emBits = this.n.bitLength() - 1;
@@ -363,8 +365,8 @@ function _rsasign_verifyStringPSS(sMsg, biSig, hashAlg, sLen) {
         throw "0x01 marker not found";
     }
 
-    return rstrtohex(H) === hashFunc('\x00\x00\x00\x00\x00\x00\x00\x00' + mHash +
-				     String.fromCharCode.apply(String, DB.slice(-sLen)));
+    return H === hextorstr(hashFunc(rstrtohex('\x00\x00\x00\x00\x00\x00\x00\x00' + mHash +
+				     String.fromCharCode.apply(String, DB.slice(-sLen)))));
 }
 
 RSAKey.prototype.signString = _rsasign_signString;
