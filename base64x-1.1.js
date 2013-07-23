@@ -293,10 +293,6 @@ function rstrtohex(s) {
     return result;
 }
 
-function rstrtoutf8(s) {
-    return unescape(encodeURIComponent(s));
-}
-
 // ==== URIComponent / hex ================================
 /**
  * convert a URLComponent string such like "%67%68" to a hexadecimal string.<br/>
