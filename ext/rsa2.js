@@ -159,7 +159,7 @@ function RSAGenerate(B,E) {
   var rng = new SecureRandom();
   var qs = B>>1;
   this.e = parseInt(E,16);
-  var ee = new BigInteger(E,16);
+  var ee = new BigInteger(E,16,rng);
   for(;;) {
     for(;;) {
       this.p = new BigInteger(B-qs,1,rng);
