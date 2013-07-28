@@ -269,9 +269,9 @@ function _rsasign_verifyHexSignatureForMessage(hSig, sMsg) {
  */
 function _rsasign_verifyString(sMsg, hSig) {
     hSig = hSig.replace(_RE_HEXDECONLY, '');
-    if (hSig.length != this.n.bitLength() / 4) return 0;
     hSig = hSig.replace(/[ \n]+/g, "");
     var biSig = parseBigInt(hSig, 16);
+    if (biSig.bitLength() > this.n.bitLength()) return 0;
     var biDecryptedSig = this.doPublic(biSig);
     var hDigestInfo = biDecryptedSig.toString(16).replace(/^1f+00/, '');
     var digestInfoAry = _rsasign_getAlgNameAndHashFromHexDisgestInfo(hDigestInfo);
