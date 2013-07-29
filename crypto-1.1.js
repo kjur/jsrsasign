@@ -1,4 +1,4 @@
-/*! crypto-1.1.0.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! crypto-1.1.1.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.1.0 (2013-Jul-17)
+ * @version 1.1.1 (2013-Jul-29)
  * @since jsrsasign 2.2
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -48,6 +48,7 @@ if (typeof KJUR.crypto == "undefined" || !KJUR.crypto) KJUR.crypto = {};
  * @name KJUR.crypto.Util
  * @class static object for cryptographic function utilities
  * @property {Array} DIGESTINFOHEAD PKCS#1 DigestInfo heading hexadecimal bytes for each hash algorithms
+ * @property {Array} DEFAULTPROVIDER associative array of default provider name for each hash and signature algorithms
  * @description
  */
 KJUR.crypto.Util = new function() {
@@ -59,7 +60,35 @@ KJUR.crypto.Util = new function() {
 	'sha512':    "3051300d060960864801650304020305000440",
 	'md2':       "3020300c06082a864886f70d020205000410",
 	'md5':       "3020300c06082a864886f70d020505000410",
-	'ripemd160': "3021300906052b2403020105000414"
+	'ripemd160': "3021300906052b2403020105000414",
+
+    };
+
+    /*
+     * @since crypto 1.1.1
+     */
+    this.DEFAULTPROVIDER = {
+	'md5':			'cryptojs',
+	'sha1':			'cryptojs',
+	'sha224':		'cryptojs',
+	'sha256':		'cryptojs',
+	'sha384':		'cryptojs',
+	'sha512':		'cryptojs',
+	'ripemd160':		'cryptojs',
+	'MD5withRSA':		'cryptojs/jsrsa',
+	'SHA1withRSA':		'cryptojs/jsrsa',
+	'SHA224withRSA':	'cryptojs/jsrsa',
+	'SHA256withRSA':	'cryptojs/jsrsa',
+	'SHA384withRSA':	'cryptojs/jsrsa',
+	'SHA512withRSA':	'cryptojs/jsrsa',
+	'RIPEMD160withRSA':	'cryptojs/jsrsa',
+	'MD5withECDSA':		'cryptojs/jsrsa',
+	'SHA1withECDSA':	'cryptojs/jsrsa',
+	'SHA224withECDSA':	'cryptojs/jsrsa',
+	'SHA256withECDSA':	'cryptojs/jsrsa',
+	'SHA384withECDSA':	'cryptojs/jsrsa',
+	'SHA512withECDSA':	'cryptojs/jsrsa',
+	'RIPEMD160withECDSA':	'cryptojs/jsrsa',
     };
 
     /**
@@ -103,6 +132,36 @@ KJUR.crypto.Util = new function() {
 	}
 	var hPaddedMessage = hHead + hMid + hTail;
 	return hPaddedMessage;
+    };
+
+    /**
+     * get hexadecimal hash of string with specified algorithm
+     * @name hashString
+     * @memberOf KJUR.crypto.Util
+     * @function
+     * @param {String} s input string to be hashed
+     * @param {String} alg hash algorithm name
+     * @return {String} hexadecimal string of hash value
+     * @since 1.1.1
+     */
+    this.hashString = function(s, alg) {
+        var md = new KJUR.crypto.MessageDigest({'alg': alg});
+        return md.digestString(s);
+    };
+
+    /**
+     * get hexadecimal hash of hexadecimal string with specified algorithm
+     * @name hashHex
+     * @memberOf KJUR.crypto.Util
+     * @function
+     * @param {String} sHex input hexadecimal string to be hashed
+     * @param {String} alg hash algorithm name
+     * @return {String} hexadecimal string of hash value
+     * @since 1.1.1
+     */
+    this.hashHex = function(sHex, alg) {
+        var md = new KJUR.crypto.MessageDigest({'alg': alg});
+        return md.digestHex(sHex);
     };
 
     /**
@@ -249,6 +308,9 @@ KJUR.crypto.MessageDigest = function(params) {
      * md.setAlgAndProvider('ripemd160', 'cryptojs');
      */
     this.setAlgAndProvider = function(alg, prov) {
+	if (alg != null && prov === undefined) prov = KJUR.crypto.Util.DEFAULTPROVIDER[alg];
+
+	// for cryptojs
 	if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(alg) != -1 &&
 	    prov == 'cryptojs') {
 	    try {
@@ -374,11 +436,12 @@ KJUR.crypto.MessageDigest = function(params) {
 	throw "digestHex(hex) not supported for this alg/prov: " + this.algName + "/" + this.provName;
     };
 
-    if (typeof params != "undefined") {
-	if (typeof params['alg'] != "undefined") {
+    if (params !== undefined) {
+	if (params['alg'] !== undefined) {
 	    this.algName = params['alg'];
-	    this.provName = params['prov'];
-	    this.setAlgAndProvider(params['alg'], params['prov']);
+	    if (params['prov'] === undefined)
+		this.provName = KJUR.crypto.Util.DEFAULTPROVIDER[this.algName];
+	    this.setAlgAndProvider(this.algName, this.provName);
 	}
     }
 };
@@ -748,12 +811,16 @@ KJUR.crypto.Signature = function(params) {
 	throw "verify(hSigVal) not supported for this alg:prov=" + this.algProvName;
     };
 
-    if (typeof params != "undefined") {
-	if (typeof params['alg'] != "undefined") {
+    if (params !== undefined) {
+	if (params['alg'] !== undefined) {
 	    this.algName = params['alg'];
-	    this.provName = params['prov'];
-	    this.algProvName = params['alg'] + ":" + params['prov'];
-	    this.setAlgAndProvider(params['alg'], params['prov']);
+	    if (params['prov'] === undefined) {
+		this.provName = KJUR.crypto.Util.DEFAULTPROVIDER[this.algName];
+	    } else {
+		this.provName = params['prov'];
+	    }
+	    this.algProvName = this.algName + ":" + this.provName;
+	    this.setAlgAndProvider(this.algName, this.provName);
 	    this._setAlgNames();
 	}
 	if (typeof params['prvkeypem'] != "undefined") {

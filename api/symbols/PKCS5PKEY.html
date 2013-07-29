@@ -522,6 +522,24 @@ Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 an
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromPublicPKCS8Hex">getRSAKeyFromPublicPKCS8Hex</a></b>(pkcs8PubHex)
+								</div>
+								<div class="description">provide hexadecimal string of unencrypted PKCS#8 private key and returns RSAKey object</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromPublicPKCS8PEM">getRSAKeyFromPublicPKCS8PEM</a></b>(pkcs8PubPEM)
+								</div>
+								<div class="description">read PEM formatted PKCS#8 public key and returns RSAKey object</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.newEryptedPKCS5PEM">newEryptedPKCS5PEM</a></b>(passcode, keyLen, hPublicExponent, alg)
 								</div>
 								<div class="description">generate RSAKey and PEM formatted encrypted PKCS#5 private key</div>
@@ -1337,6 +1355,104 @@ Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 an
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> loaded RSAKey object of RSA private key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getRSAKeyFromPublicPKCS8Hex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
+					<span class="light">PKCS5PKEY.</span><b>getRSAKeyFromPublicPKCS8Hex</b>(pkcs8PubHex)
+					
+					</div>
+					<div class="description">
+						provide hexadecimal string of unencrypted PKCS#8 private key and returns RSAKey object
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pkcs8PubHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of unencrypted PKCS#8 public key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.4</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> loaded RSAKey object of RSA public key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getRSAKeyFromPublicPKCS8PEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
+					<span class="light">PKCS5PKEY.</span><b>getRSAKeyFromPublicPKCS8PEM</b>(pkcs8PubPEM)
+					
+					</div>
+					<div class="description">
+						read PEM formatted PKCS#8 public key and returns RSAKey object
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pkcs8PubPEM</b>
+									
+								</dt>
+								<dd>PEM formatted PKCS#8 public key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.4</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> loaded RSAKey object of RSA public key</dd>
 							
 							</dl>
 						

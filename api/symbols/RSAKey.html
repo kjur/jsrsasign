@@ -396,9 +396,9 @@ ul.inheritsList
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#signStringPSS">signStringPSS</a></b>(s, hashAlg)
+								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.signStringPSS">signStringPSS</a></b>(s, hashAlg, sLen)
 								</div>
 								<div class="description">sign for a message string with RSA private key by PKCS#1 PSS signing.</div>
 							</td>
@@ -414,9 +414,9 @@ ul.inheritsList
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#verifyStringPSS">verifyStringPSS</a></b>(sMsg, hSig)
+								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.verifyStringPSS">verifyStringPSS</a></b>(sMsg, biSig, hashAlg, sLen)
 								</div>
 								<div class="description">verifies a sigature for a message string with RSA public key by PKCS#1 PSS sign.</div>
 							</td>
@@ -603,11 +603,11 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="signStringPSS"> </a>
-					<div class="fixedFont">
+					<a name=".signStringPSS"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<b>signStringPSS</b>(s, hashAlg)
+					<span class="light">RSAKey.</span><b>signStringPSS</b>(s, hashAlg, sLen)
 					
 					</div>
 					<div class="description">
@@ -632,7 +632,13 @@ ul.inheritsList
 									<span class="light fixedFont">{String}</span> <b>hashAlg</b>
 									
 								</dt>
-								<dd>hash algorithm name for signing.<br/></dd>
+								<dd>hash algorithm name for signing.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>sLen</b>
+									
+								</dt>
+								<dd>salt length (-1 or -2)</dd>
 							
 							</dl>
 						
@@ -702,11 +708,11 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="verifyStringPSS"> </a>
-					<div class="fixedFont">
+					<a name=".verifyStringPSS"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<b>verifyStringPSS</b>(sMsg, hSig)
+					<span class="light">RSAKey.</span><b>verifyStringPSS</b>(sMsg, biSig, hashAlg, sLen)
 					
 					</div>
 					<div class="description">
@@ -728,11 +734,22 @@ ul.inheritsList
 								<dd>message string to be verified.</dd>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>hSig</b>
+									<span class="light fixedFont">{BigInteger}</span> <b>biSig</b>
 									
 								</dt>
-								<dd>hexadecimal string of siganture.<br/>
-                non-hexadecimal charactors including new lines will be ignored.</dd>
+								<dd>BigInteger object of signature value</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hashAlg</b>
+									
+								</dt>
+								<dd>hash algorithm name</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>sLen</b>
+									
+								</dt>
+								<dd>salt length for PSS signature (-1 or -2)</dd>
 							
 							</dl>
 						
@@ -743,7 +760,7 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>returns 1 if valid, otherwise 0</dd>
+								<dd>returns true if valid, otherwise false</dd>
 							
 							</dl>
 						
