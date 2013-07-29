@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+
+<!-- script type="text/javascript" src="qunit.js" /script -->
+<!-- link rel="stylesheet" href="qunit.css" type="text/css" media="screen" -->
+<script src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="screen"/>
+
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../pkcs5pkey-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+
+// _test/z2.pub
+var z2PubPem = "" + 
+"-----BEGIN PUBLIC KEY-----\n" + 
+"MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOtpGHibL8Ue+MXPPufkcrNES40rCT5L\n" + 
+"RIU9MjTZ8/7owG5bAsiFA9Xxh3uZK1T5QA64jNJVbp2ojHAtNyWPuwsCAwEAAQ==\n" + 
+"-----END PUBLIC KEY-----\n";
+
+var z2PubHex = "305c300d06092a864886f70d0101010500034b003048024100eb6918789b2fc51ef8c5cf3ee7e472b3444b8d2b093e4b44853d3234d9f3fee8c06e5b02c88503d5f1877b992b54f9400eb88cd2556e9da88c702d37258fbb0b0203010001";
+
+// ======= TEST ===================================================================================
+
+test("getRSAKeyFromPublicPKCS8Hex z2", function() {
+  var k = PKCS5PKEY.getRSAKeyFromPublicPKCS8Hex(z2PubHex);
+  expect(2);
+  equal(k.n.toString(16), "eb6918789b2fc51ef8c5cf3ee7e472b3444b8d2b093e4b44853d3234d9f3fee8c06e5b02c88503d5f1877b992b54f9400eb88cd2556e9da88c702d37258fbb0b", "rsaKey.n");
+  equal(k.e.toString(16), "10001", "rsaKey.e");
+});
+
+test("getRSAKeyFromPublicPKCS8PEM z2", function() {
+  var k = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(z2PubPem);
+  expect(2);
+  equal(k.n.toString(16), "eb6918789b2fc51ef8c5cf3ee7e472b3444b8d2b093e4b44853d3234d9f3fee8c06e5b02c88503d5f1877b992b54f9400eb88cd2556e9da88c702d37258fbb0b", "rsaKey.n");
+  equal(k.e.toString(16), "10001", "rsaKey.e");
+});
+
+});
+-->
+</script>
+  
+</head>
+<body>
+<h1 id="qunit-header">QUnit for PKCS5 RSA key reader 'pkcs5pkey.js' for RSA public key</h1>
+<h2 id="qunit-banner"></h2>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+</body>
+</html>
+
+
