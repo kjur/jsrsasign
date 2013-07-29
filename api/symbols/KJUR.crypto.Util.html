@@ -370,6 +370,16 @@ ul.inheritsList
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
+								<b><a href="../symbols/KJUR.crypto.Util.html#DEFAULTPROVIDER">DEFAULTPROVIDER</a></b>
+								</div>
+								<div class="description">associative array of default provider name for each hash and signature algorithms</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
 								<b><a href="../symbols/KJUR.crypto.Util.html#DIGESTINFOHEAD">DIGESTINFOHEAD</a></b>
 								</div>
 								<div class="description">PKCS#1 DigestInfo heading hexadecimal bytes for each hash algorithms</div>
@@ -412,6 +422,24 @@ ul.inheritsList
 								<div class="fixedFont">KJUR.crypto.Util.<b><a href="../symbols/KJUR.crypto.Util.html#.getPaddedDigestInfoHex">getPaddedDigestInfoHex</a></b>(hHash, alg, keySize)
 								</div>
 								<div class="description">get PKCS#1 padded hexadecimal DigestInfo</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Util.<b><a href="../symbols/KJUR.crypto.Util.html#.hashHex">hashHex</a></b>(sHex, alg)
+								</div>
+								<div class="description">get hexadecimal hash of hexadecimal string with specified algorithm</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Util.<b><a href="../symbols/KJUR.crypto.Util.html#.hashString">hashString</a></b>(s, alg)
+								</div>
+								<div class="description">get hexadecimal hash of string with specified algorithm</div>
 							</td>
 						</tr>
 					
@@ -505,6 +533,28 @@ ul.inheritsList
 				<div class="sectionTitle">
 					Field Detail
 				</div>
+				
+					<a name="DEFAULTPROVIDER"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>DEFAULTPROVIDER</b>
+					
+					</div>
+					<div class="description">
+						associative array of default provider name for each hash and signature algorithms
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
 				
 					<a name="DIGESTINFOHEAD"> </a>
 					<div class="fixedFont">
@@ -632,6 +682,116 @@ ul.inheritsList
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> hexadecimal string of PKCS#1 padded DigestInfo</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".hashHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.Util.</span><b>hashHex</b>(sHex, alg)
+					
+					</div>
+					<div class="description">
+						get hexadecimal hash of hexadecimal string with specified algorithm
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sHex</b>
+									
+								</dt>
+								<dd>input hexadecimal string to be hashed</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>alg</b>
+									
+								</dt>
+								<dd>hash algorithm name</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>1.1.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of hash value</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".hashString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.Util.</span><b>hashString</b>(s, alg)
+					
+					</div>
+					<div class="description">
+						get hexadecimal hash of string with specified algorithm
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>input string to be hashed</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>alg</b>
+									
+								</dt>
+								<dd>hash algorithm name</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>1.1.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of hash value</dd>
 							
 							</dl>
 						

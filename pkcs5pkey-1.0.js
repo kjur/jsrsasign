@@ -1,4 +1,4 @@
-/*! pkcs5pkey-1.0.3.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! pkcs5pkey-1.0.4.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 // pkcs5pkey.js - reading passcode protected PKCS#5 PEM formatted RSA private key
 //
@@ -14,7 +14,7 @@
  * @fileOverview
  * @name pkcs5pkey-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version pkcs5pkey 1.0.3 (2013-May-27)
+ * @version pkcs5pkey 1.0.4 (2013-Jul-29)
  * @since jsrsasign 2.0.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -225,8 +225,7 @@ var PKCS5PKEY = function() {
 	    s = s.replace("-----BEGIN " + sHead + "-----", "");
 	    s = s.replace("-----END " + sHead + "-----", "");
 	    var sB64 = s.replace(/\s+/g, '');
-	    var dataWA = CryptoJS.enc.Base64.parse(sB64);
-	    var dataHex = CryptoJS.enc.Hex.stringify(dataWA);
+            var dataHex = b64tohex(sB64);
 	    return dataHex;
 	},
 
@@ -696,6 +695,66 @@ var PKCS5PKEY = function() {
 	    var rsaKey = this.getRSAKeyFromPlainPKCS8Hex(prvKeyHex);
 	    return rsaKey;
         },
+
+	// === PKCS8 RSA Public Key ================================================
+	/**
+         * read PEM formatted PKCS#8 public key and returns RSAKey object
+	 * @name getRSAKeyFromPublicPKCS8PEM
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} pkcs8PubPEM PEM formatted PKCS#8 public key
+	 * @return {RSAKey} loaded RSAKey object of RSA public key
+         * @since pkcs5pkey 1.0.4
+	 */
+        getRSAKeyFromPublicPKCS8PEM: function(pkcs8PubPEM) {
+            var pubKeyHex = this.getHexFromPEM(pkcs8PubPEM, "PUBLIC KEY");
+            var rsaKey = this.getRSAKeyFromPublicPKCS8Hex(pubKeyHex);
+	    return rsaKey;
+	},
+
+	/**
+         * provide hexadecimal string of unencrypted PKCS#8 private key and returns RSAKey object
+	 * @name getRSAKeyFromPublicPKCS8Hex
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} pkcs8PubHex hexadecimal string of unencrypted PKCS#8 public key
+	 * @return {RSAKey} loaded RSAKey object of RSA public key
+         * @since pkcs5pkey 1.0.4
+	 */
+        getRSAKeyFromPublicPKCS8Hex: function(pkcs8PubHex) {
+	    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PubHex, 0);
+	    if (a1.length != 2)
+		throw "outer DERSequence shall have 2 elements: " + a1.length;
+
+            var algIdTLV =ASN1HEX.getHexOfTLV_AtObj(pkcs8PubHex, a1[0]);
+	    if (algIdTLV != "300d06092a864886f70d0101010500") // AlgId rsaEncryption
+		throw "PKCS8 AlgorithmId is not rsaEncryption";
+	    
+	    if (pkcs8PubHex.substr(a1[1], 2) != "03")
+		throw "PKCS8 Public Key is not BITSTRING encapslated.";
+
+	    var idxPub = ASN1HEX.getStartPosOfV_AtObj(pkcs8PubHex, a1[1]) + 2; // 2 for unused bit
+	    
+	    if (pkcs8PubHex.substr(idxPub, 2) != "30")
+		throw "PKCS8 Public Key is not SEQUENCE.";
+
+	    var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PubHex, idxPub);
+	    if (a2.length != 2)
+		throw "inner DERSequence shall have 2 elements: " + a2.length;
+
+	    if (pkcs8PubHex.substr(a2[0], 2) != "02") 
+		throw "N is not ASN.1 INTEGER";
+	    if (pkcs8PubHex.substr(a2[1], 2) != "02") 
+		throw "E is not ASN.1 INTEGER";
+		
+	    var hN = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a2[0]);
+	    var hE = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a2[1]);
+
+	    var pubKey = new RSAKey();
+	    pubKey.setPublic(hN, hE);
+	    
+	    return pubKey;
+	},
 
 	//addAlgorithm: function(functionObject, algName, keyLen, ivLen) {
 	//}

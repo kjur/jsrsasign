@@ -1,10 +1,10 @@
-/*! rsasign-1.2.3.js (c) 2012 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! rsasign-1.2.4.js (c) 2012 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 //
 // rsa-sign.js - adding signing functions to RSAKey class.
 //
 //
-// version: 1.2.3 (2013 Jul 21)
+// version: 1.2.4 (2013 Jul 29)
 //
 // Copyright (c) 2010-2013 Kenji Urushima (kenji.urushima@gmail.com)
 //
@@ -52,19 +52,20 @@ _RSASIGN_DIHEAD['md2'] =       "3020300c06082a864886f70d020205000410";
 _RSASIGN_DIHEAD['md5'] =       "3020300c06082a864886f70d020505000410";
 _RSASIGN_DIHEAD['ripemd160'] = "3021300906052b2403020105000414";
 
-/**
+/*
  * @property {Dictionary} _RSASIGN_HASHHEXFUNC
  * @description Array of functions which calculate hash and returns it as hexadecimal.
  * You can add any hash algorithm implementations.
  */
-var _RSASIGN_HASHHEXFUNC = [];
-_RSASIGN_HASHHEXFUNC['sha1'] =      function(s){return KJUR.crypto.Util.sha1(s);};
-_RSASIGN_HASHHEXFUNC['sha256'] =    function(s){return KJUR.crypto.Util.sha256(s);}
-_RSASIGN_HASHHEXFUNC['sha512'] =    function(s){return KJUR.crypto.Util.sha512(s);}
-_RSASIGN_HASHHEXFUNC['md5'] =       function(s){return KJUR.crypto.Util.md5(s);};
-_RSASIGN_HASHHEXFUNC['ripemd160'] = function(s){return KJUR.crypto.Util.ripemd160(s);};
-_RSASIGN_HASHHEXFUNC['sha256Hex'] =    function(s){return KJUR.crypto.Util.sha256Hex(s);}
-_RSASIGN_HASHHEXFUNC['sha512Hex'] =    function(s){return KJUR.crypto.Util.sha512Hex(s);}
+//var _RSASIGN_HASHHEXFUNC = [];
+//_RSASIGN_HASHHEXFUNC['sha1'] =      function(s){return KJUR.crypto.Util.sha1(s);};
+//_RSASIGN_HASHHEXFUNC['sha256'] =    function(s){return KJUR.crypto.Util.sha256(s);}
+//_RSASIGN_HASHHEXFUNC['sha512'] =    function(s){return KJUR.crypto.Util.sha512(s);}
+//_RSASIGN_HASHHEXFUNC['md5'] =       function(s){return KJUR.crypto.Util.md5(s);};
+//_RSASIGN_HASHHEXFUNC['ripemd160'] = function(s){return KJUR.crypto.Util.ripemd160(s);};
+//_RSASIGN_HASHHEXFUNC['sha1Hex'] =    function(s){return KJUR.crypto.Util.hashHex(s, 'sha1');}
+//_RSASIGN_HASHHEXFUNC['sha256Hex'] =    function(s){return KJUR.crypto.Util.sha256Hex(s);}
+//_RSASIGN_HASHHEXFUNC['sha512Hex'] =    function(s){return KJUR.crypto.Util.sha512Hex(s);}
 
 //_RSASIGN_HASHHEXFUNC['sha1'] =   function(s){return sha1.hex(s);}   // http://user1.matsumoto.ne.jp/~goma/js/hash.html
 //_RSASIGN_HASHHEXFUNC['sha256'] = function(s){return sha256.hex;}    // http://user1.matsumoto.ne.jp/~goma/js/hash.html
@@ -78,7 +79,7 @@ _RE_HEXDECONLY.compile("[^0-9a-f]", "gi");
 
 function _rsasign_getHexPaddedDigestInfoForString(s, keySize, hashAlg) {
     var pmStrLen = keySize / 4;
-    var hashFunc = _RSASIGN_HASHHEXFUNC[hashAlg];
+    var hashFunc = function(s) { return KJUR.crypto.Util.hashString(s, hashAlg); };
     var sHashHex = hashFunc(s);
 
     var sHead = "0001";
@@ -145,14 +146,15 @@ function pss_mgf1_str(seed, len, hash) {
 /**
  * sign for a message string with RSA private key by PKCS#1 PSS signing.<br/>
  * @name signStringPSS
- * @memberOf RSAKey#
+ * @memberOf RSAKey
  * @function
  * @param {String} s message string to be signed.
- * @param {String} hashAlg hash algorithm name for signing.<br/>
+ * @param {String} hashAlg hash algorithm name for signing.
+ * @param {Integer} sLen salt length (-1 or -2)
  * @return returns hexadecimal string of signature value.
  */
 function _rsasign_signStringPSS(s, hashAlg, sLen) {
-    var hashFunc = _RSASIGN_HASHHEXFUNC[hashAlg + 'Hex'];
+    var hashFunc = function(sHex) { return KJUR.crypto.Util.hashHex(sHex, hashAlg); } 
     var hHash = hashFunc(rstrtohex(s));
     var mHash = hextorstr(hHash);
     var hLen = mHash.length;
@@ -243,7 +245,7 @@ function _rsasign_verifySignatureWithArgs(sMsg, biSig, hN, hE) {
     if (digestInfoAry.length == 0) return false;
     var algName = digestInfoAry[0];
     var diHashValue = digestInfoAry[1];
-    var ff = _RSASIGN_HASHHEXFUNC[algName];
+    var ff = function(s) { return KJUR.crypto.Util.hashString(s, algName); };
     var msgHashValue = ff(sMsg);
     return (diHashValue == msgHashValue);
 }
@@ -278,7 +280,7 @@ function _rsasign_verifyString(sMsg, hSig) {
     if (digestInfoAry.length == 0) return false;
     var algName = digestInfoAry[0];
     var diHashValue = digestInfoAry[1];
-    var ff = _RSASIGN_HASHHEXFUNC[algName];
+    var ff = function(s) { return KJUR.crypto.Util.hashString(s, algName); };
     var msgHashValue = ff(sMsg);
     return (diHashValue == msgHashValue);
 }
@@ -286,19 +288,20 @@ function _rsasign_verifyString(sMsg, hSig) {
 /**
  * verifies a sigature for a message string with RSA public key by PKCS#1 PSS sign.<br/>
  * @name verifyStringPSS
- * @memberOf RSAKey#
+ * @memberOf RSAKey
  * @function
  * @param {String} sMsg message string to be verified.
- * @param {String} hSig hexadecimal string of siganture.<br/>
- *                 non-hexadecimal charactors including new lines will be ignored.
- * @return returns 1 if valid, otherwise 0
+ * @param {BigInteger} biSig BigInteger object of signature value
+ * @param {String} hashAlg hash algorithm name
+ * @param {Integer} sLen salt length for PSS signature (-1 or -2)
+ * @return returns true if valid, otherwise false
  */
 function _rsasign_verifyStringPSS(sMsg, biSig, hashAlg, sLen) {
     if (biSig.bitLength() > this.n.bitLength()) {
         return false;
     }
 
-    var hashFunc = _RSASIGN_HASHHEXFUNC[hashAlg + 'Hex'];
+    var hashFunc = function(sHex) { return KJUR.crypto.Util.hashHex(sHex, hashAlg); };
     var hHash = hashFunc(rstrtohex(sMsg));
     var mHash = hextorstr(hHash);
     var hLen = mHash.length;
