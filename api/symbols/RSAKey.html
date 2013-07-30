@@ -416,7 +416,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.verifyStringPSS">verifyStringPSS</a></b>(sMsg, biSig, hashAlg, sLen)
+								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.verifyStringPSS">verifyStringPSS</a></b>(sMsg, hSig, hashAlg, sLen)
 								</div>
 								<div class="description">verifies a sigature for a message string with RSA public key by PKCS#1 PSS sign.</div>
 							</td>
@@ -712,7 +712,7 @@ ul.inheritsList
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">RSAKey.</span><b>verifyStringPSS</b>(sMsg, biSig, hashAlg, sLen)
+					<span class="light">RSAKey.</span><b>verifyStringPSS</b>(sMsg, hSig, hashAlg, sLen)
 					
 					</div>
 					<div class="description">
@@ -734,10 +734,10 @@ ul.inheritsList
 								<dd>message string to be verified.</dd>
 							
 								<dt>
-									<span class="light fixedFont">{BigInteger}</span> <b>biSig</b>
+									<span class="light fixedFont">{String}</span> <b>hSig</b>
 									
 								</dt>
-								<dd>BigInteger object of signature value</dd>
+								<dd>hexadecimal string of signature value</dd>
 							
 								<dt>
 									<span class="light fixedFont">{String}</span> <b>hashAlg</b>

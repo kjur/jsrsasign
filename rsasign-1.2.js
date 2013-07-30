@@ -1,39 +1,24 @@
-/*! rsasign-1.2.4.js (c) 2012 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! rsasign-1.2.5.js (c) 2012 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
-//
-// rsa-sign.js - adding signing functions to RSAKey class.
-//
-//
-// version: 1.2.4 (2013 Jul 29)
-//
-// Copyright (c) 2010-2013 Kenji Urushima (kenji.urushima@gmail.com)
-//
-// This software is licensed under the terms of the MIT License.
-// http://kjur.github.com/jsrsasign/license/
-//
-// The above copyright and license notice shall be 
-// included in all copies or substantial portions of the Software.
-
-//
-// Depends on:
-//   function sha1.hex(s) of sha1.js
-//   jsbn.js
-//   jsbn2.js
-//   rsa.js
-//   rsa2.js
-//
-
-// keysize / pmstrlen
-//  512 /  128
-// 1024 /  256
-// 2048 /  512
-// 4096 / 1024
+/*
+ * rsa-sign.js - adding signing functions to RSAKey class.
+ *
+ * version: 1.2.5 (2013 Jul 30)
+ *
+ * Copyright (c) 2010-2013 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * http://kjur.github.com/jsrsasign/license/
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ */
 
 /**
  * @fileOverview
  * @name rsasign-1.2.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.2.3
+ * @version 1.2.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -291,12 +276,14 @@ function _rsasign_verifyString(sMsg, hSig) {
  * @memberOf RSAKey
  * @function
  * @param {String} sMsg message string to be verified.
- * @param {BigInteger} biSig BigInteger object of signature value
+ * @param {String} hSig hexadecimal string of signature value
  * @param {String} hashAlg hash algorithm name
  * @param {Integer} sLen salt length for PSS signature (-1 or -2)
  * @return returns true if valid, otherwise false
  */
-function _rsasign_verifyStringPSS(sMsg, biSig, hashAlg, sLen) {
+function _rsasign_verifyStringPSS(sMsg, hSig, hashAlg, sLen) {
+    var biSig = new BigInteger(hSig, 16);
+
     if (biSig.bitLength() > this.n.bitLength()) {
         return false;
     }
