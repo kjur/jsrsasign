@@ -1,6 +1,11 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.0.3 to 4.0.4 (2013-Jul-30)
+  - rsasign 1.2.4 to 1.2.5
+    - verifyStringPSS argument change from BigInteger object biSig 
+      to hexadecimal string hSig
+      
 * Changes between 4.0.2 to 4.0.3 (2013-Jul-29)
   - crypto.js 1.1.0 to 1.1.1
     - Signature and MessageDigest class supports default provider.
@@ -12,6 +17,8 @@ ChangeLog for jsrsasign
     - add getRSAKeyFromPublicPKCS8Hex
   - rsasign 1.2.3 to 1.2.4
     - delete _RSASIGN_HASHHEXFUNC property
+    - now rsasign supports any hash algorithm
+      which is supported by KJUR.crypto.Util.hashString
   - add some QUnit test code
     - test/qunit-do-{pkcs5-pub, rsasign-pss}.html 
 

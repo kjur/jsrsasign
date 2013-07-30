@@ -88,29 +88,25 @@ module("Verifier Test");
 
 test("RSAPSS kp1.sig.aaa.-1.1 verify test", function() {
   var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
-  var biSig = new BigInteger(sKp1SigAAA1, 16);
-  var result = pubKey.verifyPSS("aaa", biSig, "sha1", -1);
+  var result = pubKey.verifyPSS("aaa", sKp1SigAAA1, "sha1", -1);
   equals(result, true, 'kp1.sig');
 });
 
 test("RSAPSS kp1.sig.aaa.-1.2 verify test", function() {
   var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
-  var biSig = new BigInteger(sKp1SigAAA2, 16);
-  var result = pubKey.verifyPSS("aaa", biSig, "sha1", -1);
+  var result = pubKey.verifyPSS("aaa", sKp1SigAAA2, "sha1", -1);
   equals(result, true, 'kp1.sig');
 });
 
 test("RSAPSS kp1.sig.aaa.-2.3 verify test", function() {
   var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
-  var biSig = new BigInteger(sKp1SigAAA3, 16);
-  var result = pubKey.verifyPSS("aaa", biSig, "sha1", -2);
+  var result = pubKey.verifyPSS("aaa", sKp1SigAAA3, "sha1", -2);
   equals(result, true, 'kp1.sig');
 });
 
 test("RSAPSS kp1.sig.aaa.-2.4 verify test", function() {
   var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
-  var biSig = new BigInteger(sKp1SigAAA4, 16);
-  var result = pubKey.verifyPSS("aaa", biSig, "sha1", -2);
+  var result = pubKey.verifyPSS("aaa", sKp1SigAAA4, "sha1", -2);
   equals(result, true, 'kp1.sig');
 });
 
@@ -120,8 +116,7 @@ test("RSAPSS kp1 sign and verify", function() {
   var hSigValue = prvKey.signPSS("aaa", "sha1", -2);
 
   var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
-  var biSig = new BigInteger(hSigValue, 16);
-  var result = pubKey.verifyPSS("aaa", biSig, "sha1", -2);
+  var result = pubKey.verifyPSS("aaa", hSigValue, "sha1", -2);
   equals(result, true, 'kp1.sig');
 });
 
