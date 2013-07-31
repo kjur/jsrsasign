@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="PKCS5 protected PEM RSA key viewer" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <title>Online Encrypted PKCS#5 PEM RSA Private Key Viewer</title>
+<script language="JavaScript" type="text/javascript" src="ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/sha1.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="asn1hex-1.1.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="rsapem-1.1.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="rsasign-1.2.min.js"></script>
+
+<!-- jsrsasign pkcs5pkey external codes -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1/build/rollups/aes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1/build/rollups/tripledes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/enc-base64.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+<!-- jsrsasign -->
+<script src="pkcs5pkey-1.0.min.js"></script>
+
+<script language="JavaScript" type="text/javascript">
+function doView() {
+  // 1. read encrypted private key
+  var p5key = document.form1.prvkey1.value;
+  var passcode = document.form1.passcode1.value;
+  var decryptedKeyHex = PKCS5PKEY.getDecryptedKeyHex(p5key, passcode);
+  // 2. set RSAKey object by hexadecimal decrypted private key
+  var k = new RSAKey();
+  k.readPrivateKeyFromASN1HexString(decryptedKeyHex);
+  // 3. show attributes
+  document.form1.key_n.value = k.n.toString(16);
+  document.form1.key_e.value = k.e.toString(16);
+  document.form1.key_d.value = k.d.toString(16);
+  document.form1.key_p.value = k.p.toString(16);
+  document.form1.key_q.value = k.q.toString(16);
+  document.form1.key_dp.value = k.dmp1.toString(16);
+  document.form1.key_dq.value = k.dmq1.toString(16);
+  document.form1.key_co.value = k.coeff.toString(16);
+}
+</script>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <h1 id="project_title">Online Encrypted PKCS#5 PEM RSA Private Key Viewer</h1>
+          <h2 id="project_tagline">decrypt and see RSA private key fields.</h2>
+          <a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
+          <a href="https://github.com/kjur/jsrsasign/tags/" target="_blank">DOWNLOADS</a> | 
+          <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+          <a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+          <a href="http://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+<!-- now editing -->
+<form name="form1">
+<h4>(Step1) Fill Encrypted PEM formatted RSA private key</h4>
+<textarea name="prvkey1" cols="65" rows="8">-----BEGIN RSA PRIVATE KEY-----
+Proc-Type: 4,ENCRYPTED
+DEK-Info: AES-256-CBC,40555967F759530864FE022E257DE34E
+
+jV7uXajRw4cccDaliagcqiLOiQEUCe19l761pXRxzgQP+DH4rCi12T4puTdZyy6l
+eJHcSHZ/IC9N9iS3XNLgm/rRdUBahf0l1HOerHY76xIb74tB9v1S6sZe/IaOIYTO
+E/t63rzNmj33AzEup5xMyzuAninLL3jJGKwcwkTG5u+n8p7fuMPcML0L7beVBkvZ
+oXyySfMVB8h4u7yyZdhjU3O4K8QX1g1jntGJpQsh4ikfjM+3ddG/qaBrwzTBfC0C
+F9SUbv+Sz0nZX60PhAYEDhb7194ol7F5Y4QZuDhf6K6d1v8r5b9RqDo98INqwdsD
+1El24sGa3eBXi3lnpAytX7dOOBQKRh1uJyL3IuKyuFcNJj3OOGjBkR6imZwD895e
+qxLS+BASmyGm4DME6m+kltZ12LXwPgNU6+d+XQ4NXSA=
+-----END RSA PRIVATE KEY-----</textarea>
+
+<h4>(Step2) Fill passcode to decrypt private key</h4>
+<input type="password" name="passcode1" size="60" value="hogehoge"/><br/>
+<i>NOTE: Passcode for above default RSA private key is <font color="darkgreen">'hogehoge'</font>.</i>
+
+<h4>(Step3) Press "Decrypt it" button</h4>
+<input type="button" value="Decrypt it!" onClick="doView();"/>
+
+<h2>RSA Private Key</h2>
+<table>
+<tr><td>modulus(n):</td><td><input type="text" name="key_n" size="80"/></td></tr>
+<tr><td>public exponent(e):</td><td><input type="text" name="key_e" size="80"/></td></tr>
+<tr><td>private exponent(d):</td><td><input type="text" name="key_d" size="80"/></td></tr>
+<tr><td>prime1(p):</td><td><input type="text" name="key_p" size="80"/></td></tr>
+<tr><td>prime2(q):</td><td><input type="text" name="key_q" size="80"/></td></tr>
+<tr><td>prime1 exponent(dp):</td><td><input type="text" name="key_dp" size="80"/></td></tr>
+<tr><td>prime2 exponent(dq):</td><td><input type="text" name="key_dq" size="80"/></td></tr>
+<tr><td>cofficient(co):</td><td><input type="text" name="key_co" size="80"/></td></tr>
+</table>
+</form>
+
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2013 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>

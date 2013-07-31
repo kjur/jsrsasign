@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="jsrsasign : The 'jsrsasign' (RSA-Sign JavaScript Library) is a open source free pure JavaScript implementation of PKCS#1 v2.1 RSASSA-PKCS1-v1_5 RSA signing and validation algorithm." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <title>Online Certificate Viewer</title>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/sha1.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="crypto-1.1.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="asn1hex-1.1.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="rsapem-1.1.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="rsasign-1.2.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="x509-1.1.min.js"></script>
+<script language="JavaScript" type="text/javascript">
+function doView() {
+  var sCert = document.form1.cert1.value;
+  var c = new X509();
+  c.readCertPEM(sCert);
+  document.form1.serial1.value = c.getSerialNumberHex();
+  document.form1.issuer1.value = c.getIssuerString();
+  document.form1.notbefore1.value = c.getNotBefore();
+  document.form1.notafter1.value = c.getNotAfter();
+  document.form1.subject1.value = c.getSubjectString();
+  var f = function(s) { return KJUR.crypto.Util.hashString(s, 'sha1'); }
+  document.form1.thumb1.value = f(c.hex);
+}
+</script>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <h1 id="project_title">Online Certificate Viewer</h1>
+          <h2 id="project_tagline">Basic field viewer for PEM formatted X.509 certificate.</h2>
+          <a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
+          <a href="https://github.com/kjur/jsrsasign/tags/" target="_blank">DOWNLOADS</a> | 
+          <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+          <a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+          <a href="http://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+<!-- now editing -->
+<form name="form1">
+<h4>(Step1) Fill PEM formatted X.509 certificate</h4>
+<textarea name="cert1" cols="65" rows="8">-----BEGIN CERTIFICATE-----
+MIIDMjCCAhqgAwIBAgIJAKMfG/B2MKd5MA0GCSqGSIb3DQEBBQUAMBoxCzAJBgNV
+BAYTAkpQMQswCQYDVQQKEwJ6MzAeFw0xMDA1MzEwNjE4MDhaFw0yMDA1MjgwNjE4
+MDhaMBoxCzAJBgNVBAYTAkpQMQswCQYDVQQKEwJ6MzCCASIwDQYJKoZIhvcNAQEB
+BQADggEPADCCAQoCggEBAOKosPD1rOz6Z5wtgVBKA0XMFxfKavF09f9x3N3LlCcF
+/6LTXn6/waJq93bTNBESzdw63qQl77sxFORXCVQ1Ad7CPqRbY4ywVw/8yZri9wH4
+PdSfae/fg5vuN3EesLissFSceQySHbMBeqEAw84cLvPXdlecdNmlwfS6nV5D8Ijt
+HkebP8R14AEpfoag3VS/YS6Hd4hmvZ1e3BJQm3JfFFVzTyZ0AH2oimsxfoQnZf7M
+qyIdCgmeaKYILEyYm6PKhVwZhuD5E+WG4RxNdcGCiC8GRUr2fYnXUT0CtwrYBYgZ
+121cFObeu7Z/aTIsx4MqYLHwaHqMga6U7nOHoEgqY7ECAwEAAaN7MHkwHQYDVR0O
+BBYEFKO4NcUDh3J5c7XD7j4pVXnzIfALMEoGA1UdIwRDMEGAFKO4NcUDh3J5c7XD
+7j4pVXnzIfALoR6kHDAaMQswCQYDVQQGEwJKUDELMAkGA1UEChMCejOCCQCjHxvw
+djCneTAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQC8JdiwJF22/3nB
+IxJT/gXXN10cub6O+x9q64ls7dpGpBvbi4/lJgZOsZqoJiswU5WOKZ4MTOmMHe4W
+e/MHuhcjsgf9EHHYZQ1reBYi/l9mBBbYFGs0zSv1CyjbwkyF36nr/8sWdYf4ZtXQ
+nzTGvoa6oTOOTmmj3Bwl3CHwonvgAJUCHY/UmWFzH8Sf0dDW7iJBj+ZWfjuSlSQe
+2ninrEpfA4v2V1p3LOH+layZLDMJHkNCq8eoU1MbJi07cHxLWtlwliNOiRboaiYl
+1wtWR7ZY4HZCPeyb0tanf58rBQAXElaCF3fmfHrlpxoJBsQP1NbFrBs2haOIEZ4E
+K3V9/Bpi
+-----END CERTIFICATE-----</textarea>
+
+<h4>(Step2) Press "View" button</h4>
+<input type="button" value="Analyze it!" onClick="doView();"/>
+
+<h2>Certificate Fields</h2>
+<table>
+<tr><td>SerialNumber:</td><td><input type="text" name="serial1" size="20"/></td></tr>
+<tr><td>Issuer:</td><td><input type="text" name="issuer1" size="80"/></td></tr>
+<tr><td>Validity:</td><td>
+From <input type="text" name="notbefore1" size="15"/>
+To <input type="text" name="notafter1" size="15"/>
+</td></tr>
+<tr><td>Subject:</td><td><input type="text" name="subject1" size="80"/></td></tr>
+<tr><td>SHA1 Thumb Print:</td><td><input type="text" name="thumb1" size="80"/></td></tr>
+</table>
+</form>
+
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2012 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>
