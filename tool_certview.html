@@ -32,7 +32,7 @@ function doView() {
   document.form1.notbefore1.value = c.getNotBefore();
   document.form1.notafter1.value = c.getNotAfter();
   document.form1.subject1.value = c.getSubjectString();
-  var f = _RSASIGN_HASHHEXFUNC['sha1'];
+  var f = function(s) { return KJUR.crypto.Util.hashString(s, 'sha1'); }
   document.form1.thumb1.value = f(c.hex);
 }
 </script>
