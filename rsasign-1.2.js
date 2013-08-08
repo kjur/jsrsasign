@@ -160,9 +160,9 @@ function _rsasign_signStringPSS(s, hashAlg, sLen) {
     var emLen = Math.ceil(emBits / 8);
     var i;
 
-    if (sLen === -1) {
+    if ((sLen === -1) || (sLen === undefined)) {
         sLen = hLen; // same as hash length
-    } else if ((sLen === -2) || (sLen === undefined)) {
+    } else if (sLen === -2) {
         sLen = emLen - hLen - 2; // maximum
     } else if (sLen < -2) {
         throw "invalid salt length";
@@ -306,9 +306,9 @@ function _rsasign_verifyStringPSS(sMsg, biSig, hashAlg, sLen) {
     var emLen = Math.ceil(emBits / 8);
     var i;
 
-    if (sLen === -1) {
+    if ((sLen === -1) || (sLen === undefined)) {
         sLen = hLen; // same as hash length
-    } else if ((sLen === -2) || (sLen === undefined)) {
+    } else if (sLen === -2) {
         sLen = emLen - hLen - 2; // recover
     } else if (sLen < -2) {
         throw "invalid salt length";
