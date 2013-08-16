@@ -1,4 +1,4 @@
-/*! crypto-1.1.1.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! crypto-1.1.2.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.1.1 (2013-Jul-29)
+ * @version 1.1.2 (2013-Aug-16)
  * @since jsrsasign 2.2
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -75,6 +75,12 @@ KJUR.crypto.Util = new function() {
 	'sha384':		'cryptojs',
 	'sha512':		'cryptojs',
 	'ripemd160':		'cryptojs',
+	'hmacmd5':		'cryptojs',
+	'hmacsha1':		'cryptojs',
+	'hmacsha224':		'cryptojs',
+	'hmacsha256':		'cryptojs',
+	'hmacsha384':		'cryptojs',
+	'hmacsha512':		'cryptojs',
 	'MD5withRSA':		'cryptojs/jsrsa',
 	'SHA1withRSA':		'cryptojs/jsrsa',
 	'SHA224withRSA':	'cryptojs/jsrsa',
@@ -89,6 +95,19 @@ KJUR.crypto.Util = new function() {
 	'SHA384withECDSA':	'cryptojs/jsrsa',
 	'SHA512withECDSA':	'cryptojs/jsrsa',
 	'RIPEMD160withECDSA':	'cryptojs/jsrsa',
+    };
+
+    /*
+     * @since crypto 1.1.2
+     */
+    this.CRYPTOJSMESSAGEDIGESTNAME = {
+	'md5':		'CryptoJS.algo.MD5',
+	'sha1':		'CryptoJS.algo.SHA1',
+	'sha224':	'CryptoJS.algo.SHA224',
+	'sha256':	'CryptoJS.algo.SHA256',
+	'sha384':	'CryptoJS.algo.SHA384',
+	'sha512':	'CryptoJS.algo.SHA512',
+	'ripemd160':	'CryptoJS.algo.RIPEMD160'
     };
 
     /**
@@ -243,6 +262,13 @@ KJUR.crypto.Util = new function() {
         var md = new KJUR.crypto.MessageDigest({'alg':'ripemd160', 'prov':'cryptojs'});
         return md.digestString(s);
     };
+
+    /*
+     * @since 1.1.2
+     */
+    this.getCryptoJSMDByName = function(s) {
+	
+    };
 };
 
 /**
@@ -283,15 +309,6 @@ KJUR.crypto.MessageDigest = function(params) {
     var md = null;
     var algName = null;
     var provName = null;
-    var _CryptoJSMdName = {
-	'md5': 'CryptoJS.algo.MD5',
-	'sha1': 'CryptoJS.algo.SHA1',
-	'sha224': 'CryptoJS.algo.SHA224',
-	'sha256': 'CryptoJS.algo.SHA256',
-	'sha384': 'CryptoJS.algo.SHA384',
-	'sha512': 'CryptoJS.algo.SHA512',
-	'ripemd160': 'CryptoJS.algo.RIPEMD160'
-    };
 
     /**
      * set hash algorithm and provider
@@ -314,7 +331,7 @@ KJUR.crypto.MessageDigest = function(params) {
 	if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(alg) != -1 &&
 	    prov == 'cryptojs') {
 	    try {
-		this.md = eval(_CryptoJSMdName[alg]).create();
+		this.md = eval(KJUR.crypto.Util.CRYPTOJSMESSAGEDIGESTNAME[alg]).create();
 	    } catch (ex) {
 		throw "setAlgAndProvider hash alg set fail alg=" + alg + "/" + ex;
 	    }
@@ -446,6 +463,160 @@ KJUR.crypto.MessageDigest = function(params) {
     }
 };
 
+/**
+ * Mac(Message Authentication Code) class which is very similar to java.security.Mac class 
+ * @name KJUR.crypto.Mac
+ * @class Mac class which is very similar to java.security.Mac class
+ * @param {Array} params parameters for constructor
+ * @description
+ * <br/>
+ * Currently this supports following algorithm and providers combination:
+ * <ul>
+ * <li>hmacmd5 - cryptojs</li>
+ * <li>hmacsha1 - cryptojs</li>
+ * <li>hmacsha224 - cryptojs</li>
+ * <li>hmacsha256 - cryptojs</li>
+ * <li>hmacsha384 - cryptojs</li>
+ * <li>hmacsha512 - cryptojs</li>
+ * </ul>
+ * @example
+ * var mac = new KJUR.crypto.Mac({alg: "HmacSHA1", prov: "cryptojs", "pass": "pass"});
+ * mac.updateString('aaa')
+ * var macHex = md.doFinal()
+ */
+KJUR.crypto.Mac = function(params) {
+    var mac = null;
+    var pass = null;
+    var algName = null;
+    var provName = null;
+    var algProv = null;
+
+    this.setAlgAndProvider = function(alg, prov) {
+	if (alg == null) alg = "hmacsha1";
+
+	alg = alg.toLowerCase();
+        if (alg.substr(0, 4) != "hmac") {
+	    throw "setAlgAndProvider unsupported HMAC alg: " + alg;
+	}
+
+	if (prov === undefined) prov = KJUR.crypto.Util.DEFAULTPROVIDER[alg];
+	this.algProv = alg + "/" + prov;
+
+	var hashAlg = alg.substr(4);
+
+	// for cryptojs
+	if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(hashAlg) != -1 &&
+	    prov == 'cryptojs') {
+	    try {
+		var mdObj = eval(KJUR.crypto.Util.CRYPTOJSMESSAGEDIGESTNAME[hashAlg]);
+		this.mac = CryptoJS.algo.HMAC.create(mdObj, this.pass);
+	    } catch (ex) {
+		throw "setAlgAndProvider hash alg set fail hashAlg=" + hashAlg + "/" + ex;
+	    }
+	    this.updateString = function(str) {
+		this.mac.update(str);
+	    };
+	    this.updateHex = function(hex) {
+		var wHex = CryptoJS.enc.Hex.parse(hex);
+		this.mac.update(wHex);
+	    };
+	    this.doFinal = function() {
+		var hash = this.mac.finalize();
+		return hash.toString(CryptoJS.enc.Hex);
+	    };
+	    this.doFinalString = function(str) {
+		this.updateString(str);
+		return this.doFinal();
+	    };
+	    this.doFinalHex = function(hex) {
+		this.updateHex(hex);
+		return this.doFinal();
+	    };
+	}
+    };
+
+    /**
+     * update digest by specified string
+     * @name updateString
+     * @memberOf KJUR.crypto.Mac
+     * @function
+     * @param {String} str string to update
+     * @description
+     * @example
+     * md.updateString('New York');
+     */
+    this.updateString = function(str) {
+	throw "updateString(str) not supported for this alg/prov: " + this.algProv;
+    };
+
+    /**
+     * update digest by specified hexadecimal string
+     * @name updateHex
+     * @memberOf KJUR.crypto.Mac
+     * @function
+     * @param {String} hex hexadecimal string to update
+     * @description
+     * @example
+     * md.updateHex('0afe36');
+     */
+    this.updateHex = function(hex) {
+	throw "updateHex(hex) not supported for this alg/prov: " + this.algProv;
+    };
+
+    /**
+     * completes hash calculation and returns hash result
+     * @name doFinal
+     * @memberOf KJUR.crypto.Mac
+     * @function
+     * @description
+     * @example
+     * md.digest()
+     */
+    this.doFinal = function() {
+	throw "digest() not supported for this alg/prov: " + this.algProv;
+    };
+
+    /**
+     * performs final update on the digest using string, then completes the digest computation
+     * @name doFinalString
+     * @memberOf KJUR.crypto.Mac
+     * @function
+     * @param {String} str string to final update
+     * @description
+     * @example
+     * md.digestString('aaa')
+     */
+    this.doFinalString = function(str) {
+	throw "digestString(str) not supported for this alg/prov: " + this.algProv;
+    };
+
+    /**
+     * performs final update on the digest using hexadecimal string, 
+     * then completes the digest computation
+     * @name doFinalHex
+     * @memberOf KJUR.crypto.Mac
+     * @function
+     * @param {String} hex hexadecimal string to final update
+     * @description
+     * @example
+     * md.digestHex('0f2abd')
+     */
+    this.doFinalHex = function(hex) {
+	throw "digestHex(hex) not supported for this alg/prov: " + this.algProv;
+    };
+
+    if (params !== undefined) {
+	if (params['pass'] !== undefined) {
+	    this.pass = params['pass'];
+	}
+	if (params['alg'] !== undefined) {
+	    this.algName = params['alg'];
+	    if (params['prov'] === undefined)
+		this.provName = KJUR.crypto.Util.DEFAULTPROVIDER[this.algName];
+	    this.setAlgAndProvider(this.algName, this.provName);
+	}
+    }
+};
 
 /**
  * Signature class which is very similar to java.security.Signature class
