@@ -1,6 +1,10 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.0.4 to 4.0.5 (2013-Aug-16)
+  - crypto 1.1.1 to 1.1.2
+    - KJUR.crypto.Mac (message authentication code) class added
+
 * Changes between 4.0.3 to 4.0.4 (2013-Jul-30)
   - rsasign 1.2.4 to 1.2.5
     - verifyStringPSS argument change from BigInteger object biSig 
