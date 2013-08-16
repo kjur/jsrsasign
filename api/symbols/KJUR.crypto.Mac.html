@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.crypto.ECDSA</title>
+		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.crypto.Mac</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -314,7 +314,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.crypto.ECDSA
+				Class KJUR.crypto.Mac
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -322,16 +322,16 @@ ul.inheritsList
 				
 				
 			
-				class for EC key generation,  ECDSA signing and verifcation
+				Mac class which is very similar to java.security.Mac class
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/ecdsa-modified-1.0.js.html">ecdsa-modified-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/crypto-1.1.js.html">crypto-1.1.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.crypto.ECDSA.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.crypto.Mac.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -344,12 +344,19 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.crypto.ECDSA.html#constructor">KJUR.crypto.ECDSA</a></b>()
+								<b><a href="../symbols/KJUR.crypto.Mac.html#constructor">KJUR.crypto.Mac</a></b>(params)
 							</div>
-							<div class="description">class for EC key generation,  ECDSA signing and verifcation
-<p>
-CAUTION: Most of the case, you don't need to use this class except
-for generating an EC key pair.</div>
+							<div class="description">Mac(Message Authentication Code) class which is very similar to java.security.Mac class
+<br/>
+Currently this supports following algorithm and providers combination:
+<ul>
+<li>hmacmd5 - cryptojs</li>
+<li>hmacsha1 - cryptojs</li>
+<li>hmacsha224 - cryptojs</li>
+<li>hmacsha256 - cryptojs</li>
+<li>hmacsha384 - cryptojs</li>
+<li>hmacsha512 - cryptojs</li>
+</ul></div>
 						</td>
 					</tr>
 				</tbody>
@@ -363,7 +370,7 @@ for generating an EC key pair.</div>
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.crypto.ECDSA.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.crypto.Mac.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -376,36 +383,51 @@ for generating an EC key pair.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.generateKeyPairHex">generateKeyPairHex</a></b>()
+								<div class="fixedFont">KJUR.crypto.Mac.<b><a href="../symbols/KJUR.crypto.Mac.html#.doFinal">doFinal</a></b>()
 								</div>
-								<div class="description">generate a EC key pair</div>
+								<div class="description">completes hash calculation and returns hash result
+</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.parseSigHex">parseSigHex</a></b>(sigHex)
+								<div class="fixedFont">KJUR.crypto.Mac.<b><a href="../symbols/KJUR.crypto.Mac.html#.doFinalHex">doFinalHex</a></b>(hex)
 								</div>
-								<div class="description">parse ASN.1 DER encoded ECDSA signature</div>
+								<div class="description">performs final update on the digest using hexadecimal string, 
+then completes the digest computation
+</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.signHex">signHex</a></b>(hashHex, privHex)
+								<div class="fixedFont">KJUR.crypto.Mac.<b><a href="../symbols/KJUR.crypto.Mac.html#.doFinalString">doFinalString</a></b>(str)
 								</div>
-								<div class="description">signing to message hash</div>
+								<div class="description">performs final update on the digest using string, then completes the digest computation
+</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.verifyHex">verifyHex</a></b>(hashHex, sigHex, pubkeyHex)
+								<div class="fixedFont">KJUR.crypto.Mac.<b><a href="../symbols/KJUR.crypto.Mac.html#.updateHex">updateHex</a></b>(hex)
 								</div>
-								<div class="description">verifying signature with message hash and public key</div>
+								<div class="description">update digest by specified hexadecimal string
+</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Mac.<b><a href="../symbols/KJUR.crypto.Mac.html#.updateString">updateString</a></b>(str)
+								</div>
+								<div class="description">update digest by specified string
+</div>
 							</td>
 						</tr>
 					
@@ -426,31 +448,44 @@ for generating an EC key pair.</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.crypto.ECDSA</b>()
+						<b>KJUR.crypto.Mac</b>(params)
 				</div>
 				
 				<div class="description">
-					class for EC key generation,  ECDSA signing and verifcation
-<p>
-CAUTION: Most of the case, you don't need to use this class except
-for generating an EC key pair. Please use <a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a> class instead.
-</p>
-<p>
-This class was originally developped by Stefan Thomas for Bitcoin JavaScript library.
-(See https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/src/ecdsa.js)
-Currently this class supports following named curves and their aliases.
+					Mac(Message Authentication Code) class which is very similar to java.security.Mac class
+<br/>
+Currently this supports following algorithm and providers combination:
 <ul>
-<li>secp256r1, NIST P-256, P-256, prime256v1 (*)</li>
-<li>secp256k1 (*)</li>
-<li>secp384r1, NIST P-384, P-384 (*)</li>
+<li>hmacmd5 - cryptojs</li>
+<li>hmacsha1 - cryptojs</li>
+<li>hmacsha224 - cryptojs</li>
+<li>hmacsha256 - cryptojs</li>
+<li>hmacsha384 - cryptojs</li>
+<li>hmacsha512 - cryptojs</li>
 </ul>
-</p>
 					
 				</div>
 				
 				
 				
+				<pre class="code">var mac = new KJUR.crypto.Mac({alg: "HmacSHA1", prov: "cryptojs", "pass": "pass"});
+mac.updateString('aaa')
+var macHex = md.doFinal()</pre>
 				
+				
+				
+				
+					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Array}</span>  <b>params</b>
+								
+							</dt>
+								<dd>parameters for constructor</dd>
+						
+						</dl>
 					
 					
 					
@@ -471,70 +506,54 @@ Currently this class supports following named curves and their aliases.
 					Method Detail
 				</div>
 				
-					<a name=".generateKeyPairHex"> </a>
+					<a name=".doFinal"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					<span class="light">{Array}</span>
-					<span class="light">KJUR.crypto.ECDSA.</span><b>generateKeyPairHex</b>()
+					
+					<span class="light">KJUR.crypto.Mac.</span><b>doFinal</b>()
 					
 					</div>
 					<div class="description">
-						generate a EC key pair
+						completes hash calculation and returns hash result
+
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
-var keypair = ec.generateKeyPairHex();
-var pubhex = keypair.ecpubhex; // hexadecimal string of EC private key (=d)
-var prvhex = keypair.ecprvhex; // hexadecimal string of EC public key</pre>
+					<pre class="code">md.digest()</pre>
 					
 					
 					
 						
 						
 						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>ecdsa-modified 1.0.1</dd>
-							</dl>
-							</dl>
 						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Array}</span> associative array of hexadecimal string of private and public key</dd>
-							
-							</dl>
 						
 						
 						
 
 					<hr />
 				
-					<a name=".parseSigHex"> </a>
+					<a name=".doFinalHex"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					<span class="light">{Array}</span>
-					<span class="light">KJUR.crypto.ECDSA.</span><b>parseSigHex</b>(sigHex)
+					
+					<span class="light">KJUR.crypto.Mac.</span><b>doFinalHex</b>(hex)
 					
 					</div>
 					<div class="description">
-						parse ASN.1 DER encoded ECDSA signature
+						performs final update on the digest using hexadecimal string, 
+then completes the digest computation
+
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
-var sig = ec.parseSigHex('30...');
-var biR = sig.r; // BigInteger object for 'r' field of signature.
-var biS = sig.s; // BigInteger object for 's' field of signature.</pre>
+					<pre class="code">md.digestHex('0f2abd')</pre>
 					
 					
 					
@@ -543,52 +562,39 @@ var biS = sig.s; // BigInteger object for 's' field of signature.</pre>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>sigHex</b>
+									<span class="light fixedFont">{String}</span> <b>hex</b>
 									
 								</dt>
-								<dd>hexadecimal string of ECDSA signature value</dd>
+								<dd>hexadecimal string to final update</dd>
 							
 							</dl>
 						
 						
 						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>ecdsa-modified 1.0.1</dd>
-							</dl>
-							</dl>
 						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Array}</span> associative array of signature field r and s</dd>
-							
-							</dl>
 						
 						
 						
 
 					<hr />
 				
-					<a name=".signHex"> </a>
+					<a name=".doFinalString"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					<span class="light">{String}</span>
-					<span class="light">KJUR.crypto.ECDSA.</span><b>signHex</b>(hashHex, privHex)
+					
+					<span class="light">KJUR.crypto.Mac.</span><b>doFinalString</b>(str)
 					
 					</div>
 					<div class="description">
-						signing to message hash
+						performs final update on the digest using string, then completes the digest computation
+
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
-var sigValue = ec.signHex(hash, prvKey);</pre>
+					<pre class="code">md.digestString('aaa')</pre>
 					
 					
 					
@@ -597,58 +603,39 @@ var sigValue = ec.signHex(hash, prvKey);</pre>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>hashHex</b>
+									<span class="light fixedFont">{String}</span> <b>str</b>
 									
 								</dt>
-								<dd>hexadecimal string of hash value of signing message</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>privHex</b>
-									
-								</dt>
-								<dd>hexadecimal string of EC private key</dd>
+								<dd>string to final update</dd>
 							
 							</dl>
 						
 						
 						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>ecdsa-modified 1.0.1</dd>
-							</dl>
-							</dl>
 						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> hexadecimal string of ECDSA signature</dd>
-							
-							</dl>
 						
 						
 						
 
 					<hr />
 				
-					<a name=".verifyHex"> </a>
+					<a name=".updateHex"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					<span class="light">{Boolean}</span>
-					<span class="light">KJUR.crypto.ECDSA.</span><b>verifyHex</b>(hashHex, sigHex, pubkeyHex)
+					
+					<span class="light">KJUR.crypto.Mac.</span><b>updateHex</b>(hex)
 					
 					</div>
 					<div class="description">
-						verifying signature with message hash and public key
+						update digest by specified hexadecimal string
+
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
-var result = ec.verifyHex(msgHashHex, sigHex, pubkeyHex);</pre>
+					<pre class="code">md.updateHex('0afe36');</pre>
 					
 					
 					
@@ -657,41 +644,57 @@ var result = ec.verifyHex(msgHashHex, sigHex, pubkeyHex);</pre>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>hashHex</b>
+									<span class="light fixedFont">{String}</span> <b>hex</b>
 									
 								</dt>
-								<dd>hexadecimal string of hash value of signing message</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sigHex</b>
-									
-								</dt>
-								<dd>hexadecimal string of signature value</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>pubkeyHex</b>
-									
-								</dt>
-								<dd>hexadecimal string of public key</dd>
+								<dd>hexadecimal string to update</dd>
 							
 							</dl>
 						
 						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".updateString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.Mac.</span><b>updateString</b>(str)
+					
+					</div>
+					<div class="description">
+						update digest by specified string
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">md.updateString('New York');</pre>
+					
+					
+					
 						
 							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>ecdsa-modified 1.0.1</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
+							<dt class="heading">Parameters:</dt>
 							
-								<dd><span class="light fixedFont">{Boolean}</span> true if the signature is valid, otherwise false</dd>
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>str</b>
+									
+								</dt>
+								<dd>string to update</dd>
 							
 							</dl>
+						
+						
+						
+						
 						
 						
 						
