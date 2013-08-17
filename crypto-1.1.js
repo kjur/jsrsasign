@@ -130,7 +130,7 @@ KJUR.crypto.Util = new function() {
      * @name getPaddedDigestInfoHex
      * @memberOf KJUR.crypto.Util
      * @function
-     * @param {String} hHash hexadecimal hash value
+     * @param {String} hHash hexadecimal hash value of message to be signed
      * @param {String} alg hash algorithm name (ex. 'sha1')
      * @param {Integer} keySize key bit length (ex. 1024)
      * @return {String} hexadecimal string of PKCS#1 padded DigestInfo
@@ -779,25 +779,14 @@ KJUR.crypto.Signature = function(params) {
 	    };
 
 	    this.sign = function() {
+		this.sHashHex = this.md.digest();
 		if (typeof this.ecprvhex != "undefined" &&
 		    typeof this.eccurvename != "undefined") {
 		    var ec = new KJUR.crypto.ECDSA({'curve': this.eccurvename});
-		    this.sHashHex = this.md.digest();
 		    this.hSign = ec.signHex(this.sHashHex, this.ecprvhex);
 		    return this.hSign;
 		} else {
-		    var util = KJUR.crypto.Util;
-		    var keyLen = this.prvKey.n.bitLength();
-		    this.sHashHex = this.md.digest();
-		    this.hDigestInfo = util.getDigestInfoHex(this.sHashHex, this.mdAlgName);
-		    this.hPaddedDigestInfo = 
-                        util.getPaddedDigestInfoHex(this.sHashHex, this.mdAlgName, keyLen);
-
-		    var biPaddedDigestInfo = parseBigInt(this.hPaddedDigestInfo, 16);
-		    this.hoge = biPaddedDigestInfo.toString(16);
-
-		    var biSign = this.prvKey.doPrivate(biPaddedDigestInfo);
-		    this.hSign = this._zeroPaddingOfSignature(biSign.toString(16), keyLen);
+		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex, this.mdAlgName);
 		    return this.hSign;
 		}
 	    };
@@ -810,29 +799,13 @@ KJUR.crypto.Signature = function(params) {
 		this.sign();
 	    };
 	    this.verify = function(hSigVal) {
+	        this.sHashHex = this.md.digest();
 		if (typeof this.ecpubhex != "undefined" &&
 		    typeof this.eccurvename != "undefined") {
-		    this.sHashHex = this.md.digest();
 		    var ec = new KJUR.crypto.ECDSA({curve: this.eccurvename});
 		    return ec.verifyHex(this.sHashHex, hSigVal, this.ecpubhex);
 		} else {
-		    var util = KJUR.crypto.Util;
-		    var keyLen = this.pubKey.n.bitLength();
-		    this.sHashHex = this.md.digest();
-
-		    var biSigVal = parseBigInt(hSigVal, 16);
-		    var biPaddedDigestInfo = this.pubKey.doPublic(biSigVal);
-		    this.hPaddedDigestInfo = biPaddedDigestInfo.toString(16);
-		    var s = this.hPaddedDigestInfo;
-		    s = s.replace(/^1ff+00/, '');
-
-		    var hDIHEAD = KJUR.crypto.Util.DIGESTINFOHEAD[this.mdAlgName];
-		    if (s.indexOf(hDIHEAD) != 0) {
-			return false;
-		    }
-		    var hHashFromDI = s.substr(hDIHEAD.length);
-		    //alert(hHashFromDI + "\n" + this.sHashHex);
-		    return (hHashFromDI == this.sHashHex);
+		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
 		}
 	    };
 	}
@@ -850,7 +823,9 @@ KJUR.crypto.Signature = function(params) {
      * following:
      * <ul>
      * <li>{@link RSAKey} object for RSA verification</li>
-     * <li>associative array for ECDSA verification (ex. <code>{'ecpubhex': '041f..', 'eccurvename': 'secp256r1'}</code>)</li>
+     * <li>associative array for ECDSA verification
+     *     (ex. <code>{'ecpubhex': '041f..', 'eccurvename': 'secp256r1'}</code>)
+     * </li>
      * </ul>
      * @example
      * sig.initVerifyByPublicKey(rsaPrvKey)
@@ -872,7 +847,8 @@ KJUR.crypto.Signature = function(params) {
      * sig.initVerifyByCertificatePEM(certPEM)
      */
     this.initVerifyByCertificatePEM = function(certPEM) {
-	throw "initVerifyByCertificatePEM(certPEM) not supported for this alg:prov=" + this.algProvName;
+	throw "initVerifyByCertificatePEM(certPEM) not supported for this alg:prov=" +
+	    this.algProvName;
     };
 
     /**
@@ -886,7 +862,8 @@ KJUR.crypto.Signature = function(params) {
      * following:
      * <ul>
      * <li>{@link RSAKey} object for RSA signing</li>
-     * <li>associative array for ECDSA signing (ex. <code>{'ecprvhex': '1d3f..', 'eccurvename': 'secp256r1'}</code>)</li>
+     * <li>associative array for ECDSA signing
+     *     (ex. <code>{'ecprvhex': '1d3f..', 'eccurvename': 'secp256r1'}</code>)</li>
      * </ul>
      * @example
      * sig.initSign(prvKey)

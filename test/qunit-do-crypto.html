@@ -25,7 +25,9 @@
 <script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
 <script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
 <script language="JavaScript" type="text/javascript" src="../x509-1.1.js"></script>
+
 
 <script type="text/javascript">
 <!--
@@ -146,7 +148,7 @@ test("MessageDigest empty provider", function() {
 });
 
 test("Signature class test", function() {
-  expect(20);
+  expect(11);
 
   var prvKey = new RSAKey();
   prvKey.readPrivateKeyFromASN1HexString(z1PrvHex); //=z1.prv.hex
@@ -160,9 +162,6 @@ test("Signature class test", function() {
   sig1.updateString("aaa");
   sig1.sign();
   equals(sig1.sHashHex, "7e240de74fb1ed08fa08d38063f6a6a91462a815", "updateString(aaa),sign sHashHex");
-  equals(sig1.hDigestInfo, "3021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815", "updateString(aaa),sign hDigestInfo");
-  equals(sig1.hPaddedDigestInfo, "0001ffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815", "updateString(aaa),sign hPaddedDigestInfo");
-
   // TSign.sig.bin
   equals(sig1.hSign, "d764dcacb137f2e92d9b4b73494995e16a4dae4dc5b27ecde744c9a1ecaaef9c99041544eae2108dca6559ae79d2fb3d87fa2b87699efa6dc8f3d0d2672c3b07", "updateString(aaa),sign hSign");
 
@@ -173,33 +172,26 @@ test("Signature class test", function() {
   s2.initSign(prvKey);
   s2.signString('aaa');
   equals(s2.sHashHex, "47bce5c74f589f4867dbd57e9ca9f808", "md5 aaa sHashHex");
-  equals(s2.hDigestInfo, "3020300c06082a864886f70d02050500041047bce5c74f589f4867dbd57e9ca9f808", "md5 aaa hDigestInfo");
 
   var s3 = new KJUR.crypto.Signature({"alg": "SHA256withRSA", "prov": "cryptojs/jsrsa"});
   s3.initSign(prvKey);
   s3.signString('aaa');
   equals(s3.sHashHex, "9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0", "sha256 aaa sHashHex");
-  equals(s3.hDigestInfo, "3031300d0609608648016503040201050004209834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0", "sha256 aaa hDigestInfo");
-  equals(s3.hPaddedDigestInfo, "0001ffffffffffffffffffff003031300d0609608648016503040201050004209834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0", "sha256 aaa hPaddedDigestInfo");
 
   var s4 = new KJUR.crypto.Signature({"alg": "SHA512withRSA", "prov": "cryptojs/jsrsa", "prvkeypem":z3pem});
   s4.signString('aaa');
   equals(s4.sHashHex, "d6f644b19812e97b5d871658d6d3400ecd4787faeb9b8990c1e7608288664be77257104a58d033bcf1a0e0945ff06468ebe53e2dff36e248424c7273117dac09", "sha512 aaa sHashHex");
-  equals(s4.hDigestInfo, "3051300d060960864801650304020305000440d6f644b19812e97b5d871658d6d3400ecd4787faeb9b8990c1e7608288664be77257104a58d033bcf1a0e0945ff06468ebe53e2dff36e248424c7273117dac09", "sha512 aaa hDigestInfo");
-  equals(s4.hPaddedDigestInfo, "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003051300d060960864801650304020305000440d6f644b19812e97b5d871658d6d3400ecd4787faeb9b8990c1e7608288664be77257104a58d033bcf1a0e0945ff06468ebe53e2dff36e248424c7273117dac09", "sha512 aaa hPaddedDigestInfo");
   equals(s4.hSign, "76b2b67a09e63f6125774c3130d71713930d1eed46c3ccd04558bcc473c571cef19f29443c464be972817cd7afa5f759f66f58e278034396273d5de92318eed1afda618db9e9a3221ad38e461bdd735bb065d1721ad140a426bf01e3ec2d68528b6874daf041cf2786f9f14878eac37ea708760f0f2abe1d2eab8d4977c66328", "sha512 aaa hSign"); // =TSign2.bin.hex
 
   var s5 = new KJUR.crypto.Signature({"alg": "SHA384withRSA", "prov": "cryptojs/jsrsa", "prvkeypem":z3pem});
   s5.signString('aaa');
   equals(s5.sHashHex, "8e07e5bdd64aa37536c1f257a6b44963cc327b7d7dcb2cb47a22073d33414462bfa184487cf372ce0a19dfc83f8336d8", "sha384 aaa sHashHex");
-  equals(s5.hDigestInfo, "3041300d0609608648016503040202050004308e07e5bdd64aa37536c1f257a6b44963cc327b7d7dcb2cb47a22073d33414462bfa184487cf372ce0a19dfc83f8336d8", "sha384 aaa hDigestInfo");
-  equals(s5.hPaddedDigestInfo, "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003041300d0609608648016503040202050004308e07e5bdd64aa37536c1f257a6b44963cc327b7d7dcb2cb47a22073d33414462bfa184487cf372ce0a19dfc83f8336d8", "sha384 aaa hPaddedDigestInfo");
   equals(s5.hSign, "0189dd20d5d589510d22035c41d89fdb79a75843989295233b35e015fe8d6a2283e78abc9526382583b599450f4602bee2899313a13e3df768e4361d823d25061109cb98783a1a34dd4738643afa002313e3a41857b11758b3b8e5b1e5b83081712d9bd042560ce8282768344aadcedab26b73afc11ebfb20490da5f54e89806", "sha384 aaa hSign"); // =TSign3.bin.hex
   //equals(s5.hPaddedDigestInfo.length, s5.hSign.length, "s5 len(hPaddedDigestInfo)=len(hSign)");
 });
 
 test("Signature class verify test1", function() {
-  expect(3);
+  expect(2);
   var pubKey = new RSAKey();
   pubKey.setPublic("e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd59", "10001"); //=z1.pub
   var s1 = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
@@ -207,7 +199,6 @@ test("Signature class verify test1", function() {
   s1.updateString('aaa');
   var r1 = s1.verify("d764dcacb137f2e92d9b4b73494995e16a4dae4dc5b27ecde744c9a1ecaaef9c99041544eae2108dca6559ae79d2fb3d87fa2b87699efa6dc8f3d0d2672c3b07");
   equals(s1.sHashHex, '7e240de74fb1ed08fa08d38063f6a6a91462a815', "document hash aaa sHashHex");
-  equals(s1.hPaddedDigestInfo, '1ffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815', "decrypted PaddedDigestInfo from Sig");
   equals(r1, true, "SHA1withRSA aaa verify");
 });
 
