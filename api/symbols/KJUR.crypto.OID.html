@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.asn1.x509.BasicConstraints</title>
+		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.crypto.OID</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -316,26 +316,24 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.x509.BasicConstraints
+				Class KJUR.crypto.OID
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
-				<br />Extends
-					<a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a>.<br />
 				
 			
-				BasicConstraints ASN.1 structure class
+				static object for cryptography related OIDs
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/crypto-1.1.js.html">crypto-1.1.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.BasicConstraints.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.crypto.OID.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -348,9 +346,9 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.x509.BasicConstraints.html#constructor">KJUR.asn1.x509.BasicConstraints</a></b>(params)
+								<b><a href="../symbols/KJUR.crypto.OID.html#constructor">KJUR.crypto.OID</a></b>()
 							</div>
-							<div class="description">BasicConstraints ASN.1 structure class
+							<div class="description">static object for cryptographic function utilities
 </div>
 						</td>
 					</tr>
@@ -362,11 +360,31 @@ ul.inheritsList
 			
 				
 				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class KJUR.crypto.OID.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/KJUR.crypto.OID.html#oidhex2name">oidhex2name</a></b>
+								</div>
+								<div class="description">key value of hexadecimal OID and its name
+          (ex.</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
 				
 				
-				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
-				</dl>
 				
 			
 
@@ -383,35 +401,25 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.x509.BasicConstraints</b>(params)
+						<b>KJUR.crypto.OID</b>()
 				</div>
 				
 				<div class="description">
-					BasicConstraints ASN.1 structure class
+					static object for cryptographic function utilities
 
 					
 				</div>
 				
 				
 				
-				<pre class="code"></pre>
 				
-				
-				
-				
+					
+					
 					
 						<dl class="detailList">
-						<dt class="heading">Parameters:</dt>
-						
-							<dt>
-								<span class="light fixedFont">{Array}</span>  <b>params</b>
-								
-							</dt>
-								<dd>associative array of parameters (ex. {'cA': true, 'critical': true})</dd>
-						
+						<dt class="heading">Since:</dt>
+							<dd>crypto 1.1.3</dd>
 						</dl>
-					
-					
 					
 					
 					
@@ -422,6 +430,34 @@ ul.inheritsList
 			
 
 <!-- ============================== field details ========================== -->		
+			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="oidhex2name"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>oidhex2name</b>
+					
+					</div>
+					<div class="description">
+						key value of hexadecimal OID and its name
+          (ex. '2a8648ce3d030107' and 'secp256r1')
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
 			
 
 <!-- ============================== method details ========================= -->		

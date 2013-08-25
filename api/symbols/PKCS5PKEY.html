@@ -295,6 +295,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.crypto.MessageDigest.html">KJUR.crypto.MessageDigest</a></li>
 	
+	<li><a href="../symbols/KJUR.crypto.OID.html">KJUR.crypto.OID</a></li>
+	
 	<li><a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a></li>
 	
 	<li><a href="../symbols/KJUR.crypto.Util.html">KJUR.crypto.Util</a></li>
@@ -453,9 +455,63 @@ generate PEM formatted encrypted PKCS#5 private key by
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getHexFromPEM">getHexFromPEM</a></b>(sPEM, sHead)
+								</div>
+								<div class="description">get hexacedimal string of PEM format</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getKeyAndUnusedIvByPasscodeAndIvsalt">getKeyAndUnusedIvByPasscodeAndIvsalt</a></b>(algName, passcode, hexadecimal)
 								</div>
 								<div class="description">the same function as OpenSSL EVP_BytsToKey to generate shared key and IV</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getKeyFromEncryptedPKCS8PEM">getKeyFromEncryptedPKCS8PEM</a></b>(pkcs8PEM, passcode)
+								</div>
+								<div class="description">get RSAKey/ECDSA private key object from encrypted PEM PKCS#8 private key</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getKeyFromPlainPrivatePKCS8Hex">getKeyFromPlainPrivatePKCS8Hex</a></b>(prvKeyHex)
+								</div>
+								<div class="description">get RSAKey/ECDSA private key object from HEX plain PEM PKCS#8 private key</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getKeyFromPlainPrivatePKCS8PEM">getKeyFromPlainPrivatePKCS8PEM</a></b>(pkcs8PEM)
+								</div>
+								<div class="description">get RSAKey/ECDSA private key object from PEM plain PEM PKCS#8 private key</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getKeyFromPublicPKCS8Hex">getKeyFromPublicPKCS8Hex</a></b>(pkcsPub8Hex)
+								</div>
+								<div class="description">get RSAKey/ECDSA public key object from hexadecimal string of PKCS#8 public key</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getKeyFromPublicPKCS8PEM">getKeyFromPublicPKCS8PEM</a></b>(pkcsPub8PEM)
+								</div>
+								<div class="description">get RSAKey/ECDSA public key object from PEM PKCS#8 public key</div>
 							</td>
 						</tr>
 					
@@ -542,7 +598,7 @@ Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 an
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.newEryptedPKCS5PEM">newEryptedPKCS5PEM</a></b>(passcode, keyLen, hPublicExponent, alg)
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.newEncryptedPKCS5PEM">newEncryptedPKCS5PEM</a></b>(passcode, keyLen, hPublicExponent, alg)
 								</div>
 								<div class="description">generate RSAKey and PEM formatted encrypted PKCS#5 private key</div>
 							</td>
@@ -573,6 +629,78 @@ Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 an
 								</div>
 								<div class="description">parse PEM formatted passcode protected PKCS#5 private key
 Resulted hash has following attributes.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.parsePlainPrivatePKCS8Hex">parsePlainPrivatePKCS8Hex</a></b>(pkcs8PrvHex)
+								</div>
+								<div class="description">parse hexadecimal string of plain PKCS#8 private key
+Resulted associative array has following properties:
+<ul>
+<li>algoid - hexadecimal string of OID of asymmetric key algorithm</li>
+<li>algparam - hexadecimal string of OID of ECC curve name or null</li>
+<li>keyidx - string starting index of key in pkcs8PrvHex</li>
+</ul></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.parsePrivateRawECKeyHexAtObj">parsePrivateRawECKeyHexAtObj</a></b>(pkcs8PrvHex)
+								</div>
+								<div class="description">parse hexadecimal string of ECC private key
+Following properties are added to associative array 'info'
+<ul>
+<li>key - hexadecimal string of ECC private key
+</ul></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.parsePrivateRawRSAKeyHexAtObj">parsePrivateRawRSAKeyHexAtObj</a></b>(pkcs8PrvHex)
+								</div>
+								<div class="description">parse hexadecimal string of RSA private key
+Following properties are added to associative array 'info'
+<ul>
+<li>n - hexadecimal string of public key
+<li>e - hexadecimal string of public exponent
+<li>d - hexadecimal string of private key
+<li>p - hexadecimal string
+<li>q - hexadecimal string
+<li>dp - hexadecimal string
+<li>dq - hexadecimal string
+<li>co - hexadecimal string
+</ul></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.parsePublicPKCS8Hex">parsePublicPKCS8Hex</a></b>(pkcs8PubHex)
+								</div>
+								<div class="description">parse hexadecimal string of PKCS#8 public key
+Resulted hash has following attributes.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.parsePublicRawRSAKeyHex">parsePublicRawRSAKeyHex</a></b>(pubRawRSAHex)
+								</div>
+								<div class="description">parse hexadecimal string of plain PKCS#8 private key
+Resulted associative array has following properties:
+<ul>
+<li>n - hexadecimal string of public key
+<li>e - hexadecimal string of public exponent
+</ul></div>
 							</td>
 						</tr>
 					
@@ -613,6 +741,35 @@ following symmetric key algorithms to protect private key.
 <li>AES-192-CBC</li>
 <li>AES-128-CBC</li>
 </ul>
+
+<h5>METHOD SUMMARY</h5>
+<dl>
+<dt><b>PKCS8 PRIVATE KEY METHODS</b><dd>
+<ul>
+<li><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromPlainPKCS8PEM">PKCS5PKEY.getRSAKeyFromPlainPKCS8PEM</a> - convert plain PKCS8 PEM to RSAKey object</li>
+<li><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromPlainPKCS8Hex">PKCS5PKEY.getRSAKeyFromPlainPKCS8Hex</a> - convert plain PKCS8 hexadecimal data to RSAKey object</li>
+<li><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromEncryptedPKCS8PEM">PKCS5PKEY.getRSAKeyFromEncryptedPKCS8PEM</a> - convert encrypted PKCS8 PEM to RSAKey object</li>
+<li><a href="../symbols/PKCS5PKEY.html#.getPlainPKCS8HexFromEncryptedPKCS8PEM">PKCS5PKEY.getPlainPKCS8HexFromEncryptedPKCS8PEM</a> - convert encrypted PKCS8 PEM to plain PKCS8 Hex</li>
+</ul>
+<dt><b>PKCS5 PRIVATE KEY METHODS</b><dd>
+<ul>
+<li><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromEncryptedPKCS5PEM">PKCS5PKEY.getRSAKeyFromEncryptedPKCS5PEM</a> - convert encrypted PKCS5 PEM to RSAKey object</li>
+<li>PKCS5PKEY.getEncryptedPKCS5PEMFromRSAKey - convert RSAKey object to encryped PKCS5 PEM</li>
+<li><a href="../symbols/PKCS5PKEY.html#.newEncryptedPKCS5PEM">PKCS5PKEY.newEncryptedPKCS5PEM</a> - generate RSAKey and its encrypted PKCS5 PEM</li>
+</ul>
+<dt><b>PKCS8 PUBLIC KEY METHODS</b><dd>
+<ul>
+<li><a href="../symbols/PKCS5PKEY.html#.getKeyFromPublicPKCS8PEM">PKCS5PKEY.getKeyFromPublicPKCS8PEM</a> - convert encrypted PKCS8 PEM to RSAKey/ECDSA object</li>
+<li><a href="../symbols/PKCS5PKEY.html#.getKeyFromPublicPKCS8Hex">PKCS5PKEY.getKeyFromPublicPKCS8Hex</a> - convert encrypted PKCS8 Hex to RSAKey/ECDSA object</li>
+<li><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromPublicPKCS8PEM">PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM</a> - convert encrypted PKCS8 PEM to RSAKey object</li>
+<li><a href="../symbols/PKCS5PKEY.html#.getRSAKeyFromPublicPKCS8Hex">PKCS5PKEY.getRSAKeyFromPublicPKCS8Hex</a> - convert encrypted PKCS8 Hex to RSAKey object</li>
+</ul>
+<dt><b>UTITILIY METHODS</b><dd>
+<ul>
+<li><a href="../symbols/PKCS5PKEY.html#.getHexFromPEM">PKCS5PKEY.getHexFromPEM</a> - convert PEM string to hexadecimal data</li>
+<li><a href="../symbols/PKCS5PKEY.html#.getDecryptedKeyHexByKeyIV">PKCS5PKEY.getDecryptedKeyHexByKeyIV</a> - decrypt key by sharedKey and IV</li>
+</ul>
+</dl>
 					
 				</div>
 				
@@ -954,6 +1111,61 @@ var pem = PKCS5PKEY.getEryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
 
 					<hr />
 				
+					<a name=".getHexFromPEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">PKCS5PKEY.</span><b>getHexFromPEM</b>(sPEM, sHead)
+					
+					</div>
+					<div class="description">
+						get hexacedimal string of PEM format
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sPEM</b>
+									
+								</dt>
+								<dd>PEM formatted string</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sHead</b>
+									
+								</dt>
+								<dd>PEM header string without BEGIN/END</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string data of PEM contents</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".getKeyAndUnusedIvByPasscodeAndIvsalt"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1001,6 +1213,257 @@ var pem = PKCS5PKEY.getEryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Hash}</span> hash of key and unused IV (ex. {keyhex:2fe3..., ivhex:3fad..})</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getKeyFromEncryptedPKCS8PEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">PKCS5PKEY.</span><b>getKeyFromEncryptedPKCS8PEM</b>(pkcs8PEM, passcode)
+					
+					</div>
+					<div class="description">
+						get RSAKey/ECDSA private key object from encrypted PEM PKCS#8 private key
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pkcs8PEM</b>
+									
+								</dt>
+								<dd>string of PEM formatted PKCS#8 private key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>passcode</b>
+									
+								</dt>
+								<dd>passcode string to decrypt key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> RSAKey or KJUR.crypto.ECDSA private key object</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getKeyFromPlainPrivatePKCS8Hex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">PKCS5PKEY.</span><b>getKeyFromPlainPrivatePKCS8Hex</b>(prvKeyHex)
+					
+					</div>
+					<div class="description">
+						get RSAKey/ECDSA private key object from HEX plain PEM PKCS#8 private key
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>prvKeyHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of plain PKCS#8 private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> RSAKey or KJUR.crypto.ECDSA private key object</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getKeyFromPlainPrivatePKCS8PEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">PKCS5PKEY.</span><b>getKeyFromPlainPrivatePKCS8PEM</b>(pkcs8PEM)
+					
+					</div>
+					<div class="description">
+						get RSAKey/ECDSA private key object from PEM plain PEM PKCS#8 private key
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pkcs8PEM</b>
+									
+								</dt>
+								<dd>string of plain PEM formatted PKCS#8 private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> RSAKey or KJUR.crypto.ECDSA private key object</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getKeyFromPublicPKCS8Hex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">PKCS5PKEY.</span><b>getKeyFromPublicPKCS8Hex</b>(pkcsPub8Hex)
+					
+					</div>
+					<div class="description">
+						get RSAKey/ECDSA public key object from hexadecimal string of PKCS#8 public key
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pkcsPub8Hex</b>
+									
+								</dt>
+								<dd>hexadecimal string of PKCS#8 public key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> RSAKey or KJUR.crypto.ECDSA private key object</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getKeyFromPublicPKCS8PEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">PKCS5PKEY.</span><b>getKeyFromPublicPKCS8PEM</b>(pkcsPub8PEM)
+					
+					</div>
+					<div class="description">
+						get RSAKey/ECDSA public key object from PEM PKCS#8 public key
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pkcsPub8PEM</b>
+									
+								</dt>
+								<dd>string of PEM formatted PKCS#8 public key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> RSAKey or KJUR.crypto.ECDSA private key object</dd>
 							
 							</dl>
 						
@@ -1463,11 +1926,11 @@ Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 an
 
 					<hr />
 				
-					<a name=".newEryptedPKCS5PEM"> </a>
+					<a name=".newEncryptedPKCS5PEM"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{String}</span>
-					<span class="light">PKCS5PKEY.</span><b>newEryptedPKCS5PEM</b>(passcode, keyLen, hPublicExponent, alg)
+					<span class="light">PKCS5PKEY.</span><b>newEncryptedPKCS5PEM</b>(passcode, keyLen, hPublicExponent, alg)
 					
 					</div>
 					<div class="description">
@@ -1646,6 +2109,277 @@ Resulted hash has following attributes.
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Hash}</span> hash of key information</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".parsePlainPrivatePKCS8Hex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">PKCS5PKEY.</span><b>parsePlainPrivatePKCS8Hex</b>(pkcs8PrvHex)
+					
+					</div>
+					<div class="description">
+						parse hexadecimal string of plain PKCS#8 private key
+Resulted associative array has following properties:
+<ul>
+<li>algoid - hexadecimal string of OID of asymmetric key algorithm</li>
+<li>algparam - hexadecimal string of OID of ECC curve name or null</li>
+<li>keyidx - string starting index of key in pkcs8PrvHex</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pkcs8PrvHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of PKCS#8 plain private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> associative array of parsed key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".parsePrivateRawECKeyHexAtObj"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">PKCS5PKEY.</span><b>parsePrivateRawECKeyHexAtObj</b>(pkcs8PrvHex)
+					
+					</div>
+					<div class="description">
+						parse hexadecimal string of ECC private key
+Following properties are added to associative array 'info'
+<ul>
+<li>key - hexadecimal string of ECC private key
+</ul>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pkcs8PrvHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of PKCS#8 private key concluding EC private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> info associative array to add parsed ECC private key information</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".parsePrivateRawRSAKeyHexAtObj"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">PKCS5PKEY.</span><b>parsePrivateRawRSAKeyHexAtObj</b>(pkcs8PrvHex)
+					
+					</div>
+					<div class="description">
+						parse hexadecimal string of RSA private key
+Following properties are added to associative array 'info'
+<ul>
+<li>n - hexadecimal string of public key
+<li>e - hexadecimal string of public exponent
+<li>d - hexadecimal string of private key
+<li>p - hexadecimal string
+<li>q - hexadecimal string
+<li>dp - hexadecimal string
+<li>dq - hexadecimal string
+<li>co - hexadecimal string
+</ul>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pkcs8PrvHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of PKCS#8 private key concluding RSA private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> info associative array to add parsed RSA private key information</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".parsePublicPKCS8Hex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Hash}</span>
+					<span class="light">PKCS5PKEY.</span><b>parsePublicPKCS8Hex</b>(pkcs8PubHex)
+					
+					</div>
+					<div class="description">
+						parse hexadecimal string of PKCS#8 public key
+Resulted hash has following attributes.
+<ul>
+<li>algoid - hexadecimal string of OID of asymmetric key algorithm</li>
+<li>algparam - hexadecimal string of OID of ECC curve name or null</li>
+<li>key - hexadecimal string of public key</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pkcs8PubHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of PKCS#8 public key</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Hash}</span> hash of key information</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".parsePublicRawRSAKeyHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">PKCS5PKEY.</span><b>parsePublicRawRSAKeyHex</b>(pubRawRSAHex)
+					
+					</div>
+					<div class="description">
+						parse hexadecimal string of plain PKCS#8 private key
+Resulted associative array has following properties:
+<ul>
+<li>n - hexadecimal string of public key
+<li>e - hexadecimal string of public exponent
+</ul>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pubRawRSAHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 encoded PKCS#8 public key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>pkcs5pkey 1.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> associative array of parsed key</dd>
 							
 							</dl>
 						

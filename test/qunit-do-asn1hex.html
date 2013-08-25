@@ -19,71 +19,63 @@
 $(document).ready(function(){
 
 test("ASN1HEX.getByteLengthOfL_AtObj", function() {
-  var ff = ASN1HEX.getByteLengthOfL_AtObj;
   expect(6);
-  equals(ff('020100', 0), 1, "checking L.len of 020100 is 1.");
-  equals(ff('020300', 0), 1, "checking L.len of 020300 is 1.");
-  equals(ff('02818003...', 0), 2, "checking L.len of 02818003... is 2.");
-  equals(ff('0282025b03...', 0), 3, "checking L.len of 0282025b03... is 3.");
-  equals(ff('0280020100...', 0), -1,
+  equals(ASN1HEX.getByteLengthOfL_AtObj('020100', 0), 1, "checking L.len of 020100 is 1.");
+  equals(ASN1HEX.getByteLengthOfL_AtObj('020300', 0), 1, "checking L.len of 020300 is 1.");
+  equals(ASN1HEX.getByteLengthOfL_AtObj('02818003...', 0), 2, "checking L.len of 02818003... is 2.");
+  equals(ASN1HEX.getByteLengthOfL_AtObj('0282025b03...', 0), 3, "checking L.len of 0282025b03... is 3.");
+  equals(ASN1HEX.getByteLengthOfL_AtObj('0280020100...', 0), -1,
          "checking L.len of 0280020100... is -1(indefinite length).");
-  equals(ff('ffff0201ab', 4), 1, "check L.len at 4 of ffff0201ab.");
+  equals(ASN1HEX.getByteLengthOfL_AtObj('ffff0201ab', 4), 1, "check L.len at 4 of ffff0201ab.");
 });
 
 test("ASN1HEX.getHexOfL_AtObj", function() {
-  var ff = ASN1HEX.getHexOfL_AtObj;
   expect(6);
-  equals(ff('020100', 0), '01', "check L octets of 020100.");
-  equals(ff('020300', 0), '03', "check L octets of 020300.");
-  equals(ff('02818003...', 0), '8180', "check L octets of 02818003.");
-  equals(ff('0282025b03...', 0), '82025b', "check L octets of 0282025b03.");
-  equals(ff('0280020100...', 0), '',
+  equals(ASN1HEX.getHexOfL_AtObj('020100', 0), '01', "check L octets of 020100.");
+  equals(ASN1HEX.getHexOfL_AtObj('020300', 0), '03', "check L octets of 020300.");
+  equals(ASN1HEX.getHexOfL_AtObj('02818003...', 0), '8180', "check L octets of 02818003.");
+  equals(ASN1HEX.getHexOfL_AtObj('0282025b03...', 0), '82025b', "check L octets of 0282025b03.");
+  equals(ASN1HEX.getHexOfL_AtObj('0280020100...', 0), '',
          "check L of 0280020100.(indefinite length).");
-  equals(ff('ffff0201ab', 4), '01', "check L octets at 4 of ffff0201ab.");
+  equals(ASN1HEX.getHexOfL_AtObj('ffff0201ab', 4), '01', "check L octets at 4 of ffff0201ab.");
 });
 
 test("ASN1HEX.getIntOfL_AtObj", function() {
-  var ff = ASN1HEX.getIntOfL_AtObj;
-
   expect(6);
-  equals(ff('020100', 0), 1, "check L of 020100.");
-  equals(ff('020300', 0), 3, "check L of 020300.");
-  equals(ff('02818003...', 0), 128, "check L of 02818003.");
-  equals(ff('0282025b03...', 0), 603, "check L of 0282025b03.");
-  equals(ff('0280020100...', 0), -1,
+  equals(ASN1HEX.getIntOfL_AtObj('020100', 0), 1, "check L of 020100.");
+  equals(ASN1HEX.getIntOfL_AtObj('020300', 0), 3, "check L of 020300.");
+  equals(ASN1HEX.getIntOfL_AtObj('02818003...', 0), 128, "check L of 02818003.");
+  equals(ASN1HEX.getIntOfL_AtObj('0282025b03...', 0), 603, "check L of 0282025b03.");
+  equals(ASN1HEX.getIntOfL_AtObj('0280020100...', 0), -1,
          "check of 0280020100.(indefinite length).");
-  equals(ff('ffff0201ab', 4), 1, "check L at 4 of ffff0201ab.");
+  equals(ASN1HEX.getIntOfL_AtObj('ffff0201ab', 4), 1, "check L at 4 of ffff0201ab.");
 });
 
 test("ASN1HEX.getStartPosOfV_AtObj", function() {
-  var ff = ASN1HEX.getStartPosOfV_AtObj;
-
   expect(6);
-  equals(ff('020100', 0), 4, "check V pos of 020100.");
-  equals(ff('020300', 0), 4, "check V pos of 020300.");
-  equals(ff('02818003...', 0), 6, "check V pos of 02818003.");
-  equals(ff('0282025b03...', 0), 8, "check V pos of 0282025b03.");
-  equals(ff('0280020100...', 0), -1,
+  equals(ASN1HEX.getStartPosOfV_AtObj('020100', 0), 4, "check V pos of 020100.");
+  equals(ASN1HEX.getStartPosOfV_AtObj('020300', 0), 4, "check V pos of 020300.");
+  equals(ASN1HEX.getStartPosOfV_AtObj('02818003...', 0), 6, "check V pos of 02818003.");
+  equals(ASN1HEX.getStartPosOfV_AtObj('0282025b03...', 0), 8, "check V pos of 0282025b03.");
+  equals(ASN1HEX.getStartPosOfV_AtObj('0280020100...', 0), -1,
          "check V pos of 0280020100.(indefinite length).");
-  equals(ff('ffff0201ab', 4), 8, "check V pos at 4 of ffff0201ab.");
+  equals(ASN1HEX.getStartPosOfV_AtObj('ffff0201ab', 4), 8, "check V pos at 4 of ffff0201ab.");
 });
 
 test("ASN1HEX.getHexOfV_AtObj", function() {
-  var ff = ASN1HEX.getHexOfV_AtObj;
   expect(6);
-  equals(ff('0201ab', 0), 'ab', "check V of 0201ab.");
-  equals(ff('0203012345', 0), '012345', "check V of 0203012345.");
-  equals(ff('ffff0201ab', 4), 'ab', "check V at 4 of ffff0201ab.");
-  equals(ff('024100EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7', 0), '00EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7', "check V of 024100EE...");
-  equals(ff('FFFF024100EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7FFFFFF', 4), '00EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7', "check V of FFFF024100EE... at 4 with garbage");
-  equals(ff('FFFF02818100D184617B5F8034655944839F785A63835555088A23D0B34E1A2E6BDF83C49BA2B1ECB398105EED1A21D513EA76F9AD3879843DB27E91765885BA33CCF45B1461C227205F08BCD07D5A2CF7FA9443CF2EF376F448503630699059002546D2F2EBA124478AC34704E3D83CD1E041178042A922FA3C541B3FDFEB072C5DC44A0021FFFF', 4), '00D184617B5F8034655944839F785A63835555088A23D0B34E1A2E6BDF83C49BA2B1ECB398105EED1A21D513EA76F9AD3879843DB27E91765885BA33CCF45B1461C227205F08BCD07D5A2CF7FA9443CF2EF376F448503630699059002546D2F2EBA124478AC34704E3D83CD1E041178042A922FA3C541B3FDFEB072C5DC44A0021', "check V of FFFF028181... at 4 with garbage");
+  equals(ASN1HEX.getHexOfV_AtObj('0201ab', 0), 'ab', "check V of 0201ab.");
+  equals(ASN1HEX.getHexOfV_AtObj('0203012345', 0), '012345', "check V of 0203012345.");
+  equals(ASN1HEX.getHexOfV_AtObj('ffff0201ab', 4), 'ab', "check V at 4 of ffff0201ab.");
+  equals(ASN1HEX.getHexOfV_AtObj('024100EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7', 0), '00EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7', "check V of 024100EE...");
+  equals(ASN1HEX.getHexOfV_AtObj('FFFF024100EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7FFFFFF', 4), '00EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7', "check V of FFFF024100EE... at 4 with garbage");
+  equals(ASN1HEX.getHexOfV_AtObj('FFFF02818100D184617B5F8034655944839F785A63835555088A23D0B34E1A2E6BDF83C49BA2B1ECB398105EED1A21D513EA76F9AD3879843DB27E91765885BA33CCF45B1461C227205F08BCD07D5A2CF7FA9443CF2EF376F448503630699059002546D2F2EBA124478AC34704E3D83CD1E041178042A922FA3C541B3FDFEB072C5DC44A0021FFFF', 4), '00D184617B5F8034655944839F785A63835555088A23D0B34E1A2E6BDF83C49BA2B1ECB398105EED1A21D513EA76F9AD3879843DB27E91765885BA33CCF45B1461C227205F08BCD07D5A2CF7FA9443CF2EF376F448503630699059002546D2F2EBA124478AC34704E3D83CD1E041178042A922FA3C541B3FDFEB072C5DC44A0021', "check V of FFFF028181... at 4 with garbage");
 });
 
 test("ASN1HEX.getPosOfNextSibling_AtObj", function() {
-  var ff = ASN1HEX.getPosOfNextSibling_AtObj;
   expect(2);
-  equals(ff('ff0201ab0201cdff', 2), 8, "next sibling of ff0201ab...");
-  equals(ff('ff0202abab0201cdff', 2), 10, "next sibling of ff0202ab...");
+  equals(ASN1HEX.getPosOfNextSibling_AtObj('ff0201ab0201cdff', 2), 8, "next sibling of ff0201ab...");
+  equals(ASN1HEX.getPosOfNextSibling_AtObj('ff0202abab0201cdff', 2), 10, "next sibling of ff0202ab...");
 });
 
 test("ASN1HEX.getPosArrayOfChildren_AtObj", function() { 

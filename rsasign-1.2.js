@@ -1,9 +1,9 @@
-/*! rsasign-1.2.6.js (c) 2012 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! rsasign-1.2.7.js (c) 2012 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * rsa-sign.js - adding signing functions to RSAKey class.
  *
- * version: 1.2.6 (2013 Aug 17)
+ * version: 1.2.7 (2013 Aug 25)
  *
  * Copyright (c) 2010-2013 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -18,7 +18,7 @@
  * @fileOverview
  * @name rsasign-1.2.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.2.6
+ * @version rsasign 1.2.7
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -69,6 +69,7 @@ function _rsasign_signString(s, hashAlg) {
  * @param {String} sHashHex hexadecimal string of hash value of message to be signed.
  * @param {String} hashAlg hash algorithm name for signing.<br/>
  * @return returns hexadecimal string of signature value.
+ * @since rsasign 1.2.6
  */
 function _rsasign_signWithMessageHash(sHashHex, hashAlg) {
     var hPM = KJUR.crypto.Util.getPaddedDigestInfoHex(sHashHex, hashAlg, this.n.bitLength());
@@ -109,21 +110,53 @@ function pss_mgf1_str(seed, len, hash) {
  * @function
  * @param {String} s message string to be signed.
  * @param {String} hashAlg hash algorithm name for signing.
- * @param {Integer} sLen salt length (-1 or -2)
+ * @param {Integer} sLen salt byte length from 0 to (keybytelen - hashbytelen - 2).
+ *        There are two special values:
+ *        <ul>
+ *        <li>-1: sets the salt length to the digest length</li>
+ *        <li>-2: sets the salt length to maximum permissible value
+ *           (i.e. keybytelen - hashbytelen - 2)</li>
+ *        </ul>
+ *        DEFAULT is -1. (NOTE: OpenSSL's default is -2.)
  * @return returns hexadecimal string of signature value.
  */
 function _rsasign_signStringPSS(s, hashAlg, sLen) {
     var hashFunc = function(sHex) { return KJUR.crypto.Util.hashHex(sHex, hashAlg); } 
     var hHash = hashFunc(rstrtohex(s));
+
+    if (sLen === undefined) sLen = -1;
+    return this.signWithMessageHashPSS(hHash, hashAlg, sLen);
+}
+
+/**
+ * sign hash value of message with RSA private key by PKCS#1 PSS signing.<br/>
+ * @name signWithMessageHashPSS
+ * @memberOf RSAKey
+ * @function
+ * @param {String} hHash hexadecimal hash value of message to be signed.
+ * @param {String} hashAlg hash algorithm name for signing.
+ * @param {Integer} sLen salt byte length from 0 to (keybytelen - hashbytelen - 2).
+ *        There are two special values:
+ *        <ul>
+ *        <li>-1: sets the salt length to the digest length</li>
+ *        <li>-2: sets the salt length to maximum permissible value
+ *           (i.e. keybytelen - hashbytelen - 2)</li>
+ *        </ul>
+ *        DEFAULT is -1. (NOTE: OpenSSL's default is -2.)
+ * @return returns hexadecimal string of signature value.
+ * @since rsasign 1.2.6
+ */
+function _rsasign_signWithMessageHashPSS(hHash, hashAlg, sLen) {
     var mHash = hextorstr(hHash);
     var hLen = mHash.length;
     var emBits = this.n.bitLength() - 1;
     var emLen = Math.ceil(emBits / 8);
     var i;
+    var hashFunc = function(sHex) { return KJUR.crypto.Util.hashHex(sHex, hashAlg); } 
 
-    if (sLen === -1) {
+    if (sLen === -1 || sLen === undefined) {
         sLen = hLen; // same as hash length
-    } else if ((sLen === -2) || (sLen === undefined)) {
+    } else if (sLen === -2) {
         sLen = emLen - hLen - 2; // maximum
     } else if (sLen < -2) {
         throw "invalid salt length";
@@ -253,6 +286,7 @@ function _rsasign_verifyString(sMsg, hSig) {
  * @param {String} hSig hexadecimal string of siganture.<br/>
  *                 non-hexadecimal charactors including new lines will be ignored.
  * @return returns 1 if valid, otherwise 0
+ * @since rsasign 1.2.6
  */
 function _rsasign_verifyWithMessageHash(sHashHex, hSig) {
     hSig = hSig.replace(_RE_HEXDECONLY, '');
@@ -277,10 +311,44 @@ function _rsasign_verifyWithMessageHash(sHashHex, hSig) {
  * @param {String} sMsg message string to be verified.
  * @param {String} hSig hexadecimal string of signature value
  * @param {String} hashAlg hash algorithm name
- * @param {Integer} sLen salt length for PSS signature (-1 or -2)
+ * @param {Integer} sLen salt byte length from 0 to (keybytelen - hashbytelen - 2).
+ *        There are two special values:
+ *        <ul>
+ *        <li>-1: sets the salt length to the digest length</li>
+ *        <li>-2: sets the salt length to maximum permissible value
+ *           (i.e. keybytelen - hashbytelen - 2)</li>
+ *        </ul>
+ *        DEFAULT is -1. (NOTE: OpenSSL's default is -2.)
  * @return returns true if valid, otherwise false
  */
 function _rsasign_verifyStringPSS(sMsg, hSig, hashAlg, sLen) {
+    var hashFunc = function(sHex) { return KJUR.crypto.Util.hashHex(sHex, hashAlg); };
+    var hHash = hashFunc(rstrtohex(sMsg));
+
+    if (sLen === undefined) sLen = -1;
+    return this.verifyWithMessageHashPSS(hHash, hSig, hashAlg, sLen);
+}
+
+/**
+ * verifies a sigature for a hash value of message string with RSA public key by PKCS#1 PSS sign.<br/>
+ * @name verifyWithMessageHashPSS
+ * @memberOf RSAKey
+ * @function
+ * @param {String} hHash hexadecimal hash value of message string to be verified.
+ * @param {String} hSig hexadecimal string of signature value
+ * @param {String} hashAlg hash algorithm name
+ * @param {Integer} sLen salt byte length from 0 to (keybytelen - hashbytelen - 2).
+ *        There are two special values:
+ *        <ul>
+ *        <li>-1: sets the salt length to the digest length</li>
+ *        <li>-2: sets the salt length to maximum permissible value
+ *           (i.e. keybytelen - hashbytelen - 2)</li>
+ *        </ul>
+ *        DEFAULT is -1 (NOTE: OpenSSL's default is -2.)
+ * @return returns true if valid, otherwise false
+ * @since rsasign 1.2.6
+ */
+function _rsasign_verifyWithMessageHashPSS(hHash, hSig, hashAlg, sLen) {
     var biSig = new BigInteger(hSig, 16);
 
     if (biSig.bitLength() > this.n.bitLength()) {
@@ -288,16 +356,15 @@ function _rsasign_verifyStringPSS(sMsg, hSig, hashAlg, sLen) {
     }
 
     var hashFunc = function(sHex) { return KJUR.crypto.Util.hashHex(sHex, hashAlg); };
-    var hHash = hashFunc(rstrtohex(sMsg));
     var mHash = hextorstr(hHash);
     var hLen = mHash.length;
     var emBits = this.n.bitLength() - 1;
     var emLen = Math.ceil(emBits / 8);
     var i;
 
-    if (sLen === -1) {
+    if (sLen === -1 || sLen === undefined) {
         sLen = hLen; // same as hash length
-    } else if ((sLen === -2) || (sLen === undefined)) {
+    } else if (sLen === -2) {
         sLen = emLen - hLen - 2; // recover
     } else if (sLen < -2) {
         throw "invalid salt length";
@@ -364,6 +431,8 @@ RSAKey.prototype.signStringWithSHA256 = _rsasign_signStringWithSHA256;
 RSAKey.prototype.sign = _rsasign_signString;
 RSAKey.prototype.signWithSHA1 = _rsasign_signStringWithSHA1;
 RSAKey.prototype.signWithSHA256 = _rsasign_signStringWithSHA256;
+
+RSAKey.prototype.signWithMessageHashPSS = _rsasign_signWithMessageHashPSS;
 RSAKey.prototype.signStringPSS = _rsasign_signStringPSS;
 RSAKey.prototype.signPSS = _rsasign_signStringPSS;
 RSAKey.SALT_LEN_HLEN = -1;
@@ -374,6 +443,8 @@ RSAKey.prototype.verifyString = _rsasign_verifyString;
 RSAKey.prototype.verifyHexSignatureForMessage = _rsasign_verifyHexSignatureForMessage;
 RSAKey.prototype.verify = _rsasign_verifyString;
 RSAKey.prototype.verifyHexSignatureForByteArrayMessage = _rsasign_verifyHexSignatureForMessage;
+
+RSAKey.prototype.verifyWithMessageHashPSS = _rsasign_verifyWithMessageHashPSS;
 RSAKey.prototype.verifyStringPSS = _rsasign_verifyStringPSS;
 RSAKey.prototype.verifyPSS = _rsasign_verifyStringPSS;
 RSAKey.SALT_LEN_RECOVER = -2;

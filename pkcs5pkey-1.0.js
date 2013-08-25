@@ -1,20 +1,21 @@
-/*! pkcs5pkey-1.0.4.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! pkcs5pkey-1.0.5.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
-// pkcs5pkey.js - reading passcode protected PKCS#5 PEM formatted RSA private key
-//
-// Copyright (c) 2013 Kenji Urushima (kenji.urushima@gmail.com)
-//
-// This software is licensed under the terms of the MIT License.
-// http://kjur.github.com/jsrsasign/license
-//
-// The above copyright and license notice shall be 
-// included in all copies or substantial portions of the Software.
-
+/*
+ * pkcs5pkey.js - reading passcode protected PKCS#5 PEM formatted RSA private key
+ *
+ * Copyright (c) 2013 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * http://kjur.github.com/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ */
 /**
  * @fileOverview
  * @name pkcs5pkey-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version pkcs5pkey 1.0.4 (2013-Jul-29)
+ * @version pkcs5pkey 1.0.5 (2013-Aug-20)
  * @since jsrsasign 2.0.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -39,6 +40,35 @@
  * <li>AES-192-CBC</li>
  * <li>AES-128-CBC</li>
  * </ul>
+ * 
+ * <h5>METHOD SUMMARY</h5>
+ * <dl>
+ * <dt><b>PKCS8 PRIVATE KEY METHODS</b><dd>
+ * <ul>
+ * <li>{@link PKCS5PKEY.getRSAKeyFromPlainPKCS8PEM} - convert plain PKCS8 PEM to RSAKey object</li>
+ * <li>{@link PKCS5PKEY.getRSAKeyFromPlainPKCS8Hex} - convert plain PKCS8 hexadecimal data to RSAKey object</li>
+ * <li>{@link PKCS5PKEY.getRSAKeyFromEncryptedPKCS8PEM} - convert encrypted PKCS8 PEM to RSAKey object</li>
+ * <li>{@link PKCS5PKEY.getPlainPKCS8HexFromEncryptedPKCS8PEM} - convert encrypted PKCS8 PEM to plain PKCS8 Hex</li>
+ * </ul>
+ * <dt><b>PKCS5 PRIVATE KEY METHODS</b><dd>
+ * <ul>
+ * <li>{@link PKCS5PKEY.getRSAKeyFromEncryptedPKCS5PEM} - convert encrypted PKCS5 PEM to RSAKey object</li>
+ * <li>{@link PKCS5PKEY.getEncryptedPKCS5PEMFromRSAKey} - convert RSAKey object to encryped PKCS5 PEM</li>
+ * <li>{@link PKCS5PKEY.newEncryptedPKCS5PEM} - generate RSAKey and its encrypted PKCS5 PEM</li>
+ * </ul>
+ * <dt><b>PKCS8 PUBLIC KEY METHODS</b><dd>
+ * <ul>
+ * <li>{@link PKCS5PKEY.getKeyFromPublicPKCS8PEM} - convert encrypted PKCS8 PEM to RSAKey/ECDSA object</li>
+ * <li>{@link PKCS5PKEY.getKeyFromPublicPKCS8Hex} - convert encrypted PKCS8 Hex to RSAKey/ECDSA object</li>
+ * <li>{@link PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM} - convert encrypted PKCS8 PEM to RSAKey object</li>
+ * <li>{@link PKCS5PKEY.getRSAKeyFromPublicPKCS8Hex} - convert encrypted PKCS8 Hex to RSAKey object</li>
+ * </ul>
+ * <dt><b>UTITILIY METHODS</b><dd>
+ * <ul>
+ * <li>{@link PKCS5PKEY.getHexFromPEM} - convert PEM string to hexadecimal data</li>
+ * <li>{@link PKCS5PKEY.getDecryptedKeyHexByKeyIV} - decrypt key by sharedKey and IV</li>
+ * </ul>
+ * </dl>
  * 
  * @example
  * Here is an example of PEM formatted encrypted PKCS#5 private key.
@@ -208,6 +238,7 @@ var PKCS5PKEY = function() {
     // *** PUBLIC PROPERTIES AND METHODS *******************************
     // *****************************************************************
     return {
+        // -- UTILITY METHODS ------------------------------------------------------------
 	/**
          * decrypt private key by shared key
 	 * @name version
@@ -215,8 +246,18 @@ var PKCS5PKEY = function() {
 	 * @property {String} version
 	 * @description version string of PKCS5PKEY class
 	 */
-	version: "1.0.0",
+	version: "1.0.5",
 
+	/**
+         * get hexacedimal string of PEM format
+	 * @name getHexFromPEM
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} sPEM PEM formatted string
+	 * @param {String} sHead PEM header string without BEGIN/END
+	 * @return {String} hexadecimal string data of PEM contents
+	 * @since pkcs5pkey 1.0.5
+	 */
         getHexFromPEM: function(sPEM, sHead) {
 	    var s = sPEM;
 	    if (s.indexOf("BEGIN " + sHead) == -1) {
@@ -265,6 +306,7 @@ var PKCS5PKEY = function() {
         parsePKCS5PEM: function(sPKCS5PEM) {
 	    return _parsePKCS5PEM(sPKCS5PEM);
 	},
+
 	/**
          * the same function as OpenSSL EVP_BytsToKey to generate shared key and IV
 	 * @name getKeyAndUnusedIvByPasscodeAndIvsalt
@@ -278,6 +320,7 @@ var PKCS5PKEY = function() {
 	getKeyAndUnusedIvByPasscodeAndIvsalt: function(algName, passcode, ivsaltHex) {
 	    return _getKeyAndUnusedIvByPasscodeAndIvsalt(algName, passcode, ivsaltHex);
 	},
+
         decryptKeyB64: function(privateKeyB64, sharedKeyAlgName, sharedKeyHex, ivsaltHex) {
 	    return _decryptKeyB64(privateKeyB64, sharedKeyAlgName, sharedKeyHex, ivsaltHex);
         },
@@ -434,7 +477,7 @@ var PKCS5PKEY = function() {
 
 	/**
          * generate RSAKey and PEM formatted encrypted PKCS#5 private key
-	 * @name newEryptedPKCS5PEM
+	 * @name newEncryptedPKCS5PEM
 	 * @memberOf PKCS5PKEY
 	 * @function
 	 * @param {String} passcode pass code to protect private key (ex. password)
@@ -448,7 +491,7 @@ var PKCS5PKEY = function() {
 	 * var pem2 = PKCS5PKEY.newEncryptedPKCS5PEM("password", 512);      // RSA 512bit/10001/AES-256-CBC
 	 * var pem3 = PKCS5PKEY.newEncryptedPKCS5PEM("password", 512, '3'); // RSA 512bit/    3/AES-256-CBC
 	 */
-	newEryptedPKCS5PEM: function(passcode, keyLen, hPublicExponent, alg) {
+	newEncryptedPKCS5PEM: function(passcode, keyLen, hPublicExponent, alg) {
 	    if (typeof keyLen == "undefined" || keyLen == null) {
 		keyLen = 1024;
 	    }
@@ -696,6 +739,123 @@ var PKCS5PKEY = function() {
 	    return rsaKey;
         },
 
+	/**
+         * get RSAKey/ECDSA private key object from encrypted PEM PKCS#8 private key
+	 * @name getKeyFromEncryptedPKCS8PEM
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} pkcs8PEM string of PEM formatted PKCS#8 private key
+	 * @param {String} passcode passcode string to decrypt key
+	 * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
+	 * @since pkcs5pkey 1.0.5
+	 */
+        getKeyFromEncryptedPKCS8PEM: function(pkcs8PEM, passcode) {
+	    var prvKeyHex = this.getPlainPKCS8HexFromEncryptedPKCS8PEM(pkcs8PEM, passcode);
+	    var key = this.getKeyFromPlainPrivatePKCS8Hex(prvKeyHex);
+	    return key;
+        },
+
+	/**
+         * parse hexadecimal string of plain PKCS#8 private key
+	 * @name parsePlainPrivatePKCS8Hex
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} pkcs8PrvHex hexadecimal string of PKCS#8 plain private key
+	 * @return {Array} associative array of parsed key
+	 * @since pkcs5pkey 1.0.5
+	 * @description
+	 * Resulted associative array has following properties:
+	 * <ul>
+	 * <li>algoid - hexadecimal string of OID of asymmetric key algorithm</li>
+	 * <li>algparam - hexadecimal string of OID of ECC curve name or null</li>
+	 * <li>keyidx - string starting index of key in pkcs8PrvHex</li>
+	 * </ul>
+	 */
+	parsePlainPrivatePKCS8Hex: function(pkcs8PrvHex) {
+	    var result = {};
+	    result.algparam = null;
+
+	    // 1. sequence
+	    if (pkcs8PrvHex.substr(0, 2) != "30")
+		throw "malformed plain PKCS8 private key(code:001)"; // not sequence
+
+	    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PrvHex, 0);
+	    if (a1.length != 3)
+		throw "malformed plain PKCS8 private key(code:002)";
+
+	    // 2. AlgID
+            if (pkcs8PrvHex.substr(a1[1], 2) != "30")
+                throw "malformed PKCS8 private key(code:003)"; // AlgId not sequence
+
+            var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PrvHex, a1[1]);
+            if (a2.length != 2)
+                throw "malformed PKCS8 private key(code:004)"; // AlgId not have two elements
+
+	    // 2.1. AlgID OID
+	    if (pkcs8PrvHex.substr(a2[0], 2) != "06")
+		throw "malformed PKCS8 private key(code:005)"; // AlgId.oid is not OID
+
+	    result.algoid = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a2[0]);
+
+	    // 2.2. AlgID param
+	    if (pkcs8PrvHex.substr(a2[1], 2) == "06") {
+		result.algparam = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a2[1]);
+	    }
+
+	    // 3. Key index
+	    if (pkcs8PrvHex.substr(a1[2], 2) != "04")
+		throw "malformed PKCS8 private key(code:006)"; // not octet string
+
+	    result.keyidx = ASN1HEX.getStartPosOfV_AtObj(pkcs8PrvHex, a1[2]);
+
+	    return result;
+        },
+
+	/**
+         * get RSAKey/ECDSA private key object from PEM plain PEM PKCS#8 private key
+	 * @name getKeyFromPlainPrivatePKCS8PEM
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} pkcs8PEM string of plain PEM formatted PKCS#8 private key
+	 * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
+	 * @since pkcs5pkey 1.0.5
+	 */
+	getKeyFromPlainPrivatePKCS8PEM: function(prvKeyPEM) {
+	    var prvKeyHex = this.getHexFromPEM(prvKeyPEM, "PRIVATE KEY");
+	    var key = this.getKeyFromPlainPrivatePKCS8Hex(prvKeyHex);
+	    return key;
+	},
+
+	/**
+         * get RSAKey/ECDSA private key object from HEX plain PEM PKCS#8 private key
+	 * @name getKeyFromPlainPrivatePKCS8Hex
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} prvKeyHex hexadecimal string of plain PKCS#8 private key
+	 * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
+	 * @since pkcs5pkey 1.0.5
+	 */
+	getKeyFromPlainPrivatePKCS8Hex: function(prvKeyHex) {
+	    var p8 = this.parsePlainPrivatePKCS8Hex(prvKeyHex);
+	    
+	    if (p8.algoid == "2a864886f70d010101") { // RSA
+		this.parsePrivateRawRSAKeyHexAtObj(prvKeyHex, p8);
+		var k = p8.key;
+		var key = new RSAKey();
+		key.setPrivateEx(k.n, k.e, k.d, k.p, k.q, k.dp, k.dq, k.co);
+		return key;
+	    } else if (p8.algoid == "2a8648ce3d0201") { // ECC
+		this.parsePrivateRawECKeyHexAtObj(prvKeyHex, p8);
+		if (KJUR.crypto.OID.oidhex2name[p8.algparam] === undefined)
+		    throw "KJUR.crypto.OID.oidhex2name undefined: " + p8.algparam;
+		var curveName = KJUR.crypto.OID.oidhex2name[p8.algparam];
+		var key = new KJUR.crypto.ECDSA({'curve': curveName, 'prv': p8.key});
+		return key;
+	    } else {
+		throw "unsupported private key algorithm";
+	    }
+	},
+
 	// === PKCS8 RSA Public Key ================================================
 	/**
          * read PEM formatted PKCS#8 public key and returns RSAKey object
@@ -711,6 +871,220 @@ var PKCS5PKEY = function() {
             var rsaKey = this.getRSAKeyFromPublicPKCS8Hex(pubKeyHex);
 	    return rsaKey;
 	},
+
+	/**
+         * get RSAKey/ECDSA public key object from PEM PKCS#8 public key
+	 * @name getKeyFromPublicPKCS8PEM
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} pkcsPub8PEM string of PEM formatted PKCS#8 public key
+	 * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
+	 * @since pkcs5pkey 1.0.5
+	 */
+        getKeyFromPublicPKCS8PEM: function(pkcs8PubPEM) {
+            var pubKeyHex = this.getHexFromPEM(pkcs8PubPEM, "PUBLIC KEY");
+            var key = this.getKeyFromPublicPKCS8Hex(pubKeyHex);
+	    return key;
+	},
+
+	/**
+         * get RSAKey/ECDSA public key object from hexadecimal string of PKCS#8 public key
+	 * @name getKeyFromPublicPKCS8Hex
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} pkcsPub8Hex hexadecimal string of PKCS#8 public key
+	 * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
+	 * @since pkcs5pkey 1.0.5
+	 */
+        getKeyFromPublicPKCS8Hex: function(pkcs8PubHex) {
+	    var p8 = this.parsePublicPKCS8Hex(pkcs8PubHex);
+	    
+	    if (p8.algoid == "2a864886f70d010101") { // RSA
+		var aRSA = this.parsePublicRawRSAKeyHex(p8.key);
+		var key = new RSAKey();
+		key.setPublic(aRSA.n, aRSA.e);
+		return key;
+	    } else if (p8.algoid == "2a8648ce3d0201") { // ECC
+		if (KJUR.crypto.OID.oidhex2name[p8.algparam] === undefined)
+		    throw "KJUR.crypto.OID.oidhex2name undefined: " + p8.algparam;
+		var curveName = KJUR.crypto.OID.oidhex2name[p8.algparam];
+		var key = new KJUR.crypto.ECDSA({'curve': curveName, 'pub': p8.key});
+		return key;
+	    } else {
+		throw "unsupported public key algorithm";
+	    }
+	},
+
+	/**
+         * parse hexadecimal string of plain PKCS#8 private key
+	 * @name parsePublicRawRSAKeyHex
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} pubRawRSAHex hexadecimal string of ASN.1 encoded PKCS#8 public key
+	 * @return {Array} associative array of parsed key
+	 * @since pkcs5pkey 1.0.5
+	 * @description
+	 * Resulted associative array has following properties:
+	 * <ul>
+	 * <li>n - hexadecimal string of public key
+	 * <li>e - hexadecimal string of public exponent
+	 * </ul>
+	 */
+	parsePublicRawRSAKeyHex: function(pubRawRSAHex) {
+	    var result = {};
+	    
+	    // 1. Sequence
+	    if (pubRawRSAHex.substr(0, 2) != "30")
+		throw "malformed RSA key(code:001)"; // not sequence
+	    
+	    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pubRawRSAHex, 0);
+	    if (a1.length != 2)
+		throw "malformed RSA key(code:002)"; // not 2 items in seq
+
+	    // 2. public key "N"
+	    if (pubRawRSAHex.substr(a1[0], 2) != "02")
+		throw "malformed RSA key(code:003)"; // 1st item is not integer
+
+	    result.n = ASN1HEX.getHexOfV_AtObj(pubRawRSAHex, a1[0]);
+
+	    // 3. public key "E"
+	    if (pubRawRSAHex.substr(a1[1], 2) != "02")
+		throw "malformed RSA key(code:004)"; // 2nd item is not integer
+
+	    result.e = ASN1HEX.getHexOfV_AtObj(pubRawRSAHex, a1[1]);
+
+	    return result;
+	},
+
+	/**
+         * parse hexadecimal string of RSA private key
+	 * @name parsePrivateRawRSAKeyHexAtObj
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} pkcs8PrvHex hexadecimal string of PKCS#8 private key concluding RSA private key
+	 * @return {Array} info associative array to add parsed RSA private key information
+	 * @since pkcs5pkey 1.0.5
+	 * @description
+	 * Following properties are added to associative array 'info'
+	 * <ul>
+	 * <li>n - hexadecimal string of public key
+	 * <li>e - hexadecimal string of public exponent
+	 * <li>d - hexadecimal string of private key
+	 * <li>p - hexadecimal string
+	 * <li>q - hexadecimal string
+	 * <li>dp - hexadecimal string
+	 * <li>dq - hexadecimal string
+	 * <li>co - hexadecimal string
+	 * </ul>
+	 */
+	parsePrivateRawRSAKeyHexAtObj: function(pkcs8PrvHex, info) {
+	    var keyIdx = info.keyidx;
+	    
+	    // 1. sequence
+	    if (pkcs8PrvHex.substr(keyIdx, 2) != "30")
+		throw "malformed RSA private key(code:001)"; // not sequence
+
+	    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PrvHex, keyIdx);
+	    if (a1.length != 9)
+		throw "malformed RSA private key(code:002)"; // not sequence
+
+	    // 2. RSA key
+	    info.key = {};
+	    info.key.n = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[1]);
+	    info.key.e = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[2]);
+	    info.key.d = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[3]);
+	    info.key.p = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[4]);
+	    info.key.q = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[5]);
+	    info.key.dp = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[6]);
+	    info.key.dq = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[7]);
+	    info.key.co = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[8]);
+	},
+
+	/**
+         * parse hexadecimal string of ECC private key
+	 * @name parsePrivateRawECKeyHexAtObj
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} pkcs8PrvHex hexadecimal string of PKCS#8 private key concluding EC private key
+	 * @return {Array} info associative array to add parsed ECC private key information
+	 * @since pkcs5pkey 1.0.5
+	 * @description
+	 * Following properties are added to associative array 'info'
+	 * <ul>
+	 * <li>key - hexadecimal string of ECC private key
+	 * </ul>
+	 */
+	parsePrivateRawECKeyHexAtObj: function(pkcs8PrvHex, info) {
+	    var keyIdx = info.keyidx;
+	    
+	    // 1. sequence
+	    if (pkcs8PrvHex.substr(keyIdx, 2) != "30")
+		throw "malformed ECC private key(code:001)"; // not sequence
+
+	    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PrvHex, keyIdx);
+	    if (a1.length != 3)
+		throw "malformed ECC private key(code:002)"; // not sequence
+
+	    // 2. EC private key
+	    if (pkcs8PrvHex.substr(a1[1], 2) != "04")
+		throw "malformed ECC private key(code:003)"; // not octetstring
+
+	    info.key = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[1]);
+	},
+
+	/**
+         * parse hexadecimal string of PKCS#8 public key
+	 * @name parsePublicPKCS8Hex
+	 * @memberOf PKCS5PKEY
+	 * @function
+	 * @param {String} pkcs8PubHex hexadecimal string of PKCS#8 public key
+	 * @return {Hash} hash of key information
+	 * @description
+         * Resulted hash has following attributes.
+	 * <ul>
+	 * <li>algoid - hexadecimal string of OID of asymmetric key algorithm</li>
+	 * <li>algparam - hexadecimal string of OID of ECC curve name or null</li>
+	 * <li>key - hexadecimal string of public key</li>
+	 * </ul>
+	 */
+        parsePublicPKCS8Hex: function(pkcs8PubHex) {
+	    var result = {};
+	    result.algparam = null;
+
+            // 1. AlgID and Key bit string
+	    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PubHex, 0);
+	    if (a1.length != 2)
+		throw "outer DERSequence shall have 2 elements: " + a1.length;
+
+            // 2. AlgID
+            var idxAlgIdTLV = a1[0];
+            if (pkcs8PubHex.substr(idxAlgIdTLV, 2) != "30")
+                throw "malformed PKCS8 public key(code:001)"; // AlgId not sequence
+
+            var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PubHex, idxAlgIdTLV);
+            if (a2.length != 2)
+                throw "malformed PKCS8 public key(code:002)"; // AlgId not have two elements
+
+	    // 2.1. AlgID OID
+	    if (pkcs8PubHex.substr(a2[0], 2) != "06")
+		throw "malformed PKCS8 public key(code:003)"; // AlgId.oid is not OID
+
+	    result.algoid = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a2[0]);
+
+	    // 2.2. AlgID param
+	    if (pkcs8PubHex.substr(a2[1], 2) == "06") {
+		result.algparam = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a2[1]);
+	    }
+
+	    // 3. Key
+	    if (pkcs8PubHex.substr(a1[1], 2) != "03")
+		throw "malformed PKCS8 public key(code:004)"; // Key is not bit string
+
+	    result.key = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a1[1]).substr(2);
+            
+	    // 4. return result assoc array
+	    return result;
+        },
 
 	/**
          * provide hexadecimal string of unencrypted PKCS#8 private key and returns RSAKey object

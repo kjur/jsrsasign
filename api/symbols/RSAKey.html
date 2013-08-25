@@ -295,6 +295,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.crypto.MessageDigest.html">KJUR.crypto.MessageDigest</a></li>
 	
+	<li><a href="../symbols/KJUR.crypto.OID.html">KJUR.crypto.OID</a></li>
+	
 	<li><a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a></li>
 	
 	<li><a href="../symbols/KJUR.crypto.Util.html">KJUR.crypto.Util</a></li>
@@ -371,6 +373,15 @@ ul.inheritsList
 					<tbody>
 					
 						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.getPublicKeyFromCertPEM">getPublicKeyFromCertPEM</a></b>(sCertPEM)
+								</div>
+								<div class="description">get RSAKey/ECDSA public key object from PEM certificate string</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#readPrivateKeyFromASN1HexString">readPrivateKeyFromASN1HexString</a></b>(keyHex)
@@ -389,9 +400,9 @@ ul.inheritsList
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#signString">signString</a></b>(s, hashAlg)
+								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.signString">signString</a></b>(s, hashAlg)
 								</div>
 								<div class="description">sign for a message string with RSA private key.</div>
 							</td>
@@ -403,6 +414,24 @@ ul.inheritsList
 								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.signStringPSS">signStringPSS</a></b>(s, hashAlg, sLen)
 								</div>
 								<div class="description">sign for a message string with RSA private key by PKCS#1 PSS signing.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.signWithMessageHash">signWithMessageHash</a></b>(sHashHex, hashAlg)
+								</div>
+								<div class="description">sign hash value of message to be signed with RSA private key.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.signWithMessageHashPSS">signWithMessageHashPSS</a></b>(hHash, hashAlg, sLen)
+								</div>
+								<div class="description">sign hash value of message with RSA private key by PKCS#1 PSS signing.</div>
 							</td>
 						</tr>
 					
@@ -421,6 +450,24 @@ ul.inheritsList
 								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.verifyStringPSS">verifyStringPSS</a></b>(sMsg, hSig, hashAlg, sLen)
 								</div>
 								<div class="description">verifies a sigature for a message string with RSA public key by PKCS#1 PSS sign.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.verifyWithMessageHash">verifyWithMessageHash</a></b>(sHashHex, hSig)
+								</div>
+								<div class="description">verifies a sigature for a message string with RSA public key.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.verifyWithMessageHashPSS">verifyWithMessageHashPSS</a></b>(hHash, hSig, hashAlg, sLen)
+								</div>
+								<div class="description">verifies a sigature for a hash value of message string with RSA public key by PKCS#1 PSS sign.</div>
 							</td>
 						</tr>
 					
@@ -471,6 +518,58 @@ ul.inheritsList
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name=".getPublicKeyFromCertPEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">RSAKey.</span><b>getPublicKeyFromCertPEM</b>(sCertPEM)
+					
+					</div>
+					<div class="description">
+						get RSAKey/ECDSA public key object from PEM certificate string
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/x509-1.1.js.html">x509-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sCertPEM</b>
+									
+								</dt>
+								<dd>PEM formatted X.509 certificate</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>returns RSAKey/KJUR.crypto.ECDSA object of public key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
 				
 					<a name="readPrivateKeyFromASN1HexString"> </a>
 					<div class="fixedFont">
@@ -556,11 +655,11 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="signString"> </a>
-					<div class="fixedFont">
+					<a name=".signString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<b>signString</b>(s, hashAlg)
+					<span class="light">RSAKey.</span><b>signString</b>(s, hashAlg)
 					
 					</div>
 					<div class="description">
@@ -640,11 +739,141 @@ ul.inheritsList
 									<span class="light fixedFont">{Integer}</span> <b>sLen</b>
 									
 								</dt>
-								<dd>salt length (-1 or -2)</dd>
+								<dd>salt byte length from 0 to (keybytelen - hashbytelen - 2).
+       There are two special values:
+       <ul>
+       <li>-1: sets the salt length to the digest length</li>
+       <li>-2: sets the salt length to maximum permissible value
+          (i.e. keybytelen - hashbytelen - 2)</li>
+       </ul>
+       DEFAULT is -1. (NOTE: OpenSSL's default is -2.)</dd>
 							
 							</dl>
 						
 						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>returns hexadecimal string of signature value.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".signWithMessageHash"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">RSAKey.</span><b>signWithMessageHash</b>(sHashHex, hashAlg)
+					
+					</div>
+					<div class="description">
+						sign hash value of message to be signed with RSA private key.<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sHashHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of hash value of message to be signed.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hashAlg</b>
+									
+								</dt>
+								<dd>hash algorithm name for signing.<br/></dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>rsasign 1.2.6</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>returns hexadecimal string of signature value.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".signWithMessageHashPSS"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">RSAKey.</span><b>signWithMessageHashPSS</b>(hHash, hashAlg, sLen)
+					
+					</div>
+					<div class="description">
+						sign hash value of message with RSA private key by PKCS#1 PSS signing.<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hHash</b>
+									
+								</dt>
+								<dd>hexadecimal hash value of message to be signed.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hashAlg</b>
+									
+								</dt>
+								<dd>hash algorithm name for signing.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>sLen</b>
+									
+								</dt>
+								<dd>salt byte length from 0 to (keybytelen - hashbytelen - 2).
+       There are two special values:
+       <ul>
+       <li>-1: sets the salt length to the digest length</li>
+       <li>-2: sets the salt length to maximum permissible value
+          (i.e. keybytelen - hashbytelen - 2)</li>
+       </ul>
+       DEFAULT is -1. (NOTE: OpenSSL's default is -2.)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>rsasign 1.2.6</dd>
+							</dl>
+							</dl>
 						
 						
 						
@@ -751,11 +980,148 @@ ul.inheritsList
 									<span class="light fixedFont">{Integer}</span> <b>sLen</b>
 									
 								</dt>
-								<dd>salt length for PSS signature (-1 or -2)</dd>
+								<dd>salt byte length from 0 to (keybytelen - hashbytelen - 2).
+       There are two special values:
+       <ul>
+       <li>-1: sets the salt length to the digest length</li>
+       <li>-2: sets the salt length to maximum permissible value
+          (i.e. keybytelen - hashbytelen - 2)</li>
+       </ul>
+       DEFAULT is -1. (NOTE: OpenSSL's default is -2.)</dd>
 							
 							</dl>
 						
 						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>returns true if valid, otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".verifyWithMessageHash"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">RSAKey.</span><b>verifyWithMessageHash</b>(sHashHex, hSig)
+					
+					</div>
+					<div class="description">
+						verifies a sigature for a message string with RSA public key.<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sHashHex</b>
+									
+								</dt>
+								<dd>hexadecimal hash value of message to be verified.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hSig</b>
+									
+								</dt>
+								<dd>hexadecimal string of siganture.<br/>
+                non-hexadecimal charactors including new lines will be ignored.</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>rsasign 1.2.6</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>returns 1 if valid, otherwise 0</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".verifyWithMessageHashPSS"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">RSAKey.</span><b>verifyWithMessageHashPSS</b>(hHash, hSig, hashAlg, sLen)
+					
+					</div>
+					<div class="description">
+						verifies a sigature for a hash value of message string with RSA public key by PKCS#1 PSS sign.<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hHash</b>
+									
+								</dt>
+								<dd>hexadecimal hash value of message string to be verified.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hSig</b>
+									
+								</dt>
+								<dd>hexadecimal string of signature value</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hashAlg</b>
+									
+								</dt>
+								<dd>hash algorithm name</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>sLen</b>
+									
+								</dt>
+								<dd>salt byte length from 0 to (keybytelen - hashbytelen - 2).
+       There are two special values:
+       <ul>
+       <li>-1: sets the salt length to the digest length</li>
+       <li>-2: sets the salt length to maximum permissible value
+          (i.e. keybytelen - hashbytelen - 2)</li>
+       </ul>
+       DEFAULT is -1 (NOTE: OpenSSL's default is -2.)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>rsasign 1.2.6</dd>
+							</dl>
+							</dl>
 						
 						
 						

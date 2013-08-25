@@ -1,4 +1,4 @@
-/*! ecdsa-modified-1.0.0.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
+/*! ecdsa-modified-1.0.2.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
  */
 /*
  * ecdsa-modified.js - modified Bitcoin.ECDSA class
@@ -13,7 +13,7 @@
  * @fileOverview
  * @name ecdsa-modified-1.0.js
  * @author Stefan Thomas (github.com/justmoon) and Kenji Urushima (kenji.urushima@gmail.com)
- * @version 1.0.1 (2013-Jul-17)
+ * @version 1.0.2 (2013-Aug-19)
  * @since jsrsasign 4.0
  * @license <a href="https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE">MIT License</a>
  */
@@ -41,18 +41,17 @@ if (typeof KJUR.crypto == "undefined" || !KJUR.crypto) KJUR.crypto = {};
  * </ul>
  * </p>
  */
-KJUR.crypto.ECDSA = function (params) {
-    var curveName = "secp256r1";
-    if (typeof params != "undefined") {
-	if (typeof params['curve'] != "undefined") {
-	    curveName = params['curve'];
-	}
-    }
-    this.ecparams = KJUR.crypto.ECParameterDB.getByName(curveName);
+KJUR.crypto.ECDSA = function(params) {
+    var curveName = "secp256r1";	// curve name default
+    var ecparams = null;
+    var prvKeyHex = null;
+    var pubKeyHex = null;
 
     var rng = new SecureRandom();
 
     var P_OVER_FOUR = null;
+
+    this.type = "EC";
 
     function implShamirsTrick(P, k, Q, l) {
 	var m = Math.max(k.bitLength(), l.bitLength());
@@ -90,6 +89,21 @@ KJUR.crypto.ECDSA = function (params) {
 	;
     };
 
+    this.setNamedCurve = function(curveName) {
+	this.ecparams = KJUR.crypto.ECParameterDB.getByName(curveName);
+	this.prvKeyHex = null;
+	this.pubKeyHex = null;
+	this.curveName = curveName;
+    }
+
+    this.setPrivateKeyHex = function(prvKeyHex) {
+	this.prvKeyHex = prvKeyHex;
+    }
+
+    this.setPublicKeyHex = function(pubKeyHex) {
+	this.pubKeyHex = pubKeyHex;
+    }
+
     /**
      * generate a EC key pair
      * @name generateKeyPairHex
@@ -116,7 +130,13 @@ KJUR.crypto.ECDSA = function (params) {
 	var hY   = ("0000000000" + biY.toString(16)).slice(- charlen);
 	var hPub = "04" + hX + hY;
 
+	this.prvKeyHex = hPrv;
+	this.pubKeyHex = hPub;
 	return {'ecprvhex': hPrv, 'ecpubhex': hPub};
+    };
+
+    this.signWithMessageHash = function(hashHex) {
+	return this.signHex(hashHex, this.prvKeyHex);
     };
 
     /**
@@ -166,6 +186,10 @@ KJUR.crypto.ECDSA = function (params) {
 
 	var s = k.modInverse(n).multiply(e.add(d.multiply(r))).mod(n);
 	return this.serializeSig(r, s);
+    };
+
+    this.verifyWithMessageHash = function(hashHex, sigHex) {
+	return this.verifyHex(hashHex, sigHex, this.pubKeyHex);
     };
 
     /**
@@ -466,5 +490,17 @@ KJUR.crypto.ECDSA = function (params) {
 	throw "Unable to find valid recovery factor";
     }
     */
+
+    if (params !== undefined) {
+	if (params['curve'] !== undefined) {
+	    this.curveName = params['curve'];
+	}
+    }
+    if (this.curveName === undefined) this.curveName = curveName;
+    this.setNamedCurve(this.curveName);
+    if (params !== undefined) {
+	if (params['prv'] !== undefined) this.prvKeyHex = params['prv'];
+	if (params['pub'] !== undefined) this.pubKeyHex = params['pub'];
+    }
 };
 

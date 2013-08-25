@@ -184,3 +184,5 @@ RSAKey.prototype.setPublic = RSASetPublic;
 RSAKey.prototype.encrypt = RSAEncrypt;
 RSAKey.prototype.encryptOAEP = RSAEncryptOAEP;
 //RSAKey.prototype.encrypt_b64 = RSAEncryptB64;
+
+RSAKey.prototype.type = "RSA";
