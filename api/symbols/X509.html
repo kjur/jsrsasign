@@ -295,6 +295,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.crypto.MessageDigest.html">KJUR.crypto.MessageDigest</a></li>
 	
+	<li><a href="../symbols/KJUR.crypto.OID.html">KJUR.crypto.OID</a></li>
+	
 	<li><a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a></li>
 	
 	<li><a href="../symbols/KJUR.crypto.Util.html">KJUR.crypto.Util</a></li>
@@ -463,6 +465,21 @@ ul.inheritsList
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getNotBefore">getNotBefore</a></b>()
 								</div>
 								<div class="description">get notBefore field string of certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getPublicKeyInfoPropOfCertPEM">getPublicKeyInfoPropOfCertPEM</a></b>(sCertPEM)
+								</div>
+								<div class="description">get public key information from PEM certificate
+Resulted associative array has following properties:
+<ul>
+<li>algoid - hexadecimal string of OID of asymmetric key algorithm</li>
+<li>algparam - hexadecimal string of OID of ECC curve name or null</li>
+<li>keyhex - hexadecimal string of key in the certificate</li>
+</ul></div>
 							</td>
 						</tr>
 					
@@ -744,6 +761,61 @@ ul.inheritsList
 						
 						
 						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getPublicKeyInfoPropOfCertPEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Hash}</span>
+					<span class="light">X509.</span><b>getPublicKeyInfoPropOfCertPEM</b>(sCertPEM)
+					
+					</div>
+					<div class="description">
+						get public key information from PEM certificate
+Resulted associative array has following properties:
+<ul>
+<li>algoid - hexadecimal string of OID of asymmetric key algorithm</li>
+<li>algparam - hexadecimal string of OID of ECC curve name or null</li>
+<li>keyhex - hexadecimal string of key in the certificate</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sCertPEM</b>
+									
+								</dt>
+								<dd>string of PEM formatted certificate</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.1, x509 1.1.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Hash}</span> hash of information for public key</dd>
+							
+							</dl>
 						
 						
 						

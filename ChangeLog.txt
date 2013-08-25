@@ -1,6 +1,33 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.0.5 to 4.1.0 (2013-Aug-25)
+  - crypto 1.1.2 to 1.1.3
+    - RSAPSS(*withRSAandMGF1) support in Signature class
+    - powerful init method to specify any type of key and
+      certificate and automatic initialization.
+    - KJUR.crypto.OID class added for OID and hex conversion
+  - pkcs5pkey 1.0.4 to 1.0.5
+    - to support for KJUR.crypto.ECDSA:
+      - getKeyFromEncryptedPKCS8PEM, parsePlainPrivetePKCS8Hex,
+        getKeyFromPublicPKCS8PEM, getKeyFromPublicPKCS8Hex,
+        parsePublicRawRSAKeyHex, parsePrivateRawRSAKeyHexAtObj,
+        parsePrivateRawECKeyHexAtObj and parsePublicPKCS8Hex
+        method added.
+  - rsasign 1.2.5 to 1.2.7
+    - RSAPSS saltlen default was changed from -2 to -1
+    - add API document description about PSS salt length.
+    - signWithMessageHashPSS, verifyWithMessageHashPSS 
+      method added.
+  - ecdsa-modified 1.0.1 to 1.0.2
+    - method setNamedCurve, setPrivateKeyHex, setPublicKeyHex added
+    - sign/verifyWithMessageHash method added to align RSAKey class
+  - x509 1.1.0 to 1.1.1
+    - encapsulated as class
+    - getPublicKeyInfoPropOfCertPEM method added.
+  - asn1hex 1.1.1 to 1.1.2
+    - encapsulated as class
+
 * Changes between 4.0.4 to 4.0.5 (2013-Aug-16)
   - crypto 1.1.1 to 1.1.2
     - KJUR.crypto.Mac (message authentication code) class added

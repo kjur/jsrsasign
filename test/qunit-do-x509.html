@@ -16,7 +16,7 @@
 <script language="JavaScript" type="text/javascript" src="../ext/sha1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
 
-<script language="JavaScript" type="text/javascript" src="../crypto-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../crypto-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
@@ -76,55 +76,68 @@ $(document).ready(function(){
   var hSig3 = "" + 
 "a30ea363514246b686a25529e6446d79ed3081b9709c6213f0611a495456b5b5\n" + 
 "6efb33e92ad1c00348c84c6335d01425a1033e0c5006b377ab0d6b34c9322d62\n";
+
+// _gitpg/jsrsasign/test/eckey/k1.self.cer
+var k1CertPEM = "" +
+"-----BEGIN CERTIFICATE-----\n" +
+"MIIBfDCCASGgAwIBAgIJAKbxELQvSUDNMAoGCCqGSM49BAMCMBoxCzAJBgNVBAYT\n" +
+"AlVTMQswCQYDVQQKDAJLMTAeFw0xMzA3MTQwMjE3MTdaFw0yMzA3MTIwMjE3MTda\n" +
+"MBoxCzAJBgNVBAYTAlVTMQswCQYDVQQKDAJLMTBZMBMGByqGSM49AgEGCCqGSM49\n" +
+"AwEHA0IABKAVMqPAkABT3mD77+/MpYeTMBWY0wi0Hm9ONk44jCcRvvQyxZkUjJQU\n" +
+"PU/0bCy3Pj5qQdfu8jwEfqEeYGZ95CWjUDBOMB0GA1UdDgQWBBTIR74yfMz/Y4hw\n" +
+"dXSW4r42bESo/DAfBgNVHSMEGDAWgBTIR74yfMz/Y4hwdXSW4r42bESo/DAMBgNV\n" +
+"HRMEBTADAQH/MAoGCCqGSM49BAMCA0kAMEYCIQDfAcS/WKBrP6JBgksQVpp4jdq4\n" +
+"C53Yu4F5NkaMgthAHgIhANGRdWAP1QdW9l6tiglQwdqJs4T0e8+NYv+RcAb3VYwn\n" +
+"-----END CERTIFICATE-----\n";
     
-test("_x509_pemToBase64", function() {
-  var sResult = _x509_pemToBase64(sCer1PEM);
+test("pemToBase64", function() {
+  var sResult = X509.pemToBase64(sCer1PEM);
   equals(sResult, sCer1B64, "testing pem-base64 conversion.");
 });
 
-test("_x509_pemToHex", function() {
-  var sResult = _x509_pemToHex(sCer1PEM);
+test("pemToHex", function() {
+  var sResult = X509.pemToHex(sCer1PEM);
   equals(sResult, hCer1, "testing pem-hex conversion.");
 });
 
-test("_x509_getSubjectPublicKeyInfoPosFromCertHex", function() {
-  var pSPK = _x509_getSubjectPublicKeyInfoPosFromCertHex(hCer1);
+test("getSubjectPublicKeyInfoPosFromCertHex", function() {
+  var pSPK = X509.getSubjectPublicKeyInfoPosFromCertHex(hCer1);
   equals(pSPK, 127 * 2, "check position of subject public key info.");
 });
 
-test("_x509_getSubjectPublicKeyPosFromCertHex", function() {
-  var pSPK = _x509_getSubjectPublicKeyPosFromCertHex(hCer1);
+test("getSubjectPublicKeyPosFromCertHex", function() {
+  var pSPK = X509.getSubjectPublicKeyPosFromCertHex(hCer1);
   equals(pSPK, 147 * 2, "check position of subject public key without encapsulation.");
 });
 
-test("_x509_getPublicKeyHexArrayFromCertHex", function() {
-  var a = _x509_getPublicKeyHexArrayFromCertHex(hCer1);
+test("getPublicKeyHexArrayFromCertHex", function() {
+  var a = X509.getPublicKeyHexArrayFromCertHex(hCer1);
   expect(3);
   equals(a.length, 2, "check array length.");
   equals(a[0], "00b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
   equals(a[1], "010001", "check E");
 });
 
-test("_x509_getPublicKeyHexArrayFromCertPEM", function() {
-  var a = _x509_getPublicKeyHexArrayFromCertPEM(sCer1PEM);
+test("getPublicKeyHexArrayFromCertPEM", function() {
+  var a = X509.getPublicKeyHexArrayFromCertPEM(sCer1PEM);
   expect(3);
   equals(a.length, 2, "check array length.");
   equals(a[0], "00b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
   equals(a[1], "010001", "check E");
 });
 
-test("_x509_getPublicKeyHexArrayFromCertPEM sCer2PEM", function() {
+test("getPublicKeyHexArrayFromCertPEM sCer2PEM", function() {
   expect(8);
-  equals(_x509_pemToBase64(sCer2PEM), sCer2B64, "check pem to base64.");
-  equals(_x509_pemToHex(sCer2PEM), hCer2, "check pem to hex.");
-  var pTbsCert = _x509_getHexTbsCertificateFromCert(hCer2);
+  equals(X509.pemToBase64(sCer2PEM), sCer2B64, "check pem to base64.");
+  equals(X509.pemToHex(sCer2PEM), hCer2, "check pem to hex.");
+  var pTbsCert = X509.getHexTbsCertificateFromCert(hCer2);
   equals(pTbsCert, 8, "check tbsCert position.");
-  equals(_x509_getSubjectPublicKeyInfoPosFromCertHex(hCer2), 280,
+  equals(X509.getSubjectPublicKeyInfoPosFromCertHex(hCer2), 280,
          "check subjectPublicKeyInfo position.");
-  var a = _asnhex_getPosArrayOfChildren_AtObj(hCer2, pTbsCert); 
+  var a = ASN1HEX.getPosArrayOfChildren_AtObj(hCer2, pTbsCert); 
   equals(a.join("/"), "16/38/68/142/206/280", "check postion array of tbsCert.");
 
-  var a = _x509_getPublicKeyHexArrayFromCertPEM(sCer2PEM);
+  var a = X509.getPublicKeyHexArrayFromCertPEM(sCer2PEM);
   equals(a.length, 2, "check array length.");
   equals(a[0], "00d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021", "check N");
   equals(a[1], "010001", "check E");
@@ -159,7 +172,7 @@ test("X509.getSerialNumber/Issuer/Subject/NotBefore/NotAfter test", function() {
   equals(c.getSubjectHex(), "301a310b3009060355040613024a50310b3009060355040a13027a32", "subject");
   equals(c.getNotBefore(), "100531061756Z", "notbefore");
   equals(c.getNotAfter(), "200528061756Z", "notafter");
-  equals(_x509_hex2dn(c.getSubjectHex()), "/C=JP/O=z2", "subjecthex2str");
+  equals(X509.hex2dn(c.getSubjectHex()), "/C=JP/O=z2", "subjecthex2str");
   equals(c.getIssuerString(), "/C=JP/O=z2", "issuer str");
   equals(c.getSubjectString(), "/C=JP/O=z2", "subject str");
 });
@@ -176,6 +189,22 @@ test("hoge", function() {
 });
  */
 
+test("getPublicKeyInfoPropOfCertPEM sCer1PEM", function() {
+  var r = X509.getPublicKeyInfoPropOfCertPEM(sCer1PEM);
+  expect(3);
+  equal(r.algoid, "2a864886f70d010101", "algoid");
+  equal(r.algparam, null, "algparam");
+  equal(r.keyhex, "3048024100b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b0203010001", "keyhex");
+});
+
+test("getPublicKeyInfoPropOfCertPEM k1(ECC)", function() {
+  var r = X509.getPublicKeyInfoPropOfCertPEM(k1CertPEM);
+  expect(3);
+  equal(r.algoid, "2a8648ce3d0201", "algoid"); // ecPublicKey
+  equal(r.algparam, "2a8648ce3d030107", "algparam"); // secp256r1
+  equal(r.keyhex, "04a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425", "keyhex");
+});
+
 });
 </script>
   
@@ -188,3 +217,4 @@ test("hoge", function() {
 </body>
 <center><p>&copy; 2010 Kenji Urushima</p></center>
 </html>
+
