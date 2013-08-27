@@ -2,6 +2,7 @@
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<title>QUnit for RSAKey key-reading add-on 'rsa-pem.js'</title>
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="qunit.js"></script>
 <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
@@ -42,20 +43,20 @@ $(document).ready(function(){
 
 test("_rsapem_pemToBase64", function() {
   var sResult = _rsapem_pemToBase64(sKey1PEM);
-  equals(sResult, sKey1B64, "testing pem-base64 conversion.");
+  equal(sResult, sKey1B64, "testing pem-base64 conversion.");
 });
 
 test("_rsapem_getPosArrayOfChildrenFromHex", function() {
   var hPrivateKey = b64tohex(sKey1B64);
   var a = _rsapem_getPosArrayOfChildrenFromHex(hPrivateKey);
-  equals(a.join("/"), "8/14/278/288/550/684/818/950/1082",
+  equal(a.join("/"), "8/14/278/288/550/684/818/950/1082",
          "check child element position of sKey1B64");
 });
 
 test("_rsapem_getHexValueArrayOfChildrenFromHex", function() {
   var hPrivateKey = b64tohex(sKey1B64);
   var a = _rsapem_getHexValueArrayOfChildrenFromHex(hPrivateKey);
-  equals(a.join("/"), "00/00d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021/010001/03dfeadd993a89bd86151a4a0cb3bf3b628c9c07d1f9be1727accc19ea19ecb6e98b7316d0d6b093d72455a5f46551aac5b4885f90afa7fca31c7a70c3e41b505af0fe00a32e28988ccf44f02dee005e40289d2be0604f978bbc2b86e96d7792c5207ad3fc0f40589000955c039c61655cea36e177123b8a747b30f9d93e74f1/00ee6d7fe55461600ffc58b9c873e7a61ced51d7fb9f015243527b04b3c0945b72e7aa9275d15b08fded25eaa6761f2aa66aefc767105d74496b2bfcd30a8beed7/00e0f56a0effce6406d6af8b325d936ffcca65e2be6cbb360c3140fd53c076248467ae198664fccbc76dcdf49e21109f9787cb5229573cd233a4aef1a54aff81c7/6933ad8c0dd84d5fa053b1ddcdae77b029d2c3ff0560bae073a34e26d6215fdc6a75ebdbca7d65914d333ebf263d883f17ce26e8c5e2c66da2b92cfc1d9a32cf/462da9698679ff9076970ae8aa729d64124c18a1695039fb31be618928287319ef324bfa3634fae97b22de261a909208f6af0231ad6a66f4ff72282675b021ef/40d5f2a22cee18496d8926815f1e07dbd11d5cd6160c9f524b97f4ef40516c022576a461deb70dbe963a04a26a15aa5d6b50e375c9dc64408c8b34ff18cadcd7",
+  equal(a.join("/"), "00/00d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021/010001/03dfeadd993a89bd86151a4a0cb3bf3b628c9c07d1f9be1727accc19ea19ecb6e98b7316d0d6b093d72455a5f46551aac5b4885f90afa7fca31c7a70c3e41b505af0fe00a32e28988ccf44f02dee005e40289d2be0604f978bbc2b86e96d7792c5207ad3fc0f40589000955c039c61655cea36e177123b8a747b30f9d93e74f1/00ee6d7fe55461600ffc58b9c873e7a61ced51d7fb9f015243527b04b3c0945b72e7aa9275d15b08fded25eaa6761f2aa66aefc767105d74496b2bfcd30a8beed7/00e0f56a0effce6406d6af8b325d936ffcca65e2be6cbb360c3140fd53c076248467ae198664fccbc76dcdf49e21109f9787cb5229573cd233a4aef1a54aff81c7/6933ad8c0dd84d5fa053b1ddcdae77b029d2c3ff0560bae073a34e26d6215fdc6a75ebdbca7d65914d333ebf263d883f17ce26e8c5e2c66da2b92cfc1d9a32cf/462da9698679ff9076970ae8aa729d64124c18a1695039fb31be618928287319ef324bfa3634fae97b22de261a909208f6af0231ad6a66f4ff72282675b021ef/40d5f2a22cee18496d8926815f1e07dbd11d5cd6160c9f524b97f4ef40516c022576a461deb70dbe963a04a26a15aa5d6b50e375c9dc64408c8b34ff18cadcd7",
          "check child element of sKey1B64");
 });
 
@@ -63,28 +64,28 @@ test("RSAKey.readPrivateKeyFromPEMString(keyPEM)", function() {
   var k = new RSAKey();
   k.readPrivateKeyFromPEMString(sKey1PEM);
   expect(8);
-  equals(k.n.toString(16), "d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021", "check public (n) of Key1");
-  equals(k.e.toString(16), "10001", "check public exponent(e) of Key1");
-  equals(k.d.toString(16), "3dfeadd993a89bd86151a4a0cb3bf3b628c9c07d1f9be1727accc19ea19ecb6e98b7316d0d6b093d72455a5f46551aac5b4885f90afa7fca31c7a70c3e41b505af0fe00a32e28988ccf44f02dee005e40289d2be0604f978bbc2b86e96d7792c5207ad3fc0f40589000955c039c61655cea36e177123b8a747b30f9d93e74f1", "check public exponent(d) of Key1");
-  equals(k.p.toString(16), "ee6d7fe55461600ffc58b9c873e7a61ced51d7fb9f015243527b04b3c0945b72e7aa9275d15b08fded25eaa6761f2aa66aefc767105d74496b2bfcd30a8beed7", "check public exponent(p) of Key1");
-  equals(k.q.toString(16), "e0f56a0effce6406d6af8b325d936ffcca65e2be6cbb360c3140fd53c076248467ae198664fccbc76dcdf49e21109f9787cb5229573cd233a4aef1a54aff81c7", "check public exponent(q) of Key1");
-  equals(k.dmp1.toString(16), "6933ad8c0dd84d5fa053b1ddcdae77b029d2c3ff0560bae073a34e26d6215fdc6a75ebdbca7d65914d333ebf263d883f17ce26e8c5e2c66da2b92cfc1d9a32cf", "check (dmp1) of Key1");
-  equals(k.dmq1.toString(16), "462da9698679ff9076970ae8aa729d64124c18a1695039fb31be618928287319ef324bfa3634fae97b22de261a909208f6af0231ad6a66f4ff72282675b021ef", "check (dmq1) of Key1");
-  equals(k.coeff.toString(16), "40d5f2a22cee18496d8926815f1e07dbd11d5cd6160c9f524b97f4ef40516c022576a461deb70dbe963a04a26a15aa5d6b50e375c9dc64408c8b34ff18cadcd7", "check (coeff) of Key1");
+  equal(k.n.toString(16), "d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021", "check public (n) of Key1");
+  equal(k.e.toString(16), "10001", "check public exponent(e) of Key1");
+  equal(k.d.toString(16), "3dfeadd993a89bd86151a4a0cb3bf3b628c9c07d1f9be1727accc19ea19ecb6e98b7316d0d6b093d72455a5f46551aac5b4885f90afa7fca31c7a70c3e41b505af0fe00a32e28988ccf44f02dee005e40289d2be0604f978bbc2b86e96d7792c5207ad3fc0f40589000955c039c61655cea36e177123b8a747b30f9d93e74f1", "check public exponent(d) of Key1");
+  equal(k.p.toString(16), "ee6d7fe55461600ffc58b9c873e7a61ced51d7fb9f015243527b04b3c0945b72e7aa9275d15b08fded25eaa6761f2aa66aefc767105d74496b2bfcd30a8beed7", "check public exponent(p) of Key1");
+  equal(k.q.toString(16), "e0f56a0effce6406d6af8b325d936ffcca65e2be6cbb360c3140fd53c076248467ae198664fccbc76dcdf49e21109f9787cb5229573cd233a4aef1a54aff81c7", "check public exponent(q) of Key1");
+  equal(k.dmp1.toString(16), "6933ad8c0dd84d5fa053b1ddcdae77b029d2c3ff0560bae073a34e26d6215fdc6a75ebdbca7d65914d333ebf263d883f17ce26e8c5e2c66da2b92cfc1d9a32cf", "check (dmp1) of Key1");
+  equal(k.dmq1.toString(16), "462da9698679ff9076970ae8aa729d64124c18a1695039fb31be618928287319ef324bfa3634fae97b22de261a909208f6af0231ad6a66f4ff72282675b021ef", "check (dmq1) of Key1");
+  equal(k.coeff.toString(16), "40d5f2a22cee18496d8926815f1e07dbd11d5cd6160c9f524b97f4ef40516c022576a461deb70dbe963a04a26a15aa5d6b50e375c9dc64408c8b34ff18cadcd7", "check (coeff) of Key1");
 });
 
 test("RSAKey.readPrivateKeyFromASN1HexString(keyHex)", function() {
   var k = new RSAKey();
   k.readPrivateKeyFromASN1HexString(sk10dechex);
   expect(8);
-  equals(k.n.toString(16), "b1e5aa7d6827b8c69037b269907bd8f4a7a1e6b798776e3be519fbda2966260dd56f6f3389d489a276a0a1e1b19e51328bc2d6a623f24be6b2e6718f3b292d5b", "check public (n) of Key2");
-  equals(k.e.toString(16), "10001", "check public exponent(e) of Key2");
-  equals(k.d.toString(16), "763582206ac15a4ab7320b5f921e797fb894205706fcf546df6970acfaad61c2db1fb6f9e335a1867c0f7c40a2ad39aa92b9312459bbf90d5eab831793c69321", "check public exponent(d) of Key2");
-  equals(k.p.toString(16), "e584720c8f676623e94e7fb8616e667d66cd379559ffe36acd9068495e68adc5", "check public exponent(p) of Key1");
-  equals(k.q.toString(16), "c66c72386fbdeded99c5963422d7380c19100757a4dcec581bd645d3d924409f", "check public exponent(q) of Key1");
-  equals(k.dmp1.toString(16), "101798337f3e7dafd8e4d319a763293673a5c1d6ebe7801775f0410f9bd9f50d", "check (dmp1) of Key1");
-  equals(k.dmq1.toString(16), "1bff2b329959a41b9549d2c2b273c97db37f9679a05267aa9aeae5d959570b23", "check (dmq1) of Key1");
-  equals(k.coeff.toString(16), "43ea618b8f31af3aa762171cf2b5e9d563c5041a99a2217b6c692f807e18f81a", "check (coeff) of Key1");
+  equal(k.n.toString(16), "b1e5aa7d6827b8c69037b269907bd8f4a7a1e6b798776e3be519fbda2966260dd56f6f3389d489a276a0a1e1b19e51328bc2d6a623f24be6b2e6718f3b292d5b", "check public (n) of Key2");
+  equal(k.e.toString(16), "10001", "check public exponent(e) of Key2");
+  equal(k.d.toString(16), "763582206ac15a4ab7320b5f921e797fb894205706fcf546df6970acfaad61c2db1fb6f9e335a1867c0f7c40a2ad39aa92b9312459bbf90d5eab831793c69321", "check public exponent(d) of Key2");
+  equal(k.p.toString(16), "e584720c8f676623e94e7fb8616e667d66cd379559ffe36acd9068495e68adc5", "check public exponent(p) of Key1");
+  equal(k.q.toString(16), "c66c72386fbdeded99c5963422d7380c19100757a4dcec581bd645d3d924409f", "check public exponent(q) of Key1");
+  equal(k.dmp1.toString(16), "101798337f3e7dafd8e4d319a763293673a5c1d6ebe7801775f0410f9bd9f50d", "check (dmp1) of Key1");
+  equal(k.dmq1.toString(16), "1bff2b329959a41b9549d2c2b273c97db37f9679a05267aa9aeae5d959570b23", "check (dmq1) of Key1");
+  equal(k.coeff.toString(16), "43ea618b8f31af3aa762171cf2b5e9d563c5041a99a2217b6c692f807e18f81a", "check (coeff) of Key1");
 });
 
 });
@@ -93,9 +94,7 @@ test("RSAKey.readPrivateKeyFromASN1HexString(keyHex)", function() {
   
 </head>
 <body>
-<h1 id="qunit-header">QUnit for RSAKey key-reading add-on 'rsa-pem.js'</h1>
-<h2 id="qunit-banner"></h2>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
 </body>
 </html>

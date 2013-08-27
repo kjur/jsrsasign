@@ -1,6 +1,19 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.1.0 to 4.1.1 (2013-Aug-27)
+  - crypto 1.1.3 to 1.1.4
+    - add hmacmd5, hmacripemd160 support and test code
+  - ecdsa-modified 1.0.2 to 1.0.3
+    - new static method added
+      - parseSigHex
+      - parseSigHexInHexRS
+      - asn1SigToConcatSig
+      - concatSigToASN1Sig
+      - hexRSSigToASN1Sig
+      - biRSSigToASN1Sig
+  - all QUnit test code is moved for latest QUnit 1.12
+
 * Changes between 4.0.5 to 4.1.0 (2013-Aug-25)
   - crypto 1.1.2 to 1.1.3
     - RSAPSS(*withRSAandMGF1) support in Signature class

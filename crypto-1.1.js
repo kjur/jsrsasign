@@ -80,6 +80,7 @@ KJUR.crypto.Util = new function() {
 	'hmacsha256':		'cryptojs',
 	'hmacsha384':		'cryptojs',
 	'hmacsha512':		'cryptojs',
+	'hmacripemd160':	'cryptojs',
 
 	'MD5withRSA':		'cryptojs/jsrsa',
 	'SHA1withRSA':		'cryptojs/jsrsa',
@@ -483,9 +484,9 @@ KJUR.crypto.MessageDigest = function(params) {
  * <ul>
  * <li>hmacmd5 - cryptojs</li>
  * <li>hmacsha1 - cryptojs</li>
- * <li>hmacsha224 - cryptojs</li>
+ * <li>hmacsha224 - cryptojs (NOT SUPPORTED BECAUSE OF Crypto-JS BUG)</li>
  * <li>hmacsha256 - cryptojs</li>
- * <li>hmacsha384 - cryptojs</li>
+ * <li>hmacsha384 - cryptojs (NOT SUPPORTED BECAUSE OF Crypto-JS BUG)</li>
  * <li>hmacsha512 - cryptojs</li>
  * </ul>
  * @example

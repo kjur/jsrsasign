@@ -2,6 +2,8 @@
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<meta charset="utf-8">
+<title>QUnit for hex represented ASN.1 library 'asn1hex.js'</title>
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="qunit.js"></script>
 <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
@@ -20,99 +22,99 @@ $(document).ready(function(){
 
 test("ASN1HEX.getByteLengthOfL_AtObj", function() {
   expect(6);
-  equals(ASN1HEX.getByteLengthOfL_AtObj('020100', 0), 1, "checking L.len of 020100 is 1.");
-  equals(ASN1HEX.getByteLengthOfL_AtObj('020300', 0), 1, "checking L.len of 020300 is 1.");
-  equals(ASN1HEX.getByteLengthOfL_AtObj('02818003...', 0), 2, "checking L.len of 02818003... is 2.");
-  equals(ASN1HEX.getByteLengthOfL_AtObj('0282025b03...', 0), 3, "checking L.len of 0282025b03... is 3.");
-  equals(ASN1HEX.getByteLengthOfL_AtObj('0280020100...', 0), -1,
+  equal(ASN1HEX.getByteLengthOfL_AtObj('020100', 0), 1, "checking L.len of 020100 is 1.");
+  equal(ASN1HEX.getByteLengthOfL_AtObj('020300', 0), 1, "checking L.len of 020300 is 1.");
+  equal(ASN1HEX.getByteLengthOfL_AtObj('02818003...', 0), 2, "checking L.len of 02818003... is 2.");
+  equal(ASN1HEX.getByteLengthOfL_AtObj('0282025b03...', 0), 3, "checking L.len of 0282025b03... is 3.");
+  equal(ASN1HEX.getByteLengthOfL_AtObj('0280020100...', 0), -1,
          "checking L.len of 0280020100... is -1(indefinite length).");
-  equals(ASN1HEX.getByteLengthOfL_AtObj('ffff0201ab', 4), 1, "check L.len at 4 of ffff0201ab.");
+  equal(ASN1HEX.getByteLengthOfL_AtObj('ffff0201ab', 4), 1, "check L.len at 4 of ffff0201ab.");
 });
 
 test("ASN1HEX.getHexOfL_AtObj", function() {
   expect(6);
-  equals(ASN1HEX.getHexOfL_AtObj('020100', 0), '01', "check L octets of 020100.");
-  equals(ASN1HEX.getHexOfL_AtObj('020300', 0), '03', "check L octets of 020300.");
-  equals(ASN1HEX.getHexOfL_AtObj('02818003...', 0), '8180', "check L octets of 02818003.");
-  equals(ASN1HEX.getHexOfL_AtObj('0282025b03...', 0), '82025b', "check L octets of 0282025b03.");
-  equals(ASN1HEX.getHexOfL_AtObj('0280020100...', 0), '',
+  equal(ASN1HEX.getHexOfL_AtObj('020100', 0), '01', "check L octets of 020100.");
+  equal(ASN1HEX.getHexOfL_AtObj('020300', 0), '03', "check L octets of 020300.");
+  equal(ASN1HEX.getHexOfL_AtObj('02818003...', 0), '8180', "check L octets of 02818003.");
+  equal(ASN1HEX.getHexOfL_AtObj('0282025b03...', 0), '82025b', "check L octets of 0282025b03.");
+  equal(ASN1HEX.getHexOfL_AtObj('0280020100...', 0), '',
          "check L of 0280020100.(indefinite length).");
-  equals(ASN1HEX.getHexOfL_AtObj('ffff0201ab', 4), '01', "check L octets at 4 of ffff0201ab.");
+  equal(ASN1HEX.getHexOfL_AtObj('ffff0201ab', 4), '01', "check L octets at 4 of ffff0201ab.");
 });
 
 test("ASN1HEX.getIntOfL_AtObj", function() {
   expect(6);
-  equals(ASN1HEX.getIntOfL_AtObj('020100', 0), 1, "check L of 020100.");
-  equals(ASN1HEX.getIntOfL_AtObj('020300', 0), 3, "check L of 020300.");
-  equals(ASN1HEX.getIntOfL_AtObj('02818003...', 0), 128, "check L of 02818003.");
-  equals(ASN1HEX.getIntOfL_AtObj('0282025b03...', 0), 603, "check L of 0282025b03.");
-  equals(ASN1HEX.getIntOfL_AtObj('0280020100...', 0), -1,
+  equal(ASN1HEX.getIntOfL_AtObj('020100', 0), 1, "check L of 020100.");
+  equal(ASN1HEX.getIntOfL_AtObj('020300', 0), 3, "check L of 020300.");
+  equal(ASN1HEX.getIntOfL_AtObj('02818003...', 0), 128, "check L of 02818003.");
+  equal(ASN1HEX.getIntOfL_AtObj('0282025b03...', 0), 603, "check L of 0282025b03.");
+  equal(ASN1HEX.getIntOfL_AtObj('0280020100...', 0), -1,
          "check of 0280020100.(indefinite length).");
-  equals(ASN1HEX.getIntOfL_AtObj('ffff0201ab', 4), 1, "check L at 4 of ffff0201ab.");
+  equal(ASN1HEX.getIntOfL_AtObj('ffff0201ab', 4), 1, "check L at 4 of ffff0201ab.");
 });
 
 test("ASN1HEX.getStartPosOfV_AtObj", function() {
   expect(6);
-  equals(ASN1HEX.getStartPosOfV_AtObj('020100', 0), 4, "check V pos of 020100.");
-  equals(ASN1HEX.getStartPosOfV_AtObj('020300', 0), 4, "check V pos of 020300.");
-  equals(ASN1HEX.getStartPosOfV_AtObj('02818003...', 0), 6, "check V pos of 02818003.");
-  equals(ASN1HEX.getStartPosOfV_AtObj('0282025b03...', 0), 8, "check V pos of 0282025b03.");
-  equals(ASN1HEX.getStartPosOfV_AtObj('0280020100...', 0), -1,
+  equal(ASN1HEX.getStartPosOfV_AtObj('020100', 0), 4, "check V pos of 020100.");
+  equal(ASN1HEX.getStartPosOfV_AtObj('020300', 0), 4, "check V pos of 020300.");
+  equal(ASN1HEX.getStartPosOfV_AtObj('02818003...', 0), 6, "check V pos of 02818003.");
+  equal(ASN1HEX.getStartPosOfV_AtObj('0282025b03...', 0), 8, "check V pos of 0282025b03.");
+  equal(ASN1HEX.getStartPosOfV_AtObj('0280020100...', 0), -1,
          "check V pos of 0280020100.(indefinite length).");
-  equals(ASN1HEX.getStartPosOfV_AtObj('ffff0201ab', 4), 8, "check V pos at 4 of ffff0201ab.");
+  equal(ASN1HEX.getStartPosOfV_AtObj('ffff0201ab', 4), 8, "check V pos at 4 of ffff0201ab.");
 });
 
 test("ASN1HEX.getHexOfV_AtObj", function() {
   expect(6);
-  equals(ASN1HEX.getHexOfV_AtObj('0201ab', 0), 'ab', "check V of 0201ab.");
-  equals(ASN1HEX.getHexOfV_AtObj('0203012345', 0), '012345', "check V of 0203012345.");
-  equals(ASN1HEX.getHexOfV_AtObj('ffff0201ab', 4), 'ab', "check V at 4 of ffff0201ab.");
-  equals(ASN1HEX.getHexOfV_AtObj('024100EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7', 0), '00EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7', "check V of 024100EE...");
-  equals(ASN1HEX.getHexOfV_AtObj('FFFF024100EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7FFFFFF', 4), '00EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7', "check V of FFFF024100EE... at 4 with garbage");
-  equals(ASN1HEX.getHexOfV_AtObj('FFFF02818100D184617B5F8034655944839F785A63835555088A23D0B34E1A2E6BDF83C49BA2B1ECB398105EED1A21D513EA76F9AD3879843DB27E91765885BA33CCF45B1461C227205F08BCD07D5A2CF7FA9443CF2EF376F448503630699059002546D2F2EBA124478AC34704E3D83CD1E041178042A922FA3C541B3FDFEB072C5DC44A0021FFFF', 4), '00D184617B5F8034655944839F785A63835555088A23D0B34E1A2E6BDF83C49BA2B1ECB398105EED1A21D513EA76F9AD3879843DB27E91765885BA33CCF45B1461C227205F08BCD07D5A2CF7FA9443CF2EF376F448503630699059002546D2F2EBA124478AC34704E3D83CD1E041178042A922FA3C541B3FDFEB072C5DC44A0021', "check V of FFFF028181... at 4 with garbage");
+  equal(ASN1HEX.getHexOfV_AtObj('0201ab', 0), 'ab', "check V of 0201ab.");
+  equal(ASN1HEX.getHexOfV_AtObj('0203012345', 0), '012345', "check V of 0203012345.");
+  equal(ASN1HEX.getHexOfV_AtObj('ffff0201ab', 4), 'ab', "check V at 4 of ffff0201ab.");
+  equal(ASN1HEX.getHexOfV_AtObj('024100EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7', 0), '00EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7', "check V of 024100EE...");
+  equal(ASN1HEX.getHexOfV_AtObj('FFFF024100EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7FFFFFF', 4), '00EE6D7FE55461600FFC58B9C873E7A61CED51D7FB9F015243527B04B3C0945B72E7AA9275D15B08FDED25EAA6761F2AA66AEFC767105D74496B2BFCD30A8BEED7', "check V of FFFF024100EE... at 4 with garbage");
+  equal(ASN1HEX.getHexOfV_AtObj('FFFF02818100D184617B5F8034655944839F785A63835555088A23D0B34E1A2E6BDF83C49BA2B1ECB398105EED1A21D513EA76F9AD3879843DB27E91765885BA33CCF45B1461C227205F08BCD07D5A2CF7FA9443CF2EF376F448503630699059002546D2F2EBA124478AC34704E3D83CD1E041178042A922FA3C541B3FDFEB072C5DC44A0021FFFF', 4), '00D184617B5F8034655944839F785A63835555088A23D0B34E1A2E6BDF83C49BA2B1ECB398105EED1A21D513EA76F9AD3879843DB27E91765885BA33CCF45B1461C227205F08BCD07D5A2CF7FA9443CF2EF376F448503630699059002546D2F2EBA124478AC34704E3D83CD1E041178042A922FA3C541B3FDFEB072C5DC44A0021', "check V of FFFF028181... at 4 with garbage");
 });
 
 test("ASN1HEX.getPosOfNextSibling_AtObj", function() {
   expect(2);
-  equals(ASN1HEX.getPosOfNextSibling_AtObj('ff0201ab0201cdff', 2), 8, "next sibling of ff0201ab...");
-  equals(ASN1HEX.getPosOfNextSibling_AtObj('ff0202abab0201cdff', 2), 10, "next sibling of ff0202ab...");
+  equal(ASN1HEX.getPosOfNextSibling_AtObj('ff0201ab0201cdff', 2), 8, "next sibling of ff0201ab...");
+  equal(ASN1HEX.getPosOfNextSibling_AtObj('ff0202abab0201cdff', 2), 10, "next sibling of ff0202ab...");
 });
 
 test("ASN1HEX.getPosArrayOfChildren_AtObj", function() { 
   var h = "3018300f02010102010202010302010402010504027abc0401ff";
   var a = ASN1HEX.getPosArrayOfChildren_AtObj(h, 4);
   expect(4);
-  equals(a.length, 5, "check array size.");
-  equals(ASN1HEX.getIntOfL_AtObj(h, 4), 15, "check length.");
-  equals(ASN1HEX.getPosOfNextSibling_AtObj(h, 8), 14, "check 2nd sibling.");
-  equals(a.join("/"), "8/14/20/26/32", "check array contents.");
+  equal(a.length, 5, "check array size.");
+  equal(ASN1HEX.getIntOfL_AtObj(h, 4), 15, "check length.");
+  equal(ASN1HEX.getPosOfNextSibling_AtObj(h, 8), 14, "check 2nd sibling.");
+  equal(a.join("/"), "8/14/20/26/32", "check array contents.");
 });
 
 test("ASN1HEX.getNthChildIndex_AtObj", function() { 
   var h = "300902012a02012b02012c";
   var h2 = "ff300902012a02012b02012c";
   expect(4);
-  equals(ASN1HEX.getNthChildIndex_AtObj(h, 0, 0), 4,  "nth = 1");
-  equals(ASN1HEX.getNthChildIndex_AtObj(h, 0, 1), 10, "nth = 2");
-  equals(ASN1HEX.getNthChildIndex_AtObj(h, 0, 2), 16, "nth = 3");
-  equals(ASN1HEX.getNthChildIndex_AtObj(h2, 0, 1), 12, "h2 nth = 2");
+  equal(ASN1HEX.getNthChildIndex_AtObj(h, 0, 0), 4,  "nth = 1");
+  equal(ASN1HEX.getNthChildIndex_AtObj(h, 0, 1), 10, "nth = 2");
+  equal(ASN1HEX.getNthChildIndex_AtObj(h, 0, 2), 16, "nth = 3");
+  equal(ASN1HEX.getNthChildIndex_AtObj(h2, 0, 1), 12, "h2 nth = 2");
 });
 
 test("ASN1HEX.getDecendantIndexByNthList", function() { 
   var h = "3016300902011a02011b02011c300902012a02012b02012c";
   expect(12);
-  equals(ASN1HEX.getPosArrayOfChildren_AtObj(h, 0).join("/"), "4/26", "array level 1");
-  equals(ASN1HEX.getPosArrayOfChildren_AtObj(h, 4).join("/"), "8/14/20", "array level 2-1");
-  equals(ASN1HEX.getPosArrayOfChildren_AtObj(h, 26).join("/"), "30/36/42", "array level 2-2");
-  equals(ASN1HEX.getDecendantIndexByNthList(h, 0, [0]), 4, "(0)=4");
-  equals(ASN1HEX.getDecendantIndexByNthList(h, 0, [1]), 26, "(1)=26");
-  equals(ASN1HEX.getDecendantIndexByNthList(h, 0, [0, 0]), 8, "(0,0)=8");
-  equals(ASN1HEX.getDecendantIndexByNthList(h, 0, [0, 1]), 14, "(0,1)=14");
-  equals(ASN1HEX.getDecendantIndexByNthList(h, 0, [0, 2]), 20, "(0,2)=20");
-  equals(ASN1HEX.getDecendantIndexByNthList(h, 0, [1, 0]), 30, "(1,0)=30");
-  equals(ASN1HEX.getDecendantIndexByNthList(h, 0, [1, 1]), 36, "(1,1)=36");
-  equals(ASN1HEX.getDecendantIndexByNthList(h, 0, [1, 2]), 42, "(1,2)=42");
-  equals(ASN1HEX.getHexOfTLV_AtObj(h, 36), "02012b", "02012b");
+  equal(ASN1HEX.getPosArrayOfChildren_AtObj(h, 0).join("/"), "4/26", "array level 1");
+  equal(ASN1HEX.getPosArrayOfChildren_AtObj(h, 4).join("/"), "8/14/20", "array level 2-1");
+  equal(ASN1HEX.getPosArrayOfChildren_AtObj(h, 26).join("/"), "30/36/42", "array level 2-2");
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [0]), 4, "(0)=4");
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [1]), 26, "(1)=26");
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [0, 0]), 8, "(0,0)=8");
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [0, 1]), 14, "(0,1)=14");
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [0, 2]), 20, "(0,2)=20");
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [1, 0]), 30, "(1,0)=30");
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [1, 1]), 36, "(1,1)=36");
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [1, 2]), 42, "(1,2)=42");
+  equal(ASN1HEX.getHexOfTLV_AtObj(h, 36), "02012b", "02012b");
 });
 
 test("ASN1HEX.getDecendantHexTLVByNthList", function() { 
@@ -120,9 +122,9 @@ test("ASN1HEX.getDecendantHexTLVByNthList", function() {
   var h2 = "308201a830820152a0030201020209009e775e7d9f43abc9300d06092a864886f70d0101050500301a310b3009060355040613024a50310b3009060355040a13027a32301e170d3130303533313036313735365a170d3230303532383036313735365a301a310b3009060355040613024a50310b3009060355040a13027a32305c300d06092a864886f70d0101010500034b003048024100b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b0203010001a37b3079301d0603551d0e04160414bb30852881898321fd833aa39cc1808a09bdc68c304a0603551d23044330418014bb30852881898321fd833aa39cc1808a09bdc68ca11ea41c301a310b3009060355040613024a50310b3009060355040a13027a328209009e775e7d9f43abc9300c0603551d13040530030101ff300d06092a864886f70d01010505000341005859f3cabb652ed31c470f27ca2043eefc9f20270cdec5d45b0ba7b8c4f68337918425e8a632d29c1c87a59deb2a56f3aa5e978245384afe2e75463836a8c451";
   var h3 = "301a310b3009060355040613024a50310b3009060355040a13027a32";
   expect(3);
-  equals(ASN1HEX.getDecendantHexTLVByNthList(h, 0, [1, 1]), "02012b", "(1,1)=02012b");
-  equals(ASN1HEX.getDecendantHexTLVByNthList(h2, 0, [0, 3]), h3, "issuer");
-  equals(ASN1HEX.getDecendantHexTLVByNthList(h2, 0, [0, 5]), h3, "subject");
+  equal(ASN1HEX.getDecendantHexTLVByNthList(h, 0, [1, 1]), "02012b", "(1,1)=02012b");
+  equal(ASN1HEX.getDecendantHexTLVByNthList(h2, 0, [0, 3]), h3, "issuer");
+  equal(ASN1HEX.getDecendantHexTLVByNthList(h2, 0, [0, 5]), h3, "subject");
 });
 
 
@@ -131,9 +133,7 @@ test("ASN1HEX.getDecendantHexTLVByNthList", function() {
   
 </head>
 <body>
-<h1 id="qunit-header">QUnit for hex represented ASN.1 library 'asn1hex.js'</h1>
-<h2 id="qunit-banner"></h2>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
 </body>
 </html>

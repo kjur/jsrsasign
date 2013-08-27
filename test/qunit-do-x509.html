@@ -2,6 +2,7 @@
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<title>QUnit for X.509 Certificate 'x509.js'</title>
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="qunit.js"></script>
 <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
@@ -92,65 +93,65 @@ var k1CertPEM = "" +
     
 test("pemToBase64", function() {
   var sResult = X509.pemToBase64(sCer1PEM);
-  equals(sResult, sCer1B64, "testing pem-base64 conversion.");
+  equal(sResult, sCer1B64, "testing pem-base64 conversion.");
 });
 
 test("pemToHex", function() {
   var sResult = X509.pemToHex(sCer1PEM);
-  equals(sResult, hCer1, "testing pem-hex conversion.");
+  equal(sResult, hCer1, "testing pem-hex conversion.");
 });
 
 test("getSubjectPublicKeyInfoPosFromCertHex", function() {
   var pSPK = X509.getSubjectPublicKeyInfoPosFromCertHex(hCer1);
-  equals(pSPK, 127 * 2, "check position of subject public key info.");
+  equal(pSPK, 127 * 2, "check position of subject public key info.");
 });
 
 test("getSubjectPublicKeyPosFromCertHex", function() {
   var pSPK = X509.getSubjectPublicKeyPosFromCertHex(hCer1);
-  equals(pSPK, 147 * 2, "check position of subject public key without encapsulation.");
+  equal(pSPK, 147 * 2, "check position of subject public key without encapsulation.");
 });
 
 test("getPublicKeyHexArrayFromCertHex", function() {
   var a = X509.getPublicKeyHexArrayFromCertHex(hCer1);
   expect(3);
-  equals(a.length, 2, "check array length.");
-  equals(a[0], "00b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
-  equals(a[1], "010001", "check E");
+  equal(a.length, 2, "check array length.");
+  equal(a[0], "00b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
+  equal(a[1], "010001", "check E");
 });
 
 test("getPublicKeyHexArrayFromCertPEM", function() {
   var a = X509.getPublicKeyHexArrayFromCertPEM(sCer1PEM);
   expect(3);
-  equals(a.length, 2, "check array length.");
-  equals(a[0], "00b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
-  equals(a[1], "010001", "check E");
+  equal(a.length, 2, "check array length.");
+  equal(a[0], "00b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
+  equal(a[1], "010001", "check E");
 });
 
 test("getPublicKeyHexArrayFromCertPEM sCer2PEM", function() {
   expect(8);
-  equals(X509.pemToBase64(sCer2PEM), sCer2B64, "check pem to base64.");
-  equals(X509.pemToHex(sCer2PEM), hCer2, "check pem to hex.");
+  equal(X509.pemToBase64(sCer2PEM), sCer2B64, "check pem to base64.");
+  equal(X509.pemToHex(sCer2PEM), hCer2, "check pem to hex.");
   var pTbsCert = X509.getHexTbsCertificateFromCert(hCer2);
-  equals(pTbsCert, 8, "check tbsCert position.");
-  equals(X509.getSubjectPublicKeyInfoPosFromCertHex(hCer2), 280,
+  equal(pTbsCert, 8, "check tbsCert position.");
+  equal(X509.getSubjectPublicKeyInfoPosFromCertHex(hCer2), 280,
          "check subjectPublicKeyInfo position.");
   var a = ASN1HEX.getPosArrayOfChildren_AtObj(hCer2, pTbsCert); 
-  equals(a.join("/"), "16/38/68/142/206/280", "check postion array of tbsCert.");
+  equal(a.join("/"), "16/38/68/142/206/280", "check postion array of tbsCert.");
 
   var a = X509.getPublicKeyHexArrayFromCertPEM(sCer2PEM);
-  equals(a.length, 2, "check array length.");
-  equals(a[0], "00d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021", "check N");
-  equals(a[1], "010001", "check E");
+  equal(a.length, 2, "check array length.");
+  equal(a[0], "00d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021", "check N");
+  equal(a[1], "010001", "check E");
 });
 
 test("X509.readCertPEM", function() {
   var c = new X509();
   c.readCertPEM(sCer1PEM);
   expect(4);
-  equals(c.subjectPublicKeyRSA_hN, "00b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
-  equals(c.subjectPublicKeyRSA_hE, "010001", "check E");
-  equals(c.subjectPublicKeyRSA.n.toString(16), "b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
-  equals(c.subjectPublicKeyRSA.e.toString(16), "10001", "check E");
+  equal(c.subjectPublicKeyRSA_hN, "00b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
+  equal(c.subjectPublicKeyRSA_hE, "010001", "check E");
+  equal(c.subjectPublicKeyRSA.n.toString(16), "b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
+  equal(c.subjectPublicKeyRSA.e.toString(16), "10001", "check E");
 });
 
 test("X509.subjectPublicKeyRSA.verifyString integration test", function() {
@@ -158,8 +159,8 @@ test("X509.subjectPublicKeyRSA.verifyString integration test", function() {
   var c = new X509();
   c.readCertPEM(sCer1PEM);
   expect(2);
-  equals(c.subjectPublicKeyRSA.verifyString("aaa", hSig3), true, "check sig is valid");
-  equals(c.subjectPublicKeyRSA.verifyString("aab", hSig3), false, "check sig is invalid.");
+  equal(c.subjectPublicKeyRSA.verifyString("aaa", hSig3), true, "check sig is valid");
+  equal(c.subjectPublicKeyRSA.verifyString("aab", hSig3), false, "check sig is invalid.");
 });
 
 test("X509.getSerialNumber/Issuer/Subject/NotBefore/NotAfter test", function() {
@@ -167,14 +168,14 @@ test("X509.getSerialNumber/Issuer/Subject/NotBefore/NotAfter test", function() {
   var c = new X509();
   c.readCertPEM(sCer1PEM);
   expect(8);
-  equals(c.getSerialNumberHex(), "009e775e7d9f43abc9", "sn = 02");
-  equals(c.getIssuerHex(), "301a310b3009060355040613024a50310b3009060355040a13027a32", "issuer");
-  equals(c.getSubjectHex(), "301a310b3009060355040613024a50310b3009060355040a13027a32", "subject");
-  equals(c.getNotBefore(), "100531061756Z", "notbefore");
-  equals(c.getNotAfter(), "200528061756Z", "notafter");
-  equals(X509.hex2dn(c.getSubjectHex()), "/C=JP/O=z2", "subjecthex2str");
-  equals(c.getIssuerString(), "/C=JP/O=z2", "issuer str");
-  equals(c.getSubjectString(), "/C=JP/O=z2", "subject str");
+  equal(c.getSerialNumberHex(), "009e775e7d9f43abc9", "sn = 02");
+  equal(c.getIssuerHex(), "301a310b3009060355040613024a50310b3009060355040a13027a32", "issuer");
+  equal(c.getSubjectHex(), "301a310b3009060355040613024a50310b3009060355040a13027a32", "subject");
+  equal(c.getNotBefore(), "100531061756Z", "notbefore");
+  equal(c.getNotAfter(), "200528061756Z", "notafter");
+  equal(X509.hex2dn(c.getSubjectHex()), "/C=JP/O=z2", "subjecthex2str");
+  equal(c.getIssuerString(), "/C=JP/O=z2", "issuer str");
+  equal(c.getSubjectString(), "/C=JP/O=z2", "subject str");
 });
 
 /*
@@ -182,10 +183,10 @@ test("hoge", function() {
   RSAKey.prototype.verifyString = _rsasign_verifyString;
   var r = new RSAKey();
   expect(4);
-  equals(hex2b64, null, "check 4");
-  equals(_rsasign_verifyString, null, "check 3");
-  equals(r.signString, null, "check signString function");
-  equals(r.verifyString, null, "check verifyString function");
+  equal(hex2b64, null, "check 4");
+  equal(_rsasign_verifyString, null, "check 3");
+  equal(r.signString, null, "check signString function");
+  equal(r.verifyString, null, "check verifyString function");
 });
  */
 
@@ -210,10 +211,8 @@ test("getPublicKeyInfoPropOfCertPEM k1(ECC)", function() {
   
 </head>
 <body>
-<h1 id="qunit-header">QUnit for X.509 Certificate 'x509.js'</h1>
-<h2 id="qunit-banner"></h2>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
 </body>
 <center><p>&copy; 2010 Kenji Urushima</p></center>
 </html>

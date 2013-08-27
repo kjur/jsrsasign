@@ -2,6 +2,7 @@
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<title>QUnit for RSAKey signing add-on 'rsa-sign.js of RSAPSS signature'</title>
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="qunit.js"></script>
 <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
@@ -89,25 +90,25 @@ module("Verifier Test");
 test("RSAPSS kp1.sig.aaa.-1.1 verify test", function() {
   var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
   var result = pubKey.verifyPSS("aaa", sKp1SigAAA1, "sha1", -1);
-  equals(result, true, 'kp1.sig');
+  equal(result, true, 'kp1.sig');
 });
 
 test("RSAPSS kp1.sig.aaa.-1.2 verify test", function() {
   var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
   var result = pubKey.verifyPSS("aaa", sKp1SigAAA2, "sha1", -1);
-  equals(result, true, 'kp1.sig');
+  equal(result, true, 'kp1.sig');
 });
 
 test("RSAPSS kp1.sig.aaa.-2.3 verify test", function() {
   var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
   var result = pubKey.verifyPSS("aaa", sKp1SigAAA3, "sha1", -2);
-  equals(result, true, 'kp1.sig');
+  equal(result, true, 'kp1.sig');
 });
 
 test("RSAPSS kp1.sig.aaa.-2.4 verify test", function() {
   var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
   var result = pubKey.verifyPSS("aaa", sKp1SigAAA4, "sha1", -2);
-  equals(result, true, 'kp1.sig');
+  equal(result, true, 'kp1.sig');
 });
 
 test("RSAPSS kp1 sign and verify", function() {
@@ -117,7 +118,7 @@ test("RSAPSS kp1 sign and verify", function() {
 
   var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
   var result = pubKey.verifyPSS("aaa", hSigValue, "sha1", -2);
-  equals(result, true, 'kp1.sig');
+  equal(result, true, 'kp1.sig');
 });
 
 });
@@ -125,10 +126,8 @@ test("RSAPSS kp1 sign and verify", function() {
   
 </head>
 <body>
-<h1 id="qunit-header">QUnit for RSAKey signing add-on 'rsa-sign.js of RSAPSS signature'</h1>
-<h2 id="qunit-banner"></h2>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
 </body>
 </html>
 

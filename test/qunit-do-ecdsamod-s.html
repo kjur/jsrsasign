@@ -2,7 +2,8 @@
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>QUnit for 'ecparam-1.0.js'</title>
+<meta charset="utf-8">
+<title>QUnit 'ecdsamod.js' static method test</title>
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="qunit.js"></script>
 <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
@@ -27,16 +28,14 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+var o = KJUR.crypto.ECDSA;
 
-test("ECParameterDB NIST P-256", function() {
-  var db = KJUR.crypto.ECParameterDB;
-  expect(5);
-  equal(typeof db.getByName("secp256r1"), "object", "secp256r1 defined");
-  equal(typeof db.getByName("NIST P-256"), "object", "alias NIST P-256 defined");
-  equal(typeof db.getByName("P-256"), "object", "alias P-256 defined");
-  equal(typeof db.getByName("prime256v1"), "object", "alias prime256v1 defined");
-  var ecparam = db.getByName("prime256v1");
-  equal(ecparam['n'].toString(16), "ffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551", "prime256v1:n = ");
+test("asn1SigToConcatSig k1.sig.aaa.1", function() {
+  equal(o.asn1SigToConcatSig('3045022100f729843c8bb5f285380ef5e4d708608d7449dadfa50129112668e972d30f210b0220051c589f0ebdad7a41370e9d9ce405734e854788387f21997028312a305ddae8'), 'f729843c8bb5f285380ef5e4d708608d7449dadfa50129112668e972d30f210b051c589f0ebdad7a41370e9d9ce405734e854788387f21997028312a305ddae8', '1');
+});
+
+test("concatSigToASN1Sig k1.sig.aaa.1", function() {
+  equal(o.concatSigToASN1Sig('f729843c8bb5f285380ef5e4d708608d7449dadfa50129112668e972d30f210b051c589f0ebdad7a41370e9d9ce405734e854788387f21997028312a305ddae8'), '3045022100f729843c8bb5f285380ef5e4d708608d7449dadfa50129112668e972d30f210b0220051c589f0ebdad7a41370e9d9ce405734e854788387f21997028312a305ddae8', '1');
 });
 
 });
@@ -46,6 +45,12 @@ test("ECParameterDB NIST P-256", function() {
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
+
+<b>NOTE:</b>
+<p>
+Currently this library works for only secp256r1, secp256k1 and secp384r1 EC curves
+besides some other curves are pre-defined.
+</p>
 
 <p>
 ECC related QUnit test pages: 
