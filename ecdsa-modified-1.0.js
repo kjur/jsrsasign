@@ -588,7 +588,7 @@ KJUR.crypto.ECDSA.hexRSSigToASN1Sig = function(hR, hS) {
 
 /**
  * convert R and S BigInteger object of signature to ASN.1 encoded signature
- * @name hexRSSigToASN1Sig
+ * @name biRSSigToASN1Sig
  * @memberOf KJUR.crypto.ECDSA
  * @function
  * @static
