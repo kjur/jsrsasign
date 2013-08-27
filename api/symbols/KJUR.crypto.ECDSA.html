@@ -378,6 +378,33 @@ for generating an EC key pair.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.asn1SigToConcatSig">asn1SigToConcatSig</a></b>(asn1Hex)
+								</div>
+								<div class="description">convert hexadecimal ASN.1 encoded signature to concatinated signature</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.biRSSigToASN1Sig">biRSSigToASN1Sig</a></b>(biR, biS)
+								</div>
+								<div class="description">convert R and S BigInteger object of signature to ASN.1 encoded signature</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.concatSigToASN1Sig">concatSigToASN1Sig</a></b>(concatSig)
+								</div>
+								<div class="description">convert hexadecimal concatinated signature to ASN.1 encoded signature</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.generateKeyPairHex">generateKeyPairHex</a></b>()
 								</div>
 								<div class="description">generate a EC key pair</div>
@@ -387,7 +414,25 @@ for generating an EC key pair.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.hexRSSigToASN1Sig">hexRSSigToASN1Sig</a></b>(hR, hS)
+								</div>
+								<div class="description">convert hexadecimal R and S value of signature to ASN.1 encoded signature</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.parseSigHex">parseSigHex</a></b>(sigHex)
+								</div>
+								<div class="description">parse ASN.1 DER encoded ECDSA signature</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.parseSigHexInHexRS">parseSigHexInHexRS</a></b>(sigHex)
 								</div>
 								<div class="description">parse ASN.1 DER encoded ECDSA signature</div>
 							</td>
@@ -473,6 +518,159 @@ Currently this class supports following named curves and their aliases.
 					Method Detail
 				</div>
 				
+					<a name=".asn1SigToConcatSig"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.ECDSA.</span><b>asn1SigToConcatSig</b>(asn1Hex)
+					
+					</div>
+					<div class="description">
+						convert hexadecimal ASN.1 encoded signature to concatinated signature
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>asn1Hex</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 encoded ECDSA signature value</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>ecdsa-modified 1.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> r-s concatinated format of ECDSA signature value</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".biRSSigToASN1Sig"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.ECDSA.</span><b>biRSSigToASN1Sig</b>(biR, biS)
+					
+					</div>
+					<div class="description">
+						convert R and S BigInteger object of signature to ASN.1 encoded signature
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>biR</b>
+									
+								</dt>
+								<dd>BigInteger object of R field of ECDSA signature value</dd>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>biS</b>
+									
+								</dt>
+								<dd>BIgInteger object of S field of ECDSA signature value</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>ecdsa-modified 1.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of ASN.1 encoded ECDSA signature value</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".concatSigToASN1Sig"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.ECDSA.</span><b>concatSigToASN1Sig</b>(concatSig)
+					
+					</div>
+					<div class="description">
+						convert hexadecimal concatinated signature to ASN.1 encoded signature
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>concatSig</b>
+									
+								</dt>
+								<dd>r-s concatinated format of ECDSA signature value</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>ecdsa-modified 1.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of ASN.1 encoded ECDSA signature value</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".generateKeyPairHex"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -510,6 +708,61 @@ var prvhex = keypair.ecprvhex; // hexadecimal string of EC public key</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Array}</span> associative array of hexadecimal string of private and public key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".hexRSSigToASN1Sig"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.ECDSA.</span><b>hexRSSigToASN1Sig</b>(hR, hS)
+					
+					</div>
+					<div class="description">
+						convert hexadecimal R and S value of signature to ASN.1 encoded signature
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hR</b>
+									
+								</dt>
+								<dd>hexadecimal string of R field of ECDSA signature value</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hS</b>
+									
+								</dt>
+								<dd>hexadecimal string of S field of ECDSA signature value</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>ecdsa-modified 1.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of ASN.1 encoded ECDSA signature value</dd>
 							
 							</dl>
 						
@@ -565,7 +818,63 @@ var biS = sig.s; // BigInteger object for 's' field of signature.</pre>
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{Array}</span> associative array of signature field r and s</dd>
+								<dd><span class="light fixedFont">{Array}</span> associative array of signature field r and s of BigInteger</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".parseSigHexInHexRS"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">KJUR.crypto.ECDSA.</span><b>parseSigHexInHexRS</b>(sigHex)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 DER encoded ECDSA signature
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+var sig = ec.parseSigHexInHexRS('30...');
+var hR = sig.r; // hexadecimal string for 'r' field of signature.
+var hS = sig.s; // hexadecimal string for 's' field of signature.</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sigHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of ECDSA signature value</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>ecdsa-modified 1.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> associative array of signature field r and s in hexadecimal</dd>
 							
 							</dl>
 						

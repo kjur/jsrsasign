@@ -1,9 +1,0 @@
-# EC key generation
-openssl ecparam -genkey -name secp521r1 -out k5.pem
-openssl ec -in k5.pem -pubout -out k5.pub.pem
-
-# signing by EC private key
-openssl dgst -sha256 -sign k5.pem -out k5.sig.aaa.1 aaa.txt 
-
-# validation by EC public key
-openssl dgst -verify k5.pub.pem -sha256 -signature k5.sig.aaa.1 aaa.txt
