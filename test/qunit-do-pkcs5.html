@@ -2,6 +2,7 @@
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<title>QUnit for PKCS5 private key reader 'pkcs5pkey.js'</title>
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 
 <!-- script type="text/javascript" src="qunit.js" /script -->
@@ -94,7 +95,7 @@ var sk12plainhex = "30820155020100300d06092a864886f70d01010105000482013f3082013b
 // ======= TEST ===================================================================================
 
 test("version", function() {
-  equal(PKCS5PKEY.version, "1.0.0", "check version.");
+  equal(PKCS5PKEY.version, "1.0.5", "check version.");
 });
 
 // k1.[0-1].{hex|pem|der}
@@ -264,10 +265,8 @@ test("getRSAKeyFromEncryptedPKCS8PEM", function() {
   
 </head>
 <body>
-<h1 id="qunit-header">QUnit for PKCS5 private key reader 'pkcs5pkey.js'</h1>
-<h2 id="qunit-banner"></h2>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
 </body>
 </html>
 

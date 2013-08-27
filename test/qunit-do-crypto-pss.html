@@ -2,6 +2,7 @@
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<title>QUnit for RSAKey signing add-on 'rsa-sign.js of RSAPSS signature'</title>
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="qunit.js"></script>
 <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
@@ -25,6 +26,10 @@
 <script language="JavaScript" type="text/javascript" src="../crypto-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../pkcs5pkey-1.0.js"></script>
 <script language="JavaScript" type="text/javascript" src="../base64x-1.1.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../ext/ec.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/ec-patch.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecdsa-modified-1.0.js"></script>
 
 <script>
 $(document).ready(function(){
@@ -95,7 +100,7 @@ test("Signature(SHA1withRSAandMGF1) kp1.sig.aaa.-1.1 verify test", function() {
   s1.initVerifyByPublicKey(pubKey);
   s1.updateString('aaa');
   var result = s1.verify(sKp1SigAAA1);
-  equals(result, true, 'kp1.sig');
+  equal(result, true, 'kp1.sig');
 });
 
 test("Signature(SHA1withRSAandMGF1) kp1.sig.aaa.-1.2 verify test", function() {
@@ -104,7 +109,7 @@ test("Signature(SHA1withRSAandMGF1) kp1.sig.aaa.-1.2 verify test", function() {
   s1.initVerifyByPublicKey(pubKey);
   s1.updateString('aaa');
   var result = s1.verify(sKp1SigAAA2);
-  equals(result, true, 'kp1.sig');
+  equal(result, true, 'kp1.sig');
 });
 
 test("Signature(SHA1withRSAandMGF1) kp1.sig.aaa.-2.3 verify test", function() {
@@ -114,7 +119,7 @@ test("Signature(SHA1withRSAandMGF1) kp1.sig.aaa.-2.3 verify test", function() {
   s1.initVerifyByPublicKey(pubKey);
   s1.updateString('aaa');
   var result = s1.verify(sKp1SigAAA3);
-  equals(result, true, 'kp1.sig');
+  equal(result, true, 'kp1.sig');
 });
 
 test("Signature(SHA1withRSAandMGF1) kp1.sig.aaa.-2.4 verify test", function() {
@@ -124,7 +129,7 @@ test("Signature(SHA1withRSAandMGF1) kp1.sig.aaa.-2.4 verify test", function() {
   s1.initVerifyByPublicKey(pubKey);
   s1.updateString('aaa');
   var result = s1.verify(sKp1SigAAA4);
-  equals(result, true, 'kp1.sig');
+  equal(result, true, 'kp1.sig');
 });
 
 test("Signature(SHA1withRSAandMGF1) PSS1.out.1 verify test", function() {
@@ -133,7 +138,7 @@ test("Signature(SHA1withRSAandMGF1) PSS1.out.1 verify test", function() {
   s1.initVerifyByPublicKey(pubKey);
   s1.updateString('aaa');
   var result = s1.verify(sKp1SigAAA5);
-  equals(result, true, 'kp1.sig');
+  equal(result, true, 'kp1.sig');
 });
 
 test("Signature(SHA1withRSAandMGF1) kp1 sign and verify", function() {
@@ -150,7 +155,7 @@ test("Signature(SHA1withRSAandMGF1) kp1 sign and verify", function() {
   s2.updateString('aaa');
   var result = s2.verify(hSigValue);
 
-  equals(result, true, 'kp1.sig');
+  equal(result, true, 'kp1.sig');
 });
 
 test("Signature(SHA256withRSAandMGF1) kp1 sign and verify", function() {
@@ -167,7 +172,7 @@ test("Signature(SHA256withRSAandMGF1) kp1 sign and verify", function() {
   s2.updateString('aaa');
   var result = s2.verify(hSigValue);
 
-  equals(result, true, 'kp1.sig');
+  equal(result, true, 'kp1.sig');
 });
 
 });
@@ -175,10 +180,8 @@ test("Signature(SHA256withRSAandMGF1) kp1 sign and verify", function() {
   
 </head>
 <body>
-<h1 id="qunit-header">QUnit for RSAKey signing add-on 'rsa-sign.js of RSAPSS signature'</h1>
-<h2 id="qunit-banner"></h2>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
 </body>
 </html>
 

@@ -1,4 +1,4 @@
-/*! ecdsa-modified-1.0.2.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
+/*! ecdsa-modified-1.0.3.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
  */
 /*
  * ecdsa-modified.js - modified Bitcoin.ECDSA class
@@ -13,7 +13,7 @@
  * @fileOverview
  * @name ecdsa-modified-1.0.js
  * @author Stefan Thomas (github.com/justmoon) and Kenji Urushima (kenji.urushima@gmail.com)
- * @version 1.0.2 (2013-Aug-19)
+ * @version 1.0.3 (2013-Aug-27)
  * @since jsrsasign 4.0
  * @license <a href="https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE">MIT License</a>
  */
@@ -166,10 +166,7 @@ KJUR.crypto.ECDSA = function(params) {
 
 	var s = k.modInverse(n).multiply(e.add(d.multiply(r))).mod(n);
 
-	var derR = new KJUR.asn1.DERInteger({'bigint': r});
-	var derS = new KJUR.asn1.DERInteger({'bigint': s});
-	var derSeq = new KJUR.asn1.DERSequence({'array': [derR, derS]});
-	return derSeq.getEncodedHex();
+	return KJUR.crypto.ECDSA.biRSSigToASN1Sig(r, s);
     };
 
     this.sign = function (hash, priv) {
@@ -209,7 +206,7 @@ KJUR.crypto.ECDSA = function(params) {
     this.verifyHex = function(hashHex, sigHex, pubkeyHex) {
 	var r,s;
 
-	var obj = this.parseSigHex(sigHex);
+	var obj = KJUR.crypto.ECDSA.parseSigHex(sigHex);
 	r = obj.r;
 	s = obj.s;
 
@@ -332,50 +329,6 @@ KJUR.crypto.ECDSA = function(params) {
 
 	return {r: r, s: s};
     };
-
-    /*
-     * @since ecdsa-modified 1.0.1
-     */
-    /**
-     * parse ASN.1 DER encoded ECDSA signature
-     * @name parseSigHex
-     * @memberOf KJUR.crypto.ECDSA
-     * @function
-     * @param {String} sigHex hexadecimal string of ECDSA signature value
-     * @return {Array} associative array of signature field r and s
-     * @since ecdsa-modified 1.0.1
-     * @example
-     * var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
-     * var sig = ec.parseSigHex('30...');
-     * var biR = sig.r; // BigInteger object for 'r' field of signature.
-     * var biS = sig.s; // BigInteger object for 's' field of signature.
-     */
-    this.parseSigHex = function(sigHex) {
-	// 1. ASN.1 Sequence Check
-	if (sigHex.substr(0, 2) != "30")
-	    throw "signature is not a ASN.1 sequence";
-
-	// 2. Items of ASN.1 Sequence Check
-	var a = ASN1HEX.getPosArrayOfChildren_AtObj(sigHex, 0);
-	if (a.length != 2)
-	    throw "number of signature ASN.1 sequence elements seem wrong";
-
-	// 3. Integer check
-	var iTLV1 = a[0];
-	var iTLV2 = a[1];
-	if (sigHex.substr(iTLV1, 2) != "02")
-	    throw "1st item of sequene of signature is not ASN.1 integer";
-	if (sigHex.substr(iTLV2, 2) != "02")
-	    throw "2nd item of sequene of signature is not ASN.1 integer";
-
-	// 4. getting value
-	var hR = ASN1HEX.getHexOfV_AtObj(sigHex, iTLV1);
-	var hS = ASN1HEX.getHexOfV_AtObj(sigHex, iTLV2);
-	var biR = new BigInteger(hR, 16);
-	var biS = new BigInteger(hS, 16);
-
-	return {'r': biR, 's': biS};
-    }
 
     this.parseSigCompact = function (sig) {
 	if (sig.length !== 65) {
@@ -502,5 +455,152 @@ KJUR.crypto.ECDSA = function(params) {
 	if (params['prv'] !== undefined) this.prvKeyHex = params['prv'];
 	if (params['pub'] !== undefined) this.pubKeyHex = params['pub'];
     }
+};
+
+/**
+ * parse ASN.1 DER encoded ECDSA signature
+ * @name parseSigHex
+ * @memberOf KJUR.crypto.ECDSA
+ * @function
+ * @static
+ * @param {String} sigHex hexadecimal string of ECDSA signature value
+ * @return {Array} associative array of signature field r and s of BigInteger
+ * @since ecdsa-modified 1.0.1
+ * @example
+ * var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+ * var sig = ec.parseSigHex('30...');
+ * var biR = sig.r; // BigInteger object for 'r' field of signature.
+ * var biS = sig.s; // BigInteger object for 's' field of signature.
+ */
+KJUR.crypto.ECDSA.parseSigHex = function(sigHex) {
+    var p = KJUR.crypto.ECDSA.parseSigHexInHexRS(sigHex);
+    var biR = new BigInteger(p.r, 16);
+    var biS = new BigInteger(p.s, 16);
+    
+    return {'r': biR, 's': biS};
+};
+
+/**
+ * parse ASN.1 DER encoded ECDSA signature
+ * @name parseSigHexInHexRS
+ * @memberOf KJUR.crypto.ECDSA
+ * @function
+ * @static
+ * @param {String} sigHex hexadecimal string of ECDSA signature value
+ * @return {Array} associative array of signature field r and s in hexadecimal
+ * @since ecdsa-modified 1.0.3
+ * @example
+ * var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+ * var sig = ec.parseSigHexInHexRS('30...');
+ * var hR = sig.r; // hexadecimal string for 'r' field of signature.
+ * var hS = sig.s; // hexadecimal string for 's' field of signature.
+ */
+KJUR.crypto.ECDSA.parseSigHexInHexRS = function(sigHex) {
+    // 1. ASN.1 Sequence Check
+    if (sigHex.substr(0, 2) != "30")
+	throw "signature is not a ASN.1 sequence";
+
+    // 2. Items of ASN.1 Sequence Check
+    var a = ASN1HEX.getPosArrayOfChildren_AtObj(sigHex, 0);
+    if (a.length != 2)
+	throw "number of signature ASN.1 sequence elements seem wrong";
+    
+    // 3. Integer check
+    var iTLV1 = a[0];
+    var iTLV2 = a[1];
+    if (sigHex.substr(iTLV1, 2) != "02")
+	throw "1st item of sequene of signature is not ASN.1 integer";
+    if (sigHex.substr(iTLV2, 2) != "02")
+	throw "2nd item of sequene of signature is not ASN.1 integer";
+
+    // 4. getting value
+    var hR = ASN1HEX.getHexOfV_AtObj(sigHex, iTLV1);
+    var hS = ASN1HEX.getHexOfV_AtObj(sigHex, iTLV2);
+    
+    return {'r': hR, 's': hS};
+};
+
+/**
+ * convert hexadecimal ASN.1 encoded signature to concatinated signature
+ * @name asn1SigToConcatSig
+ * @memberOf KJUR.crypto.ECDSA
+ * @function
+ * @static
+ * @param {String} asn1Hex hexadecimal string of ASN.1 encoded ECDSA signature value
+ * @return {String} r-s concatinated format of ECDSA signature value
+ * @since ecdsa-modified 1.0.3
+ */
+KJUR.crypto.ECDSA.asn1SigToConcatSig = function(asn1Sig) {
+    var pSig = KJUR.crypto.ECDSA.parseSigHexInHexRS(asn1Sig);
+    var hR = pSig.r;
+    var hS = pSig.s;
+
+    if (hR.substr(0, 2) == "00" && (((hR.length / 2) * 8) % (16 * 8)) == 8) 
+	hR = hR.substr(2);
+
+    if (hS.substr(0, 2) == "00" && (((hS.length / 2) * 8) % (16 * 8)) == 8) 
+	hS = hS.substr(2);
+
+    if ((((hR.length / 2) * 8) % (16 * 8)) != 0)
+	throw "unknown ECDSA sig r length error";
+
+    if ((((hS.length / 2) * 8) % (16 * 8)) != 0)
+	throw "unknown ECDSA sig s length error";
+
+    return hR + hS;
+};
+
+/**
+ * convert hexadecimal concatinated signature to ASN.1 encoded signature
+ * @name concatSigToASN1Sig
+ * @memberOf KJUR.crypto.ECDSA
+ * @function
+ * @static
+ * @param {String} concatSig r-s concatinated format of ECDSA signature value
+ * @return {String} hexadecimal string of ASN.1 encoded ECDSA signature value
+ * @since ecdsa-modified 1.0.3
+ */
+KJUR.crypto.ECDSA.concatSigToASN1Sig = function(concatSig) {
+    if ((((concatSig.length / 2) * 8) % (16 * 8)) != 0)
+	throw "unknown ECDSA concatinated r-s sig  length error";
+
+    var hR = concatSig.substr(0, concatSig.length / 2);
+    var hS = concatSig.substr(concatSig.length / 2);
+    return KJUR.crypto.ECDSA.hexRSSigToASN1Sig(hR, hS);
+};
+
+/**
+ * convert hexadecimal R and S value of signature to ASN.1 encoded signature
+ * @name hexRSSigToASN1Sig
+ * @memberOf KJUR.crypto.ECDSA
+ * @function
+ * @static
+ * @param {String} hR hexadecimal string of R field of ECDSA signature value
+ * @param {String} hS hexadecimal string of S field of ECDSA signature value
+ * @return {String} hexadecimal string of ASN.1 encoded ECDSA signature value
+ * @since ecdsa-modified 1.0.3
+ */
+KJUR.crypto.ECDSA.hexRSSigToASN1Sig = function(hR, hS) {
+    var biR = new BigInteger(hR, 16);
+    var biS = new BigInteger(hS, 16);
+    return KJUR.crypto.ECDSA.biRSSigToASN1Sig(biR, biS);
+};
+
+/**
+ * convert R and S BigInteger object of signature to ASN.1 encoded signature
+ * @name hexRSSigToASN1Sig
+ * @memberOf KJUR.crypto.ECDSA
+ * @function
+ * @static
+ * @param {BigInteger} biR BigInteger object of R field of ECDSA signature value
+ * @param {BigInteger} biS BIgInteger object of S field of ECDSA signature value
+ * @return {String} hexadecimal string of ASN.1 encoded ECDSA signature value
+ * @since ecdsa-modified 1.0.3
+ */
+KJUR.crypto.ECDSA.biRSSigToASN1Sig = function(biR, biS) {
+    var derR = new KJUR.asn1.DERInteger({'bigint': biR});
+    var derS = new KJUR.asn1.DERInteger({'bigint': biS});
+    var derSeq = new KJUR.asn1.DERSequence({'array': [derR, derS]});
+    return derSeq.getEncodedHex();
 };
 

@@ -2,6 +2,7 @@
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<title>QUnit for 'base64x.js'</title>
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="qunit.js"></script>
 <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
@@ -16,14 +17,14 @@ $(document).ready(function(){
 
 test("hextorstr", function() {
   expect(2);
-  equals(hextorstr("616161"), "aaa", "aaa");
-  equals(hextorstr("00010203"), "\x00\x01\x02\x03", "\\x00\\x01\\x02\\x03");
+  equal(hextorstr("616161"), "aaa", "aaa");
+  equal(hextorstr("00010203"), "\x00\x01\x02\x03", "\\x00\\x01\\x02\\x03");
 });
 
 test("rstrtohex", function() {
   expect(2);
-  equals(rstrtohex("aaa"), "616161", "aaa");
-  equals(rstrtohex("\x00\x01\x02\x03"), "00010203", "00010203");
+  equal(rstrtohex("aaa"), "616161", "aaa");
+  equal(rstrtohex("\x00\x01\x02\x03"), "00010203", "00010203");
 });
 
 });
@@ -31,9 +32,7 @@ test("rstrtohex", function() {
   
 </head>
 <body>
-<h1 id="qunit-header">QUnit for 'base64x.js'</h1>
-<h2 id="qunit-banner"></h2>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
 </body>
 </html>

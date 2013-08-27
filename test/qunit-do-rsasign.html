@@ -2,6 +2,7 @@
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<title>QUnit for RSAKey signing add-on 'rsa-sign.js'</title>
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="qunit.js"></script>
 <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
@@ -64,15 +65,15 @@ module("Padding Test");
 test("charCodeAt test", function() {
   expect(1);
   var s = new String("aaa");
-  equals(s.charCodeAt(0), 97, "aaa 0 61");
+  equal(s.charCodeAt(0), 97, "aaa 0 61");
 });
 
 test("_rsasign_getHexPaddedDigestInfoForString aaa 1024/sha1", function() {
   var hExpected = "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
   var hPM = _rsasign_getHexPaddedDigestInfoForString("aaa", 1024, 'sha1');
   expect(2);
-  equals(hPM.length, 256, "check padded message length 128byte*2chars=256chars");
-  equals(hPM, hExpected,
+  equal(hPM.length, 256, "check padded message length 128byte*2chars=256chars");
+  equal(hPM, hExpected,
          "check padded message for string aaa with SHA1withRSA 1024bit" );
 });
 
@@ -80,8 +81,8 @@ test("_rsasign_getHexPaddedDigestInfoForString aaa 1024/sha256", function() {
   var hExpected = "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003031300d0609608648016503040201050004209834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0";
   var hPM = _rsasign_getHexPaddedDigestInfoForString("aaa", 1024, 'sha256');
   expect(2);
-  equals(hPM.length, 256, "check padded message length 128byte*2chars=256chars");
-  equals(hPM, hExpected,
+  equal(hPM.length, 256, "check padded message length 128byte*2chars=256chars");
+  equal(hPM, hExpected,
          "check padded message for string aaa with SHA256withRSA 1024bit" );
 });
 
@@ -89,8 +90,8 @@ test("_rsasign_getHexPaddedDigestInfoForString aaa 512/sha1", function() {
   var hExpected = "0001ffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
   var hPM = _rsasign_getHexPaddedDigestInfoForString("aaa", 512, 'sha1');
   expect(2);
-  equals(hPM.length, 128, "check padded message length 64byte*2chars=128chars");
-  equals(hPM, hExpected,
+  equal(hPM.length, 128, "check padded message length 64byte*2chars=128chars");
+  equal(hPM, hExpected,
          "check padded message for string aaa with SHA1withRSA 512bit" );
 });
 
@@ -98,8 +99,8 @@ test("_rsasign_getHexPaddedDigestInfoForString aaa 2048/sha1", function() {
   var hExpected = "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
   var hPM = _rsasign_getHexPaddedDigestInfoForString("aaa", 2048, 'sha1');
   expect(2);
-  equals(hPM.length, 512, "check padded message length 256byte*2chars=512chars");
-  equals(hPM, hExpected,
+  equal(hPM.length, 512, "check padded message length 256byte*2chars=512chars");
+  equal(hPM, hExpected,
          "check padded message for string aaa with SHA1withRSA 2048bit" );
 });
 
@@ -107,8 +108,8 @@ test("_rsasign_getHexPaddedDigestInfoForString aaa 4096/sha1", function() {
   var hExpected = "0001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
   var hPM = _rsasign_getHexPaddedDigestInfoForString("aaa", 4096, 'sha1');
   expect(2);
-  equals(hPM.length, 1024, "check padded message length 512byte*2chars=1024chars");
-  equals(hPM, hExpected,
+  equal(hPM.length, 1024, "check padded message length 512byte*2chars=1024chars");
+  equal(hPM, hExpected,
          "check padded message for string aaa with SHA1withRSA 4096bit" );
 });
 
@@ -120,11 +121,11 @@ test("RSAKey.signString(aaa,sha1)", function() {
 
   var rsa = new RSAKey();
   rsa.setPrivateEx(k_n, k_e, k_d, k_p, k_q, k_dp, k_dq, k_co);
-  equals(rsa.n.bitLength(), 1024, "check key size");
+  equal(rsa.n.bitLength(), 1024, "check key size");
 
   //var hSig = rsa.signStringWithSHA1("aaa");
   var hSig = rsa.signString("aaa", 'sha1');
-  equals(hSig, hSigAAA,
+  equal(hSig, hSigAAA,
          "String 'aaa' is signed properly with SHA1withRSA algorithm." );
 });
 
@@ -133,11 +134,11 @@ test("RSAKey.signString(aaa,sha1) via readPEM", function() {
 
   var rsa = new RSAKey();
   rsa.readPrivateKeyFromPEMString(sKey1PEM);
-  equals(rsa.n.bitLength(), 1024, "check key size");
+  equal(rsa.n.bitLength(), 1024, "check key size");
 
   //var hSig = rsa.signStringWithSHA1("aaa");
   var hSig = rsa.signString("aaa", 'sha1');
-  equals(hSig, hSigAAA,
+  equal(hSig, hSigAAA,
          "String 'aaa' is signed properly with SHA1withRSA algorithm. (2)" );
 });
 
@@ -146,11 +147,11 @@ test("RSAKey.signString(aaa,sha256) via readPEM", function() {
 
   var rsa = new RSAKey();
   rsa.readPrivateKeyFromPEMString(sKey1PEM);
-  equals(rsa.n.bitLength(), 1024, "check key size");
+  equal(rsa.n.bitLength(), 1024, "check key size");
 
   //var hSig = rsa.signStringWithSHA256("aaa");
   var hSig = rsa.signString("aaa", 'sha256');
-  equals(hSig, hSigAAAkZ1SHA256,
+  equal(hSig, hSigAAAkZ1SHA256,
          "String 'aaa' is signed properly with SHA256withRSA algorithm. (2)" );
 });
 
@@ -167,8 +168,8 @@ test("_rsasign_getDecryptSignatureBI", function() {
   var hSigExpected = "1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
 
   expect(2);
-  equals(biDecSig.toString(16), hSigExpected, "checking decrypted signature.");
-  equals(biDecSig.toString(16).length, (1024 / 4) - 3, "check bitLength of decrypted signature.");
+  equal(biDecSig.toString(16), hSigExpected, "checking decrypted signature.");
+  equal(biDecSig.toString(16).length, (1024 / 4) - 3, "check bitLength of decrypted signature.");
 });
 
 test("_rsasign_getHexDigestInfoFromSig", function() {
@@ -179,16 +180,16 @@ test("_rsasign_getHexDigestInfoFromSig", function() {
   var hDi = _rsasign_getHexDigestInfoFromSig(biSig, k_n, k_e);
   var hDiExpected = "3021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
 
-  equals(hDi, hDiExpected, "checking digestInfo.");
+  equal(hDi, hDiExpected, "checking digestInfo.");
 });
 
 test("_rsasign_getAlgNameAndHashFromHexDisgestInfo", function() {
   var hDigestInfo = "3021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815";
   var a = _rsasign_getAlgNameAndHashFromHexDisgestInfo(hDigestInfo);
   expect(3);
-  equals(a.length, 2, "check result length.");
-  equals(a[0], 'sha1', "check algName");
-  equals(a[1], '7e240de74fb1ed08fa08d38063f6a6a91462a815', 'check hash value');
+  equal(a.length, 2, "check result length.");
+  equal(a[0], 'sha1', "check algName");
+  equal(a[1], '7e240de74fb1ed08fa08d38063f6a6a91462a815', 'check hash value');
 });
 
 test("_rsasign_verifySignatureWithArgs", function() {
@@ -201,9 +202,9 @@ test("_rsasign_verifySignatureWithArgs", function() {
   var result = _rsasign_verifySignatureWithArgs(sMsg, biSig, k_n, k_e);
 
   expect(2);
-  equals(KJUR.crypto.Util.sha1("aaa"), '7e240de74fb1ed08fa08d38063f6a6a91462a815',
+  equal(KJUR.crypto.Util.sha1("aaa"), '7e240de74fb1ed08fa08d38063f6a6a91462a815',
          'check hex_sha1 works properly.');
-  equals(result, true, 'check signature verification result');
+  equal(result, true, 'check signature verification result');
 });
 
 test("RSAKey.verifyHexSignatureForMessage aaa hSig", function() {
@@ -218,7 +219,7 @@ test("RSAKey.verifyHexSignatureForMessage aaa hSig", function() {
   var result = rsa.verifyHexSignatureForMessage(hSig, sMsg);
   //var result = true;
 
-  equals(result, true, 'check signature verification result');
+  equal(result, true, 'check signature verification result');
 });
 
 test("RSAKey.verifyHexSignatureForMessage aaa ByteArray hSig", function() {
@@ -232,7 +233,7 @@ test("RSAKey.verifyHexSignatureForMessage aaa ByteArray hSig", function() {
 
   var result = rsa.verifyHexSignatureForMessage(hSig, sMsg);
 
-  equals(result, true, 'signature of message ByteArray aaa is successfully verified.');
+  equal(result, true, 'signature of message ByteArray aaa is successfully verified.');
 });
 
 //=========================================================================
@@ -244,10 +245,10 @@ test("array test 1", function() {
   var a1 = Array(97, 97, 97);
   var a2 = Array(97, 97, 98);
   expect(4);
-  equals(a1, a1, "test1");
-  equals(a1, a2, "test2");
-  equals(a1 == a2, true, "test3");
-  equals(a1 == a1, true, "test4");
+  equal(a1, a1, "test1");
+  equal(a1, a2, "test2");
+  equal(a1 == a2, true, "test3");
+  equal(a1 == a1, true, "test4");
 });
  */
 
@@ -256,9 +257,7 @@ test("array test 1", function() {
   
 </head>
 <body>
-<h1 id="qunit-header">QUnit for RSAKey signing add-on 'rsa-sign.js'</h1>
-<h2 id="qunit-banner"></h2>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
 </body>
 </html>

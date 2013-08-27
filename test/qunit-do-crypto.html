@@ -2,6 +2,7 @@
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<title>QUnit for Cryptographic Provider Class 'crypto.js'</title>
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="qunit.js"></script>
 <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
@@ -28,6 +29,9 @@
 <script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
 <script language="JavaScript" type="text/javascript" src="../x509-1.1.js"></script>
 
+<script language="JavaScript" type="text/javascript" src="../ext/ec.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/ec-patch.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecdsa-modified-1.0.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -71,80 +75,80 @@ var z3pem = "-----BEGIN RSA PRIVATE KEY-----\n" +
 test("Util class (static) test", function() {
   var o = KJUR.crypto.Util;
   expect(4);
-  equals(o.DIGESTINFOHEAD['sha1'], "3021300906052b0e03021a05000414", "DIGESTINFOHEAD sha1");
-  equals(o.getDigestInfoHex("7e240de74fb1ed08fa08d38063f6a6a91462a815", "sha1"),
+  equal(o.DIGESTINFOHEAD['sha1'], "3021300906052b0e03021a05000414", "DIGESTINFOHEAD sha1");
+  equal(o.getDigestInfoHex("7e240de74fb1ed08fa08d38063f6a6a91462a815", "sha1"),
          "3021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815",
          "getDigestInfoHex sha1(aaa)");
 
   var hPadDI = o.getPaddedDigestInfoHex("7e240de74fb1ed08fa08d38063f6a6a91462a815", "sha1", 512);
-  equals(hPadDI.length, 512 * 2 / 8, "getPaddedDigestInfoHex sha1(aaa) length=512*2/8=128");
-  equals(hPadDI,
+  equal(hPadDI.length, 512 * 2 / 8, "getPaddedDigestInfoHex sha1(aaa) length=512*2/8=128");
+  equal(hPadDI,
          "0001ffffffffffffffffffffffffffffffffffffffffffffffffffff003021300906052b0e03021a050004147e240de74fb1ed08fa08d38063f6a6a91462a815",
          "getPaddedDigestInfoHex sha1(aaa)");
 });
 
 test("Util.{sha1,md5} test", function() {
   expect(2);
-  equals(KJUR.crypto.Util.sha1('aaa'), '7e240de74fb1ed08fa08d38063f6a6a91462a815', 'sha1 aaa');
-  equals(KJUR.crypto.Util.md5('aaa'), '47bce5c74f589f4867dbd57e9ca9f808', 'md5 aaa');
+  equal(KJUR.crypto.Util.sha1('aaa'), '7e240de74fb1ed08fa08d38063f6a6a91462a815', 'sha1 aaa');
+  equal(KJUR.crypto.Util.md5('aaa'), '47bce5c74f589f4867dbd57e9ca9f808', 'md5 aaa');
 });
 
 test("Util.hashString(aaa, {sha1,md5}) test", function() {
   expect(2);
-  equals(KJUR.crypto.Util.hashString('aaa', 'sha1'), '7e240de74fb1ed08fa08d38063f6a6a91462a815', 'sha1 aaa');
-  equals(KJUR.crypto.Util.hashString('aaa', 'md5'), '47bce5c74f589f4867dbd57e9ca9f808', 'md5 aaa');
+  equal(KJUR.crypto.Util.hashString('aaa', 'sha1'), '7e240de74fb1ed08fa08d38063f6a6a91462a815', 'sha1 aaa');
+  equal(KJUR.crypto.Util.hashString('aaa', 'md5'), '47bce5c74f589f4867dbd57e9ca9f808', 'md5 aaa');
 });
 
 test("Util.hashHex(616161, {sha1,md5}) test", function() {
   expect(2);
-  equals(KJUR.crypto.Util.hashHex('616161', 'sha1'), '7e240de74fb1ed08fa08d38063f6a6a91462a815', 'sha1 aaa');
-  equals(KJUR.crypto.Util.hashHex('616161', 'md5'), '47bce5c74f589f4867dbd57e9ca9f808', 'md5 aaa');
+  equal(KJUR.crypto.Util.hashHex('616161', 'sha1'), '7e240de74fb1ed08fa08d38063f6a6a91462a815', 'sha1 aaa');
+  equal(KJUR.crypto.Util.hashHex('616161', 'md5'), '47bce5c74f589f4867dbd57e9ca9f808', 'md5 aaa');
 });
 
 test("MessageDigest test", function() {
   expect(10);
 
   var md1 = new KJUR.crypto.MessageDigest({"alg": "sha1", "prov": "cryptojs"});
-  equals(md1.digestString("aaa"), "7e240de74fb1ed08fa08d38063f6a6a91462a815", "digestString(aaa)");
+  equal(md1.digestString("aaa"), "7e240de74fb1ed08fa08d38063f6a6a91462a815", "digestString(aaa)");
 
   var md2 = new KJUR.crypto.MessageDigest({"alg": "sha1", "prov": "cryptojs"});
   md2.updateString("a");
   md2.updateString("aa");
-  equals(md2.digest(), "7e240de74fb1ed08fa08d38063f6a6a91462a815", "updateStr(a),updateStr(aa),digest()");
+  equal(md2.digest(), "7e240de74fb1ed08fa08d38063f6a6a91462a815", "updateStr(a),updateStr(aa),digest()");
 
   var md3 = new KJUR.crypto.MessageDigest({"alg": "sha1", "prov": "cryptojs"});
-  equals(md3.digestHex("616161"), "7e240de74fb1ed08fa08d38063f6a6a91462a815", "digestHex(616161)");
+  equal(md3.digestHex("616161"), "7e240de74fb1ed08fa08d38063f6a6a91462a815", "digestHex(616161)");
 
   var md4 = new KJUR.crypto.MessageDigest({"alg": "sha1", "prov": "cryptojs"});
   md4.updateHex("6161");
   md4.updateHex("61");
-  equals(md4.digest(), "7e240de74fb1ed08fa08d38063f6a6a91462a815", "updateHex(6161),updateHex(61),digest()");
+  equal(md4.digest(), "7e240de74fb1ed08fa08d38063f6a6a91462a815", "updateHex(6161),updateHex(61),digest()");
   
   // hash alg variation
   var md5 = new KJUR.crypto.MessageDigest({"alg": "md5", "prov": "cryptojs"});
-  equals(md5.digestString("aaa"), "47bce5c74f589f4867dbd57e9ca9f808", "md5/cryptojs aaa");
+  equal(md5.digestString("aaa"), "47bce5c74f589f4867dbd57e9ca9f808", "md5/cryptojs aaa");
 
   var md6 = new KJUR.crypto.MessageDigest({"alg": "ripemd160", "prov": "cryptojs"});
-  equals(md6.digestString("aaa"), "08889bd7b151aa174c21f33f59147fa65381edea", "ripemd160/cryptojs aaa");
+  equal(md6.digestString("aaa"), "08889bd7b151aa174c21f33f59147fa65381edea", "ripemd160/cryptojs aaa");
 
   var md7 = new KJUR.crypto.MessageDigest({"alg": "sha256", "prov": "cryptojs"});
-  equals(md7.digestString("aaa"), "9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0", "sha256/cryptojs aaa");
+  equal(md7.digestString("aaa"), "9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0", "sha256/cryptojs aaa");
 
   var md8 = new KJUR.crypto.MessageDigest({"alg": "sha224", "prov": "cryptojs"});
-  equals(md8.digestString("aaa"), "ed782653bfec275cf37d027511a68cece08d1e53df1360c762ce043a", "sha224/cryptojs aaa");
+  equal(md8.digestString("aaa"), "ed782653bfec275cf37d027511a68cece08d1e53df1360c762ce043a", "sha224/cryptojs aaa");
 
   var md9 = new KJUR.crypto.MessageDigest({"alg": "sha512", "prov": "cryptojs"});
-  equals(md9.digestString("aaa"), "d6f644b19812e97b5d871658d6d3400ecd4787faeb9b8990c1e7608288664be77257104a58d033bcf1a0e0945ff06468ebe53e2dff36e248424c7273117dac09", "sha512/cryptojs aaa");
+  equal(md9.digestString("aaa"), "d6f644b19812e97b5d871658d6d3400ecd4787faeb9b8990c1e7608288664be77257104a58d033bcf1a0e0945ff06468ebe53e2dff36e248424c7273117dac09", "sha512/cryptojs aaa");
 
   var md10 = new KJUR.crypto.MessageDigest({"alg": "sha384", "prov": "cryptojs"});
-  equals(md10.digestString("aaa"), "8e07e5bdd64aa37536c1f257a6b44963cc327b7d7dcb2cb47a22073d33414462bfa184487cf372ce0a19dfc83f8336d8", "sha384/cryptojs aaa");
+  equal(md10.digestString("aaa"), "8e07e5bdd64aa37536c1f257a6b44963cc327b7d7dcb2cb47a22073d33414462bfa184487cf372ce0a19dfc83f8336d8", "sha384/cryptojs aaa");
 
 });
 
 test("MessageDigest empty provider", function() {
   expect(1);
   var md1 = new KJUR.crypto.MessageDigest({"alg": "sha1"});
-  equals(md1.digestString("aaa"), "7e240de74fb1ed08fa08d38063f6a6a91462a815", "sha1(aaa)");
+  equal(md1.digestString("aaa"), "7e240de74fb1ed08fa08d38063f6a6a91462a815", "sha1(aaa)");
 });
 
 test("Signature class test", function() {
@@ -152,18 +156,18 @@ test("Signature class test", function() {
 
   var prvKey = new RSAKey();
   prvKey.readPrivateKeyFromASN1HexString(z1PrvHex); //=z1.prv.hex
-  equals(prvKey.n.bitLength(), 512, "prvKey.n.length");
+  equal(prvKey.n.bitLength(), 512, "prvKey.n.length");
 
   var sig1 = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
-  equals(sig1.mdAlgName, "sha1", "constructor SHA1withRSA mdAlgName");
-  equals(sig1.pubkeyAlgName, "rsa", "constructor SHA1withRSA pubkeyAlgName");
+  equal(sig1.mdAlgName, "sha1", "constructor SHA1withRSA mdAlgName");
+  equal(sig1.pubkeyAlgName, "rsa", "constructor SHA1withRSA pubkeyAlgName");
 
   sig1.initSign(prvKey);
   sig1.updateString("aaa");
   sig1.sign();
-  equals(sig1.sHashHex, "7e240de74fb1ed08fa08d38063f6a6a91462a815", "updateString(aaa),sign sHashHex");
+  equal(sig1.sHashHex, "7e240de74fb1ed08fa08d38063f6a6a91462a815", "updateString(aaa),sign sHashHex");
   // TSign.sig.bin
-  equals(sig1.hSign, "d764dcacb137f2e92d9b4b73494995e16a4dae4dc5b27ecde744c9a1ecaaef9c99041544eae2108dca6559ae79d2fb3d87fa2b87699efa6dc8f3d0d2672c3b07", "updateString(aaa),sign hSign");
+  equal(sig1.hSign, "d764dcacb137f2e92d9b4b73494995e16a4dae4dc5b27ecde744c9a1ecaaef9c99041544eae2108dca6559ae79d2fb3d87fa2b87699efa6dc8f3d0d2672c3b07", "updateString(aaa),sign hSign");
 
   // ================================
 
@@ -171,22 +175,22 @@ test("Signature class test", function() {
   var s2 = new KJUR.crypto.Signature({"alg": "MD5withRSA", "prov": "cryptojs/jsrsa"});
   s2.initSign(prvKey);
   s2.signString('aaa');
-  equals(s2.sHashHex, "47bce5c74f589f4867dbd57e9ca9f808", "md5 aaa sHashHex");
+  equal(s2.sHashHex, "47bce5c74f589f4867dbd57e9ca9f808", "md5 aaa sHashHex");
 
   var s3 = new KJUR.crypto.Signature({"alg": "SHA256withRSA", "prov": "cryptojs/jsrsa"});
   s3.initSign(prvKey);
   s3.signString('aaa');
-  equals(s3.sHashHex, "9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0", "sha256 aaa sHashHex");
+  equal(s3.sHashHex, "9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0", "sha256 aaa sHashHex");
 
   var s4 = new KJUR.crypto.Signature({"alg": "SHA512withRSA", "prov": "cryptojs/jsrsa", "prvkeypem":z3pem});
   s4.signString('aaa');
-  equals(s4.sHashHex, "d6f644b19812e97b5d871658d6d3400ecd4787faeb9b8990c1e7608288664be77257104a58d033bcf1a0e0945ff06468ebe53e2dff36e248424c7273117dac09", "sha512 aaa sHashHex");
-  equals(s4.hSign, "76b2b67a09e63f6125774c3130d71713930d1eed46c3ccd04558bcc473c571cef19f29443c464be972817cd7afa5f759f66f58e278034396273d5de92318eed1afda618db9e9a3221ad38e461bdd735bb065d1721ad140a426bf01e3ec2d68528b6874daf041cf2786f9f14878eac37ea708760f0f2abe1d2eab8d4977c66328", "sha512 aaa hSign"); // =TSign2.bin.hex
+  equal(s4.sHashHex, "d6f644b19812e97b5d871658d6d3400ecd4787faeb9b8990c1e7608288664be77257104a58d033bcf1a0e0945ff06468ebe53e2dff36e248424c7273117dac09", "sha512 aaa sHashHex");
+  equal(s4.hSign, "76b2b67a09e63f6125774c3130d71713930d1eed46c3ccd04558bcc473c571cef19f29443c464be972817cd7afa5f759f66f58e278034396273d5de92318eed1afda618db9e9a3221ad38e461bdd735bb065d1721ad140a426bf01e3ec2d68528b6874daf041cf2786f9f14878eac37ea708760f0f2abe1d2eab8d4977c66328", "sha512 aaa hSign"); // =TSign2.bin.hex
 
   var s5 = new KJUR.crypto.Signature({"alg": "SHA384withRSA", "prov": "cryptojs/jsrsa", "prvkeypem":z3pem});
   s5.signString('aaa');
-  equals(s5.sHashHex, "8e07e5bdd64aa37536c1f257a6b44963cc327b7d7dcb2cb47a22073d33414462bfa184487cf372ce0a19dfc83f8336d8", "sha384 aaa sHashHex");
-  equals(s5.hSign, "0189dd20d5d589510d22035c41d89fdb79a75843989295233b35e015fe8d6a2283e78abc9526382583b599450f4602bee2899313a13e3df768e4361d823d25061109cb98783a1a34dd4738643afa002313e3a41857b11758b3b8e5b1e5b83081712d9bd042560ce8282768344aadcedab26b73afc11ebfb20490da5f54e89806", "sha384 aaa hSign"); // =TSign3.bin.hex
+  equal(s5.sHashHex, "8e07e5bdd64aa37536c1f257a6b44963cc327b7d7dcb2cb47a22073d33414462bfa184487cf372ce0a19dfc83f8336d8", "sha384 aaa sHashHex");
+  equal(s5.hSign, "0189dd20d5d589510d22035c41d89fdb79a75843989295233b35e015fe8d6a2283e78abc9526382583b599450f4602bee2899313a13e3df768e4361d823d25061109cb98783a1a34dd4738643afa002313e3a41857b11758b3b8e5b1e5b83081712d9bd042560ce8282768344aadcedab26b73afc11ebfb20490da5f54e89806", "sha384 aaa hSign"); // =TSign3.bin.hex
   //equals(s5.hPaddedDigestInfo.length, s5.hSign.length, "s5 len(hPaddedDigestInfo)=len(hSign)");
 });
 
@@ -198,8 +202,8 @@ test("Signature class verify test1", function() {
   s1.initVerifyByPublicKey(pubKey);
   s1.updateString('aaa');
   var r1 = s1.verify("d764dcacb137f2e92d9b4b73494995e16a4dae4dc5b27ecde744c9a1ecaaef9c99041544eae2108dca6559ae79d2fb3d87fa2b87699efa6dc8f3d0d2672c3b07");
-  equals(s1.sHashHex, '7e240de74fb1ed08fa08d38063f6a6a91462a815', "document hash aaa sHashHex");
-  equals(r1, true, "SHA1withRSA aaa verify");
+  equal(s1.sHashHex, '7e240de74fb1ed08fa08d38063f6a6a91462a815', "document hash aaa sHashHex");
+  equal(r1, true, "SHA1withRSA aaa verify");
 });
 
 test("Signature class verify test2(by cert)", function() {
@@ -219,7 +223,7 @@ test("Signature class verify test2(by cert)", function() {
   s1.initVerifyByCertificatePEM(certPEM);
   s1.updateString('aaa');
   var r1 = s1.verify("d764dcacb137f2e92d9b4b73494995e16a4dae4dc5b27ecde744c9a1ecaaef9c99041544eae2108dca6559ae79d2fb3d87fa2b87699efa6dc8f3d0d2672c3b07");
-  equals(r1, true, "SHA1withRSA aaa verify");
+  equal(r1, true, "SHA1withRSA aaa verify");
 });
 
 test("Signature class empty provider sign test", function() {
@@ -230,7 +234,7 @@ test("Signature class empty provider sign test", function() {
   sig1.initSign(prvKey);
   sig1.updateString("aaa");
   var hSigVal1 = sig1.sign();
-  equals(hSigVal1, "d764dcacb137f2e92d9b4b73494995e16a4dae4dc5b27ecde744c9a1ecaaef9c99041544eae2108dca6559ae79d2fb3d87fa2b87699efa6dc8f3d0d2672c3b07", "SHA1withRSA(aaa) with default provider");
+  equal(hSigVal1, "d764dcacb137f2e92d9b4b73494995e16a4dae4dc5b27ecde744c9a1ecaaef9c99041544eae2108dca6559ae79d2fb3d87fa2b87699efa6dc8f3d0d2672c3b07", "SHA1withRSA(aaa) with default provider");
 });
 
 test("Signature class empty provider verify test", function() {
@@ -238,7 +242,7 @@ test("Signature class empty provider verify test", function() {
   sig1.initVerifyByCertificatePEM(z1CrtPem);
   sig1.updateString("aaa");
   var result = sig1.verify("d764dcacb137f2e92d9b4b73494995e16a4dae4dc5b27ecde744c9a1ecaaef9c99041544eae2108dca6559ae79d2fb3d87fa2b87699efa6dc8f3d0d2672c3b07");
-  equals(result, true, "SHA1withRSA(aaa) with default provider");
+  equal(result, true, "SHA1withRSA(aaa) with default provider");
 });
 
 });
