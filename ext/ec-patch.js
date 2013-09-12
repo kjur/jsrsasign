@@ -1,3 +1,5 @@
+/*! (c) Stefan Thomas | https://github.com/bitcoinjs/bitcoinjs-lib
+ */
 /*
  * splitted from bitcoin-lib/ecdsa.js
  *

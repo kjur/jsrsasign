@@ -1,9 +1,9 @@
-/*! asn1hex-1.1.2.js (c) 2012-2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1hex-1.1.3.js (c) 2012-2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
  *
- * version: 1.1.2 (2013-Aug-21)
+ * version: 1.1.3 (2013-Sep-12)
  *
  * Copyright (c) 2010-2013 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -31,7 +31,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1hex 1.1.2 (2013-Aug-21)
+ * @version asn1hex 1.1.3 (2013-Sep-12)
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -221,6 +221,18 @@ var ASN1HEX = new function() {
      * @param {Array of Number} nthList array list of nth
      * @return {Number} string index refered by nthList
      * @since 1.1
+     * @example
+     * The "nthList" is a index list of structured ASN.1 object
+     * reference. Here is a sample structure and "nthList"s which
+     * refers each objects.
+     *
+     * SQUENCE               - [0]
+     *   SEQUENCE            - [0, 0]
+     *     IA5STRING 000     - [0, 0, 0]
+     *     UTF8STRING 001    - [0, 0, 1]
+     *   SET                 - [0, 1]
+     *     IA5STRING 010     - [0, 1, 0]
+     *     UTF8STRING 011    - [0, 1, 1]
      */
     this.getDecendantIndexByNthList = function(h, currentIndex, nthList) {
 	if (nthList.length == 0) {

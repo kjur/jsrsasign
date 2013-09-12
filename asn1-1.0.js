@@ -1,4 +1,4 @@
-/*! asn1-1.0.2.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1-1.0.3.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,8 +16,8 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.2 (2013-May-30)
- * @since 2.1
+ * @version asn1 1.0.3 (2013-Sep-12)
+ * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -49,21 +49,21 @@ if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
  * <h4>PROVIDING ASN.1 PRIMITIVES</h4>
  * Here are ASN.1 DER primitive classes.
  * <ul>
- * <li>{@link KJUR.asn1.DERBoolean}</li>
- * <li>{@link KJUR.asn1.DERInteger}</li>
- * <li>{@link KJUR.asn1.DERBitString}</li>
- * <li>{@link KJUR.asn1.DEROctetString}</li>
- * <li>{@link KJUR.asn1.DERNull}</li>
- * <li>{@link KJUR.asn1.DERObjectIdentifier}</li>
- * <li>{@link KJUR.asn1.DERUTF8String}</li>
- * <li>{@link KJUR.asn1.DERNumericString}</li>
- * <li>{@link KJUR.asn1.DERPrintableString}</li>
- * <li>{@link KJUR.asn1.DERTeletexString}</li>
- * <li>{@link KJUR.asn1.DERIA5String}</li>
- * <li>{@link KJUR.asn1.DERUTCTime}</li>
- * <li>{@link KJUR.asn1.DERGeneralizedTime}</li>
- * <li>{@link KJUR.asn1.DERSequence}</li>
- * <li>{@link KJUR.asn1.DERSet}</li>
+ * <li>0x01 {@link KJUR.asn1.DERBoolean}</li>
+ * <li>0x02 {@link KJUR.asn1.DERInteger}</li>
+ * <li>0x03 {@link KJUR.asn1.DERBitString}</li>
+ * <li>0x04 {@link KJUR.asn1.DEROctetString}</li>
+ * <li>0x05 {@link KJUR.asn1.DERNull}</li>
+ * <li>0x06 {@link KJUR.asn1.DERObjectIdentifier}</li>
+ * <li>0x0c {@link KJUR.asn1.DERUTF8String}</li>
+ * <li>0x12 {@link KJUR.asn1.DERNumericString}</li>
+ * <li>0x13 {@link KJUR.asn1.DERPrintableString}</li>
+ * <li>0x14 {@link KJUR.asn1.DERTeletexString}</li>
+ * <li>0x16 {@link KJUR.asn1.DERIA5String}</li>
+ * <li>0x17 {@link KJUR.asn1.DERUTCTime}</li>
+ * <li>0x18 {@link KJUR.asn1.DERGeneralizedTime}</li>
+ * <li>0x30 {@link KJUR.asn1.DERSequence}</li>
+ * <li>0x31 {@link KJUR.asn1.DERSet}</li>
  * </ul>
  *
  * <h4>OTHER ASN.1 CLASSES</h4>
@@ -84,7 +84,7 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
 /**
  * ASN1 utilities class
  * @name KJUR.asn1.ASN1Util
- * @classs ASN1 utilities class
+ * @class ASN1 utilities class
  * @since asn1 1.0.2
  */
 KJUR.asn1.ASN1Util = new function() {
@@ -140,6 +140,7 @@ KJUR.asn1.ASN1Util = new function() {
      * -----END PRIVATE KEY-----
      */
     this.getPEMStringFromHex = function(dataHex, pemHeader) {
+	var ns1 = KJUR.asn1;
 	var dataWA = CryptoJS.enc.Hex.parse(dataHex);
 	var dataB64 = CryptoJS.enc.Base64.stringify(dataWA);
 	var pemBody = dataB64.replace(/(.{64})/g, "$1\r\n");
@@ -147,6 +148,103 @@ KJUR.asn1.ASN1Util = new function() {
 	return "-----BEGIN " + pemHeader + "-----\r\n" + 
                pemBody + 
                "\r\n-----END " + pemHeader + "-----\r\n";
+    };
+
+    /**
+     * generate ASN1Object specifed by parameters
+     * @name newObject
+     * @memberOf KJUR.asn1.ASN1Util
+     * @function
+     * @param {Array} param parameter to generate ASN1Object
+     * @return {KJUR.asn1.ASN1Object} generated object
+     * @since asn1 1.0.3
+     * @description
+     * generate any ASN1Object specified by param
+     * including ASN.1 primitive or structured.
+     * Generally 'param' can be described as follows:
+     * <blockquote>
+     * {TYPE-OF-ASNOBJ: ASN1OBJ-PARAMETER}
+     * </blockquote>
+     * 'TYPE-OF-ASN1OBJ' can be one of following symbols:
+     * <ul>
+     * <li>'bool' - DERBoolean</li>
+     * <li>'int' - DERInteger</li>
+     * <li>'bitstr' - DERBitString</li>
+     * <li>'octstr' - DEROctetString</li>
+     * <li>'null' - DERNull</li>
+     * <li>'oid' - DERObjectIdentifier</li>
+     * <li>'utf8str' - DERUTF8String</li>
+     * <li>'numstr' - DERNumericString</li>
+     * <li>'prnstr' - DERPrintableString</li>
+     * <li>'telstr' - DERTeletexString</li>
+     * <li>'ia5str' - DERIA5String</li>
+     * <li>'utctime' - DERUTCTime</li>
+     * <li>'gentime' - DERGeneralizedTime</li>
+     * <li>'seq' - DERSequence</li>
+     * <li>'set' - DERSet</li>
+     * <li>'tag' - DERTaggedObject</li>
+     * </ul>
+     * @example
+     * newObject({'prnstr': 'aaa'});
+     * newObject({'seq': [{'int': 3}, {'prnstr': 'aaa'}]})
+     * newObject({'tag': {'tag': 'a1', 
+     *                    'obj': {'seq': [{'int': 3}, {'prnstr': 'aaa'}]}}});
+     */
+    this.newObject = function(param) {
+	var ns1 = KJUR.asn1;
+	var keys = Object.keys(param);
+	if (keys.length != 1)
+	    throw "key of param shall be only one.";
+	var key = keys[0];
+
+	if (":bool:int:bitstr:octstr:null:oid:utf8str:numstr:prnstr:telstr:ia5str:utctime:gentime:seq:set:tag:".indexOf(":" + key + ":") == -1)
+	    throw "undefined key: " + key;
+
+	if (key == "bool")    return new ns1.DERBoolean(param[key]);
+	if (key == "int")     return new ns1.DERInteger(param[key]);
+	if (key == "bitstr")  return new ns1.DERBitString(param[key]);
+	if (key == "octstr")  return new ns1.DEROctetString(param[key]);
+	if (key == "null")    return new ns1.DERNull(param[key]);
+	if (key == "oid")     return new ns1.DERObjectIdentifier(param[key]);
+	if (key == "utf8str") return new ns1.DERUTF8String(param[key]);
+	if (key == "numstr")  return new ns1.DERNumericString(param[key]);
+	if (key == "prnstr")  return new ns1.DERPrintableString(param[key]);
+	if (key == "telstr")  return new ns1.DERTeletexString(param[key]);
+	if (key == "ia5str")  return new ns1.DERIA5String(param[key]);
+	if (key == "utctime") return new ns1.DERUTCTime(param[key]);
+	if (key == "gentime") return new ns1.DERGeneralizedTime(param[key]);
+
+	if (key == "seq") {
+	    var paramList = param[key];
+	    var a = [];
+	    for (var i = 0; i < paramList.length; i++) {
+		var asn1Obj = ns1.ASN1Util.newObject(paramList[i]);
+		a.push(asn1Obj);
+	    }
+	    return new ns1.DERSequence({'array': a});
+	}
+
+	if (key == "set") {
+	    var paramList = param[key];
+	    var a = [];
+	    for (var i = 0; i < paramList.length; i++) {
+		var asn1Obj = ns1.ASN1Util.newObject(paramList[i]);
+		a.push(asn1Obj);
+	    }
+	    return new ns1.DERSet({'array': a});
+	}
+
+	if (key == "tag") {
+	    var newParam = {};
+	    if (param[key].explicit !== undefined)
+		newParam.explicit = param[key].explicit;
+	    if (param[key].tag !== undefined)
+		newParam.tag = param[key].tag;
+	    if (param[key].obj === undefined)
+		throw "obj shall be specified for 'tag'.";
+	    newParam.obj = ns1.ASN1Util.newObject(param[key].obj);
+	    return new ns1.DERTaggedObject(newParam);
+	}
     };
 };
 
@@ -170,7 +268,7 @@ KJUR.asn1.ASN1Util = new function() {
 KJUR.asn1.ASN1Object = function() {
     var isModified = true;
     var hTLV = null;
-    var hT = '00'
+    var hT = '00';
     var hL = '00';
     var hV = '';
 
@@ -307,7 +405,9 @@ KJUR.asn1.DERAbstractString = function(params) {
     };
 
     if (typeof params != "undefined") {
-	if (typeof params['str'] != "undefined") {
+	if (typeof params == "string") {
+	    this.setString(params);
+	} else if (typeof params['str'] != "undefined") {
 	    this.setString(params['str']);
 	} else if (typeof params['hex'] != "undefined") {
 	    this.setStringHex(params['hex']);
@@ -380,7 +480,7 @@ KJUR.asn1.DERAbstractTime = function(params) {
 	this.hTLV = null;
 	this.isModified = true;
 	this.s = newS;
-	this.hV = stohex(this.s);
+	this.hV = stohex(newS);
     };
 
     /**
@@ -533,6 +633,10 @@ KJUR.asn1.DERInteger = function(params) {
      * <br/>
      * NOTE: Value shall be represented by minimum octet length of
      * two's complement representation.
+     * @example
+     * new KJUR.asn1.DERInteger(123);
+     * new KJUR.asn1.DERInteger({'int': 123});
+     * new KJUR.asn1.DERInteger({'hex': '1fad'});
      */
     this.setValueHex = function(newHexString) {
 	this.hV = newHexString;
@@ -547,6 +651,8 @@ KJUR.asn1.DERInteger = function(params) {
 	    this.setByBigInteger(params['bigint']);
 	} else if (typeof params['int'] != "undefined") {
 	    this.setByInteger(params['int']);
+	} else if (typeof params == "number") {
+	    this.setByInteger(params);
 	} else if (typeof params['hex'] != "undefined") {
 	    this.setValueHex(params['hex']);
 	}
@@ -680,7 +786,9 @@ KJUR.asn1.DERBitString = function(params) {
     };
 
     if (typeof params != "undefined") {
-	if (typeof params['hex'] != "undefined") {
+	if (typeof params == "string" && params.toLowerCase().match(/^[0-9a-f]+$/)) {
+	    this.setHexValueIncludingUnusedBits(params);
+        } else if (typeof params['hex'] != "undefined") {
 	    this.setHexValueIncludingUnusedBits(params['hex']);
 	} else if (typeof params['bin'] != "undefined") {
 	    this.setByBinaryString(params['bin']);
@@ -830,7 +938,11 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
     };
 
     if (typeof params != "undefined") {
-	if (typeof params['oid'] != "undefined") {
+	if (typeof params == "string" && params.match(/^[0-2].[0-9.]+$/)) {
+	    this.setValueOidString(params);
+	} else if (KJUR.asn1.x509.OID.name2oidList[params] !== undefined) {
+	    this.setValueOidString(KJUR.asn1.x509.OID.name2oidList[params]);
+	} else if (typeof params['oid'] != "undefined") {
 	    this.setValueOidString(params['oid']);
 	} else if (typeof params['hex'] != "undefined") {
 	    this.setValueHex(params['hex']);
@@ -944,8 +1056,8 @@ YAHOO.lang.extend(KJUR.asn1.DERIA5String, KJUR.asn1.DERAbstractString);
  * d1.setString('130430125959Z');
  *
  * var d2 = new KJUR.asn1.DERUTCTime({'str': '130430125959Z'});
- *
  * var d3 = new KJUR.asn1.DERUTCTime({'date': new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0))});
+ * var d4 = new KJUR.asn1.DERUTCTime('130430125959Z');
  */
 KJUR.asn1.DERUTCTime = function(params) {
     KJUR.asn1.DERUTCTime.superclass.constructor.call(this, params);
@@ -969,6 +1081,8 @@ KJUR.asn1.DERUTCTime = function(params) {
     if (typeof params != "undefined") {
 	if (typeof params['str'] != "undefined") {
 	    this.setString(params['str']);
+	} else if (typeof params == "string" && params.match(/^[0-9]{12}Z$/)) {
+	    this.setString(params);
 	} else if (typeof params['hex'] != "undefined") {
 	    this.setStringHex(params['hex']);
 	} else if (typeof params['date'] != "undefined") {
@@ -1023,6 +1137,8 @@ KJUR.asn1.DERGeneralizedTime = function(params) {
     if (typeof params != "undefined") {
 	if (typeof params['str'] != "undefined") {
 	    this.setString(params['str']);
+	} else if (typeof params == "string" && params.match(/^[0-9]{14}Z$/)) {
+	    this.setString(params);
 	} else if (typeof params['hex'] != "undefined") {
 	    this.setStringHex(params['hex']);
 	} else if (typeof params['date'] != "undefined") {

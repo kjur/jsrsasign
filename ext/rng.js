@@ -1,3 +1,5 @@
+/*! (c) Tom Wu | http://www-cs-students.stanford.edu/~tjw/jsbn/
+ */
 // Random number generator - requires a PRNG backend, e.g. prng4.js
 
 // For best results, put code like

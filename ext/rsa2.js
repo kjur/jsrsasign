@@ -1,3 +1,5 @@
+/*! (c) Tom Wu | http://www-cs-students.stanford.edu/~tjw/jsbn/
+ */
 // Depends on rsa.js and jsbn2.js
 
 // Version 1.1: support utf-8 decoding in pkcs1unpad2
