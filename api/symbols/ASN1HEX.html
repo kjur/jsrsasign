@@ -203,6 +203,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.ASN1Util.html">KJUR.asn1.ASN1Util</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.DERAbstractString.html">KJUR.asn1.DERAbstractString</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.DERAbstractStructured.html">KJUR.asn1.DERAbstractStructured</a></li>
@@ -716,6 +718,20 @@ ul.inheritsList
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">The "nthList" is a index list of structured ASN.1 object
+reference. Here is a sample structure and "nthList"s which
+refers each objects.
+
+SQUENCE               - [0]
+  SEQUENCE            - [0, 0]
+    IA5STRING 000     - [0, 0, 0]
+    UTF8STRING 001    - [0, 0, 1]
+  SET                 - [0, 1]
+    IA5STRING 010     - [0, 1, 0]
+    UTF8STRING 011    - [0, 1, 1]</pre>
 					
 					
 					

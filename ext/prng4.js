@@ -1,3 +1,5 @@
+/*! (c) Tom Wu | http://www-cs-students.stanford.edu/~tjw/jsbn/
+ */
 // prng4.js - uses Arcfour as a PRNG
 
 function Arcfour() {
