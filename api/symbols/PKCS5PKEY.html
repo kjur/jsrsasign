@@ -433,7 +433,7 @@ version string of PKCS5PKEY class</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getEryptedPKCS5PEMFromPrvKeyHex">getEryptedPKCS5PEMFromPrvKeyHex</a></b>(hPrvKey, passcode, sharedKeyAlgName, ivsaltHex)
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getEncryptedPKCS5PEMFromPrvKeyHex">getEncryptedPKCS5PEMFromPrvKeyHex</a></b>(hPrvKey, passcode, sharedKeyAlgName, ivsaltHex)
 								</div>
 								<div class="description">get PEM formatted encrypted PKCS#5 private key from hexadecimal string of plain private key
 <br/>
@@ -445,7 +445,7 @@ ASN.1 object of plain RSA private key.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getEryptedPKCS5PEMFromRSAKey">getEryptedPKCS5PEMFromRSAKey</a></b>(pKey, passcode, alg, ivsaltHex)
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getEncryptedPKCS5PEMFromRSAKey">getEncryptedPKCS5PEMFromRSAKey</a></b>(pKey, passcode, alg, ivsaltHex)
 								</div>
 								<div class="description">get PEM formatted encrypted PKCS#5 private key from RSAKey object of private key
 <br/>
@@ -948,11 +948,11 @@ version string of PKCS5PKEY class
 
 					<hr />
 				
-					<a name=".getEryptedPKCS5PEMFromPrvKeyHex"> </a>
+					<a name=".getEncryptedPKCS5PEMFromPrvKeyHex"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{String}</span>
-					<span class="light">PKCS5PKEY.</span><b>getEryptedPKCS5PEMFromPrvKeyHex</b>(hPrvKey, passcode, sharedKeyAlgName, ivsaltHex)
+					<span class="light">PKCS5PKEY.</span><b>getEncryptedPKCS5PEMFromPrvKeyHex</b>(hPrvKey, passcode, sharedKeyAlgName, ivsaltHex)
 					
 					</div>
 					<div class="description">
@@ -972,11 +972,11 @@ Following arguments can be omitted.
 					
 					
 					<pre class="code">var pem = 
-  PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password");
+  PKCS5PKEY.getEncryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password");
 var pem2 = 
-  PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC");
+  PKCS5PKEY.getEncryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC");
 var pem3 = 
-  PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC", "1f3d02...");</pre>
+  PKCS5PKEY.getEncryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC", "1f3d02...");</pre>
 					
 					
 					
@@ -1032,11 +1032,11 @@ var pem3 =
 
 					<hr />
 				
-					<a name=".getEryptedPKCS5PEMFromRSAKey"> </a>
+					<a name=".getEncryptedPKCS5PEMFromRSAKey"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{String}</span>
-					<span class="light">PKCS5PKEY.</span><b>getEryptedPKCS5PEMFromRSAKey</b>(pKey, passcode, alg, ivsaltHex)
+					<span class="light">PKCS5PKEY.</span><b>getEncryptedPKCS5PEMFromRSAKey</b>(pKey, passcode, alg, ivsaltHex)
 					
 					</div>
 					<div class="description">
@@ -1057,7 +1057,7 @@ Following argument can be omitted.
 					
 					<pre class="code">var pkey = new RSAKey();
 pkey.generate(1024, '10001'); // generate 1024bit RSA private key with public exponent 'x010001'
-var pem = PKCS5PKEY.getEryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
+var pem = PKCS5PKEY.getEncryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
 					
 					
 					

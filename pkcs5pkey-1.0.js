@@ -372,7 +372,7 @@ var PKCS5PKEY = function() {
 
 	/**
          * get PEM formatted encrypted PKCS#5 private key from hexadecimal string of plain private key
-	 * @name getEryptedPKCS5PEMFromPrvKeyHex
+	 * @name getEncryptedPKCS5PEMFromPrvKeyHex
 	 * @memberOf PKCS5PKEY
 	 * @function
 	 * @param {String} hPrvKey hexadecimal string of plain private key
@@ -392,13 +392,13 @@ var PKCS5PKEY = function() {
 	 * </ul>
 	 * @example
 	 * var pem = 
-         *   PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password");
+         *   PKCS5PKEY.getEncryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password");
 	 * var pem2 = 
-         *   PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC");
+         *   PKCS5PKEY.getEncryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC");
 	 * var pem3 = 
-         *   PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC", "1f3d02...");
+         *   PKCS5PKEY.getEncryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC", "1f3d02...");
 	 */
-	getEryptedPKCS5PEMFromPrvKeyHex: function(hPrvKey, passcode, sharedKeyAlgName, ivsaltHex) {
+	getEncryptedPKCS5PEMFromPrvKeyHex: function(hPrvKey, passcode, sharedKeyAlgName, ivsaltHex) {
 	    var sPEM = "";
 
 	    // 1. set sharedKeyAlgName if undefined (default AES-256-CBC)
@@ -437,7 +437,7 @@ var PKCS5PKEY = function() {
 
 	/**
          * get PEM formatted encrypted PKCS#5 private key from RSAKey object of private key
-	 * @name getEryptedPKCS5PEMFromRSAKey
+	 * @name getEncryptedPKCS5PEMFromRSAKey
 	 * @memberOf PKCS5PKEY
 	 * @function
 	 * @param {RSAKey} pKey RSAKey object of private key
@@ -458,9 +458,9 @@ var PKCS5PKEY = function() {
 	 * @example
 	 * var pkey = new RSAKey();
 	 * pkey.generate(1024, '10001'); // generate 1024bit RSA private key with public exponent 'x010001'
-	 * var pem = PKCS5PKEY.getEryptedPKCS5PEMFromRSAKey(pkey, "password");
+	 * var pem = PKCS5PKEY.getEncryptedPKCS5PEMFromRSAKey(pkey, "password");
 	 */
-        getEryptedPKCS5PEMFromRSAKey: function(pKey, passcode, alg, ivsaltHex) {
+        getEncryptedPKCS5PEMFromRSAKey: function(pKey, passcode, alg, ivsaltHex) {
 	    var version = new KJUR.asn1.DERInteger({'int': 0});
 	    var n = new KJUR.asn1.DERInteger({'bigint': pKey.n});
 	    var e = new KJUR.asn1.DERInteger({'int': pKey.e});
@@ -472,7 +472,7 @@ var PKCS5PKEY = function() {
 	    var coeff = new KJUR.asn1.DERInteger({'bigint': pKey.coeff});
 	    var seq = new KJUR.asn1.DERSequence({'array': [version, n, e, d, p, q, dmp1, dmq1, coeff]});
 	    var hex = seq.getEncodedHex();
-	    return this.getEryptedPKCS5PEMFromPrvKeyHex(hex, passcode, alg, ivsaltHex);
+	    return this.getEncryptedPKCS5PEMFromPrvKeyHex(hex, passcode, alg, ivsaltHex);
         },
 
 	/**
@@ -565,7 +565,7 @@ var PKCS5PKEY = function() {
 	 * The associative array which is returned by this method has following properties:
 	 * <ul>
 	 * <li>info.pbkdf2Salt - hexadecimal string of PBKDF2 salt</li>
-	 * <li>info.pkbdf2Iter - iteration count</li>
+	 * <li>info.pbkdf2Iter - iteration count</li>
 	 * <li>info.ciphertext - hexadecimal string of encrypted private key</li>
 	 * <li>info.encryptionSchemeAlg - encryption algorithm name (currently TripleDES only)</li>
 	 * <li>info.encryptionSchemeIV - initial vector for encryption algorithm</li>
@@ -654,7 +654,7 @@ var PKCS5PKEY = function() {
 	 * As for info, this uses following properties:
 	 * <ul>
 	 * <li>info.pbkdf2Salt - hexadecimal string of PBKDF2 salt</li>
-	 * <li>info.pkbdf2Iter - iteration count</li>
+	 * <li>info.pbkdf2Iter - iteration count</li>
 	 * </ul>
 	 * Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.
 	 * <ul>
