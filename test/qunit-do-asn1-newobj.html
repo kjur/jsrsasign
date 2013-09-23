@@ -155,6 +155,17 @@ test("tag test seq [int 3, int 4] explicit", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'tag': {'tag': 'a1', 'explicit': true, 'obj': {'seq': [{'int': 3}, {'int': 4}]}}}).getEncodedHex(), "a1083006020103020104", "test1");
 });
 
+test("tag test seq [int 3, int 4] explicit", function() {
+  equal(KJUR.asn1.ASN1Util.newObject({'tag': ['a1', true, {'seq': [{'int': 3}, {'int': 4}]}]}).getEncodedHex(), "a1083006020103020104", "test1");
+});
+
+test("tag test RFC 3161 TSP Accuracy 500ms", function() {
+  equal(KJUR.asn1.ASN1Util.newObject(
+          {seq: [{tag: {tag: '80', explicit: false, obj: {int: 500}}}]}).getEncodedHex(),
+        "3004800201f4", "test1");
+});
+
+
 
 });
 -->

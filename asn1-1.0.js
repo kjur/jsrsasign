@@ -151,15 +151,15 @@ KJUR.asn1.ASN1Util = new function() {
     };
 
     /**
-     * generate ASN1Object specifed by parameters
+     * generate ASN1Object specifed by JSON parameters
      * @name newObject
      * @memberOf KJUR.asn1.ASN1Util
      * @function
-     * @param {Array} param parameter to generate ASN1Object
+     * @param {Array} param JSON parameter to generate ASN1Object
      * @return {KJUR.asn1.ASN1Object} generated object
      * @since asn1 1.0.3
      * @description
-     * generate any ASN1Object specified by param
+     * generate any ASN1Object specified by JSON param
      * including ASN.1 primitive or structured.
      * Generally 'param' can be described as follows:
      * <blockquote>
@@ -187,8 +187,17 @@ KJUR.asn1.ASN1Util = new function() {
      * @example
      * newObject({'prnstr': 'aaa'});
      * newObject({'seq': [{'int': 3}, {'prnstr': 'aaa'}]})
+     * // ASN.1 Tagged Object
      * newObject({'tag': {'tag': 'a1', 
+     *                    'explicit': true,
      *                    'obj': {'seq': [{'int': 3}, {'prnstr': 'aaa'}]}}});
+     * // more simple representation of ASN.1 Tagged Object
+     * newObject({'tag': ['a1',
+     *                    true,
+     *                    {'seq': [
+     *                      {'int': 3}, 
+     *                      {'prnstr': 'aaa'}]}
+     *                   ]});
      */
     this.newObject = function(param) {
 	var ns1 = KJUR.asn1;
@@ -235,15 +244,22 @@ KJUR.asn1.ASN1Util = new function() {
 	}
 
 	if (key == "tag") {
-	    var newParam = {};
-	    if (param[key].explicit !== undefined)
-		newParam.explicit = param[key].explicit;
-	    if (param[key].tag !== undefined)
-		newParam.tag = param[key].tag;
-	    if (param[key].obj === undefined)
-		throw "obj shall be specified for 'tag'.";
-	    newParam.obj = ns1.ASN1Util.newObject(param[key].obj);
-	    return new ns1.DERTaggedObject(newParam);
+	    var tagParam = param[key];
+	    if (Object.prototype.toString.call(tagParam) === '[object Array]' &&
+		tagParam.length == 3) {
+		var obj = ns1.ASN1Util.newObject(tagParam[2]);
+		return new ns1.DERTaggedObject({tag: tagParam[0], explicit: tagParam[1], obj: obj});
+	    } else {
+		var newParam = {};
+		if (tagParam.explicit !== undefined)
+		    newParam.explicit = tagParam.explicit;
+		if (tagParam.tag !== undefined)
+		    newParam.tag = tagParam.tag;
+		if (tagParam.obj === undefined)
+		    throw "obj shall be specified for 'tag'.";
+		newParam.obj = ns1.ASN1Util.newObject(tagParam.obj);
+		return new ns1.DERTaggedObject(newParam);
+	    }
 	}
     };
 };
