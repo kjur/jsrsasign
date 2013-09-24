@@ -358,11 +358,12 @@ Currently this supports following algorithm and providers combination:
 <ul>
 <li>hmacmd5 - cryptojs</li>
 <li>hmacsha1 - cryptojs</li>
-<li>hmacsha224 - cryptojs (NOT SUPPORTED BECAUSE OF Crypto-JS BUG)</li>
+<li>hmacsha224 - cryptojs</li>
 <li>hmacsha256 - cryptojs</li>
-<li>hmacsha384 - cryptojs (NOT SUPPORTED BECAUSE OF Crypto-JS BUG)</li>
+<li>hmacsha384 - cryptojs</li>
 <li>hmacsha512 - cryptojs</li>
-</ul></div>
+</ul>
+NOTE: HmacSHA224 and HmacSHA384 issue was fixed since jsrsasign 4.1.4.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -464,11 +465,14 @@ Currently this supports following algorithm and providers combination:
 <ul>
 <li>hmacmd5 - cryptojs</li>
 <li>hmacsha1 - cryptojs</li>
-<li>hmacsha224 - cryptojs (NOT SUPPORTED BECAUSE OF Crypto-JS BUG)</li>
+<li>hmacsha224 - cryptojs</li>
 <li>hmacsha256 - cryptojs</li>
-<li>hmacsha384 - cryptojs (NOT SUPPORTED BECAUSE OF Crypto-JS BUG)</li>
+<li>hmacsha384 - cryptojs</li>
 <li>hmacsha512 - cryptojs</li>
 </ul>
+NOTE: HmacSHA224 and HmacSHA384 issue was fixed since jsrsasign 4.1.4.
+Please use 'ext/cryptojs-312-core-fix*.js' instead of 'core.js' of original CryptoJS
+to avoid those issue.
 					
 				</div>
 				

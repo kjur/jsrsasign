@@ -1,4 +1,4 @@
-/*! crypto-1.1.3.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! crypto-1.1.4.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.1.3 (2013-Aug-25)
+ * @version 1.1.4 (2013-Sep-24)
  * @since jsrsasign 2.2
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -484,11 +484,14 @@ KJUR.crypto.MessageDigest = function(params) {
  * <ul>
  * <li>hmacmd5 - cryptojs</li>
  * <li>hmacsha1 - cryptojs</li>
- * <li>hmacsha224 - cryptojs (NOT SUPPORTED BECAUSE OF Crypto-JS BUG)</li>
+ * <li>hmacsha224 - cryptojs</li>
  * <li>hmacsha256 - cryptojs</li>
- * <li>hmacsha384 - cryptojs (NOT SUPPORTED BECAUSE OF Crypto-JS BUG)</li>
+ * <li>hmacsha384 - cryptojs</li>
  * <li>hmacsha512 - cryptojs</li>
  * </ul>
+ * NOTE: HmacSHA224 and HmacSHA384 issue was fixed since jsrsasign 4.1.4.
+ * Please use 'ext/cryptojs-312-core-fix*.js' instead of 'core.js' of original CryptoJS
+ * to avoid those issue.
  * @example
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA1", prov: "cryptojs", "pass": "pass"});
  * mac.updateString('aaa')
