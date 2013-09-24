@@ -1,5 +1,5 @@
 /*
- * jsrsasign 4.1.4 (c) 2010-2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+ * jsrsasign 4.1.4 (c) 2010-2013 Kenji Urushima | kjur.github.com/jsrsasign/license 
  */
 /*
 yahoo-min.js
