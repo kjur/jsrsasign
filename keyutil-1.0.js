@@ -1,4 +1,4 @@
-/*! keyutil-1.0.0.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! keyutil-1.0.1.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#5/8 PEM, RSA/ECDSA key object
@@ -15,8 +15,8 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version keyutil 1.0.0 (2013-Sep-14)
- * @since jsrsasign 4.1.3
+ * @version keyutil 1.0.1 (2013-Sep-27)
+ * @since jsrsasign 4.1.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -1191,7 +1191,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	return new KJUR.crypto.ECDSA({prv: param.xy, curve: param.curve});
     }
     // 2.2. RSA private key
-    if (param,n !== undefined && param.e !== undefined && param.d !== undefined &&
+    if (param.n !== undefined && param.e !== undefined && param.d !== undefined &&
 	param.p !== undefined && param.q !== undefined &&
 	param.dp !== undefined && param.dq !== undefined && param.co !== undefined) {
 	var key = new RSAKey();
@@ -1204,7 +1204,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	return new KJUR.crypto.ECDSA({pub: param.d, curve: param.curve});
     }
     // 2.4. RSA private key
-    if (param,n !== undefined && param.e) {
+    if (param.n !== undefined && param.e) {
 	var key = new RSAKey();
 	key.setPublic(param.n, param.e);
 	return key;
@@ -1266,5 +1266,66 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     }
 
     throw "not supported argument";
+};
+
+/**
+ * @name generateKeypair
+ * @memberOf KEYUTIL
+ * @function
+ * @static
+ * @param {String} alg 'RSA' or 'EC'
+ * @param {Object} keylenOrCurve key length for RSA or curve name for EC
+ * @return {Array} associative array of keypair which has prvKeyObj and pubKeyObj parameters
+ * @since keyutil 1.0.1
+ * @description
+ * This method generates a key pair of public key algorithm.
+ * The result will be an associative array which has following
+ * parameters:
+ * <ul>
+ * <li>prvKeyObj - RSAKey or ECDSA object of private key</li>
+ * <li>pubKeyObj - RSAKey or ECDSA object of public key</li>
+ * </ul>
+ * NOTE1: As for RSA algoirthm, public exponent has fixed
+ * value '0x10001'.
+ * NOTE2: As for EC algorithm, supported names of curve are
+ * secp256r1, secp256k1 and secp384r1.
+ * @example
+ * var rsaKeypair = KEYUTIL.generateKeypair("RSA", 1024);
+ * var ecKeypair = KEYUTIL.generateKeypair("EC", "secp256r1");
+ *
+ */
+KEYUTIL.generateKeypair = function(alg, keylenOrCurve) {
+    if (alg == "RSA") {
+	var keylen = keylenOrCurve;
+	var prvKey = new RSAKey();
+	prvKey.generate(keylen, '10001');
+	
+	var pubKey = new RSAKey();
+	var hN = prvKey.n.toString(16);
+	var hE = prvKey.e.toString(16);
+	pubKey.setPublic(hN, hE);
+	
+	var result = {};
+	result.prvKeyObj = prvKey;
+	result.pubKeyObj = pubKey;
+	return result;
+    } else if (alg == "EC") {
+	var curve = keylenOrCurve;
+	var ec = new KJUR.crypto.ECDSA({curve: curve});
+	var keypairHex = ec.generateKeyPairHex();
+
+	var prvKey = new KJUR.crypto.ECDSA({curve: curve});
+	prvKey.setPrivateKeyHex(keypairHex.ecprvhex);
+
+	var pubKey = new KJUR.crypto.ECDSA({curve: curve});
+	pubKey.setPublicKeyHex(keypairHex.ecpubhex);
+
+	var result = {};
+	result.prvKeyObj = prvKey;
+	result.pubKeyObj = pubKey;
+	return result;
+    } else {
+	throw "unknown algorithm: " + alg;
+    }
 };
 
