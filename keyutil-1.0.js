@@ -1268,7 +1268,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     throw "not supported argument";
 };
 
-/*
+/**
  * @name generateKeypair
  * @memberOf KEYUTIL
  * @function
@@ -1277,7 +1277,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
  * @param {Object} keylenOrCurve key length for RSA or curve name for EC
  * @return {Array} associative array of keypair which has prvKeyObj and pubKeyObj parameters
  * @since keyutil 1.0.1
- * @descrption
+ * @description
  * This method generates a key pair of public key algorithm.
  * The result will be an associative array which has following
  * parameters:

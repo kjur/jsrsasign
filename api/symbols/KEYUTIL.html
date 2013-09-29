@@ -409,6 +409,15 @@ version string of KEYUTIL class</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.generateKeypair">generateKeypair</a></b>(alg, keylenOrCurve)
+								</div>
+								<div class="description">This method generates a key pair of public key algorithm.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getDecryptedKeyHex">getDecryptedKeyHex</a></b>(sEncryptedPEM, passcode)
 								</div>
 								<div class="description">decrypt PEM formatted protected PKCS#5 private key with passcode</div>
@@ -847,6 +856,76 @@ version string of KEYUTIL class
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name=".generateKeypair"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">KEYUTIL.</span><b>generateKeypair</b>(alg, keylenOrCurve)
+					
+					</div>
+					<div class="description">
+						This method generates a key pair of public key algorithm.
+The result will be an associative array which has following
+parameters:
+<ul>
+<li>prvKeyObj - RSAKey or ECDSA object of private key</li>
+<li>pubKeyObj - RSAKey or ECDSA object of public key</li>
+</ul>
+NOTE1: As for RSA algoirthm, public exponent has fixed
+value '0x10001'.
+NOTE2: As for EC algorithm, supported names of curve are
+secp256r1, secp256k1 and secp384r1.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var rsaKeypair = KEYUTIL.generateKeypair("RSA", 1024);
+var ecKeypair = KEYUTIL.generateKeypair("EC", "secp256r1");</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>alg</b>
+									
+								</dt>
+								<dd>'RSA' or 'EC'</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>keylenOrCurve</b>
+									
+								</dt>
+								<dd>key length for RSA or curve name for EC</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>keyutil 1.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> associative array of keypair which has prvKeyObj and pubKeyObj parameters</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
 				
 					<a name=".getDecryptedKeyHex"> </a>
 					<div class="fixedFont">&lt;static&gt; 
