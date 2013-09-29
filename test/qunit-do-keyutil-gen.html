@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for KEYUTIL keypair generator 'keyutil.js'</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+
+<!-- script type="text/javascript" src="qunit.js" /script -->
+<!-- link rel="stylesheet" href="qunit.css" type="text/css" media="screen" -->
+<script src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="screen"/>
+
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rng.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/sha1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
+
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1-1.0.js"></script>
+
+<!-- jsrsasign keyutil external codes -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/cipher-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/aes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/tripledes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+<!-- for PKCS5 PBKDF2 -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/hmac.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/pbkdf2.js"></script>
+
+<!-- EC -->
+<script src="../ext/ec.js"></script>
+<script src="../ext/ec-patch.js"></script>
+<script src="../ecdsa-modified-1.0.js"></script>
+<script src="../ecparam-1.0.js"></script>
+
+<script src="../keyutil-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+
+function checkRSA(keypair, keyLen) {
+  var nLen = keypair.prvKeyObj.n.bitLength();
+  var dLen = keypair.prvKeyObj.d.bitLength();
+  expect(10);
+  equal(keyLen * 0.99 < nLen && nLen <= keyLen, true, "n.bitlength " + nLen);
+  equal(keyLen * 0.99 < dLen && dLen <= keyLen, true, "d.bitlength " + dLen);
+  equal(keypair.prvKeyObj.e.toString(16), '10001', "e(hex)");
+  equal(keypair.prvKeyObj.p !== undefined, true, "p not undefined");
+  equal(keypair.prvKeyObj.q !== undefined, true, "q not undefined");
+  equal(keypair.prvKeyObj.dmp1 !== undefined, true, "dmp1 not undefined");
+  equal(keypair.prvKeyObj.dmq1 !== undefined, true, "dmq1 not undefined");
+  equal(keypair.prvKeyObj.coeff !== undefined, true, "coeff not undefined");
+
+  var nLen2 = keypair.pubKeyObj.n.bitLength();
+  equal(keyLen * 0.99 < nLen2 && nLen <= keyLen, true, "pub n.bitlength " + nLen2);
+  equal(keypair.pubKeyObj.e.toString(16), '10001', "pub e(hex)");
+}
+
+$(document).ready(function(){
+
+test("generate RSA 512", function() {
+  var keyLen = 512;
+  var keypair = KEYUTIL.generateKeypair("RSA", keyLen);
+  checkRSA(keypair, keyLen);
+});
+
+test("generate RSA 1024", function() {
+  var keyLen = 1024;
+  var keypair = KEYUTIL.generateKeypair("RSA", keyLen);
+  checkRSA(keypair, keyLen);
+});
+
+test("generate EC", function() {
+  var curve = "secp256r1";
+  var keypair = KEYUTIL.generateKeypair("EC", curve);
+
+  expect(4);
+  equal(keypair.prvKeyObj.curveName, curve, "prv curve " + curve);
+  equal(keypair.prvKeyObj.prvKeyHex !== undefined, true, "prv keyhex not undefined:" + keypair.prvKeyObj.prvKeyHex);
+
+  equal(keypair.pubKeyObj.curveName, curve, "pub curve " + curve);
+  equal(keypair.pubKeyObj.pubKeyHex !== undefined, true, "pub keyhex undefined:" + keypair.pubKeyObj.pubKeyHex);
+});
+
+});
+-->
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+QUnit for 
+<a href="qunit-do-keyutil.html">keyutil</a> | 
+<a href="qunit-do-keyutil-eprv.html">keyutil-eprv</a> | 
+<a href="qunit-do-keyutil-pub.html">keyutil-pub</a> | 
+<a href="qunit-do-keyutil-pub.html">keyutil-gen</a> | 
+</body>
+</html>
+
+
