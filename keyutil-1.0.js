@@ -1,4 +1,4 @@
-/*! keyutil-1.0.1.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! keyutil-1.0.2.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#5/8 PEM, RSA/ECDSA key object
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version keyutil 1.0.1 (2013-Sep-27)
+ * @version keyutil 1.0.2 (2013-Oct-02)
  * @since jsrsasign 4.1.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -507,9 +507,9 @@ var KEYUTIL = function() {
 	    pKey.generate(keyLen, hPublicExponent);
 	    var pem = null;
 	    if (typeof alg == "undefined" || alg == null) {
-		pem = this.getEncryptedPKCS5PEMFromRSAKey(pkey, passcode);
+		pem = this.getEncryptedPKCS5PEMFromRSAKey(pKey, passcode);
 	    } else {
-		pem = this.getEncryptedPKCS5PEMFromRSAKey(pkey, passcode, alg);
+		pem = this.getEncryptedPKCS5PEMFromRSAKey(pKey, passcode, alg);
 	    }
 	    return pem;
         },

@@ -127,8 +127,37 @@ test("ASN1HEX.getDecendantHexTLVByNthList", function() {
   equal(ASN1HEX.getDecendantHexTLVByNthList(h2, 0, [0, 5]), h3, "subject");
 });
 
+test("getVbyList exception1 tag-unmatch", function() {
+  throws(function() {
+    ASN1HEX.getVbyList("3006020104020105", 0, [0, 0], "33");
+  },
+  /check/,
+  "throw tag unmatch");
+});
+
+test("getVbyList exception1 tag-unmatch2", function() {
+  throws(function() {
+    ASN1HEX.getVbyList("3006020104020105", 0, [300], "30");
+  },
+  /can't find/,
+  "throw tag unmatch");
+});
+
+test("getVbyList int values", function() {
+  expect(2);
+  equal(ASN1HEX.getVbyList("3006020104020105", 0, [0], "02"), "04", "4");
+  equal(ASN1HEX.getVbyList("3006020104020105", 0, [1], "02"), "05", "5");
+});
+
+test("getVbyList DSA signature int values", function() {
+  var s = "302c02146e41015afd8597894f42f466dde2190ebba6f15e0214787f9380a3a33011c88bf877df7ac3b8a62b854c";
+  expect(2);
+  equal(ASN1HEX.getVbyList(s, 0, [0], "02"), "6e41015afd8597894f42f466dde2190ebba6f15e", "4");
+  equal(ASN1HEX.getVbyList(s, 0, [1], "02"), "787f9380a3a33011c88bf877df7ac3b8a62b854c", "5");
+});
 
 });
+
 </script>
   
 </head>

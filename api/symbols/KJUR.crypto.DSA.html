@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.asn1.x509.X500Name</title>
+		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.crypto.DSA</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -322,26 +322,24 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.x509.X500Name
+				Class KJUR.crypto.DSA
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
-				<br />Extends
-					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
-				X500Name ASN.1 structure class
+				class for DSA signing and verifcation
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/dsa-modified-1.0.js.html">dsa-modified-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.X500Name.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.crypto.DSA.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -354,10 +352,10 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.x509.X500Name.html#constructor">KJUR.asn1.x509.X500Name</a></b>(params)
+								<b><a href="../symbols/KJUR.crypto.DSA.html#constructor">KJUR.crypto.DSA</a></b>()
 							</div>
-							<div class="description">X500Name ASN.1 structure class
-</div>
+							<div class="description">class for DSA signing and verification
+<p>CAUTION: Most of the case, you don't need to use this class.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -366,17 +364,71 @@ ul.inheritsList
 
 <!-- ============================== properties summary ===================== -->
 			
-				
-				
-				
-				
-				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
-				</dl>
-				
-			
 
 <!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.crypto.DSA.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.DSA.<b><a href="../symbols/KJUR.crypto.DSA.html#.parseASN1Signature">parseASN1Signature</a></b>(hSigVal)
+								</div>
+								<div class="description">parse hexadecimal ASN.1 DSA signature value</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.DSA.<b><a href="../symbols/KJUR.crypto.DSA.html#.setPrivateKey">setPrivateKey</a></b>(p, q, g, y, x)
+								</div>
+								<div class="description">set DSA private key by key specs</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.DSA.<b><a href="../symbols/KJUR.crypto.DSA.html#.setPublicKey">setPublicKey</a></b>(p, q, g, y)
+								</div>
+								<div class="description">set DSA public key by key specs</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.DSA.<b><a href="../symbols/KJUR.crypto.DSA.html#.signWithMessageHash">signWithMessageHash</a></b>(sHashHex)
+								</div>
+								<div class="description">sign to hashed message by this DSA private key object</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.DSA.<b><a href="../symbols/KJUR.crypto.DSA.html#.verifyWithMessageHash">verifyWithMessageHash</a></b>(sHashHex, hSigVal)
+								</div>
+								<div class="description">verify signature by this DSA public key object</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -389,33 +441,18 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.x509.X500Name</b>(params)
+						<b>KJUR.crypto.DSA</b>()
 				</div>
 				
 				<div class="description">
-					X500Name ASN.1 structure class
-
+					class for DSA signing and verification
+<p>CAUTION: Most of the case, you don't need to use this class.Please use <a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a> class instead.</p><p>This class was originally developped by Recurity Labs GmbH for OpenPGP JavaScript library.(See https://github.com/openpgpjs/openpgpjs/blob/master/src/ciphers/asymmetric/dsa.js)</p>
 					
 				</div>
 				
 				
 				
-				<pre class="code"></pre>
 				
-				
-				
-				
-					
-						<dl class="detailList">
-						<dt class="heading">Parameters:</dt>
-						
-							<dt>
-								<span class="light fixedFont">{Array}</span>  <b>params</b>
-								
-							</dt>
-								<dd>associative array of parameters (ex. {'str': '/C=US/O=a'})</dd>
-						
-						</dl>
 					
 					
 					
@@ -431,6 +468,290 @@ ul.inheritsList
 			
 
 <!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".parseASN1Signature"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">KJUR.crypto.DSA.</span><b>parseASN1Signature</b>(hSigVal)
+					
+					</div>
+					<div class="description">
+						parse hexadecimal ASN.1 DSA signature value
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hSigVal</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 encoded DSA signature value</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>dsa-modified 1.0.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array [s1, s2] of DSA signature value. Both s1 and s2 are BigInteger.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".setPrivateKey"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.DSA.</span><b>setPrivateKey</b>(p, q, g, y, x)
+					
+					</div>
+					<div class="description">
+						set DSA private key by key specs
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>p</b>
+									
+								</dt>
+								<dd>prime P</dd>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>q</b>
+									
+								</dt>
+								<dd>sub prime Q</dd>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>g</b>
+									
+								</dt>
+								<dd>base G</dd>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>y</b>
+									
+								</dt>
+								<dd>public key Y</dd>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>x</b>
+									
+								</dt>
+								<dd>private key X</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>dsa-modified 1.0.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".setPublicKey"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.DSA.</span><b>setPublicKey</b>(p, q, g, y)
+					
+					</div>
+					<div class="description">
+						set DSA public key by key specs
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>p</b>
+									
+								</dt>
+								<dd>prime P</dd>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>q</b>
+									
+								</dt>
+								<dd>sub prime Q</dd>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>g</b>
+									
+								</dt>
+								<dd>base G</dd>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>y</b>
+									
+								</dt>
+								<dd>public key Y</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>dsa-modified 1.0.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".signWithMessageHash"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.DSA.</span><b>signWithMessageHash</b>(sHashHex)
+					
+					</div>
+					<div class="description">
+						sign to hashed message by this DSA private key object
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sHashHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of hashed message</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>dsa-modified 1.0.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of ASN.1 encoded DSA signature value</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".verifyWithMessageHash"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<span class="light">KJUR.crypto.DSA.</span><b>verifyWithMessageHash</b>(sHashHex, hSigVal)
+					
+					</div>
+					<div class="description">
+						verify signature by this DSA public key object
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sHashHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of hashed message</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hSigVal</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 encoded DSA signature value</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>dsa-modified 1.0.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if the signature is valid otherwise false.</dd>
+							
+							</dl>
+						
+						
+						
+
+					
+				
 			
 			
 <!-- ============================== event details ========================= -->		

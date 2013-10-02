@@ -165,7 +165,10 @@ test("tag test RFC 3161 TSP Accuracy 500ms", function() {
         "3004800201f4", "test1");
 });
 
-
+test("jsonToASN1HEX test1", function() {
+var result = KJUR.asn1.ASN1Util.jsonToASN1HEX({seq: [{int: 4}, {int: 5}]});
+equal(result, "3006020104020105", "seq int int");
+});
 
 });
 -->

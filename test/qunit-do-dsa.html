@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for KJUR.crypto.DSA class 'dsa-modified.js'</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+
+<!-- script type="text/javascript" src="qunit.js" /script -->
+<!-- link rel="stylesheet" href="qunit.css" type="text/css" media="screen" -->
+<script src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="screen"/>
+
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rng.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/sha1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
+
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1-1.0.js"></script>
+
+<!-- jsrsasign keyutil external codes -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/cipher-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/aes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/tripledes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+<!-- for PKCS5 PBKDF2 -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/hmac.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/pbkdf2.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha512.js"></script>
+
+<script src="../crypto-1.1.js"></script>
+<script src="../keyutil-1.0.js"></script>
+
+<script src="../dsa-modified-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+
+// key _work_dsa/d1
+var p = new BigInteger("9ed327a12407c8d2dc9a6b9359fbc48f2a317504f33b48661c4b03778f55b818af219285bbcdfa60f63f96f5c3c06738d72432a36f46d6490a0fe70238517671e7abdb430c4ffb74a17fb6d0ceceee28fddb49273bcd165a520e4a9717b4d27ef06f3417df6a9ea2da35058f119ae76ac8095a2c45ee576c3dfe8253f3449a4f", 16);
+var q = new BigInteger("832124c3188298f8d6dd1ad84121c2ef33a5d52b", 16);
+var g = new BigInteger("711ac4053baf502aa0a09abcb7af72885495e1efb0de129d93c7bb16f0e4b80a1a10d0409ed52bcd0df0b5511f6e08f74715517e9406edd45d78f0ef15d92b27ef398ea7bf9365fa13591322149fa84635187da277f15cbc8c9a28423feb233221e5d1ad36d926d2e1e0c770f34dc04a616f55685222a9b1cf4f8ecf87c19b7e", 16);
+var y = new BigInteger("8cafd9654ce51818e154613bd0b14ee974fbdffc5a19802c4301302bc854d5e17daf0d6745a4aaa8e46ff96b57c89371fa72cca12a2248821645d1ff75869a2549ad7fd110ceefea5616d00be5941036e1a2d87bbcf0bfbe6c3b1e18ba0d3b3af6d34bacf613270a0b5f67c78668e4ba5b3ec0aa28e762ea1f9f2e0167e0523b", 16);
+var x = new BigInteger("73b3538660ceac98a3bf48e53f88b4e124657c21", 16);
+
+test("t1", function() {
+var s1 = new BigInteger("6e41015afd8597894f42f466dde2190ebba6f15e", 16);
+var s2 = new BigInteger("787f9380a3a33011c88bf877df7ac3b8a62b854c", 16);
+var dsa = new KJUR.crypto.DSA();
+equal(dsa.verify("SHA1", s1, s2, "aaa", p, q, g, y), true, "aaa SHA1");
+});
+
+test("t2", function() {
+var s1 = new BigInteger("78a2596229442d899a973e07014d41901d6687cc", 16);
+var s2 = new BigInteger("407fb52627f287bef7e4f84f7d2582fa47cc26b3", 16);
+var dsa = new KJUR.crypto.DSA();
+equal(dsa.verify("SHA512", s1, s2, "aaa", p, q, g, y), true, "aaa SHA512");
+});
+
+/*
+test("z1", function() {
+var dsa = new KJUR.crypto.DSA();
+equal(dsa.getRandomBytes(8), 1, "8");
+});
+ */
+
+test("z1", function() {
+var dsa = new KJUR.crypto.DSA();
+var bi1 = dsa.getRandomBigInteger(1024);
+expect(1);
+equal(bi1 instanceof BigInteger, true, "1 " + bi1.toString(16));
+});
+
+test("z1", function() {
+var dsa = new KJUR.crypto.DSA();
+var bi1 = dsa.getRandomBigInteger(new BigInteger("1", 16), new BigInteger("3", 16));
+expect(1);
+equal(bi1 instanceof BigInteger, true, "isBigInteger " + bi1.toString(16));
+});
+
+test("sign1", function() {
+var dsa = new KJUR.crypto.DSA();
+var sigVal = dsa.sign("SHA1", "aaa", g, p, q, x);
+expect(2);
+equal(sigVal[0] instanceof BigInteger, true, "aaa SHA1 " + sigVal[0].toString(16));
+equal(sigVal[1] instanceof BigInteger, true, "aaa SHA1 " + sigVal[1].toString(16));
+});
+
+test("verify1", function() {
+var s1 = new BigInteger("d599208889e4447e229b7092d9be323c9b38ea8", 16);
+var s2 = new BigInteger("55034b5a995695d6c1cb9c629b4ca298bb95175b", 16);
+var dsa = new KJUR.crypto.DSA();
+equal(dsa.verify("SHA1", s1, s2, "aaa", p, q, g, y), true, "aaa SHA1");
+});
+
+test("variable assignment test1", function() {
+var [a, b] = [3, 5];
+expect(2);
+equal(a, 3, "a 3");
+equal(b, 5, "b 5");
+});
+
+test("parse signature", function() {
+  var s = "302c02146e41015afd8597894f42f466dde2190ebba6f15e0214787f9380a3a33011c88bf877df7ac3b8a62b854c";
+  var dsa = new KJUR.crypto.DSA();
+  var result = dsa.parseASN1Signature(s);
+  expect(2);
+  ok(result[0].compareTo(new BigInteger("6e41015afd8597894f42f466dde2190ebba6f15e", 16)) == 0, "s1");
+  ok(result[1].compareTo(new BigInteger("787f9380a3a33011c88bf877df7ac3b8a62b854c", 16)) == 0, "s2");
+});
+
+test("verifyWithMessageHash d1.sig.aaa.1", function() {
+  var sHashHex = KJUR.crypto.Util.hashString("aaa", "sha1");
+  var hSigVal = "302c02146e41015afd8597894f42f466dde2190ebba6f15e0214787f9380a3a33011c88bf877df7ac3b8a62b854c";
+  var dsa = new KJUR.crypto.DSA();
+  dsa.setPublicKey(p, q, g, y);
+  ok(dsa.verifyWithMessageHash(sHashHex, hSigVal), "v1");
+});
+
+test("verifyWithMessageHash d1.sig.aaa.2", function() {
+  var sHashHex = KJUR.crypto.Util.hashString("aaa", "sha1");
+  var hSigVal = "302c0214172fec83363f27ee5885c2a1a1bc228e07fcac4b021439e52cfa9d4226a444fee65330de760dda7904b2";
+  var dsa = new KJUR.crypto.DSA();
+  dsa.setPublicKey(p, q, g, y);
+  ok(dsa.verifyWithMessageHash(sHashHex, hSigVal), "");
+});
+
+test("verifyWithMessageHash d1.sig.aaa.3", function() {
+  var sHashHex = KJUR.crypto.Util.hashString("aaa", "sha512");
+  var hSigVal = "302c021478a2596229442d899a973e07014d41901d6687cc0214407fb52627f287bef7e4f84f7d2582fa47cc26b3";
+  var dsa = new KJUR.crypto.DSA();
+  dsa.setPublicKey(p, q, g, y);
+  ok(dsa.verifyWithMessageHash(sHashHex, hSigVal), "");
+});
+
+test("verifyWithMessageHash d1.sig.aaa.4", function() {
+  var sHashHex = KJUR.crypto.Util.hashString("aaa", "sha512");
+  var hSigVal = "302c02143605f5f1aba1a7e877847dc8d0d0c9bbf2886c2e02146c491c95f9fca3a0596e5fe6ad170db9fb11e15a";
+  var dsa = new KJUR.crypto.DSA();
+  dsa.setPublicKey(p, q, g, y);
+  ok(dsa.verifyWithMessageHash(sHashHex, hSigVal), "");
+});
+
+test("signWithMessageHash test1", function() {
+  var sHashHex = KJUR.crypto.Util.hashString("aaa", "sha1");
+  var dsa = new KJUR.crypto.DSA();
+  dsa.setPrivateKey(p, q, g, y, x);
+  equal(dsa.signWithMessageHash(sHashHex).substr(0, 8), "302c0214", "heading");
+});
+
+test("sign and verifyWithMessageHash test1", function() {
+  var sHashHex = KJUR.crypto.Util.hashString("aaa", "sha1");
+  var dsa = new KJUR.crypto.DSA();
+  dsa.setPrivateKey(p, q, g, y, x);
+  var hSigVal = dsa.signWithMessageHash(sHashHex);
+
+  var dsa2 = new KJUR.crypto.DSA();
+  dsa2.setPublicKey(p, q, g, y);
+  ok(dsa2.verifyWithMessageHash(sHashHex, hSigVal), "");
+});
+
+});
+-->
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+QUnit for 
+<a href="qunit-do-keyutil.html">keyutil</a> | 
+<a href="qunit-do-keyutil-eprv.html">keyutil-eprv</a> | 
+<a href="qunit-do-keyutil-pub.html">keyutil-pub</a> | 
+</body>
+</html>
+
+

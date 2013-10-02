@@ -4,7 +4,7 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="opensource free RSA and ECDSA signing/validation, ASN.1, PKCS#5/8 private key X.509 certificate and CRL library in pure JavaScript" />
+    <meta name="description" content="opensource free cryptographic library supports RSA/RSAPSS/DSA/ECDSA signing/validation, ASN.1, PKCS#5/8 private key X.509 certificate and CRL library in pure JavaScript" />
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
     <title>jsrsasign - RSA Signing and Verification in JavaScript</title>
@@ -18,7 +18,7 @@
           <a id="forkme_banner" href="https://github.com/kjur/jsrsasign">Fork Me on GitHub</a>
 
           <h1 id="project_title">jsrsasign</h1>
-          <h2 id="project_tagline">opensource free RSA and ECDSA signing/validation, ASN.1, PKCS#5/8 private key X.509 certificate and CRL library in pure JavaScript</h2>
+          <h2 id="project_tagline">opensource free cryptographic library supports RSA/RSAPSS/DSA/ECDSA signing/validation, ASN.1, PKCS#5/8 private key X.509 certificate and CRL library in pure JavaScript</h2>
 
           <section id="downloads">
             <a class="zip_download_link" href="https://github.com/kjur/jsrsasign/zipball/master">Download this project as a .zip file</a>
@@ -54,6 +54,15 @@ The 'jsrsasign' library provides following features in pure JavaScript.
 
 <h3>NEWS</h3>
 <dl>
+<dt><b>2013-Sep-23</b>: 
+<dd>Release 4.1.6 is now available.
+<ul>
+<li>DSA signature algorithm support (However Signature and KEYUTIL class don't support yet)</li>
+<li>KEYUTIL.generateKeypair method added</li>
+<li>ASN1Util.jsonToASN1HEX method added</li>
+<li>HmacSHA384 support</li>
+</ul>
+
 <dt><b>2013-Sep-23</b>: 
 <dd>Release 4.1.3 is now available.
 <ul>

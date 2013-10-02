@@ -1,6 +1,17 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.1.5 to 4.1.6 (2013-Oct-02)
+  - newly dsa-modified 1.0.0 added
+    - This is a DSA algorithm ported from github.com/openpgpjs
+    - However Signature and KEYUTIL doesn't support DSA yet.
+  - asn1 1.0.3 to 1.0.4
+    - ASN1Util.jsonToASN1HEX method added.
+  - asn1hex 1.1.3 to 1.1.4
+    - ASN1HEX.getVbyList with tag checking method added.
+  - keyutil 1.0.1 to 1.0.2
+    - fix typo in newEncryptedPKCS5PEM method.
+
 * Changes between 4.1.4 to 4.1.5 (2013-Sep-29)
   - keyutil 1.0.0 to 1.0.1
     - new generateKeypair method added
