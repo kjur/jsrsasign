@@ -1,4 +1,4 @@
-/*! asn1-1.0.3.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1-1.0.4.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.0.3 (2013-Sep-12)
+ * @version asn1 1.0.4 (2013-Oct-02)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -261,6 +261,25 @@ KJUR.asn1.ASN1Util = new function() {
 		return new ns1.DERTaggedObject(newParam);
 	    }
 	}
+    };
+
+    /**
+     * get encoded hexadecimal string of ASN1Object specifed by JSON parameters
+     * @name jsonToASN1HEX
+     * @memberOf KJUR.asn1.ASN1Util
+     * @function
+     * @param {Array} param JSON parameter to generate ASN1Object
+     * @return hexadecimal string of ASN1Object
+     * @since asn1 1.0.4
+     * @description
+     * As for ASN.1 object representation of JSON object,
+     * please see {@link newObject}.
+     * @example
+     * jsonToASN1HEX({'prnstr': 'aaa'}); 
+     */
+    this.jsonToASN1HEX = function(param) {
+	var asn1Obj = this.newObject(param);
+	return asn1Obj.getEncodedHex();
     };
 };
 

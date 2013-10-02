@@ -1,9 +1,7 @@
-/*! asn1hex-1.1.3.js (c) 2012-2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1hex-1.1.4.js (c) 2012-2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
- *
- * version: 1.1.3 (2013-Sep-12)
  *
  * Copyright (c) 2010-2013 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -12,6 +10,14 @@
  *
  * The above copyright and license notice shall be 
  * included in all copies or substantial portions of the Software.
+ */
+
+/**
+ * @fileOverview
+ * @name asn1hex-1.1.js
+ * @author Kenji Urushima kenji.urushima@gmail.com
+ * @version asn1hex 1.1.4 (2013-Oct-02)
+ * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
 /*
@@ -25,14 +31,6 @@
  *   Requirements:
  *   - ASN.1 type octet length MUST be 1. 
  *     (i.e. ASN.1 primitives like SET, SEQUENCE, INTEGER, OCTETSTRING ...)
- */
-
-/**
- * @fileOverview
- * @name asn1hex-1.1.js
- * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1hex 1.1.3 (2013-Sep-12)
- * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
 /**
@@ -274,5 +272,21 @@ var ASN1HEX = new function() {
 	var idx = this.getDecendantIndexByNthList(h, currentIndex, nthList);
 	return this.getHexOfV_AtObj(h, idx);
     };
+};
+
+/*
+ * @since asn1hex 1.1.4
+ */
+ASN1HEX.getVbyList = function(h, currentIndex, nthList, checkingTag) {
+    var idx = this.getDecendantIndexByNthList(h, currentIndex, nthList);
+    if (idx === undefined) {
+	throw "can't find nthList object";
+    }
+    if (checkingTag !== undefined) {
+	if (h.substr(idx, 2) != checkingTag) {
+	    throw "checking tag doesn't match";
+	}
+    }
+    return this.getHexOfV_AtObj(h, idx);
 };
 

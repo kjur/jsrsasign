@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! keyutil-1.0.1.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! keyutil-1.0.2.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * keyutil.js - key utility for PKCS#5/8 PEM, RSA/ECDSA key object
@@ -22,7 +22,7 @@
 <span class='line'> 15</span>  * @fileOverview
 <span class='line'> 16</span>  * @name keyutil-1.0.js
 <span class='line'> 17</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 18</span>  * @version keyutil 1.0.1 (2013-Sep-27)
+<span class='line'> 18</span>  * @version keyutil 1.0.2 (2013-Oct-02)
 <span class='line'> 19</span>  * @since jsrsasign 4.1.4
 <span class='line'> 20</span>  * @license &lt;a href="http://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 21</span>  */</span><span class="WHIT">
@@ -514,9 +514,9 @@
 <span class='line'>507</span> </span><span class="WHIT">	    </span><span class="NAME">pKey.generate</span><span class="PUNC">(</span><span class="NAME">keyLen</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">hPublicExponent</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>508</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pem</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>509</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">alg</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">alg</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>510</span> </span><span class="WHIT">		</span><span class="NAME">pem</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getEncryptedPKCS5PEMFromRSAKey</span><span class="PUNC">(</span><span class="NAME">pkey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">passcode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>510</span> </span><span class="WHIT">		</span><span class="NAME">pem</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getEncryptedPKCS5PEMFromRSAKey</span><span class="PUNC">(</span><span class="NAME">pKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">passcode</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>511</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>512</span> </span><span class="WHIT">		</span><span class="NAME">pem</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getEncryptedPKCS5PEMFromRSAKey</span><span class="PUNC">(</span><span class="NAME">pkey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">passcode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">alg</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>512</span> </span><span class="WHIT">		</span><span class="NAME">pem</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getEncryptedPKCS5PEMFromRSAKey</span><span class="PUNC">(</span><span class="NAME">pKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">passcode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">alg</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>513</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>514</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">pem</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>515</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
