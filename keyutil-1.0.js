@@ -1,4 +1,4 @@
-/*! keyutil-1.0.2.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! keyutil-1.0.3.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#5/8 PEM, RSA/ECDSA key object
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version keyutil 1.0.2 (2013-Oct-02)
+ * @version keyutil 1.0.3 (2013-Oct-06)
  * @since jsrsasign 4.1.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -893,12 +893,12 @@ var KEYUTIL = function() {
 	},
 
 	/**
-         * get RSAKey/ECDSA public key object from hexadecimal string of PKCS#8 public key
+         * get RSAKey/DSA/ECDSA public key object from hexadecimal string of PKCS#8 public key
 	 * @name getKeyFromPublicPKCS8Hex
 	 * @memberOf KEYUTIL
 	 * @function
 	 * @param {String} pkcsPub8Hex hexadecimal string of PKCS#8 public key
-	 * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
+	 * @return {Object} RSAKey or KJUR.crypto.{ECDSA,DSA} private key object
 	 * @since pkcs5pkey 1.0.5
 	 */
         getKeyFromPublicPKCS8Hex: function(pkcs8PubHex) {
@@ -914,6 +914,15 @@ var KEYUTIL = function() {
 		    throw "KJUR.crypto.OID.oidhex2name undefined: " + p8.algparam;
 		var curveName = KJUR.crypto.OID.oidhex2name[p8.algparam];
 		var key = new KJUR.crypto.ECDSA({'curve': curveName, 'pub': p8.key});
+		return key;
+	    } else if (p8.algoid == "2a8648ce380401") { // DSA 1.2.840.10040.4.1
+		var param = p8.algparam;
+                var y = ASN1HEX.getHexOfV_AtObj(p8.key, 0);
+		var key = new KJUR.crypto.DSA();
+		key.setPublic(new BigInteger(param.p, 16),
+			      new BigInteger(param.q, 16),
+			      new BigInteger(param.g, 16),
+			      new BigInteger(y, 16));
 		return key;
 	    } else {
 		throw "unsupported public key algorithm";
@@ -1038,7 +1047,7 @@ var KEYUTIL = function() {
 	},
 
 	/**
-         * parse hexadecimal string of PKCS#8 public key
+         * parse hexadecimal string of PKCS#8 RSA/EC/DSA public key
 	 * @name parsePublicPKCS8Hex
 	 * @memberOf KEYUTIL
 	 * @function
@@ -1048,7 +1057,7 @@ var KEYUTIL = function() {
          * Resulted hash has following attributes.
 	 * <ul>
 	 * <li>algoid - hexadecimal string of OID of asymmetric key algorithm</li>
-	 * <li>algparam - hexadecimal string of OID of ECC curve name or null</li>
+	 * <li>algparam - hexadecimal string of OID of ECC curve name, parameter SEQUENCE of DSA or null</li>
 	 * <li>key - hexadecimal string of public key</li>
 	 * </ul>
 	 */
@@ -1077,8 +1086,13 @@ var KEYUTIL = function() {
 	    result.algoid = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a2[0]);
 
 	    // 2.2. AlgID param
-	    if (pkcs8PubHex.substr(a2[1], 2) == "06") {
+	    if (pkcs8PubHex.substr(a2[1], 2) == "06") { // OID for EC
 		result.algparam = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a2[1]);
+	    } else if (pkcs8PubHex.substr(a2[1], 2) == "30") { // SEQ for DSA
+		result.algparam = {};
+		result.algparam.p = ASN1HEX.getVbyList(pkcs8PubHex, a2[1], [0], "02");
+		result.algparam.q = ASN1HEX.getVbyList(pkcs8PubHex, a2[1], [1], "02");
+		result.algparam.g = ASN1HEX.getVbyList(pkcs8PubHex, a2[1], [2], "02");
 	    }
 
 	    // 3. Key
@@ -1142,6 +1156,7 @@ var KEYUTIL = function() {
 
 // -- MAJOR PUBLIC METHODS -------------------------------------------------------
 /**
+ * get private or public key object from any arguments
  * @name getKey
  * @memberOf KEYUTIL
  * @function
@@ -1149,29 +1164,34 @@ var KEYUTIL = function() {
  * @param {Object} param parameter to get key object. see description in detail.
  * @param {String} passcode (OPTION) parameter to get key object. see description in detail.
  * @param {String} hextype (OPTOIN) parameter to get key object. see description in detail.
- * @return {Object} {@link RSAKey} or {@link KJUR.crypto.ECDSA} object
+ * @return {Object} {@link RSAKey}, {@link KJUR.crypto.ECDSA} or {@link KJUR.crypto.ECDSA} object
  * @since keyutil 1.0.0
  * @description
- * This method gets private or public key object({@link RSAKey} or {@link KJUR.crypto.ECDSA})
- * for RSA and ECC.
+ * This method gets private or public key object({@link RSAKey}, {@link KJUR.crypto.DSA} or {@link KJUR.crypto.ECDSA})
+ * for RSA, DSA and ECC.
  * Arguments for this methods depends on a key format you specify.
  * Following key representations are supported.
  * <ul>
  * <li>ECC private/public key object(as is): param=KJUR.crypto.ECDSA</li>
+ * <li>DSA private/public key object(as is): param=KJUR.crypto.DSA</li>
  * <li>RSA private/public key object(as is): param=RSAKey </li>
  * <li>ECC private key parameters: param={d: d, curve: curveName}</li>
  * <li>RSA private key parameters: param={n: n, e: e, d: d, p: p, q: q, dp: dp, dq: dq, co: co}<br/>
  * NOTE: Each value shall be hexadecimal string of key spec.</li>
+ * <li>DSA private key parameters: param={p: p, q: q, g: g, y: y, x: x}<br/>
+ * NOTE: Each value shall be hexadecimal string of key spec.</li>
  * <li>ECC public key parameters: param={xy: xy, curve: curveName}<br/>
  * NOTE: ECC public key 'xy' shall be concatination of "04", x-bytes-hex and y-bytes-hex.</li>
+ * <li>DSA public key parameters: param={p: p, q: q, g: g, y: y}<br/>
+ * NOTE: Each value shall be hexadecimal string of key spec.</li>
  * <li>RSA public key parameters: param={n: n, e: e} </li>
- * <li>X.509 PEM certificate (RSA/ECC): param=pemString</li>
+ * <li>X.509 PEM certificate (RSA/DSA/ECC): param=pemString</li>
  * <li>PKCS#8 hexadecimal RSA/ECC public key: param=pemString, null, "pkcs8pub"</li>
- * <li>PKCS#8 PEM RSA/ECC public key: param=pemString</li>
+ * <li>PKCS#8 PEM RSA/DSA/ECC public key: param=pemString</li>
  * <li>PKCS#5 plain hexadecimal RSA private key: param=hexString, null, "pkcs5prv"</li>
- * <li>PKCS#5 plain PEM RSA private key: param=pemString</li>
+ * <li>PKCS#5 plain PEM DSA/RSA private key: param=pemString</li>
  * <li>PKCS#8 plain PEM RSA/ECDSA private key: param=pemString</li>
- * <li>PKCS#5 encrypted PEM RSA private key: param=pemString, passcode</li>
+ * <li>PKCS#5 encrypted PEM RSA/DSA private key: param=pemString, passcode</li>
  * <li>PKCS#8 encrypted PEM RSA/ECDSA private key: param=pemString, passcode</li>
  * </ul>
  * Please note following limitation on encrypted keys:
@@ -1182,8 +1202,11 @@ var KEYUTIL = function() {
  */
 KEYUTIL.getKey = function(param, passcode, hextype) {
     // 1. by key object
-    if (param instanceof RSAKey) return param;
-    if (param instanceof KJUR.crypto.ECDSA) return param;
+    if (typeof RSAKey != 'undefined' && param instanceof RSAKey) return param;
+    if (typeof KJUR.crypto.ECDSA != 'undefined' && param instanceof KJUR.crypto.ECDSA)
+	return param;
+    if (typeof KJUR.crypto.DSA != 'undefined' && param instanceof KJUR.crypto.DSA)
+	return param;
 
     // 2. by key spec
     // 2.1. ECC private key
@@ -1199,14 +1222,29 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 			 param.dp, param.dq, param.co);
 	return key;
     }
-    // 2.3. ECC public key
+    // 2.3. DSA private key
+    if (param.p !== undefined && param.q !== undefined && param.g !== undefined && 
+	param.y !== undefined && param.x !== undefined) {
+	var key = new KJUR.crypto.DSA();
+	key.setPrivate(param.p, param.q, param.g, param.y, param.x);
+	return key;
+    }
+
+    // 2.4. ECC public key
     if (param.d !== undefined && param.curve !== undefined) {
 	return new KJUR.crypto.ECDSA({pub: param.d, curve: param.curve});
     }
-    // 2.4. RSA private key
+    // 2.5. RSA private key
     if (param.n !== undefined && param.e) {
 	var key = new RSAKey();
 	key.setPublic(param.n, param.e);
+	return key;
+    }
+    // 2.6. DSA public key
+    if (param.p !== undefined && param.q !== undefined && param.g !== undefined && 
+	param.y !== undefined && param.x === undefined) {
+	var key = new KJUR.crypto.DSA();
+	key.setPublic(param.p, param.q, param.g, param.y);
 	return key;
     }
 
@@ -1249,6 +1287,25 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	return key;
     }
 
+    // 8.2. private key by plain PKCS#5 PEM DSA string
+    if (param.indexOf("-END DSA PRIVATE KEY-") != -1 &&
+	param.indexOf("4,ENCRYPTED") == -1) {
+
+	var hKey = this.getHexFromPEM(param, "DSA PRIVATE KEY");
+	var p = ASN1HEX.getVbyList(hKey, 0, [1], "02");
+	var q = ASN1HEX.getVbyList(hKey, 0, [2], "02");
+	var g = ASN1HEX.getVbyList(hKey, 0, [3], "02");
+	var y = ASN1HEX.getVbyList(hKey, 0, [4], "02");
+	var x = ASN1HEX.getVbyList(hKey, 0, [5], "02");
+	var key = new KJUR.crypto.DSA();
+	key.setPrivate(new BigInteger(p, 16),
+		       new BigInteger(q, 16),
+		       new BigInteger(g, 16),
+		       new BigInteger(y, 16),
+		       new BigInteger(x, 16));
+	return key;
+    }
+
     // 9. private key by plain PKCS#8 PEM ECC/RSA string
     if (param.indexOf("-END PRIVATE KEY-") != -1) {
 	return KEYUTIL.getKeyFromPlainPrivatePKCS8PEM(param);
@@ -1258,6 +1315,24 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     if (param.indexOf("-END RSA PRIVATE KEY-") != -1 &&
 	param.indexOf("4,ENCRYPTED") != -1) {
 	return KEYUTIL.getRSAKeyFromEncryptedPKCS5PEM(param, passcode);
+    }
+
+    // 10.2. private key by encrypted PKCS#5 PEM DSA string
+    if (param.indexOf("-END DSA PRIVATE KEY-") != -1 &&
+	param.indexOf("4,ENCRYPTED") != -1) {
+	var hKey = KEYUTIL.getDecryptedKeyHex(param, passcode);
+	var p = ASN1HEX.getVbyList(hKey, 0, [1], "02");
+	var q = ASN1HEX.getVbyList(hKey, 0, [2], "02");
+	var g = ASN1HEX.getVbyList(hKey, 0, [3], "02");
+	var y = ASN1HEX.getVbyList(hKey, 0, [4], "02");
+	var x = ASN1HEX.getVbyList(hKey, 0, [5], "02");
+	var key = new KJUR.crypto.DSA();
+	key.setPrivate(new BigInteger(p, 16),
+		       new BigInteger(q, 16),
+		       new BigInteger(g, 16),
+		       new BigInteger(y, 16),
+		       new BigInteger(x, 16));
+	return key;
     }
 
     // 11. private key by encrypted PKCS#8 hexadecimal RSA/ECDSA string

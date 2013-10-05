@@ -1,4 +1,4 @@
-/*! dsa-modified-1.0.0.js (c) Recurity Labs GmbH, Kenji Urushimma | github.com/openpgpjs/openpgpjs/blob/master/LICENSE
+/*! dsa-modified-1.0.1.js (c) Recurity Labs GmbH, Kenji Urushimma | github.com/openpgpjs/openpgpjs/blob/master/LICENSE
  */
 /*
  * dsa-modified.js - modified DSA class of OpenPGP-JS
@@ -13,7 +13,7 @@
  * @fileOverview
  * @name dsa-modified-1.0.js
  * @author Recurity Labs GmbH (github.com/openpgpjs) and Kenji Urushima (kenji.urushima@gmail.com)
- * @version 1.0.0 (2013-Oct-02)
+ * @version 1.0.1 (2013-Oct-06)
  * @since jsrsasign 4.1.6
  * @license <a href="https://github.com/openpgpjs/openpgpjs/blob/master/LICENSE">LGPL License</a>
  */
@@ -50,7 +50,7 @@ KJUR.crypto.DSA = function() {
 
     /**
      * set DSA private key by key specs
-     * @name setPrivateKey
+     * @name setPrivate
      * @memberOf KJUR.crypto.DSA
      * @function
      * @param {BigInteger} p prime P
@@ -60,7 +60,8 @@ KJUR.crypto.DSA = function() {
      * @param {BigInteger} x private key X
      * @since dsa-modified 1.0.0
      */
-    this.setPrivateKey = function(p, q, g, y, x) {
+    this.setPrivate = function(p, q, g, y, x) {
+	this.isPrivate = true;
 	this.p = p;
 	this.q = q;
 	this.g = g;
@@ -70,7 +71,7 @@ KJUR.crypto.DSA = function() {
 
     /**
      * set DSA public key by key specs
-     * @name setPublicKey
+     * @name setPublic
      * @memberOf KJUR.crypto.DSA
      * @function
      * @param {BigInteger} p prime P
@@ -79,7 +80,8 @@ KJUR.crypto.DSA = function() {
      * @param {BigInteger} y public key Y
      * @since dsa-modified 1.0.0
      */
-    this.setPublicKey = function(p, q, g, y) {
+    this.setPublic = function(p, q, g, y) {
+	this.isPublic = true;
 	this.p = p;
 	this.q = q;
 	this.g = g;
@@ -113,7 +115,7 @@ KJUR.crypto.DSA = function() {
 	var s2 = (k.modInverse(q).multiply(hash.add(x.multiply(s1)))).mod(q);
 
 	var result = KJUR.asn1.ASN1Util.jsonToASN1HEX({
-		seq: [{int: {bigint: s1}}, {int: {bigint: s2}}] 
+		'seq': [{'int': {'bigint': s1}}, {'int': {'bigint': s2}}] 
 	    });
 	return result;
     };
@@ -135,7 +137,9 @@ KJUR.crypto.DSA = function() {
 	var y = this.y;
 
 	// 1. parse ASN.1 signature
-	var [s1, s2] = this.parseASN1Signature(hSigVal);
+	var s1s2 = this.parseASN1Signature(hSigVal);
+        var s1 = s1s2[0];
+        var s2 = s1s2[1];
 
 	// 2. trim message hash
 	var sHashHex = sHashHex.substr(0, q.bitLength() / 4);

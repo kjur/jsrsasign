@@ -51,7 +51,17 @@
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/hmac.js"></script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/pbkdf2.js"></script>
 
-<script src="../pkcs5pkey-1.0.js"></script>
+<script src="../keyutil-1.0.js"></script>
+<script src="../dsa-modified-1.0.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rng.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/ec.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/ec-patch.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecdsa-modified-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecparam-1.0.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -222,6 +232,13 @@ test("sign init encrypted PKCS#8 Privae Key PEM(RSA)", function() {
   var sig = new KJUR.crypto.Signature({'alg': 'SHA1withRSA'});
   sig.init(z1PrvPemP8E, z1PrvPemP8EPass);
   equal(sig.state, "SIGN");
+});
+
+test("sign init encrypted PKCS#8 Privae Key PEM(ECC) pretest(key loading)", function() {
+  var key = KEYUTIL.getKey(k1PrvPemP8E, k1PrvPemP8EPass);
+  expect(2);
+  equal(key.type, "EC", "type");
+  ok(key.isPrivate, "isPrivate");
 });
 
 test("sign init encrypted PKCS#8 Privae Key PEM(ECC)", function() {

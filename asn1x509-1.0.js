@@ -1,4 +1,4 @@
-/*! asn1x509-1.0.5.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.6.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.5 (2013-Sep-12)
+ * @version 1.0.6 (2013-Oct-06)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -84,7 +84,7 @@ if (typeof KJUR.asn1.x509 == "undefined" || !KJUR.asn1.x509) KJUR.asn1.x509 = {}
  * X.509 Certificate class to sign and generate hex encoded certificate
  * @name KJUR.asn1.x509.Certificate
  * @class X.509 Certificate class to sign and generate hex encoded certificate
- * @param {Array} params associative array of parameters (ex. {'tbscertobj': obj, 'rsaprvkey': key})
+ * @param {Array} params associative array of parameters (ex. {'tbscertobj': obj, 'prvkeyobj': key})
  * @extends KJUR.asn1.ASN1Object
  * @description
  * <br/>
@@ -92,16 +92,17 @@ if (typeof KJUR.asn1.x509 == "undefined" || !KJUR.asn1.x509) KJUR.asn1.x509 = {}
  * following properties:
  * <ul>
  * <li>tbscertobj - specify {@link KJUR.asn1.x509.TBSCertificate} object</li>
- * <li>rsaprvkey - specify {@link RSAKey} object CA private key</li>
+ * <li>prvkeyobj - specify {@link RSAKey}, {@link KJUR.crypto.ECDSA} or {@link KJUR.crypto.DSA} object for CA private key to sign the certificate</li>
+ * <li>(DEPRECATED)rsaprvkey - specify {@link RSAKey} object CA private key</li>
+ * <li>(DEPRECATED)rsaprvpem - specify PEM string of RSA CA private key</li>
  * </ul>
- * NOTE: 'params' can be omitted.
- * <h4>EXAMPLE</h4>
+ * NOTE1: 'params' can be omitted.<br/>
+ * NOTE2: DSA/ECDSA is also supported for CA signging key from asn1x509 1.0.6.
  * @example
- * var prvKey = new RSAKey(); // CA's private key
- * prvKey.readPrivateKeyFromASN1HexString("3080...");
- * var cert = new KJUR.asn1x509.Certificate({'tbscertobj': tbs, 'rsaprvkey': prvKey});
+ * var caKey = KEYUTIL.getKey(caKeyPEM); // CA's private key
+ * var cert = new KJUR.asn1x509.Certificate({'tbscertobj': tbs, 'prvkeyobj': caKey});
  * cert.sign(); // issue certificate by CA's private key
- * var hCert = cert.getEncodedHex();
+ * var certPEM = cert.getPEMString();
  *
  * // Certificate  ::=  SEQUENCE  {
  * //     tbsCertificate       TBSCertificate,
@@ -114,7 +115,8 @@ KJUR.asn1.x509.Certificate = function(params) {
     var asn1SignatureAlg = null;
     var asn1Sig = null;
     var hexSig = null;
-    var rsaPrvKey = null;
+    var prvKey = null;
+    var rsaPrvKey = null; // DEPRECATED
 
     
     /**
@@ -136,7 +138,7 @@ KJUR.asn1.x509.Certificate = function(params) {
 	var caKeyHex = PKCS5PKEY.getDecryptedKeyHex(rsaPEM, passPEM);
 	var caKey = new RSAKey();
 	caKey.readPrivateKeyFromASN1HexString(caKeyHex);  
-	this.rsaPrvKey = caKey;
+	this.prvKey = caKey;
     };
 
     /**
@@ -152,8 +154,8 @@ KJUR.asn1.x509.Certificate = function(params) {
     this.sign = function() {
 	this.asn1SignatureAlg = this.asn1TBSCert.asn1SignatureAlg;
 
-	sig = new KJUR.crypto.Signature({'alg': 'SHA1withRSA', 'prov': 'cryptojs/jsrsa'});
-	sig.initSign(this.rsaPrvKey);
+	sig = new KJUR.crypto.Signature({'alg': 'SHA1withRSA'});
+	sig.init(this.prvKey);
 	sig.updateHex(this.asn1TBSCert.getEncodedHex());
 	this.hexSig = sig.sign();
 
@@ -195,10 +197,11 @@ KJUR.asn1.x509.Certificate = function(params) {
 	if (typeof params['tbscertobj'] != "undefined") {
 	    this.asn1TBSCert = params['tbscertobj'];
 	}
-	if (typeof params['rsaprvkey'] != "undefined") {
-	    this.rsaPrvKey = params['rsaprvkey'];
-	}
-	if ((typeof params['rsaprvpem'] != "undefined") &&
+	if (typeof params['prvkeyobj'] != "undefined") {
+	    this.prvKey = params['prvkeyobj'];
+	} else if (typeof params['rsaprvkey'] != "undefined") {
+	    this.prvKey = params['rsaprvkey'];
+        } else if ((typeof params['rsaprvpem'] != "undefined") &&
 	    (typeof params['rsaprvpas'] != "undefined")) {
 	    this.setRsaPrvKeyByPEMandPass(params['rsaprvpem'], params['rsaprvpas']);
 	}
@@ -334,11 +337,12 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
     };
 
     /**
-     * set subject public key info field by parameter
+     * (DEPRECATED) set subject public key info field by RSA key parameter
      * @name setSubjectPublicKeyByParam
      * @memberOf KJUR.asn1.x509.TBSCertificate
      * @function
-     * @param {Array} subjPKeyParam SubjectPublicKeyInfo parameter
+     * @param {Array} subjPKeyParam SubjectPublicKeyInfo parameter of RSA
+     * @deprecated
      * @description
      * @example
      * tbsc.setSubjectPublicKeyByParam({'rsakey': pubKey});
@@ -346,6 +350,26 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      */
     this.setSubjectPublicKeyByParam = function(subjPKeyParam) {
 	this.asn1SubjPKey = new KJUR.asn1.x509.SubjectPublicKeyInfo(subjPKeyParam);
+    };
+
+    /**
+     * set subject public key info by RSA/ECDSA/DSA key parameter
+     * @name setSubjectPublicKeyByGetKey
+     * @memberOf KJUR.asn1.x509.TBSCertificate
+     * @function
+     * @param {Object} keyParam public key parameter which passed to {@link KEYUTIL.getKey} argument
+     * @description
+     * @example
+     * tbsc.setSubjectPublicKeyByGetKeyParam(certPEMString); // or 
+     * tbsc.setSubjectPublicKeyByGetKeyParam(pkcs8PublicKeyPEMString); // or 
+     * tbsc.setSubjectPublicKeyByGetKeyParam(kjurCryptoECDSAKeyObject); // et.al.
+     * @see KJUR.asn1.x509.SubjectPublicKeyInfo
+     * @see KEYUTIL.getKey
+     * @since asn1x509 1.0.6
+     */
+    this.setSubjectPublicKeyByGetKey = function(keyParam) {
+	var keyObj = KEYUTIL.getKey(keyParam);
+	this.asn1SubjPKey = new KJUR.asn1.x509.SubjectPublicKeyInfo(keyObj);
     };
 
     /**
@@ -362,6 +386,39 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      */
     this.appendExtension = function(extObj) {
 	this.extensionsArray.push(extObj);
+    };
+
+    /**
+     * append X.509v3 extension to this object by name and parameters
+     * @name appendExtensionByName
+     * @memberOf KJUR.asn1.x509.TBSCertificate
+     * @function
+     * @param {name} name name of X.509v3 Extension object
+     * @param {Array} extParams parameters as argument of Extension constructor.
+     * @description
+     * @example
+     * tbsc.appendExtensionByName('BasicConstraints', {'cA':true, 'critical': true});
+     * tbsc.appendExtensionByName('KeyUsage', {'bin':'11'});
+     * tbsc.appendExtensionByName('CRLDistributionPoints', {uri: 'http://aaa.com/a.crl'});
+     * tbsc.appendExtensionByName('ExtKeyUsage', {array: [{name: 'clientAuth'}]});
+     * @see KJUR.asn1.x509.Extension
+     */
+    this.appendExtensionByName = function(name, extParams) {
+	if (name.toLowerCase() == "basicconstraints") {
+	    var extObj = new KJUR.asn1.x509.BasicConstraints(extParams);
+	    this.appendExtension(extObj);
+	} else if (name.toLowerCase() == "keyusage") {
+	    var extObj = new KJUR.asn1.x509.KeyUsage(extParams);
+	    this.appendExtension(extObj);
+	} else if (name.toLowerCase() == "crldistributionpoints") {
+	    var extObj = new KJUR.asn1.x509.CRLDistributionPoints(extParams);
+	    this.appendExtension(extObj);
+	} else if (name.toLowerCase() == "extkeyusage") {
+	    var extObj = new KJUR.asn1.x509.ExtKeyUsage(extParams);
+	    this.appendExtension(extObj);
+	} else {
+	    throw "unsupported extension name: " + name;
+	}
     };
 
     this.getEncodedHex = function() {
@@ -1060,19 +1117,26 @@ YAHOO.lang.extend(KJUR.asn1.x509.AttributeTypeAndValue, KJUR.asn1.ASN1Object);
  * SubjectPublicKeyInfo ASN.1 structure class
  * @name KJUR.asn1.x509.SubjectPublicKeyInfo
  * @class SubjectPublicKeyInfo ASN.1 structure class
- * @param {Array} params associative array of parameters (ex. {'rsakey': key})
+ * @param {Object} params parameter for subject public key
  * @extends KJUR.asn1.ASN1Object
  * @description
  * <br/>
  * As for argument 'params' for constructor, you can specify one of
  * following properties:
  * <ul>
- * <li>rsakey - specify {@link RSAKey} object of subject public key</li>
- * <li>rsapem - specify a string of PEM public key of RSA key</li>
+ * <li>{@link RSAKey} object</li>
+ * <li>{@link KJUR.crypto.ECDSA} object</li>
+ * <li>{@link KJUR.crypto.DSA} object</li>
+ * <li>(DEPRECATED)rsakey - specify {@link RSAKey} object of subject public key</li>
+ * <li>(DEPRECATED)rsapem - specify a string of PEM public key of RSA key</li>
  * </ul>
- * NOTE: 'params' can be omitted.
+ * NOTE1: 'params' can be omitted.<br/>
+ * NOTE2: DSA/ECDSA key object is also supported since asn1x509 1.0.6.<br/>
  * <h4>EXAMPLE</h4>
  * @example
+ * var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(RSAKey_object);
+ * var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoECDSA_object);
+ * var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoDSA_object);
  */
 KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
     KJUR.asn1.x509.SubjectPublicKeyInfo.superclass.constructor.call(this);
@@ -1139,13 +1203,50 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
 					   [this.asn1AlgId, this.asn1SubjPKey]});
 	this.hTLV = o.getEncodedHex();
 	return this.hTLV;
-    }
+    };
+
+    this._setRSAKey = function(key) {
+	var asn1RsaPub = KJUR.asn1.ASN1Util.newObject({
+		'seq': [{'int': {'bigint': key.n}}, {'int': {'int': key.e}}]
+	    });
+	var rsaKeyHex = asn1RsaPub.getEncodedHex();
+	this.asn1AlgId = new KJUR.asn1.x509.AlgorithmIdentifier({'name':'rsaEncryption'});
+	this.asn1SubjPKey = new KJUR.asn1.DERBitString({'hex':'00'+rsaKeyHex});
+    };
+
+    this._setEC = function(key) {
+	var asn1Params = new KJUR.asn1.DERObjectIdentifier({'name': key.curveName});
+	this.asn1AlgId = 
+	    new KJUR.asn1.x509.AlgorithmIdentifier({'name': 'ecPublicKey',
+						    'asn1params': asn1Params});
+	this.asn1SubjPKey = new KJUR.asn1.DERBitString({'hex': '00' + key.pubKeyHex});
+    };
+
+    this._setDSA = function(key) {
+	var asn1Params = new KJUR.asn1.ASN1Util.newObject({
+		'seq': [{'int': {'bigint': key.p}},
+	                {'int': {'bigint': key.q}},
+	                {'int': {'bigint': key.g}}]
+	    });
+	this.asn1AlgId = 
+	    new KJUR.asn1.x509.AlgorithmIdentifier({'name': 'dsa',
+						    'asn1params': asn1Params});
+	var pubhex = KJUR.asn1.ASN1Util.bigIntToMinTwosComplementsHex(key.y);
+	this.asn1SubjPKey = new KJUR.asn1.DERBitString({'hex': '00' + pubhex});
+    };
 
     if (typeof params != "undefined") {
-	if (typeof params['rsakey'] != "undefined") {
+	if (typeof RSAKey != 'undefined' && params instanceof RSAKey) {
+	    this._setRSAKey(params);
+	} else if (typeof KJUR.crypto.ECDSA != 'undefined' &&
+		   params instanceof KJUR.crypto.ECDSA) {
+	    this._setEC(params);
+	} else if (typeof KJUR.crypto.DSA != 'undefined' &&
+		   params instanceof KJUR.crypto.DSA) {
+	    this._setDSA(params);
+	} else if (typeof params['rsakey'] != "undefined") {
 	    this.setRSAKey(params['rsakey']);
-	}
-	if (typeof params['rsapem'] != "undefined") {
+	} else if (typeof params['rsapem'] != "undefined") {
 	    this.setRSAPEM(params['rsapem']);
 	}
     }
@@ -1212,6 +1313,7 @@ KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
     var nameAlg = null;
     var asn1Alg = null;
     var asn1Params = null;
+    var paramEmpty = false;
 
     this.getEncodedHex = function() {
 	if (this.nameAlg == null && this.asn1Alg == null) {
@@ -1220,8 +1322,9 @@ KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
 	if (this.nameAlg != null && this.asn1Alg == null) {
 	    this.asn1Alg = KJUR.asn1.x509.OID.name2obj(this.nameAlg);
 	}
-	var o = new KJUR.asn1.DERSequence({'array':[this.asn1Alg,
-						    this.asn1Params]});
+	var a = [this.asn1Alg];
+	if (! this.paramEmpty) a.push(this.asn1Params);
+	var o = new KJUR.asn1.DERSequence({'array': a});
 	this.hTLV = o.getEncodedHex();
 	return this.hTLV;
     };
@@ -1232,6 +1335,9 @@ KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
 	}
 	if (typeof params['asn1params'] != "undefined") {
 	    this.asn1Params = params['asn1params'];
+	}
+	if (typeof params['paramempty'] != "undefined") {
+	    this.paramEmpty = params['paramempty'];
 	}
     }
     if (this.asn1Params == null) {
@@ -1453,7 +1559,27 @@ KJUR.asn1.x509.OID = new function(params) {
     this.name2oidList = {
 	'sha384':			'2.16.840.1.101.3.4.2.2',
 	'sha224':			'2.16.840.1.101.3.4.2.4',
+
+	'MD2withRSA':			'1.2.840.113549.1.1.2',
+	'MD4withRSA':			'1.2.840.113549.1.1.3',
+	'MD5withRSA':			'1.2.840.113549.1.1.4',
 	'SHA1withRSA':			'1.2.840.113549.1.1.5',
+	'SHA224withRSA':		'1.2.840.113549.1.1.14',
+	'SHA256withRSA':		'1.2.840.113549.1.1.11',
+	'SHA384withRSA':		'1.2.840.113549.1.1.12',
+	'SHA512withRSA':		'1.2.840.113549.1.1.13',
+
+	'SHA1withECDSA':		'1.2.840.10045.4.1',
+	'SHA224withECDSA':		'1.2.840.10045.4.3.1',
+	'SHA256withECDSA':		'1.2.840.10045.4.3.2',
+	'SHA384withECDSA':		'1.2.840.10045.4.3.3',
+	'SHA512withECDSA':		'1.2.840.10045.4.3.4',
+
+	'dsa':				'1.2.840.10040.4.1',
+	'SHA1withDSA':			'1.2.840.10040.4.3',
+	'SHA224withDSA':		'2.16.840.1.101.3.4.3.1',
+	'SHA256withDSA':		'2.16.840.1.101.3.4.3.2',
+
         'rsaEncryption':		'1.2.840.113549.1.1.1',
 	'subjectKeyIdentifier':		'2.5.29.14',
 
@@ -1478,6 +1604,11 @@ KJUR.asn1.x509.OID = new function(params) {
 	'emailProtection':		'1.3.6.1.5.5.7.3.4',
 	'timeStamping':			'1.3.6.1.5.5.7.3.8',
 	'ocspSigning':			'1.3.6.1.5.5.7.3.9',
+
+	'ecPublicKey':			'1.2.840.10045.2.1',
+	'secp256r1':			'1.2.840.10045.3.1.7',
+	'secp256k1':			'1.3.132.0.10',
+	'secp384r1':			'1.3.132.0.34',
     };
 
     this.objCache = {};
@@ -1556,6 +1687,93 @@ KJUR.asn1.x509.X509Util = new function() {
        var pem = KJUR.asn1.ASN1Util.getPEMStringFromHex(hP8, "PUBLIC KEY");
        return pem;
    };
+};
+/**
+ * issue a certificate in PEM format
+ * @name newCertPEM
+ * @memberOf KJUR.asn1.x509.X509Util
+ * @function
+ * @param {Array} param parameter to issue a certificate
+ * @since asn1x509 1.0.6
+ * @description
+ * This method can issue a certificate by a simple
+ * JSON object.
+ * NOTE: When using DSA or ECDSA CA signing key,
+ * use 'paramempty' in 'sigalg' to ommit parameter field
+ * of AlgorithmIdentifer. In case of RSA, parameter
+ * NULL will be specified by default.
+ * @example
+ * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM(
+ * { serial: {int: 4},
+ *   sigalg: {name: 'SHA1withECDSA', paramempty: true},
+ *   issuer: {str: '/C=US/O=a'},
+ *   notbefore: {'str': '130504235959Z'},
+ *   notafter: {'str': '140504235959Z'},
+ *   subject: {str: '/C=US/O=b'},
+ *   sbjpubkey: pubKeyPEM,
+ *   ext: [
+ *     {basicConstraints: {cA: true, critical: true}},
+ *     {keyUsage: {bin: '11'}},
+ *   ],
+ *   cakey: [prvkey, pass]}
+ * );
+ */
+KJUR.asn1.x509.X509Util.newCertPEM = function(param) {
+    var ns1 = KJUR.asn1.x509;
+    var o = new ns1.TBSCertificate();
+
+    if (param.serial !== undefined)
+	o.setSerialNumberByParam(param.serial);
+    else
+	throw "serial number undefined.";
+
+    if (typeof param.sigalg.name == 'string')
+	o.setSignatureAlgByParam(param.sigalg);
+    else 
+	throw "unproper signature algorithm name";
+
+    if (param.issuer !== undefined)
+	o.setIssuerByParam(param.issuer);
+    else
+	throw "issuer name undefined.";
+    
+    if (param.notbefore !== undefined)
+	o.setNotBeforeByParam(param.notbefore);
+    else
+	throw "notbefore undefined.";
+
+    if (param.notafter !== undefined)
+	o.setNotAfterByParam(param.notafter);
+    else
+	throw "notafter undefined.";
+
+    if (param.subject !== undefined)
+	o.setSubjectByParam(param.subject);
+    else
+	throw "subject name undefined.";
+
+    if (param.sbjpubkey !== undefined)
+	o.setSubjectPublicKeyByGetKey(param.sbjpubkey);
+    else
+	throw "subject public key undefined.";
+
+    if (param.ext.length !== undefined) {
+	for (var i = 0; i < param.ext.length; i++) {
+	    for (key in param.ext[i]) {
+		o.appendExtensionByName(key, param.ext[i][key]);
+	    }
+	}
+    }
+
+    var caKey = null;
+    if (param.cakey)
+	caKey = KEYUTIL.getKey.apply(null, param.cakey);
+    else
+	throw "ca key undefined";
+
+    var cert = new ns1.Certificate({'tbscertobj': o, 'prvkeyobj': caKey});
+    cert.sign();
+    return cert.getPEMString();
 };
 
 /*

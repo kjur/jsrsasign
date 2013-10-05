@@ -362,9 +362,11 @@ As for argument 'params' for constructor, you can specify one of
 following properties:
 <ul>
 <li>tbscertobj - specify <a href="../symbols/KJUR.asn1.x509.TBSCertificate.html">KJUR.asn1.x509.TBSCertificate</a> object</li>
-<li>rsaprvkey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object CA private key</li>
+<li>prvkeyobj - specify <a href="../symbols/RSAKey.html">RSAKey</a>, <a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a> or <a href="../symbols/KJUR.crypto.DSA.html">KJUR.crypto.DSA</a> object for CA private key to sign the certificate</li>
+<li>(DEPRECATED)rsaprvkey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object CA private key</li>
+<li>(DEPRECATED)rsaprvpem - specify PEM string of RSA CA private key</li>
 </ul>
-NOTE: 'params' can be omitted.</div>
+NOTE1: 'params' can be omitted.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -459,20 +461,21 @@ As for argument 'params' for constructor, you can specify one of
 following properties:
 <ul>
 <li>tbscertobj - specify <a href="../symbols/KJUR.asn1.x509.TBSCertificate.html">KJUR.asn1.x509.TBSCertificate</a> object</li>
-<li>rsaprvkey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object CA private key</li>
+<li>prvkeyobj - specify <a href="../symbols/RSAKey.html">RSAKey</a>, <a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a> or <a href="../symbols/KJUR.crypto.DSA.html">KJUR.crypto.DSA</a> object for CA private key to sign the certificate</li>
+<li>(DEPRECATED)rsaprvkey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object CA private key</li>
+<li>(DEPRECATED)rsaprvpem - specify PEM string of RSA CA private key</li>
 </ul>
-NOTE: 'params' can be omitted.
-<h4>EXAMPLE</h4>
+NOTE1: 'params' can be omitted.<br/>
+NOTE2: DSA/ECDSA is also supported for CA signging key from asn1x509 1.0.6.
 					
 				</div>
 				
 				
 				
-				<pre class="code">var prvKey = new RSAKey(); // CA's private key
-prvKey.readPrivateKeyFromASN1HexString("3080...");
-var cert = new KJUR.asn1x509.Certificate({'tbscertobj': tbs, 'rsaprvkey': prvKey});
+				<pre class="code">var caKey = KEYUTIL.getKey(caKeyPEM); // CA's private key
+var cert = new KJUR.asn1x509.Certificate({'tbscertobj': tbs, 'prvkeyobj': caKey});
 cert.sign(); // issue certificate by CA's private key
-var hCert = cert.getEncodedHex();
+var certPEM = cert.getPEMString();
 
 // Certificate  ::=  SEQUENCE  {
 //     tbsCertificate       TBSCertificate,
@@ -490,7 +493,7 @@ var hCert = cert.getEncodedHex();
 								<span class="light fixedFont">{Array}</span>  <b>params</b>
 								
 							</dt>
-								<dd>associative array of parameters (ex. {'tbscertobj': obj, 'rsaprvkey': key})</dd>
+								<dd>associative array of parameters (ex. {'tbscertobj': obj, 'prvkeyobj': key})</dd>
 						
 						</dl>
 					

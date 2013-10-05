@@ -134,7 +134,8 @@ function RSAKey() {
 
 // Set the public key fields N and e from hex strings
 function RSASetPublic(N,E) {
-  if (typeof N !== "string")
+  this.isPublic = true;
+  if (typeof N !== "string") 
   {
     this.n = N;
     this.e = E;

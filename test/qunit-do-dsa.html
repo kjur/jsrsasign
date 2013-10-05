@@ -125,7 +125,7 @@ test("verifyWithMessageHash d1.sig.aaa.1", function() {
   var sHashHex = KJUR.crypto.Util.hashString("aaa", "sha1");
   var hSigVal = "302c02146e41015afd8597894f42f466dde2190ebba6f15e0214787f9380a3a33011c88bf877df7ac3b8a62b854c";
   var dsa = new KJUR.crypto.DSA();
-  dsa.setPublicKey(p, q, g, y);
+  dsa.setPublic(p, q, g, y);
   ok(dsa.verifyWithMessageHash(sHashHex, hSigVal), "v1");
 });
 
@@ -133,7 +133,7 @@ test("verifyWithMessageHash d1.sig.aaa.2", function() {
   var sHashHex = KJUR.crypto.Util.hashString("aaa", "sha1");
   var hSigVal = "302c0214172fec83363f27ee5885c2a1a1bc228e07fcac4b021439e52cfa9d4226a444fee65330de760dda7904b2";
   var dsa = new KJUR.crypto.DSA();
-  dsa.setPublicKey(p, q, g, y);
+  dsa.setPublic(p, q, g, y);
   ok(dsa.verifyWithMessageHash(sHashHex, hSigVal), "");
 });
 
@@ -141,7 +141,7 @@ test("verifyWithMessageHash d1.sig.aaa.3", function() {
   var sHashHex = KJUR.crypto.Util.hashString("aaa", "sha512");
   var hSigVal = "302c021478a2596229442d899a973e07014d41901d6687cc0214407fb52627f287bef7e4f84f7d2582fa47cc26b3";
   var dsa = new KJUR.crypto.DSA();
-  dsa.setPublicKey(p, q, g, y);
+  dsa.setPublic(p, q, g, y);
   ok(dsa.verifyWithMessageHash(sHashHex, hSigVal), "");
 });
 
@@ -149,25 +149,25 @@ test("verifyWithMessageHash d1.sig.aaa.4", function() {
   var sHashHex = KJUR.crypto.Util.hashString("aaa", "sha512");
   var hSigVal = "302c02143605f5f1aba1a7e877847dc8d0d0c9bbf2886c2e02146c491c95f9fca3a0596e5fe6ad170db9fb11e15a";
   var dsa = new KJUR.crypto.DSA();
-  dsa.setPublicKey(p, q, g, y);
+  dsa.setPublic(p, q, g, y);
   ok(dsa.verifyWithMessageHash(sHashHex, hSigVal), "");
 });
 
 test("signWithMessageHash test1", function() {
   var sHashHex = KJUR.crypto.Util.hashString("aaa", "sha1");
   var dsa = new KJUR.crypto.DSA();
-  dsa.setPrivateKey(p, q, g, y, x);
+  dsa.setPrivate(p, q, g, y, x);
   equal(dsa.signWithMessageHash(sHashHex).substr(0, 8), "302c0214", "heading");
 });
 
 test("sign and verifyWithMessageHash test1", function() {
   var sHashHex = KJUR.crypto.Util.hashString("aaa", "sha1");
   var dsa = new KJUR.crypto.DSA();
-  dsa.setPrivateKey(p, q, g, y, x);
+  dsa.setPrivate(p, q, g, y, x);
   var hSigVal = dsa.signWithMessageHash(sHashHex);
 
   var dsa2 = new KJUR.crypto.DSA();
-  dsa2.setPublicKey(p, q, g, y);
+  dsa2.setPublic(p, q, g, y);
   ok(dsa2.verifyWithMessageHash(sHashHex, hSigVal), "");
 });
 

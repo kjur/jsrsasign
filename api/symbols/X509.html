@@ -477,6 +477,16 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getPublicKeyFromCertPEM">getPublicKeyFromCertPEM</a></b>(sCertPEM)
+								</div>
+								<div class="description">get RSAKey/ECDSA public key object from PEM certificate string
+NOTE: DSA is also supported since x509 1.1.2.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getPublicKeyInfoPropOfCertPEM">getPublicKeyInfoPropOfCertPEM</a></b>(sCertPEM)
 								</div>
 								<div class="description">get public key information from PEM certificate
@@ -767,6 +777,56 @@ Resulted associative array has following properties:
 						
 						
 						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getPublicKeyFromCertPEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">X509.</span><b>getPublicKeyFromCertPEM</b>(sCertPEM)
+					
+					</div>
+					<div class="description">
+						get RSAKey/ECDSA public key object from PEM certificate string
+NOTE: DSA is also supported since x509 1.1.2.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sCertPEM</b>
+									
+								</dt>
+								<dd>PEM formatted RSA/ECDSA/DSA X.509 certificate</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>returns RSAKey/KJUR.crypto.{ECDSA,DSA} object of public key</dd>
+							
+							</dl>
 						
 						
 						

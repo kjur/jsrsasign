@@ -1,4 +1,4 @@
-/*! crypto-1.1.4.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! crypto-1.1.5.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.1.4 (2013-Sep-24)
+ * @version 1.1.5 (2013-Oct-06)
  * @since jsrsasign 2.2
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -97,6 +97,10 @@ KJUR.crypto.Util = new function() {
 	'SHA384withECDSA':	'cryptojs/jsrsa',
 	'SHA512withECDSA':	'cryptojs/jsrsa',
 	'RIPEMD160withECDSA':	'cryptojs/jsrsa',
+
+	'SHA1withDSA':		'cryptojs/jsrsa',
+	'SHA224withDSA':	'cryptojs/jsrsa',
+	'SHA256withDSA':	'cryptojs/jsrsa',
 
 	'MD5withRSAandMGF1':		'cryptojs/jsrsa',
 	'SHA1withRSAandMGF1':		'cryptojs/jsrsa',
@@ -641,9 +645,8 @@ KJUR.crypto.Mac = function(params) {
  * <br/>
  * As for params of constructor's argument, it can be specify following attributes:
  * <ul>
- * <li>alg - signature algorithm name (ex. {MD5,SHA1,SHA224,SHA256,SHA384,SHA512,RIPEMD160}withRSA)</li>
+ * <li>alg - signature algorithm name (ex. {MD5,SHA1,SHA224,SHA256,SHA384,SHA512,RIPEMD160}with{RSA,ECDSA,DSA})</li>
  * <li>provider - currently 'cryptojs/jsrsa' only</li>
- * <li>prvkeypem - PEM string of signer's private key. If this specified, no need to call initSign(prvKey).</li>
  * </ul>
  * <h4>SUPPORTED ALGORITHMS AND PROVIDERS</h4>
  * This Signature class supports following signature algorithm and provider names:
@@ -669,6 +672,9 @@ KJUR.crypto.Mac = function(params) {
  * <li>SHA384withRSAandMGF1 - cryptojs/jsrsa</li>
  * <li>SHA512withRSAandMGF1 - cryptojs/jsrsa</li>
  * <li>RIPEMD160withRSAandMGF1 - cryptojs/jsrsa</li>
+ * <li>SHA1withDSA - cryptojs/jsrsa</li>
+ * <li>SHA224withDSA - cryptojs/jsrsa</li>
+ * <li>SHA256withDSA - cryptojs/jsrsa</li>
  * </ul>
  * Here are supported elliptic cryptographic curve names and their aliases for ECDSA:
  * <ul>
@@ -676,39 +682,36 @@ KJUR.crypto.Mac = function(params) {
  * <li>secp256r1, NIST P-256, P-256, prime256v1</li>
  * <li>secp384r1, NIST P-384, P-384</li>
  * </ul>
+ * NOTE1: DSA signing algorithm is also supported since crypto 1.1.5.
  * <h4>EXAMPLES</h4>
  * @example
  * // RSA signature generation
- * var sig = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
- * sig.initSign(prvKey);
+ * var sig = new KJUR.crypto.Signature({"alg": "SHA1withRSA"});
+ * sig.init(prvKeyPEM);
  * sig.updateString('aaa');
  * var hSigVal = sig.sign();
  *
- * // RSA signature validation
- * var sig2 = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
- * sig2.initVerifyByCertificatePEM(cert)
+ * // DSA signature validation
+ * var sig2 = new KJUR.crypto.Signature({"alg": "SHA1withDSA"});
+ * sig2.init(certPEM);
  * sig.updateString('aaa');
  * var isValid = sig2.verify(hSigVal);
  * 
- * // EC key generation
- * var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
- * var keypair = ec.generateKeyPairHex();
- *
  * // ECDSA signing
- * var sig = new KJUR.crypto.Signature({'alg':'SHA1withECDSA', 'prov':'cryptojs/jsrsa'});
- * sig.initSign({'ecprvhex': keypair.ecprvhex, 'eccurvename': 'secp256r1'});
+ * var sig = new KJUR.crypto.Signature({'alg':'SHA1withECDSA'});
+ * sig.init(prvKeyPEM);
  * sig.updateString('aaa');
  * var sigValueHex = sig.sign();
  *
  * // ECDSA verifying
- * var sig2 = new KJUR.crypto.Signature({'alg':'SHA1withECDSA', 'prov':'cryptojs/jsrsa'});
- * sig.initVerifyByPublicKey({'ecpubhex': keypair.ecpubhex, 'eccurvename': 'secp256r1'});
+ * var sig2 = new KJUR.crypto.Signature({'alg':'SHA1withECDSA'});
+ * sig.init(certPEM);
  * sig.updateString('aaa');
  * var isValid = sig.verify(sigValueHex);
  */
 KJUR.crypto.Signature = function(params) {
-    var prvKey = null; // RSAKey/KJUR.crypto.ECDSA object for signing
-    var pubKey = null; // RSAKey/KJUR.crypto.ECDSA object for verifying
+    var prvKey = null; // RSAKey/KJUR.crypto.{ECDSA,DSA} object for signing
+    var pubKey = null; // RSAKey/KJUR.crypto.{ECDSA,DSA} object for verifying
 
     var md = null; // KJUR.crypto.MessageDigest object
     var sig = null;
@@ -766,62 +769,26 @@ KJUR.crypto.Signature = function(params) {
                       this.mdAlgName + "/" + ex;
 	    }
 
-	    this.init = function(key, pass) {
-		if (typeof key == "string") {
-		    if (key.indexOf("-END ENCRYPTED PRIVATE KEY-", 0) != -1 &&
-			pass !== undefined) {
-			this.prvKey = PKCS5PKEY.getKeyFromEncryptedPKCS8PEM(key, pass);
-			this.state = "SIGN";
-		    } else if (key.indexOf("-END RSA PRIVATE KEY-", 0) != -1 &&
-			       key.indexOf(",ENCRYPTED", 0) != -1 &&
-			       pass !== undefined) {
-			this.prvKey = PKCS5PKEY.getRSAKeyFromEncryptedPKCS5PEM(key, pass);
-			this.state = "SIGN";			
+	    this.init = function(keyparam, pass) {
+		var keyObj = null;
+		try {
+		    if (pass === undefined) {
+			keyObj = KEYUTIL.getKey(keyparam);
+		    } else {
+			keyObj = KEYUTIL.getKey(keyparam, pass);
+		    }
+		} catch (ex) {
+		    throw "init failed:" + ex;
+		}
 
-		    } else if (key.indexOf("-END RSA PRIVATE KEY-", 0) != -1 &&
-			       key.indexOf(",ENCRYPTED", 0) == -1 &&
-			       pass === undefined) {
-                        this.prvKey = new RSAKey();
-			this.prvKey.readPrivateKeyFromPEMString(key); // deprecated but,
-			this.state = "SIGN";			
-		    } else if (key.indexOf("-END PRIVATE KEY-", 0) != -1 &&
-			       pass === undefined) {
-			this.prvKey = PKCS5PKEY.getKeyFromPlainPrivatePKCS8PEM(key);
-			this.state = "SIGN";
-		    } else if (key.indexOf("-END PUBLIC KEY-", 0) != -1 &&
-			       pass === undefined) {
-			this.pubKey = PKCS5PKEY.getKeyFromPublicPKCS8PEM(key);
-			this.state = "VERIFY";
-		    } else if ((key.indexOf("-END CERTIFICATE-", 0) != -1 ||
-				key.indexOf("-END X509 CERTIFICATE-", 0) != -1 ||
-				key.indexOf("-END TRUSTED CERTIFICATE-", 0) != -1) &&
-			       pass === undefined) {
-			this.pubKey = X509.getPublicKeyFromCertPEM(key);
-			this.state = "VERIFY";
-
-		    } else {
-			throw "unsupported arguments";
-		    }
-		} else if (key instanceof RSAKey) {
-		    if (key.d != null) {
-			this.prvKey = key;
-			this.state = "SIGN";
-		    } else if (key.n != null) {
-			this.pubKey = key;
-			this.state = "VERIFY";
-		    } else {
-                        throw "RSAKey object is not private and public key";
-		    }
-		} else if (key instanceof KJUR.crypto.ECDSA) {
-		    if (key.prvKeyHex != null) {
-			this.prvKey = key;
-			this.state = "SIGN";
-		    } else if (key.pubKeyHex != null) {
-			this.pubKey = key;
-			this.state = "VERIFY";
-		    } else {
-                        throw "ECDSA object is not private and public key";
-		    }
+		if (keyObj.isPrivate === true) {
+		    this.prvKey = keyObj;
+		    this.state = "SIGN";
+		} else if (keyObj.isPublic === true) {
+		    this.pubKey = keyObj;
+		    this.state = "VERIFY";
+		} else {
+		    throw "init failed.:" + keyObj;
 		}
 	    };
 
@@ -878,6 +845,8 @@ KJUR.crypto.Signature = function(params) {
 								 this.mdAlgName);
 		} else if (this.prvKey instanceof KJUR.crypto.ECDSA) {
 		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex);
+		} else if (this.prvKey instanceof KJUR.crypto.DSA) {
+		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex);
 		} else {
 		    throw "Signature: unsupported public key alg: " + this.pubkeyAlgName;
 		}
@@ -905,6 +874,8 @@ KJUR.crypto.Signature = function(params) {
 		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
 		} else if (this.pubKey instanceof KJUR.crypto.ECDSA) {
 		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
+		} else if (this.pubKey instanceof KJUR.crypto.DSA) {
+		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
 		} else {
 		    throw "Signature: unsupported public key alg: " + this.pubkeyAlgName;
 		}
@@ -917,29 +888,32 @@ KJUR.crypto.Signature = function(params) {
      * @name init
      * @memberOf KJUR.crypto.Signature
      * @function
-     * @param {Object} key specifying public or private key as plain/encrypted PKCS#5/8 PEM file, certificate PEM or {@ RSAKey} or {@link KJUR.crypto.ECDSA} object
+     * @param {Object} key specifying public or private key as plain/encrypted PKCS#5/8 PEM file, certificate PEM or {@link RSAKey}, {@link KJUR.crypto.DSA} or {@link KJUR.crypto.ECDSA} object
      * @param {String} pass (OPTION) passcode for encrypted private key
      * @since crypto 1.1.3
      * @description
      * This method is very useful initialize method for Signature class since
-     * you just specify key then this method will automatically initialize it.
+     * you just specify key then this method will automatically initialize it
+     * using {@link KEYUTIL.getKey} method.
      * As for 'key',  following argument type are supported:
      * <h5>signing</h5>
      * <ul>
      * <li>PEM formatted PKCS#8 encrypted RSA/ECDSA private key concluding "BEGIN ENCRYPTED PRIVATE KEY"</li>
-     * <li>PEM formatted PKCS#5 encrypted RSA private key concluding "BEGIN RSA PRIVATE KEY" and ",ENCRYPTED"</li>
+     * <li>PEM formatted PKCS#5 encrypted RSA/DSA private key concluding "BEGIN RSA/DSA PRIVATE KEY" and ",ENCRYPTED"</li>
      * <li>PEM formatted PKCS#8 plain RSA/ECDSA private key concluding "BEGIN PRIVATE KEY"</li>
-     * <li>PEM formatted PKCS#5 plain RSA private key concluding "BEGIN RSA PRIVATE KEY" without ",ENCRYPTED"</li>
+     * <li>PEM formatted PKCS#5 plain RSA/DSA private key concluding "BEGIN RSA/DSA PRIVATE KEY" without ",ENCRYPTED"</li>
      * <li>RSAKey object of private key</li>
      * <li>KJUR.crypto.ECDSA object of private key</li>
+     * <li>KJUR.crypto.DSA object of private key</li>
      * </ul>
      * <h5>verification</h5>
      * <ul>
-     * <li>PEM formatted PKCS#8 RSA/ECDSA public key concluding "BEGIN PUBLIC KEY"</li>
-     * <li>PEM formatted X.509 certificate with RSA/ECC public key concluding
+     * <li>PEM formatted PKCS#8 RSA/EC/DSA public key concluding "BEGIN PUBLIC KEY"</li>
+     * <li>PEM formatted X.509 certificate with RSA/EC/DSA public key concluding
      *     "BEGIN CERTIFICATE", "BEGIN X509 CERTIFICATE" or "BEGIN TRUSTED CERTIFICATE".</li>
      * <li>RSAKey object of public key</li>
      * <li>KJUR.crypto.ECDSA object of public key</li>
+     * <li>KJUR.crypto.DSA object of public key</li>
      * </ul>
      * @example
      * sig.init(sCertPEM)
@@ -956,6 +930,7 @@ KJUR.crypto.Signature = function(params) {
      * @function
      * @param {Object} param RSAKey object of public key or associative array for ECDSA
      * @since 1.0.2
+     * @deprecated from crypto 1.1.5. please use init() method instead.
      * @description
      * Public key information will be provided as 'param' parameter and the value will be
      * following:
@@ -980,6 +955,7 @@ KJUR.crypto.Signature = function(params) {
      * @function
      * @param {String} certPEM PEM formatted string of certificate
      * @since 1.0.2
+     * @deprecated from crypto 1.1.5. please use init() method instead.
      * @description
      * @example
      * sig.initVerifyByCertificatePEM(certPEM)
@@ -995,6 +971,7 @@ KJUR.crypto.Signature = function(params) {
      * @memberOf KJUR.crypto.Signature
      * @function
      * @param {Object} param RSAKey object of public key or associative array for ECDSA
+     * @deprecated from crypto 1.1.5. please use init() method instead.
      * @description
      * Private key information will be provided as 'param' parameter and the value will be
      * following:
@@ -1149,7 +1126,8 @@ KJUR.crypto.OID = new function() {
 	'2b8104000a': 'secp256k1',
 	'2b81040023': 'secp521r1',
 	'2b81040022': 'secp384r1',
+	'2a8648ce380403': 'SHA1withDSA', // 1.2.840.10040.4.3
+	'608648016503040301': 'SHA224withDSA', // 2.16.840.1.101.3.4.3.1
+	'608648016503040302': 'SHA256withDSA', // 2.16.840.1.101.3.4.3.2
     };
 };
-
-

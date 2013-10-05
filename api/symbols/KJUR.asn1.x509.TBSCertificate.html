@@ -404,6 +404,16 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.TBSCertificate.<b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#.appendExtensionByName">appendExtensionByName</a></b>(name, extParams)
+								</div>
+								<div class="description">append X.509v3 extension to this object by name and parameters
+</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.asn1.x509.TBSCertificate.<b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#.setIssuerByParam">setIssuerByParam</a></b>(x500NameParam)
 								</div>
 								<div class="description">set issuer name field by parameter
@@ -464,9 +474,19 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.TBSCertificate.<b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#.setSubjectPublicKeyByGetKey">setSubjectPublicKeyByGetKey</a></b>(keyParam)
+								</div>
+								<div class="description">set subject public key info by RSA/ECDSA/DSA key parameter
+</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.asn1.x509.TBSCertificate.<b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#.setSubjectPublicKeyByParam">setSubjectPublicKeyByParam</a></b>(subjPKeyParam)
 								</div>
-								<div class="description">set subject public key info field by parameter
+								<div class="description">(DEPRECATED) set subject public key info field by RSA key parameter
 </div>
 							</td>
 						</tr>
@@ -579,6 +599,63 @@ tbsc.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));</pre>
 									
 								</dt>
 								<dd>X.509v3 Extension object</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name=".appendExtensionByName"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.TBSCertificate.</span><b>appendExtensionByName</b>(name, extParams)
+					
+					</div>
+					<div class="description">
+						append X.509v3 extension to this object by name and parameters
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">tbsc.appendExtensionByName('BasicConstraints', {'cA':true, 'critical': true});
+tbsc.appendExtensionByName('KeyUsage', {'bin':'11'});
+tbsc.appendExtensionByName('CRLDistributionPoints', {uri: 'http://aaa.com/a.crl'});
+tbsc.appendExtensionByName('ExtKeyUsage', {array: [{name: 'clientAuth'}]});</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{name}</span> <b>name</b>
+									
+								</dt>
+								<dd>name of X.509v3 Extension object</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>extParams</b>
+									
+								</dt>
+								<dd>parameters as argument of Extension constructor.</dd>
 							
 							</dl>
 						
@@ -872,6 +949,64 @@ tbsc.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));</pre>
 
 					<hr />
 				
+					<a name=".setSubjectPublicKeyByGetKey"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.TBSCertificate.</span><b>setSubjectPublicKeyByGetKey</b>(keyParam)
+					
+					</div>
+					<div class="description">
+						set subject public key info by RSA/ECDSA/DSA key parameter
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">tbsc.setSubjectPublicKeyByGetKeyParam(certPEMString); // or 
+tbsc.setSubjectPublicKeyByGetKeyParam(pkcs8PublicKeyPEMString); // or 
+tbsc.setSubjectPublicKeyByGetKeyParam(kjurCryptoECDSAKeyObject); // et.al.</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>keyParam</b>
+									
+								</dt>
+								<dd>public key parameter which passed to <a href="../symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> argument</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>asn1x509 1.0.6</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html">KJUR.asn1.x509.SubjectPublicKeyInfo</a></dd>
+							
+								<dd><a href="../symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
 					<a name=".setSubjectPublicKeyByParam"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -880,7 +1015,7 @@ tbsc.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));</pre>
 					
 					</div>
 					<div class="description">
-						set subject public key info field by parameter
+						(DEPRECATED) set subject public key info field by RSA key parameter
 
 						
 						
@@ -900,7 +1035,7 @@ tbsc.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));</pre>
 									<span class="light fixedFont">{Array}</span> <b>subjPKeyParam</b>
 									
 								</dt>
-								<dd>SubjectPublicKeyInfo parameter</dd>
+								<dd>SubjectPublicKeyInfo parameter of RSA</dd>
 							
 							</dl>
 						

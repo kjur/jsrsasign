@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for Cryptographic Provider Class 'crypto.js'</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha256.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha224.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/ripemd160.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha512.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha384.js"></script>
+<script src="../crypto-1.1.js"></script>
+<!-- for rsapem -->
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../x509-1.1.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../ext/prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rng.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/ec.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/ec-patch.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecdsa-modified-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecparam-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../base64x-1.1.js"></script>
+
+<!-- jsrsasign pkcs5pkey external codes -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/cipher-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/aes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/tripledes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+<!-- for PKCS5 PBKDF2 -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/hmac.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/pbkdf2.js"></script>
+
+<script src="../keyutil-1.0.js"></script>
+<script src="../dsa-modified-1.0.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rng.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/ec.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/ec-patch.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecdsa-modified-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecparam-1.0.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../dsa-modified-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+
+// _work_dsa/d1.pub.p8.pem DSA 1024bit
+var d1PubP8PEM = "" +
+"-----BEGIN PUBLIC KEY-----\n" +
+"MIIBtzCCASsGByqGSM44BAEwggEeAoGBAJ7TJ6EkB8jS3Jprk1n7xI8qMXUE8ztI\n" +
+"ZhxLA3ePVbgYryGShbvN+mD2P5b1w8BnONckMqNvRtZJCg/nAjhRdnHnq9tDDE/7\n" +
+"dKF/ttDOzu4o/dtJJzvNFlpSDkqXF7TSfvBvNBffap6i2jUFjxGa52rICVosRe5X\n" +
+"bD3+glPzRJpPAhUAgyEkwxiCmPjW3RrYQSHC7zOl1SsCgYBxGsQFO69QKqCgmry3\n" +
+"r3KIVJXh77DeEp2Tx7sW8OS4ChoQ0ECe1SvNDfC1UR9uCPdHFVF+lAbt1F148O8V\n" +
+"2Ssn7zmOp7+TZfoTWRMiFJ+oRjUYfaJ38Vy8jJooQj/rIzIh5dGtNtkm0uHgx3Dz\n" +
+"TcBKYW9VaFIiqbHPT47Ph8GbfgOBhQACgYEAjK/ZZUzlGBjhVGE70LFO6XT73/xa\n" +
+"GYAsQwEwK8hU1eF9rw1nRaSqqORv+WtXyJNx+nLMoSoiSIIWRdH/dYaaJUmtf9EQ\n" +
+"zu/qVhbQC+WUEDbhoth7vPC/vmw7Hhi6DTs69tNLrPYTJwoLX2fHhmjkuls+wKoo\n" +
+"52LqH58uAWfgUjs=\n" +
+"-----END PUBLIC KEY-----\n";
+
+// _work_dsa/d1.self.cer DSA 1024bit
+var d1CerPEM = "" +
+"-----BEGIN CERTIFICATE-----\n" +
+"MIICxDCCAoKgAwIBAgIJAP2Mxo43IyYSMAsGCWCGSAFlAwQDAjAaMQswCQYDVQQG\n" +
+"EwJVUzELMAkGA1UECgwCRDEwHhcNMTMxMDAyMTUwNDQ0WhcNMjMwOTMwMTUwNDQ0\n" +
+"WjAaMQswCQYDVQQGEwJVUzELMAkGA1UECgwCRDEwggG3MIIBKwYHKoZIzjgEATCC\n" +
+"AR4CgYEAntMnoSQHyNLcmmuTWfvEjyoxdQTzO0hmHEsDd49VuBivIZKFu836YPY/\n" +
+"lvXDwGc41yQyo29G1kkKD+cCOFF2ceer20MMT/t0oX+20M7O7ij920knO80WWlIO\n" +
+"SpcXtNJ+8G80F99qnqLaNQWPEZrnasgJWixF7ldsPf6CU/NEmk8CFQCDISTDGIKY\n" +
+"+NbdGthBIcLvM6XVKwKBgHEaxAU7r1AqoKCavLevcohUleHvsN4SnZPHuxbw5LgK\n" +
+"GhDQQJ7VK80N8LVRH24I90cVUX6UBu3UXXjw7xXZKyfvOY6nv5Nl+hNZEyIUn6hG\n" +
+"NRh9onfxXLyMmihCP+sjMiHl0a022SbS4eDHcPNNwEphb1VoUiKpsc9Pjs+HwZt+\n" +
+"A4GFAAKBgQCMr9llTOUYGOFUYTvQsU7pdPvf/FoZgCxDATAryFTV4X2vDWdFpKqo\n" +
+"5G/5a1fIk3H6csyhKiJIghZF0f91hpolSa1/0RDO7+pWFtAL5ZQQNuGi2Hu88L++\n" +
+"bDseGLoNOzr200us9hMnCgtfZ8eGaOS6Wz7AqijnYuofny4BZ+BSO6NQME4wHQYD\n" +
+"VR0OBBYEFLCotbLR56UpGnQupu4PHPDR1FtKMB8GA1UdIwQYMBaAFLCotbLR56Up\n" +
+"GnQupu4PHPDR1FtKMAwGA1UdEwQFMAMBAf8wCwYJYIZIAWUDBAMCAy8AMCwCFH/2\n" +
+"3eKK1ACVNCzb8uXiYh7TDbhdAhQixxvCBWS9aL7s8vYxzQ4/PGSUMA==\n" +
+"-----END CERTIFICATE-----\n";
+
+// _work_dsa/d1.prv.p5p.pem DSA 1024bit
+var d1PrvP5PPEM = "" +
+"-----BEGIN DSA PRIVATE KEY-----\n" +
+"MIIBuwIBAAKBgQCe0yehJAfI0tyaa5NZ+8SPKjF1BPM7SGYcSwN3j1W4GK8hkoW7\n" +
+"zfpg9j+W9cPAZzjXJDKjb0bWSQoP5wI4UXZx56vbQwxP+3Shf7bQzs7uKP3bSSc7\n" +
+"zRZaUg5Klxe00n7wbzQX32qeoto1BY8RmudqyAlaLEXuV2w9/oJT80SaTwIVAIMh\n" +
+"JMMYgpj41t0a2EEhwu8zpdUrAoGAcRrEBTuvUCqgoJq8t69yiFSV4e+w3hKdk8e7\n" +
+"FvDkuAoaENBAntUrzQ3wtVEfbgj3RxVRfpQG7dRdePDvFdkrJ+85jqe/k2X6E1kT\n" +
+"IhSfqEY1GH2id/FcvIyaKEI/6yMyIeXRrTbZJtLh4Mdw803ASmFvVWhSIqmxz0+O\n" +
+"z4fBm34CgYEAjK/ZZUzlGBjhVGE70LFO6XT73/xaGYAsQwEwK8hU1eF9rw1nRaSq\n" +
+"qORv+WtXyJNx+nLMoSoiSIIWRdH/dYaaJUmtf9EQzu/qVhbQC+WUEDbhoth7vPC/\n" +
+"vmw7Hhi6DTs69tNLrPYTJwoLX2fHhmjkuls+wKoo52LqH58uAWfgUjsCFHOzU4Zg\n" +
+"zqyYo79I5T+ItOEkZXwh\n" +
+"-----END DSA PRIVATE KEY-----\n";
+
+// _work_dsa/d1.prv.p5e.pem DSA 1024bit
+var d1PrvP5EPEM = "" +
+"-----BEGIN DSA PRIVATE KEY-----\n" +
+"Proc-Type: 4,ENCRYPTED\n" +
+"DEK-Info: DES-EDE3-CBC,0A4241238121CC53\n" +
+"\n" +
+"SREBGTs1GdPEyT0O4MQIPfZZ59Wj8dcvqyEv+IlHzztZbqUiBfGYidu5ybhhaq8W\n" +
+"FvDLUTyUPhWqjnTPI0P73t/nMFhZEEB/PWP4SCCXcsd+8ygIEVQfXl9CcFfFxsiP\n" +
+"UhRBaZrU/yQ/IynKSboA/RfysHyfJTn3GcJLmMDhs7x4yZr+E8FIfk15qXCkzEsH\n" +
+"yFkhDi0D23RfttXie5HiQE0e2XsB127aCkYfQ5nMesrGTVtQb+8cuodtejmGtFtT\n" +
+"kslgs45yRNUznxxMi/61sm6pkH///ow0w5DN74UQsqpJj4CYhhNQY4r/QnK8SvlL\n" +
+"+KFXazkFwWNZbXiyxF7zdaCsb5bglvfmJspSDGUIcxPzwMG1GQBA3IqOegjmgU/5\n" +
+"LMElak/HMFFjT+jUUvxVSJIWK7f4+lWypwPkmmZib9dx8XHPpUr/vXBwPLE40fRG\n" +
+"9enP7lSZRWjmW9alWIn6dpjG5HsQwH4eMxdD1fqLR7BR+nx+z47wqmAXPIzOL7PW\n" +
+"N4nVxc1+juzITbT6HZB5gkHJG/5l/YFDsACK8aLHp+lgM/Onyg3cMDKSbaXERPZb\n" +
+"q0MrwzdrLyCc6x9HYz2QDA==\n" +
+"-----END DSA PRIVATE KEY-----\n";
+var d1PrvP5EPass = "passwd";
+
+test("sign init plain PKCS#5 Private Key PEM(DSA)", function() {
+  var sig = new KJUR.crypto.Signature({'alg': 'SHA1withDSA'});
+  sig.init(d1PrvP5PPEM);
+  equal(sig.state, "SIGN");
+});
+
+test("sign init encrypted PKCS#5 Private Key PEM(DSA)", function() {
+  var sig = new KJUR.crypto.Signature({'alg': 'SHA1withDSA'});
+  sig.init(d1PrvP5EPEM, d1PrvP5EPass);
+  equal(sig.state, "SIGN");
+});
+
+test("verify init PKCS#8 Public Key PEM(DSA)", function() {
+  var sig = new KJUR.crypto.Signature({'alg': 'SHA1withDSA'});
+  sig.init(d1PubP8PEM);
+  equal(sig.state, "VERIFY");
+});
+
+test("verify init Certificate PEM(DSA)", function() {
+  var sig = new KJUR.crypto.Signature({'alg': 'SHA1withDSA'});
+  sig.init(d1CerPEM);
+  equal(sig.state, "VERIFY");
+});
+
+test("verify d1.sig.aaa.1", function() {
+  var sig = new KJUR.crypto.Signature({'alg': 'SHA1withDSA'});
+  sig.init(d1PubP8PEM);
+  sig.updateString("aaa");
+  ok(sig.verify("302c02146e41015afd8597894f42f466dde2190ebba6f15e0214787f9380a3a33011c88bf877df7ac3b8a62b854c"), "ok"); 
+});
+
+test("verify d1.sig.aaa.2", function() {
+  var sig = new KJUR.crypto.Signature({'alg': 'SHA1withDSA'});
+  sig.init(d1PubP8PEM);
+  sig.updateString("aaa");
+  ok(sig.verify("302c0214172fec83363f27ee5885c2a1a1bc228e07fcac4b021439e52cfa9d4226a444fee65330de760dda7904b2"), "ok"); 
+});
+
+test("sign and verify d1", function() {
+  var sig = new KJUR.crypto.Signature({'alg': 'SHA1withDSA'});
+  sig.init(d1PrvP5PPEM);
+  sig.updateString("aaa");
+  var hSigVal = sig.sign();
+
+  var sig2 = new KJUR.crypto.Signature({'alg': 'SHA1withDSA'});
+  sig2.init(d1PubP8PEM);
+  sig2.updateString("aaa");
+  ok(sig2.verify(hSigVal), "ok"); 
+});
+
+});
+-->
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+
+<p>
+ECC related QUnit test pages: 
+<a href="qunit-do-crypto.html">crypto.js</a> | 
+<a href="qunit-do-crypto-ecdsa.html">crypto.js Signature class for ECDSA</a> | 
+<a href="qunit-do-ecdsamod.html">ecdsa-modified.js</a> | 
+<a href="qunit-do-ecparam.html">ecparam.js</a> | 
+</p>
+
+</body>
+</html>
+
