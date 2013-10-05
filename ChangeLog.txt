@@ -1,6 +1,25 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.1.6 to 4.2.0 (2013-Oct-06)
+  - DSA support added to most of classes.
+  - now RSAKey/KJUR.crypto.{ECDSA,DSA} class has new properties
+    isPrivate and isPublic
+  - asn1x509 1.0.5 to 1.0.6
+    - new X509Util.newCertPEM method is added to provate
+      easy certificate issuance by JSON object.
+    - DSA/ECDSA support added to Signature, TBSCertificate, 
+      AlgorithmIdentifier and SubjectPublicKeyInfo classes
+  - keyutil 1.0.2 to 1.0.3
+    - provide support for DSA
+      - getKey
+      - getKeyFromPublicPKCS8Hex,parsePublicPKCS8Hex
+  - x509 1.1.1 to 1.1.2
+    - ECDSA,DSA support added in X509.getPublicKeyFromCertPEM
+  - dsa-modified 1.0.0 to 1.0.1
+    - method setPrivateKey, setPublicKey are changed to
+      setPrivate and setPublic respectively to align RSA/ECDSA class.
+
 * Changes between 4.1.5 to 4.1.6 (2013-Oct-02)
   - newly dsa-modified 1.0.0 added
     - This is a DSA algorithm ported from github.com/openpgpjs

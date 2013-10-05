@@ -361,10 +361,13 @@ ul.inheritsList
 As for argument 'params' for constructor, you can specify one of
 following properties:
 <ul>
-<li>rsakey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object of subject public key</li>
-<li>rsapem - specify a string of PEM public key of RSA key</li>
+<li><a href="../symbols/RSAKey.html">RSAKey</a> object</li>
+<li><a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a> object</li>
+<li><a href="../symbols/KJUR.crypto.DSA.html">KJUR.crypto.DSA</a> object</li>
+<li>(DEPRECATED)rsakey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object of subject public key</li>
+<li>(DEPRECATED)rsapem - specify a string of PEM public key of RSA key</li>
 </ul>
-NOTE: 'params' can be omitted.</div>
+NOTE1: 'params' can be omitted.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -447,17 +450,23 @@ NOTE: 'params' can be omitted.</div>
 As for argument 'params' for constructor, you can specify one of
 following properties:
 <ul>
-<li>rsakey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object of subject public key</li>
-<li>rsapem - specify a string of PEM public key of RSA key</li>
+<li><a href="../symbols/RSAKey.html">RSAKey</a> object</li>
+<li><a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a> object</li>
+<li><a href="../symbols/KJUR.crypto.DSA.html">KJUR.crypto.DSA</a> object</li>
+<li>(DEPRECATED)rsakey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object of subject public key</li>
+<li>(DEPRECATED)rsapem - specify a string of PEM public key of RSA key</li>
 </ul>
-NOTE: 'params' can be omitted.
+NOTE1: 'params' can be omitted.<br/>
+NOTE2: DSA/ECDSA key object is also supported since asn1x509 1.0.6.<br/>
 <h4>EXAMPLE</h4>
 					
 				</div>
 				
 				
 				
-				<pre class="code"></pre>
+				<pre class="code">var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(RSAKey_object);
+var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoECDSA_object);
+var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoDSA_object);</pre>
 				
 				
 				
@@ -467,10 +476,10 @@ NOTE: 'params' can be omitted.
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								<span class="light fixedFont">{Array}</span>  <b>params</b>
+								<span class="light fixedFont">{Object}</span>  <b>params</b>
 								
 							</dt>
-								<dd>associative array of parameters (ex. {'rsakey': key})</dd>
+								<dd>parameter for subject public key</dd>
 						
 						</dl>
 					

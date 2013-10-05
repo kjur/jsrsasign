@@ -1,4 +1,4 @@
-/*! ecdsa-modified-1.0.3.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
+/*! ecdsa-modified-1.0.4.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
  */
 /*
  * ecdsa-modified.js - modified Bitcoin.ECDSA class
@@ -13,7 +13,7 @@
  * @fileOverview
  * @name ecdsa-modified-1.0.js
  * @author Stefan Thomas (github.com/justmoon) and Kenji Urushima (kenji.urushima@gmail.com)
- * @version 1.0.3 (2013-Aug-27)
+ * @version 1.0.4 (2013-Oct-06)
  * @since jsrsasign 4.0
  * @license <a href="https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE">MIT License</a>
  */
@@ -97,10 +97,12 @@ KJUR.crypto.ECDSA = function(params) {
     }
 
     this.setPrivateKeyHex = function(prvKeyHex) {
+        this.isPrivate = true;
 	this.prvKeyHex = prvKeyHex;
     }
 
     this.setPublicKeyHex = function(pubKeyHex) {
+        this.isPublic = true;
 	this.pubKeyHex = pubKeyHex;
     }
 
@@ -130,8 +132,8 @@ KJUR.crypto.ECDSA = function(params) {
 	var hY   = ("0000000000" + biY.toString(16)).slice(- charlen);
 	var hPub = "04" + hX + hY;
 
-	this.prvKeyHex = hPrv;
-	this.pubKeyHex = hPub;
+	this.setPrivateKeyHex(hPrv);
+	this.setPublicKeyHex(hPub);
 	return {'ecprvhex': hPrv, 'ecpubhex': hPub};
     };
 
@@ -452,8 +454,8 @@ KJUR.crypto.ECDSA = function(params) {
     if (this.curveName === undefined) this.curveName = curveName;
     this.setNamedCurve(this.curveName);
     if (params !== undefined) {
-	if (params['prv'] !== undefined) this.prvKeyHex = params['prv'];
-	if (params['pub'] !== undefined) this.pubKeyHex = params['pub'];
+	if (params['prv'] !== undefined) this.setPrivateKeyHex(params['prv']);
+	if (params['pub'] !== undefined) this.setPublicKeyHex(params['pub']);
     }
 };
 

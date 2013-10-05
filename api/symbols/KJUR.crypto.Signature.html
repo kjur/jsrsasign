@@ -417,7 +417,8 @@ As for params of constructor's argument, it can be specify following attributes:
 								</div>
 								<div class="description">Initialize this object for signing or verifying depends on key
 This method is very useful initialize method for Signature class since
-you just specify key then this method will automatically initialize it.</div>
+you just specify key then this method will automatically initialize it
+using <a href="../symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> method.</div>
 							</td>
 						</tr>
 					
@@ -555,9 +556,8 @@ following:
 <br/>
 As for params of constructor's argument, it can be specify following attributes:
 <ul>
-<li>alg - signature algorithm name (ex. {MD5,SHA1,SHA224,SHA256,SHA384,SHA512,RIPEMD160}withRSA)</li>
+<li>alg - signature algorithm name (ex. {MD5,SHA1,SHA224,SHA256,SHA384,SHA512,RIPEMD160}with{RSA,ECDSA,DSA})</li>
 <li>provider - currently 'cryptojs/jsrsa' only</li>
-<li>prvkeypem - PEM string of signer's private key. If this specified, no need to call initSign(prvKey).</li>
 </ul>
 <h4>SUPPORTED ALGORITHMS AND PROVIDERS</h4>
 This Signature class supports following signature algorithm and provider names:
@@ -583,6 +583,9 @@ This Signature class supports following signature algorithm and provider names:
 <li>SHA384withRSAandMGF1 - cryptojs/jsrsa</li>
 <li>SHA512withRSAandMGF1 - cryptojs/jsrsa</li>
 <li>RIPEMD160withRSAandMGF1 - cryptojs/jsrsa</li>
+<li>SHA1withDSA - cryptojs/jsrsa</li>
+<li>SHA224withDSA - cryptojs/jsrsa</li>
+<li>SHA256withDSA - cryptojs/jsrsa</li>
 </ul>
 Here are supported elliptic cryptographic curve names and their aliases for ECDSA:
 <ul>
@@ -590,6 +593,7 @@ Here are supported elliptic cryptographic curve names and their aliases for ECDS
 <li>secp256r1, NIST P-256, P-256, prime256v1</li>
 <li>secp384r1, NIST P-384, P-384</li>
 </ul>
+NOTE1: DSA signing algorithm is also supported since crypto 1.1.5.
 <h4>EXAMPLES</h4>
 					
 				</div>
@@ -597,30 +601,26 @@ Here are supported elliptic cryptographic curve names and their aliases for ECDS
 				
 				
 				<pre class="code">// RSA signature generation
-var sig = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
-sig.initSign(prvKey);
+var sig = new KJUR.crypto.Signature({"alg": "SHA1withRSA"});
+sig.init(prvKeyPEM);
 sig.updateString('aaa');
 var hSigVal = sig.sign();
 
-// RSA signature validation
-var sig2 = new KJUR.crypto.Signature({"alg": "SHA1withRSA", "prov": "cryptojs/jsrsa"});
-sig2.initVerifyByCertificatePEM(cert)
+// DSA signature validation
+var sig2 = new KJUR.crypto.Signature({"alg": "SHA1withDSA"});
+sig2.init(certPEM);
 sig.updateString('aaa');
 var isValid = sig2.verify(hSigVal);
 
-// EC key generation
-var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
-var keypair = ec.generateKeyPairHex();
-
 // ECDSA signing
-var sig = new KJUR.crypto.Signature({'alg':'SHA1withECDSA', 'prov':'cryptojs/jsrsa'});
-sig.initSign({'ecprvhex': keypair.ecprvhex, 'eccurvename': 'secp256r1'});
+var sig = new KJUR.crypto.Signature({'alg':'SHA1withECDSA'});
+sig.init(prvKeyPEM);
 sig.updateString('aaa');
 var sigValueHex = sig.sign();
 
 // ECDSA verifying
-var sig2 = new KJUR.crypto.Signature({'alg':'SHA1withECDSA', 'prov':'cryptojs/jsrsa'});
-sig.initVerifyByPublicKey({'ecpubhex': keypair.ecpubhex, 'eccurvename': 'secp256r1'});
+var sig2 = new KJUR.crypto.Signature({'alg':'SHA1withECDSA'});
+sig.init(certPEM);
 sig.updateString('aaa');
 var isValid = sig.verify(sigValueHex);</pre>
 				
@@ -695,24 +695,27 @@ var isValid = sig.verify(sigValueHex);</pre>
 					<div class="description">
 						Initialize this object for signing or verifying depends on key
 This method is very useful initialize method for Signature class since
-you just specify key then this method will automatically initialize it.
+you just specify key then this method will automatically initialize it
+using <a href="../symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> method.
 As for 'key',  following argument type are supported:
 <h5>signing</h5>
 <ul>
 <li>PEM formatted PKCS#8 encrypted RSA/ECDSA private key concluding "BEGIN ENCRYPTED PRIVATE KEY"</li>
-<li>PEM formatted PKCS#5 encrypted RSA private key concluding "BEGIN RSA PRIVATE KEY" and ",ENCRYPTED"</li>
+<li>PEM formatted PKCS#5 encrypted RSA/DSA private key concluding "BEGIN RSA/DSA PRIVATE KEY" and ",ENCRYPTED"</li>
 <li>PEM formatted PKCS#8 plain RSA/ECDSA private key concluding "BEGIN PRIVATE KEY"</li>
-<li>PEM formatted PKCS#5 plain RSA private key concluding "BEGIN RSA PRIVATE KEY" without ",ENCRYPTED"</li>
+<li>PEM formatted PKCS#5 plain RSA/DSA private key concluding "BEGIN RSA/DSA PRIVATE KEY" without ",ENCRYPTED"</li>
 <li>RSAKey object of private key</li>
 <li>KJUR.crypto.ECDSA object of private key</li>
+<li>KJUR.crypto.DSA object of private key</li>
 </ul>
 <h5>verification</h5>
 <ul>
-<li>PEM formatted PKCS#8 RSA/ECDSA public key concluding "BEGIN PUBLIC KEY"</li>
-<li>PEM formatted X.509 certificate with RSA/ECC public key concluding
+<li>PEM formatted PKCS#8 RSA/EC/DSA public key concluding "BEGIN PUBLIC KEY"</li>
+<li>PEM formatted X.509 certificate with RSA/EC/DSA public key concluding
     "BEGIN CERTIFICATE", "BEGIN X509 CERTIFICATE" or "BEGIN TRUSTED CERTIFICATE".</li>
 <li>RSAKey object of public key</li>
 <li>KJUR.crypto.ECDSA object of public key</li>
+<li>KJUR.crypto.DSA object of public key</li>
 </ul>
 						
 						
@@ -732,7 +735,7 @@ As for 'key',  following argument type are supported:
 									<span class="light fixedFont">{Object}</span> <b>key</b>
 									
 								</dt>
-								<dd>specifying public or private key as plain/encrypted PKCS#5/8 PEM file, certificate PEM or {@ RSAKey} or <a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a> object</dd>
+								<dd>specifying public or private key as plain/encrypted PKCS#5/8 PEM file, certificate PEM or <a href="../symbols/RSAKey.html">RSAKey</a>, <a href="../symbols/KJUR.crypto.DSA.html">KJUR.crypto.DSA</a> or <a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a> object</dd>
 							
 								<dt>
 									<span class="light fixedFont">{String}</span> <b>pass</b>
@@ -796,6 +799,13 @@ following:
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from crypto 1.1.5. please use init() method instead.
+							</dt>
+							</dl>
+						
 						
 						
 						
@@ -836,6 +846,13 @@ following:
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from crypto 1.1.5. please use init() method instead.
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">
@@ -890,6 +907,13 @@ following:
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from crypto 1.1.5. please use init() method instead.
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">

@@ -473,8 +473,9 @@ generate PEM formatted encrypted PKCS#5 private key by
 							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getKey">getKey</a></b>(param, passcode, hextype)
 								</div>
-								<div class="description">This method gets private or public key object(<a href="../symbols/RSAKey.html">RSAKey</a> or <a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a>)
-for RSA and ECC.</div>
+								<div class="description">get private or public key object from any arguments
+This method gets private or public key object(<a href="../symbols/RSAKey.html">RSAKey</a>, <a href="../symbols/KJUR.crypto.DSA.html">KJUR.crypto.DSA</a> or <a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a>)
+for RSA, DSA and ECC.</div>
 							</td>
 						</tr>
 					
@@ -519,7 +520,7 @@ for RSA and ECC.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getKeyFromPublicPKCS8Hex">getKeyFromPublicPKCS8Hex</a></b>(pkcsPub8Hex)
 								</div>
-								<div class="description">get RSAKey/ECDSA public key object from hexadecimal string of PKCS#8 public key</div>
+								<div class="description">get RSAKey/DSA/ECDSA public key object from hexadecimal string of PKCS#8 public key</div>
 							</td>
 						</tr>
 					
@@ -702,7 +703,7 @@ Following properties are added to associative array 'info'
 							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.parsePublicPKCS8Hex">parsePublicPKCS8Hex</a></b>(pkcs8PubHex)
 								</div>
-								<div class="description">parse hexadecimal string of PKCS#8 public key
+								<div class="description">parse hexadecimal string of PKCS#8 RSA/EC/DSA public key
 Resulted hash has following attributes.</div>
 							</td>
 						</tr>
@@ -1267,26 +1268,32 @@ var pem = KEYUTIL.getEncryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
 					
 					</div>
 					<div class="description">
-						This method gets private or public key object(<a href="../symbols/RSAKey.html">RSAKey</a> or <a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a>)
-for RSA and ECC.
+						get private or public key object from any arguments
+This method gets private or public key object(<a href="../symbols/RSAKey.html">RSAKey</a>, <a href="../symbols/KJUR.crypto.DSA.html">KJUR.crypto.DSA</a> or <a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a>)
+for RSA, DSA and ECC.
 Arguments for this methods depends on a key format you specify.
 Following key representations are supported.
 <ul>
 <li>ECC private/public key object(as is): param=KJUR.crypto.ECDSA</li>
+<li>DSA private/public key object(as is): param=KJUR.crypto.DSA</li>
 <li>RSA private/public key object(as is): param=RSAKey </li>
 <li>ECC private key parameters: param={d: d, curve: curveName}</li>
 <li>RSA private key parameters: param={n: n, e: e, d: d, p: p, q: q, dp: dp, dq: dq, co: co}<br/>
 NOTE: Each value shall be hexadecimal string of key spec.</li>
+<li>DSA private key parameters: param={p: p, q: q, g: g, y: y, x: x}<br/>
+NOTE: Each value shall be hexadecimal string of key spec.</li>
 <li>ECC public key parameters: param={xy: xy, curve: curveName}<br/>
 NOTE: ECC public key 'xy' shall be concatination of "04", x-bytes-hex and y-bytes-hex.</li>
+<li>DSA public key parameters: param={p: p, q: q, g: g, y: y}<br/>
+NOTE: Each value shall be hexadecimal string of key spec.</li>
 <li>RSA public key parameters: param={n: n, e: e} </li>
-<li>X.509 PEM certificate (RSA/ECC): param=pemString</li>
+<li>X.509 PEM certificate (RSA/DSA/ECC): param=pemString</li>
 <li>PKCS#8 hexadecimal RSA/ECC public key: param=pemString, null, "pkcs8pub"</li>
-<li>PKCS#8 PEM RSA/ECC public key: param=pemString</li>
+<li>PKCS#8 PEM RSA/DSA/ECC public key: param=pemString</li>
 <li>PKCS#5 plain hexadecimal RSA private key: param=hexString, null, "pkcs5prv"</li>
-<li>PKCS#5 plain PEM RSA private key: param=pemString</li>
+<li>PKCS#5 plain PEM DSA/RSA private key: param=pemString</li>
 <li>PKCS#8 plain PEM RSA/ECDSA private key: param=pemString</li>
-<li>PKCS#5 encrypted PEM RSA private key: param=pemString, passcode</li>
+<li>PKCS#5 encrypted PEM RSA/DSA private key: param=pemString, passcode</li>
 <li>PKCS#8 encrypted PEM RSA/ECDSA private key: param=pemString, passcode</li>
 </ul>
 Please note following limitation on encrypted keys:
@@ -1337,7 +1344,7 @@ Please note following limitation on encrypted keys:
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{Object}</span> <a href="../symbols/RSAKey.html">RSAKey</a> or <a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a> object</dd>
+								<dd><span class="light fixedFont">{Object}</span> <a href="../symbols/RSAKey.html">RSAKey</a>, <a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a> or <a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a> object</dd>
 							
 							</dl>
 						
@@ -1562,7 +1569,7 @@ Please note following limitation on encrypted keys:
 					
 					</div>
 					<div class="description">
-						get RSAKey/ECDSA public key object from hexadecimal string of PKCS#8 public key
+						get RSAKey/DSA/ECDSA public key object from hexadecimal string of PKCS#8 public key
 						
 						
 					</div>
@@ -1594,7 +1601,7 @@ Please note following limitation on encrypted keys:
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{Object}</span> RSAKey or KJUR.crypto.ECDSA private key object</dd>
+								<dd><span class="light fixedFont">{Object}</span> RSAKey or KJUR.crypto.{ECDSA,DSA} private key object</dd>
 							
 							</dl>
 						
@@ -2473,11 +2480,11 @@ Following properties are added to associative array 'info'
 					
 					</div>
 					<div class="description">
-						parse hexadecimal string of PKCS#8 public key
+						parse hexadecimal string of PKCS#8 RSA/EC/DSA public key
 Resulted hash has following attributes.
 <ul>
 <li>algoid - hexadecimal string of OID of asymmetric key algorithm</li>
-<li>algparam - hexadecimal string of OID of ECC curve name or null</li>
+<li>algparam - hexadecimal string of OID of ECC curve name, parameter SEQUENCE of DSA or null</li>
 <li>key - hexadecimal string of public key</li>
 </ul>
 						

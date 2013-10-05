@@ -119,6 +119,7 @@ function oaep_unpad(d, n, hash)
 
 // Set the private key fields N, e, and d from hex strings
 function RSASetPrivate(N,E,D) {
+  this.isPrivate = true;
   if (typeof N !== "string")
   {
     this.n = N;
@@ -136,7 +137,7 @@ function RSASetPrivate(N,E,D) {
 
 // Set the private key fields N, e, d and CRT params from hex strings
 function RSASetPrivateEx(N,E,D,P,Q,DP,DQ,C) {
-  //alert("RSASetPrivateEx called");
+  this.isPrivate = true;
   if (N == null) throw "RSASetPrivateEx N == null";
   if (E == null) throw "RSASetPrivateEx E == null";
   if (N.length == 0) throw "RSASetPrivateEx N.length == 0";

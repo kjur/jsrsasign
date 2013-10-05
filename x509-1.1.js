@@ -1,9 +1,7 @@
-/*! x509-1.1.1.js (c) 2012 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! x509-1.1.2.js (c) 2012 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /* 
  * x509.js - X509 class to read subject public key from certificate.
- *
- * version: 1.1 (2013-Aug-22)
  *
  * Copyright (c) 2010-2013 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -14,20 +12,20 @@
  * included in all copies or substantial portions of the Software.
  */
 
+/**
+ * @fileOverview
+ * @name x509-1.1.js
+ * @author Kenji Urushima kenji.urushima@gmail.com
+ * @version x509 1.1.2 (2013-Oct-06)
+ * @since jsrsasign 1.x.x
+ * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
+ */
+
 /*
  * Depends:
  *   base64.js
  *   rsa.js
  *   asn1hex.js
- */
-
-/**
- * @fileOverview
- * @name x509-1.1.js
- * @author Kenji Urushima kenji.urushima@gmail.com
- * @version x509 1.1.1 (2013-Aug-22)
- * @since jsrsasign 1.x.x
- * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
 /**
@@ -256,32 +254,43 @@ X509.DN_ATTRHEX = {
 /**
  * get RSAKey/ECDSA public key object from PEM certificate string
  * @name getPublicKeyFromCertPEM
- * @memberOf RSAKey
+ * @memberOf X509
  * @function
- * @param {String} sCertPEM PEM formatted X.509 certificate
- * @return returns RSAKey/KJUR.crypto.ECDSA object of public key
+ * @param {String} sCertPEM PEM formatted RSA/ECDSA/DSA X.509 certificate
+ * @return returns RSAKey/KJUR.crypto.{ECDSA,DSA} object of public key
  * @since x509 1.1.1
+ * @description
+ * NOTE: DSA is also supported since x509 1.1.2.
  */
 X509.getPublicKeyFromCertPEM = function(sCertPEM) {
     var info = X509.getPublicKeyInfoPropOfCertPEM(sCertPEM);
 
     if (info.algoid == "2a864886f70d010101") { // RSA
-	var aRSA = PKCS5PKEY.parsePublicRawRSAKeyHex(info.keyhex);
+	var aRSA = KEYUTIL.parsePublicRawRSAKeyHex(info.keyhex);
 	var key = new RSAKey();
 	key.setPublic(aRSA.n, aRSA.e);
 	return key;
-    } else if (info.algoid = "2a8648ce3d0201") { // ECC
+    } else if (info.algoid == "2a8648ce3d0201") { // ECC
 	var curveName = KJUR.crypto.OID.oidhex2name[info.algparam];
 	var key = new KJUR.crypto.ECDSA({'curve': curveName, 'info': info.keyhex});
         key.setPublicKeyHex(info.keyhex);
+	return key;
+    } else if (info.algoid == "2a8648ce380401") { // DSA 1.2.840.10040.4.1
+	var p = ASN1HEX.getVbyList(info.algparam, 0, [0], "02");
+	var q = ASN1HEX.getVbyList(info.algparam, 0, [1], "02");
+	var g = ASN1HEX.getVbyList(info.algparam, 0, [2], "02");
+	var y = ASN1HEX.getHexOfV_AtObj(info.keyhex, 0);
+	y = y.substr(2);
+	var key = new KJUR.crypto.DSA();
+	key.setPublic(new BigInteger(p, 16),
+		      new BigInteger(q, 16),
+		      new BigInteger(g, 16),
+		      new BigInteger(y, 16));
 	return key;
     } else {
 	throw "unsupported key";
     }
 };
-
-
-
 
 /**
  * get public key information from PEM certificate
@@ -333,8 +342,10 @@ X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
 
     result.algoid = ASN1HEX.getHexOfV_AtObj(hCert, a4[0]);
 
-    if (hCert.substr(a4[1], 2) == "06") {
+    if (hCert.substr(a4[1], 2) == "06") { // EC
 	result.algparam = ASN1HEX.getHexOfV_AtObj(hCert, a4[1]);
+    } else if (hCert.substr(a4[1], 2) == "30") { // DSA
+	result.algparam = ASN1HEX.getHexOfTLV_AtObj(hCert, a4[1]);
     }
 
     // 5. Public Key Hex
