@@ -183,7 +183,13 @@ var KEYUTIL = function() {
 	//alert("salt = " + saltHex);
 	    
 	var salt = CryptoJS.enc.Hex.parse(saltHex);
-	var data = CryptoJS.enc.Utf8.parse(passcode);
+	
+	var data = passcode;
+	
+	// convert to CryptoJS words object if string
+	if(typeof passcode == "string") {
+	    data = CryptoJS.enc.Utf8.parse(passcode);
+	}
 	//alert("salt = " + salt);
 	//alert("data = " + data);
 
