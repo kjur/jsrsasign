@@ -1657,9 +1657,9 @@ KJUR.asn1.x509.OID = new function(params) {
 };
 
 /**
- * ASN1 utilities class
+ * X.509 certificate and CRL utilities class
  * @name KJUR.asn1.x509.X509Util
- * @classs X509 utilities class
+ * @class X.509 certificate and CRL utilities class
  */
 KJUR.asn1.x509.X509Util = new function() {
     /**
