@@ -1,7 +1,7 @@
 {
   "name": "jsrsasign",
-  "version": "0.0.1",
-  "description": "pure JavaScript cryptographic library",
+  "version": "0.0.2",
+  "description": "pure JavaScript cryptographic library(jsrsasign) and JSON Web Token (JWT) and JSON Web Signature (JWS) library (jsjws) bundle",
   "main": "lib/jsrsasign.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,14 +18,20 @@
     "PKCS1",
     "PKCS5",
     "PKCS8",
-    "Hash",
+    "hash function",
     "HMac",
     "ASN.1",
     "X.509",
     "Signature",
     "Message Digest",
     "signing",
-    "certificate"
+    "certificate",
+    "JSON Web Token",
+    "JSON Web Signature",
+    "JWT",
+    "JWS",
+    "JOSE",
+    "JWA"
   ],
   "author": "Kenji Urushima",
   "licenses": [
