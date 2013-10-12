@@ -284,7 +284,7 @@ ASN1HEX.getVbyList = function(h, currentIndex, nthList, checkingTag) {
     }
     if (checkingTag !== undefined) {
 	if (h.substr(idx, 2) != checkingTag) {
-	    throw "checking tag doesn't match";
+	    throw "checking tag doesn't match: " + h.substr(idx,2) + "!=" + checkingTag;
 	}
     }
     return this.getHexOfV_AtObj(h, idx);

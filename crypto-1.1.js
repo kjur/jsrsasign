@@ -1116,10 +1116,13 @@ KJUR.crypto.Signature = function(params) {
  * @since crypto 1.1.3
  * @description
  */
+
+
 KJUR.crypto.OID = new function() {
     this.oidhex2name = {
 	'2a864886f70d010101': 'rsaEncryption',
 	'2a8648ce3d0201': 'ecPublicKey',
+	'2a8648ce380401': 'dsa',
 	'2a8648ce3d030107': 'secp256r1',
 	'2b8104001f': 'secp192k1',
 	'2b81040021': 'secp224r1',

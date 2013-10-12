@@ -72,7 +72,7 @@ $(document).ready(function(){
 // 1.1. Plain PKCS#8 Private Key
 
 // _test/z1.prv.p8p.pem (RSA)
-var z1PrvPemP8P = "" +
+var z1PrvP8PPEM = "" +
 "-----BEGIN PRIVATE KEY-----\n" +
 "MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEA6GZN0rQFKRIVaPOz\n" +
 "m8l6Yue6PAm6vcTw3NjfkOt5C5u2RaK3DjESdHtNPEG1FCSJURX++I951D6uWxpO\n" +
@@ -85,7 +85,7 @@ var z1PrvPemP8P = "" +
 "-----END PRIVATE KEY-----\n";
 
 // _gitpg/jsrsasign/test/eckey/k1.prv.p8p.pem (ECC)
-var k1PrvPemP8P = "" +
+var k1PrvP8PPEM = "" +
 "-----BEGIN PRIVATE KEY-----\n" +
 "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgEbVzfPnZPxfAyxqE\n" +
 "ZV05laAoJAl+/6Xt2O4mOB611sOhRANCAASgFTKjwJAAU95g++/vzKWHkzAVmNMI\n" +
@@ -95,7 +95,7 @@ var k1PrvPemP8P = "" +
 // 1.2. Plain PKCS#5 Private Key
 
 // _test/z1.prv.p5p.pem (RSA)
-var z1PrvPemP5P = "" +
+var z1PrvP5PPEM = "" +
 "-----BEGIN RSA PRIVATE KEY-----\n" +
 "MIIBOgIBAAJBAOhmTdK0BSkSFWjzs5vJemLnujwJur3E8NzY35DreQubtkWitw4x\n" +
 "EnR7TTxBtRQkiVEV/viPedQ+rlsaTjUY/VkCAwEAAQJAeLvFTGRnlemmI8sPkSx/\n" +
@@ -200,13 +200,13 @@ var k1CertPEM = "" +
 
 test("sign init plain PKCS#8 Private Key PEM(RSA)", function() {
   var sig = new KJUR.crypto.Signature({'alg': 'SHA1withRSA'});
-  sig.init(z1PrvPemP8P);
+  sig.init(z1PrvP8PPEM);
   equal(sig.state, "SIGN");
 });
 
 test("sign init plain PKCS#8 Private Key PEM(ECC)", function() {
   var sig = new KJUR.crypto.Signature({'alg': 'SHA1withECDSA'});
-  sig.init(k1PrvPemP8P);
+  sig.init(k1PrvP8PPEM);
   equal(sig.state, "SIGN");
 });
 
@@ -214,7 +214,7 @@ test("sign init plain PKCS#8 Private Key PEM(ECC)", function() {
 
 test("sign init plain PKCS#5 Privae Key PEM(RSA)", function() {
   var sig = new KJUR.crypto.Signature({'alg': 'SHA1withRSA'});
-  sig.init(z1PrvPemP5P);
+  sig.init(z1PrvP5PPEM);
   equal(sig.state, "SIGN");
 });
 
@@ -294,7 +294,7 @@ test("verify init key object(ECC)", function() {
 
 test("sign and verify integrated test (RSA)", function() {
   var sig1 = new KJUR.crypto.Signature({'alg': 'SHA1withRSA'});
-  sig1.init(z1PrvPemP8P);
+  sig1.init(z1PrvP8PPEM);
   sig1.updateString("aaa");
   var hSigVal = sig1.sign();
 
@@ -307,7 +307,7 @@ test("sign and verify integrated test (RSA)", function() {
 
 test("sign and verify integrated test (ECC)", function() {
   var sig1 = new KJUR.crypto.Signature({'alg': 'SHA1withECDSA'});
-  sig1.init(k1PrvPemP8P);
+  sig1.init(k1PrvP8PPEM);
   sig1.updateString("aaa");
   var hSigVal = sig1.sign();
 
@@ -320,7 +320,7 @@ test("sign and verify integrated test (ECC)", function() {
 
 test("sign and verify integrated test (RSAPSS)", function() {
   var sig1 = new KJUR.crypto.Signature({'alg': 'SHA1withRSAandMGF1'});
-  sig1.init(z1PrvPemP8P);
+  sig1.init(z1PrvP8PPEM);
   sig1.updateString("aaa");
   var hSigVal = sig1.sign();
 

@@ -1,0 +1,328 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit test for getPEM method 'keyutil.js'</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+
+<!-- script type="text/javascript" src="qunit.js" /script -->
+<!-- link rel="stylesheet" href="qunit.css" type="text/css" media="screen" -->
+<script src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="screen"/>
+
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rng.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/sha1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../crypto-1.1.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../ext/prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rng.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/ec.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/ec-patch.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecdsa-modified-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecparam-1.0.js"></script>
+
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1x509-1.0.js"></script>
+
+<!-- jsrsasign keyutil external codes -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/cipher-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/aes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/tripledes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+<!-- for PKCS5 PBKDF2 -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/hmac.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/pbkdf2.js"></script>
+
+<script src="../dsa-modified-1.0.js"></script>
+<script src="../keyutil-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+
+// _test/z1.pub.p8.pem (RSA 512bit)
+var z1PubP8PEM = "" +
+"-----BEGIN PUBLIC KEY-----\n" +
+"MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOhmTdK0BSkSFWjzs5vJemLnujwJur3E\n" +
+"8NzY35DreQubtkWitw4xEnR7TTxBtRQkiVEV/viPedQ+rlsaTjUY/VkCAwEAAQ==\n" +
+"-----END PUBLIC KEY-----\n";
+
+// _gitpg/jsrsasign/test/eckey/k1.*
+var k1PubP8PEM = "" +
+"-----BEGIN PUBLIC KEY-----\n" +
+"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoBUyo8CQAFPeYPvv78ylh5MwFZjT\n" +
+"CLQeb042TjiMJxG+9DLFmRSMlBQ9T/RsLLc+PmpB1+7yPAR+oR5gZn3kJQ==\n" +
+"-----END PUBLIC KEY-----\n";
+
+// _work_dsa/d1.pub.p8.pem
+var d1PubP8PEM = "" +
+"-----BEGIN PUBLIC KEY-----\n" +
+"MIIBtzCCASsGByqGSM44BAEwggEeAoGBAJ7TJ6EkB8jS3Jprk1n7xI8qMXUE8ztI\n" +
+"ZhxLA3ePVbgYryGShbvN+mD2P5b1w8BnONckMqNvRtZJCg/nAjhRdnHnq9tDDE/7\n" +
+"dKF/ttDOzu4o/dtJJzvNFlpSDkqXF7TSfvBvNBffap6i2jUFjxGa52rICVosRe5X\n" +
+"bD3+glPzRJpPAhUAgyEkwxiCmPjW3RrYQSHC7zOl1SsCgYBxGsQFO69QKqCgmry3\n" +
+"r3KIVJXh77DeEp2Tx7sW8OS4ChoQ0ECe1SvNDfC1UR9uCPdHFVF+lAbt1F148O8V\n" +
+"2Ssn7zmOp7+TZfoTWRMiFJ+oRjUYfaJ38Vy8jJooQj/rIzIh5dGtNtkm0uHgx3Dz\n" +
+"TcBKYW9VaFIiqbHPT47Ph8GbfgOBhQACgYEAjK/ZZUzlGBjhVGE70LFO6XT73/xa\n" +
+"GYAsQwEwK8hU1eF9rw1nRaSqqORv+WtXyJNx+nLMoSoiSIIWRdH/dYaaJUmtf9EQ\n" +
+"zu/qVhbQC+WUEDbhoth7vPC/vmw7Hhi6DTs69tNLrPYTJwoLX2fHhmjkuls+wKoo\n" +
+"52LqH58uAWfgUjs=\n" +
+"-----END PUBLIC KEY-----\n";
+
+// getKey PKCS#5 EC (DES,AES128) =============================================
+
+var k1PrvP5EPEMAES = "" +
+"-----BEGIN EC PRIVATE KEY-----\n" +
+"Proc-Type: 4,ENCRYPTED\n" +
+"DEK-Info: AES-128-CBC,82AB598946381DC29DFF9284AC87FC3B\n" +
+"\n" +
+"Dfmfeq7gCFgSke6vSaSSaDeKLcdS5Y1ULC2ItDhxFTTJBsx+GN6Xleov9O/sNVJJ\n" +
+"oppEd9tiumPXV0JcDkzKYfvJpERQ4DPg5DVat55dvb5XtfeHu6N5TbrZvYlXFzju\n" +
+"+hkBdUBbdd9IGDIy2LMDk6OJU+6xdjGTg2n4hMJ2TMo=\n" +
+"-----END EC PRIVATE KEY----- \n";
+
+var k1PrvP5EPEMDES = "" +
+"-----BEGIN EC PRIVATE KEY-----\n" +
+"Proc-Type: 4,ENCRYPTED\n" +
+"DEK-Info: DES-CBC,645FBB08673C98F4\n" +
+"\n" +
+"8fuc/voymYvarRk58pkmpty0boF3ntX1A3SI742tWCL1+8E+alEoc8bAVbhsnELa\n" +
+"b9cxRtmv4s26UOd6HUmvwS2OaifN/C6fmxRmrMm1XEuRMWu7k9AeCu5VoP9KnNCk\n" +
+"b8EzJErKSjFGqgVZVm6dmQ3X8myCRl4ATx+s14dQ4jM=\n" +
+"-----END EC PRIVATE KEY-----\n";
+
+test("getKey private ECDSA k1.prv.p5e.pem (DES) > PKCS5PRV", function() {
+var key = KEYUTIL.getKey(k1PrvP5EPEMDES, "passwd");
+equal(key.prvKeyHex, "11b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3", "");
+});
+
+test("getKey private ECDSA k1.prv.p5e.pem (AES-128) > PKCS5PRV", function() {
+var key = KEYUTIL.getKey(k1PrvP5EPEMAES, "password-orange");
+equal(key.prvKeyHex, "11b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3", "");
+});
+
+// private key test ==============================================
+
+test("getKey private DSA d1.prv.p8p.pem", function() {
+var key = KEYUTIL.getKey(d1PrvP8PPEM);
+expect(1);
+equal(key.x.toString(16), "73b3538660ceac98a3bf48e53f88b4e124657c21", "");
+});
+
+// public key test ==============================================
+
+test("getPEM public RSA z1.pub.p8.pem", function() {
+var key = KEYUTIL.getKey(z1PubP8PEM);
+equal(KEYUTIL.getPEM(key).replace(/\r\n/g, "\n"), z1PubP8PEM, "");
+});
+
+test("getPEM public ECDSA k1.pub.p8.pem", function() {
+var key = KEYUTIL.getKey(k1PubP8PEM);
+equal(KEYUTIL.getPEM(key).replace(/\r\n/g, "\n"), k1PubP8PEM, "");
+});
+
+test("getPEM public DSA d1.pub.p8.pem", function() {
+var key = KEYUTIL.getKey(d1PubP8PEM);
+equal(KEYUTIL.getPEM(key).replace(/\r\n/g, "\n"), d1PubP8PEM, "");
+});
+
+// private key test 1 (PKCS1 plain) ===============================
+
+// _test/z1.prv.p5p.pem (RSA)
+var z1PrvP5PPEM = "" +
+"-----BEGIN RSA PRIVATE KEY-----\n" +
+"MIIBOgIBAAJBAOhmTdK0BSkSFWjzs5vJemLnujwJur3E8NzY35DreQubtkWitw4x\n" +
+"EnR7TTxBtRQkiVEV/viPedQ+rlsaTjUY/VkCAwEAAQJAeLvFTGRnlemmI8sPkSx/\n" +
+"n2hhcRVg5Xut4h3tL32Vefhicvq55xqycoLCdgxATa5qyKOrhSz2vNVi+a/4JHom\n" +
+"TQIhAP6b1FCGazJVYU/el2p2rAsdWDDdpk9TWblG2FErwSOfAiEA6atoD18F27D0\n" +
+"MRsOb0No9IdKEjiXnYvGAMNcbyBwfAcCIQDVSctpjcF9T+MOWoTzrehgAzwe639n\n" +
+"0oZGXJ/YF9RbNwIgGEm0u0RJO5idCS2ixnXfRut5C4POXpXUsuebiAF7L6kCIH0m\n" +
+"GpYlbUmwIMsdWH7N4Sfgk6TSs0zb/xcfNBJbWFep\n" +
+"-----END RSA PRIVATE KEY-----\n";
+
+// _gitpg/jsrsasign/test/eckey/k1.prv.p8p.pem (ECC)
+var k1PrvP8PPEM = "" +
+"-----BEGIN PRIVATE KEY-----\n" +
+"MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgEbVzfPnZPxfAyxqE\n" +
+"ZV05laAoJAl+/6Xt2O4mOB611sOhRANCAASgFTKjwJAAU95g++/vzKWHkzAVmNMI\n" +
+"tB5vTjZOOIwnEb70MsWZFIyUFD1P9Gwstz4+akHX7vI8BH6hHmBmfeQl\n" +
+"-----END PRIVATE KEY-----\n";
+
+var k1PrvP5PPEM = "" +
+"-----BEGIN EC PARAMETERS-----\n" +
+"BggqhkjOPQMBBw==\n" +
+"-----END EC PARAMETERS-----\n" +
+"-----BEGIN EC PRIVATE KEY-----\n" +
+"MHcCAQEEIBG1c3z52T8XwMsahGVdOZWgKCQJfv+l7djuJjgetdbDoAoGCCqGSM49\n" +
+"AwEHoUQDQgAEoBUyo8CQAFPeYPvv78ylh5MwFZjTCLQeb042TjiMJxG+9DLFmRSM\n" +
+"lBQ9T/RsLLc+PmpB1+7yPAR+oR5gZn3kJQ==\n" +
+"-----END EC PRIVATE KEY-----\n";
+
+// _work_dsa/d1.prv.p5p.pem DSA 1024bit
+var d1PrvP5PPEM = "" +
+"-----BEGIN DSA PRIVATE KEY-----\n" +
+"MIIBuwIBAAKBgQCe0yehJAfI0tyaa5NZ+8SPKjF1BPM7SGYcSwN3j1W4GK8hkoW7\n" +
+"zfpg9j+W9cPAZzjXJDKjb0bWSQoP5wI4UXZx56vbQwxP+3Shf7bQzs7uKP3bSSc7\n" +
+"zRZaUg5Klxe00n7wbzQX32qeoto1BY8RmudqyAlaLEXuV2w9/oJT80SaTwIVAIMh\n" +
+"JMMYgpj41t0a2EEhwu8zpdUrAoGAcRrEBTuvUCqgoJq8t69yiFSV4e+w3hKdk8e7\n" +
+"FvDkuAoaENBAntUrzQ3wtVEfbgj3RxVRfpQG7dRdePDvFdkrJ+85jqe/k2X6E1kT\n" +
+"IhSfqEY1GH2id/FcvIyaKEI/6yMyIeXRrTbZJtLh4Mdw803ASmFvVWhSIqmxz0+O\n" +
+"z4fBm34CgYEAjK/ZZUzlGBjhVGE70LFO6XT73/xaGYAsQwEwK8hU1eF9rw1nRaSq\n" +
+"qORv+WtXyJNx+nLMoSoiSIIWRdH/dYaaJUmtf9EQzu/qVhbQC+WUEDbhoth7vPC/\n" +
+"vmw7Hhi6DTs69tNLrPYTJwoLX2fHhmjkuls+wKoo52LqH58uAWfgUjsCFHOzU4Zg\n" +
+"zqyYo79I5T+ItOEkZXwh\n" +
+"-----END DSA PRIVATE KEY-----\n";
+
+test("getPEM private RSA z1.prv.p5p.pem > PKCS1PRV", function() {
+var key = KEYUTIL.getKey(z1PrvP5PPEM);
+equal(KEYUTIL.getPEM(key, "PKCS1PRV").replace(/\r\n/g, "\n"), z1PrvP5PPEM, "");
+});
+
+test("getPEM private ECDSA k1.prv.p8p.pem > PKCS1PRV", function() {
+var key = KEYUTIL.getKey(k1PrvP8PPEM);
+equal(KEYUTIL.getPEM(key, "PKCS1PRV").replace(/\r\n/g, "\n"), k1PrvP5PPEM, "");
+});
+
+test("getPEM private DSA d1.prv.p5p.pem > PKCS1PRV", function() {
+var key = KEYUTIL.getKey(d1PrvP5PPEM);
+equal(KEYUTIL.getPEM(key, "PKCS1PRV").replace(/\r\n/g, "\n"), d1PrvP5PPEM, "");
+});
+
+// private key test 2 (PKCS5 encrypted) ========================
+
+test("getPEM private RSA z1.prv.p5p.pem > PKCS5PRV", function() {
+var key = KEYUTIL.getKey(z1PrvP5PPEM);
+var pem = KEYUTIL.getPEM(key, "PKCS5PRV", "password-orange", "AES-128-CBC");
+var key2 = KEYUTIL.getKey(pem, "password-orange");
+expect(2);
+equal(pem.indexOf("AES-128-CBC") != -1, true, "");
+equal(key2.d.toString(16), "78bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d", "");
+});
+
+test("getPEM private ECDSA k1.prv.p5p.pem > PKCS5PRV AES-128-CBC", function() {
+var key = KEYUTIL.getKey(k1PrvP8PPEM);
+var pem = KEYUTIL.getPEM(key, "PKCS5PRV", "password-orange", "AES-128-CBC");
+var key2 = KEYUTIL.getKey(pem, "password-orange");
+expect(2);
+equal(pem.indexOf("AES-128-CBC") != -1, true, pem);
+equal(key2.prvKeyHex, "11b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3", "");
+});
+
+test("getPEM private ECDSA k1.prv.p5p.pem > PKCS5PRV DES-CBC", function() {
+var key = KEYUTIL.getKey(k1PrvP8PPEM);
+var pem = KEYUTIL.getPEM(key, "PKCS5PRV", "password-orange", "DES-CBC");
+var key2 = KEYUTIL.getKey(pem, "password-orange");
+expect(2);
+equal(pem.indexOf("DES-CBC") != -1, true, pem);
+equal(key2.prvKeyHex, "11b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3", "");
+});
+
+test("getPEM private DSA d1.prv.p5p.pem > PKCS5PRV", function() {
+var key = KEYUTIL.getKey(d1PrvP5PPEM);
+var pem = KEYUTIL.getPEM(key, "PKCS5PRV", "password-orange", "AES-128-CBC");
+var key2 = KEYUTIL.getKey(pem, "password-orange");
+expect(2);
+equal(pem.indexOf("AES-128-CBC") != -1, true, "");
+equal(key2.x.toString(16), "73b3538660ceac98a3bf48e53f88b4e124657c21", "");
+});
+
+// PKCS8 plain private key
+
+var d1PrvP8PPEM = "" +
+"-----BEGIN PRIVATE KEY-----\n" +
+"MIIBSgIBADCCASsGByqGSM44BAEwggEeAoGBAJ7TJ6EkB8jS3Jprk1n7xI8qMXUE\n" +
+"8ztIZhxLA3ePVbgYryGShbvN+mD2P5b1w8BnONckMqNvRtZJCg/nAjhRdnHnq9tD\n" +
+"DE/7dKF/ttDOzu4o/dtJJzvNFlpSDkqXF7TSfvBvNBffap6i2jUFjxGa52rICVos\n" +
+"Re5XbD3+glPzRJpPAhUAgyEkwxiCmPjW3RrYQSHC7zOl1SsCgYBxGsQFO69QKqCg\n" +
+"mry3r3KIVJXh77DeEp2Tx7sW8OS4ChoQ0ECe1SvNDfC1UR9uCPdHFVF+lAbt1F14\n" +
+"8O8V2Ssn7zmOp7+TZfoTWRMiFJ+oRjUYfaJ38Vy8jJooQj/rIzIh5dGtNtkm0uHg\n" +
+"x3DzTcBKYW9VaFIiqbHPT47Ph8GbfgQWAhRzs1OGYM6smKO/SOU/iLThJGV8IQ==\n" +
+"-----END PRIVATE KEY-----\n";
+
+test("getPEM private RSA z1.prv.p5p.pem > PKCS8PRV plain", function() {
+var key = KEYUTIL.getKey(z1PrvP5PPEM);
+var pem = KEYUTIL.getPEM(key, "PKCS8PRV");
+var key2 = KEYUTIL.getKey(pem)
+expect(2);
+equal(pem.indexOf("-BEGIN PRIVATE KEY-") != -1, true, "");
+equal(key2.d.toString(16), "78bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d", "");
+});
+
+test("getPEM private ECDSA k1.prv.p5p.pem > PKCS8PRV plain", function() {
+var key = KEYUTIL.getKey(k1PrvP8PPEM);
+var pem = KEYUTIL.getPEM(key, "PKCS8PRV");
+var key2 = KEYUTIL.getKey(pem);
+expect(2);
+equal(pem.indexOf("-BEGIN PRIVATE KEY-") != -1, true, "");
+equal(key2.prvKeyHex, "11b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3", "");
+});
+
+test("getPEM private DSA d1.prv.p5p.pem > PKCS8PRV plain", function() {
+var key = KEYUTIL.getKey(d1PrvP5PPEM);
+var pem = KEYUTIL.getPEM(key, "PKCS8PRV");
+expect(3);
+equal(pem.indexOf("-BEGIN PRIVATE KEY-") != -1, true, pem);
+equal(pem.replace(/\r\n/g, "\n"), d1PrvP8PPEM, "");
+var key2 = KEYUTIL.getKey(pem);
+equal(key2.x.toString(16), "73b3538660ceac98a3bf48e53f88b4e124657c21", "");
+});
+
+// encripted PKCS#8 ==================================================================================
+
+test("getPEM private RSA z1.prv.p5p.pem > PKCS8PRV encrypted", function() {
+var key = KEYUTIL.getKey(z1PrvP5PPEM);
+expect(2);
+var pem = KEYUTIL.getPEM(key, "PKCS8PRV", "orange");
+equal(pem.indexOf("-BEGIN ENCRYPTED PRIVATE KEY-") != -1, true, pem);
+var key2 = KEYUTIL.getKey(pem, "orange");
+equal(key2.d.toString(16), "78bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d", "");
+});
+
+test("getPEM private ECDSA k1.prv.p5p.pem > PKCS8PRV encrypted", function() {
+var key = KEYUTIL.getKey(k1PrvP8PPEM);
+expect(2);
+var pem = KEYUTIL.getPEM(key, "PKCS8PRV", "orange");
+equal(pem.indexOf("-BEGIN ENCRYPTED PRIVATE KEY-") != -1, true, pem);
+var key2 = KEYUTIL.getKey(pem, "orange");
+equal(key2.prvKeyHex, "11b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3", "");
+});
+
+test("getPEM private DSA d1.prv.p5p.pem > PKCS8PRV encrypted", function() {
+var key = KEYUTIL.getKey(d1PrvP5PPEM);
+expect(2);
+var pem = KEYUTIL.getPEM(key, "PKCS8PRV", "orange");
+equal(pem.indexOf("-BEGIN ENCRYPTED PRIVATE KEY-") != -1, true, pem);
+var key2 = KEYUTIL.getKey(pem, "orange");
+equal(key2.x.toString(16), "73b3538660ceac98a3bf48e53f88b4e124657c21", "");
+});
+
+});
+
+-->
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+QUnit for 
+<a href="qunit-do-keyutil.html">keyutil</a> | 
+<a href="qunit-do-keyutil-eprv.html">keyutil-eprv</a> | 
+<a href="qunit-do-keyutil-pub.html">keyutil-pub</a> | 
+</body>
+</html>
+

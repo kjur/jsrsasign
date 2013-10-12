@@ -1,4 +1,4 @@
-/*! asn1x509-1.0.6.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.7.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.6 (2013-Oct-06)
+ * @version 1.0.7 (2013-Oct-11)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1145,12 +1145,13 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
     var rsaKey = null;
 
     /**
-     * set RSAKey object as subject public key
+     * (DEPRECATED) set RSAKey object as subject public key
      * @name setRSAKey
      * @memberOf KJUR.asn1.x509.SubjectPublicKeyInfo
      * @function
      * @param {RSAKey} rsaKey {@link RSAKey} object for RSA public key
      * @description
+     * @deprecated
      * @example
      * spki.setRSAKey(rsaKey);
      */
@@ -1167,11 +1168,12 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
     };
 
     /**
-     * set a PEM formatted RSA public key string as RSA public key
+     * (DEPRECATED) set a PEM formatted RSA public key string as RSA public key
      * @name setRSAPEM
      * @memberOf KJUR.asn1.x509.SubjectPublicKeyInfo
      * @function
      * @param {String} rsaPubPEM PEM formatted RSA public key string
+     * @deprecated
      * @description
      * @example
      * spki.setRSAPEM(rsaPubPEM);
@@ -1196,11 +1198,19 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
 	}
     };
 
-    this.getEncodedHex = function() {
+    /*
+     * @since asn1x509 1.0.7
+     */
+    this.getASN1Object = function() {
 	if (this.asn1AlgId == null || this.asn1SubjPKey == null)
 	    throw "algId and/or subjPubKey not set";
 	var o = new KJUR.asn1.DERSequence({'array':
 					   [this.asn1AlgId, this.asn1SubjPKey]});
+	return o;
+    };
+
+    this.getEncodedHex = function() {
+	var o = this.getASN1Object();
 	this.hTLV = o.getEncodedHex();
 	return this.hTLV;
     };
@@ -1231,8 +1241,8 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
 	this.asn1AlgId = 
 	    new KJUR.asn1.x509.AlgorithmIdentifier({'name': 'dsa',
 						    'asn1params': asn1Params});
-	var pubhex = KJUR.asn1.ASN1Util.bigIntToMinTwosComplementsHex(key.y);
-	this.asn1SubjPKey = new KJUR.asn1.DERBitString({'hex': '00' + pubhex});
+	var pubInt = new KJUR.asn1.DERInteger({'bigint': key.y});
+	this.asn1SubjPKey = new KJUR.asn1.DERBitString({'hex': '00' + pubInt.getEncodedHex()});
     };
 
     if (typeof params != "undefined") {
@@ -1609,6 +1619,11 @@ KJUR.asn1.x509.OID = new function(params) {
 	'secp256r1':			'1.2.840.10045.3.1.7',
 	'secp256k1':			'1.3.132.0.10',
 	'secp384r1':			'1.3.132.0.34',
+
+	'pkcs5PBES2':			'1.2.840.113549.1.5.13',
+	'pkcs5PBKDF2':			'1.2.840.113549.1.5.12',
+
+	'des-EDE3-CBC':			'1.2.840.113549.3.7',
     };
 
     this.objCache = {};
