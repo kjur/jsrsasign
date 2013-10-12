@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for KEYUTIL DES-CBC PKCS5 private key 'keyutil.js'</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+
+<!-- script type="text/javascript" src="qunit.js" /script -->
+<!-- link rel="stylesheet" href="qunit.css" type="text/css" media="screen" -->
+<script src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="screen"/>
+
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rng.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/sha1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
+
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1-1.0.js"></script>
+
+<!-- jsrsasign keyutil external codes -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/cipher-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/aes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/tripledes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+<!-- for PKCS5 PBKDF2 -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/hmac.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/pbkdf2.js"></script>
+
+<script src="../crypto-1.1.js"></script>
+<script src="../keyutil-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+
+// _test/z1.prv.p5e.pem.des PKCS#5 RSA private key (DES-CBC)
+var z1PrvP5EPEM = "" +
+"-----BEGIN RSA PRIVATE KEY-----\n" +
+"Proc-Type: 4,ENCRYPTED\n" +
+"DEK-Info: DES-CBC,A3D5101CABF7BD71\n" +
+"\n" +
+"KvnKN0lzwCBEKt5ki9aiq0hi7PBMyLDxs5LLs/Jkqglin+w4f+h3CRwR5xs9xQff\n" +
+"yQS4riWlJOZSd9ke6h/OAq8FAnd0M+amF3NoKwUSmNxnsNHXsoNJjIUeJia0lgfa\n" +
+"pILuvtirdgv3d++fhfzdGMgitnB+RKJAJMQjtscgVYdsAGpIHVaYF++ZENbNlalZ\n" +
+"ReGolfQBYv2eiQbg+EohEum7AZJsp4n+nkBetIS9Cvfg/C2Glx26atqiNsudGe4f\n" +
+"Zey4DpWOPJp/xzFyFENbsRSOjxXSmGY595oExD4vQjGC3yriBWQebZqJFgyj8J2W\n" +
+"jPgwGPS3NcnevXuZRETLHG5dL4KniQaSjTcMUuv2OoC2zfK+SxylMNfJdP8h38bf\n" +
+"4rzOYYR1urPtAjyMVYAlTzwAArFUxZttRzhy737MIXE=\n" +
+"-----END RSA PRIVATE KEY-----\n";
+var z1PrvP5EPass = "passwd";
+
+var z1PrvP5PHex = "3082013a020100024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001024078bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d022100fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f022100e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07022100d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b3702201849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa902207d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9";
+
+test("getDecryptedKeyHex z1(DES-CBC)", function() {
+var hex = KEYUTIL.getDecryptedKeyHex(z1PrvP5EPEM, z1PrvP5EPass);
+equal(hex, z1PrvP5PHex, "z1 DES-CBC");
+});
+
+test("getKey z1(DES-CBC)", function() {
+var key = KEYUTIL.getKey(z1PrvP5EPEM, z1PrvP5EPass);
+expect(3);
+equal(key.n.toString(16), "e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd59", "n");
+equal(key.e, 65537, "e");
+equal(key.d.toString(16), "78bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d", "d");
+
+});
+
+});
+-->
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+QUnit for 
+<a href="qunit-do-keyutil.html">keyutil</a> | 
+<a href="qunit-do-keyutil-eprv.html">keyutil-eprv</a> | 
+<a href="qunit-do-keyutil-pub.html">keyutil-pub</a> | 
+</body>
+</html>
+
+

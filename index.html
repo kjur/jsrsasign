@@ -4,7 +4,7 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="opensource free cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#5/8 private key X.509 certificate and CRL library in pure JavaScript" />
+    <meta name="description" content="opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate and CRL" />
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
     <title>jsrsasign - RSA Signing and Verification in JavaScript</title>
@@ -18,7 +18,7 @@
           <a id="forkme_banner" href="https://github.com/kjur/jsrsasign">Fork Me on GitHub</a>
 
           <h1 id="project_title">jsrsasign</h1>
-          <h2 id="project_tagline">opensource free cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#5/8 private key X.509 certificate and CRL library in pure JavaScript</h2>
+          <h2 id="project_tagline">opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate and CRL</h2>
 
           <section id="downloads">
             <a class="zip_download_link" href="https://github.com/kjur/jsrsasign/zipball/master">Download this project as a .zip file</a>
@@ -29,6 +29,7 @@
           <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
           <a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
           <a href="http://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
+          <a href="https://npmjs.org/package/jsrsasign" target="_blank">NPM</a> | 
         </header>
     </div>
 
@@ -47,16 +48,26 @@ The 'jsrsasign' library provides following features in pure JavaScript.
 <li>ASN.1 structure for X.509 ceritificate and CRL generation</li>
 <li>simple ASN.1 data parser</li>
 <li>simple X.509 certificate parser/reader</li>
-<li>PKCS5PKEY - PEM formatted PKCS#5 and PKCS#8 encrypted/plain RSA private key</li>
+<li>KEYUTIL - loading RSA/EC/DSA private/public key from PEM formatted PKCS#1/5/8 and X.509 certificate</li>
+<li>Supported formats and algorithms are listed <a href="index_alg.html">here</a>.</li>
 </ul>
 
 <h3>NEWS</h3>
 <dl>
+<dt><b>2013-Oct-12</b>: 
+<dd>Release 4.2.1 is now available.
+<ul>
+<li>Add generic PEM private/public key exporting method <a href="http://kjur.github.io/jsrsasign/api/symbols/KEYUTIL#.getPEM">KEYUTIL.getPEM</a> and it provides support to export to PEM PKCS#8 encrypted private key.</li>
+</ul>
+
+<dt><b>2013-Oct-07</b>: 
+<dd>Node.js <a href="https://npmjs.org/package/jsrsasign" target="_blank">npm module of jsrsasign</a> is now registered in the repository. It also includes <a href="http://kjur.github.io/jsjws/">'jsjws'</a>.
+
 <dt><b>2013-Oct-06</b>: 
 <dd>Release 4.2.0 is now available.
 <ul>
 <li>DSA/ECDSA algorithms is now supported most of class and methods like Signature, KEYUTIL, KJUR.asn1.x509 DSA</li>
-<li>KJUR.asn1.x509.X509Util.newCertPEM method to provide easy issuance of a certificate by JSON data.</li>
+<li><a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.X509Util.html#.newCertPEM">KJUR.asn1.x509.X509Util.newCertPEM</a> method to provide easy issuance of a certificate by JSON data.</li>
 </ul>
 
 <dt><b>2013-Oct-02</b>: 
@@ -300,40 +311,16 @@ xmldsig signatures in a browser
 </dl>
 
 <!-- **************************************************************************** -->
-<h3>INCLUDED THRID-PARTY LIBRARIES</h3>
+<h3>DEPENDENCY</h3>
 <p>
 <ul>
-<li><a href="http://www-cs-students.stanford.edu/~tjw/jsbn/" target="_blank">Tom Wu's jsbn library - BigInteger, RSA and ECC</a>
-<ul>
-<li>base64.js - String encoder for Base64 and Hex</li>
-<li>jsbn.js - basic BigInteger class</li>
-<li>jsbn2.js - BigInteger class extension</li>
-<li>prng4.js - Random number generator</li>
-<li>rng.js - Random number generator</li>
-<li>rsa.js - RSAKey class for RSA public key encryption.</li>
-<li>rsa2.js - RSA class extension for RSA private key decryption.</li>
-<li>ec.js - elliptic curve cryptography.</li>
-</ul>
-</li>
-
-<li><a href="https://github.com/bitcoinjs/bitcoinjs-lib/" target="_blank">BitcoinJS library - ECC patch and ECDSA</a>
-<ul>
-<li>ecdsa.js - ECDSA support</li>
-</ul>
-</li>
-
-<li>
-<a href="http://pajhome.org.uk/crypt/md5/" target="_blank">Paul Johnston's JavaScript MD5</a><br/>
-Some hash algorithm script is included however not used since 3.0.4.
-</li>
+<li><a href="http://www-cs-students.stanford.edu/~tjw/jsbn/" target="_blank">Tom Wu's jsbn library</a> - BigInteger, RSA and ECC</li>
+<li><a href="https://github.com/bitcoinjs/bitcoinjs-lib/" target="_blank">BitcoinJS library</a> - ECDSA signature algorithm</li>
+<li><a href="https://code.google.com/p/crypto-js/">CryptoJS</a> - symmetric key encryption algorithms, message digest, message authentication codes and PBKDF</li>
+<li><a href="http://openpgpjs.org/">OpenPGP.js</a> - DSA signature algorithm</a>
+<li><a href="http://yuilibrary.com/">Yahoo YUI library</a> - for class inheritance</a>
 </ul>
 </p>
-
-<h3>NON INCLUDED THRID-PARTY LIBRARIES</h3>
-<ul>
-<li><a href="http://crypto-js.googlecode.com/" target="_blank">CryptoJS</a> - aes.js, tripledes.js,
-  core.js, enc-base64.js, md5.js are used by 'pkcs5pkey.js'.</li>
-</ul>
 
 <p></p>
 

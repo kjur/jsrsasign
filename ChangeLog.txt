@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.2.0 to 4.2.1 (2013-Oct-11)
+  - keyutil 1.0.3 to 1.0.4
+    - new getPEM method for exporting keys
+    - exporting PKCS#8 encrypted private key also supported.
+    - DES-CBC support for PKCS#5 encrypted private key
+    - additional DSA support
+    - make old methods are marked as deprecated.
+
 * Changes between 4.1.6 to 4.2.0 (2013-Oct-06)
   - DSA support added to most of classes.
   - now RSAKey/KJUR.crypto.{ECDSA,DSA} class has new properties

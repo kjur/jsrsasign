@@ -47,23 +47,23 @@ available in this jsrsasign npm module.
 
 After loading the module,
 
-    &gt; var r = require('jsrsasign');
+    > var r = require('jsrsasign');
 
 You can refer name spaces, classes, methods and functions 
 by following variables:
 
-- [r.BigInteger] - BigInteger class
-- [r.RSAKey] - [RSAKey class](http://kjur.github.io/jsrsasign/api/symbols/RSAKey.html)
-- [r.ECDSA] - [KJUR.crypto.ECDSA class](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.ECDSA.html)
-- [r.DSA] - [KJUR.crypto.DSA class](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.DSA.html)
-- [r.Signature] - [KJUR.crypto.Signature class](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Signature.html)
-- [r.MessageDigest] - [KJUR.crypto.MessageDigest class](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.MessageDigest.html)
-- [r.Mac] - [KJUR.crypto.Mac class](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Mac.html)
-- [r.KEYUTIL] - [KEYUTIL class](http://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html)
-- [r.ASN1HEX] - [ASN1HEX class](http://kjur.github.io/jsrsasign/api/symbols/ASN1HEX.html)
-- [r.crypto] - [KJUR.crypto name space](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.html)
-- [r.asn1] - [KJUR.asn1 name space](http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.html)
-- [r.jws] - [KJUR.jws name space](http://kjur.github.io/jsjws/api/)
+- r.BigInteger - BigInteger class
+- r.RSAKey - [RSAKey class](http://kjur.github.io/jsrsasign/api/symbols/RSAKey.html)
+- r.ECDSA - [KJUR.crypto.ECDSA class](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.ECDSA.html)
+- r.DSA - [KJUR.crypto.DSA class](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.DSA.html)
+- r.Signature - [KJUR.crypto.Signature class](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Signature.html)
+- r.MessageDigest - [KJUR.crypto.MessageDigest class](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.MessageDigest.html)
+- r.Mac - [KJUR.crypto.Mac class](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Mac.html)
+- r.KEYUTIL - [KEYUTIL class](http://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html)
+- r.ASN1HEX - [ASN1HEX class](http://kjur.github.io/jsrsasign/api/symbols/ASN1HEX.html)
+- r.crypto - [KJUR.crypto name space](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.html)
+- r.asn1 - [KJUR.asn1 name space](http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.html)
+- r.jws - [KJUR.jws name space](http://kjur.github.io/jsjws/api/)
 
 Please see API reference in the above links.
 
@@ -72,17 +72,17 @@ EXAMPLE(1) SIGNATURE
 
 Loading encrypted PKCS#5 private key:
 
-    &gt; var fs = require('fs');
-    &gt; var pem = fs.readFileSync('z1.prv.p5e.pem', 'binary');
-    &gt; var prvKey = a.KEYUTIL.getKey(pem, 'passwd');
+    > var fs = require('fs');
+    > var pem = fs.readFileSync('z1.prv.p5e.pem', 'binary');
+    > var prvKey = a.KEYUTIL.getKey(pem, 'passwd');
 
 Sign string 'aaa' with the loaded private key:
 
-    &gt; var sig = new a.Signature({alg: 'SHA1withRSA'});
-    &gt; sig.init(prvKey);
-    &gt; sig.updateString('aaa');
-    &gt; var sigVal = sig.sign();
-    &gt; sigVal
+    > var sig = new a.Signature({alg: 'SHA1withRSA'});
+    > sig.init(prvKey);
+    > sig.updateString('aaa');
+    > var sigVal = sig.sign();
+    > sigVal
     'd764dcacb...'
 
 
