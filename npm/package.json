@@ -1,6 +1,6 @@
 {
   "name": "jsrsasign",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "pure JavaScript cryptographic library(jsrsasign) and JSON Web Token (JWT) and JSON Web Signature (JWS) library (jsjws) bundle",
   "main": "lib/jsrsasign.js",
   "scripts": {
