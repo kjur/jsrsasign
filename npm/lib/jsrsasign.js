@@ -1,4 +1,3 @@
-
 var navigator = {};
 navigator.uesrAgent = false;
 
@@ -299,3 +298,4 @@ exports.newline_toDos = newline_toDos;
 exports.crypto = KJUR.crypto;
 exports.asn1 = KJUR.asn1;
 exports.jws = KJUR.jws;
+exports.X509 = X509;
