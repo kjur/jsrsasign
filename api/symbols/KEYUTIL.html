@@ -251,6 +251,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html">KJUR.asn1.x509.AttributeTypeAndValue</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html">KJUR.asn1.x509.AuthorityKeyIdentifier</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.BasicConstraints.html">KJUR.asn1.x509.BasicConstraints</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.Certificate.html">KJUR.asn1.x509.Certificate</a></li>
@@ -481,6 +483,24 @@ for RSA, DSA and ECC.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getKeyFromCSRHex">getKeyFromCSRHex</a></b>(csrHex)
+								</div>
+								<div class="description">get RSAKey/DSA/ECDSA public key object from hexadecimal string of PKCS#10 CSR</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getKeyFromCSRPEM">getKeyFromCSRPEM</a></b>(csrPEM)
+								</div>
+								<div class="description">get RSAKey/DSA/ECDSA public key object from PEM formatted PKCS#10 CSR string</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getKeyFromEncryptedPKCS8PEM">getKeyFromEncryptedPKCS8PEM</a></b>(pkcs8PEM, passcode)
 								</div>
 								<div class="description">get RSAKey/ECDSA private key object from encrypted PEM PKCS#8 private key</div>
@@ -627,6 +647,19 @@ Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 an
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.newEncryptedPKCS5PEM">newEncryptedPKCS5PEM</a></b>(passcode, keyLen, hPublicExponent, alg)
 								</div>
 								<div class="description">generate RSAKey and PEM formatted encrypted PKCS#5 private key</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.parseCSRHex">parseCSRHex</a></b>(csrHex)
+								</div>
+								<div class="description">parse hexadecimal string of PKCS#10 CSR (certificate signing request)
+Resulted associative array has following properties:
+<ul>
+<li>p8pubkeyhex - hexadecimal string of subject public key in PKCS#8</li>
+</ul></div>
 							</td>
 						</tr>
 					
@@ -1324,6 +1357,104 @@ Please note following limitation on encrypted keys:
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Hash}</span> hash of key and unused IV (ex. {keyhex:2fe3..., ivhex:3fad..})</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getKeyFromCSRHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">KEYUTIL.</span><b>getKeyFromCSRHex</b>(csrHex)
+					
+					</div>
+					<div class="description">
+						get RSAKey/DSA/ECDSA public key object from hexadecimal string of PKCS#10 CSR
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>csrHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of PKCS#10 CSR</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>keyutil 1.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> RSAKey/DSA/ECDSA public key object</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getKeyFromCSRPEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">KEYUTIL.</span><b>getKeyFromCSRPEM</b>(csrPEM)
+					
+					</div>
+					<div class="description">
+						get RSAKey/DSA/ECDSA public key object from PEM formatted PKCS#10 CSR string
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>csrPEM</b>
+									
+								</dt>
+								<dd>PEM formatted PKCS#10 CSR string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>keyutil 1.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> RSAKey/DSA/ECDSA public key object</dd>
 							
 							</dl>
 						
@@ -2239,6 +2370,59 @@ var pem3 = KEYUTIL.newEncryptedPKCS5PEM("password", 512, '3'); // RSA 512bit/   
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> string of PEM formatted encrypted PKCS#5 private key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".parseCSRHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">KEYUTIL.</span><b>parseCSRHex</b>(csrHex)
+					
+					</div>
+					<div class="description">
+						parse hexadecimal string of PKCS#10 CSR (certificate signing request)
+Resulted associative array has following properties:
+<ul>
+<li>p8pubkeyhex - hexadecimal string of subject public key in PKCS#8</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>csrHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of PKCS#10 CSR</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>keyutil 1.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> associative array of parsed CSR</dd>
 							
 							</dl>
 						

@@ -251,6 +251,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html">KJUR.asn1.x509.AttributeTypeAndValue</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html">KJUR.asn1.x509.AuthorityKeyIdentifier</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.BasicConstraints.html">KJUR.asn1.x509.BasicConstraints</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.Certificate.html">KJUR.asn1.x509.Certificate</a></li>
@@ -501,6 +503,10 @@ JSON object.</div>
 						issue a certificate in PEM format
 This method can issue a certificate by a simple
 JSON object.
+Signature value will be provided by signing with 
+private key using 'cakey' parameter or 
+hexa decimal signature value by 'sighex' parameter.
+
 NOTE: When using DSA or ECDSA CA signing key,
 use 'paramempty' in 'sigalg' to ommit parameter field
 of AlgorithmIdentifer. In case of RSA, parameter
@@ -524,6 +530,17 @@ NULL will be specified by default.
     {keyUsage: {bin: '11'}},
   ],
   cakey: [prvkey, pass]}
+);
+// -- or --
+var certPEM = KJUR.asn1.x509.X509Util.newCertPEM(
+{ serial: {int: 1},
+  sigalg: {name: 'SHA1withRSA', paramempty: true},
+  issuer: {str: '/C=US/O=T1'},
+  notbefore: {'str': '130504235959Z'},
+  notafter: {'str': '140504235959Z'},
+  subject: {str: '/C=US/O=T1'},
+  sbjpubkey: pubKeyObj,
+  sighex: '0102030405..'}
 );</pre>
 					
 					

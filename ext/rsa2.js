@@ -189,6 +189,7 @@ function RSAGenerate(B,E) {
       break;
     }
   }
+  this.isPrivate = true;
 }
 
 // Perform raw private operation on "x": return x^d (mod n)

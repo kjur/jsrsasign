@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="jsrsasign : conversion tool from The CSR to self signed certificate for factorable.net checker." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <title>For Checking CSR by factorable.net</title>
+<!-- for pkcs5pkey -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/cipher-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/tripledes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64.js"></script>
+<!-- for crypto -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<!-- for crypto, asn1, asn1x509 -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<!-- for asn1x509(stohex) -->
+
+<script language="JavaScript" type="text/javascript" src="ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="base64x-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="rsasign-1.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="x509-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="pkcs5pkey-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="asn1-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="asn1x509-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="crypto-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="keyutil-1.0.js"></script>
+<script language="JavaScript" type="text/javascript">
+function doIt() {
+  var f1 = document.form1;
+
+  f1.newcert1.value = "issuing ...";
+
+  var csrPEM = f1.csr1.value;
+  var pubKeyObj = KEYUTIL.getKeyFromCSRPEM(csrPEM);
+
+  var certPEM = KJUR.asn1.x509.X509Util.newCertPEM(
+    { serial: {int: 1},
+      sigalg: {name: 'SHA1withRSA', paramempty: true},
+      issuer: {str: '/C=US/O=t1'},
+      notbefore: {'str': '130504235959Z'},
+      notafter: {'str': '140504235959Z'},
+      subject: {str: '/C=US/O=t1'},
+      sbjpubkey: pubKeyObj,
+      sighex: '0102030405060708'});
+
+  f1.newcert1.value = certPEM;
+}
+</script>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <h1 id="project_title">CSR to certificate converter</h1>
+          <h2 id="project_tagline">for checking weak RSA public key by factorable.net</h2>
+
+          <a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
+          <a href="https://github.com/kjur/jsrsasign/tags/" target="_blank">DOWNLOADS</a> | 
+          <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+          <a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+          <a href="http://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+<!-- now editing -->
+<form name="form1">
+<p>
+The <a href="https://factorable.net/">factorable.net</a> site provides 
+<a href="https://factorable.net/keycheck.html">key checker</a> to 
+verify whether weak or compromised key or not.
+However this can only check X.509 certificate or SSH public key.
+Thus you can't easily check your key before its certificate issuance
+by PKCS#10 CSR (certificate signing request) or PKCS#8 PEM public key.
+</p>
+<p>
+This tool can generate a fake certificate by specifying CSR
+for checking factorable weak key checker. 
+Resulting certificate has wrong signature value but it doesn't matter for the checker.
+</p>
+
+<h4>(Step1) Fill PEM formatted PKCS#10 CSR (certificate signing request)</h4>
+<textarea name="csr1" cols="65" rows="6">-----BEGIN CERTIFICATE REQUEST-----
+MIICXzCCAUcCAQAwGjELMAkGA1UEBhMCSlAxCzAJBgNVBAoMAlQxMIIBIjANBgkq
+hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt4uoTSYnQOFGjDSjWS0YlxrZeJdQFl9H
+nxJKG2REzARk9SyNZxx+U66DqIw7NJHfus0LA8Bm8AITW6HcDBrhdYffqdpBB6OO
+EPUm6EH7VRAZqETt5IGazdgX9chm8dlBrUaWXuUV+i4lUwsPU3cs2rNdFkyEpBun
+h5MYI0quAGVca3PbXGog9Cd29X98kSs4epYv7Y9p+4PQGoTln4qQXgxSKaGGmaaz
+qkNiG9yogvzmiROFH3qgf5ERhS93JlN+jrxStV/UgN05SpjTCU/xv7Z4U0/EsPWT
+/blSkWO3Wg0Whl59JW6aiYmdCGEHWEBuMaNmYIDMf6rcq79oOL5ZswIDAQABoAAw
+DQYJKoZIhvcNAQEFBQADggEBAGglAvUXY8K0V/J0gc/GXW6pnsIUY42ZyWq2DGMb
+cPk5QcwbqFE0f5eQJcLuI9S5cCAxNDbsAs25nPzEyYv4nvwxplV4Hgxjq9ldbTr+
+cb+QqV+C0sSwFEsDhT68kytFal2+WS0gNvKHu6gaam9uW2mUrEgNGAsCeUaQq5+H
+8IfqVv7LPrGfkX2D3yFhEKLr3/hYM1+kYk6NnV+R/Q5jTWlVQ0RExGjsr5SXHY2C
+S7QqoqRL/D5x9efPSoS21XwZz0DnhvdBEhTzlzs7CEsXslMI1XPENQktkMQuWqyC
+LNgyk3WCWqvwIcw1iuP4vD5HLMBwBKRtjtgdfAz+yjgrcrQ=
+-----END CERTIFICATE REQUEST-----</textarea>
+
+<!-- ============================================================== -->
+
+<h4>(Step2) Press "Convert" button</h4>
+<input type="button" value="Convert" onClick="doIt();"/>
+<input type="reset" name="reset" value="Reset"/>
+
+<h2>Fake Certificate for factorable.net key checker</h2>
+<textarea name="newcert1" cols="65" rows="8"></textarea>
+
+<br/>
+
+Copy this certificate, paste it on the bottom text field of
+<a href="https://factorable.net/keycheck.html">key checker</a> 
+then click "Check" button.
+You can see the weak key checking result for the CSR and public key pair.
+
+</form>
+
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2012 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>

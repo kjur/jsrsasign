@@ -251,6 +251,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html">KJUR.asn1.x509.AttributeTypeAndValue</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html">KJUR.asn1.x509.AuthorityKeyIdentifier</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.BasicConstraints.html">KJUR.asn1.x509.BasicConstraints</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.Certificate.html">KJUR.asn1.x509.Certificate</a></li>
@@ -639,7 +641,8 @@ tbsc.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));</pre>
 					<pre class="code">tbsc.appendExtensionByName('BasicConstraints', {'cA':true, 'critical': true});
 tbsc.appendExtensionByName('KeyUsage', {'bin':'11'});
 tbsc.appendExtensionByName('CRLDistributionPoints', {uri: 'http://aaa.com/a.crl'});
-tbsc.appendExtensionByName('ExtKeyUsage', {array: [{name: 'clientAuth'}]});</pre>
+tbsc.appendExtensionByName('ExtKeyUsage', {array: [{name: 'clientAuth'}]});
+tbsc.appendExtensionByName('AuthorityKeyIdentifier', {kid: '1234ab..'});</pre>
 					
 					
 					

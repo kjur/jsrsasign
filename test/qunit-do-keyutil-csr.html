@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for CSR in 'keyutil.js'</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+
+<!-- script type="text/javascript" src="qunit.js" /script -->
+<!-- link rel="stylesheet" href="qunit.css" type="text/css" media="screen" -->
+<script src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="screen"/>
+
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../keyutil-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../crypto-1.1.js"></script>
+<!-- ec -->
+<script src="../ext/prng4.js"></script>
+<script src="../ext/rng.js"></script>
+<script src="../ext/ec.js"></script>
+<script src="../ext/ec-patch.js"></script>
+<script src="../ecdsa-modified-1.0.js"></script>
+<script src="../ecparam-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+
+var rsacsr1pem = "" +
+"-----BEGIN CERTIFICATE REQUEST-----\r\n" + 
+"MIICXzCCAUcCAQAwGjELMAkGA1UEBhMCSlAxCzAJBgNVBAoMAlQxMIIBIjANBgkq\r\n" + 
+"hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt4uoTSYnQOFGjDSjWS0YlxrZeJdQFl9H\r\n" + 
+"nxJKG2REzARk9SyNZxx+U66DqIw7NJHfus0LA8Bm8AITW6HcDBrhdYffqdpBB6OO\r\n" + 
+"EPUm6EH7VRAZqETt5IGazdgX9chm8dlBrUaWXuUV+i4lUwsPU3cs2rNdFkyEpBun\r\n" + 
+"h5MYI0quAGVca3PbXGog9Cd29X98kSs4epYv7Y9p+4PQGoTln4qQXgxSKaGGmaaz\r\n" + 
+"qkNiG9yogvzmiROFH3qgf5ERhS93JlN+jrxStV/UgN05SpjTCU/xv7Z4U0/EsPWT\r\n" + 
+"/blSkWO3Wg0Whl59JW6aiYmdCGEHWEBuMaNmYIDMf6rcq79oOL5ZswIDAQABoAAw\r\n" + 
+"DQYJKoZIhvcNAQEFBQADggEBAGglAvUXY8K0V/J0gc/GXW6pnsIUY42ZyWq2DGMb\r\n" + 
+"cPk5QcwbqFE0f5eQJcLuI9S5cCAxNDbsAs25nPzEyYv4nvwxplV4Hgxjq9ldbTr+\r\n" + 
+"cb+QqV+C0sSwFEsDhT68kytFal2+WS0gNvKHu6gaam9uW2mUrEgNGAsCeUaQq5+H\r\n" + 
+"8IfqVv7LPrGfkX2D3yFhEKLr3/hYM1+kYk6NnV+R/Q5jTWlVQ0RExGjsr5SXHY2C\r\n" + 
+"S7QqoqRL/D5x9efPSoS21XwZz0DnhvdBEhTzlzs7CEsXslMI1XPENQktkMQuWqyC\r\n" + 
+"LNgyk3WCWqvwIcw1iuP4vD5HLMBwBKRtjtgdfAz+yjgrcrQ=\r\n" + 
+"-----END CERTIFICATE REQUEST-----\r\n";
+
+// ======= TEST ===================================================================================
+
+// 
+test("parseCSRHex test/eckey/rsacsr1.csr", function() {
+  var csrHex = KEYUTIL.getHexFromPEM(rsacsr1pem, "CERTIFICATE REQUEST");
+  var info = KEYUTIL.parseCSRHex(csrHex);
+  var pubkey = KEYUTIL.getKey(info.p8pubkeyhex, null, "pkcs8pub");
+  equal(info.p8pubkeyhex, "30820122300d06092a864886f70d01010105000382010f003082010a0282010100b78ba84d262740e1468c34a3592d18971ad9789750165f479f124a1b6444cc0464f52c8d671c7e53ae83a88c3b3491dfbacd0b03c066f002135ba1dc0c1ae17587dfa9da4107a38e10f526e841fb551019a844ede4819acdd817f5c866f1d941ad46965ee515fa2e25530b0f53772cdab35d164c84a41ba7879318234aae00655c6b73db5c6a20f42776f57f7c912b387a962fed8f69fb83d01a84e59f8a905e0c5229a18699a6b3aa43621bdca882fce68913851f7aa07f9111852f7726537e8ebc52b55fd480dd394a98d3094ff1bfb678534fc4b0f593fdb9529163b75a0d16865e7d256e9a89899d08610758406e31a3666080cc7faadcabbf6838be59b30203010001", "pubkey");
+});
+
+test("getKeyFromCSRHex test/eckey/rsacsr1.csr", function() {
+  var csrHex = KEYUTIL.getHexFromPEM(rsacsr1pem, "CERTIFICATE REQUEST");
+  var key = KEYUTIL.getKeyFromCSRHex(csrHex);
+  equal(key.e.toString(16), "10001", "e of key");
+});
+
+test("getKeyFromCSRPEM test/eckey/rsacsr1.csr", function() {
+  var key = KEYUTIL.getKeyFromCSRPEM(rsacsr1pem);
+  equal(key.e.toString(16), "10001", "e of key");
+});
+
+});
+-->
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+QUnit for 
+<a href="qunit-do-keyutil.html">keyutil</a> | 
+<a href="qunit-do-keyutil-eprv.html">keyutil-eprv</a> | 
+<a href="qunit-do-keyutil-pub.html">keyutil-pub</a> | 
+</body>
+</html>
+
+

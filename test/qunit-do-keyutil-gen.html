@@ -50,21 +50,26 @@
 <!--
 
 function checkRSA(keypair, keyLen) {
-  var nLen = keypair.prvKeyObj.n.bitLength();
-  var dLen = keypair.prvKeyObj.d.bitLength();
-  expect(10);
+  var prvKey = keypair.prvKeyObj;
+  var pubKey = keypair.pubKeyObj;
+
+  var nLen = prvKey.n.bitLength();
+  var dLen = prvKey.d.bitLength();
+  expect(12);
+  ok(prvKey.isPrivate, "isPrivate");
   equal(keyLen * 0.99 < nLen && nLen <= keyLen, true, "n.bitlength " + nLen);
   equal(keyLen * 0.99 < dLen && dLen <= keyLen, true, "d.bitlength " + dLen);
-  equal(keypair.prvKeyObj.e.toString(16), '10001', "e(hex)");
-  equal(keypair.prvKeyObj.p !== undefined, true, "p not undefined");
-  equal(keypair.prvKeyObj.q !== undefined, true, "q not undefined");
-  equal(keypair.prvKeyObj.dmp1 !== undefined, true, "dmp1 not undefined");
-  equal(keypair.prvKeyObj.dmq1 !== undefined, true, "dmq1 not undefined");
-  equal(keypair.prvKeyObj.coeff !== undefined, true, "coeff not undefined");
+  equal(prvKey.e.toString(16), '10001', "e(hex)");
+  equal(prvKey.p !== undefined, true, "p not undefined");
+  equal(prvKey.q !== undefined, true, "q not undefined");
+  equal(prvKey.dmp1 !== undefined, true, "dmp1 not undefined");
+  equal(prvKey.dmq1 !== undefined, true, "dmq1 not undefined");
+  equal(prvKey.coeff !== undefined, true, "coeff not undefined");
 
-  var nLen2 = keypair.pubKeyObj.n.bitLength();
+  var nLen2 = pubKey.n.bitLength();
+  ok(pubKey.isPublic, "isPublic");
   equal(keyLen * 0.99 < nLen2 && nLen <= keyLen, true, "pub n.bitlength " + nLen2);
-  equal(keypair.pubKeyObj.e.toString(16), '10001', "pub e(hex)");
+  equal(pubKey.e.toString(16), '10001', "pub e(hex)");
 }
 
 $(document).ready(function(){
