@@ -199,6 +199,7 @@ test("OID class test", function() {
          "06092a864886f70d010105", "name2obj SHA1withRSA");
 });
 
+// BasicConstraints
 test("BasicConstraints class test", function() {
   expect(6);
   var o1 = new KJUR.asn1.x509.BasicConstraints({});
@@ -214,6 +215,7 @@ test("BasicConstraints class test", function() {
   equal(o3.getEncodedHex(), "300f0603551d13040830060101ff020107", "constructor cA=t pl=7 getEncodedHex");
 });
 
+// KeyUsage
 test("KeyUsage class test", function() {
   expect(3);
   var o = new KJUR.asn1.x509.KeyUsage({'bin':'11'});
@@ -224,6 +226,7 @@ test("KeyUsage class test", function() {
   equal(o2.getEncodedHex(), "300e0603551d0f0101ff0404030206c0", "constructor bin 11 critical getEncodedHex");
 });
 
+// CRLDP
 test("CRLDistributionPoints class test", function() {
   expect(2);
 
@@ -237,6 +240,7 @@ test("CRLDistributionPoints class test", function() {
   equal(cdp2.getEncodedHex(), "30200603551d1f041930173015a013a011860f687474703a2f2f6161612e636f6d2f", "constructor uri http://aaa.com/");
 });
 
+// ExtKeyUsage
 test("ExtKeyUsage class test", function() {
   expect(1);
 
@@ -247,6 +251,45 @@ test("ExtKeyUsage class test", function() {
   equal(eku1.getEncodedHex(), "30190603551d25041230100604551d250006082b06010505070302", "constructor array");
 });
 
+// AuthorityKeyIdentifier
+test("AuthorityKeyIdentifier class test (KID)", function() {
+  expect(2);
+  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'kid': {'hex': '89ab'}});
+  equal(o1.getExtnValueHex(), "3004800289ab", "kid value");
+  equal(o1.getEncodedHex(), "300d0603551d2304063004800289ab", "ext hex");
+});
+
+test("AuthorityKeyIdentifier class test (CertIssuer)", function() {
+  expect(2);
+  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'issuer': {'str': '/C=US/CN=a'}});
+  equal(o1.getExtnValueHex(), "301ba119310b3009060355040613025553310a300806035504030c0161", "issuer name");
+  equal(o1.getEncodedHex(), "30240603551d23041d301ba119310b3009060355040613025553310a300806035504030c0161", "ext hex");
+});
+
+test("AuthorityKeyIdentifier class test (CertSN)", function() {
+  expect(2);
+  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'sn': {'hex': '1234'}});
+  equal(o1.getExtnValueHex(), "300482021234", "cert SN");
+  equal(o1.getEncodedHex(), "300d0603551d230406300482021234", "ext hex");
+});
+
+test("AuthorityKeyIdentifier class test (All)", function() {
+  expect(2);
+  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'kid': {'hex': '89ab'},
+                                                      'issuer': {'str': '/C=US/CN=a'},
+                                                      'sn': {'hex': '1234'}});
+  equal(o1.getExtnValueHex(), "3023800289aba119310b3009060355040613025553310a300806035504030c016182021234", "all");
+  equal(o1.getEncodedHex(), "302c0603551d2304253023800289aba119310b3009060355040613025553310a300806035504030c016182021234", "ext hex");
+});
+
+test("AuthorityKeyIdentifier class test (KID critical)", function() {
+  expect(2);
+  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'kid': {'hex': '89ab'}, 'critical': true});
+  equal(o1.getExtnValueHex(), "3004800289ab", "kid critical");
+  equal(o1.getEncodedHex(), "30100603551d230101ff04063004800289ab", "ext hex");
+});
+
+// ==== END OF X.509V3 EXTENSION TEST ===================
 test("CRL class test", function() {
   expect(1);
 

@@ -251,6 +251,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html">KJUR.asn1.x509.AttributeTypeAndValue</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html">KJUR.asn1.x509.AuthorityKeyIdentifier</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.BasicConstraints.html">KJUR.asn1.x509.BasicConstraints</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.Certificate.html">KJUR.asn1.x509.Certificate</a></li>
@@ -419,6 +421,16 @@ NOTE1: 'params' can be omitted.</div>
 								<div class="description">set PKCS#5 encrypted RSA PEM private key as CA key
 <br/>
 <h4>EXAMPLES</h4></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.Certificate.<b><a href="../symbols/KJUR.asn1.x509.Certificate.html#.setSignatureHex">setSignatureHex</a></b>()
+								</div>
+								<div class="description">set signature value internally by hex string
+</div>
 							</td>
 						</tr>
 					
@@ -602,6 +614,43 @@ cert.setRsaPrvKeyByPEMandPass("-----BEGIN RSA PRIVATE..(snip)", "password");</pr
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
 								<dd>1.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".setSignatureHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.Certificate.</span><b>setSignatureHex</b>()
+					
+					</div>
+					<div class="description">
+						set signature value internally by hex string
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbs});
+cert.setSignatureHex('01020304');</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>asn1x509 1.0.8</dd>
 							</dl>
 							</dl>
 						
