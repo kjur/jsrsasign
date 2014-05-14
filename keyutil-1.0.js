@@ -1,4 +1,4 @@
-/*! keyutil-1.0.5.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! keyutil-1.0.6.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version keyutil 1.0.5 (2014-Apr-18)
+ * @version keyutil 1.0.6 (2014-May-14)
  * @since jsrsasign 4.1.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1439,11 +1439,15 @@ KEYUTIL.generateKeypair = function(alg, keylenOrCurve) {
 		var keylen = keylenOrCurve;
 		var prvKey = new RSAKey();
 		prvKey.generate(keylen, '10001');
+		prvKey.isPrivate = true;
+		prvKey.isPublic = true;
 		
 		var pubKey = new RSAKey();
 		var hN = prvKey.n.toString(16);
 		var hE = prvKey.e.toString(16);
 		pubKey.setPublic(hN, hE);
+		pubKey.isPrivate = false;
+		pubKey.isPublic = true;
 		
 		var result = {};
 		result.prvKeyObj = prvKey;
@@ -1456,9 +1460,13 @@ KEYUTIL.generateKeypair = function(alg, keylenOrCurve) {
 
 		var prvKey = new KJUR.crypto.ECDSA({curve: curve});
 		prvKey.setPrivateKeyHex(keypairHex.ecprvhex);
+		prvKey.isPrivate = true;
+		prvKey.isPublic = false;
 
 		var pubKey = new KJUR.crypto.ECDSA({curve: curve});
 		pubKey.setPublicKeyHex(keypairHex.ecpubhex);
+		pubKey.isPrivate = false;
+		pubKey.isPublic = true;
 
 		var result = {};
 		result.prvKeyObj = prvKey;

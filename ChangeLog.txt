@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.2.2 to 4.2.3 (2014-May-14) minor update
+  - keyutil 1.0.6
+    - isPublic and isPrivate flag fix for generateKey method.
+  - tool_ca.html
+    - fix keyutil.js reference
+
 * Changes between 4.2.1 to 4.2.2 (2014-Apr-19)
   - asn1x509 1.0.7 to 1.0.8
     - add setSignatureHex method for Certificate class
@@ -9,9 +15,9 @@ ChangeLog for jsrsasign
     - add AuthorityKeyIdentifier X.509v3 extension class
   - keyutil 1.0.4 to 1.0.5
     - PKCS#10 CSR support. Following methods are added:
-      - PKCS5PKEY.getKeyFromCSRPEM
-      - PKCS5PKEY.getKeyFromCSRHex
-      - PKCS5PKEY.parseCSRHex
+      - KEYUTIL.getKeyFromCSRPEM
+      - KEYUTIL.getKeyFromCSRHex
+      - KEYUTIL.parseCSRHex
   - Tool:
     - tool_forfact.html:
       CSR to fake certificate converter for factorable.net
