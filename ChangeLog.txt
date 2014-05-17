@@ -1,6 +1,19 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.2.3 to 4.5.0 (2014-May-17)
+  - RFC 5652 CMS SignedData generator is now supported.
+  - asn1cms 1.0.0 (NEW)
+  - asn1 1.0.4 to 1.0.5
+    - unsorted DERSet is now supported for ASN.1 BER
+    - DERUTCTime/GeneralizedTime provides current time
+      if arguments is not specified.
+  - asn1x509 1.0.8 to 1.0.9
+    - x509.Time: automatic detection for UTC/Gen by length
+    - OID: some oids are added.
+  - keyutil 1.0.6 to 1.0.7
+    - KEYUTIL.getHexFromPEM can omit sHead now.
+
 * Changes between 4.2.2 to 4.2.3 (2014-May-14) minor update
   - keyutil 1.0.6
     - isPublic and isPrivate flag fix for generateKey method.

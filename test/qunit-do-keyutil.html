@@ -224,7 +224,10 @@ test("getHexFromPEM", function() {
   var s = "-----BEGIN AAA TEST-----\r\n" +
           "YWFh\r\n" +
           "-----END AAA TEST-----\r\n";
-  equal(KEYUTIL.getHexFromPEM(s, "AAA TEST"), "616161", "aaa"); 
+
+  expect(2);
+  equal(KEYUTIL.getHexFromPEM(s, "AAA TEST"), "616161", "(s, AAA TEST)-aaa"); 
+  equal(KEYUTIL.getHexFromPEM(s), "616161", "no sHead (s)-aaa"); 
 });
 
 test("parseHexOfEncryptedPKCS8", function() {

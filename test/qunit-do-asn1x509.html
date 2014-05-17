@@ -143,13 +143,19 @@ test("SubjectPublicKeyInfo class test", function() {
 });
 
 test("Time class test", function() {
-  expect(2);
+  expect(4);
 
   var o1 = new KJUR.asn1.x509.Time({'str':'130430235959Z'}); // UTC
   equal(o1.getEncodedHex(), "170d3133303433303233353935395a", "constructor default timestr");
 
   var o2 = new KJUR.asn1.x509.Time({'str':'20130430235959Z', 'type': 'gen'}); // Gen
   equal(o2.getEncodedHex(), "180f32303133303433303233353935395a", "constructor default timestr");
+
+  var o3 = new KJUR.asn1.x509.Time({'str':'20130430235959Z'}); // Gen
+  equal(o3.getEncodedHex(), "180f32303133303433303233353935395a", "constructor default timestr (auto gen)");
+
+  var o4 = new KJUR.asn1.x509.Time(); // auto UTC
+  equal(o4.getEncodedHex().substr(0, 4), "170d", "constructor default timestr (empty)=170d...");
 });
 
 test("AlgorithmIdentifier class test", function() {

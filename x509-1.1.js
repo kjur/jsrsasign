@@ -1,9 +1,9 @@
-/*! x509-1.1.2.js (c) 2012 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! x509-1.1.3.js (c) 2012-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /* 
  * x509.js - X509 class to read subject public key from certificate.
  *
- * Copyright (c) 2010-2013 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2014 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version x509 1.1.2 (2013-Oct-06)
+ * @version x509 1.1.3 (2014-May-17)
  * @since jsrsasign 1.x.x
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -54,17 +54,17 @@ function X509() {
      * @function
      */
     this.getSerialNumberHex = function() {
-	return ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 1]);
+        return ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 1]);
     };
 
     /**
-     * get hexadecimal string of issuer field of certificate.<br/>
+     * get hexadecimal string of issuer field TLV of certificate.<br/>
      * @name getIssuerHex
      * @memberOf X509#
      * @function
      */
     this.getIssuerHex = function() {
-	return ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 3]);
+        return ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 3]);
     };
 
     /**
@@ -74,7 +74,7 @@ function X509() {
      * @function
      */
     this.getIssuerString = function() {
-	return X509.hex2dn(ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 3]));
+        return X509.hex2dn(ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 3]));
     };
 
     /**
@@ -84,7 +84,7 @@ function X509() {
      * @function
      */
     this.getSubjectHex = function() {
-	return ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 5]);
+        return ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 5]);
     };
 
     /**
@@ -94,7 +94,7 @@ function X509() {
      * @function
      */
     this.getSubjectString = function() {
-	return X509.hex2dn(ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 5]));
+        return X509.hex2dn(ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 5]));
     };
 
     /**
@@ -104,10 +104,10 @@ function X509() {
      * @function
      */
     this.getNotBefore = function() {
-	var s = ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 4, 0]);
-	s = s.replace(/(..)/g, "%$1");
-	s = decodeURIComponent(s);
-	return s;
+        var s = ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 4, 0]);
+        s = s.replace(/(..)/g, "%$1");
+        s = decodeURIComponent(s);
+        return s;
     };
 
     /**
@@ -117,10 +117,10 @@ function X509() {
      * @function
      */
     this.getNotAfter = function() {
-	var s = ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 4, 1]);
-	s = s.replace(/(..)/g, "%$1");
-	s = decodeURIComponent(s);
-	return s;
+        var s = ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 4, 1]);
+        s = s.replace(/(..)/g, "%$1");
+        s = decodeURIComponent(s);
+        return s;
     };
 
     // ===== read certificate public key ==========================
@@ -134,23 +134,23 @@ function X509() {
      * @param {String} sCertPEM string for PEM formatted X.509 certificate
      */
     this.readCertPEM = function(sCertPEM) {
-	var hCert = X509.pemToHex(sCertPEM);
-	var a = X509.getPublicKeyHexArrayFromCertHex(hCert);
-	var rsa = new RSAKey();
-	rsa.setPublic(a[0], a[1]);
-	this.subjectPublicKeyRSA = rsa;
-	this.subjectPublicKeyRSA_hN = a[0];
-	this.subjectPublicKeyRSA_hE = a[1];
-	this.hex = hCert;
+        var hCert = X509.pemToHex(sCertPEM);
+        var a = X509.getPublicKeyHexArrayFromCertHex(hCert);
+        var rsa = new RSAKey();
+        rsa.setPublic(a[0], a[1]);
+        this.subjectPublicKeyRSA = rsa;
+        this.subjectPublicKeyRSA_hN = a[0];
+        this.subjectPublicKeyRSA_hE = a[1];
+        this.hex = hCert;
     };
 
     this.readCertPEMWithoutRSAInit = function(sCertPEM) {
-	var hCert = X509.pemToHex(sCertPEM);
-	var a = X509.getPublicKeyHexArrayFromCertHex(hCert);
-	this.subjectPublicKeyRSA.setPublic(a[0], a[1]);
-	this.subjectPublicKeyRSA_hN = a[0];
-	this.subjectPublicKeyRSA_hE = a[1];
-	this.hex = hCert;
+        var hCert = X509.pemToHex(sCertPEM);
+        var a = X509.getPublicKeyHexArrayFromCertHex(hCert);
+        this.subjectPublicKeyRSA.setPublic(a[0], a[1]);
+        this.subjectPublicKeyRSA_hN = a[0];
+        this.subjectPublicKeyRSA_hE = a[1];
+        this.hex = hCert;
     };
 };
 
@@ -189,11 +189,11 @@ X509.getSubjectPublicKeyInfoPosFromCertHex = function(hCert) {
     var a = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, pTbsCert); 
     if (a.length < 1) return -1;
     if (hCert.substring(a[0], a[0] + 10) == "a003020102") { // v3
-	if (a.length < 6) return -1;
-	return a[6];
+        if (a.length < 6) return -1;
+        return a[6];
     } else {
-	if (a.length < 5) return -1;
-	return a[5];
+        if (a.length < 5) return -1;
+        return a[5];
     }
 };
 
@@ -204,9 +204,9 @@ X509.getPublicKeyHexArrayFromCertHex = function(hCert) {
     var hN = ASN1HEX.getHexOfV_AtObj(hCert, a[0]);
     var hE = ASN1HEX.getHexOfV_AtObj(hCert, a[1]);
     if (hN != null && hE != null) {
-	return [hN, hE];
+        return [hN, hE];
     } else {
-	return [];
+        return [];
     }
 };
 
@@ -225,8 +225,8 @@ X509.hex2dn = function(hDN) {
     var s = "";
     var a = ASN1HEX.getPosArrayOfChildren_AtObj(hDN, 0);
     for (var i = 0; i < a.length; i++) {
-	var hRDN = ASN1HEX.getHexOfTLV_AtObj(hDN, a[i]);
-	s = s + "/" + X509.hex2rdn(hRDN);
+        var hRDN = ASN1HEX.getHexOfTLV_AtObj(hDN, a[i]);
+        s = s + "/" + X509.hex2rdn(hRDN);
     }
     return s;
 };
@@ -266,29 +266,29 @@ X509.getPublicKeyFromCertPEM = function(sCertPEM) {
     var info = X509.getPublicKeyInfoPropOfCertPEM(sCertPEM);
 
     if (info.algoid == "2a864886f70d010101") { // RSA
-	var aRSA = KEYUTIL.parsePublicRawRSAKeyHex(info.keyhex);
-	var key = new RSAKey();
-	key.setPublic(aRSA.n, aRSA.e);
-	return key;
+        var aRSA = KEYUTIL.parsePublicRawRSAKeyHex(info.keyhex);
+        var key = new RSAKey();
+        key.setPublic(aRSA.n, aRSA.e);
+        return key;
     } else if (info.algoid == "2a8648ce3d0201") { // ECC
-	var curveName = KJUR.crypto.OID.oidhex2name[info.algparam];
-	var key = new KJUR.crypto.ECDSA({'curve': curveName, 'info': info.keyhex});
+        var curveName = KJUR.crypto.OID.oidhex2name[info.algparam];
+        var key = new KJUR.crypto.ECDSA({'curve': curveName, 'info': info.keyhex});
         key.setPublicKeyHex(info.keyhex);
-	return key;
+        return key;
     } else if (info.algoid == "2a8648ce380401") { // DSA 1.2.840.10040.4.1
-	var p = ASN1HEX.getVbyList(info.algparam, 0, [0], "02");
-	var q = ASN1HEX.getVbyList(info.algparam, 0, [1], "02");
-	var g = ASN1HEX.getVbyList(info.algparam, 0, [2], "02");
-	var y = ASN1HEX.getHexOfV_AtObj(info.keyhex, 0);
-	y = y.substr(2);
-	var key = new KJUR.crypto.DSA();
-	key.setPublic(new BigInteger(p, 16),
-		      new BigInteger(q, 16),
-		      new BigInteger(g, 16),
-		      new BigInteger(y, 16));
-	return key;
+        var p = ASN1HEX.getVbyList(info.algparam, 0, [0], "02");
+        var q = ASN1HEX.getVbyList(info.algparam, 0, [1], "02");
+        var g = ASN1HEX.getVbyList(info.algparam, 0, [2], "02");
+        var y = ASN1HEX.getHexOfV_AtObj(info.keyhex, 0);
+        y = y.substr(2);
+        var key = new KJUR.crypto.DSA();
+        key.setPublic(new BigInteger(p, 16),
+                      new BigInteger(q, 16),
+                      new BigInteger(g, 16),
+                      new BigInteger(y, 16));
+        return key;
     } else {
-	throw "unsupported key";
+        throw "unsupported key";
     }
 };
 
@@ -317,40 +317,40 @@ X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
     // 1. Certificate ASN.1
     var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0); 
     if (a1.length != 3)
-	throw "malformed X.509 certificate PEM (code:001)"; // not 3 item of seq Cert
+        throw "malformed X.509 certificate PEM (code:001)"; // not 3 item of seq Cert
 
     // 2. tbsCertificate
     if (hCert.substr(a1[0], 2) != "30")
-	throw "malformed X.509 certificate PEM (code:002)"; // tbsCert not seq 
+        throw "malformed X.509 certificate PEM (code:002)"; // tbsCert not seq 
 
     var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]); 
 
     // 3. subjectPublicKeyInfo
     if (a2.length < 7)
-	throw "malformed X.509 certificate PEM (code:003)"; // no subjPubKeyInfo
+        throw "malformed X.509 certificate PEM (code:003)"; // no subjPubKeyInfo
 
     var a3 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a2[6]); 
 
     if (a3.length != 2)
-	throw "malformed X.509 certificate PEM (code:004)"; // not AlgId and PubKey
+        throw "malformed X.509 certificate PEM (code:004)"; // not AlgId and PubKey
 
     // 4. AlgId
     var a4 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a3[0]); 
 
     if (a4.length != 2)
-	throw "malformed X.509 certificate PEM (code:005)"; // not 2 item in AlgId
+        throw "malformed X.509 certificate PEM (code:005)"; // not 2 item in AlgId
 
     result.algoid = ASN1HEX.getHexOfV_AtObj(hCert, a4[0]);
 
     if (hCert.substr(a4[1], 2) == "06") { // EC
-	result.algparam = ASN1HEX.getHexOfV_AtObj(hCert, a4[1]);
+        result.algparam = ASN1HEX.getHexOfV_AtObj(hCert, a4[1]);
     } else if (hCert.substr(a4[1], 2) == "30") { // DSA
-	result.algparam = ASN1HEX.getHexOfTLV_AtObj(hCert, a4[1]);
+        result.algparam = ASN1HEX.getHexOfTLV_AtObj(hCert, a4[1]);
     }
 
     // 5. Public Key Hex
     if (hCert.substr(a3[1], 02) != "03")
-	throw "malformed X.509 certificate PEM (code:006)"; // not bitstring
+        throw "malformed X.509 certificate PEM (code:006)"; // not bitstring
 
     var unusedBitAndKeyHex = ASN1HEX.getHexOfV_AtObj(hCert, a3[1]);
     result.keyhex = unusedBitAndKeyHex.substr(2);
@@ -359,13 +359,13 @@ X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
 };
 
 /*
-X509.prototype.readCertPEM = _x509_readCertPEM;
-X509.prototype.readCertPEMWithoutRSAInit = _x509_readCertPEMWithoutRSAInit;
-X509.prototype.getSerialNumberHex = _x509_getSerialNumberHex;
-X509.prototype.getIssuerHex = _x509_getIssuerHex;
-X509.prototype.getSubjectHex = _x509_getSubjectHex;
-X509.prototype.getIssuerString = _x509_getIssuerString;
-X509.prototype.getSubjectString = _x509_getSubjectString;
-X509.prototype.getNotBefore = _x509_getNotBefore;
-X509.prototype.getNotAfter = _x509_getNotAfter;
+  X509.prototype.readCertPEM = _x509_readCertPEM;
+  X509.prototype.readCertPEMWithoutRSAInit = _x509_readCertPEMWithoutRSAInit;
+  X509.prototype.getSerialNumberHex = _x509_getSerialNumberHex;
+  X509.prototype.getIssuerHex = _x509_getIssuerHex;
+  X509.prototype.getSubjectHex = _x509_getSubjectHex;
+  X509.prototype.getIssuerString = _x509_getIssuerString;
+  X509.prototype.getSubjectString = _x509_getSubjectString;
+  X509.prototype.getNotBefore = _x509_getNotBefore;
+  X509.prototype.getNotAfter = _x509_getNotAfter;
 */
