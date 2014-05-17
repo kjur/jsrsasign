@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : conversion tool from The CSR to self signed certificate for factorable.net checker." />
+
+<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+<title>CMS SignedData Generator</title>
+<script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript">
+function doIt() {
+  var f1 = document.form1;
+
+  f1.newcms1.value = "signing ...";
+
+  var prvKeyPEM = f1.prvkey1.value;
+  var certPEM = f1.cert1.value;
+
+  var param = {
+      content: {str: "jsrsasign"},
+      certs: [certPEM],
+      signerInfos: [{
+        hashAlg: 'sha256',
+        sAttr: {
+        },
+        signerCert: certPEM,
+        sigAlg: 'SHA256withRSA',
+        signerPrvKey: prvKeyPEM
+      }]
+  };
+
+  param.content.str = f1.content1.value;
+  param.signerInfos[0].hashAlg = f1.hashalg1.value;
+  param.signerInfos[0].sigAlg = f1.sigalg1.value;
+  if (f1.signingtime1.checked) {
+    param.signerInfos[0].sAttr.SigningTime = {};
+  }
+
+  try {
+    var sd = KJUR.asn1.cms.CMSUtil.newSignedData(param);
+    f1.newcms1.value = sd.getPEM();
+  } catch (ex) {
+    f1.newcms1.value = ex;
+  }
+}
+</script>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">CMS SignedData generator</h1>
+<h2 id="project_tagline">Simple RFC 5652 CMS SignedData generator in pure JavaScript</h2>
+<a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://github.com/kjur/jsrsasign/tags/" target="_blank">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+<a href="http://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+<!-- now editing -->
+<form name="form1">
+
+<h4>(Step1) Fill signer's private key and certificate</h4>
+As for private key, any PKCS#5 and PKCS#8 PEM formatted
+RSA/ECDSA/DSA key are supported.
+
+<h5>SIGNER'S PRIVATE KEY:</h5>
+<textarea name="prvkey1" cols="65" rows="6">-----BEGIN PRIVATE KEY-----
+MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDfdOqotHd55SYO
+0dLz2oXengw/tZ+q3ZmOPeVmMuOMIYO/Cv1wk2U0OK4pug4OBSJPhl09Zs6IwB8N
+wPOU7EDTgMOcQUYB/6QNCI1J7Zm2oLtuchzz4pIb+o4ZAhVprLhRyvqi8OTKQ7kf
+Gfs5Tuwmn1M/0fQkfzMxADpjOKNgf0uy6lN6utjdTrPKKFUQNdc6/Ty8EeTnQEwU
+lsT2LAXCfEKxTn5RlRljDztS7Sfgs8VL0FPy1Qi8B+dFcgRYKFrcpsVaZ1lBmXKs
+XDRu5QR/Rg3f9DRq4GR1sNH8RLY9uApMl2SNz+sR4zRPG85R/se5Q06Gu0BUQ3UP
+m67ETVZLAgMBAAECggEADjU54mYvHpICXHjc5+JiFqiH8NkUgOG8LL4kwt3DeBp9
+bP0+5hSJH8vmzwJkeGG9L79EWG4b/bfxgYdeNX7cFFagmWPRFrlxbd64VRYFawZH
+RJt+2cbzMVI6DL8EK4bu5Ux5qTiV44Jw19hoD9nDzCTfPzSTSGrKD3iLPdnREYaI
+GDVxcjBv3Tx6rrv3Z2lhHHKhEHb0RRjATcjAVKV9NZhMajJ4l9pqJ3A4IQrCBl95
+ux6Xm1oXP0i6aR78cjchsCpcMXdP3WMsvHgTlsZT0RZLFHrvkiNHlPiil4G2/eHk
+wvT//CrcbO6SmI/zCtMmypuHJqcr+Xb7GPJoa64WoQKBgQDwrfelf3Rdfo9kaK/b
+rBmbu1++qWpYVPTedQy84DK2p3GE7YfKyI+fhbnw5ol3W1jjfvZCmK/p6eZR4jgy
+J0KJ76z53T8HoDTF+FTkR55oM3TEM46XzI36RppWP1vgcNHdz3U4DAqkMlAh4lVm
+3GiKPGX5JHHe7tWz/uZ55Kk58QKBgQDtrkqdSzWlOjvYD4mq4m8jPgS7v3hiHd+1
+OT8S37zdoT8VVzo2T4SF+fBhI2lWYzpQp2sCjLmCwK9k/Gur55H2kTBTwzlQ6WSL
+Te9Zj+eoMGklIirA+8YdQHXrO+CCw9BTJAF+c3c3xeUOLXafzyW29bASGfUtA7Ax
+QAsR+Rr3+wKBgAwfZxrh6ZWP+17+WuVArOWIMZFj7SRX2yGdWa/lxwgmNPSSFkXj
+hkBttujoY8IsSrTivzqpgCrTCjPTpir4iURzWw4W08bpjd7u3C/HX7Y16Uq8ohEJ
+T5lslveDJ3iNljSK74eMK7kLg7fBM7YDogxccHJ1IHsvInp3e1pmZxOxAoGAO+bS
+TUQ4N/UuQezgkF3TDrnBraO67leDGwRbfiE/U0ghQvqh5DA0QSPVzlWDZc9KUitv
+j8vxsR9o1PW9GS0an17GJEYuetLnkShKK3NWOhBBX6d1yP9rVdH6JhgIJEy/g0Su
+z7TAFiFc8i7JF8u4QJ05C8bZAMhOLotqftQeVOMCgYAid8aaRvaM2Q8a42Jn6ZTT
+5ms6AvNr98sv0StnfmNQ+EYXN0bEk2huSW+w2hN34TYYBTjViQmHbhudwwu8lVjE
+ccDmIXsUFbHVK+kTIpWGGchy5cYPs3k9s1nMR2av0Lojtw9WRY76xRXvN8W6R7Eh
+wA2ax3+gEEYpGhjM/lO2Lg==
+-----END PRIVATE KEY-----</textarea>
+
+<h5>SIGNER'S X.509 CERTIFICATE:</h5>
+<textarea name="cert1" cols="65" rows="6">-----BEGIN CERTIFICATE-----
+MIIC/zCCAeegAwIBAgIBATANBgkqhkiG9w0BAQUFADAaMQswCQYDVQQGEwJVUzEL
+MAkGA1UECgwCWjQwHhcNMTMwODI4MTgyODM0WhcNMjMwODI4MTgyODM0WjAaMQsw
+CQYDVQQGEwJVUzELMAkGA1UECgwCWjQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw
+ggEKAoIBAQDfdOqotHd55SYO0dLz2oXengw/tZ+q3ZmOPeVmMuOMIYO/Cv1wk2U0
+OK4pug4OBSJPhl09Zs6IwB8NwPOU7EDTgMOcQUYB/6QNCI1J7Zm2oLtuchzz4pIb
++o4ZAhVprLhRyvqi8OTKQ7kfGfs5Tuwmn1M/0fQkfzMxADpjOKNgf0uy6lN6utjd
+TrPKKFUQNdc6/Ty8EeTnQEwUlsT2LAXCfEKxTn5RlRljDztS7Sfgs8VL0FPy1Qi8
+B+dFcgRYKFrcpsVaZ1lBmXKsXDRu5QR/Rg3f9DRq4GR1sNH8RLY9uApMl2SNz+sR
+4zRPG85R/se5Q06Gu0BUQ3UPm67ETVZLAgMBAAGjUDBOMB0GA1UdDgQWBBQHZPTE
+yQVu/0I/3QWhlTyW7WoTzTAfBgNVHSMEGDAWgBQHZPTEyQVu/0I/3QWhlTyW7WoT
+zTAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQDHxqJ9y8alTH7agVMW
+Zfic/RbrdvHwyq+IOrgDToqyo0w+IZ6BCn9vjv5iuhqu4ForOWDAFpQKZW0DLBJE
+Qy/7/0+9pk2DPhK1XzdOovlSrkRt+GcEpGnUXnzACXDBbO0+Wrk+hcjEkQRRK1bW
+2rknARIEJG9GS+pShP9Bq/0BmNsMepdNcBa0z3a5B0fzFyCQoUlX6RTqxRw1h1Qt
+5F00pfsp7SjXVIvYcewHaNASbto1n5hrSz1VY9hLba11ivL1N4WoWbmzAL6BWabs
+C2D/MenST2/X6hTKyGXpg3Eg2h3iLvUtwcNny0hRKstc73Jl9xR3qXfXKJH0ThTl
+q0gq
+-----END CERTIFICATE-----</textarea>
+
+<!-- ============================================================== -->
+
+<h4>(Step2) Fill CMS SignedData properties</h4>
+
+<table>
+<tr><td>signed content</td>
+<td><input type="text" name="content1" value="jsrsasign"></td></tr>
+<tr><td>hash algorithm for MessageDigest attribute</td>
+<td>
+<select name="hashalg1">
+<option value="sha256">SHA-256
+<option value="sha512">SHA-512
+<option value="sha384">SHA-384
+<option value="sha224">SHA-224
+<option value="sha1">SHA-1
+<option value="md5">MD5
+<option value="ripemd160">RIPEMD160
+</select>
+</td></tr>
+<tr><td>signature algorithm for MessageDigest attribute</td>
+<td>
+<select name="sigalg1">
+<option value="SHA256withRSA">SHA256withRSA
+<option value="SHA512withRSA">SHA512withRSA
+<option value="SHA384withRSA">SHA384withRSA
+<option value="SHA224withRSA">SHA224withRSA
+<option value="SHA1withRSA">SHA1withRSA
+<option value="MD5withRSA">MD5withRSA
+<option value="RIPEMD160withRSA">RIPEMD160withRSA
+<option value="SHA256withECDSA">SHA256withECDSA
+<option value="SHA512withECDSA">SHA512withECDSA
+<option value="SHA384withECDSA">SHA384withECDSA
+<option value="SHA224withECDSA">SHA224withECDSA
+<option value="SHA1withECDSA">SHA1withECDSA
+<option value="SHA256withSA">SHA256withDSA
+<option value="SHA512withSA">SHA512withDSA
+<option value="SHA384withSA">SHA384withDSA
+<option value="SHA224withSA">SHA224withDSA
+<option value="SHA1withDSA">SHA1withDSA
+</select>
+</td></tr>
+<tr><td>add SigingTime signed attribute?</td>
+<td><input type="checkbox" name="signingtime1" value="on" checked/></td></tr>
+</table>
+
+<h4>(Step3) Press "Sign" button</h4>
+<input type="button" value="Sign" onClick="doIt();"/>
+<input type="reset" name="reset" value="Reset"/>
+
+<h2>Generated CMS SignedData</h2>
+<textarea name="newcms1" cols="65" rows="8"></textarea>
+
+<br/>
+This PEM formatted CMS signed data can be verified by OpenSSL command
+as following.
+
+<blockquote>
+% openssl cms -verify -in cms.pem -signer signer.cer -no_signer_cert_verify -inform PEM -binary
+</blockquote>
+</form>
+
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2012 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>
