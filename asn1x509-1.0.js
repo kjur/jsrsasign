@@ -1,4 +1,4 @@
-/*! asn1x509-1.0.8.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.9.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.8 (2014-Apr-16)
+ * @version 1.0.9 (2014-May-17)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1148,9 +1148,10 @@ KJUR.asn1.x509.X500Name = function(params) {
     };
 
     this.getEncodedHex = function() {
+        if (typeof this.hTLV == "string") return this.hTLV;
         var o = new KJUR.asn1.DERSequence({"array": this.asn1Array});
-        this.TLV = o.getEncodedHex();
-        return this.TLV;
+        this.hTLV = o.getEncodedHex();
+        return this.hTLV;
     };
 
     if (typeof params != "undefined") {
@@ -1422,14 +1423,20 @@ KJUR.asn1.x509.Time = function(params) {
     }
 
     this.getEncodedHex = function() {
-        if (this.timeParams == null) {
-            throw "timeParams shall be specified. ({'str':'130403235959Z'}}";
-        }
         var o = null;
-        if (this.type == "utc") {
-            o = new KJUR.asn1.DERUTCTime(this.timeParams);
+
+        if (this.timeParams != null) {
+            if (this.type == "utc") {
+                o = new KJUR.asn1.DERUTCTime(this.timeParams);
+            } else {
+                o = new KJUR.asn1.DERGeneralizedTime(this.timeParams);
+            }
         } else {
-            o = new KJUR.asn1.DERGeneralizedTime(this.timeParams);
+            if (this.type == "utc") {
+                o = new KJUR.asn1.DERUTCTime();
+            } else {
+                o = new KJUR.asn1.DERGeneralizedTime();
+            }
         }
         this.TLV = o.getEncodedHex();
         return this.TLV;
@@ -1437,8 +1444,13 @@ KJUR.asn1.x509.Time = function(params) {
     
     this.type = "utc";
     if (typeof params != "undefined") {
-        if (typeof params['type'] != "undefined") {
-            this.type = params['type'];
+        if (typeof params.type != "undefined") {
+            this.type = params.type;
+        } else {
+            if (typeof params.str != "undefined") {
+                if (params.str.match(/^[0-9]{12}Z$/)) this.type = "utc";
+                if (params.str.match(/^[0-9]{14}Z$/)) this.type = "gen";
+            }
         }
         this.timeParams = params;
     }
@@ -1701,10 +1713,18 @@ KJUR.asn1.x509.OID = new function(params) {
         'ST':   '2.5.4.8',
         'L':    '2.5.4.7',
         'CN':   '2.5.4.3',
+        'DN':   '2.5.4.49',
+        'DC':   '0.9.2342.19200300.100.1.25',
     };
     this.name2oidList = {
-        'sha384':           '2.16.840.1.101.3.4.2.2',
-        'sha224':           '2.16.840.1.101.3.4.2.4',
+        'sha1':                 '1.3.14.3.2.26',
+        'sha256':               '2.16.840.1.101.3.4.2.1',
+        'sha384':               '2.16.840.1.101.3.4.2.2',
+        'sha512':               '2.16.840.1.101.3.4.2.3',
+        'sha224':               '2.16.840.1.101.3.4.2.4',
+        'md5':                  '1.2.840.113549.2.5',
+        'md2':                  '1.3.14.7.2.2.1',
+        'ripemd160':            '1.3.36.3.2.1',
 
         'MD2withRSA':           '1.2.840.113549.1.1.2',
         'MD4withRSA':           '1.2.840.113549.1.1.3',
@@ -1721,29 +1741,29 @@ KJUR.asn1.x509.OID = new function(params) {
         'SHA384withECDSA':      '1.2.840.10045.4.3.3',
         'SHA512withECDSA':      '1.2.840.10045.4.3.4',
 
-        'dsa':              '1.2.840.10040.4.1',
+        'dsa':                  '1.2.840.10040.4.1',
         'SHA1withDSA':          '1.2.840.10040.4.3',
         'SHA224withDSA':        '2.16.840.1.101.3.4.3.1',
         'SHA256withDSA':        '2.16.840.1.101.3.4.3.2',
 
         'rsaEncryption':        '1.2.840.113549.1.1.1',
-        'subjectKeyIdentifier':     '2.5.29.14',
+        'subjectKeyIdentifier': '2.5.29.14',
 
         'countryName':          '2.5.4.6',
         'organization':         '2.5.4.10',
-        'organizationalUnit':       '2.5.4.11',
-        'stateOrProvinceName':      '2.5.4.8',
-        'locality':         '2.5.4.7',
+        'organizationalUnit':   '2.5.4.11',
+        'stateOrProvinceName':  '2.5.4.8',
+        'locality':             '2.5.4.7',
         'commonName':           '2.5.4.3',
 
-        'keyUsage':         '2.5.29.15',
+        'keyUsage':             '2.5.29.15',
         'basicConstraints':     '2.5.29.19',
-        'cRLDistributionPoints':    '2.5.29.31',
-        'certificatePolicies':      '2.5.29.32',
-        'authorityKeyIdentifier':   '2.5.29.35',
+        'cRLDistributionPoints':'2.5.29.31',
+        'certificatePolicies':  '2.5.29.32',
+        'authorityKeyIdentifier':'2.5.29.35',
         'extKeyUsage':          '2.5.29.37',
 
-        'anyExtendedKeyUsage':      '2.5.29.37.0',
+        'anyExtendedKeyUsage':  '2.5.29.37.0',
         'serverAuth':           '1.3.6.1.5.5.7.3.1',
         'clientAuth':           '1.3.6.1.5.5.7.3.2',
         'codeSigning':          '1.3.6.1.5.5.7.3.3',
@@ -1760,6 +1780,14 @@ KJUR.asn1.x509.OID = new function(params) {
         'pkcs5PBKDF2':          '1.2.840.113549.1.5.12',
 
         'des-EDE3-CBC':         '1.2.840.113549.3.7',
+
+        'data':                 '1.2.840.113549.1.7.1', // CMS data
+        'signed-data':          '1.2.840.113549.1.7.2', // CMS signed-data
+        'enveloped-data':       '1.2.840.113549.1.7.3', // CMS enveloped-data
+        'digested-data':        '1.2.840.113549.1.7.5', // CMS digested-data
+        'encrypted-data':       '1.2.840.113549.1.7.6', // CMS encrypted-data
+        'authenticated-data':   '1.2.840.113549.1.9.16.1.2', // CMS authenticated-data
+        'tstinfo':              '1.2.840.113549.1.9.16.1.4', // RFC3161 TSTInfo
     };
 
     this.objCache = {};
@@ -1932,23 +1960,23 @@ KJUR.asn1.x509.X509Util.newCertPEM = function(param) {
         }
     }
 
-	// set signature
-	if (param.cakey === undefined && param.sighex === undefined)
-		throw "param cakey and sighex undefined.";
+        // set signature
+        if (param.cakey === undefined && param.sighex === undefined)
+                throw "param cakey and sighex undefined.";
 
     var caKey = null;
-	var cert = null;
+        var cert = null;
 
     if (param.cakey) {
         caKey = KEYUTIL.getKey.apply(null, param.cakey);
-		cert = new ns1.Certificate({'tbscertobj': o, 'prvkeyobj': caKey});
-		cert.sign();
-	}
+                cert = new ns1.Certificate({'tbscertobj': o, 'prvkeyobj': caKey});
+                cert.sign();
+        }
 
-	if (param.sighex) {
-		cert = new ns1.Certificate({'tbscertobj': o});
-		cert.setSignatureHex(param.sighex);
-	}
+        if (param.sighex) {
+                cert = new ns1.Certificate({'tbscertobj': o});
+                cert.setSignatureHex(param.sighex);
+        }
 
     return cert.getPEMString();
 };

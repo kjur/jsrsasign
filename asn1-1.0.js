@@ -1,9 +1,9 @@
-/*! asn1-1.0.4.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1-1.0.5.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
  *
- * Copyright (c) 2013 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2014 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.0.4 (2013-Oct-02)
+ * @version asn1 1.0.5 (2014-May-17)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -885,25 +885,25 @@ YAHOO.lang.extend(KJUR.asn1.DERNull, KJUR.asn1.ASN1Object);
  */
 KJUR.asn1.DERObjectIdentifier = function(params) {
     var itox = function(i) {
-	var h = i.toString(16);
-	if (h.length == 1) h = '0' + h;
-	return h;
+        var h = i.toString(16);
+        if (h.length == 1) h = '0' + h;
+        return h;
     };
     var roidtox = function(roid) {
-	var h = '';
-	var bi = new BigInteger(roid, 10);
-	var b = bi.toString(2);
-	var padLen = 7 - b.length % 7;
-	if (padLen == 7) padLen = 0;
-	var bPad = '';
-	for (var i = 0; i < padLen; i++) bPad += '0';
-	b = bPad + b;
-	for (var i = 0; i < b.length - 1; i += 7) {
-	    var b8 = b.substr(i, 7);
-	    if (i != b.length - 7) b8 = '1' + b8;
-	    h += itox(parseInt(b8, 2));
-	}
-	return h;
+        var h = '';
+        var bi = new BigInteger(roid, 10);
+        var b = bi.toString(2);
+        var padLen = 7 - b.length % 7;
+        if (padLen == 7) padLen = 0;
+        var bPad = '';
+        for (var i = 0; i < padLen; i++) bPad += '0';
+        b = bPad + b;
+        for (var i = 0; i < b.length - 1; i += 7) {
+            var b8 = b.substr(i, 7);
+            if (i != b.length - 7) b8 = '1' + b8;
+            h += itox(parseInt(b8, 2));
+        }
+        return h;
     }
 
     KJUR.asn1.DERObjectIdentifier.superclass.constructor.call(this);
@@ -917,10 +917,10 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
      * @param {String} newHexString hexadecimal value of OID bytes
      */
     this.setValueHex = function(newHexString) {
-	this.hTLV = null;
-	this.isModified = true;
-	this.s = null;
-	this.hV = newHexString;
+        this.hTLV = null;
+        this.isModified = true;
+        this.s = null;
+        this.hV = newHexString;
     };
 
     /**
@@ -931,21 +931,21 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
      * @param {String} oidString OID string (ex. 2.5.4.13)
      */
     this.setValueOidString = function(oidString) {
-	if (! oidString.match(/^[0-9.]+$/)) {
-	    throw "malformed oid string: " + oidString;
-	}
-	var h = '';
-	var a = oidString.split('.');
-	var i0 = parseInt(a[0]) * 40 + parseInt(a[1]);
-	h += itox(i0);
-	a.splice(0, 2);
-	for (var i = 0; i < a.length; i++) {
-	    h += roidtox(a[i]);
-	}
-	this.hTLV = null;
-	this.isModified = true;
-	this.s = null;
-	this.hV = h;
+        if (! oidString.match(/^[0-9.]+$/)) {
+            throw "malformed oid string: " + oidString;
+        }
+        var h = '';
+        var a = oidString.split('.');
+        var i0 = parseInt(a[0]) * 40 + parseInt(a[1]);
+        h += itox(i0);
+        a.splice(0, 2);
+        for (var i = 0; i < a.length; i++) {
+            h += roidtox(a[i]);
+        }
+        this.hTLV = null;
+        this.isModified = true;
+        this.s = null;
+        this.hV = h;
     };
 
     /**
@@ -960,30 +960,30 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
      * Otherwise raise error.
      */
     this.setValueName = function(oidName) {
-	if (typeof KJUR.asn1.x509.OID.name2oidList[oidName] != "undefined") {
-	    var oid = KJUR.asn1.x509.OID.name2oidList[oidName];
-	    this.setValueOidString(oid);
-	} else {
-	    throw "DERObjectIdentifier oidName undefined: " + oidName;
-	}
+        if (typeof KJUR.asn1.x509.OID.name2oidList[oidName] != "undefined") {
+            var oid = KJUR.asn1.x509.OID.name2oidList[oidName];
+            this.setValueOidString(oid);
+        } else {
+            throw "DERObjectIdentifier oidName undefined: " + oidName;
+        }
     };
 
     this.getFreshValueHex = function() {
-	return this.hV;
+        return this.hV;
     };
 
     if (typeof params != "undefined") {
-	if (typeof params == "string" && params.match(/^[0-2].[0-9.]+$/)) {
-	    this.setValueOidString(params);
-	} else if (KJUR.asn1.x509.OID.name2oidList[params] !== undefined) {
-	    this.setValueOidString(KJUR.asn1.x509.OID.name2oidList[params]);
-	} else if (typeof params['oid'] != "undefined") {
-	    this.setValueOidString(params['oid']);
-	} else if (typeof params['hex'] != "undefined") {
-	    this.setValueHex(params['hex']);
-	} else if (typeof params['name'] != "undefined") {
-	    this.setValueName(params['name']);
-	}
+        if (typeof params == "string" && params.match(/^[0-2].[0-9.]+$/)) {
+            this.setValueOidString(params);
+        } else if (KJUR.asn1.x509.OID.name2oidList[params] !== undefined) {
+            this.setValueOidString(KJUR.asn1.x509.OID.name2oidList[params]);
+        } else if (typeof params['oid'] != "undefined") {
+            this.setValueOidString(params['oid']);
+        } else if (typeof params['hex'] != "undefined") {
+            this.setValueHex(params['hex']);
+        } else if (typeof params['name'] != "undefined") {
+            this.setValueName(params['name']);
+        }
     }
 };
 YAHOO.lang.extend(KJUR.asn1.DERObjectIdentifier, KJUR.asn1.ASN1Object);
@@ -1106,23 +1106,32 @@ KJUR.asn1.DERUTCTime = function(params) {
      * @param {Date} dateObject Date object to set ASN.1 value(V)
      */
     this.setByDate = function(dateObject) {
-	this.hTLV = null;
-	this.isModified = true;
-	this.date = dateObject;
-	this.s = this.formatDate(this.date, 'utc');
-	this.hV = stohex(this.s);
+        this.hTLV = null;
+        this.isModified = true;
+        this.date = dateObject;
+        this.s = this.formatDate(this.date, 'utc');
+        this.hV = stohex(this.s);
+    };
+
+    this.getFreshValueHex = function() {
+        if (typeof this.date == "undefined" && typeof this.s == "undefined") {
+            this.date = new Date();
+            this.s = this.formatDate(this.date, 'utc');
+            this.hV = stohex(this.s);
+        }
+        return this.hV;
     };
 
     if (typeof params != "undefined") {
-	if (typeof params['str'] != "undefined") {
-	    this.setString(params['str']);
-	} else if (typeof params == "string" && params.match(/^[0-9]{12}Z$/)) {
-	    this.setString(params);
-	} else if (typeof params['hex'] != "undefined") {
-	    this.setStringHex(params['hex']);
-	} else if (typeof params['date'] != "undefined") {
-	    this.setByDate(params['date']);
-	}
+        if (typeof params['str'] != "undefined") {
+            this.setString(params['str']);
+        } else if (typeof params == "string" && params.match(/^[0-9]{12}Z$/)) {
+            this.setString(params);
+        } else if (typeof params['hex'] != "undefined") {
+            this.setStringHex(params['hex']);
+        } else if (typeof params['date'] != "undefined") {
+            this.setByDate(params['date']);
+        }
     }
 };
 YAHOO.lang.extend(KJUR.asn1.DERUTCTime, KJUR.asn1.DERAbstractTime);
@@ -1162,23 +1171,32 @@ KJUR.asn1.DERGeneralizedTime = function(params) {
      * o.setByDate(date);
      */
     this.setByDate = function(dateObject) {
-	this.hTLV = null;
-	this.isModified = true;
-	this.date = dateObject;
-	this.s = this.formatDate(this.date, 'gen');
-	this.hV = stohex(this.s);
+        this.hTLV = null;
+        this.isModified = true;
+        this.date = dateObject;
+        this.s = this.formatDate(this.date, 'gen');
+        this.hV = stohex(this.s);
+    };
+
+    this.getFreshValueHex = function() {
+        if (typeof this.date == "undefined" && typeof this.s == "undefined") {
+            this.date = new Date();
+            this.s = this.formatDate(this.date, 'gen');
+            this.hV = stohex(this.s);
+        }
+        return this.hV;
     };
 
     if (typeof params != "undefined") {
-	if (typeof params['str'] != "undefined") {
-	    this.setString(params['str']);
-	} else if (typeof params == "string" && params.match(/^[0-9]{14}Z$/)) {
-	    this.setString(params);
-	} else if (typeof params['hex'] != "undefined") {
-	    this.setStringHex(params['hex']);
-	} else if (typeof params['date'] != "undefined") {
-	    this.setByDate(params['date']);
-	}
+        if (typeof params['str'] != "undefined") {
+            this.setString(params['str']);
+        } else if (typeof params == "string" && params.match(/^[0-9]{14}Z$/)) {
+            this.setString(params);
+        } else if (typeof params['hex'] != "undefined") {
+            this.setStringHex(params['hex']);
+        } else if (typeof params['date'] != "undefined") {
+            this.setByDate(params['date']);
+        }
     }
 };
 YAHOO.lang.extend(KJUR.asn1.DERGeneralizedTime, KJUR.asn1.DERAbstractTime);
@@ -1202,13 +1220,13 @@ KJUR.asn1.DERSequence = function(params) {
     KJUR.asn1.DERSequence.superclass.constructor.call(this, params);
     this.hT = "30";
     this.getFreshValueHex = function() {
-	var h = '';
-	for (var i = 0; i < this.asn1Array.length; i++) {
-	    var asn1Obj = this.asn1Array[i];
-	    h += asn1Obj.getEncodedHex();
-	}
-	this.hV = h;
-	return this.hV;
+        var h = '';
+        for (var i = 0; i < this.asn1Array.length; i++) {
+            var asn1Obj = this.asn1Array[i];
+            h += asn1Obj.getEncodedHex();
+        }
+        this.hV = h;
+        return this.hV;
     };
 };
 YAHOO.lang.extend(KJUR.asn1.DERSequence, KJUR.asn1.DERAbstractStructured);
@@ -1225,22 +1243,31 @@ YAHOO.lang.extend(KJUR.asn1.DERSequence, KJUR.asn1.DERAbstractStructured);
  * following properties:
  * <ul>
  * <li>array - specify array of ASN1Object to set elements of content</li>
+ * <li>sortflag - flag for sort (default: true). ASN.1 BER is not sorted in 'SET OF'.</li>
  * </ul>
- * NOTE: 'params' can be omitted.
+ * NOTE1: 'params' can be omitted.<br/>
+ * NOTE2: sortflag is supported since 1.0.5.
  */
 KJUR.asn1.DERSet = function(params) {
     KJUR.asn1.DERSet.superclass.constructor.call(this, params);
     this.hT = "31";
+    this.sortFlag = true; // item shall be sorted only in ASN.1 DER
     this.getFreshValueHex = function() {
-	var a = new Array();
-	for (var i = 0; i < this.asn1Array.length; i++) {
-	    var asn1Obj = this.asn1Array[i];
-	    a.push(asn1Obj.getEncodedHex());
-	}
-	a.sort();
-	this.hV = a.join('');
-	return this.hV;
+        var a = new Array();
+        for (var i = 0; i < this.asn1Array.length; i++) {
+            var asn1Obj = this.asn1Array[i];
+            a.push(asn1Obj.getEncodedHex());
+        }
+        if (this.sortFlag == true) a.sort();
+        this.hV = a.join('');
+        return this.hV;
     };
+
+    if (typeof params != "undefined") {
+        if (typeof params.sortflag != "undefined" &&
+            params.sortflag == false)
+            this.sortFlag = false;
+    }
 };
 YAHOO.lang.extend(KJUR.asn1.DERSet, KJUR.asn1.DERAbstractStructured);
 
@@ -1286,36 +1313,36 @@ KJUR.asn1.DERTaggedObject = function(params) {
      * @param {ASN1Object} asn1Object ASN.1 to encapsulate
      */
     this.setASN1Object = function(isExplicitFlag, tagNoHex, asn1Object) {
-	this.hT = tagNoHex;
-	this.isExplicit = isExplicitFlag;
-	this.asn1Object = asn1Object;
-	if (this.isExplicit) {
-	    this.hV = this.asn1Object.getEncodedHex();
-	    this.hTLV = null;
-	    this.isModified = true;
-	} else {
-	    this.hV = null;
-	    this.hTLV = asn1Object.getEncodedHex();
-	    this.hTLV = this.hTLV.replace(/^../, tagNoHex);
-	    this.isModified = false;
-	}
+        this.hT = tagNoHex;
+        this.isExplicit = isExplicitFlag;
+        this.asn1Object = asn1Object;
+        if (this.isExplicit) {
+            this.hV = this.asn1Object.getEncodedHex();
+            this.hTLV = null;
+            this.isModified = true;
+        } else {
+            this.hV = null;
+            this.hTLV = asn1Object.getEncodedHex();
+            this.hTLV = this.hTLV.replace(/^../, tagNoHex);
+            this.isModified = false;
+        }
     };
 
     this.getFreshValueHex = function() {
-	return this.hV;
+        return this.hV;
     };
 
     if (typeof params != "undefined") {
-	if (typeof params['tag'] != "undefined") {
-	    this.hT = params['tag'];
-	}
-	if (typeof params['explicit'] != "undefined") {
-	    this.isExplicit = params['explicit'];
-	}
-	if (typeof params['obj'] != "undefined") {
-	    this.asn1Object = params['obj'];
-	    this.setASN1Object(this.isExplicit, this.hT, this.asn1Object);
-	}
+        if (typeof params['tag'] != "undefined") {
+            this.hT = params['tag'];
+        }
+        if (typeof params['explicit'] != "undefined") {
+            this.isExplicit = params['explicit'];
+        }
+        if (typeof params['obj'] != "undefined") {
+            this.asn1Object = params['obj'];
+            this.setASN1Object(this.isExplicit, this.hT, this.asn1Object);
+        }
     }
 };
 YAHOO.lang.extend(KJUR.asn1.DERTaggedObject, KJUR.asn1.ASN1Object);

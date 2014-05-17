@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="jsrsasign : The 'jsrsasign' (RSA-Sign JavaScript Library) is a open source free pure JavaScript implementation of PKCS#1 v2.1 RSASSA-PKCS1-v1_5 RSA signing and validation algorithm." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <title>jsrsasign Old News</title>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <h1 id="project_title">jsrsasign Old News Archive</h1>
+          <a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
+          <a href="https://github.com/kjur/jsrsasign/tags/" target="_blank">DOWNLOADS</a> | 
+          <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+          <a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+          <a href="http://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+<!-- now editing -->
+<h1>Old News</h1>
+
+<dl>
+<dt><b>2013-Oct-02</b>: 
+<dd>Release 4.1.6 is now available.
+<ul>
+<li>DSA signature algorithm support (However Signature and KEYUTIL class don't support yet)</li>
+<li>KEYUTIL.generateKeypair method added</li>
+<li>ASN1Util.jsonToASN1HEX method added</li>
+<li>HmacSHA384 support</li>
+</ul>
+
+<dt><b>2013-Sep-23</b>: 
+<dd>Release 4.1.3 is now available.
+<ul>
+<li>ASNUtil.newObject update for tagged object</li>
+<li>PKCS5PKEY class was moved to KEYUTIL class and KEYUTIL class has more generic getKey() method.</li>
+</ul>
+
+<dt><b>2013-Sep-12</b>: 
+<dd>Release 4.1.2 is now available.
+<ul>
+<li>new ASNUtil.newObject method for easy ASN.1 Object generation. Please see 
+<a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.ASN1Util.html#.newObject">API document</a> and <a href="http://kjur.github.io/jsrsasign/test/qunit-do-asn1-newobj.html">test codes</a> for usage.</li>
+<li>Minimized all in one code <a href="http://kjur.github.io/jsrsasign/jsrsasign-4.1.2-all-min.js">jsrsasign-4.1.2-all-min.js</a> is also provided.</li>
+</ul>
+
+<dt><b>2013-Aug-25</b>: 
+<dd>Release 4.1.0 is now available.
+<ul>
+<li>RSAPSS support in Signature class.</li>
+<li>add useful init() method for Signature class</li>
+<li>add ECDSA support and getKey methods to PKCS5PKEY class</li>
+</ul>
+
+<dt><b>2013-Aug-17</b>: 
+<dd>Release 4.0.5 is now available.
+<ul>
+<li>Message authentication code (MAC) class added.</li>
+</ul>
+
+<dt><b>2013-Jul-23</b>: 
+<dd>Release 4.0.2 is now available.
+<ul>
+<li>RSAPSS signing and validation fix by Davegithub.com/davedoesdev)</li>
+</ul>
+
+<dt><b>2013-Jul-18</b>: 
+<dd>Release 4.0.0 is now available.
+<ul>
+<li>ECC key generation and ECDSA signing and verification support</li>
+<li>Currently supports secp256r1, secp256k1 and secp384r1 curves</li>
+<li>You can specify other curves such like secp192r1 or NIST P-521 however
+it can't be signed nor verified properly with other curves. 
+I appreciate if you fix the bugs.</li>
+</ul>
+
+<dt><b>2013-May-29</b>: 
+<dd>Release 3.1.3 is now available.
+<ul>
+<li><a href="http://crypto.stanford.edu/sjcl/">Stanford JavaScript Crypto Library</a> support in MessageDigest class.</li>
+</ul>
+
+<dt><b>2013-May-27</b>: 
+<dd>Release 3.1.2 is now available.
+<ul>
+<li>add some methods to 'pkcs5pkey.js' to load encrypted PKCS#8 PEM private key.</li>
+</ul>
+
+<dt><b>2013-May-20</b>: 
+<dd>Release 3.1.1 is now available.
+<ul>
+<li>add some methods to 'pkcs5pkey.js' to generate encrypted PKCS#5 PEM private key.</li>
+</ul>
+
+<dt><b>2013-May-16</b>: 
+<dd>Release 3.1.0 is now available.
+<ul>
+<li>CRL class added to issue CRL.</li>
+</ul>
+
+<dt><b>2013-May-13</b>: 
+<dd>Release 3.0.5 is now available.
+<ul>
+<li>method getRSAKeyFromPlainPKCS8PEM added to PKCS5PKEY class to load
+unencrypted PEM formatted PKCS#8 private key.</li>
+</ul>
+
+<dt><b>2013-May-13</b>: 
+<dd>Release 3.0.4 is now available.
+<ul>
+<li>hash algorithm script rsasign-1.2.js uses was changed from Paul Johnstons's to CryptJS.</li>
+<li>static hash method md5,sha1,sha256,sha512,ripemd160 added to KJUR.crypto.Util</li>
+</ul>
+
+<dt><b>2013-May-12</b>: 
+<dd>Release 3.0.3 is now available.
+<ul>
+<li>ExtKeyUsage class added to asn1x509.js.</li>
+</ul>
+
+<dt><b>2013-May-12</b>: 
+<dd>Release 3.0.2 is now available.
+<ul>
+<li>Signature class now supports signature verification.</li>
+</ul>
+
+<dt><b>2013-May-12</b>: 
+<dd>Release 3.0.1 is now available.
+<ul>
+<li>MessageDigest/Signature class now supports MD5, SHA224, SHA256, SHA384, SHA512, RIPEMD160
+algorithms</li>
+<li><a href="index_ut.html">QUnit unit test codes</a> also be published. This may be useful
+for examples.
+</ul>
+
+<dt><b>2013-May-10</b>: 
+<dd>Release 3.0.0 is now available.
+<ul>
+<li>New feature: ASN.1 encoder class, MessageDigest, Signature class like Java JCE, certificate issuance.</li>
+<li>Merged contribution by David Halls. Thank you Dave!. Now jsrsasign supports PKCS#1 PSS and OAEP</li>
+<li><a href="tool_ca.html" target="_blank">'JavaScript Certification Authority' sample tool</a> added.
+</ul>
+
+<dt><b>2013-Apr-14</b>: 
+<dd>Release 2.0.0 is now available.
+<ul>
+<li>Now support reading passcode encrypted PKCS#5 RSA private key in pkcs5pkey.js. See
+  <a href="tool_pkcs5view.html" target="_blank">PKCS#5 sample</a>.</li>
+</ul>
+
+<dt><b>2013-Apr-14</b>: 
+<dd>Release 1.3.1 is now available.
+<ul>
+<li>add readPrivateKeyFromASN1HexString method to rsapem-1.1.js</li>
+</ul>
+
+<dt><b>2012-May-11</b>: 
+<dd>Release 1.3 is now available.
+<ul>
+<li>enhanced X509 class support for getting basic certificate fields.</li>
+<li>enhanced ASN1HEX class to refer decendant ASN.1 data</li>
+<li>API document added.</li>
+</ul>
+
+<dt><b>2012-May-03</b>: 
+<dd>Release 1.2.1 is released. Minified scripts are added.
+
+<dt><b>2012-Apr-30</b>:
+<dd>Release 1.2 is available for fixing critical zero padding bug and supporting some other hash functions.
+
+</dl>
+
+<h3>Old News Summary</h3>
+<ul>
+<li>Release 3.0.0: May 10, 2013 - ASN.1 encoder, MessageDigest and Signature class like Java JCE, PKCS#1 PSS and OAEP support</li>
+<li>Release 2.0.0: Apr 14, 2013 - encrypted PKCS#5 private key support</li>
+<li>Release 1.3.1: Apr 14, 2013 - add readPrivateKeyFromASN1HexString method to rsapem-1.1.js</li>
+<li>Release 1.3: Mar 11, 2012 - X509 and ASN1HEX class enhancement</li>
+<li>Release 1.2.1: Mar 3, 2012 - minified scripts (*.min.js) added</li>
+<li>Release 1.2: Apr 30, 2012 - Critical zero padding bug fix and some other hash support</li>
+<li>Release 1.1: Sep 25, 2010 - Web contents update</li>
+<li>Release 1.0: Jun 03, 2010 - Initial release at
+<a href="http://www9.atwiki.jp/kurushima/pub/jsrsa/" target="_blank">old site
+(www9.atwiki.jp/kurushima/pub/jsrsa/)
+</a>.
+</li>
+</ul>
+
+Back to <a href="index.html">TOP</a>.
+
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2014 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>

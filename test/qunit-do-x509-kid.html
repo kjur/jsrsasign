@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for X.509 Certificate 'x509.js'</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha256.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha224.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/ripemd160.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha512.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha384.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/sha1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../crypto-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../x509-1.1.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+var comodoSubCA1PEM = "-----BEGIN CERTIFICATE-----\r\n" +
+"MIIEqzCCA5OgAwIBAgIQLnmDLpCIh+qLjvMabuZ6RDANBgkqhkiG9w0BAQUFADCB\r\n" +
+"kzELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2Ug\r\n" +
+"Q2l0eTEeMBwGA1UEChMVVGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExho\r\n" +
+"dHRwOi8vd3d3LnVzZXJ0cnVzdC5jb20xGzAZBgNVBAMTElVUTiAtIERBVEFDb3Jw\r\n" +
+"IFNHQzAeFw0wNjEyMDEwMDAwMDBaFw0yMDA1MzAxMDQ4MzhaMIGBMQswCQYDVQQG\r\n" +
+"EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxm\r\n" +
+"b3JkMRowGAYDVQQKExFDT01PRE8gQ0EgTGltaXRlZDEnMCUGA1UEAxMeQ09NT0RP\r\n" +
+"IENlcnRpZmljYXRpb24gQXV0aG9yaXR5MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A\r\n" +
+"MIIBCgKCAQEA0ECLi3LjkRv3UcEbVASY06m/weaKXTuH+7uIzg3jLz8GlvCiKVCZ\r\n" +
+"rts7oVewdFFxze1CkU1B/qnI2GqGd0S7WWaXUF601CxwRM/aN5VCaTwwxHGzUvAh\r\n" +
+"TaHYujl8HJ6jJJ3ygxaYqhZ8Q5sVW7euNJH+1GImGEaaP+vB+fGQV+useg2L23Iw\r\n" +
+"ambV4EajcNxo2f8ESIl33rXp+2dtQem8Ob0y2WIC8bGoPW43nOIv4tOiJovGuFVD\r\n" +
+"iOEjPqXSJDlqR6sA1KGzqSX+DT+nHbrTUcELpNqsOO9VUCQFZUaTNE8tja3G1CEZ\r\n" +
+"0o7KBWFxB3NH5YoZEr0ETc5OnKVIrLsm9wIDAQABo4IBCTCCAQUwHwYDVR0jBBgw\r\n" +
+"FoAUUzLRs89/+uDxoF2FTpLSnkUdtE8wHQYDVR0OBBYEFAtY5YvGTBU3pECpMKkh\r\n" +
+"vkc2Wlb/MA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MCAGA1UdJQQZ\r\n" +
+"MBcGCisGAQQBgjcKAwMGCWCGSAGG+EIEATARBgNVHSAECjAIMAYGBFUdIAAwbQYD\r\n" +
+"VR0fBGYwZDAxoC+gLYYraHR0cDovL2NybC5jb21vZG9jYS5jb20vVVROLURBVEFD\r\n" +
+"b3JwU0dDLmNybDAvoC2gK4YpaHR0cDovL2NybC5jb21vZG8ubmV0L1VUTi1EQVRB\r\n" +
+"Q29ycFNHQy5jcmwwDQYJKoZIhvcNAQEFBQADggEBANheksSuFNxDrcKkw2dFBx35\r\n" +
+"N6IZxxw3NZETHAfEfUKmDvCGXENrDkTPviRhOkKpzp1Mr3k5cN0OBCBOlZw83rdg\r\n" +
+"umNDQO1qD4FJRrsek8BL8/jhNkkbb7YMDfKQV4r8bZPyKMf6hgoosxcOWYoutr/N\r\n" +
+"4axMZmzyVZFWtzK/seR9teg6ti/bspzaUJOOTsWsmn5cnhI8O03GUHCzZSuO92uh\r\n" +
+"uyXAALv17BZlgQ771KMhlneaqHS8U6rCOVD/CwIJYcyVt9eIavZcxWjTFJUaR1/Z\r\n" +
+"+y3kL48ThqsxE0ATrG7ttRAwixtQqc7ujMrrfLW5Fj3U+m+SbR6ivfsCSsVwvvE=\r\n" +
+"-----END CERTIFICATE-----\r\n";
+
+// _test/ossca.cer
+var ossca1PEM = "-----BEGIN CERTIFICATE-----\r\n" + 
+"MIICLDCCAZWgAwIBAgIJAIxHcf236ENLMA0GCSqGSIb3DQEBBQUAMC8xCzAJBgNV\r\n" +
+"BAYTAlVTMRMwEQYDVQQIDApTb21lLVN0YXRlMQswCQYDVQQKDAJUMTAeFw0xNDA0\r\n" +
+"MjAxNTU1NTZaFw0yNDA0MTkxNTU1NTZaMC8xCzAJBgNVBAYTAlVTMRMwEQYDVQQI\r\n" +
+"DApTb21lLVN0YXRlMQswCQYDVQQKDAJUMTCBnzANBgkqhkiG9w0BAQEFAAOBjQAw\r\n" +
+"gYkCgYEAtOhhsOtaxVLsLSgPkEqHX9SiE2qtD/XBGsWPyPDFSyZINsjBQx77IMos\r\n" +
+"K/0n3g5xgajG2riMa5VoFACtgyuppfbk4/JEXQJVcV9LWxSg/1SSq1C95IzgNpZX\r\n" +
+"R7ICHFCmsGn1FeT7Bww4pnzRKC+tSsYT8v+CamMGq9grnwX6upECAwEAAaNQME4w\r\n" +
+"HQYDVR0OBBYEFPkuxFULX3Z0FQBTtM9SZQLDEF65MB8GA1UdIwQYMBaAFPkuxFUL\r\n" +
+"X3Z0FQBTtM9SZQLDEF65MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEA\r\n" +
+"I7dKuHCwQV8EI6CZhF7fKSL49IX70OSKkXkZX+15F9Xo1Si9Uyd+bKKixX8aD6ao\r\n" +
+"Hk+bNegGa8WnfE4IaZm+JeVI61hCziPpDYPw11EYUUgyz+nwAv0qLAAtRAzbrQW4\r\n" +
+"2jEUks/ZQvJT4NDxELJXpF4HTDEgyDxq8W/zcDDv+lU=\r\n" +
+"-----END CERTIFICATE-----\r\n";
+
+test("kid test1", function() {
+  var info = X509.getPublicKeyInfoPropOfCertPEM(ossca1PEM);
+  var pubKeyHex = info.keyhex;
+  var kid = KJUR.crypto.Util.hashHex(pubKeyHex, "sha1");
+  equal(pubKeyHex, "30818902818100b4e861b0eb5ac552ec2d280f904a875fd4a2136aad0ff5c11ac58fc8f0c54b264836c8c1431efb20ca2c2bfd27de0e7181a8c6dab88c6b95681400ad832ba9a5f6e4e3f2445d0255715f4b5b14a0ff5492ab50bde48ce036965747b2021c50a6b069f515e4fb070c38a67cd1282fad4ac613f2ff826a6306abd82b9f05faba910203010001", "pubkey");
+  equal(kid, "f92ec4550b5f7674150053b4cf526502c3105eb9", "skid");
+});
+
+
+});
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+</body>
+<center><p>&copy; 2010 Kenji Urushima</p></center>
+</html>
+

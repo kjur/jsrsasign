@@ -156,7 +156,7 @@ test("IA5String Test", function() {
 });
 
 test("UTCTime Test", function() {
-  expect(4);
+  expect(5);
 
   var d1 = new KJUR.asn1.DERUTCTime();
   d1.setString('130430125959Z');
@@ -172,10 +172,14 @@ test("UTCTime Test", function() {
 
   var d4 = new KJUR.asn1.DERUTCTime({'date':new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0))});
   equal(d4.s, "150131000000Z", "constructor date argument");
+
+  var d5 = new KJUR.asn1.DERUTCTime();
+  var d5hex = d5.getEncodedHex()
+  equal(d5hex.substr(0, 4), "170d", "now[0,4]=170d");
 });
 
 test("GeneralizedTime Test", function() {
-  expect(4);
+  expect(5);
   var d1 = new KJUR.asn1.DERGeneralizedTime();
   d1.setString('20130430125959Z');
   equal(d1.getEncodedHex(), "180f32303133303433303132353935395a", 
@@ -192,6 +196,10 @@ test("GeneralizedTime Test", function() {
   var date4 = new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0));
   var d4 = new KJUR.asn1.DERGeneralizedTime({'date': date4});
   equal(d4.s, "20150131000000Z", "constructor date argument");
+
+  var d5 = new KJUR.asn1.DERGeneralizedTime();
+  var d5hex = d5.getEncodedHex()
+  equal(d5hex.substr(0, 4), "180f", "now[0,4]=180f");
 });
 
 test("Sequence Test", function() {

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsjws - supported algorithm table</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">jsrsasign: supported algorithm table</h1>
+<a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://github.com/kjur/jsrsasign/tags/" target="_blank">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+<a href="http://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<div><i>for jsrsasign 4.2.0: LAST UPDATE: 2013-Oct-07</i></div>
+<p>
+Here is the list of supported algortihms in jsrsasign.
+</p>
+
+<table>
+<tr>
+<th>Function</th>
+<th>Algorithm</th>
+<th>Note</th>
+</tr>
+
+<tr>
+<td>Signature algorithm</td>
+<td>RSA, RSAPSS, ECDSA, DSA</td>
+<td>
+based on
+<a href="http://www-cs-students.stanford.edu/~tjw/jsbn/">Tom Wu's Lib(RSA)</a>,
+<a href="https://github.com/davedoesdev">David Halls's contribution(RSAPSS)</a>, 
+<a href="http://bitcoinjs.org/">BitCoinJS(ECDSA)</a> and 
+<a href="http://openpgpjs.org/">OpenPGP.js(DSA).
+</td>
+</tr>
+
+<tr>
+<td>Message authentication code</td>
+<td>Hmac{MD5,SHA1,SHA224,SHA256,SHA384,SHA512}</td>
+<td>
+based on <a href="http://crypto-js.googlecode.com/">CryptoJS</a>
+</td>
+</tr>
+
+<tr>
+<td>Message digest</td>
+<td>MD5,SHA{1,224,256,384,512},RIPEMD160</td>
+<td>
+based on <a href="http://crypto-js.googlecode.com/">CryptoJS</a> and
+<a href="http://crypto.stanford.edu/sjcl/">SJCL</a>
+</td>
+</tr>
+
+<tr>
+<td>Named curves of elliptic curve cryptography</td>
+<td>secp256r1,secp256k1,secp384r1</td>
+<td>
+based on <a href="http://bitcoinjs.org/">BitCoinJS</a> and 
+<a href="http://www-cs-students.stanford.edu/~tjw/jsbn/">Tom Wu's Lib</a>
+</td>
+</tr>
+
+<tr>
+<td>key protection algorithm for PKCS#8 encrypted private key</td>
+<td>PBKDF2/HmacSHA1/3DES</td>
+<td>
+based on <a href="http://crypto-js.googlecode.com/">CryptoJS</a>
+</td>
+</tr>
+
+<tr>
+<td>key protection algorithm for PKCS#5 encrypted private key</td>
+<td>DES-CBC, DES-EDE3-CBC, AES-{128,192,256}-CBC</td>
+<td>based on <a href="http://crypto-js.googlecode.com/">CryptoJS</a></td>
+</tr>
+
+</table>
+
+Back to <a href="index.html">TOP</a>.
+
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2013 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>
