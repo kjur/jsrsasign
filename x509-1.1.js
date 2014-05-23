@@ -349,7 +349,7 @@ X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
     }
 
     // 5. Public Key Hex
-    if (hCert.substr(a3[1], 02) != "03")
+    if (hCert.substr(a3[1], 2) != "03")
 	throw "malformed X.509 certificate PEM (code:006)"; // not bitstring
 
     var unusedBitAndKeyHex = ASN1HEX.getHexOfV_AtObj(hCert, a3[1]);
