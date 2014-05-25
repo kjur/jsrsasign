@@ -99,15 +99,19 @@ test("Null Test", function() {
 
 test("ObjectIdentifier Test", function() {
   var d = new KJUR.asn1.DERObjectIdentifier();
-  expect(4);
+
+  expect(5);
   d.setValueHex('550406');
   equal(d.getEncodedHex(), "0603550406", "setValueHex('550406') C:2.5.4.6");
   d.setValueOidString('2.5.4.6');
   equal(d.getEncodedHex(), "0603550406", "setValueOidString('2.5.4.6') C:2.5.4.6");
   d.setValueOidString('1.2.34.56789');
   equal(d.getEncodedHex(), "06052a2283bb55", "setValueOidString('1.2.34.56789')");
-  var d2 = new KJUR.asn1.DERObjectIdentifier({'oid':'2.5.4.6'});
-  equal(d2.getEncodedHex(), "0603550406", "constructor oid 2.5.4.6");
+  var d4 = new KJUR.asn1.DERObjectIdentifier({'oid':'2.5.4.6'});
+  equal(d4.getEncodedHex(), "0603550406", "constructor oid 2.5.4.6");
+
+  var d5 = new KJUR.asn1.DERObjectIdentifier({'oid':'0.1.1.2.2'});
+  equal(d5.getEncodedHex(), "060401010202", "oid 0.1.1.2.2");
 });
 
 test("UTF8String Test", function() {
@@ -179,7 +183,7 @@ test("UTCTime Test", function() {
 });
 
 test("GeneralizedTime Test", function() {
-  expect(5);
+  expect(7);
   var d1 = new KJUR.asn1.DERGeneralizedTime();
   d1.setString('20130430125959Z');
   equal(d1.getEncodedHex(), "180f32303133303433303132353935395a", 
@@ -200,6 +204,12 @@ test("GeneralizedTime Test", function() {
   var d5 = new KJUR.asn1.DERGeneralizedTime();
   var d5hex = d5.getEncodedHex()
   equal(d5hex.substr(0, 4), "180f", "now[0,4]=180f");
+  equal(d5.s.length, 15, "now length=15");
+
+  var d6 = new KJUR.asn1.DERGeneralizedTime({millis: true});
+  var d6hex = d6.getEncodedHex()
+  equal(d6.s.match(/^[0-9]+[.]?[0-9]*Z$/) != null, true, "now ({millis: true}) match/^d+.?d*Z$/");
+
 });
 
 test("Sequence Test", function() {

@@ -1,4 +1,4 @@
-/*! asn1-1.0.5.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1-1.0.6.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.0.5 (2014-May-17)
+ * @version asn1 1.0.6 (2014-May-21)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -33,7 +33,7 @@
  * </ul>
  * </p> 
  * NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
-  * @name KJUR
+ * @name KJUR
  * @namespace kjur's class library name space
  */
 if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
@@ -75,7 +75,8 @@ if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
  * <li>{@link KJUR.asn1.DERTaggedObject}</li>
  * </ul>
  * </p>
- * NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
+ * NOTE: Please ignore method summary and document of this namespace. 
+ * This caused by a bug of jsdoc2.
  * @name KJUR.asn1
  * @namespace
  */
@@ -89,39 +90,39 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  */
 KJUR.asn1.ASN1Util = new function() {
     this.integerToByteHex = function(i) {
-	var h = i.toString(16);
-	if ((h.length % 2) == 1) h = '0' + h;
-	return h;
+        var h = i.toString(16);
+        if ((h.length % 2) == 1) h = '0' + h;
+        return h;
     };
     this.bigIntToMinTwosComplementsHex = function(bigIntegerValue) {
-	var h = bigIntegerValue.toString(16);
-	if (h.substr(0, 1) != '-') {
-	    if (h.length % 2 == 1) {
-		h = '0' + h;
-	    } else {
-		if (! h.match(/^[0-7]/)) {
-		    h = '00' + h;
-		}
-	    }
-	} else {
-	    var hPos = h.substr(1);
-	    var xorLen = hPos.length;
-	    if (xorLen % 2 == 1) {
-		xorLen += 1;
-	    } else {
-		if (! h.match(/^[0-7]/)) {
-		    xorLen += 2;
-		}
-	    }
-	    var hMask = '';
-	    for (var i = 0; i < xorLen; i++) {
-		hMask += 'f';
-	    }
-	    var biMask = new BigInteger(hMask, 16);
-	    var biNeg = biMask.xor(bigIntegerValue).add(BigInteger.ONE);
-	    h = biNeg.toString(16).replace(/^-/, '');
-	}
-	return h;
+        var h = bigIntegerValue.toString(16);
+        if (h.substr(0, 1) != '-') {
+            if (h.length % 2 == 1) {
+                h = '0' + h;
+            } else {
+                if (! h.match(/^[0-7]/)) {
+                    h = '00' + h;
+                }
+            }
+        } else {
+            var hPos = h.substr(1);
+            var xorLen = hPos.length;
+            if (xorLen % 2 == 1) {
+                xorLen += 1;
+            } else {
+                if (! h.match(/^[0-7]/)) {
+                    xorLen += 2;
+                }
+            }
+            var hMask = '';
+            for (var i = 0; i < xorLen; i++) {
+                hMask += 'f';
+            }
+            var biMask = new BigInteger(hMask, 16);
+            var biNeg = biMask.xor(bigIntegerValue).add(BigInteger.ONE);
+            h = biNeg.toString(16).replace(/^-/, '');
+        }
+        return h;
     };
     /**
      * get PEM string from hexadecimal data and header string
@@ -140,14 +141,14 @@ KJUR.asn1.ASN1Util = new function() {
      * -----END PRIVATE KEY-----
      */
     this.getPEMStringFromHex = function(dataHex, pemHeader) {
-	var ns1 = KJUR.asn1;
-	var dataWA = CryptoJS.enc.Hex.parse(dataHex);
-	var dataB64 = CryptoJS.enc.Base64.stringify(dataWA);
-	var pemBody = dataB64.replace(/(.{64})/g, "$1\r\n");
+        var ns1 = KJUR.asn1;
+        var dataWA = CryptoJS.enc.Hex.parse(dataHex);
+        var dataB64 = CryptoJS.enc.Base64.stringify(dataWA);
+        var pemBody = dataB64.replace(/(.{64})/g, "$1\r\n");
         pemBody = pemBody.replace(/\r\n$/, '');
-	return "-----BEGIN " + pemHeader + "-----\r\n" + 
-               pemBody + 
-               "\r\n-----END " + pemHeader + "-----\r\n";
+        return "-----BEGIN " + pemHeader + "-----\r\n" + 
+            pemBody + 
+            "\r\n-----END " + pemHeader + "-----\r\n";
     };
 
     /**
@@ -200,67 +201,67 @@ KJUR.asn1.ASN1Util = new function() {
      *                   ]});
      */
     this.newObject = function(param) {
-	var ns1 = KJUR.asn1;
-	var keys = Object.keys(param);
-	if (keys.length != 1)
-	    throw "key of param shall be only one.";
-	var key = keys[0];
+        var ns1 = KJUR.asn1;
+        var keys = Object.keys(param);
+        if (keys.length != 1)
+            throw "key of param shall be only one.";
+        var key = keys[0];
 
-	if (":bool:int:bitstr:octstr:null:oid:utf8str:numstr:prnstr:telstr:ia5str:utctime:gentime:seq:set:tag:".indexOf(":" + key + ":") == -1)
-	    throw "undefined key: " + key;
+        if (":bool:int:bitstr:octstr:null:oid:utf8str:numstr:prnstr:telstr:ia5str:utctime:gentime:seq:set:tag:".indexOf(":" + key + ":") == -1)
+            throw "undefined key: " + key;
 
-	if (key == "bool")    return new ns1.DERBoolean(param[key]);
-	if (key == "int")     return new ns1.DERInteger(param[key]);
-	if (key == "bitstr")  return new ns1.DERBitString(param[key]);
-	if (key == "octstr")  return new ns1.DEROctetString(param[key]);
-	if (key == "null")    return new ns1.DERNull(param[key]);
-	if (key == "oid")     return new ns1.DERObjectIdentifier(param[key]);
-	if (key == "utf8str") return new ns1.DERUTF8String(param[key]);
-	if (key == "numstr")  return new ns1.DERNumericString(param[key]);
-	if (key == "prnstr")  return new ns1.DERPrintableString(param[key]);
-	if (key == "telstr")  return new ns1.DERTeletexString(param[key]);
-	if (key == "ia5str")  return new ns1.DERIA5String(param[key]);
-	if (key == "utctime") return new ns1.DERUTCTime(param[key]);
-	if (key == "gentime") return new ns1.DERGeneralizedTime(param[key]);
+        if (key == "bool")    return new ns1.DERBoolean(param[key]);
+        if (key == "int")     return new ns1.DERInteger(param[key]);
+        if (key == "bitstr")  return new ns1.DERBitString(param[key]);
+        if (key == "octstr")  return new ns1.DEROctetString(param[key]);
+        if (key == "null")    return new ns1.DERNull(param[key]);
+        if (key == "oid")     return new ns1.DERObjectIdentifier(param[key]);
+        if (key == "utf8str") return new ns1.DERUTF8String(param[key]);
+        if (key == "numstr")  return new ns1.DERNumericString(param[key]);
+        if (key == "prnstr")  return new ns1.DERPrintableString(param[key]);
+        if (key == "telstr")  return new ns1.DERTeletexString(param[key]);
+        if (key == "ia5str")  return new ns1.DERIA5String(param[key]);
+        if (key == "utctime") return new ns1.DERUTCTime(param[key]);
+        if (key == "gentime") return new ns1.DERGeneralizedTime(param[key]);
 
-	if (key == "seq") {
-	    var paramList = param[key];
-	    var a = [];
-	    for (var i = 0; i < paramList.length; i++) {
-		var asn1Obj = ns1.ASN1Util.newObject(paramList[i]);
-		a.push(asn1Obj);
-	    }
-	    return new ns1.DERSequence({'array': a});
-	}
+        if (key == "seq") {
+            var paramList = param[key];
+            var a = [];
+            for (var i = 0; i < paramList.length; i++) {
+                var asn1Obj = ns1.ASN1Util.newObject(paramList[i]);
+                a.push(asn1Obj);
+            }
+            return new ns1.DERSequence({'array': a});
+        }
 
-	if (key == "set") {
-	    var paramList = param[key];
-	    var a = [];
-	    for (var i = 0; i < paramList.length; i++) {
-		var asn1Obj = ns1.ASN1Util.newObject(paramList[i]);
-		a.push(asn1Obj);
-	    }
-	    return new ns1.DERSet({'array': a});
-	}
+        if (key == "set") {
+            var paramList = param[key];
+            var a = [];
+            for (var i = 0; i < paramList.length; i++) {
+                var asn1Obj = ns1.ASN1Util.newObject(paramList[i]);
+                a.push(asn1Obj);
+            }
+            return new ns1.DERSet({'array': a});
+        }
 
-	if (key == "tag") {
-	    var tagParam = param[key];
-	    if (Object.prototype.toString.call(tagParam) === '[object Array]' &&
-		tagParam.length == 3) {
-		var obj = ns1.ASN1Util.newObject(tagParam[2]);
-		return new ns1.DERTaggedObject({tag: tagParam[0], explicit: tagParam[1], obj: obj});
-	    } else {
-		var newParam = {};
-		if (tagParam.explicit !== undefined)
-		    newParam.explicit = tagParam.explicit;
-		if (tagParam.tag !== undefined)
-		    newParam.tag = tagParam.tag;
-		if (tagParam.obj === undefined)
-		    throw "obj shall be specified for 'tag'.";
-		newParam.obj = ns1.ASN1Util.newObject(tagParam.obj);
-		return new ns1.DERTaggedObject(newParam);
-	    }
-	}
+        if (key == "tag") {
+            var tagParam = param[key];
+            if (Object.prototype.toString.call(tagParam) === '[object Array]' &&
+                tagParam.length == 3) {
+                var obj = ns1.ASN1Util.newObject(tagParam[2]);
+                return new ns1.DERTaggedObject({tag: tagParam[0], explicit: tagParam[1], obj: obj});
+            } else {
+                var newParam = {};
+                if (tagParam.explicit !== undefined)
+                    newParam.explicit = tagParam.explicit;
+                if (tagParam.tag !== undefined)
+                    newParam.tag = tagParam.tag;
+                if (tagParam.obj === undefined)
+                    throw "obj shall be specified for 'tag'.";
+                newParam.obj = ns1.ASN1Util.newObject(tagParam.obj);
+                return new ns1.DERTaggedObject(newParam);
+            }
+        }
     };
 
     /**
@@ -278,8 +279,8 @@ KJUR.asn1.ASN1Util = new function() {
      * jsonToASN1HEX({'prnstr': 'aaa'}); 
      */
     this.jsonToASN1HEX = function(param) {
-	var asn1Obj = this.newObject(param);
-	return asn1Obj.getEncodedHex();
+        var asn1Obj = this.newObject(param);
+        return asn1Obj.getEncodedHex();
     };
 };
 
@@ -315,27 +316,27 @@ KJUR.asn1.ASN1Object = function() {
      * @return {String} hexadecimal string of ASN.1 TLV length(L)
      */
     this.getLengthHexFromValue = function() {
-	if (typeof this.hV == "undefined" || this.hV == null) {
-	    throw "this.hV is null or undefined.";
-	}
-	if (this.hV.length % 2 == 1) {
-	    throw "value hex must be even length: n=" + hV.length + ",v=" + this.hV;
-	}
-	var n = this.hV.length / 2;
-	var hN = n.toString(16);
-	if (hN.length % 2 == 1) {
-	    hN = "0" + hN;
-	}
-	if (n < 128) {
-	    return hN;
-	} else {
-	    var hNlen = hN.length / 2;
-	    if (hNlen > 15) {
-		throw "ASN.1 length too long to represent by 8x: n = " + n.toString(16);
-	    }
-	    var head = 128 + hNlen;
-	    return head.toString(16) + hN;
-	}
+        if (typeof this.hV == "undefined" || this.hV == null) {
+            throw "this.hV is null or undefined.";
+        }
+        if (this.hV.length % 2 == 1) {
+            throw "value hex must be even length: n=" + hV.length + ",v=" + this.hV;
+        }
+        var n = this.hV.length / 2;
+        var hN = n.toString(16);
+        if (hN.length % 2 == 1) {
+            hN = "0" + hN;
+        }
+        if (n < 128) {
+            return hN;
+        } else {
+            var hNlen = hN.length / 2;
+            if (hNlen > 15) {
+                throw "ASN.1 length too long to represent by 8x: n = " + n.toString(16);
+            }
+            var head = 128 + hNlen;
+            return head.toString(16) + hN;
+        }
     };
 
     /**
@@ -346,14 +347,14 @@ KJUR.asn1.ASN1Object = function() {
      * @return {String} hexadecimal string of ASN.1 TLV
      */
     this.getEncodedHex = function() {
-	if (this.hTLV == null || this.isModified) {
-	    this.hV = this.getFreshValueHex();
-	    this.hL = this.getLengthHexFromValue();
-	    this.hTLV = this.hT + this.hL + this.hV;
-	    this.isModified = false;
-	    //alert("first time: " + this.hTLV);
-	}
-	return this.hTLV;
+        if (this.hTLV == null || this.isModified) {
+            this.hV = this.getFreshValueHex();
+            this.hL = this.getLengthHexFromValue();
+            this.hTLV = this.hT + this.hL + this.hV;
+            this.isModified = false;
+            //alert("first time: " + this.hTLV);
+        }
+        return this.hTLV;
     };
 
     /**
@@ -364,12 +365,12 @@ KJUR.asn1.ASN1Object = function() {
      * @return {String} hexadecimal string of ASN.1 TLV value(V) bytes
      */
     this.getValueHex = function() {
-	this.getEncodedHex();
-	return this.hV;
+        this.getEncodedHex();
+        return this.hV;
     }
 
     this.getFreshValueHex = function() {
-	return '';
+        return '';
     };
 };
 
@@ -404,7 +405,7 @@ KJUR.asn1.DERAbstractString = function(params) {
      * @return {String} string value of this string object
      */
     this.getString = function() {
-	return this.s;
+        return this.s;
     };
 
     /**
@@ -415,10 +416,10 @@ KJUR.asn1.DERAbstractString = function(params) {
      * @param {String} newS value by a string to set
      */
     this.setString = function(newS) {
-	this.hTLV = null;
-	this.isModified = true;
-	this.s = newS;
-	this.hV = stohex(this.s);
+        this.hTLV = null;
+        this.isModified = true;
+        this.s = newS;
+        this.hV = stohex(this.s);
     };
 
     /**
@@ -429,24 +430,24 @@ KJUR.asn1.DERAbstractString = function(params) {
      * @param {String} newHexString value by a hexadecimal string to set
      */
     this.setStringHex = function(newHexString) {
-	this.hTLV = null;
-	this.isModified = true;
-	this.s = null;
-	this.hV = newHexString;
+        this.hTLV = null;
+        this.isModified = true;
+        this.s = null;
+        this.hV = newHexString;
     };
 
     this.getFreshValueHex = function() {
-	return this.hV;
+        return this.hV;
     };
 
     if (typeof params != "undefined") {
-	if (typeof params == "string") {
-	    this.setString(params);
-	} else if (typeof params['str'] != "undefined") {
-	    this.setString(params['str']);
-	} else if (typeof params['hex'] != "undefined") {
-	    this.setStringHex(params['hex']);
-	}
+        if (typeof params == "string") {
+            this.setString(params);
+        } else if (typeof params['str'] != "undefined") {
+            this.setString(params['str']);
+        } else if (typeof params['hex'] != "undefined") {
+            this.setStringHex(params['hex']);
+        }
     }
 };
 YAHOO.lang.extend(KJUR.asn1.DERAbstractString, KJUR.asn1.ASN1Object);
@@ -469,27 +470,46 @@ KJUR.asn1.DERAbstractTime = function(params) {
 
     // --- PRIVATE METHODS --------------------
     this.localDateToUTC = function(d) {
-	utc = d.getTime() + (d.getTimezoneOffset() * 60000);
-	var utcDate = new Date(utc);
-	return utcDate;
+        utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+        var utcDate = new Date(utc);
+        return utcDate;
     };
 
-    this.formatDate = function(dateObject, type) {
-	var pad = this.zeroPadding;
-	var d = this.localDateToUTC(dateObject);
-	var year = String(d.getFullYear());
-	if (type == 'utc') year = year.substr(2, 2);
-	var month = pad(String(d.getMonth() + 1), 2);
-	var day = pad(String(d.getDate()), 2);
-	var hour = pad(String(d.getHours()), 2);
-	var min = pad(String(d.getMinutes()), 2);
-	var sec = pad(String(d.getSeconds()), 2);
-	return year + month + day + hour + min + sec + 'Z';
+    /*
+     * format date string by Data object
+     * @name formatDate
+     * @memberOf KJUR.asn1.AbstractTime;
+     * @param {Date} dateObject 
+     * @param {string} type 'utc' or 'gen'
+     * @param {boolean} withMillis flag for with millisections or not
+     * @description
+     * 'withMillis' flag is supported from asn1 1.0.6.
+     */
+    this.formatDate = function(dateObject, type, withMillis) {
+        var pad = this.zeroPadding;
+        var d = this.localDateToUTC(dateObject);
+        var year = String(d.getFullYear());
+        if (type == 'utc') year = year.substr(2, 2);
+        var month = pad(String(d.getMonth() + 1), 2);
+        var day = pad(String(d.getDate()), 2);
+        var hour = pad(String(d.getHours()), 2);
+        var min = pad(String(d.getMinutes()), 2);
+        var sec = pad(String(d.getSeconds()), 2);
+        var s = year + month + day + hour + min + sec;
+        if (withMillis === true) {
+            var millis = d.getMilliseconds();
+            if (millis != 0) {
+                var sMillis = pad(String(millis), 3);
+                sMillis = sMillis.replace(/[0]+$/, "");
+                s = s + "." + sMillis;
+            }
+        }
+        return s + "Z";
     };
 
     this.zeroPadding = function(s, len) {
-	if (s.length >= len) return s;
-	return new Array(len - s.length + 1).join('0') + s;
+        if (s.length >= len) return s;
+        return new Array(len - s.length + 1).join('0') + s;
     };
 
     // --- PUBLIC METHODS --------------------
@@ -501,7 +521,7 @@ KJUR.asn1.DERAbstractTime = function(params) {
      * @return {String} string value of this time object
      */
     this.getString = function() {
-	return this.s;
+        return this.s;
     };
 
     /**
@@ -512,10 +532,10 @@ KJUR.asn1.DERAbstractTime = function(params) {
      * @param {String} newS value by a string to set such like "130430235959Z"
      */
     this.setString = function(newS) {
-	this.hTLV = null;
-	this.isModified = true;
-	this.s = newS;
-	this.hV = stohex(newS);
+        this.hTLV = null;
+        this.isModified = true;
+        this.s = newS;
+        this.hV = stohex(newS);
     };
 
     /**
@@ -531,12 +551,12 @@ KJUR.asn1.DERAbstractTime = function(params) {
      * @param {Integer} sec seconds of date
      */
     this.setByDateValue = function(year, month, day, hour, min, sec) {
-	var dateObject = new Date(Date.UTC(year, month - 1, day, hour, min, sec, 0));
-	this.setByDate(dateObject);
+        var dateObject = new Date(Date.UTC(year, month - 1, day, hour, min, sec, 0));
+        this.setByDate(dateObject);
     };
 
     this.getFreshValueHex = function() {
-	return this.hV;
+        return this.hV;
     };
 };
 YAHOO.lang.extend(KJUR.asn1.DERAbstractTime, KJUR.asn1.ASN1Object);
@@ -564,9 +584,9 @@ KJUR.asn1.DERAbstractStructured = function(params) {
      * @param {array} asn1ObjectArray array of ASN1Object to set
      */
     this.setByASN1ObjectArray = function(asn1ObjectArray) {
-	this.hTLV = null;
-	this.isModified = true;
-	this.asn1Array = asn1ObjectArray;
+        this.hTLV = null;
+        this.isModified = true;
+        this.asn1Array = asn1ObjectArray;
     };
 
     /**
@@ -577,16 +597,16 @@ KJUR.asn1.DERAbstractStructured = function(params) {
      * @param {ASN1Object} asn1Object to add
      */
     this.appendASN1Object = function(asn1Object) {
-	this.hTLV = null;
-	this.isModified = true;
-	this.asn1Array.push(asn1Object);
+        this.hTLV = null;
+        this.isModified = true;
+        this.asn1Array.push(asn1Object);
     };
 
     this.asn1Array = new Array();
     if (typeof params != "undefined") {
-	if (typeof params['array'] != "undefined") {
-	    this.asn1Array = params['array'];
-	}
+        if (typeof params['array'] != "undefined") {
+            this.asn1Array = params['array'];
+        }
     }
 };
 YAHOO.lang.extend(KJUR.asn1.DERAbstractStructured, KJUR.asn1.ASN1Object);
@@ -641,9 +661,9 @@ KJUR.asn1.DERInteger = function(params) {
      * @param {BigInteger} bigIntegerValue to set
      */
     this.setByBigInteger = function(bigIntegerValue) {
-	this.hTLV = null;
-	this.isModified = true;
-	this.hV = KJUR.asn1.ASN1Util.bigIntToMinTwosComplementsHex(bigIntegerValue);
+        this.hTLV = null;
+        this.isModified = true;
+        this.hV = KJUR.asn1.ASN1Util.bigIntToMinTwosComplementsHex(bigIntegerValue);
     };
 
     /**
@@ -654,8 +674,8 @@ KJUR.asn1.DERInteger = function(params) {
      * @param {Integer} integer value to set
      */
     this.setByInteger = function(intValue) {
-	var bi = new BigInteger(String(intValue), 10);
-	this.setByBigInteger(bi);
+        var bi = new BigInteger(String(intValue), 10);
+        this.setByBigInteger(bi);
     };
 
     /**
@@ -674,23 +694,23 @@ KJUR.asn1.DERInteger = function(params) {
      * new KJUR.asn1.DERInteger({'hex': '1fad'});
      */
     this.setValueHex = function(newHexString) {
-	this.hV = newHexString;
+        this.hV = newHexString;
     };
 
     this.getFreshValueHex = function() {
-	return this.hV;
+        return this.hV;
     };
 
     if (typeof params != "undefined") {
-	if (typeof params['bigint'] != "undefined") {
-	    this.setByBigInteger(params['bigint']);
-	} else if (typeof params['int'] != "undefined") {
-	    this.setByInteger(params['int']);
-	} else if (typeof params == "number") {
-	    this.setByInteger(params);
-	} else if (typeof params['hex'] != "undefined") {
-	    this.setValueHex(params['hex']);
-	}
+        if (typeof params['bigint'] != "undefined") {
+            this.setByBigInteger(params['bigint']);
+        } else if (typeof params['int'] != "undefined") {
+            this.setByInteger(params['int']);
+        } else if (typeof params == "number") {
+            this.setByInteger(params);
+        } else if (typeof params['hex'] != "undefined") {
+            this.setValueHex(params['hex']);
+        }
     }
 };
 YAHOO.lang.extend(KJUR.asn1.DERInteger, KJUR.asn1.ASN1Object);
@@ -724,9 +744,9 @@ KJUR.asn1.DERBitString = function(params) {
      * @param {String} newHexStringIncludingUnusedBits
      */
     this.setHexValueIncludingUnusedBits = function(newHexStringIncludingUnusedBits) {
-	this.hTLV = null;
-	this.isModified = true;
-	this.hV = newHexStringIncludingUnusedBits;
+        this.hTLV = null;
+        this.isModified = true;
+        this.hV = newHexStringIncludingUnusedBits;
     };
 
     /**
@@ -738,13 +758,13 @@ KJUR.asn1.DERBitString = function(params) {
      * @param {String} hValue
      */
     this.setUnusedBitsAndHexValue = function(unusedBits, hValue) {
-	if (unusedBits < 0 || 7 < unusedBits) {
-	    throw "unused bits shall be from 0 to 7: u = " + unusedBits;
-	}
-	var hUnusedBits = "0" + unusedBits;
-	this.hTLV = null;
-	this.isModified = true;
-	this.hV = hUnusedBits + hValue;
+        if (unusedBits < 0 || 7 < unusedBits) {
+            throw "unused bits shall be from 0 to 7: u = " + unusedBits;
+        }
+        var hUnusedBits = "0" + unusedBits;
+        this.hTLV = null;
+        this.isModified = true;
+        this.hV = hUnusedBits + hValue;
     };
 
     /**
@@ -759,22 +779,22 @@ KJUR.asn1.DERBitString = function(params) {
      * NOTE: Trailing zeros '0' will be ignored.
      */
     this.setByBinaryString = function(binaryString) {
-	binaryString = binaryString.replace(/0+$/, '');
-	var unusedBits = 8 - binaryString.length % 8;
-	if (unusedBits == 8) unusedBits = 0;
-	for (var i = 0; i <= unusedBits; i++) {
-	    binaryString += '0';
-	}
-	var h = '';
-	for (var i = 0; i < binaryString.length - 1; i += 8) {
-	    var b = binaryString.substr(i, 8);
-	    var x = parseInt(b, 2).toString(16);
-	    if (x.length == 1) x = '0' + x;
-	    h += x;  
-	}
-	this.hTLV = null;
-	this.isModified = true;
-	this.hV = '0' + unusedBits + h;
+        binaryString = binaryString.replace(/0+$/, '');
+        var unusedBits = 8 - binaryString.length % 8;
+        if (unusedBits == 8) unusedBits = 0;
+        for (var i = 0; i <= unusedBits; i++) {
+            binaryString += '0';
+        }
+        var h = '';
+        for (var i = 0; i < binaryString.length - 1; i += 8) {
+            var b = binaryString.substr(i, 8);
+            var x = parseInt(b, 2).toString(16);
+            if (x.length == 1) x = '0' + x;
+            h += x;  
+        }
+        this.hTLV = null;
+        this.isModified = true;
+        this.hV = '0' + unusedBits + h;
     };
 
     /**
@@ -787,15 +807,15 @@ KJUR.asn1.DERBitString = function(params) {
      * NOTE: Trailing falses will be ignored.
      */
     this.setByBooleanArray = function(booleanArray) {
-	var s = '';
-	for (var i = 0; i < booleanArray.length; i++) {
-	    if (booleanArray[i] == true) {
-		s += '1';
-	    } else {
-		s += '0';
-	    }
-	}
-	this.setByBinaryString(s);
+        var s = '';
+        for (var i = 0; i < booleanArray.length; i++) {
+            if (booleanArray[i] == true) {
+                s += '1';
+            } else {
+                s += '0';
+            }
+        }
+        this.setByBinaryString(s);
     };
 
     /**
@@ -809,27 +829,27 @@ KJUR.asn1.DERBitString = function(params) {
      * This static method may be useful to initialize boolean array.
      */
     this.newFalseArray = function(nLength) {
-	var a = new Array(nLength);
-	for (var i = 0; i < nLength; i++) {
-	    a[i] = false;
-	}
-	return a;
+        var a = new Array(nLength);
+        for (var i = 0; i < nLength; i++) {
+            a[i] = false;
+        }
+        return a;
     };
 
     this.getFreshValueHex = function() {
-	return this.hV;
+        return this.hV;
     };
 
     if (typeof params != "undefined") {
-	if (typeof params == "string" && params.toLowerCase().match(/^[0-9a-f]+$/)) {
-	    this.setHexValueIncludingUnusedBits(params);
+        if (typeof params == "string" && params.toLowerCase().match(/^[0-9a-f]+$/)) {
+            this.setHexValueIncludingUnusedBits(params);
         } else if (typeof params['hex'] != "undefined") {
-	    this.setHexValueIncludingUnusedBits(params['hex']);
-	} else if (typeof params['bin'] != "undefined") {
-	    this.setByBinaryString(params['bin']);
-	} else if (typeof params['array'] != "undefined") {
-	    this.setByBooleanArray(params['array']);
-	}
+            this.setHexValueIncludingUnusedBits(params['hex']);
+        } else if (typeof params['bin'] != "undefined") {
+            this.setByBinaryString(params['bin']);
+        } else if (typeof params['array'] != "undefined") {
+            this.setByBooleanArray(params['array']);
+        }
     }
 };
 YAHOO.lang.extend(KJUR.asn1.DERBitString, KJUR.asn1.ASN1Object);
@@ -1142,6 +1162,7 @@ YAHOO.lang.extend(KJUR.asn1.DERUTCTime, KJUR.asn1.DERAbstractTime);
  * @name KJUR.asn1.DERGeneralizedTime
  * @class class for ASN.1 DER GeneralizedTime
  * @param {Array} params associative array of parameters (ex. {'str': '20130430235959Z'})
+ * @property {Boolean} withMillis flag to show milliseconds or not
  * @extends KJUR.asn1.DERAbstractTime
  * @description
  * <br/>
@@ -1151,12 +1172,15 @@ YAHOO.lang.extend(KJUR.asn1.DERUTCTime, KJUR.asn1.DERAbstractTime);
  * <li>str - specify initial ASN.1 value(V) by a string (ex.'20130430235959Z')</li>
  * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
  * <li>date - specify Date object.</li>
+ * <li>millis - specify flag to show milliseconds (from 1.0.6)</li>
  * </ul>
- * NOTE: 'params' can be omitted.
+ * NOTE1: 'params' can be omitted.
+ * NOTE2: 'withMillis' property is supported from asn1 1.0.6.
  */
 KJUR.asn1.DERGeneralizedTime = function(params) {
     KJUR.asn1.DERGeneralizedTime.superclass.constructor.call(this, params);
     this.hT = "18";
+    this.withMillis = false;
 
     /**
      * set value by a Date object
@@ -1174,14 +1198,14 @@ KJUR.asn1.DERGeneralizedTime = function(params) {
         this.hTLV = null;
         this.isModified = true;
         this.date = dateObject;
-        this.s = this.formatDate(this.date, 'gen');
+        this.s = this.formatDate(this.date, 'gen', this.withMillis);
         this.hV = stohex(this.s);
     };
 
     this.getFreshValueHex = function() {
         if (typeof this.date == "undefined" && typeof this.s == "undefined") {
             this.date = new Date();
-            this.s = this.formatDate(this.date, 'gen');
+            this.s = this.formatDate(this.date, 'gen', this.withMillis);
             this.hV = stohex(this.s);
         }
         return this.hV;
@@ -1196,6 +1220,8 @@ KJUR.asn1.DERGeneralizedTime = function(params) {
             this.setStringHex(params['hex']);
         } else if (typeof params['date'] != "undefined") {
             this.setByDate(params['date']);
+        } else if (params.millis === true) {
+            this.withMillis = true;
         }
     }
 };

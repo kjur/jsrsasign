@@ -1,9 +1,9 @@
-/*! asn1hex-1.1.4.js (c) 2012-2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1hex-1.1.5.js (c) 2012-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
  *
- * Copyright (c) 2010-2013 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2014 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license/
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1hex 1.1.4 (2013-Oct-02)
+ * @version asn1hex 1.1.5 (2014-May-25)
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -50,11 +50,11 @@ var ASN1HEX = new function() {
      * @return byte length for ASN.1 L(length) bytes
      */
     this.getByteLengthOfL_AtObj = function(s, pos) {
-	if (s.substring(pos + 2, pos + 3) != '8') return 1;
-	var i = parseInt(s.substring(pos + 3, pos + 4));
-	if (i == 0) return -1; 		// length octet '80' indefinite length
-	if (0 < i && i < 10) return i + 1;	// including '8?' octet;
-	return -2;				// malformed format
+        if (s.substring(pos + 2, pos + 3) != '8') return 1;
+        var i = parseInt(s.substring(pos + 3, pos + 4));
+        if (i == 0) return -1;          // length octet '80' indefinite length
+        if (0 < i && i < 10) return i + 1;      // including '8?' octet;
+        return -2;                              // malformed format
     };
 
     /**
@@ -67,9 +67,9 @@ var ASN1HEX = new function() {
      * @return {String} hexadecimal string for ASN.1 L(length) bytes
      */
     this.getHexOfL_AtObj = function(s, pos) {
-	var len = this.getByteLengthOfL_AtObj(s, pos);
-	if (len < 1) return '';
-	return s.substring(pos + 2, pos + 2 + len * 2);
+        var len = this.getByteLengthOfL_AtObj(s, pos);
+        if (len < 1) return '';
+        return s.substring(pos + 2, pos + 2 + len * 2);
     };
 
     //   getting ASN.1 length value at the position 'idx' of
@@ -89,15 +89,15 @@ var ASN1HEX = new function() {
      * @return ASN.1 L(length) integer value
      */
     this.getIntOfL_AtObj = function(s, pos) {
-	var hLength = this.getHexOfL_AtObj(s, pos);
-	if (hLength == '') return -1;
-	var bi;
-	if (parseInt(hLength.substring(0, 1)) < 8) {
-	    bi = new BigInteger(hLength, 16);
-	} else {
-	    bi = new BigInteger(hLength.substring(2), 16);
-	}
-	return bi.intValue();
+        var hLength = this.getHexOfL_AtObj(s, pos);
+        if (hLength == '') return -1;
+        var bi;
+        if (parseInt(hLength.substring(0, 1)) < 8) {
+            bi = new BigInteger(hLength, 16);
+        } else {
+            bi = new BigInteger(hLength.substring(2), 16);
+        }
+        return bi.intValue();
     };
 
     /**
@@ -109,9 +109,9 @@ var ASN1HEX = new function() {
      * @param {Number} pos string index
      */
     this.getStartPosOfV_AtObj = function(s, pos) {
-	var l_len = this.getByteLengthOfL_AtObj(s, pos);
-	if (l_len < 0) return l_len;
-	return pos + (l_len + 1) * 2;
+        var l_len = this.getByteLengthOfL_AtObj(s, pos);
+        if (l_len < 0) return l_len;
+        return pos + (l_len + 1) * 2;
     };
 
     /**
@@ -124,9 +124,9 @@ var ASN1HEX = new function() {
      * @return {String} hexadecimal string of ASN.1 value.
      */
     this.getHexOfV_AtObj = function(s, pos) {
-	var pos1 = this.getStartPosOfV_AtObj(s, pos);
-	var len = this.getIntOfL_AtObj(s, pos);
-	return s.substring(pos1, pos1 + len * 2);
+        var pos1 = this.getStartPosOfV_AtObj(s, pos);
+        var len = this.getIntOfL_AtObj(s, pos);
+        return s.substring(pos1, pos1 + len * 2);
     };
 
     /**
@@ -140,10 +140,10 @@ var ASN1HEX = new function() {
      * @since 1.1
      */
     this.getHexOfTLV_AtObj = function(s, pos) {
-	var hT = s.substr(pos, 2);
-	var hL = this.getHexOfL_AtObj(s, pos);
-	var hV = this.getHexOfV_AtObj(s, pos);
-	return hT + hL + hV;
+        var hT = s.substr(pos, 2);
+        var hL = this.getHexOfL_AtObj(s, pos);
+        var hV = this.getHexOfV_AtObj(s, pos);
+        return hT + hL + hV;
     };
 
     /**
@@ -156,9 +156,9 @@ var ASN1HEX = new function() {
      * @return next sibling starting index for ASN.1 object string
      */
     this.getPosOfNextSibling_AtObj = function(s, pos) {
-	var pos1 = this.getStartPosOfV_AtObj(s, pos);
-	var len = this.getIntOfL_AtObj(s, pos);
-	return pos1 + len * 2;
+        var pos1 = this.getStartPosOfV_AtObj(s, pos);
+        var len = this.getIntOfL_AtObj(s, pos);
+        return pos1 + len * 2;
     };
 
     /**
@@ -171,25 +171,25 @@ var ASN1HEX = new function() {
      * @return {Array of Number} array of indexes for childen of ASN.1 objects
      */
     this.getPosArrayOfChildren_AtObj = function(h, pos) {
-	var a = new Array();
-	var p0 = this.getStartPosOfV_AtObj(h, pos);
-	a.push(p0);
+        var a = new Array();
+        var p0 = this.getStartPosOfV_AtObj(h, pos);
+        a.push(p0);
 
-	var len = this.getIntOfL_AtObj(h, pos);
-	var p = p0;
-	var k = 0;
-	while (1) {
-	    var pNext = this.getPosOfNextSibling_AtObj(h, p);
-	    if (pNext == null || (pNext - p0  >= (len * 2))) break;
-	    if (k >= 200) break;
-	    
-	    a.push(pNext);
-	    p = pNext;
-	    
-	    k++;
-	}
-	
-	return a;
+        var len = this.getIntOfL_AtObj(h, pos);
+        var p = p0;
+        var k = 0;
+        while (1) {
+            var pNext = this.getPosOfNextSibling_AtObj(h, p);
+            if (pNext == null || (pNext - p0  >= (len * 2))) break;
+            if (k >= 200) break;
+            
+            a.push(pNext);
+            p = pNext;
+            
+            k++;
+        }
+        
+        return a;
     };
 
     /**
@@ -204,8 +204,8 @@ var ASN1HEX = new function() {
      * @since 1.1
      */
     this.getNthChildIndex_AtObj = function(h, idx, nth) {
-	var a = this.getPosArrayOfChildren_AtObj(h, idx);
-	return a[nth];
+        var a = this.getPosArrayOfChildren_AtObj(h, idx);
+        return a[nth];
     };
 
     // ========== decendant methods ==============================
@@ -224,21 +224,21 @@ var ASN1HEX = new function() {
      * reference. Here is a sample structure and "nthList"s which
      * refers each objects.
      *
-     * SQUENCE               - [0]
-     *   SEQUENCE            - [0, 0]
-     *     IA5STRING 000     - [0, 0, 0]
-     *     UTF8STRING 001    - [0, 0, 1]
-     *   SET                 - [0, 1]
-     *     IA5STRING 010     - [0, 1, 0]
-     *     UTF8STRING 011    - [0, 1, 1]
+     * SQUENCE               - 
+     *   SEQUENCE            - [0]
+     *     IA5STRING 000     - [0, 0]
+     *     UTF8STRING 001    - [0, 1]
+     *   SET                 - [1]
+     *     IA5STRING 010     - [1, 0]
+     *     UTF8STRING 011    - [1, 1]
      */
     this.getDecendantIndexByNthList = function(h, currentIndex, nthList) {
-	if (nthList.length == 0) {
-	    return currentIndex;
-	}
-	var firstNth = nthList.shift();
-	var a = this.getPosArrayOfChildren_AtObj(h, currentIndex);
-	return this.getDecendantIndexByNthList(h, a[firstNth], nthList);
+        if (nthList.length == 0) {
+            return currentIndex;
+        }
+        var firstNth = nthList.shift();
+        var a = this.getPosArrayOfChildren_AtObj(h, currentIndex);
+        return this.getDecendantIndexByNthList(h, a[firstNth], nthList);
     };
 
     /**
@@ -253,8 +253,8 @@ var ASN1HEX = new function() {
      * @since 1.1
      */
     this.getDecendantHexTLVByNthList = function(h, currentIndex, nthList) {
-	var idx = this.getDecendantIndexByNthList(h, currentIndex, nthList);
-	return this.getHexOfTLV_AtObj(h, idx);
+        var idx = this.getDecendantIndexByNthList(h, currentIndex, nthList);
+        return this.getHexOfTLV_AtObj(h, idx);
     };
 
     /**
@@ -269,8 +269,8 @@ var ASN1HEX = new function() {
      * @since 1.1
      */
     this.getDecendantHexVByNthList = function(h, currentIndex, nthList) {
-	var idx = this.getDecendantIndexByNthList(h, currentIndex, nthList);
-	return this.getHexOfV_AtObj(h, idx);
+        var idx = this.getDecendantIndexByNthList(h, currentIndex, nthList);
+        return this.getHexOfV_AtObj(h, idx);
     };
 };
 
@@ -280,13 +280,60 @@ var ASN1HEX = new function() {
 ASN1HEX.getVbyList = function(h, currentIndex, nthList, checkingTag) {
     var idx = this.getDecendantIndexByNthList(h, currentIndex, nthList);
     if (idx === undefined) {
-	throw "can't find nthList object";
+        throw "can't find nthList object";
     }
     if (checkingTag !== undefined) {
-	if (h.substr(idx, 2) != checkingTag) {
-	    throw "checking tag doesn't match: " + h.substr(idx,2) + "!=" + checkingTag;
-	}
+        if (h.substr(idx, 2) != checkingTag) {
+            throw "checking tag doesn't match: " + 
+                h.substr(idx,2) + "!=" + checkingTag;
+        }
     }
     return this.getHexOfV_AtObj(h, idx);
+};
+
+/**
+ * get OID string from hexadecimal encoded value
+ * @name hextooidstr
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} hex hexadecmal string of ASN.1 DER encoded OID value
+ * @return {String} OID string (ex. '1.2.3.4.567')
+ * @since asn1hex 1.1.5
+ */
+ASN1HEX.hextooidstr = function(hex) {
+    var zeroPadding = function(s, len) {
+        if (s.length >= len) return s;
+        return new Array(len - s.length + 1).join('0') + s;
+    };
+
+    var a = [];
+
+    // a[0], a[1]
+    var hex0 = hex.substr(0, 2);
+    var i0 = parseInt(hex0, 16);
+    a[0] = new String(Math.floor(i0 / 40));
+    a[1] = new String(i0 % 40);
+
+    // a[2]..a[n]
+   var hex1 = hex.substr(2);
+    var b = [];
+    for (var i = 0; i < hex1.length / 2; i++) {
+    b.push(parseInt(hex1.substr(i * 2, 2), 16));
+    }
+    var c = [];
+    var cbin = "";
+    for (var i = 0; i < b.length; i++) {
+        if (b[i] & 0x80) {
+            cbin = cbin + zeroPadding((b[i] & 0x7f).toString(2), 7);
+        } else {
+            cbin = cbin + zeroPadding((b[i] & 0x7f).toString(2), 7);
+            c.push(new String(parseInt(cbin, 2)));
+            cbin = "";
+        }
+    }
+
+    var s = a.join(".");
+    if (c.length > 0) s = s + "." + c.join(".");
+    return s;
 };
 

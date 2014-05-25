@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="jsrsasign : The 'jsrsasign' (RSA-Sign JavaScript Library) is a open source free pure JavaScript implementation of PKCS#1 v2.1 RSASSA-PKCS1-v1_5 RSA signing and validation algorithm." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <title>Time Stamp Generator</title>
+<!-- for pkcs5pkey -->
+<script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript">
+function doIt() {
+  var f1 = document.form1;
+
+  var aReq = null;
+  try {
+    // get request hex
+    var req1hex = b64nltohex(f1.req1.value);
+
+    // parse request
+    aReq = KJUR.asn1.tsp.TSPUtil.parseTimeStampReq(req1hex);
+  } catch (ex) {
+    alert("request parse error: " + ex);
+    return;
+  }
+
+  try {
+    // aTSTInfo parameters
+    var aTSTInfo = {};
+    aTSTInfo.policy = aReq.policy;
+    aTSTInfo.messageImprint = aReq.mi;
+    aTSTInfo.serialNumber = {hex: f1.serial1.value};
+    aTSTInfo.genTime = {};
+    if (f1.gentimemilli1.checked)
+      aTSTInfo.genTime = {millis: true};
+    if (f1.accu_second1.value != "" ||
+        f1.accu_milli1.value != "" ||
+        f1.accu_micro1.value != "") {
+      aTSTInfo.accuracy = {};
+      if (f1.accu_second1.value != "") 
+        aTSTInfo.accuracy.seconds = parseInt(f1.accu_second1.value, 10);
+      if (f1.accu_milli1.value != "") 
+        aTSTInfo.accuracy.millis = parseInt(f1.accu_milli1.value, 10);
+      if (f1.accu_micro1.value != "") 
+        aTSTInfo.accuracy.micross = parseInt(f1.accu_micro1.value, 10);
+    }
+    if (f1.ordering1.checked) aTSTInfo.ordering = true;
+    if (f1.nonce1.checked &&
+        typeof aReq.nonce == "string") {
+      aTSTInfo.nonce = {hex: aReq.nonce};
+    }
+    if (f1.tsa1.checked) {
+      aTSTInfo.tsa = {certsubject: f1.cert1.value};
+    }
+
+    var aTST = {
+      tstInfo: aTSTInfo,
+      signerCert: f1.cert1.value,
+      hashAlg: 'sha256',
+      signerPrvKey: f1.prvkey1.value,
+      sigAlg: 'SHA256withRSA'
+    };
+    if (aReq.certreq === true) {
+      aTST.certs = [f1.cert1.value];
+    }
+
+    var dTST = KJUR.asn1.tsp.TSPUtil.newTimeStampToken(aTST);
+
+    var tstHex = dTST.getContentInfoEncodedHex();
+    f1.newtst1.value = hextob64nl(tstHex);
+
+    var dRes = new KJUR.asn1.tsp.TimeStampResp({tst: dTST,
+                                                status: {status: {name: 'granted'}}});
+    f1.newres1.value = hextob64nl(dRes.getEncodedHex());
+  } catch (ex) {
+    alert("error: " + ex);
+  }
+}
+</script>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">TimeStamp Generator</h1>
+<h2 id="project_tagline">RFC 3161 Time Stamp Token/Response Generator</h2>
+<a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://github.com/kjur/jsrsasign/tags/" target="_blank">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+<a href="http://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+
+<!-- now editing -->
+<form name="form1">
+<h4>(Step1) Fill Fields</h4>
+<table>
+<tr><td colspan="2">Time Stamp Requst (Base64):<br/>
+<textarea name="req1" cols="65" rows="2">MEwCAQEwMTANBglghkgBZQMEAgEFAAQgmDSHbc+wXLFnpcJJU+uljErImxrfV/KP
+L50JrxB+6PAGBCoDBAUCCxobHB4fKissLS4vAQH/</textarea>
+<br/>
+NOTE: You can generate request <a href="tool_tsreq.html">here</a>.
+</td></tr>
+<tr><td colspan="2">TSA Private Key (PEM):<br/>
+<textarea name="prvkey1" cols="65" rows="3">-----BEGIN PRIVATE KEY-----
+MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDfdOqotHd55SYO
+0dLz2oXengw/tZ+q3ZmOPeVmMuOMIYO/Cv1wk2U0OK4pug4OBSJPhl09Zs6IwB8N
+wPOU7EDTgMOcQUYB/6QNCI1J7Zm2oLtuchzz4pIb+o4ZAhVprLhRyvqi8OTKQ7kf
+Gfs5Tuwmn1M/0fQkfzMxADpjOKNgf0uy6lN6utjdTrPKKFUQNdc6/Ty8EeTnQEwU
+lsT2LAXCfEKxTn5RlRljDztS7Sfgs8VL0FPy1Qi8B+dFcgRYKFrcpsVaZ1lBmXKs
+XDRu5QR/Rg3f9DRq4GR1sNH8RLY9uApMl2SNz+sR4zRPG85R/se5Q06Gu0BUQ3UP
+m67ETVZLAgMBAAECggEADjU54mYvHpICXHjc5+JiFqiH8NkUgOG8LL4kwt3DeBp9
+bP0+5hSJH8vmzwJkeGG9L79EWG4b/bfxgYdeNX7cFFagmWPRFrlxbd64VRYFawZH
+RJt+2cbzMVI6DL8EK4bu5Ux5qTiV44Jw19hoD9nDzCTfPzSTSGrKD3iLPdnREYaI
+GDVxcjBv3Tx6rrv3Z2lhHHKhEHb0RRjATcjAVKV9NZhMajJ4l9pqJ3A4IQrCBl95
+ux6Xm1oXP0i6aR78cjchsCpcMXdP3WMsvHgTlsZT0RZLFHrvkiNHlPiil4G2/eHk
+wvT//CrcbO6SmI/zCtMmypuHJqcr+Xb7GPJoa64WoQKBgQDwrfelf3Rdfo9kaK/b
+rBmbu1++qWpYVPTedQy84DK2p3GE7YfKyI+fhbnw5ol3W1jjfvZCmK/p6eZR4jgy
+J0KJ76z53T8HoDTF+FTkR55oM3TEM46XzI36RppWP1vgcNHdz3U4DAqkMlAh4lVm
+3GiKPGX5JHHe7tWz/uZ55Kk58QKBgQDtrkqdSzWlOjvYD4mq4m8jPgS7v3hiHd+1
+OT8S37zdoT8VVzo2T4SF+fBhI2lWYzpQp2sCjLmCwK9k/Gur55H2kTBTwzlQ6WSL
+Te9Zj+eoMGklIirA+8YdQHXrO+CCw9BTJAF+c3c3xeUOLXafzyW29bASGfUtA7Ax
+QAsR+Rr3+wKBgAwfZxrh6ZWP+17+WuVArOWIMZFj7SRX2yGdWa/lxwgmNPSSFkXj
+hkBttujoY8IsSrTivzqpgCrTCjPTpir4iURzWw4W08bpjd7u3C/HX7Y16Uq8ohEJ
+T5lslveDJ3iNljSK74eMK7kLg7fBM7YDogxccHJ1IHsvInp3e1pmZxOxAoGAO+bS
+TUQ4N/UuQezgkF3TDrnBraO67leDGwRbfiE/U0ghQvqh5DA0QSPVzlWDZc9KUitv
+j8vxsR9o1PW9GS0an17GJEYuetLnkShKK3NWOhBBX6d1yP9rVdH6JhgIJEy/g0Su
+z7TAFiFc8i7JF8u4QJ05C8bZAMhOLotqftQeVOMCgYAid8aaRvaM2Q8a42Jn6ZTT
+5ms6AvNr98sv0StnfmNQ+EYXN0bEk2huSW+w2hN34TYYBTjViQmHbhudwwu8lVjE
+ccDmIXsUFbHVK+kTIpWGGchy5cYPs3k9s1nMR2av0Lojtw9WRY76xRXvN8W6R7Eh
+wA2ax3+gEEYpGhjM/lO2Lg==
+-----END PRIVATE KEY-----</textarea>
+</td></tr>
+<tr><td colspan="2">TSA Certificate (PEM):<br/>
+<textarea name="cert1" cols="65" rows="3">-----BEGIN CERTIFICATE-----
+MIIDETCCAfmgAwIBAgIBTTANBgkqhkiG9w0BAQUFADAbMQswCQYDVQQGEwJVUzEM
+MAoGA1UECgwDQ0ExMB4XDTEzMDUwMTIzNTk1OVoXDTIzMDUwMTIzNTk1OVowHDEL
+MAkGA1UEBhMCVVMxDTALBgNVBAMMBFRTQTEwggEiMA0GCSqGSIb3DQEBAQUAA4IB
+DwAwggEKAoIBAQDfdOqotHd55SYO0dLz2oXengw/tZ+q3ZmOPeVmMuOMIYO/Cv1w
+k2U0OK4pug4OBSJPhl09Zs6IwB8NwPOU7EDTgMOcQUYB/6QNCI1J7Zm2oLtuchzz
+4pIb+o4ZAhVprLhRyvqi8OTKQ7kfGfs5Tuwmn1M/0fQkfzMxADpjOKNgf0uy6lN6
+utjdTrPKKFUQNdc6/Ty8EeTnQEwUlsT2LAXCfEKxTn5RlRljDztS7Sfgs8VL0FPy
+1Qi8B+dFcgRYKFrcpsVaZ1lBmXKsXDRu5QR/Rg3f9DRq4GR1sNH8RLY9uApMl2SN
+z+sR4zRPG85R/se5Q06Gu0BUQ3UPm67ETVZLAgMBAAGjXzBdMAwGA1UdEwEB/wQC
+MAAwCwYDVR0PBAQDAgbAMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMIMCgGA1UdHwQh
+MB8wHaAboBmGF2h0dHA6Ly90ZXN0LmNvbS9jYTEuY3JsMA0GCSqGSIb3DQEBBQUA
+A4IBAQBNkm5GniFi3PKqbafCVN8mpHWJjF2stCRTVxeTCIXUC63YD5XKABGzPH+Y
+2R8fCrOa8cGlHmFXOlJye/lnXeZodPyxJUvAKohTp6sG+rJVId8ISI2Io2i5BF8a
+CHdm8qd8E0fJvBudqkEc26Ia6tFSA/gEW0ffhsCkN/lXUAjuvDLqtTtU7zBU6dIl
+h12Pwyf+x6AsYSciA9zWC6OE590K8Jr2z4u85biM7viWvPeZPNHSNM1fe+8wKbP8
+64JtLj/VrglcsXALaUalyh2Hs7gPQzjyus1fyhEWPO3T6KMcBMXjb6anxL5q9YO5
+qx1hJTY3L1hahBcMTALQyTEiFv1S
+-----END CERTIFICATE-----</textarea>
+</td></tr>
+
+<tr><td>serial(hex):</td><td><input type="text" name="serial1" value="01020304" size="80"/></td></tr>
+<tr><td>genTime:</td>
+<td>
+include milli seconds
+<input type="checkbox" name="gentimemilli1" value="1" checked/></td>
+</tr>
+<tr><td>accuracy:</td><td>
+second:
+<input type="text" name="accu_second1" value="" size="8"/>
+milli:
+<input type="text" name="accu_milli1" value="500" size="8"/>
+micro:
+<input type="text" name="accu_micro1" value="" size="8"/>
+</td></tr>
+<tr><td>ordering:</td><td>
+ordering true: <input type="checkbox" name="ordering1" value="1" checked/>
+</td></tr>
+<tr><td>nonce:</td><td>
+include nonce: <input type="checkbox" name="nonce1" value="1" checked/>
+</td></tr>
+<tr><td>tsa:</td><td>
+include TSA Name: <input type="checkbox" name="tsa1" value="1" checked/>
+</td></tr>
+</table>
+
+<h4>(Step2) Press "Generate" button</h4>
+<input type="button" value="Generate Token/Reponse" onClick="doIt();"/>
+<input type="reset" name="reset" value="Reset"/>
+
+<h2>Generated TimeStampToken/Response</h2>
+Generated TimeStampToken(Base64):<br/>
+<textarea name="newtst1" cols="65" rows="3"></textarea><br/>
+Generated TimeStampResponse(Base64):<br/>
+<textarea name="newres1" cols="65" rows="3"></textarea><br/>
+
+</form>
+
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2014 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>

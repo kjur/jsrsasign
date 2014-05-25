@@ -13,6 +13,8 @@
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha256.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha512.js"></script>
 
 <script src="../ext/jsbn.js"></script>
 <script src="../ext/jsbn2.js"></script>
@@ -114,10 +116,25 @@ test("attr SigningTime 131231235959Z", function() {
         "301c06092a864886f70d010905310f170d3133313233313233353935395a".substr(0, 34), "{}");
 });
 
+test("attr SigningCertificate z4self", function() {
+  var o = new KJUR.asn1.cms.SigningCertificate({array: [sZ4_CERPEM]});
+  equal(o.getEncodedHex(), "304a060b2a864886f70d010910020c313b30393037041476c19d787741bdaf76cab1c42d166cb536aa83f8301f301a310b3009060355040613025553310b3009060355040a0c025a34020101", "");
+});
+
+test("attr SigningCertificateV2 z4self", function() {
+  var o = new KJUR.asn1.cms.SigningCertificateV2({array: [sZ4_CERPEM], hashAlg: 'sha512'});
+  equal(o.getEncodedHex(), "308185060b2a864886f70d010910022f317630743072300d06096086480165030402030500044026b07a87ff25e74b6a9115ca502a1c913f8f8ee92285418cdfb3c35e910bf30838c98ded14349b8641ce5287616bb0a493e20ee27ac4c377f797dcfcb70fc8c5301f301a310b3009060355040613025553310b3009060355040a0c025a34020101", "");
+});
+
 test("IssuerAndSerialNumber /C=US/O=T1 3", function() {
+  expect(2);
+
   var o = new KJUR.asn1.cms.IssuerAndSerialNumber({"issuer": {"str": "/C=US/O=T1"},
                                                    "serial": {"int": 3}});
-  equal(o.getEncodedHex(), "301f301a310b3009060355040613025553310b3009060355040a0c025431020103", "iasn1");
+  equal(o.getEncodedHex(), "301f301a310b3009060355040613025553310b3009060355040a0c025431020103", "by issuer and serial");
+
+  var o2 = new KJUR.asn1.cms.IssuerAndSerialNumber({cert: sZ4_CERPEM});
+  equal(o2.getEncodedHex(), "301f301a310b3009060355040613025553310b3009060355040a0c025a34020101", "by cert");
 });
 
 test("AttributeList/1 sorted", function() {
@@ -322,6 +339,8 @@ test("CMSUtil.newSignedData/2 certificate added", function() {
 QUnit TEST 
 <a href="qunit-do-asn1.html">asn1</a> | 
 <a href="qunit-do-asn1x509.html">asn1x509</a> | 
+<a href="qunit-do-asn1cms.html">asn1cms</a> | 
+<a href="qunit-do-asn1tsp.html">asn1tsp</a> | 
 <a href="../api/index.html">APIDOCS</a> | 
 </div>
 </body>

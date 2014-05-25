@@ -1,4 +1,4 @@
-/*! asn1cms-1.0.0.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1cms-1.0.1.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1cms.js - ASN.1 DER encoder classes for Cryptographic Message Syntax(CMS)
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cms-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.0 (2014-May-14)
+ * @version 1.0.1 (2014-May-21)
  * @since jsrsasign 4.2.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -27,7 +27,7 @@
  * @name KJUR
  * @namespace kjur's class library name space
  */
-    if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
+if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
 
 /**
  * kjur's ASN.1 class library name space
@@ -64,7 +64,8 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * <li>{@link KJUR.asn1.cms.MessageDigest}</li>
  * <li>{@link KJUR.asn1.cms.SigningTime}</li>
  * </ul>
- * NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
+ * NOTE: Please ignore method summary and document of this namespace. 
+ * This caused by a bug of jsdoc2.
  * </p>
  * @name KJUR.asn1.cms
  * @namespace
@@ -225,22 +226,149 @@ KJUR.asn1.cms.SigningTime = function(params) {
 };
 YAHOO.lang.extend(KJUR.asn1.cms.SigningTime, KJUR.asn1.cms.Attribute);
 
-// not implemented yet
+/**
+ * class for CMS SigningCertificate attribute
+ * @name KJUR.asn1.cms.SigningCertificate
+ * @class class for CMS SigningCertificate attribute
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.cms.Attribute
+ * @since jsrsasign 4.5.1 asn1cms 1.0.1
+ * @description
+ * <pre>
+ * Attribute ::= SEQUENCE {
+ *    type               OBJECT IDENTIFIER,
+ *    values             AttributeSetValue }
+ * AttributeSetValue ::= SET OF ANY
+ * SigningCertificate ::= SEQUENCE {
+ *    certs SEQUENCE OF ESSCertID,
+ *    policies SEQUENCE OF PolicyInformation OPTIONAL }
+ * ESSCertID ::= SEQUENCE {
+ *    certHash Hash,
+ *    issuerSerial IssuerSerial OPTIONAL }
+ * IssuerSerial ::= SEQUENCE {
+ *    issuer GeneralNames,
+ *    serialNumber CertificateSerialNumber }
+ * </pre>
+ * @example
+ * o = new KJUR.asn1.cms.SigningCertificate({array: [certPEM]});
+ */
 KJUR.asn1.cms.SigningCertificate = function(params) {
     KJUR.asn1.cms.SigningCertificate.superclass.constructor.call(this);
     this.attrTypeOid = "1.2.840.113549.1.9.16.2.12";
+    var nA = KJUR.asn1;
+    var nC = KJUR.asn1.cms;
+    var nY = KJUR.crypto;
+
+    this.setCerts = function(listPEM) {
+        var list = [];
+        for (var i = 0; i < listPEM.length; i++) {
+            var hex = KEYUTIL.getHexFromPEM(listPEM[i]);
+            var certHashHex = nY.Util.hashHex(hex, 'sha1');
+            var dCertHash = new nA.DEROctetString({hex: certHashHex});
+            dCertHash.getEncodedHex();
+            var dIssuerSerial =
+                new nC.IssuerAndSerialNumber({cert: listPEM[i]});
+            dIssuerSerial.getEncodedHex();
+            var dESSCertID =
+                new nA.DERSequence({array: [dCertHash, dIssuerSerial]});
+            dESSCertID.getEncodedHex();
+            list.push(dESSCertID);
+        }
+
+        var dValue = new nA.DERSequence({array: list});
+        dValue.getEncodedHex();
+        this.valueList = [dValue];
+    };
 
     if (typeof params != "undefined") {
-        var contentTypeASN1 = new KJUR.asn1.DEROctetString(params);
-        try {
-            contentTypeASN1.getEncodedHex();
-        } catch (ex) {
-            throw "SigningCertificate.getEncodedHex() failed/" + ex;
+        if (typeof params.array == "object") {
+            this.setCerts(params.array);
         }
-        this.valueList = [contentTypeASN1];
     }
 };
 YAHOO.lang.extend(KJUR.asn1.cms.SigningCertificate, KJUR.asn1.cms.Attribute);
+
+/**
+ * class for CMS SigningCertificateV2 attribute
+ * @name KJUR.asn1.cms.SigningCertificateV2
+ * @class class for CMS SigningCertificateV2 attribute
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.cms.Attribute
+ * @since jsrsasign 4.5.1 asn1cms 1.0.1
+ * @description
+ * <pre>
+ * oid-signingCertificateV2 = 1.2.840.113549.1.9.16.2.47 
+ * Attribute ::= SEQUENCE {
+ *    type               OBJECT IDENTIFIER,
+ *    values             AttributeSetValue }
+ * AttributeSetValue ::= SET OF ANY
+ * SigningCertificateV2 ::=  SEQUENCE {
+ *    certs        SEQUENCE OF ESSCertIDv2,
+ *    policies     SEQUENCE OF PolicyInformation OPTIONAL }
+ * ESSCertIDv2 ::=  SEQUENCE {
+ *    hashAlgorithm           AlgorithmIdentifier
+ *                            DEFAULT {algorithm id-sha256},
+ *    certHash                Hash,
+ *    issuerSerial            IssuerSerial OPTIONAL }
+ * Hash ::= OCTET STRING
+ * IssuerSerial ::= SEQUENCE {
+ *    issuer                  GeneralNames,
+ *    serialNumber            CertificateSerialNumber }
+ * </pre>
+ * @example
+ * // hash algorithm is sha256 by default:
+ * o = new KJUR.asn1.cms.SigningCertificateV2({array: [certPEM]});
+ * o = new KJUR.asn1.cms.SigningCertificateV2({array: [certPEM],
+ *                                             hashAlg: 'sha512'});
+ */
+KJUR.asn1.cms.SigningCertificateV2 = function(params) {
+    KJUR.asn1.cms.SigningCertificateV2.superclass.constructor.call(this);
+    this.attrTypeOid = "1.2.840.113549.1.9.16.2.47";
+    var nA = KJUR.asn1;
+    var nX = KJUR.asn1.x509;
+    var nC = KJUR.asn1.cms;
+    var nY = KJUR.crypto;
+
+    this.setCerts = function(listPEM, hashAlg) {
+        var list = [];
+        for (var i = 0; i < listPEM.length; i++) {
+            var hex = KEYUTIL.getHexFromPEM(listPEM[i]);
+
+            var a = [];
+            if (hashAlg != "sha256")
+                a.push(new nX.AlgorithmIdentifier({name: hashAlg}));
+
+            var certHashHex = nY.Util.hashHex(hex, hashAlg);
+            var dCertHash = new nA.DEROctetString({hex: certHashHex});
+            dCertHash.getEncodedHex();
+            a.push(dCertHash);
+
+            var dIssuerSerial =
+                new nC.IssuerAndSerialNumber({cert: listPEM[i]});
+            dIssuerSerial.getEncodedHex();
+            a.push(dIssuerSerial);
+
+            var dESSCertIDv2 =
+                new nA.DERSequence({array: a});
+            dESSCertIDv2.getEncodedHex();
+            list.push(dESSCertIDv2);
+        }
+
+        var dValue = new nA.DERSequence({array: list});
+        dValue.getEncodedHex();
+        this.valueList = [dValue];
+    };
+
+    if (typeof params != "undefined") {
+        if (typeof params.array == "object") {
+            var hashAlg = "sha256"; // sha2 default
+            if (typeof params.hashAlg == "string") 
+                hashAlg = params.hashAlg;
+            this.setCerts(params.array, hashAlg);
+        }
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.cms.SigningCertificateV2, KJUR.asn1.cms.Attribute);
 
 /**
  * class for IssuerAndSerialNumber ASN.1 structure for CMS
@@ -260,11 +388,29 @@ YAHOO.lang.extend(KJUR.asn1.cms.SigningCertificate, KJUR.asn1.cms.Attribute);
  * // specify by X500Name and DERInteger
  * o = new KJUR.asn1.cms.IssuerAndSerialNumber(
  *      {issuer: {str: '/C=US/O=T1'}, serial {int: 3}});
+ * // specify by PEM certificate
+ * o = new KJUR.asn1.cms.IssuerAndSerialNumber({cert: certPEM});
  */
 KJUR.asn1.cms.IssuerAndSerialNumber = function(params) {
     KJUR.asn1.cms.IssuerAndSerialNumber.superclass.constructor.call(this);
     var dIssuer = null;
     var dSerial = null;
+    var nA = KJUR.asn1;
+    var nX = nA.x509;
+
+    /*
+     * @since asn1cms 1.0.1
+     */
+    this.setByCertPEM = function(certPEM) {
+        var certHex = KEYUTIL.getHexFromPEM(certPEM);
+        var x = new X509();
+        x.hex = certHex;
+        var issuerTLVHex = x.getIssuerHex();
+        this.dIssuer = new nX.X500Name();
+        this.dIssuer.hTLV = issuerTLVHex;
+        var serialVHex = x.getSerialNumberHex();
+        this.dSerial = new nA.DERInteger({hex: serialVHex});
+    };
 
     this.getEncodedHex = function() {
         var seq = new KJUR.asn1.DERSequence({"array": [this.dIssuer,
@@ -285,6 +431,9 @@ KJUR.asn1.cms.IssuerAndSerialNumber = function(params) {
             } else {
                 this.dSerial = new KJUR.asn1.DERInteger(params.serial);
             }
+        }
+        if (typeof params.cert == "string") {
+            this.setByCertPEM(params.cert);
         }
     }
 };
@@ -336,7 +485,8 @@ KJUR.asn1.cms.AttributeList = function(params) {
 
     this.getEncodedHex = function() {
         if (typeof this.hTLV == "string") return this.hTLV;
-        var set = new KJUR.asn1.DERSet({array: this.list, sortflag: this.sortFlag});
+        var set = new KJUR.asn1.DERSet({array: this.list, 
+                                        sortflag: this.sortFlag});
         this.hTLV = set.getEncodedHex();
         return this.hTLV;
     };
@@ -394,20 +544,10 @@ KJUR.asn1.cms.SignerInfo = function(params) {
             params.indexOf("CERTIFICATE") != -1 &&
             params.indexOf("BEGIN") != -1 &&
             params.indexOf("END") != -1) {
+
             var certPEM = params;
-            var x = new X509();
-            x.hex = X509.pemToHex(certPEM);
-
-            var issuerTLVHex = x.getIssuerHex();
-            var dIssuer = new nX.X500Name();
-            dIssuer.hTLV = issuerTLVHex;
-
-            var serialVHex = x.getSerialNumberHex();
-            var dSerial = new nA.DERInteger({hex: serialVHex});
-
-            //alert(issuerTLVHex + "--" + serialVHex);
             this.dSignerIdentifier = 
-                new nC.IssuerAndSerialNumber({issuer: dIssuer, serial: dSerial});
+                new nC.IssuerAndSerialNumber({cert: params});
         }
     };
 
@@ -712,9 +852,14 @@ KJUR.asn1.cms.SignedData = function(params) {
         return this.hTLV;
     };
 
-    this.getContentInfoEncodedHex = function() {
+    this.getContentInfo = function() {
         this.getEncodedHex();
         var ci = new nC.ContentInfo({type: 'signed-data', obj: this});
+	return ci;
+    };
+
+    this.getContentInfoEncodedHex = function() {
+	var ci = this.getContentInfo();
         var ciHex = ci.getEncodedHex();
         return ciHex;
     };

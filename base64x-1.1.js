@@ -1,11 +1,11 @@
-/*! base64x-1.1.2 (c) 2013 Kenji Urushima | kjur.github.com/jsjws/license
+/*! base64x-1.1.3 (c) 2012-2014 Kenji Urushima | kjur.github.com/jsjws/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * version: 1.1.2 (2013 Jul 21)
+ * version: 1.1.3 (2014 May 25)
  *
- * Copyright (c) 2012-2013 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2012-2014 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsjws/license/
@@ -272,7 +272,7 @@ function hextoutf8(s) {
 function hextorstr(sHex) {
     var s = "";
     for (var i = 0; i < sHex.length - 1; i += 2) {
-	s += String.fromCharCode(parseInt(sHex.substr(i, 2), 16));
+        s += String.fromCharCode(parseInt(sHex.substr(i, 2), 16));
     }
     return s;
 }
@@ -288,10 +288,38 @@ function hextorstr(sHex) {
 function rstrtohex(s) {
     var result = "";
     for (var i = 0; i < s.length; i++) {
-	result += ("0" + s.charCodeAt(i).toString(16)).slice(-2);
+        result += ("0" + s.charCodeAt(i).toString(16)).slice(-2);
     }
     return result;
 }
+
+// ==== hex / b64nl =======================================
+
+/*
+ * since base64x 1.1.3
+ */
+function hextob64(s) {
+    return hex2b64(s);
+}
+
+/*
+ * since base64x 1.1.3
+ */
+function hextob64nl(s) {
+    var b64 = hextob64(s);
+    var b64nl = b64.replace(/(.{64})/g, "$1\r\n");
+    b64nl = b64nl.replace(/\r\n$/, '');
+    return b64nl;
+}
+
+/*
+ * since base64x 1.1.3
+ */
+function b64nltohex(s) {
+    var b64 = s.replace(/[^0-9A-Za-z\/+=]*/g, '');
+    var hex = b64tohex(b64);
+    return hex;
+} 
 
 // ==== URIComponent / hex ================================
 /**
@@ -362,4 +390,3 @@ function newline_toDos(s) {
     s = s.replace(/\n/mg, "\r\n");
     return s;
 }
-
