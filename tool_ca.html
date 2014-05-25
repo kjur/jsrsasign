@@ -53,6 +53,20 @@ function doIssue() {
     tbsc.appendExtension(new KJUR.asn1.x509.KeyUsage(param));
   }
 
+  if (f1.eku_exists.checked) {
+    var param = {};
+    var a = [];
+    param.critical = (f1.eku_critical.checked) ? true : false;
+    if (f1.eku_srv.checked)   a.push({name: 'serverAuth'});
+    if (f1.eku_cli.checked)   a.push({name: 'clientAuth'});
+    if (f1.eku_code.checked)  a.push({name: 'codeSigning'});
+    if (f1.eku_email.checked) a.push({name: 'emailProtection'});
+    if (f1.eku_time.checked)  a.push({name: 'timeStamping'});
+    param.array = a;
+    var ext = new KJUR.asn1.x509.ExtKeyUsage(param);
+    tbsc.appendExtension(ext);
+  }
+
   if (f1.cdp_exists.checked && f1.cdp_uri.value != '') {
     var param = {};
     param['critical'] = (f1.cdp_critical.checked)? true : false;
@@ -61,9 +75,9 @@ function doIssue() {
   }
 
   // generate and sign certificate
-  var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbsc,
-                                             'rsaprvpem': f1.cakey1.value,
-                                             'rsaprvpas': f1.cakeypass1.value});
+  var caKey = KEYUTIL.getKey.apply(null, [f1.cakey1.value, f1.cakeypass1.value]);
+  var cert = new KJUR.asn1.x509.Certificate({tbscertobj: tbsc,
+                                             prvkeyobj: caKey});
   cert.sign();
   f1.newcert1.value = cert.getPEMString();
 }
@@ -147,6 +161,17 @@ critical<input type="checkbox" name="ku_critical" value="1"/>
 <input type="checkbox" name="ku_6crlsign" value="1"/> keyEncipherment(6)
 <input type="checkbox" name="ku_7enconly" value="1"/> encipherOnly(7)
 <input type="checkbox" name="ku_8deconly" value="1"/> decipherOnly(8)<br/>
+</td></tr>
+<tr><td colspan="2">
+Extended Key Usage:
+exists<input type="checkbox" name="eku_exists" value="1"/>
+critical<input type="checkbox" name="eku_critical" value="1"/>
+<br/>
+<input type="checkbox" name="eku_srv" value="1"/> serverAuth
+<input type="checkbox" name="eku_cli" value="1"/> clientAuth
+<input type="checkbox" name="eku_code" value="1"/> codeSigning
+<input type="checkbox" name="eku_email" value="1"/> emailProtection
+<input type="checkbox" name="eku_time" value="1"/> timeStamping
 </td></tr>
 <tr><td colspan="2">
 CRL DistributionPoints: 

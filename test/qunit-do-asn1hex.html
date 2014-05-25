@@ -156,6 +156,26 @@ test("getVbyList DSA signature int values", function() {
   equal(ASN1HEX.getVbyList(s, 0, [1], "02"), "787f9380a3a33011c88bf877df7ac3b8a62b854c", "5");
 });
 
+/*
+test("oidstrtohex", function() {
+  expect(3);
+  equal(ASN1HEX.oidstrtohex("1.2"), "2a", "1.2>2a");
+  equal(ASN1HEX.oidstrtohex("2.16.840.1.101.3.4.2.1"),
+        "608648016503040201", "sha256");
+  equal(ASN1HEX.oidstrtohex("1.2.840.113549.1.1.5"),
+        "2a864886f70d010105", "SHA1withRSA");
+});
+ */
+
+test("hextooidstr", function() {
+  expect(3);
+  equal(ASN1HEX.hextooidstr("2a"), "1.2", "2a->1.2");
+  equal(ASN1HEX.hextooidstr("608648016503040201"),  // SHA256
+        "2.16.840.1.101.3.4.2.1", "sha256");
+  equal(ASN1HEX.hextooidstr("2a864886f70d010105"),
+        "1.2.840.113549.1.1.5", "SHA1withRSA");
+});
+
 });
 
 </script>
@@ -166,3 +186,4 @@ test("getVbyList DSA signature int values", function() {
 <div id="qunit-fixture">test markup</div>
 </body>
 </html>
+

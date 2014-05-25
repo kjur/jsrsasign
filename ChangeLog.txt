@@ -1,6 +1,27 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.5.0 to 4.6.0 (2014-May-25)
+  - RFC 3161 Time Stamp Protocol generator is now supported.
+  - asn1tsp 1.0.0 (NEW)
+  - asn1 1.0.5 to 1.0.6
+    - AbstractTime/GeneralizedTime: millisecond support
+  - asn1cms 1.0.0 to 1.0.1
+    - IssuerAndSerialNumber: setByCertPEM method added
+    - SigningCertificate attribute added
+    - SigningCertificate attributeV2 added
+  - asn1x509 1.0.8 to 1.0.9
+    - OID.oid2name added
+    - X500Name
+      - add certissuer, certsubject parameter support
+  - base64x 1.1.2 to 1.1.3
+    - function hextob64, hextob64nl, b64nltohex added
+  - tool_tsreq.html for TimeStamp Request demo (NEW)
+  - tool_tsres.html for making TimeStampToken demo (NEW)
+  - tool_ca.html
+    - fix signing key bug
+    - support ExtKeyUsage
+
 * Changes between 4.2.3 to 4.5.0 (2014-May-17)
   - RFC 5652 CMS SignedData generator is now supported.
   - asn1cms 1.0.0 (NEW)

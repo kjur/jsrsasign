@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="jsrsasign : The 'jsrsasign' (RSA-Sign JavaScript Library) is a open source free pure JavaScript implementation of PKCS#1 v2.1 RSASSA-PKCS1-v1_5 RSA signing and validation algorithm." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <title>Time Stamp Request Generator</title>
+<!-- for pkcs5pkey -->
+<script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript">
+function doIt() {
+  var f1 = document.form1;
+
+  var json = {
+    mi: { hashAlg: f1.hashalg1.value,
+          hashValue: f1.hashval1.value }
+  };
+  if (f1.policy1.value != "") 
+    json.policy = {oid: f1.policy1.value};
+  if (f1.nonce1.value != "")
+    json.nonce = {hex: f1.nonce1.value};
+  if (f1.certreq1.checked) {
+    json.certreq = true;
+  } else {
+    json.certreq = false;
+  }
+
+  f1.newreq1.value = "generating ...";
+
+  var o = new KJUR.asn1.tsp.TimeStampReq(json);
+  var hex = o.getEncodedHex();
+  var b64 = hex2b64(hex);
+  var pemBody = b64.replace(/(.{64})/g, "$1\r\n");
+  pemBody = pemBody.replace(/\r\n$/, '');
+  f1.newreq1.value = pemBody;
+}
+</script>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">TimeStampReq Generator</h1>
+<h2 id="project_tagline">RFC 3161 Time Stamp Request Generator</h2>
+<a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://github.com/kjur/jsrsasign/tags/" target="_blank">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+<a href="http://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+  <section id="main_content" class="inner">
+
+<!-- now editing -->
+<form name="form1">
+<h4>(Step1) Fill Fields</h4>
+<table>
+<tr><th colspan="2">MessageImprint</th></tr>
+<tr><td>hashAlg:</td><td>
+<select name="hashalg1">
+<option value="sha256">SHA-256
+<option value="sha512">SHA-512
+<option value="sha384">SHA-384
+<option value="sha224">SHA-224
+<option value="sha1">SHA-1
+<option value="md5">MD5
+<option value="ripemd160">RIPEMD160
+</select>
+</td></tr>
+<tr><td>hashValue(hex):</td><td><input type="text" name="hashval1" value="9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0" size="80"/><br/>
+Fill hash value of document to be time-stamped. You can use sha256sum or 'openssl dgst -HASHALG FILE' command.
+</td></tr>
+<tr><th colspan="2">Other Optional Fields</th></tr>
+<tr><td>ReqPolicy:</td>
+<td><input type="text" name="policy1" value="1.2.3.4.5" size="80"/></td></tr>
+<tr><td>Nonce:</td><td>
+<input type="text" name="nonce1" value="1a1b1c1e1f2a2b2c2d2e2f" size="40"/>
+</td></tr>
+<tr><td>certReq:</td><td>
+exists<input type="checkbox" name="certreq1" value="1" checked/>
+</td></tr>
+</table>
+
+<h4>(Step2) Press "Generate" button</h4>
+<input type="button" value="Generate Request" onClick="doIt();"/>
+<input type="reset" name="reset" value="Reset"/>
+
+<h2>Generated TimeStampReq</h2>
+<textarea name="newreq1" cols="65" rows="8"></textarea>
+<br/>
+To see this request by openssl, save this to a file and:
+<blockquote>
+% openssl base64 -in FILE -out FILE2<br/>
+% openssl ts -query -in FILE2 -text<br/>
+</blockquote>
+
+You can copy this request and generate time stamp token 
+for it at <a href="tool_tsres.html">another sample page.</a>
+
+</form>
+
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2014 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>
