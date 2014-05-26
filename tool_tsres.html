@@ -62,9 +62,9 @@ function doIt() {
       signerPrvKey: f1.prvkey1.value,
       sigAlg: 'SHA256withRSA'
     };
-    if (aReq.certreq === true) {
-      aTST.certs = [f1.cert1.value];
-    }
+    if (aReq.certreq === true) aTST.certs = [f1.cert1.value];
+    aTST.hashAlg = f1.mdalg1.value;
+    aTST.sigAlg = f1.sigalg1.value;
 
     var dTST = KJUR.asn1.tsp.TSPUtil.newTimeStampToken(aTST);
 
@@ -184,6 +184,42 @@ include nonce: <input type="checkbox" name="nonce1" value="1" checked/>
 </td></tr>
 <tr><td>tsa:</td><td>
 include TSA Name: <input type="checkbox" name="tsa1" value="1" checked/>
+</td></tr>
+<tr><td>
+hashAlg:</td><td>
+<select name="mdalg1">
+<option value="sha256">SHA-256
+<option value="sha512">SHA-512
+<option value="sha384">SHA-384
+<option value="sha224">SHA-224
+<option value="sha1">SHA-1
+<option value="md5">MD5
+<option value="ripemd160">RIPEMD160
+</select>
+NOTE: for hash algorithm of MessageDigest attribute.
+</td></tr>
+<tr><td>
+sigAlg:</td><td>
+<select name="sigalg1">
+<option value="SHA256withRSA">SHA256withRSA
+<option value="SHA512withRSA">SHA512withRSA
+<option value="SHA384withRSA">SHA384withRSA
+<option value="SHA224withRSA">SHA224withRSA
+<option value="SHA1withRSA">SHA1withRSA
+<option value="MD5withRSA">MD5withRSA
+<option value="RIPEMD160withRSA">RIPEMD160withRSA
+<option value="SHA256withECDSA">SHA256withECDSA
+<option value="SHA512withECDSA">SHA512withECDSA
+<option value="SHA384withECDSA">SHA384withECDSA
+<option value="SHA224withECDSA">SHA224withECDSA
+<option value="SHA1withECDSA">SHA1withECDSA
+<option value="SHA256withSA">SHA256withDSA
+<option value="SHA512withSA">SHA512withDSA
+<option value="SHA384withSA">SHA384withDSA
+<option value="SHA224withSA">SHA224withDSA
+<option value="SHA1withDSA">SHA1withDSA
+</select>
+NOTE: for SignerInfo Signature algorithm.
 </td></tr>
 </table>
 
