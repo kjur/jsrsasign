@@ -854,11 +854,11 @@ KJUR.crypto.Signature = function(params) {
 	    };
 	    this.signString = function(str) {
 		this.updateString(str);
-		this.sign();
+		return this.sign();
 	    };
 	    this.signHex = function(hex) {
 		this.updateHex(hex);
-		this.sign();
+		return this.sign();
 	    };
 	    this.verify = function(hSigVal) {
 	        this.sHashHex = this.md.digest();
