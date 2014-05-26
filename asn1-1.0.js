@@ -55,6 +55,7 @@ if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
  * <li>0x04 {@link KJUR.asn1.DEROctetString}</li>
  * <li>0x05 {@link KJUR.asn1.DERNull}</li>
  * <li>0x06 {@link KJUR.asn1.DERObjectIdentifier}</li>
+ * <li>0x0a {@link KJUR.asn1.DEREnumerated}</li>
  * <li>0x0c {@link KJUR.asn1.DERUTF8String}</li>
  * <li>0x12 {@link KJUR.asn1.DERNumericString}</li>
  * <li>0x13 {@link KJUR.asn1.DERPrintableString}</li>
@@ -174,6 +175,7 @@ KJUR.asn1.ASN1Util = new function() {
      * <li>'octstr' - DEROctetString</li>
      * <li>'null' - DERNull</li>
      * <li>'oid' - DERObjectIdentifier</li>
+     * <li>'enum' - DEREnumerated</li>
      * <li>'utf8str' - DERUTF8String</li>
      * <li>'numstr' - DERNumericString</li>
      * <li>'prnstr' - DERPrintableString</li>
@@ -207,7 +209,7 @@ KJUR.asn1.ASN1Util = new function() {
             throw "key of param shall be only one.";
         var key = keys[0];
 
-        if (":bool:int:bitstr:octstr:null:oid:utf8str:numstr:prnstr:telstr:ia5str:utctime:gentime:seq:set:tag:".indexOf(":" + key + ":") == -1)
+        if (":bool:int:bitstr:octstr:null:oid:enum:utf8str:numstr:prnstr:telstr:ia5str:utctime:gentime:seq:set:tag:".indexOf(":" + key + ":") == -1)
             throw "undefined key: " + key;
 
         if (key == "bool")    return new ns1.DERBoolean(param[key]);
@@ -216,6 +218,7 @@ KJUR.asn1.ASN1Util = new function() {
         if (key == "octstr")  return new ns1.DEROctetString(param[key]);
         if (key == "null")    return new ns1.DERNull(param[key]);
         if (key == "oid")     return new ns1.DERObjectIdentifier(param[key]);
+        if (key == "enum")    return new ns1.DEREnumerated(param[key]);
         if (key == "utf8str") return new ns1.DERUTF8String(param[key]);
         if (key == "numstr")  return new ns1.DERNumericString(param[key]);
         if (key == "prnstr")  return new ns1.DERPrintableString(param[key]);
@@ -1007,6 +1010,86 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
     }
 };
 YAHOO.lang.extend(KJUR.asn1.DERObjectIdentifier, KJUR.asn1.ASN1Object);
+
+// ********************************************************************
+/**
+ * class for ASN.1 DER Enumerated
+ * @name KJUR.asn1.DEREnumerated
+ * @class class for ASN.1 DER Enumerated
+ * @extends KJUR.asn1.ASN1Object
+ * @description
+ * <br/>
+ * As for argument 'params' for constructor, you can specify one of
+ * following properties:
+ * <ul>
+ * <li>int - specify initial ASN.1 value(V) by integer value</li>
+ * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
+ * </ul>
+ * NOTE: 'params' can be omitted.
+ */
+KJUR.asn1.DEREnumerated = function(params) {
+    KJUR.asn1.DEREnumerated.superclass.constructor.call(this);
+    this.hT = "0a";
+
+    /**
+     * set value by Tom Wu's BigInteger object
+     * @name setByBigInteger
+     * @memberOf KJUR.asn1.DEREnumerated
+     * @function
+     * @param {BigInteger} bigIntegerValue to set
+     */
+    this.setByBigInteger = function(bigIntegerValue) {
+        this.hTLV = null;
+        this.isModified = true;
+        this.hV = KJUR.asn1.ASN1Util.bigIntToMinTwosComplementsHex(bigIntegerValue);
+    };
+
+    /**
+     * set value by integer value
+     * @name setByInteger
+     * @memberOf KJUR.asn1.DEREnumerated
+     * @function
+     * @param {Integer} integer value to set
+     */
+    this.setByInteger = function(intValue) {
+        var bi = new BigInteger(String(intValue), 10);
+        this.setByBigInteger(bi);
+    };
+
+    /**
+     * set value by integer value
+     * @name setValueHex
+     * @memberOf KJUR.asn1.DEREnumerated
+     * @function
+     * @param {String} hexadecimal string of integer value
+     * @description
+     * <br/>
+     * NOTE: Value shall be represented by minimum octet length of
+     * two's complement representation.
+     * @example
+     * new KJUR.asn1.DEREnumerated(123);
+     * new KJUR.asn1.DEREnumerated({'int': 123});
+     * new KJUR.asn1.DEREnumerated({'hex': '1fad'});
+     */
+    this.setValueHex = function(newHexString) {
+        this.hV = newHexString;
+    };
+
+    this.getFreshValueHex = function() {
+        return this.hV;
+    };
+
+    if (typeof params != "undefined") {
+        if (typeof params['int'] != "undefined") {
+            this.setByInteger(params['int']);
+        } else if (typeof params == "number") {
+            this.setByInteger(params);
+        } else if (typeof params['hex'] != "undefined") {
+            this.setValueHex(params['hex']);
+        }
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.DEREnumerated, KJUR.asn1.ASN1Object);
 
 // ********************************************************************
 /**
