@@ -1,6 +1,28 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.6.0 to 4.7.0 (2014-Jul-07)
+  - RFC 5126 CAdES format supported
+    - CAdES-BES/EPES/T support in this version.
+  - asn1cades (NEW)
+  - asn1tsp 1.0.0 to 1.0.1
+    - AbstractTSAAdapter, Fixed/SimpleTSAAdapter class added
+  - asn1cms 1.0.1 to 1.0.2
+    - SigningCertificate and SigningCertificateV2
+      attributes are added.
+    - IssuerAndSerialNumber class constructor now 
+      supports PEM string of certificate.
+    - properties dDigestAlgs and dCerts of SignedData object
+      are added for object preservation.
+    - CMSUtil.newSignedData now supports
+      SigningCertificate/V2 attributes.
+  - asn1
+    - add DEREnumerate class
+  - x509
+    - fix for strict mode
+  - crypto
+    - fix for Signature.signHex/Str
+
 * Changes between 4.5.0 to 4.6.0 (2014-May-25)
   - RFC 3161 Time Stamp Protocol generator is now supported.
   - asn1tsp 1.0.0 (NEW)

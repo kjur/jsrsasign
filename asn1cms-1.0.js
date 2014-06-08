@@ -1,4 +1,4 @@
-/*! asn1cms-1.0.1.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1cms-1.0.2.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1cms.js - ASN.1 DER encoder classes for Cryptographic Message Syntax(CMS)
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cms-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.1 (2014-May-21)
+ * @version 1.0.2 (2014-Jun-07)
  * @since jsrsasign 4.2.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -63,6 +63,8 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * <li>{@link KJUR.asn1.cms.ContentType}</li>
  * <li>{@link KJUR.asn1.cms.MessageDigest}</li>
  * <li>{@link KJUR.asn1.cms.SigningTime}</li>
+ * <li>{@link KJUR.asn1.cms.SigningCertificate}</li>
+ * <li>{@link KJUR.asn1.cms.SigningCertificateV2}</li>
  * </ul>
  * NOTE: Please ignore method summary and document of this namespace. 
  * This caused by a bug of jsdoc2.
@@ -390,6 +392,7 @@ YAHOO.lang.extend(KJUR.asn1.cms.SigningCertificateV2, KJUR.asn1.cms.Attribute);
  *      {issuer: {str: '/C=US/O=T1'}, serial {int: 3}});
  * // specify by PEM certificate
  * o = new KJUR.asn1.cms.IssuerAndSerialNumber({cert: certPEM});
+ * o = new KJUR.asn1.cms.IssuerAndSerialNumber(certPEM); // since 1.0.3
  */
 KJUR.asn1.cms.IssuerAndSerialNumber = function(params) {
     KJUR.asn1.cms.IssuerAndSerialNumber.superclass.constructor.call(this);
@@ -420,6 +423,10 @@ KJUR.asn1.cms.IssuerAndSerialNumber = function(params) {
     };
 
     if (typeof params != "undefined") {
+        if (typeof params == "string" &&
+            params.indexOf("-----BEGIN ") != -1) {
+            this.setByCertPEM(params);
+        }
         if (params.issuer && params.serial) {
             if (params.issuer instanceof KJUR.asn1.x509.X500Name) {
                 this.dIssuer = params.issuer;
@@ -610,14 +617,27 @@ KJUR.asn1.cms.SignerInfo = function(params) {
         this.dSig = new nA.DEROctetString({hex: sigValHex});
     };
 
+    /*
+     * @since asn1cms 1.0.3
+     */
+    this.addUnsigned = function(attr) {
+        this.hTLV = null;
+        this.dUnsignedAttrs.hTLV = null;
+        this.dUnsignedAttrs.add(attr);
+    };
+
     this.getEncodedHex = function() {
-        if (this.dSignedAttrs.length() == 0) {
+        //alert("sattrs.hTLV=" + this.dSignedAttrs.hTLV);
+        if (this.dSignedAttrs instanceof KJUR.asn1.cms.AttributeList &&
+            this.dSignedAttrs.length() == 0) {
             throw "SignedAttrs length = 0 (empty)";
         }
-        var sa = new nA.DERTaggedObject({obj: this.dSignedAttrs, tag: 'a0', explicit: false});
+        var sa = new nA.DERTaggedObject({obj: this.dSignedAttrs,
+                                         tag: 'a0', explicit: false});
         var ua = null;;
         if (this.dUnsignedAttrs.length() > 0) {
-            ua = new nA.DERTaggedObject({obj: this.dUnsignedAttrs, tag: 'a1', explicit: false});
+            ua = new nA.DERTaggedObject({obj: this.dUnsignedAttrs,
+                                         tag: 'a1', explicit: false});
         }
 
         var items = [
@@ -808,8 +828,10 @@ KJUR.asn1.cms.SignedData = function(params) {
     var nX = KJUR.asn1.x509;
 
     this.dCMSVersion = new nA.DERInteger({'int': 1});
+    this.dDigestAlgs = null;
     this.digestAlgNameList = [];
     this.dEncapContentInfo = new nC.EncapsulatedContentInfo();
+    this.dCerts = null;
     this.certificateList = [];
     this.crlList = [];
     this.signerInfoList = [new nC.SignerInfo()];
@@ -824,27 +846,32 @@ KJUR.asn1.cms.SignedData = function(params) {
     this.getEncodedHex = function() {
         if (typeof this.hTLV == "string") return this.hTLV;
         
-        var digestAlgList = [];
-        for (var i = 0; i < this.digestAlgNameList.length; i++) {
-            var o = new nX.AlgorithmIdentifier({name: this.digestAlgNameList[i]});
-            digestAlgList.push(o);
+        if (this.dDigestAlgs == null) {
+            var digestAlgList = [];
+            for (var i = 0; i < this.digestAlgNameList.length; i++) {
+                var name = this.digestAlgNameList[i];
+                var o = new nX.AlgorithmIdentifier({name: name});
+                digestAlgList.push(o);
+            }
+            this.dDigestAlgs = new nA.DERSet({array: digestAlgList});
         }
-
-        var dDigestAlgs = new nA.DERSet({array: digestAlgList});
-        var dSignerInfos = new nA.DERSet({array: this.signerInfoList});
 
         var a = [this.dCMSVersion,
-                 dDigestAlgs,
+                 this.dDigestAlgs,
                  this.dEncapContentInfo];
 
-        if (this.certificateList.length > 0) {
-            var o1 = new nA.DERSet({array: this.certificateList});
-            var o2 = new nA.DERTaggedObject({obj: o1,
-                                             tag: 'a0',
-                                             explicit: false});
-            a.push(o2);
+        if (this.dCerts == null) {
+            if (this.certificateList.length > 0) {
+                var o1 = new nA.DERSet({array: this.certificateList});
+                this.dCerts
+                    = new nA.DERTaggedObject({obj: o1,
+                                              tag: 'a0',
+                                              explicit: false});
+            }
         }
+        if (this.dCerts != null) a.push(this.dCerts);
         
+        var dSignerInfos = new nA.DERSet({array: this.signerInfoList});
         a.push(dSignerInfos);
 
         var seq = new nA.DERSequence({array: a});
@@ -855,11 +882,11 @@ KJUR.asn1.cms.SignedData = function(params) {
     this.getContentInfo = function() {
         this.getEncodedHex();
         var ci = new nC.ContentInfo({type: 'signed-data', obj: this});
-	return ci;
+        return ci;
     };
 
     this.getContentInfoEncodedHex = function() {
-	var ci = this.getContentInfo();
+        var ci = this.getContentInfo();
         var ciHex = ci.getEncodedHex();
         return ciHex;
     };
@@ -897,6 +924,7 @@ KJUR.asn1.cms.CMSUtil = new function() {
  *     hashAlg: 'sha256',
  *     sAttr: {
  *       SigningTime: {}
+ *       SigningCertificateV2: {array: [certPEM]},
  *     },
  *     signerCert: certPEM,
  *     sigAlg: 'SHA256withRSA',
@@ -906,6 +934,7 @@ KJUR.asn1.cms.CMSUtil = new function() {
  */
 KJUR.asn1.cms.CMSUtil.newSignedData = function(param) {
     var nC = KJUR.asn1.cms;
+    var nE = KJUR.asn1.cades;
     var sd = new nC.SignedData();
 
     sd.dEncapContentInfo.setContentValue(param.content);
@@ -927,8 +956,21 @@ KJUR.asn1.cms.CMSUtil.newSignedData = function(param) {
                                  hashAlg: siParam.hashAlg});
 
         for (attrName in siParam.sAttr) {
+            var attrParam = siParam.sAttr[attrName];
             if (attrName == "SigningTime") {
-                var attr = new nC.SigningTime(siParam.sAttr[attrName]);
+                var attr = new nC.SigningTime(attrParam);
+                si.dSignedAttrs.add(attr);
+            }
+            if (attrName == "SigningCertificate") {
+                var attr = new nC.SigningCertificate(attrParam);
+                si.dSignedAttrs.add(attr);
+            }
+            if (attrName == "SigningCertificateV2") {
+                var attr = new nC.SigningCertificateV2(attrParam);
+                si.dSignedAttrs.add(attr);
+            }
+            if (attrName == "SignaturePolicyIdentifier") {
+                var attr = new nE.SignaturePolicyIdentifier(attrParam);
                 si.dSignedAttrs.add(attr);
             }
         }

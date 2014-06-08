@@ -1,0 +1,783 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! asn1cades-1.0.0.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+<span class='line'>  2</span>  */</span><span class="WHIT">
+<span class='line'>  3</span> </span><span class="COMM">/*
+<span class='line'>  4</span>  * asn1cades.js - ASN.1 DER encoder classes for RFC 5126 CAdES long term signature
+<span class='line'>  5</span>  *
+<span class='line'>  6</span>  * Copyright (c) 2014 Kenji Urushima (kenji.urushima@gmail.com)
+<span class='line'>  7</span>  *
+<span class='line'>  8</span>  * This software is licensed under the terms of the MIT License.
+<span class='line'>  9</span>  * http://kjur.github.com/jsrsasign/license
+<span class='line'> 10</span>  *
+<span class='line'> 11</span>  * The above copyright and license notice shall be 
+<span class='line'> 12</span>  * included in all copies or substantial portions of the Software.
+<span class='line'> 13</span>  */</span><span class="WHIT">
+<span class='line'> 14</span> 
+<span class='line'> 15</span> </span><span class="COMM">/**
+<span class='line'> 16</span>  * @fileOverview
+<span class='line'> 17</span>  * @name asn1cades-1.0.js
+<span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
+<span class='line'> 19</span>  * @version 1.0.0 (2014-May-28)
+<span class='line'> 20</span>  * @since jsrsasign 4.7.0
+<span class='line'> 21</span>  * @license &lt;a href="http://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
+<span class='line'> 22</span>  */</span><span class="WHIT">
+<span class='line'> 23</span> 
+<span class='line'> 24</span> </span><span class="COMM">/** 
+<span class='line'> 25</span>  * kjur's class library name space
+<span class='line'> 26</span>  * // already documented in asn1-1.0.js
+<span class='line'> 27</span>  * @name KJUR
+<span class='line'> 28</span>  * @namespace kjur's class library name space
+<span class='line'> 29</span>  */</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">KJUR</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">KJUR</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">KJUR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 31</span> 
+<span class='line'> 32</span> </span><span class="COMM">/**
+<span class='line'> 33</span>  * kjur's ASN.1 class library name space
+<span class='line'> 34</span>  * // already documented in asn1-1.0.js
+<span class='line'> 35</span>  * @name KJUR.asn1
+<span class='line'> 36</span>  * @namespace
+<span class='line'> 37</span>  */</span><span class="WHIT">
+<span class='line'> 38</span> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">KJUR.asn1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 39</span> 
+<span class='line'> 40</span> </span><span class="COMM">/**
+<span class='line'> 41</span>  * kjur's ASN.1 class for RFC 5126 CAdES long term signature
+<span class='line'> 42</span>  * &lt;p>
+<span class='line'> 43</span>  * This name space provides 
+<span class='line'> 44</span>  * &lt;a href="https://tools.ietf.org/html/rfc5126">RFC 5126
+<span class='line'> 45</span>  * CAdES(CMS Advanced Electronic Signature)&lt;/a> generator.
+<span class='line'> 46</span>  *
+<span class='line'> 47</span>  * &lt;h4>SUPPORTED FORMATS&lt;/h4>
+<span class='line'> 48</span>  * Following CAdES formats is supported by this library.
+<span class='line'> 49</span>  * &lt;ul>
+<span class='line'> 50</span>  * &lt;li>CAdES-BES - CAdES Basic Electronic Signature&lt;/li>
+<span class='line'> 51</span>  * &lt;li>CAdES-EPES - CAdES Explicit Policy-based Electronic Signature&lt;/li>
+<span class='line'> 52</span>  * &lt;li>CAdES-T - Electronic Signature with Time&lt;/li>
+<span class='line'> 53</span>  * &lt;/ul>
+<span class='line'> 54</span>  * &lt;/p>
+<span class='line'> 55</span>  *
+<span class='line'> 56</span>  * &lt;h4>PROVIDED ATTRIBUTE CLASSES&lt;/h4>
+<span class='line'> 57</span>  * &lt;ul>
+<span class='line'> 58</span>  * &lt;li>{@link KJUR.asn1.cades.SignaturePolicyIdentifier} - for CAdES-EPES&lt;/li>
+<span class='line'> 59</span>  * &lt;li>{@link KJUR.asn1.cades.SignatureTimeStamp} - for CAdES-T&lt;/li>
+<span class='line'> 60</span>  * &lt;li>{@link KJUR.asn1.cades.CompleteCertificateRefs} - for CAdES-C(for future use)&lt;/li>
+<span class='line'> 61</span>  * &lt;/ul>
+<span class='line'> 62</span>  * NOTE: Currntly CAdES-C is not supported since parser can't
+<span class='line'> 63</span>  * handle unsigned attribute.
+<span class='line'> 64</span>  * 
+<span class='line'> 65</span>  * &lt;h4>OTHER CLASSES&lt;/h4>
+<span class='line'> 66</span>  * &lt;ul>
+<span class='line'> 67</span>  * &lt;li>{@link KJUR.asn1.cades.OtherHashAlgAndValue}&lt;/li>
+<span class='line'> 68</span>  * &lt;li>{@link KJUR.asn1.cades.OtherHash}&lt;/li>
+<span class='line'> 69</span>  * &lt;li>{@link KJUR.asn1.cades.OtherCertID}&lt;/li>
+<span class='line'> 70</span>  * &lt;li>{@link KJUR.asn1.cades.CAdESUtil} - utilities for CAdES&lt;/li>
+<span class='line'> 71</span>  * &lt;/ul>
+<span class='line'> 72</span>  *
+<span class='line'> 73</span>  * &lt;h4>GENERATE CAdES-BES&lt;/h4>
+<span class='line'> 74</span>  * To generate CAdES-BES, {@link KJUR.asn.cades} namespace 
+<span class='line'> 75</span>  * classes are not required and already {@link KJUR.asn.cms} namespace 
+<span class='line'> 76</span>  * provides attributes for CAdES-BES.
+<span class='line'> 77</span>  * Create {@link KJUR.asn1.cms.SignedData} with following
+<span class='line'> 78</span>  * mandatory attribute in CAdES-BES:
+<span class='line'> 79</span>  * &lt;ul>
+<span class='line'> 80</span>  * &lt;li>{@link KJUR.asn1.cms.ContentType}&lt;/li>
+<span class='line'> 81</span>  * &lt;li>{@link KJUR.asn1.cms.MessageDigest}&lt;/li>
+<span class='line'> 82</span>  * &lt;li>{@link KJUR.asn1.cms.SigningCertificate} or &lt;/li>
+<span class='line'> 83</span>  * &lt;li>{@link KJUR.asn1.cms.SigningCertificateV2}&lt;/li>
+<span class='line'> 84</span>  * &lt;/ul>
+<span class='line'> 85</span>  * CMSUtil.newSignedData method is very useful to generate CAdES-BES.
+<span class='line'> 86</span>  * &lt;pre>
+<span class='line'> 87</span>  * sd = KJUR.asn1.cms.CMSUtil.newSignedData({
+<span class='line'> 88</span>  *   content: {str: "aaa"},
+<span class='line'> 89</span>  *   certs: [certPEM],
+<span class='line'> 90</span>  *   signerInfos: [{
+<span class='line'> 91</span>  *     hashAlg: 'sha256',
+<span class='line'> 92</span>  *     sAttr: {SigningCertificateV2: {array: [certPEM]}},
+<span class='line'> 93</span>  *     signerCert: certPEM,
+<span class='line'> 94</span>  *     sigAlg: 'SHA256withRSA',
+<span class='line'> 95</span>  *     signerPrvKey: pkcs8PrvKeyPEM
+<span class='line'> 96</span>  *   }]
+<span class='line'> 97</span>  * });
+<span class='line'> 98</span>  * signedDataHex = sd.getContentInfoEncodedHex();
+<span class='line'> 99</span>  * &lt;/pre>
+<span class='line'>100</span>  * NOTE: ContentType and MessageDigest signed attributes
+<span class='line'>101</span>  * are automatically added by default.
+<span class='line'>102</span>  *
+<span class='line'>103</span>  * &lt;h4>GENERATE CAdES-BES with multiple signers&lt;/h4>
+<span class='line'>104</span>  * If you need signature by multiple signers, you can 
+<span class='line'>105</span>  * specify one or more items in 'signerInfos' property as below.
+<span class='line'>106</span>  * &lt;pre>
+<span class='line'>107</span>  * sd = KJUR.asn1.cms.CMSUtil.newSignedData({
+<span class='line'>108</span>  *   content: {str: "aaa"},
+<span class='line'>109</span>  *   certs: [certPEM1, certPEM2],
+<span class='line'>110</span>  *   signerInfos: [{
+<span class='line'>111</span>  *     hashAlg: 'sha256',
+<span class='line'>112</span>  *     sAttr: {SigningCertificateV2: {array: [certPEM1]}},
+<span class='line'>113</span>  *     signerCert: certPEM1,
+<span class='line'>114</span>  *     sigAlg: 'SHA256withRSA',
+<span class='line'>115</span>  *     signerPrvKey: pkcs8PrvKeyPEM1
+<span class='line'>116</span>  *   },{
+<span class='line'>117</span>  *     hashAlg: 'sha1',
+<span class='line'>118</span>  *     sAttr: {SigningCertificateV2: {array: [certPEM2]}},
+<span class='line'>119</span>  *     signerCert: certPEM2,
+<span class='line'>120</span>  *     sigAlg: 'SHA1withRSA',
+<span class='line'>121</span>  *     signerPrvKey: pkcs8PrvKeyPEM2
+<span class='line'>122</span>  *   }]
+<span class='line'>123</span>  * });
+<span class='line'>124</span>  * signedDataHex = sd.getContentInfoEncodedHex();
+<span class='line'>125</span>  * &lt;/pre>
+<span class='line'>126</span>  *
+<span class='line'>127</span>  * &lt;h4>GENERATE CAdES-EPES&lt;/h4>
+<span class='line'>128</span>  * When you need a CAdES-EPES signature,
+<span class='line'>129</span>  * you just need to add 'SignaturePolicyIdentifier'
+<span class='line'>130</span>  * attribute as below.
+<span class='line'>131</span>  * &lt;pre>
+<span class='line'>132</span>  * sd = KJUR.asn1.cms.CMSUtil.newSignedData({
+<span class='line'>133</span>  *   content: {str: "aaa"},
+<span class='line'>134</span>  *   certs: [certPEM],
+<span class='line'>135</span>  *   signerInfos: [{
+<span class='line'>136</span>  *     hashAlg: 'sha256',
+<span class='line'>137</span>  *     sAttr: {
+<span class='line'>138</span>  *       SigningCertificateV2: {array: [certPEM]},
+<span class='line'>139</span>  *       SignaturePolicyIdentifier: {
+<span class='line'>140</span>  *         oid: '1.2.3.4.5',
+<span class='line'>141</span>  *         hash: {alg: 'sha1', hash: 'b1b2b3b4b...'}
+<span class='line'>142</span>  *       },
+<span class='line'>143</span>  *     },
+<span class='line'>144</span>  *     signerCert: certPEM,
+<span class='line'>145</span>  *     sigAlg: 'SHA256withRSA',
+<span class='line'>146</span>  *     signerPrvKey: pkcs8PrvKeyPEM
+<span class='line'>147</span>  *   }]
+<span class='line'>148</span>  * });
+<span class='line'>149</span>  * signedDataHex = sd.getContentInfoEncodedHex();
+<span class='line'>150</span>  * &lt;/pre>
+<span class='line'>151</span>  *
+<span class='line'>152</span>  * &lt;h4>GENERATE CAdES-T&lt;/h4>
+<span class='line'>153</span>  * After a signed CAdES-BES or CAdES-EPES signature have been generated,
+<span class='line'>154</span>  * you can generate CAdES-T by adding SigningTimeStamp unsigned attribute.
+<span class='line'>155</span>  * &lt;pre>
+<span class='line'>156</span>  * beshex = "30..."; // hex of CAdES-BES or EPES data 
+<span class='line'>157</span>  * info = KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned(beshex);
+<span class='line'>158</span>  * // You can refer a hexadecimal string of signature value 
+<span class='line'>159</span>  * // in the first signerInfo in the CAdES-BES/EPES with a variable:
+<span class='line'>160</span>  * // 'info.si[0].sigval'. You need to get RFC 3161 TimeStampToken
+<span class='line'>161</span>  * // from a trusted time stamp authority. Otherwise you can also 
+<span class='line'>162</span>  * // get it by 'KJUR.asn1.tsp' module. We suppose that we could 
+<span class='line'>163</span>  * // get proper time stamp.
+<span class='line'>164</span>  * tsthex0 = "30..."; // hex of TimeStampToken for signerInfo[0] sigval
+<span class='line'>165</span>  * si0 = info.obj.signerInfoList[0];
+<span class='line'>166</span>  * si0.addUnsigned(new KJUR.asn1.cades.SignatureTimeStamp({tst: tsthex0});
+<span class='line'>167</span>  * esthex = info.obj.getContentInfoEncodedHex(); // CAdES-T
+<span class='line'>168</span>  * &lt;/pre>
+<span class='line'>169</span>  * &lt;/p>
+<span class='line'>170</span>  *
+<span class='line'>171</span>  * &lt;h4>SAMPLE CODES&lt;/h4>
+<span class='line'>172</span>  * &lt;ul>
+<span class='line'>173</span>  * &lt;li>&lt;a href="../../tool_cades.html">demo program for CAdES-BES/EPES/T generation&lt;/a>&lt;/li>
+<span class='line'>174</span>  * &lt;li>&lt;a href="../../test/qunit-do-asn1cades.html">Unit test code for KJUR.asn1.cades package&lt;/a>&lt;/li>
+<span class='line'>175</span>  * &lt;li>&lt;a href="../../test/qunit-do-asn1tsp.html">Unit test code for KJUR.asn1.tsp package (See SimpleTSAAdaptor test)&lt;/a>&lt;/li>
+<span class='line'>176</span>  * &lt;li>&lt;a href="../../test/qunit-do-asn1cms.html">Unit test code for KJUR.asn1.cms package (See newSignedData test)&lt;/a>&lt;/li>
+<span class='line'>177</span>  * &lt;/ul>
+<span class='line'>178</span>  * 
+<span class='line'>179</span>  * @name KJUR.asn1.cades
+<span class='line'>180</span>  * @namespace
+<span class='line'>181</span>  */</span><span class="WHIT">
+<span class='line'>182</span> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.cades</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">KJUR.asn1.cades</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.cades</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>183</span> 
+<span class='line'>184</span> </span><span class="COMM">/**
+<span class='line'>185</span>  * class for RFC 5126 CAdES SignaturePolicyIdentifier attribute
+<span class='line'>186</span>  * @name KJUR.asn1.cades.SignaturePolicyIdentifier
+<span class='line'>187</span>  * @class class for RFC 5126 CAdES SignaturePolicyIdentifier attribute
+<span class='line'>188</span>  * @param {Array} params associative array of parameters
+<span class='line'>189</span>  * @extends KJUR.asn1.cms.Attribute
+<span class='line'>190</span>  * @since jsrsasign 4.7.0 asn1cades 1.0.0
+<span class='line'>191</span>  * @description
+<span class='line'>192</span>  * &lt;pre>
+<span class='line'>193</span>  * SignaturePolicyIdentifier ::= CHOICE {
+<span class='line'>194</span>  *    signaturePolicyId       SignaturePolicyId,
+<span class='line'>195</span>  *    signaturePolicyImplied  SignaturePolicyImplied } -- not used
+<span class='line'>196</span>  *
+<span class='line'>197</span>  * SignaturePolicyImplied ::= NULL
+<span class='line'>198</span>  * SignaturePolicyId ::= SEQUENCE {
+<span class='line'>199</span>  *    sigPolicyId           SigPolicyId,
+<span class='line'>200</span>  *    sigPolicyHash         SigPolicyHash,
+<span class='line'>201</span>  *    sigPolicyQualifiers   SEQUENCE SIZE (1..MAX) OF
+<span class='line'>202</span>  *                             SigPolicyQualifierInfo OPTIONAL }
+<span class='line'>203</span>  * SigPolicyId ::= OBJECT IDENTIFIER
+<span class='line'>204</span>  * SigPolicyHash ::= OtherHashAlgAndValue
+<span class='line'>205</span>  * &lt;/pre>
+<span class='line'>206</span>  * @example
+<span class='line'>207</span>  * var o = new KJUR.asn1.cades.SignaturePolicyIdentifier({
+<span class='line'>208</span>  *   oid: '1.2.3.4.5',
+<span class='line'>209</span>  *   hash: {alg: 'sha1', hash: 'a1a2a3a4...'}
+<span class='line'>210</span>  * });
+<span class='line'>211</span>  */</span><span class="WHIT">
+<span class='line'>212</span> </span><span class="COMM">/*
+<span class='line'>213</span>  * id-aa-ets-sigPolicyId OBJECT IDENTIFIER ::= { iso(1)
+<span class='line'>214</span>  *    member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs9(9)
+<span class='line'>215</span>  *    smime(16) id-aa(2) 15 }
+<span class='line'>216</span>  *
+<span class='line'>217</span>  * signature-policy-identifier attribute values have ASN.1 type
+<span class='line'>218</span>  * SignaturePolicyIdentifier:
+<span class='line'>219</span>  *
+<span class='line'>220</span>  * SigPolicyQualifierInfo ::= SEQUENCE {
+<span class='line'>221</span>  *    sigPolicyQualifierId  SigPolicyQualifierId,
+<span class='line'>222</span>  *    sigQualifier          ANY DEFINED BY sigPolicyQualifierId } 
+<span class='line'>223</span>  *
+<span class='line'>224</span>  * sigpolicyQualifierIds defined in the present document:
+<span class='line'>225</span>  * SigPolicyQualifierId ::= OBJECT IDENTIFIER
+<span class='line'>226</span>  * id-spq-ets-uri OBJECT IDENTIFIER ::= { iso(1)
+<span class='line'>227</span>  *    member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs9(9)
+<span class='line'>228</span>  *    smime(16) id-spq(5) 1 }
+<span class='line'>229</span>  *
+<span class='line'>230</span>  * SPuri ::= IA5String
+<span class='line'>231</span>  *
+<span class='line'>232</span>  * id-spq-ets-unotice OBJECT IDENTIFIER ::= { iso(1)
+<span class='line'>233</span>  *    member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs9(9)
+<span class='line'>234</span>  *    smime(16) id-spq(5) 2 }
+<span class='line'>235</span>  *
+<span class='line'>236</span>  * SPUserNotice ::= SEQUENCE {
+<span class='line'>237</span>  *    noticeRef        NoticeReference OPTIONAL,
+<span class='line'>238</span>  *    explicitText     DisplayText OPTIONAL}
+<span class='line'>239</span>  *
+<span class='line'>240</span>  * NoticeReference ::= SEQUENCE {
+<span class='line'>241</span>  *    organization     DisplayText,
+<span class='line'>242</span>  *    noticeNumbers    SEQUENCE OF INTEGER }
+<span class='line'>243</span>  *
+<span class='line'>244</span>  * DisplayText ::= CHOICE {
+<span class='line'>245</span>  *    visibleString    VisibleString  (SIZE (1..200)),
+<span class='line'>246</span>  *    bmpString        BMPString      (SIZE (1..200)),
+<span class='line'>247</span>  *    utf8String       UTF8String     (SIZE (1..200)) }
+<span class='line'>248</span>  */</span><span class="WHIT">
+<span class='line'>249</span> </span><span class="NAME">KJUR.asn1.cades.SignaturePolicyIdentifier</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>250</span> </span><span class="WHIT">    </span><span class="NAME">KJUR.asn1.cades.SignaturePolicyIdentifier.superclass.constructor.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>251</span> </span><span class="WHIT">    </span><span class="NAME">this.attrTypeOid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"1.2.840.113549.1.9.16.2.15"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>252</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nA</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>253</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nC</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.cades</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>254</span> 
+<span class='line'>255</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>256</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params.oid</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>257</span> </span><span class="WHIT">            </span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params.hash</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"object"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>258</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dOid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.DERObjectIdentifier</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">oid</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">params.oid</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>259</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dHash</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nC.OtherHashAlgAndValue</span><span class="PUNC">(</span><span class="NAME">params.hash</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>260</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">seq</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.DERSequence</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">array</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">dOid</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dHash</span><span class="PUNC">]</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>261</span> </span><span class="WHIT">            </span><span class="NAME">this.valueList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">seq</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>262</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>263</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>264</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>265</span> </span><span class="NAME">YAHOO.lang.extend</span><span class="PUNC">(</span><span class="NAME">KJUR.asn1.cades.SignaturePolicyIdentifier</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>266</span> </span><span class="WHIT">                  </span><span class="NAME">KJUR.asn1.cms.Attribute</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>267</span> 
+<span class='line'>268</span> </span><span class="COMM">/**
+<span class='line'>269</span>  * class for OtherHashAlgAndValue ASN.1 object
+<span class='line'>270</span>  * @name KJUR.asn1.cades.OtherHashAlgAndValue
+<span class='line'>271</span>  * @class class for OtherHashAlgAndValue ASN.1 object
+<span class='line'>272</span>  * @param {Array} params associative array of parameters
+<span class='line'>273</span>  * @extends KJUR.asn1.ASN1Object
+<span class='line'>274</span>  * @since jsrsasign 4.7.0 asn1cades 1.0.0
+<span class='line'>275</span>  * @description
+<span class='line'>276</span>  * &lt;pre>
+<span class='line'>277</span>  * OtherHashAlgAndValue ::= SEQUENCE {
+<span class='line'>278</span>  *    hashAlgorithm   AlgorithmIdentifier,
+<span class='line'>279</span>  *    hashValue       OtherHashValue }
+<span class='line'>280</span>  * OtherHashValue ::= OCTET STRING
+<span class='line'>281</span>  * &lt;/pre>
+<span class='line'>282</span>  */</span><span class="WHIT">
+<span class='line'>283</span> </span><span class="NAME">KJUR.asn1.cades.OtherHashAlgAndValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>284</span> </span><span class="WHIT">    </span><span class="NAME">KJUR.asn1.cades.OtherHashAlgAndValue.superclass.constructor.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>285</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nA</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>286</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>287</span> </span><span class="WHIT">    </span><span class="NAME">this.dAlg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>288</span> </span><span class="WHIT">    </span><span class="NAME">this.dHash</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>289</span> 
+<span class='line'>290</span> </span><span class="WHIT">    </span><span class="NAME">this.getEncodedHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>291</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">seq</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.DERSequence</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">array</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">this.dAlg</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.dHash</span><span class="PUNC">]</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>292</span> </span><span class="WHIT">        </span><span class="NAME">this.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">seq.getEncodedHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>293</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.hTLV</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>294</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>295</span> 
+<span class='line'>296</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>297</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params.alg</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>298</span> </span><span class="WHIT">            </span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params.hash</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>299</span> </span><span class="WHIT">            </span><span class="NAME">this.dAlg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nX.AlgorithmIdentifier</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">name</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">params.alg</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>300</span> </span><span class="WHIT">            </span><span class="NAME">this.dHash</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.DEROctetString</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">hex</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">params.hash</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>301</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>302</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>303</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>304</span> </span><span class="NAME">YAHOO.lang.extend</span><span class="PUNC">(</span><span class="NAME">KJUR.asn1.cades.OtherHashAlgAndValue</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.ASN1Object</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>305</span> 
+<span class='line'>306</span> </span><span class="COMM">/**
+<span class='line'>307</span>  * class for RFC 5126 CAdES SignatureTimeStamp attribute
+<span class='line'>308</span>  * @name KJUR.asn1.cades.SignatureTimeStamp
+<span class='line'>309</span>  * @class class for RFC 5126 CAdES SignatureTimeStamp attribute
+<span class='line'>310</span>  * @param {Array} params associative array of parameters
+<span class='line'>311</span>  * @extends KJUR.asn1.cms.Attribute
+<span class='line'>312</span>  * @since jsrsasign 4.7.0 asn1cades 1.0.0
+<span class='line'>313</span>  * @description
+<span class='line'>314</span>  * &lt;pre>
+<span class='line'>315</span>  * id-aa-signatureTimeStampToken OBJECT IDENTIFIER ::=
+<span class='line'>316</span>  *    1.2.840.113549.1.9.16.2.14
+<span class='line'>317</span>  * SignatureTimeStampToken ::= TimeStampToken
+<span class='line'>318</span>  * &lt;/pre>
+<span class='line'>319</span>  */</span><span class="WHIT">
+<span class='line'>320</span> </span><span class="NAME">KJUR.asn1.cades.SignatureTimeStamp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>321</span> </span><span class="WHIT">    </span><span class="NAME">KJUR.asn1.cades.SignatureTimeStamp.superclass.constructor.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>322</span> </span><span class="WHIT">    </span><span class="NAME">this.attrTypeOid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"1.2.840.113549.1.9.16.2.14"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>323</span> </span><span class="WHIT">    </span><span class="NAME">this.tstHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>324</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nA</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>325</span> 
+<span class='line'>326</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>327</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params.res</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>328</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params.res</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>329</span> </span><span class="WHIT">                </span><span class="NAME">params.res.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9A-Fa-f]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>330</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.res</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.ASN1Object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>331</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>332</span> </span><span class="WHIT">                </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"res param shall be ASN1Object or hex string"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>333</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>334</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>335</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params.tst</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>336</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params.tst</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>337</span> </span><span class="WHIT">                </span><span class="NAME">params.tst.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9A-Fa-f]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>338</span> </span><span class="WHIT">                </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.ASN1Object</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>339</span> </span><span class="WHIT">                </span><span class="NAME">this.tstHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params.tst</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>340</span> </span><span class="WHIT">                </span><span class="NAME">d.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.tstHex</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>341</span> </span><span class="WHIT">                </span><span class="NAME">d.getEncodedHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>342</span> </span><span class="WHIT">                </span><span class="NAME">this.valueList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">d</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>343</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.tst</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.ASN1Object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>344</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>345</span> </span><span class="WHIT">                </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"tst param shall be ASN1Object or hex string"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>346</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>347</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>348</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>349</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>350</span> </span><span class="NAME">YAHOO.lang.extend</span><span class="PUNC">(</span><span class="NAME">KJUR.asn1.cades.SignatureTimeStamp</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>351</span> </span><span class="WHIT">                  </span><span class="NAME">KJUR.asn1.cms.Attribute</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>352</span> 
+<span class='line'>353</span> </span><span class="COMM">/**
+<span class='line'>354</span>  * class for RFC 5126 CAdES CompleteCertificateRefs attribute
+<span class='line'>355</span>  * @name KJUR.asn1.cades.CompleteCertificateRefs
+<span class='line'>356</span>  * @class class for RFC 5126 CAdES CompleteCertificateRefs attribute
+<span class='line'>357</span>  * @param {Array} params associative array of parameters
+<span class='line'>358</span>  * @extends KJUR.asn1.cms.Attribute
+<span class='line'>359</span>  * @since jsrsasign 4.7.0 asn1cades 1.0.0
+<span class='line'>360</span>  * @description
+<span class='line'>361</span>  * &lt;pre>
+<span class='line'>362</span>  * id-aa-ets-certificateRefs OBJECT IDENTIFIER = 
+<span class='line'>363</span>  *    1.2.840.113549.1.9.16.2.21
+<span class='line'>364</span>  * CompleteCertificateRefs ::=  SEQUENCE OF OtherCertID
+<span class='line'>365</span>  * &lt;/pre>
+<span class='line'>366</span>  * @example
+<span class='line'>367</span>  * o = new KJUR.asn1.cades.CompleteCertificateRefs([certPEM1,certPEM2]);
+<span class='line'>368</span>  */</span><span class="WHIT">
+<span class='line'>369</span> </span><span class="NAME">KJUR.asn1.cades.CompleteCertificateRefs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>370</span> </span><span class="WHIT">    </span><span class="NAME">KJUR.asn1.cades.CompleteCertificateRefs.superclass.constructor.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>371</span> </span><span class="WHIT">    </span><span class="NAME">this.attrTypeOid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"1.2.840.113549.1.9.16.2.21"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>372</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nA</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>373</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nD</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.cades</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>374</span> 
+<span class='line'>375</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>376</span>      * set value by array
+<span class='line'>377</span>      * @name setByArray
+<span class='line'>378</span>      * @memberOf KJUR.asn1.cades.CompleteCertificateRefs
+<span class='line'>379</span>      * @function
+<span class='line'>380</span>      * @param {Array} a array of {@link KJUR.asn1.cades.OtherCertID} argument
+<span class='line'>381</span>      * @return unspecified
+<span class='line'>382</span>      * @description
+<span class='line'>383</span>      */</span><span class="WHIT">
+<span class='line'>384</span> </span><span class="WHIT">    </span><span class="NAME">this.setByArray</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">a</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>385</span> </span><span class="WHIT">        </span><span class="NAME">this.valueList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>386</span> </span><span class="WHIT">        </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>387</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">o</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nD.OtherCertID</span><span class="PUNC">(</span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>388</span> </span><span class="WHIT">            </span><span class="NAME">this.valueList.push</span><span class="PUNC">(</span><span class="NAME">o</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>389</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>390</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>391</span> 
+<span class='line'>392</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>393</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"object"</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>394</span> </span><span class="WHIT">            </span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"number"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>395</span> </span><span class="WHIT">            </span><span class="NAME">this.setByArray</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>396</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>397</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>398</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>399</span> </span><span class="NAME">YAHOO.lang.extend</span><span class="PUNC">(</span><span class="NAME">KJUR.asn1.cades.CompleteCertificateRefs</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>400</span> </span><span class="WHIT">                  </span><span class="NAME">KJUR.asn1.cms.Attribute</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>401</span> 
+<span class='line'>402</span> </span><span class="COMM">/**
+<span class='line'>403</span>  * class for OtherCertID ASN.1 object
+<span class='line'>404</span>  * @name KJUR.asn1.cades.OtherCertID
+<span class='line'>405</span>  * @class class for OtherCertID ASN.1 object
+<span class='line'>406</span>  * @param {Array} params associative array of parameters
+<span class='line'>407</span>  * @extends KJUR.asn1.ASN1Object
+<span class='line'>408</span>  * @since jsrsasign 4.7.0 asn1cades 1.0.0
+<span class='line'>409</span>  * @description
+<span class='line'>410</span>  * &lt;pre>
+<span class='line'>411</span>  * OtherCertID ::= SEQUENCE {
+<span class='line'>412</span>  *    otherCertHash    OtherHash,
+<span class='line'>413</span>  *    issuerSerial     IssuerSerial OPTIONAL }
+<span class='line'>414</span>  * &lt;/pre>
+<span class='line'>415</span>  * @example
+<span class='line'>416</span>  * o = new KJUR.asn1.cades.OtherCertID(certPEM);
+<span class='line'>417</span>  * o = new KJUR.asn1.cades.OtherCertID({cert:certPEM, hasis: false});
+<span class='line'>418</span>  */</span><span class="WHIT">
+<span class='line'>419</span> </span><span class="NAME">KJUR.asn1.cades.OtherCertID</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>420</span> </span><span class="WHIT">    </span><span class="NAME">KJUR.asn1.cades.OtherCertID.superclass.constructor.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>421</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nA</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>422</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nC</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.cms</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>423</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nD</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.cades</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>424</span> </span><span class="WHIT">    </span><span class="NAME">this.hasIssuerSerial</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>425</span> </span><span class="WHIT">    </span><span class="NAME">this.dOtherCertHash</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>426</span> </span><span class="WHIT">    </span><span class="NAME">this.dIssuerSerial</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>427</span> 
+<span class='line'>428</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>429</span>      * set value by PEM string of certificate
+<span class='line'>430</span>      * @name setByCertPEM
+<span class='line'>431</span>      * @memberOf KJUR.asn1.cades.OtherCertID
+<span class='line'>432</span>      * @function
+<span class='line'>433</span>      * @param {String} certPEM PEM string of certificate
+<span class='line'>434</span>      * @return unspecified
+<span class='line'>435</span>      * @description
+<span class='line'>436</span>      * This method will set value by a PEM string of a certificate.
+<span class='line'>437</span>      * This will add IssuerAndSerialNumber by default 
+<span class='line'>438</span>      * which depends on hasIssuerSerial flag.
+<span class='line'>439</span>      */</span><span class="WHIT">
+<span class='line'>440</span> </span><span class="WHIT">    </span><span class="NAME">this.setByCertPEM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">certPEM</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>441</span> </span><span class="WHIT">        </span><span class="NAME">this.dOtherCertHash</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nD.OtherHash</span><span class="PUNC">(</span><span class="NAME">certPEM</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>442</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.hasIssuerSerial</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>443</span> </span><span class="WHIT">            </span><span class="NAME">this.dIssuerSerial</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nC.IssuerAndSerialNumber</span><span class="PUNC">(</span><span class="NAME">certPEM</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>444</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>445</span> 
+<span class='line'>446</span> </span><span class="WHIT">    </span><span class="NAME">this.getEncodedHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>447</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.hTLV</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.hTLV</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>448</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.dOtherCertHash</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>449</span> </span><span class="WHIT">            </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"otherCertHash not set"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>450</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">this.dOtherCertHash</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>451</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.dIssuerSerial</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>452</span> </span><span class="WHIT">            </span><span class="NAME">a.push</span><span class="PUNC">(</span><span class="NAME">this.dIssuerSerial</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>453</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">seq</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.DERSequence</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">array</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>454</span> </span><span class="WHIT">        </span><span class="NAME">this.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">seq.getEncodedHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>455</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.hTLV</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>456</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>457</span> 
+<span class='line'>458</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>459</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>460</span> </span><span class="WHIT">            </span><span class="NAME">params.indexOf</span><span class="PUNC">(</span><span class="STRN">"-----BEGIN "</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>461</span> </span><span class="WHIT">            </span><span class="NAME">this.setByCertPEM</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>462</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>463</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"object"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>464</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.hasis</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>465</span> </span><span class="WHIT">                </span><span class="NAME">this.hasIssuerSerial</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>466</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params.cert</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>467</span> </span><span class="WHIT">                </span><span class="NAME">this.setByCertPEM</span><span class="PUNC">(</span><span class="NAME">params.cert</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>468</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>469</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>470</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>471</span> </span><span class="NAME">YAHOO.lang.extend</span><span class="PUNC">(</span><span class="NAME">KJUR.asn1.cades.OtherCertID</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.ASN1Object</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>472</span> 
+<span class='line'>473</span> </span><span class="COMM">/**
+<span class='line'>474</span>  * class for OtherHash ASN.1 object
+<span class='line'>475</span>  * @name KJUR.asn1.cades.OtherHash
+<span class='line'>476</span>  * @class class for OtherHash ASN.1 object
+<span class='line'>477</span>  * @param {Array} params associative array of parameters
+<span class='line'>478</span>  * @extends KJUR.asn1.ASN1Object
+<span class='line'>479</span>  * @since jsrsasign 4.7.0 asn1cades 1.0.0
+<span class='line'>480</span>  * @description
+<span class='line'>481</span>  * &lt;pre>
+<span class='line'>482</span>  * OtherHash ::= CHOICE {
+<span class='line'>483</span>  *    sha1Hash   OtherHashValue,  -- This contains a SHA-1 hash
+<span class='line'>484</span>  *    otherHash  OtherHashAlgAndValue}
+<span class='line'>485</span>  * OtherHashValue ::= OCTET STRING
+<span class='line'>486</span>  * &lt;/pre>
+<span class='line'>487</span>  * @example
+<span class='line'>488</span>  * o = new KJUR.asn1.cades.OtherHash("1234");
+<span class='line'>489</span>  * o = new KJUR.asn1.cades.OtherHash(certPEMStr); // default alg=sha256
+<span class='line'>490</span>  * o = new KJUR.asn1.cades.OtherHash({alg: 'sha256', hash: '1234'});
+<span class='line'>491</span>  * o = new KJUR.asn1.cades.OtherHash({alg: 'sha256', cert: certPEM});
+<span class='line'>492</span>  * o = new KJUR.asn1.cades.OtherHash({cert: certPEM});
+<span class='line'>493</span>  */</span><span class="WHIT">
+<span class='line'>494</span> </span><span class="NAME">KJUR.asn1.cades.OtherHash</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>495</span> </span><span class="WHIT">    </span><span class="NAME">KJUR.asn1.cades.OtherHash.superclass.constructor.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>496</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nA</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>497</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nD</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.cades</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>498</span> </span><span class="WHIT">    </span><span class="NAME">this.alg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'sha256'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>499</span> </span><span class="WHIT">    </span><span class="NAME">this.dOtherHash</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>500</span> 
+<span class='line'>501</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>502</span>      * set value by PEM string of certificate
+<span class='line'>503</span>      * @name setByCertPEM
+<span class='line'>504</span>      * @memberOf KJUR.asn1.cades.OtherHash
+<span class='line'>505</span>      * @function
+<span class='line'>506</span>      * @param {String} certPEM PEM string of certificate
+<span class='line'>507</span>      * @return unspecified
+<span class='line'>508</span>      * @description
+<span class='line'>509</span>      * This method will set value by a PEM string of a certificate.
+<span class='line'>510</span>      * An algorithm used to hash certificate data will
+<span class='line'>511</span>      * be defined by 'alg' property and 'sha256' is default.
+<span class='line'>512</span>      */</span><span class="WHIT">
+<span class='line'>513</span> </span><span class="WHIT">    </span><span class="NAME">this.setByCertPEM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">certPEM</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>514</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">certPEM.indexOf</span><span class="PUNC">(</span><span class="STRN">"-----BEGIN "</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>515</span> </span><span class="WHIT">            </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"certPEM not to seem PEM format"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>516</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">X509.pemToHex</span><span class="PUNC">(</span><span class="NAME">certPEM</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>517</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hash</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.crypto.Util.hashHex</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.alg</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>518</span> </span><span class="WHIT">        </span><span class="NAME">this.dOtherHash</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> 
+<span class='line'>519</span>             </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nD.OtherHashAlgAndValue</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">alg</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.alg</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">hash</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">hash</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>520</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>521</span> 
+<span class='line'>522</span> </span><span class="WHIT">    </span><span class="NAME">this.getEncodedHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>523</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.dOtherHash</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>524</span> </span><span class="WHIT">            </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"OtherHash not set"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>525</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.dOtherHash.getEncodedHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>526</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>527</span> 
+<span class='line'>528</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>529</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>530</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.indexOf</span><span class="PUNC">(</span><span class="STRN">"-----BEGIN "</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>531</span> </span><span class="WHIT">                </span><span class="NAME">this.setByCertPEM</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>532</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9A-Fa-f]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>533</span> </span><span class="WHIT">                </span><span class="NAME">this.dOtherHash</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.DEROctetString</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">hex</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>534</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>535</span> </span><span class="WHIT">                </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"unsupported string value for params"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>536</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>537</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"object"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>538</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params.cert</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>539</span> </span><span class="WHIT">                </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params.alg</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>540</span> </span><span class="WHIT">                    </span><span class="NAME">this.alg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params.alg</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>541</span> </span><span class="WHIT">                </span><span class="NAME">this.setByCertPEM</span><span class="PUNC">(</span><span class="NAME">params.cert</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>542</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>543</span> </span><span class="WHIT">                </span><span class="NAME">this.dOtherHash</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nD.OtherHashAlgAndValue</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>544</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>545</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>546</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>547</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>548</span> </span><span class="NAME">YAHOO.lang.extend</span><span class="PUNC">(</span><span class="NAME">KJUR.asn1.cades.OtherHash</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.ASN1Object</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>549</span> 
+<span class='line'>550</span> 
+<span class='line'>551</span> </span><span class="COMM">// == BEGIN UTILITIES =====================================================</span><span class="WHIT">
+<span class='line'>552</span> 
+<span class='line'>553</span> </span><span class="COMM">/**
+<span class='line'>554</span>  * CAdES utiliteis class
+<span class='line'>555</span>  * @name KJUR.asn1.cades.CAdESUtil
+<span class='line'>556</span>  * @class CAdES utilities class
+<span class='line'>557</span>  * @since jsrsasign 4.7.0 asn1cades 1.0.0
+<span class='line'>558</span>  */</span><span class="WHIT">
+<span class='line'>559</span> </span><span class="NAME">KJUR.asn1.cades.CAdESUtil</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>560</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>561</span> </span><span class="COMM">/*
+<span class='line'>562</span>  *
+<span class='line'>563</span>  */</span><span class="WHIT">
+<span class='line'>564</span> </span><span class="NAME">KJUR.asn1.cades.CAdESUtil.addSigTS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">dCMS</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">siIdx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sigTSHex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>565</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>566</span> </span><span class="COMM">/**
+<span class='line'>567</span>  * parse CMS SignedData to add unsigned attributes
+<span class='line'>568</span>  * @name parseSignedDataForAddingUnsigned
+<span class='line'>569</span>  * @memberOf KJUR.asn1.cades.CAdESUtil
+<span class='line'>570</span>  * @function
+<span class='line'>571</span>  * @param {String} hex hexadecimal string of ContentInfo of CMS SignedData
+<span class='line'>572</span>  * @return {Object} associative array of parsed data
+<span class='line'>573</span>  * @description
+<span class='line'>574</span>  * This method will parse a hexadecimal string of 
+<span class='line'>575</span>  * ContentInfo with CMS SignedData to add a attribute
+<span class='line'>576</span>  * to unsigned attributes field in a signerInfo field.
+<span class='line'>577</span>  * Parsed result will be an associative array which has
+<span class='line'>578</span>  * following properties:
+<span class='line'>579</span>  * &lt;ul>
+<span class='line'>580</span>  * &lt;li>version - hex of CMSVersion ASN.1 TLV&lt;/li>
+<span class='line'>581</span>  * &lt;li>algs - hex of DigestAlgorithms ASN.1 TLV&lt;/li>
+<span class='line'>582</span>  * &lt;li>encapcontent - hex of EncapContentInfo ASN.1 TLV&lt;/li>
+<span class='line'>583</span>  * &lt;li>certs - hex of Certificates ASN.1 TLV&lt;/li>
+<span class='line'>584</span>  * &lt;li>revs - hex of RevocationInfoChoices ASN.1 TLV&lt;/li>
+<span class='line'>585</span>  * &lt;li>si[] - array of SignerInfo properties&lt;/li>
+<span class='line'>586</span>  * &lt;li>obj - parsed KJUR.asn1.cms.SignedData object&lt;/li>
+<span class='line'>587</span>  * &lt;/ul>
+<span class='line'>588</span>  * @example
+<span class='line'>589</span>  * info = KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned(beshex);
+<span class='line'>590</span>  * sd = info.obj;
+<span class='line'>591</span>  */</span><span class="WHIT">
+<span class='line'>592</span> </span><span class="NAME">KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>593</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nA</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>594</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nC</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.cms</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>595</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nU</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.cades.CAdESUtil</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>596</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">r</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>597</span> 
+<span class='line'>598</span> </span><span class="WHIT">    </span><span class="COMM">// 1. not oid signed-data then error</span><span class="WHIT">
+<span class='line'>599</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ASN1HEX.getDecendantHexTLVByNthList</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> 
+<span class='line'>600</span>         </span><span class="STRN">"06092a864886f70d010702"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>601</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"hex is not CMS SignedData"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>602</span> 
+<span class='line'>603</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iSD</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getDecendantIndexByNthList</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>604</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aSDChildIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getPosArrayOfChildren_AtObj</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iSD</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>605</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">aSDChildIdx.length</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">4</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>606</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"num of SignedData elem shall be 4 at least"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>607</span> 
+<span class='line'>608</span> </span><span class="WHIT">    </span><span class="COMM">// 2. HEXs of SignedData children</span><span class="WHIT">
+<span class='line'>609</span> </span><span class="WHIT">    </span><span class="COMM">// 2.1. SignedData.CMSVersion</span><span class="WHIT">
+<span class='line'>610</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iVersion</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aSDChildIdx.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>611</span> </span><span class="WHIT">    </span><span class="NAME">r.version</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getHexOfTLV_AtObj</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iVersion</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>612</span> 
+<span class='line'>613</span> </span><span class="WHIT">    </span><span class="COMM">// 2.2. SignedData.DigestAlgorithms</span><span class="WHIT">
+<span class='line'>614</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iAlgs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aSDChildIdx.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>615</span> </span><span class="WHIT">    </span><span class="NAME">r.algs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getHexOfTLV_AtObj</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iAlgs</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>616</span> 
+<span class='line'>617</span> </span><span class="WHIT">    </span><span class="COMM">// 2.3. SignedData.EncapContentInfo</span><span class="WHIT">
+<span class='line'>618</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iEncapContent</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aSDChildIdx.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>619</span> </span><span class="WHIT">    </span><span class="NAME">r.encapcontent</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getHexOfTLV_AtObj</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iEncapContent</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>620</span> 
+<span class='line'>621</span> </span><span class="WHIT">    </span><span class="COMM">// 2.4. [0]Certs </span><span class="WHIT">
+<span class='line'>622</span> </span><span class="WHIT">    </span><span class="NAME">r.certs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>623</span> </span><span class="WHIT">    </span><span class="NAME">r.revs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>624</span> </span><span class="WHIT">    </span><span class="NAME">r.si</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>625</span> 
+<span class='line'>626</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iNext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aSDChildIdx.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>627</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hex.substr</span><span class="PUNC">(</span><span class="NAME">iNext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"a0"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>628</span> </span><span class="WHIT">        </span><span class="NAME">r.certs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getHexOfTLV_AtObj</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iNext</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>629</span> </span><span class="WHIT">        </span><span class="NAME">iNext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aSDChildIdx.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>630</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>631</span> 
+<span class='line'>632</span> </span><span class="WHIT">    </span><span class="COMM">// 2.5. [1]Revs</span><span class="WHIT">
+<span class='line'>633</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hex.substr</span><span class="PUNC">(</span><span class="NAME">iNext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"a1"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>634</span> </span><span class="WHIT">        </span><span class="NAME">r.revs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getHexOfTLV_AtObj</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iNext</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>635</span> </span><span class="WHIT">        </span><span class="NAME">iNext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aSDChildIdx.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>636</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>637</span> 
+<span class='line'>638</span> </span><span class="WHIT">    </span><span class="COMM">// 2.6. SignerInfos</span><span class="WHIT">
+<span class='line'>639</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iSignerInfos</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">iNext</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>640</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hex.substr</span><span class="PUNC">(</span><span class="NAME">iSignerInfos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"31"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>641</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Can't find signerInfos"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>642</span> 
+<span class='line'>643</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aSIIndex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getPosArrayOfChildren_AtObj</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iSignerInfos</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>644</span> </span><span class="WHIT">    </span><span class="COMM">//alert(aSIIndex.join("-"));</span><span class="WHIT">
+<span class='line'>645</span> 
+<span class='line'>646</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">aSIIndex.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>647</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iSI</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aSIIndex</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>648</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pSI</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">nU.parseSignerInfoForAddingUnsigned</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iSI</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>649</span> </span><span class="WHIT">        </span><span class="NAME">r.si</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">pSI</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>650</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>651</span> 
+<span class='line'>652</span> </span><span class="WHIT">    </span><span class="COMM">// x. obj(SignedData)</span><span class="WHIT">
+<span class='line'>653</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tmp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>654</span> </span><span class="WHIT">    </span><span class="NAME">r.obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nC.SignedData</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>655</span> 
+<span class='line'>656</span> </span><span class="WHIT">    </span><span class="NAME">tmp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.ASN1Object</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>657</span> </span><span class="WHIT">    </span><span class="NAME">tmp.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">r.version</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>658</span> </span><span class="WHIT">    </span><span class="NAME">r.obj.dCMSVersion</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>659</span> 
+<span class='line'>660</span> </span><span class="WHIT">    </span><span class="NAME">tmp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.ASN1Object</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>661</span> </span><span class="WHIT">    </span><span class="NAME">tmp.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">r.algs</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>662</span> </span><span class="WHIT">    </span><span class="NAME">r.obj.dDigestAlgs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>663</span> 
+<span class='line'>664</span> </span><span class="WHIT">    </span><span class="NAME">tmp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.ASN1Object</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>665</span> </span><span class="WHIT">    </span><span class="NAME">tmp.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">r.encapcontent</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>666</span> </span><span class="WHIT">    </span><span class="NAME">r.obj.dEncapContentInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>667</span> 
+<span class='line'>668</span> </span><span class="WHIT">    </span><span class="NAME">tmp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.ASN1Object</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>669</span> </span><span class="WHIT">    </span><span class="NAME">tmp.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">r.certs</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>670</span> </span><span class="WHIT">    </span><span class="NAME">r.obj.dCerts</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>671</span> 
+<span class='line'>672</span> </span><span class="WHIT">    </span><span class="NAME">r.obj.signerInfoList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>673</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">r.si.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>674</span> </span><span class="WHIT">        </span><span class="NAME">r.obj.signerInfoList.push</span><span class="PUNC">(</span><span class="NAME">r.si</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>675</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>676</span> 
+<span class='line'>677</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">r</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>678</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>679</span> 
+<span class='line'>680</span> </span><span class="COMM">/**
+<span class='line'>681</span>  * parse SignerInfo to add unsigned attributes
+<span class='line'>682</span>  * @name parseSignerInfoForAddingUnsigned
+<span class='line'>683</span>  * @memberOf KJUR.asn1.cades.CAdESUtil
+<span class='line'>684</span>  * @function
+<span class='line'>685</span>  * @param {String} hex hexadecimal string of SignerInfo
+<span class='line'>686</span>  * @return {Object} associative array of parsed data
+<span class='line'>687</span>  * @description
+<span class='line'>688</span>  * This method will parse a hexadecimal string of 
+<span class='line'>689</span>  * SignerInfo to add a attribute
+<span class='line'>690</span>  * to unsigned attributes field in a signerInfo field.
+<span class='line'>691</span>  * Parsed result will be an associative array which has
+<span class='line'>692</span>  * following properties:
+<span class='line'>693</span>  * &lt;ul>
+<span class='line'>694</span>  * &lt;li>version - hex TLV of version&lt;/li>
+<span class='line'>695</span>  * &lt;li>si - hex TLV of SignerIdentifier&lt;/li>
+<span class='line'>696</span>  * &lt;li>digalg - hex TLV of DigestAlgorithm&lt;/li>
+<span class='line'>697</span>  * &lt;li>sattrs - hex TLV of SignedAttributes&lt;/li>
+<span class='line'>698</span>  * &lt;li>sigalg - hex TLV of SignatureAlgorithm&lt;/li>
+<span class='line'>699</span>  * &lt;li>sig - hex TLV of signature&lt;/li>
+<span class='line'>700</span>  * &lt;li>sigval = hex V of signature&lt;/li>
+<span class='line'>701</span>  * &lt;li>obj - parsed KJUR.asn1.cms.SignerInfo object&lt;/li>
+<span class='line'>702</span>  * &lt;/ul>
+<span class='line'>703</span>  * NOTE: Parsing of unsigned attributes will be provided in the
+<span class='line'>704</span>  * future version. That's way this version provides support
+<span class='line'>705</span>  * for CAdES-T and not for CAdES-C.
+<span class='line'>706</span>  */</span><span class="WHIT">
+<span class='line'>707</span> </span><span class="NAME">KJUR.asn1.cades.CAdESUtil.parseSignerInfoForAddingUnsigned</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> 
+<span class='line'>708</span>     </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iSI</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">nth</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>709</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nA</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>710</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nC</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.cms</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>711</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">r</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>712</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aSIChildIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getPosArrayOfChildren_AtObj</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iSI</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>713</span> </span><span class="WHIT">    </span><span class="COMM">//alert(aSIChildIdx.join("="));</span><span class="WHIT">
+<span class='line'>714</span> 
+<span class='line'>715</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">aSIChildIdx.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">6</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>716</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"not supported items for SignerInfo (!=6)"</span><span class="PUNC">;</span><span class="WHIT"> 
+<span class='line'>717</span> 
+<span class='line'>718</span>     </span><span class="COMM">// 1. SignerInfo.CMSVersion</span><span class="WHIT">
+<span class='line'>719</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iVersion</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aSIChildIdx.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>720</span> </span><span class="WHIT">    </span><span class="NAME">r.version</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getHexOfTLV_AtObj</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iVersion</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>721</span> 
+<span class='line'>722</span> </span><span class="WHIT">    </span><span class="COMM">// 2. SignerIdentifier(IssuerAndSerialNumber)</span><span class="WHIT">
+<span class='line'>723</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iIdentifier</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aSIChildIdx.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>724</span> </span><span class="WHIT">    </span><span class="NAME">r.si</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getHexOfTLV_AtObj</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iIdentifier</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>725</span> 
+<span class='line'>726</span> </span><span class="WHIT">    </span><span class="COMM">// 3. DigestAlgorithm</span><span class="WHIT">
+<span class='line'>727</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iDigestAlg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aSIChildIdx.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>728</span> </span><span class="WHIT">    </span><span class="NAME">r.digalg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getHexOfTLV_AtObj</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iDigestAlg</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>729</span> 
+<span class='line'>730</span> </span><span class="WHIT">    </span><span class="COMM">// 4. SignedAttrs</span><span class="WHIT">
+<span class='line'>731</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iSignedAttrs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aSIChildIdx.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>732</span> </span><span class="WHIT">    </span><span class="NAME">r.sattrs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getHexOfTLV_AtObj</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iSignedAttrs</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>733</span> 
+<span class='line'>734</span> </span><span class="WHIT">    </span><span class="COMM">// 5. SigAlg</span><span class="WHIT">
+<span class='line'>735</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iSigAlg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aSIChildIdx.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>736</span> </span><span class="WHIT">    </span><span class="NAME">r.sigalg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getHexOfTLV_AtObj</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iSigAlg</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>737</span> 
+<span class='line'>738</span> </span><span class="WHIT">    </span><span class="COMM">// 6. Signature</span><span class="WHIT">
+<span class='line'>739</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iSig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aSIChildIdx.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>740</span> </span><span class="WHIT">    </span><span class="NAME">r.sig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getHexOfTLV_AtObj</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iSig</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>741</span> </span><span class="WHIT">    </span><span class="NAME">r.sigval</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getHexOfV_AtObj</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iSig</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>742</span> 
+<span class='line'>743</span> </span><span class="WHIT">    </span><span class="COMM">// 7. obj(SignerInfo)</span><span class="WHIT">
+<span class='line'>744</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tmp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>745</span> </span><span class="WHIT">    </span><span class="NAME">r.obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nC.SignerInfo</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>746</span> 
+<span class='line'>747</span> </span><span class="WHIT">    </span><span class="NAME">tmp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.ASN1Object</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>748</span> </span><span class="WHIT">    </span><span class="NAME">tmp.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">r.version</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>749</span> </span><span class="WHIT">    </span><span class="NAME">r.obj.dCMSVersion</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>750</span> 
+<span class='line'>751</span> </span><span class="WHIT">    </span><span class="NAME">tmp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.ASN1Object</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>752</span> </span><span class="WHIT">    </span><span class="NAME">tmp.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">r.si</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>753</span> </span><span class="WHIT">    </span><span class="NAME">r.obj.dSignerIdentifier</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>754</span> 
+<span class='line'>755</span> </span><span class="WHIT">    </span><span class="NAME">tmp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.ASN1Object</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>756</span> </span><span class="WHIT">    </span><span class="NAME">tmp.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">r.digalg</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>757</span> </span><span class="WHIT">    </span><span class="NAME">r.obj.dDigestAlgorithm</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>758</span> 
+<span class='line'>759</span> </span><span class="WHIT">    </span><span class="NAME">tmp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.ASN1Object</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>760</span> </span><span class="WHIT">    </span><span class="NAME">tmp.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">r.sattrs</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>761</span> </span><span class="WHIT">    </span><span class="NAME">r.obj.dSignedAttrs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>762</span> 
+<span class='line'>763</span> </span><span class="WHIT">    </span><span class="NAME">tmp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.ASN1Object</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>764</span> </span><span class="WHIT">    </span><span class="NAME">tmp.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">r.sigalg</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>765</span> </span><span class="WHIT">    </span><span class="NAME">r.obj.dSigAlg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>766</span> 
+<span class='line'>767</span> </span><span class="WHIT">    </span><span class="NAME">tmp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nA.ASN1Object</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>768</span> </span><span class="WHIT">    </span><span class="NAME">tmp.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">r.sig</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>769</span> </span><span class="WHIT">    </span><span class="NAME">r.obj.dSig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">tmp</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>770</span> 
+<span class='line'>771</span> </span><span class="WHIT">    </span><span class="NAME">r.obj.dUnsignedAttrs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">nC.AttributeList</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>772</span> 
+<span class='line'>773</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">r</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>774</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>775</span> 
+<span class='line'>776</span> </span></pre></body></html>

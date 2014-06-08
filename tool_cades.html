@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : conversion tool from The CSR to self signed certificate for factorable.net checker." />
+
+<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+<title>CAdES Generator</title>
+<script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript">
+var param = {
+    content: {str: ""},
+    signerInfos: [{
+      hashAlg: 'sha256',
+      sAttr: {
+      },
+      sigAlg: 'SHA256withRSA'
+    }]
+};
+
+var parsedInfo = null;
+
+function doIt() {
+  var f1 = document.form1;
+
+  f1.newcms1.value = "signing ...";
+
+  var prvKeyPEM = f1.prvkey1.value;
+  var certPEM = f1.cert1.value;
+
+  param.signerInfos[0].signerCert = certPEM;
+  param.signerInfos[0].signerPrvKey = prvKeyPEM;
+  param.certs = [certPEM];
+
+  param.content.str = f1.content1.value;
+  if (f1.attr_sigtime.checked)
+    param.signerInfos[0].sAttr.SigningTime = {};
+  if (f1.attr_sigcertv1.checked)
+    param.signerInfos[0].sAttr.SigningCertificate = {array: [certPEM]};
+  if (f1.attr_sigcertv2.checked)
+    param.signerInfos[0].sAttr.SigningCertificateV2 = {array: [certPEM]};
+  if (f1.attr_sigpol_flag.checked) {
+    param.signerInfos[0].sAttr.SignaturePolicyIdentifier = {
+      oid: f1.attr_sigpol_oid.value,
+      hash: {
+        alg: f1.attr_sigpol_hashalg.value,
+        hash: f1.attr_sigpol_hash.value
+      }      
+    };
+  }
+
+  try {
+    var sd = KJUR.asn1.cms.CMSUtil.newSignedData(param);
+    //f1.newcms1.value = sd.getPEM();
+    f1.newcms1.value = sd.getContentInfoEncodedHex();
+  } catch (ex) {
+    f1.newcms1.value = "Error: " + ex;
+  }
+}
+
+function doIt2() {
+  var f1 = document.form1;
+  try {
+    var cms = f1.newcms1.value;
+    parsedInfo = 
+      KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned(cms);
+    f1.si_sigval1.value = parsedInfo.si[0].sigval;
+  } catch (ex) {
+    f1.si_sigval1.value = "Error: " + ex;
+  }
+}
+
+// _test/z4.* RSA 2048bit
+var sTSAKEY = 
+"-----BEGIN PRIVATE KEY-----\n" + 
+"MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDfdOqotHd55SYO\n" + 
+"0dLz2oXengw/tZ+q3ZmOPeVmMuOMIYO/Cv1wk2U0OK4pug4OBSJPhl09Zs6IwB8N\n" + 
+"wPOU7EDTgMOcQUYB/6QNCI1J7Zm2oLtuchzz4pIb+o4ZAhVprLhRyvqi8OTKQ7kf\n" + 
+"Gfs5Tuwmn1M/0fQkfzMxADpjOKNgf0uy6lN6utjdTrPKKFUQNdc6/Ty8EeTnQEwU\n" + 
+"lsT2LAXCfEKxTn5RlRljDztS7Sfgs8VL0FPy1Qi8B+dFcgRYKFrcpsVaZ1lBmXKs\n" + 
+"XDRu5QR/Rg3f9DRq4GR1sNH8RLY9uApMl2SNz+sR4zRPG85R/se5Q06Gu0BUQ3UP\n" + 
+"m67ETVZLAgMBAAECggEADjU54mYvHpICXHjc5+JiFqiH8NkUgOG8LL4kwt3DeBp9\n" + 
+"bP0+5hSJH8vmzwJkeGG9L79EWG4b/bfxgYdeNX7cFFagmWPRFrlxbd64VRYFawZH\n" + 
+"RJt+2cbzMVI6DL8EK4bu5Ux5qTiV44Jw19hoD9nDzCTfPzSTSGrKD3iLPdnREYaI\n" + 
+"GDVxcjBv3Tx6rrv3Z2lhHHKhEHb0RRjATcjAVKV9NZhMajJ4l9pqJ3A4IQrCBl95\n" + 
+"ux6Xm1oXP0i6aR78cjchsCpcMXdP3WMsvHgTlsZT0RZLFHrvkiNHlPiil4G2/eHk\n" + 
+"wvT//CrcbO6SmI/zCtMmypuHJqcr+Xb7GPJoa64WoQKBgQDwrfelf3Rdfo9kaK/b\n" + 
+"rBmbu1++qWpYVPTedQy84DK2p3GE7YfKyI+fhbnw5ol3W1jjfvZCmK/p6eZR4jgy\n" + 
+"J0KJ76z53T8HoDTF+FTkR55oM3TEM46XzI36RppWP1vgcNHdz3U4DAqkMlAh4lVm\n" + 
+"3GiKPGX5JHHe7tWz/uZ55Kk58QKBgQDtrkqdSzWlOjvYD4mq4m8jPgS7v3hiHd+1\n" + 
+"OT8S37zdoT8VVzo2T4SF+fBhI2lWYzpQp2sCjLmCwK9k/Gur55H2kTBTwzlQ6WSL\n" + 
+"Te9Zj+eoMGklIirA+8YdQHXrO+CCw9BTJAF+c3c3xeUOLXafzyW29bASGfUtA7Ax\n" + 
+"QAsR+Rr3+wKBgAwfZxrh6ZWP+17+WuVArOWIMZFj7SRX2yGdWa/lxwgmNPSSFkXj\n" + 
+"hkBttujoY8IsSrTivzqpgCrTCjPTpir4iURzWw4W08bpjd7u3C/HX7Y16Uq8ohEJ\n" + 
+"T5lslveDJ3iNljSK74eMK7kLg7fBM7YDogxccHJ1IHsvInp3e1pmZxOxAoGAO+bS\n" + 
+"TUQ4N/UuQezgkF3TDrnBraO67leDGwRbfiE/U0ghQvqh5DA0QSPVzlWDZc9KUitv\n" + 
+"j8vxsR9o1PW9GS0an17GJEYuetLnkShKK3NWOhBBX6d1yP9rVdH6JhgIJEy/g0Su\n" + 
+"z7TAFiFc8i7JF8u4QJ05C8bZAMhOLotqftQeVOMCgYAid8aaRvaM2Q8a42Jn6ZTT\n" + 
+"5ms6AvNr98sv0StnfmNQ+EYXN0bEk2huSW+w2hN34TYYBTjViQmHbhudwwu8lVjE\n" + 
+"ccDmIXsUFbHVK+kTIpWGGchy5cYPs3k9s1nMR2av0Lojtw9WRY76xRXvN8W6R7Eh\n" + 
+"wA2ax3+gEEYpGhjM/lO2Lg==\n" + 
+"-----END PRIVATE KEY-----\n";
+
+// _test/z4.tsa.cer
+var sTSACERT = 
+"-----BEGIN CERTIFICATE-----\n" + 
+"MIIDETCCAfmgAwIBAgIBTTANBgkqhkiG9w0BAQUFADAbMQswCQYDVQQGEwJVUzEM\n" + 
+"MAoGA1UECgwDQ0ExMB4XDTEzMDUwMTIzNTk1OVoXDTIzMDUwMTIzNTk1OVowHDEL\n" + 
+"MAkGA1UEBhMCVVMxDTALBgNVBAMMBFRTQTEwggEiMA0GCSqGSIb3DQEBAQUAA4IB\n" + 
+"DwAwggEKAoIBAQDfdOqotHd55SYO0dLz2oXengw/tZ+q3ZmOPeVmMuOMIYO/Cv1w\n" + 
+"k2U0OK4pug4OBSJPhl09Zs6IwB8NwPOU7EDTgMOcQUYB/6QNCI1J7Zm2oLtuchzz\n" + 
+"4pIb+o4ZAhVprLhRyvqi8OTKQ7kfGfs5Tuwmn1M/0fQkfzMxADpjOKNgf0uy6lN6\n" + 
+"utjdTrPKKFUQNdc6/Ty8EeTnQEwUlsT2LAXCfEKxTn5RlRljDztS7Sfgs8VL0FPy\n" + 
+"1Qi8B+dFcgRYKFrcpsVaZ1lBmXKsXDRu5QR/Rg3f9DRq4GR1sNH8RLY9uApMl2SN\n" + 
+"z+sR4zRPG85R/se5Q06Gu0BUQ3UPm67ETVZLAgMBAAGjXzBdMAwGA1UdEwEB/wQC\n" + 
+"MAAwCwYDVR0PBAQDAgbAMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMIMCgGA1UdHwQh\n" + 
+"MB8wHaAboBmGF2h0dHA6Ly90ZXN0LmNvbS9jYTEuY3JsMA0GCSqGSIb3DQEBBQUA\n" + 
+"A4IBAQBNkm5GniFi3PKqbafCVN8mpHWJjF2stCRTVxeTCIXUC63YD5XKABGzPH+Y\n" + 
+"2R8fCrOa8cGlHmFXOlJye/lnXeZodPyxJUvAKohTp6sG+rJVId8ISI2Io2i5BF8a\n" + 
+"CHdm8qd8E0fJvBudqkEc26Ia6tFSA/gEW0ffhsCkN/lXUAjuvDLqtTtU7zBU6dIl\n" + 
+"h12Pwyf+x6AsYSciA9zWC6OE590K8Jr2z4u85biM7viWvPeZPNHSNM1fe+8wKbP8\n" + 
+"64JtLj/VrglcsXALaUalyh2Hs7gPQzjyus1fyhEWPO3T6KMcBMXjb6anxL5q9YO5\n" + 
+"qx1hJTY3L1hahBcMTALQyTEiFv1S\n" + 
+"-----END CERTIFICATE-----\n";
+
+var tsa = new KJUR.asn1.tsp.SimpleTSAAdapter({
+  tstInfo: {
+    policy: '1.2.3.4.5',
+    messageImprint: {},
+    serialNumber: {'int': 3},
+    genTime: {millis: true},
+    accuracy: {millis: 500},
+    ordering: true,
+    nonce: {'int': 3}
+  },
+  certs: [sTSACERT],
+  signerCert: sTSACERT,
+  hashAlg: 'sha256',
+  signerPrvKey: sTSAKEY,
+  sigAlg: 'SHA256withRSA'
+});
+
+function doIt3() {
+  var f1 = document.form1;
+  var sigval = f1.si_sigval1.value;
+  f1.si_sigtst1.value = "getting TST from Demo TSA...";  
+  try {
+    var tst = tsa.getTSTHex(sigval, 'sha256');
+    f1.si_sigtst1.value = tst;
+  } catch (ex) {
+    f1.si_sigtst1.value = "Error: " + ex;
+  }
+}
+
+function doIt4() {
+  var f1 = document.form1;
+  var tst = f1.si_sigtst1.value;
+  f1.cades_t_1.value = "generating CAdES-T by adding SigTS...";
+  try {
+    var sd = parsedInfo.obj;
+    var si = sd.signerInfoList[0];
+    sd.hTLV = null;
+    si.addUnsigned(new KJUR.asn1.cades.SignatureTimeStamp({tst: tst}));
+    f1.cades_t_1.value = sd.getContentInfoEncodedHex();
+  } catch (ex) {
+    f1.cades_t_1.value = "Error: " + ex;
+  }
+}
+
+</script>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">CAdES Generator</h1>
+<h2 id="project_tagline">RFC 5126 CAdES Long Term Signature Generator by pure JavaScript</h2>
+<a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://github.com/kjur/jsrsasign/tags/" target="_blank">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+<a href="http://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+<!-- now editing -->
+This tool can generate CAdES-BES/EPES signature and then 
+convert it to CAdES-T by adding SignatureTimeStamp.<br/>
+NOTE: Currently jsrsasign supports CAdES-BES, EPES and T formats.
+
+<form name="form1">
+
+<h4>(Step1) Generate CAdES-BES or EPES</h4>
+
+<table>
+<tr><td colspan="2">
+Message to be signed (i.e. eContent):<br/>
+<textarea name="content1" cols="65" rows="2">aaa</textarea>
+</td></tr>
+<tr><th colspan="2">SignerInfo</th></tr>
+<tr><td colspan="2">Signer's Private Key (PEM):<br/>
+<textarea name="prvkey1" cols="65" rows="3">-----BEGIN PRIVATE KEY-----
+MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDfdOqotHd55SYO
+0dLz2oXengw/tZ+q3ZmOPeVmMuOMIYO/Cv1wk2U0OK4pug4OBSJPhl09Zs6IwB8N
+wPOU7EDTgMOcQUYB/6QNCI1J7Zm2oLtuchzz4pIb+o4ZAhVprLhRyvqi8OTKQ7kf
+Gfs5Tuwmn1M/0fQkfzMxADpjOKNgf0uy6lN6utjdTrPKKFUQNdc6/Ty8EeTnQEwU
+lsT2LAXCfEKxTn5RlRljDztS7Sfgs8VL0FPy1Qi8B+dFcgRYKFrcpsVaZ1lBmXKs
+XDRu5QR/Rg3f9DRq4GR1sNH8RLY9uApMl2SNz+sR4zRPG85R/se5Q06Gu0BUQ3UP
+m67ETVZLAgMBAAECggEADjU54mYvHpICXHjc5+JiFqiH8NkUgOG8LL4kwt3DeBp9
+bP0+5hSJH8vmzwJkeGG9L79EWG4b/bfxgYdeNX7cFFagmWPRFrlxbd64VRYFawZH
+RJt+2cbzMVI6DL8EK4bu5Ux5qTiV44Jw19hoD9nDzCTfPzSTSGrKD3iLPdnREYaI
+GDVxcjBv3Tx6rrv3Z2lhHHKhEHb0RRjATcjAVKV9NZhMajJ4l9pqJ3A4IQrCBl95
+ux6Xm1oXP0i6aR78cjchsCpcMXdP3WMsvHgTlsZT0RZLFHrvkiNHlPiil4G2/eHk
+wvT//CrcbO6SmI/zCtMmypuHJqcr+Xb7GPJoa64WoQKBgQDwrfelf3Rdfo9kaK/b
+rBmbu1++qWpYVPTedQy84DK2p3GE7YfKyI+fhbnw5ol3W1jjfvZCmK/p6eZR4jgy
+J0KJ76z53T8HoDTF+FTkR55oM3TEM46XzI36RppWP1vgcNHdz3U4DAqkMlAh4lVm
+3GiKPGX5JHHe7tWz/uZ55Kk58QKBgQDtrkqdSzWlOjvYD4mq4m8jPgS7v3hiHd+1
+OT8S37zdoT8VVzo2T4SF+fBhI2lWYzpQp2sCjLmCwK9k/Gur55H2kTBTwzlQ6WSL
+Te9Zj+eoMGklIirA+8YdQHXrO+CCw9BTJAF+c3c3xeUOLXafzyW29bASGfUtA7Ax
+QAsR+Rr3+wKBgAwfZxrh6ZWP+17+WuVArOWIMZFj7SRX2yGdWa/lxwgmNPSSFkXj
+hkBttujoY8IsSrTivzqpgCrTCjPTpir4iURzWw4W08bpjd7u3C/HX7Y16Uq8ohEJ
+T5lslveDJ3iNljSK74eMK7kLg7fBM7YDogxccHJ1IHsvInp3e1pmZxOxAoGAO+bS
+TUQ4N/UuQezgkF3TDrnBraO67leDGwRbfiE/U0ghQvqh5DA0QSPVzlWDZc9KUitv
+j8vxsR9o1PW9GS0an17GJEYuetLnkShKK3NWOhBBX6d1yP9rVdH6JhgIJEy/g0Su
+z7TAFiFc8i7JF8u4QJ05C8bZAMhOLotqftQeVOMCgYAid8aaRvaM2Q8a42Jn6ZTT
+5ms6AvNr98sv0StnfmNQ+EYXN0bEk2huSW+w2hN34TYYBTjViQmHbhudwwu8lVjE
+ccDmIXsUFbHVK+kTIpWGGchy5cYPs3k9s1nMR2av0Lojtw9WRY76xRXvN8W6R7Eh
+wA2ax3+gEEYpGhjM/lO2Lg==
+-----END PRIVATE KEY-----</textarea>
+</td></tr>
+<tr><td colspan="2">Signer's Certificate (PEM):<br/>
+<textarea name="cert1" cols="65" rows="3">-----BEGIN CERTIFICATE-----
+MIIC/zCCAeegAwIBAgIBATANBgkqhkiG9w0BAQUFADAaMQswCQYDVQQGEwJVUzEL
+MAkGA1UECgwCWjQwHhcNMTMwODI4MTgyODM0WhcNMjMwODI4MTgyODM0WjAaMQsw
+CQYDVQQGEwJVUzELMAkGA1UECgwCWjQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw
+ggEKAoIBAQDfdOqotHd55SYO0dLz2oXengw/tZ+q3ZmOPeVmMuOMIYO/Cv1wk2U0
+OK4pug4OBSJPhl09Zs6IwB8NwPOU7EDTgMOcQUYB/6QNCI1J7Zm2oLtuchzz4pIb
++o4ZAhVprLhRyvqi8OTKQ7kfGfs5Tuwmn1M/0fQkfzMxADpjOKNgf0uy6lN6utjd
+TrPKKFUQNdc6/Ty8EeTnQEwUlsT2LAXCfEKxTn5RlRljDztS7Sfgs8VL0FPy1Qi8
+B+dFcgRYKFrcpsVaZ1lBmXKsXDRu5QR/Rg3f9DRq4GR1sNH8RLY9uApMl2SNz+sR
+4zRPG85R/se5Q06Gu0BUQ3UPm67ETVZLAgMBAAGjUDBOMB0GA1UdDgQWBBQHZPTE
+yQVu/0I/3QWhlTyW7WoTzTAfBgNVHSMEGDAWgBQHZPTEyQVu/0I/3QWhlTyW7WoT
+zTAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQDHxqJ9y8alTH7agVMW
+Zfic/RbrdvHwyq+IOrgDToqyo0w+IZ6BCn9vjv5iuhqu4ForOWDAFpQKZW0DLBJE
+Qy/7/0+9pk2DPhK1XzdOovlSrkRt+GcEpGnUXnzACXDBbO0+Wrk+hcjEkQRRK1bW
+2rknARIEJG9GS+pShP9Bq/0BmNsMepdNcBa0z3a5B0fzFyCQoUlX6RTqxRw1h1Qt
+5F00pfsp7SjXVIvYcewHaNASbto1n5hrSz1VY9hLba11ivL1N4WoWbmzAL6BWabs
+C2D/MenST2/X6hTKyGXpg3Eg2h3iLvUtwcNny0hRKstc73Jl9xR3qXfXKJH0ThTl
+q0gq
+-----END CERTIFICATE-----</textarea>
+</td></tr>
+
+<tr><th colspan="2">SignerInfo Attributes</th></tr>
+
+<tr><td colspan="2">
+SigningTime
+<input type="checkbox" name="attr_sigtime" value="1"/>,
+SigningCertificate(V1) 
+<input type="checkbox" name="attr_sigcertv1" value="1"/>, 
+SigningCertificateV2
+<input type="checkbox" name="attr_sigcertv2" value="1" checked/>
+</td></tr>
+
+<tr><td>
+Signature<br/>Policy</br>(for EPES)<br/>
+<input type="checkbox" name="attr_sigpol_flag" value="1"/>
+</td>
+<td>
+policy OID: 
+<input type="text" name="attr_sigpol_oid" value="1.2.3.4.5" size="40"/>
+<br/>
+hash alg:
+<select name="attr_sigpol_hashalg">
+<option value="sha1">SHA-1
+<option value="sha256">SHA-256
+<option value="sha512">SHA-512
+<option value="sha384">SHA-384
+<option value="sha224">SHA-224
+<option value="md5">MD5
+<option value="ripemd160">RIPEMD160
+</select>
+<br/>
+hash value: 
+<input type="text" name="attr_sigpol_hash" value="a1a2a3a4a5a6a7a8a9a0a1a2a3a4a5a6a7a8a9a0" size="40"/>
+</td></tr>
+
+</table>
+
+<input type="button" value="Generate CAdES-BES/EPES" onClick="doIt();"/>
+<input type="reset" name="reset" value="Reset"/>
+
+<h6>RESULT:</h6>
+<textarea name="newcms1" cols="65" rows="4"></textarea>
+
+<h4>(Step2)Parse CAdES-BES/EPES for adding SigTS</h4>
+Parse above CAdES-BES/EPES signature and
+and get the signature value of signerInfo.
+<br/>
+<input type="button" value="Parse CAdES-BES/EPES" onClick="doIt2();"/>
+<br/>
+<h5>signature value of the first SignerInfo</h5>
+<textarea name="si_sigval1" cols="65" rows="3"></textarea>
+<br/>
+
+<h4>(Step3)Get TimeStampToken</h4>
+Get TimeStampToken for above signature value.
+You can get it from trusted time stamp authority or 
+use sample TSA using jsrsasign.
+<br/>
+<input type="button" value="Get TimeStampToken for the signature from Demo TSA" onClick="doIt3();"/>
+<br/>
+<h6>TimeStampToken for the signature value in SignerInfo</h6>
+<textarea name="si_sigtst1" cols="65" rows="3"></textarea>
+
+<h4>(Step4)Convert CAdES-BES/EPES to CAdES-T</h4>
+
+You can convert it to CAdES-T signature 
+by adding SignatureTimeStamp attribute with the above signature time stamp.
+<br/>
+<input type="button" value="Convert to CAdES-T" onClick="doIt4();"/>
+<br/>
+<h6>CAdES-T signature as the result</h6>
+<textarea name="cades_t_1" cols="65" rows="3"></textarea><br/>
+
+</form>
+
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2014 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>

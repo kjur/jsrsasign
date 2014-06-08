@@ -1,0 +1,742 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="generator" content="JsDoc Toolkit" />
+		
+		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.asn1.cades</title>
+
+		<style type="text/css">
+			/* default.css */
+body
+{
+	font: 12px "Lucida Grande", Tahoma, Arial, Helvetica, sans-serif;
+	width: 800px;
+}
+
+.header
+{
+	clear: both;
+	background-color: #ccc;
+	padding: 8px;
+}
+
+h1
+{
+	font-size: 150%;
+	font-weight: bold;
+	padding: 0;
+	margin: 1em 0 0 .3em;
+}
+
+hr
+{
+	border: none 0;
+	border-top: 1px solid #7F8FB1;
+	height: 1px;
+}
+
+pre.code
+{
+	display: block;
+	padding: 8px;
+	border: 1px dashed #ccc;
+}
+
+#index
+{
+	margin-top: 24px;
+	float: left;
+	width: 160px;
+	position: absolute;
+	left: 8px;
+	background-color: #F3F3F3;
+	padding: 8px;
+}
+
+#content
+{
+	margin-left: 190px;
+	width: 600px;
+}
+
+.classList
+{
+	list-style-type: none;
+	padding: 0;
+	margin: 0 0 0 8px;
+	font-family: arial, sans-serif;
+	font-size: 1em;
+	overflow: auto;
+}
+
+.classList li
+{
+	padding: 0;
+	margin: 0 0 8px 0;
+}
+
+.summaryTable { width: 100%; }
+
+h1.classTitle
+{
+	font-size:170%;
+	line-height:130%;
+}
+
+h2 { font-size: 110%; }
+caption, div.sectionTitle
+{
+	background-color: #7F8FB1;
+	color: #fff;
+	font-size:130%;
+	text-align: left;
+	padding: 2px 6px 2px 6px;
+	border: 1px #7F8FB1 solid;
+}
+
+div.sectionTitle { margin-bottom: 8px; }
+.summaryTable thead { display: none; }
+
+.summaryTable td
+{
+	vertical-align: top;
+	padding: 4px;
+	border-bottom: 1px #7F8FB1 solid;
+	border-right: 1px #7F8FB1 solid;
+}
+
+/*col#summaryAttributes {}*/
+.summaryTable td.attributes
+{
+	border-left: 1px #7F8FB1 solid;
+	width: 140px;
+	text-align: right;
+}
+
+td.attributes, .fixedFont
+{
+	line-height: 15px;
+	color: #002EBE;
+	font-family: "Courier New",Courier,monospace;
+	font-size: 13px;
+}
+
+.summaryTable td.nameDescription
+{
+	text-align: left;
+	font-size: 13px;
+	line-height: 15px;
+}
+
+.summaryTable td.nameDescription, .description
+{
+	line-height: 15px;
+	padding: 4px;
+	padding-left: 4px;
+}
+
+.summaryTable { margin-bottom: 8px; }
+
+ul.inheritsList
+{
+	list-style: square;
+	margin-left: 20px;
+	padding-left: 0;
+}
+
+.detailList {
+	margin-left: 20px; 
+	line-height: 15px;
+}
+.detailList dt { margin-left: 20px; }
+
+.detailList .heading
+{
+	font-weight: bold;
+	padding-bottom: 6px;
+	margin-left: 0;
+}
+
+.light, td.attributes, .light a:link, .light a:visited
+{
+	color: #777;
+	font-style: italic;
+}
+
+.fineprint
+{
+	text-align: right;
+	font-size: 10px;
+}
+		</style>
+	</head>
+
+	<body>
+<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<div id="header" style="background: #7F8FB1; color: white; margin: -10px">
+&nbsp; <b><a href="http://kjur.github.com/jsrsasign/" style="color: white">jsrsasign</a></b> 4.0.0 JavaScript API Reference
+</div>
+
+		<!-- end static/header.html -->
+
+<!-- ============================== classes index ============================ -->
+		<div id="index">
+			<!-- begin publish.classesIndex -->
+			<div align="center"><a href="../index.html">Class Index</a>
+| <a href="../files.html">File Index</a></div>
+<hr />
+<h2>Classes</h2>
+<ul class="classList">
+	
+	<li><i><a href="../symbols/global__.html">global__</a></i></li>
+	
+	<li><a href="../symbols/ASN1HEX.html">ASN1HEX</a></li>
+	
+	<li><a href="../symbols/Base64x.html">Base64x</a></li>
+	
+	<li><a href="../symbols/KEYUTIL.html">KEYUTIL</a></li>
+	
+	<li><a href="../symbols/KJUR.html">KJUR</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.html">KJUR.asn1</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ASN1Util.html">KJUR.asn1.ASN1Util</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.html">KJUR.asn1.cades</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.CAdESUtil.html">KJUR.asn1.cades.CAdESUtil</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.CompleteCertificateRefs.html">KJUR.asn1.cades.CompleteCertificateRefs</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.OtherCertID.html">KJUR.asn1.cades.OtherCertID</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.OtherHash.html">KJUR.asn1.cades.OtherHash</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.OtherHashAlgAndValue.html">KJUR.asn1.cades.OtherHashAlgAndValue</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.SignaturePolicyIdentifier.html">KJUR.asn1.cades.SignaturePolicyIdentifier</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.SignatureTimeStamp.html">KJUR.asn1.cades.SignatureTimeStamp</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.html">KJUR.asn1.cms</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.Attribute.html">KJUR.asn1.cms.Attribute</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.AttributeList.html">KJUR.asn1.cms.AttributeList</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.CMSUtil.html">KJUR.asn1.cms.CMSUtil</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.ContentInfo.html">KJUR.asn1.cms.ContentInfo</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.ContentType.html">KJUR.asn1.cms.ContentType</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.EncapsulatedContentInfo.html">KJUR.asn1.cms.EncapsulatedContentInfo</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.IssuerAndSerialNumber.html">KJUR.asn1.cms.IssuerAndSerialNumber</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.MessageDigest.html">KJUR.asn1.cms.MessageDigest</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.SignerInfo.html">KJUR.asn1.cms.SignerInfo</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.SigningCertificate.html">KJUR.asn1.cms.SigningCertificate</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.SigningCertificateV2.html">KJUR.asn1.cms.SigningCertificateV2</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.SigningTime.html">KJUR.asn1.cms.SigningTime</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERAbstractString.html">KJUR.asn1.DERAbstractString</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERAbstractStructured.html">KJUR.asn1.DERAbstractStructured</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERAbstractTime.html">KJUR.asn1.DERAbstractTime</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERBitString.html">KJUR.asn1.DERBitString</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERBoolean.html">KJUR.asn1.DERBoolean</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DEREnumerated.html">KJUR.asn1.DEREnumerated</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERGeneralizedTime.html">KJUR.asn1.DERGeneralizedTime</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERIA5String.html">KJUR.asn1.DERIA5String</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERInteger.html">KJUR.asn1.DERInteger</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERNull.html">KJUR.asn1.DERNull</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERNumericString.html">KJUR.asn1.DERNumericString</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERObjectIdentifier.html">KJUR.asn1.DERObjectIdentifier</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DEROctetString.html">KJUR.asn1.DEROctetString</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERPrintableString.html">KJUR.asn1.DERPrintableString</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERSequence.html">KJUR.asn1.DERSequence</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERSet.html">KJUR.asn1.DERSet</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERTaggedObject.html">KJUR.asn1.DERTaggedObject</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERTeletexString.html">KJUR.asn1.DERTeletexString</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERUTCTime.html">KJUR.asn1.DERUTCTime</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.DERUTF8String.html">KJUR.asn1.DERUTF8String</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.html">KJUR.asn1.tsp</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.AbstractTSAAdapter.html">KJUR.asn1.tsp.AbstractTSAAdapter</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.Accuracy.html">KJUR.asn1.tsp.Accuracy</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.FixedTSAAdapter.html">KJUR.asn1.tsp.FixedTSAAdapter</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.MessageImprint.html">KJUR.asn1.tsp.MessageImprint</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.PKIFailureInfo.html">KJUR.asn1.tsp.PKIFailureInfo</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.PKIFreeText.html">KJUR.asn1.tsp.PKIFreeText</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.PKIStatus.html">KJUR.asn1.tsp.PKIStatus</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.PKIStatusInfo.html">KJUR.asn1.tsp.PKIStatusInfo</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.SimpleTSAAdapter.html">KJUR.asn1.tsp.SimpleTSAAdapter</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampReq.html">KJUR.asn1.tsp.TimeStampReq</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampResp.html">KJUR.asn1.tsp.TimeStampResp</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.TSPUtil.html">KJUR.asn1.tsp.TSPUtil</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.TSTInfo.html">KJUR.asn1.tsp.TSTInfo</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.html">KJUR.asn1.x509</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.AlgorithmIdentifier.html">KJUR.asn1.x509.AlgorithmIdentifier</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html">KJUR.asn1.x509.AttributeTypeAndValue</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html">KJUR.asn1.x509.AuthorityKeyIdentifier</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.BasicConstraints.html">KJUR.asn1.x509.BasicConstraints</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.Certificate.html">KJUR.asn1.x509.Certificate</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.CRL.html">KJUR.asn1.x509.CRL</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.CRLDistributionPoints.html">KJUR.asn1.x509.CRLDistributionPoints</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.CRLEntry.html">KJUR.asn1.x509.CRLEntry</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.DistributionPoint.html">KJUR.asn1.x509.DistributionPoint</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.DistributionPointName.html">KJUR.asn1.x509.DistributionPointName</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.ExtKeyUsage.html">KJUR.asn1.x509.ExtKeyUsage</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html">KJUR.asn1.x509.SubjectPublicKeyInfo</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html">KJUR.asn1.x509.TBSCertificate</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.TBSCertList.html">KJUR.asn1.x509.TBSCertList</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.Time.html">KJUR.asn1.x509.Time</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.X509Util.html">KJUR.asn1.x509.X509Util</a></li>
+	
+	<li><a href="../symbols/KJUR.crypto.html">KJUR.crypto</a></li>
+	
+	<li><a href="../symbols/KJUR.crypto.DSA.html">KJUR.crypto.DSA</a></li>
+	
+	<li><a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a></li>
+	
+	<li><a href="../symbols/KJUR.crypto.ECParameterDB.html">KJUR.crypto.ECParameterDB</a></li>
+	
+	<li><a href="../symbols/KJUR.crypto.Mac.html">KJUR.crypto.Mac</a></li>
+	
+	<li><a href="../symbols/KJUR.crypto.MessageDigest.html">KJUR.crypto.MessageDigest</a></li>
+	
+	<li><a href="../symbols/KJUR.crypto.OID.html">KJUR.crypto.OID</a></li>
+	
+	<li><a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a></li>
+	
+	<li><a href="../symbols/KJUR.crypto.Util.html">KJUR.crypto.Util</a></li>
+	
+	<li><a href="../symbols/PKCS5PKEY.html">PKCS5PKEY</a></li>
+	
+	<li><a href="../symbols/RSAKey.html">RSAKey</a></li>
+	
+	<li><a href="../symbols/X509.html">X509</a></li>
+	
+</ul>
+<hr />
+			<!-- end publish.classesIndex -->
+		</div>
+		
+		<div id="content">
+<!-- ============================== class title ============================ -->
+			<h1 class="classTitle">
+				
+				Namespace KJUR.asn1.cades
+			</h1>
+
+<!-- ============================== class summary ========================== -->			
+			<p class="description">
+				
+				
+			
+				
+				
+				
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1cades-1.0.js.html">asn1cades-1.0.js</a>.
+				
+			</p>
+
+<!-- ============================== constructor summary ==================== -->			
+			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.cades.">
+				<caption>Namespace Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.cades.html#constructor">KJUR.asn1.cades</a></b>
+							</div>
+							<div class="description">kjur's ASN.1 class for RFC 5126 CAdES long term signature
+<p>
+This name space provides 
+<a href="https://tools.ietf.org/html/rfc5126">RFC 5126
+CAdES(CMS Advanced Electronic Signature)</a> generator.</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+
+<!-- ============================== properties summary ===================== -->
+			
+
+<!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.cades.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.cades.<b>getEncodedHex</b>()
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.cades.<b>setByCertPEM</b>(certPEM)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
+<!-- ============================== events summary ======================== -->
+			
+
+<!-- ============================== constructor details ==================== -->		
+			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Namespace Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>KJUR.asn1.cades</b>
+				</div>
+				
+				<div class="description">
+					kjur's ASN.1 class for RFC 5126 CAdES long term signature
+<p>
+This name space provides 
+<a href="https://tools.ietf.org/html/rfc5126">RFC 5126
+CAdES(CMS Advanced Electronic Signature)</a> generator.
+
+<h4>SUPPORTED FORMATS</h4>
+Following CAdES formats is supported by this library.
+<ul>
+<li>CAdES-BES - CAdES Basic Electronic Signature</li>
+<li>CAdES-EPES - CAdES Explicit Policy-based Electronic Signature</li>
+<li>CAdES-T - Electronic Signature with Time</li>
+</ul>
+</p>
+
+<h4>PROVIDED ATTRIBUTE CLASSES</h4>
+<ul>
+<li><a href="../symbols/KJUR.asn1.cades.SignaturePolicyIdentifier.html">KJUR.asn1.cades.SignaturePolicyIdentifier</a> - for CAdES-EPES</li>
+<li><a href="../symbols/KJUR.asn1.cades.SignatureTimeStamp.html">KJUR.asn1.cades.SignatureTimeStamp</a> - for CAdES-T</li>
+<li><a href="../symbols/KJUR.asn1.cades.CompleteCertificateRefs.html">KJUR.asn1.cades.CompleteCertificateRefs</a> - for CAdES-C(for future use)</li>
+</ul>
+NOTE: Currntly CAdES-C is not supported since parser can't
+handle unsigned attribute.
+
+<h4>OTHER CLASSES</h4>
+<ul>
+<li><a href="../symbols/KJUR.asn1.cades.OtherHashAlgAndValue.html">KJUR.asn1.cades.OtherHashAlgAndValue</a></li>
+<li><a href="../symbols/KJUR.asn1.cades.OtherHash.html">KJUR.asn1.cades.OtherHash</a></li>
+<li><a href="../symbols/KJUR.asn1.cades.OtherCertID.html">KJUR.asn1.cades.OtherCertID</a></li>
+<li><a href="../symbols/KJUR.asn1.cades.CAdESUtil.html">KJUR.asn1.cades.CAdESUtil</a> - utilities for CAdES</li>
+</ul>
+
+<h4>GENERATE CAdES-BES</h4>
+To generate CAdES-BES, KJUR.asn.cades namespace 
+classes are not required and already KJUR.asn.cms namespace 
+provides attributes for CAdES-BES.
+Create <a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a> with following
+mandatory attribute in CAdES-BES:
+<ul>
+<li><a href="../symbols/KJUR.asn1.cms.ContentType.html">KJUR.asn1.cms.ContentType</a></li>
+<li><a href="../symbols/KJUR.asn1.cms.MessageDigest.html">KJUR.asn1.cms.MessageDigest</a></li>
+<li><a href="../symbols/KJUR.asn1.cms.SigningCertificate.html">KJUR.asn1.cms.SigningCertificate</a> or </li>
+<li><a href="../symbols/KJUR.asn1.cms.SigningCertificateV2.html">KJUR.asn1.cms.SigningCertificateV2</a></li>
+</ul>
+CMSUtil.newSignedData method is very useful to generate CAdES-BES.
+<pre>
+sd = KJUR.asn1.cms.CMSUtil.newSignedData({
+  content: {str: "aaa"},
+  certs: [certPEM],
+  signerInfos: [{
+    hashAlg: 'sha256',
+    sAttr: {SigningCertificateV2: {array: [certPEM]}},
+    signerCert: certPEM,
+    sigAlg: 'SHA256withRSA',
+    signerPrvKey: pkcs8PrvKeyPEM
+  }]
+});
+signedDataHex = sd.getContentInfoEncodedHex();
+</pre>
+NOTE: ContentType and MessageDigest signed attributes
+are automatically added by default.
+
+<h4>GENERATE CAdES-BES with multiple signers</h4>
+If you need signature by multiple signers, you can 
+specify one or more items in 'signerInfos' property as below.
+<pre>
+sd = KJUR.asn1.cms.CMSUtil.newSignedData({
+  content: {str: "aaa"},
+  certs: [certPEM1, certPEM2],
+  signerInfos: [{
+    hashAlg: 'sha256',
+    sAttr: {SigningCertificateV2: {array: [certPEM1]}},
+    signerCert: certPEM1,
+    sigAlg: 'SHA256withRSA',
+    signerPrvKey: pkcs8PrvKeyPEM1
+  },{
+    hashAlg: 'sha1',
+    sAttr: {SigningCertificateV2: {array: [certPEM2]}},
+    signerCert: certPEM2,
+    sigAlg: 'SHA1withRSA',
+    signerPrvKey: pkcs8PrvKeyPEM2
+  }]
+});
+signedDataHex = sd.getContentInfoEncodedHex();
+</pre>
+
+<h4>GENERATE CAdES-EPES</h4>
+When you need a CAdES-EPES signature,
+you just need to add 'SignaturePolicyIdentifier'
+attribute as below.
+<pre>
+sd = KJUR.asn1.cms.CMSUtil.newSignedData({
+  content: {str: "aaa"},
+  certs: [certPEM],
+  signerInfos: [{
+    hashAlg: 'sha256',
+    sAttr: {
+      SigningCertificateV2: {array: [certPEM]},
+      SignaturePolicyIdentifier: {
+        oid: '1.2.3.4.5',
+        hash: {alg: 'sha1', hash: 'b1b2b3b4b...'}
+      },
+    },
+    signerCert: certPEM,
+    sigAlg: 'SHA256withRSA',
+    signerPrvKey: pkcs8PrvKeyPEM
+  }]
+});
+signedDataHex = sd.getContentInfoEncodedHex();
+</pre>
+
+<h4>GENERATE CAdES-T</h4>
+After a signed CAdES-BES or CAdES-EPES signature have been generated,
+you can generate CAdES-T by adding SigningTimeStamp unsigned attribute.
+<pre>
+beshex = "30..."; // hex of CAdES-BES or EPES data 
+info = KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned(beshex);
+// You can refer a hexadecimal string of signature value 
+// in the first signerInfo in the CAdES-BES/EPES with a variable:
+// 'info.si[0].sigval'. You need to get RFC 3161 TimeStampToken
+// from a trusted time stamp authority. Otherwise you can also 
+// get it by 'KJUR.asn1.tsp' module. We suppose that we could 
+// get proper time stamp.
+tsthex0 = "30..."; // hex of TimeStampToken for signerInfo[0] sigval
+si0 = info.obj.signerInfoList[0];
+si0.addUnsigned(new KJUR.asn1.cades.SignatureTimeStamp({tst: tsthex0});
+esthex = info.obj.getContentInfoEncodedHex(); // CAdES-T
+</pre>
+</p>
+
+<h4>SAMPLE CODES</h4>
+<ul>
+<li><a href="../../tool_cades.html">demo program for CAdES-BES/EPES/T generation</a></li>
+<li><a href="../../test/qunit-do-asn1cades.html">Unit test code for KJUR.asn1.cades package</a></li>
+<li><a href="../../test/qunit-do-asn1tsp.html">Unit test code for KJUR.asn1.tsp package (See SimpleTSAAdaptor test)</a></li>
+<li><a href="../../test/qunit-do-asn1cms.html">Unit test code for KJUR.asn1.cms package (See newSignedData test)</a></li>
+</ul>
+					
+				</div>
+				
+				
+				
+				
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
+			
+
+<!-- ============================== field details ========================== -->		
+			
+
+<!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".getEncodedHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.cades.</span><b>getEncodedHex</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".setByCertPEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.cades.</span><b>setByCertPEM</b>(certPEM)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>certPEM</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					
+				
+			
+			
+<!-- ============================== event details ========================= -->		
+			
+			
+			<hr />
+		</div>
+
+		
+<!-- ============================== footer ================================= -->
+		<div class="fineprint" style="clear:both">
+                        &copy; 2012 Kenji Urushima, All rights reserved<br/>
+			
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 
+		</div>
+	</body>
+</html>
