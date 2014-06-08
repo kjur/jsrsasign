@@ -4,7 +4,7 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, CMS SignedData and TimeStamp" />
+    <meta name="description" content="opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, CMS SignedData, TimeStamp and CAdES" />
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
     <title>jsrsasign - RSA Signing and Verification in JavaScript</title>
@@ -18,7 +18,7 @@
           <a id="forkme_banner" href="https://github.com/kjur/jsrsasign">Fork Me on GitHub</a>
 
           <h1 id="project_title">jsrsasign</h1>
-          <h2 id="project_tagline">opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, CMS SignedData and TimeStamp</h2>
+          <h2 id="project_tagline">opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, CMS SignedData, TimeStamp and CAdES</h2>
 
           <section id="downloads">
             <a class="zip_download_link" href="https://github.com/kjur/jsrsasign/zipball/master">Download this project as a .zip file</a>
@@ -41,21 +41,31 @@
 <h3>FEATURES</h3>
 The 'jsrsasign' library provides following features in pure JavaScript.
 <ul>
-<li>Signature - RSA/RSAPSS/ECDSA/DSA digital signtature class wrapper of Java JCE style</li>
-<li>MessageDigest - cryptographic hash calculation class wrapper of Java JCE style</li>
-<li>MAC - message authentication code hash calculation class wrapper of Java JCE style</li>
-<li>ASN.1 encoder/generator</li>
-<li>ASN.1 structure for X.509 ceritificate and CRL generation</li>
-<li>simple ASN.1 data parser</li>
-<li>simple X.509 certificate parser/reader</li>
-<li>KEYUTIL - loading RSA/EC/DSA private/public key from PEM formatted PKCS#1/5/8 and X.509 certificate</li>
+<li><a href="api/symbols/KJUR.crypto.Signature.html">Signature</a> - RSA/RSAPSS/ECDSA/DSA digital signtature class wrapper of Java JCE style</li>
+<li><a href="api/symbols/KJUR.crypto.MessageDigest.html">MessageDigest</a> - cryptographic hash calculation class wrapper of Java JCE style</li>
+<li><a href="api/symbols/KJUR.crypto.Mac.html">MAC</a> - message authentication code hash calculation class wrapper of Java JCE style</li>
+<li><a href="api/symbols/KJUR.asn1.html">ASN.1 encoder/generator</a></li>
+<li><a href="api/symbols/KJUR.asn1.x509.html">ASN.1 structure for X.509 ceritificate, CRL and CSR(PKCS#10) generation</a></li>
+<li><a href="api/symbols/KJUR.asn1.cms.html">ASN.1 structure for CMS SignedData generation</a></li>
+<li><a href="api/symbols/KJUR.asn1.tsp.html">ASN.1 structure for RFC 3161 TimeStamp generation</a></li>
+<li><a href="api/symbols/KJUR.asn1.cades.html">ASN.1 structure for RFC 5126 CAdES Long Term Signature generation</a></li>
+<li><a href="api/symbols/ASN1HEX.html">simple ASN.1 data parser</a></li>
+<li><a href="api/symbols/X509.html">simple X.509 certificate parser/reader</a></li>
+<li><a href="api/symbols/KEYUTIL.html">KEYUTIL</a> - loading RSA/EC/DSA private/public key from PEM formatted PKCS#1/5/8 and X.509 certificate</li>
 <li>Supported formats and algorithms are listed <a href="index_alg.html">here</a>.</li>
 </ul>
 
 <h3>NEWS</h3>
 <dl>
+<dt><b>2014-Jun-08</b>: 
+<dd><a href="https://github.com/kjur/jsrsasign/archive/4.7.0.tar.gz">Release 4.7.0</a> is now available.
+<ul>
+<li>RFC 5126 CAdES Long Term Signature support</li>
+<li>Demo for CAdES BES/EPES/T is <a href="tool_cades.html">here</a>.
+</ul>
+
 <dt><b>2014-May-26</b>: 
-<dd>Release 4.6.0 is now available.
+<dd><a href="https://github.com/kjur/jsrsasign/archive/4.6.0.tar.gz">Release 4.6.0</a> is now available.
 <ul>
 <li>RFC 3161 Time Stamp support</li>
 <li>Demo for time stamp <a href="tool_tsreq.html">request</a>

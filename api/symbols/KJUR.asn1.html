@@ -207,6 +207,22 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.ASN1Util.html">KJUR.asn1.ASN1Util</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cades.html">KJUR.asn1.cades</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.CAdESUtil.html">KJUR.asn1.cades.CAdESUtil</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.CompleteCertificateRefs.html">KJUR.asn1.cades.CompleteCertificateRefs</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.OtherCertID.html">KJUR.asn1.cades.OtherCertID</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.OtherHash.html">KJUR.asn1.cades.OtherHash</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.OtherHashAlgAndValue.html">KJUR.asn1.cades.OtherHashAlgAndValue</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.SignaturePolicyIdentifier.html">KJUR.asn1.cades.SignaturePolicyIdentifier</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.SignatureTimeStamp.html">KJUR.asn1.cades.SignatureTimeStamp</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.html">KJUR.asn1.cms</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.Attribute.html">KJUR.asn1.cms.Attribute</a></li>
@@ -245,6 +261,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.DERBoolean.html">KJUR.asn1.DERBoolean</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.DEREnumerated.html">KJUR.asn1.DEREnumerated</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.DERGeneralizedTime.html">KJUR.asn1.DERGeneralizedTime</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.DERIA5String.html">KJUR.asn1.DERIA5String</a></li>
@@ -275,7 +293,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.html">KJUR.asn1.tsp</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.tsp.AbstractTSAAdapter.html">KJUR.asn1.tsp.AbstractTSAAdapter</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.tsp.Accuracy.html">KJUR.asn1.tsp.Accuracy</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.FixedTSAAdapter.html">KJUR.asn1.tsp.FixedTSAAdapter</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.MessageImprint.html">KJUR.asn1.tsp.MessageImprint</a></li>
 	
@@ -286,6 +308,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.tsp.PKIStatus.html">KJUR.asn1.tsp.PKIStatus</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.PKIStatusInfo.html">KJUR.asn1.tsp.PKIStatusInfo</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.SimpleTSAAdapter.html">KJUR.asn1.tsp.SimpleTSAAdapter</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampReq.html">KJUR.asn1.tsp.TimeStampReq</a></li>
 	
@@ -463,7 +487,25 @@ well known BouncyCaslte Cryptography Library.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.<b>setByBigInteger</b>(bigIntegerValue)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.asn1.<b>setByDate</b>(dateObject)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.<b>setByInteger</b>(intValue)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -524,6 +566,7 @@ Here are ASN.1 DER primitive classes.
 <li>0x04 <a href="../symbols/KJUR.asn1.DEROctetString.html">KJUR.asn1.DEROctetString</a></li>
 <li>0x05 <a href="../symbols/KJUR.asn1.DERNull.html">KJUR.asn1.DERNull</a></li>
 <li>0x06 <a href="../symbols/KJUR.asn1.DERObjectIdentifier.html">KJUR.asn1.DERObjectIdentifier</a></li>
+<li>0x0a <a href="../symbols/KJUR.asn1.DEREnumerated.html">KJUR.asn1.DEREnumerated</a></li>
 <li>0x0c <a href="../symbols/KJUR.asn1.DERUTF8String.html">KJUR.asn1.DERUTF8String</a></li>
 <li>0x12 <a href="../symbols/KJUR.asn1.DERNumericString.html">KJUR.asn1.DERNumericString</a></li>
 <li>0x13 <a href="../symbols/KJUR.asn1.DERPrintableString.html">KJUR.asn1.DERPrintableString</a></li>
@@ -622,6 +665,42 @@ This caused by a bug of jsdoc2.
 
 					<hr />
 				
+					<a name=".setByBigInteger"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.</span><b>setByBigInteger</b>(bigIntegerValue)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>bigIntegerValue</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name=".setByDate"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -643,6 +722,42 @@ This caused by a bug of jsdoc2.
 							
 								<dt>
 									<b>dateObject</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".setByInteger"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.</span><b>setByInteger</b>(intValue)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>intValue</b>
 									
 								</dt>
 								<dd></dd>

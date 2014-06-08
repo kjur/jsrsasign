@@ -1,4 +1,4 @@
-/*! asn1tsp-1.0.0.js (c) 2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1tsp-1.0.1.js (c) 2014 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1tsp.js - ASN.1 DER encoder classes for RFC 3161 Time Stamp Protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1tsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.0 (2014-May-25)
+ * @version 1.0.1 (2014-Jun-07)
  * @since jsrsasign 4.5.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -150,7 +150,7 @@ KJUR.asn1.tsp.MessageImprint = function(params) {
     this.getEncodedHex = function() {
         if (typeof this.hTLV == "string") return this.hTLV;
         var seq = 
-	    new nA.DERSequence({array: [this.dHashAlg, this.dHashValue]});
+            new nA.DERSequence({array: [this.dHashAlg, this.dHashValue]});
         return seq.getEncodedHex();
     };
 
@@ -585,7 +585,101 @@ KJUR.asn1.tsp.PKIFailureInfo.valueList = {
     systemFailure:          25
 };
 
-// --- END OF RFC 2510 CMP -------------------------------------------------
+// --- END OF RFC 2510 CMP -------------------------------------------
+
+/**
+ * abstract class for TimeStampToken generator
+ * @name KJUR.asn1.tsp.AbstractTSAAdapter
+ * @class abstract class for TimeStampToken generator
+ * @param {Array} params associative array of parameters
+ * @since jsrsasign 4.7.0 asn1tsp 1.0.1
+ * @description
+ */
+KJUR.asn1.tsp.AbstractTSAAdapter = function(params) {
+    this.getTSTHex = function(msgHex, hashAlg) {
+        throw "not implemented yet";
+    };
+};
+
+/**
+ * class for simple TimeStampToken generator
+ * @name KJUR.asn1.tsp.SimpleTSAAdapter
+ * @class class for simple TimeStampToken generator
+ * @param {Array} params associative array of parameters
+ * @since jsrsasign 4.7.0 asn1tsp 1.0.1
+ * @description
+ */
+KJUR.asn1.tsp.SimpleTSAAdapter = function(initParams) {
+    KJUR.asn1.tsp.SimpleTSAAdapter.superclass.constructor.call(this);
+    this.params = null;
+    this.serial = 0;
+
+    this.getTSTHex = function(msgHex, hashAlg) {
+        // messageImprint
+        var hashHex = KJUR.crypto.Util.hashHex(msgHex, hashAlg);
+        this.params.tstInfo.messageImprint =
+            {hashAlg: hashAlg, hashValue: hashHex};
+
+        // serial
+        this.params.tstInfo.serialNumber = {'int': this.serial++};
+
+        // nonce
+        var nonceValue = Math.floor(Math.random() * 1000000000);
+        this.params.tstInfo.nonce = {'int': nonceValue};
+
+        var obj = 
+            KJUR.asn1.tsp.TSPUtil.newTimeStampToken(this.params);
+        return obj.getContentInfoEncodedHex();
+    };
+
+    if (typeof initParams != "undefined") {
+        this.params = initParams;
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.tsp.SimpleTSAAdapter,
+                  KJUR.asn1.tsp.AbstractTSAAdapter);
+
+/**
+ * class for fixed TimeStampToken generator
+ * @name KJUR.asn1.tsp.FixedTSAAdapter
+ * @class class for fixed TimeStampToken generator
+ * @param {Array} params associative array of parameters
+ * @since jsrsasign 4.7.0 asn1tsp 1.0.1
+ * @description
+ * This class generates fixed TimeStampToken except messageImprint
+ * for testing purpose.
+ * General TSA generates TimeStampToken which varies following
+ * fields:
+ * <ul>
+ * <li>genTime</li>
+ * <li>serialNumber</li>
+ * <li>nonce</li>
+ * </ul>
+ * Those values are provided by initial parameters.
+ */
+KJUR.asn1.tsp.FixedTSAAdapter = function(initParams) {
+    KJUR.asn1.tsp.FixedTSAAdapter.superclass.constructor.call(this);
+    this.params = null;
+
+    this.getTSTHex = function(msgHex, hashAlg) {
+        // fixed serialNumber
+        // fixed nonce        
+        var hashHex = KJUR.crypto.Util.hashHex(msgHex, hashAlg);
+        this.params.tstInfo.messageImprint =
+            {hashAlg: hashAlg, hashValue: hashHex};
+        var obj = 
+            KJUR.asn1.tsp.TSPUtil.newTimeStampToken(this.params);
+        return obj.getContentInfoEncodedHex();
+    };
+
+    if (typeof initParams != "undefined") {
+        this.params = initParams;
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.tsp.FixedTSAAdapter,
+                  KJUR.asn1.tsp.AbstractTSAAdapter);
+
+// --- TSP utilities -------------------------------------------------
 
 /**
  * TSP utiliteis class
