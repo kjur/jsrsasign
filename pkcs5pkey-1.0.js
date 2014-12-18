@@ -91,6 +91,10 @@ var PKCS5PKEY = function() {
         return decryptGeneral(CryptoJS.AES, dataHex, keyHex, ivHex);
     };
 
+    var decryptDES = function(dataHex, keyHex, ivHex) {
+        return decryptGeneral(CryptoJS.DES, dataHex, keyHex, ivHex);
+    };
+
     var decrypt3DES = function(dataHex, keyHex, ivHex) {
         return decryptGeneral(CryptoJS.TripleDES, dataHex, keyHex, ivHex);
     };
@@ -110,6 +114,10 @@ var PKCS5PKEY = function() {
     // shared key decryption ------------------------------------------
     var encryptAES = function(dataHex, keyHex, ivHex) {
         return encryptGeneral(CryptoJS.AES, dataHex, keyHex, ivHex);
+    };
+
+    var encryptDES = function(dataHex, keyHex, ivHex) {
+        return encryptGeneral(CryptoJS.DES, dataHex, keyHex, ivHex);
     };
 
     var encrypt3DES = function(dataHex, keyHex, ivHex) {
@@ -132,7 +140,8 @@ var PKCS5PKEY = function() {
     'AES-256-CBC': { 'proc': decryptAES, 'eproc': encryptAES, keylen: 32, ivlen: 16 },
     'AES-192-CBC': { 'proc': decryptAES, 'eproc': encryptAES, keylen: 24, ivlen: 16 },
     'AES-128-CBC': { 'proc': decryptAES, 'eproc': encryptAES, keylen: 16, ivlen: 16 },
-    'DES-EDE3-CBC': { 'proc': decrypt3DES, 'eproc': encrypt3DES, keylen: 24, ivlen: 8 }
+    'DES-EDE3-CBC': { 'proc': decrypt3DES, 'eproc': encrypt3DES, keylen: 24, ivlen: 8 },
+    'DES-CBC': { 'proc': decryptDES, 'eproc': encryptDES, keylen: 8, ivlen: 8 }
     };
 
     var getFuncByName = function(algName) {
@@ -609,9 +618,12 @@ var PKCS5PKEY = function() {
             var a0_0_1_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1[1]); 
             if (a0_0_1_1.length != 2)
                 throw "malformed format: SEQUENCE(0.0.1.1).items != 2: " + a0_0_1_1.length;
-            if (ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_1[0]) != "2a864886f70d0307")
-                throw "this only supports TripleDES";
-            info.encryptionSchemeAlg = "TripleDES";
+            if (ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_1[0]) == "2a864886f70d0307")
+                info.encryptionSchemeAlg = "TripleDES";
+            else if (ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_1[0]) == "2b0e030207")
+                info.encryptionSchemeAlg = "DES";
+            else
+                throw "this only supports DES and TripleDES";
 
             // 2.2.1.1 IV of encryptionScheme
             info.encryptionSchemeIV = ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_1[1]);
@@ -705,11 +717,16 @@ var PKCS5PKEY = function() {
             // 3. hKey - PBKDF2 key
             var pbkdf2KeyHex = PKCS5PKEY.getPBKDF2KeyHexFromParam(info, passcode);
             // 4. decrypt ciphertext by PBKDF2 key
-            var encrypted = {};
+            var decrypt, encrypted = {};
             encrypted.ciphertext = CryptoJS.enc.Hex.parse(info.ciphertext);
             var pbkdf2KeyWS = CryptoJS.enc.Hex.parse(pbkdf2KeyHex);
-            var des3IVWS = CryptoJS.enc.Hex.parse(info.encryptionSchemeIV);
-            var decWS = CryptoJS.TripleDES.decrypt(encrypted, pbkdf2KeyWS, { iv: des3IVWS });
+            var IVWS = CryptoJS.enc.Hex.parse(info.encryptionSchemeIV);
+            if (info.encryptionSchemeAlg == "TripleDES") {
+                decrypt = CryptoJS.TripleDES.decrypt;
+            } else if (info.encryptionSchemeAlg == "DES") {
+                decrypt = CryptoJS.DES.decrypt;
+            }
+            var decWS = decrypt(encrypted, pbkdf2KeyWS, { iv: IVWS });
             var decHex = CryptoJS.enc.Hex.stringify(decWS);
             return decHex;
         },
