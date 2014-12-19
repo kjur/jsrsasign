@@ -1,0 +1,47 @@
+{
+  "name": "jsrsasign",
+  "version": "0.0.4",
+  "description": "pure JavaScript cryptographic library(jsrsasign) and JSON Web Token (JWT) and JSON Web Signature (JWS) library (jsjws) bundle",
+  "main": "lib/jsrsasign.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kjur/jsrsasign.git"
+  },
+  "keywords": [
+    "RSA",
+    "ECDSA",
+    "DSA",
+    "RSAPSS",
+    "PKCS1",
+    "PKCS5",
+    "PKCS8",
+    "hash function",
+    "HMac",
+    "ASN.1",
+    "X.509",
+    "Signature",
+    "Message Digest",
+    "signing",
+    "certificate",
+    "JSON Web Token",
+    "JSON Web Signature",
+    "JWT",
+    "JWS",
+    "JOSE",
+    "JWA"
+  ],
+  "author": "Kenji Urushima",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.github.com/kjur/jsrsasign/master/LICENSE.txt"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/kjur/jsrsasign/issues"
+  },
+  "dependencies": {}
+}
