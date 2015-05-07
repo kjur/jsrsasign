@@ -26,7 +26,7 @@
  * @name KJUR
  * @namespace kjur's class library name space
  */
-if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
+if (typeof KJUR == "undefined" || !KJUR) window.KJUR = {};
 /**
  * kjur's cryptographic algorithm provider library name space
  * <p>
