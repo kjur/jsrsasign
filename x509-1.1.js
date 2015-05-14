@@ -1,9 +1,9 @@
-/*! x509-1.1.3.js (c) 2012-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! x509-1.1.4.js (c) 2012-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /* 
  * x509.js - X509 class to read subject public key from certificate.
  *
- * Copyright (c) 2010-2014 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2015 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version x509 1.1.3 (2014-May-17)
+ * @version x509 1.1.4 (2015-May-14)
  * @since jsrsasign 1.x.x
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -356,6 +356,37 @@ X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
     result.keyhex = unusedBitAndKeyHex.substr(2);
 
     return result;
+};
+
+/**
+ * get position of subjectPublicKeyInfo field from HEX certificate
+ * @name getPublicKeyInfoPosOfCertHEX
+ * @memberOf X509
+ * @function
+ * @param {String} hCert hexadecimal string of certificate
+ * @return {Integer} position in hexadecimal string
+ * @since x509 1.1.4
+ * @description
+ * get position for SubjectPublicKeyInfo field in the hexadecimal string of
+ * certificate.
+ */
+X509.getPublicKeyInfoPosOfCertHEX = function(hCert) {
+    // 1. Certificate ASN.1
+    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0); 
+    if (a1.length != 3)
+        throw "malformed X.509 certificate PEM (code:001)"; // not 3 item of seq Cert
+
+    // 2. tbsCertificate
+    if (hCert.substr(a1[0], 2) != "30")
+        throw "malformed X.509 certificate PEM (code:002)"; // tbsCert not seq 
+
+    var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]); 
+
+    // 3. subjectPublicKeyInfo
+    if (a2.length < 7)
+        throw "malformed X.509 certificate PEM (code:003)"; // no subjPubKeyInfo
+    
+    return a2[6];
 };
 
 /*

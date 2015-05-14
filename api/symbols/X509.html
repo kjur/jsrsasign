@@ -565,6 +565,17 @@ NOTE: DSA is also supported since x509 1.1.2.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getPublicKeyInfoPosOfCertHEX">getPublicKeyInfoPosOfCertHEX</a></b>(hCert)
+								</div>
+								<div class="description">get position of subjectPublicKeyInfo field from HEX certificate
+get position for SubjectPublicKeyInfo field in the hexadecimal string of
+certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getPublicKeyInfoPropOfCertPEM">getPublicKeyInfoPropOfCertPEM</a></b>(sCertPEM)
 								</div>
 								<div class="description">get public key information from PEM certificate
@@ -903,6 +914,57 @@ NOTE: DSA is also supported since x509 1.1.2.
 							<dt class="heading">Returns:</dt>
 							
 								<dd>returns RSAKey/KJUR.crypto.{ECDSA,DSA} object of public key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getPublicKeyInfoPosOfCertHEX"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Integer}</span>
+					<span class="light">X509.</span><b>getPublicKeyInfoPosOfCertHEX</b>(hCert)
+					
+					</div>
+					<div class="description">
+						get position of subjectPublicKeyInfo field from HEX certificate
+get position for SubjectPublicKeyInfo field in the hexadecimal string of
+certificate.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of certificate</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.4</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Integer}</span> position in hexadecimal string</dd>
 							
 							</dl>
 						

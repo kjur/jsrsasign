@@ -7,10 +7,15 @@
     <meta name="description" content="HTTPS設定ファイル生成ツール" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    <title>HTTPS設定ファイル生成ツール(ベータ版)</title>
+    <title>HTTPS設定ファイル生成ツール0.2(ベータ版)</title>
 <!-- for pkcs5pkey -->
 <script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="x509-1.1.js"></script>
+
 <script language="JavaScript" type="text/javascript">
+/********************************************
+ * 各種ガイドラインでの暗号スイートの定義
+ ********************************************/
 var OPENSSL_CIPHERSUITE = {
   "cryptrec1": "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA256",
   "cryptrec2": "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-CAMELLIA128-SHA:DHE-RSA-AES128-SHA:AES128-GCM-SHA256:AES128-SHA256:CAMELLIA128-SHA:AES128-SHA:ECDH-ECDSA-AES128-GCM-SHA256:ECDH-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-SHA256:DHE-RSA-CAMELLIA256-SHA:DHE-RSA-AES256-SHA:AES256-GCM-SHA384:AES256-SHA256:CAMELLIA256-SHA:AES256-SHA:ECDH-ECDSA-AES256-GCM-SHA384:ECDH-RSA-AES256-GCM-SHA384",
@@ -18,7 +23,7 @@ var OPENSSL_CIPHERSUITE = {
   "mozilla1": "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!3DES:!MD5:!PSK",
   "mozilla2": "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA",
   "mozilla3": "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:ECDHE-RSA-DES-CBC3-SHA:ECDHE-ECDSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA",
-  "ivanpfsblog": "EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS",
+  "qualysblog": "EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS",
   "openssl_default": "DEFAULT",
   "redhat_default": "HIGH:!aNULL:!MD5:!RC4",
   "centos6_default": "ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW",
@@ -26,8 +31,11 @@ var OPENSSL_CIPHERSUITE = {
   "general_default": "ALL:!aNULL:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM",
 };
 
+/********************************************
+ * 各サーバー(バージョン)の設定テンプレート
+ ********************************************/
 var CFG_TEMPLATE = {
-// **** テンプレート始まり ***********************
+/* Apache 2.4系テンプレート */
 "apache24": 
 (function() {/*
 # sample ssl.conf for Apache 2.4
@@ -49,6 +57,7 @@ SSLCipherSuite %%%CIPHERSUITE%%%
 %%%CIPHERORDER%%%
 SSLCertificateFile conf/ssl/server.crt
 SSLCertificateKeyFile conf/ssl/server.key
+%%%COMPRESSION%%%
 %%%KEYPINNING%%%
 <Files ~ "\.(cgi|shtml|phtml|php3?)$">
     SSLOptions +StdEnvVars
@@ -58,8 +67,7 @@ BrowserMatch "MSIE [2-5]" \
          downgrade-1.0 force-response-1.0
 </VirtualHost>
 */}).toString().match(/\/\*([^]*)\*\//)[1],
-// **** テンプレートおわり ***********************
-// **** テンプレート始まり ***********************
+/* Apache 2.2系テンプレート */
 "apache22": 
 (function() {/*
 # sample ssl.conf for Apache 2.2
@@ -84,6 +92,7 @@ SSLCipherSuite %%%CIPHERSUITE%%%
 SSLCertificateFile conf/ssl/server.crt
 SSLCertificateKeyFile conf/ssl/server.key
 SSLCertificateChainFile conf/ssl/chain.crt
+%%%COMPRESSION%%%
 %%%KEYPINNING%%%
 <Files ~ "\.(cgi|shtml|phtml|php3?)$">
     SSLOptions +StdEnvVars
@@ -93,39 +102,96 @@ SetEnvIf User-Agent ".*MSIE.*" \
          downgrade-1.0 force-response-1.0
 </VirtualHost>
 */}).toString().match(/\/\*([^]*)\*\//)[1],
-// **** テンプレートおわり ***********************
+
+/* nginx テンプレート */
+"nginx":
+(function() {/*
+# /etc/nginx/conf.d/ssl.conf - 生成されたNginx SSL設定ファイル
+server {
+  listen       443;
+  #server_name example.jp;
+  
+  ssl                  on;
+  ssl_certificate      /etc/nginx/cert.crt;
+  ssl_certificate_key  /etc/nginx/cert.key;
+
+  ssl_session_timeout  5m;
+
+  ssl_protocols %%%PROTOCOL%%%;
+  ssl_ciphers %%%CIPHERSUITE%%%;
+  %%%CIPHERORDER%%%
+
+  location / {
+    root /usr/share/nginx/html;
+    index index.html index.htm;
+  }
+}
+*/}).toString().match(/\/\*([^]*)\*\//)[1],
 };
 
-function doGen() {
+/********************************************
+ * ローカル関数定義
+ ********************************************/
+function _doGen() {
   var f1 = document.form1;
 
   var sCertPEM = f1.cert1.value;
+  var guidename = f1.guidename.value;
+  var serverapp = f1.serverapp.value;
 
   //alert(1);
   var cfg = CFG_TEMPLATE[f1.serverapp.value];
-  cfg = cfg.replace("%%%PROTOCOL%%%", _getProtocolValue(f1.guidename.value, f1.serverapp.value));
-  cfg = cfg.replace("%%%CIPHERSUITE%%%", OPENSSL_CIPHERSUITE[f1.guidename.value]);
+  cfg = cfg.replace("%%%PROTOCOL%%%", _getProtocolValue(guidename, serverapp));
+  cfg = cfg.replace("%%%CIPHERSUITE%%%", OPENSSL_CIPHERSUITE[guidename]);
 
-  if (f1.guidename.value.indexOf("cryptrec") != -1 ||
-      f1.guidename.value.indexOf("mozilla") != -1) {
-    cfg = cfg.replace("%%%CIPHERORDER%%%", "SSLHonorCipherOrder On");
-  } else {
-    cfg = cfg.replace("%%%CIPHERORDER%%%", "#SSLHonorCipherOrder On");
-  }
-
-  cfg = _setPinning(cfg, f1);
+  cfg = _updateOrder(cfg, guidename, serverapp);
+  cfg = _updateCompression(cfg, guidename, serverapp);
+  cfg = _updatePinning(cfg, f1);
 
   f1.resultcfg.value = cfg;
 }
 
-function _setPinning(cfg, f1) {
+function _updateCompression(cfg, guidename, serverapp) {
+  // 注：nginx は新しいもので対応、設定は不要
+  if (guidename.indexOf("cryptrec") != -1 ||
+      guidename.indexOf("mozilla") != -1) {
+    if (serverapp.indexOf("apache") != -1) {
+      cfg = cfg.replace("%%%COMPRESSION%%%", "SSLCompression off");
+    }
+  } else {
+    if (serverapp.indexOf("apache") != -1) {
+      cfg = cfg.replace("%%%COMPRESSION%%%", "#SSLCompression off");
+    }
+  }
+  return cfg;
+}
+
+function _updateOrder(cfg, guidename, serverapp) {
+  if (guidename.indexOf("cryptrec") != -1 ||
+      guidename.indexOf("mozilla") != -1) {
+    if (serverapp.indexOf("apache") != -1) {
+      cfg = cfg.replace("%%%CIPHERORDER%%%", "SSLHonorCipherOrder On");
+    } else if (serverapp == "nginx") {
+      cfg = cfg.replace("%%%CIPHERORDER%%%", "ssl_prefer_server_ciphers on;");
+    }
+  } else {
+    if (serverapp.indexOf("apache") != -1) {
+      cfg = cfg.replace("%%%CIPHERORDER%%%", "#SSLHonorCipherOrder On");
+    } else if (serverapp == "nginx") {
+      cfg = cfg.replace("%%%CIPHERORDER%%%", "#ssl_prefer_server_ciphers on;");
+    }
+  }
+  return cfg;
+}
+
+function _updatePinning(cfg, f1) {
   var a = _getCertPinArray(f1);
   if (a.length != 0) {
     var s = "Header always set Public-Key-Pins \"";
     for (var i = 0; i < a.length; i++) {
       s += "pin-sha256=\\\"" + a[i] + "\\\"; ";
     }
-    s += "\"";
+    s += " includeSubDomains\"";
     cfg = cfg.replace("%%%KEYPINNING%%%", s);
   } else {
     cfg = cfg.replace("%%%KEYPINNING%%%", "");
@@ -152,26 +218,9 @@ function _getSHA256HashB64OfCertPEM(sCertPEM) {
 }
 
 function _getPublicKeyInfoHexOfCertPEM(sCertPEM) {
-    var result = {};
-    result.algparam = null;
     var hCert = X509.pemToHex(sCertPEM);
-
-    // 1. Certificate ASN.1
-    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0); 
-    if (a1.length != 3)
-        throw "malformed X.509 certificate PEM (code:001)"; // not 3 item of seq Cert
-
-    // 2. tbsCertificate
-    if (hCert.substr(a1[0], 2) != "30")
-        throw "malformed X.509 certificate PEM (code:002)"; // tbsCert not seq 
-
-    var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]); 
-
-    // 3. subjectPublicKeyInfo
-    if (a2.length < 7)
-        throw "malformed X.509 certificate PEM (code:003)"; // no subjPubKeyInfo
-
-    var publicKeyInfoHex = ASN1HEX.getHexOfTLV_AtObj(hCert, a2[6]);
+    var pos = X509.getPublicKeyInfoPosOfCertHEX(hCert);
+    var publicKeyInfoHex = ASN1HEX.getHexOfTLV_AtObj(hCert, pos);
     return publicKeyInfoHex;
 };
 
@@ -183,8 +232,18 @@ function _getProtocolValue(guideName, serverType) {
     if (guideName == "mozilla1") return "all -SSLv3 -TLSv1";
     if (guideName == "mozilla2") return "all -SSLv3";
     if (guideName == "mozilla3") return "all";
-    if (guideName == "ivanpfsblog") return "all -SSLv2 -SSLv3";
+    if (guideName == "qualysblog") return "all -SSLv2 -SSLv3";
     return "all"; // デフォルト
+  }
+  if (serverType == "nginx") {
+    if (guideName == "cryptrec1") return "TLSv1.2";
+    if (guideName == "cryptrec2") return "TLSv1.2 TLSv1.1 TLSv1";
+    if (guideName == "cryptrec3") return "TLSv1.2 TLSv1.1 TLSv1 SSLv3";
+    if (guideName == "mozilla1") return "TLSv1.2 TLSv1.1 TLSv1 SSLv3";
+    if (guideName == "mozilla2") return "TLSv1.2 TLSv1.1 TLSv1 SSLv3";
+    if (guideName == "mozilla3") return "TLSv1.2 TLSv1.1 TLSv1 SSLv3";
+    if (guideName == "qualysblog") return "TLSv1.2 TLSv1.1 TLSv1 SSLv3";
+    return "TLSv1.2 TLSv1.1 TLSv1 SSLv3"; // デフォルト
   }
   return "---NOT SUPPORTED---";
 }
@@ -196,7 +255,7 @@ function _getProtocolValue(guideName, serverType) {
 <!-- HEADER -->
 <div id="header_wrap" class="outer">
 <header class="inner">
-<h1 id="project_title">HTTPS設定ファイル生成ツール(ベータ版)</h1>
+<h1 id="project_title">HTTPS設定ファイル生成ツール0.2(ベータ版)</h1>
 <h2 id="project_tagline">各種ガイドラインに応じたApacheやnginxなど主要なサーバーのHTTPS設定を自動生成します</h2>
 
 <a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
@@ -221,7 +280,7 @@ function _getProtocolValue(guideName, serverType) {
 <option value="mozilla1">Mozilla Modern Compatibility Profile - 高セキュリティ
 <option value="mozilla2">Mozilla Intermediate Compatibility Profile - 中セキュリティ(デフォルト)
 <option value="mozilla3">Mozilla Old Backward Compatibility Profile - 低セキュリティ
-<option value="ivanpfsblog">Ivan Ristic氏のPFSに関するブログでの推奨設定
+<option value="qualysblog">Qualys社のブログによる推奨設定
 
 <option value="openssl_default">OpenSSLデフォルト設定
 <option value="redhat_default">RedHat Linuxデフォルト設定
@@ -235,20 +294,21 @@ function _getProtocolValue(guideName, serverType) {
 <select name="serverapp">
 <option value="apache24">Apache HTTP Server 2.4
 <option value="apache22">Apache HTTP Server 2.2
+<option value="nginx">nginx
 </select>
 </p>
 <p>
-SSLサーバー証明書PEM<br/>
-<textarea name="cert1" cols="80" rows="3"></textarea>
-<br/>中間CA証明書1(SSLサーバーに近い順)<br/>
-<textarea name="cert2" cols="80" rows="3"></textarea>
-<br/>中間CA証明書2(SSLサーバーに近い順、ルートに近いもの)<br/>
+a) SSLサーバー証明書PEM<br/>
+<textarea name="cert1" cols="80" rows="3"></textarea><br/>
+b) 中間CA証明書1(SSLサーバーに近い順)<br/>
+<textarea name="cert2" cols="80" rows="3"></textarea><br/>
+c) 中間CA証明書2(SSLサーバーに近い順、ルートに近い方)<br/>
 <textarea name="cert3" cols="80" rows="3"></textarea>
 <br/>
 
 </p>
 <p>
-<input type="button" value="生成" onClick="doGen();"/>
+<input type="button" value="生成" onClick="_doGen();"/>
 <input type="reset" name="reset" value="Reset"/>
 </p>
 
@@ -268,8 +328,8 @@ SSLサーバー証明書PEM<br/>
 <p>
 現時点ではベータ版のため、
 <ul>
-<li>Apache 2.4系、Apache 2.2系のssl.conf設定ファイルしか生成できない。(nginx等近日対応)</li>
-<li>暗号スイート、プロトコル、暗号スイート順序、Public Key Pinningしか設定されない。</li>
+<li>Apache 2.4系、Apache 2.2系、nginxのssl.conf設定ファイルしか生成できない。(lighttpd等近日対応)</li>
+<li>暗号スイート、プロトコル、暗号スイート順序、TLS圧縮オフ、Public Key Pinningしか設定されない。</li>
 <li>OCSP stapling、HSTSなどは未対応。(近日対応予定)</li>
 </ul>
 となっていますが、よかったらご利用ください。Public Key Pinningの設定に対応するためは、
@@ -277,10 +337,30 @@ SSLサーバー証明書、中間CA証明書のPEM形式でコピーペースト
 設定を出力します。
 </p>
 <p>
-本ツールは、<a href="https://twitter.com/kjur">@kjur</a> が個人的に作成したものであり、CRYPTRECやIPAとは無関係です。バグ報告や問題のご指摘は<a href="https://github.com/kjur/jsrsasign/issues">こちらのバグトラッカー</a>で日本語でお知らせください。
+本ツールは、<a href="https://twitter.com/kjur">@kjur</a> が個人的に作成したものであり、CRYPTRECやIPAにより公開されているページではありません。バグ報告や問題のご指摘は<a href="https://github.com/kjur/jsrsasign/issues">こちらのバグトラッカー</a>で日本語でお知らせください。
 </p>
 
-<hr/>
+<h4>使用方法</h4>
+<p>
+<ul>
+<li>準拠したいガイドラインのパターンを選択します。例えば、「CRYPTREC/IPA SSL設定ガイド 推奨セキュリティ型」など選択します。</li>
+<li>設定対象のウェブサーバーのソフトウェアを指定します。例えば Apache 2.4 などを選択します。</li>
+<li>Certificate Pinning(Public Key Pinning)のヘッダ情報を設定したい場合には、PEMテキスト形式の証明書を
+コピーペーストします。
+SSLサーバー証明書からルート証明書の手前の中間CA証明書までをa) b) c)に順にコピーペーストしてください。
+中間証CA証明書は2段まで対応しています。例えば、ルート＞中間＞サーバー証明書の3段である場合には、
+a) b) にのみ登録し c) は空欄としてください。
+</li>
+<li>「生成」ボタンを押せば、ガイドに従った設定ファイル(の一部)が下に表示されます。</li>
+<li>生成された設定ファイル(一部)の内容を設定し、動作確認する。</li>
+</ul>
+</p>
+
+<h4>注意事項</h4>
+<p>
+必ずテスト環境および本番環境で、期待された動作をするかご確認ください。
+</p>
+
 <h4>参考リンク</h4>
 <ul>
 <li><a href="http://www.ipa.go.jp/security/vuln/ssl_crypt_config.html" target="_blank">
@@ -291,6 +371,32 @@ Mozilla Wiki: Security/Server Side TLS</a></li>
 Mozilla SSL Configuration Generator</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Public_Key_Pinning">
 Mozilla Developper Network: Public Key Pinning</a></li>
+<li><a href="https://community.qualys.com/blogs/securitylabs/2013/08/05/configuring-apache-nginx-and-openssl-for-forward-secrecy">QUALYS BLOG: Configuring Apache, Nginx, and OpenSSL for Forward Secrecy</a></li>
+<li><a href="https://projects.dm.id.lv/s/pkp-online/calculator.html">JavaScript Public-Key-Pins (HPKP) calculator v1.0.2</a></li>
+<li><a href="https://www.nic.ad.jp/ja/materials/iw/2014/proceedings/s14/s14-urushima.pdf">
+Internet Week 2014 講演資料 サーバーのSSL/TLS設定のツボ</a></li>
+<li><a href="http://www.jnsa.org/seminar/pki-day/2015/data/2-1_urushima.pdf">
+JNSA PKI Day 2015 講演資料 SSL/TLS生誕20年、脆弱性と対策を振返る</a></li>
+<li><a href="http://blog.livedoor.jp/k_urushima/archives/1768181.html">
+「RFC 7525 TLSとDTLSの安全な利用に関する推奨事項」の公開</a></li>
+</ul>
+
+<h4>補足説明</h4>
+<p>
+Public Key Pinningのために、証明書をテキスト添付するのは気持ち悪いと思われるかもしれませんが、
+ご安心ください。
+すべての処理はブラウザのJavaScriptで行われ、サーバーに送信することもなく、
+HTMLファイルとJavaScriptファイルさえあれば、オフラインでも実行することができます。
+具体的には自作の<a href="https://kjur.github.io/jsrsasign/">jsrsasign</a>という、
+JavaScript暗号ライブラリを使って、PEM形式のX.509証明書を解析し、SubjectPublicKeyInfoから
+公開鍵を取り出し、ハッシュ計算し、Pinning用のヘッダ値を生成しています。
+</p>
+
+<h4>ニュース</h4>
+<ul>
+<li>2015.05.14 - 0.2ベータ版 nginx設定、TLS圧縮オフに対応　
+(CRYPTRECガイドにはAppendixに圧縮オフ設定例はなかった)</li>
+<li>2015.05.13 - 0.1ベータ版 初版公開</li>
 </ul>
 
 </form>

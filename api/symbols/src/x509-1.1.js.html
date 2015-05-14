@@ -5,12 +5,12 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! x509-1.1.3.js (c) 2012-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! x509-1.1.4.js (c) 2012-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/* 
 <span class='line'>  4</span>  * x509.js - X509 class to read subject public key from certificate.
 <span class='line'>  5</span>  *
-<span class='line'>  6</span>  * Copyright (c) 2010-2014 Kenji Urushima (kenji.urushima@gmail.com)
+<span class='line'>  6</span>  * Copyright (c) 2010-2015 Kenji Urushima (kenji.urushima@gmail.com)
 <span class='line'>  7</span>  *
 <span class='line'>  8</span>  * This software is licensed under the terms of the MIT License.
 <span class='line'>  9</span>  * http://kjur.github.com/jsrsasign/license
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name x509-1.1.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version x509 1.1.3 (2014-May-17)
+<span class='line'> 19</span>  * @version x509 1.1.4 (2015-May-14)
 <span class='line'> 20</span>  * @since jsrsasign 1.x.x
 <span class='line'> 21</span>  * @license &lt;a href="http://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -365,15 +365,46 @@
 <span class='line'>358</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>359</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>360</span> 
-<span class='line'>361</span> </span><span class="COMM">/*
-<span class='line'>362</span>   X509.prototype.readCertPEM = _x509_readCertPEM;
-<span class='line'>363</span>   X509.prototype.readCertPEMWithoutRSAInit = _x509_readCertPEMWithoutRSAInit;
-<span class='line'>364</span>   X509.prototype.getSerialNumberHex = _x509_getSerialNumberHex;
-<span class='line'>365</span>   X509.prototype.getIssuerHex = _x509_getIssuerHex;
-<span class='line'>366</span>   X509.prototype.getSubjectHex = _x509_getSubjectHex;
-<span class='line'>367</span>   X509.prototype.getIssuerString = _x509_getIssuerString;
-<span class='line'>368</span>   X509.prototype.getSubjectString = _x509_getSubjectString;
-<span class='line'>369</span>   X509.prototype.getNotBefore = _x509_getNotBefore;
-<span class='line'>370</span>   X509.prototype.getNotAfter = _x509_getNotAfter;
-<span class='line'>371</span> */</span><span class="WHIT">
-<span class='line'>372</span> </span></pre></body></html>
+<span class='line'>361</span> </span><span class="COMM">/**
+<span class='line'>362</span>  * get position of subjectPublicKeyInfo field from HEX certificate
+<span class='line'>363</span>  * @name getPublicKeyInfoPosOfCertHEX
+<span class='line'>364</span>  * @memberOf X509
+<span class='line'>365</span>  * @function
+<span class='line'>366</span>  * @param {String} hCert hexadecimal string of certificate
+<span class='line'>367</span>  * @return {Integer} position in hexadecimal string
+<span class='line'>368</span>  * @since x509 1.1.4
+<span class='line'>369</span>  * @description
+<span class='line'>370</span>  * get position for SubjectPublicKeyInfo field in the hexadecimal string of
+<span class='line'>371</span>  * certificate.
+<span class='line'>372</span>  */</span><span class="WHIT">
+<span class='line'>373</span> </span><span class="NAME">X509.getPublicKeyInfoPosOfCertHEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>374</span> </span><span class="WHIT">    </span><span class="COMM">// 1. Certificate ASN.1</span><span class="WHIT">
+<span class='line'>375</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getPosArrayOfChildren_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> 
+<span class='line'>376</span>     </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a1.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>377</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed X.509 certificate PEM (code:001)"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// not 3 item of seq Cert</span><span class="WHIT">
+<span class='line'>378</span> 
+<span class='line'>379</span> </span><span class="WHIT">    </span><span class="COMM">// 2. tbsCertificate</span><span class="WHIT">
+<span class='line'>380</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hCert.substr</span><span class="PUNC">(</span><span class="NAME">a1</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>381</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed X.509 certificate PEM (code:002)"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// tbsCert not seq </span><span class="WHIT">
+<span class='line'>382</span> 
+<span class='line'>383</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getPosArrayOfChildren_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a1</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> 
+<span class='line'>384</span> 
+<span class='line'>385</span>     </span><span class="COMM">// 3. subjectPublicKeyInfo</span><span class="WHIT">
+<span class='line'>386</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a2.length</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">7</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>387</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed X.509 certificate PEM (code:003)"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// no subjPubKeyInfo</span><span class="WHIT">
+<span class='line'>388</span> </span><span class="WHIT">    
+<span class='line'>389</span>     </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">a2</span><span class="PUNC">[</span><span class="NUMB">6</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>390</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>391</span> 
+<span class='line'>392</span> </span><span class="COMM">/*
+<span class='line'>393</span>   X509.prototype.readCertPEM = _x509_readCertPEM;
+<span class='line'>394</span>   X509.prototype.readCertPEMWithoutRSAInit = _x509_readCertPEMWithoutRSAInit;
+<span class='line'>395</span>   X509.prototype.getSerialNumberHex = _x509_getSerialNumberHex;
+<span class='line'>396</span>   X509.prototype.getIssuerHex = _x509_getIssuerHex;
+<span class='line'>397</span>   X509.prototype.getSubjectHex = _x509_getSubjectHex;
+<span class='line'>398</span>   X509.prototype.getIssuerString = _x509_getIssuerString;
+<span class='line'>399</span>   X509.prototype.getSubjectString = _x509_getSubjectString;
+<span class='line'>400</span>   X509.prototype.getNotBefore = _x509_getNotBefore;
+<span class='line'>401</span>   X509.prototype.getNotAfter = _x509_getNotAfter;
+<span class='line'>402</span> */</span><span class="WHIT">
+<span class='line'>403</span> </span></pre></body></html>

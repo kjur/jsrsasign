@@ -472,16 +472,14 @@ following properties:
 <li>rfc822 - rfc822Name[1] (ex. user1@foo.com)</li>
 <li>dns - dNSName[2] (ex. foo.com)</li>
 <li>uri - uniformResourceIdentifier[6] (ex. http://foo.com/)</li>
+<li>certissuer - directoryName[4] (PEM or hex string of cert)</li>
+<li>certsubj - directoryName[4] (PEM or hex string of cert)</li>
 </ul>
-NOTE: Currently this only supports 'uniformResourceIdentifier'.
-<h4>EXAMPLE AND ASN.1 SYNTAX</h4>
-					
-				</div>
-				
-				
-				
-				<pre class="code">var gn = new KJUR.asn1.x509.GeneralName({'uri': 'http://aaa.com/'});
+NOTE1: certissuer and certsubj is supported since asn1x509 1.0.10.
 
+Here is definition of the ASN.1 syntax:
+<pre>
+-- NOTE: under the CHOICE, it will always be explicit.
 GeneralName ::= CHOICE {
         otherName                       [0]     OtherName,
         rfc822Name                      [1]     IA5String,
@@ -491,7 +489,18 @@ GeneralName ::= CHOICE {
         ediPartyName                    [5]     EDIPartyName,
         uniformResourceIdentifier       [6]     IA5String,
         iPAddress                       [7]     OCTET STRING,
-        registeredID                    [8]     OBJECT IDENTIFIER }</pre>
+        registeredID                    [8]     OBJECT IDENTIFIER } 
+</pre>
+					
+				</div>
+				
+				
+				
+				<pre class="code">gn = new KJUR.asn1.x509.GeneralName({rfc822:      'test@aaa.com'});
+gn = new KJUR.asn1.x509.GeneralName({dns:         'aaa.com'});
+gn = new KJUR.asn1.x509.GeneralName({uri:         'http://aaa.com/'});
+gn = new KJUR.asn1.x509.GeneralName({certissuer:  certPEM});
+gn = new KJUR.asn1.x509.GeneralName({certsubj:    certPEM});</pre>
 				
 				
 				
