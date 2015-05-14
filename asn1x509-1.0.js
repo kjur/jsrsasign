@@ -1,4 +1,4 @@
-/*! asn1x509-1.0.9.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.10.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.9 (2014-May-17)
+ * @version 1.0.10 (2014-Jun-09)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1525,12 +1525,14 @@ YAHOO.lang.extend(KJUR.asn1.x509.AlgorithmIdentifier, KJUR.asn1.ASN1Object);
  * <li>rfc822 - rfc822Name[1] (ex. user1@foo.com)</li>
  * <li>dns - dNSName[2] (ex. foo.com)</li>
  * <li>uri - uniformResourceIdentifier[6] (ex. http://foo.com/)</li>
+ * <li>certissuer - directoryName[4] (PEM or hex string of cert)</li>
+ * <li>certsubj - directoryName[4] (PEM or hex string of cert)</li>
  * </ul>
- * NOTE: Currently this only supports 'uniformResourceIdentifier'.
- * <h4>EXAMPLE AND ASN.1 SYNTAX</h4>
- * @example
- * var gn = new KJUR.asn1.x509.GeneralName({'uri': 'http://aaa.com/'});
+ * NOTE1: certissuer and certsubj is supported since asn1x509 1.0.10.
  *
+ * Here is definition of the ASN.1 syntax:
+ * <pre>
+ * -- NOTE: under the CHOICE, it will always be explicit.
  * GeneralName ::= CHOICE {
  *         otherName                       [0]     OtherName,
  *         rfc822Name                      [1]     IA5String,
@@ -1541,33 +1543,82 @@ YAHOO.lang.extend(KJUR.asn1.x509.AlgorithmIdentifier, KJUR.asn1.ASN1Object);
  *         uniformResourceIdentifier       [6]     IA5String,
  *         iPAddress                       [7]     OCTET STRING,
  *         registeredID                    [8]     OBJECT IDENTIFIER } 
+ * </pre>
+ *
+ * 
+ *
+ * @example
+ * gn = new KJUR.asn1.x509.GeneralName({rfc822:      'test@aaa.com'});
+ * gn = new KJUR.asn1.x509.GeneralName({dns:         'aaa.com'});
+ * gn = new KJUR.asn1.x509.GeneralName({uri:         'http://aaa.com/'});
+ * gn = new KJUR.asn1.x509.GeneralName({certissuer:  certPEM});
+ * gn = new KJUR.asn1.x509.GeneralName({certsubj:    certPEM});
  */
 KJUR.asn1.x509.GeneralName = function(params) {
     KJUR.asn1.x509.GeneralName.superclass.constructor.call(this);
     var asn1Obj = null;
     var type = null;
-    var pTag = {'rfc822': '81', 'dns': '82', 'uri': '86'};
+    var pTag = {rfc822: '81', dns: '82', dn: 'a4',  uri: '86'};
+    this.explicit = false;
 
     this.setByParam = function(params) {
         var str = null;
         var v = null;
 
-        if (typeof params['rfc822'] != "undefined") {
+		if (typeof params == "undefined") return;
+		
+        if (typeof params.rfc822 != "undefined") {
             this.type = 'rfc822';
             v = new KJUR.asn1.DERIA5String({'str': params[this.type]});
         }
-        if (typeof params['dns'] != "undefined") {
+        if (typeof params.dns != "undefined") {
             this.type = 'dns';
             v = new KJUR.asn1.DERIA5String({'str': params[this.type]});
         }
-        if (typeof params['uri'] != "undefined") {
+        if (typeof params.uri != "undefined") {
             this.type = 'uri';
             v = new KJUR.asn1.DERIA5String({'str': params[this.type]});
         }
+		if (typeof params.certissuer != "undefined") {
+			this.type = 'dn';
+			this.explicit = true;
+			var certStr = params.certissuer;
+			var certHex = null;
+			if (certStr.match(/^[0-9A-Fa-f]+$/)) {
+				certHex == certStr;
+            }
+		    if (certStr.indexOf("-----BEGIN ") != -1) {
+				certHex = X509.pemToHex(certStr);
+			}
+		    if (certHex == null) throw "certissuer param not cert";
+			var x = new X509();
+			x.hex = certHex;
+			var dnHex = x.getIssuerHex();
+			v = new KJUR.asn1.ASN1Object();
+			v.hTLV = dnHex;
+		}
+		if (typeof params.certsubj != "undefined") {
+			this.type = 'dn';
+			this.explicit = true;
+			var certStr = params.certsubj;
+			var certHex = null;
+			if (certStr.match(/^[0-9A-Fa-f]+$/)) {
+				certHex == certStr;
+            }
+		    if (certStr.indexOf("-----BEGIN ") != -1) {
+				certHex = X509.pemToHex(certStr);
+			}
+		    if (certHex == null) throw "certsubj param not cert";
+			var x = new X509();
+			x.hex = certHex;
+			var dnHex = x.getSubjectHex();
+			v = new KJUR.asn1.ASN1Object();
+			v.hTLV = dnHex;
+		}
 
         if (this.type == null)
             throw "unsupported type in params=" + params;
-        this.asn1Obj = new KJUR.asn1.DERTaggedObject({'explicit': false,
+        this.asn1Obj = new KJUR.asn1.DERTaggedObject({'explicit': this.explicit,
                                                       'tag': pTag[this.type],
                                                       'obj': v});
     };
