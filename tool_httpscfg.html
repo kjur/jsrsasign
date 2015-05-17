@@ -306,7 +306,7 @@ function _getProtocolValue(guideName, serverType) {
 <div id="header_wrap" class="outer">
 <header class="inner">
 <h1 id="project_title">HTTPS設定ファイル生成ツール0.4(ベータ版)</h1>
-<h2 id="project_tagline">各種ガイドラインに応じたApacheやnginxなど主要なサーバーのHTTPS設定を自動生成します</h2>
+<h2 id="project_tagline">各種ガイドラインに応じたApache、nginx、lighttpdなど主要なサーバーのHTTPS設定を自動生成します</h2>
 
 <a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
 </header>
@@ -379,7 +379,7 @@ c) 中間CA証明書2(SSLサーバーに近い順、ルートに近い方)<br/>
 <p>
 現時点ではベータ版のため、
 <ul>
-<li>Apache 2.4系、Apache 2.2系、nginxのssl.conf設定ファイルしか生成できない。(lighttpd等近日対応)</li>
+<li>Apache 2.4系、Apache 2.2系、nginx、lighttpdのssl.conf設定ファイルしか生成できない。</li>
 <li>暗号スイート、プロトコル、暗号スイート順序、TLS圧縮オフ、Public Key Pinningしか設定されない。</li>
 <li>OCSP stapling、HSTSなどは未対応。(近日対応予定)</li>
 </ul>
@@ -421,13 +421,16 @@ CRYPTREC/IPA SSL/TLS暗号設定ガイドライン～安全なウェブサイト
 <li><a href="https://wiki.mozilla.org/Security/Server_Side_TLS">
 Mozilla Wiki: Security/Server Side TLS</a></li>
 <li><a href="https://community.qualys.com/blogs/securitylabs/2013/08/05/configuring-apache-nginx-and-openssl-for-forward-secrecy">QUALYS BLOG: Configuring Apache, Nginx, and OpenSSL for Forward Secrecy</a></li>
+<li><a href="https://cipherli.st/">Cipherli.st: String Ciphers for Apache, nginx and Lighttpd</a></li>
+<li><a href="http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r1.pdf">
+NIST SP 800-52r1 Guidelines for the Selection, Configuration, and Use of TLS Implementation (Apr 2014)</a></li>
 </ul>
 </li>
 
 <li><b>他サイトSSL設定ファイル生成ツール：</b>
 <ul>
 <li><a href="https://mozilla.github.io/server-side-tls/ssl-config-generator/">
-Mozilla SSL Configuration Generator</a></li>
+    Mozilla SSL Configuration Generator</a></li>
 <li><a href="https://projects.dm.id.lv/s/pkp-online/calculator.html">
 JavaScript Public-Key-Pins (HPKP) calculator v1.0.2</a></li>
 </ul>
@@ -435,7 +438,9 @@ JavaScript Public-Key-Pins (HPKP) calculator v1.0.2</a></li>
 <li><b>各ソフトウェアのサーバーSSL設定マニュアル：</b>
 <ul>
 <li><a href="http://nginx.org/en/docs/http/ngx_http_ssl_module.html">
-nginx: odule ngx_http_ssl_module</li>
+nginx: odule ngx_http_ssl_module</a></li>
+<li><a href="http://redmine.lighttpd.net/projects/1/wiki/docs_ssl">
+lighttpd: Secure HTTP</a></li>
 </ul>
 
 <li><b>その他学習資料：</b>

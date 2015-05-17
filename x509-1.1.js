@@ -1,4 +1,4 @@
-/*! x509-1.1.4.js (c) 2012-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! x509-1.1.5.js (c) 2012-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /* 
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version x509 1.1.4 (2015-May-14)
+ * @version x509 1.1.5 (2015-May-17)
  * @since jsrsasign 1.x.x
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -387,6 +387,123 @@ X509.getPublicKeyInfoPosOfCertHEX = function(hCert) {
         throw "malformed X.509 certificate PEM (code:003)"; // no subjPubKeyInfo
     
     return a2[6];
+};
+
+/**
+ * get array of X.509 V3 extension value information in hex string of certificate
+ * @name getV3ExtInfoListOfCertHex
+ * @memberOf X509
+ * @function
+ * @param {String} hCert hexadecimal string of X.509 certificate binary
+ * @return {Array} array of result object by {@link X509.getV3ExtInfoListOfCertHex}
+ * @since x509 1.1.5
+ * @description
+ * This method will get all extension information of a X.509 certificate.
+ * Items of resulting array has following properties:
+ * <ul>
+ * <li>posTLV - index of ASN.1 TLV for the extension. same as 'pos' argument.</li>
+ * <li>oid - dot noted string of extension oid (ex. 2.5.29.14)</li>
+ * <li>critical - critical flag value for this extension</li>
+ * <li>posV - index of ASN.1 TLV for the extension value.
+ * This is a position of a content of ENCAPSULATED OCTET STRING.</li>
+ * </ul>
+ * @example
+ * hCert = X509.pemToHex(certGithubPEM);
+ * a = X509.getV3ExtInfoListOfCertHex(hCert);
+ * // Then a will be an array of like following:
+ * [{1952, "2.5.29.35", false, 1968},
+ *  {1974, "2.5.29.19", true, 1986}, ...]
+ */
+X509.getV3ExtInfoListOfCertHex = function(hCert) {
+    // 1. Certificate ASN.1
+    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0); 
+    if (a1.length != 3)
+        throw "malformed X.509 certificate PEM (code:001)"; // not 3 item of seq Cert
+
+    // 2. tbsCertificate
+    if (hCert.substr(a1[0], 2) != "30")
+        throw "malformed X.509 certificate PEM (code:002)"; // tbsCert not seq 
+
+    var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]); 
+
+    // 3. v3Extension EXPLICIT Tag [3]
+    // ver, seri, alg, iss, validity, subj, spki, (iui,) (sui,) ext
+    if (a2.length < 8)
+        throw "malformed X.509 certificate PEM (code:003)"; // tbsCert num field too short
+
+    if (hCert.substr(a2[7], 2) != "a3")
+        throw "malformed X.509 certificate PEM (code:004)"; // not [3] tag
+
+    var a3 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a2[7]);
+    if (a3.length != 1)
+        throw "malformed X.509 certificate PEM (code:005)"; // [3]tag numChild!=1
+
+    // 4. v3Extension SEQUENCE
+    if (hCert.substr(a3[0], 2) != "30")
+        throw "malformed X.509 certificate PEM (code:006)"; // not SEQ
+
+    var a4 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a3[0]);
+
+    // 5. v3Extension item position
+    var numExt = a4.length;
+    var aInfo = new Array(numExt);
+    for (var i = 0; i < numExt; i++) {
+	aInfo[i] = X509.getV3ExtItemInfo_AtObj(hCert, a4[i]);
+    }
+    return aInfo;
+};
+
+/**
+ * get X.509 V3 extension value information at the specified position
+ * @name getV3ExtItemInfo_AtObj
+ * @memberOf X509
+ * @function
+ * @param {String} hCert hexadecimal string of X.509 certificate binary
+ * @param {Integer} pos index of hexadecimal string for the extension
+ * @return {Object} properties for the extension
+ * @since x509 1.1.5
+ * @description
+ * This method will get some information of a X.509 V extension 
+ * which is referred by an index of hexadecimal string of X.509 
+ * certificate. 
+ * Resulting object has following properties:
+ * <ul>
+ * <li>posTLV - index of ASN.1 TLV for the extension. same as 'pos' argument.</li>
+ * <li>oid - dot noted string of extension oid (ex. 2.5.29.14)</li>
+ * <li>critical - critical flag value for this extension</li>
+ * <li>posV - index of ASN.1 TLV for the extension value.
+ * This is a position of a content of ENCAPSULATED OCTET STRING.</li>
+ * </ul>
+ * This method is used by {@link X509.getV3ExtInfoListOfCertHex} internally.
+ */
+X509.getV3ExtItemInfo_AtObj = function(hCert, pos) {
+    var info = {};
+
+    // posTLV - extension TLV
+    info.posTLV = pos;
+
+    var a  = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, pos);
+    if (a.length != 2 && a.length != 3)
+        throw "malformed X.509v3 Ext (code:001)"; // oid,(critical,)val
+
+    // oid - extension OID
+    if (hCert.substr(a[0], 2) != "06")
+        throw "malformed X.509v3 Ext (code:002)"; // not OID "06"
+    var valueHex = ASN1HEX.getHexOfV_AtObj(hCert, a[0]);
+    info.oid = ASN1HEX.hextooidstr(valueHex); 
+
+    // critical - extension critical flag
+    info.critical = false; // critical false by default
+    if (a.length == 3) info.critical = true;
+
+    // posV - content TLV position of encapsulated
+    //        octet string of V3 extension value.
+    var posExtV = a[a.length - 1];
+    if (hCert.substr(posExtV, 2) != "04")
+        throw "malformed X.509v3 Ext (code:003)"; // not EncapOctet "04"
+    info.posV = ASN1HEX.getStartPosOfV_AtObj(hCert, posExtV);
+    
+    return info;
 };
 
 /*
