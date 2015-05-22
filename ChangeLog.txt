@@ -1,6 +1,33 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.7.1 to 4.7.2 (2015-May-18)
+  - x509 1.1.4 to 1.1.6
+    - add some X.509v3 extension parsing methods.
+      following methods are added:
+      - getV3ExtInfoListOfCertHex
+      - getV3ExtItemInfo_AtObj
+      - getHexOfTLV_V3ExtValue
+      - getHexOfV_V3ExtValue
+      - getPosOfTLV_V3ExtValue
+      - getExtKeyUsageBin
+      - getExtKeyUsageString
+      - getExtAIAInfo
+  - asn1x509 1.0.10 to 1.0.11
+    - OID.name2oidList updated for X.509v3 extension OIDs
+    - OID.name2oid method added
+    - OID.oid2name method added
+  - ** 4.7.2 updated files **
+    - ChangeLog.txt
+    - asn1x509-1.0.js
+    - test/qunit-do-x509-ext.html
+    - test/qunit-do-asn1x509.html
+    - x509-1.1
+    - test/index.html
+    - tool_httpscfg.html
+    - ext/yahoo-min.js
+    - ext/yahoo.js
+
 * Changes between 4.7.0 to 4.7.1 (2015-May-14)
   - asn1x509 1.0.9 to 1.0.10
     - certissuer and certsubj supported in GeneralName class

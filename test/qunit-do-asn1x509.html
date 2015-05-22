@@ -12,19 +12,20 @@
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core-min.js"></script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
-<script src="../ext/jsbn.js"></script>
-<script src="../ext/jsbn2.js"></script>
-<script src="../ext/rsa.js"></script>
-<script src="../ext/rsa2.js"></script>
-<script src="../ext/base64.js"></script>
-<script src="../base64x-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../base64x-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
-<script language="JavaScript" type="text/javascript" src="../crypto-1.0.js"></script>
-<script src="../asn1-1.0.js"></script>
-<script src="../asn1x509-1.0.js"></script>
-<script src="../x509-1.1.js"></script>
-<script src="../keyutil-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../crypto-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1x509-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../x509-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../keyutil-1.0.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -73,12 +74,12 @@ test("Certificate class test", function() {
   prvKey.readPrivateKeyFromASN1HexString("3082013a020100024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001024078bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d022100fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f022100e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07022100d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b3702201849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa902207d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9");
   var crt1 = new KJUR.asn1.x509.Certificate({tbscertobj: o,
                                              prvkeyobj:  prvKey});
+  crt1.sign();					  
   expect(3);
   // test3
   equal(crt1.asn1TBSCert.getEncodedHex(), "3081e5a003020102020104300d06092a864886f70d01010505003019310b3009060355040613025553310a3008060355040a0c0161301e170d3133303530343233353935395a170d3134303530343233353935395a3019310b3009060355040613025553310a300806035504030c01623057300d06092a864886f70d01010105000346003043023c00e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a0203010001a31d301b300c0603551d13040530030101ff300b0603551d0f0404030206c0", "constructor,sign,asn1TBSCert.getEncodedHex");
 
   // test1
-  crt1.sign();					  
   hCrt1 = crt1.getEncodedHex()
   equal(hCrt1, "3082013a3081e5a003020102020104300d06092a864886f70d01010505003019310b3009060355040613025553310a3008060355040a0c0161301e170d3133303530343233353935395a170d3134303530343233353935395a3019310b3009060355040613025553310a300806035504030c01623057300d06092a864886f70d01010105000346003043023c00e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a0203010001a31d301b300c0603551d13040530030101ff300b0603551d0f0404030206c0300d06092a864886f70d010105050003410088dca030a5dcae7b85f0bfcb1fcbac18065d9f5bfd717c78075449a8447e87d0c7cb0cfd2b2ad7140c4075fd44b741502b89a7f7a9967e21c8aea330ac124be0", "constructor,sign,getEncodedHex");
 
@@ -87,7 +88,6 @@ test("Certificate class test", function() {
 
 
 });
-
 
 test("TBSCertificate class test", function() {
   expect(1);
@@ -229,10 +229,13 @@ test("DistributionPoint class test", function() {
 
 test("OID class test", function() {
   var o = KJUR.asn1.x509.OID;
-  expect(2);
   equal(o.atype2obj('C').getEncodedHex(), "0603550406", "C");
   equal(o.name2obj('SHA1withRSA').getEncodedHex(), 
          "06092a864886f70d010105", "name2obj SHA1withRSA");
+  equal(o.name2oid('basicConstraints'), '2.5.29.19', "name2oid basicConstraints");
+  equal(o.name2oid('UNKNOWNOIDNAME'), '', "name2oid unknown name");
+  equal(o.oid2name('2.5.29.19'), 'basicConstraints', "oid2name basicConstraints");
+  equal(o.oid2name('0.0.0.0'), '', "oid2name unknown oid");
 });
 
 // BasicConstraints
@@ -395,5 +398,6 @@ test("X509Util.getPKCS8PubKeyPEMfromRSAKey", function() {
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
+<a href="index.html">TEST INDEX</a> |
 </body>
 </html>

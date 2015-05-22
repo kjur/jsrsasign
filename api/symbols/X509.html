@@ -517,6 +517,64 @@ ul.inheritsList
 					<tbody>
 					
 						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtAIAInfo">getExtAIAInfo</a></b>(hCert)
+								</div>
+								<div class="description">get AuthorityInfoAccess extension value in the certificate as associative array
+This method will get authority info access value
+as associate array which has following properties:
+<ul>
+<li>ocsp - array of string for OCSP responder URL</li>
+<li>caissuer - array of string for caIssuer value (i.e.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtKeyUsageBin">getExtKeyUsageBin</a></b>(hCert)
+								</div>
+								<div class="description">get KeyUsage extension value as binary string in the certificate
+This method will get key usage extension value
+as binary string such like '101'.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtKeyUsageString">getExtKeyUsageString</a></b>(hCert)
+								</div>
+								<div class="description">get KeyUsage extension value as names in the certificate
+This method will get key usage extension value
+as comma separated string of usage names.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getHexOfTLV_V3ExtValue">getHexOfTLV_V3ExtValue</a></b>(hCert, oidOrName)
+								</div>
+								<div class="description">get X.509 V3 extension value ASN.1 TLV for specified oid or name
+This method will get X.509v3 extension value of ASN.1 TLV
+which is specifyed by extension name or oid.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getHexOfV_V3ExtValue">getHexOfV_V3ExtValue</a></b>(hCert, oidOrName)
+								</div>
+								<div class="description">get X.509 V3 extension value ASN.1 V for specified oid or name
+This method will get X.509v3 extension value of ASN.1 value
+which is specifyed by extension name or oid.</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getIssuerHex">getIssuerHex</a></b>()
@@ -549,6 +607,17 @@ ul.inheritsList
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getNotBefore">getNotBefore</a></b>()
 								</div>
 								<div class="description">get notBefore field string of certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getPosOfTLV_V3ExtValue">getPosOfTLV_V3ExtValue</a></b>(hCert, oidOrName)
+								</div>
+								<div class="description">get index in the certificate hexa string for specified oid or name specified extension
+This method will get X.509v3 extension value of ASN.1 V(value)
+which is specifyed by extension name or oid.</div>
 							</td>
 						</tr>
 					
@@ -612,6 +681,28 @@ Resulted associative array has following properties:
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getSubjectString">getSubjectString</a></b>()
 								</div>
 								<div class="description">get string of subject field of certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getV3ExtInfoListOfCertHex">getV3ExtInfoListOfCertHex</a></b>(hCert)
+								</div>
+								<div class="description">get array of X.509 V3 extension value information in hex string of certificate
+This method will get all extension information of a X.509 certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getV3ExtItemInfo_AtObj">getV3ExtItemInfo_AtObj</a></b>(hCert, pos)
+								</div>
+								<div class="description">get X.509 V3 extension value information at the specified position
+This method will get some information of a X.509 V extension 
+which is referred by an index of hexadecimal string of X.509 
+certificate.</div>
 							</td>
 						</tr>
 					
@@ -772,6 +863,318 @@ Resulted associative array has following properties:
 					Method Detail
 				</div>
 				
+					<a name=".getExtAIAInfo"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">X509.</span><b>getExtAIAInfo</b>(hCert)
+					
+					</div>
+					<div class="description">
+						get AuthorityInfoAccess extension value in the certificate as associative array
+This method will get authority info access value
+as associate array which has following properties:
+<ul>
+<li>ocsp - array of string for OCSP responder URL</li>
+<li>caissuer - array of string for caIssuer value (i.e. CA certificates URL)</li>
+</ul>
+If there is no key usage extension in the certificate,
+it returns null;
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">oAIA = X509.getExtAIAInfo(hCert);
+// result will be such like:
+// oAIA.ocsp = ["http://ocsp.foo.com"];
+// oAIA.caissuer = ["http://rep.foo.com/aaa.p8m"];</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.6</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> associative array of AIA extension properties</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getExtKeyUsageBin"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">X509.</span><b>getExtKeyUsageBin</b>(hCert)
+					
+					</div>
+					<div class="description">
+						get KeyUsage extension value as binary string in the certificate
+This method will get key usage extension value
+as binary string such like '101'.
+Key usage bits definition is in the RFC 5280.
+If there is no key usage extension in the certificate,
+it returns empty string (i.e. '').
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">bKeyUsage = X509.getExtKeyUsageBin(hCert);
+// bKeyUsage will be such like '101'.
+// 1 - digitalSignature 
+// 0 - nonRepudiation
+// 1 - keyEncipherment</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.6</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> binary string of key usage bits (ex. '101')</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getExtKeyUsageString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">X509.</span><b>getExtKeyUsageString</b>(hCert)
+					
+					</div>
+					<div class="description">
+						get KeyUsage extension value as names in the certificate
+This method will get key usage extension value
+as comma separated string of usage names.
+If there is no key usage extension in the certificate,
+it returns empty string (i.e. '').
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">sKeyUsage = X509.getExtKeyUsageString(hCert);
+// sKeyUsage will be such like 'digitalSignature,keyEncipherment'.</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.6</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> comma separated string of key usage</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getHexOfTLV_V3ExtValue"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">X509.</span><b>getHexOfTLV_V3ExtValue</b>(hCert, oidOrName)
+					
+					</div>
+					<div class="description">
+						get X.509 V3 extension value ASN.1 TLV for specified oid or name
+This method will get X.509v3 extension value of ASN.1 TLV
+which is specifyed by extension name or oid.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">hExtValue = X509.getHexOfTLV_V3ExtValue(hCert, "keyUsage");
+// hExtValue will be such like '030205a0'.</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>oidOrName</b>
+									
+								</dt>
+								<dd>oid or name for extension (ex. 'keyUsage' or '2.5.29.15')</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.6</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of extension ASN.1 TLV</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getHexOfV_V3ExtValue"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">X509.</span><b>getHexOfV_V3ExtValue</b>(hCert, oidOrName)
+					
+					</div>
+					<div class="description">
+						get X.509 V3 extension value ASN.1 V for specified oid or name
+This method will get X.509v3 extension value of ASN.1 value
+which is specifyed by extension name or oid. 
+If there is no such extension in the certificate,
+it returns empty string (i.e. '').
+Available extension names and oids are defined
+in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">hExtValue = X509.getHexOfV_V3ExtValue(hCert, "keyUsage");
+// hExtValue will be such like '05a0'.</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>oidOrName</b>
+									
+								</dt>
+								<dd>oid or name for extension (ex. 'keyUsage' or '2.5.29.15')</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.6</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of extension ASN.1 TLV</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="getIssuerHex"> </a>
 					<div class="fixedFont">
 					
@@ -866,6 +1269,72 @@ Resulted associative array has following properties:
 						
 						
 						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getPosOfTLV_V3ExtValue"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Integer}</span>
+					<span class="light">X509.</span><b>getPosOfTLV_V3ExtValue</b>(hCert, oidOrName)
+					
+					</div>
+					<div class="description">
+						get index in the certificate hexa string for specified oid or name specified extension
+This method will get X.509v3 extension value of ASN.1 V(value)
+which is specifyed by extension name or oid. 
+If there is no such extension in the certificate,
+it returns empty string (i.e. '').
+Available extension names and oids are defined
+in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">idx = X509.getPosOfV_V3ExtValue(hCert, "keyUsage");
+// The 'idx' will be index in the string for keyUsage value ASN.1 TLV.</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>oidOrName</b>
+									
+								</dt>
+								<dd>oid or name for extension (ex. 'keyUsage' or '2.5.29.15')</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.6</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Integer}</span> index in the hexadecimal string of certficate for specified extension</dd>
+							
+							</dl>
 						
 						
 						
@@ -1097,6 +1566,139 @@ Resulted associative array has following properties:
 						
 						
 						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getV3ExtInfoListOfCertHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">X509.</span><b>getV3ExtInfoListOfCertHex</b>(hCert)
+					
+					</div>
+					<div class="description">
+						get array of X.509 V3 extension value information in hex string of certificate
+This method will get all extension information of a X.509 certificate.
+Items of resulting array has following properties:
+<ul>
+<li>posTLV - index of ASN.1 TLV for the extension. same as 'pos' argument.</li>
+<li>oid - dot noted string of extension oid (ex. 2.5.29.14)</li>
+<li>critical - critical flag value for this extension</li>
+<li>posV - index of ASN.1 TLV for the extension value.
+This is a position of a content of ENCAPSULATED OCTET STRING.</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">hCert = X509.pemToHex(certGithubPEM);
+a = X509.getV3ExtInfoListOfCertHex(hCert);
+// Then a will be an array of like following:
+[{posTLV: 1952, oid: "2.5.29.35", critical: false, posV: 1968},
+ {posTLV: 1974, oid: "2.5.29.19", critical: true, posV: 1986}, ...]</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of result object by <a href="../symbols/X509.html#.getV3ExtInfoListOfCertHex">X509.getV3ExtInfoListOfCertHex</a></dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getV3ExtItemInfo_AtObj"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">X509.</span><b>getV3ExtItemInfo_AtObj</b>(hCert, pos)
+					
+					</div>
+					<div class="description">
+						get X.509 V3 extension value information at the specified position
+This method will get some information of a X.509 V extension 
+which is referred by an index of hexadecimal string of X.509 
+certificate. 
+Resulting object has following properties:
+<ul>
+<li>posTLV - index of ASN.1 TLV for the extension. same as 'pos' argument.</li>
+<li>oid - dot noted string of extension oid (ex. 2.5.29.14)</li>
+<li>critical - critical flag value for this extension</li>
+<li>posV - index of ASN.1 TLV for the extension value.
+This is a position of a content of ENCAPSULATED OCTET STRING.</li>
+</ul>
+This method is used by <a href="../symbols/X509.html#.getV3ExtInfoListOfCertHex">X509.getV3ExtInfoListOfCertHex</a> internally.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>pos</b>
+									
+								</dt>
+								<dd>index of hexadecimal string for the extension</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> properties for the extension</dd>
+							
+							</dl>
 						
 						
 						

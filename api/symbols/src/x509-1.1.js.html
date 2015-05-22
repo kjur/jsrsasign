@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! x509-1.1.4.js (c) 2012-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! x509-1.1.6.js (c) 2012-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/* 
 <span class='line'>  4</span>  * x509.js - X509 class to read subject public key from certificate.
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name x509-1.1.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version x509 1.1.4 (2015-May-14)
+<span class='line'> 19</span>  * @version x509 1.1.6 (2015-May-20)
 <span class='line'> 20</span>  * @since jsrsasign 1.x.x
 <span class='line'> 21</span>  * @license &lt;a href="http://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -396,15 +396,336 @@
 <span class='line'>389</span>     </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">a2</span><span class="PUNC">[</span><span class="NUMB">6</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>390</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>391</span> 
-<span class='line'>392</span> </span><span class="COMM">/*
-<span class='line'>393</span>   X509.prototype.readCertPEM = _x509_readCertPEM;
-<span class='line'>394</span>   X509.prototype.readCertPEMWithoutRSAInit = _x509_readCertPEMWithoutRSAInit;
-<span class='line'>395</span>   X509.prototype.getSerialNumberHex = _x509_getSerialNumberHex;
-<span class='line'>396</span>   X509.prototype.getIssuerHex = _x509_getIssuerHex;
-<span class='line'>397</span>   X509.prototype.getSubjectHex = _x509_getSubjectHex;
-<span class='line'>398</span>   X509.prototype.getIssuerString = _x509_getIssuerString;
-<span class='line'>399</span>   X509.prototype.getSubjectString = _x509_getSubjectString;
-<span class='line'>400</span>   X509.prototype.getNotBefore = _x509_getNotBefore;
-<span class='line'>401</span>   X509.prototype.getNotAfter = _x509_getNotAfter;
-<span class='line'>402</span> */</span><span class="WHIT">
-<span class='line'>403</span> </span></pre></body></html>
+<span class='line'>392</span> </span><span class="COMM">/**
+<span class='line'>393</span>  * get array of X.509 V3 extension value information in hex string of certificate
+<span class='line'>394</span>  * @name getV3ExtInfoListOfCertHex
+<span class='line'>395</span>  * @memberOf X509
+<span class='line'>396</span>  * @function
+<span class='line'>397</span>  * @param {String} hCert hexadecimal string of X.509 certificate binary
+<span class='line'>398</span>  * @return {Array} array of result object by {@link X509.getV3ExtInfoListOfCertHex}
+<span class='line'>399</span>  * @since x509 1.1.5
+<span class='line'>400</span>  * @description
+<span class='line'>401</span>  * This method will get all extension information of a X.509 certificate.
+<span class='line'>402</span>  * Items of resulting array has following properties:
+<span class='line'>403</span>  * &lt;ul>
+<span class='line'>404</span>  * &lt;li>posTLV - index of ASN.1 TLV for the extension. same as 'pos' argument.&lt;/li>
+<span class='line'>405</span>  * &lt;li>oid - dot noted string of extension oid (ex. 2.5.29.14)&lt;/li>
+<span class='line'>406</span>  * &lt;li>critical - critical flag value for this extension&lt;/li>
+<span class='line'>407</span>  * &lt;li>posV - index of ASN.1 TLV for the extension value.
+<span class='line'>408</span>  * This is a position of a content of ENCAPSULATED OCTET STRING.&lt;/li>
+<span class='line'>409</span>  * &lt;/ul>
+<span class='line'>410</span>  * @example
+<span class='line'>411</span>  * hCert = X509.pemToHex(certGithubPEM);
+<span class='line'>412</span>  * a = X509.getV3ExtInfoListOfCertHex(hCert);
+<span class='line'>413</span>  * // Then a will be an array of like following:
+<span class='line'>414</span>  * [{posTLV: 1952, oid: "2.5.29.35", critical: false, posV: 1968},
+<span class='line'>415</span>  *  {posTLV: 1974, oid: "2.5.29.19", critical: true, posV: 1986}, ...]
+<span class='line'>416</span>  */</span><span class="WHIT">
+<span class='line'>417</span> </span><span class="NAME">X509.getV3ExtInfoListOfCertHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>418</span> </span><span class="WHIT">    </span><span class="COMM">// 1. Certificate ASN.1</span><span class="WHIT">
+<span class='line'>419</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getPosArrayOfChildren_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> 
+<span class='line'>420</span>     </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a1.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>421</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed X.509 certificate PEM (code:001)"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// not 3 item of seq Cert</span><span class="WHIT">
+<span class='line'>422</span> 
+<span class='line'>423</span> </span><span class="WHIT">    </span><span class="COMM">// 2. tbsCertificate</span><span class="WHIT">
+<span class='line'>424</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hCert.substr</span><span class="PUNC">(</span><span class="NAME">a1</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>425</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed X.509 certificate PEM (code:002)"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// tbsCert not seq </span><span class="WHIT">
+<span class='line'>426</span> 
+<span class='line'>427</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getPosArrayOfChildren_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a1</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> 
+<span class='line'>428</span> 
+<span class='line'>429</span>     </span><span class="COMM">// 3. v3Extension EXPLICIT Tag [3]</span><span class="WHIT">
+<span class='line'>430</span> </span><span class="WHIT">    </span><span class="COMM">// ver, seri, alg, iss, validity, subj, spki, (iui,) (sui,) ext</span><span class="WHIT">
+<span class='line'>431</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a2.length</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">8</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>432</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed X.509 certificate PEM (code:003)"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// tbsCert num field too short</span><span class="WHIT">
+<span class='line'>433</span> 
+<span class='line'>434</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hCert.substr</span><span class="PUNC">(</span><span class="NAME">a2</span><span class="PUNC">[</span><span class="NUMB">7</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"a3"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>435</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed X.509 certificate PEM (code:004)"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// not [3] tag</span><span class="WHIT">
+<span class='line'>436</span> 
+<span class='line'>437</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a3</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getPosArrayOfChildren_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a2</span><span class="PUNC">[</span><span class="NUMB">7</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>438</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a3.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>439</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed X.509 certificate PEM (code:005)"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// [3]tag numChild!=1</span><span class="WHIT">
+<span class='line'>440</span> 
+<span class='line'>441</span> </span><span class="WHIT">    </span><span class="COMM">// 4. v3Extension SEQUENCE</span><span class="WHIT">
+<span class='line'>442</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hCert.substr</span><span class="PUNC">(</span><span class="NAME">a3</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>443</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed X.509 certificate PEM (code:006)"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// not SEQ</span><span class="WHIT">
+<span class='line'>444</span> 
+<span class='line'>445</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a4</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getPosArrayOfChildren_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a3</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>446</span> 
+<span class='line'>447</span> </span><span class="WHIT">    </span><span class="COMM">// 5. v3Extension item position</span><span class="WHIT">
+<span class='line'>448</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">numExt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">a4.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>449</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="NAME">numExt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>450</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">numExt</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>451</span> </span><span class="WHIT">	</span><span class="NAME">aInfo</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">X509.getV3ExtItemInfo_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a4</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>452</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>453</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">aInfo</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>454</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>455</span> 
+<span class='line'>456</span> </span><span class="COMM">/**
+<span class='line'>457</span>  * get X.509 V3 extension value information at the specified position
+<span class='line'>458</span>  * @name getV3ExtItemInfo_AtObj
+<span class='line'>459</span>  * @memberOf X509
+<span class='line'>460</span>  * @function
+<span class='line'>461</span>  * @param {String} hCert hexadecimal string of X.509 certificate binary
+<span class='line'>462</span>  * @param {Integer} pos index of hexadecimal string for the extension
+<span class='line'>463</span>  * @return {Object} properties for the extension
+<span class='line'>464</span>  * @since x509 1.1.5
+<span class='line'>465</span>  * @description
+<span class='line'>466</span>  * This method will get some information of a X.509 V extension 
+<span class='line'>467</span>  * which is referred by an index of hexadecimal string of X.509 
+<span class='line'>468</span>  * certificate. 
+<span class='line'>469</span>  * Resulting object has following properties:
+<span class='line'>470</span>  * &lt;ul>
+<span class='line'>471</span>  * &lt;li>posTLV - index of ASN.1 TLV for the extension. same as 'pos' argument.&lt;/li>
+<span class='line'>472</span>  * &lt;li>oid - dot noted string of extension oid (ex. 2.5.29.14)&lt;/li>
+<span class='line'>473</span>  * &lt;li>critical - critical flag value for this extension&lt;/li>
+<span class='line'>474</span>  * &lt;li>posV - index of ASN.1 TLV for the extension value.
+<span class='line'>475</span>  * This is a position of a content of ENCAPSULATED OCTET STRING.&lt;/li>
+<span class='line'>476</span>  * &lt;/ul>
+<span class='line'>477</span>  * This method is used by {@link X509.getV3ExtInfoListOfCertHex} internally.
+<span class='line'>478</span>  */</span><span class="WHIT">
+<span class='line'>479</span> </span><span class="NAME">X509.getV3ExtItemInfo_AtObj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pos</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>480</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">info</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>481</span> 
+<span class='line'>482</span> </span><span class="WHIT">    </span><span class="COMM">// posTLV - extension TLV</span><span class="WHIT">
+<span class='line'>483</span> </span><span class="WHIT">    </span><span class="NAME">info.posTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">pos</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>484</span> 
+<span class='line'>485</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT">  </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getPosArrayOfChildren_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pos</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>486</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>487</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed X.509v3 Ext (code:001)"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// oid,(critical,)val</span><span class="WHIT">
+<span class='line'>488</span> 
+<span class='line'>489</span> </span><span class="WHIT">    </span><span class="COMM">// oid - extension OID</span><span class="WHIT">
+<span class='line'>490</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hCert.substr</span><span class="PUNC">(</span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"06"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>491</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed X.509v3 Ext (code:002)"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// not OID "06"</span><span class="WHIT">
+<span class='line'>492</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">valueHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getHexOfV_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>493</span> </span><span class="WHIT">    </span><span class="NAME">info.oid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.hextooidstr</span><span class="PUNC">(</span><span class="NAME">valueHex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> 
+<span class='line'>494</span> 
+<span class='line'>495</span>     </span><span class="COMM">// critical - extension critical flag</span><span class="WHIT">
+<span class='line'>496</span> </span><span class="WHIT">    </span><span class="NAME">info.critical</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// critical false by default</span><span class="WHIT">
+<span class='line'>497</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">info.critical</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>498</span> 
+<span class='line'>499</span> </span><span class="WHIT">    </span><span class="COMM">// posV - content TLV position of encapsulated</span><span class="WHIT">
+<span class='line'>500</span> </span><span class="WHIT">    </span><span class="COMM">//        octet string of V3 extension value.</span><span class="WHIT">
+<span class='line'>501</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">posExtV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>502</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hCert.substr</span><span class="PUNC">(</span><span class="NAME">posExtV</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"04"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>503</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed X.509v3 Ext (code:003)"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// not EncapOctet "04"</span><span class="WHIT">
+<span class='line'>504</span> </span><span class="WHIT">    </span><span class="NAME">info.posV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getStartPosOfV_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">posExtV</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>505</span> </span><span class="WHIT">    
+<span class='line'>506</span>     </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">info</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>507</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>508</span> 
+<span class='line'>509</span> </span><span class="COMM">/**
+<span class='line'>510</span>  * get X.509 V3 extension value ASN.1 TLV for specified oid or name
+<span class='line'>511</span>  * @name getHexOfTLV_V3ExtValue
+<span class='line'>512</span>  * @memberOf X509
+<span class='line'>513</span>  * @function
+<span class='line'>514</span>  * @param {String} hCert hexadecimal string of X.509 certificate binary
+<span class='line'>515</span>  * @param {String} oidOrName oid or name for extension (ex. 'keyUsage' or '2.5.29.15')
+<span class='line'>516</span>  * @return {String} hexadecimal string of extension ASN.1 TLV
+<span class='line'>517</span>  * @since x509 1.1.6
+<span class='line'>518</span>  * @description
+<span class='line'>519</span>  * This method will get X.509v3 extension value of ASN.1 TLV
+<span class='line'>520</span>  * which is specifyed by extension name or oid. 
+<span class='line'>521</span>  * @example
+<span class='line'>522</span>  * hExtValue = X509.getHexOfTLV_V3ExtValue(hCert, "keyUsage");
+<span class='line'>523</span>  * // hExtValue will be such like '030205a0'.
+<span class='line'>524</span>  */</span><span class="WHIT">
+<span class='line'>525</span> </span><span class="NAME">X509.getHexOfTLV_V3ExtValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">oidOrName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>526</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pos</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">X509.getPosOfTLV_V3ExtValue</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">oidOrName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>527</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">pos</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>528</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getHexOfTLV_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pos</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>529</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>530</span> 
+<span class='line'>531</span> </span><span class="COMM">/**
+<span class='line'>532</span>  * get X.509 V3 extension value ASN.1 V for specified oid or name
+<span class='line'>533</span>  * @name getHexOfV_V3ExtValue
+<span class='line'>534</span>  * @memberOf X509
+<span class='line'>535</span>  * @function
+<span class='line'>536</span>  * @param {String} hCert hexadecimal string of X.509 certificate binary
+<span class='line'>537</span>  * @param {String} oidOrName oid or name for extension (ex. 'keyUsage' or '2.5.29.15')
+<span class='line'>538</span>  * @return {String} hexadecimal string of extension ASN.1 TLV
+<span class='line'>539</span>  * @since x509 1.1.6
+<span class='line'>540</span>  * @description
+<span class='line'>541</span>  * This method will get X.509v3 extension value of ASN.1 value
+<span class='line'>542</span>  * which is specifyed by extension name or oid. 
+<span class='line'>543</span>  * If there is no such extension in the certificate,
+<span class='line'>544</span>  * it returns empty string (i.e. '').
+<span class='line'>545</span>  * Available extension names and oids are defined
+<span class='line'>546</span>  * in the {@link KJUR.asn1.x509.OID} class.
+<span class='line'>547</span>  * @example
+<span class='line'>548</span>  * hExtValue = X509.getHexOfV_V3ExtValue(hCert, "keyUsage");
+<span class='line'>549</span>  * // hExtValue will be such like '05a0'.
+<span class='line'>550</span>  */</span><span class="WHIT">
+<span class='line'>551</span> </span><span class="NAME">X509.getHexOfV_V3ExtValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">oidOrName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>552</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pos</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">X509.getPosOfTLV_V3ExtValue</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">oidOrName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>553</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">pos</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>554</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getHexOfV_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pos</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>555</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>556</span> 
+<span class='line'>557</span> </span><span class="COMM">/**
+<span class='line'>558</span>  * get index in the certificate hexa string for specified oid or name specified extension
+<span class='line'>559</span>  * @name getPosOfTLV_V3ExtValue
+<span class='line'>560</span>  * @memberOf X509
+<span class='line'>561</span>  * @function
+<span class='line'>562</span>  * @param {String} hCert hexadecimal string of X.509 certificate binary
+<span class='line'>563</span>  * @param {String} oidOrName oid or name for extension (ex. 'keyUsage' or '2.5.29.15')
+<span class='line'>564</span>  * @return {Integer} index in the hexadecimal string of certficate for specified extension
+<span class='line'>565</span>  * @since x509 1.1.6
+<span class='line'>566</span>  * @description
+<span class='line'>567</span>  * This method will get X.509v3 extension value of ASN.1 V(value)
+<span class='line'>568</span>  * which is specifyed by extension name or oid. 
+<span class='line'>569</span>  * If there is no such extension in the certificate,
+<span class='line'>570</span>  * it returns empty string (i.e. '').
+<span class='line'>571</span>  * Available extension names and oids are defined
+<span class='line'>572</span>  * in the {@link KJUR.asn1.x509.OID} class.
+<span class='line'>573</span>  * @example
+<span class='line'>574</span>  * idx = X509.getPosOfV_V3ExtValue(hCert, "keyUsage");
+<span class='line'>575</span>  * // The 'idx' will be index in the string for keyUsage value ASN.1 TLV.
+<span class='line'>576</span>  */</span><span class="WHIT">
+<span class='line'>577</span> </span><span class="NAME">X509.getPosOfTLV_V3ExtValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">oidOrName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>578</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">oidOrName</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>579</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">oidOrName.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9.]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509.OID.name2oid</span><span class="PUNC">(</span><span class="NAME">oidOrName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>580</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">oid</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>581</span> 
+<span class='line'>582</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">infoList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">X509.getV3ExtInfoListOfCertHex</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>583</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">infoList.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>584</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">info</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">infoList</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>585</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">info.oid</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">info.posV</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>586</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>587</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>588</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>589</span> 
+<span class='line'>590</span> </span><span class="NAME">X509.KEYUSAGE_NAME</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">
+<span class='line'>591</span> </span><span class="WHIT">    </span><span class="STRN">"digitalSignature"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>592</span> </span><span class="WHIT">    </span><span class="STRN">"nonRepudiation"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>593</span> </span><span class="WHIT">    </span><span class="STRN">"keyEncipherment"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>594</span> </span><span class="WHIT">    </span><span class="STRN">"dataEncipherment"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>595</span> </span><span class="WHIT">    </span><span class="STRN">"keyAgreement"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>596</span> </span><span class="WHIT">    </span><span class="STRN">"keyCertSign"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>597</span> </span><span class="WHIT">    </span><span class="STRN">"cRLSign"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>598</span> </span><span class="WHIT">    </span><span class="STRN">"encipherOnly"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>599</span> </span><span class="WHIT">    </span><span class="STRN">"decipherOnly"</span><span class="WHIT">
+<span class='line'>600</span> </span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>601</span> 
+<span class='line'>602</span> </span><span class="COMM">/**
+<span class='line'>603</span>  * get KeyUsage extension value as binary string in the certificate
+<span class='line'>604</span>  * @name getExtKeyUsageBin
+<span class='line'>605</span>  * @memberOf X509
+<span class='line'>606</span>  * @function
+<span class='line'>607</span>  * @param {String} hCert hexadecimal string of X.509 certificate binary
+<span class='line'>608</span>  * @return {String} binary string of key usage bits (ex. '101')
+<span class='line'>609</span>  * @since x509 1.1.6
+<span class='line'>610</span>  * @description
+<span class='line'>611</span>  * This method will get key usage extension value
+<span class='line'>612</span>  * as binary string such like '101'.
+<span class='line'>613</span>  * Key usage bits definition is in the RFC 5280.
+<span class='line'>614</span>  * If there is no key usage extension in the certificate,
+<span class='line'>615</span>  * it returns empty string (i.e. '').
+<span class='line'>616</span>  * @example
+<span class='line'>617</span>  * bKeyUsage = X509.getExtKeyUsageBin(hCert);
+<span class='line'>618</span>  * // bKeyUsage will be such like '101'.
+<span class='line'>619</span>  * // 1 - digitalSignature 
+<span class='line'>620</span>  * // 0 - nonRepudiation
+<span class='line'>621</span>  * // 1 - keyEncipherment
+<span class='line'>622</span>  */</span><span class="WHIT">
+<span class='line'>623</span> </span><span class="NAME">X509.getExtKeyUsageBin</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>624</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hKeyUsage</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">X509.getHexOfV_V3ExtValue</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"keyUsage"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>625</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hKeyUsage</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>626</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hKeyUsage.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">hKeyUsage.length</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>627</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed key usage value"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>628</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">unusedBits</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">hKeyUsage.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>629</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bKeyUsage</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">hKeyUsage.substr</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>630</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">bKeyUsage.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">bKeyUsage.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">unusedBits</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>631</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>632</span> 
+<span class='line'>633</span> </span><span class="COMM">/**
+<span class='line'>634</span>  * get KeyUsage extension value as names in the certificate
+<span class='line'>635</span>  * @name getExtKeyUsageString
+<span class='line'>636</span>  * @memberOf X509
+<span class='line'>637</span>  * @function
+<span class='line'>638</span>  * @param {String} hCert hexadecimal string of X.509 certificate binary
+<span class='line'>639</span>  * @return {String} comma separated string of key usage
+<span class='line'>640</span>  * @since x509 1.1.6
+<span class='line'>641</span>  * @description
+<span class='line'>642</span>  * This method will get key usage extension value
+<span class='line'>643</span>  * as comma separated string of usage names.
+<span class='line'>644</span>  * If there is no key usage extension in the certificate,
+<span class='line'>645</span>  * it returns empty string (i.e. '').
+<span class='line'>646</span>  * @example
+<span class='line'>647</span>  * sKeyUsage = X509.getExtKeyUsageString(hCert);
+<span class='line'>648</span>  * // sKeyUsage will be such like 'digitalSignature,keyEncipherment'.
+<span class='line'>649</span>  */</span><span class="WHIT">
+<span class='line'>650</span> </span><span class="NAME">X509.getExtKeyUsageString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>651</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bKeyUsage</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">X509.getExtKeyUsageBin</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>652</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>653</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">bKeyUsage.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>654</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">bKeyUsage.substr</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"1"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">a.push</span><span class="PUNC">(</span><span class="NAME">X509.KEYUSAGE_NAME</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>655</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>656</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">a.join</span><span class="PUNC">(</span><span class="STRN">","</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>657</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>658</span> 
+<span class='line'>659</span> </span><span class="COMM">/**
+<span class='line'>660</span>  * get AuthorityInfoAccess extension value in the certificate as associative array
+<span class='line'>661</span>  * @name getExtAIAInfo
+<span class='line'>662</span>  * @memberOf X509
+<span class='line'>663</span>  * @function
+<span class='line'>664</span>  * @param {String} hCert hexadecimal string of X.509 certificate binary
+<span class='line'>665</span>  * @return {Object} associative array of AIA extension properties
+<span class='line'>666</span>  * @since x509 1.1.6
+<span class='line'>667</span>  * @description
+<span class='line'>668</span>  * This method will get authority info access value
+<span class='line'>669</span>  * as associate array which has following properties:
+<span class='line'>670</span>  * &lt;ul>
+<span class='line'>671</span>  * &lt;li>ocsp - array of string for OCSP responder URL&lt;/li>
+<span class='line'>672</span>  * &lt;li>caissuer - array of string for caIssuer value (i.e. CA certificates URL)&lt;/li>
+<span class='line'>673</span>  * &lt;/ul>
+<span class='line'>674</span>  * If there is no key usage extension in the certificate,
+<span class='line'>675</span>  * it returns null;
+<span class='line'>676</span>  * @example
+<span class='line'>677</span>  * oAIA = X509.getExtAIAInfo(hCert);
+<span class='line'>678</span>  * // result will be such like:
+<span class='line'>679</span>  * // oAIA.ocsp = ["http://ocsp.foo.com"];
+<span class='line'>680</span>  * // oAIA.caissuer = ["http://rep.foo.com/aaa.p8m"];
+<span class='line'>681</span>  */</span><span class="WHIT">
+<span class='line'>682</span> </span><span class="NAME">X509.getExtAIAInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>683</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>684</span> </span><span class="WHIT">    </span><span class="NAME">result.ocsp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>685</span> </span><span class="WHIT">    </span><span class="NAME">result.caissuer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>686</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pos1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">X509.getPosOfTLV_V3ExtValue</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"authorityInfoAccess"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>687</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">pos1</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>688</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hCert.substr</span><span class="PUNC">(</span><span class="NAME">pos1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="COMM">// extnValue SEQUENCE</span><span class="WHIT">
+<span class='line'>689</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed AIA Extn Value"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>690</span> </span><span class="WHIT">    
+<span class='line'>691</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">posAccDescList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getPosArrayOfChildren_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pos1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>692</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">posAccDescList.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>693</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">posAccDescList</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>694</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">posAccDescChild</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getPosArrayOfChildren_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">p</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>695</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">posAccDescChild.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>696</span> </span><span class="WHIT">	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed AccessDescription of AIA Extn"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>697</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pOID</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">posAccDescChild</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>698</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">posAccDescChild</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>699</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ASN1HEX.getHexOfV_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pOID</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"2b06010505073001"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>700</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hCert.substr</span><span class="PUNC">(</span><span class="NAME">pName</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"86"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>701</span> </span><span class="WHIT">		</span><span class="NAME">result.ocsp.push</span><span class="PUNC">(</span><span class="NAME">hextoutf8</span><span class="PUNC">(</span><span class="NAME">ASN1HEX.getHexOfV_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pName</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>702</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>703</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>704</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ASN1HEX.getHexOfV_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pOID</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"2b06010505073002"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>705</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hCert.substr</span><span class="PUNC">(</span><span class="NAME">pName</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"86"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>706</span> </span><span class="WHIT">		</span><span class="NAME">result.caissuer.push</span><span class="PUNC">(</span><span class="NAME">hextoutf8</span><span class="PUNC">(</span><span class="NAME">ASN1HEX.getHexOfV_AtObj</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pName</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>707</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>708</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>709</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>710</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>711</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>712</span> 
+<span class='line'>713</span> </span><span class="COMM">/*
+<span class='line'>714</span>   X509.prototype.readCertPEM = _x509_readCertPEM;
+<span class='line'>715</span>   X509.prototype.readCertPEMWithoutRSAInit = _x509_readCertPEMWithoutRSAInit;
+<span class='line'>716</span>   X509.prototype.getSerialNumberHex = _x509_getSerialNumberHex;
+<span class='line'>717</span>   X509.prototype.getIssuerHex = _x509_getIssuerHex;
+<span class='line'>718</span>   X509.prototype.getSubjectHex = _x509_getSubjectHex;
+<span class='line'>719</span>   X509.prototype.getIssuerString = _x509_getIssuerString;
+<span class='line'>720</span>   X509.prototype.getSubjectString = _x509_getSubjectString;
+<span class='line'>721</span>   X509.prototype.getNotBefore = _x509_getNotBefore;
+<span class='line'>722</span>   X509.prototype.getNotAfter = _x509_getNotAfter;
+<span class='line'>723</span> */</span><span class="WHIT">
+<span class='line'>724</span> </span></pre></body></html>
