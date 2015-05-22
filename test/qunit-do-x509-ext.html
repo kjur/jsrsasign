@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for X.509 Certificate 'x509.js'</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha256.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha224.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/ripemd160.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha512.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha384.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/sha1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../base64x-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../crypto-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../x509-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/yahoo.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1x509-1.0.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+var certGithubPEM = "-----BEGIN CERTIFICATE-----\r\n" +
+"MIIF4DCCBMigAwIBAgIQDACTENIG2+M3VTWAEY3chzANBgkqhkiG9w0BAQsFADB1\r\n" +
+"MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3\r\n" +
+"d3cuZGlnaWNlcnQuY29tMTQwMgYDVQQDEytEaWdpQ2VydCBTSEEyIEV4dGVuZGVk\r\n" +
+"IFZhbGlkYXRpb24gU2VydmVyIENBMB4XDTE0MDQwODAwMDAwMFoXDTE2MDQxMjEy\r\n" +
+"MDAwMFowgfAxHTAbBgNVBA8MFFByaXZhdGUgT3JnYW5pemF0aW9uMRMwEQYLKwYB\r\n" +
+"BAGCNzwCAQMTAlVTMRkwFwYLKwYBBAGCNzwCAQITCERlbGF3YXJlMRAwDgYDVQQF\r\n" +
+"Ewc1MTU3NTUwMRcwFQYDVQQJEw41NDggNHRoIFN0cmVldDEOMAwGA1UEERMFOTQx\r\n" +
+"MDcxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1T\r\n" +
+"YW4gRnJhbmNpc2NvMRUwEwYDVQQKEwxHaXRIdWIsIEluYy4xEzARBgNVBAMTCmdp\r\n" +
+"dGh1Yi5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCx1Nw8r/3z\r\n" +
+"Tu3BZ63myyLot+KrKPL33GJwCNEMr9YWaiGwNksXDTZjBK6/6iBRlWVm8r+5TaQM\r\n" +
+"Kev1FbHoNbNwEJTVG1m0Jg/Wg1dZneF8Cd3gE8pNb0Obzc+HOhWnhd1mg+2TDP4r\r\n" +
+"bTgceYiQz61YGC1R0cKj8keMbzgJubjvTJMLy4OUh+rgo7XZe5trD0P5yu6ADSin\r\n" +
+"dvEl9ME1PPZ0rd5qM4J73P1LdqfC7vJqv6kkpl/nLnwO28N0c/p+xtjPYOs2ViG2\r\n" +
+"wYq4JIJNeCS66R2hiqeHvmYlab++O3JuT+DkhSUIsZGJuNZ0ZXabLE9iH6H6Or6c\r\n" +
+"JL+fyrDFwGeNAgMBAAGjggHuMIIB6jAfBgNVHSMEGDAWgBQ901Cl1qCt7vNKYApl\r\n" +
+"0yHU+PjWDzAdBgNVHQ4EFgQUakOQfTuYFHJSlTqqKApD+FF+06YwJQYDVR0RBB4w\r\n" +
+"HIIKZ2l0aHViLmNvbYIOd3d3LmdpdGh1Yi5jb20wDgYDVR0PAQH/BAQDAgWgMB0G\r\n" +
+"A1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjB1BgNVHR8EbjBsMDSgMqAwhi5o\r\n" +
+"dHRwOi8vY3JsMy5kaWdpY2VydC5jb20vc2hhMi1ldi1zZXJ2ZXItZzEuY3JsMDSg\r\n" +
+"MqAwhi5odHRwOi8vY3JsNC5kaWdpY2VydC5jb20vc2hhMi1ldi1zZXJ2ZXItZzEu\r\n" +
+"Y3JsMEIGA1UdIAQ7MDkwNwYJYIZIAYb9bAIBMCowKAYIKwYBBQUHAgEWHGh0dHBz\r\n" +
+"Oi8vd3d3LmRpZ2ljZXJ0LmNvbS9DUFMwgYgGCCsGAQUFBwEBBHwwejAkBggrBgEF\r\n" +
+"BQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29tMFIGCCsGAQUFBzAChkZodHRw\r\n" +
+"Oi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vRGlnaUNlcnRTSEEyRXh0ZW5kZWRWYWxp\r\n" +
+"ZGF0aW9uU2VydmVyQ0EuY3J0MAwGA1UdEwEB/wQCMAAwDQYJKoZIhvcNAQELBQAD\r\n" +
+"ggEBAG/nbcuC8++QhwnXDxUiLIz+06scipbbXRJd0XjAMbD/RciJ9wiYUhcfTEsg\r\n" +
+"ZGpt21DXEL5+q/4vgNipSlhBaYFyGQiDm5IQTmIte0ZwQ26jUxMf4pOmI1v3kj43\r\n" +
+"FHU7uUskQS6lPUgND5nqHkKXxv6V2qtHmssrA9YNQMEK93ga2rWDpK21mUkgLviT\r\n" +
+"PB5sPdE7IzprOCp+Ynpf3RcFddAkXb6NqJoQRPrStMrv19C1dqUmJRwIQdhkkqev\r\n" +
+"ff6IQDlhC8BIMKmCNK33cEYDfDWROtW7JNgBvBTwww8jO1gyug8SbGZ6bZ3k8OV8\r\n" +
+"XX4C2NesiZcLYbc2n7B9O+63M2k=\r\n" +
+"-----END CERTIFICATE-----\r\n";
+
+test("getV3ExtInfoListOfCertHex test1", function() {
+  var hCert = X509.pemToHex(certGithubPEM);
+  var a = X509.getV3ExtInfoListOfCertHex(hCert);
+  equal(a.length, 9, "num ext=9");
+  equal(a[0].posTLV, 1484, "AKID TLV index");
+  equal(a[0].oid, "2.5.29.35", "AKID oid");
+  equal(a[0].critical, false, "AKID critical");
+  equal(a[0].posV, 1502, "AKID value index");
+  equal(a[1].oid, "2.5.29.14", "SKID oid");
+  equal(a[1].critical, false, "SKID critical");
+  equal(a[2].oid, "2.5.29.17", "SAN oid");
+  equal(a[2].critical, false, "SAN critical");
+  equal(a[3].oid, "2.5.29.15", "KeyUsage oid");
+  equal(a[3].critical, true, "KeyUsage critical");
+  equal(a[3].posV, 1714, "KeyUsage posV");
+  equal(ASN1HEX.getHexOfTLV_AtObj(hCert, a[3].posV), "030205a0", "KeyUsage value 030205a0");
+  equal(a[4].oid, "2.5.29.37", "ExtKeyUsage oid");
+  equal(a[4].critical, false, "ExtKeyUsage critical");
+  equal(a[5].oid, "2.5.29.31", "CDP oid");
+  equal(a[5].critical, false, "CDP critical");
+  equal(a[6].oid, "2.5.29.32", "CertPolicy oid");
+  equal(a[6].critical, false, "CertPolicy critical");
+  equal(a[7].oid, "1.3.6.1.5.5.7.1.1", "AIA oid");
+  equal(a[7].critical, false, "AIA critical");
+  equal(a[8].oid, "2.5.29.19", "basicConstraints oid");
+  equal(a[8].critical, true, "basicConstraints critical");
+  equal(ASN1HEX.getHexOfTLV_AtObj(hCert, a[8].posV), "3000", "basicConst value 3000");
+});
+
+test("getPosOfTLV_V3ExtValue test1", function() {
+  var hCert = X509.pemToHex(certGithubPEM);
+  equal(X509.getPosOfTLV_V3ExtValue(hCert, "keyUsage"), 1714, "by keyUsage");
+  equal(X509.getPosOfTLV_V3ExtValue(hCert, "2.5.29.15"), 1714, "by 2.5.29.15(=keyUsage)");
+  equal(X509.getPosOfTLV_V3ExtValue(hCert, "policyConstraints"), -1, "by policyConstraints -> -1");
+  equal(X509.getPosOfTLV_V3ExtValue(hCert, "0.0.0.0"), -1, "by 0.0.0.0 -> -1");
+});
+
+test("getHexOfV_V3ExtValue test1", function() {
+  var hCert = X509.pemToHex(certGithubPEM);
+  equal(X509.getHexOfV_V3ExtValue(hCert, "keyUsage"), "05a0", "by keyUsage");
+  equal(X509.getHexOfV_V3ExtValue(hCert, "2.5.29.15"), "05a0", "by 2.5.29.15(=keyUsage)");
+  equal(X509.getHexOfV_V3ExtValue(hCert, "policyConstraints"), '', "by policyConstraints -> -1");
+  equal(X509.getHexOfV_V3ExtValue(hCert, "0.0.0.0"), '', "by 0.0.0.0 -> -1");
+});
+
+test("getHexOfTLV_V3ExtValue test1", function() {
+  var hCert = X509.pemToHex(certGithubPEM);
+  equal(X509.getHexOfTLV_V3ExtValue(hCert, "keyUsage"), "030205a0", "by keyUsage");
+  equal(X509.getHexOfTLV_V3ExtValue(hCert, "2.5.29.15"), "030205a0", "by 2.5.29.15(=keyUsage)");
+  equal(X509.getHexOfTLV_V3ExtValue(hCert, "policyConstraints"), '', "by policyConstraints -> -1");
+  equal(X509.getHexOfTLV_V3ExtValue(hCert, "0.0.0.0"), '', "by 0.0.0.0 -> -1");
+});
+
+test("getExtKeyUsageBin", function() {
+  var hCert = X509.pemToHex(certGithubPEM);
+  equal(X509.getExtKeyUsageBin(hCert), "101", "101");
+});
+
+test("getExtKeyUsageString", function() {
+  var hCert = X509.pemToHex(certGithubPEM);
+  equal(X509.getExtKeyUsageString(hCert), "digitalSignature,keyEncipherment", "digitalSignature,keyEncipherment");
+});
+
+test("getExtAIAInfo", function() {
+  var hCert = X509.pemToHex(certGithubPEM);
+  var info = X509.getExtAIAInfo(hCert);
+  equal(info.ocsp.length, 1, "number item of ocsp = 1");
+  equal(info.ocsp[0], "http://ocsp.digicert.com", "ocsp=http://ocsp.digicert.com");
+  equal(info.caissuer.length, 1, "number item of caIssuer = 1");
+  equal(info.caissuer[0], "http://cacerts.digicert.com/DigiCertSHA2ExtendedValidationServerCA.crt", "caIssuer=http://cacerts.digicert.com/DigiCertSHA2ExtendedValidationServerCA.crt");
+});
+
+});
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+</body>
+<center><p>&copy; 2015 Kenji Urushima</p></center>
+</html>
+

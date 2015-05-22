@@ -7,10 +7,9 @@
     <meta name="description" content="HTTPS設定ファイル生成ツール" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    <title>HTTPS設定ファイル生成ツール0.2(ベータ版)</title>
+    <title>HTTPS設定ファイル生成ツール0.4(ベータ版)</title>
 <!-- for pkcs5pkey -->
 <script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
-<script language="JavaScript" type="text/javascript" src="x509-1.1.js"></script>
 
 <script language="JavaScript" type="text/javascript">
 /********************************************
@@ -58,7 +57,8 @@ SSLCipherSuite %%%CIPHERSUITE%%%
 SSLCertificateFile conf/ssl/server.crt
 SSLCertificateKeyFile conf/ssl/server.key
 %%%COMPRESSION%%%
-%%%KEYPINNING%%%
+# Public Key Pinningを有効にするにはコメントアウトを外して下さい
+#Header always set Public-Key-Pins "%%%KEYPINNING%%%"
 <Files ~ "\.(cgi|shtml|phtml|php3?)$">
     SSLOptions +StdEnvVars
 </Files>
@@ -93,7 +93,8 @@ SSLCertificateFile conf/ssl/server.crt
 SSLCertificateKeyFile conf/ssl/server.key
 SSLCertificateChainFile conf/ssl/chain.crt
 %%%COMPRESSION%%%
-%%%KEYPINNING%%%
+# Public Key Pinningを有効にするにはコメントアウトを外して下さい
+#Header always set Public-Key-Pins "%%%KEYPINNING%%%"
 <Files ~ "\.(cgi|shtml|phtml|php3?)$">
     SSLOptions +StdEnvVars
 </Files>
@@ -120,11 +121,34 @@ server {
   ssl_protocols %%%PROTOCOL%%%;
   ssl_ciphers %%%CIPHERSUITE%%%;
   %%%CIPHERORDER%%%
+  # Public-Key-Pinningを有効にするにはコメントアウトを外してください
+  #add_header Public-Key-Pins '%%%KEYPINNING%%%';
 
   location / {
     root /usr/share/nginx/html;
     index index.html index.htm;
   }
+}
+*/}).toString().match(/\/\*([^]*)\*\//)[1],
+"lighttpd":
+(function() {/*
+# sample lighttpd HTTPS settings - 生成されたlighttpd SSL設定ファイル
+server.module += ("mod_setenv")
+$SERVER["socket"] == "0.0.0.0:443" {
+  ssl.engine = "enable"
+  ssl.pemfile = "/etc/lighttpd/server.key"
+  ssl.ca-file = "/etc/lighttpd/ca-bundle.pem"
+  %%%PROTOCOL%%%
+  ssl.cipher-list = "%%%CIPHERSUITE%%%"
+  %%%CIPHERORDER%%%
+  # TLS圧縮のフラグuse-compressionは最新版では設定エラー警告表示される
+  # 古い版では設定可能
+  #ssl.use-compression = "disable"
+  # Public-Key-Pinningを有効にするにはコメントアウトを外してください
+  #setenv.add-response-header = (
+  #  "Public-Key-Pins" => "%%%KEYPINNING%%%"
+  #)
+  setenv.add-environment = ("HTTPS"=>"on")
 }
 */}).toString().match(/\/\*([^]*)\*\//)[1],
 };
@@ -138,6 +162,9 @@ function _doGen() {
   var sCertPEM = f1.cert1.value;
   var guidename = f1.guidename.value;
   var serverapp = f1.serverapp.value;
+  var cert1 = f1.cert1.value;
+  var cert2 = f1.cert2.value;
+  var cert3 = f1.cert3.value;
 
   //alert(1);
   var cfg = CFG_TEMPLATE[f1.serverapp.value];
@@ -146,7 +173,7 @@ function _doGen() {
 
   cfg = _updateOrder(cfg, guidename, serverapp);
   cfg = _updateCompression(cfg, guidename, serverapp);
-  cfg = _updatePinning(cfg, f1);
+  cfg = _updatePinning(cfg, [cert1, cert2, cert3], serverapp);
 
   f1.resultcfg.value = cfg;
 }
@@ -167,46 +194,54 @@ function _updateCompression(cfg, guidename, serverapp) {
 }
 
 function _updateOrder(cfg, guidename, serverapp) {
-  if (guidename.indexOf("cryptrec") != -1 ||
-      guidename.indexOf("mozilla") != -1) {
-    if (serverapp.indexOf("apache") != -1) {
-      cfg = cfg.replace("%%%CIPHERORDER%%%", "SSLHonorCipherOrder On");
-    } else if (serverapp == "nginx") {
-      cfg = cfg.replace("%%%CIPHERORDER%%%", "ssl_prefer_server_ciphers on;");
-    }
-  } else {
-    if (serverapp.indexOf("apache") != -1) {
-      cfg = cfg.replace("%%%CIPHERORDER%%%", "#SSLHonorCipherOrder On");
-    } else if (serverapp == "nginx") {
-      cfg = cfg.replace("%%%CIPHERORDER%%%", "#ssl_prefer_server_ciphers on;");
-    }
+  var s = "# -- cipherorder not specified for this guide --";
+  if (serverapp.indexOf("apache") != -1) s = "SSLHonorCipherOrder On";
+  if (serverapp == "nginx")              s = "ssl_prefer_server_ciphers on;";
+  if (serverapp == "lighttpd")           s = "ssl.honor-cipher-order = \"enable\"";
+  if (guidename.indexOf("cryptrec") == -1 &&
+      guidename.indexOf("mozilla") == -1) {
+    cfg = cfg.replace("%%%CIPHERORDER%%%", "#" + s);
+  } else {    
+    cfg = cfg.replace("%%%CIPHERORDER%%%", s);
   }
   return cfg;
 }
 
-function _updatePinning(cfg, f1) {
-  var a = _getCertPinArray(f1);
-  if (a.length != 0) {
-    var s = "Header always set Public-Key-Pins \"";
-    for (var i = 0; i < a.length; i++) {
-      s += "pin-sha256=\\\"" + a[i] + "\\\"; ";
-    }
-    s += " includeSubDomains\"";
-    cfg = cfg.replace("%%%KEYPINNING%%%", s);
-  } else {
+function _updatePinning(cfg, aCert, serverapp) {
+  if (aCert.length == 0) {
     cfg = cfg.replace("%%%KEYPINNING%%%", "");
+    return cfg;
   }
+
+  var headerValue = _getPinHeaderValue(aCert, 60);
+  if (serverapp.indexOf("apache") != -1 || serverapp == "lighttpd") {
+    headerValue = headerValue.replace(/"/g, "\\\"");
+  }
+  cfg = cfg.replace("%%%KEYPINNING%%%", headerValue);
   return cfg;
 }
 
-function _getCertPinArray(f1) {
+function _getPinHeaderValue(aCert, nDay) {
+  var a = _getCertPinArray(aCert);
+
+  var s = "";
+  for (var i = 0; i < a.length; i++) {
+    s += "pin-sha256=\"" + a[i] + "\"";
+  }
+  if (nDay != null || nDay > 0) {
+    var nSec = nDay * 24 * 60 * 60;
+    s += "; max-age=" + nSec;
+  }
+  s += "; includeSubDomains";
+  return s;
+}
+
+function _getCertPinArray(aCert) {
   var a = new Array();
-  var c1 = f1.cert1.value;
-  var c2 = f1.cert2.value;
-  var c3 = f1.cert3.value;
-  if (c1 != "") a.push(_getSHA256HashB64OfCertPEM(c1));
-  if (c2 != "") a.push(_getSHA256HashB64OfCertPEM(c2));
-  if (c3 != "") a.push(_getSHA256HashB64OfCertPEM(c3));
+  for (var i = 0; i < aCert.length; i++) {
+    var c = aCert[i];
+    if (c != "") a.push(_getSHA256HashB64OfCertPEM(c));
+  }
   return a;
 }
 
@@ -224,6 +259,11 @@ function _getPublicKeyInfoHexOfCertPEM(sCertPEM) {
     return publicKeyInfoHex;
 };
 
+var LIGHTTPD_NOT_SSL2 = "ssl.use-sslv2 = \"disable\"";
+var LIGHTTPD_NOT_SSL = "ssl.use-sslv2 = \"disable\"\r\n  ssl.use-sslv3 = \"disable\"";
+var LIGHTTPD_TLS1112 = "ssl.use-sslv2 = \"disable\"\r\n  ssl.use-sslv3 = \"disable\"\r\n  ssl.use-tlsv1 = \"disable\"";
+var LIGHTTPD_TLS12 = "ssl.use-sslv2 = \"disable\"\r\n  ssl.use-sslv3 = \"disable\"\r\n  ssl.use-tlsv1 = \"disable\"\r\n  ssl.use-tlsv1.1 = \"disable\"";
+
 function _getProtocolValue(guideName, serverType) {
   if (serverType == "apache24" || serverType == "apache22") {
     if (guideName == "cryptrec1") return "TLSv1.2";
@@ -239,13 +279,23 @@ function _getProtocolValue(guideName, serverType) {
     if (guideName == "cryptrec1") return "TLSv1.2";
     if (guideName == "cryptrec2") return "TLSv1.2 TLSv1.1 TLSv1";
     if (guideName == "cryptrec3") return "TLSv1.2 TLSv1.1 TLSv1 SSLv3";
-    if (guideName == "mozilla1") return "TLSv1.2 TLSv1.1 TLSv1 SSLv3";
-    if (guideName == "mozilla2") return "TLSv1.2 TLSv1.1 TLSv1 SSLv3";
+    if (guideName == "mozilla1") return "TLSv1.2 TLSv1.1";
+    if (guideName == "mozilla2") return "TLSv1.2 TLSv1.1 TLSv1";
     if (guideName == "mozilla3") return "TLSv1.2 TLSv1.1 TLSv1 SSLv3";
     if (guideName == "qualysblog") return "TLSv1.2 TLSv1.1 TLSv1 SSLv3";
     return "TLSv1.2 TLSv1.1 TLSv1 SSLv3"; // デフォルト
   }
-  return "---NOT SUPPORTED---";
+  if (serverType == "lighttpd") {
+    if (guideName == "cryptrec1") return LIGHTTPD_TLS12;
+    if (guideName == "cryptrec2") return LIGHTTPD_NOT_SSL;
+    if (guideName == "cryptrec3") return LIGHTTPD_NOT_SSL2;
+    if (guideName == "mozilla1") return LIGHTTPD_TLS1112;
+    if (guideName == "mozilla2") return LIGHTTPD_NOT_SSL;
+    if (guideName == "mozilla3") return LIGHTTPD_NOT_SSL2;
+    if (guideName == "qualysblog") return LIGHTTPD_NOT_SSL2;
+    return LIGHTTPD_NOT_SSL2; // デフォルト
+  }
+  return "# --protocol setting not supported--";
 }
 </script>
 </head>
@@ -255,8 +305,8 @@ function _getProtocolValue(guideName, serverType) {
 <!-- HEADER -->
 <div id="header_wrap" class="outer">
 <header class="inner">
-<h1 id="project_title">HTTPS設定ファイル生成ツール0.2(ベータ版)</h1>
-<h2 id="project_tagline">各種ガイドラインに応じたApacheやnginxなど主要なサーバーのHTTPS設定を自動生成します</h2>
+<h1 id="project_title">HTTPS設定ファイル生成ツール0.4(ベータ版)</h1>
+<h2 id="project_tagline">各種ガイドラインに応じたApache、nginx、lighttpdなど主要なサーバーのHTTPS設定を自動生成します</h2>
 
 <a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
 </header>
@@ -295,6 +345,7 @@ function _getProtocolValue(guideName, serverType) {
 <option value="apache24">Apache HTTP Server 2.4
 <option value="apache22">Apache HTTP Server 2.2
 <option value="nginx">nginx
+<option value="lighttpd">lighttpd
 </select>
 </p>
 <p>
@@ -328,7 +379,7 @@ c) 中間CA証明書2(SSLサーバーに近い順、ルートに近い方)<br/>
 <p>
 現時点ではベータ版のため、
 <ul>
-<li>Apache 2.4系、Apache 2.2系、nginxのssl.conf設定ファイルしか生成できない。(lighttpd等近日対応)</li>
+<li>Apache 2.4系、Apache 2.2系、nginx、lighttpdのssl.conf設定ファイルしか生成できない。</li>
 <li>暗号スイート、プロトコル、暗号スイート順序、TLS圧縮オフ、Public Key Pinningしか設定されない。</li>
 <li>OCSP stapling、HSTSなどは未対応。(近日対応予定)</li>
 </ul>
@@ -363,22 +414,46 @@ a) b) にのみ登録し c) は空欄としてください。
 
 <h4>参考リンク</h4>
 <ul>
+<li><b>ガイドライン：</b>
+<ul>
 <li><a href="http://www.ipa.go.jp/security/vuln/ssl_crypt_config.html" target="_blank">
 CRYPTREC/IPA SSL/TLS暗号設定ガイドライン～安全なウェブサイトのために（暗号設定対策編）～</a></li>
 <li><a href="https://wiki.mozilla.org/Security/Server_Side_TLS">
 Mozilla Wiki: Security/Server Side TLS</a></li>
+<li><a href="https://community.qualys.com/blogs/securitylabs/2013/08/05/configuring-apache-nginx-and-openssl-for-forward-secrecy">QUALYS BLOG: Configuring Apache, Nginx, and OpenSSL for Forward Secrecy</a></li>
+<li><a href="https://cipherli.st/">Cipherli.st: String Ciphers for Apache, nginx and Lighttpd</a></li>
+<li><a href="http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r1.pdf">
+NIST SP 800-52r1 Guidelines for the Selection, Configuration, and Use of TLS Implementation (Apr 2014)</a></li>
+</ul>
+</li>
+
+<li><b>他サイトSSL設定ファイル生成ツール：</b>
+<ul>
 <li><a href="https://mozilla.github.io/server-side-tls/ssl-config-generator/">
-Mozilla SSL Configuration Generator</a></li>
+    Mozilla SSL Configuration Generator</a></li>
+<li><a href="https://projects.dm.id.lv/s/pkp-online/calculator.html">
+JavaScript Public-Key-Pins (HPKP) calculator v1.0.2</a></li>
+</ul>
+
+<li><b>各ソフトウェアのサーバーSSL設定マニュアル：</b>
+<ul>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_ssl_module.html">
+nginx: odule ngx_http_ssl_module</a></li>
+<li><a href="http://redmine.lighttpd.net/projects/1/wiki/docs_ssl">
+lighttpd: Secure HTTP</a></li>
+</ul>
+
+<li><b>その他学習資料：</b>
+<ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Public_Key_Pinning">
 Mozilla Developper Network: Public Key Pinning</a></li>
-<li><a href="https://community.qualys.com/blogs/securitylabs/2013/08/05/configuring-apache-nginx-and-openssl-for-forward-secrecy">QUALYS BLOG: Configuring Apache, Nginx, and OpenSSL for Forward Secrecy</a></li>
-<li><a href="https://projects.dm.id.lv/s/pkp-online/calculator.html">JavaScript Public-Key-Pins (HPKP) calculator v1.0.2</a></li>
 <li><a href="https://www.nic.ad.jp/ja/materials/iw/2014/proceedings/s14/s14-urushima.pdf">
 Internet Week 2014 講演資料 サーバーのSSL/TLS設定のツボ</a></li>
 <li><a href="http://www.jnsa.org/seminar/pki-day/2015/data/2-1_urushima.pdf">
 JNSA PKI Day 2015 講演資料 SSL/TLS生誕20年、脆弱性と対策を振返る</a></li>
 <li><a href="http://blog.livedoor.jp/k_urushima/archives/1768181.html">
 「RFC 7525 TLSとDTLSの安全な利用に関する推奨事項」の公開</a></li>
+</ul>
 </ul>
 
 <h4>補足説明</h4>
@@ -394,6 +469,8 @@ JavaScript暗号ライブラリを使って、PEM形式のX.509証明書を解�
 
 <h4>ニュース</h4>
 <ul>
+<li>2015.05.16 - 0.4ベータ版 lighttpdに対応</li>
+<li>2015.05.15 - 0.3ベータ版 nginxのMozillaのガイドのprotocol値の誤りの修正</li>
 <li>2015.05.14 - 0.2ベータ版 nginx設定、TLS圧縮オフに対応　
 (CRYPTRECガイドにはAppendixに圧縮オフ設定例はなかった)</li>
 <li>2015.05.13 - 0.1ベータ版 初版公開</li>

@@ -1,9 +1,9 @@
-/*! asn1x509-1.0.10.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.11.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
  *
- * Copyright (c) 2013-2014 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2015 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.10 (2014-Jun-09)
+ * @version 1.0.11 (2015-Mar-20)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1816,12 +1816,17 @@ KJUR.asn1.x509.OID = new function(params) {
         'locality':             '2.5.4.7',
         'commonName':           '2.5.4.3',
 
+        'subjectKeyIdentifier': '2.5.29.14',
         'keyUsage':             '2.5.29.15',
+        'subjectAltName':       '2.5.29.17',
         'basicConstraints':     '2.5.29.19',
+        'nameConstraints':      '2.5.29.30',
         'cRLDistributionPoints':'2.5.29.31',
         'certificatePolicies':  '2.5.29.32',
         'authorityKeyIdentifier':'2.5.29.35',
+        'policyConstraints':    '2.5.29.36',
         'extKeyUsage':          '2.5.29.37',
+	'authorityInfoAccess':  '1.3.6.1.5.5.7.1.1',
 
         'anyExtendedKeyUsage':  '2.5.29.37.0',
         'serverAuth':           '1.3.6.1.5.5.7.3.1',
@@ -1896,6 +1901,18 @@ KJUR.asn1.x509.OID = new function(params) {
 };
 
 /*
+ * convert OID to name
+ * @name oid2name
+ * @memberOf KJUR.asn1.x509.OID
+ * @function
+ * @param {String} dot noted Object Identifer string (ex. 1.2.3.4)
+ * @return {String} OID name
+ * @description
+ * This static method converts OID string to its name.
+ * If OID is undefined then it returns empty string (i.e. '').
+ * @example
+ * name = KJUR.asn1.x509.OID.oid2name("1.3.6.1.5.5.7.1.1");
+ * // name will be 'authorityInfoAccess'.
  * @since asn1x509 1.0.9
  */
 KJUR.asn1.x509.OID.oid2name = function(oid) {
@@ -1904,6 +1921,27 @@ KJUR.asn1.x509.OID.oid2name = function(oid) {
         if (list[name] == oid) return name;
     }
     return '';
+};
+
+/*
+ * convert name to OID
+ * @name name2oid
+ * @memberOf KJUR.asn1.x509.OID
+ * @function
+ * @param {String} OID name
+ * @return {String} dot noted Object Identifer string (ex. 1.2.3.4)
+ * @description
+ * This static method converts from OID name to OID string.
+ * If OID is undefined then it returns empty string (i.e. '').
+ * @example
+ * name = KJUR.asn1.x509.OID.name2oid("authorityInfoAccess");
+ * // name will be '1.3.6.1.5.5.7.1.1'.
+ * @since asn1x509 1.0.11
+ */
+KJUR.asn1.x509.OID.name2oid = function(name) {
+    var list = KJUR.asn1.x509.OID.name2oidList;
+    if (list[name] === undefined) return '';
+    return list[name];
 };
 
 /**
