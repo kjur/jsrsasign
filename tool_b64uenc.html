@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="jsjws : pure JavaScript implementation of JSON Web Signature" />
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <title>Online Base64URL encoder</title>
+
+    <script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/ext/base64.js"></script>
+    <script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/base64x-1.1.js"></script>
+    <script language="JavaScript" type="text/javascript">
+function doEncode() {
+  var s = document.form1.s.value;
+  document.form1.s_b64u.value = utf8tob64u(s);
+  document.form1.s_b64.value = utf8tob64(s);
+  document.form1.s_hex.value = utf8tohex(s);
+}
+    </script>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <h1 id="project_title">Online Base64URL encoder</h1>
+          <h2 id="project_tagline">Convert UTF-8 string to Base64URL, Base64 and Hex online.</h2>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<!-- now editing -->
+<form name="form1">
+<h4>(Step1) Input any UTF-8 string here.</h4>
+<textarea name="s" rows="10" cols="100">
+{ "msg_en": "Hello",
+  "msg_jp": "こんにちは",
+  "msg_cn": "你好",
+  "msg_kr": "안녕하세요",
+  "msg_ru": "Здравствуйте!",
+  "msg_de": "Grüß Gott" }</textarea>
+<i>NOTE: You can input any UTF-8 string including CJK(Chinese, Japanese Kanji, Korean) or ISO Latin characters.</i>
+
+<h4>(Step2) Convert String.</h4>
+<input type="button" value="Encode it" onClick="doEncode();"/><br/>
+
+<hr>
+<h2>Encoded Result</h2>
+
+<h4>Base64 URL encoded string</h4>
+<textarea name="s_b64u" cols="100" rows="8"></textarea>
+
+<h4>Base64 encoded string</h4>
+<textarea name="s_b64" cols="100" rows="8"></textarea>
+
+<h4>Hexadecimal encoded string</h4>
+<textarea name="s_hex" cols="100" rows="8"></textarea>
+
+</form>
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsjws maintained by <a href="https://github.com/kjur">@kjur</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2012 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>

@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, CMS SignedData, TimeStamp and CAdES" />
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, CMS SignedData, TimeStamp and CAdES" />
+<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+<title>jsrsasign - cryptography library in JavaScript</title>
+</head>
 
-    <title>jsrsasign - RSA Signing and Verification in JavaScript</title>
-  </head>
+<body>
 
-  <body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<a id="forkme_banner" href="https://github.com/kjur/jsrsasign">Fork Me on GitHub</a>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/kjur/jsrsasign">Fork Me on GitHub</a>
+<h1 id="project_title">jsrsasign</h1>
+<h2 id="project_tagline">opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, CMS SignedData, TimeStamp, CAdES and JSON Web Signature/Token</h2>
 
-          <h1 id="project_title">jsrsasign</h1>
-          <h2 id="project_tagline">opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, CMS SignedData, TimeStamp and CAdES</h2>
-
-          <section id="downloads">
-            <a class="zip_download_link" href="https://github.com/kjur/jsrsasign/zipball/master">Download this project as a .zip file</a>
-            <a class="tar_download_link" href="https://github.com/kjur/jsrsasign/tarball/master">Download this project as a tar.gz file</a>
-          </section>
-          <a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
-          <a href="https://github.com/kjur/jsrsasign/tags/" target="_blank">DOWNLOADS</a> | 
-          <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
-          <a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
-          <a href="http://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
-          <a href="https://npmjs.org/package/jsrsasign" target="_blank">NPM</a> | 
-        </header>
-    </div>
+<section id="downloads">
+<a class="zip_download_link" href="https://github.com/kjur/jsrsasign/zipball/master">Download this project as a .zip file</a>
+<a class="tar_download_link" href="https://github.com/kjur/jsrsasign/tarball/master">Download this project as a tar.gz file</a>
+</section>
+<a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="http://kjur.github.io/jsrsasign/index_jws.html">jsjws</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases" target="_blank">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+<a href="http://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
+<a href="https://npmjs.org/package/jsrsasign" target="_blank">NPM</a> | 
+</header>
+</div>
 
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
@@ -52,11 +52,18 @@ The 'jsrsasign' library provides following features in pure JavaScript.
 <li><a href="api/symbols/ASN1HEX.html">simple ASN.1 data parser</a></li>
 <li><a href="api/symbols/X509.html">simple X.509 certificate parser/reader</a></li>
 <li><a href="api/symbols/KEYUTIL.html">KEYUTIL</a> - loading RSA/EC/DSA private/public key from PEM formatted PKCS#1/5/8 and X.509 certificate</li>
+<li><a href="api/symbols/KJUR.jws.html">JSON Web Siguature and JSON Web Token</a></li>
 <li>Supported formats and algorithms are listed <a href="index_alg.html">here</a>.</li>
+
 </ul>
 
 <h3>NEWS</h3>
 <dl>
+<dt><b>2015-Jun-01</b>:
+<dd>Release 4.8.0 is now available. Now <a href="http://kjur.github.io/jsjws">jsjws</a> is
+marged into jsrsasign and is a part of jsrsasign.
+Full JSON Web Token(JWT) validation functionality is added.
+
 <dt><b>2015-May-22</b>:
 <dd>Release 4.7.2 is now available. Parsing X.509v3 extension methods added in X509 class.
 
@@ -210,8 +217,8 @@ almost no restrictions.
 <li><a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial" target="_blank">List of programming tutorials</a></li>
 </ul>
 
-You can see the list of QUnit unit tests <a href="index_ut.html">here</a> 
-and I hope they help you understand 'jsrsasign' library.
+You can see the list of QUnit unit tests <a href="test/index.html">here</a> 
+and I hope they help you understand 'jsrsasign' library and APIs.
 
 <h3>MY RELATED PROJECT</h3>
 <ul>

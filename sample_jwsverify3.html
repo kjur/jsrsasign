@@ -1,0 +1,138 @@
+<html>
+<head>
+<title>Sample JWS Verification Application(NOT WORKS)</title>
+<script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/json-sans-eval-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="jws-3.2.js"></script>
+
+<style type="text/css">
+TD  {vertical-align: top; border: solid 1px #000000; }
+</style>
+<script language="JavaScript" type="text/javascript">
+function doVerify() {
+  var jws = new KJUR.jws.JWS();
+  var sJWS = document.form1.jws1.value;
+  var sCert = document.form1.cert1.value;
+
+  var result = 0;
+  try {
+    var cert = new X509();
+    var pubkey = KEYUTIL.getKey(sCert);
+    result = KJUR.jws.JWS.verify(sJWS, pubkey);
+  } catch (ex) {
+    alert("Error: " + ex);
+    result = 0;
+  }
+
+  try {
+    document.form1.im_enchead1.value = jws.parsedJWS.headB64U;
+    document.form1.im_encpayload1.value = jws.parsedJWS.payloadB64U;
+    document.form1.im_encsigval1.value = jws.parsedJWS.sigvalB64U;
+    document.form1.im_siginput1.value = jws.parsedJWS.si;
+    document.form1.im_sigval_h1.value = jws.parsedJWS.sigvalH;
+    document.form1.im_head1.value = jws.parsedJWS.headS;
+    document.form1.im_payload1.value = jws.parsedJWS.payloadS;
+  } catch (ex) {}
+
+  if (result == 1) {
+    alert("JWS signature is *Valid*.");
+  } else {
+    alert("JWS signature is *Invalid*.");
+  }
+}
+</script>
+</head>
+
+<body>
+
+<form name="form1">
+<h1>Sample JWS Verification Application</h1>
+
+<p>
+Default values are cited from <a href="http://tools.ietf.org/html/draft-jones-json-web-signature-04#appendix-A.2" target="_blank">
+"draft-jones-json-web-signature-04 Annex.2"</a>.
+</p>
+
+<table width="100%">
+<tbody>
+<tr><td rowspan="2">Input</td><td>JWS</td><td colspan="2">
+<textarea name="jws1" rows="8" cols="100">eyJhbGciOiJQUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2p3dC1pZHAuZXhhbXBsZS5jb20iLCJzdWIiOiJtYWlsdG86bWlrZUBleGFtcGxlLmNvbSIsIm5iZiI6MTQzMDA1MTUzMiwiZXhwIjoxNDMwMDU1MTMyLCJpYXQiOjE0MzAwNTE1MzIsImp0aSI6ImlkMTIzNDU2IiwidHlwIjoiaHR0cHM6Ly9leGFtcGxlLmNvbS9yZWdpc3RlciJ9.UbXdFgYOu8Cidtmlmy_BGNvUErCSnyoj0w0FnV8UI8cRP8ftuN8MLxBoQVx9U8_W7owa2I8T9E2_gSv72sdS-bY9SH-M9o058VkbMSSzyfsKs1Fe8s3T30erJmmHd3JGaPmdoCrco8Q_3rgtGd_mlQ0PYovLFuO9gXi7AhZuRJFFN3q2gtaPG4bSCv5nXt15ApMIo_FutCovBNgCZcdBWvsGA6QnuouEEXVLjmsiQuwRKyuw6MhWQeMNp551aSxJNBZVqmfnkKZb-DOasoqDFIK0uaNrvptYCD7fE_URA9emi9k4yXhk7iY0PArLy-R5pdJmiNENdQmW9t2EKSgwIg</textarea></td></tr>
+<tr><td>PEM X.509 Certificate verify with</td><td colspan="2">
+<textarea name="cert1" cols="65" rows="8">-----BEGIN CERTIFICATE-----
+MIIC/zCCAeegAwIBAgIBATANBgkqhkiG9w0BAQUFADAaMQswCQYDVQQGEwJVUzEL
+MAkGA1UECgwCWjQwHhcNMTMwODI4MTgyODM0WhcNMjMwODI4MTgyODM0WjAaMQsw
+CQYDVQQGEwJVUzELMAkGA1UECgwCWjQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw
+ggEKAoIBAQDfdOqotHd55SYO0dLz2oXengw/tZ+q3ZmOPeVmMuOMIYO/Cv1wk2U0
+OK4pug4OBSJPhl09Zs6IwB8NwPOU7EDTgMOcQUYB/6QNCI1J7Zm2oLtuchzz4pIb
++o4ZAhVprLhRyvqi8OTKQ7kfGfs5Tuwmn1M/0fQkfzMxADpjOKNgf0uy6lN6utjd
+TrPKKFUQNdc6/Ty8EeTnQEwUlsT2LAXCfEKxTn5RlRljDztS7Sfgs8VL0FPy1Qi8
+B+dFcgRYKFrcpsVaZ1lBmXKsXDRu5QR/Rg3f9DRq4GR1sNH8RLY9uApMl2SNz+sR
+4zRPG85R/se5Q06Gu0BUQ3UPm67ETVZLAgMBAAGjUDBOMB0GA1UdDgQWBBQHZPTE
+yQVu/0I/3QWhlTyW7WoTzTAfBgNVHSMEGDAWgBQHZPTEyQVu/0I/3QWhlTyW7WoT
+zTAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQDHxqJ9y8alTH7agVMW
+Zfic/RbrdvHwyq+IOrgDToqyo0w+IZ6BCn9vjv5iuhqu4ForOWDAFpQKZW0DLBJE
+Qy/7/0+9pk2DPhK1XzdOovlSrkRt+GcEpGnUXnzACXDBbO0+Wrk+hcjEkQRRK1bW
+2rknARIEJG9GS+pShP9Bq/0BmNsMepdNcBa0z3a5B0fzFyCQoUlX6RTqxRw1h1Qt
+5F00pfsp7SjXVIvYcewHaNASbto1n5hrSz1VY9hLba11ivL1N4WoWbmzAL6BWabs
+C2D/MenST2/X6hTKyGXpg3Eg2h3iLvUtwcNny0hRKstc73Jl9xR3qXfXKJH0ThTl
+q0gq
+-----END CERTIFICATE-----</textarea>
+</td></tr>
+<tr><td colspan="4">
+<input type="button" value="Verify JWS Signature" onClick="doVerify();"/><br/>
+</td></tr>
+
+<tr><td colspan="2">Encoded Head</td><td colspan="2">
+<textarea name="im_enchead1" cols="100" rows="1" readonly></textarea>
+</td></tr>
+<tr><td colspan="2">Encoded Payload</td><td colspan="2">
+<textarea name="im_encpayload1" cols="100" rows="1" readonly></textarea>
+</td></tr>
+<tr><td colspan="2">Encoded Signature Value</td><td colspan="2">
+<textarea name="im_encsigval1" cols="100" rows="6" readonly></textarea>
+</td></tr>
+<tr><td colspan="2">Signature Input</td><td colspan="2">
+<textarea name="im_siginput1" cols="100" rows="3" readonly></textarea>
+</td></tr>
+<tr><td colspan="2">Signature Value (Hex)</td><td colspan="2">
+<textarea name="im_sigval_h1" cols="100" rows="8" readonly></textarea>
+</td></tr>
+<tr><td colspan="2">Head</td><td colspan="2">
+<textarea name="im_head1" cols="100" rows="2" readonly></textarea>
+</td></tr>
+<tr><td colspan="2">Payload</td><td colspan="2">
+<textarea name="im_payload1" cols="100" rows="3" readonly></textarea>
+</td></tr>
+</tbody>
+
+</table>
+</form>
+
+<h3>USAGE</h3>
+<ol>
+<li>Fill JWS signature and X509 certificate if you need.</li>
+<li>Then just press "Verify JWS Signature" button.</li>
+<li>If the signature is valid, you will see a dialog 'JWS signature is '*Valid*'.
+You may see an error dialog if it is malformed signature.</li>
+</li>
+<li>As for JWS signature generation, please see <a href="sample_generate3.html">this sample</a>.</li>
+</ol>
+
+<center>
+Copyright &copy; 2013-2015 Kenji Urushima and Dave All Rights Reserved.
+</center>
+
+<div align="right">
+<a href="index.html">Go back to index</a>
+</div>
+
+<div align="right">
+<a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
+<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
+</a>
+<a href="http://x5.choumusubi.com/bin/gg?069823300">
+<img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
+</a>
+</div>
+</body>
+</html>

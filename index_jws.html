@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsjws : pure JavaScript implementation of JWT ( JSON Web Token ) and JWS ( JSON Web Signature )" />
+<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+<title>jsjws: pure JavaScript JSON Web Signature library (now a part of jsrsasign)</title>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/kjur/jsjws">View on GitHub</a>
+
+          <h1 id="project_title">jsjws (now a part of jsjws)</h1>
+          <h2 id="project_tagline">jsjws : pure JavaScript implementation of JWT ( JSON Web Token ) and JWS ( JSON Web Signature )</h2>
+          <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/kjur/jsjws/zipball/master">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/kjur/jsjws/tarball/master">Download this project as a tar.gz file</a>
+          </section>
+          <a href="http://kjur.github.io/jsrsasign/">jsrsasign TOP</a> |
+	  <a href="https://github.com/kjur/jsrsasign/releases" target="_blank">DOWNLOADS</a> | 
+          <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+          <a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+          <a href="http://kjur.github.io/jsrsasign/index_jws.html#demo" target="_blank">DEMOS</a> | 
+          <a href="http://kjur.github.io/jsrsasign/mobile/">MOBILE</a> | 
+          <a href="https://npmjs.org/package/jsrsasign" target="_blank">NPM</a> | 
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+<!-- now editing -->
+JSON Web Signature(JWS) is a specification for signing JSON data structure 
+defined in OpenID community 
+<a href="http://self-issued.info/docs/draft-jones-json-web-signature-04.html" target="_blank">[1]</a>
+and IETF 
+<a href="http://tools.ietf.org/html/draft-ietf-jose-json-web-signature" target="_blank">[2]</a>
+and <a href="http://openid.net/2011/04/29/a-map-for-openid-abc/" target="_blank">one of 
+basic component for OpenID ABC or OpenID Connect</a>.
+The 'jsjws'(JSON Web Signature JavaScript Library) is a pure open source free JavaScript 
+implementation of it.
+Furthermore, 'jsjws' provides JSON Web Signature JSON Serialization (JWS-JS) 
+<a href="http://tools.ietf.org/html/draft-jones-json-web-signature-json-serialization-01" target="_blank">[3]</a>
+which is a kind of parallel or independent signature format by multiple signers.
+
+<h3>FEATURES</h3>
+<ul>
+<li>sign and verify a JSON Web Token(JWT) and Signature(JWS) with RSA/RSAPSS/ECDSA algorithm</li>
+<li>implemented by pure JavaScript</li>
+<li>work on any modern browsers including smart phones</li>
+<li>supports all algorithms except ES512 (i.e. jsjws now supports 
+     HS256, HS384, HS512, RS256, RS384, RS512, ES256, ES384, PS256, PS384, PS512)</li>
+<li>powerful and easy 'sign' and 'verify' method.</li>
+<li>used with naked key, X.509 certificate and PKCS#5/PKCS#8 encrypted/plain private/public key</li>
+<li>supports UTF-8 characters including CJK, Latin and non-ASCII in JWS Header and Payload</li>
+<li>sign and verify a JSON Web Signature JSON Serialization (JWS-JS)</li>
+
+</ul>
+
+<h3>NEWS</h3>
+<dl>
+<dt><b>2015-May-29</b>: 
+<dd>
+Now jsjws is merged into <a href="https://github.com/kjur/jsrsasign/releases/tag/4.8.0">jsrsasign 4.8.0</a>.
+There is no further update at <a href="https://kjur.github.io/jsjws/">github jsjws repository</a>.
+Please watch jsrsasign.
+
+<dt><b>2015-Apr-26</b>: 
+<dd>
+3.2.2 released. Bugfix release for safe JSON strings and samples..
+
+<dt><b>2015-Apr-19</b>: 
+<dd>
+3.2.0 released. Mitigation for some signature replacement attacks in <a href="http://kjur.github.io/jsjws/api/symbols/KJUR.jws.JWS.html#.verify">JWS.verify</a>.
+Great thanks to Alberto Pose for suggestions. 
+
+<dt><b>2015-Apr-04</b>: 
+<dd>
+3.1.0 released. alg=none support have been removed in the verify method to resolve <a href="https://threatpost.com/critical-vulnerabilities-affect-json-web-token-libraries/111943">the same issue</a>. Thank you kindly, Adriano Raiano, David Halls, Alberto Pose and JPCERT/CC. 
+
+<dt><b>2013-Oct-07</b>: 
+<dd>Node.js <a href="https://npmjs.org/package/jsrsasign" target="_blank">npm module of jsrsasign</a> is now registered in the repository. It also includes this <a href="http://kjur.github.io/jsjws/">'jsjws'</a>.
+
+<dt><b>2013-Sep-24</b>
+<dd>
+3.0.2 released. Now supports HS384 (HmacSHA384) signature 
+by CryptoJS patch.
+
+<dt><b>2013-Sep-04</b>
+<dd>
+The jsjws page for <a href="http://kjur.github.io/jsjws/mobile/">iPhone and Android</a> is now available.
+<a href="http://kjur.github.io/jsjws/mobile/tool_jwt.html">JWT siging/verifying demo for smart phone</a>
+is also available.
+
+<dt><b>2013-Aug-29</b>
+<dd>
+<a href="index_jwsmat.html">Document "Algorithm Support Matrix for JWT/JWS Implementations" added.</a>
+<dt><b>2013-Aug-28</b>
+<dd>
+<ul>
+<a href="tool_jwt.html">New tool to generate and verify signed JSON Web Token(JWT).</a>
+</ul>
+<dt><b>2013-Aug-27</b>: 
+<dd>Release 3.0.0
+<ul>
+<li>provides powerful and easy <a href="http://kjur.github.io/jsjws/api/symbols/KJUR.jws.JWS.html#.sign">signing</a>
+and <a href="http://kjur.github.io/jsjws/api/symbols/KJUR.jws.JWS.html#.verify">verifying</a> method.</li>
+<li>add ECDSA and HMAC support</li>
+<li>add PKCS#5 and PKCS#8 encrypted/plain private key support</li>
+<li><a href="index_jwsut.html">QUnit unit tests</a> added</li>
+</ul>
+<dt><b>2013-Jul-23</b>: 
+<dd>Release 2.0.1 to fix RSAPSS signatures.
+<dt><b>2013-Jul-21</b>: 
+<dd>Release 2.0 is now available to support PS{256,512} (i.e. SHA256/512withRSAPSS) signature algorithm.
+<dt><b>2012-May-21</b>: 
+<dd>Release 1.2 is now available to add JWS-JS parallel signature support.
+<dt><b>2012-May-07</b>: 
+<dd>Release 1.1 is available. Following features are added.
+<ul>
+<li>UTF-8 string support in JWS Header and Payload</li>
+<li>sign JWS with PEM formatted PKCS# RSA private key without passcode</li>
+<li>verify JWS with PEM formatted X.509 certificate</li>
+</ul>
+</dl>
+
+<h3><a name="demo">ONLINE TOOL</a></h3>
+<ul>
+<li><a href="tool_jwt.html" target="_blank">Online JWT generator/verifier (UPDATE)</a></li>
+<li><a href="tool_jwtveri.html" target="_blank">Online JWT full verifier (NEW!!!)</a></li>
+<li><a href="tool_jwsverifyanalyze.html" target="_blank">Online JWS verifier/analyzer</a></li>
+<li><a href="tool_b64uenc.html" target="_blank">Online Base64URL encoder</a></li>
+<li><a href="tool_b64udec.html" target="_blank">Online Base64URL decoder</a></li>
+</ul>
+
+<h3>DEMO</h3>
+<ul>
+<li><a href="sample_jwsgenerate.html" target="_blank">sign JWS with naked private key</a></li>
+<li><a href="sample_jwsverify.html" target="_blank">verify JWS with naked public key</a></li>
+<li><a href="sample_jwsgenerate2.html" target="_blank">sign JWS with PKCS#1 private key</a></li>
+<li><a href="sample_jwsverify2.html" target="_blank">verify JWS with X.509 certificate</a></li>
+<li><a href="sample_jwsgenerate3.html" target="_blank">sign JWS with RSAPSS</a></li>
+<li><a href="sample_jwsverify3.html" target="_blank">verify JWS with RSAPSS</a></li>
+<li><a href="sample_jwsjsgen1.html" target="_blank">generete JWS-JS</a></li>
+<li><a href="sample_jwsjsgen2.html" target="_blank">generete JWS-JS by existing JWS</a></li>
+<li><a href="sample_jwsjsveri1.html" target="_blank">verify JWS-JS</a></li>
+</ul>
+
+<h3>DOWNLOAD</h3>
+
+<ul>
+<li>Use git to clonse the official jsrsasign repository
+<blockquote>git clone git://github.com/kjur/jsrsasign.git</blockquote>
+</li>
+<li>Alternatively, you can download a zip file for the
+<a href="https://github.com/kjur/jsjws/archive/master.zip">latest development version</a> 
+or a <a href="https://github.com/kjur/jsjws/releases">previous releases</a>.
+</li>
+</ul>
+<a href="http://github.com/kjur/jsjws/blob/master/ChangeLog.txt">See 'ChangeLog.txt' in detail.</a>
+
+<h3><a href="api/">API DOCUMENT</a></h3>
+The 'jsjws'(JSON Web Signature JavaScript Library) JavaScript API
+document is available <a href="api/">here</a>.
+
+<h3><a href="license/">LICENSE</a></h3>
+The 'jsjws'(JSON Web Signature JavaScript Library) is licensed under the terms of 
+the MIT license reproduced which is simple and easy to understand and places 
+almost no restrictions. 
+<ul>
+<li><a href="http://github.com/kjur/jsjws/blob/master/LICENSE.txt">LICENSE.txt - JSON Web Signature JavaScript Library LICENSE</a></li>
+</ul>
+
+<h3>MY RELATED PROJECT</h3>
+<ul>
+<li><a href="http://kjur.github.com/jsrsasign/">jsrsasign - RSA-Sign JavaScript Library</a>
+</ul>
+
+<h3>RELATED LINKS</h3>
+<ul>
+<li><a href="https://npmjs.org/package/jsjws">jsjws porting for Node.js npm package by David Halls</a></li>
+</ul>
+
+<h3>INCLUDED THIRD-PARTY LIBRARIES</h3>
+<ul>
+<li><a href="http://www-cs-students.stanford.edu/~tjw/jsbn/" target="_blank">
+Tom Wu's jsbn and RSA library (BSD License)</a></li>
+<li><a href="http://pajhome.org.uk/crypt/md5/" target="_blank">
+Paul Johnston's JavaScript SHA2 libraries (BSD License)</a></li>
+<li><a href="http://code.google.com/p/json-sans-eval/" target="_blank">
+json-sans-eval - A fast and secure JSON parser in JavaScript (Apache License 2.0)</a></li>
+</li>
+</ul>
+
+<h3>WHAT IS JWS?</h3>
+<p>
+JSON Web Signature(JWS) is a simple signature format for signing small JSON data
+and will be used to exchange an authentication data for 
+<a href="http://openid.net/connect/" target="_blank">OpenID Connect</a>.
+Any JWS data is represented in a printable text since it consists of 
+Base64URL encoded characters and period('.').
+Following figure shows how JWS signature will be generated.
+<br clear="all"/>
+<img src="index_jws_gen.png"/>
+<br clear="all"/>
+See following pages for detail.
+<ul>
+<li>
+<a href="http://tools.ietf.org/agenda/82/slides/jose-2.pdf">
+Slides: Propposed Document for JOSE: JWS-JWE-JWK, Mike Jones, IETF 82, Nov 2011
+</a>
+</li>
+<li>
+<a href="http://tools.ietf.org/html/draft-jones-json-web-signature-04">
+IETF Internet Draft: JSON Web Signature (JWS)                   
+draft-jones-json-web-signature-04</a> 
+</li>
+</ul>
+</p>
+
+<h3>WHAT IS JWS-JS?</h3>
+<p>
+JSON Web Signature JSON Serialization (JWS-JS) is a signature format to
+sign a data by a number of signers independently.
+This way of signing is called parallel or independent signature in general.
+Following figure shows how JWS-JS signature will be generated.
+<br clear="all"/>
+<img src="index_jws_genjs.png"/>
+<br clear="all"/>
+<ul>
+<li>
+<a href="http://tools.ietf.org/html/draft-jones-json-web-signature-json-serialization-01" target="_blank">IETF Internet Draft: JSON Web Signature JSON Serialization (JWS-JS)</a>
+</li>
+</ul>
+</p>
+
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsjws maintained by <a href="https://github.com/kjur">@kjur</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2012 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>

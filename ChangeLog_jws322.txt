@@ -1,0 +1,104 @@
+
+ChangeLog for jsjws
+
+* 3.2.2 Release (2015-Apr-26)
+ - isSafeJSONString undefined bugfix
+ - readSafeJSONString undefined bugfix
+ - sample codes bugfix
+
+* 3.2.0 Release (2015-Apr-19)
+ - JWS.verify method updated to mitigate signature replacement
+   attacks:
+   - add optional acceptAlgs argument to specify accepted
+     signature algorithms to verify.
+   - strict key type checking
+   
+remove alg=none signature validation support.
+ - jsjws will be merged into jsrsasign near in the future.
+
+* 3.1.0 Release (2015-Apr-03)
+ - remove alg=none signature validation support.
+ - jsjws will be merged into jsrsasign near in the future.
+
+* 3.0.2 Release (2013-Sep-24)
+ - add HS384 support with jsrsasign 4.1.4 or later.
+   Please use 
+     'http://kjur.github.io/jsrsasign/ext/cryptojs-312-core-fix.js' or 
+     'http://kjur.github.io/jsrsasign/ext/cryptojs-312-core-fix-min.js' or 
+     'http://kjur.github.io/jsrsasign/jsrsasign-4.1.4-all-min.js'
+   instead of orignal 'core.js' of CryptoJS.
+
+* 3.0.1 Release (2013-Aug-28)
+ - jws 3.0.0 to 3.0.1
+   - new KJUR.jws.IntDate class for time format of JWT
+ - new online tool "tool_jwt.html" to generate and verify signed JWT
+
+* 3.0.0 Release (2013-Aug-27)
+ - easy and powerful sign and verify methods available
+ - now supports HS{256,512},RS{256,384,512},ES{256,384},PS{256,384,512},none
+   (i.e. supports all algorithms except HS384 and ES512.)
+ - other existing signing and verfying methods are deprecated.
+ - now supports signing by following keys:
+   - PEM plain RSA PKCS#5 private key (NEW)
+   - PEM encrypted RSA PKCS#5 private key (NEW)
+   - PEM plain RSA/ECC PKCS#8 private key (NEW)
+   - PEM encrypted RSA/ECC PKCS#8 private key (NEW)
+   - RSAKey object of private key
+   - KJUR.crypto.ECDSA object of private key (NEW)
+ - now supports verifying by following keys:
+   - PEM RSA/ECC PKCS#8 public key (NEW)
+   - PEM RSA/ECC X.509 certificate
+   - RSAKey object of public key
+   - KJUR.crypto.ECDSA object of public key (NEW)
+- now supports following asymmetoric key algorithms
+   - RSA
+   - ECDSA (NEW)
+   - RSAPSS
+ - QUnit unit tests added.
+
+* 2.0.2 Release (2013-Jul-30)
+ - jws-2.0.js 2.0.2 to 2.0.3
+   - support for rsasign 1.2.5 (verifyStringPSS arg bi to hex change)
+
+* 2.0.2 Release [Jul 29, 2013]
+ - small fix for jws-2.0.js (2.0.1 -> 2.0.2)
+
+* 2.0.1 Release [Jul 23, 2013]
+ - fix RSAPSS by David (github.com/davedoesdev)
+   (jws-2.0.js, sample_{generate,verify}3.html)
+
+* 2.0.0 Release [Jul 21, 2013]
+ - merge David Halls's contribution. (https://github.com/davedoesdev, Thanks! Dave.)
+  - class implementation was chagned
+  - supports PS{256,512} signature algorithm
+    NOTE: however still having issue on PS{256,512} support
+  - jsrsasign codes are not included from this release
+
+* 1.2.1 Release [May 7, 2013]
+ - merge David Halls's contribution. (https://github.com/davedoesdev, Thanks! Dave.)
+  - rsa.js: update for PKCS#1 OAEP support
+  - rsa2.js: update for PKCS#1 OAEP support
+  - rsasign-1.2.js: add PSS support
+  - jsbn.js: small fix
+  - jsbn2.js: update for probable prime fix, bnSquare
+  - base64.js: small fix
+  - base64x-1.1.js: small update on utf8tob64u, b64utoutf8
+
+* 1.2 Release [Mar 19, 2012]
+ - 'JWSJS' class is now available for JSON Web Signature JSON Serialization 
+   (JWS-JS) which is a kind of parallel signature.
+ - 'readSafeJSONString' method added to 'JWS' class.
+ - utf8/Base64, utf8/Hex converting functions are added to 'base64x.js'.
+ - New online tools for converting Base64URL added.
+
+* 1.1 Relasse [Mar 07, 2012]
+ - following features are added.
+   - UTF-8 string support in JWS Header and Payload
+   - sign JWS with PEM formatted PKCS# RSA private key without passcode
+   - verify JWS with PEM formatted X.509 certificate
+
+* 1.0.1 Relasse [Mar 06, 2012]
+ - API document is added.
+
+* 1.0 Initial Relasse [Mar 04, 2012]
+

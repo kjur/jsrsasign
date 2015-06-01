@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="jsjws : pure JavaScript implementation of JSON Web Signature" />
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <title>Online JWS verifier/analyzer</title>
+<script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/json-sans-eval-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="jws-3.2.js"></script>
+
+    <script language="JavaScript" type="text/javascript">
+function doVerify() {
+  var sJWS = document.form1.jws1.value;
+  var sCert = document.form1.cert1.value;
+
+  var jws = new KJUR.jws.JWS();
+  var result = 0;
+  try {
+    result = jws.verifyJWSByPemX509Cert(sJWS, sCert);
+  } catch (ex) {
+    alert("Error: " + ex);
+    result = 0;
+  }
+
+  document.form1.im_enchead1.value = jws.parsedJWS.headB64U;
+  document.form1.im_encpayload1.value = jws.parsedJWS.payloadB64U;
+  document.form1.im_encsigval1.value = jws.parsedJWS.sigvalB64U;
+  document.form1.im_siginput1.value = jws.parsedJWS.si;
+  document.form1.im_sigval_h1.value = jws.parsedJWS.sigvalH;
+
+  document.form1.im_head1.value = jws.parsedJWS.headS;
+  document.form1.im_payload1.value = jws.parsedJWS.payloadS;
+
+  if (result == 1) {
+    alert("JWS signature is *Valid*.");
+  } else {
+    alert("JWS signature is *Invalid*.");
+  }
+}
+
+function doAnalyze() {
+  var sJWS = document.form1.jws1.value;
+
+  var jws = new KJUR.jws.JWS();
+  var result = 0;
+  try {
+    result = jws.parseJWS(sJWS);
+  } catch (ex) {
+    alert("Error: parseJWS() " + ex);
+    result = 0;
+  }
+
+  document.form1.im_enchead1.value = jws.parsedJWS.headB64U;
+  document.form1.im_encpayload1.value = jws.parsedJWS.payloadB64U;
+  document.form1.im_encsigval1.value = jws.parsedJWS.sigvalB64U;
+  document.form1.im_siginput1.value = jws.parsedJWS.si;
+  document.form1.im_sigval_h1.value = jws.parsedJWS.sigvalH;
+  document.form1.im_head1.value = jws.parsedJWS.headS;
+  document.form1.im_payload1.value = jws.parsedJWS.payloadS;
+}
+    </script>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <h1 id="project_title">Online JWS verifier/analyzer</h1>
+          <h2 id="project_tagline">You can analyze and verify JSON Web Signature(JWS) online.</h2>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<!-- now editing -->
+<form name="form1">
+<h4>(Step1) Fill JWS signature here.</h4>
+<textarea name="jws1" rows="8" cols="100">eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.qCW4l5nfdvBt-yl_OiYRFrKkribqbDbmQ9ULyemAgCNXAAr70hN5-IERIefzySpm6Er4UuX_aXcnIXgMvK-hFMFhLOuJckrDEe1Pz-OzqScvGSJUbeOsd_nB9E2BNVYZrgMESQOifiEyUtWdbzCoMgf9nQg2AEWbVSaPImqQkGp-JZsJsvMUC-3A3RcimGIjLv-A8skyhNufASd6DPgk46Ydqt6vi2L6d2InvZSkhTSsYhbfm9TgrKyA906YHE0zE-asuXAzI1ISPxAjlO8ZhekEvg6teaa-1cSQQdOFj-ZWpqVsEI1YXr7zuvugWQhqfBqqPcT6fP5t3ff8FKwV9w</textarea>
+<h4>(Step2) Fill X.509 PEM certificate here to verify the JWS with if needed.</h4>
+<textarea name="cert1" cols="65" rows="8">-----BEGIN CERTIFICATE-----
+MIIDMjCCAhqgAwIBAgIJAKMfG/B2MKd5MA0GCSqGSIb3DQEBBQUAMBoxCzAJBgNV
+BAYTAkpQMQswCQYDVQQKEwJ6MzAeFw0xMDA1MzEwNjE4MDhaFw0yMDA1MjgwNjE4
+MDhaMBoxCzAJBgNVBAYTAkpQMQswCQYDVQQKEwJ6MzCCASIwDQYJKoZIhvcNAQEB
+BQADggEPADCCAQoCggEBAOKosPD1rOz6Z5wtgVBKA0XMFxfKavF09f9x3N3LlCcF
+/6LTXn6/waJq93bTNBESzdw63qQl77sxFORXCVQ1Ad7CPqRbY4ywVw/8yZri9wH4
+PdSfae/fg5vuN3EesLissFSceQySHbMBeqEAw84cLvPXdlecdNmlwfS6nV5D8Ijt
+HkebP8R14AEpfoag3VS/YS6Hd4hmvZ1e3BJQm3JfFFVzTyZ0AH2oimsxfoQnZf7M
+qyIdCgmeaKYILEyYm6PKhVwZhuD5E+WG4RxNdcGCiC8GRUr2fYnXUT0CtwrYBYgZ
+121cFObeu7Z/aTIsx4MqYLHwaHqMga6U7nOHoEgqY7ECAwEAAaN7MHkwHQYDVR0O
+BBYEFKO4NcUDh3J5c7XD7j4pVXnzIfALMEoGA1UdIwRDMEGAFKO4NcUDh3J5c7XD
+7j4pVXnzIfALoR6kHDAaMQswCQYDVQQGEwJKUDELMAkGA1UEChMCejOCCQCjHxvw
+djCneTAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQC8JdiwJF22/3nB
+IxJT/gXXN10cub6O+x9q64ls7dpGpBvbi4/lJgZOsZqoJiswU5WOKZ4MTOmMHe4W
+e/MHuhcjsgf9EHHYZQ1reBYi/l9mBBbYFGs0zSv1CyjbwkyF36nr/8sWdYf4ZtXQ
+nzTGvoa6oTOOTmmj3Bwl3CHwonvgAJUCHY/UmWFzH8Sf0dDW7iJBj+ZWfjuSlSQe
+2ninrEpfA4v2V1p3LOH+layZLDMJHkNCq8eoU1MbJi07cHxLWtlwliNOiRboaiYl
+1wtWR7ZY4HZCPeyb0tanf58rBQAXElaCF3fmfHrlpxoJBsQP1NbFrBs2haOIEZ4E
+K3V9/Bpi
+-----END CERTIFICATE-----</textarea>
+<h4>(Step3) Press "Anlalyze" or "Verify"</h4>
+<input type="button" value="Analyze it!" onClick="doAnalyze();"/> or 
+<input type="button" value="Analyze and Verify it!" onClick="doVerify();"/>
+
+<h2>Result Of Analysis</h2>
+<b>Encoded Header</b><br/>
+<textarea name="im_enchead1" cols="100" rows="1"></textarea><br/>
+<b>Encoded Payload</b><br/>
+<textarea name="im_encpayload1" cols="100" rows="1"></textarea><br/>
+<b>Encoded Signature Value</b><br/>
+<textarea name="im_encsigval1" cols="100" rows="6"></textarea><br/>
+<b>Signature Input</b><br/>
+<textarea name="im_siginput1" cols="100" rows="3"></textarea><br/>
+<b>Signature Value (Hex)</b><br/>
+<textarea name="im_sigval_h1" cols="100" rows="8"></textarea><br/>
+<b>Header</b><br/>
+<textarea name="im_head1" cols="100" rows="5"></textarea><br/>
+<b>Payload</b><br/>
+<textarea name="im_payload1" cols="100" rows="8"></textarea><br/>
+</form>
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsjws maintained by <a href="https://github.com/kjur">@kjur</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2012 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta charset="utf-8">
+<title>QUnit sign() and verify() test which takes time of 'jws.js'</title>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../jsrsasign-latest-all-min.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../ext/json-sans-eval.js"></script>
+<script language="JavaScript" type="text/javascript" src="../jws-3.2.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+// _test/z1.prv.p5p.pem (RSA)
+var z1PrvPemP5P = "" +
+"-----BEGIN RSA PRIVATE KEY-----\n" +
+"MIIBOgIBAAJBAOhmTdK0BSkSFWjzs5vJemLnujwJur3E8NzY35DreQubtkWitw4x\n" +
+"EnR7TTxBtRQkiVEV/viPedQ+rlsaTjUY/VkCAwEAAQJAeLvFTGRnlemmI8sPkSx/\n" +
+"n2hhcRVg5Xut4h3tL32Vefhicvq55xqycoLCdgxATa5qyKOrhSz2vNVi+a/4JHom\n" +
+"TQIhAP6b1FCGazJVYU/el2p2rAsdWDDdpk9TWblG2FErwSOfAiEA6atoD18F27D0\n" +
+"MRsOb0No9IdKEjiXnYvGAMNcbyBwfAcCIQDVSctpjcF9T+MOWoTzrehgAzwe639n\n" +
+"0oZGXJ/YF9RbNwIgGEm0u0RJO5idCS2ixnXfRut5C4POXpXUsuebiAF7L6kCIH0m\n" +
+"GpYlbUmwIMsdWH7N4Sfgk6TSs0zb/xcfNBJbWFep\n" +
+"-----END RSA PRIVATE KEY-----\n";
+
+// _test/z1.prv.p5e.pem (RSA)
+var z1PrvPemP5E = "" +
+"-----BEGIN RSA PRIVATE KEY-----\n" +
+"Proc-Type: 4,ENCRYPTED\n" +
+"DEK-Info: DES-EDE3-CBC,4626F2E5853E783F\n" +
+"\n" +
+"3vFpkrnbantC8RSzng2+jBw/VX95oi0VGKP0G8whENHUOVQXB/YOUSj+n80Y0Wwc\n" +
+"GpeQi8U0FQdWyYv8b9aioeFB06r9t9mJsYscJ/wcIvv5tTMkr89cwN3+4GQQuqNg\n" +
+"TmI9ekeoZ3NP26hTM4XTuFqHx4dzNNwjDLc8txc77WE/o4J4p8k9Py5yPZjs9EKy\n" +
+"wy/yxtqQYQuFj90OMEG1G89iHTZRcq4YTZYdqg6P/XEUvyjifN+7Nym8f2N9TDDn\n" +
+"RJtApPQlrgXvUDQKz6Lu1ZYMwe94E9YdutDGQMbxixbiyxlcxrkb/oEHH5WP5qPG\n" +
+"w/xzh08Ce2Ftba2Q860S8nznjyZFiv+lqSKBahbujgP/63ZL+JbAd4cYBqgm4g1C\n" +
+"YwMhHJbaVCzwYduxdyK2JBYEosDZiDfnOP4DqPhJYpg=\n" +
+"-----END RSA PRIVATE KEY-----\n";
+var z1PrvPemP5EPass = "hoge";
+
+// _test/z1.prv.p8e.pem (RSA)
+var z1PrvPemP8E = "" +
+"-----BEGIN ENCRYPTED PRIVATE KEY-----\n" +
+"MIIBpjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQIyScsGkpMl3kCAggA\n" +
+"MBQGCCqGSIb3DQMHBAiObBK7oyBAzwSCAWCkStExnU3pYBQAxRqDctg5QEO3Ic1d\n" +
+"GsRW+JW0kNonUydoOSD/7DBglnSDowiQ69HCW4OmumSJIU0hewX0yburFuy6Zs/q\n" +
+"DkWox7oxBCsgFmfmkKGcK0USeJ+LX+YZVbvCCvHZkd99pEqQSfkRu4DgXbWmo6Zv\n" +
+"2A6VFyBhE9MFmYex8mHTZ5cchBzAiFWRzjpRX94F4vbUFoXPGrEbOLovM2VpZ8Df\n" +
+"1nLuXhWYVHsXHWn+fm7TH4Xzh1mFYYkTiXL9ABwKKohEL2SQJzKpa9FZvOZAmlSe\n" +
+"UgQxVQLM/ZC+o4Vs4JHqIu4Ek2bgjEqDzo2EPznpcCsQTcwOqhPwNjP4Y3ovn1Nm\n" +
+"8i0Hx51OA0vjRZBvvduKM9d5kRAOg8jqLjeWU3KraWLuSJ96RTzlWFgw6PsML+RE\n" +
+"LHfdKDjRT0NMEMRh892oBi828asvvSWO6HYcM0xclt0uakxJhVP/mtzA\n" +
+"-----END ENCRYPTED PRIVATE KEY-----\n";
+var z1PrvPemP8EPass = "passwd";
+
+var z1PubPemP8 = "" +
+"-----BEGIN PUBLIC KEY-----\n" +
+"MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOhmTdK0BSkSFWjzs5vJemLnujwJur3E\n" +
+"8NzY35DreQubtkWitw4xEnR7TTxBtRQkiVEV/viPedQ+rlsaTjUY/VkCAwEAAQ==\n" +
+"-----END PUBLIC KEY-----\n";
+
+var z1CertPEM = "" +
+"-----BEGIN CERTIFICATE-----\n" +
+"MIIBdTCCAR+gAwIBAgIBBTANBgkqhkiG9w0BAQUFADAaMQswCQYDVQQGEwJVUzEL\n" +
+"MAkGA1UECgwCYTEwHhcNMTMwNTA0MDM0MTQxWhcNMjMwNTA0MDM0MTQxWjAaMQsw\n" +
+"CQYDVQQGEwJVUzELMAkGA1UECgwCYTEwXDANBgkqhkiG9w0BAQEFAANLADBIAkEA\n" +
+"6GZN0rQFKRIVaPOzm8l6Yue6PAm6vcTw3NjfkOt5C5u2RaK3DjESdHtNPEG1FCSJ\n" +
+"URX++I951D6uWxpONRj9WQIDAQABo1AwTjAdBgNVHQ4EFgQUxUc+4gDI561wA9/1\n" +
+"QguM3fTCDhUwHwYDVR0jBBgwFoAUxUc+4gDI561wA9/1QguM3fTCDhUwDAYDVR0T\n" +
+"BAUwAwEB/zANBgkqhkiG9w0BAQUFAANBALL2k69LjwOYfDXv3TXJUAFGUqto+Noj\n" +
+"CJLP08fOfNBZy+KAIy0GsrNU/3uRViqbuGqAnH9kFFwHQjOAFrAe8XQ=\n" +
+"-----END CERTIFICATE-----\n";
+
+// _test/z3.prv.p8p.pem (RSA)
+var z3PrvPemP8P = "" +
+"-----BEGIN PRIVATE KEY-----\n" +
+"MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBALDikFExZMEW5bws\n" +
+"j9DckEA+Ai7jYe7+In5UHpsqCaqXlPlJQFpziDWDHp1IlWI6r+nZ/7AJhS3y6wbV\n" +
+"rF8IN4ohKaga1LIL3RDfnGbm4QcF06rrE0vHkMALUu0o/7zmR0qUgeNnRhd21J/+\n" +
+"5vt9nzbaigklghW3DKYCaZN/n3CbAgMBAAECgYEAq1zjGXWzuYi4SkQVk++KZGJu\n" +
+"dQRehU15F0/hUss4ECfH8HXxvW893zHG//MoncBjWjeTCPVAK9KxtK5ezrZELpXb\n" +
+"Q82HCR2yhf0Wjt4dMVPwyXs6AFfjv5fPYrwODQIOAccXuf8CirfHQlJu9WZCJH6X\n" +
+"mbOgYSxgzlWUn00vlTkCQQDeStbmlwK4SeSA6yKhCk2Oab3qojtP/FPPiNrMqVnH\n" +
+"IDDH9A0LAfUUvTsZL6PvLCsmkr2ubBn4EZUYX5qaIJkdAkEAy7UO9s4UJC3s4vVL\n" +
+"wOzqSkxq287x1wfRkLJbYCkkouV93MoGDoq2dJ1jLD99Ts0QB8zkcu/Bk4whAS/u\n" +
+"PIg7FwJBALDvtxCCINsZjfWDs+OlNMhnqJCLo1RuTzPBBg+juN9D4zA1NPCPFUn1\n" +
+"uYW5ou4sJQimAq9EQoNvU1K8Pm3yBo0CQQCaQfWe99dQvmZQR6ih48ZXlR6mbUO9\n" +
+"rfIIPMftPbq8kESLWYDUqj4YeMaMz1c4wRiOj52/W8eez9J+b6lctVzpAkAUWYjg\n" +
+"GoRPQcbtp1pc2qb4wIMG9+D/VevHkHH7x/RAIgNkK3+Y0XiAa2hAZvveUYua05Yy\n" +
+"akHe+tn1GooNC2SE\n" +
+"-----END PRIVATE KEY-----\n";
+
+var z3PubPemP8 = "" +
+"-----BEGIN PUBLIC KEY-----\n" +
+"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCw4pBRMWTBFuW8LI/Q3JBAPgIu\n" +
+"42Hu/iJ+VB6bKgmql5T5SUBac4g1gx6dSJViOq/p2f+wCYUt8usG1axfCDeKISmo\n" +
+"GtSyC90Q35xm5uEHBdOq6xNLx5DAC1LtKP+85kdKlIHjZ0YXdtSf/ub7fZ822ooJ\n" +
+"JYIVtwymAmmTf59wmwIDAQAB\n" +
+"-----END PUBLIC KEY-----\n";
+
+// _test/z4.prv.p8p.pem (RSA 2048bit)
+var z4PrvPemP8P = "" +
+"-----BEGIN PRIVATE KEY-----\n" +
+"MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDfdOqotHd55SYO\n" +
+"0dLz2oXengw/tZ+q3ZmOPeVmMuOMIYO/Cv1wk2U0OK4pug4OBSJPhl09Zs6IwB8N\n" +
+"wPOU7EDTgMOcQUYB/6QNCI1J7Zm2oLtuchzz4pIb+o4ZAhVprLhRyvqi8OTKQ7kf\n" +
+"Gfs5Tuwmn1M/0fQkfzMxADpjOKNgf0uy6lN6utjdTrPKKFUQNdc6/Ty8EeTnQEwU\n" +
+"lsT2LAXCfEKxTn5RlRljDztS7Sfgs8VL0FPy1Qi8B+dFcgRYKFrcpsVaZ1lBmXKs\n" +
+"XDRu5QR/Rg3f9DRq4GR1sNH8RLY9uApMl2SNz+sR4zRPG85R/se5Q06Gu0BUQ3UP\n" +
+"m67ETVZLAgMBAAECggEADjU54mYvHpICXHjc5+JiFqiH8NkUgOG8LL4kwt3DeBp9\n" +
+"bP0+5hSJH8vmzwJkeGG9L79EWG4b/bfxgYdeNX7cFFagmWPRFrlxbd64VRYFawZH\n" +
+"RJt+2cbzMVI6DL8EK4bu5Ux5qTiV44Jw19hoD9nDzCTfPzSTSGrKD3iLPdnREYaI\n" +
+"GDVxcjBv3Tx6rrv3Z2lhHHKhEHb0RRjATcjAVKV9NZhMajJ4l9pqJ3A4IQrCBl95\n" +
+"ux6Xm1oXP0i6aR78cjchsCpcMXdP3WMsvHgTlsZT0RZLFHrvkiNHlPiil4G2/eHk\n" +
+"wvT//CrcbO6SmI/zCtMmypuHJqcr+Xb7GPJoa64WoQKBgQDwrfelf3Rdfo9kaK/b\n" +
+"rBmbu1++qWpYVPTedQy84DK2p3GE7YfKyI+fhbnw5ol3W1jjfvZCmK/p6eZR4jgy\n" +
+"J0KJ76z53T8HoDTF+FTkR55oM3TEM46XzI36RppWP1vgcNHdz3U4DAqkMlAh4lVm\n" +
+"3GiKPGX5JHHe7tWz/uZ55Kk58QKBgQDtrkqdSzWlOjvYD4mq4m8jPgS7v3hiHd+1\n" +
+"OT8S37zdoT8VVzo2T4SF+fBhI2lWYzpQp2sCjLmCwK9k/Gur55H2kTBTwzlQ6WSL\n" +
+"Te9Zj+eoMGklIirA+8YdQHXrO+CCw9BTJAF+c3c3xeUOLXafzyW29bASGfUtA7Ax\n" +
+"QAsR+Rr3+wKBgAwfZxrh6ZWP+17+WuVArOWIMZFj7SRX2yGdWa/lxwgmNPSSFkXj\n" +
+"hkBttujoY8IsSrTivzqpgCrTCjPTpir4iURzWw4W08bpjd7u3C/HX7Y16Uq8ohEJ\n" +
+"T5lslveDJ3iNljSK74eMK7kLg7fBM7YDogxccHJ1IHsvInp3e1pmZxOxAoGAO+bS\n" +
+"TUQ4N/UuQezgkF3TDrnBraO67leDGwRbfiE/U0ghQvqh5DA0QSPVzlWDZc9KUitv\n" +
+"j8vxsR9o1PW9GS0an17GJEYuetLnkShKK3NWOhBBX6d1yP9rVdH6JhgIJEy/g0Su\n" +
+"z7TAFiFc8i7JF8u4QJ05C8bZAMhOLotqftQeVOMCgYAid8aaRvaM2Q8a42Jn6ZTT\n" +
+"5ms6AvNr98sv0StnfmNQ+EYXN0bEk2huSW+w2hN34TYYBTjViQmHbhudwwu8lVjE\n" +
+"ccDmIXsUFbHVK+kTIpWGGchy5cYPs3k9s1nMR2av0Lojtw9WRY76xRXvN8W6R7Eh\n" +
+"wA2ax3+gEEYpGhjM/lO2Lg==\n" +
+"-----END PRIVATE KEY-----\n";
+
+// _test/z4.pub.p8.pem (RSA 2048bit)
+var z4PubPemP8 = "" +
+"-----BEGIN PUBLIC KEY-----\n" +
+"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA33TqqLR3eeUmDtHS89qF\n" +
+"3p4MP7Wfqt2Zjj3lZjLjjCGDvwr9cJNlNDiuKboODgUiT4ZdPWbOiMAfDcDzlOxA\n" +
+"04DDnEFGAf+kDQiNSe2ZtqC7bnIc8+KSG/qOGQIVaay4Ucr6ovDkykO5Hxn7OU7s\n" +
+"Jp9TP9H0JH8zMQA6YzijYH9LsupTerrY3U6zyihVEDXXOv08vBHk50BMFJbE9iwF\n" +
+"wnxCsU5+UZUZYw87Uu0n4LPFS9BT8tUIvAfnRXIEWCha3KbFWmdZQZlyrFw0buUE\n" +
+"f0YN3/Q0auBkdbDR/ES2PbgKTJdkjc/rEeM0TxvOUf7HuUNOhrtAVEN1D5uuxE1W\n" +
+"SwIDAQAB\n" +
+"-----END PUBLIC KEY-----\n";
+
+// _gitpg/jsrsasign/test/eckey/k1.prv.p8p.pem (ECC NIST P-256)
+var k1PrvPemP8P = "" +
+"-----BEGIN PRIVATE KEY-----\n" +
+"MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgEbVzfPnZPxfAyxqE\n" +
+"ZV05laAoJAl+/6Xt2O4mOB611sOhRANCAASgFTKjwJAAU95g++/vzKWHkzAVmNMI\n" +
+"tB5vTjZOOIwnEb70MsWZFIyUFD1P9Gwstz4+akHX7vI8BH6hHmBmfeQl\n" +
+"-----END PRIVATE KEY-----\n";
+
+// _gitpg/jsrsasign/test/eckey/k1.pub.pem (ECC NIST P-256)
+var k1PubPemP8 = "" +
+"-----BEGIN PUBLIC KEY-----\n" +
+"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoBUyo8CQAFPeYPvv78ylh5MwFZjT\n" +
+"CLQeb042TjiMJxG+9DLFmRSMlBQ9T/RsLLc+PmpB1+7yPAR+oR5gZn3kJQ==\n" +
+"-----END PUBLIC KEY-----\n";
+
+// _gitpg/jsrsasign/test/eckey/k6.prv.p8p.pem (ECC NIST P-384)
+var k6PrvPemP8P = "" +
+"-----BEGIN PRIVATE KEY-----\n" +
+"MIG2AgEAMBAGByqGSM49AgEGBSuBBAAiBIGeMIGbAgEBBDAamStb0Xep3y3sWw2u\n" +
+"SSAdUPkgQ9Rvhlnx8XEVOYy2teh69T0on77ja02m03n8t8WhZANiAARUNSar38Rz\n" +
+"lKPyZFsNSGUanzpNRth0C+MikVEH8FAlDHMMpAs34dyF4IK0uxgbiEe9bQ+ieLrl\n" +
+"6xwFR0yaTivuwoyXC+ScGUnwnpaXmid6UUgw4ypbneHsaKuZ9JLdMAo=\n" +
+"-----END PRIVATE KEY-----\n";
+
+// _gitpg/jsrsasign/test/eckey/k6.pub.p8.pem (ECC NIST P-384)
+var k6PubPemP8 = "" +
+"-----BEGIN PUBLIC KEY-----\n" +
+"MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAEVDUmq9/Ec5Sj8mRbDUhlGp86TUbYdAvj\n" +
+"IpFRB/BQJQxzDKQLN+HcheCCtLsYG4hHvW0Poni65escBUdMmk4r7sKMlwvknBlJ\n" +
+"8J6Wl5onelFIMOMqW53h7GirmfSS3TAK\n" +
+"-----END PUBLIC KEY-----\n";
+
+// 2. loading key type test
+
+test("key type test: PKCS5 plain private key (RSA)", function() {
+  expect(1);
+  var sJWS = KJUR.jws.JWS.sign(null, '{"alg":"RS256", "cty":"JWT"}', '{"age": 21}', z1PrvPemP5P);
+  equal(sJWS, 'eyJhbGciOiJSUzI1NiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.RXHGIva7QOtcJFH4_FMUpvlaJShrysAZ65yL_St_CVJqqNnSyhxKguld2R3G-rNXutZr8sKuIDEotVnnbz-4OA', "1");
+});
+
+test("key type test: PKCS5 encrypted private key (RSA)", function() {
+  expect(1);
+  var sJWS = KJUR.jws.JWS.sign(null, '{"alg":"RS256", "cty":"JWT"}', '{"age": 21}', z1PrvPemP5E, z1PrvPemP5EPass);
+  equal(sJWS, 'eyJhbGciOiJSUzI1NiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.RXHGIva7QOtcJFH4_FMUpvlaJShrysAZ65yL_St_CVJqqNnSyhxKguld2R3G-rNXutZr8sKuIDEotVnnbz-4OA', "1");
+});
+
+test("key type test: PKCS8 encrypted private key (RSA)", function() {
+  expect(1);
+  var sJWS = KJUR.jws.JWS.sign(null, '{"alg":"RS256", "cty":"JWT"}', '{"age": 21}', z1PrvPemP8E, z1PrvPemP8EPass);
+  equal(sJWS, 'eyJhbGciOiJSUzI1NiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.RXHGIva7QOtcJFH4_FMUpvlaJShrysAZ65yL_St_CVJqqNnSyhxKguld2R3G-rNXutZr8sKuIDEotVnnbz-4OA', "1");
+});
+
+// 2. verify test for algorithm name
+test("verify test for key type PKCS8 public key z1", function() {
+  expect(1);
+  var result = KJUR.jws.JWS.verify('eyJhbGciOiJSUzI1NiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.RXHGIva7QOtcJFH4_FMUpvlaJShrysAZ65yL_St_CVJqqNnSyhxKguld2R3G-rNXutZr8sKuIDEotVnnbz-4OA', z1PubPemP8);
+  equal(result, true, "1");
+});
+
+test("verify test for key type X.509 public key certificate z1", function() {
+  expect(1);
+  var result = KJUR.jws.JWS.verify('eyJhbGciOiJSUzI1NiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.RXHGIva7QOtcJFH4_FMUpvlaJShrysAZ65yL_St_CVJqqNnSyhxKguld2R3G-rNXutZr8sKuIDEotVnnbz-4OA', z1CertPEM);
+  equal(result, true, "1");
+});
+
+});
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+<p>
+<a href="qunit-do-jws-sign.html">sign/verify</a> | 
+<a href="qunit-do-jws-sign-slow.html">sign/verify slow</a> | 
+<a href="qunit-do-jws-intdate.html">IntDate</a> | 
+</p>
+</body>
+</html>
+
