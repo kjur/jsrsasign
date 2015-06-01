@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsjws : pure JavaScript implementation of JSON Web Signature" />
+<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+<title>Online JWT verifyer</title>
+
+<script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/json-sans-eval.js"></script>
+<script language="JavaScript" type="text/javascript" src="jws-3.2.js"></script>
+
+<script language="JavaScript" type="text/javascript">
+function _doVerify() {
+  _doDecode();
+
+  var sJWT = document.form1.jwt1.value;
+  var key = document.form1.key1.value;
+
+  var isValid = false;
+  var acceptField = _getAcceptField();
+  try {
+    isValid = KJUR.jws.JWS.verifyJWT(sJWT, key, acceptField);
+  } catch (ex) {
+    alert("Error: " + ex);
+    isValid = false;
+  }
+
+  if (isValid) {
+    alert("JWT is *Valid*.");
+  } else {
+    alert("JWT is *Invalid*.");
+  }
+}
+
+function _doDecode() {
+  var sJWT = document.form1.jwt1.value;
+
+  var a = sJWT.split(".");
+  var uHeader = b64utos(a[0]);
+  var uClaim = b64utos(a[1]);
+
+  var pHeader = KJUR.jws.JWS.readSafeJSONString(uHeader);
+  var pClaim = KJUR.jws.JWS.readSafeJSONString(uClaim);
+
+  var sHeader = JSON.stringify(pHeader, null, "  ");
+  var sClaim = JSON.stringify(pClaim, null, "  ");
+
+  document.form1.im_head1.value = sHeader;
+  document.form1.im_payload1.value = sClaim;
+}
+
+function _getAcceptField() {
+  var acceptField = {};
+  if (document.form1.alg1.value != '')
+    acceptField.alg = document.form1.alg1.value.split(',');
+  if (document.form1.time1.value != '')
+    acceptField.verifyAt = KJUR.jws.IntDate.get(document.form1.time1.value);
+  if (document.form1.iss1.value != '')
+    acceptField.iss = document.form1.iss1.value.split(',');
+  if (document.form1.sub1.value != '')
+    acceptField.sub = document.form1.sub1.value.split(',');
+  if (document.form1.aud1.value != '')
+    acceptField.aud = document.form1.aud1.value.split(',');
+  return acceptField;
+}
+
+</script>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Online JWT verifyer</h1>
+<h2 id="project_tagline">You can verify JSON Web Token(JWT) on browser.</h2>
+
+<a href="http://kjur.github.io/jsrsasign/index_jws.html">jws TOP</a> |
+<a href="https://github.com/kjur/jsrsasign/releases" target="_blank">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="http://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+<a href="http://kjur.github.io/jsrsasign/index_jwt.html#demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+<!-- now editing -->
+<form name="form1">
+<h4>(Step1) Set JWT(JSON Web Token) to verify.</h4>
+<textarea name="jwt1" cols="65" rows="3">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2p3dC1pZHAuZXhhbXBsZS5jb20iLCJzdWIiOiJtYWlsdG86bWlrZUBleGFtcGxlLmNvbSIsIm5iZiI6OTQ2Njg0ODAwLCJleHAiOjEyNjIzMDQwMDAsImlhdCI6OTQ2Njg0ODAwLCJqdGkiOiJpZDEyMzQ1NiIsInR5cCI6Imh0dHBzOi8vZXhhbXBsZS5jb20vcmVnaXN0ZXIiLCJhdWQiOiJodHRwOi8vZm9vMS5jb20ifQ.mKoQqwytXUtT3Y0Obp-j973pTyOxSZBS7NAaZ3BAyqg</textarea><br/>
+
+<h4>(Step2) Set HMAC Shared Key(in HEX), PEM Certificate or Public Key.</h4>
+<textarea name="key1" cols="65" rows="3">616161</textarea><br/>
+
+<h4>(Step3) Specify Acceptable Token Claims.</h4>
+<p>
+<input name="time1" type="text" size="70" value="20050101000000Z"/>Validation Time (current time will be used if empty)<br/>
+<input name="alg1" type="text" size="70" value="HS256,HS384,HS512"/> Acceptable Algs(alg) (MANDATORY)<br/>
+<input name="iss1" type="text" size="70" value="https://jwt-idp.example.com"/>Acceptable Issuers(iss)<br/>
+<input name="sub1" type="text" size="70" value="mailto:mike@example.com"/>Acceptable Subjects(sub)<br/>
+<input name="aud1" type="text" size="70" value="http://foo1.com"/>Acceptable Audiences(aud)<br/>
+<p>
+<p>
+NOTE: If you have two or more acceptable values commas (',') can be used.<br/>
+</p>
+
+<h4>(Step3) Verify.</h4>
+<p>
+KJUR.jws.JWS.verifyJWT method verifies 'alg', 'iss', 'sub', 'nbf', 'exp', 'iat', 'jti' and 'aud'
+fields and its signature.
+<br/>
+<input type="button" value="Verify it!" onClick="_doVerify()"/>
+or 
+<input type="button" value="Just Decode JWT" onClick="_doDecode()"/>
+</p>
+<h2>Parsed JWT</h2>
+<b>Header</b><br/>
+<textarea name="im_head1" cols="100" rows="5"></textarea><br/>
+<b>Payload</b><br/>
+<textarea name="im_payload1" cols="100" rows="11"></textarea><br/>
+</form>
+<!-- now editing -->
+
+</section>
+</div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsjws maintained by <a href="https://github.com/kjur">@kjur</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2015 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>
+

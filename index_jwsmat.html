@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsjws : pure JavaScript implementation of JSON Web Token(JWT) and JSON Web Signature(JWS)" />
+<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsjws - Algorithm Support Matrix of JWT/JWS implementations</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Algorithm Support Matrix of JWT/JWS Implementations</h1>
+<a href="http://kjur.github.io/jsjws/">TOP</a> | 
+<a href="https://github.com/kjur/jsjws/tags/" target="_blank">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsjws/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="http://kjur.github.io/jsjws/api/" target="_blank">API REFERENCE</a> | 
+<a href="http://kjur.github.io/jsjws/index.html#demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<div><i>LAST UPDATE: 2014-Jun-06</i></div>
+<p>
+There are many implementations of JWT/JWS and
+below shows which algorithms are supported.
+If you know any aother implementation or find a mistake in the table 
+please let me know.
+</p>
+
+<table>
+<tr>
+<th>impl</th>
+<th>language</th>
+<th>HS256</th>
+<th>HS384</th>
+<th>HS512</th>
+<th>RS256</th>
+<th>RS384</th>
+<th>RS512</th>
+<th>ES256</th>
+<th>ES384</th>
+<th>ES512</th>
+<th>PS256</th>
+<th>PS384</th>
+<th>PS512</th>
+<th>none</th>
+<th nowrap>Crypto Lib</th>
+</tr>
+
+<tr>
+<td><a href="http://kjur.github.io/jsjws/">jsjws</a></td>
+<td>JavaScript</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td nowrap>
+<a href="http://www-cs-students.stanford.edu/~tjw/jsbn/">Tom Wu's RSA</a>,
+<a href="http://kjur.github.io/jsrsasign/">jsrsasign</a>,
+<a href="http://code.google.com/p/crypto-js/">CryptoJS</a>,
+<a href="http://crypto.stanford.edu/sjcl/">sjcl</a>
+</td>
+</tr>
+
+<tr>
+<td><a href="https://npmjs.org/package/jsjws">node-jsjws</a></td>
+<td>JavaScript</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td nowrap>
+<a href="http://www-cs-students.stanford.edu/~tjw/jsbn/">Tom Wu's RSA</a>,
+<a href="http://kjur.github.io/jsrsasign/">jsrsasign</a>,
+<a href="http://code.google.com/p/crypto-js/">CryptoJS</a>,
+<a href="http://crypto.stanford.edu/sjcl/">sjcl</a>
+</td>
+</tr>
+
+<tr>
+<td><a href="https://npmjs.org/package/jwt">jwt-node</a></td>
+<td>JavaScript</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td nowrap>
+<a href="http://www-cs-students.stanford.edu/~tjw/jsbn/">Tom Wu's RSA</a>,
+<a href="http://kjur.github.io/jsrsasign/">jsrsasign</a>
+</td>
+</tr>
+
+<tr>
+<td><a href="https://github.com/michaelrhanson/jwt-js">jwt-js</a></td>
+<td>JavaScript</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td nowrap>
+<a href="http://www-cs-students.stanford.edu/~tjw/jsbn/">Tom Wu's RSA</a>,
+<a href="http://kjur.github.io/jsrsasign/">jsrsasign</a>
+</td>
+</tr>
+
+<tr>
+<td><a href="https://github.com/mozilla/jwcrypto">jwcrypto</a></td>
+<td>JavaScript</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td nowrap>
+<a href="http://www-cs-students.stanford.edu/~tjw/jsbn/">Tom Wu's RSA</a>,
+<a href="http://kjur.github.io/jsrsasign/">jsrsasign</a>,
+<a href="http://crypto.stanford.edu/sjcl/">sjcl</a>
+</td>
+</tr>
+
+<tr>
+<td><a href="https://npmjs.org/package/green-jwt">green-jwt</a></td>
+<td>JavaScript</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&#10004;</td>
+<td nowrap>
+<a href="http://nodejs.org/api/crypto.html">node-crypto</a>
+</td>
+</tr>
+
+<tr>
+<td><a href="https://bitbucket.org/b_c/jose4j/wiki/Home">jose.4.j</a></td>
+<td>Java</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td nowrap>
+Default JCE
+</td>
+</tr>
+
+<tr>
+<td><a href="https://bitbucket.org/nimbusds/nimbus-jose-jwt">Nimbus JWT</a></td>
+<td>Java</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td nowrap>
+<a href="http://www.bouncycastle.org/java.html">BouncyCastle</a>
+</td>
+</tr>
+
+<tr>
+<td><a href="https://github.com/nov/json-jwt">json-jwt</a></td>
+<td>Ruby</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td nowrap>Ruby(OpenSSL)</td>
+</tr>
+
+<tr>
+<td><a href="https://pypi.python.org/pypi/jws/0.1.0">jws</a>
+<td>Python</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td nowrap>hashlib, ecdsa, Crypto.PublicKey.RSA module</td>
+</tr>
+
+<tr>
+<td><a href="https://github.com/rohe/pyjwkest">pyjwkest</a></td>
+<td>Python</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&#10004;</td>
+<td nowrap>
+<a href="https://pypi.python.org/pypi/M2Crypto">M2Crypto</a>
+</td>
+</tr>
+
+<tr>
+<td><a href="https://github.com/ritou/php-Akita_JOSE">php Akita JOSE</a></td>
+<td>PHP</td>
+<td>&#10004;</td><!-- HS256 -->
+<td>&#10004;</td><!-- HS384 -->
+<td>&#10004;</td><!-- HS512 -->
+<td>&#10004;</td><!-- RS256 -->
+<td>&#10004;</td><!-- RS384 -->
+<td>&#10004;</td><!-- RS512 -->
+<td>&mdash;</td><!-- ES256 -->
+<td>&mdash;</td><!-- ES384 -->
+<td>&mdash;</td><!-- ES512 -->
+<td>&mdash;</td><!-- PS256 -->
+<td>&mdash;</td><!-- PS384 -->
+<td>&mdash;</td><!-- PS512 -->
+<td>&#10004;</td><!-- none -->
+<td nowrap>?</td><!-- cryptlib -->
+</tr>
+
+<tr>
+<td><a href="https://github.com/xaicron/p5-JSON-WebToken">p5 JSON WebToken</a></td>
+<td>Perl</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td nowrap>Digest::SHA, Crypt::OpenSSL::RSA module</td>
+</tr>
+
+<tr>
+<td><a href="https://github.com/johnsheehan/jwt">jwt for .NET</a></td>
+<td>C#</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td nowrap>CNG,CAPI</td>
+</tr>
+
+<tr>
+<td><a href="https://github.com/pingidentity/mod_auth_openidc/tree/master/src/jose">mod_auth_openidc</a></td>
+<td>C</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&#10004;</td>
+<td>&mdash;</td>
+<td nowrap>OpenSSL</td>
+</tr>
+
+<tr>
+<td><a href="https://github.com/dvsekhvalnov/jose-jwt">JOSE JWT .NET</a></td>
+<td>PHP</td>
+<td>&#10004;</td><!-- HS256 -->
+<td>&#10004;</td><!-- HS384 -->
+<td>&#10004;</td><!-- HS512 -->
+<td>&#10004;</td><!-- RS256 -->
+<td>&#10004;</td><!-- RS384 -->
+<td>&#10004;</td><!-- RS512 -->
+<td>&#10004;</td><!-- ES256 -->
+<td>&#10004;</td><!-- ES384 -->
+<td>&#10004;</td><!-- ES512 -->
+<td>&#10004;</td><!-- PS256 -->
+<td>&#10004;</td><!-- PS384 -->
+<td>&#10004;</td><!-- PS512 -->
+<td>&#10004;</td><!-- none -->
+<td nowrap></td><!-- cryptlib -->
+</tr>
+
+</table>
+
+Back to <a href="index.html">TOP</a>.
+
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2013-2014 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

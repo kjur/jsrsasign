@@ -1,0 +1,125 @@
+<html>
+<head>
+<title>Sample JWS Signing Application</title>
+<script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/json-sans-eval-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="jws-3.2.js"></script>
+
+<style type="text/css">
+TD  {vertical-align: top; border: solid 1px #000000; }
+</style>
+<script language="JavaScript" type="text/javascript">
+function _genJWS() {
+  var sHead = newline_toDos(document.form1.jwshead1.value);
+  var sPayload = newline_toDos(document.form1.jwspayload1.value);
+  var hN = document.form1.pubkey1_n.value;
+  var hE = document.form1.pubkey1_e.value;
+  var hD = document.form1.pubkey1_d.value;
+
+  var jws = new KJUR.jws.JWS();
+  var sResult = null;
+  try {
+    sResult = jws.generateJWSByNED(sHead, sPayload, hN, hE, hD);
+    document.form1.jwsgenerated1.value = sResult;
+  } catch (ex) {
+    alert("Error: " + ex);
+  }
+}
+
+function _checkIfSame() {
+  var jws = new new KJUR.jws.JWS();
+  var sJWS = document.form1.jwsgenerated1.value;
+  var sExpectedEncodedSignatureValue = document.form1.jwsexpectedencsig1.value;
+  var sEncodedSignatureValueOfJWS = null;
+
+  try {
+    sEncodedSignatureValueOfJWS = jws.getEncodedSignatureValueFromJWS(sJWS);
+  } catch (ex) {
+    alert("Error: " + ex);
+    return;
+  }
+
+  //alert(sEncodedSignatureValueOfJWS + "\n" + sExpectedEncodedSignatureValue);
+
+  if (sEncodedSignatureValueOfJWS == sExpectedEncodedSignatureValue) {
+    alert("Success: these are the same.");
+  } else {
+    alert("Fail: these are different.");
+  }
+}
+</script>
+</head>
+
+<body>
+<h1>Sample JWS Signing Application</h1>
+
+<p>
+Default values are cited from <a href="http://tools.ietf.org/html/draft-jones-json-web-signature-04#appendix-A.2" target="_blank">
+"draft-jones-json-web-signature-04 Annex.2"</a>.
+</p>
+
+<form name="form1">
+<table width="100%">
+<tbody>
+<tr><td rowspan="5">Input</td><td>JWS Header</td><td colspan="2">
+<textarea name="jwshead1" rows="3" cols="100">{"alg":"RS256"}</textarea></td></tr>
+<tr><td>JWS Payload</td><td colspan="2">
+<textarea name="jwspayload1" rows="3" cols="100">{"iss":"joe",
+ "exp":1300819380,
+ "http://example.com/is_root":true}</textarea>
+</td></tr>
+<tr><td rowspan="3">Signing Private Key</td><td>Public Key Modulus (N)</td><td>
+<textarea name="pubkey1_n" cols="64" rows="8">a1f8160ae2e3c9b465ce8d2d656263362b927dbe29e1f02477fc1625cc90a136e38bd93497c5b6ea63dd7711e67c7429f956b0fb8a8f089adc4b69893cc1333f53edd019b87784252fec914fe4857769594bea4280d32c0f55bf62944f130396bc6e9bdf6ebdd2bda3678eeca0c668f701b38dbffb38c8342ce2fe6d27fade4a5a4874979dd4b9cf9adec4c75b05852c2c0f5ef8a5c1750392f944e8ed64c110c6b647609aa4783aeb9c6c9ad755313050638b83665c6f6f7a82a396702a1f641b82d3ebf2392219491fb686872c5716f50af8358d9a8b9d17c340728f7f87d89a18d8fcab67ad84590c2ecf759339363c07034d6f606f9e21e05456cae5e9a1</textarea>
+</td></tr>
+<tr><td>Public Exponent (E)</td><td>
+<textarea name="pubkey1_e">010001</textarea><br/>
+</td></tr>
+<tr><td>Private Exponent (D)</td><td>
+<textarea name="pubkey1_d" cols="64" rows="8">12ae71a469cd0a2bc37e526c4500571f1d61751d64e949707b62590f9d0ba57c963c401e3fcf2f2cd3bdec88e503bfc6439b0b28c82f7d3797671f5213eed8c15a25d8d5cea0025ee3ab2e8b7f79216fc63bea562753b40644c6a15127d9b2954540a0bbe1a30556982d4e9fde5f6425f14d4b713441b55dc73b9b4aedcc92ace3927e37f57d0cfd5e7581fa512c8f4961a9eb0b80f8a80746728a55ff46471f3425063b9d53642f5ede1e84d613081afa5c22d051285bd63b943b565d898a05685413e53c3c6c6525ff1fe34e3ddc70f0d56450fda48ba12e104e9deb9fb81881e1c4bdf25d9247f450c865927968e77334f4414f75a750e139546e3a8a739d</textarea><br/>
+</td></tr>
+<tr><td colspan="4">
+<input type="button" value="Generate JWS Signature&darr;" onClick="_genJWS();"/>
+</td></tr>
+<tr><td colspan="2">Output JWS Signature</td><td colspan="2">
+<textarea name="jwsgenerated1" cols="100" rows="6" readonly></textarea>
+</td></tr>
+<tr><td colspan="2">
+<input type="button" value="Check if these encoded signatures are the same? &uarr;&rarr;"
+ onClick="_checkIfSame();"/>
+</td><td colspan="2">
+<textarea name="jwsexpectedencsig1" cols="100" rows="6">cC4hiUPoj9Eetdgtv3hF80EGrhuB__dzERat0XF9g2VtQgr9PJbu3XOiZj5RZmh7AAuHIm4Bh-0Qc_lF5YKt_O8W2Fp5jujGbds9uJdbF9CUAr7t1dnZcAcQjbKBYNX4BAynRFdiuB--f_nZLgrnbyTyWzO75vRK5h6xBArLIARNPvkSjtQBMHlb1L07Qe7K0GarZRmB_eSN9383LcOLn6_dO--xi12jzDwusC-eOkHWEsqtFZESc6BfI7noOPqvhJ1phCnvWh6IeYI2w9QOYEUipUTI8np6LbgGY9Fs98rqVt5AXLIhWkWywlVmtVrBp0igcN_IoypGlUPQGe77Rw</textarea><br/>
+The above expected encoded signature value is cited from 
+<a href="http://tools.ietf.org/html/draft-jones-json-web-signature-04#appendix-A.2" target="_blank">
+"draft-jones-json-web-signature-04 Annex.2"</a>.
+</td></tr>
+</tbody>
+</table>
+
+</form>
+<h3>USAGE</h3>
+<ol>
+<li>Just press "Generate JWS Signature" button.</li>
+<li>You can specify signature algorithm name such es "RS256"(SHA256withRSA) or "RS512"(SHA512withRSA). 
+If it isn't un-supported value, it will raise an error.</li>
+<li>If malformed JWS Head is specified, it will raise an error.</li>
+<li>As for JWS signature verification, please see <a href="sample_verify.html">this sample</a>.</li>
+</ol>
+
+<center>
+Copyright &copy; 2012-2015 Kenji Urushima, All Rights Reserved.
+</center>
+
+<div align="right">
+<a href="index.html">Go back to index</a>
+</div>
+
+<div align="right">
+<a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
+<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
+</a>
+<a href="http://x5.choumusubi.com/bin/gg?069823300">
+<img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
+</a>
+</div>
+</body>
+</html>

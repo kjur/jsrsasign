@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for 'jws.js' utility methods</title>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../ext/json-sans-eval.js"></script>
+<script language="JavaScript" type="text/javascript" src="../jws-3.2.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+test("isSafeJSONString", function() {
+  expect(4);
+  equal(KJUR.jws.JWS.isSafeJSONString("{'aaa':'bbb'}"), 1, "1 - {'aaa':'bbb'}");
+  equal(KJUR.jws.JWS.isSafeJSONString("{aaa:bbb}"), 1, "1 - {aaa:bbb}");
+  equal(KJUR.jws.JWS.isSafeJSONString("1234"), 0, "0 - 1234");
+  equal(KJUR.jws.JWS.isSafeJSONString("'abcd'"), 0, "0 - 'abcd'");
+});
+
+test("readSafeJSONString 1", function() {
+  var a = KJUR.jws.JWS.readSafeJSONString("{\"aaa\":\"bbb\"}");
+  expect(2);
+  equal(typeof a, "object", "object");
+  equal(a.aaa, "bbb", "bbb");
+});
+
+});
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+</body>
+</html>

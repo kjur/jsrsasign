@@ -1,6 +1,31 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.7.2 to 4.8.0 (2015-Jun-01)
+  - Now jsjws JSON Web Signtaure library is merged into
+    jsrsasign.
+  - RFC 7519 JWT JSON Web Token full validation support.
+  - jws 3.2.2 to 3.2.3
+    - JWS.verifyJWT added to do full validation for JWT
+    - JWS.inArray added
+    - JWS.includedArray added
+    - ChangeLogs for jws and jwsjs before jws 3.2.2
+      please see ChangeLog_jws322.txt
+  - asn1x509 1.0.11 to 1.0.12
+    - subjectKeyIdentifier OID duplicate definition fix
+  - JSON Web Token(JWT) full validation demo is available.
+  - tool_jwt.html update to add 'aud' claim
+  - ** 4.8.0 updated files
+    - ChangeLog*.txt
+    - jws-3.2.*
+    - jwsjs-2.0.*
+    - index_jws*.*
+    - sample_jws*
+    - tool_b64u*
+    - tool_{jws,jwt}*.html
+    - ext/json-sans-eval*.js
+    - test/qunit-do-jws*.html
+
 * Changes between 4.7.1 to 4.7.2 (2015-May-18)
   - x509 1.1.4 to 1.1.6
     - add some X.509v3 extension parsing methods.

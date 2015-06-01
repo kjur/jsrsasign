@@ -1,0 +1,137 @@
+<html>
+<head>
+<title>Sample JWS Verification Application</title>
+<script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/json-sans-eval-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="jws-3.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="jwsjs-2.0.js"></script>
+
+<style type="text/css">
+TD  {vertical-align: top; border: solid 1px #000000; }
+</style>
+<script language="JavaScript" type="text/javascript">
+function doVerify() {
+
+  var jwsjs = new KJUR.jws.JWSJS();
+  jwsjs.readJWSJS(document.form1.jwsjs1.value);
+
+  var cert1 = document.form1.cert1.value;
+  var cert2 = document.form1.cert2.value;
+
+  try {
+    var result = jwsjs.verifyWithCerts([cert1, cert2]);
+    if (result == 1) {
+      alert("JWS-JS valid");
+    } else {
+      alert("JWS-JS invalid");
+    }
+  } catch (ex) {
+    alert("JWS-JS invalid: " + ex);
+  }
+}
+</script>
+</head>
+
+<body>
+
+<form name="form1">
+<h1>Sample for JWS-JS with Two Parallel Signature Verification</h1>
+
+<h3>(STEP1) specify JWS-JS and two ceritificate to verifyFirst JWS Signature to add</h3>
+
+<p>
+<b><i>verifying JWS-JS signature (two parallel signature)</i></b><br/>
+<textarea name="jwsjs1" rows="10" cols="65">{
+  "headers": [
+    "eyJhbGciOiJSUzI1NiJ9",
+    "eyJhbGciOiJSUzI1NiJ9"
+  ],
+  "payload": "eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ",
+  "signatures": [
+    "qCW4l5nfdvBt-yl_OiYRFrKkribqbDbmQ9ULyemAgCNXAAr70hN5-IERIefzySpm6Er4UuX_aXcnIXgMvK-hFMFhLOuJckrDEe1Pz-OzqScvGSJUbeOsd_nB9E2BNVYZrgMESQOifiEyUtWdbzCoMgf9nQg2AEWbVSaPImqQkGp-JZsJsvMUC-3A3RcimGIjLv-A8skyhNufASd6DPgk46Ydqt6vi2L6d2InvZSkhTSsYhbfm9TgrKyA906YHE0zE-asuXAzI1ISPxAjlO8ZhekEvg6teaa-1cSQQdOFj-ZWpqVsEI1YXr7zuvugWQhqfBqqPcT6fP5t3ff8FKwV9w",
+    "qCW4l5nfdvBt-yl_OiYRFrKkribqbDbmQ9ULyemAgCNXAAr70hN5-IERIefzySpm6Er4UuX_aXcnIXgMvK-hFMFhLOuJckrDEe1Pz-OzqScvGSJUbeOsd_nB9E2BNVYZrgMESQOifiEyUtWdbzCoMgf9nQg2AEWbVSaPImqQkGp-JZsJsvMUC-3A3RcimGIjLv-A8skyhNufASd6DPgk46Ydqt6vi2L6d2InvZSkhTSsYhbfm9TgrKyA906YHE0zE-asuXAzI1ISPxAjlO8ZhekEvg6teaa-1cSQQdOFj-ZWpqVsEI1YXr7zuvugWQhqfBqqPcT6fP5t3ff8FKwV9w"
+  ]
+}</textarea>
+</p>
+
+<p>
+<b><i>first cerntificate for verification</i></b><br/>
+<textarea name="cert1" cols="65" rows="8">-----BEGIN CERTIFICATE-----
+MIIDMjCCAhqgAwIBAgIJAKMfG/B2MKd5MA0GCSqGSIb3DQEBBQUAMBoxCzAJBgNV
+BAYTAkpQMQswCQYDVQQKEwJ6MzAeFw0xMDA1MzEwNjE4MDhaFw0yMDA1MjgwNjE4
+MDhaMBoxCzAJBgNVBAYTAkpQMQswCQYDVQQKEwJ6MzCCASIwDQYJKoZIhvcNAQEB
+BQADggEPADCCAQoCggEBAOKosPD1rOz6Z5wtgVBKA0XMFxfKavF09f9x3N3LlCcF
+/6LTXn6/waJq93bTNBESzdw63qQl77sxFORXCVQ1Ad7CPqRbY4ywVw/8yZri9wH4
+PdSfae/fg5vuN3EesLissFSceQySHbMBeqEAw84cLvPXdlecdNmlwfS6nV5D8Ijt
+HkebP8R14AEpfoag3VS/YS6Hd4hmvZ1e3BJQm3JfFFVzTyZ0AH2oimsxfoQnZf7M
+qyIdCgmeaKYILEyYm6PKhVwZhuD5E+WG4RxNdcGCiC8GRUr2fYnXUT0CtwrYBYgZ
+121cFObeu7Z/aTIsx4MqYLHwaHqMga6U7nOHoEgqY7ECAwEAAaN7MHkwHQYDVR0O
+BBYEFKO4NcUDh3J5c7XD7j4pVXnzIfALMEoGA1UdIwRDMEGAFKO4NcUDh3J5c7XD
+7j4pVXnzIfALoR6kHDAaMQswCQYDVQQGEwJKUDELMAkGA1UEChMCejOCCQCjHxvw
+djCneTAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQC8JdiwJF22/3nB
+IxJT/gXXN10cub6O+x9q64ls7dpGpBvbi4/lJgZOsZqoJiswU5WOKZ4MTOmMHe4W
+e/MHuhcjsgf9EHHYZQ1reBYi/l9mBBbYFGs0zSv1CyjbwkyF36nr/8sWdYf4ZtXQ
+nzTGvoa6oTOOTmmj3Bwl3CHwonvgAJUCHY/UmWFzH8Sf0dDW7iJBj+ZWfjuSlSQe
+2ninrEpfA4v2V1p3LOH+layZLDMJHkNCq8eoU1MbJi07cHxLWtlwliNOiRboaiYl
+1wtWR7ZY4HZCPeyb0tanf58rBQAXElaCF3fmfHrlpxoJBsQP1NbFrBs2haOIEZ4E
+K3V9/Bpi
+-----END CERTIFICATE-----</textarea>
+</p>
+
+<p>
+<b><i>second cerntificate for verification</i></b><br/>
+<textarea name="cert2" cols="65" rows="8">-----BEGIN CERTIFICATE-----
+MIIDMjCCAhqgAwIBAgIJAKMfG/B2MKd5MA0GCSqGSIb3DQEBBQUAMBoxCzAJBgNV
+BAYTAkpQMQswCQYDVQQKEwJ6MzAeFw0xMDA1MzEwNjE4MDhaFw0yMDA1MjgwNjE4
+MDhaMBoxCzAJBgNVBAYTAkpQMQswCQYDVQQKEwJ6MzCCASIwDQYJKoZIhvcNAQEB
+BQADggEPADCCAQoCggEBAOKosPD1rOz6Z5wtgVBKA0XMFxfKavF09f9x3N3LlCcF
+/6LTXn6/waJq93bTNBESzdw63qQl77sxFORXCVQ1Ad7CPqRbY4ywVw/8yZri9wH4
+PdSfae/fg5vuN3EesLissFSceQySHbMBeqEAw84cLvPXdlecdNmlwfS6nV5D8Ijt
+HkebP8R14AEpfoag3VS/YS6Hd4hmvZ1e3BJQm3JfFFVzTyZ0AH2oimsxfoQnZf7M
+qyIdCgmeaKYILEyYm6PKhVwZhuD5E+WG4RxNdcGCiC8GRUr2fYnXUT0CtwrYBYgZ
+121cFObeu7Z/aTIsx4MqYLHwaHqMga6U7nOHoEgqY7ECAwEAAaN7MHkwHQYDVR0O
+BBYEFKO4NcUDh3J5c7XD7j4pVXnzIfALMEoGA1UdIwRDMEGAFKO4NcUDh3J5c7XD
+7j4pVXnzIfALoR6kHDAaMQswCQYDVQQGEwJKUDELMAkGA1UEChMCejOCCQCjHxvw
+djCneTAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQC8JdiwJF22/3nB
+IxJT/gXXN10cub6O+x9q64ls7dpGpBvbi4/lJgZOsZqoJiswU5WOKZ4MTOmMHe4W
+e/MHuhcjsgf9EHHYZQ1reBYi/l9mBBbYFGs0zSv1CyjbwkyF36nr/8sWdYf4ZtXQ
+nzTGvoa6oTOOTmmj3Bwl3CHwonvgAJUCHY/UmWFzH8Sf0dDW7iJBj+ZWfjuSlSQe
+2ninrEpfA4v2V1p3LOH+layZLDMJHkNCq8eoU1MbJi07cHxLWtlwliNOiRboaiYl
+1wtWR7ZY4HZCPeyb0tanf58rBQAXElaCF3fmfHrlpxoJBsQP1NbFrBs2haOIEZ4E
+K3V9/Bpi
+-----END CERTIFICATE-----</textarea>
+</p>
+
+<h3>(STEP3) Append a signature</h3>
+<input type="button" value="Verify" onClick="doVerify();"/><br/>
+
+</form>
+
+<h3>USAGE</h3>
+<ol>
+<li>Fill JWS signature, modulus and public exponent of a public key if you need.</li>
+<li>Then just press "Verify JWS Signature" button.</li>
+<li>If the signature is valid, you will see a dialog 'JWS signature is '*Valid*'.
+You may see an error dialog if it is malformed signature.</li>
+</li>
+<li>As for JWS signature generation, please see <a href="sample_generate.html">this sample</a>.</li>
+</ol>
+
+<center>
+Copyright &copy; 2012-2015 Kenji Urushima, All Rights Reserved.
+</center>
+
+<div align="right">
+<a href="index.html">Go back to index</a>
+</div>
+
+<div align="right">
+<a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
+<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
+</a>
+<a href="http://x5.choumusubi.com/bin/gg?069823300">
+<img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
+</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="jsjws : pure JavaScript implementation of JSON Web Signature" />
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <title>Online Base64URL decoder</title>
+
+    <script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/ext/jsbn.js"></script>
+    <script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/ext/base64.js"></script>
+    <script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/base64x-1.1.js"></script>
+    <script language="JavaScript" type="text/javascript">
+var _CONV = {
+  "b64utoutf8": b64utoutf8,
+  "b64utohex": b64utohex,
+  "b64utob64": b64utob64,
+  "b64toutf8": b64toutf8,
+  "b64tohex": b64tohex,
+  "hextoutf8": hextoutf8,
+};
+function doDecode() {
+  var s = document.form1.s_in.value;
+  var fname = document.form1.fromto.value;
+  var f = _CONV[fname];
+  if (f != null) {
+    document.form1.s_out.value = f(s);
+  } else {
+    alert("function not supported: " + fname);
+  }
+}
+    </script>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <h1 id="project_title">Online Base64URL decoder</h1>
+          <h2 id="project_tagline">Convert Base64URL, Base64 and Hex online to UTF-8 string.</h2>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<!-- now editing -->
+<form name="form1">
+<h4>(Step1) Fill a string to be decoded.</h4>
+<textarea name="s_in" rows="10" cols="100">eyAibXNnX2VuIjogIkhlbGxvIiwKICAibXNnX2pwIjogIuOBk-OCk-OBq-OBoeOBryIsCiAgIm1zZ19jbiI6ICLkvaDlpb0iLAogICJtc2dfa3IiOiAi7JWI64WV7ZWY7IS47JqUIiwKICAibXNnX3J1IjogItCX0LTRgNCw0LLRgdGC0LLRg9C50YLQtSEiLAogICJtc2dfZGUiOiAiR3LDvMOfIEdvdHQiIH0</textarea>
+
+<h4>(Step2) Convert String.</h4>
+convert from to:
+<select name="fromto">
+<option label="Base64URL to UTF-8" value="b64utoutf8" selected/>Base64URL to UTF-8
+<option label="Base64URL to Hexadecimal" value="b64utohex"/>Base64URL to Hexadecimal
+<option label="Base64URL to Base64" value="b64utob64"/>Base64URL to Base64
+<option label="Base64 to UTF-8" value="b64toutf8"/>Base64 to UTF-8
+<option label="Base64 to Hexadecimal" value="b64tohex"/>Base64 to Hexadecimal
+<option label="Hexadecimal to UTF-8" value="hextoutf8"/>Hexadecimal to UTF-8
+</option>
+<input type="button" value="Decode it" onClick="doDecode();"/><br/>
+
+<hr>
+<h2>Decoded Result</h2>
+
+<textarea name="s_out" cols="100" rows="8"></textarea>
+
+
+</form>
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsjws maintained by <a href="https://github.com/kjur">@kjur</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2012 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>

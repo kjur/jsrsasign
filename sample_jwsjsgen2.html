@@ -1,0 +1,113 @@
+<html>
+<head>
+<title>Sample JWS-JS generator with existing JWS</title>
+<script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/json-sans-eval-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="jws-3.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="jwsjs-2.0.js"></script>
+
+<style type="text/css">
+TD  {vertical-align: top; border: solid 1px #000000; }
+</style>
+<script language="JavaScript" type="text/javascript">
+var jwsjs = null;
+
+function doGenerate() {
+  var sJWS = document.form1.jws1.value;
+
+  jwsjs = new KJUR.jws.JWSJS();
+  jwsjs.initWithJWS(sJWS);
+  alert(JSON.stringify(jwsjs.getJSON(), null, 2));
+}
+
+function addSignature() {
+  if (jwsjs == null) {
+    alert("Please read first signature");
+    return;
+  }
+  var sHeader = newline_toDos(document.form1.jwshead1.value);
+  var sPrvKey = document.form1.pemprvkey1.value;
+  
+  jwsjs.addSignatureByHeaderKey(sHeader, sPrvKey);
+  document.form1.jwsjs1.value = newline_toDos(JSON.stringify(jwsjs.getJSON(), null, 2));
+}
+</script>
+</head>
+
+<body>
+
+<form name="form1">
+<h1>Sample JWS-JS generator with existing JWS</h1>
+
+<h3>(STEP1) specify existing JWS signature to add to JWS-JS first time</h3>
+<textarea name="jws1" rows="8" cols="100">eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.qCW4l5nfdvBt-yl_OiYRFrKkribqbDbmQ9ULyemAgCNXAAr70hN5-IERIefzySpm6Er4UuX_aXcnIXgMvK-hFMFhLOuJckrDEe1Pz-OzqScvGSJUbeOsd_nB9E2BNVYZrgMESQOifiEyUtWdbzCoMgf9nQg2AEWbVSaPImqQkGp-JZsJsvMUC-3A3RcimGIjLv-A8skyhNufASd6DPgk46Ydqt6vi2L6d2InvZSkhTSsYhbfm9TgrKyA906YHE0zE-asuXAzI1ISPxAjlO8ZhekEvg6teaa-1cSQQdOFj-ZWpqVsEI1YXr7zuvugWQhqfBqqPcT6fP5t3ff8FKwV9w</textarea>
+
+<h3>(STEP2) Generate first JWS-JS with existing JWS</h3>
+<input type="button" value="Generate first time" onClick="doGenerate();"/><br/>
+
+<h3>(STEP3) Append signatures</h3>
+
+<p>
+<b><i>adding JWS Header</i></b><br/>
+<textarea name="jwshead1" rows="3" cols="100">{"alg":"RS256"}</textarea><br/>
+</p>
+
+<p>
+<b><i>signing private key</i></b><br/>
+<textarea name="pemprvkey1" rows="10" cols="65">-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEA4qiw8PWs7PpnnC2BUEoDRcwXF8pq8XT1/3Hc3cuUJwX/otNe
+fr/Bomr3dtM0ERLN3DrepCXvuzEU5FcJVDUB3sI+pFtjjLBXD/zJmuL3Afg91J9p
+79+Dm+43cR6wuKywVJx5DJIdswF6oQDDzhwu89d2V5x02aXB9LqdXkPwiO0eR5s/
+xHXgASl+hqDdVL9hLod3iGa9nV7cElCbcl8UVXNPJnQAfaiKazF+hCdl/syrIh0K
+CZ5opggsTJibo8qFXBmG4PkT5YbhHE11wYKILwZFSvZ9iddRPQK3CtgFiBnXbVwU
+5t67tn9pMizHgypgsfBoeoyBrpTuc4egSCpjsQIDAQABAoIBAF2sU/wxvHbwAhQE
+pnXVMMcO0thtOodxzBz3JM2xThhWnVDgxCPkAhWq2X0NSm5n9BY5ajwyxYH6heTc
+p6lagtxaMONiNaE2W7TqxzMw696vhnYyL+kH2e9+owEoKucXz4QYatqsJIQPb2vM
+0h+DfFAgUvNgYNZ2b9NBsLn9oBImDfYueHyqpRGTdX5urEVtmQz029zaC+jFc7BK
+Y6qBRSTwFwnVgE+Td8UgdrO3JQ/0Iwk/lkphnhls/BYvdNC5O8oEppozNVmMV8jm
+61K+agOh1KD8ky60iQFjo3VdFpUjI+W0+sYiYpDb4+Z9OLOTK/5J2EBAGim9siyd
+gHspx+UCgYEA9+t5Rs95hG9Q+6mXn95hYduPoxdFCIFhbGl6GBIGLyHUdD8vmgwP
+dHo7Y0hnK0NyXfue0iFBYD94/fuUe7GvcXib93heJlvPx9ykEZoq9DZnhPFBlgIE
+SGeD8hClazcr9O99Fmg3e7NyTuVou+CIublWWlFyN36iamP3a08pChsCgYEA6gvT
+pi/ZkYI1JZqxXsTwzAsR1VBwYslZoicwGNjRzhvuqmqwNvK17dnSQfIrsC2VnG2E
+UbE5EIAWbibdoL4hWUpPx5Tl096OjC3qBR6okAxbVtVEY7Rmv7J9RwriXhtD1DYp
+eBvo3eQonApFkfI8Lr2kuKGIgwzkZ72QLXsKJiMCgYBZXBCci0/bglwIObqjLv6e
+zQra2BpT1H6PGv2dC3IbLvBq7hN0TQCNFTmusXwuReNFKNq4FrB/xqEPusxsQUFh
+fv2Il2QoI1OjUE364jy1RZ7Odj8TmKp+hoEykPluybYYVPIbT3kgJy/+bAXyIh5m
+Av2zFEQ86HIWMu4NSb0bHQKBgETEZNOXi52tXGBIK4Vk6DuLpRnAIMVl0+hJC2DB
+lCOzIVUBM/VxKvNP5O9rcFq7ihIEO7SlFdc7S1viH4xzUOkjZH2Hyl+OLOQTOYd3
+kp+AgfXpg8an4ujAUP7mu8xaxns7zsNzr+BCgYwXmIlhWz2Aiz2UeL/IsfOpRwuV
+801xAoGADQB84MJe/X8xSUZQzpn2KP/yZ7C517qDJjComGe3mjVxTIT5XAaa1tLy
+T4mvpSeYDJkBD8Hxr3fB1YNDWNbgwrNPGZnUTBNhxIsNLPnV8WySiW57LqVXlggH
+vjFmyDdU5Hh6ma4q+BeAqbXZSJz0cfkBcBLCSe2gIJ/QJ3YJVQI=
+-----END RSA PRIVATE KEY-----</textarea>
+<br/>
+<input type="button" value="Append Signature" onClick="addSignature();"/><br/>
+</p>
+<p><i>
+NOTE: You can modify 'JWS Header' and 'signing private key' and push 'Add Signature' one or
+more time to generate multiple parallel JWS-JS signature.
+</i></p>
+
+<h2>Result of JWS-JS</h2>
+<textarea name="jwsjs1" rows="100" cols="65"></textarea>
+</form>
+
+<center>
+Copyright &copy; 2012-2015 Kenji Urushima, All Rights Reserved.
+</center>
+
+<div align="right">
+<a href="index.html">Go back to index</a>
+</div>
+
+<div align="right">
+<a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
+<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
+</a>
+<a href="http://x5.choumusubi.com/bin/gg?069823300">
+<img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
+</a>
+</div>
+</body>
+</html>
