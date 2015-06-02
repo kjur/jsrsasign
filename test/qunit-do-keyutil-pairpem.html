@@ -15,18 +15,6 @@
 
 $(document).ready(function(){
 
-test("generate EC", function() {
-  var curve = "secp256r1";
-  var keypair = KEYUTIL.generateKeypair("EC", curve);
-
-  expect(4);
-  equal(keypair.prvKeyObj.curveName, curve, "prv curve " + curve);
-  equal(keypair.prvKeyObj.prvKeyHex !== undefined, true, "prv keyhex not undefined:" + keypair.prvKeyObj.prvKeyHex);
-
-  equal(keypair.pubKeyObj.curveName, curve, "pub curve " + curve);
-  equal(keypair.pubKeyObj.pubKeyHex !== undefined, true, "pub keyhex undefined:" + keypair.pubKeyObj.pubKeyHex);
-});
-
 test("generateKeypair(RSA,1024) getPEM(privateKey)", function() {
   var kp = KEYUTIL.generateKeypair("RSA", 1024);
   equal(KEYUTIL.getPEM(kp.prvKeyObj, "PKCS1PRV").substr(0, 34), "-----BEGIN RSA PRIVATE KEY-----\r\nM", "");
