@@ -385,6 +385,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.crypto.Util.html">KJUR.crypto.Util</a></li>
 	
+	<li><a href="../symbols/KJUR.jws.html">KJUR.jws</a></li>
+	
 	<li><a href="../symbols/KJUR.jws.IntDate.html">KJUR.jws.IntDate</a></li>
 	
 	<li><a href="../symbols/KJUR.jws.JWS.html">KJUR.jws.JWS</a></li>
@@ -776,7 +778,7 @@ Currently this class supports following named curves and their aliases.
 					
 					
 					
-					<pre class="code">var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+					<pre class="code">var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
 var keypair = ec.generateKeyPairHex();
 var pubhex = keypair.ecpubhex; // hexadecimal string of EC private key (=d)
 var prvhex = keypair.ecprvhex; // hexadecimal string of EC public key</pre>
@@ -876,7 +878,7 @@ var prvhex = keypair.ecprvhex; // hexadecimal string of EC public key</pre>
 					
 					
 					
-					<pre class="code">var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+					<pre class="code">var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
 var sig = ec.parseSigHex('30...');
 var biR = sig.r; // BigInteger object for 'r' field of signature.
 var biS = sig.s; // BigInteger object for 's' field of signature.</pre>
@@ -932,7 +934,7 @@ var biS = sig.s; // BigInteger object for 's' field of signature.</pre>
 					
 					
 					
-					<pre class="code">var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+					<pre class="code">var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
 var sig = ec.parseSigHexInHexRS('30...');
 var hR = sig.r; // hexadecimal string for 'r' field of signature.
 var hS = sig.s; // hexadecimal string for 's' field of signature.</pre>
@@ -988,7 +990,7 @@ var hS = sig.s; // hexadecimal string for 's' field of signature.</pre>
 					
 					
 					
-					<pre class="code">var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+					<pre class="code">var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
 var sigValue = ec.signHex(hash, prvKey);</pre>
 					
 					
@@ -1048,7 +1050,7 @@ var sigValue = ec.signHex(hash, prvKey);</pre>
 					
 					
 					
-					<pre class="code">var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+					<pre class="code">var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
 var result = ec.verifyHex(msgHashHex, sigHex, pubkeyHex);</pre>
 					
 					

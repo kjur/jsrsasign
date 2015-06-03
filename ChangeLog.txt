@@ -1,6 +1,19 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.8.0 to 4.8.1
+  - keyutil 1.0.7 to 1.0.8
+    - RFC 7517 JSON Web Key(JWK) support 
+      for RSA/ECC private/public key added in KEYUTIL.getKey method
+  - ** 4.8.1 updated files
+    - ChangeLog.txt
+    - ecdsa-modified-1.0*.js (jsdoc fix)
+    - keyutil-1.0*.js
+    - base64x-1.1.js (b64utohex zero padding added)
+    - test/qunit-do-base64x.html
+    - test/qunit-do-keyutil-jwk.html
+    - test/qunit-do-keyutil-pairpem.html
+
 * Changes between 4.7.2 to 4.8.0 (2015-Jun-01)
   - Now jsjws JSON Web Signtaure library is merged into
     jsrsasign.

@@ -114,7 +114,7 @@ KJUR.crypto.ECDSA = function(params) {
      * @return {Array} associative array of hexadecimal string of private and public key
      * @since ecdsa-modified 1.0.1
      * @example
-     * var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+     * var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
      * var keypair = ec.generateKeyPairHex();
      * var pubhex = keypair.ecpubhex; // hexadecimal string of EC private key (=d)
      * var prvhex = keypair.ecprvhex; // hexadecimal string of EC public key
@@ -151,7 +151,7 @@ KJUR.crypto.ECDSA = function(params) {
      * @return {String} hexadecimal string of ECDSA signature
      * @since ecdsa-modified 1.0.1
      * @example
-     * var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+     * var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
      * var sigValue = ec.signHex(hash, prvKey);
      */
     this.signHex = function (hashHex, privHex) {
@@ -202,7 +202,7 @@ KJUR.crypto.ECDSA = function(params) {
      * @return {Boolean} true if the signature is valid, otherwise false
      * @since ecdsa-modified 1.0.1
      * @example
-     * var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+     * var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
      * var result = ec.verifyHex(msgHashHex, sigHex, pubkeyHex);
      */
     this.verifyHex = function(hashHex, sigHex, pubkeyHex) {
@@ -469,7 +469,7 @@ KJUR.crypto.ECDSA = function(params) {
  * @return {Array} associative array of signature field r and s of BigInteger
  * @since ecdsa-modified 1.0.1
  * @example
- * var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+ * var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
  * var sig = ec.parseSigHex('30...');
  * var biR = sig.r; // BigInteger object for 'r' field of signature.
  * var biS = sig.s; // BigInteger object for 's' field of signature.
@@ -492,7 +492,7 @@ KJUR.crypto.ECDSA.parseSigHex = function(sigHex) {
  * @return {Array} associative array of signature field r and s in hexadecimal
  * @since ecdsa-modified 1.0.3
  * @example
- * var ec = KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+ * var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
  * var sig = ec.parseSigHexInHexRS('30...');
  * var hR = sig.r; // hexadecimal string for 'r' field of signature.
  * var hS = sig.s; // hexadecimal string for 's' field of signature.

@@ -24,6 +24,21 @@
  */
 
 if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
+
+/**
+ * kjur's JSON Web Signature/Token(JWS/JWT) library name space
+ * <p>
+ * This namespace privides following JWS/JWS related classes.
+ * <ul>
+ * <li>{@link KJUR.jws.JWS} - JSON Web Signature/Token(JWS/JWT) class</li>
+ * <li>{@link KJUR.jws.JWSJS} - JWS JSON Serialization(JWSJS) class</li>
+ * <li>{@link KJUR.jws.IntDate} - UNIX origin time utility class</li>
+ * </ul>
+ * NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
+ * </p>
+ * @name KJUR.jws
+ * @namespace
+ */
 if (typeof KJUR.jws == "undefined" || !KJUR.jws) KJUR.jws = {};
 
 /**

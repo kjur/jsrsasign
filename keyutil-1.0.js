@@ -1,9 +1,9 @@
-/*! keyutil-1.0.7.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! keyutil-1.0.8.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
  *
- * Copyright (c) 2013-2014 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2015 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version keyutil 1.0.7 (2014-May-17)
+ * @version keyutil 1.0.8 (2015-Jul-02)
  * @since jsrsasign 4.1.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1243,7 +1243,9 @@ var KEYUTIL = function() {
  * <ul>
  * <li>Encrypted PKCS#8 only supports PBKDF2/HmacSHA1/3DES</li>
  * <li>Encrypted PKCS#5 supports DES-CBC, DES-EDE3-CBC, AES-{128,192.256}-CBC</li>
+ * <li>JWT plain RSA/ECC private/public key</li>
  * </ul>
+ * NOTE: <a href="https://tools.ietf.org/html/rfc7517">RFC 7517 JSON Web Key(JWK)</a> support for RSA/ECC private/public key from jsrsasign 4.8.1.
  */
 KEYUTIL.getKey = function(param, passcode, hextype) {
     // 1. by key object
@@ -1259,10 +1261,16 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     if (param.xy !== undefined && param.curve !== undefined) {
         return new KJUR.crypto.ECDSA({prv: param.xy, curve: param.curve});
     }
-    // 2.2. RSA private key
-    if (param.n !== undefined && param.e !== undefined && param.d !== undefined &&
-        param.p !== undefined && param.q !== undefined &&
-        param.dp !== undefined && param.dq !== undefined && param.co !== undefined) {
+    // 2.2. bare RSA private key
+    if (param.n !== undefined &&
+	param.e !== undefined &&
+	param.d !== undefined &&
+        param.p !== undefined &&
+	param.q !== undefined &&
+        param.dp !== undefined &&
+	param.dq !== undefined &&
+	param.co !== undefined &&
+        param.qi === undefined) {
         var key = new RSAKey();
         key.setPrivateEx(param.n, param.e, param.d, param.p, param.q,
                          param.dp, param.dq, param.co);
@@ -1280,8 +1288,8 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     if (param.d !== undefined && param.curve !== undefined) {
         return new KJUR.crypto.ECDSA({pub: param.d, curve: param.curve});
     }
-    // 2.5. RSA private key
-    if (param.n !== undefined && param.e) {
+    // 2.5. bare RSA public key
+    if (param.kty === undefined && param.n !== undefined && param.e) {
         var key = new RSAKey();
         key.setPublic(param.n, param.e);
         return key;
@@ -1294,6 +1302,66 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
         return key;
     }
 
+    // 2.7. JWK RSA public key
+    if (param.kty === "RSA" &&
+	param.n !== undefined &&
+	param.e !== undefined &&
+	param.d === undefined) {
+	var key = new RSAKey();
+	key.setPublic(b64utohex(param.n), b64utohex(param.e));
+	return key;
+    }
+
+    // 2.8. JWK RSA private key
+    if (param.kty === "RSA" &&
+	param.n !== undefined &&
+	param.e !== undefined &&
+	param.d !== undefined &&
+	param.p !== undefined &&
+	param.q !== undefined &&
+	param.dp !== undefined &&
+	param.dq !== undefined &&
+	param.qi !== undefined) {
+	var key = new RSAKey();
+        key.setPrivateEx(b64utohex(param.n),
+			 b64utohex(param.e),
+			 b64utohex(param.d),
+			 b64utohex(param.p),
+			 b64utohex(param.q),
+                         b64utohex(param.dp),
+			 b64utohex(param.dq),
+			 b64utohex(param.qi));
+	return key;
+    }
+
+    // 2.9. JWK ECC public key
+    if (param.kty === "EC" &&
+	param.crv !== undefined &&
+	param.x !== undefined &&
+	param.y !== undefined &&
+        param.d === undefined) {
+	var ec = new KJUR.crypto.ECDSA({"curve": param.crv});
+	var charlen = ec.ecparams.keylen / 4;
+        var hX   = ("0000000000" + b64utohex(param.x)).slice(- charlen);
+        var hY   = ("0000000000" + b64utohex(param.y)).slice(- charlen);
+        var hPub = "04" + hX + hY;
+	ec.setPublicKeyHex(hPub);
+	return ec;
+    }
+
+    // 2.10. JWK ECC private key
+    if (param.kty === "EC" &&
+	param.crv !== undefined &&
+	param.x !== undefined &&
+	param.y !== undefined &&
+        param.d !== undefined) {
+	var ec = new KJUR.crypto.ECDSA({"curve": param.crv});
+	var charlen = ec.ecparams.keylen / 4;
+        var hPrv = ("0000000000" + b64utohex(param.d)).slice(- charlen);
+	ec.setPrivateKeyHex(hPrv);
+	return ec;
+    }
+    
     // 3. by cert
     if (param.indexOf("-END CERTIFICATE-", 0) != -1 ||
         param.indexOf("-END X509 CERTIFICATE-", 0) != -1 ||
