@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for KEYUTIL generateKeypair and getPEM 'keyutil.js'</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen"/>
+<script language="JavaScript" type="text/javascript" src="../jsrsasign-latest-all-min.js"></script>
+
+
+<script type="text/javascript">
+<!--
+
+$(document).ready(function(){
+
+test("generateKeypair(RSA,1024) getPEM(privateKey)", function() {
+  var kp = KEYUTIL.generateKeypair("RSA", 1024);
+  equal(KEYUTIL.getPEM(kp.prvKeyObj, "PKCS1PRV").substr(0, 34), "-----BEGIN RSA PRIVATE KEY-----\r\nM", "");
+});
+
+test("generateKeypair(RSA,1024) getPEM(publicKey)", function() {
+  var kp = KEYUTIL.generateKeypair("RSA", 1024);
+  equal(KEYUTIL.getPEM(kp.pubKeyObj, "PKCS8PUB").substr(0, 29), "-----BEGIN PUBLIC KEY-----\r\nM", "");
+});
+
+test("generateKeypair(EC,secp256r1) getPEM(privateKey)", function() {
+  var kp = KEYUTIL.generateKeypair("EC", "secp256r1");
+  equal(KEYUTIL.getPEM(kp.prvKeyObj, "PKCS8PRV").substr(0, 30), "-----BEGIN PRIVATE KEY-----\r\nM", "");
+});
+
+test("generateKeypair(EC,secp256r1) getPEM(publicKey)", function() {
+  var kp = KEYUTIL.generateKeypair("EC", "secp256r1");
+  equal(KEYUTIL.getPEM(kp.pubKeyObj, "PKCS8PUB").substr(0, 29), "-----BEGIN PUBLIC KEY-----\r\nM", "");
+});
+
+});
+-->
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+<a href="index.html">TEST INDEX</a> | 
+QUnit for 
+<a href="qunit-do-keyutil.html">keyutil</a> | 
+<a href="qunit-do-keyutil-eprv.html">keyutil-eprv</a> | 
+<a href="qunit-do-keyutil-pub.html">keyutil-pub</a> | 
+<a href="qunit-do-keyutil-pub.html">keyutil-gen</a> | 
+</body>
+</html>
+
+

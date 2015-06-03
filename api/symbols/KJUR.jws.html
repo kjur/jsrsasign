@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.asn1.DERBitString</title>
+		<title>jsrsasign 4.0.0 JavaScript API Reference - KJUR.jws</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -408,27 +408,25 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.DERBitString
+				Namespace KJUR.jws
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
-				<br />Extends
-					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
-				class for ASN.1 DER encoded BitString primitive
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1-1.0.js.html">asn1-1.0.js</a>.
+				
+					<br /><i>Defined in: </i> <a href="../symbols/src/jws-3.2.js.html">jws-3.2.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.DERBitString.">
-				<caption>Class Summary</caption>
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.jws.">
+				<caption>Namespace Summary</caption>
 				<thead>
 					<tr>
 						<th scope="col">Constructor Attributes</th>
@@ -440,14 +438,9 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.DERBitString.html#constructor">KJUR.asn1.DERBitString</a></b>()
+								<b><a href="../symbols/KJUR.jws.html#constructor">KJUR.jws</a></b>
 							</div>
-							<div class="description">class for ASN.1 DER encoded BitString primitive
-<br/>
-As for argument 'params' for constructor, you can specify one of
-following properties:
-<ul>
-<li>bin - specify binary string (ex.</div>
+							<div class="description">kjur's JSON Web Signature/Token(JWS/JWT) library name space<p>This namespace privides following JWS/JWS related classes.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -456,88 +449,8 @@ following properties:
 
 <!-- ============================== properties summary ===================== -->
 			
-				
-				
-				
-				
-				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
-				</dl>
-				
-			
 
 <!-- ============================== methods summary ======================== -->
-			
-				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.DERBitString.">
-					<caption>Method Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DERBitString.<b><a href="../symbols/KJUR.asn1.DERBitString.html#.newFalseArray">newFalseArray</a></b>(nLength)
-								</div>
-								<div class="description">generate an array of false with specified length
-This static method may be useful to initialize boolean array.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DERBitString.<b><a href="../symbols/KJUR.asn1.DERBitString.html#.setByBinaryString">setByBinaryString</a></b>(binaryString)
-								</div>
-								<div class="description">set ASN.1 DER BitString by binary string
-Its unused bits will be calculated automatically by length of 
-'binaryValue'.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DERBitString.<b><a href="../symbols/KJUR.asn1.DERBitString.html#.setByBooleanArray">setByBooleanArray</a></b>(booleanArray)
-								</div>
-								<div class="description">set ASN.1 TLV value(V) by an array of boolean
-NOTE: Trailing falses will be ignored.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DERBitString.<b><a href="../symbols/KJUR.asn1.DERBitString.html#.setHexValueIncludingUnusedBits">setHexValueIncludingUnusedBits</a></b>(newHexStringIncludingUnusedBits)
-								</div>
-								<div class="description">set ASN.1 value(V) by a hexadecimal string including unused bits</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DERBitString.<b><a href="../symbols/KJUR.asn1.DERBitString.html#.setUnusedBitsAndHexValue">setUnusedBitsAndHexValue</a></b>(unusedBits, hValue)
-								</div>
-								<div class="description">set ASN.1 value(V) by unused bit and hexadecimal string of value</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
-				
-				
-				<dl class="inheritsList">
-				
-				</dl>
-				
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -546,24 +459,15 @@ NOTE: Trailing falses will be ignored.</div>
 			
 			<div class="details"><a name="constructor"> </a>
 				<div class="sectionTitle">
-					Class Detail
+					Namespace Detail
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.DERBitString</b>()
+						<b>KJUR.jws</b>
 				</div>
 				
 				<div class="description">
-					class for ASN.1 DER encoded BitString primitive
-<br/>
-As for argument 'params' for constructor, you can specify one of
-following properties:
-<ul>
-<li>bin - specify binary string (ex. '10111')</li>
-<li>array - specify array of boolean (ex. [true,false,true,true])</li>
-<li>hex - specify hexadecimal string of ASN.1 value(V) including unused bits</li>
-</ul>
-NOTE: 'params' can be omitted.
+					kjur's JSON Web Signature/Token(JWS/JWT) library name space<p>This namespace privides following JWS/JWS related classes.<ul><li><a href="../symbols/KJUR.jws.JWS.html">KJUR.jws.JWS</a> - JSON Web Signature/Token(JWS/JWT) class</li><li><a href="../symbols/KJUR.jws.JWSJS.html">KJUR.jws.JWSJS</a> - JWS JSON Serialization(JWSJS) class</li><li><a href="../symbols/KJUR.jws.IntDate.html">KJUR.jws.IntDate</a> - UNIX origin time utility class</li></ul>NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.</p>
 					
 				</div>
 				
@@ -585,209 +489,6 @@ NOTE: 'params' can be omitted.
 			
 
 <!-- ============================== method details ========================= -->		
-			
-				<div class="sectionTitle">
-					Method Detail
-				</div>
-				
-					<a name=".newFalseArray"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{array}</span>
-					<span class="light">KJUR.asn1.DERBitString.</span><b>newFalseArray</b>(nLength)
-					
-					</div>
-					<div class="description">
-						generate an array of false with specified length
-This static method may be useful to initialize boolean array.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Integer}</span> <b>nLength</b>
-									
-								</dt>
-								<dd>length of array to generate</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{array}</span> array of boolean faluse</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".setByBinaryString"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.DERBitString.</span><b>setByBinaryString</b>(binaryString)
-					
-					</div>
-					<div class="description">
-						set ASN.1 DER BitString by binary string
-Its unused bits will be calculated automatically by length of 
-'binaryValue'. <br/>
-NOTE: Trailing zeros '0' will be ignored.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>binaryString</b>
-									
-								</dt>
-								<dd>binary value string (i.e. '10111')</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".setByBooleanArray"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.DERBitString.</span><b>setByBooleanArray</b>(booleanArray)
-					
-					</div>
-					<div class="description">
-						set ASN.1 TLV value(V) by an array of boolean
-NOTE: Trailing falses will be ignored.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{array}</span> <b>booleanArray</b>
-									
-								</dt>
-								<dd>array of boolean (ex. [true, false, true])</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".setHexValueIncludingUnusedBits"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.DERBitString.</span><b>setHexValueIncludingUnusedBits</b>(newHexStringIncludingUnusedBits)
-					
-					</div>
-					<div class="description">
-						set ASN.1 value(V) by a hexadecimal string including unused bits
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>newHexStringIncludingUnusedBits</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".setUnusedBitsAndHexValue"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.DERBitString.</span><b>setUnusedBitsAndHexValue</b>(unusedBits, hValue)
-					
-					</div>
-					<div class="description">
-						set ASN.1 value(V) by unused bit and hexadecimal string of value
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Integer}</span> <b>unusedBits</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hValue</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					
-				
 			
 			
 <!-- ============================== event details ========================= -->		

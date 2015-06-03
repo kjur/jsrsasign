@@ -27,6 +27,12 @@ test("rstrtohex", function() {
   equal(rstrtohex("\x00\x01\x02\x03"), "00010203", "00010203");
 });
 
+test("hextob64u", function() {
+  equal(hextob64u("10001"), "AQAB", "10001");
+  equal(hextob64u("010001"), "AQAB", "010001");
+});
+
+
 });
 </script>
   

@@ -1,11 +1,11 @@
-/*! base64x-1.1.3 (c) 2012-2014 Kenji Urushima | kjur.github.com/jsjws/license
+/*! base64x-1.1.4 (c) 2012-2015 Kenji Urushima | kjur.github.com/jsjws/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * version: 1.1.3 (2014 May 25)
+ * version: 1.1.4 (2015 Jul 3)
  *
- * Copyright (c) 2012-2014 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2012-2015 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsjws/license/
@@ -15,6 +15,15 @@
  *
  * DEPENDS ON:
  *   - base64.js - Tom Wu's Base64 library
+ */
+
+/**
+ * @fileOverview
+ * @name base64x-1.1.js
+ * @author Kenji Urushima kenji.urushima@gmail.com
+ * @version asn1 1.1.4 (2015-Jul-3)
+ * @since jsrsasign 2.1
+ * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
 /**
@@ -163,8 +172,13 @@ function b64utob64(s) {
  * convert a hexadecimal string to a Base64URL encoded string.<br/>
  * @param {String} s hexadecimal string
  * @return {String} Base64URL encoded string
+ * @description
+ * convert a hexadecimal string to a Base64URL encoded string.
+ * NOTE: If leading "0" is omitted and odd number length for
+ * hexadecimal leading "0" is automatically added.
  */
 function hextob64u(s) {
+    if (s.length % 2 == 1) s = "0" + s;
     return b64tob64u(hex2b64(s));
 }
 
