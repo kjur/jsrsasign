@@ -4,7 +4,7 @@
 <head>
 <meta charset='utf-8' />
 <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-<meta name="description" content="opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, CMS SignedData, TimeStamp and CAdES" />
+<meta name="description" content="opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, CMS SignedData, TimeStamp and CAdES and JSON Web Signature(JWS)/Token(JWT)/Key(JWK)" />
 <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 <title>jsrsasign - cryptography library in JavaScript</title>
 </head>
@@ -17,7 +17,7 @@
 <a id="forkme_banner" href="https://github.com/kjur/jsrsasign">Fork Me on GitHub</a>
 
 <h1 id="project_title">jsrsasign</h1>
-<h2 id="project_tagline">opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, CMS SignedData, TimeStamp, CAdES and JSON Web Signature/Token</h2>
+<h2 id="project_tagline">opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, CMS SignedData, TimeStamp, CAdES and JSON Web Signature(JWS)/Token(JWT)/Key(JWK)</h2>
 
 <section id="downloads">
 <a class="zip_download_link" href="https://github.com/kjur/jsrsasign/zipball/master">Download this project as a .zip file</a>
@@ -52,16 +52,26 @@ The 'jsrsasign' library provides following features in pure JavaScript.
 <li><a href="api/symbols/ASN1HEX.html">simple ASN.1 data parser</a></li>
 <li><a href="api/symbols/X509.html">simple X.509 certificate parser/reader</a></li>
 <li><a href="api/symbols/KEYUTIL.html">KEYUTIL</a> - loading RSA/EC/DSA private/public key from PEM formatted PKCS#1/5/8 and X.509 certificate</li>
-<li><a href="api/symbols/KJUR.jws.JWS.html">JSON Web Siguature and JSON Web Token</a></li>
+<li><a href="api/symbols/KJUR.jws.JWS.html">JSON Web Siguature(JWS)</a>,
+<a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.jws.JWS.html#.verifyJWT">JSON Web Token(JWT)</a> and
+<a href="https://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html#.getKey">JSON Web Key(JWK)</a></li>
 <li>Supported formats and algorithms are listed <a href="index_alg.html">here</a>.</li>
 
 </ul>
 
 <h3>NEWS</h3>
 <dl>
+<dt><b>2015-Jun-06</b>:
+<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/4.8.2">Release 4.8.2</a> is now available.
+Small fix in 
+<a href="https://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> and
+<a href="https://www.npmjs.com/package/jsrsasign">npm jsrsasign</a> officially released.  
+
+
 <dt><b>2015-Jun-03</b>:
 <dd><a href="https://github.com/kjur/jsrsasign/releases/tag/4.8.1">Release 4.8.1</a> is now available. 
-<a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.jws.KEYUTIL.html#.getKey">KEYUTIL.getKey method</a> now supports RFC 7517 JSON Web Key(JWK) loading for RSA/ECC private/public key.
+<a href="https://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey method</a>
+now supports RFC 7517 JSON Web Key(JWK) loading for RSA/ECC private/public key.
 
 <dt><b>2015-Jun-01</b>:
 <dd><a href="https://github.com/kjur/jsrsasign/releases/tag/4.8.0">Release 4.8.0</a> is now available. Now <a href="http://kjur.github.io/jsjws">jsjws</a> is

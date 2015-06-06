@@ -1,4 +1,4 @@
-/*! keyutil-1.0.8.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! keyutil-1.0.9.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version keyutil 1.0.8 (2015-Jul-02)
+ * @version keyutil 1.0.9 (2015-Jul-04)
  * @since jsrsasign 4.1.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1258,8 +1258,8 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 
     // 2. by key spec
     // 2.1. ECC private key
-    if (param.xy !== undefined && param.curve !== undefined) {
-        return new KJUR.crypto.ECDSA({prv: param.xy, curve: param.curve});
+    if (param.d !== undefined && param.curve !== undefined) {
+        return new KJUR.crypto.ECDSA({prv: param.d, curve: param.curve});
     }
     // 2.2. bare RSA private key
     if (param.n !== undefined &&
@@ -1285,8 +1285,8 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     }
 
     // 2.4. ECC public key
-    if (param.d !== undefined && param.curve !== undefined) {
-        return new KJUR.crypto.ECDSA({pub: param.d, curve: param.curve});
+    if (param.xy !== undefined && param.d === undefined && param.curve !== undefined) {
+        return new KJUR.crypto.ECDSA({pub: param.xy, curve: param.curve});
     }
     // 2.5. bare RSA public key
     if (param.kty === undefined && param.n !== undefined && param.e) {

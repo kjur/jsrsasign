@@ -8,6 +8,7 @@ exports.MessageDigest = KJUR.crypto.MessageDigest;
 exports.Mac = KJUR.crypto.Mac;
 exports.KEYUTIL = KEYUTIL;
 exports.ASN1HEX = ASN1HEX;
+exports.X509 = X509;
 
 // ext/base64.js
 exports.b64tohex = b64tohex;
