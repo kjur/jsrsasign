@@ -1,6 +1,6 @@
 {
   "name": "jsrsasign",
-  "version": "4.8.2.1",
+  "version": "4.8.2",
   "description": "opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, CMS SignedData, TimeStamp and CAdES and JSON Web Signature(JWS)/Token(JWT)/Key(JWK). This node package based on jsrsasign 4.8.2",
   "main": "lib/jsrsasign.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "JSON Web Token", "JWT",
     "JSON Web Signature", "JWS",
     "JSON Web Key", "JWK", 
-    "JOSE", "JWA",
+    "JOSE", "JWA"
   ],
   "author": "Kenji Urushima",
   "licenses": [
