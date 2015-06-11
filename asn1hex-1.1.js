@@ -1,9 +1,9 @@
-/*! asn1hex-1.1.5.js (c) 2012-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1hex-1.1.6.js (c) 2012-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
  *
- * Copyright (c) 2010-2014 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2015 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license/
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1hex 1.1.5 (2014-May-25)
+ * @version asn1hex 1.1.6 (2015-Jun-11)
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -337,3 +337,230 @@ ASN1HEX.hextooidstr = function(hex) {
     return s;
 };
 
+/**
+ * get string of simple ASN.1 dump from hexadecimal ASN.1 data
+ * @name dump
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} hex hexadecmal string of ASN.1 data
+ * @param {Array} associative array of flags for dump (OPTION)
+ * @param {Number} idx string index for starting dump (OPTION)
+ * @param {String} indent string (OPTION)
+ * @return {String} string of simple ASN.1 dump
+ * @since jsrsasign 4.8.3 asn1hex 1.1.6
+ * @description
+ * This method will get an ASN.1 dump from
+ * hexadecmal string of ASN.1 DER encoded data.
+ * Here are features:
+ * <ul>
+ * <li>ommit long hexadecimal string</li>
+ * <li>dump encapsulated OCTET STRING (good for X.509v3 extensions)</li>
+ * <li>structured/primitive context specific tag support (i.e. [0], [3] ...)</li>
+ * <li>automatic decode for implicit primitive context specific tag 
+ * (good for X.509v3 extension value)
+ *   <ul>
+ *   <li>if hex starts '68747470'(i.e. http) it is decoded as utf8 encoded string.</li>
+ *   <li>if it is in 'subjectAltName' extension value and is '[2]'(dNSName) tag
+ *   value will be encoded as utf8 string</li>
+ *   <li>otherwise it shows as hexadecimal string</li>
+ *   </ul>
+ * </li>
+ * </ul>
+ * @example
+ * // ASN.1 INTEGER
+ * ASN1HEX.dump('0203012345')
+ * &darr;
+ * INTEGER 012345
+ * // ASN.1 Object Identifier
+ * ASN1HEX.dump('06052b0e03021a')
+ * &darr;
+ * ObjectIdentifier sha1 (1 3 14 3 2 26)
+ * // ASN.1 SEQUENCE
+ * ASN1HEX.dump('3006020101020102')
+ * &darr;
+ * SEQUENCE
+ *   INTEGER 01
+ *   INTEGER 02
+ * // ASN.1 DUMP FOR X.509 CERTIFICATE
+ * ASN1HEX.dump(X509.pemToHex(certPEM))
+ * &darr;
+ * SEQUENCE
+ *   SEQUENCE
+ *     [0]
+ *       INTEGER 02
+ *     INTEGER 0c009310d206dbe337553580118ddc87
+ *     SEQUENCE
+ *       ObjectIdentifier SHA256withRSA (1 2 840 113549 1 1 11)
+ *       NULL
+ *     SEQUENCE
+ *       SET
+ *         SEQUENCE
+ *           ObjectIdentifier countryName (2 5 4 6)
+ *           PrintableString 'US'
+ *             :
+ */
+ASN1HEX.dump = function(hex, flags, idx, indent) {
+    var _skipLongHex = function(hex, limitNumOctet) {
+	if (hex.length <= limitNumOctet * 2) {
+	    return hex;
+	} else {
+	    var s = hex.substr(0, limitNumOctet) + 
+		    "..(total " + hex.length / 2 + "bytes).." +
+		    hex.substr(hex.length - limitNumOctet, limitNumOctet);
+	    return s;
+	};
+    };
+
+    if (flags === undefined) flags = { "ommit_long_octet": 32 };
+    if (idx === undefined) idx = 0;
+    if (indent === undefined) indent = "";
+    var skipLongHex = flags.ommit_long_octet;
+
+    if (hex.substr(idx, 2) == "01") {
+	var v = ASN1HEX.getHexOfV_AtObj(hex, idx);
+	if (v == "00") {
+	    return indent + "BOOLEAN FALSE\n";
+	} else {
+	    return indent + "BOOLEAN TRUE\n";
+	}
+    }
+    if (hex.substr(idx, 2) == "02") {
+	var v = ASN1HEX.getHexOfV_AtObj(hex, idx);
+	return indent + "INTEGER " + _skipLongHex(v, skipLongHex) + "\n";
+    }
+    if (hex.substr(idx, 2) == "03") {
+	var v = ASN1HEX.getHexOfV_AtObj(hex, idx);
+	return indent + "BITSTRING " + _skipLongHex(v, skipLongHex) + "\n";
+    }
+    if (hex.substr(idx, 2) == "04") {
+	var v = ASN1HEX.getHexOfV_AtObj(hex, idx);
+	if (ASN1HEX.isASN1HEX(v)) {
+	    var s = indent + "OCTETSTRING, encapsulates\n";
+	    s = s + ASN1HEX.dump(v, flags, 0, indent + "  ");
+	    return s;
+	} else {
+	    return indent + "OCTETSTRING " + _skipLongHex(v, skipLongHex) + "\n";
+	}
+    }
+    if (hex.substr(idx, 2) == "05") {
+	return indent + "NULL\n";
+    }
+    if (hex.substr(idx, 2) == "06") {
+	var hV = ASN1HEX.getHexOfV_AtObj(hex, idx);
+        var oidDot = KJUR.asn1.ASN1Util.oidHexToInt(hV);
+        var oidName = KJUR.asn1.x509.OID.oid2name(oidDot);
+	var oidSpc = oidDot.replace(/\./g, ' ');
+        if (oidName != '') {
+  	    return indent + "ObjectIdentifier " + oidName + " (" + oidSpc + ")\n";
+	} else {
+  	    return indent + "ObjectIdentifier (" + oidSpc + ")\n";
+	}
+    }
+    if (hex.substr(idx, 2) == "0c") {
+	return indent + "UTF8String '" + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "'\n";
+    }
+    if (hex.substr(idx, 2) == "13") {
+	return indent + "PrintableString '" + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "'\n";
+    }
+    if (hex.substr(idx, 2) == "14") {
+	return indent + "TeletexString '" + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "'\n";
+    }
+    if (hex.substr(idx, 2) == "16") {
+	return indent + "IA5String '" + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "'\n";
+    }
+    if (hex.substr(idx, 2) == "17") {
+	return indent + "UTCTime " + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "\n";
+    }
+    if (hex.substr(idx, 2) == "18") {
+	return indent + "GeneralizedTime " + hextoutf8(ASN1HEX.getHexOfV_AtObj(hex, idx)) + "\n";
+    }
+    if (hex.substr(idx, 2) == "30") {
+	if (hex.substr(idx, 4) == "3000") {
+	    return indent + "SEQUENCE {}\n";
+	}
+
+	var s = indent + "SEQUENCE\n";
+	var aIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, idx);
+
+	var flagsTemp = flags;
+	
+	if ((aIdx.length == 2 || aIdx.length == 3) &&
+	    hex.substr(aIdx[0], 2) == "06" &&
+	    hex.substr(aIdx[aIdx.length - 1], 2) == "04") { // supposed X.509v3 extension
+	    var oidHex = ASN1HEX.getHexOfV_AtObj(hex, aIdx[0]);
+	    var oidDot = KJUR.asn1.ASN1Util.oidHexToInt(oidHex);
+	    var oidName = KJUR.asn1.x509.OID.oid2name(oidDot);
+
+	    var flagsClone = JSON.parse(JSON.stringify(flags));
+	    flagsClone.x509ExtName = oidName;
+	    flagsTemp = flagsClone;
+	}
+	
+	for (var i = 0; i < aIdx.length; i++) {
+	    s = s + ASN1HEX.dump(hex, flagsTemp, aIdx[i], indent + "  ");
+	}
+	return s;
+    }
+    if (hex.substr(idx, 2) == "31") {
+	var s = indent + "SET\n";
+	var aIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, idx);
+	for (var i = 0; i < aIdx.length; i++) {
+	    s = s + ASN1HEX.dump(hex, flags, aIdx[i], indent + "  ");
+	}
+	return s;
+    }
+    var tag = parseInt(hex.substr(idx, 2), 16);
+    if ((tag & 128) != 0) { // context specific 
+	var tagNumber = tag & 31;
+	if ((tag & 32) != 0) { // structured tag
+	    var s = indent + "[" + tagNumber + "]\n";
+	    var aIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, idx);
+	    for (var i = 0; i < aIdx.length; i++) {
+		s = s + ASN1HEX.dump(hex, flags, aIdx[i], indent + "  ");
+	    }
+	    return s;
+	} else { // primitive tag
+	    var v = ASN1HEX.getHexOfV_AtObj(hex, idx);
+	    if (v.substr(0, 8) == "68747470") { // http
+		v = hextoutf8(v);
+	    }
+	    if (flags.x509ExtName === "subjectAltName" &&
+		tagNumber == 2) {
+		v = hextoutf8(v);
+	    }
+	    
+	    var s = indent + "[" + tagNumber + "] " + v + "\n";
+	    return s;
+	}
+    }
+    return indent + "UNKNOWN(" + hex.substr(idx, 2) + ") " + ASN1HEX.getHexOfV_AtObj(hex, idx) + "\n";
+};
+
+/**
+ * check wheather the string is ASN.1 hexadecimal string or not
+ * @name isASN1HEX
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} hex string to check whether it is hexadecmal string for ASN.1 DER or not
+ * @return {Boolean} true if it is hexadecimal string of ASN.1 data otherwise false
+ * @since jsrsasign 4.8.3 asn1hex 1.1.6
+ * @description
+ * This method checks wheather the argument 'hex' is a hexadecimal string of
+ * ASN.1 data or not.
+ * @example
+ * ASN1HEX.isASN1HEX('0203012345') &rarr; true // PROPER ASN.1 INTEGER
+ * ASN1HEX.isASN1HEX('0203012345ff') &rarr; false // TOO LONG VALUE
+ * ASN1HEX.isASN1HEX('02030123') &rarr; false // TOO SHORT VALUE
+ * ASN1HEX.isASN1HEX('fa3bcd') &rarr; false // WRONG FOR ASN.1
+ */
+ASN1HEX.isASN1HEX = function(hex) {
+    if (hex.length % 2 == 1) return false;
+
+    var intL = ASN1HEX.getIntOfL_AtObj(hex, 0);
+    var tV = hex.substr(0, 2);
+    var lV = ASN1HEX.getHexOfL_AtObj(hex, 0);
+    var hVLength = hex.length - tV.length - lV.length;
+    if (hVLength == intL * 2) return true;
+
+    return false;
+};

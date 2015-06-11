@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta charset="utf-8">
+<title>QUnit for ASN1.dump method in 'asn1hex.js'</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/sha1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="../base64x-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../x509-1.1.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<script src="../asn1-1.0.js"></script>
+<script src="../asn1x509-1.0.js"></script>
+
+<script type="text/javascript">
+// _test/github.com.cer
+var certGithubPEM = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIF4DCCBMigAwIBAgIQDACTENIG2+M3VTWAEY3chzANBgkqhkiG9w0BAQsFADB1
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+d3cuZGlnaWNlcnQuY29tMTQwMgYDVQQDEytEaWdpQ2VydCBTSEEyIEV4dGVuZGVk
+IFZhbGlkYXRpb24gU2VydmVyIENBMB4XDTE0MDQwODAwMDAwMFoXDTE2MDQxMjEy
+MDAwMFowgfAxHTAbBgNVBA8MFFByaXZhdGUgT3JnYW5pemF0aW9uMRMwEQYLKwYB
+BAGCNzwCAQMTAlVTMRkwFwYLKwYBBAGCNzwCAQITCERlbGF3YXJlMRAwDgYDVQQF
+Ewc1MTU3NTUwMRcwFQYDVQQJEw41NDggNHRoIFN0cmVldDEOMAwGA1UEERMFOTQx
+MDcxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1T
+YW4gRnJhbmNpc2NvMRUwEwYDVQQKEwxHaXRIdWIsIEluYy4xEzARBgNVBAMTCmdp
+dGh1Yi5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCx1Nw8r/3z
+Tu3BZ63myyLot+KrKPL33GJwCNEMr9YWaiGwNksXDTZjBK6/6iBRlWVm8r+5TaQM
+Kev1FbHoNbNwEJTVG1m0Jg/Wg1dZneF8Cd3gE8pNb0Obzc+HOhWnhd1mg+2TDP4r
+bTgceYiQz61YGC1R0cKj8keMbzgJubjvTJMLy4OUh+rgo7XZe5trD0P5yu6ADSin
+dvEl9ME1PPZ0rd5qM4J73P1LdqfC7vJqv6kkpl/nLnwO28N0c/p+xtjPYOs2ViG2
+wYq4JIJNeCS66R2hiqeHvmYlab++O3JuT+DkhSUIsZGJuNZ0ZXabLE9iH6H6Or6c
+JL+fyrDFwGeNAgMBAAGjggHuMIIB6jAfBgNVHSMEGDAWgBQ901Cl1qCt7vNKYApl
+0yHU+PjWDzAdBgNVHQ4EFgQUakOQfTuYFHJSlTqqKApD+FF+06YwJQYDVR0RBB4w
+HIIKZ2l0aHViLmNvbYIOd3d3LmdpdGh1Yi5jb20wDgYDVR0PAQH/BAQDAgWgMB0G
+A1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjB1BgNVHR8EbjBsMDSgMqAwhi5o
+dHRwOi8vY3JsMy5kaWdpY2VydC5jb20vc2hhMi1ldi1zZXJ2ZXItZzEuY3JsMDSg
+MqAwhi5odHRwOi8vY3JsNC5kaWdpY2VydC5jb20vc2hhMi1ldi1zZXJ2ZXItZzEu
+Y3JsMEIGA1UdIAQ7MDkwNwYJYIZIAYb9bAIBMCowKAYIKwYBBQUHAgEWHGh0dHBz
+Oi8vd3d3LmRpZ2ljZXJ0LmNvbS9DUFMwgYgGCCsGAQUFBwEBBHwwejAkBggrBgEF
+BQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29tMFIGCCsGAQUFBzAChkZodHRw
+Oi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vRGlnaUNlcnRTSEEyRXh0ZW5kZWRWYWxp
+ZGF0aW9uU2VydmVyQ0EuY3J0MAwGA1UdEwEB/wQCMAAwDQYJKoZIhvcNAQELBQAD
+ggEBAG/nbcuC8++QhwnXDxUiLIz+06scipbbXRJd0XjAMbD/RciJ9wiYUhcfTEsg
+ZGpt21DXEL5+q/4vgNipSlhBaYFyGQiDm5IQTmIte0ZwQ26jUxMf4pOmI1v3kj43
+FHU7uUskQS6lPUgND5nqHkKXxv6V2qtHmssrA9YNQMEK93ga2rWDpK21mUkgLviT
+PB5sPdE7IzprOCp+Ynpf3RcFddAkXb6NqJoQRPrStMrv19C1dqUmJRwIQdhkkqev
+ff6IQDlhC8BIMKmCNK33cEYDfDWROtW7JNgBvBTwww8jO1gyug8SbGZ6bZ3k8OV8
+XX4C2NesiZcLYbc2n7B9O+63M2k=
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+var certGithubDump = (function() {/*SEQUENCE
+  SEQUENCE
+    [0]
+      INTEGER 02
+    INTEGER 0c009310d206dbe337553580118ddc87
+    SEQUENCE
+      ObjectIdentifier SHA256withRSA (1 2 840 113549 1 1 11)
+      NULL
+    SEQUENCE
+      SET
+        SEQUENCE
+          ObjectIdentifier countryName (2 5 4 6)
+          PrintableString 'US'
+      SET
+        SEQUENCE
+          ObjectIdentifier organization (2 5 4 10)
+          PrintableString 'DigiCert Inc'
+      SET
+        SEQUENCE
+          ObjectIdentifier organizationalUnit (2 5 4 11)
+          PrintableString 'www.digicert.com'
+      SET
+        SEQUENCE
+          ObjectIdentifier commonName (2 5 4 3)
+          PrintableString 'DigiCert SHA2 Extended Validation Server CA'
+    SEQUENCE
+      UTCTime 140408000000Z
+      UTCTime 160412120000Z
+    SEQUENCE
+      SET
+        SEQUENCE
+          ObjectIdentifier (2 5 4 15)
+          UTF8String 'Private Organization'
+      SET
+        SEQUENCE
+          ObjectIdentifier (1 3 6 1 4 1 311 60 2 1 3)
+          PrintableString 'US'
+      SET
+        SEQUENCE
+          ObjectIdentifier (1 3 6 1 4 1 311 60 2 1 2)
+          PrintableString 'Delaware'
+      SET
+        SEQUENCE
+          ObjectIdentifier (2 5 4 5)
+          PrintableString '5157550'
+      SET
+        SEQUENCE
+          ObjectIdentifier (2 5 4 9)
+          PrintableString '548 4th Street'
+      SET
+        SEQUENCE
+          ObjectIdentifier (2 5 4 17)
+          PrintableString '94107'
+      SET
+        SEQUENCE
+          ObjectIdentifier countryName (2 5 4 6)
+          PrintableString 'US'
+      SET
+        SEQUENCE
+          ObjectIdentifier stateOrProvinceName (2 5 4 8)
+          PrintableString 'California'
+      SET
+        SEQUENCE
+          ObjectIdentifier locality (2 5 4 7)
+          PrintableString 'San Francisco'
+      SET
+        SEQUENCE
+          ObjectIdentifier organization (2 5 4 10)
+          PrintableString 'GitHub, Inc.'
+      SET
+        SEQUENCE
+          ObjectIdentifier commonName (2 5 4 3)
+          PrintableString 'github.com'
+    SEQUENCE
+      SEQUENCE
+        ObjectIdentifier rsaEncryption (1 2 840 113549 1 1 1)
+        NULL
+      BITSTRING 003082010a0282010100b1d4dc3caffd..(total 271bytes)..be9c24bf9fcab0c5c0678d0203010001
+    [3]
+      SEQUENCE
+        SEQUENCE
+          ObjectIdentifier authorityKeyIdentifier (2 5 29 35)
+          OCTETSTRING, encapsulates
+            SEQUENCE
+              [0] 3dd350a5d6a0adeef34a600a65d321d4f8f8d60f
+        SEQUENCE
+          ObjectIdentifier subjectKeyIdentifier (2 5 29 14)
+          OCTETSTRING, encapsulates
+            OCTETSTRING 6a43907d3b98147252953aaa280a43f8517ed3a6
+        SEQUENCE
+          ObjectIdentifier subjectAltName (2 5 29 17)
+          OCTETSTRING, encapsulates
+            SEQUENCE
+              [2] github.com
+              [2] www.github.com
+        SEQUENCE
+          ObjectIdentifier keyUsage (2 5 29 15)
+          BOOLEAN TRUE
+          OCTETSTRING, encapsulates
+            BITSTRING 05a0
+        SEQUENCE
+          ObjectIdentifier extKeyUsage (2 5 29 37)
+          OCTETSTRING, encapsulates
+            SEQUENCE
+              ObjectIdentifier serverAuth (1 3 6 1 5 5 7 3 1)
+              ObjectIdentifier clientAuth (1 3 6 1 5 5 7 3 2)
+        SEQUENCE
+          ObjectIdentifier cRLDistributionPoints (2 5 29 31)
+          OCTETSTRING, encapsulates
+            SEQUENCE
+              SEQUENCE
+                [0]
+                  [0]
+                    [6] http://crl3.digicert.com/sha2-ev-server-g1.crl
+              SEQUENCE
+                [0]
+                  [0]
+                    [6] http://crl4.digicert.com/sha2-ev-server-g1.crl
+        SEQUENCE
+          ObjectIdentifier certificatePolicies (2 5 29 32)
+          OCTETSTRING, encapsulates
+            SEQUENCE
+              SEQUENCE
+                ObjectIdentifier (2 16 840 1 114412 2 1)
+                SEQUENCE
+                  SEQUENCE
+                    ObjectIdentifier (1 3 6 1 5 5 7 2 1)
+                    IA5String 'https://www.digicert.com/CPS'
+        SEQUENCE
+          ObjectIdentifier authorityInfoAccess (1 3 6 1 5 5 7 1 1)
+          OCTETSTRING, encapsulates
+            SEQUENCE
+              SEQUENCE
+                ObjectIdentifier (1 3 6 1 5 5 7 48 1)
+                [6] http://ocsp.digicert.com
+              SEQUENCE
+                ObjectIdentifier (1 3 6 1 5 5 7 48 2)
+                [6] http://cacerts.digicert.com/DigiCertSHA2ExtendedValidationServerCA.crt
+        SEQUENCE
+          ObjectIdentifier basicConstraints (2 5 29 19)
+          BOOLEAN TRUE
+          OCTETSTRING, encapsulates
+            SEQUENCE {}
+  SEQUENCE
+    ObjectIdentifier SHA256withRSA (1 2 840 113549 1 1 11)
+    NULL
+  BITSTRING 006fe76dcb82f3ef908709d70f15222c..(total 257bytes)..d7ac89970b61b7369fb07d3beeb73369
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+$(document).ready(function(){
+
+test("ASN1HEX.dump", function() {
+  equal(ASN1HEX.dump('0101ff'), "BOOLEAN TRUE\n", "BOOLEAN TRUE");
+  equal(ASN1HEX.dump('010100'), "BOOLEAN FALSE\n", "BOOLEAN FALSE");
+  equal(ASN1HEX.dump('0203012345'), "INTEGER 012345\n", "INTEGER 012345");
+  equal(ASN1HEX.dump('0303001234'), "BITSTRING 001234\n", "BITSTRING 001234");
+  equal(ASN1HEX.dump('0403ababab'), "OCTETSTRING ababab\n", "OCTETSTRING ababab");
+  equal(ASN1HEX.dump('0500'), "NULL\n", "NULL");
+  equal(ASN1HEX.dump('0603550406'), "ObjectIdentifier countryName (2 5 4 6)\n", "OID CN");
+  equal(ASN1HEX.dump('06052b0e03021a'), "ObjectIdentifier sha1 (1 3 14 3 2 26)\n", "OID sha1");
+  equal(ASN1HEX.dump('06092a864886f70d010702'), "ObjectIdentifier signed-data (1 2 840 113549 1 7 2)\n", "OID signed-data");
+  equal(ASN1HEX.dump('0c025553'), "UTF8String 'US'\n", "UTF8String US");
+  equal(ASN1HEX.dump('13025553'), "PrintableString 'US'\n", "PrintableString US");
+  equal(ASN1HEX.dump('14025553'), "TeletexString 'US'\n", "TeletexString US");
+  equal(ASN1HEX.dump('16025553'), "IA5String 'US'\n", "IA5String US");
+  equal(ASN1HEX.dump('170d3233303530313233353935395a'),
+                     "UTCTime 230501235959Z\n", "UTCTime 2023");
+  equal(ASN1HEX.dump('180f32303233303530313233353935395a'),
+                     "GeneralizedTime 20230501235959Z\n", "GenTime 2023");
+  var aIdx = ASN1HEX.getPosArrayOfChildren_AtObj("3006020101020102", 0);
+  equal(aIdx.length, 2, "aIdx.length");
+  equal(aIdx[0], 4, "aIdx[0]");
+  equal(aIdx[1], 10, "aIdx[1]");
+  equal(ASN1HEX.dump('3006020101020102'), "SEQUENCE\n  INTEGER 01\n  INTEGER 02\n", "SEQ INT 1 INT 2");
+  equal(ASN1HEX.dump('3106020101020102'), "SET\n  INTEGER 01\n  INTEGER 02\n", "SET INT 1 INT 2");
+});
+
+test("ASN1HEX.dump longint", function() {
+  equal(ASN1HEX.dump('0250' + 
+                     '11223344556677889900a1a2a3a4a5a6a7a8a9a0' +
+                     'b1b2b3b4b5b6b7b8b9b0c1c2c3c4c5c6c7c8c9c0' +
+                     'd1d2d3d4d5d6d7d8d9d0e1e2e3e4e5e6e7e8e9e0' +
+                     'f1f2f3f4f5f6f7f8f9f0g1g2g3g4g5g6g7g8g9g0'), 
+                     "INTEGER 11223344556677889900a1a2a3a4a5a6..(total 80bytes)..f5f6f7f8f9f0g1g2g3g4g5g6g7g8g9g0\n",
+                     "long int");
+  equal(ASN1HEX.dump('0250' + 
+                     '11223344556677889900a1a2a3a4a5a6a7a8a9a0' +
+                     'b1b2b3b4b5b6b7b8b9b0c1c2c3c4c5c6c7c8c9c0' +
+                     'd1d2d3d4d5d6d7d8d9d0e1e2e3e4e5e6e7e8e9e0' +
+                     'f1f2f3f4f5f6f7f8f9f0g1g2g3g4g5g6g7g8g9g0'), 
+                     "INTEGER 11223344556677889900a1a2a3a4a5a6..(total 80bytes)..f5f6f7f8f9f0g1g2g3g4g5g6g7g8g9g0\n",
+                     "long int");
+});
+
+test("ASN1HEX.isASN1HEX", function() {
+  equal(ASN1HEX.isASN1HEX('3006020101020102'), true, "3006020101020102");
+  equal(ASN1HEX.isASN1HEX('300602010102010202'), false, "300602010102010202 extra 02");
+  equal(ASN1HEX.isASN1HEX('30060201010201'), false, "30060201010201 short 02");
+});
+
+test("ASN1HEX.dump cert", function() {
+  var hCert = X509.pemToHex(certGithubPEM);
+  equal(ASN1HEX.dump(hCert), certGithubDump, "certGithubPEM");
+});
+
+
+});
+
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+<a href="index.html">TEST INDEX</a> | 
+<a href="qunit-do-asn1hex.html">asn1hex</a> | 
+</body>
+</html>
+
