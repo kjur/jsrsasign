@@ -467,6 +467,17 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.dump">dump</a></b>(hex, associative, idx, indent)
+								</div>
+								<div class="description">get string of simple ASN.1 dump from hexadecimal ASN.1 data
+This method will get an ASN.1 dump from
+hexadecmal string of ASN.1 DER encoded data.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getByteLengthOfL_AtObj">getByteLengthOfL_AtObj</a></b>(s, pos)
 								</div>
 								<div class="description">get byte length for ASN.1 L(length) bytes</div>
@@ -581,6 +592,17 @@ ul.inheritsList
 							</td>
 						</tr>
 					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.isASN1HEX">isASN1HEX</a></b>(hex)
+								</div>
+								<div class="description">check wheather the string is ASN.1 hexadecimal string or not
+This method checks wheather the argument 'hex' is a hexadecimal string of
+ASN.1 data or not.</div>
+							</td>
+						</tr>
+					
 					</tbody>
 				</table>
 				
@@ -633,6 +655,124 @@ ul.inheritsList
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name=".dump"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">ASN1HEX.</span><b>dump</b>(hex, associative, idx, indent)
+					
+					</div>
+					<div class="description">
+						get string of simple ASN.1 dump from hexadecimal ASN.1 data
+This method will get an ASN.1 dump from
+hexadecmal string of ASN.1 DER encoded data.
+Here are features:
+<ul>
+<li>ommit long hexadecimal string</li>
+<li>dump encapsulated OCTET STRING (good for X.509v3 extensions)</li>
+<li>structured/primitive context specific tag support (i.e. [0], [3] ...)</li>
+<li>automatic decode for implicit primitive context specific tag 
+(good for X.509v3 extension value)
+  <ul>
+  <li>if hex starts '68747470'(i.e. http) it is decoded as utf8 encoded string.</li>
+  <li>if it is in 'subjectAltName' extension value and is '[2]'(dNSName) tag
+  value will be encoded as utf8 string</li>
+  <li>otherwise it shows as hexadecimal string</li>
+  </ul>
+</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">// ASN.1 INTEGER
+ASN1HEX.dump('0203012345')
+&darr;
+INTEGER 012345
+// ASN.1 Object Identifier
+ASN1HEX.dump('06052b0e03021a')
+&darr;
+ObjectIdentifier sha1 (1 3 14 3 2 26)
+// ASN.1 SEQUENCE
+ASN1HEX.dump('3006020101020102')
+&darr;
+SEQUENCE
+  INTEGER 01
+  INTEGER 02
+// ASN.1 DUMP FOR X.509 CERTIFICATE
+ASN1HEX.dump(X509.pemToHex(certPEM))
+&darr;
+SEQUENCE
+  SEQUENCE
+    [0]
+      INTEGER 02
+    INTEGER 0c009310d206dbe337553580118ddc87
+    SEQUENCE
+      ObjectIdentifier SHA256withRSA (1 2 840 113549 1 1 11)
+      NULL
+    SEQUENCE
+      SET
+        SEQUENCE
+          ObjectIdentifier countryName (2 5 4 6)
+          PrintableString 'US'
+            :</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hex</b>
+									
+								</dt>
+								<dd>hexadecmal string of ASN.1 data</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>associative</b>
+									
+								</dt>
+								<dd>array of flags for dump (OPTION)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>idx</b>
+									
+								</dt>
+								<dd>string index for starting dump (OPTION)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>indent</b>
+									
+								</dt>
+								<dd>string (OPTION)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 4.8.3 asn1hex 1.1.6</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> string of simple ASN.1 dump</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
 				
 					<a name=".getByteLengthOfL_AtObj"> </a>
 					<div class="fixedFont">&lt;static&gt; 
@@ -1324,6 +1464,64 @@ SQUENCE               -
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> OID string (ex. '1.2.3.4.567')</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".isASN1HEX"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<span class="light">ASN1HEX.</span><b>isASN1HEX</b>(hex)
+					
+					</div>
+					<div class="description">
+						check wheather the string is ASN.1 hexadecimal string or not
+This method checks wheather the argument 'hex' is a hexadecimal string of
+ASN.1 data or not.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">ASN1HEX.isASN1HEX('0203012345') &rarr; true // PROPER ASN.1 INTEGER
+ASN1HEX.isASN1HEX('0203012345ff') &rarr; false // TOO LONG VALUE
+ASN1HEX.isASN1HEX('02030123') &rarr; false // TOO SHORT VALUE
+ASN1HEX.isASN1HEX('fa3bcd') &rarr; false // WRONG FOR ASN.1</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hex</b>
+									
+								</dt>
+								<dd>string to check whether it is hexadecmal string for ASN.1 DER or not</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 4.8.3 asn1hex 1.1.6</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if it is hexadecimal string of ASN.1 data otherwise false</dd>
 							
 							</dl>
 						

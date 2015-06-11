@@ -576,16 +576,11 @@ Currently this supports following algorithm and providers combination:
 				
 				
 				<pre class="code">// CryptoJS provider sample
-&lt;script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"&gt;&lt;/script&gt;
-&lt;script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"&gt;&lt;/script&gt;
-&lt;script src="crypto-1.0.js"&gt;&lt;/script&gt;
 var md = new KJUR.crypto.MessageDigest({alg: "sha1", prov: "cryptojs"});
 md.updateString('aaa')
 var mdHex = md.digest()
 
 // SJCL(Stanford JavaScript Crypto Library) provider sample
-&lt;script src="http://bitwiseshiftleft.github.io/sjcl/sjcl.js"&gt;&lt;/script&gt;
-&lt;script src="crypto-1.0.js"&gt;&lt;/script&gt;
 var md = new KJUR.crypto.MessageDigest({alg: "sha256", prov: "sjcl"}); // sjcl supports sha256 only
 md.updateString('aaa')
 var mdHex = md.digest()</pre>

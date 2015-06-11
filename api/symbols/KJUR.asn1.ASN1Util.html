@@ -496,6 +496,27 @@ including ASN.1 primitive or structured.</div>
 							</td>
 						</tr>
 					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.ASN1Util.<b><a href="../symbols/KJUR.asn1.ASN1Util.html#.oidHexToInt">oidHexToInt</a></b>(hex)
+								</div>
+								<div class="description">get dot noted oid number string from hexadecimal value of OID
+This static method converts from hexadecimal string representation of 
+ASN.1 value of object identifier to oid number string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.ASN1Util.<b><a href="../symbols/KJUR.asn1.ASN1Util.html#.oidIntToHex">oidIntToHex</a></b>(oidString)
+								</div>
+								<div class="description">get hexadecimal value of object identifier from dot noted oid value
+This static method converts from object identifier value string.</div>
+							</td>
+						</tr>
+					
 					</tbody>
 				</table>
 				
@@ -745,6 +766,116 @@ newObject({'tag': ['a1',
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>}</span> generated object</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".oidHexToInt"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.asn1.ASN1Util.</span><b>oidHexToInt</b>(hex)
+					
+					</div>
+					<div class="description">
+						get dot noted oid number string from hexadecimal value of OID
+This static method converts from hexadecimal string representation of 
+ASN.1 value of object identifier to oid number string.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.asn1.ASN1Util.oidHexToInt('550406') &rarr; "2.5.4.6"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hex</b>
+									
+								</dt>
+								<dd>hexadecimal value of object identifier</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 4.8.3 asn1 1.0.7</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> dot noted string of object identifier</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".oidIntToHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.asn1.ASN1Util.</span><b>oidIntToHex</b>(oidString)
+					
+					</div>
+					<div class="description">
+						get hexadecimal value of object identifier from dot noted oid value
+This static method converts from object identifier value string.
+to hexadecimal string representation of it.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.asn1.ASN1Util.oidIntToHex("2.5.4.6") &rarr; "550406"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>oidString</b>
+									
+								</dt>
+								<dd>dot noted string of object identifier</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 4.8.3 asn1 1.0.7</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal value of object identifier</dd>
 							
 							</dl>
 						

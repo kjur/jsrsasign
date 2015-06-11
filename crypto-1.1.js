@@ -1,9 +1,9 @@
-/*! crypto-1.1.5.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! crypto-1.1.6.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
  *
- * Copyright (c) 2013 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2015 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.1.5 (2013-Oct-06)
+ * @version 1.1.6 (2015-Jun-07)
  * @since jsrsasign 2.2
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -305,16 +305,11 @@ KJUR.crypto.Util = new function() {
  * </ul>
  * @example
  * // CryptoJS provider sample
- * &lt;script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"&gt;&lt;/script&gt;
- * &lt;script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"&gt;&lt;/script&gt;
- * &lt;script src="crypto-1.0.js"&gt;&lt;/script&gt;
  * var md = new KJUR.crypto.MessageDigest({alg: "sha1", prov: "cryptojs"});
  * md.updateString('aaa')
  * var mdHex = md.digest()
  *
  * // SJCL(Stanford JavaScript Crypto Library) provider sample
- * &lt;script src="http://bitwiseshiftleft.github.io/sjcl/sjcl.js"&gt;&lt;/script&gt;
- * &lt;script src="crypto-1.0.js"&gt;&lt;/script&gt;
  * var md = new KJUR.crypto.MessageDigest({alg: "sha256", prov: "sjcl"}); // sjcl supports sha256 only
  * md.updateString('aaa')
  * var mdHex = md.digest()
@@ -826,6 +821,7 @@ KJUR.crypto.Signature = function(params) {
 	    this.updateString = function(str) {
 		this.md.updateString(str);
 	    };
+
 	    this.updateHex = function(hex) {
 		this.md.updateHex(hex);
 	    };
@@ -836,11 +832,13 @@ KJUR.crypto.Signature = function(params) {
 		    typeof this.eccurvename != "undefined") {
 		    var ec = new KJUR.crypto.ECDSA({'curve': this.eccurvename});
 		    this.hSign = ec.signHex(this.sHashHex, this.ecprvhex);
-		} else if (this.pubkeyAlgName == "rsaandmgf1") {
+		} else if (this.prvKey instanceof RSAKey &&
+		           this.pubkeyAlgName == "rsaandmgf1") {
 		    this.hSign = this.prvKey.signWithMessageHashPSS(this.sHashHex,
 								    this.mdAlgName,
 								    this.pssSaltLen);
-		} else if (this.pubkeyAlgName == "rsa") {
+		} else if (this.prvKey instanceof RSAKey &&
+			   this.pubkeyAlgName == "rsa") {
 		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex,
 								 this.mdAlgName);
 		} else if (this.prvKey instanceof KJUR.crypto.ECDSA) {
@@ -866,11 +864,13 @@ KJUR.crypto.Signature = function(params) {
 		    typeof this.eccurvename != "undefined") {
 		    var ec = new KJUR.crypto.ECDSA({curve: this.eccurvename});
 		    return ec.verifyHex(this.sHashHex, hSigVal, this.ecpubhex);
-		} else if (this.pubkeyAlgName == "rsaandmgf1") {
+		} else if (this.pubKey instanceof RSAKey &&
+			   this.pubkeyAlgName == "rsaandmgf1") {
 		    return this.pubKey.verifyWithMessageHashPSS(this.sHashHex, hSigVal, 
 								this.mdAlgName,
 								this.pssSaltLen);
-		} else if (this.pubkeyAlgName == "rsa") {
+		} else if (this.pubKey instanceof RSAKey &&
+			   this.pubkeyAlgName == "rsa") {
 		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
 		} else if (this.pubKey instanceof KJUR.crypto.ECDSA) {
 		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);

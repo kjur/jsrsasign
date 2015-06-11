@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta charset="utf-8">
+<title>QUnit for ASN1Util.oidHexToInt/IntToHex in 'asn1.js'</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<!-- getPEM -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core-min.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
+
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<script src="../ext/jsbn.js"></script>
+<script src="../ext/jsbn2.js"></script>
+<script src="../ext/base64.js"></script>
+<script src="../base64x-1.1.js"></script>
+<script src="../asn1-1.0.js"></script>
+<script src="../asn1x509-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+
+// ======= TEST ===============================================================
+var oidHexToInt = KJUR.asn1.ASN1Util.oidHexToInt;
+var oidIntToHex = KJUR.asn1.ASN1Util.oidIntToHex;
+
+test("oidHexToInt ", function() {
+  equal(oidHexToInt("2b0e03021a"), "1.3.14.3.2.26", "oidHexToInt 1.3.14.3.2.26/sha1");
+  equal(oidHexToInt("2a864886f70d010702"), "1.2.840.113549.1.7.2", "oidHexToInt 1.2.840.113549.1.7.2/signedData");
+  equal(oidHexToInt("2a2283bb55"), "1.2.34.56789", "oidHexToInt 1.3.34.56789");
+});
+
+test("oidIntToHex", function() {
+  equal((new BigInteger(oidIntToHex("1.2.34.56789"), 16)).toString(2), "10101000100010100000111011101101010101", "oidIntToHex 1.2.34.56789 bin");
+  equal(oidIntToHex("1.2.34.56789"), "2a2283bb55", "oidIntToHex 1.2.34.56789 hex");
+});
+
+});
+-->
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+</body>
+</html>

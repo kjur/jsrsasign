@@ -1,6 +1,23 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.8.2 to 4.8.3
+  - crypto 1.1.5 to 1.1.6
+    - Signature.sign method fix in automatic detection of private key
+  - asn1 1.0.6 to 1.0.7
+    - ASN1Util.oidHexToInt() added
+    - ASN1Util.oidIntToHex() added
+  - asn1hex 1.1.5 to 1.1.6
+    - ASN1HEX.dump() simple ASN.1 dump functionality added
+    - ASN1HEX.isASN1HEX() added
+  - ** 4.8.3 updated files
+    - ChangeLog.txt
+    - asn1-1.0*.js
+    - asn1hex-1.1*.js
+    - crypto-1.1*.js
+    - test/qunit-do-asn1-oidhex.html
+    - test/qunit-do-asn1hex-dump.html
+
 * Changes between 4.8.1 to 4.8.2
   - keyutil 1.0.8 to 1.0.9
     - getKey EC private/public key bug #69 fix

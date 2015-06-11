@@ -1,9 +1,9 @@
-/*! asn1-1.0.6.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1-1.0.7.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
  *
- * Copyright (c) 2013-2014 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2015 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.0.6 (2014-May-21)
+ * @version asn1 1.0.7 (2015-Jun-11)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -286,6 +286,95 @@ KJUR.asn1.ASN1Util = new function() {
         return asn1Obj.getEncodedHex();
     };
 };
+
+/**
+ * get dot noted oid number string from hexadecimal value of OID
+ * @name oidHexToInt
+ * @memberOf KJUR.asn1.ASN1Util
+ * @function
+ * @param {String} hex hexadecimal value of object identifier
+ * @return {String} dot noted string of object identifier
+ * @since jsrsasign 4.8.3 asn1 1.0.7
+ * @description
+ * This static method converts from hexadecimal string representation of 
+ * ASN.1 value of object identifier to oid number string.
+ * @example
+ * KJUR.asn1.ASN1Util.oidHexToInt('550406') &rarr; "2.5.4.6"
+ */
+KJUR.asn1.ASN1Util.oidHexToInt = function(hex) {
+    var s = "";
+    var i01 = parseInt(hex.substr(0, 2), 16);
+    var i0 = Math.floor(i01 / 40);
+    var i1 = i01 % 40;
+    var s = i0 + "." + i1;
+
+    var binbuf = "";
+    for (var i = 2; i < hex.length; i += 2) {
+	var value = parseInt(hex.substr(i, 2), 16);
+        var bin = ("00000000" + value.toString(2)).slice(- 8);
+	binbuf = binbuf + bin.substr(1, 7);
+	if (bin.substr(0, 1) == "0") {
+	    var bi = new BigInteger(binbuf, 2);
+	    s = s + "." + bi.toString(10);
+	    binbuf = "";
+	}
+    };
+
+    return s;
+};
+
+/**
+ * get hexadecimal value of object identifier from dot noted oid value
+ * @name oidIntToHex
+ * @memberOf KJUR.asn1.ASN1Util
+ * @function
+ * @param {String} oidString dot noted string of object identifier
+ * @return {String} hexadecimal value of object identifier
+ * @since jsrsasign 4.8.3 asn1 1.0.7
+ * @description
+ * This static method converts from object identifier value string.
+ * to hexadecimal string representation of it.
+ * @example
+ * KJUR.asn1.ASN1Util.oidIntToHex("2.5.4.6") &rarr; "550406"
+ */
+KJUR.asn1.ASN1Util.oidIntToHex = function(oidString) {
+    var itox = function(i) {
+        var h = i.toString(16);
+        if (h.length == 1) h = '0' + h;
+        return h;
+    };
+
+    var roidtox = function(roid) {
+        var h = '';
+        var bi = new BigInteger(roid, 10);
+        var b = bi.toString(2);
+        var padLen = 7 - b.length % 7;
+        if (padLen == 7) padLen = 0;
+        var bPad = '';
+        for (var i = 0; i < padLen; i++) bPad += '0';
+        b = bPad + b;
+        for (var i = 0; i < b.length - 1; i += 7) {
+            var b8 = b.substr(i, 7);
+            if (i != b.length - 7) b8 = '1' + b8;
+            h += itox(parseInt(b8, 2));
+        }
+        return h;
+    };
+    
+    if (! oidString.match(/^[0-9.]+$/)) {
+        throw "malformed oid string: " + oidString;
+    }
+    var h = '';
+    var a = oidString.split('.');
+    var i0 = parseInt(a[0]) * 40 + parseInt(a[1]);
+    h += itox(i0);
+    a.splice(0, 2);
+    for (var i = 0; i < a.length; i++) {
+        h += roidtox(a[i]);
+    }
+    return h;
+};
+
 
 // ********************************************************************
 //  Abstract ASN.1 Classes
