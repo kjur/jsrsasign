@@ -166,7 +166,6 @@ function _doGen() {
   var serverapp = f1.serverapp.value;
   var cert1 = f1.cert1.value;
   var cert2 = f1.cert2.value;
-  var cert3 = f1.cert3.value;
 
   //alert(1);
   var cfg = CFG_TEMPLATE[f1.serverapp.value];
@@ -175,7 +174,7 @@ function _doGen() {
 
   cfg = _updateOrder(cfg, guidename, serverapp);
   cfg = _updateCompression(cfg, guidename, serverapp);
-  cfg = _updatePinning(cfg, [cert1, cert2, cert3], serverapp);
+  cfg = _updatePinning(cfg, [cert1, cert2], serverapp);
 
   f1.resultcfg.value = cfg;
 }
@@ -257,10 +256,15 @@ function _getSHA256HashB64OfCertPEM(sCertPEM) {
 }
 
 function _getPublicKeyInfoHexOfCertPEM(sCertPEM) {
+  if (sCertPEM.indexOf("-----BEGIN PUBLIC KEY") != -1) {
+    var hPubkey = X509.pemToHex(sCertPEM);
+    return hPubkey;
+  } else {		      
     var hCert = X509.pemToHex(sCertPEM);
     var pos = X509.getPublicKeyInfoPosOfCertHEX(hCert);
     var publicKeyInfoHex = ASN1HEX.getHexOfTLV_AtObj(hCert, pos);
     return publicKeyInfoHex;
+  }		      
 };
 
 var LIGHTTPD_NOT_SSL2 = "ssl.use-sslv2 = \"disable\"";
@@ -355,12 +359,10 @@ function _getProtocolValue(guideName, serverType) {
 </select>
 </p>
 <p>
-a) SSLサーバー証明書PEM<br/>
+a) Pinにマッチさせる証明書のPEM(SSLサーバー証明書や中間CA証明書等)<br/>
 <textarea name="cert1" cols="80" rows="3"></textarea><br/>
-b) 中間CA証明書1(SSLサーバーに近い順)<br/>
+b) Pinにマッチさせないバックアップの証明書もしくはPKCS#8公開鍵のPEM<br/>
 <textarea name="cert2" cols="80" rows="3"></textarea><br/>
-c) 中間CA証明書2(SSLサーバーに近い順、ルートに近い方)<br/>
-<textarea name="cert3" cols="80" rows="3"></textarea>
 <br/>
 
 </p>
@@ -477,7 +479,8 @@ JavaScript暗号ライブラリを使って、PEM形式のX.509証明書を解�
 
 <h4>ニュース</h4>
 <ul>
-<li>2015.06.21 - 0.5ベータ版 Bulletproof SSL and TLSへの対応</li>
+<li>2015.06.21 - 0.5ベータ版 Bulletproof SSL and TLSへの対応。SSL/TLSガイドで記載された
+Certificate Pinningの記載誤り(Backup Pin)への対応</li>
 <li>2015.05.16 - 0.4ベータ版 lighttpdに対応</li>
 <li>2015.05.15 - 0.3ベータ版 nginxのMozillaのガイドのprotocol値の誤りの修正</li>
 <li>2015.05.14 - 0.2ベータ版 nginx設定、TLS圧縮オフに対応　
