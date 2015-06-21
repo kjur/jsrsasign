@@ -7,7 +7,7 @@
     <meta name="description" content="HTTPS設定ファイル生成ツール" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    <title>HTTPS設定ファイル生成ツール0.4(ベータ版)</title>
+    <title>HTTPS設定ファイル生成ツール0.5(ベータ版)</title>
 <!-- for pkcs5pkey -->
 <script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
 
@@ -21,7 +21,9 @@ var OPENSSL_CIPHERSUITE = {
   "cryptrec3": "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-CAMELLIA128-SHA:DHE-RSA-AES128-SHA:AES128-GCM-SHA256:AES128-SHA256:CAMELLIA128-SHA:AES128-SHA:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-SHA256:DHE-RSA-CAMELLIA256-SHA:DHE-RSA-AES256-SHA:AES256-GCM-SHA384:AES256-SHA256:CAMELLIA256-SHA:AES256-SHA:RC4-SHA:EDH-RSA-DES-CBC3-SHA:DES-CBC3-SHA",
   "mozilla1": "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!3DES:!MD5:!PSK",
   "mozilla2": "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA",
-  "mozilla3": "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:ECDHE-RSA-DES-CBC3-SHA:ECDHE-ECDSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA",
+ "mozilla3": "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:ECDHE-RSA-DES-CBC3-SHA:ECDHE-ECDSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA",
+  "bullet1": "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA256:EDH-RSA-DES-CBC3-SHA",
+  "bullet2": "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA256:EDH-RSA-DES-CBC3-SHA:AES128-SHA:AES256-SHA:DES-CBC3-SHA:ECDHE-RSA-RC4-SHA:RC4-SHA",
   "qualysblog": "EECDH+ECDSA+AESGCM:EECDH+aRSA+AESGCM:EECDH+ECDSA+SHA384:EECDH+ECDSA+SHA256:EECDH+aRSA+SHA384:EECDH+aRSA+SHA256:EECDH+aRSA+RC4:EECDH:EDH+aRSA:RC4:!aNULL:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS",
   "openssl_default": "DEFAULT",
   "redhat_default": "HIGH:!aNULL:!MD5:!RC4",
@@ -181,7 +183,8 @@ function _doGen() {
 function _updateCompression(cfg, guidename, serverapp) {
   // 注：nginx は新しいもので対応、設定は不要
   if (guidename.indexOf("cryptrec") != -1 ||
-      guidename.indexOf("mozilla") != -1) {
+      guidename.indexOf("mozilla") != -1 ||
+      guidename.indexOf("bullet") != -1) {
     if (serverapp.indexOf("apache") != -1) {
       cfg = cfg.replace("%%%COMPRESSION%%%", "SSLCompression off");
     }
@@ -199,7 +202,8 @@ function _updateOrder(cfg, guidename, serverapp) {
   if (serverapp == "nginx")              s = "ssl_prefer_server_ciphers on;";
   if (serverapp == "lighttpd")           s = "ssl.honor-cipher-order = \"enable\"";
   if (guidename.indexOf("cryptrec") == -1 &&
-      guidename.indexOf("mozilla") == -1) {
+      guidename.indexOf("mozilla") == -1 &&
+      guidename.indexOf("bullet") == -1) {
     cfg = cfg.replace("%%%CIPHERORDER%%%", "#" + s);
   } else {    
     cfg = cfg.replace("%%%CIPHERORDER%%%", s);
@@ -305,7 +309,7 @@ function _getProtocolValue(guideName, serverType) {
 <!-- HEADER -->
 <div id="header_wrap" class="outer">
 <header class="inner">
-<h1 id="project_title">HTTPS設定ファイル生成ツール0.4(ベータ版)</h1>
+<h1 id="project_title">HTTPS設定ファイル生成ツール0.5(ベータ版)</h1>
 <h2 id="project_tagline">各種ガイドラインに応じたApache、nginx、lighttpdなど主要なサーバーのHTTPS設定を自動生成します</h2>
 
 <a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
@@ -330,6 +334,8 @@ function _getProtocolValue(guideName, serverType) {
 <option value="mozilla1">Mozilla Modern Compatibility Profile - 高セキュリティ
 <option value="mozilla2">Mozilla Intermediate Compatibility Profile - 中セキュリティ(デフォルト)
 <option value="mozilla3">Mozilla Old Backward Compatibility Profile - 低セキュリティ
+<option value="bullet1">Bulletproof SSL and TLS - recommended(中)
+<option value="bullet2">Bulletproof SSL and TLS - compatibility(低)
 <option value="qualysblog">Qualys社のブログによる推奨設定
 
 <option value="openssl_default">OpenSSLデフォルト設定
@@ -419,7 +425,9 @@ a) b) にのみ登録し c) は空欄としてください。
 <li><a href="http://www.ipa.go.jp/security/vuln/ssl_crypt_config.html" target="_blank">
 CRYPTREC/IPA SSL/TLS暗号設定ガイドライン～安全なウェブサイトのために（暗号設定対策編）～</a></li>
 <li><a href="https://wiki.mozilla.org/Security/Server_Side_TLS">
-Mozilla Wiki: Security/Server Side TLS</a></li>
+    Mozilla Wiki: Security/Server Side TLS</a></li>
+<li><a href="https://www.feistyduck.com/books/bulletproof-ssl-and-tls/">Bulletproof SSL and TLS by Ivan Ristic
+</a></li>
 <li><a href="https://community.qualys.com/blogs/securitylabs/2013/08/05/configuring-apache-nginx-and-openssl-for-forward-secrecy">QUALYS BLOG: Configuring Apache, Nginx, and OpenSSL for Forward Secrecy</a></li>
 <li><a href="https://cipherli.st/">Cipherli.st: String Ciphers for Apache, nginx and Lighttpd</a></li>
 <li><a href="http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r1.pdf">
@@ -469,6 +477,7 @@ JavaScript暗号ライブラリを使って、PEM形式のX.509証明書を解�
 
 <h4>ニュース</h4>
 <ul>
+<li>2015.06.21 - 0.5ベータ版 Bulletproof SSL and TLSへの対応</li>
 <li>2015.05.16 - 0.4ベータ版 lighttpdに対応</li>
 <li>2015.05.15 - 0.3ベータ版 nginxのMozillaのガイドのprotocol値の誤りの修正</li>
 <li>2015.05.14 - 0.2ベータ版 nginx設定、TLS圧縮オフに対応　

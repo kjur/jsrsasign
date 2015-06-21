@@ -10,6 +10,7 @@ ChangeLog for jsrsasign
   - asn1hex 1.1.5 to 1.1.6
     - ASN1HEX.dump() simple ASN.1 dump functionality added
     - ASN1HEX.isASN1HEX() added
+  - tool_asn1dumper.html - Online ASN.1 dump tool added for demo
   - ** 4.8.3 updated files
     - ChangeLog.txt
     - asn1-1.0*.js
