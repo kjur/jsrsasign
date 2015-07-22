@@ -1,5 +1,5 @@
 
 var navigator = {};
-navigator.uesrAgent = false;
+navigator.userAgent = false;
 
 var window = {};
