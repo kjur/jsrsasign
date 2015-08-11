@@ -113,7 +113,9 @@ test("verifyJWT jti", function() {
   equal(KJUR.jws.JWS.verifyJWT(jwtHS256AUD2, "616161", {alg: ["HS256"]}),
         true, "with jti");
   equal(KJUR.jws.JWS.verifyJWT(jwtHS256NOJTI, "616161", {alg: ["HS256"]}),
-        false, "without jti");
+        true, "without jti");
+  equal(KJUR.jws.JWS.verifyJWT(jwtHS256AUD2, "616161", {alg: ["HS256"], jti: "0123456789"}),
+        false, "with invalid jti");
 });
 
 test("verifyJWT JWS signature", function() {
