@@ -152,8 +152,8 @@ follow the instructions:
 
 <blockquote><pre>
 # generate secp256r1 curve EC key pair
-# openssl uses the X9.62 name prime256v1 to refer to curve secp256r1
-% openssl ecparam -genkey -name prime256v1 -out k.pem
+# Note: openssl uses the X9.62 name prime256v1 to refer to curve secp256r1, so this will generate output
+% openssl ecparam -genkey -name secp256v1 -out k.pem
 
 # print private key and public key
 % openssl ec -in k.pem -noout -text
