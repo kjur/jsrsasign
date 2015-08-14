@@ -27,8 +27,8 @@ and this 'jsrsasign' module.
     - provides RSAPSS signing
     - also provides support for JSON Web Signatures (JWS) and JSON Web Token (JWT)
 
-CONCLUDED THRIDPARTY LIBRARIES
-------------------------------
+CONCLUDED THIRD-PARTY LIBRARIES
+-------------------------------
 
 - [CryptoJS](https://code.google.com/p/crypto-js/): for symmetric cipher, hash, mac, PBKDF (BSD License)
 - [BitCoinJS](http://bitcoinjs.org/): for ECDSA (MIT License)
