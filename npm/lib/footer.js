@@ -24,6 +24,7 @@ exports.stob64u = stob64u;
 exports.b64utos = b64utos;
 exports.b64tob64u = b64tob64u;
 exports.b64utob64 = b64utob64;
+exports.hex2b64 = hex2b64;
 exports.hextob64u = hextob64u;
 exports.b64utohex = b64utohex;
 exports.b64tohex = b64tohex;
