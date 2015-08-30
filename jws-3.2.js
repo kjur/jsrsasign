@@ -669,7 +669,7 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
  * <li>Payload.iat (issued at) - Validation time is greater than Payloead.iat.</li>
  * </ul>
  * </li>
- * <li>Payload.jti (JWT id) - Payload.jti is defined.</li>
+ * <li>Payload.jti (JWT id) - Payload.jti is included in acceptField.jti if specified. (OPTION)</li>
  * <li>JWS signature of JWS is valid for specified key.</li>
  * </ul>
  *
@@ -685,6 +685,7 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
  *   sub: ['mailto:john@foo.com', 'mailto:alice@foo.com'],
  *   verifyAt: KJUR.jws.IntDate.get('20150520235959Z'),
  *   aud: ['http://foo.com'], // aud: 'http://foo.com' is fine too.
+ *   jti: 'id123456'
  * });
  */
 KJUR.jws.JWS.verifyJWT = function(sJWT, key, acceptField) {
@@ -752,7 +753,9 @@ KJUR.jws.JWS.verifyJWT = function(sJWT, key, acceptField) {
     }
 
     // 9 JWT id 'jti' check
-    if (pPayload.jti === undefined) return false;
+    if (pPayload.jti !== undefined && acceptField.jti !== undefined) {
+      if (pPayload.jti !== acceptField.jti) return false;
+    }
 
     // 10 JWS signature check
     if (! KJUR.jws.JWS.verify(sJWT, key, acceptField.alg)) return false;
