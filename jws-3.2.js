@@ -1,9 +1,9 @@
-/*! jws-3.2.3 (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! jws-3.2.4 (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * jws.js - JSON Web Signature Class
  *
- * version: 3.2.3 (2015 May 29)
+ * version: 3.2.4 (2015 Aug 30)
  *
  * Copyright (c) 2010-2015 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -18,7 +18,7 @@
  * @fileOverview
  * @name jws-3.2.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 3.2.3 (2015-May-29)
+ * @version 3.2.4 (2015-Aug-30)
  * @since jsjws 1.0, jsrsasign 4.8.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */

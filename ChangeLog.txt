@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.8.4 to 4.8.5
+  - some of small fix release for npm and jsrsasign-latest-all-min.
+  - jwt 3.2.3 to 3.2.4
+    - jws.js update for validation of jti confirming to RFC 7519
+      as optional in verifyJWT method. Thanks @stephanbacheller.
+
 * Changes between 4.8.3 to 4.8.4
   - some of small fix release for npm.
 
