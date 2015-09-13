@@ -5,12 +5,12 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! base64x-1.1.4 (c) 2012-2015 Kenji Urushima | kjur.github.com/jsjws/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! base64x-1.1.5 (c) 2012-2015 Kenji Urushima | kjur.github.com/jsjws/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
 <span class='line'>  5</span>  *
-<span class='line'>  6</span>  * version: 1.1.4 (2015 Jul 3)
+<span class='line'>  6</span>  * version: 1.1.5 (2015-Sep-13)
 <span class='line'>  7</span>  *
 <span class='line'>  8</span>  * Copyright (c) 2012-2015 Kenji Urushima (kenji.urushima@gmail.com)
 <span class='line'>  9</span>  *
@@ -28,7 +28,7 @@
 <span class='line'> 21</span>  * @fileOverview
 <span class='line'> 22</span>  * @name base64x-1.1.js
 <span class='line'> 23</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 24</span>  * @version asn1 1.1.4 (2015-Jul-3)
+<span class='line'> 24</span>  * @version asn1 1.1.5 (2015-Sep-13)
 <span class='line'> 25</span>  * @since jsrsasign 2.1
 <span class='line'> 26</span>  * @license &lt;a href="http://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 27</span>  */</span><span class="WHIT">
@@ -340,7 +340,7 @@
 <span class='line'>333</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">b64</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/[^0-9A-Za-z\/+=]*/g</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>334</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">b64tohex</span><span class="PUNC">(</span><span class="NAME">b64</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>335</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">hex</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>336</span> </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'>336</span> </span><span class="PUNC">}</span><span class="WHIT"> 
 <span class='line'>337</span> 
 <span class='line'>338</span> </span><span class="COMM">// ==== URIComponent / hex ================================</span><span class="WHIT">
 <span class='line'>339</span> </span><span class="COMM">/**
@@ -411,4 +411,28 @@
 <span class='line'>404</span> </span><span class="WHIT">    </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\n/mg</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"\r\n"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>405</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>406</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>407</span> </span></pre></body></html>
+<span class='line'>407</span> 
+<span class='line'>408</span> </span><span class="COMM">// ==== others ================================</span><span class="WHIT">
+<span class='line'>409</span> 
+<span class='line'>410</span> </span><span class="COMM">/**
+<span class='line'>411</span>  * find index of string where two string differs
+<span class='line'>412</span>  * @param {String} s1 string to compare
+<span class='line'>413</span>  * @param {String} s2 string to compare
+<span class='line'>414</span>  * @return {Number} string index of where character differs. Return -1 if same.
+<span class='line'>415</span>  * @since jsrsasign 4.9.0 base64x 1.1.5
+<span class='line'>416</span>  * @example
+<span class='line'>417</span>  * strdiffidx("abcdefg", "abcd4fg") -> 4
+<span class='line'>418</span>  * strdiffidx("abcdefg", "abcdefg") -> -1
+<span class='line'>419</span>  * strdiffidx("abcdefg", "abcdef") -> 6
+<span class='line'>420</span>  * strdiffidx("abcdefgh", "abcdef") -> 6
+<span class='line'>421</span>  */</span><span class="WHIT">
+<span class='line'>422</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">strdiffidx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">s2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>423</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s1.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>424</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s1.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">s2.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s2.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>425</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">n</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>426</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s1.charCodeAt</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">s2.charCodeAt</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>427</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>428</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s1.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">s2.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">n</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>429</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// same</span><span class="WHIT">
+<span class='line'>430</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>431</span> </span></pre></body></html>

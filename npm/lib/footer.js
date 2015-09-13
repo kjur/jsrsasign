@@ -38,6 +38,7 @@ exports.hextorstr = hextorstr;
 exports.rstrtohex = rstrtohex;
 exports.newline_toUnix = newline_toUnix;
 exports.newline_toDos = newline_toDos;
+exports.strdiffidx = strdiffidx;
 
 exports.crypto = KJUR.crypto;
 exports.asn1 = KJUR.asn1;

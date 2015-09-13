@@ -1,4 +1,4 @@
-/*! keyutil-1.0.9.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! keyutil-1.0.10.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version keyutil 1.0.9 (2015-Jul-04)
+ * @version keyutil 1.0.10 (2015-Sep-13)
  * @since jsrsasign 4.1.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1248,7 +1248,7 @@ var KEYUTIL = function() {
  * NOTE: <a href="https://tools.ietf.org/html/rfc7517">RFC 7517 JSON Web Key(JWK)</a> support for RSA/ECC private/public key from jsrsasign 4.8.1.
  */
 KEYUTIL.getKey = function(param, passcode, hextype) {
-    // 1. by key object
+    // 1. by key RSAKey/KJUR.crypto.ECDSA/KJUR.crypto.DSA object
     if (typeof RSAKey != 'undefined' && param instanceof RSAKey)
         return param;
     if (typeof KJUR.crypto.ECDSA != 'undefined' && param instanceof KJUR.crypto.ECDSA)
@@ -1256,7 +1256,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     if (typeof KJUR.crypto.DSA != 'undefined' && param instanceof KJUR.crypto.DSA)
         return param;
 
-    // 2. by key spec
+    // 2. by parameters of key
     // 2.1. ECC private key
     if (param.d !== undefined && param.curve !== undefined) {
         return new KJUR.crypto.ECDSA({prv: param.d, curve: param.curve});
@@ -1362,7 +1362,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	return ec;
     }
     
-    // 3. by cert
+    // 3. by PEM certificate (-----BEGIN ... CERTIFITE----)
     if (param.indexOf("-END CERTIFICATE-", 0) != -1 ||
         param.indexOf("-END X509 CERTIFICATE-", 0) != -1 ||
         param.indexOf("-END TRUSTED CERTIFICATE-", 0) != -1) {
@@ -1393,12 +1393,12 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
         return key;
     }
 
-    // 8. private key by plain PKCS#5 PEM RSA string
+    // 8. private key by plain PKCS#5 PEM RSA string 
+    //    getKey("-----BEGIN RSA PRIVATE KEY-...")
     if (param.indexOf("-END RSA PRIVATE KEY-") != -1 &&
         param.indexOf("4,ENCRYPTED") == -1) {
-        var key = new RSAKey();
-        key.readPrivateKeyFromPEMString(param);
-        return key;
+        var hex = KEYUTIL.getHexFromPEM(param, "RSA PRIVATE KEY");
+        return KEYUTIL.getKey(hex, null, "pkcs5prv");
     }
 
     // 8.2. private key by plain PKCS#5 PEM DSA string

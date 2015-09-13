@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 4.0.0 JavaScript API Reference - global__</title>
+		<title>jsrsasign 4.8.7 JavaScript API Reference - global__</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -177,7 +177,7 @@ ul.inheritsList
 <!-- ============================== header ================================= -->	
 		<!-- begin static/header.html -->
 		<div id="header" style="background: #7F8FB1; color: white; margin: -10px">
-&nbsp; <b><a href="http://kjur.github.com/jsrsasign/" style="color: white">jsrsasign</a></b> 4.0.0 JavaScript API Reference
+&nbsp; <b><a href="http://kjur.github.com/jsrsasign/" style="color: white">jsrsasign</a></b> JavaScript API Reference
 </div>
 
 		<!-- end static/header.html -->
@@ -250,6 +250,14 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.cms.SigningCertificateV2.html">KJUR.asn1.cms.SigningCertificateV2</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.SigningTime.html">KJUR.asn1.cms.SigningTime</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.csr.html">KJUR.asn1.csr</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.csr.CertificationRequest.html">KJUR.asn1.csr.CertificationRequest</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.csr.CertificationRequestInfo.html">KJUR.asn1.csr.CertificationRequestInfo</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.csr.CSRUtil.html">KJUR.asn1.csr.CSRUtil</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.DERAbstractString.html">KJUR.asn1.DERAbstractString</a></li>
 	
@@ -563,7 +571,8 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#newline_toDos">newline_toDos</a></b>(s)
 								</div>
-								<div class="description">convert all UNIX new line("\r\n") to DOS new line("\n") in a String "s".</div>
+								<div class="description">convert all UNIX new line("\r\n") to DOS new line("\n") in 
+a String "s".</div>
 							</td>
 						</tr>
 					
@@ -572,7 +581,8 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#newline_toUnix">newline_toUnix</a></b>(s)
 								</div>
-								<div class="description">convert all DOS new line("\r\n") to UNIX new line("\n") in a String "s".</div>
+								<div class="description">convert all DOS new line("\r\n") to UNIX new line("\n") in 
+a String "s".</div>
 							</td>
 						</tr>
 					
@@ -618,6 +628,15 @@ ul.inheritsList
 								<div class="fixedFont"><b><a href="../symbols/global__.html#stohex">stohex</a></b>(s)
 								</div>
 								<div class="description">convert a ASCII string to a hexadecimal string of ASCII codes.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#strdiffidx">strdiffidx</a></b>(s1, s2)
+								</div>
+								<div class="description">find index of string where two string differs</div>
 							</td>
 						</tr>
 					
@@ -686,7 +705,8 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						convert a Base64 encoded string to a Base64URL encoded string.<br/>Example: "ab+c3f/==" &rarr; "ab-c3f_"
+						convert a Base64 encoded string to a Base64URL encoded string.<br/>
+Example: "ab+c3f/==" &rarr; "ab-c3f_"
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -784,7 +804,8 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						convert a Base64URL encoded string to a Base64 encoded string.<br/>Example: "ab-c3f_" &rarr; "ab+c3f/=="
+						convert a Base64URL encoded string to a Base64 encoded string.<br/>
+Example: "ab-c3f_" &rarr; "ab+c3f/=="
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -876,7 +897,8 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						convert a Base64URL encoded string to a ASCII string.<br/>NOTE: This can't be used for Base64URL encoded non ASCII characters.
+						convert a Base64URL encoded string to a ASCII string.<br/>
+NOTE: This can't be used for Base64URL encoded non ASCII characters.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -1053,7 +1075,11 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						convert UTFa hexadecimal string to a URLComponent string such like "%67%68".<br/>Note that these "<code>0-9A-Za-z!'()*-._~</code>" characters will notconverted to "%xx" format by builtin 'encodeURIComponent()' function.However this 'encodeURIComponentAll()' function will convert all of characters into "%xx" format.
+						convert UTFa hexadecimal string to a URLComponent string such like "%67%68".<br/>
+Note that these "<code>0-9A-Za-z!'()*-._~</code>" characters will not
+converted to "%xx" format by builtin 'encodeURIComponent()' function.
+However this 'encodeURIComponentAll()' function will convert 
+all of characters into "%xx" format.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -1106,7 +1132,9 @@ ul.inheritsList
 					</div>
 					<div class="description">
 						convert a hexadecimal string to a Base64URL encoded string.<br/>
-convert a hexadecimal string to a Base64URL encoded string.NOTE: If leading "0" is omitted and odd number length forhexadecimal leading "0" is automatically added.
+convert a hexadecimal string to a Base64URL encoded string.
+NOTE: If leading "0" is omitted and odd number length for
+hexadecimal leading "0" is automatically added.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -1260,7 +1288,9 @@ convert a hexadecimal string to a Base64URL encoded string.NOTE: If leading "0"
 					
 					</div>
 					<div class="description">
-						convert a hexadecimal encoded string to a UTF-8 encoded string including CJK or Latin.<br/>Note that when input is improper hexadecimal string as UTF-8 string, this function returns'null'.
+						convert a hexadecimal encoded string to a UTF-8 encoded string including CJK or Latin.<br/>
+Note that when input is improper hexadecimal string as UTF-8 string, this function returns
+'null'.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -1312,7 +1342,8 @@ convert a hexadecimal string to a Base64URL encoded string.NOTE: If leading "0"
 					
 					</div>
 					<div class="description">
-						convert all UNIX new line("\r\n") to DOS new line("\n") in a String "s".
+						convert all UNIX new line("\r\n") to DOS new line("\n") in 
+a String "s".
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -1358,7 +1389,8 @@ convert a hexadecimal string to a Base64URL encoded string.NOTE: If leading "0"
 					
 					</div>
 					<div class="description">
-						convert all DOS new line("\r\n") to UNIX new line("\n") in a String "s".
+						convert all DOS new line("\r\n") to UNIX new line("\n") in 
+a String "s".
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -1460,7 +1492,8 @@ convert a hexadecimal string to a Base64URL encoded string.NOTE: If leading "0"
 					
 					</div>
 					<div class="description">
-						convert a ASCII string to a Base64 encoded string.<br/>NOTE: This can't be used for non ASCII characters.
+						convert a ASCII string to a Base64 encoded string.<br/>
+NOTE: This can't be used for non ASCII characters.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -1506,7 +1539,8 @@ convert a hexadecimal string to a Base64URL encoded string.NOTE: If leading "0"
 					
 					</div>
 					<div class="description">
-						convert a ASCII string to a Base64URL encoded string.<br/>NOTE: This can't be used for non ASCII characters.
+						convert a ASCII string to a Base64URL encoded string.<br/>
+NOTE: This can't be used for non ASCII characters.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -1598,7 +1632,8 @@ convert a hexadecimal string to a Base64URL encoded string.NOTE: If leading "0"
 					
 					</div>
 					<div class="description">
-						convert a ASCII string to a hexadecimal string of ASCII codes.<br/>NOTE: This can't be used for non ASCII characters.
+						convert a ASCII string to a hexadecimal string of ASCII codes.<br/>
+NOTE: This can't be used for non ASCII characters.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -1628,6 +1663,71 @@ convert a hexadecimal string to a Base64URL encoded string.NOTE: If leading "0"
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> hexadecimal string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="strdiffidx"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Number}</span>
+					<b>strdiffidx</b>(s1, s2)
+					
+					</div>
+					<div class="description">
+						find index of string where two string differs
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">strdiffidx("abcdefg", "abcd4fg") -> 4
+strdiffidx("abcdefg", "abcdefg") -> -1
+strdiffidx("abcdefg", "abcdef") -> 6
+strdiffidx("abcdefgh", "abcdef") -> 6</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s1</b>
+									
+								</dt>
+								<dd>string to compare</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s2</b>
+									
+								</dt>
+								<dd>string to compare</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 4.9.0 base64x 1.1.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Number}</span> string index of where character differs. Return -1 if same.</dd>
 							
 							</dl>
 						
@@ -1842,7 +1942,7 @@ convert a hexadecimal string to a Base64URL encoded string.NOTE: If leading "0"
 		
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
-                        &copy; 2012 Kenji Urushima, All rights reserved<br/>
+                        &copy; 2012-2015 Kenji Urushima, All rights reserved<br/>
 			
 			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 
 		</div>
