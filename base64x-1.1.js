@@ -1,9 +1,9 @@
-/*! base64x-1.1.4 (c) 2012-2015 Kenji Urushima | kjur.github.com/jsjws/license
+/*! base64x-1.1.5 (c) 2012-2015 Kenji Urushima | kjur.github.com/jsjws/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * version: 1.1.4 (2015 Jul 3)
+ * version: 1.1.5 (2015-Sep-13)
  *
  * Copyright (c) 2012-2015 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -21,7 +21,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.1.4 (2015-Jul-3)
+ * @version asn1 1.1.5 (2015-Sep-13)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -404,3 +404,27 @@ function newline_toDos(s) {
     s = s.replace(/\n/mg, "\r\n");
     return s;
 }
+
+// ==== others ================================
+
+/**
+ * find index of string where two string differs
+ * @param {String} s1 string to compare
+ * @param {String} s2 string to compare
+ * @return {Number} string index of where character differs. Return -1 if same.
+ * @since jsrsasign 4.9.0 base64x 1.1.5
+ * @example
+ * strdiffidx("abcdefg", "abcd4fg") -> 4
+ * strdiffidx("abcdefg", "abcdefg") -> -1
+ * strdiffidx("abcdefg", "abcdef") -> 6
+ * strdiffidx("abcdefgh", "abcdef") -> 6
+ */
+var strdiffidx = function(s1, s2) {
+    var n = s1.length;
+    if (s1.length > s2.length) n = s2.length;
+    for (var i = 0; i < n; i++) {
+	if (s1.charCodeAt(i) != s2.charCodeAt(i)) return i;
+    }
+    if (s1.length != s2.length) return n;
+    return -1; // same
+};

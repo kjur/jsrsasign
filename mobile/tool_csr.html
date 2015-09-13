@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>DEMO: PKCS#10/CSR tool by jsrsasign</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" rel="stylesheet" type="text/css">
+<script src="http://code.jquery.com/jquery-1.7.1.min.js" type="text/javascript"></script>
+<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript" src="../jsrsasign-latest-all-min.js"></script>
+<script leanguage="JavaScript" type="text/javascript">
+</script>
+
+</head>
+
+<body>
+
+
+<!-- page top -->
+<div data-role="page" id="top">
+<div data-role="header">
+<h1>CSR/PKCS#10 DEMO</h1>
+<a href="index.html">Back</a>
+</div>
+<div data-role="content">
+This is a <a href="http://kjur.github.io/jsjws/" target="_blank">jsrsasign</a>
+demo program to generate a certificate signing request (CSR/PKCS#10) to
+to be issued your certificate from a certification authorities.
+
+<h2>demo</h2>
+<ul data-role="listview" data-inset="true">
+<li><a href="#signer">JWT signer</a></li>
+<li><a href="#verifier">JWT verifier</a></li>
+<li><a href="#parser">JWT parser</a></li>
+</ul>
+</div>
+<div data-role="footer">
+<h4>&copy; 2013 <a href="https://github.com/kjur">@kjur</a></h4>
+</div>
+</div>
+
+<!-- page signer -->
+<div data-role="page" id="signer">
+<script>
+$(document).bind('mobileinit', function(){
+  $.mobile.loader.prototype.options.text = "loading";
+  $.mobile.loader.prototype.options.textVisible = false;
+  $.mobile.loader.prototype.options.theme = "z";
+  $.mobile.loader.prototype.options.html = "";
+});
+</script>
+<div data-role="header">
+<h1>JWT signer</h1>
+<a href="#top">Back</a>
+</div>
+<div data-role="content">
+This is a sample program to generate a signed JSON Web Token(JWT).
+
+<h2>(Step1) set claim</h2>
+
+<form name="form1">
+<div data-role="fieldcontain">
+<label>Issuer(iss)</label><br/>
+<input type="text" name="iss1" value="https://jwt-idp.example.com"/><br/>
+<label>Subject(sub)</label><br/>
+<input type="text" name="sub1" value="mailto:mike@example.com"/><br/>
+<label>Not Before Time(nbf)</label><br/>
+<input type="text" name="nbf1" value="now"/><br/>
+<label>Expiration Time(exp)</label><br/>
+<input type="text" name="exp1" value="now + 1hour"/><br/>
+<label>Issue At Time(iat)</label><br/>
+<input type="text" name="iat1" value="now"/><br/>
+<label>JWT ID(jti)</label><br/>
+<input type="text" name="jti1" value="id123456"/><br/>
+<label>Type(typ)</label><br/>
+<input type="text" name="typ1" value="https://example.com/register"/><br/>
+</div>
+
+NOTE: As for 'time' representation, please see 
+<a href="http://kjur.github.io/jsjws/api/symbols/KJUR.jws.IntDate.html#.get" target="_blank">here</a> in detail.
+
+<h2>(Step2) Choose issuer key and JWS signing algorithm.</h2>
+
+<div data-role="fieldcontain">
+<b>Private key or shared secret:</b><br/>
+Choose JWS signature algorithm and default value: <br/>
+<select name="alg1" onChange="_setAlg()">
+<option value="none" selected/> none (no signature)
+<option value="HS256"/> HS256 (HmacSHA256) with default shared key
+<option value="HS512"/> HS512 (HmacSHA512) with default shared key
+<option value="RS256"/> RS256 (SHA256withRSA RSA2048bit:z4) with default private key
+<option value="RS384"/> RS384 (SHA384withRSA RSA2048bit:z4) with default private key
+<option value="RS512"/> RS512 (SHA512withRSA RSA2048bit:z4) with default private key
+<option value="ES256"/> ES256 (SHA256withECDSA NIST P-256) with default private key
+<option value="ES384"/> ES384 (SHA384withECDSA NIST P-384) with default private key
+<option value="PS256"/> PS256 (SHA256withRSAandMGF1 RSA2048bit:z4) with default private key
+<option value="PS384"/> PS384 (SHA384withRSAandMGF1 RSA2048bit:z4) with default private key
+<option value="PS512"/> PS512 (SHA512withRSAandMGF1 RSA2048bit:z4) with default private key
+<option value="RS256"/> SHA256withRSA with PKCS#5 plain private key(z4)
+<option value="RS256"/> SHA256withRSA with PKCS#8 plain private key(z4)
+<option value="RS256"/> SHA256withRSA with PKCS#8 encrypted private key(z4)
+</select>
+<br/>
+Or specify signature algorithm, private key, private key passcode and/or shared secret:<br/>
+<textarea name="key1" cols="65" rows="3"></textarea><br/>
+passcode for private key: <br/>
+<input name="pass1" type="text" cols="40"/><br/>
+
+<i>NOTE: Off course you can set your own private key and passcode. 
+Please care of proper signature algorithm 
+when you set your own key and pass code.</i>
+
+<h2>(Step3) Press "Sign it!"</h2>
+To generate signed JWT just pass 'Sign it!'.
+<input type="button" value="Sign it!" onClick="_doSign();"/> <br/>
+<textarea name="jws1" cols="65" rows="3"></textarea><br/>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+<div data-role="footer">
+<h4>&copy; 2013 <a href="https://github.com/kjur">@kjur</a></h4>
+</div>
+</div>
+
+<!-- page verifier ----------------------------------------------------------------------->
+<div data-role="page" id="verifier">
+<div data-role="header">
+<h1>JWT verifier</h1>
+<a href="#top">Back</a>
+</div>
+<div data-role="content">
+This is a sample program to generate and verify JSON Web Token(JWT).
+
+<form name="form2" id="form2">
+
+<h2>(Step1) Fill JWT</h2>
+
+<textarea rows="10" cols="10" id="textarea_parse_jws1" name="jws1">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2p3dC1pZHAuZXhhbXBsZS5jb20iLCJzdWIiOiJtYWlsdG86bWlrZUBleGFtcGxlLmNvbSIsIm5iZiI6MTM3ODI3NTMwMiwiZXhwIjoxMzc4Mjc4OTAyLCJpYXQiOjEzNzgyNzUzMDIsImp0aSI6ImlkMTIzNDU2IiwidHlwIjoiaHR0cHM6Ly9leGFtcGxlLmNvbS9yZWdpc3RlciJ9.fWNOjt3Xa72gc4uqFILE6tdf6TVqtC0Tws2w5rkllb0</textarea>
+
+<h2>(Step2) Choose proper public key or certificate to verify.</h2>
+
+<select name="alg2" onChange="_setAlg2()">
+<option value="none" selected/> none (no signature)
+<option value="HS"/> HS* (HmacSHA*) with default shared key
+<option value="RSPS-PUB"/> default PKCS#8 public key (RSA z4) for RS* PS* JWT
+<option value="RSPS-CER"/> default X.509 certificate (RSA z4) for RS* PS* JWT
+<option value="ES256-PUB"/> default public key for ES256 (SHA256withECDSA NIST P-256 k1)
+<option value="ES256-CER"/> default X.509 certificate for ES256 (SHA256withECDSA NIST P-256 k1)
+<option value="ES384-PUB"/> default public key for ES384 (SHA384withECDSA NIST P-384 k6)
+<option value="ES384-PUB"/> default X.509 certificate for ES384 (SHA384withECDSA NIST P-384 k6)
+</select>
+<br/>
+<textarea name="key2" cols="65" rows="3"></textarea><br/>
+<br/>
+NOTE: When you sign JWT with your own key, please fill your
+own public key or X.509 certificate to verify it.
+<br/>
+
+<h2>(Step3) Press 'Verify'.</h2>
+<input type="button" value="Verify it!" onClick="_doVerify()"/>
+
+<h2>JWT Header</h2>
+<textarea rows="10" cols="10" name="im_head1">
+</textarea>
+
+<h2>JWT Payload(Claim)</h2>
+<textarea rows="30" cols="10" name="im_payload1">
+</textarea>
+
+</form>
+
+</div>
+<div data-role="footer">
+<h4>&copy; 2013 <a href="https://github.com/kjur">@kjur</a></h4>
+</div>
+</div>
+
+<!-- page parser -->
+<div data-role="page" id="parser">
+<div data-role="header">
+<h1>JWT parser</h1>
+<a href="#top">Back</a>
+</div>
+<div data-role="content">
+This is a sample program just to parse JSON Web Token(JWT).
+
+<form name="form3" id="form3">
+<textarea rows="10" cols="10" id="textarea_parse_jws1" name="jws1">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2p3dC1pZHAuZXhhbXBsZS5jb20iLCJzdWIiOiJtYWlsdG86bWlrZUBleGFtcGxlLmNvbSIsIm5iZiI6MTM3ODI3NTMwMiwiZXhwIjoxMzc4Mjc4OTAyLCJpYXQiOjEzNzgyNzUzMDIsImp0aSI6ImlkMTIzNDU2IiwidHlwIjoiaHR0cHM6Ly9leGFtcGxlLmNvbS9yZWdpc3RlciJ9.fWNOjt3Xa72gc4uqFILE6tdf6TVqtC0Tws2w5rkllb0</textarea>
+
+<input type="button" value="Just Decode JWT" onClick="_doDecode()"/>
+
+<h2>JWT Header</h2>
+<textarea rows="10" cols="10" name="im_head1">
+</textarea>
+
+<h2>JWT Payload(Claim)</h2>
+<textarea rows="30" cols="10" name="im_payload1">
+</textarea>
+
+</form>
+
+</div>
+<div data-role="footer">
+<h4>&copy; 2013 <a href="https://github.com/kjur">@kjur</a></h4>
+</div>
+
+</div>
+
+</body>
+</html>

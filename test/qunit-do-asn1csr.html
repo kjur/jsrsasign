@@ -1,0 +1,303 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta charset="utf-8">
+<title>QUnit for CSR ASN1 Encoder Class 'asn1csr.js'</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core-min.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha256.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/cipher-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/tripledes.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../ext/prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rng.js"></script>
+<script src="../ext/jsbn.js"></script>
+<script src="../ext/jsbn2.js"></script>
+<script src="../ext/rsa.js"></script>
+<script src="../ext/rsa2.js"></script>
+<script src="../ext/base64.js"></script>
+<script src="../base64x-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../crypto-1.1.js"></script>
+<script src="../asn1-1.0.js"></script>
+<script src="../asn1x509-1.0.js"></script>
+<script src="../keyutil-1.0.js"></script>
+<script src="../rsasign-1.2.js"></script>
+<script src="../asn1csr-1.0.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../ext/ec.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/ec-patch.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecdsa-modified-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecparam-1.0.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../dsa-modified-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+
+// _test/z1.*
+var z1PubP8PEM = "" +
+"-----BEGIN PUBLIC KEY-----\n" +
+"MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOhmTdK0BSkSFWjzs5vJemLnujwJur3E\n" +
+"8NzY35DreQubtkWitw4xEnR7TTxBtRQkiVEV/viPedQ+rlsaTjUY/VkCAwEAAQ==\n" +
+"-----END PUBLIC KEY-----\n";
+
+var z1PrvP5EPEM = "" +
+"-----BEGIN RSA PRIVATE KEY-----\n" +
+"Proc-Type: 4,ENCRYPTED\n" +
+"DEK-Info: DES-EDE3-CBC,4626F2E5853E783F\n" +
+"\n" +
+"3vFpkrnbantC8RSzng2+jBw/VX95oi0VGKP0G8whENHUOVQXB/YOUSj+n80Y0Wwc\n" +
+"GpeQi8U0FQdWyYv8b9aioeFB06r9t9mJsYscJ/wcIvv5tTMkr89cwN3+4GQQuqNg\n" +
+"TmI9ekeoZ3NP26hTM4XTuFqHx4dzNNwjDLc8txc77WE/o4J4p8k9Py5yPZjs9EKy\n" +
+"wy/yxtqQYQuFj90OMEG1G89iHTZRcq4YTZYdqg6P/XEUvyjifN+7Nym8f2N9TDDn\n" +
+"RJtApPQlrgXvUDQKz6Lu1ZYMwe94E9YdutDGQMbxixbiyxlcxrkb/oEHH5WP5qPG\n" +
+"w/xzh08Ce2Ftba2Q860S8nznjyZFiv+lqSKBahbujgP/63ZL+JbAd4cYBqgm4g1C\n" +
+"YwMhHJbaVCzwYduxdyK2JBYEosDZiDfnOP4DqPhJYpg=\n" +
+"-----END RSA PRIVATE KEY-----\n";
+var z1PrvP5EPass = "hoge";
+
+var z1CertPEM = "" +
+"-----BEGIN CERTIFICATE-----\r\n" +
+"MIIBfzCCASmgAwIBAgIBBDANBgkqhkiG9w0BAQUFADAZMQswCQYDVQQGEwJVUzEK\r\n" +
+"MAgGA1UECgwBYTAeFw0xMzA1MDQyMzU5NTlaFw0xNDA1MDQyMzU5NTlaMBkxCzAJ\r\n" +
+"BgNVBAYTAlVTMQowCAYDVQQKDAFiMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOhm\r\n" +
+"TdK0BSkSFWjzs5vJemLnujwJur3E8NzY35DreQubtkWitw4xEnR7TTxBtRQkiVEV\r\n" +
+"/viPedQ+rlsaTjUY/VkCAwEAAaNcMFowDwYDVR0TAQH/BAUwAwEB/zALBgNVHQ8E\r\n" +
+"BAMCBsAwJQYDVR0fBB4wHDAaoBigFoYUaHR0cDovL2FhYS5jb20vYS5jcmwwEwYD\r\n" +
+"VR0lBAwwCgYIKwYBBQUHAwIwDQYJKoZIhvcNAQEFBQADQQAMUx/hyfWr2779id/7\r\n" +
+"p6lHAFZTN+HBwfoq6c1reeVtk7JKD+18dYbKJcwbLLj2CEv04fm+MQ5p8mY7r5Aa\r\n" +
+"558s\r\n" +
+"-----END CERTIFICATE-----\r\n";
+
+// _gitpg/jsrsasign/test/eckey/k1.*
+var k1PubP8PEM = "" +
+"-----BEGIN PUBLIC KEY-----\n" +
+"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoBUyo8CQAFPeYPvv78ylh5MwFZjT\n" +
+"CLQeb042TjiMJxG+9DLFmRSMlBQ9T/RsLLc+PmpB1+7yPAR+oR5gZn3kJQ==\n" +
+"-----END PUBLIC KEY-----\n";
+
+var k1PrvP8PPEM = "" +
+"-----BEGIN PRIVATE KEY-----\n" +
+"MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgEbVzfPnZPxfAyxqE\n" +
+"ZV05laAoJAl+/6Xt2O4mOB611sOhRANCAASgFTKjwJAAU95g++/vzKWHkzAVmNMI\n" +
+"tB5vTjZOOIwnEb70MsWZFIyUFD1P9Gwstz4+akHX7vI8BH6hHmBmfeQl\n" +
+"-----END PRIVATE KEY-----\n";
+
+// _work_dsa/d1.pub.p8.pem
+var d1PubP8PEM = "" +
+"-----BEGIN PUBLIC KEY-----\n" +
+"MIIBtzCCASsGByqGSM44BAEwggEeAoGBAJ7TJ6EkB8jS3Jprk1n7xI8qMXUE8ztI\n" +
+"ZhxLA3ePVbgYryGShbvN+mD2P5b1w8BnONckMqNvRtZJCg/nAjhRdnHnq9tDDE/7\n" +
+"dKF/ttDOzu4o/dtJJzvNFlpSDkqXF7TSfvBvNBffap6i2jUFjxGa52rICVosRe5X\n" +
+"bD3+glPzRJpPAhUAgyEkwxiCmPjW3RrYQSHC7zOl1SsCgYBxGsQFO69QKqCgmry3\n" +
+"r3KIVJXh77DeEp2Tx7sW8OS4ChoQ0ECe1SvNDfC1UR9uCPdHFVF+lAbt1F148O8V\n" +
+"2Ssn7zmOp7+TZfoTWRMiFJ+oRjUYfaJ38Vy8jJooQj/rIzIh5dGtNtkm0uHgx3Dz\n" +
+"TcBKYW9VaFIiqbHPT47Ph8GbfgOBhQACgYEAjK/ZZUzlGBjhVGE70LFO6XT73/xa\n" +
+"GYAsQwEwK8hU1eF9rw1nRaSqqORv+WtXyJNx+nLMoSoiSIIWRdH/dYaaJUmtf9EQ\n" +
+"zu/qVhbQC+WUEDbhoth7vPC/vmw7Hhi6DTs69tNLrPYTJwoLX2fHhmjkuls+wKoo\n" +
+"52LqH58uAWfgUjs=\n" +
+"-----END PUBLIC KEY-----\n";
+
+var d1PrvP5EPEM = "" +
+"-----BEGIN DSA PRIVATE KEY-----\n" +
+"Proc-Type: 4,ENCRYPTED\n" +
+"DEK-Info: DES-EDE3-CBC,0A4241238121CC53\n" +
+"\n" +
+"SREBGTs1GdPEyT0O4MQIPfZZ59Wj8dcvqyEv+IlHzztZbqUiBfGYidu5ybhhaq8W\n" +
+"FvDLUTyUPhWqjnTPI0P73t/nMFhZEEB/PWP4SCCXcsd+8ygIEVQfXl9CcFfFxsiP\n" +
+"UhRBaZrU/yQ/IynKSboA/RfysHyfJTn3GcJLmMDhs7x4yZr+E8FIfk15qXCkzEsH\n" +
+"yFkhDi0D23RfttXie5HiQE0e2XsB127aCkYfQ5nMesrGTVtQb+8cuodtejmGtFtT\n" +
+"kslgs45yRNUznxxMi/61sm6pkH///ow0w5DN74UQsqpJj4CYhhNQY4r/QnK8SvlL\n" +
+"+KFXazkFwWNZbXiyxF7zdaCsb5bglvfmJspSDGUIcxPzwMG1GQBA3IqOegjmgU/5\n" +
+"LMElak/HMFFjT+jUUvxVSJIWK7f4+lWypwPkmmZib9dx8XHPpUr/vXBwPLE40fRG\n" +
+"9enP7lSZRWjmW9alWIn6dpjG5HsQwH4eMxdD1fqLR7BR+nx+z47wqmAXPIzOL7PW\n" +
+"N4nVxc1+juzITbT6HZB5gkHJG/5l/YFDsACK8aLHp+lgM/Onyg3cMDKSbaXERPZb\n" +
+"q0MrwzdrLyCc6x9HYz2QDA==\n" +
+"-----END DSA PRIVATE KEY-----\n";
+var d1PrvP5EPass = "passwd";
+
+// _data/0csr1/key2.pub
+var key2pub = (function() {/*
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5/2QHMBBvirriuchipR5
+02Ra3oN/jduXlIFi0eWpQem2S0IrKwgiBX9+hNnjhqMhOXp4k/6IuCOH6PIRpJSk
+F1N/tu7ypzTVwnT8LQof5daRQteHFPU3w3MelduE5nGPjJl8jcV36jtvt7nnkZjJ
+vZPluQLNAt6azIvI31BQqNID1x3RIDTxVa6A952undto669sUuOcjUCFxwYCk3u5
+m89RpayoyAEK3rq6XbSF+spirWLHeDF0d58hMGvbwI8YPnp7dNRPU08Wg9QUJE8l
+JEfMyAXOYa2eKRk9mqB7jkEYDHiqNPzjsm3CT0amn8e2B+dQUYgSe3Rnj58ToiIr
+xQIDAQAB
+-----END PUBLIC KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// _data/0csr1/key2.prv
+var key2prv = (function() {/*-----BEGIN RSA PRIVATE KEY-----
+MIIEpQIBAAKCAQEA5/2QHMBBvirriuchipR502Ra3oN/jduXlIFi0eWpQem2S0Ir
+KwgiBX9+hNnjhqMhOXp4k/6IuCOH6PIRpJSkF1N/tu7ypzTVwnT8LQof5daRQteH
+FPU3w3MelduE5nGPjJl8jcV36jtvt7nnkZjJvZPluQLNAt6azIvI31BQqNID1x3R
+IDTxVa6A952undto669sUuOcjUCFxwYCk3u5m89RpayoyAEK3rq6XbSF+spirWLH
+eDF0d58hMGvbwI8YPnp7dNRPU08Wg9QUJE8lJEfMyAXOYa2eKRk9mqB7jkEYDHiq
+NPzjsm3CT0amn8e2B+dQUYgSe3Rnj58ToiIrxQIDAQABAoIBAQCeXYe9OLkoWiBE
+yBcrhMPNPJqTf2zZp+fH5rNQ2dg7OJHKujbBv2GKI0h45EzfogiSNjqNvJoUKZ0j
+teu5UAbcLZHnjSJ0Zirt/fIPxPOVcG3lFUAPXH5em/1rC1mj/i2iKzzNgtmjOkO/
+RdcAmy5MjeOp8nGE3fUKYPoVB7yoILi44W7yLbSUctyFDAPCGLyjyN0N3Yq5dcyv
+5F+Ec3aQhEVQ8282iAcP6/gQBg/fC1SnIOLd8UGM0EyuFhxkH5L5lQDT4obcEStz
+F8lm6+53WTd9nTTNE9GRDBXySFVQmX82lfWjcLW2+8cXgzC04ozpRrQnH+stgRUC
+67OcSX0ZAoGBAPwTuZwJirT3gMQgcyTozFoLGD1kRCjBW18tw0pE8C/ZAHaT4DaD
+kDpzWddkiyCHSInyGIXcT1gbBgvMF4wqIYzMRjtlj88mgK//gHLhWjiCVTh76wgG
+3XmLsOiL+cxjFX/XQWI5kocABzYbJThRjxOxi1zQ3MFOZVmR7LRQuvCfAoGBAOuZ
+0CEQI1A2LBWJAl0KAgHcre4VfBMETTbFecs4Pul4fqSQcxlSU7x43ZLUAEEWAs3P
+njN4Z6WmANdrEMlAdSv+PO8nbjA7gC5BMrlzc1TTnj2Z42SYT9AsTe+N/dAWv7Kf
+AFjDVfwEKY9a21sChU0oV+ohcJsExeM5JXonulUbAoGBANlx1nmwjXNf0Tbd2xWq
+r6S4z1cd5+HUMZKf8kddwmcz5L9k/lNoGAEjwgsYkx8jM8KzEM5f5h3VadjBXEqv
+iTNgfvD7whrqVrX7S/1NQbtfSk4oLu1EpsYTZy6imH/jtQcLUz589VX5Az98GRZE
+3IwbamFNVjB2BN1IEIzW2vt3AoGAMrpgnO3bnKa9YTmp35yLCBma/Zt0pqeTdIqa
+ic4nhZ+jLQ3JKpeWXgtsMfQhxeHWYrgkaRKwxnLy1W9BIwQU9o78UcYcrJfzJoJ1
+SIb6OzaBaOQcmQlOjhUsBrt8/fQX/H7N1U7h0ayXwj0e4/6r8wwPueLPWyFw9lbU
+ofOx5CcCgYEAvTTcxuj6jscA33tFPa+SWM2QT8JFMxftjVTitUBdPntRWCawwzqY
+yIaCKBkF8f03cTS3yz1ZiE3M1OQs1zuaUxJVTr1VpSUV+pxTuZ3gq3i/9QHadVrE
+MGpevmzMV1eLDgIjvOUFkBskHqfKieaNYsP33jnqlv6Zi8Z6NVYPVDc=
+-----END RSA PRIVATE KEY-----*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// _data/0csr1/key2.csr.hex (generated by OpenSSL SHA256)
+var key2csrhex = "308202773082015f0201003032310b3009060355040613025553310d300b060355040a0c04546573743114301206035504030c0b6578616d706c652e636f6d30820122300d06092a864886f70d01010105000382010f003082010a0282010100e7fd901cc041be2aeb8ae7218a9479d3645ade837f8ddb97948162d1e5a941e9b64b422b2b0822057f7e84d9e386a321397a7893fe88b82387e8f211a494a417537fb6eef2a734d5c274fc2d0a1fe5d69142d78714f537c3731e95db84e6718f8c997c8dc577ea3b6fb7b9e79198c9bd93e5b902cd02de9acc8bc8df5050a8d203d71dd12034f155ae80f79dae9ddb68ebaf6c52e39c8d4085c70602937bb99bcf51a5aca8c8010adebaba5db485faca62ad62c7783174779f21306bdbc08f183e7a7b74d44f534f1683d414244f252447ccc805ce61ad9e29193d9aa07b8e41180c78aa34fce3b26dc24f46a69fc7b607e7505188127b74678f9f13a2222bc50203010001a000300d06092a864886f70d01010b0500038201010060f76944264ee26ca31814e560048427a1596c976906c62d1147bcd01b3d8adafaae7bd01e682732a3da6e56c3f0da4908dad2e6ec1a399cc41dbfe4b240ed3c318301fb9f4a1510f396a5cab91cecb69893afb523bd5641994273994ec181f55e5edec3fbaad4274152c499c294464abaf0c1563d04d8ddc5efdd123b3d992132c82979189b232589cd2bca77cdfc59bade2129542d95100b274d529d97d27ca53105c3847def151ecfac8d12e398192ff33a827d5b5bb042b2276b3d8e31915e5a2788a929a45f1dd29d4cdf472c899ffe9692aa8dab958644e00705bd1b187df5c3394bb180ad742c03058b5e8e38a1257877787b01fd120c93edd8de6668";
+
+// _data/0csr1/key2.csr3.hex (generated by OpenSSL SHA1)
+var key2csr3hex = "308202773082015f0201003032310b3009060355040613025553310d300b060355040a0c04546573743114301206035504030c0b6578616d706c652e636f6d30820122300d06092a864886f70d01010105000382010f003082010a0282010100e7fd901cc041be2aeb8ae7218a9479d3645ade837f8ddb97948162d1e5a941e9b64b422b2b0822057f7e84d9e386a321397a7893fe88b82387e8f211a494a417537fb6eef2a734d5c274fc2d0a1fe5d69142d78714f537c3731e95db84e6718f8c997c8dc577ea3b6fb7b9e79198c9bd93e5b902cd02de9acc8bc8df5050a8d203d71dd12034f155ae80f79dae9ddb68ebaf6c52e39c8d4085c70602937bb99bcf51a5aca8c8010adebaba5db485faca62ad62c7783174779f21306bdbc08f183e7a7b74d44f534f1683d414244f252447ccc805ce61ad9e29193d9aa07b8e41180c78aa34fce3b26dc24f46a69fc7b607e7505188127b74678f9f13a2222bc50203010001a000300d06092a864886f70d0101050500038201010015ca0b78733822afab6cd69f214c60b62c63639abb92397ddd974cfa1c6e1c186aefa7d5fbd4b2c98bcfacc7572f4856f2635c5da1126062f0ea8ce6b41f959dd5232d441d453a11d7129ef449209ced804920512a0e8b0f0980abbebec76a319636ce1fa9bb46e7abb21f47c2cd8350c3f4d36a857bd16444573b74e34618e8962e01e8316ab7508ca90364a160eeb162b4c90ca6654243e6dc0ed3ed1b8a0dcc29263777b9ffe1ec1829bb54ecb12f0e1998762cdc4f4087add6b6d31d8f96ba5001e4d37c7ee09805cf5b7fecc061402aba8692ef5d573ded54d080016a4f3e80d9c9ca7b6fa121a555a23326dfee6119a6d7562db1cac9d083ff0e2a178c";
+
+// _data/0csr1/key2.csr (generated by OpenSSL SHA256 PEM)
+var key2csrpem = "" +
+"-----BEGIN CERTIFICATE REQUEST-----\r\n" +
+"MIICdzCCAV8CAQAwMjELMAkGA1UEBhMCVVMxDTALBgNVBAoMBFRlc3QxFDASBgNV\r\n" +
+"BAMMC2V4YW1wbGUuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA\r\n" +
+"5/2QHMBBvirriuchipR502Ra3oN/jduXlIFi0eWpQem2S0IrKwgiBX9+hNnjhqMh\r\n" +
+"OXp4k/6IuCOH6PIRpJSkF1N/tu7ypzTVwnT8LQof5daRQteHFPU3w3MelduE5nGP\r\n" +
+"jJl8jcV36jtvt7nnkZjJvZPluQLNAt6azIvI31BQqNID1x3RIDTxVa6A952undto\r\n" +
+"669sUuOcjUCFxwYCk3u5m89RpayoyAEK3rq6XbSF+spirWLHeDF0d58hMGvbwI8Y\r\n" +
+"Pnp7dNRPU08Wg9QUJE8lJEfMyAXOYa2eKRk9mqB7jkEYDHiqNPzjsm3CT0amn8e2\r\n" +
+"B+dQUYgSe3Rnj58ToiIrxQIDAQABoAAwDQYJKoZIhvcNAQELBQADggEBAGD3aUQm\r\n" +
+"TuJsoxgU5WAEhCehWWyXaQbGLRFHvNAbPYra+q570B5oJzKj2m5Ww/DaSQja0ubs\r\n" +
+"GjmcxB2/5LJA7TwxgwH7n0oVEPOWpcq5HOy2mJOvtSO9VkGZQnOZTsGB9V5e3sP7\r\n" +
+"qtQnQVLEmcKURkq68MFWPQTY3cXv3RI7PZkhMsgpeRibIyWJzSvKd838WbreISlU\r\n" +
+"LZUQCydNUp2X0nylMQXDhH3vFR7PrI0S45gZL/M6gn1bW7BCsidrPY4xkV5aJ4ip\r\n" +
+"KaRfHdKdTN9HLImf/paSqo2rlYZE4AcFvRsYffXDOUuxgK10LAMFi16OOKEleHd4\r\n" +
+"ewH9EgyT7djeZmg=\r\n" +
+"-----END CERTIFICATE REQUEST-----\r\n";
+
+// ======= TEST ===============================================================
+
+test("CertificationRequestInfo", function() {
+var csri = new KJUR.asn1.csr.CertificationRequestInfo();
+csri.setSubjectByParam({'str': '/C=US/CN=b'});
+csri.setSubjectPublicKeyByGetKey(z1PubP8PEM);
+equal(csri.getEncodedHex(), "307e0201003019310b3009060355040613025553310a300806035504030c0162305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a000", "aaa");
+});
+
+test("CertificationRequestInfo key2pub", function() {
+var csri = new KJUR.asn1.csr.CertificationRequestInfo();
+csri.setSubjectByParam({'str': '/C=US/O=Test/CN=example.com'});
+csri.setSubjectPublicKeyByGetKey(key2pub);
+equal(csri.getEncodedHex(), "3082015f0201003032310b3009060355040613025553310d300b060355040a0c04546573743114301206035504030c0b6578616d706c652e636f6d30820122300d06092a864886f70d01010105000382010f003082010a0282010100e7fd901cc041be2aeb8ae7218a9479d3645ade837f8ddb97948162d1e5a941e9b64b422b2b0822057f7e84d9e386a321397a7893fe88b82387e8f211a494a417537fb6eef2a734d5c274fc2d0a1fe5d69142d78714f537c3731e95db84e6718f8c997c8dc577ea3b6fb7b9e79198c9bd93e5b902cd02de9acc8bc8df5050a8d203d71dd12034f155ae80f79dae9ddb68ebaf6c52e39c8d4085c70602937bb99bcf51a5aca8c8010adebaba5db485faca62ad62c7783174779f21306bdbc08f183e7a7b74d44f534f1683d414244f252447ccc805ce61ad9e29193d9aa07b8e41180c78aa34fce3b26dc24f46a69fc7b607e7505188127b74678f9f13a2222bc50203010001a000", "aaa");
+});
+
+test("CertificationRequest SHA1withRSA", function() {
+var csri = new KJUR.asn1.csr.CertificationRequestInfo();
+csri.setSubjectByParam({'str': '/C=US/CN=b'});
+csri.setSubjectPublicKeyByGetKey(z1PubP8PEM);
+
+var csr = new KJUR.asn1.csr.CertificationRequest({'csrinfo': csri});
+var prvKey = KEYUTIL.getKey(z1PrvP5EPEM, "hoge");
+//equal(prvKey, null, "aaa");
+csr.sign("SHA1withRSA", prvKey);
+equal(csr.getEncodedHex(), "3081d2307e0201003019310b3009060355040613025553310a300806035504030c0162305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a000300d06092a864886f70d010105050003410078a1bcf448392f6f1d3da500f18b85b763c71415c3a2a6460fe555b01793d2665ea5d5b76bd4c0b4b3affd6e4b50c4941fffab930240ad411fa378f3c719934d", "aaa");
+});
+
+test("CertificationRequest SHA256withRSA", function() {
+var csri = new KJUR.asn1.csr.CertificationRequestInfo();
+csri.setSubjectByParam({'str': '/C=US/CN=b'});
+csri.setSubjectPublicKeyByGetKey(z1PubP8PEM);
+
+var csr = new KJUR.asn1.csr.CertificationRequest({'csrinfo': csri});
+var prvKey = KEYUTIL.getKey(z1PrvP5EPEM, "hoge");
+//equal(prvKey, null, "aaa");
+csr.sign("SHA256withRSA", prvKey);
+equal(csr.getEncodedHex(), "3081d2307e0201003019310b3009060355040613025553310a300806035504030c0162305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a000300d06092a864886f70d01010b0500034100966e2cc2e53e277beaa639b444e0e463abefc3f1d4841e93a8088e07862d4dd58b6c83492b3dc8f3076f031060b931272d1248e5c08ccd2c34cb63c90a06211e", "aaa");
+});
+
+test("CertificationRequest SHA256withRSA key2pub/prv", function() {
+var csri = new KJUR.asn1.csr.CertificationRequestInfo();
+csri.setSubjectByParam({'str': '/C=US/O=Test/CN=example.com'});
+csri.setSubjectPublicKeyByGetKey(key2pub);
+
+var csr = new KJUR.asn1.csr.CertificationRequest({'csrinfo': csri});
+var prvKey = KEYUTIL.getKey(key2prv);
+csr.sign("SHA256withRSA", prvKey);
+equal(csr.getEncodedHex(), key2csrhex, "csr compare to the one generated by openssl/sha256/key2");
+});
+
+test("CertificationRequest SHA1withRSA key2pub/prv", function() {
+var csri = new KJUR.asn1.csr.CertificationRequestInfo();
+csri.setSubjectByParam({'str': '/C=US/O=Test/CN=example.com'});
+csri.setSubjectPublicKeyByGetKey(key2pub);
+
+var csr = new KJUR.asn1.csr.CertificationRequest({'csrinfo': csri});
+var prvKey = KEYUTIL.getKey(key2prv);
+csr.sign("SHA1withRSA", prvKey);
+equal(csr.getEncodedHex(), key2csr3hex, "csr compare HEX to the one generated by openssl/sha1/key2");
+});
+
+test("CertificationRequest.getPEMString SHA256withRSA key2pub/prv", function() {
+var csri = new KJUR.asn1.csr.CertificationRequestInfo();
+csri.setSubjectByParam({'str': '/C=US/O=Test/CN=example.com'});
+csri.setSubjectPublicKeyByGetKey(key2pub);
+var csr = new KJUR.asn1.csr.CertificationRequest({'csrinfo': csri});
+var prvKey = KEYUTIL.getKey(key2prv);
+csr.sign("SHA256withRSA", prvKey);
+equal(csr.getPEMString(), key2csrpem, "csr compare PEM to the one generated by openssl/sha1/key2");
+});
+
+test("CSRUtil.newCSRPEM by keyPEM SHA256withRSA key2pub/prv", function() {
+var pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
+  subject: {str: '/C=US/O=Test/CN=example.com'},
+  sbjpubkey: key2pub,
+  sigalg: "SHA256withRSA",
+  sbjprvkey: key2prv
+});
+equal(pem, key2csrpem, "CSR PEM compare to the one generated by openssl/sha1/key2");
+});
+
+test("CSRUtil.newCSRPEM by keyObj SHA256withRSA key2pub/prv", function() {
+var prvKey = KEYUTIL.getKey(key2prv);
+var pubKey = KEYUTIL.getKey(key2pub);
+var pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
+  subject: {str: '/C=US/O=Test/CN=example.com'},
+  sbjpubkey: pubKey,
+  sigalg: "SHA256withRSA",
+  sbjprvkey: prvKey
+});
+equal(pem, key2csrpem, "CSR PEM compare to the one generated by openssl/sha1/key2");
+});
+
+});
+
+-->
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+</body>
+</html>
+

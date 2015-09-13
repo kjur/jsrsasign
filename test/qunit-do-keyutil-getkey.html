@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for KEYUTIL Class 'keyutil.js'</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha256.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha224.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/ripemd160.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha512.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha384.js"></script>
+<script src="../crypto-1.1.js"></script>
+<!-- for rsapem -->
+<script language="JavaScript" type="text/javascript" src="../ext/prng4.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rng.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1x509-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsapem-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../rsasign-1.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../x509-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../keyutil-1.0.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../ext/ec.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/ec-patch.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecdsa-modified-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+
+// ======= TEST ===============================================================
+
+// jsrsa/_test/z1.prv.hex
+var z1PrvHex = "3082013a020100024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001024078bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d022100fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f022100e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07022100d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b3702201849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa902207d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9";
+
+// jsrsa/_test/z1.cer
+var z1CrtPem = "" +
+"-----BEGIN CERTIFICATE-----\n" +
+"MIIBdTCCAR+gAwIBAgIBBTANBgkqhkiG9w0BAQUFADAaMQswCQYDVQQGEwJVUzEL\n" +
+"MAkGA1UECgwCYTEwHhcNMTMwNTA0MDM0MTQxWhcNMjMwNTA0MDM0MTQxWjAaMQsw\n" +
+"CQYDVQQGEwJVUzELMAkGA1UECgwCYTEwXDANBgkqhkiG9w0BAQEFAANLADBIAkEA\n" +
+"6GZN0rQFKRIVaPOzm8l6Yue6PAm6vcTw3NjfkOt5C5u2RaK3DjESdHtNPEG1FCSJ\n" +
+"URX++I951D6uWxpONRj9WQIDAQABo1AwTjAdBgNVHQ4EFgQUxUc+4gDI561wA9/1\n" +
+"QguM3fTCDhUwHwYDVR0jBBgwFoAUxUc+4gDI561wA9/1QguM3fTCDhUwDAYDVR0T\n" +
+"BAUwAwEB/zANBgkqhkiG9w0BAQUFAANBALL2k69LjwOYfDXv3TXJUAFGUqto+Noj\n" +
+"CJLP08fOfNBZy+KAIy0GsrNU/3uRViqbuGqAnH9kFFwHQjOAFrAe8XQ=\n" +
+"-----END CERTIFICATE-----\n";
+
+// jsrsa/_test/z3.prv
+var z3pem = "-----BEGIN RSA PRIVATE KEY-----\n" +
+"MIICXgIBAAKBgQCw4pBRMWTBFuW8LI/Q3JBAPgIu42Hu/iJ+VB6bKgmql5T5SUBa\n" + 
+"c4g1gx6dSJViOq/p2f+wCYUt8usG1axfCDeKISmoGtSyC90Q35xm5uEHBdOq6xNL\n" + 
+"x5DAC1LtKP+85kdKlIHjZ0YXdtSf/ub7fZ822ooJJYIVtwymAmmTf59wmwIDAQAB\n" + 
+"AoGBAKtc4xl1s7mIuEpEFZPvimRibnUEXoVNeRdP4VLLOBAnx/B18b1vPd8xxv/z\n" + 
+"KJ3AY1o3kwj1QCvSsbSuXs62RC6V20PNhwkdsoX9Fo7eHTFT8Ml7OgBX47+Xz2K8\n" + 
+"Dg0CDgHHF7n/Aoq3x0JSbvVmQiR+l5mzoGEsYM5VlJ9NL5U5AkEA3krW5pcCuEnk\n" + 
+"gOsioQpNjmm96qI7T/xTz4jazKlZxyAwx/QNCwH1FL07GS+j7ywrJpK9rmwZ+BGV\n" + 
+"GF+amiCZHQJBAMu1DvbOFCQt7OL1S8Ds6kpMatvO8dcH0ZCyW2ApJKLlfdzKBg6K\n" + 
+"tnSdYyw/fU7NEAfM5HLvwZOMIQEv7jyIOxcCQQCw77cQgiDbGY31g7PjpTTIZ6iQ\n" + 
+"i6NUbk8zwQYPo7jfQ+MwNTTwjxVJ9bmFuaLuLCUIpgKvREKDb1NSvD5t8gaNAkEA\n" + 
+"mkH1nvfXUL5mUEeooePGV5Uepm1Dva3yCDzH7T26vJBEi1mA1Ko+GHjGjM9XOMEY\n" + 
+"jo+dv1vHns/Sfm+pXLVc6QJAFFmI4BqET0HG7adaXNqm+MCDBvfg/1Xrx5Bx+8f0\n" + 
+"QCIDZCt/mNF4gGtoQGb73lGLmtOWMmpB3vrZ9RqKDQtkhA==\n" + 
+"-----END RSA PRIVATE KEY-----\n";
+
+// _data/0csr1/key2.pub
+var key2pub = (function() {/*
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5/2QHMBBvirriuchipR5
+02Ra3oN/jduXlIFi0eWpQem2S0IrKwgiBX9+hNnjhqMhOXp4k/6IuCOH6PIRpJSk
+F1N/tu7ypzTVwnT8LQof5daRQteHFPU3w3MelduE5nGPjJl8jcV36jtvt7nnkZjJ
+vZPluQLNAt6azIvI31BQqNID1x3RIDTxVa6A952undto669sUuOcjUCFxwYCk3u5
+m89RpayoyAEK3rq6XbSF+spirWLHeDF0d58hMGvbwI8YPnp7dNRPU08Wg9QUJE8l
+JEfMyAXOYa2eKRk9mqB7jkEYDHiqNPzjsm3CT0amn8e2B+dQUYgSe3Rnj58ToiIr
+xQIDAQAB
+-----END PUBLIC KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// _data/0csr1/key2.prv
+var key2prv = (function() {/*
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpQIBAAKCAQEA5/2QHMBBvirriuchipR502Ra3oN/jduXlIFi0eWpQem2S0Ir
+KwgiBX9+hNnjhqMhOXp4k/6IuCOH6PIRpJSkF1N/tu7ypzTVwnT8LQof5daRQteH
+FPU3w3MelduE5nGPjJl8jcV36jtvt7nnkZjJvZPluQLNAt6azIvI31BQqNID1x3R
+IDTxVa6A952undto669sUuOcjUCFxwYCk3u5m89RpayoyAEK3rq6XbSF+spirWLH
+eDF0d58hMGvbwI8YPnp7dNRPU08Wg9QUJE8lJEfMyAXOYa2eKRk9mqB7jkEYDHiq
+NPzjsm3CT0amn8e2B+dQUYgSe3Rnj58ToiIrxQIDAQABAoIBAQCeXYe9OLkoWiBE
+yBcrhMPNPJqTf2zZp+fH5rNQ2dg7OJHKujbBv2GKI0h45EzfogiSNjqNvJoUKZ0j
+teu5UAbcLZHnjSJ0Zirt/fIPxPOVcG3lFUAPXH5em/1rC1mj/i2iKzzNgtmjOkO/
+RdcAmy5MjeOp8nGE3fUKYPoVB7yoILi44W7yLbSUctyFDAPCGLyjyN0N3Yq5dcyv
+5F+Ec3aQhEVQ8282iAcP6/gQBg/fC1SnIOLd8UGM0EyuFhxkH5L5lQDT4obcEStz
+F8lm6+53WTd9nTTNE9GRDBXySFVQmX82lfWjcLW2+8cXgzC04ozpRrQnH+stgRUC
+67OcSX0ZAoGBAPwTuZwJirT3gMQgcyTozFoLGD1kRCjBW18tw0pE8C/ZAHaT4DaD
+kDpzWddkiyCHSInyGIXcT1gbBgvMF4wqIYzMRjtlj88mgK//gHLhWjiCVTh76wgG
+3XmLsOiL+cxjFX/XQWI5kocABzYbJThRjxOxi1zQ3MFOZVmR7LRQuvCfAoGBAOuZ
+0CEQI1A2LBWJAl0KAgHcre4VfBMETTbFecs4Pul4fqSQcxlSU7x43ZLUAEEWAs3P
+njN4Z6WmANdrEMlAdSv+PO8nbjA7gC5BMrlzc1TTnj2Z42SYT9AsTe+N/dAWv7Kf
+AFjDVfwEKY9a21sChU0oV+ohcJsExeM5JXonulUbAoGBANlx1nmwjXNf0Tbd2xWq
+r6S4z1cd5+HUMZKf8kddwmcz5L9k/lNoGAEjwgsYkx8jM8KzEM5f5h3VadjBXEqv
+iTNgfvD7whrqVrX7S/1NQbtfSk4oLu1EpsYTZy6imH/jtQcLUz589VX5Az98GRZE
+3IwbamFNVjB2BN1IEIzW2vt3AoGAMrpgnO3bnKa9YTmp35yLCBma/Zt0pqeTdIqa
+ic4nhZ+jLQ3JKpeWXgtsMfQhxeHWYrgkaRKwxnLy1W9BIwQU9o78UcYcrJfzJoJ1
+SIb6OzaBaOQcmQlOjhUsBrt8/fQX/H7N1U7h0ayXwj0e4/6r8wwPueLPWyFw9lbU
+ofOx5CcCgYEAvTTcxuj6jscA33tFPa+SWM2QT8JFMxftjVTitUBdPntRWCawwzqY
+yIaCKBkF8f03cTS3yz1ZiE3M1OQs1zuaUxJVTr1VpSUV+pxTuZ3gq3i/9QHadVrE
+MGpevmzMV1eLDgIjvOUFkBskHqfKieaNYsP33jnqlv6Zi8Z6NVYPVDc=
+-----END RSA PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+var key2prvhex = "308204a50201000282010100e7fd901cc041be2aeb8ae7218a9479d3645ade837f8ddb97948162d1e5a941e9b64b422b2b0822057f7e84d9e386a321397a7893fe88b82387e8f211a494a417537fb6eef2a734d5c274fc2d0a1fe5d69142d78714f537c3731e95db84e6718f8c997c8dc577ea3b6fb7b9e79198c9bd93e5b902cd02de9acc8bc8df5050a8d203d71dd12034f155ae80f79dae9ddb68ebaf6c52e39c8d4085c70602937bb99bcf51a5aca8c8010adebaba5db485faca62ad62c7783174779f21306bdbc08f183e7a7b74d44f534f1683d414244f252447ccc805ce61ad9e29193d9aa07b8e41180c78aa34fce3b26dc24f46a69fc7b607e7505188127b74678f9f13a2222bc5020301000102820101009e5d87bd38b9285a2044c8172b84c3cd3c9a937f6cd9a7e7c7e6b350d9d83b3891caba36c1bf618a234878e44cdfa20892363a8dbc9a14299d23b5ebb95006dc2d91e78d2274662aedfdf20fc4f395706de515400f5c7e5e9bfd6b0b59a3fe2da22b3ccd82d9a33a43bf45d7009b2e4c8de3a9f27184ddf50a60fa1507bca820b8b8e16ef22db49472dc850c03c218bca3c8dd0ddd8ab975ccafe45f84737690844550f36f3688070febf810060fdf0b54a720e2ddf1418cd04cae161c641f92f99500d3e286dc112b7317c966ebee7759377d9d34cd13d1910c15f2485550997f3695f5a370b5b6fbc7178330b4e28ce946b4271feb2d811502ebb39c497d1902818100fc13b99c098ab4f780c4207324e8cc5a0b183d644428c15b5f2dc34a44f02fd9007693e03683903a7359d7648b20874889f21885dc4f581b060bcc178c2a218ccc463b658fcf2680afff8072e15a388255387beb0806dd798bb0e88bf9cc63157fd741623992870007361b2538518f13b18b5cd0dcc14e655991ecb450baf09f02818100eb99d021102350362c1589025d0a0201dcadee157c13044d36c579cb383ee9787ea49073195253bc78dd92d400411602cdcf9e337867a5a600d76b10c940752bfe3cef276e303b802e4132b9737354d39e3d99e364984fd02c4def8dfdd016bfb29f0058c355fc04298f5adb5b02854d2857ea21709b04c5e339257a27ba551b02818100d971d679b08d735fd136dddb15aaafa4b8cf571de7e1d431929ff2475dc26733e4bf64fe5368180123c20b18931f2333c2b310ce5fe61dd569d8c15c4aaf8933607ef0fbc21aea56b5fb4bfd4d41bb5f4a4e282eed44a6c613672ea2987fe3b5070b533e7cf555f9033f7c191644dc8c1b6a614d56307604dd48108cd6dafb7702818032ba609ceddb9ca6bd6139a9df9c8b08199afd9b74a6a793748a9a89ce27859fa32d0dc92a97965e0b6c31f421c5e1d662b8246912b0c672f2d56f41230414f68efc51c61cac97f32682754886fa3b368168e41c99094e8e152c06bb7cfdf417fc7ecdd54ee1d1ac97c23d1ee3feabf30c0fb9e2cf5b2170f656d4a1f3b1e42702818100bd34dcc6e8fa8ec700df7b453daf9258cd904fc2453317ed8d54e2b5405d3e7b515826b0c33a98c88682281905f1fd377134b7cb3d59884dccd4e42cd73b9a5312554ebd55a52515fa9c53b99de0ab78bff501da755ac4306a5ebe6ccc57578b0e0223bce505901b241ea7ca89e68d62c3f7de39ea96fe998bc67a35560f5437";
+
+var key2prvb64 = "MIIEpQIBAAKCAQEA5/2QHMBBvirriuchipR502Ra3oN/jduXlIFi0eWpQem2S0IrKwgiBX9+hNnjhqMhOXp4k/6IuCOH6PIRpJSkF1N/tu7ypzTVwnT8LQof5daRQteHFPU3w3MelduE5nGPjJl8jcV36jtvt7nnkZjJvZPluQLNAt6azIvI31BQqNID1x3RIDTxVa6A952undto669sUuOcjUCFxwYCk3u5m89RpayoyAEK3rq6XbSF+spirWLHeDF0d58hMGvbwI8YPnp7dNRPU08Wg9QUJE8lJEfMyAXOYa2eKRk9mqB7jkEYDHiqNPzjsm3CT0amn8e2B+dQUYgSe3Rnj58ToiIrxQIDAQABAoIBAQCeXYe9OLkoWiBEyBcrhMPNPJqTf2zZp+fH5rNQ2dg7OJHKujbBv2GKI0h45EzfogiSNjqNvJoUKZ0jteu5UAbcLZHnjSJ0Zirt/fIPxPOVcG3lFUAPXH5em/1rC1mj/i2iKzzNgtmjOkO/RdcAmy5MjeOp8nGE3fUKYPoVB7yoILi44W7yLbSUctyFDAPCGLyjyN0N3Yq5dcyv5F+Ec3aQhEVQ8282iAcP6/gQBg/fC1SnIOLd8UGM0EyuFhxkH5L5lQDT4obcEStzF8lm6+53WTd9nTTNE9GRDBXySFVQmX82lfWjcLW2+8cXgzC04ozpRrQnH+stgRUC67OcSX0ZAoGBAPwTuZwJirT3gMQgcyTozFoLGD1kRCjBW18tw0pE8C/ZAHaT4DaDkDpzWddkiyCHSInyGIXcT1gbBgvMF4wqIYzMRjtlj88mgK//gHLhWjiCVTh76wgG3XmLsOiL+cxjFX/XQWI5kocABzYbJThRjxOxi1zQ3MFOZVmR7LRQuvCfAoGBAOuZ0CEQI1A2LBWJAl0KAgHcre4VfBMETTbFecs4Pul4fqSQcxlSU7x43ZLUAEEWAs3PnjN4Z6WmANdrEMlAdSv+PO8nbjA7gC5BMrlzc1TTnj2Z42SYT9AsTe+N/dAWv7KfAFjDVfwEKY9a21sChU0oV+ohcJsExeM5JXonulUbAoGBANlx1nmwjXNf0Tbd2xWqr6S4z1cd5+HUMZKf8kddwmcz5L9k/lNoGAEjwgsYkx8jM8KzEM5f5h3VadjBXEqviTNgfvD7whrqVrX7S/1NQbtfSk4oLu1EpsYTZy6imH/jtQcLUz589VX5Az98GRZE3IwbamFNVjB2BN1IEIzW2vt3AoGAMrpgnO3bnKa9YTmp35yLCBma/Zt0pqeTdIqaic4nhZ+jLQ3JKpeWXgtsMfQhxeHWYrgkaRKwxnLy1W9BIwQU9o78UcYcrJfzJoJ1SIb6OzaBaOQcmQlOjhUsBrt8/fQX/H7N1U7h0ayXwj0e4/6r8wwPueLPWyFw9lbUofOx5CcCgYEAvTTcxuj6jscA33tFPa+SWM2QT8JFMxftjVTitUBdPntRWCawwzqYyIaCKBkF8f03cTS3yz1ZiE3M1OQs1zuaUxJVTr1VpSUV+pxTuZ3gq3i/9QHadVrEMGpevmzMV1eLDgIjvOUFkBskHqfKieaNYsP33jnqlv6Zi8Z6NVYPVDc=";
+
+test("KEYUTIL.getKey RSA PKCS5PRVPEM, PKCS5PRVHEX comparison", function() {
+var k1 = KEYUTIL.getKey(key2prv);
+var k2 = KEYUTIL.getKey(key2prvhex, null, "pkcs5prv");
+
+equal(KEYUTIL.getHexFromPEM(key2prv, "RSA PRIVATE KEY"), key2prvhex, "same hex");
+equal(KEYUTIL.getHexFromPEM(key2prv), key2prvhex, "same hex");
+equal(k1.n.bitLength(), k2.n.bitLength(), "n.bitLength = " + k1.n.bitLength());
+equal(k1.n.compareTo(k2.n), 0, "same n");
+equal(k1.e, k2.e, "same e " + k1.e);
+equal(k1.d.compareTo(k2.d), 0, "same d");
+equal(k1.p.compareTo(k2.p), 0, "same p");
+equal(k1.q.compareTo(k2.q), 0, "same q");
+equal(k1.dmp1.compareTo(k2.dmp1), 0, "same dmp1");
+equal(k1.dmq1.compareTo(k2.dmq1), 0, "same dmq1");
+equal(k1.coeff.compareTo(k2.coeff), 0, "same coeff " + k1.coeff.toString(16) + " " + k2.coeff.toString(16));
+});
+
+});
+-->
+</script>
+  
+</head>
+<body>
+<h1 id="qunit-header">QUnit for KEYUTIL Class 'keyutil.js'</h1>
+<h2 id="qunit-banner"></h2>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-/*! asn1-1.0.7.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1-1.0.8.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.0.7 (2015-Jun-11)
+ * @version asn1 1.0.8 (2015-Sep-13)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -45,7 +45,6 @@ if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
  * class structure and methods is very similar to 
  * org.bouncycastle.asn1 package of 
  * well known BouncyCaslte Cryptography Library.
- *
  * <h4>PROVIDING ASN.1 PRIMITIVES</h4>
  * Here are ASN.1 DER primitive classes.
  * <ul>
@@ -66,7 +65,6 @@ if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
  * <li>0x30 {@link KJUR.asn1.DERSequence}</li>
  * <li>0x31 {@link KJUR.asn1.DERSet}</li>
  * </ul>
- *
  * <h4>OTHER ASN.1 CLASSES</h4>
  * <ul>
  * <li>{@link KJUR.asn1.ASN1Object}</li>
@@ -74,6 +72,14 @@ if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
  * <li>{@link KJUR.asn1.DERAbstractTime}</li>
  * <li>{@link KJUR.asn1.DERAbstractStructured}</li>
  * <li>{@link KJUR.asn1.DERTaggedObject}</li>
+ * </ul>
+ * <h4>SUB NAME SPACES</h4>
+ * <ul>
+ * <li>{@link KJUR.asn1.cades} - CAdES long term signature format</li>
+ * <li>{@link KJUR.asn1.cms} - Cryptographic Message Syntax</li>
+ * <li>{@link KJUR.asn1.csr} - Certificate Signing Request (CSR/PKCS#10)</li>
+ * <li>{@link KJUR.asn1.tsp} - RFC 3161 Timestamping Protocol Format</li>
+ * <li>{@link KJUR.asn1.x509} - RFC 5280 X.509 certificate and CRL</li>
  * </ul>
  * </p>
  * NOTE: Please ignore method summary and document of this namespace. 

@@ -1,0 +1,318 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! asn1csr-1.0.0.js (c) 2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+<span class='line'>  2</span>  */</span><span class="WHIT">
+<span class='line'>  3</span> </span><span class="COMM">/*
+<span class='line'>  4</span>  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
+<span class='line'>  5</span>  *
+<span class='line'>  6</span>  * Copyright (c) 2015 Kenji Urushima (kenji.urushima@gmail.com)
+<span class='line'>  7</span>  *
+<span class='line'>  8</span>  * This software is licensed under the terms of the MIT License.
+<span class='line'>  9</span>  * http://kjur.github.com/jsrsasign/license
+<span class='line'> 10</span>  *
+<span class='line'> 11</span>  * The above copyright and license notice shall be 
+<span class='line'> 12</span>  * included in all copies or substantial portions of the Software.
+<span class='line'> 13</span>  */</span><span class="WHIT">
+<span class='line'> 14</span> 
+<span class='line'> 15</span> </span><span class="COMM">/**
+<span class='line'> 16</span>  * @fileOverview
+<span class='line'> 17</span>  * @name asn1csr-1.0.js
+<span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
+<span class='line'> 19</span>  * @version 1.0.0 (2015-Sep-12)
+<span class='line'> 20</span>  * @since jsrsasign 4.8.7
+<span class='line'> 21</span>  * @license &lt;a href="http://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
+<span class='line'> 22</span>  */</span><span class="WHIT">
+<span class='line'> 23</span> 
+<span class='line'> 24</span> </span><span class="COMM">/**
+<span class='line'> 25</span>  * kjur's ASN.1 class for CSR/PKCS#10 name space
+<span class='line'> 26</span>  * &lt;p>
+<span class='line'> 27</span>  * This name space is a sub name space for {@link KJUR.asn1}.
+<span class='line'> 28</span>  * This name space contains classes for
+<span class='line'> 29</span>  * &lt;a href="https://tools.ietf.org/html/rfc2986">RFC 2986&lt;/a>
+<span class='line'> 30</span>  * certificate signing request(CSR/PKCS#10) and its utilities
+<span class='line'> 31</span>  * to be issued your certificate from certification authorities.
+<span class='line'> 32</span>  * &lt;h4>PROVIDING ASN.1 STRUCTURES&lt;/h4>
+<span class='line'> 33</span>  * &lt;ul>
+<span class='line'> 34</span>  * &lt;li>{@link KJUR.asn1.csr.CertificationRequest}&lt;/li>
+<span class='line'> 35</span>  * &lt;li>{@link KJUR.asn1.csr.CertificationRequestInfo}&lt;/li>
+<span class='line'> 36</span>  * &lt;/ul>
+<span class='line'> 37</span>  * &lt;h4>PROVIDING UTILITY CLASSES&lt;/h4>
+<span class='line'> 38</span>  * &lt;ul>
+<span class='line'> 39</span>  * &lt;li>{@link KJUR.asn1.csr.CSRUtil}&lt;/li>
+<span class='line'> 40</span>  * &lt;/ul>
+<span class='line'> 41</span>  * {@link KJUR.asn1.csr.CSRUtil.newCSRPEM} method is very useful to
+<span class='line'> 42</span>  * get your certificate signing request (CSR/PKCS#10) file.
+<span class='line'> 43</span>  * &lt;/p>
+<span class='line'> 44</span>  * @name KJUR.asn1.csr
+<span class='line'> 45</span>  * @namespace
+<span class='line'> 46</span>  */</span><span class="WHIT">
+<span class='line'> 47</span> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.csr</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">KJUR.asn1.csr</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.csr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 48</span> 
+<span class='line'> 49</span> </span><span class="COMM">/**
+<span class='line'> 50</span>  * ASN.1 CertificationRequest structure class
+<span class='line'> 51</span>  * @name KJUR.asn1.csr.CertificationRequest
+<span class='line'> 52</span>  * @class ASN.1 CertificationRequest structure class
+<span class='line'> 53</span>  * @param {Array} params associative array of parameters (ex. {})
+<span class='line'> 54</span>  * @extends KJUR.asn1.ASN1Object
+<span class='line'> 55</span>  * @since jsrsasign 4.8.7 asn1csr 1.0.0
+<span class='line'> 56</span>  * @description
+<span class='line'> 57</span>  * &lt;br/>
+<span class='line'> 58</span>  * @example
+<span class='line'> 59</span>  * csri = new KJUR.asn1.csr.CertificationRequestInfo();
+<span class='line'> 60</span>  * csri.setSubjectByParam({'str': '/C=US/O=Test/CN=example.com'});
+<span class='line'> 61</span>  * csri.setSubjectPublicKeyByGetKey(pubKeyObj);
+<span class='line'> 62</span>  * csr = new KJUR.asn1.csr.CertificationRequest({'csrinfo': csri});
+<span class='line'> 63</span>  * csr.sign("SHA256withRSA", prvKeyObj);
+<span class='line'> 64</span>  * pem = csr.getPEMString();
+<span class='line'> 65</span>  * 
+<span class='line'> 66</span>  * // -- DEFINITION OF ASN.1 SYNTAX --
+<span class='line'> 67</span>  * // CertificationRequest ::= SEQUENCE {
+<span class='line'> 68</span>  * //   certificationRequestInfo CertificationRequestInfo,
+<span class='line'> 69</span>  * //   signatureAlgorithm       AlgorithmIdentifier{{ SignatureAlgorithms }},
+<span class='line'> 70</span>  * //   signature                BIT STRING }
+<span class='line'> 71</span>  */</span><span class="WHIT">
+<span class='line'> 72</span> </span><span class="NAME">KJUR.asn1.csr.CertificationRequest</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 73</span> </span><span class="WHIT">    </span><span class="NAME">KJUR.asn1.csr.CertificationRequest.superclass.constructor.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 74</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">asn1CSRInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 75</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">asn1SignatureAlg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 76</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">asn1Sig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hexSig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 78</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">prvKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 79</span> 
+<span class='line'> 80</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'> 81</span>      * sign CertificationRequest and set signature value internally
+<span class='line'> 82</span>      * @name sign
+<span class='line'> 83</span>      * @memberOf KJUR.asn1.csr.CertificationRequest
+<span class='line'> 84</span>      * @function
+<span class='line'> 85</span>      * @description
+<span class='line'> 86</span>      * This method self-signs CertificateRequestInfo with a subject's
+<span class='line'> 87</span>      * private key and set signature value internally.
+<span class='line'> 88</span>      * &lt;br/>
+<span class='line'> 89</span>      * @example
+<span class='line'> 90</span>      * csr = new KJUR.asn1.csr.CertificationRequest({'csrinfo': csri});
+<span class='line'> 91</span>      * csr.sign("SHA256withRSA", prvKeyObj);
+<span class='line'> 92</span>      */</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="WHIT">    </span><span class="NAME">this.sign</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">sigAlgName</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">prvKeyObj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 94</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.prvKey</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">this.prvKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">prvKeyObj</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 95</span> 
+<span class='line'> 96</span> </span><span class="WHIT">	</span><span class="NAME">this.asn1SignatureAlg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> 
+<span class='line'> 97</span> 	    </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509.AlgorithmIdentifier</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'name'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">sigAlgName</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 98</span> 
+<span class='line'> 99</span> </span><span class="WHIT">        </span><span class="NAME">sig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">KJUR.crypto.Signature</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'alg'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">sigAlgName</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>100</span> </span><span class="WHIT">        </span><span class="NAME">sig.initSign</span><span class="PUNC">(</span><span class="NAME">this.prvKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>101</span> </span><span class="WHIT">        </span><span class="NAME">sig.updateHex</span><span class="PUNC">(</span><span class="NAME">this.asn1CSRInfo.getEncodedHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>102</span> </span><span class="WHIT">        </span><span class="NAME">this.hexSig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sig.sign</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>103</span> 
+<span class='line'>104</span> </span><span class="WHIT">        </span><span class="NAME">this.asn1Sig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.DERBitString</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'hex'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'00'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.hexSig</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">seq</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.DERSequence</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'array'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">this.asn1CSRInfo</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="WHIT">                                                       </span><span class="NAME">this.asn1SignatureAlg</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>107</span> </span><span class="WHIT">                                                       </span><span class="NAME">this.asn1Sig</span><span class="PUNC">]</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="WHIT">        </span><span class="NAME">this.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">seq.getEncodedHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>109</span> </span><span class="WHIT">        </span><span class="NAME">this.isModified</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>111</span> 
+<span class='line'>112</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>113</span>      * get PEM formatted certificate signing request (CSR/PKCS#10)
+<span class='line'>114</span>      * @name getPEMString
+<span class='line'>115</span>      * @memberOf KJUR.asn1.csr.CertificationRequest
+<span class='line'>116</span>      * @function
+<span class='line'>117</span>      * @return PEM formatted string of CSR/PKCS#10
+<span class='line'>118</span>      * @description
+<span class='line'>119</span>      * This method is to a get CSR PEM string after signed.
+<span class='line'>120</span>      * &lt;br/>
+<span class='line'>121</span>      * @example
+<span class='line'>122</span>      * csr = new KJUR.asn1.csr.CertificationRequest({'csrinfo': csri});
+<span class='line'>123</span>      * csr.sign();
+<span class='line'>124</span>      * pem =  csr.getPEMString();
+<span class='line'>125</span>      * // pem will be following:
+<span class='line'>126</span>      * // -----BEGIN CERTIFICATE REQUEST-----
+<span class='line'>127</span>      * // MII ...snip...
+<span class='line'>128</span>      * // -----END CERTIFICATE REQUEST-----
+<span class='line'>129</span>      */</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="WHIT">    </span><span class="NAME">this.getPEMString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pem</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.ASN1Util.getPEMStringFromHex</span><span class="PUNC">(</span><span class="NAME">this.getEncodedHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>132</span> </span><span class="WHIT">							 </span><span class="STRN">"CERTIFICATE REQUEST"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>133</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">pem</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>134</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>135</span> 
+<span class='line'>136</span> </span><span class="WHIT">    </span><span class="NAME">this.getEncodedHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.isModified</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this.hTLV</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.hTLV</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"not signed yet"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>140</span> 
+<span class='line'>141</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>142</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">[</span><span class="STRN">'csrinfo'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>143</span> </span><span class="WHIT">            </span><span class="NAME">this.asn1CSRInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">[</span><span class="STRN">'csrinfo'</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>144</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>145</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="NAME">YAHOO.lang.extend</span><span class="PUNC">(</span><span class="NAME">KJUR.asn1.csr.CertificationRequest</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.ASN1Object</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>148</span> 
+<span class='line'>149</span> </span><span class="COMM">/**
+<span class='line'>150</span>  * ASN.1 CertificationRequestInfo structure class
+<span class='line'>151</span>  * @name KJUR.asn1.csr.CertificationRequestInfo
+<span class='line'>152</span>  * @class ASN.1 CertificationRequestInfo structure class
+<span class='line'>153</span>  * @param {Array} params associative array of parameters (ex. {})
+<span class='line'>154</span>  * @extends KJUR.asn1.ASN1Object
+<span class='line'>155</span>  * @since jsrsasign 4.8.7 asn1csr 1.0.0
+<span class='line'>156</span>  * @description
+<span class='line'>157</span>  * &lt;br/>
+<span class='line'>158</span>  * @example
+<span class='line'>159</span>  * csri = new KJUR.asn1.csr.CertificationRequestInfo();
+<span class='line'>160</span>  * csri.setSubjectByParam({'str': '/C=US/O=Test/CN=example.com'});
+<span class='line'>161</span>  * csri.setSubjectPublicKeyByGetKey(pubKeyObj);
+<span class='line'>162</span>  *
+<span class='line'>163</span>  * // -- DEFINITION OF ASN.1 SYNTAX --
+<span class='line'>164</span>  * // CertificationRequestInfo ::= SEQUENCE {
+<span class='line'>165</span>  * //   version       INTEGER { v1(0) } (v1,...),
+<span class='line'>166</span>  * //   subject       Name,
+<span class='line'>167</span>  * //   subjectPKInfo SubjectPublicKeyInfo{{ PKInfoAlgorithms }},
+<span class='line'>168</span>  * //   attributes    [0] Attributes{{ CRIAttributes }} }
+<span class='line'>169</span>  *
+<span class='line'>170</span>  */</span><span class="WHIT">
+<span class='line'>171</span> </span><span class="NAME">KJUR.asn1.csr.CertificationRequestInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="WHIT">    </span><span class="NAME">KJUR.asn1.csr.CertificationRequestInfo.superclass.constructor.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>173</span> 
+<span class='line'>174</span> </span><span class="WHIT">    </span><span class="NAME">this._initialize</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="WHIT">        </span><span class="NAME">this.asn1Array</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>176</span> 
+<span class='line'>177</span> </span><span class="WHIT">	</span><span class="NAME">this.asn1Version</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.DERInteger</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'int'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="WHIT">	</span><span class="NAME">this.asn1Subject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>179</span> </span><span class="WHIT">	</span><span class="NAME">this.asn1SubjPKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>180</span> </span><span class="WHIT">	</span><span class="NAME">this.extensionsArray</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>182</span> 
+<span class='line'>183</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>184</span>      * set subject name field by parameter
+<span class='line'>185</span>      * @name setSubjectByParam
+<span class='line'>186</span>      * @memberOf KJUR.asn1.csr.CertificationRequestInfo
+<span class='line'>187</span>      * @function
+<span class='line'>188</span>      * @param {Array} x500NameParam X500Name parameter
+<span class='line'>189</span>      * @description
+<span class='line'>190</span>      * @example
+<span class='line'>191</span>      * csri.setSubjectByParam({'str': '/C=US/CN=b'});
+<span class='line'>192</span>      * @see KJUR.asn1.x509.X500Name
+<span class='line'>193</span>      */</span><span class="WHIT">
+<span class='line'>194</span> </span><span class="WHIT">    </span><span class="NAME">this.setSubjectByParam</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">x500NameParam</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>195</span> </span><span class="WHIT">        </span><span class="NAME">this.asn1Subject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509.X500Name</span><span class="PUNC">(</span><span class="NAME">x500NameParam</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>197</span> 
+<span class='line'>198</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>199</span>      * set subject public key info by RSA/ECDSA/DSA key parameter
+<span class='line'>200</span>      * @name setSubjectPublicKeyByGetKey
+<span class='line'>201</span>      * @memberOf KJUR.asn1.csr.CertificationRequestInfo
+<span class='line'>202</span>      * @function
+<span class='line'>203</span>      * @param {Object} keyParam public key parameter which passed to {@link KEYUTIL.getKey} argument
+<span class='line'>204</span>      * @description
+<span class='line'>205</span>      * @example
+<span class='line'>206</span>      * csri.setSubjectPublicKeyByGetKeyParam(certPEMString); // or 
+<span class='line'>207</span>      * csri.setSubjectPublicKeyByGetKeyParam(pkcs8PublicKeyPEMString); // or 
+<span class='line'>208</span>      * csir.setSubjectPublicKeyByGetKeyParam(kjurCryptoECDSAKeyObject); // et.al.
+<span class='line'>209</span>      * @see KJUR.asn1.x509.SubjectPublicKeyInfo
+<span class='line'>210</span>      * @see KEYUTIL.getKey
+<span class='line'>211</span>      */</span><span class="WHIT">
+<span class='line'>212</span> </span><span class="WHIT">    </span><span class="NAME">this.setSubjectPublicKeyByGetKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">keyParam</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>213</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">keyObj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KEYUTIL.getKey</span><span class="PUNC">(</span><span class="NAME">keyParam</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>214</span> </span><span class="WHIT">        </span><span class="NAME">this.asn1SubjPKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509.SubjectPublicKeyInfo</span><span class="PUNC">(</span><span class="NAME">keyObj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>216</span> 
+<span class='line'>217</span> </span><span class="WHIT">    </span><span class="NAME">this.getEncodedHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="WHIT">        </span><span class="NAME">this.asn1Array</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>219</span> 
+<span class='line'>220</span> </span><span class="WHIT">        </span><span class="NAME">this.asn1Array.push</span><span class="PUNC">(</span><span class="NAME">this.asn1Version</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>221</span> </span><span class="WHIT">        </span><span class="NAME">this.asn1Array.push</span><span class="PUNC">(</span><span class="NAME">this.asn1Subject</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>222</span> </span><span class="WHIT">        </span><span class="NAME">this.asn1Array.push</span><span class="PUNC">(</span><span class="NAME">this.asn1SubjPKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>223</span> 
+<span class='line'>224</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">extSeq</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.DERSequence</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">"array"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.extensionsArray</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>225</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">extTagObj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.DERTaggedObject</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'explicit'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>226</span> </span><span class="WHIT">                                                       </span><span class="STRN">'tag'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'a0'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>227</span> </span><span class="WHIT">                                                       </span><span class="STRN">'obj'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">extSeq</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>228</span> </span><span class="WHIT">        </span><span class="NAME">this.asn1Array.push</span><span class="PUNC">(</span><span class="NAME">extTagObj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>229</span> 
+<span class='line'>230</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">o</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.DERSequence</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">"array"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.asn1Array</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>231</span> </span><span class="WHIT">        </span><span class="NAME">this.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">o.getEncodedHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>232</span> </span><span class="WHIT">        </span><span class="NAME">this.isModified</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>233</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.hTLV</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>234</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>235</span> 
+<span class='line'>236</span> </span><span class="WHIT">    </span><span class="NAME">this._initialize</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>237</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>238</span> </span><span class="NAME">YAHOO.lang.extend</span><span class="PUNC">(</span><span class="NAME">KJUR.asn1.csr.CertificationRequestInfo</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.ASN1Object</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>239</span> 
+<span class='line'>240</span> </span><span class="COMM">/**
+<span class='line'>241</span>  * Certification Request (CSR/PKCS#10) utilities class
+<span class='line'>242</span>  * @name KJUR.asn1.csr.CSRUtil
+<span class='line'>243</span>  * @class Certification Request (CSR/PKCS#10) utilities class
+<span class='line'>244</span>  */</span><span class="WHIT">
+<span class='line'>245</span> </span><span class="NAME">KJUR.asn1.csr.CSRUtil</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>246</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>247</span> 
+<span class='line'>248</span> </span><span class="COMM">/**
+<span class='line'>249</span>  * generate a PEM format of CSR/PKCS#10 certificate signing request
+<span class='line'>250</span>  * @name newCSRPEM
+<span class='line'>251</span>  * @memberOf KJUR.asn1.csr.CSRUtil
+<span class='line'>252</span>  * @function
+<span class='line'>253</span>  * @param {Array} param parameter to generate CSR
+<span class='line'>254</span>  * @since jsrsasign 4.8.7 asn1csr 1.0.0
+<span class='line'>255</span>  * @description
+<span class='line'>256</span>  * This method can generate a CSR certificate signing
+<span class='line'>257</span>  * request by a simple JSON object which has following parameters:
+<span class='line'>258</span>  * &lt;ul>
+<span class='line'>259</span>  * &lt;li>subject - parameter to be passed to {@link KJUR.asn1.x509.X500Name}&lt;/li>
+<span class='line'>260</span>  * &lt;li>sbjpubkey - parameter to be passed to {@link KEYUTIL.getKey}&lt;/li>
+<span class='line'>261</span>  * &lt;li>sigalg - signature algorithm name (ex. SHA256withRSA)&lt;/li>
+<span class='line'>262</span>  * &lt;li>sbjprvkey - parameter to be passed to {@link KEYUTIL.getKey}&lt;/li>
+<span class='line'>263</span>  * &lt;/ul>
+<span class='line'>264</span>  *
+<span class='line'>265</span>  * @example
+<span class='line'>266</span>  * // 1) by key object
+<span class='line'>267</span>  * pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
+<span class='line'>268</span>  *   subject: {str: '/C=US/O=Test/CN=example.com'},
+<span class='line'>269</span>  *   sbjpubkey: pubKeyObj,
+<span class='line'>270</span>  *   sigalg: "SHA256withRSA",
+<span class='line'>271</span>  *   sbjprvkey: prvKeyObj
+<span class='line'>272</span>  * });
+<span class='line'>273</span>  *
+<span class='line'>274</span>  * // 2) by private/public key PEM 
+<span class='line'>275</span>  * pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
+<span class='line'>276</span>  *   subject: {str: '/C=US/O=Test/CN=example.com'},
+<span class='line'>277</span>  *   sbjpubkey: pubKeyPEM,
+<span class='line'>278</span>  *   sigalg: "SHA256withRSA",
+<span class='line'>279</span>  *   sbjprvkey: prvKeyPEM
+<span class='line'>280</span>  * });
+<span class='line'>281</span>  *
+<span class='line'>282</span>  * // 3) with generateKeypair
+<span class='line'>283</span>  * kp = KEYUTIL.generateKeypair("RSA", 2048);
+<span class='line'>284</span>  * pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
+<span class='line'>285</span>  *   subject: {str: '/C=US/O=Test/CN=example.com'},
+<span class='line'>286</span>  *   sbjpubkey: kp.pubKeyObj,
+<span class='line'>287</span>  *   sigalg: "SHA256withRSA",
+<span class='line'>288</span>  *   sbjprvkey: kp.prvKeyObj
+<span class='line'>289</span>  * });
+<span class='line'>290</span>  */</span><span class="WHIT">
+<span class='line'>291</span> </span><span class="NAME">KJUR.asn1.csr.CSRUtil.newCSRPEM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">param</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>292</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ns1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.csr</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>293</span> 
+<span class='line'>294</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.subject</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"parameter subject undefined"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>295</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.sbjpubkey</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"parameter sbjpubkey undefined"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>296</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.sigalg</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"parameter sigalg undefined"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>297</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.sbjprvkey</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"parameter sbjpubkey undefined"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>298</span> 
+<span class='line'>299</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">csri</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ns1.CertificationRequestInfo</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>300</span> </span><span class="WHIT">    </span><span class="NAME">csri.setSubjectByParam</span><span class="PUNC">(</span><span class="NAME">param.subject</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>301</span> </span><span class="WHIT">    </span><span class="NAME">csri.setSubjectPublicKeyByGetKey</span><span class="PUNC">(</span><span class="NAME">param.sbjpubkey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>302</span> 
+<span class='line'>303</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">csr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ns1.CertificationRequest</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'csrinfo'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">csri</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>304</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">prvKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KEYUTIL.getKey</span><span class="PUNC">(</span><span class="NAME">param.sbjprvkey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>305</span> </span><span class="WHIT">    </span><span class="NAME">csr.sign</span><span class="PUNC">(</span><span class="NAME">param.sigalg</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">prvKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>306</span> 
+<span class='line'>307</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pem</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">csr.getPEMString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>308</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">pem</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>309</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>310</span> 
+<span class='line'>311</span> </span></pre></body></html>
