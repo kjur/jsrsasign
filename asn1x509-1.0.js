@@ -1146,6 +1146,14 @@ KJUR.asn1.x509.X500Name = function(params) {
             this.asn1Array.push(new KJUR.asn1.x509.RDN({'str':a[i]}));
         }
     };
+    
+    this.setByObject = function(dnObj) {
+    	for (var x in dnObj) {
+    	     if (dnObj.hasOwnPropertyOf(x)) {
+                this.ans1Array.push(new KJUR.asn1.x509.RDN({'str': x + '=' + dnObj[x]}));
+    	     }
+    	}
+    }
 
     this.getEncodedHex = function() {
         if (typeof this.hTLV == "string") return this.hTLV;
@@ -1157,7 +1165,10 @@ KJUR.asn1.x509.X500Name = function(params) {
     if (typeof params != "undefined") {
         if (typeof params['str'] != "undefined") {
             this.setByString(params['str']);
+        } else if (params) {
+            this.setByObject(params);
         }
+        
         if (typeof params.certissuer != "undefined") {
             var x = new X509();
             x.hex = X509.pemToHex(params.certissuer);
