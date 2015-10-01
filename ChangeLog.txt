@@ -6,6 +6,7 @@ ChangeLog for jsrsasign
     - setByObject method added to X500Name class
     - {C: "US", O: "test"} representation now can be used
       in newCertPEM method in X509Util class.
+    - Thanks @cblair (Colby Blair) for these contribution.
 
 * Changes between 4.8.6 to 4.9.0
   - certificate signing request(CSR/PKCS#10) generation support
