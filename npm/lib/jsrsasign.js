@@ -4,7 +4,7 @@ navigator.userAgent = false;
 
 var window = {};
 /*
- * jsrsasign 4.9.0 (c) 2010-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+ * jsrsasign 4.9.1 (c) 2010-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 
 /*

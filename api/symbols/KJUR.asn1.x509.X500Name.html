@@ -472,6 +472,48 @@ ul.inheritsList
 
 <!-- ============================== methods summary ======================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.x509.X500Name.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.X500Name.<b><a href="../symbols/KJUR.asn1.x509.X500Name.html#.setByObject">setByObject</a></b>(dnObj)
+								</div>
+								<div class="description">set DN by associative array
+</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.X500Name.<b><a href="../symbols/KJUR.asn1.x509.X500Name.html#.setByString">setByString</a></b>(dnStr)
+								</div>
+								<div class="description">set DN by string
+</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+				<dl class="inheritsList">
+				
+				</dl>
+				
+			
 <!-- ============================== events summary ======================== -->
 			
 
@@ -494,7 +536,10 @@ ul.inheritsList
 				
 				
 				
-				<pre class="code"></pre>
+				<pre class="code">// 1. construct with string
+o = new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa/OU=bbb/CN=foo@example.com"});
+// 2. construct by object
+o = new KJUR.asn1.x509.X500Name({C: "US", O: "aaa", CN: "http://example.com/"});</pre>
 				
 				
 				
@@ -525,6 +570,101 @@ ul.inheritsList
 			
 
 <!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".setByObject"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.X500Name.</span><b>setByObject</b>(dnObj)
+					
+					</div>
+					<div class="description">
+						set DN by associative array
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">name = new KJUR.asn1.x509.X500Name();
+name.setByObject({C: "US", O: "aaa", CN="http://example.com/"1});</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>dnObj</b>
+									
+								</dt>
+								<dd>associative array of DN (ex. {C: "US", O: "aaa"})</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 4.9. asn1x509 1.0.13</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".setByString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.X500Name.</span><b>setByString</b>(dnStr)
+					
+					</div>
+					<div class="description">
+						set DN by string
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">name = new KJUR.asn1.x509.X500Name();
+name.setByString("/C=US/O=aaa/OU=bbb/CN=foo@example.com");</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>dnStr</b>
+									
+								</dt>
+								<dd>distinguished name by string (ex. /C=US/O=aaa)</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					
+				
 			
 			
 <!-- ============================== event details ========================= -->		

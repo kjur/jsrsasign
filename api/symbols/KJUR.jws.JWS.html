@@ -667,7 +667,11 @@ This method supports following algorithms.</div>
 								<div class="fixedFont">KJUR.jws.JWS.<b><a href="../symbols/KJUR.jws.JWS.html#.verify">verify</a></b>(sJWS, key, acceptAlgs)
 								</div>
 								<div class="description">verify JWS signature by specified key or certificate<br/>
-<p>This method verifies a JSON Web Signature Compact Serialization string by the validation algorithm as described in <a href="http://self-issued.info/docs/draft-jones-json-web-signature-04.html#anchor5">the section 5 of Internet Draft draft-jones-json-web-signature-04.</div>
+<p>
+This method verifies a JSON Web Signature Compact Serialization string by the validation 
+algorithm as described in 
+<a href="http://self-issued.info/docs/draft-jones-json-web-signature-04.html#anchor5">
+the section 5 of Internet Draft draft-jones-json-web-signature-04.</div>
 							</td>
 						</tr>
 					
@@ -703,7 +707,9 @@ This method supports following algorithms.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">KJUR.jws.JWS.<b><a href="../symbols/KJUR.jws.JWS.html#.verifyJWT">verifyJWT</a></b>(sJWT, key, acceptField)
 								</div>
-								<div class="description">This method verifies a<a href="https://tools.ietf.org/html/rfc7519">RFC 7519</a> JSON Web Token(JWT).</div>
+								<div class="description">This method verifies a
+<a href="https://tools.ietf.org/html/rfc7519">RFC 7519</a> 
+JSON Web Token(JWT).</div>
 							</td>
 						</tr>
 					
@@ -729,7 +735,26 @@ This method supports following algorithms.</div>
 				
 				<div class="description">
 					JSON Web Signature(JWS) class.<br/>
-<h4>Supported Algorithms</h4>Here is supported algorithm names for <a href="../symbols/KJUR.jws.JWS.html#.sign">KJUR.jws.JWS.sign</a> and <a href="../symbols/KJUR.jws.JWS.html#.verify">KJUR.jws.JWS.verify</a>methods.<table><tr><th>alg value</th><th>spec requirement</th><th>jsjws support</th></tr><tr><td>HS256</td><td>REQUIRED</td><td>SUPPORTED</td></tr><tr><td>HS384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr><tr><td>HS512</td><td>OPTIONAL</td><td>SUPPORTED</td></tr><tr><td>RS256</td><td>RECOMMENDED</td><td>SUPPORTED</td></tr><tr><td>RS384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr><tr><td>RS512</td><td>OPTIONAL</td><td>SUPPORTED</td></tr><tr><td>ES256</td><td>RECOMMENDED+</td><td>SUPPORTED</td></tr><tr><td>ES384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr><tr><td>ES512</td><td>OPTIONAL</td><td>-</td></tr><tr><td>PS256</td><td>OPTIONAL</td><td>SUPPORTED</td></tr><tr><td>PS384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr><tr><td>PS512</td><td>OPTIONAL</td><td>SUPPORTED</td></tr><tr><td>none</td><td>REQUIRED</td><td>SUPPORTED(signature generation only)</td></tr></table>NOTE1: HS384 is supported since jsjws 3.0.2 with jsrsasign 4.1.4.<br/>
+<h4>Supported Algorithms</h4>
+Here is supported algorithm names for <a href="../symbols/KJUR.jws.JWS.html#.sign">KJUR.jws.JWS.sign</a> and <a href="../symbols/KJUR.jws.JWS.html#.verify">KJUR.jws.JWS.verify</a>
+methods.
+<table>
+<tr><th>alg value</th><th>spec requirement</th><th>jsjws support</th></tr>
+<tr><td>HS256</td><td>REQUIRED</td><td>SUPPORTED</td></tr>
+<tr><td>HS384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
+<tr><td>HS512</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
+<tr><td>RS256</td><td>RECOMMENDED</td><td>SUPPORTED</td></tr>
+<tr><td>RS384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
+<tr><td>RS512</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
+<tr><td>ES256</td><td>RECOMMENDED+</td><td>SUPPORTED</td></tr>
+<tr><td>ES384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
+<tr><td>ES512</td><td>OPTIONAL</td><td>-</td></tr>
+<tr><td>PS256</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
+<tr><td>PS384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
+<tr><td>PS512</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
+<tr><td>none</td><td>REQUIRED</td><td>SUPPORTED(signature generation only)</td></tr>
+</table>
+NOTE1: HS384 is supported since jsjws 3.0.2 with jsrsasign 4.1.4.<br/>
 					
 				</div>
 				
@@ -784,7 +809,9 @@ This method supports following algorithms.</div>
 					
 					</div>
 					<div class="description">
-						This property is set after JWS signature verification. <br/>          Following "parsedJWS_*" properties can be accessed as "parsedJWS.*" because of          JsDoc restriction.
+						This property is set after JWS signature verification. <br/>
+          Following "parsedJWS_*" properties can be accessed as "parsedJWS.*" because of
+          JsDoc restriction.
 						
 						
 					</div>
@@ -968,7 +995,8 @@ This method supports following algorithms.</div>
 					
 					</div>
 					<div class="description">
-						generate JWS signature by Header, Payload and a RSA private key.<br/>This only supports "RS256", "RS512", "PS256" and "PS512" algorithms.
+						generate JWS signature by Header, Payload and a RSA private key.<br/>
+This only supports "RS256", "RS512", "PS256" and "PS512" algorithms.
 						
 						
 					</div>
@@ -1045,7 +1073,8 @@ This method supports following algorithms.</div>
 					
 					</div>
 					<div class="description">
-						generate JWS signature by Header, Payload and a naked RSA private key.<br/>This only supports "RS256" and "RS512" algorithm.
+						generate JWS signature by Header, Payload and a naked RSA private key.<br/>
+This only supports "RS256" and "RS512" algorithm.
 						
 						
 					</div>
@@ -1134,7 +1163,8 @@ This method supports following algorithms.</div>
 					
 					</div>
 					<div class="description">
-						generate JWS signature by Header, Payload and a PEM formatted PKCS#1 RSA private key.<br/>This only supports "RS256" and "RS512" algorithm.
+						generate JWS signature by Header, Payload and a PEM formatted PKCS#1 RSA private key.<br/>
+This only supports "RS256" and "RS512" algorithm.
 						
 						
 					</div>
@@ -1161,7 +1191,8 @@ This method supports following algorithms.</div>
 									<span class="light fixedFont">{String}</span> <b>string</b>
 									
 								</dt>
-								<dd>for sPemPrvKey PEM formatted PKCS#1 RSA private key<br/>                Heading and trailing space characters in PEM key will be ignored.</dd>
+								<dd>for sPemPrvKey PEM formatted PKCS#1 RSA private key<br/>
+                Heading and trailing space characters in PEM key will be ignored.</dd>
 							
 							</dl>
 						
@@ -1277,7 +1308,9 @@ This method supports following algorithms.</div>
 					
 					
 					
-					<pre class="code">KJUR.jws.JWS.inArray('b', ['b', 'c', 'a']) => trueKJUR.jws.JWS.inArray('a', ['b', 'c', 'a']) => trueKJUR.jws.JWS.inArray('a', ['b', 'c']) => false</pre>
+					<pre class="code">KJUR.jws.JWS.inArray('b', ['b', 'c', 'a']) => true
+KJUR.jws.JWS.inArray('a', ['b', 'c', 'a']) => true
+KJUR.jws.JWS.inArray('a', ['b', 'c']) => false</pre>
 					
 					
 					
@@ -1303,7 +1336,9 @@ This method supports following algorithms.</div>
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
-								<dd>jws 3.2.3This method verifies whether an item is included by an array.It doesn't care about item ordering in an array.</dd>
+								<dd>jws 3.2.3
+This method verifies whether an item is included by an array.
+It doesn't care about item ordering in an array.</dd>
 							</dl>
 							</dl>
 						
@@ -1336,7 +1371,9 @@ This method supports following algorithms.</div>
 					
 					
 					
-					<pre class="code">KJUR.jws.JWS.includedArray(['b'], ['b', 'c', 'a']) => trueKJUR.jws.JWS.includedArray(['a', 'b'], ['b', 'c', 'a']) => trueKJUR.jws.JWS.includedArray(['a', 'b'], ['b', 'c']) => false</pre>
+					<pre class="code">KJUR.jws.JWS.includedArray(['b'], ['b', 'c', 'a']) => true
+KJUR.jws.JWS.includedArray(['a', 'b'], ['b', 'c', 'a']) => true
+KJUR.jws.JWS.includedArray(['a', 'b'], ['b', 'c']) => false</pre>
 					
 					
 					
@@ -1362,7 +1399,9 @@ This method supports following algorithms.</div>
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
-								<dd>jws 3.2.3This method verifies whether an array is included by another array.It doesn't care about item ordering in a array.</dd>
+								<dd>jws 3.2.3
+This method verifies whether an array is included by another array.
+It doesn't care about item ordering in a array.</dd>
 							</dl>
 							</dl>
 						
@@ -1388,7 +1427,9 @@ This method supports following algorithms.</div>
 					
 					</div>
 					<div class="description">
-						check whether a String "s" is a safe JSON string or not.<br/>If a String "s" is a malformed JSON string or an other object typethis returns 0, otherwise this returns 1.
+						check whether a String "s" is a safe JSON string or not.<br/>
+If a String "s" is a malformed JSON string or an other object type
+this returns 0, otherwise this returns 1.
 						
 						
 					</div>
@@ -1488,7 +1529,9 @@ This method supports following algorithms.</div>
 					
 					</div>
 					<div class="description">
-						read a String "s" as JSON object if it is safe.<br/>If a String "s" is a malformed JSON string or not JSON string,this returns null, otherwise returns JSON object.
+						read a String "s" as JSON object if it is safe.<br/>
+If a String "s" is a malformed JSON string or not JSON string,
+this returns null, otherwise returns JSON object.
 						
 						
 					</div>
@@ -1538,7 +1581,31 @@ This method supports following algorithms.</div>
 					</div>
 					<div class="description">
 						generate JWS signature by specified key<br/>
-This method supports following algorithms.<table><tr><th>alg value</th><th>spec requirement</th><th>jsjws support</th></tr><tr><td>HS256</td><td>REQUIRED</td><td>SUPPORTED</td></tr><tr><td>HS384</td><td>OPTIONAL</td><td>-</td></tr><tr><td>HS512</td><td>OPTIONAL</td><td>SUPPORTED</td></tr><tr><td>RS256</td><td>RECOMMENDED</td><td>SUPPORTED</td></tr><tr><td>RS384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr><tr><td>RS512</td><td>OPTIONAL</td><td>SUPPORTED</td></tr><tr><td>ES256</td><td>RECOMMENDED+</td><td>SUPPORTED</td></tr><tr><td>ES384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr><tr><td>ES512</td><td>OPTIONAL</td><td>-</td></tr><tr><td>PS256</td><td>OPTIONAL</td><td>SUPPORTED</td></tr><tr><td>PS384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr><tr><td>PS512</td><td>OPTIONAL</td><td>SUPPORTED</td></tr><tr><td>none</td><td>REQUIRED</td><td>SUPPORTED(signature generation only)</td></tr></table><dl><dt>NOTE1:<dd>salt length of RSAPSS signature is the same as the hash algorithm lengthbecause of <a href="http://www.ietf.org/mail-archive/web/jose/current/msg02901.html">IETF JOSE ML discussion</a>.<dt>NOTE2:<dd>The reason of HS384 unsupport is  <a href="https://code.google.com/p/crypto-js/issues/detail?id=84">CryptoJS HmacSHA384 bug</a>.</dl>
+This method supports following algorithms.
+<table>
+<tr><th>alg value</th><th>spec requirement</th><th>jsjws support</th></tr>
+<tr><td>HS256</td><td>REQUIRED</td><td>SUPPORTED</td></tr>
+<tr><td>HS384</td><td>OPTIONAL</td><td>-</td></tr>
+<tr><td>HS512</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
+<tr><td>RS256</td><td>RECOMMENDED</td><td>SUPPORTED</td></tr>
+<tr><td>RS384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
+<tr><td>RS512</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
+<tr><td>ES256</td><td>RECOMMENDED+</td><td>SUPPORTED</td></tr>
+<tr><td>ES384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
+<tr><td>ES512</td><td>OPTIONAL</td><td>-</td></tr>
+<tr><td>PS256</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
+<tr><td>PS384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
+<tr><td>PS512</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
+<tr><td>none</td><td>REQUIRED</td><td>SUPPORTED(signature generation only)</td></tr>
+</table>
+<dl>
+<dt>NOTE1:
+<dd>salt length of RSAPSS signature is the same as the hash algorithm length
+because of <a href="http://www.ietf.org/mail-archive/web/jose/current/msg02901.html">IETF JOSE ML discussion</a>.
+<dt>NOTE2:
+<dd>The reason of HS384 unsupport is  
+<a href="https://code.google.com/p/crypto-js/issues/detail?id=84">CryptoJS HmacSHA384 bug</a>.
+</dl>
 						
 						
 					</div>
@@ -1621,14 +1688,51 @@ This method supports following algorithms.<table><tr><th>alg value</th><th>spe
 					</div>
 					<div class="description">
 						verify JWS signature by specified key or certificate<br/>
-<p>This method verifies a JSON Web Signature Compact Serialization string by the validation algorithm as described in <a href="http://self-issued.info/docs/draft-jones-json-web-signature-04.html#anchor5">the section 5 of Internet Draft draft-jones-json-web-signature-04.</a></p><p>Since 3.2.0 strict key checking has been provided against a JWS algorithmin a JWS header.<ul><li>In case 'alg' is 'HS*' in the JWS header,'key' shall be hexadecimal string for Hmac{256,384,512} shared secret key.Otherwise it raise an error.</li><li>In case 'alg' is 'RS*' or 'PS*' in the JWS header,'key' shall be a RSAKey object or a PEM string ofX.509 RSA public key certificate or PKCS#8 RSA public key.Otherwise it raise an error.</li><li>In case 'alg' is 'ES*' in the JWS header,'key' shall be a KJUR.crypto.ECDSA object or a PEM string ofX.509 ECC public key certificate or PKCS#8 ECC public key.Otherwise it raise an error.</li><li>In case 'alg' is 'none' in the JWS header,validation not supported after jsjws 3.1.0.</li></ul></p><p>NOTE1: The argument 'acceptAlgs' is supported since 3.2.0.Strongly recommended to provide acceptAlgs to mitigatesignature replacement attacks.<br/></p>
+<p>
+This method verifies a JSON Web Signature Compact Serialization string by the validation 
+algorithm as described in 
+<a href="http://self-issued.info/docs/draft-jones-json-web-signature-04.html#anchor5">
+the section 5 of Internet Draft draft-jones-json-web-signature-04.</a>
+</p>
+<p>
+Since 3.2.0 strict key checking has been provided against a JWS algorithm
+in a JWS header.
+<ul>
+<li>In case 'alg' is 'HS*' in the JWS header,
+'key' shall be hexadecimal string for Hmac{256,384,512} shared secret key.
+Otherwise it raise an error.</li>
+<li>In case 'alg' is 'RS*' or 'PS*' in the JWS header,
+'key' shall be a RSAKey object or a PEM string of
+X.509 RSA public key certificate or PKCS#8 RSA public key.
+Otherwise it raise an error.</li>
+<li>In case 'alg' is 'ES*' in the JWS header,
+'key' shall be a KJUR.crypto.ECDSA object or a PEM string of
+X.509 ECC public key certificate or PKCS#8 ECC public key.
+Otherwise it raise an error.</li>
+<li>In case 'alg' is 'none' in the JWS header,
+validation not supported after jsjws 3.1.0.</li>
+</ul>
+</p>
+<p>
+NOTE1: The argument 'acceptAlgs' is supported since 3.2.0.
+Strongly recommended to provide acceptAlgs to mitigate
+signature replacement attacks.<br/>
+</p>
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">// 1) verify a RS256 JWS signature by a certificate string.var isValid = KJUR.jws.JWS.verify('eyJh...', '-----BEGIN...', ['RS256']);// 2) verify a HS256 JWS signature by a certificate string.var isValid = KJUR.jws.JWS.verify('eyJh...', '6f62ad...', ['HS256']);// 3) verify a ES256 JWS signature by a KJUR.crypto.ECDSA key object.var pubkey = KEYUTIL.getKey('-----BEGIN CERT...');var isValid = KJUR.jws.JWS.verify('eyJh...', pubkey);</pre>
+					<pre class="code">// 1) verify a RS256 JWS signature by a certificate string.
+var isValid = KJUR.jws.JWS.verify('eyJh...', '-----BEGIN...', ['RS256']);
+
+// 2) verify a HS256 JWS signature by a certificate string.
+var isValid = KJUR.jws.JWS.verify('eyJh...', '6f62ad...', ['HS256']);
+
+// 3) verify a ES256 JWS signature by a KJUR.crypto.ECDSA key object.
+var pubkey = KEYUTIL.getKey('-----BEGIN CERT...');
+var isValid = KJUR.jws.JWS.verify('eyJh...', pubkey);</pre>
 					
 					
 					
@@ -1695,7 +1799,8 @@ This method supports following algorithms.<table><tr><th>alg value</th><th>spe
 					
 					</div>
 					<div class="description">
-						verify JWS signature with RSA public key.<br/>This only supports "RS256", "RS512", "PS256" and "PS512" algorithms.
+						verify JWS signature with RSA public key.<br/>
+This only supports "RS256", "RS512", "PS256" and "PS512" algorithms.
 						
 						
 					</div>
@@ -1766,7 +1871,8 @@ This method supports following algorithms.<table><tr><th>alg value</th><th>spe
 					
 					</div>
 					<div class="description">
-						verify JWS signature with naked RSA public key.<br/>This only supports "RS256" and "RS512" algorithm.
+						verify JWS signature with naked RSA public key.<br/>
+This only supports "RS256" and "RS512" algorithm.
 						
 						
 					</div>
@@ -1843,7 +1949,8 @@ This method supports following algorithms.<table><tr><th>alg value</th><th>spe
 					
 					</div>
 					<div class="description">
-						verify JWS signature by PEM formatted X.509 certificate.<br/>This only supports "RS256" and "RS512" algorithm.
+						verify JWS signature by PEM formatted X.509 certificate.<br/>
+This only supports "RS256" and "RS512" algorithm.
 						
 						
 					</div>
@@ -1920,14 +2027,53 @@ This method supports following algorithms.<table><tr><th>alg value</th><th>spe
 					
 					</div>
 					<div class="description">
-						This method verifies a<a href="https://tools.ietf.org/html/rfc7519">RFC 7519</a> JSON Web Token(JWT).It will verify following:<ul><li>Header.alg<ul><li>alg is specified in JWT header.</li><li>alg is included in acceptField.alg array. (MANDATORY)</li><li>alg is proper for key.</li></ul></li><li>Payload.iss (issuer) - Payload.iss is included in acceptField.iss array if specified. (OPTION)</li><li>Payload.sub (subject) - Payload.sub is included in acceptField.sub array if specified. (OPTION)</li><li>Payload.aud (audience) - Payload.aud is included in acceptField.aud array or     the same as value if specified. (OPTION)</li><li>Time validity<ul><li>If acceptField.verifyAt as number of UNIX origin time is specifed for validation time, this method will verify at the time for it, otherwise current time will be used to verify.</li><li>Payload.exp (expire) - Validation time is smaller than Payloead.exp.</li><li>Payload.nbf (not before) - Validation time is greater than Payloead.nbf.</li><li>Payload.iat (issued at) - Validation time is greater than Payloead.iat.</li></ul></li><li>Payload.jti (JWT id) - Payload.jti is included in acceptField.jti if specified. (OPTION)</li><li>JWS signature of JWS is valid for specified key.</li></ul>
+						This method verifies a
+<a href="https://tools.ietf.org/html/rfc7519">RFC 7519</a> 
+JSON Web Token(JWT).
+It will verify following:
+<ul>
+<li>Header.alg
+<ul>
+<li>alg is specified in JWT header.</li>
+<li>alg is included in acceptField.alg array. (MANDATORY)</li>
+<li>alg is proper for key.</li>
+</ul>
+</li>
+<li>Payload.iss (issuer) - Payload.iss is included in acceptField.iss array if specified. (OPTION)</li>
+<li>Payload.sub (subject) - Payload.sub is included in acceptField.sub array if specified. (OPTION)</li>
+<li>Payload.aud (audience) - Payload.aud is included in acceptField.aud array or 
+    the same as value if specified. (OPTION)</li>
+<li>Time validity
+<ul>
+<li>If acceptField.verifyAt as number of UNIX origin time is specifed for validation time, 
+this method will verify at the time for it, otherwise current time will be used to verify.</li>
+<li>Payload.exp (expire) - Validation time is smaller than Payloead.exp.</li>
+<li>Payload.nbf (not before) - Validation time is greater than Payloead.nbf.</li>
+<li>Payload.iat (issued at) - Validation time is greater than Payloead.iat.</li>
+</ul>
+</li>
+<li>Payload.jti (JWT id) - Payload.jti is included in acceptField.jti if specified. (OPTION)</li>
+<li>JWS signature of JWS is valid for specified key.</li>
+</ul>
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">// simple validation for HS256isValid = KJUR.jws.JWS.verifyJWT("eyJhbG...", "616161", {alg: ["HS256"]}),// full validation for RS or PSpubkey = KEYUTIL.getKey('-----BEGIN CERT...');isValid = KJUR.jws.JWS.verifyJWT('eyJh...', pubkey, {  alg: ['RS256', 'RS512', 'PS256', 'PS512'],  iss: ['http://foo.com'],  sub: ['mailto:john@foo.com', 'mailto:alice@foo.com'],  verifyAt: KJUR.jws.IntDate.get('20150520235959Z'),  aud: ['http://foo.com'], // aud: 'http://foo.com' is fine too.  jti: 'id123456'});</pre>
+					<pre class="code">// simple validation for HS256
+isValid = KJUR.jws.JWS.verifyJWT("eyJhbG...", "616161", {alg: ["HS256"]}),
+
+// full validation for RS or PS
+pubkey = KEYUTIL.getKey('-----BEGIN CERT...');
+isValid = KJUR.jws.JWS.verifyJWT('eyJh...', pubkey, {
+  alg: ['RS256', 'RS512', 'PS256', 'PS512'],
+  iss: ['http://foo.com'],
+  sub: ['mailto:john@foo.com', 'mailto:alice@foo.com'],
+  verifyAt: KJUR.jws.IntDate.get('20150520235959Z'),
+  aud: ['http://foo.com'], // aud: 'http://foo.com' is fine too.
+  jti: 'id123456'
+});</pre>
 					
 					
 					
