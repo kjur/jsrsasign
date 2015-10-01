@@ -1146,6 +1146,19 @@ KJUR.asn1.x509.X500Name = function(params) {
             this.asn1Array.push(new KJUR.asn1.x509.RDN({'str':a[i]}));
         }
     };
+    
+    this.setByObject = function(dnObj) {
+        // Get all the dnObject attributes and stuff them in the ANS1 array.
+        for (var x in dnObj) {
+            if (dnObj.hasOwnProperty(x)) {
+                var newRDN = new KJUR.asn1.x509.RDN(
+                    {'str': x + '=' + dnObj[x]});
+                // Initialize or push into the ANS1 array.
+                this.ans1Array ? this.ans1Array.push(newRDN)
+                    : this.ans1Array = [newRDN];
+            }
+        }
+    };
 
     this.getEncodedHex = function() {
         if (typeof this.hTLV == "string") return this.hTLV;
@@ -1157,7 +1170,13 @@ KJUR.asn1.x509.X500Name = function(params) {
     if (typeof params != "undefined") {
         if (typeof params['str'] != "undefined") {
             this.setByString(params['str']);
+        // If params is an object, then set the ASN1 array just using the object
+        // attributes. This is nice for fields that have lots of special
+        // characters (i.e. CN: 'http://www.github.com/kjur//').
+        } else if (typeof params === "object") {
+            this.setByObject(params);
         }
+        
         if (typeof params.certissuer != "undefined") {
             var x = new X509();
             x.hex = X509.pemToHex(params.certissuer);
