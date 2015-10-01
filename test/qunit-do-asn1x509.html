@@ -110,17 +110,34 @@ test("TBSCertificate class test", function() {
 });
 
 test("X500Name class test", function() {
-  expect(2);
-  var o2 = new KJUR.asn1.x509.X500Name();
-  o2.setByString("/C=US/O=aaa");
-  equal(o2.getEncodedHex(), 
+  var o = null;
+
+  o = new KJUR.asn1.x509.X500Name();
+  o.setByString("/C=US/O=aaa");
+  equal(o.getEncodedHex(), 
          "301b310b3009060355040613025553310c300a060355040a0c03616161",
          "setByString(/C=US/O=aaa)");
 
-  var o3 = new KJUR.asn1.x509.X500Name({'str':'/C=US/O=aaa'});
-  equal(o3.getEncodedHex(),
+  o = new KJUR.asn1.x509.X500Name();
+  o.setByObject({C: "US", O: "aaa"});
+  equal(o.getEncodedHex(), 
+         "301b310b3009060355040613025553310c300a060355040a0c03616161",
+         "setByObject({C: 'US', O: 'aaa'})");
+
+  o = new KJUR.asn1.x509.X500Name({'str':'/C=US/O=aaa'});
+  equal(o.getEncodedHex(),
          "301b310b3009060355040613025553310c300a060355040a0c03616161",
          "constructor str /C=US/O=aaa");
+
+  o = new KJUR.asn1.x509.X500Name({'C': 'US', 'O': 'aaa'});
+  equal(o.getEncodedHex(),
+         "301b310b3009060355040613025553310c300a060355040a0c03616161",
+         "constructor obj C:US, O:aaa");
+
+  o = new KJUR.asn1.x509.X500Name({'C': 'US', 'O': 'aa/'});
+  equal(o.getEncodedHex(),
+         "301b310b3009060355040613025553310c300a060355040a0c0361612f",
+         "constructor obj C:US, O:aa/");
 });
 
 test("RDN class test", function() {

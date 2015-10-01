@@ -1,4 +1,4 @@
-/*! asn1x509-1.0.12.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.13.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.12 (2015-Jun-01)
+ * @version 1.0.13 (2015-Oct-01)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1134,16 +1134,56 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRLEntry, KJUR.asn1.ASN1Object);
  * @extends KJUR.asn1.ASN1Object
  * @description
  * @example
+ * // 1. construct with string
+ * o = new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa/OU=bbb/CN=foo@example.com"});
+ * // 2. construct by object
+ * o = new KJUR.asn1.x509.X500Name({C: "US", O: "aaa", CN: "http://example.com/"});
  */
 KJUR.asn1.x509.X500Name = function(params) {
     KJUR.asn1.x509.X500Name.superclass.constructor.call(this);
     this.asn1Array = new Array();
 
+    /**
+     * set DN by string
+     * @name setByString
+     * @memberOf KJUR.asn1.x509.X500Name
+     * @function
+     * @param {Array} dnStr distinguished name by string (ex. /C=US/O=aaa)
+     * @description
+     * @example
+     * name = new KJUR.asn1.x509.X500Name();
+     * name.setByString("/C=US/O=aaa/OU=bbb/CN=foo@example.com");
+     */
     this.setByString = function(dnStr) {
         var a = dnStr.split('/');
         a.shift();
         for (var i = 0; i < a.length; i++) {
             this.asn1Array.push(new KJUR.asn1.x509.RDN({'str':a[i]}));
+        }
+    };
+    
+    /**
+     * set DN by associative array
+     * @name setByObject
+     * @memberOf KJUR.asn1.x509.X500Name
+     * @function
+     * @param {Array} dnObj associative array of DN (ex. {C: "US", O: "aaa"})
+     * @since jsrsasign 4.9. asn1x509 1.0.13
+     * @description
+     * @example
+     * name = new KJUR.asn1.x509.X500Name();
+     * name.setByObject({C: "US", O: "aaa", CN="http://example.com/"1});
+     */
+    this.setByObject = function(dnObj) {
+        // Get all the dnObject attributes and stuff them in the ASN.1 array.
+        for (var x in dnObj) {
+            if (dnObj.hasOwnProperty(x)) {
+                var newRDN = new KJUR.asn1.x509.RDN(
+                    {'str': x + '=' + dnObj[x]});
+                // Initialize or push into the ANS1 array.
+                this.asn1Array ? this.asn1Array.push(newRDN)
+                    : this.asn1Array = [newRDN];
+            }
         }
     };
 
@@ -1157,7 +1197,13 @@ KJUR.asn1.x509.X500Name = function(params) {
     if (typeof params != "undefined") {
         if (typeof params['str'] != "undefined") {
             this.setByString(params['str']);
+        // If params is an object, then set the ASN1 array just using the object
+        // attributes. This is nice for fields that have lots of special
+        // characters (i.e. CN: 'http://www.github.com/kjur//').
+        } else if (typeof params === "object") {
+            this.setByObject(params);
         }
+        
         if (typeof params.certissuer != "undefined") {
             var x = new X509();
             x.hex = X509.pemToHex(params.certissuer);
@@ -2017,6 +2063,18 @@ KJUR.asn1.x509.X509Util = new function() {
  *   notbefore: {'str': '130504235959Z'},
  *   notafter: {'str': '140504235959Z'},
  *   subject: {str: '/C=US/O=T1'},
+ *   sbjpubkey: pubKeyObj,
+ *   sighex: '0102030405..'}
+ * );
+ * // for the issuer and subject field, another
+ * // representation is also available
+ * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM(
+ * { serial: {int: 1},
+ *   sigalg: {name: 'SHA1withRSA', paramempty: true},
+ *   issuer: {C: "US", O: "T1"},
+ *   notbefore: {'str': '130504235959Z'},
+ *   notafter: {'str': '140504235959Z'},
+ *   subject: {C: "US", O: "T1", CN: "http://example.com/"},
  *   sbjpubkey: pubKeyObj,
  *   sighex: '0102030405..'}
  * );
