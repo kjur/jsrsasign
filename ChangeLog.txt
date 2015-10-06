@@ -1,6 +1,16 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.9.1 to 4.9.2 (2015-Oct-02)
+  - latest asn1x509 1.0.13 was missed in the latest-min.js and
+    it was fixed.
+
+* Changes between 4.9.0 to 4.9.1
+  - asn1x509 1.0.12 t 1.0.13
+    - setByObject method added to X500Name class
+    - {C: "US", O: "test"} representation now can be used
+      in newCertPEM method in X509Util class.
+
 * Changes between 4.8.6 to 4.9.0
   - certificate signing request(CSR/PKCS#10) generation support
     asn1csr-1.0.js added
