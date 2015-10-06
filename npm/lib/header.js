@@ -1,5 +1,5 @@
 
-var navigator = {};
-navigator.userAgent = false;
+;(function (root) {
+  navigator.userAgent = false;
 
-var window = {};
+  var window = {};
