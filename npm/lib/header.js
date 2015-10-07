@@ -4,3 +4,4 @@
   navigator.userAgent = false;
 
   var window = {};
+  var exports = {};
