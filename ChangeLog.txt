@@ -1,6 +1,25 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 4.9.2 to 4.10.0 (2015-Oct-12)
+  - some JWS HS* and Crypto Mac signature issue was fixed.
+  - crypto 1.1.6 to 1.1.7
+    - add support for various password providing method
+      such as base64, base64url, hexadecimal or utf8 string
+      for Mac.
+  - jws 3.2.4 to 3.3.0
+    - add support for various password providing method
+      such as base64, base64url, hexadecimal or utf8 string
+      for HS* JWS signing and validation
+    - remove some old fashoned functions and methods
+      which marked as "deprecated". Followings are removed:
+      - JWS.generateJWSByP1PrvKey
+      - JWS.generateJWSByKey
+      - JWS.generateJWSByNED
+      - JWS.verifyJWSByPemX509Cert
+    - JWS.sign can handle header and payload
+      JSON object not JSON string.
+
 * Changes between 4.9.1 to 4.9.2 (2015-Oct-02)
   - latest asn1x509 1.0.13 was missed in the latest-min.js and
     it was fixed.

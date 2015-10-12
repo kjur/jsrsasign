@@ -10,9 +10,8 @@
 <script type="text/javascript" src="qunit.js"></script>
 
 <script language="JavaScript" type="text/javascript" src="../jsrsasign-latest-all-min.js"></script>
-
-<script language="JavaScript" type="text/javascript" src="../ext/json-sans-eval.js"></script>
-<script language="JavaScript" type="text/javascript" src="../jws-3.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../crypto-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../jws-3.3.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -202,21 +201,6 @@ test("algorithm test: none", function() {
   equal(sJWS, 'eyJhbGciOiJub25lIiwgImN0eSI6IkpXVCJ9.eyJhZ2UiOiAyMX0.', "1");
 });
 
-var hJWSHSPass = "616161";
-var sJWSHS256 = 'eyJhbGciOiJIUzI1NiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.vcimDRCLttYBHsO7M0S_tCvUIOGz26Ti5nkRuj1QcHc';
-test("algorithm test: HS256", function() {
-  expect(1);
-  var sJWS = KJUR.jws.JWS.sign(null, '{"alg":"HS256", "cty":"JWT"}', '{"age": 21}', hJWSHSPass);
-  equal(sJWS, sJWSHS256, "1");
-});
-
-var sJWSHS512 = 'eyJhbGciOiJIUzUxMiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.b6HuF_CTLldXzQwAVhsnpEGkbrtquQfjdr8ie_UyqjPFNnGOz-rEvOvfDC_ex4zvVgsARAixM-6Ug9WcnweTgA';
-test("algorithm test: HS512", function() {
-  expect(1);
-  var sJWS = KJUR.jws.JWS.sign(null, '{"alg":"HS512", "cty":"JWT"}', '{"age": 21}', hJWSHSPass);
-  equal(sJWS, sJWSHS512, "1");
-});
-
 var sJWSRS256 = 'eyJhbGciOiJSUzI1NiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.inTO81veA1R6x_MYP9Y3HBY7AlJ5H_QYZPzCJTEMu7md4fVm_AwBY-uNqxnM31JUVWYazX1htv2KES_VXievD8qVxez6-S7K8y-oQ462rCENrko_GVHBm9C7SgkZEgsnZ2IlhYhcYOmBUESfAHJKak9gP6_azu6Vr8Nvwtx8Qjk';
 test("algorithm test: RS256", function() {
   expect(1);
@@ -302,18 +286,6 @@ test("verify test for algorithm none with ignored key", function() {
 });
  */
 
-test("verify test for algorithm HS256", function() {
-  expect(1);
-  var result = KJUR.jws.JWS.verify(sJWSHS256, hJWSHSPass);
-  equal(result, true, "");
-});
-
-test("verify test for algorithm HS512", function() {
-  expect(1);
-  var result = KJUR.jws.JWS.verify(sJWSHS512, hJWSHSPass);
-  equal(result, true, "");
-});
-
 test("verify test for algorithm RS256 z3", function() {
   expect(1);
   var result = KJUR.jws.JWS.verify(sJWSRS256, z3PubPemP8);
@@ -378,28 +350,6 @@ test("arg test", function() {
 });
  */
 
-test("arg acceptAlgs test (HS256 not in [HS512])", function() {
-  expect(1);
-  var msg = "";
-  try {
-    var result = KJUR.jws.JWS.verify(sJWSHS256, hJWSHSPass, ["HS512"]);
-  } catch(ex) {
-    msg = ex;
-  }
-  equal(msg, "algorithm 'HS256' not accepted in the list", "");
-});
-
-test("arg acceptAlgs test (HS256 in [HS256])", function() {
-  expect(1);
-  var msg = "";
-  try {
-    var result = KJUR.jws.JWS.verify(sJWSHS256, hJWSHSPass, ["HS256"]);
-  } catch(ex) {
-    msg = ex;
-  }
-  equal(msg, "", "");
-});
-
 });
 </script>
   
@@ -408,7 +358,10 @@ test("arg acceptAlgs test (HS256 in [HS256])", function() {
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
 <p>
-<a href="qunit-do-jws-sign.html">sign/verify</a> | 
+<a href="../">TOP</a> | 
+<a href="index.html">TEST INDEX</a> | 
+<a href="qunit-do-jws-sign.html">asynmetric key(RS/PS/ES) sign/verify</a> | 
+<a href="qunit-do-jws-sign-hs.html">Hmac(HS) sign/verify</a> | 
 <a href="qunit-do-jws-sign-slow.html">sign/verify slow</a> | 
 <a href="qunit-do-jws-intdate.html">IntDate</a> | 
 </p>

@@ -427,7 +427,7 @@ ul.inheritsList
 				KJUR.jws.IntDate class
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/jws-3.2.js.html">jws-3.2.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/jws-3.3.js.html">jws-3.3.js</a>.
 				
 			</p>
 
@@ -479,7 +479,48 @@ used in JSON Web Token(JWT).</div>
 							<td class="nameDescription">
 								<div class="fixedFont">KJUR.jws.IntDate.<b><a href="../symbols/KJUR.jws.IntDate.html#.get">get</a></b>(s)
 								</div>
-								<div class="description">This method will accept following representation of time.</div>
+								<div class="description">get UNIX origin time from by string
+This method will accept following representation of time.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.jws.IntDate.<b><a href="../symbols/KJUR.jws.IntDate.html#.getNow">getNow</a></b>()
+								</div>
+								<div class="description">get UNIX origin time of current time
+This method provides UNIX origin time for current time</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.jws.IntDate.<b><a href="../symbols/KJUR.jws.IntDate.html#.getZulu">getZulu</a></b>(s)
+								</div>
+								<div class="description">get UNIX origin time from Zulu time representation string
+This method provides UNIX origin time from Zulu time.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.jws.IntDate.<b><a href="../symbols/KJUR.jws.IntDate.html#.intDate2UTCString">intDate2UTCString</a></b>(intDate)
+								</div>
+								<div class="description">get UTC time string from UNIX origin time value
+This method provides UTC time string for UNIX origin time value.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.jws.IntDate.<b><a href="../symbols/KJUR.jws.IntDate.html#.intDate2Zulu">intDate2Zulu</a></b>(intDate)
+								</div>
+								<div class="description">get UTC time string from UNIX origin time value
+This method provides Zulu time string for UNIX origin time value.</div>
 							</td>
 						</tr>
 					
@@ -546,7 +587,8 @@ used in JSON Web Token(JWT).
 					
 					</div>
 					<div class="description">
-						This method will accept following representation of time.
+						get UNIX origin time from by string
+This method will accept following representation of time.
 <ul>
 <li>now - current time</li>
 <li>now + 1hour - after 1 hour from now</li>
@@ -598,6 +640,221 @@ used in JSON Web Token(JWT).
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Integer}</span> UNIX origin time in seconds for argument 's'</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getNow"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Integer}</span>
+					<span class="light">KJUR.jws.IntDate.</span><b>getNow</b>()
+					
+					</div>
+					<div class="description">
+						get UNIX origin time of current time
+This method provides UNIX origin time for current time
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.jws.IntDate.getNow() => 1478...</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jws 3.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Integer}</span> UNIX origin time for current time</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getZulu"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Integer}</span>
+					<span class="light">KJUR.jws.IntDate.</span><b>getZulu</b>(s)
+					
+					</div>
+					<div class="description">
+						get UNIX origin time from Zulu time representation string
+This method provides UNIX origin time from Zulu time.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.jws.IntDate.getZulu("20151012125959Z") => 1478...</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>string of Zulu time representation (ex. 20151012125959Z)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jws 3.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Throws:</dt>
+							
+								<dt>
+									 <b></b>
+								</dt>
+								<dd>"unsupported format: s" when malformed format</dd>
+							
+							</dl>
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Integer}</span> UNIX origin time in seconds for argument 's'</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".intDate2UTCString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.jws.IntDate.</span><b>intDate2UTCString</b>(intDate)
+					
+					</div>
+					<div class="description">
+						get UTC time string from UNIX origin time value
+This method provides UTC time string for UNIX origin time value.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.jws.IntDate.intDate2UTCString(1478...) => "2015 Oct ..."</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>intDate</b>
+									
+								</dt>
+								<dd>UNIX origin time value (ex. 1478...)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jws 3.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> UTC time string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".intDate2Zulu"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.jws.IntDate.</span><b>intDate2Zulu</b>(intDate)
+					
+					</div>
+					<div class="description">
+						get UTC time string from UNIX origin time value
+This method provides Zulu time string for UNIX origin time value.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.jws.IntDate.intDate2UTCString(1478...) => "20151012...Z"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>intDate</b>
+									
+								</dt>
+								<dd>UNIX origin time value (ex. 1478...)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jws 3.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> Zulu time string</dd>
 							
 							</dl>
 						
