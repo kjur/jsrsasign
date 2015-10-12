@@ -1312,7 +1312,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	return key;
     }
 
-    // 2.8. JWK RSA private key
+    // 2.8. JWK RSA private key with CRT parameters
     if (param.kty === "RSA" &&
 	param.n !== undefined &&
 	param.e !== undefined &&
@@ -1333,6 +1333,24 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 			 b64utohex(param.qi));
 	return key;
     }
+
+	// JWK RSA private key
+    if (param.kty === "RSA" &&
+	param.n !== undefined &&
+	param.e !== undefined &&
+	param.d !== undefined &&
+	param.p === undefined &&
+	param.q === undefined &&
+	param.dp === undefined &&
+	param.dq === undefined &&
+	param.qi === undefined) {
+	var key = new RSAKey();
+        key.setPrivate(b64utohex(param.n),
+			 b64utohex(param.e),
+			 b64utohex(param.d));
+	return key;
+    }
+
 
     // 2.9. JWK ECC public key
     if (param.kty === "EC" &&
