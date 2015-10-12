@@ -1,4 +1,4 @@
-/*! crypto-1.1.6.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! crypto-1.1.7.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.1.6 (2015-Jun-07)
+ * @version 1.1.7 (2015-Oct-11)
  * @since jsrsasign 2.2
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -491,10 +491,23 @@ KJUR.crypto.MessageDigest = function(params) {
  * NOTE: HmacSHA224 and HmacSHA384 issue was fixed since jsrsasign 4.1.4.
  * Please use 'ext/cryptojs-312-core-fix*.js' instead of 'core.js' of original CryptoJS
  * to avoid those issue.
+ * <br/>
+ * NOTE2: Hmac signature bug was fixed in jsrsasign 4.9.0 by providing CryptoJS
+ * bug workaround.
+ * <br/>
+ * Please see {@link KJUR.crypto.Mac.setPassword}, how to provide password
+ * in various ways in detail.
  * @example
- * var mac = new KJUR.crypto.Mac({alg: "HmacSHA1", prov: "cryptojs", "pass": "pass"});
+ * var mac = new KJUR.crypto.Mac({alg: "HmacSHA1", "pass": "pass"});
  * mac.updateString('aaa')
  * var macHex = md.doFinal()
+ *
+ * // other password representation 
+ * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"hex":  "6161"}});
+ * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"utf8": "aa"}});
+ * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"rstr": "\x61\x61"}});
+ * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"b64":  "Mi02/+...a=="}});
+ * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"b64u": "Mi02_-...a"}});
  */
 KJUR.crypto.Mac = function(params) {
     var mac = null;
@@ -504,6 +517,8 @@ KJUR.crypto.Mac = function(params) {
     var algProv = null;
 
     this.setAlgAndProvider = function(alg, prov) {
+	alg = alg.toLowerCase();
+
 	if (alg == null) alg = "hmacsha1";
 
 	alg = alg.toLowerCase();
@@ -617,12 +632,90 @@ KJUR.crypto.Mac = function(params) {
 	throw "digestHex(hex) not supported for this alg/prov: " + this.algProv;
     };
 
-    if (params !== undefined) {
-	if (params['pass'] !== undefined) {
-	    this.pass = params['pass'];
+    /**
+     * set password for Mac
+     * @name setPassword
+     * @memberOf KJUR.crypto.Mac
+     * @function
+     * @param {Object} pass password for Mac
+     * @since crypto 1.1.7 jsrsasign 4.9.0
+     * @description
+     * This method will set password for (H)Mac internally.
+     * Argument 'pass' can be specified as following:
+     * <ul>
+     * <li>even length string of 0..9, a..f or A-F: implicitly specified as hexadecimal string</li>
+     * <li>not above string: implicitly specified as raw string</li>
+     * <li>{rstr: "\x65\x70"}: explicitly specified as raw string</li>
+     * <li>{hex: "6570"}: explicitly specified as hexacedimal string</li>
+     * <li>{utf8: "秘密"}: explicitly specified as UTF8 string</li>
+     * <li>{b64: "Mi78..=="}: explicitly specified as Base64 string</li>
+     * <li>{b64u: "Mi7-_"}: explicitly specified as Base64URL string</li>
+     * </ul>
+     * It is *STRONGLY RECOMMENDED* that explicit representation of password argument
+     * to avoid ambiguity. For example string  "6161" can mean a string "6161" or 
+     * a hexadecimal string of "aa" (i.e. \x61\x61).
+     * @example
+     * mac = KJUR.crypto.Mac({'alg': 'hmacsha256'});
+     * // set password by implicit raw string
+     * mac.setPassword("\x65\x70\xb9\x0b");
+     * mac.setPassword("password");
+     * // set password by implicit hexadecimal string
+     * mac.setPassword("6570b90b");
+     * mac.setPassword("6570B90B");
+     * // set password by explicit raw string
+     * mac.setPassword({"rstr": "\x65\x70\xb9\x0b"});
+     * // set password by explicit hexadecimal string
+     * mac.setPassword({"hex": "6570b90b"});
+     * // set password by explicit utf8 string
+     * mac.setPassword({"utf8": "passwordパスワード");
+     * // set password by explicit Base64 string
+     * mac.setPassword({"b64": "Mb+c3f/=="});
+     * // set password by explicit Base64URL string
+     * mac.setPassword({"b64u": "Mb-c3f_"});
+     */
+    this.setPassword = function(pass) {
+	// internal this.pass shall be CryptoJS DWord Object for CryptoJS bug
+	// work around. CrytoJS HMac password can be passed by
+	// raw string as described in the manual however it doesn't
+	// work properly in some case. If password was passed
+	// by CryptoJS DWord which is not described in the manual
+	// it seems to work. (fixed since crypto 1.1.7)
+
+	if (typeof pass == 'string') {
+	    var hPass = pass;
+	    if (pass.length % 2 == 1 || ! pass.match(/^[0-9A-Fa-f]+$/)) { // raw str
+		hPass = rstrtohex(pass);
+	    }
+	    this.pass = CryptoJS.enc.Hex.parse(hPass);
+	    return;
 	}
-	if (params['alg'] !== undefined) {
-	    this.algName = params['alg'];
+
+	if (typeof pass != 'object')
+	    throw "KJUR.crypto.Mac unsupported password type: " + pass;
+	
+	var hPass = null;
+	if (pass.hex  !== undefined) {
+	    if (pass.hex.length % 2 != 0 || ! pass.hex.match(/^[0-9A-Fa-f]+$/))
+		throw "Mac: wrong hex password: " + pass.hex;
+	    hPass = pass.hex;
+	}
+	if (pass.utf8 !== undefined) hPass = utf8tohex(pass.utf8);
+	if (pass.rstr !== undefined) hPass = rstrtohex(pass.rstr);
+	if (pass.b64  !== undefined) hPass = b64tohex(pass.b64);
+	if (pass.b64u !== undefined) hPass = b64utohex(pass.b64u);
+
+	if (hPass == null)
+	    throw "KJUR.crypto.Mac unsupported password type: " + pass;
+
+	this.pass = CryptoJS.enc.Hex.parse(hPass);
+    };
+
+    if (params !== undefined) {
+	if (params.pass !== undefined) {
+	    this.setPassword(params.pass);
+	}
+	if (params.alg !== undefined) {
+	    this.algName = params.alg;
 	    if (params['prov'] === undefined)
 		this.provName = KJUR.crypto.Util.DEFAULTPROVIDER[this.algName];
 	    this.setAlgAndProvider(this.algName, this.provName);

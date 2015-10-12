@@ -427,7 +427,7 @@ ul.inheritsList
 				JSON Web Signature(JWS) class
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/jws-3.2.js.html">jws-3.2.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/jws-3.3.js.html">jws-3.3.js</a>.
 				
 			</p>
 
@@ -470,82 +470,12 @@ ul.inheritsList
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								<b><a href="../symbols/KJUR.jws.JWS.html#parsedJWS">parsedJWS</a></b>
+								KJUR.jws.JWS.<b><a href="../symbols/KJUR.jws.JWS.html#.jwsalg2sigalg">jwsalg2sigalg</a></b>
 								</div>
-								<div class="description">This property is set after JWS signature verification.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/KJUR.jws.JWS.html#parsedJWS_headB64U">parsedJWS_headB64U</a></b>
-								</div>
-								<div class="description">string of Encrypted JWS Header</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/KJUR.jws.JWS.html#parsedJWS_headS">parsedJWS_headS</a></b>
-								</div>
-								<div class="description">string of decoded JWS Header</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/KJUR.jws.JWS.html#parsedJWS_payloadB64U">parsedJWS_payloadB64U</a></b>
-								</div>
-								<div class="description">string of Encrypted JWS Payload</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/KJUR.jws.JWS.html#parsedJWS_si">parsedJWS_si</a></b>
-								</div>
-								<div class="description">string of Signature Input</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/KJUR.jws.JWS.html#parsedJWS_sigvalB64U">parsedJWS_sigvalB64U</a></b>
-								</div>
-								<div class="description">string of Encrypted JWS signature value</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/KJUR.jws.JWS.html#parsedJWS_sigvalBI">parsedJWS_sigvalBI</a></b>
-								</div>
-								<div class="description">BigInteger(defined in jsbn.js) object of JWS signature value</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/KJUR.jws.JWS.html#parsedJWS_sigvalH">parsedJWS_sigvalH</a></b>
-								</div>
-								<div class="description">hexadecimal string of JWS signature value</div>
+								<div class="description">static associative array of general signature algorithm name from JWS algorithm name</div>
 							</td>
 						</tr>
 					
@@ -569,33 +499,6 @@ ul.inheritsList
 						</tr>
 					</thead>
 					<tbody>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.jws.JWS.<b><a href="../symbols/KJUR.jws.JWS.html#.generateJWSByKey">generateJWSByKey</a></b>(sHead, sPayload, RSA)
-								</div>
-								<div class="description">generate JWS signature by Header, Payload and a RSA private key.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.jws.JWS.<b><a href="../symbols/KJUR.jws.JWS.html#.generateJWSByNED">generateJWSByNED</a></b>(sHead, sPayload, hN, hE, hD)
-								</div>
-								<div class="description">generate JWS signature by Header, Payload and a naked RSA private key.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.jws.JWS.<b><a href="../symbols/KJUR.jws.JWS.html#.generateJWSByP1PrvKey">generateJWSByP1PrvKey</a></b>(sHead, sPayload, string)
-								</div>
-								<div class="description">generate JWS signature by Header, Payload and a PEM formatted PKCS#1 RSA private key.</div>
-							</td>
-						</tr>
 					
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
@@ -654,7 +557,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.jws.JWS.<b><a href="../symbols/KJUR.jws.JWS.html#.sign">sign</a></b>(alg, sHead, sPayload, key, pass)
+								<div class="fixedFont">KJUR.jws.JWS.<b><a href="../symbols/KJUR.jws.JWS.html#.sign">sign</a></b>(alg, spHead, spPayload, key, pass)
 								</div>
 								<div class="description">generate JWS signature by specified key<br/>
 This method supports following algorithms.</div>
@@ -672,33 +575,6 @@ This method verifies a JSON Web Signature Compact Serialization string by the va
 algorithm as described in 
 <a href="http://self-issued.info/docs/draft-jones-json-web-signature-04.html#anchor5">
 the section 5 of Internet Draft draft-jones-json-web-signature-04.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.jws.JWS.<b><a href="../symbols/KJUR.jws.JWS.html#.verifyJWSByKey">verifyJWSByKey</a></b>(sJWS, key)
-								</div>
-								<div class="description">verify JWS signature with RSA public key.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.jws.JWS.<b><a href="../symbols/KJUR.jws.JWS.html#.verifyJWSByNE">verifyJWSByNE</a></b>(sJWS, hN, hE)
-								</div>
-								<div class="description">verify JWS signature with naked RSA public key.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.jws.JWS.<b><a href="../symbols/KJUR.jws.JWS.html#.verifyJWSByPemX509Cert">verifyJWSByPemX509Cert</a></b>(sJWS, sPemX509Cert)
-								</div>
-								<div class="description">verify JWS signature by PEM formatted X.509 certificate.</div>
 							</td>
 						</tr>
 					
@@ -735,6 +611,7 @@ JSON Web Token(JWT).</div>
 				
 				<div class="description">
 					JSON Web Signature(JWS) class.<br/>
+This class provides JSON Web Signature(JWS)/JSON Web Token(JWT) signing and validation.
 <h4>Supported Algorithms</h4>
 Here is supported algorithm names for <a href="../symbols/KJUR.jws.JWS.html#.sign">KJUR.jws.JWS.sign</a> and <a href="../symbols/KJUR.jws.JWS.html#.verify">KJUR.jws.JWS.verify</a>
 methods.
@@ -754,9 +631,35 @@ methods.
 <tr><td>PS512</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
 <tr><td>none</td><td>REQUIRED</td><td>SUPPORTED(signature generation only)</td></tr>
 </table>
-NOTE1: HS384 is supported since jsjws 3.0.2 with jsrsasign 4.1.4.<br/>
+<dl>
+<dt><b>NOTE1</b>
+<dd>HS384 is supported since jsjws 3.0.2 with jsrsasign 4.1.4.
+<dt><b>NOTE2</b>
+<dd>Some deprecated methods have been removed since jws 3.3 of jsrsasign 4.10.0.
+Removed methods are following:
+<ul>
+<li>JWS.verifyJWSByNE</li>
+<li>JWS.verifyJWSByKey</li>
+<li>JWS.generateJWSByNED</li>
+<li>JWS.generateJWSByKey</li>
+<li>JWS.generateJWSByP1PrvKey</li>
+</ul>
+</dl>
+<b>EXAMPLE</b><br/>
 					
 				</div>
+				
+				
+				
+				<pre class="code">// JWS signing 
+sJWS = KJUR.jws.JWS.sign(null, '{"alg":"HS256", "cty":"JWT"}', '{"age": 21}', "password");
+// JWS validation
+isValid = KJUR.jws.JWS.verify('eyJjdHkiOiJKV1QiLCJhbGc...', "password");
+// JWT validation
+isValid = KJUR.jws.JWS.verifyJWT('eyJh...', "password", {
+  alg: ['HS256', 'HS384'],
+  iss: ['http://foo.com']
+});</pre>
 				
 				
 				
@@ -771,13 +674,6 @@ NOTE1: HS384 is supported since jsjws 3.0.2 with jsrsasign 4.1.4.<br/>
 					
 					
 					
-					
-						<dl class="detailList">
-						<dt class="heading">Requires:</dt>
-						
-							<dd>base64x.js, json-sans-eval.js and jsrsasign library</dd>
-						
-						</dl>
 					
 					
 						<dl class="detailList">
@@ -801,39 +697,15 @@ NOTE1: HS384 is supported since jsjws 3.0.2 with jsrsasign 4.1.4.<br/>
 					Field Detail
 				</div>
 				
-					<a name="parsedJWS"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{Dictionary}</span>
-					<b>parsedJWS</b>
-					
-					</div>
-					<div class="description">
-						This property is set after JWS signature verification. <br/>
-          Following "parsedJWS_*" properties can be accessed as "parsedJWS.*" because of
-          JsDoc restriction.
-						
-						
-					</div>
+					<a name=".jwsalg2sigalg"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="parsedJWS_headB64U"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>parsedJWS_headB64U</b>
+					<span class="light">KJUR.jws.JWS.</span><b>jwsalg2sigalg</b>
 					
 					</div>
 					<div class="description">
-						string of Encrypted JWS Header
+						static associative array of general signature algorithm name from JWS algorithm name
 						
 						
 					</div>
@@ -842,137 +714,10 @@ NOTE1: HS384 is supported since jsjws 3.0.2 with jsrsasign 4.1.4.<br/>
 
 						
 						
-						
-						
-
-					<hr />
-				
-					<a name="parsedJWS_headS"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>parsedJWS_headS</b>
-					
-					</div>
-					<div class="description">
-						string of decoded JWS Header
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="parsedJWS_payloadB64U"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>parsedJWS_payloadB64U</b>
-					
-					</div>
-					<div class="description">
-						string of Encrypted JWS Payload
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="parsedJWS_si"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>parsedJWS_si</b>
-					
-					</div>
-					<div class="description">
-						string of Signature Input
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="parsedJWS_sigvalB64U"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>parsedJWS_sigvalB64U</b>
-					
-					</div>
-					<div class="description">
-						string of Encrypted JWS signature value
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="parsedJWS_sigvalBI"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>parsedJWS_sigvalBI</b>
-					
-					</div>
-					<div class="description">
-						BigInteger(defined in jsbn.js) object of JWS signature value
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="parsedJWS_sigvalH"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>parsedJWS_sigvalH</b>
-					
-					</div>
-					<div class="description">
-						hexadecimal string of JWS signature value
-						
-						
-					</div>
-					
-					
-
-						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jws 3.0.0</dd>
+							</dl>
 						
 						
 						
@@ -986,259 +731,6 @@ NOTE1: HS384 is supported since jsjws 3.0.2 with jsrsasign 4.1.4.<br/>
 				<div class="sectionTitle">
 					Method Detail
 				</div>
-				
-					<a name=".generateJWSByKey"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">KJUR.jws.JWS.</span><b>generateJWSByKey</b>(sHead, sPayload, RSA)
-					
-					</div>
-					<div class="description">
-						generate JWS signature by Header, Payload and a RSA private key.<br/>
-This only supports "RS256", "RS512", "PS256" and "PS512" algorithms.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sHead</b>
-									
-								</dt>
-								<dd>string of JWS Header</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sPayload</b>
-									
-								</dt>
-								<dd>string of JWS Payload</dd>
-							
-								<dt>
-									<span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> <b>RSA</b>
-									
-								</dt>
-								<dd>private key</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from 3.0.0 please move to <a href="../symbols/KJUR.jws.JWS.html#.sign">KJUR.jws.JWS.sign</a>
-							</dt>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Throws:</dt>
-							
-								<dt>
-									 <b></b>
-								</dt>
-								<dd>if sHead is a malformed JSON string.</dd>
-							
-								<dt>
-									 <b></b>
-								</dt>
-								<dd>if supported signature algorithm was not specified in JSON Header.</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> JWS signature string</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".generateJWSByNED"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">KJUR.jws.JWS.</span><b>generateJWSByNED</b>(sHead, sPayload, hN, hE, hD)
-					
-					</div>
-					<div class="description">
-						generate JWS signature by Header, Payload and a naked RSA private key.<br/>
-This only supports "RS256" and "RS512" algorithm.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sHead</b>
-									
-								</dt>
-								<dd>string of JWS Header</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sPayload</b>
-									
-								</dt>
-								<dd>string of JWS Payload</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hN</b>
-									
-								</dt>
-								<dd>hexadecimal string for modulus of RSA public key</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hE</b>
-									
-								</dt>
-								<dd>hexadecimal string for public exponent of RSA public key</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hD</b>
-									
-								</dt>
-								<dd>hexadecimal string for private exponent of RSA private key</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from 3.0.0 please move to <a href="../symbols/KJUR.jws.JWS.html#.sign">KJUR.jws.JWS.sign</a>
-							</dt>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Throws:</dt>
-							
-								<dt>
-									 <b></b>
-								</dt>
-								<dd>if sHead is a malformed JSON string.</dd>
-							
-								<dt>
-									 <b></b>
-								</dt>
-								<dd>if supported signature algorithm was not specified in JSON Header.</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> JWS signature string</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".generateJWSByP1PrvKey"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">KJUR.jws.JWS.</span><b>generateJWSByP1PrvKey</b>(sHead, sPayload, string)
-					
-					</div>
-					<div class="description">
-						generate JWS signature by Header, Payload and a PEM formatted PKCS#1 RSA private key.<br/>
-This only supports "RS256" and "RS512" algorithm.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sHead</b>
-									
-								</dt>
-								<dd>string of JWS Header</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sPayload</b>
-									
-								</dt>
-								<dd>string of JWS Payload</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>string</b>
-									
-								</dt>
-								<dd>for sPemPrvKey PEM formatted PKCS#1 RSA private key<br/>
-                Heading and trailing space characters in PEM key will be ignored.</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from 3.0.0 please move to <a href="../symbols/KJUR.jws.JWS.html#.sign">KJUR.jws.JWS.sign</a>
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>1.1</dd>
-							</dl>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Throws:</dt>
-							
-								<dt>
-									 <b></b>
-								</dt>
-								<dd>if sHead is a malformed JSON string.</dd>
-							
-								<dt>
-									 <b></b>
-								</dt>
-								<dd>if supported signature algorithm was not specified in JSON Header.</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> JWS signature string</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
 				
 					<a name=".getEncodedSignatureValueFromJWS"> </a>
 					<div class="fixedFont">&lt;static&gt; 
@@ -1576,7 +1068,7 @@ this returns null, otherwise returns JSON object.
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{String}</span>
-					<span class="light">KJUR.jws.JWS.</span><b>sign</b>(alg, sHead, sPayload, key, pass)
+					<span class="light">KJUR.jws.JWS.</span><b>sign</b>(alg, spHead, spPayload, key, pass)
 					
 					</div>
 					<div class="description">
@@ -1585,7 +1077,7 @@ This method supports following algorithms.
 <table>
 <tr><th>alg value</th><th>spec requirement</th><th>jsjws support</th></tr>
 <tr><td>HS256</td><td>REQUIRED</td><td>SUPPORTED</td></tr>
-<tr><td>HS384</td><td>OPTIONAL</td><td>-</td></tr>
+<tr><td>HS384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
 <tr><td>HS512</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
 <tr><td>RS256</td><td>RECOMMENDED</td><td>SUPPORTED</td></tr>
 <tr><td>RS384</td><td>OPTIONAL</td><td>SUPPORTED</td></tr>
@@ -1603,12 +1095,38 @@ This method supports following algorithms.
 <dd>salt length of RSAPSS signature is the same as the hash algorithm length
 because of <a href="http://www.ietf.org/mail-archive/web/jose/current/msg02901.html">IETF JOSE ML discussion</a>.
 <dt>NOTE2:
-<dd>The reason of HS384 unsupport is  
-<a href="https://code.google.com/p/crypto-js/issues/detail?id=84">CryptoJS HmacSHA384 bug</a>.
+<dd>To support HS384, patched version of CryptoJS is used.
+<a href="https://code.google.com/p/crypto-js/issues/detail?id=84">See here for detail</a>.
+<dt>NOTE3:
+From jsrsasign 4.10.0 jws 3.3.0, Way to provide password
+for HS* algorithm is changed. The 'key' attribute value is
+passed to <a href="../symbols/KJUR.crypto.Mac.html#.setPassword">KJUR.crypto.Mac.setPassword</a> so please see
+<a href="../symbols/KJUR.crypto.Mac.html#.setPassword">KJUR.crypto.Mac.setPassword</a> for detail.
+As for backword compatibility, if key is a string, has even length and
+0..9, A-F or a-f characters, key string is treated as a hexadecimal
+otherwise it is treated as a raw string.
+<dd>
 </dl>
+<b>EXAMPLE</b><br/>
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">// sign HS256 signature with password "aaa" implicitly handled as string
+sJWS = KJUR.jws.JWS.sign(null, {alg: "HS256", cty: "JWT"}, {age: 21}, "aaa");
+// sign HS256 signature with password "6161" implicitly handled as hex
+sJWS = KJUR.jws.JWS.sign(null, {alg: "HS256", cty: "JWT"}, {age: 21}, "6161");
+// sign HS256 signature with base64 password
+sJWS = KJUR.jws.JWS.sign(null, {alg: "HS256"}, {age: 21}, {b64: "Mi/8..a="});
+// sign RS256 signature with PKCS#8 PEM RSA private key
+sJWS = KJUR.jws.JWS.sign(null, {alg: "RS256"}, {age: 21}, "-----BEGIN PRIVATE KEY...");
+// sign RS256 signature with PKCS#8 PEM ECC private key with passcode
+sJWS = KJUR.jws.JWS.sign(null, {alg: "ES256"}, {age: 21}, 
+                         "-----BEGIN PRIVATE KEY...", "keypass");
+// header and payload can be passed by both string and object
+sJWS = KJUR.jws.JWS.sign(null, '{alg:"HS256",cty:"JWT"}', '{age:21}', "aaa");</pre>
 					
 					
 					
@@ -1623,28 +1141,28 @@ because of <a href="http://www.ietf.org/mail-archive/web/jose/current/msg02901.h
 								<dd>JWS algorithm name to sign and force set to sHead or null</dd>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>sHead</b>
+									<span class="light fixedFont">{String}</span> <b>spHead</b>
 									
 								</dt>
-								<dd>string of JWS Header</dd>
+								<dd>string or object of JWS Header</dd>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>sPayload</b>
+									<span class="light fixedFont">{String}</span> <b>spPayload</b>
 									
 								</dt>
-								<dd>string of JWS Payload</dd>
+								<dd>string or object of JWS Payload</dd>
 							
 								<dt>
 									<span class="light fixedFont">{String}</span> <b>key</b>
 									
 								</dt>
-								<dd>string of private key or key object to sign</dd>
+								<dd>string of private key or mac key object to sign</dd>
 							
 								<dt>
 									<span class="light fixedFont">{String}</span> <b>pass</b>
 									
 								</dt>
-								<dd>(OPTION)passcode to use encrypted private key</dd>
+								<dd>(OPTION)passcode to use encrypted asymmetric private key</dd>
 							
 							</dl>
 						
@@ -1718,6 +1236,15 @@ NOTE1: The argument 'acceptAlgs' is supported since 3.2.0.
 Strongly recommended to provide acceptAlgs to mitigate
 signature replacement attacks.<br/>
 </p>
+<p>
+NOTE2: From jsrsasign 4.9.0 jws 3.2.5, Way to provide password
+for HS* algorithm is changed. The 'key' attribute value is
+passed to <a href="../symbols/KJUR.crypto.Mac.html#.setPassword">KJUR.crypto.Mac.setPassword</a> so please see
+<a href="../symbols/KJUR.crypto.Mac.html#.setPassword">KJUR.crypto.Mac.setPassword</a> for detail.
+As for backword compatibility, if key is a string, has even length and
+0..9, A-F or a-f characters, key string is treated as a hexadecimal
+otherwise it is treated as a raw string.
+</p>
 						
 						
 					</div>
@@ -1725,10 +1252,14 @@ signature replacement attacks.<br/>
 					
 					
 					<pre class="code">// 1) verify a RS256 JWS signature by a certificate string.
-var isValid = KJUR.jws.JWS.verify('eyJh...', '-----BEGIN...', ['RS256']);
+isValid = KJUR.jws.JWS.verify('eyJh...', '-----BEGIN...', ['RS256']);
 
 // 2) verify a HS256 JWS signature by a certificate string.
-var isValid = KJUR.jws.JWS.verify('eyJh...', '6f62ad...', ['HS256']);
+isValid = KJUR.jws.JWS.verify('eyJh...', {hex: '6f62ad...'}, ['HS256']);
+isValid = KJUR.jws.JWS.verify('eyJh...', {b64: 'Mi/ab8...a=='}, ['HS256']);
+isValid = KJUR.jws.JWS.verify('eyJh...', {utf8: 'Secret秘密'}, ['HS256']);
+isValid = KJUR.jws.JWS.verify('eyJh...', '6f62ad', ['HS256']); // implicit hex
+isValid = KJUR.jws.JWS.verify('eyJh...', '6f62ada', ['HS256']); // implicit raw string
 
 // 3) verify a ES256 JWS signature by a KJUR.crypto.ECDSA key object.
 var pubkey = KEYUTIL.getKey('-----BEGIN CERT...');
@@ -1787,234 +1318,6 @@ var isValid = KJUR.jws.JWS.verify('eyJh...', pubkey);</pre>
 								<dd><a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Mac.html">jsrsasign KJUR.crypto.Mac method</a></dd>
 							
 							</dl>
-						
-
-					<hr />
-				
-					<a name=".verifyJWSByKey"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{Boolean}</span>
-					<span class="light">KJUR.jws.JWS.</span><b>verifyJWSByKey</b>(sJWS, key)
-					
-					</div>
-					<div class="description">
-						verify JWS signature with RSA public key.<br/>
-This only supports "RS256", "RS512", "PS256" and "PS512" algorithms.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sJWS</b>
-									
-								</dt>
-								<dd>JWS signature string to be verified</dd>
-							
-								<dt>
-									<span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> <b>key</b>
-									
-								</dt>
-								<dd>RSA public key</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from 3.0.0 please move to <a href="../symbols/KJUR.jws.JWS.html#.verify">KJUR.jws.JWS.verify</a>
-							</dt>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Throws:</dt>
-							
-								<dt>
-									 <b></b>
-								</dt>
-								<dd>if sJWS is not comma separated string such like "Header.Payload.Signature".</dd>
-							
-								<dt>
-									 <b></b>
-								</dt>
-								<dd>if JWS Header is a malformed JSON string.</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Boolean}</span> returns true when JWS signature is valid, otherwise returns false</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".verifyJWSByNE"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">KJUR.jws.JWS.</span><b>verifyJWSByNE</b>(sJWS, hN, hE)
-					
-					</div>
-					<div class="description">
-						verify JWS signature with naked RSA public key.<br/>
-This only supports "RS256" and "RS512" algorithm.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sJWS</b>
-									
-								</dt>
-								<dd>JWS signature string to be verified</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hN</b>
-									
-								</dt>
-								<dd>hexadecimal string for modulus of RSA public key</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hE</b>
-									
-								</dt>
-								<dd>hexadecimal string for public exponent of RSA public key</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from 3.0.0 please move to <a href="../symbols/KJUR.jws.JWS.html#.verify">KJUR.jws.JWS.verify</a>
-							</dt>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Throws:</dt>
-							
-								<dt>
-									 <b></b>
-								</dt>
-								<dd>if sJWS is not comma separated string such like "Header.Payload.Signature".</dd>
-							
-								<dt>
-									 <b></b>
-								</dt>
-								<dd>if JWS Header is a malformed JSON string.</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> returns 1 when JWS signature is valid, otherwise returns 0</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".verifyJWSByPemX509Cert"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">KJUR.jws.JWS.</span><b>verifyJWSByPemX509Cert</b>(sJWS, sPemX509Cert)
-					
-					</div>
-					<div class="description">
-						verify JWS signature by PEM formatted X.509 certificate.<br/>
-This only supports "RS256" and "RS512" algorithm.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sJWS</b>
-									
-								</dt>
-								<dd>JWS signature string to be verified</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sPemX509Cert</b>
-									
-								</dt>
-								<dd>string of PEM formatted X.509 certificate</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from 3.0.0 please move to <a href="../symbols/KJUR.jws.JWS.html#.verify">KJUR.jws.JWS.verify</a>
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>1.1</dd>
-							</dl>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Throws:</dt>
-							
-								<dt>
-									 <b></b>
-								</dt>
-								<dd>if sJWS is not comma separated string such like "Header.Payload.Signature".</dd>
-							
-								<dt>
-									 <b></b>
-								</dt>
-								<dd>if JWS Header is a malformed JSON string.</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> returns 1 when JWS signature is valid, otherwise returns 0</dd>
-							
-							</dl>
-						
-						
 						
 
 					<hr />

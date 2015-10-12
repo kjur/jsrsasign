@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for Cryptographic Provider Class 'crypto.js' HMAC test</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<script src="../ext/cryptojs-312-core-fix.js"></script>
+<!-- script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js" -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/hmac.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha256.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha224.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha512.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha384.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/ripemd160.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha224.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha384.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64.js"></script>
+
+<script src="../crypto-1.1.js"></script>
+<script src="../ext/jsbn.js"></script>
+<script src="../ext/base64.js"></script>
+<script src="../base64x-1.1.js"></script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+
+var passHex = "6570b90b8d7b135e3ad84db8ec3f7df45dfde81db5143dc2e82f";
+var pass = hextorstr(passHex);
+var jwt = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImV4dGFwcHN2Y3VzciIsImVtYWlsIjoib2xpdmllci52YWlsbGFuY291cnQrc2hvdWxkbm9iZXVzZWRAZ21haWwuY29tIiwicGljdHVyZSI6Imh0dHBzOi8vcy5ncmF2YXRhci5jb20vYXZhdGFyLzc3YTE1OGZjY2JlZmIyMmU1NjYyNzVhYzVjNTdiZmFlP3M9NDgwXHUwMDI2cj1wZ1x1MDAyNmQ9aHR0cHMlM0ElMkYlMkZjZG4uYXV0aDAuY29tJTJGYXZhdGFycyUyRmV4LnBuZyIsIm5pY2tuYW1lIjoiZXh0YXBwc3ZjdXNyIiwibmFtZSI6Im9saXZpZXIudmFpbGxhbmNvdXJ0K3Nob3VsZG5vYmV1c2VkQGdtYWlsLmNvbSIsIkF1dGhvcml6YXRpb25TZXJ2aWNlVG9rZW4iOiJleUowZVhBaU9pSktWMVFpTENKaGJHY2lPaUpJVXpJMU5pSjkuZXlKbGJXRnBiQ0k2SW1WNGRHRndjSE4yWTNWemNpSXNJbWxoZENJNk1UUTBOREEzTnpReE15d2laWGh3SWpveE5EUTBNRGM0TURFekxDSmhkV1FpT2lKdFJVRm5VM1JyZVVKRE5qZHpVMkpUYUVsS1RUVnRSVFp3Y2pkNlZVbEpTeUlzSW1semN5STZJbmR2Ym1SbGNuZGhjbVV1WVhWMGFEQXVZMjl0SWl3aWMzVmlJam9pYjJ4cGRtbGxjaTUyWVdsc2JHRnVZMjkxY25RcmMyaHZkV3hrYm05aVpYVnpaV1JBWjIxaGFXd3VZMjl0SW4wLmlmM1FnejdwaGVBVWVLRGx3ay1TQkhRNDhUWkxwTno0U0EtclM5NXZxaUUiLCJ0ZW5hbnRpZCI6ImNhc3BlckpTVGVzdFRlbmFudCIsIlJvbGVzIjpbIkNVU1RPTUVSIiwiVVNFUiJdLCJfaWQiOiIwZTg3NzY5YWQ1MjA5ZGQ4MDAxOGVjMTc1Y2YwMmYyYyIsImVtYWlsX3ZlcmlmaWVkIjoidHJ1ZSIsImNsaWVudElEIjoibUVBZ1N0a3lCQzY3c1NiU2hJSk01bUU2cHI3elVJSUsiLCJ1c2VyX2lkIjoiYXV0aDB8NTYwZWEwODE2NGFiNTc0ODZjYTQ1NDU0IiwiaWRlbnRpdGllcyI6IntcInVzZXJfaWRcIjpcIjU2MGVhMDgxNjRhYjU3NDg2Y2E0NTQ1NFwiLFwicHJvdmlkZXJcIjpcImF1dGgwXCIsXCJjb25uZWN0aW9uXCI6XCJBdXRoMC1TZXJ2aWNlMlNlcnZpY2UtU3RvcmUtRm9yLURldlwiLFwiaXNTb2NpYWxcIjpmYWxzZX0iLCJ1cGRhdGVkX2F0IjoiMjAxNS0xMC0wNVQyMDozNjo1Mi45MTVaIiwiY3JlYXRlZF9hdCI6IjIwMTUtMTAtMDJUMTU6MTk6MjkuNjA0WiIsImdsb2JhbF9jbGllbnRfaWQiOiJJWUVYdlN6dmhTYXJxMDZkeXdYejN6YzR2WVh0dWdrOCIsImlzcyI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0L2Nhc3BlckpTVGVzdFRlbmFudC8iLCJzdWIiOiJhdXRoMHw1NjBlYTA4MTY0YWI1NzQ4NmNhNDU0NTQiLCJhdWQiOiJodHRwczovL25jaGljY29udGVudHNlcnZlci5jbG91ZGFwcC5uZXQiLCJleHAiOjE0NDQwNzc0NzQsImlhdCI6IjE0NDQwNzc0MTMiLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJ0aWQiOiJjYXNwZXJKU1Rlc3RUZW5hbnQiLCJuYmYiOjE0NDQwNzc0MTR9";
+var macB64U = "q40gYgoQeO99wuJaHay8LZ2zh9YuErc4_ny8-zgxbhk";
+var macHex = b64utohex(macB64U);
+
+test("Mac alg test (HmacSHA256 LargeJWT)", function() {
+  var m, uSI;
+
+  m = new KJUR.crypto.Mac({"alg": "hmacsha256", "pass": pass});
+  m.updateString(jwt);
+  equal(m.doFinal(), b64utohex(macB64U), "alg hmacsha256 small case");
+
+  uSI = "eyJhbGciOiJIUzI1NiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0";  
+  m = new KJUR.crypto.Mac({"alg": "hmacsha256", "pass": "aaa"});
+  m.updateString(uSI);
+  equal(m.doFinal(), b64utohex("vcimDRCLttYBHsO7M0S_tCvUIOGz26Ti5nkRuj1QcHc"), "qunit jws sign");
+
+  uSI = "eyJhbGciOiJIUzI1NiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0";  
+  m = new KJUR.crypto.Mac({"alg": "hmacsha256", "pass": "616161"});
+  m.updateString(uSI);
+  equal(m.doFinal(), b64utohex("vcimDRCLttYBHsO7M0S_tCvUIOGz26Ti5nkRuj1QcHc"), "qunit jws sign");
+
+  uSI = "eyJhbGciOiJIUzI1NiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0";  
+  m = new KJUR.crypto.Mac({"alg": "hmacsha256", "prov": "cryptojs", "pass": "616161"});
+  m.updateString(uSI);
+  equal(m.doFinal(), b64utohex("vcimDRCLttYBHsO7M0S_tCvUIOGz26Ti5nkRuj1QcHc"), "qunit jws sign");
+});
+
+test("Mac.setPassword test (HmacSHA256 LargeJWT)", function() {
+  var m;
+
+  m = new KJUR.crypto.Mac({"alg": "HmacSHA256", "pass": pass});
+  m.updateString(jwt);
+  equal(m.doFinal(), b64utohex(macB64U), "implicit raw password");
+
+  m = new KJUR.crypto.Mac({"alg": "HmacSHA256", "pass": passHex});
+  m.updateString(jwt);
+  equal(m.doFinal(), b64utohex(macB64U), "implicit hex password");
+
+  m = new KJUR.crypto.Mac({"alg": "HmacSHA256", "pass": {rstr: pass}});
+  m.updateString(jwt);
+  equal(m.doFinal(), b64utohex(macB64U), "explicit raw password");
+
+  m = new KJUR.crypto.Mac({"alg": "HmacSHA256", "pass": {hex: passHex}});
+  m.updateString(jwt);
+  equal(m.doFinal(), b64utohex(macB64U), "explicit hex password");
+
+  m = new KJUR.crypto.Mac({"alg": "HmacSHA256", "pass": {b64: hextob64(rstrtohex(pass))}});
+  m.updateString(jwt);
+  equal(m.doFinal(), b64utohex(macB64U), "explicit b64 password");
+
+  m = new KJUR.crypto.Mac({"alg": "HmacSHA256", "pass": {b64u: hextob64u(rstrtohex(pass))}});
+  m.updateString(jwt);
+  equal(m.doFinal(), b64utohex(macB64U), "explicit b64u password");
+});
+
+/*
+test("2", function() {
+var hash = CryptoJS.HmacSHA256(jwt, pass);
+equal(CryptoJS.enc.Hex.stringify(hash), macHex, 
+      "CryptoJS.HmacSHA256 has bug itself if this test fails");
+});
+
+test("3", function() {
+equal(pass, "\x65\x70\xb9\x0b\x8d\x7b\x13\x5e\x3a\xd8\x4d\xb8\xec\x3f\x7d\xf4\x5d\xfd\xe8\x1d\xb5\x14\x3d\xc2\xe8\x2f", "password test");
+});
+
+test("4", function() {
+var b = "ZXC5C417E1462E247D999F396B21FD3C6C9=";
+var k1 = b64utob64(b);
+k1 = CryptoJS.enc.Base64.parse(k1).toString();
+k1 = hextorstr(k1);
+var k2 = hextorstr(b64utohex(b));
+equal(k1, k2, "pass");
+});
+ */
+
+});
+-->
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+
+<p>
+<a href="../">TOP</a> | 
+<a href="index.html">TEST INDEX</a> | 
+<a href="qunit-do-crypto.html">crypto</a> | 
+<a href="qunit-do-crypto-mac.html">crypto-mac</a> | 
+<a href="qunit-do-crypto-mac2.html">crypto-mac2</a> | 
+</p>
+
+</body>
+</html>
+

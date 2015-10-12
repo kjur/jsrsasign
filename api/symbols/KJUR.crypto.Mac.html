@@ -517,6 +517,16 @@ then completes the digest computation
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Mac.<b><a href="../symbols/KJUR.crypto.Mac.html#.setPassword">setPassword</a></b>(pass)
+								</div>
+								<div class="description">set password for Mac
+This method will set password for (H)Mac internally.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.crypto.Mac.<b><a href="../symbols/KJUR.crypto.Mac.html#.updateHex">updateHex</a></b>(hex)
 								</div>
 								<div class="description">update digest by specified hexadecimal string
@@ -569,14 +579,27 @@ Currently this supports following algorithm and providers combination:
 NOTE: HmacSHA224 and HmacSHA384 issue was fixed since jsrsasign 4.1.4.
 Please use 'ext/cryptojs-312-core-fix*.js' instead of 'core.js' of original CryptoJS
 to avoid those issue.
+<br/>
+NOTE2: Hmac signature bug was fixed in jsrsasign 4.9.0 by providing CryptoJS
+bug workaround.
+<br/>
+Please see <a href="../symbols/KJUR.crypto.Mac.html#.setPassword">KJUR.crypto.Mac.setPassword</a>, how to provide password
+in various ways in detail.
 					
 				</div>
 				
 				
 				
-				<pre class="code">var mac = new KJUR.crypto.Mac({alg: "HmacSHA1", prov: "cryptojs", "pass": "pass"});
+				<pre class="code">var mac = new KJUR.crypto.Mac({alg: "HmacSHA1", "pass": "pass"});
 mac.updateString('aaa')
-var macHex = md.doFinal()</pre>
+var macHex = md.doFinal()
+
+// other password representation 
+var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"hex":  "6161"}});
+var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"utf8": "aa"}});
+var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"rstr": "\x61\x61"}});
+var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"b64":  "Mi02/+...a=="}});
+var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"b64u": "Mi02_-...a"}});</pre>
 				
 				
 				
@@ -717,6 +740,82 @@ then completes the digest computation
 							</dl>
 						
 						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".setPassword"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.Mac.</span><b>setPassword</b>(pass)
+					
+					</div>
+					<div class="description">
+						set password for Mac
+This method will set password for (H)Mac internally.
+Argument 'pass' can be specified as following:
+<ul>
+<li>even length string of 0..9, a..f or A-F: implicitly specified as hexadecimal string</li>
+<li>not above string: implicitly specified as raw string</li>
+<li>{rstr: "\x65\x70"}: explicitly specified as raw string</li>
+<li>{hex: "6570"}: explicitly specified as hexacedimal string</li>
+<li>{utf8: "秘密"}: explicitly specified as UTF8 string</li>
+<li>{b64: "Mi78..=="}: explicitly specified as Base64 string</li>
+<li>{b64u: "Mi7-_"}: explicitly specified as Base64URL string</li>
+</ul>
+It is *STRONGLY RECOMMENDED* that explicit representation of password argument
+to avoid ambiguity. For example string  "6161" can mean a string "6161" or 
+a hexadecimal string of "aa" (i.e. \x61\x61).
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">mac = KJUR.crypto.Mac({'alg': 'hmacsha256'});
+// set password by implicit raw string
+mac.setPassword("\x65\x70\xb9\x0b");
+mac.setPassword("password");
+// set password by implicit hexadecimal string
+mac.setPassword("6570b90b");
+mac.setPassword("6570B90B");
+// set password by explicit raw string
+mac.setPassword({"rstr": "\x65\x70\xb9\x0b"});
+// set password by explicit hexadecimal string
+mac.setPassword({"hex": "6570b90b"});
+// set password by explicit utf8 string
+mac.setPassword({"utf8": "passwordパスワード");
+// set password by explicit Base64 string
+mac.setPassword({"b64": "Mb+c3f/=="});
+// set password by explicit Base64URL string
+mac.setPassword({"b64u": "Mb-c3f_"});</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>pass</b>
+									
+								</dt>
+								<dd>password for Mac</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>crypto 1.1.7 jsrsasign 4.9.0</dd>
+							</dl>
+							</dl>
 						
 						
 						
