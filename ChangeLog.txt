@@ -1,7 +1,8 @@
 
 ChangeLog for jsrsasign
 
-* Changes between 4.9.2 to 4.10.0 (2015-Oct-12)
+* Changes between 4.9.2 to 5.0.0 (2015-Oct-14)
+  - *NOTICE* release 4.10.0 declined since API semver violation
   - some JWS HS* and Crypto Mac signature issue was fixed.
   - crypto 1.1.6 to 1.1.7
     - add support for various password providing method
@@ -19,6 +20,11 @@ ChangeLog for jsrsasign
       - JWS.verifyJWSByPemX509Cert
     - JWS.sign can handle header and payload
       JSON object not JSON string.
+    - JWS.verify bugfix in 4.10.0 which only 
+      accepts hexacedimal string key for HS*.
+  - keyutil 1.0.10 to 1.0.11
+    - add support for RSA private key without
+      P/Q/DP/DQ/COEFF of JWK
 
 * Changes between 4.9.1 to 4.9.2 (2015-Oct-02)
   - latest asn1x509 1.0.13 was missed in the latest-min.js and

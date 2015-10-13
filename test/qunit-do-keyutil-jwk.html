@@ -87,7 +87,8 @@ var prvEC1 =
   "y" : "4Etl6SRW2YiLUrN5vfvVHuhp7x8PxltmWWlbbM4IFyM",
   "d" : "870MB6gfuTJ4HtUnUvYMyJpr5eUZNP4Bk43bVdj3eAE",
   "use" : "enc",
-  "kid" : "1" };
+  "kid" : "1"
+};
 // RFC7517 A.2.2 RSA PRV
 var prvRSA1 =
 { "kty" : "RSA",
@@ -103,6 +104,7 @@ var prvRSA1 =
   "kid" : "2011-04-29"
 };
 
+// _test/z4.prv with P/Q/DP/DQ/COEFF
 var prvRSA2 =
 { "kty" : "RSA",
   "n" : "AN906qi0d3nlJg7R0vPahd6eDD-1n6rdmY495WYy44whg78K_XCTZTQ4rim6Dg4FIk-GXT1mzojAHw3A85TsQNOAw5xBRgH_pA0IjUntmbagu25yHPPikhv6jhkCFWmsuFHK-qLw5MpDuR8Z-zlO7CafUz_R9CR_MzEAOmM4o2B_S7LqU3q62N1Os8ooVRA11zr9PLwR5OdATBSWxPYsBcJ8QrFOflGVGWMPO1LtJ-CzxUvQU_LVCLwH50VyBFgoWtymxVpnWUGZcqxcNG7lBH9GDd_0NGrgZHWw0fxEtj24CkyXZI3P6xHjNE8bzlH-x7lDToa7QFRDdQ-brsRNVks",
@@ -115,6 +117,15 @@ var prvRSA2 =
   "qi" : "InfGmkb2jNkPGuNiZ-mU0-ZrOgLza_fLL9ErZ35jUPhGFzdGxJNobklvsNoTd-E2GAU41YkJh24bncMLvJVYxHHA5iF7FBWx1SvpEyKVhhnIcuXGD7N5PbNZzEdmr9C6I7cPVkWO-sUV7zfFukexIcANmsd_oBBGKRoYzP5Tti4",
   "alg" : "RS256",
   "kid" : "_test/z4.prv"
+};
+// _test/z4.prv *without* P/Q/DP/DQ/COEFF
+var prvRSA2s =
+{ "kty" : "RSA",
+  "n" : "AN906qi0d3nlJg7R0vPahd6eDD-1n6rdmY495WYy44whg78K_XCTZTQ4rim6Dg4FIk-GXT1mzojAHw3A85TsQNOAw5xBRgH_pA0IjUntmbagu25yHPPikhv6jhkCFWmsuFHK-qLw5MpDuR8Z-zlO7CafUz_R9CR_MzEAOmM4o2B_S7LqU3q62N1Os8ooVRA11zr9PLwR5OdATBSWxPYsBcJ8QrFOflGVGWMPO1LtJ-CzxUvQU_LVCLwH50VyBFgoWtymxVpnWUGZcqxcNG7lBH9GDd_0NGrgZHWw0fxEtj24CkyXZI3P6xHjNE8bzlH-x7lDToa7QFRDdQ-brsRNVks",
+  "e" : "AQAB",
+  "d" : "DjU54mYvHpICXHjc5-JiFqiH8NkUgOG8LL4kwt3DeBp9bP0-5hSJH8vmzwJkeGG9L79EWG4b_bfxgYdeNX7cFFagmWPRFrlxbd64VRYFawZHRJt-2cbzMVI6DL8EK4bu5Ux5qTiV44Jw19hoD9nDzCTfPzSTSGrKD3iLPdnREYaIGDVxcjBv3Tx6rrv3Z2lhHHKhEHb0RRjATcjAVKV9NZhMajJ4l9pqJ3A4IQrCBl95ux6Xm1oXP0i6aR78cjchsCpcMXdP3WMsvHgTlsZT0RZLFHrvkiNHlPiil4G2_eHkwvT__CrcbO6SmI_zCtMmypuHJqcr-Xb7GPJoa64WoQ",
+  "alg" : "RS256",
+  "kid" : "_test/z4.prv simple"
 };
 
 var prvRSA2PEM = (function() {/*
@@ -200,6 +211,15 @@ test("getKey JWK prvRSA2 compare to PEM", function() {
   equal(k1.dmp1.compareTo(k2.dmp1), 0, "dmp1");
   equal(k1.dmq1.compareTo(k2.dmq1), 0, "dmq2");
   equal(k1.coeff.compareTo(k2.coeff), 0, "coeff");
+});
+
+test("getKey JWK prvRSA2s(without P/Q/DP/DQ/COEFF) compare to PEM", function() {
+  var k1 = KEYUTIL.getKey(prvRSA2s);
+  var k2 = KEYUTIL.getKey(prvRSA2PEM);
+  equal(k1.isPrivate, true, "is private key");
+  equal(k1.n.compareTo(k2.n), 0, "n");
+  equal(k1.e, k2.e, "e");
+  equal(k1.d.compareTo(k2.d), 0, "d");
 });
 
 });

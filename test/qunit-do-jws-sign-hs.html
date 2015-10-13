@@ -116,9 +116,31 @@ var hJWSHSPass = "616161";
 var sJWSHS256 = 'eyJhbGciOiJIUzI1NiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.vcimDRCLttYBHsO7M0S_tCvUIOGz26Ti5nkRuj1QcHc';
 var sJWSHS512 = 'eyJhbGciOiJIUzUxMiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.b6HuF_CTLldXzQwAVhsnpEGkbrtquQfjdr8ie_UyqjPFNnGOz-rEvOvfDC_ex4zvVgsARAixM-6Ug9WcnweTgA';
 
+// *** VERIFICATION TESTS *****************************************
 test("verify test for algorithm HS256", function() {
   var result = KJUR.jws.JWS.verify(sJWSHS256, hJWSHSPass);
-  equal(result, true, "");
+  equal(result, true, "pass=616161");
+
+  var result = KJUR.jws.JWS.verify(sJWSHS256, "aaa");
+  equal(result, true, "pass=aaa");
+
+  var result = KJUR.jws.JWS.verify(sJWSHS256, {hex: "616161"});
+  equal(result, true, "pass={hex:616161}");
+
+  var result = KJUR.jws.JWS.verify(sJWSHS256, {utf8: "aaa"});
+  equal(result, true, "pass={utf8:aaa}");
+
+  var result = KJUR.jws.JWS.verify(sJWSHS256, {rstr: "aaa"});
+  equal(result, true, "pass={rstr:aaa}");
+
+  var result = KJUR.jws.JWS.verify(sJWSHS256, {b64: "YWFh"});
+  equal(result, true, "pass={b64:YWFh}");
+
+  var result = KJUR.jws.JWS.verify(sJWSHS256, {b64u: "YWFh"});
+  equal(result, true, "pass={b64u:YWFh}");
+
+  var result = KJUR.jws.JWS.verify(sJWSHS256, "aab");
+  equal(result, false, "pass=aab FALSE");
 });
 
 test("verify test for algorithm HS512", function() {
@@ -126,6 +148,7 @@ test("verify test for algorithm HS512", function() {
   equal(result, true, "");
 });
 
+// *** ALGORITHM ACCEPTANCE TESTS *****************************************
 test("arg acceptAlgs test (HS256 not in [HS512])", function() {
   expect(1);
   var msg = "";
