@@ -1,4 +1,4 @@
-/*! keyutil-1.0.10.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! keyutil-1.0.11.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version keyutil 1.0.10 (2015-Sep-13)
+ * @version keyutil 1.0.11 (2015-Oct-14)
  * @since jsrsasign 4.1.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1243,7 +1243,10 @@ var KEYUTIL = function() {
  * <ul>
  * <li>Encrypted PKCS#8 only supports PBKDF2/HmacSHA1/3DES</li>
  * <li>Encrypted PKCS#5 supports DES-CBC, DES-EDE3-CBC, AES-{128,192.256}-CBC</li>
- * <li>JWT plain RSA/ECC private/public key</li>
+ * <li>JWT plain ECC private/public key</li>
+ * <li>JWT plain RSA public key</li>
+ * <li>JWT plain RSA private key with P/Q/DP/DQ/COEFF</li>
+ * <li>JWT plain RSA private key without P/Q/DP/DQ/COEFF (since jsrsasign 5.0.0)</li>
  * </ul>
  * NOTE: <a href="https://tools.ietf.org/html/rfc7517">RFC 7517 JSON Web Key(JWK)</a> support for RSA/ECC private/public key from jsrsasign 4.8.1.
  */
@@ -1312,7 +1315,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	return key;
     }
 
-    // 2.8. JWK RSA private key
+    // 2.8.1. JWK RSA private key with p/q/dp/dq/coeff
     if (param.kty === "RSA" &&
 	param.n !== undefined &&
 	param.e !== undefined &&
@@ -1331,6 +1334,19 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
                          b64utohex(param.dp),
 			 b64utohex(param.dq),
 			 b64utohex(param.qi));
+	return key;
+    }
+
+    // 2.8.2. JWK RSA private key without p/q/dp/dq/coeff
+    //        since jsrsasign 5.0.0 keyutil 1.0.11
+    if (param.kty === "RSA" &&
+	param.n !== undefined &&
+	param.e !== undefined &&
+	param.d !== undefined) {
+	var key = new RSAKey();
+        key.setPrivate(b64utohex(param.n),
+		       b64utohex(param.e),
+		       b64utohex(param.d));
 	return key;
     }
 

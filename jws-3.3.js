@@ -1,9 +1,9 @@
-/*! jws-3.3.0 (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! jws-3.3.1 (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * jws.js - JSON Web Signature(JWS) and JSON Web Token(JWT) Class
  *
- * version: 3.3.0 (2015 Oct 12)
+ * version: 3.3.1 (2015 Oct 14)
  *
  * Copyright (c) 2010-2015 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -18,7 +18,7 @@
  * @fileOverview
  * @name jws-3.3.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 3.3.0 (2015-Oct-12)
+ * @version 3.3.1 (2015-Oct-14)
  * @since jsjws 1.0, jsrsasign 4.8.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -394,15 +394,8 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
 	throw "key shall be specified to verify.";
     }
 
-    // 3.1. check whether key is hexstr if alg is HS*.
-    if (algType == "HS") {
-	if (typeof key != "string" &&
-	    key.length != 0 &&
-	    key.length % 2 != 0 &&
-	    ! key.match(/^[0-9A-Fa-f]+/)) {
-	    throw "key shall be a hexadecimal str for HS* algs";
-	}
-    }
+    // 3.1. There is no key check for HS* because Mac will check it.
+    //      since jsrsasign 5.0.0.
 
     // 3.2. convert key object if key is a public key or cert PEM string
     if (typeof key == "string" &&

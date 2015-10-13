@@ -1347,7 +1347,10 @@ Please note following limitation on encrypted keys:
 <ul>
 <li>Encrypted PKCS#8 only supports PBKDF2/HmacSHA1/3DES</li>
 <li>Encrypted PKCS#5 supports DES-CBC, DES-EDE3-CBC, AES-{128,192.256}-CBC</li>
-<li>JWT plain RSA/ECC private/public key</li>
+<li>JWT plain ECC private/public key</li>
+<li>JWT plain RSA public key</li>
+<li>JWT plain RSA private key with P/Q/DP/DQ/COEFF</li>
+<li>JWT plain RSA private key without P/Q/DP/DQ/COEFF (since jsrsasign 5.0.0)</li>
 </ul>
 NOTE: <a href="https://tools.ietf.org/html/rfc7517">RFC 7517 JSON Web Key(JWK)</a> support for RSA/ECC private/public key from jsrsasign 4.8.1.
 						
