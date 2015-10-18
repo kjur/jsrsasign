@@ -915,12 +915,12 @@ NOTE: <a href="../symbols/KJUR.crypto.DSA.html">KJUR.crypto.DSA</a> is not yet s
 				
 				
 				
-				<pre class="code">// 1. loading private key
+				<pre class="code">// 1. loading PEM private key
 var key = KEYUTIL.getKey(pemPKCS1PrivateKey);
 var key = KEYUTIL.getKey(pemPKCS5EncryptedPrivateKey, "passcode");
 var key = KEYUTIL.getKey(pemPKC85PlainPrivateKey);
 var key = KEYUTIL.getKey(pemPKC85EncryptedPrivateKey, "passcode");
-// 2. loading public key
+// 2. loading PEM public key
 var key = KEYUTIL.getKey(pemPKCS8PublicKey);
 var key = KEYUTIL.getKey(pemX509Certificate);
 // 3. exporting private key
@@ -1353,9 +1353,31 @@ Please note following limitation on encrypted keys:
 <li>JWT plain RSA private key without P/Q/DP/DQ/COEFF (since jsrsasign 5.0.0)</li>
 </ul>
 NOTE: <a href="https://tools.ietf.org/html/rfc7517">RFC 7517 JSON Web Key(JWK)</a> support for RSA/ECC private/public key from jsrsasign 4.8.1.
+
+<h5>EXAMPLE</h5>
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">// 1. loading private key from PEM string
+keyObj = KEYUTIL.getKey("-----BEGIN RSA PRIVATE KEY...");
+keyObj = KEYUTIL.getKey("-----BEGIN RSA PRIVATE KEY..., "passcode");
+keyObj = KEYUTIL.getKey("-----BEGIN PRIVATE KEY...");
+keyObj = KEYUTIL.getKey("-----BEGIN PRIVATE KEY...", "passcode");
+// 2. loading public key from PEM string
+keyObj = KEYUTIL.getKey("-----BEGIN PUBLIC KEY...");
+keyObj = KEYUTIL.getKey("-----BEGIN X509 CERTIFICATE...");
+// 3. loading hexadecimal PKCS#5/PKCS#8 key
+keyObj = KEYUTIL.getKey("308205c1...", null, "pkcs8pub");
+keyObj = KEYUTIL.getKey("3082048b...", null, "pkcs5prv");
+// 4. loading JSON Web Key(JWK)
+keyObj = KEYUTIL.getKey({kty: "RSA", n: "0vx7...", e: "AQAB"});
+keyObj = KEYUTIL.getKey({kty: "EC", crv: "P-256", 
+                         x: "MKBC...", y: "4Etl6...", d: "870Mb..."});
+// 5. bare hexadecimal key
+keyObj = KEYUTIL.getKey({n: "75ab..", e: "010001"});</pre>
 					
 					
 					

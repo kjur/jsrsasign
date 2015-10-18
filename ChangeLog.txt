@@ -1,6 +1,10 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 5.0.0 to 5.0.1 (2015-Oct-17)
+  - keyutil 1.0.10 to 1.0.11
+    - add support for bare RSA NED hexadecimal key in KEYUTIL.getKey
+
 * Changes between 4.9.2 to 5.0.0 (2015-Oct-14)
   - *NOTICE* release 4.10.0 declined since API semver violation
   - some JWS HS* and Crypto Mac signature issue was fixed.
