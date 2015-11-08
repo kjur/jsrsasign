@@ -1,5 +1,7 @@
 
-var navigator = {};
-navigator.userAgent = false;
+;(function (root) {
+  var navigator = {};
+  navigator.userAgent = false;
 
-var window = {};
+  var window = {};
+  var exports = {};
