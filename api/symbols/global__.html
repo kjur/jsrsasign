@@ -569,6 +569,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#intarystrtohex">intarystrtohex</a></b>(s)
+								</div>
+								<div class="description">convert string of integer array to hexadecimal string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#newline_toDos">newline_toDos</a></b>(s)
 								</div>
 								<div class="description">convert all UNIX new line("\r\n") to DOS new line("\n") in 
@@ -589,9 +598,59 @@ a String "s".</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#readFile">readFile</a></b>(binFile)
+								</div>
+								<div class="description">read file and return file contents
+This function only works in Node.js.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#readFileHexByBin">readFileHexByBin</a></b>(binFile)
+								</div>
+								<div class="description">read binary file and return file contents as hexadecimal string
+This function only works in Node.js.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#readFileUTF8">readFileUTF8</a></b>(utf8File)
+								</div>
+								<div class="description">read file and return file contents as utf-8 string
+This function only works in Node.js.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#rstrtohex">rstrtohex</a></b>(s)
 								</div>
 								<div class="description">convert a raw string including non printable characters to hexadecimal encoded string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#saveFile">saveFile</a></b>(binFile, rawString)
+								</div>
+								<div class="description">save raw string to file
+This function only works in Node.js.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#saveFileBinByHex">saveFileBinByHex</a></b>(binFile, hexString)
+								</div>
+								<div class="description">save data represented by hexadecimal string to file
+This function only works in Node.js.</div>
 							</td>
 						</tr>
 					
@@ -1334,6 +1393,77 @@ Note that when input is improper hexadecimal string as UTF-8 string, this functi
 
 					<hr />
 				
+					<a name="intarystrtohex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>intarystrtohex</b>(s)
+					
+					</div>
+					<div class="description">
+						convert string of integer array to hexadecimal string.<br/>
+This function converts a string of JavaScript integer array to
+a hexadecimal string. Each integer value shall be in a range 
+from 0 to 255 otherwise it raise exception. Input string can
+have extra space or newline string so that they will be ignored.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">intarystrtohex(" [123, 34, 101, 34, 58] ")
+-> 7b2265223a (i.e. `{"e":` as string)</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>string of integer array</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>base64x 1.1.6 jsrsasign 5.0.2</dd>
+							</dl>
+							</dl>
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Throws:</dt>
+							
+								<dt>
+									 <b></b>
+								</dt>
+								<dd>"malformed integer array string: *" for wrong input</dd>
+							
+							</dl>
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="newline_toDos"> </a>
 					<div class="fixedFont">
 					
@@ -1428,6 +1558,147 @@ a String "s".
 
 					<hr />
 				
+					<a name="readFile"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>readFile</b>(binFile)
+					
+					</div>
+					<div class="description">
+						read file and return file contents
+This function only works in Node.js.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/nodeutil-1.0.js.html">nodeutil-1.0.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>binFile</b>
+									
+								</dt>
+								<dd>file name to be read</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> raw string of file contents</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="readFileHexByBin"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>readFileHexByBin</b>(binFile)
+					
+					</div>
+					<div class="description">
+						read binary file and return file contents as hexadecimal string
+This function only works in Node.js.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/nodeutil-1.0.js.html">nodeutil-1.0.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>binFile</b>
+									
+								</dt>
+								<dd>file name to be read</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of file contents</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="readFileUTF8"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>readFileUTF8</b>(utf8File)
+					
+					</div>
+					<div class="description">
+						read file and return file contents as utf-8 string
+This function only works in Node.js.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/nodeutil-1.0.js.html">nodeutil-1.0.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>utf8File</b>
+									
+								</dt>
+								<dd>file name to be read</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> utf-8 string of file contents</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="rstrtohex"> </a>
 					<div class="fixedFont">
 					
@@ -1478,6 +1749,98 @@ a String "s".
 								<dd><span class="light fixedFont">{String}</span> hexadecimal encoded string</dd>
 							
 							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="saveFile"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>saveFile</b>(binFile, rawString)
+					
+					</div>
+					<div class="description">
+						save raw string to file
+This function only works in Node.js.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/nodeutil-1.0.js.html">nodeutil-1.0.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>binFile</b>
+									
+								</dt>
+								<dd>file name to save contents.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>rawString</b>
+									
+								</dt>
+								<dd>string contents to be saved.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="saveFileBinByHex"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>saveFileBinByHex</b>(binFile, hexString)
+					
+					</div>
+					<div class="description">
+						save data represented by hexadecimal string to file
+This function only works in Node.js.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/nodeutil-1.0.js.html">nodeutil-1.0.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>binFile</b>
+									
+								</dt>
+								<dd>file name to save contents.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hexString</b>
+									
+								</dt>
+								<dd>hexadecimal string to be saved.</dd>
+							
+							</dl>
+						
+						
+						
+						
 						
 						
 						

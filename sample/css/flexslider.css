@@ -1,0 +1,112 @@
+/*
+ * jQuery FlexSlider v2.0
+ * http://www.woothemes.com/flexslider/
+ *
+ * Copyright 2012 WooThemes
+ * Free to use under the GPLv2 license.
+ * http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Contributing author: Tyler Smith (@mbmufffin)
+ */
+/* Browser Resets */
+.flex-container a:active,
+.flexslider a:active,
+.flex-container a:focus,
+.flexslider a:focus  {outline: none;}
+.slides,
+.flex-control-nav,
+.flex-direction-nav {margin: 0; padding: 0; list-style: none;} 
+
+/* FlexSlider Necessary Styles
+*********************************/ 
+.flexslider {margin: 0; padding: 0;}
+.flexslider .slides > li {display: none; -webkit-backface-visibility: hidden;} /* Hide the slides before the JS is loaded. Avoids image jumping */
+.flexslider .slides img {width: 100%; display: block;}
+.flex-pauseplay span {text-transform: capitalize;}
+
+/* Clearfix for the .slides element */
+.slides:after {content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0;} 
+html[xmlns] .slides {display: block;} 
+
+/* No JavaScript Fallback */
+/* If you are not using another script, such as Modernizr, make sure you
+ * include js that eliminates this class on page load */
+.no-js .slides > li:first-child {display: block;}
+
+
+/* FlexSlider Default Theme
+*********************************/
+.flexslider { background: ; position: relative; -webkit-border-radius: 4px; -moz-border-radius: 4px; -o-border-radius: 4px; border-radius: 4px; ,0,0,.2); zoom: 1;}
+.flex-viewport {max-height:1500px; -webkit-transition: all 1s ease; -moz-transition: all 1s ease; transition: all 1s ease;}
+.loading .flex-viewport {max-height: 300px;}
+.flexslider .slides {zoom: 1;}
+.carousel li {margin-right: 5px}
+/* Direction Nav */
+.flex-direction-nav a {width: 34px; height: 48px; margin: -20px 0 0; display: block; background: url(../images/arrows.png) no-repeat 0 0; position: absolute; top:46%; cursor: pointer; text-indent: -9999px; opacity: 0; -webkit-transition: all .3s ease;}
+.flex-direction-nav .flex-next {background-position: 100% 0; right:0px; }
+.flex-direction-nav .flex-prev {left: 0px;}
+.flexslider:hover .flex-next {opacity: 0.8; right: 0px;}
+.flexslider:hover .flex-prev {opacity: 0.8; left: 0px;}
+/*--.flexslider:hover .flex-next:hover, .flexslider:hover .flex-prev:hover {opacity: 1;}
+.flex-direction-nav .disabled {opacity: .3!important; filter:alpha(opacity=30); cursor: default;}--*/
+
+/* Control Nav */
+.flex-control-nav { position: absolute;
+  bottom: 0px;
+  text-align: center;
+  right: 0;
+  background: rgba(0, 0, 0, 0.49);
+  width: 100%;
+  padding: 10px 0 0 0;}
+.flex-control-nav li {display:inline-block; zoom: 1; *display: inline;padding:0.2em;}
+.flex-control-paging li a {width: 12px; height: 12px; display:inline-block;  background:#fff; cursor: pointer; text-indent: -9999px; -webkit-border-radius: 20px; -moz-border-radius: 20px; -o-border-radius: 20px; border-radius: 20px; box-shadow: inset 0 0 3px rgba(0,0,0,0.3); border:;}
+.flex-control-paging li a:hover { background:#c36c88; }
+.flex-control-paging li a.flex-active { background:#4fc1e9; cursor: default; }
+
+.flex-control-thumbs {margin: 5px 0 0; position: static; overflow: hidden;}
+.flex-control-thumbs li {width: 25%; float: left; margin: 0;}
+.flex-control-thumbs img {width: 100%; display: block; opacity: .7; cursor: pointer;}
+.flex-control-thumbs img:hover {opacity: 1;}
+.flex-control-thumbs .active {opacity: 1; cursor: default;}
+/*----flexslider1---*/
+.flexslider1 ol.flex-control-nav{
+	width: ;
+	position: absolute;
+	bottom: -49px;
+	text-align: center;
+	left: 3em;
+}
+.flexslider1 .flex-control-paging li a{width: 12px; height: 12px;}
+.flexslider1.flex-control-nav  li{margin: 0 1px;}
+
+@media screen and (max-width: 860px) {
+  .flex-direction-nav .flex-prev {opacity: 1; left: 0;}
+  .flex-direction-nav .flex-next {opacity: 1; right: 0;}
+}
+@media screen and (max-width: 1024px) {
+	.flex-control-nav {}
+	.flexslider1 ol.flex-control-nav {bottom: -28px;left: 1em;}
+
+}
+
+@media screen and (max-width: 768px) {
+	.flex-control-nav {}
+	.flexslider1 ol.flex-control-nav {bottom: -6px;left: 22em;}
+	}
+@media screen and (max-width: 640px) {
+	.flex-control-nav {left: 0
+	em;}
+.flexslider1 ol.flex-control-nav {bottom: 2px;left: 0em;}
+}
+@media screen and (max-width: 480px) {
+.flex-control-nav {left:0em;}
+.flexslider1 ol.flex-control-nav {bottom: 1px;left:0em;}
+}
+@media screen and (max-width: 320px) {
+.flex-control-nav {left:0em;}
+.flexslider1 ol.flex-control-nav {bottom: 1px;left:0em;}
+
+
+}
+
+}

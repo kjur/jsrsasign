@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta charset="utf-8">
+<title>QUnit sign() and verify() test of 'jws.js'</title>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="../jws-3.3.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+test("getJWKthumbprint RSA sample in RFC7638", function() {
+  var k = {
+    "kty": "RSA",
+    "n": "0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zgdAZHzu6qMQvRL5hajrn1n91CbOpbISD08qNLyrdkt-bFTWhAI4vMQFh6WeZu0fM4lFd2NcRwr3XPksINHaQ-G_xBniIqbw0Ls1jF44-csFCur-kEgU8awapJzKnqDKgw",
+    "e": "AQAB",
+    "alg": "RS256",
+    "kid": "2011-04-29" };
+  equal(KJUR.jws.JWS.getJWKthumbprint(k), "NzbLsXh8uDCcd-6MNwXF4W_7noWXFZAfHkxZsRGC9Xs", "ok");
+});
+
+});
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+<p>
+<a href="../">TOP</a> | 
+<a href="index.html">TEST INDEX</a> | 
+<a href="qunit-do-jws-sign.html">asynmetric key(RS/PS/ES) sign/verify</a> | 
+<a href="qunit-do-jws-sign-hs.html">Hmac(HS) sign/verify</a> | 
+<a href="qunit-do-jws-sign-slow.html">sign/verify slow</a> | 
+<a href="qunit-do-jws-intdate.html">IntDate</a> | 
+</p>
+</body>
+</html>
+

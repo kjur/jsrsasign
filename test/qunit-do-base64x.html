@@ -32,6 +32,12 @@ test("hextob64u", function() {
   equal(hextob64u("010001"), "AQAB", "010001");
 });
 
+test("intarystrtohex", function() {
+  equal(intarystrtohex('  [123, 34, 101, 34, 58, 34, 65] '), 
+        '7b2265223a2241', 'rfc7638 sample {"e":"A');
+  equal(intarystrtohex('  [55, 54, 203, 177, 120, 124 ]  '),
+        '3736cbb1787c', 'rfc7638 sample hash');
+});
 
 });
 </script>

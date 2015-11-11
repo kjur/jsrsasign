@@ -512,6 +512,18 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.jws.JWS.<b><a href="../symbols/KJUR.jws.JWS.html#.getJWKthumbprint">getJWKthumbprint</a></b>(o)
+								</div>
+								<div class="description">get RFC 7638 JWK thumbprint from JWK object
+This method calculates JWK thmubprint for specified JWK object
+as described in 
+<a href="https://tools.ietf.org/html/rfc7638">RFC 7638</a>.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.jws.JWS.<b><a href="../symbols/KJUR.jws.JWS.html#.inArray">inArray</a></b>(item, a)
 								</div>
 								<div class="description">check whether item is included by array</div>
@@ -777,6 +789,67 @@ isValid = KJUR.jws.JWS.verifyJWT('eyJh...', "password", {
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> string of Encoded Signature Value</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getJWKthumbprint"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.jws.JWS.</span><b>getJWKthumbprint</b>(o)
+					
+					</div>
+					<div class="description">
+						get RFC 7638 JWK thumbprint from JWK object
+This method calculates JWK thmubprint for specified JWK object
+as described in 
+<a href="https://tools.ietf.org/html/rfc7638">RFC 7638</a>.
+It supports all type of "kty". (i.e. "RSA", "EC" and "oct"
+(for symmetric key))
+Working sample is 
+<a href="https://kjur.github.io/jsrsasign/sample/tool_jwktp.html">here</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">jwk = {"kty":"RSA", "n":"0vx...", "e":"AQAB", ...};
+thumbprint = KJUR.jws.JWS.getJWKthumbprint(jwk);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>o</b>
+									
+								</dt>
+								<dd>JWK object to be calculated thumbprint</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 5.0.2 jws 3.3.2</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> Base64 URL encoded JWK thumbprint value</dd>
 							
 							</dl>
 						

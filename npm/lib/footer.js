@@ -9,6 +9,7 @@ exports.Mac = KJUR.crypto.Mac;
 exports.KEYUTIL = KEYUTIL;
 exports.ASN1HEX = ASN1HEX;
 exports.X509 = X509;
+exports.CryptoJS = CryptoJS;
 
 // ext/base64.js
 exports.b64tohex = b64tohex;
@@ -38,8 +39,16 @@ exports.hextorstr = hextorstr;
 exports.rstrtohex = rstrtohex;
 exports.newline_toUnix = newline_toUnix;
 exports.newline_toDos = newline_toDos;
+exports.intarystrtohex = intarystrtohex;
 exports.strdiffidx = strdiffidx;
 
 exports.crypto = KJUR.crypto;
 exports.asn1 = KJUR.asn1;
 exports.jws = KJUR.jws;
+
+exports.readFileUTF8 = readFileUTF8;
+exports.readFileHexByBin = readFileHexByBin;
+exports.readFile = readFile;
+exports.saveFile = saveFile;
+exports.saveFileBinByHex = saveFileBinByHex;
+
