@@ -6,6 +6,8 @@ ChangeLog for jsrsasign
     - RFC 7638 getJWKthumbprint method added
   - base64x 1.1.5 to 1.1.6
     - function intarystrtohex added
+  - nodeutil 1.0.0 newly added
+    - utils for file I/O in Node.js
   - npm
     - add reference to intarystrtohex and CryptoJS
 
