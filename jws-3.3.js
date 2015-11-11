@@ -1,9 +1,9 @@
-/*! jws-3.3.1 (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! jws-3.3.2 (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * jws.js - JSON Web Signature(JWS) and JSON Web Token(JWT) Class
  *
- * version: 3.3.1 (2015 Oct 14)
+ * version: 3.3.2 (2015 Nov 11)
  *
  * Copyright (c) 2010-2015 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -18,7 +18,7 @@
  * @fileOverview
  * @name jws-3.3.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 3.3.1 (2015-Oct-14)
+ * @version 3.3.2 (2015-Nov-11)
  * @since jsjws 1.0, jsrsasign 4.8.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -736,6 +736,66 @@ KJUR.jws.JWS.getEncodedSignatureValueFromJWS = function(sJWS) {
 };
 
 /**
+ * get RFC 7638 JWK thumbprint from JWK object
+ * @name getJWKthumbprint
+ * @memberOf KJUR.jws.JWS
+ * @function
+ * @static
+ * @param {String} o JWK object to be calculated thumbprint
+ * @return {String} Base64 URL encoded JWK thumbprint value
+ * @since jsrsasign 5.0.2 jws 3.3.2
+ * @description
+ * This method calculates JWK thmubprint for specified JWK object
+ * as described in 
+ * <a href="https://tools.ietf.org/html/rfc7638">RFC 7638</a>.
+ * It supports all type of "kty". (i.e. "RSA", "EC" and "oct"
+ * (for symmetric key))
+ * Working sample is 
+ * <a href="https://kjur.github.io/jsrsasign/sample/tool_jwktp.html">here</a>.
+ * @example
+ * jwk = {"kty":"RSA", "n":"0vx...", "e":"AQAB", ...};
+ * thumbprint = KJUR.jws.JWS.getJWKthumbprint(jwk);
+ */
+KJUR.jws.JWS.getJWKthumbprint = function(o) {
+    if (o.kty !== "RSA" &&
+	o.kty !== "EC" &&
+	o.kty !== "oct")
+	throw "unsupported algorithm for JWK Thumprint";
+
+    // 1. get canonically ordered json string
+    var s = '{';
+    if (o.kty === "RSA") {
+	if (typeof o.n != "string" || typeof o.e != "string")
+	    throw "wrong n and e value for RSA key";
+	s += '"' + 'e' + '":"' + o.e + '",';
+	s += '"' + 'kty' + '":"' + o.kty + '",';
+	s += '"' + 'n' + '":"' + o.n + '"}';
+    } else if (o.kty === "EC") {
+	if (typeof o.crv != "string" || 
+	    typeof o.x != "string" ||
+	    typeof o.y != "string")
+	    throw "wrong crv, x and y value for EC key";
+	s += '"' + 'crv' + '":"' + o.crv + '",';
+	s += '"' + 'kty' + '":"' + o.kty + '",';
+	s += '"' + 'x' + '":"' + o.x + '",';
+	s += '"' + 'y' + '":"' + o.y + '"}';
+    } else if (o.kty === "oct") {
+	if (typeof o.k != "string")
+	    throw "wrong k value for oct(symmetric) key";
+	s += '"' + 'kty' + '":"' + o.kty + '",';
+	s += '"' + 'k' + '":"' + o.k + '"}';
+    }
+    //alert(s);
+
+    // 2. get thumb print
+    var hJWK = rstrtohex(s);
+    var hash = KJUR.crypto.Util.hashHex(hJWK, "sha256");
+    var hashB64U = hextob64u(hash);
+
+    return hashB64U;
+};
+
+/**
  * IntDate class for time representation for JSON Web Token(JWT)
  * @class KJUR.jws.IntDate class
  * @name KJUR.jws.IntDate
@@ -877,3 +937,4 @@ KJUR.jws.IntDate.intDate2Zulu = function(intDate) {
     var sec =  ("00" + d.getUTCSeconds()).slice(-2);    
     return year + mon + day + hour + min + sec + "Z";
 };
+

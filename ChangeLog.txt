@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 5.0.1 to 5.0.2 (2015-Nov-11)
+  - jws 3.3.1 to 3.3.2
+    - RFC 7638 getJWKthumbprint method added
+  - base64x 1.1.5 to 1.1.6
+    - function intarystrtohex added
+  - npm
+    - add reference to intarystrtohex and CryptoJS
+
 * Changes between 5.0.0 to 5.0.1 (2015-Oct-17)
   - keyutil 1.0.10 to 1.0.11
     - add support for bare RSA NED hexadecimal key in KEYUTIL.getKey

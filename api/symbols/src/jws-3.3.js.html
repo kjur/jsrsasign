@@ -5,12 +5,12 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! jws-3.3.1 (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! jws-3.3.2 (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * jws.js - JSON Web Signature(JWS) and JSON Web Token(JWT) Class
 <span class='line'>  5</span>  *
-<span class='line'>  6</span>  * version: 3.3.1 (2015 Oct 14)
+<span class='line'>  6</span>  * version: 3.3.2 (2015 Nov 11)
 <span class='line'>  7</span>  *
 <span class='line'>  8</span>  * Copyright (c) 2010-2015 Kenji Urushima (kenji.urushima@gmail.com)
 <span class='line'>  9</span>  *
@@ -25,7 +25,7 @@
 <span class='line'> 18</span>  * @fileOverview
 <span class='line'> 19</span>  * @name jws-3.3.js
 <span class='line'> 20</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 21</span>  * @version 3.3.1 (2015-Oct-14)
+<span class='line'> 21</span>  * @version 3.3.2 (2015-Nov-11)
 <span class='line'> 22</span>  * @since jsjws 1.0, jsrsasign 4.8.0
 <span class='line'> 23</span>  * @license &lt;a href="http://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 24</span>  */</span><span class="WHIT">
@@ -743,145 +743,206 @@
 <span class='line'>736</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>737</span> 
 <span class='line'>738</span> </span><span class="COMM">/**
-<span class='line'>739</span>  * IntDate class for time representation for JSON Web Token(JWT)
-<span class='line'>740</span>  * @class KJUR.jws.IntDate class
-<span class='line'>741</span>  * @name KJUR.jws.IntDate
-<span class='line'>742</span>  * @since jws 3.0.1
-<span class='line'>743</span>  * @description
-<span class='line'>744</span>  * Utility class for IntDate which is integer representation of UNIX origin time
-<span class='line'>745</span>  * used in JSON Web Token(JWT).
-<span class='line'>746</span>  */</span><span class="WHIT">
-<span class='line'>747</span> </span><span class="NAME">KJUR.jws.IntDate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>748</span> 
-<span class='line'>749</span> </span><span class="COMM">/**
-<span class='line'>750</span>  * get UNIX origin time from by string
-<span class='line'>751</span>  * @name get
-<span class='line'>752</span>  * @memberOf KJUR.jws.IntDate
-<span class='line'>753</span>  * @function
-<span class='line'>754</span>  * @static
-<span class='line'>755</span>  * @param {String} s string of time representation
-<span class='line'>756</span>  * @return {Integer} UNIX origin time in seconds for argument 's'
-<span class='line'>757</span>  * @since jws 3.0.1
-<span class='line'>758</span>  * @throws "unsupported format: s" when malformed format
-<span class='line'>759</span>  * @description
-<span class='line'>760</span>  * This method will accept following representation of time.
-<span class='line'>761</span>  * &lt;ul>
-<span class='line'>762</span>  * &lt;li>now - current time&lt;/li>
-<span class='line'>763</span>  * &lt;li>now + 1hour - after 1 hour from now&lt;/li>
-<span class='line'>764</span>  * &lt;li>now + 1day - after 1 day from now&lt;/li>
-<span class='line'>765</span>  * &lt;li>now + 1month - after 30 days from now&lt;/li>
-<span class='line'>766</span>  * &lt;li>now + 1year - after 365 days from now&lt;/li>
-<span class='line'>767</span>  * &lt;li>YYYYmmDDHHMMSSZ - UTC time (ex. 20130828235959Z)&lt;/li>
-<span class='line'>768</span>  * &lt;li>number - UNIX origin time (seconds from 1970-01-01 00:00:00) (ex. 1377714748)&lt;/li>
-<span class='line'>769</span>  * &lt;/ul>
-<span class='line'>770</span>  */</span><span class="WHIT">
-<span class='line'>771</span> </span><span class="NAME">KJUR.jws.IntDate.get</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>772</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"now"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>773</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KJUR.jws.IntDate.getNow</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>774</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"now + 1hour"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>775</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KJUR.jws.IntDate.getNow</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>776</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"now + 1day"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>777</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KJUR.jws.IntDate.getNow</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">24</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>778</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"now + 1month"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>779</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KJUR.jws.IntDate.getNow</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">24</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">30</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>780</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"now + 1year"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>781</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KJUR.jws.IntDate.getNow</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">24</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">365</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>782</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/Z$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>783</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KJUR.jws.IntDate.getZulu</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>784</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>785</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>786</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>787</span> </span><span class="WHIT">    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"unsupported format: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>788</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>739</span>  * get RFC 7638 JWK thumbprint from JWK object
+<span class='line'>740</span>  * @name getJWKthumbprint
+<span class='line'>741</span>  * @memberOf KJUR.jws.JWS
+<span class='line'>742</span>  * @function
+<span class='line'>743</span>  * @static
+<span class='line'>744</span>  * @param {String} o JWK object to be calculated thumbprint
+<span class='line'>745</span>  * @return {String} Base64 URL encoded JWK thumbprint value
+<span class='line'>746</span>  * @since jsrsasign 5.0.2 jws 3.3.2
+<span class='line'>747</span>  * @description
+<span class='line'>748</span>  * This method calculates JWK thmubprint for specified JWK object
+<span class='line'>749</span>  * as described in 
+<span class='line'>750</span>  * &lt;a href="https://tools.ietf.org/html/rfc7638">RFC 7638&lt;/a>.
+<span class='line'>751</span>  * It supports all type of "kty". (i.e. "RSA", "EC" and "oct"
+<span class='line'>752</span>  * (for symmetric key))
+<span class='line'>753</span>  * Working sample is 
+<span class='line'>754</span>  * &lt;a href="https://kjur.github.io/jsrsasign/sample/tool_jwktp.html">here&lt;/a>.
+<span class='line'>755</span>  * @example
+<span class='line'>756</span>  * jwk = {"kty":"RSA", "n":"0vx...", "e":"AQAB", ...};
+<span class='line'>757</span>  * thumbprint = KJUR.jws.JWS.getJWKthumbprint(jwk);
+<span class='line'>758</span>  */</span><span class="WHIT">
+<span class='line'>759</span> </span><span class="NAME">KJUR.jws.JWS.getJWKthumbprint</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">o</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>760</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">o.kty</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="STRN">"RSA"</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>761</span> </span><span class="WHIT">	</span><span class="NAME">o.kty</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="STRN">"EC"</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>762</span> </span><span class="WHIT">	</span><span class="NAME">o.kty</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="STRN">"oct"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>763</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"unsupported algorithm for JWK Thumprint"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>764</span> 
+<span class='line'>765</span> </span><span class="WHIT">    </span><span class="COMM">// 1. get canonically ordered json string</span><span class="WHIT">
+<span class='line'>766</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'{'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>767</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">o.kty</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"RSA"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>768</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">o.n</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">o.e</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>769</span> </span><span class="WHIT">	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"wrong n and e value for RSA key"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>770</span> </span><span class="WHIT">	</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'e'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'":"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">o.e</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'",'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>771</span> </span><span class="WHIT">	</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'kty'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'":"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">o.kty</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'",'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>772</span> </span><span class="WHIT">	</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'n'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'":"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">o.n</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'"}'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>773</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">o.kty</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"EC"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>774</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">o.crv</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> 
+<span class='line'>775</span> 	    </span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">o.x</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT">
+<span class='line'>776</span> </span><span class="WHIT">	    </span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">o.y</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>777</span> </span><span class="WHIT">	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"wrong crv, x and y value for EC key"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>778</span> </span><span class="WHIT">	</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'crv'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'":"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">o.crv</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'",'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>779</span> </span><span class="WHIT">	</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'kty'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'":"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">o.kty</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'",'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>780</span> </span><span class="WHIT">	</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'x'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'":"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">o.x</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'",'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>781</span> </span><span class="WHIT">	</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'y'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'":"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">o.y</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'"}'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>782</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">o.kty</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"oct"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>783</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">o.k</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>784</span> </span><span class="WHIT">	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"wrong k value for oct(symmetric) key"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>785</span> </span><span class="WHIT">	</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'kty'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'":"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">o.kty</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'",'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>786</span> </span><span class="WHIT">	</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'k'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'":"'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">o.k</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'"}'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>787</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>788</span> </span><span class="WHIT">    </span><span class="COMM">//alert(s);</span><span class="WHIT">
 <span class='line'>789</span> 
-<span class='line'>790</span> </span><span class="COMM">/**
-<span class='line'>791</span>  * get UNIX origin time from Zulu time representation string
-<span class='line'>792</span>  * @name getZulu
-<span class='line'>793</span>  * @memberOf KJUR.jws.IntDate
-<span class='line'>794</span>  * @function
-<span class='line'>795</span>  * @static
-<span class='line'>796</span>  * @param {String} s string of Zulu time representation (ex. 20151012125959Z)
-<span class='line'>797</span>  * @return {Integer} UNIX origin time in seconds for argument 's'
-<span class='line'>798</span>  * @since jws 3.0.1
-<span class='line'>799</span>  * @throws "unsupported format: s" when malformed format
-<span class='line'>800</span>  * @description
-<span class='line'>801</span>  * This method provides UNIX origin time from Zulu time.
-<span class='line'>802</span>  * @example
-<span class='line'>803</span>  * KJUR.jws.IntDate.getZulu("20151012125959Z") => 1478...
-<span class='line'>804</span>  */</span><span class="WHIT">
-<span class='line'>805</span> </span><span class="NAME">KJUR.jws.IntDate.getZulu</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>806</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)Z/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>807</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">RegExp.$1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>808</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">month</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">RegExp.$2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>809</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">day</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">RegExp.$3</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>810</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hour</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">RegExp.$4</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>811</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">min</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">RegExp.$5</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>812</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sec</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">RegExp.$6</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>813</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="NAME">Date.UTC</span><span class="PUNC">(</span><span class="NAME">year</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">month</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">day</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">hour</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">min</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sec</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>814</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">~</span><span class="PUNC">~</span><span class="PUNC">(</span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>815</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>816</span> </span><span class="WHIT">    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"unsupported format: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>817</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>818</span> 
-<span class='line'>819</span> </span><span class="COMM">/**
-<span class='line'>820</span>  * get UNIX origin time of current time
-<span class='line'>821</span>  * @name getNow
-<span class='line'>822</span>  * @memberOf KJUR.jws.IntDate
-<span class='line'>823</span>  * @function
-<span class='line'>824</span>  * @static
-<span class='line'>825</span>  * @return {Integer} UNIX origin time for current time
-<span class='line'>826</span>  * @since jws 3.0.1
-<span class='line'>827</span>  * @description
-<span class='line'>828</span>  * This method provides UNIX origin time for current time
-<span class='line'>829</span>  * @example
-<span class='line'>830</span>  * KJUR.jws.IntDate.getNow() => 1478...
-<span class='line'>831</span>  */</span><span class="WHIT">
-<span class='line'>832</span> </span><span class="NAME">KJUR.jws.IntDate.getNow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>833</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">~</span><span class="PUNC">~</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>834</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">d</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>835</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>836</span> 
-<span class='line'>837</span> </span><span class="COMM">/**
-<span class='line'>838</span>  * get UTC time string from UNIX origin time value
-<span class='line'>839</span>  * @name intDate2UTCString
-<span class='line'>840</span>  * @memberOf KJUR.jws.IntDate
-<span class='line'>841</span>  * @function
-<span class='line'>842</span>  * @static
-<span class='line'>843</span>  * @param {Integer} intDate UNIX origin time value (ex. 1478...)
-<span class='line'>844</span>  * @return {String} UTC time string
-<span class='line'>845</span>  * @since jws 3.0.1
-<span class='line'>846</span>  * @description
-<span class='line'>847</span>  * This method provides UTC time string for UNIX origin time value.
-<span class='line'>848</span>  * @example
-<span class='line'>849</span>  * KJUR.jws.IntDate.intDate2UTCString(1478...) => "2015 Oct ..."
-<span class='line'>850</span>  */</span><span class="WHIT">
-<span class='line'>851</span> </span><span class="NAME">KJUR.jws.IntDate.intDate2UTCString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>852</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>853</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">d.toUTCString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>854</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>855</span> 
-<span class='line'>856</span> </span><span class="COMM">/**
-<span class='line'>857</span>  * get UTC time string from UNIX origin time value
-<span class='line'>858</span>  * @name intDate2Zulu
-<span class='line'>859</span>  * @memberOf KJUR.jws.IntDate
-<span class='line'>860</span>  * @function
-<span class='line'>861</span>  * @static
-<span class='line'>862</span>  * @param {Integer} intDate UNIX origin time value (ex. 1478...)
-<span class='line'>863</span>  * @return {String} Zulu time string
-<span class='line'>864</span>  * @since jws 3.0.1
-<span class='line'>865</span>  * @description
-<span class='line'>866</span>  * This method provides Zulu time string for UNIX origin time value.
-<span class='line'>867</span>  * @example
-<span class='line'>868</span>  * KJUR.jws.IntDate.intDate2UTCString(1478...) => "20151012...Z"
-<span class='line'>869</span>  */</span><span class="WHIT">
-<span class='line'>870</span> </span><span class="NAME">KJUR.jws.IntDate.intDate2Zulu</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>871</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>872</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">"0000"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCFullYear</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">4</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'>873</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mon</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">d.getUTCMonth</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'>874</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">day</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCDate</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'>875</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hour</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCHours</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'>876</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">min</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCMinutes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'>877</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sec</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCSeconds</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'>878</span>     </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">mon</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">day</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">hour</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">min</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">sec</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"Z"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>879</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>880</span> </span></pre></body></html>
+<span class='line'>790</span> </span><span class="WHIT">    </span><span class="COMM">// 2. get thumb print</span><span class="WHIT">
+<span class='line'>791</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hJWK</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">rstrtohex</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>792</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hash</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.crypto.Util.hashHex</span><span class="PUNC">(</span><span class="NAME">hJWK</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"sha256"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>793</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hashB64U</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hextob64u</span><span class="PUNC">(</span><span class="NAME">hash</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>794</span> 
+<span class='line'>795</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">hashB64U</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>796</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>797</span> 
+<span class='line'>798</span> </span><span class="COMM">/**
+<span class='line'>799</span>  * IntDate class for time representation for JSON Web Token(JWT)
+<span class='line'>800</span>  * @class KJUR.jws.IntDate class
+<span class='line'>801</span>  * @name KJUR.jws.IntDate
+<span class='line'>802</span>  * @since jws 3.0.1
+<span class='line'>803</span>  * @description
+<span class='line'>804</span>  * Utility class for IntDate which is integer representation of UNIX origin time
+<span class='line'>805</span>  * used in JSON Web Token(JWT).
+<span class='line'>806</span>  */</span><span class="WHIT">
+<span class='line'>807</span> </span><span class="NAME">KJUR.jws.IntDate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>808</span> 
+<span class='line'>809</span> </span><span class="COMM">/**
+<span class='line'>810</span>  * get UNIX origin time from by string
+<span class='line'>811</span>  * @name get
+<span class='line'>812</span>  * @memberOf KJUR.jws.IntDate
+<span class='line'>813</span>  * @function
+<span class='line'>814</span>  * @static
+<span class='line'>815</span>  * @param {String} s string of time representation
+<span class='line'>816</span>  * @return {Integer} UNIX origin time in seconds for argument 's'
+<span class='line'>817</span>  * @since jws 3.0.1
+<span class='line'>818</span>  * @throws "unsupported format: s" when malformed format
+<span class='line'>819</span>  * @description
+<span class='line'>820</span>  * This method will accept following representation of time.
+<span class='line'>821</span>  * &lt;ul>
+<span class='line'>822</span>  * &lt;li>now - current time&lt;/li>
+<span class='line'>823</span>  * &lt;li>now + 1hour - after 1 hour from now&lt;/li>
+<span class='line'>824</span>  * &lt;li>now + 1day - after 1 day from now&lt;/li>
+<span class='line'>825</span>  * &lt;li>now + 1month - after 30 days from now&lt;/li>
+<span class='line'>826</span>  * &lt;li>now + 1year - after 365 days from now&lt;/li>
+<span class='line'>827</span>  * &lt;li>YYYYmmDDHHMMSSZ - UTC time (ex. 20130828235959Z)&lt;/li>
+<span class='line'>828</span>  * &lt;li>number - UNIX origin time (seconds from 1970-01-01 00:00:00) (ex. 1377714748)&lt;/li>
+<span class='line'>829</span>  * &lt;/ul>
+<span class='line'>830</span>  */</span><span class="WHIT">
+<span class='line'>831</span> </span><span class="NAME">KJUR.jws.IntDate.get</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>832</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"now"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>833</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KJUR.jws.IntDate.getNow</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>834</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"now + 1hour"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>835</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KJUR.jws.IntDate.getNow</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>836</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"now + 1day"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>837</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KJUR.jws.IntDate.getNow</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">24</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>838</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"now + 1month"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>839</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KJUR.jws.IntDate.getNow</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">24</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">30</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>840</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"now + 1year"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>841</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KJUR.jws.IntDate.getNow</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">24</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">365</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>842</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/Z$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>843</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KJUR.jws.IntDate.getZulu</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>844</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>845</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>846</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>847</span> </span><span class="WHIT">    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"unsupported format: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>848</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>849</span> 
+<span class='line'>850</span> </span><span class="COMM">/**
+<span class='line'>851</span>  * get UNIX origin time from Zulu time representation string
+<span class='line'>852</span>  * @name getZulu
+<span class='line'>853</span>  * @memberOf KJUR.jws.IntDate
+<span class='line'>854</span>  * @function
+<span class='line'>855</span>  * @static
+<span class='line'>856</span>  * @param {String} s string of Zulu time representation (ex. 20151012125959Z)
+<span class='line'>857</span>  * @return {Integer} UNIX origin time in seconds for argument 's'
+<span class='line'>858</span>  * @since jws 3.0.1
+<span class='line'>859</span>  * @throws "unsupported format: s" when malformed format
+<span class='line'>860</span>  * @description
+<span class='line'>861</span>  * This method provides UNIX origin time from Zulu time.
+<span class='line'>862</span>  * @example
+<span class='line'>863</span>  * KJUR.jws.IntDate.getZulu("20151012125959Z") => 1478...
+<span class='line'>864</span>  */</span><span class="WHIT">
+<span class='line'>865</span> </span><span class="NAME">KJUR.jws.IntDate.getZulu</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>866</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)Z/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>867</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">RegExp.$1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>868</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">month</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">RegExp.$2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>869</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">day</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">RegExp.$3</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>870</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hour</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">RegExp.$4</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>871</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">min</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">RegExp.$5</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>872</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sec</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">RegExp.$6</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>873</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="NAME">Date.UTC</span><span class="PUNC">(</span><span class="NAME">year</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">month</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">day</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">hour</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">min</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sec</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>874</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">~</span><span class="PUNC">~</span><span class="PUNC">(</span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>875</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>876</span> </span><span class="WHIT">    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"unsupported format: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>877</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>878</span> 
+<span class='line'>879</span> </span><span class="COMM">/**
+<span class='line'>880</span>  * get UNIX origin time of current time
+<span class='line'>881</span>  * @name getNow
+<span class='line'>882</span>  * @memberOf KJUR.jws.IntDate
+<span class='line'>883</span>  * @function
+<span class='line'>884</span>  * @static
+<span class='line'>885</span>  * @return {Integer} UNIX origin time for current time
+<span class='line'>886</span>  * @since jws 3.0.1
+<span class='line'>887</span>  * @description
+<span class='line'>888</span>  * This method provides UNIX origin time for current time
+<span class='line'>889</span>  * @example
+<span class='line'>890</span>  * KJUR.jws.IntDate.getNow() => 1478...
+<span class='line'>891</span>  */</span><span class="WHIT">
+<span class='line'>892</span> </span><span class="NAME">KJUR.jws.IntDate.getNow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>893</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">~</span><span class="PUNC">~</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>894</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">d</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>895</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>896</span> 
+<span class='line'>897</span> </span><span class="COMM">/**
+<span class='line'>898</span>  * get UTC time string from UNIX origin time value
+<span class='line'>899</span>  * @name intDate2UTCString
+<span class='line'>900</span>  * @memberOf KJUR.jws.IntDate
+<span class='line'>901</span>  * @function
+<span class='line'>902</span>  * @static
+<span class='line'>903</span>  * @param {Integer} intDate UNIX origin time value (ex. 1478...)
+<span class='line'>904</span>  * @return {String} UTC time string
+<span class='line'>905</span>  * @since jws 3.0.1
+<span class='line'>906</span>  * @description
+<span class='line'>907</span>  * This method provides UTC time string for UNIX origin time value.
+<span class='line'>908</span>  * @example
+<span class='line'>909</span>  * KJUR.jws.IntDate.intDate2UTCString(1478...) => "2015 Oct ..."
+<span class='line'>910</span>  */</span><span class="WHIT">
+<span class='line'>911</span> </span><span class="NAME">KJUR.jws.IntDate.intDate2UTCString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>912</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>913</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">d.toUTCString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>914</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>915</span> 
+<span class='line'>916</span> </span><span class="COMM">/**
+<span class='line'>917</span>  * get UTC time string from UNIX origin time value
+<span class='line'>918</span>  * @name intDate2Zulu
+<span class='line'>919</span>  * @memberOf KJUR.jws.IntDate
+<span class='line'>920</span>  * @function
+<span class='line'>921</span>  * @static
+<span class='line'>922</span>  * @param {Integer} intDate UNIX origin time value (ex. 1478...)
+<span class='line'>923</span>  * @return {String} Zulu time string
+<span class='line'>924</span>  * @since jws 3.0.1
+<span class='line'>925</span>  * @description
+<span class='line'>926</span>  * This method provides Zulu time string for UNIX origin time value.
+<span class='line'>927</span>  * @example
+<span class='line'>928</span>  * KJUR.jws.IntDate.intDate2UTCString(1478...) => "20151012...Z"
+<span class='line'>929</span>  */</span><span class="WHIT">
+<span class='line'>930</span> </span><span class="NAME">KJUR.jws.IntDate.intDate2Zulu</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>931</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>932</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">"0000"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCFullYear</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">4</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'>933</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mon</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">d.getUTCMonth</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'>934</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">day</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCDate</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'>935</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hour</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCHours</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'>936</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">min</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCMinutes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'>937</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sec</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCSeconds</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'>938</span>     </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">mon</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">day</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">hour</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">min</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">sec</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"Z"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>939</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>940</span> 
+<span class='line'>941</span> </span></pre></body></html>

@@ -1,0 +1,179 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>jsrsasign: Integer array converter</title>
+<!-- Custom Theme files -->
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<meta name="keywords" content="Flatastic Mega Mobile UI Kit App Responsive web template, Bootstrap Web Templates, Flat Web Templates, AndriodCompatible web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola webdesign" />
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="../jsrsasign-latest-all-min.js"></script>
+<script src="../base64x-1.1.js"></script>
+<!-- Custom Theme files -->
+<link href="css/style.css" rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="js/Chart.js"></script> 
+<!-- Google Fonts -->
+<link href='//fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+<!---tage-script---->
+<!-- start price_bar  -->	
+<link href="css/jquery.nouislider.css" rel="stylesheet">
+<script src="js/jquery.nouislider.js"></script>
+<link rel="stylesheet" type="text/css" href="css/fd-slider.css">
+<script type="text/javascript" src="js/fd-slider.js"></script>
+<script>
+$(document).ready(function(){
+//-------row1-----//
+  $(".tag1").click(function(){
+    $(".tag1").hide();
+  });
+  $(".toogle2").click(function(){
+    $(".toogle2").hide();
+  });
+  $(".tag2").click(function(){
+    $(".tag2").hide();
+  });
+ //-------//row1-----//
+});
+
+//var hash = KJUR.crypto.Util.hashHex(hex, "sha256");
+//var hashB64U = hextob64u(hash);
+
+// toHex callback
+$(document).ready(function(){
+  $("#b1").click(function() {
+    var sInput = $('#input1').val();
+    var hex = intarystrtohex(sInput);
+    $('#output1').val(hex);
+  });
+});
+
+// toStr callback
+$(document).ready(function(){
+  $("#b2").click(function() {
+    var sInput = $('#input1').val();
+    var sOutput = hextorstr(intarystrtohex(sInput));
+    $('#output1').val(sOutput);
+  });
+});
+
+</script>
+
+<script src="js/easyResponsiveTabs.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+  $('#horizontalTab').easyResponsiveTabs({
+    type: 'default', //Types: default, vertical, accordion           
+    width: 'auto', //auto or any width like 600px
+    fit: true   // 100% fit in a container
+  });
+});
+</script>	
+
+<!----Calender -------->
+<link rel="stylesheet" href="css/clndr.css" type="text/css" />
+<script src="js/underscore-min.js" type="text/javascript"></script>
+<script src= "js/moment-2.2.1.js" type="text/javascript"></script>
+<script src="js/clndr.js" type="text/javascript"></script>
+<script src="js/site.js" type="text/javascript"></script>
+<!----End Calender -------->
+</head>
+<body>
+<div class="wrap">
+
+<!-- Menu-2 -->
+<div class="menu_2">
+<a href="index.html"><span class="menu_2_left"></span></a>
+<h2>Integer Array Converter</h2>
+<span class="menu_2_right">
+ <ul class="menu_2_right_nav">
+  <li><a href="#">Profile</a></li>
+  <li><a href="#">Login</a></li>
+  <li class="last_menu"><a href="#">Logout</a></li>
+ </ul>
+</span>
+<div class="clear"></div>
+</div>
+
+<div class="form-group">
+<textarea class="form-control" rows="10" cols="100" id="input1">
+[123, 34, 101, 34, 58, 34, 65, 81, 65, 66, 34, 44, 34, 107, 116, 121,
+   34, 58, 34, 82, 83, 65, 34, 44, 34, 110, 34, 58, 34, 48, 118, 120,
+   55, 97, 103, 111, 101, 98, 71, 99, 81, 83, 117, 117, 80, 105, 76, 74,
+   88, 90, 112, 116, 78, 57, 110, 110, 100, 114, 81, 109, 98, 88, 69,
+   112, 115, 50, 97, 105, 65, 70, 98, 87, 104, 77, 55, 56, 76, 104, 87,
+   120, 52, 99, 98, 98, 102, 65, 65, 116, 86, 84, 56, 54, 122, 119, 117,
+   49, 82, 75, 55, 97, 80, 70, 70, 120, 117, 104, 68, 82, 49, 76, 54,
+   116, 83, 111, 99, 95, 66, 74, 69, 67, 80, 101, 98, 87, 75, 82, 88,
+   106, 66, 90, 67, 105, 70, 86, 52, 110, 51, 111, 107, 110, 106, 104,
+   77, 115, 116, 110, 54, 52, 116, 90, 95, 50, 87, 45, 53, 74, 115, 71,
+   89, 52, 72, 99, 53, 110, 57, 121, 66, 88, 65, 114, 119, 108, 57, 51,
+   108, 113, 116, 55, 95, 82, 78, 53, 119, 54, 67, 102, 48, 104, 52, 81,
+   121, 81, 53, 118, 45, 54, 53, 89, 71, 106, 81, 82, 48, 95, 70, 68,
+   87, 50, 81, 118, 122, 113, 89, 51, 54, 56, 81, 81, 77, 105, 99, 65,
+   116, 97, 83, 113, 122, 115, 56, 75, 74, 90, 103, 110, 89, 98, 57, 99,
+   55, 100, 48, 122, 103, 100, 65, 90, 72, 122, 117, 54, 113, 77, 81,
+   118, 82, 76, 53, 104, 97, 106, 114, 110, 49, 110, 57, 49, 67, 98, 79,
+   112, 98, 73, 83, 68, 48, 56, 113, 78, 76, 121, 114, 100, 107, 116,
+   45, 98, 70, 84, 87, 104, 65, 73, 52, 118, 77, 81, 70, 104, 54, 87,
+   101, 90, 117, 48, 102, 77, 52, 108, 70, 100, 50, 78, 99, 82, 119,
+   114, 51, 88, 80, 107, 115, 73, 78, 72, 97, 81, 45, 71, 95, 120, 66,
+   110, 105, 73, 113, 98, 119, 48, 76, 115, 49, 106, 70, 52, 52, 45, 99,
+   115, 70, 67, 117, 114, 45, 107, 69, 103, 85, 56, 97, 119, 97, 112,
+   74, 122, 75, 110, 113, 68, 75, 103, 119, 34, 125]
+</textarea>
+</div>
+
+<div class="big-buttons-col2">
+<ul>
+<li><input class="blue blue1" type="button" value="Convert Integer Array to Hex" id="b1"/></li>
+<li><input class="blue blue1" type="button" value="Convert Integer Array to String" id="b2"/></li>
+</ul>
+</div>
+
+<div class="form-group">
+<textarea class="form-control" rows="10" cols="100" id="output1"></textarea>
+</div>
+
+<div>
+This tool converts from a string of integer array 
+(ex. ' [ 123, 34, 101, ... ] ')
+to a hexadecimal string or raw string.
+This tool may be useful to see some IETF RFC example
+like <a href="https://tools.ietf.org/html/rfc7638#section-3.1" target="_blank">this</a>.
+</div>
+
+<!-- *** FOOTER *************************************** -->
+<div class="copy">
+<p>
+&copy; 2015 Kenji Urushima <a href="https://twitter.com/kjur">@kjur</a>
+All rights reserved |
+Template by <a href="http://w3layouts.com" target="_blank">w3layouts</a> |
+Powered by <a href="https://kjur.github.io/jsrsasign">jsrsasign</a>
+</p>
+</div>
+<!--- start circle --->
+<script src="js/jquery.circliful.min.js"></script>
+<script>
+$( document ).ready(function() {
+  $('#myStat2').circliful();
+});
+</script>
+<link href="css/flexslider.css" rel='stylesheet' type='text/css' />
+<script defer src="js/jquery.flexslider.js"></script>
+<script type="text/javascript">
+$(function(){
+  SyntaxHighlighter.all();
+});
+$(window).load(function(){
+  $('.flexslider').flexslider({
+    animation: "slide",
+    start: function(slider){
+      $('body').removeClass('loading');
+    }
+  });
+});
+</script>
+</body>
+</html>

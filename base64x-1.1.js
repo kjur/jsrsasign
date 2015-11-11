@@ -1,9 +1,9 @@
-/*! base64x-1.1.5 (c) 2012-2015 Kenji Urushima | kjur.github.com/jsjws/license
+/*! base64x-1.1.6 (c) 2012-2015 Kenji Urushima | kjur.github.com/jsjws/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * version: 1.1.5 (2015-Sep-13)
+ * version: 1.1.6 (2015-Nov-11)
  *
  * Copyright (c) 2012-2015 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -21,7 +21,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.1.5 (2015-Sep-13)
+ * @version asn1 1.1.6 (2015-Nov-11)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -406,6 +406,39 @@ function newline_toDos(s) {
 }
 
 // ==== others ================================
+
+/**
+ * convert string of integer array to hexadecimal string.<br/>
+ * @param {String} s string of integer array
+ * @return {String} hexadecimal string
+ * @since base64x 1.1.6 jsrsasign 5.0.2
+ * @throws "malformed integer array string: *" for wrong input
+ * @description
+ * This function converts a string of JavaScript integer array to
+ * a hexadecimal string. Each integer value shall be in a range 
+ * from 0 to 255 otherwise it raise exception. Input string can
+ * have extra space or newline string so that they will be ignored.
+ * 
+ * @example
+ * intarystrtohex(" [123, 34, 101, 34, 58] ")
+ * -> 7b2265223a (i.e. `{"e":` as string)
+ */
+function intarystrtohex(s) {
+  s = s.replace(/^\s*\[\s*/, '');
+  s = s.replace(/\s*\]\s*$/, '');
+  s = s.replace(/\s*/g, '');
+  try {
+    var hex = s.split(/,/).map(function(element, index, array) {
+      var i = parseInt(element);
+      if (i < 0 || 255 < i) throw "integer not in range 0-255";
+      var hI = ("00" + i.toString(16)).slice(-2);
+      return hI;
+    }).join('');
+    return hex;
+  } catch(ex) {
+    throw "malformed integer array string: " + ex;
+  }
+}
 
 /**
  * find index of string where two string differs
