@@ -16,6 +16,7 @@
  * 各種ガイドラインでの暗号スイートの定義
  ********************************************/
 var OPENSSL_CIPHERSUITE = {
+  "kjur201511": "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:AES128-GCM-SHA256:AES128-SHA256:AES128-SHA:AES256-GCM-SHA384:AES256-SHA256:AES256-SHA:DES-CBC3-SHA",
   "cryptrec1": "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA256",
   "cryptrec2": "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-CAMELLIA128-SHA:DHE-RSA-AES128-SHA:AES128-GCM-SHA256:AES128-SHA256:CAMELLIA128-SHA:AES128-SHA:ECDH-ECDSA-AES128-GCM-SHA256:ECDH-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-SHA256:DHE-RSA-CAMELLIA256-SHA:DHE-RSA-AES256-SHA:AES256-GCM-SHA384:AES256-SHA256:CAMELLIA256-SHA:AES256-SHA:ECDH-ECDSA-AES256-GCM-SHA384:ECDH-RSA-AES256-GCM-SHA384",
   "cryptrec3": "DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-CAMELLIA128-SHA:DHE-RSA-AES128-SHA:AES128-GCM-SHA256:AES128-SHA256:CAMELLIA128-SHA:AES128-SHA:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-SHA256:DHE-RSA-CAMELLIA256-SHA:DHE-RSA-AES256-SHA:AES256-GCM-SHA384:AES256-SHA256:CAMELLIA256-SHA:AES256-SHA:RC4-SHA:EDH-RSA-DES-CBC3-SHA:DES-CBC3-SHA",
@@ -197,10 +198,12 @@ function _updateCompression(cfg, guidename, serverapp) {
 
 function _updateOrder(cfg, guidename, serverapp) {
   var s = "# -- cipherorder not specified for this guide --";
+  if (serverapp.indexOf("kjur") != -1) s = "SSLHonorCipherOrder On";
   if (serverapp.indexOf("apache") != -1) s = "SSLHonorCipherOrder On";
   if (serverapp == "nginx")              s = "ssl_prefer_server_ciphers on;";
   if (serverapp == "lighttpd")           s = "ssl.honor-cipher-order = \"enable\"";
-  if (guidename.indexOf("cryptrec") == -1 &&
+  if (guidename.indexOf("kjur") == -1 &&
+      guidename.indexOf("cryptrec") == -1 &&
       guidename.indexOf("mozilla") == -1 &&
       guidename.indexOf("bullet") == -1) {
     cfg = cfg.replace("%%%CIPHERORDER%%%", "#" + s);
@@ -274,6 +277,7 @@ var LIGHTTPD_TLS12 = "ssl.use-sslv2 = \"disable\"\r\n  ssl.use-sslv3 = \"disable
 
 function _getProtocolValue(guideName, serverType) {
   if (serverType == "apache24" || serverType == "apache22") {
+    if (guideName == "kjur201511") return "all -SSLv2 -SSLv3";
     if (guideName == "cryptrec1") return "TLSv1.2";
     if (guideName == "cryptrec2") return "all -SSLv2 -SSLv3";
     if (guideName == "cryptrec3") return "all -SSLv2";
@@ -284,6 +288,7 @@ function _getProtocolValue(guideName, serverType) {
     return "all"; // デフォルト
   }
   if (serverType == "nginx") {
+    if (guideName == "kjur201511") return "TLSv1.2 TLSv1.1 TLSv1";
     if (guideName == "cryptrec1") return "TLSv1.2";
     if (guideName == "cryptrec2") return "TLSv1.2 TLSv1.1 TLSv1";
     if (guideName == "cryptrec3") return "TLSv1.2 TLSv1.1 TLSv1 SSLv3";
@@ -294,6 +299,7 @@ function _getProtocolValue(guideName, serverType) {
     return "TLSv1.2 TLSv1.1 TLSv1 SSLv3"; // デフォルト
   }
   if (serverType == "lighttpd") {
+    if (guideName == "kjur201511") return LIGHTTPD_NOT_SSL;
     if (guideName == "cryptrec1") return LIGHTTPD_TLS12;
     if (guideName == "cryptrec2") return LIGHTTPD_NOT_SSL;
     if (guideName == "cryptrec3") return LIGHTTPD_NOT_SSL2;
@@ -313,7 +319,7 @@ function _getProtocolValue(guideName, serverType) {
 <!-- HEADER -->
 <div id="header_wrap" class="outer">
 <header class="inner">
-<h1 id="project_title">HTTPS設定ファイル生成ツール0.5(ベータ版)</h1>
+<h1 id="project_title">HTTPS設定ファイル生成ツール0.6(ベータ版)</h1>
 <h2 id="project_tagline">各種ガイドラインに応じたApache、nginx、lighttpdなど主要なサーバーのHTTPS設定を自動生成します</h2>
 
 <a href="http://kjur.github.io/jsrsasign/">TOP</a> | 
@@ -332,6 +338,7 @@ function _getProtocolValue(guideName, serverType) {
 <p>
 ガイドラインの種類：
 <select name="guidename">
+<option value="kjur201511">種々のガイドを参考に2015年11月時点での超オススメ設定(by @kjur)
 <option value="cryptrec1">CRYPTREC/IPAガイド(2015.05版)高セキュリティ型 - 高いセキュリティを求める医療・金融、政府機関等向け
 <option value="cryptrec2">CRYPTREC/IPAガイド(2015.05版)推奨セキュリティ型 - 標準的な設定
 <option value="cryptrec3">CRYPTREC/IPAガイド(2015.05版)セキュリティ例外型 - 古いフィーチャーフォン、ゲーム機も対象に含む場合
