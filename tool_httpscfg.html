@@ -182,7 +182,8 @@ function _doGen() {
 
 function _updateCompression(cfg, guidename, serverapp) {
   // 注：nginx は新しいもので対応、設定は不要
-  if (guidename.indexOf("cryptrec") != -1 ||
+  if (guidename.indexOf("kjur") != -1 ||
+      guidename.indexOf("cryptrec") != -1 ||
       guidename.indexOf("mozilla") != -1 ||
       guidename.indexOf("bullet") != -1) {
     if (serverapp.indexOf("apache") != -1) {
