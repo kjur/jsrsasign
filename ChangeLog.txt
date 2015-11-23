@@ -1,7 +1,7 @@
 
 ChangeLog for jsrsasign
 
-* Changes between 5.0.2 to 5.0.3 (2015-Nov-23)
+* Changes between 5.0.2 to 5.0.4 (2015-Nov-23)
   - jwtverify, asn1dump and pemtobin sample Node script in 
     sample_node directory. 
     There is a bower release but not in npm.
