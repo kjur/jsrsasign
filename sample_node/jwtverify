@@ -1,0 +1,134 @@
+#!/usr/bin/env node
+
+/*
+ * jwtverify - verify JWT/JWS file or string
+ *
+ * Copyright (c) 2015 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * http://kjur.github.com/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+var path = require('path');
+
+program
+  .version('0.0.1')
+  .usage('[options] <JWT/JWS file or string to verify>')
+  .description('verify JWT/jWS file or string')
+  .option('-s, --hmacpassstr <pass string>', 'Hmac(HS*) pass string (ex. passwd)')
+  .option('-x, --hmacpasshex <pass hex>', 'Hmac(HS*) pass hex (ex. 7e5f...)')
+  .option('-b, --hmacpassb64u <pass b64u>', 'Hmac(HS*) pass base 64 url encoding)')
+  .option('-k, --pubkey <file>', 'public key file (ex. PKCS#8 PEM or JWK)')
+  .option('-v, --verbose', 'show header and payload')
+  .option('--accept_iss <iss1,...>', 'check iss is in the iss list (ex. a@a.com,b@b.com)')
+  .option('--accept_sub <sub1,...>', 'check sub is in the sub list (ex. a@a.com,b@b.com)')
+  .option('--verify_at <YYYYMMDDHHmmSSZ>', 'verify at specified UTC time(ex. 20151123235959Z)')
+  .parse(process.argv);
+
+if (program.args.length !== 1)
+  throw "wrong number of arguments";
+
+var jwt;
+try {
+  var inFile  = program.args[0];
+  jwt = rs.readFile(inFile);
+} catch(ex) {
+  jwt = program.args[0]; // as string
+}
+//console.log(jwt);
+
+var pass;
+var pubKeyObj;
+var acceptField = {};
+
+if (program.hmacpassstr !== undefined) 
+  pass = {utf8: program.hmacpassstr};
+if (program.hmacpasshex !== undefined) 
+  pass = {hex: program.hmacpasshex};
+if (program.hmacpassb64u !== undefined) 
+  pass = {b64u: program.hmacpassb64u};
+
+if (program.pubkey !== undefined) {
+   var pubKeyPEM = rs.readFile(program.pubkey);
+   pubKeyObj = rs.KEYUTIL.getKey(pubKeyPEM);
+}
+
+/*
+ * set acceptField
+ */
+if (pass !== undefined) 
+  acceptField.alg = ['HS256', 'HS384', 'HS512'];
+if (pubKeyObj !== undefined) 
+  acceptField.alg = ['RS256', 'RS384', 'RS512',
+                     'PS256', 'PS384', 'PS512',
+                     'ES256', 'ES384', 'ES512'];
+
+if (program.verify_at !== undefined)
+  acceptField.verifyAt = KJUR.jws.IntDate.getZulu(program.verify_at);
+
+if (program.accept_iss !== undefined)
+  acceptField.iss = program.accept_iss.split(",");
+
+if (program.accept_sub !== undefined)
+  acceptField.sub = program.accept_sub.split(",");
+
+/*
+ * show header and payload
+ */
+if (program.verbose) {
+  var a = jwt.split(".");
+  var pHeader = KJUR.jws.JWS.readSafeJSONString(rs.b64utoutf8(a[0]));
+  var pClaim = KJUR.jws.JWS.readSafeJSONString(rs.b64utoutf8(a[1]));
+  var sHeader = JSON.stringify(pHeader, null, "  ");
+  var sClaim = JSON.stringify(pClaim, null, "  ");
+  console.log("*** HEADER ***");
+  console.log(sHeader);
+  console.log("*** PAYLOAD ***");
+  console.log(sClaim);
+}
+
+/*
+ * show result
+ */
+if (program.verbose)
+  console.log("*** JWT/JWS VALIDATION RESULT ***");
+
+var isValid;
+if (pass !== undefined) {
+   //console.log("pass defined");
+   isValid = rs.jws.JWS.verifyJWT(jwt, pass, acceptField);
+}
+if (pubKeyObj !== undefined) {
+   //console.log("pubKeyObj defined");
+   isValid = rs.jws.JWS.verifyJWT(jwt, pubKeyObj, acceptField);
+}
+
+if (program.verbose) {
+  console.log('  - on: JWS signature validation');
+  if (acceptField.alg !== undefined)
+    console.log('  - on: check acceptable signature algorithm');
+  if (program.verify_at === undefined) {
+    console.log('  - on: verify at current time');
+  } else {
+    console.log('  - on: verify at %j', program.verify_at);
+  }
+
+  if (acceptField.iss != undefined)
+    console.log('  - on: check iss in %j', program.accept_iss);
+
+  if (acceptField.sub != undefined)
+    console.log('  - on: check sub in %j', program.accept_sub);
+}
+
+if (isValid) {
+  console.log('This JWT/JWS is valid.');
+} else {
+  console.log('This JWT/JWS is *NOT* valid.');
+}

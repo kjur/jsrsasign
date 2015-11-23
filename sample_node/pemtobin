@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+
+/*
+ * pemtobin - convert any PEM to binary file
+ *
+ * Copyright (c) 2015 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * http://kjur.github.com/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+
+program
+  .version('0.0.1')
+  .usage('[options] <input PEM file> <output binary file>')
+  .description('convert any PEM file to binary')
+  .parse(process.argv);
+
+if (program.args.length !== 2)
+  throw "wrong number of arguments";
+
+var inFile  = program.args[0];
+var outFile = program.args[1];
+
+var pem = rs.readFile(inFile);
+var hex = rs.KEYUTIL.getHexFromPEM(pem);
+rs.saveFileBinByHex(outFile, hex);
+

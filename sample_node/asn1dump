@@ -1,0 +1,33 @@
+#!/usr/bin/env node
+
+/*
+ * asn1dump - simple ASN.1 dumper for ASN.1 DER binary file
+ *
+ * Copyright (c) 2015 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * http://kjur.github.com/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+
+program
+  .version('0.0.1')
+  .usage('[options] <input file>')
+  .description('show dump of ASN.1 DER file')
+  .parse(process.argv);
+
+if (program.args.length !== 1)
+  throw "wrong number of arguments";
+
+var file = program.args[0];
+
+var bin = rs.readFile(file);
+var hex = rs.rstrtohex(bin);
+console.log(rs.ASN1HEX.dump(hex));
