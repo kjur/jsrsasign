@@ -21,7 +21,7 @@ using [KJUR.jws.JWS.verifyJWT()](http://kjur.github.io/jsrsasign/api/symbols/KJU
 
 * Verbose mode for validation in detail.
 
-To verify JWS, provide simplly passcode or public key:
+To verify JWS, provide simply passcode or public key:
 
     % jwtverify -s password aaa.jws // passcode is 'password'
     % jwtverify -x 616161 aaa.jws   // passcode is 0x616161 (i.e. aaa)
