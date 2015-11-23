@@ -11,11 +11,15 @@ Here is sample node utility scripts using 'jsrsasign' module.
 This script is to verify JWT(JSON Web Token) or JWS(JSON Web Signature) file or string 
 using [KJUR.jws.JWS.verifyJWT()](http://kjur.github.io/jsrsasign/api/symbols/KJUR.jws.JWS.html#.verifyJWT) method. It has following features:
 
-..* HS256/384/512,RS256/384/512,PS256/384/512,ES256/384 signature algorithm support
-..* string, hexadecimal and Base64URL passcode support for HS* signatures
-..* JWS and JWT validation
-..* JWT/JWS signature can be provided by a file or a string argument.
-..* Verbose mode for validation in detail.
+* HS256/384/512,RS256/384/512,PS256/384/512,ES256/384 signature algorithm support
+
+* string, hexadecimal and Base64URL passcode support for HS* signatures
+
+* JWS and JWT validation
+
+* JWT/JWS signature can be provided by a file or a string argument.
+
+* Verbose mode for validation in detail.
 
 To verify JWS, provide simplly passcode or public key:
 
