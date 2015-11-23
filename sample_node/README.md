@@ -38,7 +38,9 @@ Verifying JWT is very similar to JWS however you can specify optional arguments:
     % jwtverify -s aaa --accept_iss "http://example.com" aaa.jwt // acceptable issuer
     % jwtverify -s aaa --accept_sub "http://example.com" aaa.jwt // acceptable subject
 
-2. [asn1dump](https://github.com/kjur/jsrsasign/tree/master/sample_node/asn1dump) - simple ASN.1 dumper
+1. [asn1dump](https://github.com/kjur/jsrsasign/tree/master/sample_node/asn1dump) - simple ASN.1 dumper
+
+This script dumps ASN.1 DER formatted binary file.
 
     % asn1dump aaa.pub.p8.der
     SEQUENCE
@@ -47,7 +49,9 @@ Verifying JWT is very similar to JWS however you can specify optional arguments:
         NULL
       BITSTRING 003081890...(total ???bytes)...
 
-3. [pemtobin](https://github.com/kjur/jsrsasign/tree/master/sample_node/pemtobin) - convert any PEM file to binary
+1. [pemtobin](https://github.com/kjur/jsrsasign/tree/master/sample_node/pemtobin) - convert any PEM file to binary
+
+This script converts from any PEM format file to binary.
 
     % pemtobin aaa.pem aaa.der
 
