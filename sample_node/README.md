@@ -49,6 +49,12 @@ This script dumps ASN.1 DER formatted binary file.
         NULL
       BITSTRING 003081890...(total ???bytes)...
 
+1. [jwssign](https://github.com/kjur/jsrsasign/tree/master/sample_node/jwssign) - sign JWS by header and payload file or string
+
+This script is to sign JWS(JSON Web Signature) for specified header and payload file or string
+using [KJUR.jws.JWS.sign()](http://kjur.github.io/jsrsasign/api/symbols/KJUR.jws.JWS.html#.sign) method. 
+See [here](https://github.com/kjur/jsrsasign/wiki/Sample-Node-Script---jwssign) in detail.
+
 1. [pemtobin](https://github.com/kjur/jsrsasign/tree/master/sample_node/pemtobin) - convert any PEM file to binary
 
 This script converts from any PEM format file to binary.

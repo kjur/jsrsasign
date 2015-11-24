@@ -1,0 +1,107 @@
+#!/usr/bin/env node
+
+/*
+ * jwssign - sign JWS by header/payload file or string
+ *
+ * Copyright (c) 2015 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * http://kjur.github.com/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+var path = require('path');
+var JWS = rs.jws.JWS;
+
+program
+  .version('1.0.0 (2015-Nov-25)')
+  .usage('[options] <JWS Header file/string> <JWS payload file/string> <output JWS file>')
+  .description('sign JWS by header/payload file or string')
+  .option('-t, --passtype <utf8|hex|b64|b64u>', 'Hmac(HS*) pass type', 'utf8')
+  .option('-p, --pass <pass>', 'Hmac(HS*) password in specfied type', 'passwd')
+  .option('-k, --prvkey <file>', 'private key file (ex. PKCS#8 PEM)')
+  .option('-f, --forcealg <sigalg>', 'overwrite alg in header (ex. HS512)')
+  .parse(process.argv);
+
+if (program.args.length !== 3)
+  throw "wrong number of arguments";
+var outFile = program.args[2];
+
+var sHeader, pHeader, sPayload;
+var pass, prvKeyObj;
+
+/*
+ * Read Header and Payload
+ */
+
+try {
+  var inFile = program.args[0];
+  sHeader = rs.readFile(inFile);
+} catch(ex) {
+  sHeader = program.args[0] // as string
+}
+
+try {
+  var inFile = program.args[1];
+  sPayload = rs.readFile(inFile);
+} catch(ex) {
+  sPayload = program.args[1] // as string
+}
+
+pHeader = JWS.readSafeJSONString(sHeader);
+if (pHeader === null)
+  throw "error: not safe JSON header: " + sHeader;
+
+/*
+ * pass, prvkey and sigalg check
+ */
+if (program.forcealg !== undefined && pHeader.alg !== program.forcealg) {
+  pHeader.alg = program.forcealg;
+  sHeader = JSON.stringify(pHeader);
+}
+
+pass = {};
+if (! JWS.inArray(program.passtype, ['utf8', 'hex', 'b64', 'b64u']))
+  throw "unsupported HS* password type: " + program.passtype;
+if (program.passtype !== undefined && program.pass !== undefined)
+  pass[program.passtype] = program.pass;
+
+if (program.prvkey !== undefined) {
+   var prvPEM = rs.readFile(program.prvkey);
+   prvKeyObj = rs.KEYUTIL.getKey(prvPEM);
+}
+
+if (prvKeyObj === undefined && ! pHeader.alg.match(/^HS/))
+  throw "sigalg shall be HS* in header for hmac password";
+
+if (prvKeyObj !== undefined && prvKeyObj instanceof rs.RSAKey &&
+    ! pHeader.alg.match(/^[PR]S/))
+  throw "sigalg shall be PS* or RS* in header for RSA key";
+
+if (prvKeyObj !== undefined && prvKeyObj instanceof rs.crypto.ECDSA &&
+    ! pHeader.alg.match(/^ES/))
+  throw "sigalg shall be ES* in header for ECDSA key: " + pHeader.alg;
+
+/*
+ * sign JWS
+ */
+var sJWS
+if (prvKeyObj === undefined) {
+  sJWS = JWS.sign(pHeader.alg, sHeader, sPayload, pass);
+} else {
+  sJWS = JWS.sign(pHeader.alg, sHeader, sPayload, prvKeyObj);
+}
+
+if (outFile === "-") 
+  console.log(sJWS);
+else
+  rs.saveFile(outFile, sJWS);
+
+
+
