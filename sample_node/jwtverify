@@ -17,14 +17,14 @@
 var program = require('commander');
 var rs = require('jsrsasign');
 var path = require('path');
+var JWS = rs.jws.JWS;
 
 program
-  .version('0.0.1')
+  .version('1.0.0 (2015-Nov-25)')
   .usage('[options] <JWT/JWS file or string to verify>')
   .description('verify JWT/jWS file or string')
-  .option('-s, --hmacpassstr <pass string>', 'Hmac(HS*) pass string (ex. passwd)')
-  .option('-x, --hmacpasshex <pass hex>', 'Hmac(HS*) pass hex (ex. 7e5f...)')
-  .option('-b, --hmacpassb64u <pass b64u>', 'Hmac(HS*) pass base 64 url encoding)')
+  .option('-t, --passtype <utf8|hex|b64|b64u>', 'Hmac(HS*) pass type', 'utf8')
+  .option('-p, --pass <pass>', 'Hmac(HS*) password in specfied type', 'passwd')
   .option('-k, --pubkey <file>', 'public key file (ex. PKCS#8 PEM or JWK)')
   .option('-v, --verbose', 'show header and payload')
   .option('--accept_iss <iss1,...>', 'check iss is in the iss list (ex. a@a.com,b@b.com)')
@@ -48,12 +48,12 @@ var pass;
 var pubKeyObj;
 var acceptField = {};
 
-if (program.hmacpassstr !== undefined) 
-  pass = {utf8: program.hmacpassstr};
-if (program.hmacpasshex !== undefined) 
-  pass = {hex: program.hmacpasshex};
-if (program.hmacpassb64u !== undefined) 
-  pass = {b64u: program.hmacpassb64u};
+if (! JWS.inArray(program.passtype, ['utf8', 'hex', 'b64', 'b64u']))
+  throw "unsupported HS* password type: " + program.passtype;
+if (program.passtype !== undefined && program.pass !== undefined) {
+  pass = {};
+  pass[program.passtype] = program.pass;
+}
 
 if (program.pubkey !== undefined) {
    var pubKeyPEM = rs.readFile(program.pubkey);

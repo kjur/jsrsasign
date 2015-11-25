@@ -2,7 +2,8 @@
 ChangeLog for jsrsasign
 
 * Changes between 5.0.4 to next release
-  - node sample 'jwssign' added.
+  - node sample 'jwssign', 'jwtverify', 'asn1dump'
+    and 'pemtobin'  added.
 
 * Changes between 5.0.2 to 5.0.4 (2015-Nov-23)
   - jwtverify, asn1dump and pemtobin sample Node script in 
