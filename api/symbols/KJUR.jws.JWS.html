@@ -551,6 +551,16 @@ as described in
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.jws.JWS.<b><a href="../symbols/KJUR.jws.JWS.html#.parse">parse</a></b>(sJWS)
+								</div>
+								<div class="description">parse header and payload of JWS signature<br/>
+This method parses JWS signature string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.jws.JWS.<b><a href="../symbols/KJUR.jws.JWS.html#.parseJWS">parseJWS</a></b>(sJWS)
 								</div>
 								<div class="description">parse JWS string and set public property 'parsedJWS' dictionary.</div>
@@ -1021,6 +1031,93 @@ this returns 0, otherwise this returns 1.
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Number}</span> 1 or 0</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".parse"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">KJUR.jws.JWS.</span><b>parse</b>(sJWS)
+					
+					</div>
+					<div class="description">
+						parse header and payload of JWS signature<br/>
+This method parses JWS signature string. 
+Resulted associative array has following properties:
+<ul>
+<li>headerObj - JSON object of header</li>
+<li>payloadObj - JSON object of payload if payload is JSON string otherwise undefined</li>
+<li>headerPP - pretty printed JSON header by stringify</li>
+<li>payloadPP - pretty printed JSON payload by stringify if payload is JSON otherwise Base64URL decoded raw string of payload</li>
+<li>sigHex - hexadecimal string of signature</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.jws.JWS.parse(sJWS) ->
+{ 
+  headerObj: {"alg": "RS256", "typ": "JWS"},
+  payloadObj: {"product": "orange", "quantity": 100},
+  headerPP: 
+  '{
+    "alg": "RS256",
+    "typ": "JWS"
+  }',
+  payloadPP: 
+  '{
+    "product": "orange",
+    "quantity": 100
+  }',
+  sigHex: "91f3cd..." 
+}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sJWS</b>
+									
+								</dt>
+								<dd>string of JWS signature to parse</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jws 3.3.3</dd>
+							</dl>
+							</dl>
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Throws:</dt>
+							
+								<dt>
+									 <b></b>
+								</dt>
+								<dd>if sJWS is malformed JWS signature</dd>
+							
+							</dl>
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> associative array of parsed header and payload. See below.</dd>
 							
 							</dl>
 						

@@ -1,4 +1,4 @@
-/*! base64x-1.1.6 (c) 2012-2015 Kenji Urushima | kjur.github.com/jsjws/license
+/*! base64x-1.1.6 (c) 2012-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library

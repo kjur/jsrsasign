@@ -8,8 +8,11 @@
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="qunit.js"></script>
 
+<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="../base64x-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/json-sans-eval.js"></script>
-<script language="JavaScript" type="text/javascript" src="../jws-3.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../jws-3.3.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -29,6 +32,20 @@ test("readSafeJSONString 1", function() {
   equal(a.aaa, "bbb", "bbb");
 });
 
+test("parse jwt.io sample", function() {
+  var sJWS = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ";
+  var result = KJUR.jws.JWS.parse(sJWS);
+
+  equal(result.headerObj.alg, "HS256", "headerObj.alg=HS256");
+  equal(result.headerObj.typ, "JWT", "headerObj.typ=JWT");
+  equal(result.payloadObj.sub, "1234567890", "payloadObj.sub=1234567890");
+  equal(result.payloadObj.name, "John Doe", "payloadObj.name=John Doe");
+  equal(result.payloadObj.admin, true, "payloadObj.admin=true");
+  equal(result.headerPP, "{\n  \"alg\": \"HS256\",\n  \"typ\": \"JWT\"\n}", "headerPP");
+  equal(result.payloadPP, "{\n  \"sub\": \"1234567890\",\n  \"name\": \"John Doe\",\n  \"admin\": true\n}", "payloadPP");
+  equal(result.sigHex, "4c9540f793ab33b13670169bdf444c1eb1c37047f18e861981e14e34587b1e04", "sigHex");
+});
+
 });
 </script>
   
@@ -36,5 +53,6 @@ test("readSafeJSONString 1", function() {
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
+<a href="index.html">TEST INDEX</a> | 
 </body>
 </html>

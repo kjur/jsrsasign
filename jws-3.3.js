@@ -1,9 +1,9 @@
-/*! jws-3.3.2 (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! jws-3.3.3 (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * jws.js - JSON Web Signature(JWS) and JSON Web Token(JWT) Class
  *
- * version: 3.3.2 (2015 Nov 11)
+ * version: 3.3.3 (2015 Nov 27)
  *
  * Copyright (c) 2010-2015 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -18,7 +18,7 @@
  * @fileOverview
  * @name jws-3.3.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 3.3.2 (2015-Nov-11)
+ * @version 3.3.3 (2015-Nov-27)
  * @since jsjws 1.0, jsrsasign 4.8.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -462,6 +462,72 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
 };
 
 /**
+ * parse header and payload of JWS signature<br/>
+ * @name parse
+ * @memberOf KJUR.jws.JWS
+ * @function
+ * @static
+ * @param {String} sJWS string of JWS signature to parse
+ * @return {Array} associative array of parsed header and payload. See below.
+ * @throws if sJWS is malformed JWS signature
+ * @since jws 3.3.3
+ * @description
+ * This method parses JWS signature string. 
+ * Resulted associative array has following properties:
+ * <ul>
+ * <li>headerObj - JSON object of header</li>
+ * <li>payloadObj - JSON object of payload if payload is JSON string otherwise undefined</li>
+ * <li>headerPP - pretty printed JSON header by stringify</li>
+ * <li>payloadPP - pretty printed JSON payload by stringify if payload is JSON otherwise Base64URL decoded raw string of payload</li>
+ * <li>sigHex - hexadecimal string of signature</li>
+ * </ul>
+ * @example
+ * KJUR.jws.JWS.parse(sJWS) ->
+ * { 
+ *   headerObj: {"alg": "RS256", "typ": "JWS"},
+ *   payloadObj: {"product": "orange", "quantity": 100},
+ *   headerPP: 
+ *   '{
+ *     "alg": "RS256",
+ *     "typ": "JWS"
+ *   }',
+ *   payloadPP: 
+ *   '{
+ *     "product": "orange",
+ *     "quantity": 100
+ *   }',
+ *   sigHex: "91f3cd..." 
+ * }
+ */
+KJUR.jws.JWS.parse = function(sJWS) {
+    var a = sJWS.split(".");
+    var result = {};
+    var uHeader, uPayload, uSig;
+    if (a.length != 2 && a.length != 3)
+	throw "malformed sJWS: wrong number of '.' splitted elements";
+
+    uHeader = a[0];
+    uPayload = a[1];
+    if (a.length == 3) uSig = a[2]; 
+
+    result.headerObj = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(uHeader));
+    result.payloadObj = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(uPayload));
+
+    result.headerPP = JSON.stringify(result.headerObj, null, "  ");
+    if (result.payloadObj == null) {
+	result.payloadPP = b64utoutf8(uPayload);
+    } else {
+	result.payloadPP = JSON.stringify(result.payloadObj, null, "  ");
+    }
+
+    if (uSig !== undefined) {
+	result.sigHex = b64utohex(uSig);
+    }
+
+    return result;
+};
+
+/**
  * @name verifyJWT
  * @memberOf KJUR.jws.JWS
  * @function
@@ -668,7 +734,7 @@ KJUR.jws.JWS.jwsalg2sigalg = {
     "none":	"none",
 };
 
-// === utility static method ======================================================
+// === utility static method ==================================================
 
 /**
  * check whether a String "s" is a safe JSON string or not.<br/>
@@ -859,12 +925,33 @@ KJUR.jws.IntDate.get = function(s) {
  * @throws "unsupported format: s" when malformed format
  * @description
  * This method provides UNIX origin time from Zulu time.
+ * Following representations are supported:
+ * <ul>
+ * <li>YYYYMMDDHHmmSSZ - GeneralizedTime format</li>
+ * <li>YYMMDDHHmmSSZ - UTCTime format. If YY is greater or equal to 
+ * 50 then it represents 19YY otherwise 20YY.</li>
+ * </ul>
  * @example
  * KJUR.jws.IntDate.getZulu("20151012125959Z") => 1478...
+ * KJUR.jws.IntDate.getZulu("151012125959Z") => 1478...
  */
 KJUR.jws.IntDate.getZulu = function(s) {
-    if (a = s.match(/(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)Z/)) {
-	var year = parseInt(RegExp.$1);
+    var a;
+    if (a = s.match(/(\d+)(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)Z/)) {
+        var sYear = RegExp.$1;
+	var year = parseInt(sYear);
+	if (sYear.length == 4) {
+        } else if (sYear.length == 2) {
+	    if (50 <= year && year < 100) {
+		year = 1900 + year;
+	    } else if (0 <= year && year < 50) {
+		year = 2000 + year;
+	    } else {
+		throw "malformed year string for UTCTime";
+	    }
+	} else {
+	    throw "malformed year string";
+	}
 	var month = parseInt(RegExp.$2) - 1;
 	var day = parseInt(RegExp.$3);
 	var hour = parseInt(RegExp.$4);
