@@ -1,9 +1,20 @@
 
 ChangeLog for jsrsasign
 
-* Changes between 5.0.4 to next release
+* Changes between 5.0.4 to 5.0.5
   - node sample 'jwssign', 'jwtverify', 'asn1dump'
     and 'pemtobin'  added.
+  - base64x 1.1.5 to 1.1.6
+    - license URL small fix
+  - asn1 1.0.8 to 1.0.9
+    - DERGeneralizedTime withMillis fix
+    - DERGeneralizedTime and DERUTCTime refactoring
+  - jws 3.3.2 to 3.3.3
+    - JWS.parse method added
+    - IntDate.getZulu UTCTime(YY) support added
+  - jsrsasign-x.x.x-all-min.js move to lib directory from this version
+  - jsrsasign-{1.2,1.2.1,1.3,1.3.1,2.0.0}.tgz are removed
+    since they can get from github release/tags.
 
 * Changes between 5.0.2 to 5.0.4 (2015-Nov-23)
   - jwtverify, asn1dump and pemtobin sample Node script in 

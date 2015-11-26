@@ -701,13 +701,20 @@ This method provides UNIX origin time for current time
 					<div class="description">
 						get UNIX origin time from Zulu time representation string
 This method provides UNIX origin time from Zulu time.
+Following representations are supported:
+<ul>
+<li>YYYYMMDDHHmmSSZ - GeneralizedTime format</li>
+<li>YYMMDDHHmmSSZ - UTCTime format. If YY is greater or equal to 
+50 then it represents 19YY otherwise 20YY.</li>
+</ul>
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">KJUR.jws.IntDate.getZulu("20151012125959Z") => 1478...</pre>
+					<pre class="code">KJUR.jws.IntDate.getZulu("20151012125959Z") => 1478...
+KJUR.jws.IntDate.getZulu("151012125959Z") => 1478...</pre>
 					
 					
 					

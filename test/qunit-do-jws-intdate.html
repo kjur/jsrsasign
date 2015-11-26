@@ -9,7 +9,7 @@
 <script type="text/javascript" src="qunit.js"></script>
 
 <script language="JavaScript" type="text/javascript" src="../ext/json-sans-eval.js"></script>
-<script language="JavaScript" type="text/javascript" src="../jws-3.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../jws-3.3.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -40,22 +40,27 @@ test("60*60-3 < get('now + 1hour') - get('now') < 60*60+3", function() {
 });
 
 test("getZulu(20130828042500Z) = 1377663900", function() {
-  expect(1);
   equal(KJUR.jws.IntDate.getZulu('20130828042500Z'), 1377663900, "");
 });
 
-test("getZulu 19700101000000Z", function() {
-  expect(1);
+test("getZulu(130828042500Z) = 1377663900", function() {
+  equal(KJUR.jws.IntDate.getZulu('130828042500Z'), 1377663900, "");
+});
+
+
+test("getZulu(19700101000000Z)", function() {
   equal(KJUR.jws.IntDate.getZulu('19700101000000Z'), 0, "1");
 });
 
-test("getZulu 19700201000000Z", function() {
-  expect(1);
+test("getZulu(700101000000Z)", function() {
+  equal(KJUR.jws.IntDate.getZulu('700101000000Z'), 0, "1");
+});
+
+test("intDate2UTCString(getZulu(19700201000000Z))=Thu, 01 Jan 1970 00:00:00 GMT", function() {
   equal(KJUR.jws.IntDate.intDate2UTCString(KJUR.jws.IntDate.getZulu('19700101000000Z')), "Thu, 01 Jan 1970 00:00:00 GMT", "1");
 });
 
-test("intDate2Zulu(0)==19700201000000Z", function() {
-  expect(1);
+test("intDate2Zulu(0)==19700101000000Z", function() {
   equal(KJUR.jws.IntDate.intDate2Zulu(0), "19700101000000Z", "1");
 });
 
@@ -66,6 +71,7 @@ test("intDate2Zulu(0)==19700201000000Z", function() {
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
+<a href="index.html">TEST INDEX</a> | 
 <a href="qunit-do-jws-sign.html">sign/verify</a> | 
 <a href="qunit-do-jws-sign-slow.html">sign/verify slow</a> | 
 <a href="qunit-do-jws-intdate.html">IntDate</a> | 

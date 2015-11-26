@@ -1,4 +1,4 @@
-/*! asn1-1.0.8.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1-1.0.9.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.0.8 (2015-Sep-13)
+ * @version asn1 1.0.9 (2015-Nov-26)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1320,15 +1320,15 @@ KJUR.asn1.DERUTCTime = function(params) {
         return this.hV;
     };
 
-    if (typeof params != "undefined") {
-        if (typeof params['str'] != "undefined") {
-            this.setString(params['str']);
+    if (params !== undefined) {
+        if (params.str !== undefined) {
+            this.setString(params.str);
         } else if (typeof params == "string" && params.match(/^[0-9]{12}Z$/)) {
             this.setString(params);
-        } else if (typeof params['hex'] != "undefined") {
-            this.setStringHex(params['hex']);
-        } else if (typeof params['date'] != "undefined") {
-            this.setByDate(params['date']);
+        } else if (params.hex !== undefined) {
+            this.setStringHex(params.hex);
+        } else if (params.date !== undefined) {
+            this.setByDate(params.date);
         }
     }
 };
@@ -1381,7 +1381,7 @@ KJUR.asn1.DERGeneralizedTime = function(params) {
     };
 
     this.getFreshValueHex = function() {
-        if (typeof this.date == "undefined" && typeof this.s == "undefined") {
+        if (this.date === undefined && this.s === undefined) {
             this.date = new Date();
             this.s = this.formatDate(this.date, 'gen', this.withMillis);
             this.hV = stohex(this.s);
@@ -1389,16 +1389,17 @@ KJUR.asn1.DERGeneralizedTime = function(params) {
         return this.hV;
     };
 
-    if (typeof params != "undefined") {
-        if (typeof params['str'] != "undefined") {
-            this.setString(params['str']);
+    if (params !== undefined) {
+        if (params.str !== undefined) {
+            this.setString(params.str);
         } else if (typeof params == "string" && params.match(/^[0-9]{14}Z$/)) {
             this.setString(params);
-        } else if (typeof params['hex'] != "undefined") {
-            this.setStringHex(params['hex']);
-        } else if (typeof params['date'] != "undefined") {
-            this.setByDate(params['date']);
-        } else if (params.millis === true) {
+        } else if (params.hex !== undefined) {
+            this.setStringHex(params.hex);
+        } else if (params.date !== undefined) {
+            this.setByDate(params.date);
+        }
+        if (params.millis === true) {
             this.withMillis = true;
         }
     }
