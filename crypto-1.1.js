@@ -1,9 +1,9 @@
-/*! crypto-1.1.7.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! crypto-1.1.8.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
  *
- * Copyright (c) 2013-2015 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2016 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.1.7 (2015-Oct-11)
+ * @version 1.1.8 (2016-Feb-28)
  * @since jsrsasign 2.2
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -115,13 +115,13 @@ KJUR.crypto.Util = new function() {
      * @since crypto 1.1.2
      */
     this.CRYPTOJSMESSAGEDIGESTNAME = {
-	'md5':		'CryptoJS.algo.MD5',
-	'sha1':		'CryptoJS.algo.SHA1',
-	'sha224':	'CryptoJS.algo.SHA224',
-	'sha256':	'CryptoJS.algo.SHA256',
-	'sha384':	'CryptoJS.algo.SHA384',
-	'sha512':	'CryptoJS.algo.SHA512',
-	'ripemd160':	'CryptoJS.algo.RIPEMD160'
+	'md5':		CryptoJS.algo.MD5,
+	'sha1':		CryptoJS.algo.SHA1,
+	'sha224':	CryptoJS.algo.SHA224,
+	'sha256':	CryptoJS.algo.SHA256,
+	'sha384':	CryptoJS.algo.SHA384,
+	'sha512':	CryptoJS.algo.SHA512,
+	'ripemd160':	CryptoJS.algo.RIPEMD160
     };
 
     /**
@@ -340,7 +340,7 @@ KJUR.crypto.MessageDigest = function(params) {
 	if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(alg) != -1 &&
 	    prov == 'cryptojs') {
 	    try {
-		this.md = eval(KJUR.crypto.Util.CRYPTOJSMESSAGEDIGESTNAME[alg]).create();
+		this.md = KJUR.crypto.Util.CRYPTOJSMESSAGEDIGESTNAME[alg].create();
 	    } catch (ex) {
 		throw "setAlgAndProvider hash alg set fail alg=" + alg + "/" + ex;
 	    }
@@ -535,7 +535,7 @@ KJUR.crypto.Mac = function(params) {
 	if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(hashAlg) != -1 &&
 	    prov == 'cryptojs') {
 	    try {
-		var mdObj = eval(KJUR.crypto.Util.CRYPTOJSMESSAGEDIGESTNAME[hashAlg]);
+		var mdObj = KJUR.crypto.Util.CRYPTOJSMESSAGEDIGESTNAME[hashAlg];
 		this.mac = CryptoJS.algo.HMAC.create(mdObj, this.pass);
 	    } catch (ex) {
 		throw "setAlgAndProvider hash alg set fail hashAlg=" + hashAlg + "/" + ex;
