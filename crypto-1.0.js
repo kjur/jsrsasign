@@ -242,7 +242,7 @@ KJUR.crypto.MessageDigest = function(params) {
 	if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(alg) != -1 &&
 	    prov == 'cryptojs') {
 	    try {
-		this.md = eval(_CryptoJSMdName[alg]).create();
+		this.md = _CryptoJSMdName[alg].create();
 	    } catch (ex) {
 		throw "setAlgAndProvider hash alg set fail alg=" + alg + "/" + ex;
 	    }
