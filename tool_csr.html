@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="Online ASN.1 Dumper powered by jsrsasign" />
+<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+<title>Keypair and CSR generator demo (powered by jsrsasign)</title>
+<script language="JavaScript" type="text/javascript" src="./jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript">
+function _doIt() {
+  var f1 = document.form1;
+  var subject = f1.subject.value;
+  var sigalg = "SHA256withRSA";
+  var keyalg = "RSA";
+  var keylen = 2048;
+  var curve = "NIST P-256";
+
+  switch (f1.alginfo.value) {
+    case "SHA1withRSA2048":
+      sigalg = "SHA1withRSA";
+      break;
+    case "SHA256withECDSAP256":
+      sigalg = "SHA256withECDSA";
+      keyalg = "EC";
+      keylen = "secp256r1";
+      break;
+    case "SHA1withECDSAP256":
+      sigalg = "SHA1withECDSA";
+      keyalg = "EC";
+      keylen = "secp256r1";
+      break;
+    default: break;
+  } 
+
+  try {
+    var kp = KEYUTIL.generateKeypair(keyalg, keylen);
+    var pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
+      "subject": {"str": subject},
+      "sbjpubkey": kp.pubKeyObj,
+      "sigalg": sigalg,
+      "sbjprvkey": kp.prvKeyObj
+    });
+    f1.out_csr.value = pem;
+    f1.out_prv.value = KEYUTIL.getPEM(kp.prvKeyObj, "PKCS8PRV");
+    alert("Keypair and CSR successfully generated");
+  } catch (ex) {
+    alert("Failed: " + ex);
+  }
+}
+</script>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Keypair and CSR generator demo</h1>
+<h2 id="project_tagline">Generates a certificate signing request(CSR) to issue your certificate by pure JavaScript on the browser.</h2>
+</header>
+</div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<!-- now editing -->
+<form name="form1">
+
+<h4>(Step1) Fill required data to generate CSR.</h4>
+
+<b>Subject Name: </b>
+<input type="text" name="subject" size="60" value="/C=US/O=Test/CN=example.com"/><br/>
+<b>Key and Signature Algorithm Name: </b>
+<select name="alginfo" onChange="_setSample()">
+<option value="SHA256withRSA2048">RSA 2048bit keypair and SHA256withRSA signed CSR
+<option value="SHA1withRSA2048">RSA 2048bit keypair and SHA1withRSA signed CSR
+<option value="SHA256withECDSAP256">ECC P-256 keypair and SHA256withECDSA signed CSR
+<option value="SHA1withECDSAP256">ECC P-256 keypair and SHA1withECDSA signed CSR
+</select>
+<br/>
+
+<input type="button" value="Generate your keypair and CSR" onClick="_doIt();"/><br/>
+
+<hr>
+<h2>(Step 2) Confirm resulted Private Key and CSR</h2>
+
+<b>(self signed)Certificate Signing Request (CSR/PKCS#11): </b><br/>
+<textarea name="out_csr" cols="82" rows="5"></textarea>
+<br/>
+<b>PKCS#8 plain PRIVATE KEY</b><br/>
+<textarea name="out_prv" cols="82" rows="5"></textarea>
+<br/>
+
+</form>
+<h4>NOTE</h4>
+<p>
+This tool is demonstration for jsrsasign and can be used for testing purpose only.
+Since PRNG is poor and it may generate weak key pair.
+CSR can be verify its self-signed signature by following OpenSSL command:
+<blockquote>
+% openssl req -in sample.csr -noout -text <font color="deeppink">-verify</font>
+</blockquote>
+</p>
+
+
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">This demo is powered by by <a href="https://kjur.github.io/jsrsasign/">jsrsasign</a>.</p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2015 Kenji Urushima <a href="https://twitter.com/kjur">@kjur</a>. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>
