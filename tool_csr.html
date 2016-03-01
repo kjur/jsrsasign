@@ -37,7 +37,7 @@ function _doIt() {
   try {
     var kp = KEYUTIL.generateKeypair(keyalg, keylen);
     var pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
-      "subject": subject,
+      "subject": {"str": subject},
       "sbjpubkey": kp.pubKeyObj,
       "sigalg": sigalg,
       "sbjprvkey": kp.prvKeyObj
