@@ -6,6 +6,7 @@ ChangeLog for jsrsasign
   - jsrsasign-latest-all-min wrong order in concatination.
     This raise wrong PKCS#5/8 encrypted PEM private key 
     generation in KEYUTIL.getPEM().
+  - sample_node/asn1extract added
 
 * Changes between 5.0.5 to 5.0.6 (2016-Feb-28)
   - bower.json name space fix
