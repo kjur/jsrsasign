@@ -10,6 +10,20 @@
 <script src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
 <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="screen"/>
 
+<!-- jsrsasign keyutil external codes -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/cipher-core.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/aes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/tripledes.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+<!-- for PKCS5 PBKDF2 -->
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/hmac.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/pbkdf2.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha512.js"></script>
+
 <script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/prng4.js"></script>
@@ -24,20 +38,6 @@
 
 <script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
 <script language="JavaScript" type="text/javascript" src="../asn1-1.0.js"></script>
-
-<!-- jsrsasign keyutil external codes -->
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/cipher-core.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/aes.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/tripledes.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
-<!-- for PKCS5 PBKDF2 -->
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/hmac.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/pbkdf2.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha512.js"></script>
 
 <script src="../crypto-1.1.js"></script>
 <script src="../keyutil-1.0.js"></script>
@@ -105,12 +105,15 @@ var dsa = new KJUR.crypto.DSA();
 equal(dsa.verify("SHA1", s1, s2, "aaa", p, q, g, y), true, "aaa SHA1");
 });
 
+/*
+// This works only on FF. Fail on Chrome.
 test("variable assignment test1", function() {
 var [a, b] = [3, 5];
 expect(2);
 equal(a, 3, "a 3");
 equal(b, 5, "b 5");
 });
+ */
 
 test("parse signature", function() {
   var s = "302c02146e41015afd8597894f42f466dde2190ebba6f15e0214787f9380a3a33011c88bf877df7ac3b8a62b854c";
