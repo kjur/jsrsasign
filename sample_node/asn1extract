@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+
+/*
+ * asn1extract - extract data at any position from ASN.1 structured data
+ *
+ * Copyright (c) 2015 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * http://kjur.github.com/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+var path = require('path');
+
+program
+  .version('1.0.0 (2015-Nov-26)')
+  .description('verify JWT/jWS file or string')
+  .usage('[options] <new extracted file> <ASN.1 DER file> <pos1...>')
+  .option('-a, --alltlv', 'extract whole ASN.1 TLV structure ')
+  .option('-v, --vonly', 'extract ASN.1 V value only')
+  .parse(process.argv);
+
+if (program.args.length < 3)
+  throw "wrong number of arguments";
+
+var outFile = program.args[0];
+var inFile = program.args[1];
+
+var hex;
+try {
+  hex = rs.readFileHexByBin(inFile);
+} catch(ex) {
+  throw "can't read file: " + inFile;
+}
+
+var idxList = program.args.slice(2);
+//console.log("idxList = %j", idxList);
+var parseInt10 = function(i) {return parseInt(i, 10);};
+var idxList2 = idxList.map(parseInt10);
+//console.log("idxList2 = %j", idxList2);
+
+var idx = rs.ASN1HEX.getDecendantIndexByNthList(hex, 0, idxList2);
+console.log("idx = %j", idx);
+var hExtract = rs.ASN1HEX.getHexOfTLV_AtObj(hex, idx);
+console.log(hExtract);
+console.log(rs.ASN1HEX.dump(hExtract));
+
+
+

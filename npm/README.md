@@ -73,4 +73,8 @@ Sign string 'aaa' with the loaded private key:
     > sigVal
     'd764dcacb...'
 
+MORE TUTORIALS AND SAMPLES
+--------------------
+- [Tutorials in GitHub Wiki](https://github.com/kjur/jsrsasign/wiki)
+- [Sample Node Scripts](https://github.com/kjur/jsrsasign/tree/master/sample_node)
 
