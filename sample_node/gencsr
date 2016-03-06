@@ -12,6 +12,22 @@
  * included in all copies or substantial portions of the Software.
  * 
  * Please use '-h' option for this script usage.
+ * ---------------------------------------------------------
+ * DESCRIPTION
+ *   This script generates RSA and EC public key pair and
+ *   CSR(Certificate Signing Request), then save them as:
+ *   - PKCS#8 PEM public key file
+ *   - PKCS#8 PEM encrypted private key file
+ *   - PEM CSR file
+ *
+ * USAGE
+ *   Genearte yyy.{pub,prv,csr} by default 
+ *   (RSA 2048 with password "passwd" and CSR for /C=US/O=TEST)
+ *   % gencsr yyy
+ *   RSA 1024 with password "secret" and CSR for /C=US/O=T1/CN=mydomain.com
+ *   % gencsr -s 1024 -p secret -d /C=US/O=T1/CN=mydomain.com yyy
+ *   EC curve secp256k1
+ *   % gencsr -a EC -c secp256k1 yyy
  */
 
 var program = require('commander');
@@ -19,7 +35,7 @@ var rs = require('jsrsasign');
 var path = require('path');
 
 program
-  .version('1.0.0 (2016-Mar-06)')
+  .version('1.0.1 (2016-Mar-07)')
   .description('generate keypair and CSR, then save them to FILEHEAD.{pub,prv,csr}')
   .usage('[options] [file head]')
   .option('-a, --keyalg <RSA|EC>', 'public key algorithm. default=RSA', "RSA")
