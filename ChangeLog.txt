@@ -1,6 +1,10 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 5.0.7 to next version
+  - LICENSE.txt small update for years of copyright.
+  - ext/x64-core*.js was missed and added
+
 * Changes between 5.0.6 to 5.0.7 (2016-Mar-05)
   - tool_csr.html fix for subject parameter.
   - jsrsasign-latest-all-min wrong order in concatination.
