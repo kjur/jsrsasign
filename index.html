@@ -96,80 +96,6 @@ NOTICE: Release 4.10.0 was declined because of semver violation.
 <dd><a href="https://github.com/kjur/jsrsasign/releases/tag/4.9.0">Release 4.9.0</a> is now available.
 <a href="api/symbols/KJUR.asn1.csr.html#.dump">Certificate signing request (CSR/PKCS#10) support</a> is added.
 
-<dt><b>2015-Jun-11</b>:
-<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/4.8.3">Release 4.8.3</a> is now available.
-<a href="api/symbols/ASN1HEX.html#.dump">ASN1HEX.dump() ASN.1 dump functionality</a> is added.
-<a href="tool_asn1dumper.html">ASN.1 dump tool is also available.</a>
-
-<dt><b>2015-Jun-06</b>:
-<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/4.8.2">Release 4.8.2</a> is now available.
-Small fix in 
-<a href="https://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> and
-<a href="https://www.npmjs.com/package/jsrsasign">npm jsrsasign</a> officially released.  
-
-<dt><b>2015-Jun-03</b>:
-<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/4.8.1">Release 4.8.1</a> is now available. 
-<a href="https://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey method</a>
-now supports RFC 7517 JSON Web Key(JWK) loading for RSA/ECC private/public key.
-
-<dt><b>2015-Jun-01</b>:
-<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/4.8.0">Release 4.8.0</a> is now available. Now <a href="http://kjur.github.io/jsjws">jsjws</a> is
-marged into jsrsasign and is a part of jsrsasign.
-<a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.jws.JWS.html#.verifyJWT">Full JSON Web Token(JWT) validation functionality</a> and <a href="https://kjur.github.io/jsrsasign/tool_jwtveri.html">its demo</a> is added. Bower support is also available.
-
-<dt><b>2015-May-22</b>:
-<dd>Release 4.7.2 is now available. Parsing X.509v3 extension methods added in X509 class.
-
-<dt><b>2015-May-14</b>: 
-<dd>Release 4.7.1 is now available. This is a small update. Please see ChangeLog.
-
-<dt><b>2014-Jun-08</b>: 
-<dd><a href="https://github.com/kjur/jsrsasign/archive/4.7.0.tar.gz">Release 4.7.0</a> is now available.
-<ul>
-<li>RFC 5126 CAdES Long Term Signature support</li>
-<li>Demo for CAdES BES/EPES/T is <a href="tool_cades.html">here</a>.
-</ul>
-
-<dt><b>2014-May-26</b>: 
-<dd><a href="https://github.com/kjur/jsrsasign/archive/4.6.0.tar.gz">Release 4.6.0</a> is now available.
-<ul>
-<li>RFC 3161 Time Stamp support</li>
-<li>Demo for time stamp <a href="tool_tsreq.html">request</a>
-and <a href="tool_tsres.html">response</a> are available.</li>
-</ul>
-
-<dt><b>2014-May-18</b>: 
-<dd>Release 4.5.0 is now available.
-<ul>
-<li>RFC 5652 CMS SignedData generation</li>
-<li>simple CMS SignedData generator <a href="tool_cmssign.html">tool</a></li>
-</ul>
-
-<dd>
-<dt><b>2014-Apr-19</b>: 
-<dd>Release 4.2.2 is now available.
-<ul>
-<li>PKCS#10 CSR(certificate signing request) support in keyutil.js</li>
-<li>AuthorityKeyIdentifier v3 extension support in asn1x509.js</li>
-<li>Fake certificate converter <a href="tool_forfact.html">tool</a> from CSR for <a href="https://factorable.net/keycheck.html">factorable.net key check</a></li>
-</ul>
-
-<dt><b>2013-Oct-12</b>: 
-<dd>Release 4.2.1 is now available.
-<ul>
-<li>Add generic PEM private/public key exporting method <a href="http://kjur.github.io/jsrsasign/api/symbols/KEYUTIL#.getPEM">KEYUTIL.getPEM</a> and it provides support to export to PEM PKCS#8 encrypted private key.</li>
-</ul>
-
-<dt><b>2013-Oct-07</b>: 
-<dd>Node.js <a href="https://npmjs.org/package/jsrsasign" target="_blank">npm module of jsrsasign</a> is now registered in the repository. It also includes <a href="http://kjur.github.io/jsjws/">'jsjws'</a>.
-
-<dt><b>2013-Oct-06</b>: 
-<dd>Release 4.2.0 is now available.
-<ul>
-<li>DSA/ECDSA algorithms is now supported most of class and methods like Signature, KEYUTIL, KJUR.asn1.x509 DSA</li>
-<li><a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.X509Util.html#.newCertPEM">KJUR.asn1.x509.X509Util.newCertPEM</a> method to provide easy issuance of a certificate by JSON data.</li>
-</ul>
-
 </dl>
 Old news is <a href="index_oldnews.html">here</a>.
 
@@ -206,49 +132,7 @@ or a <a href="https://github.com/kjur/jsrsasign/releases/">previous releases</a>
 </li>
 </ul>
 <a href="http://github.com/kjur/jsrsasign/blob/master/ChangeLog.txt">See 'ChangeLog.txt' in detail.</a>
-
-<h3>SOURCE CODES</h3>
-<p>
-The 'jsrsasign' library contains following source codes. 
-<ul>
-<li><b><a href="asn1-1.0.js">asn1.js</a></b> - ASN.1 DER primitive encoder class.
-<a href="asn1-1.0.min.js">(mini)</a>
-</li>
-<li><b><a href="asn1x509-1.0.js">asn1x509.js</a></b> - ASN.1 structured for X.509 certificate.
-<a href="asn1x509-1.0.min.js">(mini)</a>
-</li>
-<li><b><a href="crypto-1.1.js">crypto.js</a></b> - MessageDigest and Signature class like Java JCE.
-<a href="crypto-1.1.min.js">(mini)</a>
-</li>
-<li><b><a href="pkcs5pkey-1.0.js">pkcs5pkey.js</a></b> - encrypted PKCS#5 private key reader.
-<a href="pkcs5pkey-1.0.min.js">(mini)</a>
-</li>
-<li><b><a href="rsasign-1.2.js">rsasign.js</a></b> - RSAKey class extension for RSA signing and verification.
-<a href="rsasign-1.2.min.js">(mini)</a>
-</li>
-<li><b><a href="x509-1.1.js">x509.js</a></b> - X509 class to read subject public key from a PEM formatted X.509 certificate.
-<a href="x509-1.1.min.js">(mini)</a>
-</li>
-<li><b><a href="rsapem-1.1.js">rsapem.js</a></b> - RSAKey class extension to read PKCS#1 RSA private key PEM file
-<a href="rsapem-1.1.min.js">(mini)</a>
-</li>
-<li><b><a href="asn1hex-1.1.js">asn1hex.js</a></b> - simple ASN.1 parser to read hexadecimal encoded ASN.1 DER
-<a href="asn1hex-1.1.min.js">(mini)</a>
-</li>
-
-
-<li><b><a href="ecdsa-modified-1.0.js">ecdsa-modified.js</a></b> - modified version of BitcoinJS ECDSA codes
-<a href="ecdsa-modified-1.0.min.js">(mini)</a>
-</li>
-
-<li><b><a href="ecparam-1.0.js">ecparam.js</a></b> - ECC parameters
-<a href="ecparam-1.0.min.js">(mini)</a>
-</li>
-
-
 </ul>
-As for github repository, see <a href="https://github.com/kjur/jsrsasign">https://github.com/kjur/jsrsasign</a>.
-</p>
 
 <h3><a href="api/">API DOCUMENT</a></h3>
 The 'jsrsasign'(RSA-Sign JavaScript Library) JavaScript API
@@ -275,11 +159,6 @@ almost no restrictions.
 
 You can see the list of QUnit unit tests <a href="test/index.html">here</a> 
 and I hope they help you understand 'jsrsasign' library and APIs.
-
-<h3>MY RELATED PROJECT</h3>
-<ul>
-<li><a href="http://kjur.github.com/jsjws/">jsjws - JSON Web Signature(JWS) JavaScript Library</a>
-</ul>
 
 <!-- **************************************************************************** -->
 <a name="projects"></a>
