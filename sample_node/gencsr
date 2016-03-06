@@ -1,0 +1,73 @@
+#!/usr/bin/env node
+
+/*
+ * gencsr - generate keypair and CSR, then save them to files.
+ *
+ * Copyright (c) 2016 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * http://kjur.github.com/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+var path = require('path');
+
+program
+  .version('1.0.0 (2016-Mar-06)')
+  .description('generate keypair and CSR, then save them to FILEHEAD.{pub,prv,csr}')
+  .usage('[options] [file head]')
+  .option('-a, --keyalg <RSA|EC>', 'public key algorithm. default=RSA', "RSA")
+  .option('-s, --size <key size>', 'RSA key size. default=2048', "2048")
+  .option('-c, --curve <curve name>', 'EC curve name. default=secp256r1', 'secp256r1')
+  .option('-d, --dn <DN name>', 'subject DN for CSR. default=/C=US/O=TEST', '/C=US/O=TEST')
+  .option('-p, --pass <password>', 'password for PKCS#8 private key. default=passwd', 'passwd')
+  .parse(process.argv);
+
+//console.log("program.args.length=" + program.args.length);
+
+if (program.args.length !== 1)
+  throw "wrong number of args"
+
+var head = program.args[0];
+var dn = program.dn;
+var keyalg = program.keyalg;
+var keyopt, sigalg;
+if (program.keyalg === "RSA") {
+   keyopt = parseInt(program.size);
+   sigalg = "SHA256withRSA";
+} else {
+   keyopt = program.curve;
+   sigalg = "SHA256withECDSA";
+}
+var pass = program.pass;
+
+var pubFile = head + ".pub";
+var prvFile = head + ".prv";
+var csrFile = head + ".csr";
+
+console.log("generating keypair...");
+var kp = rs.KEYUTIL.generateKeypair(keyalg, keyopt);
+console.log("done.");
+var prvKey = kp.prvKeyObj;
+var pubKey = kp.pubKeyObj;
+
+var csr = rs.asn1.csr.CSRUtil.newCSRPEM({
+    subject: {str: dn},
+    sbjpubkey: pubKey,
+    sigalg: sigalg,
+    sbjprvkey: prvKey
+});
+
+rs.saveFile(pubFile, rs.KEYUTIL.getPEM(pubKey));
+rs.saveFile(prvFile, rs.KEYUTIL.getPEM(prvKey, "PKCS8PRV", pass));
+rs.saveFile(csrFile, csr);
+console.log("all save done.");
+
+
+
