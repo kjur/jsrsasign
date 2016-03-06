@@ -20,7 +20,7 @@ var path = require('path');
 
 program
   .version('1.0.0 (2015-Nov-26)')
-  .description('verify JWT/jWS file or string')
+  .description('extract arbitrary part of ASN.1 DER data by a list of position')
   .usage('[options] <new extracted file> <ASN.1 DER file> <pos1...>')
   .option('-a, --alltlv', 'extract whole ASN.1 TLV structure ')
   .option('-v, --vonly', 'extract ASN.1 V value only')
