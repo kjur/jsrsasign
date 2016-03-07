@@ -1425,39 +1425,34 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	ec.setPrivateKeyHex(hPrv);
 	return ec;
     }
-    
-    // 4. by PEM certificate (-----BEGIN ... CERTIFITE----)
+
+    // 4. by PEM certificate (-----BEGIN ... CERTIFICATE----)
     if (param.indexOf("-END CERTIFICATE-", 0) != -1 ||
         param.indexOf("-END X509 CERTIFICATE-", 0) != -1 ||
         param.indexOf("-END TRUSTED CERTIFICATE-", 0) != -1) {
         return X509.getPublicKeyFromCertPEM(param);
     }
 
-    // 4. public key by PKCS#8 hexadecimal string
+    // 5. public key by PKCS#8 hexadecimal string
     if (hextype === "pkcs8pub") {
         return KEYUTIL.getKeyFromPublicPKCS8Hex(param);
     }
 
-    // 5. public key by PKCS#8 PEM string
+    // 6. public key by PKCS#8 PEM string
     if (param.indexOf("-END PUBLIC KEY-") != -1) {
         return KEYUTIL.getKeyFromPublicPKCS8PEM(param);
     }
-    
-    // 6. private key by PKCS#5 plain hexadecimal RSA string
+
+    // 7. private key by PKCS#5 plain hexadecimal RSA string
     if (hextype === "pkcs5prv") {
         var key = new RSAKey();
         key.readPrivateKeyFromASN1HexString(param);
         return key;
     }
 
-    // 7. private key by plain PKCS#5 hexadecimal RSA string
-    if (hextype === "pkcs5prv") {
-        var key = new RSAKey();
-        key.readPrivateKeyFromASN1HexString(param);
-        return key;
-    }
+    // 8. private key by plain PKCS#5 PEM string
 
-    // 8. private key by plain PKCS#5 PEM RSA string 
+    // 8.1. private key by plain PKCS#5 PEM RSA string
     //    getKey("-----BEGIN RSA PRIVATE KEY-...")
     if (param.indexOf("-END RSA PRIVATE KEY-") != -1 &&
         param.indexOf("4,ENCRYPTED") == -1) {
@@ -1484,12 +1479,14 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
         return key;
     }
 
-    // 9. private key by plain PKCS#8 PEM ECC/RSA string
+    // 9. private key by plain PKCS#8 PEM ECC/RSA/DSA string
     if (param.indexOf("-END PRIVATE KEY-") != -1) {
         return KEYUTIL.getKeyFromPlainPrivatePKCS8PEM(param);
     }
 
-    // 10. private key by encrypted PKCS#5 PEM RSA string
+    // 10. private key by encrypted PKCS#5 PEM string
+
+    // 10.1. private key by encrypted PKCS#5 PEM RSA string
     if (param.indexOf("-END RSA PRIVATE KEY-") != -1 &&
         param.indexOf("4,ENCRYPTED") != -1) {
         return KEYUTIL.getRSAKeyFromEncryptedPKCS5PEM(param, passcode);
