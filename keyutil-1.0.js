@@ -1479,7 +1479,14 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
         return key;
     }
 
-    // 9. private key by plain PKCS#8 PEM ECC/RSA/DSA string
+    // 9. private key by plain PKCS#8
+
+    // 9.1. hex ECC/RSA/DSA string
+    if (hextype === "pkcs8prv") {
+        return KEYUTIL.getKeyFromPlainPrivatePKCS8Hex(param);
+    }
+
+    // 9.2. PEM ECC/RSA/DSA string
     if (param.indexOf("-END PRIVATE KEY-") != -1) {
         return KEYUTIL.getKeyFromPlainPrivatePKCS8PEM(param);
     }
