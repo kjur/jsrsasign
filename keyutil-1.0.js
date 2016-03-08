@@ -1504,6 +1504,14 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
                        new BigInteger(x, 16));
         return key;
     }
+    
+    // 8.3. private key by plain PKCS#5 PEM EC string
+    if (param.indexOf("-END EC PRIVATE KEY-") != -1 &&
+        param.indexOf("4,ENCRYPTED") == -1) {
+
+        var hKey = this.getHexFromPEM(param, "EC PRIVATE KEY");
+        return _getECCPrivateKeyFromPlainPKCS5Hex(hKey);
+    }
 
     // 9. private key by plain PKCS#8
 
