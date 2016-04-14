@@ -1,9 +1,9 @@
-/*! x509-1.1.6.js (c) 2012-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! x509-1.1.7.js (c) 2012-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /* 
  * x509.js - X509 class to read subject public key from certificate.
  *
- * Copyright (c) 2010-2015 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2016 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version x509 1.1.6 (2015-May-20)
+ * @version x509 1.1.7 (2016-Apr-13)
  * @since jsrsasign 1.x.x
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -29,15 +29,54 @@
  */
 
 /**
- * X.509 certificate class.<br/>
- * @class X.509 certificate class
+ * hexadecimal X.509 certificate ASN.1 parser class.<br/>
+ * @class hexadecimal X.509 certificate ASN.1 parser class
  * @property {RSAKey} subjectPublicKeyRSA Tom Wu's RSAKey object
  * @property {String} subjectPublicKeyRSA_hN hexadecimal string for modulus of RSA public key
  * @property {String} subjectPublicKeyRSA_hE hexadecimal string for public exponent of RSA public key
  * @property {String} hex hexacedimal string for X.509 certificate.
  * @author Kenji Urushima
  * @version 1.0.1 (08 May 2012)
- * @see <a href="http://kjur.github.com/jsrsasigns/">'jwrsasign'(RSA Sign JavaScript Library) home page http://kjur.github.com/jsrsasign/</a>
+ * @see <a href="http://kjur.github.com/jsrsasigns/">'jsrsasign'(RSA Sign JavaScript Library) home page http://kjur.github.com/jsrsasign/</a>
+ * @description
+ * X509 class provides following functionality:
+ * <ul>
+ * <li>parse X.509 certificate ASN.1 structure</li>
+ * <li>get basic fields, extensions, signature algorithms and signature values</li>
+ * <li>read PEM certificate</li>
+ * </ul>
+ * 
+ * <ul>
+ * <li><b>TO GET FIELDS</b>
+ *   <ul>
+ *   <li>serial - {@link X509#getSerialNumberHex}</li>
+ *   <li>issuer - {@link X509#getIssuerHex}</li>
+ *   <li>issuer - {@link X509#getIssuerString}</li>
+ *   <li>notBefore - {@link X509#getNotBefore}</li>
+ *   <li>notAfter - {@link X509#getNotAfter}</li>
+ *   <li>subject - {@link X509#getSubjectHex}</li>
+ *   <li>subject - {@link X509#getSubjectString}</li>
+ *   <li>subjectPublicKeyInfo - {@link X509.getSubjectPublicKeyPosFromCertHex}</li>
+ *   <li>subjectPublicKeyInfo - {@link X509.getSubjectPublicKeyInfoPosFromCertHex}</li>
+ *   <li>subjectPublicKeyInfo - {@link X509.getPublicKeyFromCertPEM}</li>
+ *   <li>signature algorithm - {@link X509.getSignatureAlgorithmName}</li>
+ *   <li>signature value - {@link X509.getSignatureValueHex}</li>
+ *   </ul>
+ * </li>
+ * <li><b>TO GET EXTENSIONS</b>
+ *   <ul>
+ *   <li>basicConstraints - {@link X509.getExtBasicConstraints}</li>
+ *   <li>keyUsage - {@link X509.getExtKeyUsageBin}</li>
+ *   <li>keyUsage - {@link X509.getExtKeyUsageString}</li>
+ *   <li>authorityInfoAccess - {@link X509.getExtAIAInfo}</li>
+ *   </ul>
+ * </li>
+ * <li><b>UTILITIES</b>
+ *   <ul>
+ *   <li>reading PEM certificate - {@link X509#readCertPEM}</li>
+ *   </ul>
+ * </li>
+ * </ul>
  */
 function X509() {
     this.subjectPublicKeyRSA = null;
@@ -52,6 +91,11 @@ function X509() {
      * @name getSerialNumberHex
      * @memberOf X509#
      * @function
+     * @return {String} hexadecimal string of certificate serial number
+     * @example
+     * var x = new X509();
+     * x.readCertPEM(sCertPEM);
+     * var sn = x.getSerialNumberHex(); // return string like "01ad..."
      */
     this.getSerialNumberHex = function() {
         return ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 1]);
@@ -62,6 +106,11 @@ function X509() {
      * @name getIssuerHex
      * @memberOf X509#
      * @function
+     * @return {String} hexadecial string of issuer DN ASN.1
+     * @example
+     * var x = new X509();
+     * x.readCertPEM(sCertPEM);
+     * var issuer = x.getIssuerHex(); // return string like "3013..."
      */
     this.getIssuerHex = function() {
         return ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 3]);
@@ -72,6 +121,11 @@ function X509() {
      * @name getIssuerString
      * @memberOf X509#
      * @function
+     * @return {String} issuer DN string
+     * @example
+     * var x = new X509();
+     * x.readCertPEM(sCertPEM);
+     * var issuer = x.getIssuerString(); // return string like "/C=US/O=TEST"
      */
     this.getIssuerString = function() {
         return X509.hex2dn(ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 3]));
@@ -82,6 +136,11 @@ function X509() {
      * @name getSubjectHex
      * @memberOf X509#
      * @function
+     * @return {String} hexadecial string of subject DN ASN.1
+     * @example
+     * var x = new X509();
+     * x.readCertPEM(sCertPEM);
+     * var subject = x.getSubjectHex(); // return string like "3013..."
      */
     this.getSubjectHex = function() {
         return ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 5]);
@@ -92,6 +151,11 @@ function X509() {
      * @name getSubjectString
      * @memberOf X509#
      * @function
+     * @return {String} subject DN string
+     * @example
+     * var x = new X509();
+     * x.readCertPEM(sCertPEM);
+     * var subject = x.getSubjectString(); // return string like "/C=US/O=TEST"
      */
     this.getSubjectString = function() {
         return X509.hex2dn(ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 5]));
@@ -102,6 +166,11 @@ function X509() {
      * @name getNotBefore
      * @memberOf X509#
      * @function
+     * @return {String} not before time value (ex. "151231235959Z")
+     * @example
+     * var x = new X509();
+     * x.readCertPEM(sCertPEM);
+     * var notBefore = x.getNotBefore(); // return string like "151231235959Z"
      */
     this.getNotBefore = function() {
         var s = ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 4, 0]);
@@ -115,6 +184,11 @@ function X509() {
      * @name getNotAfter
      * @memberOf X509#
      * @function
+     * @return {String} not after time value (ex. "151231235959Z")
+     * @example
+     * var x = new X509();
+     * x.readCertPEM(sCertPEM);
+     * var notAfter = x.getNotAfter(); // return string like "151231235959Z"
      */
     this.getNotAfter = function() {
         var s = ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 4, 1]);
@@ -132,6 +206,9 @@ function X509() {
      * @memberOf X509#
      * @function
      * @param {String} sCertPEM string for PEM formatted X.509 certificate
+     * @example
+     * x = new X509();
+     * x.readCertPEM(sCertPEM); // read certificate
      */
     this.readCertPEM = function(sCertPEM) {
         var hCert = X509.pemToHex(sCertPEM);
@@ -518,13 +595,14 @@ X509.getV3ExtItemInfo_AtObj = function(hCert, pos) {
  * @description
  * This method will get X.509v3 extension value of ASN.1 TLV
  * which is specifyed by extension name or oid. 
+ * If there is no such extension in the certificate, it returns null.
  * @example
  * hExtValue = X509.getHexOfTLV_V3ExtValue(hCert, "keyUsage");
  * // hExtValue will be such like '030205a0'.
  */
 X509.getHexOfTLV_V3ExtValue = function(hCert, oidOrName) {
     var pos = X509.getPosOfTLV_V3ExtValue(hCert, oidOrName);
-    if (pos == -1) return '';
+    if (pos == -1) return null;
     return ASN1HEX.getHexOfTLV_AtObj(hCert, pos);
 };
 
@@ -540,8 +618,7 @@ X509.getHexOfTLV_V3ExtValue = function(hCert, oidOrName) {
  * @description
  * This method will get X.509v3 extension value of ASN.1 value
  * which is specifyed by extension name or oid. 
- * If there is no such extension in the certificate,
- * it returns empty string (i.e. '').
+ * If there is no such extension in the certificate, it returns null.
  * Available extension names and oids are defined
  * in the {@link KJUR.asn1.x509.OID} class.
  * @example
@@ -550,7 +627,7 @@ X509.getHexOfTLV_V3ExtValue = function(hCert, oidOrName) {
  */
 X509.getHexOfV_V3ExtValue = function(hCert, oidOrName) {
     var pos = X509.getPosOfTLV_V3ExtValue(hCert, oidOrName);
-    if (pos == -1) return '';
+    if (pos == -1) return null;
     return ASN1HEX.getHexOfV_AtObj(hCert, pos);
 };
 
@@ -567,7 +644,7 @@ X509.getHexOfV_V3ExtValue = function(hCert, oidOrName) {
  * This method will get X.509v3 extension value of ASN.1 V(value)
  * which is specifyed by extension name or oid. 
  * If there is no such extension in the certificate,
- * it returns empty string (i.e. '').
+ * it returns -1.
  * Available extension names and oids are defined
  * in the {@link KJUR.asn1.x509.OID} class.
  * @example
@@ -585,6 +662,47 @@ X509.getPosOfTLV_V3ExtValue = function(hCert, oidOrName) {
 	if (info.oid == oid) return info.posV;
     }
     return -1;
+};
+
+/* ======================================================================
+ *   Specific V3 Extensions
+ * ====================================================================== */
+
+/**
+ * get BasicConstraints extension value as object in the certificate
+ * @name getExtBasicConstraints
+ * @memberOf X509
+ * @function
+ * @param {String} hCert hexadecimal string of X.509 certificate binary
+ * @return {Object} associative array which may have "cA" and "pathLen" parameters
+ * @since x509 1.1.7
+ * @description
+ * This method will get basic constraints extension value as object with following paramters.
+ * <ul>
+ * <li>cA - CA flag whether CA or not</li>
+ * <li>pathLen - maximum intermediate certificate length</li>
+ * </ul>
+ * There are use cases for return values:
+ * <ul>
+ * <li>{cA:true, pathLen:3} - cA flag is true and pathLen is 3</li>
+ * <li>{cA:true} - cA flag is true and no pathLen</li>
+ * <li>{} - basic constraints has no value in case of end entity certificate</li>
+ * <li>null - there is no basic constraints extension</li>
+ * </ul>
+ * @example
+ * obj = X509.getExtBasicConstraints(hCert);
+ */
+X509.getExtBasicConstraints = function(hCert) {
+    var hBC = X509.getHexOfV_V3ExtValue(hCert, "basicConstraints");
+    if (hBC === null) return null;
+    if (hBC === '') return {};
+    if (hBC === '0101ff') return { "cA": true };
+    if (hBC.substr(0, 8) === '0101ff02') {
+	var pathLexHex = ASN1HEX.getHexOfV_AtObj(hBC, 6);
+	var pathLen = parseInt(pathLexHex, 16);
+	return { "cA": true, "pathLen": pathLen };
+    }
+    throw "unknown error";
 };
 
 X509.KEYUSAGE_NAME = [
@@ -708,6 +826,50 @@ X509.getExtAIAInfo = function(hCert) {
 	}
     }
     return result;
+};
+
+/**
+ * get signature algorithm name from hexadecimal certificate data
+ * @name getSignatureAlgorithmName
+ * @memberOf X509
+ * @function
+ * @param {String} hCert hexadecimal string of X.509 certificate binary
+ * @return {String} signature algorithm name (ex. SHA1withRSA, SHA256withECDSA)
+ * @since x509 1.1.7
+ * @description
+ * This method will get signature algorithm name of certificate:
+ * @example
+ * algName = X509.getSignatureAlgorithmName(hCert);
+ */
+X509.getSignatureAlgorithmName = function(hCert) {
+    var sigAlgOidHex = ASN1HEX.getDecendantHexVByNthList(hCert, 0, [1, 0]);
+    var sigAlgOidInt = KJUR.asn1.ASN1Util.oidHexToInt(sigAlgOidHex);
+    var sigAlgName = KJUR.asn1.x509.OID.oid2name(sigAlgOidInt);
+    return sigAlgName;
+};
+
+/**
+ * get signature value in hexadecimal string
+ * @name getSignatureValueHex
+ * @memberOf X509
+ * @function
+ * @param {String} hCert hexadecimal string of X.509 certificate binary
+ * @return {String} signature value hexadecimal string without BitString unused bits
+ * @since x509 1.1.7
+ * @description
+ * This method will get signature value of certificate:
+ * @example
+ * sigHex = X509.getSignatureValueHex(hCert);
+ */
+X509.getSignatureValueHex = function(hCert) {
+    var h = ASN1HEX.getDecendantHexVByNthList(hCert, 0, [2]);
+    if (h.substr(0, 2) !== "00")
+	throw "can't get signature value";
+    return h.substr(2);
+};
+
+X509.getSerialNumberHex = function(hCert) {
+    return ASN1HEX.getDecendantHexVByNthList(hCert, 0, [0, 1]);
 };
 
 /*

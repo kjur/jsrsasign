@@ -15,9 +15,11 @@ function doVerify() {
   var sMsg = document.form1.msgverified.value;
   var hSig = document.form1.sigverified.value;
 
-  var x509 = new X509();
-  x509.readCertPEM(document.form1.cert.value);
-  var isValid = x509.subjectPublicKeyRSA.verifyString(sMsg, hSig);
+  //var x509 = new X509();
+  //x509.readCertPEM(document.form1.cert.value);
+  var pubKey = KEYUTIL.getKey(document.form1.cert.value);
+  //var isValid = x509.subjectPublicKeyRSA.verifyString(sMsg, hSig);
+  var isValid = pubKey.verifyString(sMsg, hSig);
 
   // display verification result
   if (isValid) {

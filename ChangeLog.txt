@@ -1,10 +1,19 @@
 
 ChangeLog for jsrsasign
 
-* Changes between 5.0.7 to next version
+* Changes between 5.0.7 to 5.0.8 (2016-Apr-14)
   - LICENSE.txt small update for years of copyright.
   - ext/x64-core*.js was missed and added
-  - sample_node/gencsr added
+  - x509 1.1.6 to 1.1.7
+    - X509.{getHexOfTLV_V3ExtValue,getHexOfV_V3ExtValue} 
+      are chageed to return null instead of '' if there 
+      is no extension specified by name or oid.
+    - X509.getBasicConstraints added
+    - X509.getSignatureAlgorithmName added
+    - X509.getSignatureValueHex added
+    - API document update
+  - each *.min.js files are moved to min/ folder.
+  - clean up old *-all-min.js
 
 * Changes between 5.0.6 to 5.0.7 (2016-Mar-05)
   - tool_csr.html fix for subject parameter.
