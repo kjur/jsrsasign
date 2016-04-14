@@ -72,6 +72,20 @@ var certGithubPEM = "-----BEGIN CERTIFICATE-----\r\n" +
 "XX4C2NesiZcLYbc2n7B9O+63M2k=\r\n" +
 "-----END CERTIFICATE-----\r\n";
 
+// _gitpg/jsrsasign/test/eckey/k1.self.cer
+var k1CertPEM = "" +
+"-----BEGIN CERTIFICATE-----\n" +
+"MIIBfDCCASGgAwIBAgIJAKbxELQvSUDNMAoGCCqGSM49BAMCMBoxCzAJBgNVBAYT\n" +
+"AlVTMQswCQYDVQQKDAJLMTAeFw0xMzA3MTQwMjE3MTdaFw0yMzA3MTIwMjE3MTda\n" +
+"MBoxCzAJBgNVBAYTAlVTMQswCQYDVQQKDAJLMTBZMBMGByqGSM49AgEGCCqGSM49\n" +
+"AwEHA0IABKAVMqPAkABT3mD77+/MpYeTMBWY0wi0Hm9ONk44jCcRvvQyxZkUjJQU\n" +
+"PU/0bCy3Pj5qQdfu8jwEfqEeYGZ95CWjUDBOMB0GA1UdDgQWBBTIR74yfMz/Y4hw\n" +
+"dXSW4r42bESo/DAfBgNVHSMEGDAWgBTIR74yfMz/Y4hwdXSW4r42bESo/DAMBgNV\n" +
+"HRMEBTADAQH/MAoGCCqGSM49BAMCA0kAMEYCIQDfAcS/WKBrP6JBgksQVpp4jdq4\n" +
+"C53Yu4F5NkaMgthAHgIhANGRdWAP1QdW9l6tiglQwdqJs4T0e8+NYv+RcAb3VYwn\n" +
+"-----END CERTIFICATE-----\n";
+var k1CertHex = X509.pemToHex(k1CertPEM);
+
 test("getV3ExtInfoListOfCertHex test1", function() {
   var hCert = X509.pemToHex(certGithubPEM);
   var a = X509.getV3ExtInfoListOfCertHex(hCert);
@@ -105,24 +119,30 @@ test("getPosOfTLV_V3ExtValue test1", function() {
   var hCert = X509.pemToHex(certGithubPEM);
   equal(X509.getPosOfTLV_V3ExtValue(hCert, "keyUsage"), 1714, "by keyUsage");
   equal(X509.getPosOfTLV_V3ExtValue(hCert, "2.5.29.15"), 1714, "by 2.5.29.15(=keyUsage)");
-  equal(X509.getPosOfTLV_V3ExtValue(hCert, "policyConstraints"), -1, "by policyConstraints -> -1");
-  equal(X509.getPosOfTLV_V3ExtValue(hCert, "0.0.0.0"), -1, "by 0.0.0.0 -> -1");
+  equal(X509.getPosOfTLV_V3ExtValue(hCert, "policyConstraints"), -1,
+        "by policyConstraints -> -1, no such extension");
+  equal(X509.getPosOfTLV_V3ExtValue(hCert, "0.0.0.0"), -1,
+        "by 0.0.0.0 -> -1, no such extension");
 });
 
 test("getHexOfV_V3ExtValue test1", function() {
   var hCert = X509.pemToHex(certGithubPEM);
   equal(X509.getHexOfV_V3ExtValue(hCert, "keyUsage"), "05a0", "by keyUsage");
   equal(X509.getHexOfV_V3ExtValue(hCert, "2.5.29.15"), "05a0", "by 2.5.29.15(=keyUsage)");
-  equal(X509.getHexOfV_V3ExtValue(hCert, "policyConstraints"), '', "by policyConstraints -> -1");
-  equal(X509.getHexOfV_V3ExtValue(hCert, "0.0.0.0"), '', "by 0.0.0.0 -> -1");
+  equal(X509.getHexOfV_V3ExtValue(hCert, "policyConstraints"), null, 
+        "by policyConstraints -> null, no such extention");
+  equal(X509.getHexOfV_V3ExtValue(hCert, "0.0.0.0"), null, 
+        "by 0.0.0.0 -> null, no such extension");
 });
 
 test("getHexOfTLV_V3ExtValue test1", function() {
   var hCert = X509.pemToHex(certGithubPEM);
   equal(X509.getHexOfTLV_V3ExtValue(hCert, "keyUsage"), "030205a0", "by keyUsage");
   equal(X509.getHexOfTLV_V3ExtValue(hCert, "2.5.29.15"), "030205a0", "by 2.5.29.15(=keyUsage)");
-  equal(X509.getHexOfTLV_V3ExtValue(hCert, "policyConstraints"), '', "by policyConstraints -> -1");
-  equal(X509.getHexOfTLV_V3ExtValue(hCert, "0.0.0.0"), '', "by 0.0.0.0 -> -1");
+  equal(X509.getHexOfTLV_V3ExtValue(hCert, "policyConstraints"), null,
+        "by policyConstraints -> null, no such extension");
+  equal(X509.getHexOfTLV_V3ExtValue(hCert, "0.0.0.0"), null,
+        "by 0.0.0.0 -> null, no such extension");
 });
 
 test("getExtKeyUsageBin", function() {
@@ -144,6 +164,35 @@ test("getExtAIAInfo", function() {
   equal(info.caissuer[0], "http://cacerts.digicert.com/DigiCertSHA2ExtendedValidationServerCA.crt", "caIssuer=http://cacerts.digicert.com/DigiCertSHA2ExtendedValidationServerCA.crt");
 });
 
+test("getExtBasicConstraints k1 {cA:true}", function() {
+  var r = X509.getExtBasicConstraints(k1CertHex);
+  equal(typeof r, "object");
+  equal(r.cA, true);
+  equal(r.pathLen === undefined, true);
+});
+
+// test/z1.der1-p3 basicConstraints={ca:true, pathlen:3}
+test("getExtBasicConstraints z1.der1-p3 {cA:true,pathLen:3}", function() {
+  var r = X509.getExtBasicConstraints("3082017630820120a003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333134313832365a170d3236303431333134313832365a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a3533051301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e15300f0603551d13040830060101ff020103300d06092a864886f70d01010b0500034100862bf6d5f0c366dd1c71af10df93e2e9e0b7210b6912d1774e27107203f2dc257f9b132285bc1ce8d32d8ffc69470cd6c52ec76b7d68708eca3bbd49556f3005");
+  equal(typeof r, "object");
+  equal(r.cA, true);
+  equal(r.pathLen, 3);
+});
+
+// test/z1.der2-no basicConstraints has empty value (for EE)
+test("getExtBasicConstraints z1.der2-emp {}", function() {
+  var r = X509.getExtBasicConstraints("308201703082011aa003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333134313934345a170d3236303431333134313934345a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a34d304b301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e1530090603551d1304023000300d06092a864886f70d01010b050003410039de7f9c2975d1d309edd707609c3052c6adeda0b440c55e86410d303abd3363e4d66a1858c5c7f747fee590c38cf68a9ae39ce394175e36d12308490d3b94f2");
+  equal(typeof r, "object");
+  equal(r.cA === undefined, true);
+  equal(r.pathLen === undefined, true);
+});
+
+// test/z1.der3-no (no basic constraints)
+test("getExtBasicConstraints z1.der3-no (no basic constraints)", function() {
+  var r = X509.getExtBasicConstraints("308201653082010fa003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333135313332335a170d3236303431333135313332335a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a3423040301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e15300d06092a864886f70d01010b050003410016f823db6f65546958157ec08c20e736b0243fb6fa2fba6b74ac036f0115786c070d80d94b428f2f9d174169fb19e00fadfa5dbfbd19f27e2782adbd7bec644b");
+  equal(r, null);
+});
+
 });
 </script>
   
@@ -151,7 +200,17 @@ test("getExtAIAInfo", function() {
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
+
+<p>
+<a href="../">TOP</a> | 
+<a href="index.html">TEST INDEX</a> | 
+<a href="qunit-do-x509.html">x509</a> | 
+<a href="qunit-do-x509-ext.html">x509-ext</a> | 
+<a href="qunit-do-x509-key.html">x509-key</a> | 
+<a href="qunit-do-x509-kid.html">x509-kid</a> | 
+</p>
+
 </body>
-<center><p>&copy; 2015 Kenji Urushima</p></center>
+<center><p>&copy; 2015-2016 Kenji Urushima</p></center>
 </html>
 

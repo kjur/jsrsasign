@@ -426,7 +426,7 @@ ul.inheritsList
 				
 				
 			
-				X.509 certificate class
+				hexadecimal X.509 certificate ASN.1 parser class
 				
 				
 					<br /><i>Defined in: </i> <a href="../symbols/src/x509-1.1.js.html">x509-1.1.js</a>.
@@ -450,7 +450,7 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/X509.html#constructor">X509</a></b>()
 							</div>
-							<div class="description">X.509 certificate class.</div>
+							<div class="description">hexadecimal X.509 certificate ASN.1 parser class.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -543,6 +543,16 @@ as associate array which has following properties:
 <ul>
 <li>ocsp - array of string for OCSP responder URL</li>
 <li>caissuer - array of string for caIssuer value (i.e.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtBasicConstraints">getExtBasicConstraints</a></b>(hCert)
+								</div>
+								<div class="description">get BasicConstraints extension value as object in the certificate
+This method will get basic constraints extension value as object with following paramters.</div>
 							</td>
 						</tr>
 					
@@ -683,6 +693,26 @@ Resulted associative array has following properties:
 						</tr>
 					
 						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getSignatureAlgorithmName">getSignatureAlgorithmName</a></b>(hCert)
+								</div>
+								<div class="description">get signature algorithm name from hexadecimal certificate data
+This method will get signature algorithm name of certificate:</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getSignatureValueHex">getSignatureValueHex</a></b>(hCert)
+								</div>
+								<div class="description">get signature value in hexadecimal string
+This method will get signature value of certificate:</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getSubjectHex">getSubjectHex</a></b>()
@@ -752,7 +782,45 @@ certificate.</div>
 				</div>
 				
 				<div class="description">
-					X.509 certificate class.<br/>
+					hexadecimal X.509 certificate ASN.1 parser class.<br/>
+X509 class provides following functionality:
+<ul>
+<li>parse X.509 certificate ASN.1 structure</li>
+<li>get basic fields, extensions, signature algorithms and signature values</li>
+<li>read PEM certificate</li>
+</ul>
+
+<ul>
+<li><b>TO GET FIELDS</b>
+  <ul>
+  <li>serial - <a href="../symbols/X509.html#getSerialNumberHex">X509#getSerialNumberHex</a></li>
+  <li>issuer - <a href="../symbols/X509.html#getIssuerHex">X509#getIssuerHex</a></li>
+  <li>issuer - <a href="../symbols/X509.html#getIssuerString">X509#getIssuerString</a></li>
+  <li>notBefore - <a href="../symbols/X509.html#getNotBefore">X509#getNotBefore</a></li>
+  <li>notAfter - <a href="../symbols/X509.html#getNotAfter">X509#getNotAfter</a></li>
+  <li>subject - <a href="../symbols/X509.html#getSubjectHex">X509#getSubjectHex</a></li>
+  <li>subject - <a href="../symbols/X509.html#getSubjectString">X509#getSubjectString</a></li>
+  <li>subjectPublicKeyInfo - X509.getSubjectPublicKeyPosFromCertHex</li>
+  <li>subjectPublicKeyInfo - X509.getSubjectPublicKeyInfoPosFromCertHex</li>
+  <li>subjectPublicKeyInfo - <a href="../symbols/X509.html#.getPublicKeyFromCertPEM">X509.getPublicKeyFromCertPEM</a></li>
+  <li>signature algorithm - <a href="../symbols/X509.html#.getSignatureAlgorithmName">X509.getSignatureAlgorithmName</a></li>
+  <li>signature value - <a href="../symbols/X509.html#.getSignatureValueHex">X509.getSignatureValueHex</a></li>
+  </ul>
+</li>
+<li><b>TO GET EXTENSIONS</b>
+  <ul>
+  <li>basicConstraints - <a href="../symbols/X509.html#.getExtBasicConstraints">X509.getExtBasicConstraints</a></li>
+  <li>keyUsage - <a href="../symbols/X509.html#.getExtKeyUsageBin">X509.getExtKeyUsageBin</a></li>
+  <li>keyUsage - <a href="../symbols/X509.html#.getExtKeyUsageString">X509.getExtKeyUsageString</a></li>
+  <li>authorityInfoAccess - <a href="../symbols/X509.html#.getExtAIAInfo">X509.getExtAIAInfo</a></li>
+  </ul>
+</li>
+<li><b>UTILITIES</b>
+  <ul>
+  <li>reading PEM certificate - <a href="../symbols/X509.html#readCertPEM">X509#readCertPEM</a></li>
+  </ul>
+</li>
+</ul>
 					<br /><i>Author: </i>Kenji Urushima.
 				</div>
 				
@@ -769,7 +837,7 @@ certificate.</div>
 						<dl class="detailList">
 						<dt class="heading">See:</dt>
 						
-							<dd><a href="http://kjur.github.com/jsrsasigns/">'jwrsasign'(RSA Sign JavaScript Library) home page http://kjur.github.com/jsrsasign/</a></dd>
+							<dd><a href="http://kjur.github.com/jsrsasigns/">'jsrsasign'(RSA Sign JavaScript Library) home page http://kjur.github.com/jsrsasign/</a></dd>
 						
 						</dl>
 					
@@ -943,6 +1011,71 @@ it returns null;
 
 					<hr />
 				
+					<a name=".getExtBasicConstraints"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">X509.</span><b>getExtBasicConstraints</b>(hCert)
+					
+					</div>
+					<div class="description">
+						get BasicConstraints extension value as object in the certificate
+This method will get basic constraints extension value as object with following paramters.
+<ul>
+<li>cA - CA flag whether CA or not</li>
+<li>pathLen - maximum intermediate certificate length</li>
+</ul>
+There are use cases for return values:
+<ul>
+<li>{cA:true, pathLen:3} - cA flag is true and pathLen is 3</li>
+<li>{cA:true} - cA flag is true and no pathLen</li>
+<li>{} - basic constraints has no value in case of end entity certificate</li>
+<li>null - there is no basic constraints extension</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">obj = X509.getExtBasicConstraints(hCert);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.7</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> associative array which may have "cA" and "pathLen" parameters</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".getExtKeyUsageBin"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1073,7 +1206,8 @@ it returns empty string (i.e. '').
 					<div class="description">
 						get X.509 V3 extension value ASN.1 TLV for specified oid or name
 This method will get X.509v3 extension value of ASN.1 TLV
-which is specifyed by extension name or oid.
+which is specifyed by extension name or oid. 
+If there is no such extension in the certificate, it returns null.
 						
 						
 					</div>
@@ -1136,8 +1270,7 @@ which is specifyed by extension name or oid.
 						get X.509 V3 extension value ASN.1 V for specified oid or name
 This method will get X.509v3 extension value of ASN.1 value
 which is specifyed by extension name or oid. 
-If there is no such extension in the certificate,
-it returns empty string (i.e. '').
+If there is no such extension in the certificate, it returns null.
 Available extension names and oids are defined
 in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class.
 						
@@ -1194,7 +1327,7 @@ in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class
 					<a name="getIssuerHex"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{String}</span>
 					<b>getIssuerHex</b>()
 					
 					</div>
@@ -1206,10 +1339,23 @@ in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class
 					
 					
 					
+					<pre class="code">var x = new X509();
+x.readCertPEM(sCertPEM);
+var issuer = x.getIssuerHex(); // return string like "3013..."</pre>
+					
+					
+					
 						
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecial string of issuer DN ASN.1</dd>
+							
+							</dl>
 						
 						
 						
@@ -1219,7 +1365,7 @@ in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class
 					<a name="getIssuerString"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{String}</span>
 					<b>getIssuerString</b>()
 					
 					</div>
@@ -1231,10 +1377,23 @@ in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class
 					
 					
 					
+					<pre class="code">var x = new X509();
+x.readCertPEM(sCertPEM);
+var issuer = x.getIssuerString(); // return string like "/C=US/O=TEST"</pre>
+					
+					
+					
 						
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> issuer DN string</dd>
+							
+							</dl>
 						
 						
 						
@@ -1244,7 +1403,7 @@ in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class
 					<a name="getNotAfter"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{String}</span>
 					<b>getNotAfter</b>()
 					
 					</div>
@@ -1256,10 +1415,23 @@ in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class
 					
 					
 					
+					<pre class="code">var x = new X509();
+x.readCertPEM(sCertPEM);
+var notAfter = x.getNotAfter(); // return string like "151231235959Z"</pre>
+					
+					
+					
 						
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> not after time value (ex. "151231235959Z")</dd>
+							
+							</dl>
 						
 						
 						
@@ -1269,7 +1441,7 @@ in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class
 					<a name="getNotBefore"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{String}</span>
 					<b>getNotBefore</b>()
 					
 					</div>
@@ -1281,10 +1453,23 @@ in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class
 					
 					
 					
+					<pre class="code">var x = new X509();
+x.readCertPEM(sCertPEM);
+var notBefore = x.getNotBefore(); // return string like "151231235959Z"</pre>
+					
+					
+					
 						
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> not before time value (ex. "151231235959Z")</dd>
+							
+							</dl>
 						
 						
 						
@@ -1303,7 +1488,7 @@ in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class
 This method will get X.509v3 extension value of ASN.1 V(value)
 which is specifyed by extension name or oid. 
 If there is no such extension in the certificate,
-it returns empty string (i.e. '').
+it returns -1.
 Available extension names and oids are defined
 in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class.
 						
@@ -1516,7 +1701,7 @@ Resulted associative array has following properties:
 					<a name="getSerialNumberHex"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{String}</span>
 					<b>getSerialNumberHex</b>()
 					
 					</div>
@@ -1528,10 +1713,131 @@ Resulted associative array has following properties:
 					
 					
 					
+					<pre class="code">var x = new X509();
+x.readCertPEM(sCertPEM);
+var sn = x.getSerialNumberHex(); // return string like "01ad..."</pre>
+					
+					
+					
 						
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of certificate serial number</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getSignatureAlgorithmName"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">X509.</span><b>getSignatureAlgorithmName</b>(hCert)
+					
+					</div>
+					<div class="description">
+						get signature algorithm name from hexadecimal certificate data
+This method will get signature algorithm name of certificate:
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">algName = X509.getSignatureAlgorithmName(hCert);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.7</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> signature algorithm name (ex. SHA1withRSA, SHA256withECDSA)</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getSignatureValueHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">X509.</span><b>getSignatureValueHex</b>(hCert)
+					
+					</div>
+					<div class="description">
+						get signature value in hexadecimal string
+This method will get signature value of certificate:
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">sigHex = X509.getSignatureValueHex(hCert);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.7</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> signature value hexadecimal string without BitString unused bits</dd>
+							
+							</dl>
 						
 						
 						
@@ -1541,7 +1847,7 @@ Resulted associative array has following properties:
 					<a name="getSubjectHex"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{String}</span>
 					<b>getSubjectHex</b>()
 					
 					</div>
@@ -1553,10 +1859,23 @@ Resulted associative array has following properties:
 					
 					
 					
+					<pre class="code">var x = new X509();
+x.readCertPEM(sCertPEM);
+var subject = x.getSubjectHex(); // return string like "3013..."</pre>
+					
+					
+					
 						
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecial string of subject DN ASN.1</dd>
+							
+							</dl>
 						
 						
 						
@@ -1566,7 +1885,7 @@ Resulted associative array has following properties:
 					<a name="getSubjectString"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{String}</span>
 					<b>getSubjectString</b>()
 					
 					</div>
@@ -1578,10 +1897,23 @@ Resulted associative array has following properties:
 					
 					
 					
+					<pre class="code">var x = new X509();
+x.readCertPEM(sCertPEM);
+var subject = x.getSubjectString(); // return string like "/C=US/O=TEST"</pre>
+					
+					
+					
 						
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> subject DN string</dd>
+							
+							</dl>
 						
 						
 						
@@ -1733,6 +2065,11 @@ This method is used by <a href="../symbols/X509.html#.getV3ExtInfoListOfCertHex"
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.readCertPEM(sCertPEM); // read certificate</pre>
 					
 					
 					
