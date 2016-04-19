@@ -1,6 +1,11 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 5.0.8 to 5.0.9 (2016-Apr-19)
+  - ext/rng.js
+    - use window.crypto.getRandomValues for SecureRandom
+      if available. (ToDo also for Node.js)
+
 * Changes between 5.0.7 to 5.0.8 (2016-Apr-14)
   - LICENSE.txt small update for years of copyright.
   - ext/x64-core*.js was missed and added
