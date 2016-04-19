@@ -1,3 +1,5 @@
+exports.SecureRandom = SecureRandom;
+exports.rng_seed_time = rng_seed_time;
 
 exports.BigInteger = BigInteger;
 exports.RSAKey = RSAKey;
