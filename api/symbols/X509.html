@@ -549,10 +549,43 @@ as associate array which has following properties:
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtAuthorityKeyIdentifier">getExtAuthorityKeyIdentifier</a></b>(hCert)
+								</div>
+								<div class="description">get authorityKeyIdentifier value as JSON object in the certificate
+This method will get authority key identifier extension value
+as JSON object.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtBasicConstraints">getExtBasicConstraints</a></b>(hCert)
 								</div>
 								<div class="description">get BasicConstraints extension value as object in the certificate
 This method will get basic constraints extension value as object with following paramters.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtCRLDistributionPointsURI">getExtCRLDistributionPointsURI</a></b>(hCert)
+								</div>
+								<div class="description">get array of string for fullName URIs in cRLDistributionPoints(CDP) in the certificate
+This method will get all fullName URIs of cRLDistributionPoints extension
+in the certificate as array of URI string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtExtKeyUsageName">getExtExtKeyUsageName</a></b>(hCert)
+								</div>
+								<div class="description">get extKeyUsage value as array of name string in the certificate
+This method will get extended key usage extension value
+as array of name or OID string.</div>
 							</td>
 						</tr>
 					
@@ -581,6 +614,28 @@ as comma separated string of usage names.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtSubjectAltName">getExtSubjectAltName</a></b>(hCert)
+								</div>
+								<div class="description">get subjectAltName value as array of string in the certificate
+This method will get subject alt name extension value
+as array of name.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtSubjectKeyIdentifier">getExtSubjectKeyIdentifier</a></b>(hCert)
+								</div>
+								<div class="description">get subjectKeyIdentifier value as hexadecimal string in the certificate
+This method will get subject key identifier extension value
+as hexadecimal string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getHexOfTLV_V3ExtValue">getHexOfTLV_V3ExtValue</a></b>(hCert, oidOrName)
 								</div>
 								<div class="description">get X.509 V3 extension value ASN.1 TLV for specified oid or name
@@ -597,6 +652,15 @@ which is specifyed by extension name or oid.</div>
 								<div class="description">get X.509 V3 extension value ASN.1 V for specified oid or name
 This method will get X.509v3 extension value of ASN.1 value
 which is specifyed by extension name or oid.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getInfo">getInfo</a></b>()
+								</div>
+								<div class="description">get certificate information as string.</div>
 							</td>
 						</tr>
 					
@@ -693,6 +757,16 @@ Resulted associative array has following properties:
 						</tr>
 					
 						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getSignatureAlgorithmField">getSignatureAlgorithmField</a></b>()
+								</div>
+								<div class="description">get signature algorithm name in basic field
+This method will get a name of signature algorithm field of certificate:</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getSignatureAlgorithmName">getSignatureAlgorithmName</a></b>(hCert)
@@ -749,6 +823,24 @@ This method will get all extension information of a X.509 certificate.</div>
 This method will get some information of a X.509 V extension 
 which is referred by an index of hexadecimal string of X.509 
 certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.pemToBase64">pemToBase64</a></b>(sCertPEM)
+								</div>
+								<div class="description">get Base64 string from PEM certificate string</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.pemToHex">pemToHex</a></b>(sCertPEM)
+								</div>
+								<div class="description">get a hexa decimal string from PEM certificate string</div>
 							</td>
 						</tr>
 					
@@ -812,12 +904,20 @@ X509 class provides following functionality:
   <li>basicConstraints - <a href="../symbols/X509.html#.getExtBasicConstraints">X509.getExtBasicConstraints</a></li>
   <li>keyUsage - <a href="../symbols/X509.html#.getExtKeyUsageBin">X509.getExtKeyUsageBin</a></li>
   <li>keyUsage - <a href="../symbols/X509.html#.getExtKeyUsageString">X509.getExtKeyUsageString</a></li>
+  <li>subjectKeyIdentifier - <a href="../symbols/X509.html#.getExtSubjectKeyIdentifier">X509.getExtSubjectKeyIdentifier</a></li>
+  <li>authorityKeyIdentifier - <a href="../symbols/X509.html#.getExtAuthorityKeyIdentifier">X509.getExtAuthorityKeyIdentifier</a></li>
+  <li>extKeyUsage - <a href="../symbols/X509.html#.getExtExtKeyUsageName">X509.getExtExtKeyUsageName</a></li>
+  <li>subjectAltName - <a href="../symbols/X509.html#.getExtSubjectAltName">X509.getExtSubjectAltName</a></li>
+  <li>cRLDistributionPoints - <a href="../symbols/X509.html#.getExtCRLDistributionPointsURI">X509.getExtCRLDistributionPointsURI</a></li>
   <li>authorityInfoAccess - <a href="../symbols/X509.html#.getExtAIAInfo">X509.getExtAIAInfo</a></li>
   </ul>
 </li>
 <li><b>UTILITIES</b>
   <ul>
   <li>reading PEM certificate - <a href="../symbols/X509.html#readCertPEM">X509#readCertPEM</a></li>
+  <li>get all certificate information - <a href="../symbols/X509.html#getInfo">X509#getInfo</a></li>
+  <li>get Base64 from PEM certificate - <a href="../symbols/X509.html#.pemToBase64">X509.pemToBase64</a></li>
+  <li>get hexadecimal string from PEM certificate - <a href="../symbols/X509.html#.pemToHex">X509.pemToHex</a></li>
   </ul>
 </li>
 </ul>
@@ -1011,6 +1111,69 @@ it returns null;
 
 					<hr />
 				
+					<a name=".getExtAuthorityKeyIdentifier"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">X509.</span><b>getExtAuthorityKeyIdentifier</b>(hCert)
+					
+					</div>
+					<div class="description">
+						get authorityKeyIdentifier value as JSON object in the certificate
+This method will get authority key identifier extension value
+as JSON object.
+If there is no its extension in the certificate,
+it returns null.
+<br>
+NOTE: Currently this method only supports keyIdentifier so that
+authorityCertIssuer and authorityCertSerialNumber will not
+be return in the JSON object.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">akid = X509.getExtAuthorityKeyIdentifier(hCert);
+// returns following JSON object
+{ kid: "1234abcd..." }</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 5.0.10 x509 1.1.8</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> JSON object of authority key identifier or null</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".getExtBasicConstraints"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1068,6 +1231,130 @@ There are use cases for return values:
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Object}</span> associative array which may have "cA" and "pathLen" parameters</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getExtCRLDistributionPointsURI"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">X509.</span><b>getExtCRLDistributionPointsURI</b>(hCert)
+					
+					</div>
+					<div class="description">
+						get array of string for fullName URIs in cRLDistributionPoints(CDP) in the certificate
+This method will get all fullName URIs of cRLDistributionPoints extension
+in the certificate as array of URI string.
+If there is no its extension in the certificate,
+it returns null.
+<br>
+NOTE: Currently this method supports only fullName URI so that
+other parameters will not be returned.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">cdpuri = X509.getExtCRLDistributionPointsURI(hCert);
+// returns following array:
+["http://example.com/aaa.crl", "http://example.org/aaa.crl"]</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 5.0.10 x509 1.1.8</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> array of fullName URIs of CDP of the certificate</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getExtExtKeyUsageName"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">X509.</span><b>getExtExtKeyUsageName</b>(hCert)
+					
+					</div>
+					<div class="description">
+						get extKeyUsage value as array of name string in the certificate
+This method will get extended key usage extension value
+as array of name or OID string.
+If there is no its extension in the certificate,
+it returns null.
+<br>
+NOTE: Supported extended key usage ID names are defined in
+name2oidList parameter in asn1x509.js file.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">eku = X509.getExtExtKeyUsageName(hCert);
+// returns following array:
+["serverAuth", "clientAuth", "0.1.2.3.4.5"]</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 5.0.10 x509 1.1.8</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> array of extended key usage ID name or oid</dd>
 							
 							</dl>
 						
@@ -1196,6 +1483,125 @@ it returns empty string (i.e. '').
 
 					<hr />
 				
+					<a name=".getExtSubjectAltName"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">X509.</span><b>getExtSubjectAltName</b>(hCert)
+					
+					</div>
+					<div class="description">
+						get subjectAltName value as array of string in the certificate
+This method will get subject alt name extension value
+as array of name.
+If there is no its extension in the certificate,
+it returns null.
+<br>
+NOTE: Currently this method supports only dNSName so that
+other name type such like iPAddress or generalName will not be returned.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">san = X509.getExtSubjectAltName(hCert);
+// returns following array:
+["example.com", "example.org"]</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 5.0.10 x509 1.1.8</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> array of alt names</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getExtSubjectKeyIdentifier"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">X509.</span><b>getExtSubjectKeyIdentifier</b>(hCert)
+					
+					</div>
+					<div class="description">
+						get subjectKeyIdentifier value as hexadecimal string in the certificate
+This method will get subject key identifier extension value
+as hexadecimal string.
+If there is no its extension in the certificate,
+it returns null.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">skid = X509.getExtSubjectKeyIdentifier(hCert);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 5.0.10 x509 1.1.8</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of subject key identifier or null</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".getHexOfTLV_V3ExtValue"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1316,6 +1722,73 @@ in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> hexadecimal string of extension ASN.1 TLV</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getInfo"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>getInfo</b>()
+					
+					</div>
+					<div class="description">
+						get certificate information as string.<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.readCertPEM(certPEM);
+console.log(x.getInfo());
+// this shows as following
+Basic Fields
+  serial number: 02ac5c266a0b409b8f0b79f2ae462577
+  signature algorithm: SHA1withRSA
+  issuer: /C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert High Assurance EV Root CA
+  notBefore: 061110000000Z
+  notAfter: 311110000000Z
+  subject: /C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert High Assurance EV Root CA
+  subject public key info: 
+    key algorithm: RSA
+    n=c6cce573e6fbd4bb...
+    e=10001
+X509v3 Extensions:
+  keyUsage CRITICAL:
+    digitalSignature,keyCertSign,cRLSign
+  basicConstraints CRITICAL:
+    cA=true
+  subjectKeyIdentifier :
+    b13ec36903f8bf4701d498261a0802ef63642bc3
+  authorityKeyIdentifier :
+    kid=b13ec36903f8bf4701d498261a0802ef63642bc3
+signature algorithm: SHA1withRSA
+signature: 1c1a0697dcd79c9f...</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 5.0.10 x509 1.1.8</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> certificate information string</dd>
 							
 							</dl>
 						
@@ -1736,6 +2209,51 @@ var sn = x.getSerialNumberHex(); // return string like "01ad..."</pre>
 
 					<hr />
 				
+					<a name="getSignatureAlgorithmField"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>getSignatureAlgorithmField</b>()
+					
+					</div>
+					<div class="description">
+						get signature algorithm name in basic field
+This method will get a name of signature algorithm field of certificate:
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var x = new X509();
+x.readCertPEM(sCertPEM);
+algName = x.getSignatureAlgorithmField();</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>x509 1.1.8</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> signature algorithm name (ex. SHA1withRSA, SHA256withECDSA)</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".getSignatureAlgorithmName"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -2045,6 +2563,100 @@ This method is used by <a href="../symbols/X509.html#.getV3ExtInfoListOfCertHex"
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Object}</span> properties for the extension</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".pemToBase64"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">X509.</span><b>pemToBase64</b>(sCertPEM)
+					
+					</div>
+					<div class="description">
+						get Base64 string from PEM certificate string
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">b64 = X509.pemToBase64(certPEM);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sCertPEM</b>
+									
+								</dt>
+								<dd>PEM formatted RSA/ECDSA/DSA X.509 certificate</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> Base64 string of PEM certificate</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".pemToHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">X509.</span><b>pemToHex</b>(sCertPEM)
+					
+					</div>
+					<div class="description">
+						get a hexa decimal string from PEM certificate string
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">hex = X509.pemToHex(certPEM);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sCertPEM</b>
+									
+								</dt>
+								<dd>PEM formatted RSA/ECDSA/DSA X.509 certificate</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of PEM certificate</dd>
 							
 							</dl>
 						

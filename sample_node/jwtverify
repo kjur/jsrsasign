@@ -101,13 +101,13 @@ if (program.verbose)
   console.log("*** JWT/JWS VALIDATION RESULT ***");
 
 var isValid;
-if (pass !== undefined) {
-   //console.log("pass defined");
-   isValid = rs.jws.JWS.verifyJWT(jwt, pass, acceptField);
-}
+
 if (pubKeyObj !== undefined) {
    //console.log("pubKeyObj defined");
    isValid = rs.jws.JWS.verifyJWT(jwt, pubKeyObj, acceptField);
+} else {
+   //console.log("pass defined");
+   isValid = rs.jws.JWS.verifyJWT(jwt, pass, acceptField);
 }
 
 if (program.verbose) {
