@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+/*
+ * showcert - show X.509 binary or PEM certificate
+ *
+ * Copyright (c) 2015 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * http://kjur.github.com/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+
+program
+    .version('0.0.1')
+    .usage('[options] <DER binary or PEM certificate file>')
+    .description('show X.509 binary or PEM certificate')
+    .parse(process.argv);
+
+if (program.args.length !== 1)
+    throw "wrong number of arguments";
+
+var file = program.args[0];
+
+var data = rs.readFile(file);
+var pem;
+if (data.substr(0, 5) === "-----") {
+    pem = data;
+} else {
+    var hex = rs.rstrtohex(data);
+    pem = rs.asn1.ASN1Util.getPEMStringFromHex(hex, "CERTIFICATE");
+}
+
+var x = new rs.X509();
+x.readCertPEM(pem);
+console.log(x.getInfo());
+
