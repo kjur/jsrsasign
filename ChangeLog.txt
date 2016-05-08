@@ -7,6 +7,8 @@ ChangeLog for jsrsasign
     - X509.DN_ATTRHEX added to show EV cert DN
   - test/qunit-do-x509-getinfo.html
     - test case added for EV cert DN
+  - tool_{jwt,jwtveri}.html
+    - fix typo. Thanks ParkinT.
 
 * Changes between 5.0.9 to 5.0.10
   - sample_node/jwtverify bugfix
