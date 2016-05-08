@@ -8,7 +8,9 @@ ChangeLog for jsrsasign
   - test/qunit-do-x509-getinfo.html
     - test case added for EV cert DN
   - tool_{jwt,jwtveri}.html
-    - fix typo. Thanks ParkinT.
+    - fix typo. Thanks @ParkinT.
+  - ext/{rsa,rsa2}.js
+    - allow hash func to be passed to OAEP. Thanks @davedoesdev.
 
 * Changes between 5.0.9 to 5.0.10
   - sample_node/jwtverify bugfix
