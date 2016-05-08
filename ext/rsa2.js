@@ -50,11 +50,15 @@ function oaep_mgf1_str(seed, len, hash)
     return mask;
 }
 
-var SHA1_SIZE = 20;
-
 // Undo PKCS#1 (OAEP) padding and, if valid, return the plaintext
-function oaep_unpad(d, n, hash)
+function oaep_unpad(d, n, hash, hashLen)
 {
+    if (!hash)
+    {
+        hash = rstr_sha1;
+        hashLen = 20;
+    }
+
     d = d.toByteArray();
 
     var i;
@@ -71,15 +75,15 @@ function oaep_unpad(d, n, hash)
 
     d = String.fromCharCode.apply(String, d);
 
-    if (d.length < 2 * SHA1_SIZE + 2)
+    if (d.length < 2 * hashLen + 2)
     {
         throw "Cipher too short";
     }
 
-    var maskedSeed = d.substr(1, SHA1_SIZE)
-    var maskedDB = d.substr(SHA1_SIZE + 1);
+    var maskedSeed = d.substr(1, hashLen)
+    var maskedDB = d.substr(hashLen + 1);
 
-    var seedMask = oaep_mgf1_str(maskedDB, SHA1_SIZE, hash || rstr_sha1);
+    var seedMask = oaep_mgf1_str(maskedDB, hashLen, hash);
     var seed = [], i;
 
     for (i = 0; i < maskedSeed.length; i += 1)
@@ -88,7 +92,7 @@ function oaep_unpad(d, n, hash)
     }
 
     var dbMask = oaep_mgf1_str(String.fromCharCode.apply(String, seed),
-                           d.length - SHA1_SIZE, rstr_sha1);
+                           d.length - hashLen, hash);
 
     var DB = [];
 
@@ -99,12 +103,12 @@ function oaep_unpad(d, n, hash)
 
     DB = String.fromCharCode.apply(String, DB);
 
-    if (DB.substr(0, SHA1_SIZE) !== rstr_sha1(''))
+    if (DB.substr(0, hashLen) !== hash(''))
     {
         throw "Hash mismatch";
     }
 
-    DB = DB.substr(SHA1_SIZE);
+    DB = DB.substr(hashLen);
 
     var first_one = DB.indexOf('\x01');
     var last_zero = (first_one != -1) ? DB.substr(0, first_one).lastIndexOf('\x00') : -1;
@@ -221,11 +225,11 @@ function RSADecrypt(ctext) {
 
 // Return the PKCS#1 OAEP RSA decryption of "ctext".
 // "ctext" is an even-length hex string and the output is a plain string.
-function RSADecryptOAEP(ctext, hash) {
+function RSADecryptOAEP(ctext, hash, hashLen) {
   var c = parseBigInt(ctext, 16);
   var m = this.doPrivate(c);
   if(m == null) return null;
-  return oaep_unpad(m, (this.n.bitLength()+7)>>3, hash);
+  return oaep_unpad(m, (this.n.bitLength()+7)>>3, hash, hashLen);
 }
 
 // Return the PKCS#1 RSA decryption of "ctext".
