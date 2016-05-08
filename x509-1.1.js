@@ -489,6 +489,11 @@ X509.DN_ATTRHEX = {
     "0603550405": "SN",
     "0603550408": "ST",
     "0603550407": "L",
+    "0603550409": "streetAddress",
+    "060355040f": "businessCategory",
+    "0603550411": "postalCode",
+    "060b2b0601040182373c020102": "jurisdictionOfIncorporationSP",
+    "060b2b0601040182373c020103": "jurisdictionOfIncorporationC",
 };
 
 /**

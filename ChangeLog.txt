@@ -3,6 +3,10 @@ ChangeLog for jsrsasign
 
 * Changes between 5.0.10 to next version
   - sample_node/showcert added
+  - x509.js 1.1.8 to next version
+    - X509.DN_ATTRHEX added to show EV cert DN
+  - test/qunit-do-x509-getinfo.html
+    - test case added for EV cert DN
 
 * Changes between 5.0.9 to 5.0.10
   - sample_node/jwtverify bugfix
