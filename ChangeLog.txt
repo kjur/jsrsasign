@@ -11,6 +11,9 @@ ChangeLog for jsrsasign
     - fix typo. Thanks @ParkinT.
   - ext/{rsa,rsa2}.js
     - allow hash func to be passed to OAEP. Thanks @davedoesdev.
+  - asn1x509.js 1.0.13 to next version
+    - add 'SN' (i.e. SurName) support in distinguished name.
+      Thanks @kurtsson.
 
 * Changes between 5.0.9 to 5.0.10
   - sample_node/jwtverify bugfix
