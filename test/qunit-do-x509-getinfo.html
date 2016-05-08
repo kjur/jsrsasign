@@ -189,6 +189,41 @@ signature algorithm: SHA256withRSA
 signature: 0b76f2c64e9cf6fd...
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+// _test/0cert/github.com.cer
+var certGithubOUT = (function() {/*Basic Fields
+  serial number: 0c009310d206dbe337553580118ddc87
+  signature algorithm: SHA256withRSA
+  issuer: /C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert SHA2 Extended Validation Server CA
+  notBefore: 140408000000Z
+  notAfter: 160412120000Z
+  subject: /businessCategory=Private Organization/jurisdictionOfIncorporationC=US/jurisdictionOfIncorporationSP=Delaware/SN=5157550/streetAddress=548 4th Street/postalCode=94107/C=US/ST=California/L=San Francisco/O=GitHub, Inc./CN=github.com
+  subject public key info: 
+    key algorithm: RSA
+    n=b1d4dc3caffdf34e...
+    e=10001
+X509v3 Extensions:
+  authorityKeyIdentifier :
+    kid=3dd350a5d6a0adeef34a600a65d321d4f8f8d60f
+  subjectKeyIdentifier :
+    6a43907d3b98147252953aaa280a43f8517ed3a6
+  subjectAltName :
+    github.com, www.github.com
+  keyUsage CRITICAL:
+    digitalSignature,keyEncipherment
+  extKeyUsage :
+    serverAuth, clientAuth
+  cRLDistributionPoints :
+    http://crl3.digicert.com/sha2-ev-server-g1.crl,http://crl4.digicert.com/sha2-ev-server-g1.crl
+  certificatePolicies :
+  authorityInfoAccess :
+    ocsp: http://ocsp.digicert.com
+    caissuer: http://cacerts.digicert.com/DigiCertSHA2ExtendedValidationServerCA.crt
+  basicConstraints CRITICAL:
+    {}
+signature algorithm: SHA256withRSA
+signature: 6fe76dcb82f3ef90...
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
 test("X509.getInfo() DigiCert EV Root", function() {
   var c = new X509();
   c.readCertPEM(certDigicertPEM);
@@ -200,6 +235,12 @@ test("X509.getInfo() pulse.cio.gov SSL cert", function() {
   var c = new X509();
   c.readCertPEM(certCioGovPEM);
   equal(c.getInfo(), certCioGovOUT, certCioGovOUT);
+});
+
+test("X509.getInfo() github.com SSL cert", function() {
+  var c = new X509();
+  c.readCertPEM(certGithubPEM);
+  equal(c.getInfo(), certGithubOUT, certGithubOUT);
 });
 
 });
