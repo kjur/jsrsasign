@@ -1,4 +1,4 @@
-/*! x509-1.1.8.js (c) 2012-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! x509-1.1.9.js (c) 2012-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /* 
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version x509 1.1.8 (2016-Apr-24)
+ * @version x509 1.1.9 (2016-May-10)
  * @since jsrsasign 1.x.x
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -546,13 +546,13 @@ X509.getPublicKeyFromCertPEM = function(sCertPEM) {
  * @return {Hash} hash of information for public key
  * @since x509 1.1.1
  * @description
- * Resulted associative array has following properties:
+ * Resulted associative array has following properties:<br/>
  * <ul>
  * <li>algoid - hexadecimal string of OID of asymmetric key algorithm</li>
  * <li>algparam - hexadecimal string of OID of ECC curve name or null</li>
  * <li>keyhex - hexadecimal string of key in the certificate</li>
  * </ul>
- * @since x509 1.1.1
+ * NOTE: X509v1 certificate is also supported since x509.js 1.1.9.
  */
 X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
     var result = {};
@@ -571,10 +571,13 @@ X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
     var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]); 
 
     // 3. subjectPublicKeyInfo
-    if (a2.length < 7)
+    var idx_spi = 6; // subjectPublicKeyInfo index in tbsCert for v3 cert
+    if (hCert.substr(a2[0], 2) !== "a0") idx_spi = 5;
+
+    if (a2.length < idx_spi + 1)
         throw "malformed X.509 certificate PEM (code:003)"; // no subjPubKeyInfo
 
-    var a3 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a2[6]); 
+    var a3 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a2[idx_spi]); 
 
     if (a3.length != 2)
         throw "malformed X.509 certificate PEM (code:004)"; // not AlgId and PubKey

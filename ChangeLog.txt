@@ -1,17 +1,21 @@
 
 ChangeLog for jsrsasign
 
-* Changes between 5.0.10 to next version
+* Changes between 5.0.10 to 5.0.11
+  - X509v1 certificate support in KEYUTIL.getKey and
+    X509.getPublicKeyInfoPropOfCertPEM
   - sample_node/showcert added
-  - x509.js 1.1.8 to next version
+  - x509.js 1.1.8 to 1.1.9
     - X509.DN_ATTRHEX added to show EV cert DN
+    - X509v1 certificate support in X509.getPublicKeyInfoPropOfCertPEM.
+      This makes KEYUTIL.getKey support X509v1 certificate.
   - test/qunit-do-x509-getinfo.html
     - test case added for EV cert DN
   - tool_{jwt,jwtveri}.html
     - fix typo. Thanks @ParkinT.
   - ext/{rsa,rsa2}.js
     - allow hash func to be passed to OAEP. Thanks @davedoesdev.
-  - asn1x509.js 1.0.13 to next version
+  - asn1x509.js 1.0.13 to 1.0.14
     - add 'SN' (i.e. SurName) support in distinguished name.
       Thanks @kurtsson.
 
