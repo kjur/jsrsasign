@@ -1,4 +1,4 @@
-/*! asn1x509-1.0.13.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.14.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.13 (2015-Oct-01)
+ * @version 1.0.14 (2016-May-10)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */

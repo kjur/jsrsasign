@@ -1230,7 +1230,7 @@ var KEYUTIL = function() {
  * <li>DSA public key parameters: param={p: p, q: q, g: g, y: y}<br/>
  * NOTE: Each value shall be hexadecimal string of key spec.</li>
  * <li>RSA public key parameters: param={n: n, e: e} </li>
- * <li>X.509 PEM certificate (RSA/DSA/ECC): param=pemString</li>
+ * <li>X.509v1/v3 PEM certificate (RSA/DSA/ECC): param=pemString</li>
  * <li>PKCS#8 hexadecimal RSA/ECC public key: param=pemString, null, "pkcs8pub"</li>
  * <li>PKCS#8 PEM RSA/DSA/ECC public key: param=pemString</li>
  * <li>PKCS#5 plain hexadecimal RSA private key: param=hexString, null, "pkcs5prv"</li>
@@ -1248,7 +1248,8 @@ var KEYUTIL = function() {
  * <li>JWT plain RSA private key with P/Q/DP/DQ/COEFF</li>
  * <li>JWT plain RSA private key without P/Q/DP/DQ/COEFF (since jsrsasign 5.0.0)</li>
  * </ul>
- * NOTE: <a href="https://tools.ietf.org/html/rfc7517">RFC 7517 JSON Web Key(JWK)</a> support for RSA/ECC private/public key from jsrsasign 4.8.1.
+ * NOTE1: <a href="https://tools.ietf.org/html/rfc7517">RFC 7517 JSON Web Key(JWK)</a> support for RSA/ECC private/public key from jsrsasign 4.8.1.<br/>
+ * NOTE2: X509v1 support is added since jsrsasign 5.0.11.
  * 
  * <h5>EXAMPLE</h5>
  * @example

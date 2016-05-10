@@ -25,6 +25,12 @@
 <script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
 <script language="JavaScript" type="text/javascript" src="../asn1-1.0.js"></script>
 
+<script language="JavaScript" type="text/javascript" src="../ext/ec.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/ec-patch.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecdsa-modified-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecparam-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../x509-1.1.js"></script>
+
 <!-- jsrsasign keyutil external codes -->
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
 <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
@@ -135,6 +141,23 @@ yIaCKBkF8f03cTS3yz1ZiE3M1OQs1zuaUxJVTr1VpSUV+pxTuZ3gq3i/9QHadVrE
 MGpevmzMV1eLDgIjvOUFkBskHqfKieaNYsP33jnqlv6Zi8Z6NVYPVDc=
 -----END RSA PRIVATE KEY-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// sample-rsasign.html
+var cert1 = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIBvTCCASYCCQD55fNzc0WF7TANBgkqhkiG9w0BAQUFADAjMQswCQYDVQQGEwJK
+UDEUMBIGA1UEChMLMDAtVEVTVC1SU0EwHhcNMTAwNTI4MDIwODUxWhcNMjAwNTI1
+MDIwODUxWjAjMQswCQYDVQQGEwJKUDEUMBIGA1UEChMLMDAtVEVTVC1SU0EwgZ8w
+DQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBANGEYXtfgDRlWUSDn3haY4NVVQiKI9Cz
+Thoua9+DxJuiseyzmBBe7Roh1RPqdvmtOHmEPbJ+kXZYhbozzPRbFGHCJyBfCLzQ
+fVos9/qUQ88u83b0SFA2MGmQWQAlRtLy66EkR4rDRwTj2DzR4EEXgEKpIvo8VBs/
+3+sHLF3ESgAhAgMBAAEwDQYJKoZIhvcNAQEFBQADgYEAEZ6mXFFq3AzfaqWHmCy1
+ARjlauYAa8ZmUFnLm0emg9dkVBJ63aEqARhtok6bDQDzSJxiLpCEF6G4b/Nv/M/M
+LyhP+OoOTmETMegAVQMq71choVJyOFE5BtQa6M/lCHEOya5QUfoRF2HF9EjRF44K
+3OK+u3ivTSj3zwjtpudY5Xo=
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
 
 // ======= TEST ===================================================================================
 
@@ -305,6 +328,10 @@ test("getRSAKeyFromEncryptedPKCS8PEM", function() {
   equal(k.d.toString(16), "ac15f412e8378393323f4aad5f890d97d72ab6c0528039cfa33eb2e930927bab09994944a11e1cdcf4153f1c8d9c1825bdeed0a1e86b1c268b42e1c348ad3f61", "rsaKey.d");
 });
 
+test("getKey(cert1) sample-rsasign.html", function() {
+  var k = KEYUTIL.getKey(cert1);
+  equal(k.e.toString(16), "10001", "rsaKey.e");
+});
 
 });
 -->
