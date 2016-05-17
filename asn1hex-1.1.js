@@ -1,9 +1,9 @@
-/*! asn1hex-1.1.6.js (c) 2012-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1hex-1.1.6.js (c) 2012-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
  *
- * Copyright (c) 2010-2015 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2016 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license/
@@ -38,6 +38,42 @@
  * @name ASN1HEX
  * @class ASN.1 DER encoded hexadecimal string utility class
  * @since jsrsasign 1.1
+ * @description
+ * This class provides a parser for hexadecimal string of
+ * DER encoded ASN.1 binary data.
+ * Here are major methods of this class.
+ * <ul>
+ * <li><b>ACCESS BY POSITION</b>
+ *   <ul>
+ *   <li>{@link ASN1HEX.getHexOfTLV_AtObj} - get ASN.1 TLV at specified position</li>
+ *   <li>{@link ASN1HEX.getHexOfV_AtObj} - get ASN.1 V at specified position</li>
+ *   <li>{@link ASN1HEX.getHexOfL_AtObj} - get hexadecimal ASN.1 L at specified position</li>
+ *   <li>{@link ASN1HEX.getIntOfL_AtObj} - get integer ASN.1 L at specified position</li>
+ *   <li>{@link ASN1HEX.getStartPosOfV_AtObj} - get ASN.1 V position from its ASN.1 TLV position</li>
+ *   </ul>
+ * </li>
+ * <li><b>ACCESS FOR CHILD ITEM</b>
+ *   <ul>
+ *   <li>{@link ASN1HEX.getNthChildIndex_AtObj} - get nth child index at specified position</li>
+ *   <li>{@link ASN1HEX.getPosArrayOfChildren_AtObj} - get indexes of children</li>
+ *   <li>{@link ASN1HEX.getPosOfNextSibling_AtObj} - get position of next sibling</li>
+ *   </ul>
+ * </li>
+ * <li><b>ACCESS NESTED ASN.1 STRUCTURE</b>
+ *   <ul>
+ *   <li>{@link ASN1HEX.getDecendantHexTLVByNthList} - get ASN.1 TLV at specified list index</li>
+ *   <li>{@link ASN1HEX.getDecendantHexVByNthList} - get ASN.1 V at specified list index</li>
+ *   <li>{@link ASN1HEX.getDecendantIndexByNthList} - get index at specified list index</li>
+ *   </ul>
+ * </li>
+ * <li><b>UTILITIES</b>
+ *   <ul>
+ *   <li>{@link ASN1HEX.dump} - dump ASN.1 structure</li>
+ *   <li>{@link ASN1HEX.isASN1HEX} - check whether ASN.1 hexadecimal string or not</li>
+ *   <li>{@link ASN1HEX.hextooidstr} - convert hexadecimal string of OID to dotted integer list</li>
+ *   </ul>
+ * </li>
+ * </ul>
  */
 var ASN1HEX = new function() {
     /**
@@ -371,16 +407,19 @@ ASN1HEX.hextooidstr = function(hex) {
  * ASN1HEX.dump('0203012345')
  * &darr;
  * INTEGER 012345
+ *
  * // ASN.1 Object Identifier
  * ASN1HEX.dump('06052b0e03021a')
  * &darr;
  * ObjectIdentifier sha1 (1 3 14 3 2 26)
+ *
  * // ASN.1 SEQUENCE
  * ASN1HEX.dump('3006020101020102')
  * &darr;
  * SEQUENCE
  *   INTEGER 01
  *   INTEGER 02
+ *
  * // ASN.1 DUMP FOR X.509 CERTIFICATE
  * ASN1HEX.dump(X509.pemToHex(certPEM))
  * &darr;
