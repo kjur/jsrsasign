@@ -10,7 +10,7 @@
 
 <script language="JavaScript" type="text/javascript" src="../jsrsasign-latest-all-min.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/json-sans-eval.js"></script>
-<script language="JavaScript" type="text/javascript" src="../jws-3.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../jws-3.3.js"></script>
 
 <script type="text/javascript">
 // tool_jwt.html with one aud
@@ -24,6 +24,10 @@ var jwtHS256TIME = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2p
 
 // tool_jwt.html no jti
 var jwtHS256NOJTI = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2p3dC1pZHAuZXhhbXBsZS5jb20iLCJzdWIiOiJtYWlsdG86bWlrZUBleGFtcGxlLmNvbSIsIm5iZiI6MSwiZXhwIjoyMDgyNzU4Mzk5LCJpYXQiOjEsInR5cCI6Imh0dHBzOi8vZXhhbXBsZS5jb20vcmVnaXN0ZXIiLCJhdWQiOiJodHRwOi8vZm9vMS5jb20ifQ.fmG19deqNvXXbtEgQRBeaJqRYBac9HfAesqTF8z3nXc";
+
+// jwt.io HS256 {iat: 946684800, nbf: 946684800, exp: 946684920} 
+//   2min 2000/01/01 00:01:00 946684860 (verify at)
+var jwtGrace = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gQmVlIiwiYWRtaW4iOnRydWUsImlhdCI6OTQ2Njg0ODAwLCJuYmYiOjk0NjY4NDgwMCwiZXhwIjo5NDY2ODQ5MjB9.XapAg9_7SaJovdN7L2HxJ3UrzWGhSEcgjVJLSNr658Q";
 
 $(document).ready(function(){
 
@@ -123,6 +127,21 @@ test("verifyJWT JWS signature", function() {
         false, "HS256 wrong key");
   equal(KJUR.jws.JWS.verifyJWT(jwtHS256AUD2.replace("L2p3d", "L2o3d"), "616161", {alg: ["HS256"]}),
         false, "iss jwt-idp to j7t-idp forged signature");
+});
+
+test("verifyJWT gracePeriod test", function() {
+  var JWS = KJUR.jws.JWS;
+  var IntDate = KJUR.jws.IntDate;
+  equal(JWS.verifyJWT(jwtGrace, "616161", {alg: ["HS256"], verifyAt: 946684860}),
+        true, "iat2000 < 2000+1min ? true");
+  equal(JWS.verifyJWT(jwtGrace, "616161", {alg: ["HS256"], verifyAt: 946684860 - 120}),
+        false, "iat2000 < 2000-1min ? false");
+  equal(JWS.verifyJWT(jwtGrace, "616161", {alg: ["HS256"], verifyAt: 946684860 + 120}),
+        false, "2000+3min < exp2000+2min ? false");
+  equal(JWS.verifyJWT(jwtGrace, "616161", {alg: ["HS256"], verifyAt: 946684860 - 120, gracePeriod: 2 * 60}),
+        true, "iat2000 < 2000-1min ? grace=2min true");
+  equal(JWS.verifyJWT(jwtGrace, "616161", {alg: ["HS256"], verifyAt: 946684860 + 120, gracePeriod: 2 * 60}),
+        true, "2000+3min < exp2000+2min ? grace=2min true");
 });
 
 });

@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 5.0.11 to 5.0.12
+  - jws between 3.3.3 to 3.3.4
+    - support grace period for verifyJWT method.
+      This is to allow time difference between 
+      JWT generator and verifier.
+  - asn1hex
+    - API document update
+
 * Changes between 5.0.10 to 5.0.11
   - X509v1 certificate support in KEYUTIL.getKey and
     X509.getPublicKeyInfoPropOfCertPEM

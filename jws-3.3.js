@@ -1,11 +1,11 @@
-/*! jws-3.3.3 (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! jws-3.3.4 (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * jws.js - JSON Web Signature(JWS) and JSON Web Token(JWT) Class
  *
- * version: 3.3.3 (2015 Nov 27)
+ * version: 3.3.4 (2016 May 17)
  *
- * Copyright (c) 2010-2015 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2016 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license/
@@ -18,7 +18,7 @@
  * @fileOverview
  * @name jws-3.3.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 3.3.3 (2015-Nov-27)
+ * @version 3.3.4 (2016-May-17)
  * @since jsjws 1.0, jsrsasign 4.8.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -537,6 +537,7 @@ KJUR.jws.JWS.parse = function(sJWS) {
  * @param {Array} acceptField associative array of acceptable fields (OPTION)
  * @return {Boolean} true if the JWT token is valid otherwise false
  * @since jws 3.2.3 jsrsasign 4.8.0
+ *
  * @description
  * This method verifies a
  * <a href="https://tools.ietf.org/html/rfc7519">RFC 7519</a> 
@@ -556,11 +557,22 @@ KJUR.jws.JWS.parse = function(sJWS) {
  *     the same as value if specified. (OPTION)</li>
  * <li>Time validity
  * <ul>
- * <li>If acceptField.verifyAt as number of UNIX origin time is specifed for validation time, 
- * this method will verify at the time for it, otherwise current time will be used to verify.</li>
- * <li>Payload.exp (expire) - Validation time is smaller than Payloead.exp.</li>
- * <li>Payload.nbf (not before) - Validation time is greater than Payloead.nbf.</li>
- * <li>Payload.iat (issued at) - Validation time is greater than Payloead.iat.</li>
+ * <li>
+ * If acceptField.verifyAt as number of UNIX origin time is specifed for validation time, 
+ * this method will verify at the time for it, otherwise current time will be used to verify.
+ * </li>
+ * <li>
+ * Clock of JWT generator or verifier can be fast or slow. If these clocks are
+ * very different, JWT validation may fail. To avoid such case, 'jsrsasign' supports
+ * 'acceptField.gracePeriod' parameter which specifies acceptable time difference
+ * of those clocks in seconds. So if you want to accept slow or fast in 2 hours,
+ * you can specify <code>acceptField.gracePeriod = 2 * 60 * 60;</code>.
+ * "gracePeriod" is zero by default.
+ * "gracePeriod" is supported since jsrsasign 5.0.12.
+ * </li>
+ * <li>Payload.exp (expire) - Validation time is smaller than Payload.exp + gracePeriod.</li>
+ * <li>Payload.nbf (not before) - Validation time is greater than Payload.nbf - gracePeriod.</li>
+ * <li>Payload.iat (issued at) - Validation time is greater than Payload.iat - gracePeriod.</li>
  * </ul>
  * </li>
  * <li>Payload.jti (JWT id) - Payload.jti is included in acceptField.jti if specified. (OPTION)</li>
@@ -579,7 +591,8 @@ KJUR.jws.JWS.parse = function(sJWS) {
  *   sub: ['mailto:john@foo.com', 'mailto:alice@foo.com'],
  *   verifyAt: KJUR.jws.IntDate.get('20150520235959Z'),
  *   aud: ['http://foo.com'], // aud: 'http://foo.com' is fine too.
- *   jti: 'id123456'
+ *   jti: 'id123456',
+ *   gracePeriod: 1 * 60 * 60 // accept 1 hour slow or fast
  * });
  */
 KJUR.jws.JWS.verifyJWT = function(sJWT, key, acceptField) {
@@ -625,25 +638,30 @@ KJUR.jws.JWS.verifyJWT = function(sJWT, key, acceptField) {
 	}
     }
 
-    // 8. time validity (nbf < now < exp) && (iat <= now)
+    // 8. time validity 
+    //   (nbf - gracePeriod < now < exp + gracePeriod) && (iat - gracePeriod < now)
     var now = KJUR.jws.IntDate.getNow();
-    if (acceptField.verifyAt !== undefined && typeof acceptField.verifyAt == "number") {
+    if (acceptField.verifyAt !== undefined && typeof acceptField.verifyAt === "number") {
 	now = acceptField.verifyAt;
+    }
+    if (acceptField.gracePeriod === undefined || 
+        typeof acceptField.gracePeriod !== "number") {
+	acceptField.gracePeriod = 0;
     }
 
     // 8.1 expired time 'exp' check
     if (pPayload.exp !== undefined && typeof pPayload.exp == "number") {
-	if (pPayload.exp < now) return false;
+	if (pPayload.exp + acceptField.gracePeriod < now) return false;
     }
 
     // 8.2 not before time 'nbf' check
     if (pPayload.nbf !== undefined && typeof pPayload.nbf == "number") {
-	if (now < pPayload.nbf) return false;
+	if (now < pPayload.nbf - acceptField.gracePeriod) return false;
     }
     
     // 8.3 issued at time 'iat' check
     if (pPayload.iat !== undefined && typeof pPayload.iat == "number") {
-	if (now < pPayload.iat) return false;
+	if (now < pPayload.iat - acceptField.gracePeriod) return false;
     }
 
     // 9 JWT id 'jti' check

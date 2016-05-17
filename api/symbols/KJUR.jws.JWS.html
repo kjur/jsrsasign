@@ -1518,11 +1518,22 @@ It will verify following:
     the same as value if specified. (OPTION)</li>
 <li>Time validity
 <ul>
-<li>If acceptField.verifyAt as number of UNIX origin time is specifed for validation time, 
-this method will verify at the time for it, otherwise current time will be used to verify.</li>
-<li>Payload.exp (expire) - Validation time is smaller than Payloead.exp.</li>
-<li>Payload.nbf (not before) - Validation time is greater than Payloead.nbf.</li>
-<li>Payload.iat (issued at) - Validation time is greater than Payloead.iat.</li>
+<li>
+If acceptField.verifyAt as number of UNIX origin time is specifed for validation time, 
+this method will verify at the time for it, otherwise current time will be used to verify.
+</li>
+<li>
+Clock of JWT generator or verifier can be fast or slow. If these clocks are
+very different, JWT validation may fail. To avoid such case, 'jsrsasign' supports
+'acceptField.gracePeriod' parameter which specifies acceptable time difference
+of those clocks in seconds. So if you want to accept slow or fast in 2 hours,
+you can specify <code>acceptField.gracePeriod = 2 * 60 * 60;</code>.
+"gracePeriod" is zero by default.
+"gracePeriod" is supported since jsrsasign 5.0.12.
+</li>
+<li>Payload.exp (expire) - Validation time is smaller than Payload.exp + gracePeriod.</li>
+<li>Payload.nbf (not before) - Validation time is greater than Payload.nbf - gracePeriod.</li>
+<li>Payload.iat (issued at) - Validation time is greater than Payload.iat - gracePeriod.</li>
 </ul>
 </li>
 <li>Payload.jti (JWT id) - Payload.jti is included in acceptField.jti if specified. (OPTION)</li>
@@ -1545,7 +1556,8 @@ isValid = KJUR.jws.JWS.verifyJWT('eyJh...', pubkey, {
   sub: ['mailto:john@foo.com', 'mailto:alice@foo.com'],
   verifyAt: KJUR.jws.IntDate.get('20150520235959Z'),
   aud: ['http://foo.com'], // aud: 'http://foo.com' is fine too.
-  jti: 'id123456'
+  jti: 'id123456',
+  gracePeriod: 1 * 60 * 60 // accept 1 hour slow or fast
 });</pre>
 					
 					
