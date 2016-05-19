@@ -38,6 +38,7 @@
 <script language="JavaScript" type="text/javascript" src="../ext/ec.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/ec-patch.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ecdsa-modified-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecparam-1.0.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -141,6 +142,48 @@ equal(k1.q.compareTo(k2.q), 0, "same q");
 equal(k1.dmp1.compareTo(k2.dmp1), 0, "same dmp1");
 equal(k1.dmq1.compareTo(k2.dmq1), 0, "same dmq1");
 equal(k1.coeff.compareTo(k2.coeff), 0, "same coeff " + k1.coeff.toString(16) + " " + k2.coeff.toString(16));
+});
+
+var key5prveccpem = "-----BEGIN EC PRIVATE KEY-----\n" +
+"MHQCAQEEIIRAVcyhPv14znmkw6TFq6XbDr63rp1WkGwD0zPFZo1boAcGBSuBBAAK\n" +
+"oUQDQgAEFHt56eHdMyTO6hFf9AN7bId8c3dxMUGL+ytxPv/Q9QIye5I4YVgb1VNe\n" +
+"6uAGdlJp9AT19cUiFOlyGwSqfQQKdQ==\n" +
+"-----END EC PRIVATE KEY-----";
+var key5prvecchex = "30740201010420844055cca13efd78ce79a4c3a4c5aba5db0ebeb7ae9d56906c03d333c5668d5ba00706052b8104000aa14403420004147b79e9e1dd3324ceea115ff4037b6c877c73777131418bfb2b713effd0f502327b923861581bd5535eeae006765269f404f5f5c52214e9721b04aa7d040a75";
+
+test("KEYUTIL.getKey ECC PKCS5PRVPEM, PKCS5PRVHEX comparison", function() {
+var k1 = KEYUTIL.getKey(key5prveccpem);
+var k2 = KEYUTIL.getKey(key5prvecchex, null, "pkcs5prv-ecc");
+
+equal(KEYUTIL.getHexFromPEM(key5prveccpem, "EC PRIVATE KEY"), key5prvecchex, "same hex");
+equal(KEYUTIL.getHexFromPEM(key5prveccpem), key5prvecchex, "same hex");
+equal(k1.ecparams.name, k2.ecparams.name, "same name " + k1.ecparams.name);
+equal(k1.ecparams.keylen, k2.ecparams.keylen, "same keylen " + k1.ecparams.keylen);
+equal(k1.ecparams.n, k2.ecparams.n, "same n " + k1.ecparams.n);
+equal(k1.ecparams.G, k2.ecparams.G, "same G " + k1.ecparams.G);
+equal(k1.ecparams.curve, k2.ecparams.curve, "same curve " + k1.ecparams.curve);
+equal(k1.ecparams.h, k2.ecparams.h, "same h " + k1.ecparams.h);
+});
+
+var key8prveccpem = "-----BEGIN PRIVATE KEY-----\n" +
+"MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgYirTZSx+5O8Y6tlG\n" +
+"cka6W6btJiocdrdolfcukSoTEk+hRANCAAQkvPNu7Pa1GcsWU4v7ptNfqCJVq8Cx\n" +
+"zo0MUVPQgwJ3aJtNM1QMOQUayCrRwfklg+D/rFSUwEUqtZh7fJDiFqz3\n" +
+"-----END PRIVATE KEY-----";
+var key8prvecchex = "308187020100301306072a8648ce3d020106082a8648ce3d030107046d306b0201010420622ad3652c7ee4ef18ead9467246ba5ba6ed262a1c76b76895f72e912a13124fa1440342000424bcf36eecf6b519cb16538bfba6d35fa82255abc0b1ce8d0c5153d0830277689b4d33540c39051ac82ad1c1f92583e0ffac5494c0452ab5987b7c90e216acf7";
+
+test("KEYUTIL.getKey ECC PKCS8PRVPEM, PKCS8PRVHEX comparison", function() {
+var k1 = KEYUTIL.getKey(key8prveccpem);
+var k2 = KEYUTIL.getKey(key8prvecchex, null, "pkcs8prv");
+
+equal(KEYUTIL.getHexFromPEM(key8prveccpem, "PRIVATE KEY"), key8prvecchex, "same hex");
+equal(KEYUTIL.getHexFromPEM(key8prveccpem), key8prvecchex, "same hex");
+equal(k1.ecparams.name, k2.ecparams.name, "same name " + k1.ecparams.name);
+equal(k1.ecparams.keylen, k2.ecparams.keylen, "same keylen " + k1.ecparams.keylen);
+equal(k1.ecparams.n, k2.ecparams.n, "same n " + k1.ecparams.n);
+equal(k1.ecparams.G, k2.ecparams.G, "same G " + k1.ecparams.G);
+equal(k1.ecparams.curve, k2.ecparams.curve, "same curve " + k1.ecparams.curve);
+equal(k1.ecparams.h, k2.ecparams.h, "same h " + k1.ecparams.h);
 });
 
 });

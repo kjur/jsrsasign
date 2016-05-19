@@ -1426,44 +1426,65 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	ec.setPrivateKeyHex(hPrv);
 	return ec;
     }
-    
-    // 4. by PEM certificate (-----BEGIN ... CERTIFITE----)
+
+    // 4. by PEM certificate (-----BEGIN ... CERTIFICATE----)
     if (param.indexOf("-END CERTIFICATE-", 0) != -1 ||
         param.indexOf("-END X509 CERTIFICATE-", 0) != -1 ||
         param.indexOf("-END TRUSTED CERTIFICATE-", 0) != -1) {
         return X509.getPublicKeyFromCertPEM(param);
     }
 
-    // 4. public key by PKCS#8 hexadecimal string
+    // 5. public key by PKCS#8 hexadecimal string
     if (hextype === "pkcs8pub") {
         return KEYUTIL.getKeyFromPublicPKCS8Hex(param);
     }
 
-    // 5. public key by PKCS#8 PEM string
+    // 6. public key by PKCS#8 PEM string
     if (param.indexOf("-END PUBLIC KEY-") != -1) {
         return KEYUTIL.getKeyFromPublicPKCS8PEM(param);
     }
-    
-    // 6. private key by PKCS#5 plain hexadecimal RSA string
-    if (hextype === "pkcs5prv") {
+
+    // 7. private key by PKCS#5 plain hexadecimal string
+
+    // 7.1. RSA
+    if (hextype === "pkcs5prv" || hextype === "pkcs5prv-rsa") {
         var key = new RSAKey();
         key.readPrivateKeyFromASN1HexString(param);
         return key;
     }
 
-    // 7. private key by plain PKCS#5 hexadecimal RSA string
-    if (hextype === "pkcs5prv") {
-        var key = new RSAKey();
-        key.readPrivateKeyFromASN1HexString(param);
-        return key;
+    var _getECCPrivateKeyFromPlainPKCS5Hex = function(hKey) {
+        var key = ASN1HEX.getVbyList(hKey, 0, [1], "04");
+        var curveNameOidHex = ASN1HEX.getVbyList(hKey, 0, [2,0], "06");
+        var pubkey = ASN1HEX.getVbyList(hKey, 0, [3,0], "03").substr(2);
+        var curveName = "";
+
+        if (KJUR.crypto.OID.oidhex2name[curveNameOidHex] !== undefined) {
+            curveName = KJUR.crypto.OID.oidhex2name[curveNameOidHex];
+        } else {
+            throw "undefined OID(hex) in KJUR.crypto.OID: " + curveNameOidHex;
+        }
+
+        var ec = new KJUR.crypto.ECDSA({'name': curveName});
+        ec.setPublicKeyHex(pubkey);
+        ec.setPrivateKeyHex(key);
+        ec.isPublic = false;
+        return ec;
+    };
+
+    // 7.2. ECC
+    if (hextype === "pkcs5prv-ecc") {
+        return _getECCPrivateKeyFromPlainPKCS5Hex(param);
     }
 
-    // 8. private key by plain PKCS#5 PEM RSA string 
+    // 8. private key by plain PKCS#5 PEM string
+
+    // 8.1. private key by plain PKCS#5 PEM RSA string
     //    getKey("-----BEGIN RSA PRIVATE KEY-...")
     if (param.indexOf("-END RSA PRIVATE KEY-") != -1 &&
         param.indexOf("4,ENCRYPTED") == -1) {
         var hex = KEYUTIL.getHexFromPEM(param, "RSA PRIVATE KEY");
-        return KEYUTIL.getKey(hex, null, "pkcs5prv");
+        return KEYUTIL.getKey(hex, null, "pkcs5prv-rsa");
     }
 
     // 8.2. private key by plain PKCS#5 PEM DSA string
@@ -1484,13 +1505,30 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
                        new BigInteger(x, 16));
         return key;
     }
+    
+    // 8.3. private key by plain PKCS#5 PEM EC string
+    if (param.indexOf("-END EC PRIVATE KEY-") != -1 &&
+        param.indexOf("4,ENCRYPTED") == -1) {
 
-    // 9. private key by plain PKCS#8 PEM ECC/RSA string
+        var hKey = this.getHexFromPEM(param, "EC PRIVATE KEY");
+        return _getECCPrivateKeyFromPlainPKCS5Hex(hKey);
+    }
+
+    // 9. private key by plain PKCS#8
+
+    // 9.1. hex ECC/RSA/DSA string
+    if (hextype === "pkcs8prv") {
+        return KEYUTIL.getKeyFromPlainPrivatePKCS8Hex(param);
+    }
+
+    // 9.2. PEM ECC/RSA/DSA string
     if (param.indexOf("-END PRIVATE KEY-") != -1) {
         return KEYUTIL.getKeyFromPlainPrivatePKCS8PEM(param);
     }
 
-    // 10. private key by encrypted PKCS#5 PEM RSA string
+    // 10. private key by encrypted PKCS#5 PEM string
+
+    // 10.1. private key by encrypted PKCS#5 PEM RSA string
     if (param.indexOf("-END RSA PRIVATE KEY-") != -1 &&
         param.indexOf("4,ENCRYPTED") != -1) {
         return KEYUTIL.getRSAKeyFromEncryptedPKCS5PEM(param, passcode);
@@ -1500,23 +1538,8 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     if (param.indexOf("-END EC PRIVATE KEY-") != -1 &&
         param.indexOf("4,ENCRYPTED") != -1) {
         var hKey = KEYUTIL.getDecryptedKeyHex(param, passcode);
-
-        var key = ASN1HEX.getVbyList(hKey, 0, [1], "04");
-        var curveNameOidHex = ASN1HEX.getVbyList(hKey, 0, [2,0], "06");
-        var pubkey = ASN1HEX.getVbyList(hKey, 0, [3,0], "03").substr(2);
-        var curveName = "";
-
-        if (KJUR.crypto.OID.oidhex2name[curveNameOidHex] !== undefined) {
-            curveName = KJUR.crypto.OID.oidhex2name[curveNameOidHex];
-        } else {
-            throw "undefined OID(hex) in KJUR.crypto.OID: " + curveNameOidHex;
-        }
-
-        var ec = new KJUR.crypto.ECDSA({'name': curveName});
-        ec.setPublicKeyHex(pubkey);
-        ec.setPrivateKeyHex(key);
-        ec.isPublic = false;
-        return ec;
+        
+        return _getECCPrivateKeyFromPlainPKCS5Hex(hKey);
     }
 
     // 10.3. private key by encrypted PKCS#5 PEM DSA string
