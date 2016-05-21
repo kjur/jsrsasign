@@ -51,9 +51,27 @@ if (typeof KJUR.jws == "undefined" || !KJUR.jws) KJUR.jws = {};
  * @since jsjws 1.0
  * @description
  * This class provides JSON Web Signature(JWS)/JSON Web Token(JWT) signing and validation.
- * <h4>Supported Algorithms</h4>
- * Here is supported algorithm names for {@link KJUR.jws.JWS.sign} and {@link KJUR.jws.JWS.verify}
- * methods.
+ *
+ * <h4>METHOD SUMMARY</h4>
+ * Here is major methods of {@link KJUR.jws.JWS} class.
+ * <ul>
+ * <li><b>SIGN</b><br/>
+ * <li>{@link KJUR.jws.JWS.sign} - sign JWS</li>
+ * </li>
+ * <li><b>VERIFY</b><br/>
+ * <li>{@link KJUR.jws.JWS.verify} - verify JWS signature</li>
+ * <li>{@link KJUR.jws.JWS.verifyJWT} - verify properties of JWT token at specified time</li>
+ * </li>
+ * <li><b>UTILITY</b><br/>
+ * <li>{@link KJUR.jws.JWS.getJWKthumbprint} - get RFC 7638 JWK thumbprint</li>
+ * <li>{@link KJUR.jws.JWS.isSafeJSONString} - check whether safe JSON string or not</li>
+ * <li>{@link KJUR.jws.JWS.readSafeJSONString} - read safe JSON string only</li>
+ * </li>
+ * </ul> 
+ *
+ * <h4>SUPPORTED SIGNATURE ALGORITHMS</h4>
+ * Here is supported algorithm names for {@link KJUR.jws.JWS.sign} and
+ * {@link KJUR.jws.JWS.verify} methods.
  * <table>
  * <tr><th>alg value</th><th>spec requirement</th><th>jsjws support</th></tr>
  * <tr><td>HS256</td><td>REQUIRED</td><td>SUPPORTED</td></tr>
@@ -87,11 +105,11 @@ if (typeof KJUR.jws == "undefined" || !KJUR.jws) KJUR.jws = {};
  * <b>EXAMPLE</b><br/>
  * @example
  * // JWS signing 
- * sJWS = KJUR.jws.JWS.sign(null, '{"alg":"HS256", "cty":"JWT"}', '{"age": 21}', "password");
+ * sJWS = KJUR.jws.JWS.sign(null, '{"alg":"HS256", "cty":"JWT"}', '{"age": 21}', {"utf8": "password"});
  * // JWS validation
- * isValid = KJUR.jws.JWS.verify('eyJjdHkiOiJKV1QiLCJhbGc...', "password");
+ * isValid = KJUR.jws.JWS.verify('eyJjdHkiOiJKV1QiLCJhbGc...', {"utf8": "password"});
  * // JWT validation
- * isValid = KJUR.jws.JWS.verifyJWT('eyJh...', "password", {
+ * isValid = KJUR.jws.JWS.verifyJWT('eyJh...', {"utf8": "password"}, {
  *   alg: ['HS256', 'HS384'],
  *   iss: ['http://foo.com']
  * });
@@ -577,6 +595,24 @@ KJUR.jws.JWS.parse = function(sJWS) {
  * </li>
  * <li>Payload.jti (JWT id) - Payload.jti is included in acceptField.jti if specified. (OPTION)</li>
  * <li>JWS signature of JWS is valid for specified key.</li>
+ * </ul>
+ *
+ * <h4>acceptField parameters</h4>
+ * Here is available acceptField argument parameters:
+ * <ul>
+ * <li>alg - array of acceptable signature algorithm names (ex. ["HS256", "HS384"])</li>
+ * <li>iss - array of acceptable issuer names (ex. ['http://foo.com'])</li>
+ * <li>sub - array of acceptable subject names (ex. ['mailto:john@foo.com'])</li>
+ * <li>aud - array or string of acceptable audience name(s) (ex. ['http://foo.com'])</li>
+ * <li>jti - string of acceptable JWT ID (OPTION) (ex. 'id1234')</li>
+ * <li>
+ * verifyAt - time to verify 'nbf', 'iat' and 'exp' in UNIX seconds 
+ * (OPTION) (ex. 1377663900).  
+ * If this is not specified, current time of verifier will be used. 
+ * {@link KJUR.jws.IntDate} may be useful to specify it.
+ * </li>
+ * <li>gracePeriod - acceptable time difference between signer and verifier
+ * in seconds (ex. 3600). If this is not specified, zero will be used.</li>
  * </ul>
  *
  * @example

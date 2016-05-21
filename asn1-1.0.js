@@ -148,6 +148,7 @@ KJUR.asn1.ASN1Util = new function() {
      * -----END PRIVATE KEY-----
      */
     this.getPEMStringFromHex = function(dataHex, pemHeader) {
+        //var dataB64 = hextob64(dataHex);
         var ns1 = KJUR.asn1;
         var dataWA = CryptoJS.enc.Hex.parse(dataHex);
         var dataB64 = CryptoJS.enc.Base64.stringify(dataWA);
