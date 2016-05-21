@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 5.0.12 to next version
+  - jws.js
+    API document updated.
+  - CryptoJS codes in code.google.com seem to be removed and
+    404 not found so that CryptoJS references in all test
+    were moved to local files.
+  - CryptoJS codes were moved to ext/cj directory.
+
 * Changes between 5.0.11 to 5.0.12
   - jws between 3.3.3 to 3.3.4
     - support grace period for verifyJWT method.
