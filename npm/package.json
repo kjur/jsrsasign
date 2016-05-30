@@ -4,28 +4,48 @@
   "description": "opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, CMS SignedData, TimeStamp and CAdES and JSON Web Signature(JWS)/Token(JWT)/Key(JWK).",
   "main": "lib/jsrsasign.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ava tests/*.spec.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/kjur/jsrsasign.git"
   },
   "keywords": [
-    "RSA", "ECDSA", "DSA", "RSAPSS",
-    "PKCS#1", "PKCS#5", "PKCS#8", "private key", "public key",
-    "CSR", "PKCS#10",
+    "RSA",
+    "ECDSA",
+    "DSA",
+    "RSAPSS",
+    "PKCS#1",
+    "PKCS#5",
+    "PKCS#8",
+    "private key",
+    "public key",
+    "CSR",
+    "PKCS#10",
     "hash function",
     "HMac",
     "ASN.1",
-    "certificate", "X.509",
-    "RFC 3161", "Digital Timestamp", "Timestamp", "Time Stamp Token",
-    "CMS", "Cryptgraphic Message Syntax", "PKCS#7",   
-    "Signature", "Digital Signature", "signing",
+    "certificate",
+    "X.509",
+    "RFC 3161",
+    "Digital Timestamp",
+    "Timestamp",
+    "Time Stamp Token",
+    "CMS",
+    "Cryptgraphic Message Syntax",
+    "PKCS#7",
+    "Signature",
+    "Digital Signature",
+    "signing",
     "Message Digest",
-    "JSON Web Token", "JWT",
-    "JSON Web Signature", "JWS",
-    "JSON Web Key", "JWK", 
-    "JOSE", "JWA"
+    "JSON Web Token",
+    "JWT",
+    "JSON Web Signature",
+    "JWS",
+    "JSON Web Key",
+    "JWK",
+    "JOSE",
+    "JWA"
   ],
   "author": "Kenji Urushima",
   "licenses": [
@@ -37,5 +57,19 @@
   "bugs": {
     "url": "https://github.com/kjur/jsrsasign/issues"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "ava": "^0.15.1",
+    "babel-core": "^6.9.1",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-stage-1": "^6.5.0"
+  },
+  "ava": {
+    "require": [
+      "babel-register"
+    ],
+    "babel": {
+      "presets": ["es2015", "stage-1"]
+    }
+  }
 }
