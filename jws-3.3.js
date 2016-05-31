@@ -135,7 +135,7 @@ KJUR.jws.JWS = function() {
 	    return;
 	}
 	if (sJWS.match(/^([^.]+)\.([^.]+)\.([^.]+)$/) == null) {
-	    throw "JWS signature is not a form of 'Head.Payload.SigValue'.";
+	    throw new Error("JWS signature is not a form of 'Head.Payload.SigValue'.");
 	}
 	var b6Head = RegExp.$1;
 	var b6Payload = RegExp.$2;
@@ -160,7 +160,7 @@ KJUR.jws.JWS = function() {
 	this.parsedJWS.payloadS = sPayload;
 
 	if (! ns1.isSafeJSONString(sHead, this.parsedJWS, 'headP'))
-	    throw "malformed JSON string for JWS Head: " + sHead;
+	    throw new Error("malformed JSON string for JWS Head: " + sHead);
     };
 };
 
@@ -238,7 +238,7 @@ KJUR.jws.JWS.sign = function(alg, spHeader, spPayload, key, pass) {
 
     // 1. check signatureInput(Header, Payload) is string or object
     if (typeof spHeader != 'string' && typeof spHeader != 'object')
-	throw "spHeader must be JSON string or object: " + spHeader;
+	throw new Error("spHeader must be JSON string or object: " + spHeader);
 
     if (typeof spHeader == 'object') {
 	pHeader = spHeader;
@@ -248,7 +248,7 @@ KJUR.jws.JWS.sign = function(alg, spHeader, spPayload, key, pass) {
     if (typeof spHeader == 'string') {
 	sHeader = spHeader;
 	if (! ns1.isSafeJSONString(sHeader))
-	    throw "JWS Head is not safe JSON string: " + sHeader;
+	    throw new Error("JWS Head is not safe JSON string: " + sHeader);
 	pHeader = ns1.readSafeJSONString(sHeader);
 
     }
@@ -271,12 +271,12 @@ KJUR.jws.JWS.sign = function(alg, spHeader, spPayload, key, pass) {
 
     // 4. check explicit algorithm doesn't match with JWS header.
     if (alg !== pHeader.alg)
-	throw "alg and sHeader.alg doesn't match: " + alg + "!=" + pHeader.alg;
+	throw new Error("alg and sHeader.alg doesn't match: " + alg + "!=" + pHeader.alg);
 
     // 5. set signature algorithm like SHA1withRSA
     var sigAlg = null;
     if (ns1.jwsalg2sigalg[alg] === undefined) {
-	throw "unsupported alg name: " + alg;
+	throw new Error("unsupported alg name: " + alg);
     } else {
 	sigAlg = ns1.jwsalg2sigalg[alg];
     }
@@ -288,7 +288,7 @@ KJUR.jws.JWS.sign = function(alg, spHeader, spPayload, key, pass) {
     var hSig = "";
     if (sigAlg.substr(0, 4) == "Hmac") {
 	if (key === undefined)
-	    throw "mac key shall be specified for HS* alg";
+	    throw new Error("mac key shall be specified for HS* alg");
 	//alert("sigAlg=" + sigAlg);
 	var mac = new KJUR.crypto.Mac({'alg': sigAlg, 'prov': 'cryptojs', 'pass': key});
 	mac.updateString(uSignatureInput);
@@ -391,7 +391,7 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
     var alg = null;
     var algType = null; // HS|RS|PS|ES|no
     if (pHeader.alg === undefined) {
-	throw "algorithm not specified in header";
+	throw new Error("algorithm not specified in header");
     } else {
 	alg = pHeader.alg;
 	algType = alg.substr(0, 2);
@@ -403,13 +403,13 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
         acceptAlgs.length > 0) {
 	var acceptAlgStr = ":" + acceptAlgs.join(":") + ":";
 	if (acceptAlgStr.indexOf(":" + alg + ":") == -1) {
-	    throw "algorithm '" + alg + "' not accepted in the list";
+	    throw new Error("algorithm '" + alg + "' not accepted in the list");
 	}
     }
 
     // 3. check whether key is a proper key for alg.
     if (alg != "none" && key === null) {
-	throw "key shall be specified to verify.";
+	throw new Error("key shall be specified to verify.");
     }
 
     // 3.1. There is no key check for HS* because Mac will check it.
@@ -424,14 +424,14 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
     // 3.3. check whether key is RSAKey obj if alg is RS* or PS*.
     if (algType == "RS" || algType == "PS") {
 	if (!(key instanceof RSAKey)) {
-	    throw "key shall be a RSAKey obj for RS* and PS* algs";
+	    throw new Error("key shall be a RSAKey obj for RS* and PS* algs");
 	}
     }
 
     // 3.4. check whether key is ECDSA obj if alg is ES*.
     if (algType == "ES") {
 	if (!(key instanceof KJUR.crypto.ECDSA)) {
-	    throw "key shall be a ECDSA obj for ES* algs";
+	    throw new Error("key shall be a ECDSA obj for ES* algs");
 	}
     }
 
@@ -442,18 +442,18 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
     // 4. check whether alg is supported alg in jsjws.
     var sigAlg = null;
     if (jws.jwsalg2sigalg[pHeader.alg] === undefined) {
-	throw "unsupported alg name: " + alg;
+	throw new Error("unsupported alg name: " + alg);
     } else {
 	sigAlg = jws.jwsalg2sigalg[alg];
     }
 
     // 5. verify
     if (sigAlg == "none") {
-        throw "not supported";
+        throw new Error("not supported");
     } else if (sigAlg.substr(0, 4) == "Hmac") {
 	var hSig2 = null;
 	if (key === undefined)
-	    throw "hexadecimal key shall be specified for HMAC";
+	    throw new Error("hexadecimal key shall be specified for HMAC");
 	//try {
 	    var mac = new KJUR.crypto.Mac({'alg': sigAlg, 'pass': key});
 	    mac.updateString(uSignatureInput);
@@ -522,7 +522,7 @@ KJUR.jws.JWS.parse = function(sJWS) {
     var result = {};
     var uHeader, uPayload, uSig;
     if (a.length != 2 && a.length != 3)
-	throw "malformed sJWS: wrong number of '.' splitted elements";
+	throw new Error("malformed sJWS: wrong number of '.' splitted elements");
 
     uHeader = a[0];
     uPayload = a[1];
@@ -650,7 +650,7 @@ KJUR.jws.JWS.verifyJWT = function(sJWT, key, acceptField) {
     // 4. algorithm ('alg' in header) check
     if (pHeader.alg === undefined) return false;
     if (acceptField.alg === undefined)
-	throw "acceptField.alg shall be specified";
+	throw new Error("acceptField.alg shall be specified");
     if (! ns1.inArray(pHeader.alg, acceptField.alg)) return false;
 
     // 5. issuer ('iss' in payload) check
@@ -850,7 +850,7 @@ KJUR.jws.JWS.readSafeJSONString = function(s) {
  */
 KJUR.jws.JWS.getEncodedSignatureValueFromJWS = function(sJWS) {
     if (sJWS.match(/^[^.]+\.[^.]+\.([^.]+)$/) == null) {
-	throw "JWS signature is not a form of 'Head.Payload.SigValue'.";
+	throw new Error("JWS signature is not a form of 'Head.Payload.SigValue'.");
     }
     return RegExp.$1;
 };
@@ -880,13 +880,13 @@ KJUR.jws.JWS.getJWKthumbprint = function(o) {
     if (o.kty !== "RSA" &&
 	o.kty !== "EC" &&
 	o.kty !== "oct")
-	throw "unsupported algorithm for JWK Thumprint";
+	throw new Error("unsupported algorithm for JWK Thumprint");
 
     // 1. get canonically ordered json string
     var s = '{';
     if (o.kty === "RSA") {
 	if (typeof o.n != "string" || typeof o.e != "string")
-	    throw "wrong n and e value for RSA key";
+	    throw new Error("wrong n and e value for RSA key");
 	s += '"' + 'e' + '":"' + o.e + '",';
 	s += '"' + 'kty' + '":"' + o.kty + '",';
 	s += '"' + 'n' + '":"' + o.n + '"}';
@@ -894,14 +894,14 @@ KJUR.jws.JWS.getJWKthumbprint = function(o) {
 	if (typeof o.crv != "string" || 
 	    typeof o.x != "string" ||
 	    typeof o.y != "string")
-	    throw "wrong crv, x and y value for EC key";
+	    throw new Error("wrong crv, x and y value for EC key");
 	s += '"' + 'crv' + '":"' + o.crv + '",';
 	s += '"' + 'kty' + '":"' + o.kty + '",';
 	s += '"' + 'x' + '":"' + o.x + '",';
 	s += '"' + 'y' + '":"' + o.y + '"}';
     } else if (o.kty === "oct") {
 	if (typeof o.k != "string")
-	    throw "wrong k value for oct(symmetric) key";
+	    throw new Error("wrong k value for oct(symmetric) key");
 	s += '"' + 'kty' + '":"' + o.kty + '",';
 	s += '"' + 'k' + '":"' + o.k + '"}';
     }
@@ -964,7 +964,7 @@ KJUR.jws.IntDate.get = function(s) {
     } else if (s.match(/^[0-9]+$/)) {
 	return parseInt(s);
     }
-    throw "unsupported format: " + s;
+    throw new Error("unsupported format: " + s);
 };
 
 /**
@@ -1001,10 +1001,10 @@ KJUR.jws.IntDate.getZulu = function(s) {
 	    } else if (0 <= year && year < 50) {
 		year = 2000 + year;
 	    } else {
-		throw "malformed year string for UTCTime";
+		throw new Error("malformed year string for UTCTime");
 	    }
 	} else {
-	    throw "malformed year string";
+	    throw new Error("malformed year string");
 	}
 	var month = parseInt(RegExp.$2) - 1;
 	var day = parseInt(RegExp.$3);
@@ -1014,7 +1014,7 @@ KJUR.jws.IntDate.getZulu = function(s) {
 	var d = new Date(Date.UTC(year, month, day, hour, min, sec));
 	return ~~(d / 1000);
     }
-    throw "unsupported format: " + s;
+    throw new Error("unsupported format: " + s);
 };
 
 /**

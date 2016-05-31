@@ -329,7 +329,7 @@ KJUR.asn1.cades.SignatureTimeStamp = function(params) {
                 params.res.match(/^[0-9A-Fa-f]+$/)) {
             } else if (params.res instanceof KJUR.asn1.ASN1Object) {
             } else {
-                throw "res param shall be ASN1Object or hex string";
+                throw new Error("res param shall be ASN1Object or hex string");
             }
         }
         if (typeof params.tst != "undefined") {
@@ -342,7 +342,7 @@ KJUR.asn1.cades.SignatureTimeStamp = function(params) {
                 this.valueList = [d];
             } else if (params.tst instanceof KJUR.asn1.ASN1Object) {
             } else {
-                throw "tst param shall be ASN1Object or hex string";
+                throw new Error("tst param shall be ASN1Object or hex string");
             }
         }
     }
@@ -446,7 +446,7 @@ KJUR.asn1.cades.OtherCertID = function(params) {
     this.getEncodedHex = function() {
         if (this.hTLV != null) return this.hTLV;
         if (this.dOtherCertHash == null)
-            throw "otherCertHash not set";
+            throw new Error("otherCertHash not set");
         var a = [this.dOtherCertHash];
         if (this.dIssuerSerial != null)
             a.push(this.dIssuerSerial);
@@ -512,7 +512,7 @@ KJUR.asn1.cades.OtherHash = function(params) {
      */
     this.setByCertPEM = function(certPEM) {
         if (certPEM.indexOf("-----BEGIN ") == -1)
-            throw "certPEM not to seem PEM format";
+            throw new Error("certPEM not to seem PEM format");
         var hex = X509.pemToHex(certPEM);
         var hash = KJUR.crypto.Util.hashHex(hex, this.alg);
         this.dOtherHash = 
@@ -521,7 +521,7 @@ KJUR.asn1.cades.OtherHash = function(params) {
 
     this.getEncodedHex = function() {
         if (this.dOtherHash == null)
-            throw "OtherHash not set";
+            throw new Error("OtherHash not set");
         return this.dOtherHash.getEncodedHex();
     };
 
@@ -532,7 +532,7 @@ KJUR.asn1.cades.OtherHash = function(params) {
             } else if (params.match(/^[0-9A-Fa-f]+$/)) {
                 this.dOtherHash = new nA.DEROctetString({hex: params});
             } else {
-                throw "unsupported string value for params";
+                throw new Error("unsupported string value for params");
             }
         } else if (typeof params == "object") {
             if (typeof params.cert == "string") {
@@ -598,12 +598,12 @@ KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned = function(hex) {
     // 1. not oid signed-data then error
     if (ASN1HEX.getDecendantHexTLVByNthList(hex, 0, [0]) != 
         "06092a864886f70d010702")
-        throw "hex is not CMS SignedData";
+        throw new Error("hex is not CMS SignedData");
 
     var iSD = ASN1HEX.getDecendantIndexByNthList(hex, 0, [1, 0]);
     var aSDChildIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, iSD);
     if (aSDChildIdx.length < 4)
-        throw "num of SignedData elem shall be 4 at least";
+        throw new Error("num of SignedData elem shall be 4 at least");
 
     // 2. HEXs of SignedData children
     // 2.1. SignedData.CMSVersion
@@ -638,7 +638,7 @@ KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned = function(hex) {
     // 2.6. SignerInfos
     var iSignerInfos = iNext;
     if (hex.substr(iSignerInfos, 2) != "31")
-        throw "Can't find signerInfos";
+        throw new Error("Can't find signerInfos");
 
     var aSIIndex = ASN1HEX.getPosArrayOfChildren_AtObj(hex, iSignerInfos);
     //alert(aSIIndex.join("-"));
@@ -713,7 +713,7 @@ KJUR.asn1.cades.CAdESUtil.parseSignerInfoForAddingUnsigned =
     //alert(aSIChildIdx.join("="));
 
     if (aSIChildIdx.length != 6)
-        throw "not supported items for SignerInfo (!=6)"; 
+        throw new Error("not supported items for SignerInfo (!=6)"); 
 
     // 1. SignerInfo.CMSVersion
     var iVersion = aSIChildIdx.shift();

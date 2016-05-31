@@ -135,7 +135,7 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
 
     this.getEncodedHex = function() {
         if (this.isModified == false && this.hTLV != null) return this.hTLV;
-        throw "not signed yet";
+        throw new Error("not signed yet");
     };
 
     if (typeof params != "undefined") {
@@ -291,10 +291,10 @@ KJUR.asn1.csr.CSRUtil = new function() {
 KJUR.asn1.csr.CSRUtil.newCSRPEM = function(param) {
     var ns1 = KJUR.asn1.csr;
 
-    if (param.subject === undefined) throw "parameter subject undefined";
-    if (param.sbjpubkey === undefined) throw "parameter sbjpubkey undefined";
-    if (param.sigalg === undefined) throw "parameter sigalg undefined";
-    if (param.sbjprvkey === undefined) throw "parameter sbjpubkey undefined";
+    if (param.subject === undefined) throw new Error("parameter subject undefined");
+    if (param.sbjpubkey === undefined) throw new Error("parameter sbjpubkey undefined");
+    if (param.sigalg === undefined) throw new Error("parameter sigalg undefined");
+    if (param.sbjprvkey === undefined) throw new Error("parameter sbjpubkey undefined");
 
     var csri = new ns1.CertificationRequestInfo();
     csri.setSubjectByParam(param.subject);

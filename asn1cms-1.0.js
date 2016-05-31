@@ -102,14 +102,14 @@ KJUR.asn1.cms.Attribute = function(params) {
         try {
             attrValueASN1.getEncodedHex();
         } catch (ex) {
-            throw "fail valueSet.getEncodedHex in Attribute(1)/" + ex;
+            throw new Error("fail valueSet.getEncodedHex in Attribute(1)/" + ex);
         }
 
         seq = new KJUR.asn1.DERSequence({"array": [attrTypeASN1, attrValueASN1]});
         try {
             this.hTLV = seq.getEncodedHex();
         } catch (ex) {
-            throw "failed seq.getEncodedHex in Attribute(2)/" + ex;
+            throw new Error("failed seq.getEncodedHex in Attribute(2)/" + ex);
         }
 
         return this.hTLV;
@@ -221,7 +221,7 @@ KJUR.asn1.cms.SigningTime = function(params) {
         try {
             asn1.getEncodedHex();
         } catch (ex) {
-            throw "SigningTime.getEncodedHex() failed/" + ex;
+            throw new Error("SigningTime.getEncodedHex() failed/" + ex);
         }
         this.valueList = [asn1];
     }
@@ -630,7 +630,7 @@ KJUR.asn1.cms.SignerInfo = function(params) {
         //alert("sattrs.hTLV=" + this.dSignedAttrs.hTLV);
         if (this.dSignedAttrs instanceof KJUR.asn1.cms.AttributeList &&
             this.dSignedAttrs.length() == 0) {
-            throw "SignedAttrs length = 0 (empty)";
+            throw new Error("SignedAttrs length = 0 (empty)");
         }
         var sa = new nA.DERTaggedObject({obj: this.dSignedAttrs,
                                          tag: 'a0', explicit: false});
@@ -718,7 +718,7 @@ KJUR.asn1.cms.EncapsulatedContentInfo = function(params) {
 
     this.getEncodedHex = function() {
         if (typeof this.eContentValueHex != "string") {
-            throw "eContentValue not yet set";
+            throw new Error("eContentValue not yet set");
         }
 
         var dValue = new nA.DEROctetString({hex: this.eContentValueHex});

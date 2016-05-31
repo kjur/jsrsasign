@@ -316,12 +316,12 @@ var ASN1HEX = new function() {
 ASN1HEX.getVbyList = function(h, currentIndex, nthList, checkingTag) {
     var idx = this.getDecendantIndexByNthList(h, currentIndex, nthList);
     if (idx === undefined) {
-        throw "can't find nthList object";
+        throw new Error("can't find nthList object");
     }
     if (checkingTag !== undefined) {
         if (h.substr(idx, 2) != checkingTag) {
-            throw "checking tag doesn't match: " + 
-                h.substr(idx,2) + "!=" + checkingTag;
+            throw new Error("checking tag doesn't match: " + 
+                h.substr(idx,2) + "!=" + checkingTag);
         }
     }
     return this.getHexOfV_AtObj(h, idx);

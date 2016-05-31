@@ -24,7 +24,7 @@ program
   .parse(process.argv);
 
 if (program.args.length !== 1)
-  throw "wrong number of arguments";
+  throw new Error("wrong number of arguments");
 
 var file = program.args[0];
 

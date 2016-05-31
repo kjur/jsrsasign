@@ -430,13 +430,13 @@ function intarystrtohex(s) {
   try {
     var hex = s.split(/,/).map(function(element, index, array) {
       var i = parseInt(element);
-      if (i < 0 || 255 < i) throw "integer not in range 0-255";
+      if (i < 0 || 255 < i) throw new Error("integer not in range 0-255");
       var hI = ("00" + i.toString(16)).slice(-2);
       return hI;
     }).join('');
     return hex;
   } catch(ex) {
-    throw "malformed integer array string: " + ex;
+    throw new Error("malformed integer array string: " + ex);
   }
 }
 

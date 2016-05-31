@@ -33,7 +33,7 @@ program
   .parse(process.argv);
 
 if (program.args.length !== 1)
-  throw "wrong number of arguments";
+  throw new Error("wrong number of arguments");
 
 var jwt;
 try {
@@ -49,7 +49,7 @@ var pubKeyObj;
 var acceptField = {};
 
 if (! JWS.inArray(program.passtype, ['utf8', 'hex', 'b64', 'b64u']))
-  throw "unsupported HS* password type: " + program.passtype;
+  throw new Error("unsupported HS* password type: " + program.passtype);
 if (program.passtype !== undefined && program.pass !== undefined) {
   pass = {};
   pass[program.passtype] = program.pass;

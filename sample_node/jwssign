@@ -30,7 +30,7 @@ program
   .parse(process.argv);
 
 if (program.args.length !== 3)
-  throw "wrong number of arguments";
+  throw new Error("wrong number of arguments");
 var outFile = program.args[2];
 
 var sHeader, pHeader, sPayload;
@@ -56,7 +56,7 @@ try {
 
 pHeader = JWS.readSafeJSONString(sHeader);
 if (pHeader === null)
-  throw "error: not safe JSON header: " + sHeader;
+  throw new Error("error: not safe JSON header: " + sHeader);
 
 /*
  * pass, prvkey and sigalg check
@@ -68,7 +68,7 @@ if (program.forcealg !== undefined && pHeader.alg !== program.forcealg) {
 
 pass = {};
 if (! JWS.inArray(program.passtype, ['utf8', 'hex', 'b64', 'b64u']))
-  throw "unsupported HS* password type: " + program.passtype;
+  throw new Error("unsupported HS* password type: " + program.passtype);
 if (program.passtype !== undefined && program.pass !== undefined)
   pass[program.passtype] = program.pass;
 
@@ -78,15 +78,15 @@ if (program.prvkey !== undefined) {
 }
 
 if (prvKeyObj === undefined && ! pHeader.alg.match(/^HS/))
-  throw "sigalg shall be HS* in header for hmac password";
+  throw new Error("sigalg shall be HS* in header for hmac password");
 
 if (prvKeyObj !== undefined && prvKeyObj instanceof rs.RSAKey &&
     ! pHeader.alg.match(/^[PR]S/))
-  throw "sigalg shall be PS* or RS* in header for RSA key";
+  throw new Error("sigalg shall be PS* or RS* in header for RSA key");
 
 if (prvKeyObj !== undefined && prvKeyObj instanceof rs.crypto.ECDSA &&
     ! pHeader.alg.match(/^ES/))
-  throw "sigalg shall be ES* in header for ECDSA key: " + pHeader.alg;
+  throw new Error("sigalg shall be ES* in header for ECDSA key: " + pHeader.alg);
 
 /*
  * sign JWS

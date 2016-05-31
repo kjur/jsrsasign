@@ -213,11 +213,11 @@ KJUR.asn1.ASN1Util = new function() {
         var ns1 = KJUR.asn1;
         var keys = Object.keys(param);
         if (keys.length != 1)
-            throw "key of param shall be only one.";
+            throw new Error("key of param shall be only one.");
         var key = keys[0];
 
         if (":bool:int:bitstr:octstr:null:oid:enum:utf8str:numstr:prnstr:telstr:ia5str:utctime:gentime:seq:set:tag:".indexOf(":" + key + ":") == -1)
-            throw "undefined key: " + key;
+            throw new Error("undefined key: " + key);
 
         if (key == "bool")    return new ns1.DERBoolean(param[key]);
         if (key == "int")     return new ns1.DERInteger(param[key]);
@@ -267,7 +267,7 @@ KJUR.asn1.ASN1Util = new function() {
                 if (tagParam.tag !== undefined)
                     newParam.tag = tagParam.tag;
                 if (tagParam.obj === undefined)
-                    throw "obj shall be specified for 'tag'.";
+                    throw new Error("obj shall be specified for 'tag'.");
                 newParam.obj = ns1.ASN1Util.newObject(tagParam.obj);
                 return new ns1.DERTaggedObject(newParam);
             }
@@ -369,7 +369,7 @@ KJUR.asn1.ASN1Util.oidIntToHex = function(oidString) {
     };
     
     if (! oidString.match(/^[0-9.]+$/)) {
-        throw "malformed oid string: " + oidString;
+        throw new Error("malformed oid string: " + oidString);
     }
     var h = '';
     var a = oidString.split('.');
@@ -416,10 +416,10 @@ KJUR.asn1.ASN1Object = function() {
      */
     this.getLengthHexFromValue = function() {
         if (typeof this.hV == "undefined" || this.hV == null) {
-            throw "this.hV is null or undefined.";
+            throw new Error("this.hV is null or undefined.");
         }
         if (this.hV.length % 2 == 1) {
-            throw "value hex must be even length: n=" + hV.length + ",v=" + this.hV;
+            throw new Error("value hex must be even length: n=" + hV.length + ",v=" + this.hV);
         }
         var n = this.hV.length / 2;
         var hN = n.toString(16);
@@ -431,7 +431,7 @@ KJUR.asn1.ASN1Object = function() {
         } else {
             var hNlen = hN.length / 2;
             if (hNlen > 15) {
-                throw "ASN.1 length too long to represent by 8x: n = " + n.toString(16);
+                throw new Error("ASN.1 length too long to represent by 8x: n = " + n.toString(16));
             }
             var head = 128 + hNlen;
             return head.toString(16) + hN;
@@ -858,7 +858,7 @@ KJUR.asn1.DERBitString = function(params) {
      */
     this.setUnusedBitsAndHexValue = function(unusedBits, hValue) {
         if (unusedBits < 0 || 7 < unusedBits) {
-            throw "unused bits shall be from 0 to 7: u = " + unusedBits;
+            throw new Error("unused bits shall be from 0 to 7: u = " + unusedBits);
         }
         var hUnusedBits = "0" + unusedBits;
         this.hTLV = null;
@@ -1051,7 +1051,7 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
      */
     this.setValueOidString = function(oidString) {
         if (! oidString.match(/^[0-9.]+$/)) {
-            throw "malformed oid string: " + oidString;
+            throw new Error("malformed oid string: " + oidString);
         }
         var h = '';
         var a = oidString.split('.');
@@ -1083,7 +1083,7 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
             var oid = KJUR.asn1.x509.OID.name2oidList[oidName];
             this.setValueOidString(oid);
         } else {
-            throw "DERObjectIdentifier oidName undefined: " + oidName;
+            throw new Error("DERObjectIdentifier oidName undefined: " + oidName);
         }
     };
 

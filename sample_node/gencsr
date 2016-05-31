@@ -48,7 +48,7 @@ program
 //console.log("program.args.length=" + program.args.length);
 
 if (program.args.length !== 1)
-  throw "wrong number of args"
+  throw new Error("wrong number of args");
 
 var head = program.args[0];
 var dn = program.dn;

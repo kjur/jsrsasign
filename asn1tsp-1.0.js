@@ -205,7 +205,7 @@ KJUR.asn1.tsp.TimeStampReq = function(params) {
 
     this.getEncodedHex = function() {
         if (this.dMessageImprint == null)
-            throw "messageImprint shall be specified";
+            throw new Error("messageImprint shall be specified");
 
         var a = [this.dVersion, this.dMessageImprint];
         if (this.dPolicy != null) a.push(this.dPolicy);
@@ -285,19 +285,19 @@ KJUR.asn1.tsp.TSTInfo = function(params) {
     this.getEncodedHex = function() {
         var a = [this.dVersion];
 
-        if (this.dPolicy == null) throw "policy shall be specified.";
+        if (this.dPolicy == null) throw new Error("policy shall be specified.");
         a.push(this.dPolicy);
 
         if (this.dMessageImprint == null)
-            throw "messageImprint shall be specified.";
+            throw new Error("messageImprint shall be specified.");
         a.push(this.dMessageImprint);
 
         if (this.dSerialNumber == null)
-            throw "serialNumber shall be specified.";
+            throw new Error("serialNumber shall be specified.");
         a.push(this.dSerialNumber);
 
         if (this.dGenTime == null)
-            throw "genTime shall be specified.";
+            throw new Error("genTime shall be specified.");
         a.push(this.dGenTime);
 
         if (this.dAccuracy != null) a.push(this.dAccuracy);
@@ -313,7 +313,7 @@ KJUR.asn1.tsp.TSTInfo = function(params) {
     if (typeof params != "undefined") {
         if (typeof params.policy == "string") {
             if (! params.policy.match(/^[0-9.]+$/))
-                throw "policy shall be oid like 0.1.4.134";
+                throw new Error("policy shall be oid like 0.1.4.134");
             this.dPolicy = new nA.DERObjectIdentifier({oid: params.policy});
         }
         if (typeof params.messageImprint != "undefined") {
@@ -365,7 +365,7 @@ KJUR.asn1.tsp.TimeStampResp = function(params) {
 
     this.getEncodedHex = function() {
         if (this.dStatus == null)
-            throw "status shall be specified";
+            throw new Error("status shall be specified");
         var a = [this.dStatus];
         if (this.dTST != null) a.push(this.dTST);
         var seq = new nA.DERSequence({array: a});
@@ -412,7 +412,7 @@ KJUR.asn1.tsp.PKIStatusInfo = function(params) {
 
     this.getEncodedHex = function() {
         if (this.dStatus == null)
-            throw "status shall be specified";
+            throw new Error("status shall be specified");
         var a = [this.dStatus];
         if (this.dStatusString != null) a.push(this.dStatusString);
         if (this.dFailureInfo != null) a.push(this.dFailureInfo);
@@ -470,7 +470,7 @@ KJUR.asn1.tsp.PKIStatus = function(params) {
         if (typeof params.name != "undefined") {
             var list = nT.PKIStatus.valueList;
             if (typeof list[params.name] == "undefined")
-                throw "name undefined: " + params.name;
+                throw new Error("name undefined: " + params.name);
             this.dStatus = 
                 new nA.DERInteger({'int': list[params.name]});
         } else {
@@ -553,7 +553,7 @@ KJUR.asn1.tsp.PKIFailureInfo = function(params) {
 
     this.getEncodedHex = function() {
         if (this.value == null)
-            throw "value shall be specified";
+            throw new Error("value shall be specified");
         var binValue = new Number(this.value).toString(2);
         var dValue = new nA.DERBitString();
         dValue.setByBinaryString(binValue);
@@ -565,7 +565,7 @@ KJUR.asn1.tsp.PKIFailureInfo = function(params) {
         if (typeof params.name == "string") {
             var list = nT.PKIFailureInfo.valueList;
             if (typeof list[params.name] == "undefined")
-                throw "name undefined: " + params.name;
+                throw new Error("name undefined: " + params.name);
             this.value = list[params.name];
         } else if (typeof params['int'] == "number") {
             this.value = params['int'];
@@ -597,7 +597,7 @@ KJUR.asn1.tsp.PKIFailureInfo.valueList = {
  */
 KJUR.asn1.tsp.AbstractTSAAdapter = function(params) {
     this.getTSTHex = function(msgHex, hashAlg) {
-        throw "not implemented yet";
+        throw new Error("not implemented yet");
     };
 };
 
@@ -754,7 +754,7 @@ KJUR.asn1.tsp.TSPUtil.parseTimeStampReq = function(reqHex) {
     var idxList = ASN1HEX.getPosArrayOfChildren_AtObj(reqHex, 0);
 
     if (idxList.length < 2)
-        throw "TimeStampReq must have at least 2 items";
+        throw new Error("TimeStampReq must have at least 2 items");
 
     var miHex = ASN1HEX.getHexOfTLV_AtObj(reqHex, idxList[1]);
     json.mi = KJUR.asn1.tsp.TSPUtil.parseMessageImprint(miHex); 
@@ -797,7 +797,7 @@ KJUR.asn1.tsp.TSPUtil.parseMessageImprint = function(miHex) {
     var json = {};
 
     if (miHex.substr(0, 2) != "30")
-        throw "head of messageImprint hex shall be '30'";
+        throw new Error("head of messageImprint hex shall be '30'");
 
     var idxList = ASN1HEX.getPosArrayOfChildren_AtObj(miHex, 0);
     var hashAlgOidIdx = 
@@ -806,7 +806,7 @@ KJUR.asn1.tsp.TSPUtil.parseMessageImprint = function(miHex) {
     var hashAlgOid = ASN1HEX.hextooidstr(hashAlgHex);
     var hashAlgName = KJUR.asn1.x509.OID.oid2name(hashAlgOid);
     if (hashAlgName == '')
-        throw "hashAlg name undefined: " + hashAlgOid;
+        throw new Error("hashAlg name undefined: " + hashAlgOid);
     var hashAlg = hashAlgName;
 
     var hashValueIdx =

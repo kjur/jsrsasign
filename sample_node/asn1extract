@@ -27,7 +27,7 @@ program
   .parse(process.argv);
 
 if (program.args.length < 3)
-  throw "wrong number of arguments";
+  throw new Error("wrong number of arguments");
 
 var outFile = program.args[0];
 var inFile = program.args[1];
@@ -36,7 +36,7 @@ var hex;
 try {
   hex = rs.readFileHexByBin(inFile);
 } catch(ex) {
-  throw "can't read file: " + inFile;
+  throw new Error("can't read file: " + inFile);
 }
 
 var idxList = program.args.slice(2);

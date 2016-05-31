@@ -128,9 +128,9 @@ KJUR.jws.JWSJS = function() {
      */
     this.verifyWithCerts = function(aCert) {
 		if (this.aHeader.length != aCert.length) 
-			throw "num headers does not match with num certs";
+			throw new Error("num headers does not match with num certs");
 		if (this.aSignature.length != aCert.length) 
-			throw "num signatures does not match with num certs";
+			throw new Error("num signatures does not match with num certs");
 
 		var payload = this.sPayload;
 		var errMsg = "";
@@ -168,7 +168,7 @@ KJUR.jws.JWSJS = function() {
      */
     this.readJWSJS = function(sJWSJS) {
 		var oJWSJS = ns1.readSafeJSONString(sJWSJS);
-		if (oJWSJS == null) throw "argument is not JSON string: " + sJWSJS;
+		if (oJWSJS == null) throw new Error("argument is not JSON string: " + sJWSJS);
 
 		this.aHeader = oJWSJS.headers;
 		this.sPayload = oJWSJS.payload;

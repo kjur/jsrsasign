@@ -149,7 +149,7 @@ KJUR.crypto.DSA = function() {
 	    s1.compareTo(q) > 0 ||
 	    BigInteger.ZERO.compareTo(s2) > 0 ||
 	    s2.compareTo(q) > 0) {
-	    throw "invalid DSA signature";
+	    throw new Error("invalid DSA signature");
 	}
 	var w = s2.modInverse(q);
 	var u1 = hash.multiply(w).mod(q);
@@ -173,7 +173,7 @@ KJUR.crypto.DSA = function() {
 	    var s2 = new BigInteger(ASN1HEX.getVbyList(hSigVal, 0, [1], "02"), 16);
 	    return [s1, s2];
 	} catch (ex) {
-	    throw "malformed DSA signature";
+	    throw new Error("malformed DSA signature");
 	}
     }
 

@@ -194,7 +194,7 @@ KJUR.asn1.x509.Certificate = function(params) {
 
     this.getEncodedHex = function() {
         if (this.isModified == false && this.hTLV != null) return this.hTLV;
-        throw "not signed yet";
+        throw new Error("not signed yet");
     };
 
     /**
@@ -445,13 +445,13 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
             var extObj = new KJUR.asn1.x509.AuthorityKeyIdentifier(extParams);
             this.appendExtension(extObj);
         } else {
-            throw "unsupported extension name: " + name;
+            throw new Error("unsupported extension name: " + name);
         }
     };
 
     this.getEncodedHex = function() {
         if (this.asn1NotBefore == null || this.asn1NotAfter == null)
-            throw "notBefore and/or notAfter not set";
+            throw new Error("notBefore and/or notAfter not set");
         var asn1Validity = 
             new KJUR.asn1.DERSequence({'array':[this.asn1NotBefore, this.asn1NotAfter]});
 
@@ -868,7 +868,7 @@ KJUR.asn1.x509.CRL = function(params) {
 
     this.getEncodedHex = function() {
         if (this.isModified == false && this.hTLV != null) return this.hTLV;
-        throw "not signed yet";
+        throw new Error("not signed yet");
     };
 
     /**
@@ -1268,7 +1268,7 @@ KJUR.asn1.x509.AttributeTypeAndValue = function(params) {
         if (attrTypeAndValueStr.match(/^([^=]+)=(.+)$/)) {
             this.setByAttrTypeAndValueStr(RegExp.$1, RegExp.$2);
         } else {
-            throw "malformed attrTypeAndValueStr: " + attrTypeAndValueStr;
+            throw new Error("malformed attrTypeAndValueStr: " + attrTypeAndValueStr);
         }
     };
 
@@ -1284,7 +1284,7 @@ KJUR.asn1.x509.AttributeTypeAndValue = function(params) {
         if (dsType == "prn")    return new KJUR.asn1.DERPrintableString({"str": valueStr});
         if (dsType == "tel")    return new KJUR.asn1.DERTeletexString({"str": valueStr});
         if (dsType == "ia5")    return new KJUR.asn1.DERIA5String({"str": valueStr});
-        throw "unsupported directory string type: type=" + dsType + " value=" + valueStr;
+        throw new Error("unsupported directory string type: type=" + dsType + " value=" + valueStr);
     };
 
     this.getEncodedHex = function() {
@@ -1349,7 +1349,7 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
      */
     this.setRSAKey = function(rsaKey) {
         if (! RSAKey.prototype.isPrototypeOf(rsaKey))
-            throw "argument is not RSAKey instance";
+            throw new Error("argument is not RSAKey instance");
         this.rsaKey = rsaKey;
         var asn1RsaN = new KJUR.asn1.DERInteger({'bigint': rsaKey.n});
         var asn1RsaE = new KJUR.asn1.DERInteger({'int': rsaKey.e});
@@ -1386,7 +1386,7 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
             rsaKey.setPublic(a3[0], a3[1]);
             this.setRSAKey(rsaKey);
         } else {
-            throw "key not supported";
+            throw new Error("key not supported");
         }
     };
 
@@ -1395,7 +1395,7 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
      */
     this.getASN1Object = function() {
         if (this.asn1AlgId == null || this.asn1SubjPKey == null)
-            throw "algId and/or subjPubKey not set";
+            throw new Error("algId and/or subjPubKey not set");
         var o = new KJUR.asn1.DERSequence({'array':
                                            [this.asn1AlgId, this.asn1SubjPKey]});
         return o;
@@ -1530,7 +1530,7 @@ KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
 
     this.getEncodedHex = function() {
         if (this.nameAlg == null && this.asn1Alg == null) {
-            throw "algorithm not specified";
+            throw new Error("algorithm not specified");
         }
         if (this.nameAlg != null && this.asn1Alg == null) {
             this.asn1Alg = KJUR.asn1.x509.OID.name2obj(this.nameAlg);
@@ -1636,7 +1636,7 @@ KJUR.asn1.x509.GeneralName = function(params) {
 		    if (certStr.indexOf("-----BEGIN ") != -1) {
 				certHex = X509.pemToHex(certStr);
 			}
-		    if (certHex == null) throw "certissuer param not cert";
+		    if (certHex == null) throw new Error("certissuer param not cert");
 			var x = new X509();
 			x.hex = certHex;
 			var dnHex = x.getIssuerHex();
@@ -1654,7 +1654,7 @@ KJUR.asn1.x509.GeneralName = function(params) {
 		    if (certStr.indexOf("-----BEGIN ") != -1) {
 				certHex = X509.pemToHex(certStr);
 			}
-		    if (certHex == null) throw "certsubj param not cert";
+		    if (certHex == null) throw new Error("certsubj param not cert");
 			var x = new X509();
 			x.hex = certHex;
 			var dnHex = x.getSubjectHex();
@@ -1663,7 +1663,7 @@ KJUR.asn1.x509.GeneralName = function(params) {
 		}
 
         if (this.type == null)
-            throw "unsupported type in params=" + params;
+            throw new Error("unsupported type in params=" + params);
         this.asn1Obj = new KJUR.asn1.DERTaggedObject({'explicit': this.explicit,
                                                       'tag': pTag[this.type],
                                                       'obj': v});
@@ -1744,7 +1744,7 @@ KJUR.asn1.x509.DistributionPointName = function(gnOrRdn) {
 
     this.getEncodedHex = function() {
         if (this.type != "full")
-            throw "currently type shall be 'full': " + this.type;
+            throw new Error("currently type shall be 'full': " + this.type);
         this.asn1Obj = new KJUR.asn1.DERTaggedObject({'explicit': false,
                                                       'tag': this.tag,
                                                       'obj': this.asn1V});
@@ -1758,7 +1758,7 @@ KJUR.asn1.x509.DistributionPointName = function(gnOrRdn) {
             this.tag = "a0";
             this.asn1V = gnOrRdn;
         } else {
-            throw "This class supports GeneralNames only as argument";
+            throw new Error("This class supports GeneralNames only as argument");
         }
     }
 };
@@ -1917,7 +1917,7 @@ KJUR.asn1.x509.OID = new function(params) {
         if (typeof this.objCache[name] != "undefined")
             return this.objCache[name];
         if (typeof this.name2oidList[name] == "undefined")
-            throw "Name of ObjectIdentifier not defined: " + name;
+            throw new Error("Name of ObjectIdentifier not defined: " + name);
         var oid = this.name2oidList[name];
         var obj = new KJUR.asn1.DERObjectIdentifier({'oid': oid});
         this.objCache[name] = obj;
@@ -1938,7 +1938,7 @@ KJUR.asn1.x509.OID = new function(params) {
         if (typeof this.objCache[atype] != "undefined")
             return this.objCache[atype];
         if (typeof this.atype2oidList[atype] == "undefined")
-            throw "AttributeType name undefined: " + atype;
+            throw new Error("AttributeType name undefined: " + atype);
         var oid = this.atype2oidList[atype];
         var obj = new KJUR.asn1.DERObjectIdentifier({'oid': oid});
         this.objCache[atype] = obj;
@@ -2087,37 +2087,37 @@ KJUR.asn1.x509.X509Util.newCertPEM = function(param) {
     if (param.serial !== undefined)
         o.setSerialNumberByParam(param.serial);
     else
-        throw "serial number undefined.";
+        throw new Error("serial number undefined.");
 
     if (typeof param.sigalg.name == 'string')
         o.setSignatureAlgByParam(param.sigalg);
     else 
-        throw "unproper signature algorithm name";
+        throw new Error("unproper signature algorithm name");
 
     if (param.issuer !== undefined)
         o.setIssuerByParam(param.issuer);
     else
-        throw "issuer name undefined.";
+        throw new Error("issuer name undefined.");
     
     if (param.notbefore !== undefined)
         o.setNotBeforeByParam(param.notbefore);
     else
-        throw "notbefore undefined.";
+        throw new Error("notbefore undefined.");
 
     if (param.notafter !== undefined)
         o.setNotAfterByParam(param.notafter);
     else
-        throw "notafter undefined.";
+        throw new Error("notafter undefined.");
 
     if (param.subject !== undefined)
         o.setSubjectByParam(param.subject);
     else
-        throw "subject name undefined.";
+        throw new Error("subject name undefined.");
 
     if (param.sbjpubkey !== undefined)
         o.setSubjectPublicKeyByGetKey(param.sbjpubkey);
     else
-        throw "subject public key undefined.";
+        throw new Error("subject public key undefined.");
 
     if (param.ext !== undefined && param.ext.length !== undefined) {
         for (var i = 0; i < param.ext.length; i++) {
@@ -2129,7 +2129,7 @@ KJUR.asn1.x509.X509Util.newCertPEM = function(param) {
 
     // set signature
     if (param.cakey === undefined && param.sighex === undefined)
-        throw "param cakey and sighex undefined.";
+        throw new Error("param cakey and sighex undefined.");
 
     var caKey = null;
     var cert = null;

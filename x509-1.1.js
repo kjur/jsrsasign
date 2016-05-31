@@ -533,7 +533,7 @@ X509.getPublicKeyFromCertPEM = function(sCertPEM) {
                       new BigInteger(y, 16));
         return key;
     } else {
-        throw "unsupported key";
+        throw new Error("unsupported key");
     }
 };
 
@@ -562,11 +562,11 @@ X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
     // 1. Certificate ASN.1
     var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0); 
     if (a1.length != 3)
-        throw "malformed X.509 certificate PEM (code:001)"; // not 3 item of seq Cert
+        throw new Error("malformed X.509 certificate PEM (code:001)"); // not 3 item of seq Cert
 
     // 2. tbsCertificate
     if (hCert.substr(a1[0], 2) != "30")
-        throw "malformed X.509 certificate PEM (code:002)"; // tbsCert not seq 
+        throw new Error("malformed X.509 certificate PEM (code:002)"); // tbsCert not seq 
 
     var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]); 
 
@@ -575,18 +575,18 @@ X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
     if (hCert.substr(a2[0], 2) !== "a0") idx_spi = 5;
 
     if (a2.length < idx_spi + 1)
-        throw "malformed X.509 certificate PEM (code:003)"; // no subjPubKeyInfo
+        throw new Error("malformed X.509 certificate PEM (code:003)"); // no subjPubKeyInfo
 
     var a3 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a2[idx_spi]); 
 
     if (a3.length != 2)
-        throw "malformed X.509 certificate PEM (code:004)"; // not AlgId and PubKey
+        throw new Error("malformed X.509 certificate PEM (code:004)"); // not AlgId and PubKey
 
     // 4. AlgId
     var a4 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a3[0]); 
 
     if (a4.length != 2)
-        throw "malformed X.509 certificate PEM (code:005)"; // not 2 item in AlgId
+        throw new Error("malformed X.509 certificate PEM (code:005)"); // not 2 item in AlgId
 
     result.algoid = ASN1HEX.getHexOfV_AtObj(hCert, a4[0]);
 
@@ -598,7 +598,7 @@ X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
 
     // 5. Public Key Hex
     if (hCert.substr(a3[1], 2) != "03")
-        throw "malformed X.509 certificate PEM (code:006)"; // not bitstring
+        throw new Error("malformed X.509 certificate PEM (code:006)"); // not bitstring
 
     var unusedBitAndKeyHex = ASN1HEX.getHexOfV_AtObj(hCert, a3[1]);
     result.keyhex = unusedBitAndKeyHex.substr(2);
@@ -622,17 +622,17 @@ X509.getPublicKeyInfoPosOfCertHEX = function(hCert) {
     // 1. Certificate ASN.1
     var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0); 
     if (a1.length != 3)
-        throw "malformed X.509 certificate PEM (code:001)"; // not 3 item of seq Cert
+        throw new Error("malformed X.509 certificate PEM (code:001)"); // not 3 item of seq Cert
 
     // 2. tbsCertificate
     if (hCert.substr(a1[0], 2) != "30")
-        throw "malformed X.509 certificate PEM (code:002)"; // tbsCert not seq 
+        throw new Error("malformed X.509 certificate PEM (code:002)"); // tbsCert not seq 
 
     var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]); 
 
     // 3. subjectPublicKeyInfo
     if (a2.length < 7)
-        throw "malformed X.509 certificate PEM (code:003)"; // no subjPubKeyInfo
+        throw new Error("malformed X.509 certificate PEM (code:003)"); // no subjPubKeyInfo
     
     return a2[6];
 };
@@ -666,29 +666,29 @@ X509.getV3ExtInfoListOfCertHex = function(hCert) {
     // 1. Certificate ASN.1
     var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0); 
     if (a1.length != 3)
-        throw "malformed X.509 certificate PEM (code:001)"; // not 3 item of seq Cert
+        throw new Error("malformed X.509 certificate PEM (code:001)"); // not 3 item of seq Cert
 
     // 2. tbsCertificate
     if (hCert.substr(a1[0], 2) != "30")
-        throw "malformed X.509 certificate PEM (code:002)"; // tbsCert not seq 
+        throw new Error("malformed X.509 certificate PEM (code:002)"); // tbsCert not seq 
 
     var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]); 
 
     // 3. v3Extension EXPLICIT Tag [3]
     // ver, seri, alg, iss, validity, subj, spki, (iui,) (sui,) ext
     if (a2.length < 8)
-        throw "malformed X.509 certificate PEM (code:003)"; // tbsCert num field too short
+        throw new Error("malformed X.509 certificate PEM (code:003)"); // tbsCert num field too short
 
     if (hCert.substr(a2[7], 2) != "a3")
-        throw "malformed X.509 certificate PEM (code:004)"; // not [3] tag
+        throw new Error("malformed X.509 certificate PEM (code:004)"); // not [3] tag
 
     var a3 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a2[7]);
     if (a3.length != 1)
-        throw "malformed X.509 certificate PEM (code:005)"; // [3]tag numChild!=1
+        throw new Error("malformed X.509 certificate PEM (code:005)"); // [3]tag numChild!=1
 
     // 4. v3Extension SEQUENCE
     if (hCert.substr(a3[0], 2) != "30")
-        throw "malformed X.509 certificate PEM (code:006)"; // not SEQ
+        throw new Error("malformed X.509 certificate PEM (code:006)"); // not SEQ
 
     var a4 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a3[0]);
 
@@ -732,11 +732,11 @@ X509.getV3ExtItemInfo_AtObj = function(hCert, pos) {
 
     var a  = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, pos);
     if (a.length != 2 && a.length != 3)
-        throw "malformed X.509v3 Ext (code:001)"; // oid,(critical,)val
+        throw new Error("malformed X.509v3 Ext (code:001)"); // oid,(critical,)val
 
     // oid - extension OID
     if (hCert.substr(a[0], 2) != "06")
-        throw "malformed X.509v3 Ext (code:002)"; // not OID "06"
+        throw new Error("malformed X.509v3 Ext (code:002)"); // not OID "06"
     var valueHex = ASN1HEX.getHexOfV_AtObj(hCert, a[0]);
     info.oid = ASN1HEX.hextooidstr(valueHex); 
 
@@ -748,7 +748,7 @@ X509.getV3ExtItemInfo_AtObj = function(hCert, pos) {
     //        octet string of V3 extension value.
     var posExtV = a[a.length - 1];
     if (hCert.substr(posExtV, 2) != "04")
-        throw "malformed X.509v3 Ext (code:003)"; // not EncapOctet "04"
+        throw new Error("malformed X.509v3 Ext (code:003)"); // not EncapOctet "04"
     info.posV = ASN1HEX.getStartPosOfV_AtObj(hCert, posExtV);
     
     return info;
@@ -873,7 +873,7 @@ X509.getExtBasicConstraints = function(hCert) {
 	var pathLen = parseInt(pathLexHex, 16);
 	return { "cA": true, "pathLen": pathLen };
     }
-    throw "unknown error";
+    throw new Error("unknown error");
 };
 
 X509.KEYUSAGE_NAME = [
@@ -913,7 +913,7 @@ X509.getExtKeyUsageBin = function(hCert) {
     var hKeyUsage = X509.getHexOfV_V3ExtValue(hCert, "keyUsage");
     if (hKeyUsage == '') return '';
     if (hKeyUsage.length % 2 != 0 || hKeyUsage.length <= 2)
-	throw "malformed key usage value";
+	throw new Error("malformed key usage value");
     var unusedBits = parseInt(hKeyUsage.substr(0, 2));
     var bKeyUsage = parseInt(hKeyUsage.substr(2), 16).toString(2);
     return bKeyUsage.substr(0, bKeyUsage.length - unusedBits);
@@ -1153,14 +1153,14 @@ X509.getExtAIAInfo = function(hCert) {
     var pos1 = X509.getPosOfTLV_V3ExtValue(hCert, "authorityInfoAccess");
     if (pos1 == -1) return null;
     if (hCert.substr(pos1, 2) != "30") // extnValue SEQUENCE
-	throw "malformed AIA Extn Value";
+	throw new Error("malformed AIA Extn Value");
     
     var posAccDescList = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, pos1);
     for (var i = 0; i < posAccDescList.length; i++) {
 	var p = posAccDescList[i];
 	var posAccDescChild = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, p);
 	if (posAccDescChild.length != 2)
-	    throw "malformed AccessDescription of AIA Extn";
+	    throw new Error("malformed AccessDescription of AIA Extn");
 	var pOID = posAccDescChild[0];
 	var pName = posAccDescChild[1];
 	if (ASN1HEX.getHexOfV_AtObj(hCert, pOID) == "2b06010505073001") {
@@ -1213,7 +1213,7 @@ X509.getSignatureAlgorithmName = function(hCert) {
 X509.getSignatureValueHex = function(hCert) {
     var h = ASN1HEX.getDecendantHexVByNthList(hCert, 0, [2]);
     if (h.substr(0, 2) !== "00")
-	throw "can't get signature value";
+	throw new Error("can't get signature value");
     return h.substr(2);
 };
 

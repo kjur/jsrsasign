@@ -75,7 +75,7 @@ KJUR.crypto.ECParameterDB = new function() {
 	if (typeof db[name] != "undefined") {
 	    return db[name];
 	}
-	throw "unregistered EC curve name: " + name;
+	throw new Error("unregistered EC curve name: " + name);
     };
 
     /**
