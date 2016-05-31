@@ -185,7 +185,7 @@ test("algorithm test: unknown algorithm", function() {
   throws(function() {
     var sJWS = KJUR.jws.JWS.sign("unknown", '{"cty":"JWT"}', '{"age": 21}');
   },
-  /^unsupported alg name: /,
+  /unsupported alg name: /,
   "raise exception 'unsupported alg name'");
 });
 
