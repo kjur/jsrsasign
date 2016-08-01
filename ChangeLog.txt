@@ -8,6 +8,7 @@ ChangeLog for jsrsasign
     404 not found so that CryptoJS references in all test
     were moved to local files.
   - CryptoJS codes were moved to ext/cj directory.
+  - tool_b64u{enc,dec}.html script URL fix
 
 * Changes between 5.0.11 to 5.0.12
   - jws between 3.3.3 to 3.3.4
