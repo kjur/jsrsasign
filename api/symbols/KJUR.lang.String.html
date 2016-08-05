@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 4.8.7 JavaScript API Reference - KJUR.asn1.cades.SignaturePolicyIdentifier</title>
+		<title>jsrsasign 4.8.7 JavaScript API Reference - KJUR.lang.String</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -418,26 +418,26 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.cades.SignaturePolicyIdentifier
+				Class KJUR.lang.String
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
+				<br />Version
+					1.0 (2016-Aug-05).<br />
 				
-				<br />Extends
-					<a href="../symbols/KJUR.asn1.cms.Attribute.html">KJUR.asn1.cms.Attribute</a>.<br />
 				
 			
-				class for RFC 5126 CAdES SignaturePolicyIdentifier attribute
+				String and its utility class
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1cades-1.0.js.html">asn1cades-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.cades.SignaturePolicyIdentifier.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.lang.String.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -450,19 +450,10 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.cades.SignaturePolicyIdentifier.html#constructor">KJUR.asn1.cades.SignaturePolicyIdentifier</a></b>(params)
+								<b><a href="../symbols/KJUR.lang.String.html#constructor">KJUR.lang.String</a></b>()
 							</div>
-							<div class="description">class for RFC 5126 CAdES SignaturePolicyIdentifier attribute
-<pre>
-SignaturePolicyIdentifier ::= CHOICE {
-   signaturePolicyId       SignaturePolicyId,
-   signaturePolicyImplied  SignaturePolicyImplied } -- not used
-
-SignaturePolicyImplied ::= NULL
-SignaturePolicyId ::= SEQUENCE {
-   sigPolicyId           SigPolicyId,
-   sigPolicyHash         SigPolicyHash,
-   sigPolicyQualifiers   SEQUENCE SIZE (1.</div>
+							<div class="description">String and its utility class <br/>
+This class provides some static utility methods for string.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -471,17 +462,74 @@ SignaturePolicyId ::= SEQUENCE {
 
 <!-- ============================== properties summary ===================== -->
 			
-				
-				
-				
-				
-				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
-				</dl>
-				
-			
 
 <!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.lang.String.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.lang.String.<b><a href="../symbols/KJUR.lang.String.html#.isBase64">isBase64</a></b>(s)
+								</div>
+								<div class="description">check whether a string is a base64 encoded string or not<br/>
+Input string can conclude new lines or space characters.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.lang.String.<b><a href="../symbols/KJUR.lang.String.html#.isBase64URL">isBase64URL</a></b>(s)
+								</div>
+								<div class="description">check whether a string is a base64url encoded string or not<br/>
+Input string can conclude new lines or space characters.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.lang.String.<b><a href="../symbols/KJUR.lang.String.html#.isHex">isHex</a></b>(s)
+								</div>
+								<div class="description">check whether a string is an hexadecimal string or not<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.lang.String.<b><a href="../symbols/KJUR.lang.String.html#.isInteger">isInteger</a></b>(s)
+								</div>
+								<div class="description">check whether a string is an integer string or not<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.lang.String.<b><a href="../symbols/KJUR.lang.String.html#.isIntegerArray">isIntegerArray</a></b>(s)
+								</div>
+								<div class="description">check whether a string is a string of integer array or not<br/>
+Input string can conclude new lines or space characters.</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -494,55 +542,24 @@ SignaturePolicyId ::= SEQUENCE {
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.cades.SignaturePolicyIdentifier</b>(params)
+						<b>KJUR.lang.String</b>()
 				</div>
 				
 				<div class="description">
-					class for RFC 5126 CAdES SignaturePolicyIdentifier attribute
-<pre>
-SignaturePolicyIdentifier ::= CHOICE {
-   signaturePolicyId       SignaturePolicyId,
-   signaturePolicyImplied  SignaturePolicyImplied } -- not used
-
-SignaturePolicyImplied ::= NULL
-SignaturePolicyId ::= SEQUENCE {
-   sigPolicyId           SigPolicyId,
-   sigPolicyHash         SigPolicyHash,
-   sigPolicyQualifiers   SEQUENCE SIZE (1..MAX) OF
-                            SigPolicyQualifierInfo OPTIONAL }
-SigPolicyId ::= OBJECT IDENTIFIER
-SigPolicyHash ::= OtherHashAlgAndValue
-</pre>
-					
+					String and its utility class <br/>
+This class provides some static utility methods for string.
+					<br /><i>Author: </i>Kenji Urushima.
 				</div>
 				
 				
 				
-				<pre class="code">var o = new KJUR.asn1.cades.SignaturePolicyIdentifier({
-  oid: '1.2.3.4.5',
-  hash: {alg: 'sha1', hash: 'a1a2a3a4...'}
-});</pre>
 				
-				
-				
-				
-					
-						<dl class="detailList">
-						<dt class="heading">Parameters:</dt>
-						
-							<dt>
-								<span class="light fixedFont">{Array}</span>  <b>params</b>
-								
-							</dt>
-								<dd>associative array of parameters</dd>
-						
-						</dl>
 					
 					
 					
 						<dl class="detailList">
 						<dt class="heading">Since:</dt>
-							<dd>jsrsasign 4.7.0 asn1cades 1.0.0</dd>
+							<dd>base64x 1.1.7 jsrsasign 5.0.13</dd>
 						</dl>
 					
 					
@@ -557,6 +574,290 @@ SigPolicyHash ::= OtherHashAlgAndValue
 			
 
 <!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".isBase64"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<span class="light">KJUR.lang.String.</span><b>isBase64</b>(s)
+					
+					</div>
+					<div class="description">
+						check whether a string is a base64 encoded string or not<br/>
+Input string can conclude new lines or space characters.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.lang.String.isBase64("YWE=") &rarr; true
+KJUR.lang.String.isBase64("YW_=") &rarr; false
+KJUR.lang.String.isBase64("YWE") &rarr; false -- length shall be multiples of 4</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>input string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>base64x 1.1.7 jsrsasign 5.0.13</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if a string "s" is a base64 encoded string otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".isBase64URL"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<span class="light">KJUR.lang.String.</span><b>isBase64URL</b>(s)
+					
+					</div>
+					<div class="description">
+						check whether a string is a base64url encoded string or not<br/>
+Input string can conclude new lines or space characters.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.lang.String.isBase64URL("YWE") &rarr; true
+KJUR.lang.String.isBase64URL("YW-") &rarr; true
+KJUR.lang.String.isBase64URL("YW+") &rarr; false</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>input string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>base64x 1.1.7 jsrsasign 5.0.13</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if a string "s" is a base64url encoded string otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".isHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<span class="light">KJUR.lang.String.</span><b>isHex</b>(s)
+					
+					</div>
+					<div class="description">
+						check whether a string is an hexadecimal string or not<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.lang.String.isHex("1234") &rarr; true
+KJUR.lang.String.isHex("12ab") &rarr; true
+KJUR.lang.String.isHex("12AB") &rarr; true
+KJUR.lang.String.isHex("12ZY") &rarr; false
+KJUR.lang.String.isHex("121") &rarr; false -- odd length</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>input string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>base64x 1.1.7 jsrsasign 5.0.13</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if a string "s" is an hexadecimal string otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".isInteger"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<span class="light">KJUR.lang.String.</span><b>isInteger</b>(s)
+					
+					</div>
+					<div class="description">
+						check whether a string is an integer string or not<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.lang.String.isInteger("12345") &rarr; true
+KJUR.lang.String.isInteger("123ab") &rarr; false</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>input string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>base64x 1.1.7 jsrsasign 5.0.13</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if a string "s" is an integer string otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".isIntegerArray"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<span class="light">KJUR.lang.String.</span><b>isIntegerArray</b>(s)
+					
+					</div>
+					<div class="description">
+						check whether a string is a string of integer array or not<br/>
+Input string can conclude new lines or space characters.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.lang.String.isIntegerArray("[1,2,3]") &rarr; true
+KJUR.lang.String.isIntegerArray("  [1, 2, 3  ] ") &rarr; true
+KJUR.lang.String.isIntegerArray("[a,2]") &rarr; false</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>input string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>base64x 1.1.7 jsrsasign 5.0.13</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if a string "s" is a string of integer array otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+
+					
+				
 			
 			
 <!-- ============================== event details ========================= -->		
