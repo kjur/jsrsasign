@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : pure JavaScript crypto library" />
+<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+<title>Online String Converter</title>
+<script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript">
+var _CONV = {
+  "b64utoutf8": b64utoutf8,
+  "b64utohex": b64utohex,
+  "b64utob64": b64utob64,
+  "b64toutf8": b64toutf8,
+  "b64tohex": b64tohex,
+  "hextoutf8": hextoutf8,
+};
+function doDecode() {
+  var s = document.form1.s_in.value;
+  var fname = document.form1.fromto.value;
+  var f = _CONV[fname];
+  if (f != null) {
+    document.form1.s_out.value = f(s);
+  } else {
+    alert("function not supported: " + fname);
+  }
+}
+</script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <h1 id="project_title">String Converter</h1>
+          <h2 id="project_tagline">convert any string such as Base64, Base64URL, hexadecimal, et.al.</h2>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<!-- now editing -->
+<form name="form1">
+<h4>input</h4>
+<textarea name="s_in" rows="5" cols="100">eyAibXNnX2VuIjogIkhlbGxvIiwKICAibXNnX2pwIjogIuOBk-OCk-OBq-OBoeOBryIsCiAgIm1zZ19jbiI6ICLkvaDlpb0iLAogICJtc2dfa3IiOiAi7JWI64WV7ZWY7IS47JqUIiwKICAibXNnX3J1IjogItCX0LTRgNCw0LLRgdGC0LLRg9C50YLQtSEiLAogICJtc2dfZGUiOiAiR3LDvMOfIEdvdHQiIH0</textarea>
+
+<h4>output</h4>
+<textarea name="s_out" cols="100" rows="5"></textarea>
+
+<table>
+<thead>
+<tr><td></td><th colspan="6">convert to</th></tr>
+</thead>
+<tbody>
+
+<tr><th>base64url</th>
+<td><a href="javascript:conv(b64utob64u)">base64url</a></td>
+<td><a href="javascript:conv(b64utob64)">base64</a></td>
+<td><a href="javascript:conv(b64utohex)">hex</a></td>
+<td><a href="javascript:conv(b64utoutf8)">utf8</a></td>
+<td><a href="javascript:conv(b64utorstr)">raw</a></td>
+</tr>
+
+<tr><th>utf8</th>
+<td><a href="javascript:conv(utf8tob64u)">base64url</a></td>
+<td><a href="javascript:conv(utf8tob64)">base64</a></td>
+<td><a href="javascript:conv(utf8tohex)">hex</a></td>
+<td><a href="javascript:conv(utf8toutf8)">utf8</a></td>
+<td><a href="javascript:conv(utf8torstr)">raw</a></td>
+</tr>
+
+<tr><th>hex</th>
+<td><a href="javascript:conv(hextob64u)">base64url</a></td>
+<td><a href="javascript:conv(hextob64)">base64</a></td>
+<td><a href="javascript:conv(hextohex)">hex</a></td>
+<td><a href="javascript:conv(hextoutf8)">utf8</a></td>
+<td><a href="javascript:conv(hextorstr)">raw</a></td>
+<td><a href="javascript:conv(hextoasn1dump)">asn1dump</a></td>
+</tr>
+
+</tbody>
+</table>
+
+<script language="JavaScript" type="text/javascript">
+function hextoasn1dump(s) {
+  return ASN1HEX.dump(s);
+}
+
+function conv(f) {
+  var s = document.form1.s_in.value;
+  if (f != null) {
+    try {
+      document.form1.s_out.value = f(s);
+    } catch (ex) {
+      alert(ex);
+    }
+  } else {
+    alert("no such function");
+  }
+}
+</script>
+
+<hr>
+
+</form>
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsjws maintained by <a href="https://github.com/kjur">@kjur</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2016 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>

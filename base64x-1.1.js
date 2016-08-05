@@ -1,11 +1,11 @@
-/*! base64x-1.1.6 (c) 2012-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! base64x-1.1.7 (c) 2012-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * version: 1.1.6 (2015-Nov-11)
+ * version: 1.1.7 (2016-Aug-03)
  *
- * Copyright (c) 2012-2015 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2012-2016 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsjws/license/
@@ -21,10 +21,24 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.1.6 (2015-Nov-11)
+ * @version asn1 1.1.7 (2016-Aug-03)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
+
+var KJUR;
+if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
+if (typeof KJUR.lang == "undefined" || !KJUR.lang) KJUR.lang = {};
+
+/**
+ * String and its utility class <br/>
+ * This class provides some static utility methods for string.
+ * @class String and its utility class
+ * @author Kenji Urushima
+ * @version 1.0 (2016-Aug-05)
+ * @since base64x 1.1.7 jsrsasign 5.0.13
+ */
+KJUR.lang.String = function() {};
 
 /**
  * Base64URL and supplementary functions for Tom Wu's base64.js library.<br/>
@@ -405,6 +419,125 @@ function newline_toDos(s) {
     return s;
 }
 
+// ==== string type checker ===================
+
+/**
+ * check whether a string is an integer string or not<br/>
+ * @name isInteger
+ * @memberOf KJUR.lang.String
+ * @function
+ * @static
+ * @param {String} s input string
+ * @return {Boolean} true if a string "s" is an integer string otherwise false
+ * @since base64x 1.1.7 jsrsasign 5.0.13
+ * @example
+ * KJUR.lang.String.isInteger("12345") &rarr; true
+ * KJUR.lang.String.isInteger("123ab") &rarr; false
+ */
+KJUR.lang.String.isInteger = function(s) {
+    if (s.match(/^[0-9]+$/)) {
+	return true;
+    } else if (s.match(/^-[0-9]+$/)) {
+	return true;
+    } else {
+	return false;
+    }
+};
+
+/**
+ * check whether a string is an hexadecimal string or not<br/>
+ * @name isHex
+ * @memberOf KJUR.lang.String
+ * @function
+ * @static
+ * @param {String} s input string
+ * @return {Boolean} true if a string "s" is an hexadecimal string otherwise false
+ * @since base64x 1.1.7 jsrsasign 5.0.13
+ * @example
+ * KJUR.lang.String.isHex("1234") &rarr; true
+ * KJUR.lang.String.isHex("12ab") &rarr; true
+ * KJUR.lang.String.isHex("12AB") &rarr; true
+ * KJUR.lang.String.isHex("12ZY") &rarr; false
+ * KJUR.lang.String.isHex("121") &rarr; false -- odd length
+ */
+KJUR.lang.String.isHex = function(s) {
+    if (s.length % 2 == 0 &&
+	(s.match(/^[0-9a-f]+$/) || s.match(/^[0-9A-F]+$/))) {
+	return true;
+    } else {
+	return false;
+    }
+};
+
+/**
+ * check whether a string is a base64 encoded string or not<br/>
+ * Input string can conclude new lines or space characters.
+ * @name isBase64
+ * @memberOf KJUR.lang.String
+ * @function
+ * @static
+ * @param {String} s input string
+ * @return {Boolean} true if a string "s" is a base64 encoded string otherwise false
+ * @since base64x 1.1.7 jsrsasign 5.0.13
+ * @example
+ * KJUR.lang.String.isBase64("YWE=") &rarr; true
+ * KJUR.lang.String.isBase64("YW_=") &rarr; false
+ * KJUR.lang.String.isBase64("YWE") &rarr; false -- length shall be multiples of 4
+ */
+KJUR.lang.String.isBase64 = function(s) {
+    s = s.replace(/\s+/g, "");
+    if (s.match(/^[0-9A-Za-z+\/]+={0,3}$/) && s.length % 4 == 0) {
+	return true;
+    } else {
+	return false;
+    }
+};
+
+/**
+ * check whether a string is a base64url encoded string or not<br/>
+ * Input string can conclude new lines or space characters.
+ * @name isBase64URL
+ * @memberOf KJUR.lang.String
+ * @function
+ * @static
+ * @param {String} s input string
+ * @return {Boolean} true if a string "s" is a base64url encoded string otherwise false
+ * @since base64x 1.1.7 jsrsasign 5.0.13
+ * @example
+ * KJUR.lang.String.isBase64URL("YWE") &rarr; true
+ * KJUR.lang.String.isBase64URL("YW-") &rarr; true
+ * KJUR.lang.String.isBase64URL("YW+") &rarr; false
+ */
+KJUR.lang.String.isBase64URL = function(s) {
+    if (s.match(/[+/=]/)) return false;
+    s = b64utob64(s);
+    return KJUR.lang.String.isBase64(s);
+};
+
+/**
+ * check whether a string is a string of integer array or not<br/>
+ * Input string can conclude new lines or space characters.
+ * @name isIntegerArray
+ * @memberOf KJUR.lang.String
+ * @function
+ * @static
+ * @param {String} s input string
+ * @return {Boolean} true if a string "s" is a string of integer array otherwise false
+ * @since base64x 1.1.7 jsrsasign 5.0.13
+ * @example
+ * KJUR.lang.String.isIntegerArray("[1,2,3]") &rarr; true
+ * KJUR.lang.String.isIntegerArray("  [1, 2, 3  ] ") &rarr; true
+ * KJUR.lang.String.isIntegerArray("[a,2]") &rarr; false
+ */
+KJUR.lang.String.isIntegerArray = function(s) {
+    s = s.replace(/\s+/g, "");
+    if (s.match(/^\[[0-9,]+\]$/)) {
+	return true;
+    } else {
+	return false;
+    }
+};
+
 // ==== others ================================
 
 /**
@@ -461,3 +594,5 @@ var strdiffidx = function(s1, s2) {
     if (s1.length != s2.length) return n;
     return -1; // same
 };
+
+

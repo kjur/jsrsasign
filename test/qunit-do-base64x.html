@@ -3,12 +3,14 @@
 <html>
 <head>
 <title>QUnit for 'base64x.js' and 'ext/base64.js'</title>
+<meta charset='utf-8' />
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="qunit.js"></script>
 <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
 <!-- crypto-js, yahoo -->
 <!-- tom wo's -->
 <script src="../ext/base64.js"></script>
+<script src="../ext/jsbn.js"></script>
 <!-- jsrsasign -->
 <script src="../base64x-1.1.js"></script>
 
@@ -49,6 +51,51 @@ test("hextob64", function() {
 
   // _gitpg/jsrsasign/test/eckey/k1.*
   equal(hextob64("3059301306072a8648ce3d020106082a8648ce3d03010703420004a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425"), "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEoBUyo8CQAFPeYPvv78ylh5MwFZjTCLQeb042TjiMJxG+9DLFmRSMlBQ9T/RsLLc+PmpB1+7yPAR+oR5gZn3kJQ==", "ec key");
+});
+
+test("b64utohex", function() {
+  equal(b64utohex("MEUCIQD4rwV75OAQfwqRlpBIlTblPdG3XFrxcTRsYHJkzDmemQIgQyV-3QfkSmM1rQf4lFUC3DKIDfTJKjJCR8e4zvIUYf0"), 
+    "3045022100f8af057be4e0107f0a919690489536e53dd1b75c5af171346c607264cc399e99022043257edd07e44a6335ad07f8945502dc32880df4c92a324247c7b8cef21461fd", 
+    "123");
+});
+
+test("KJUR.lang.String.isInteger", function() {
+  equal(KJUR.lang.String.isInteger("123"), true, "123");
+  equal(KJUR.lang.String.isInteger("-123"), true, "-123");
+  equal(KJUR.lang.String.isInteger("abc"), false, "abc");
+  equal(KJUR.lang.String.isInteger("0"), true, "0");
+});
+
+test("KJUR.lang.String.isHex", function() {
+  equal(KJUR.lang.String.isHex("123"), false, "123");
+  equal(KJUR.lang.String.isHex("1234"), true, "1234");
+  equal(KJUR.lang.String.isHex("az12"), false, "az12");
+  equal(KJUR.lang.String.isHex("az1%"), false, "az1%");
+});
+
+test("KJUR.lang.String.isBase64", function() {
+  equal(KJUR.lang.String.isBase64("YQ=="), true, "YQ==");
+  equal(KJUR.lang.String.isBase64("a"), false, "a");
+  equal(KJUR.lang.String.isBase64("Y_=="), false, "Y_==");
+  equal(KJUR.lang.String.isBase64("Y+=="), true, "Y+==");
+});
+
+test("KJUR.lang.String.isBase64URL", function() {
+  equal(KJUR.lang.String.isBase64URL("YQ"), true, "YQ");
+  equal(KJUR.lang.String.isBase64URL("YWE"), true, "YWE");
+  equal(KJUR.lang.String.isBase64URL("YW_"), true, "YW_");
+  equal(KJUR.lang.String.isBase64URL("YW-"), true, "YW-");
+  equal(KJUR.lang.String.isBase64URL("Y+"), false, "Y+");
+  equal(KJUR.lang.String.isBase64URL("Y/"), false, "Y/");
+  equal(KJUR.lang.String.isBase64URL("Y=a"), false, "Y=a");
+  equal(KJUR.lang.String.isBase64URL("Y%%"), false, "Y%%");
+});
+
+test("KJUR.lang.String.isIntegerArray", function() {
+  equal(KJUR.lang.String.isIntegerArray("[1,3,4]"), true, "[1,3,4]");
+  equal(KJUR.lang.String.isIntegerArray(" [1, 3, 4]   "), true, " [1, 3, 4]   with space chars");
+  equal(KJUR.lang.String.isIntegerArray("[[1,3,4]"), false, "[[1,3,4]");
+  equal(KJUR.lang.String.isIntegerArray("[a,3,4]"), false, "[a,3,4]");
 });
 
 });
