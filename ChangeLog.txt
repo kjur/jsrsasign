@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 5.0.13 to next version
+  - npm
+    - missed to export KJUR.lang now fixed
+  - tool_certview.html
+    - loading script fix
+
 * Changes between 5.0.12 to 5.0.13
   - base64x.js
     - KJUR.lang.String class added and its some static
