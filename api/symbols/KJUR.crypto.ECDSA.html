@@ -516,6 +516,24 @@ for generating an EC key pair.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.getPublicKeyXYHex">getPublicKeyXYHex</a></b>()
+								</div>
+								<div class="description">get X and Y hexadecimal string value of public key</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.getShortNISTPCurveName">getShortNISTPCurveName</a></b>()
+								</div>
+								<div class="description">get NIST curve short name such as "P-256" or "P-384"</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.hexRSSigToASN1Sig">hexRSSigToASN1Sig</a></b>(hR, hS)
 								</div>
 								<div class="description">convert hexadecimal R and S value of signature to ASN.1 encoded signature</div>
@@ -790,8 +808,8 @@ Currently this class supports following named curves and their aliases.
 					
 					<pre class="code">var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
 var keypair = ec.generateKeyPairHex();
-var pubhex = keypair.ecpubhex; // hexadecimal string of EC private key (=d)
-var prvhex = keypair.ecprvhex; // hexadecimal string of EC public key</pre>
+var pubhex = keypair.ecpubhex; // hexadecimal string of EC public key
+var prvhex = keypair.ecprvhex; // hexadecimal string of EC private key (=d)</pre>
 					
 					
 					
@@ -810,6 +828,92 @@ var prvhex = keypair.ecprvhex; // hexadecimal string of EC public key</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Array}</span> associative array of hexadecimal string of private and public key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getPublicKeyXYHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">KJUR.crypto.ECDSA.</span><b>getPublicKeyXYHex</b>()
+					
+					</div>
+					<div class="description">
+						get X and Y hexadecimal string value of public key
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1', 'pub': pubHex});
+ec.getPublicKeyXYHex() &rarr; { x: '01bacf...', y: 'c3bc22...' }</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>ecdsa-modified 1.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> associative array of x and y value of public key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getShortNISTPCurveName"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.ECDSA.</span><b>getShortNISTPCurveName</b>()
+					
+					</div>
+					<div class="description">
+						get NIST curve short name such as "P-256" or "P-384"
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1', 'pub': pubHex});
+ec.getShortPCurveName() &rarr; "P-256";</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>ecdsa-modified 1.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> short NIST P curve name such as "P-256" or "P-384" if it's NIST P curve otherwise null;</dd>
 							
 							</dl>
 						
