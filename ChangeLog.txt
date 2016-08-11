@@ -1,6 +1,26 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 5.0.13 to 5.0.14
+  - keyutil 1.0.12 to 1.0.13
+    - KEYUTIL.getJWKFromKey() method added to get
+      RFC 7517 JSON Web Key(JWK) object from RSAKey or
+      KJUR.crypto.ECDSA public/private key object.
+    - KEYUTIL.generateKeypair() 
+      do also setPublicKeyHex for EC private key in
+      as aligned to PEM private key
+      loading.
+    - KEYUTIL.getKey(JWK_EC_PRV)
+      made change to set public x y too.
+  - ecdsa-modified 1.0.4 to 1.0.5
+    - getPublicKeyXYHex() method added
+    - getShortNISTPCurveName() method added
+  - npm
+    - missed to export KJUR.lang now fixed
+  - sample_node/genjwk added to generate keypair and save as JWK
+  - tool_certview.html
+    - loading script fix
+
 * Changes between 5.0.12 to 5.0.13
   - base64x.js
     - KJUR.lang.String class added and its some static

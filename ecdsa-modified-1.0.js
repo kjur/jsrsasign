@@ -1,10 +1,10 @@
-/*! ecdsa-modified-1.0.4.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
+/*! ecdsa-modified-1.0.5.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
  */
 /*
  * ecdsa-modified.js - modified Bitcoin.ECDSA class
  * 
- * Copyright (c) 2013 Stefan Thomas (github.com/justmoon)
- *                    Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2016 Stefan Thomas (github.com/justmoon)
+ *                         Kenji Urushima (kenji.urushima@gmail.com)
  * LICENSE
  *   https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
  */
@@ -13,7 +13,7 @@
  * @fileOverview
  * @name ecdsa-modified-1.0.js
  * @author Stefan Thomas (github.com/justmoon) and Kenji Urushima (kenji.urushima@gmail.com)
- * @version 1.0.4 (2013-Oct-06)
+ * @version 1.0.5 (2016-Aug-11)
  * @since jsrsasign 4.0
  * @license <a href="https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE">MIT License</a>
  */
@@ -94,17 +94,64 @@ KJUR.crypto.ECDSA = function(params) {
 	this.prvKeyHex = null;
 	this.pubKeyHex = null;
 	this.curveName = curveName;
-    }
+    };
 
     this.setPrivateKeyHex = function(prvKeyHex) {
         this.isPrivate = true;
 	this.prvKeyHex = prvKeyHex;
-    }
+    };
 
     this.setPublicKeyHex = function(pubKeyHex) {
         this.isPublic = true;
 	this.pubKeyHex = pubKeyHex;
-    }
+    };
+
+    /**
+     * get X and Y hexadecimal string value of public key
+     * @name getPublicKeyXYHex
+     * @memberOf KJUR.crypto.ECDSA
+     * @function
+     * @return {Array} associative array of x and y value of public key
+     * @since ecdsa-modified 1.0.5 jsrsasign 5.0.14
+     * @example
+     * ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1', 'pub': pubHex});
+     * ec.getPublicKeyXYHex() &rarr; { x: '01bacf...', y: 'c3bc22...' }
+     */
+    this.getPublicKeyXYHex = function() {
+	var h = this.pubKeyHex;
+	if (h.substr(0, 2) !== "04")
+	    throw "this method supports uncompressed format(04) only";
+
+	var charlen = this.ecparams.keylen / 4;
+	if (h.length !== 2 + charlen * 2)
+	    throw "malformed public key hex length";
+
+	var result = {};
+	result.x = h.substr(2, charlen);
+	result.y = h.substr(2 + charlen);
+	return result;
+    };
+
+    /**
+     * get NIST curve short name such as "P-256" or "P-384"
+     * @name getShortNISTPCurveName
+     * @memberOf KJUR.crypto.ECDSA
+     * @function
+     * @return {String} short NIST P curve name such as "P-256" or "P-384" if it's NIST P curve otherwise null;
+     * @since ecdsa-modified 1.0.5 jsrsasign 5.0.14
+     * @example
+     * ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1', 'pub': pubHex});
+     * ec.getShortPCurveName() &rarr; "P-256";
+     */
+    this.getShortNISTPCurveName = function() {
+	var s = this.curveName;
+	if (s === "secp256r1" || s === "NIST P-256" ||
+	    s === "P-256" || s === "prime256v1")
+	    return "P-256";
+	if (s === "secp384r1" || s === "NIST P-384" || s === "P-384")
+	    return "P-384";
+	return null;
+    };
 
     /**
      * generate a EC key pair
@@ -116,8 +163,8 @@ KJUR.crypto.ECDSA = function(params) {
      * @example
      * var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
      * var keypair = ec.generateKeyPairHex();
-     * var pubhex = keypair.ecpubhex; // hexadecimal string of EC private key (=d)
-     * var prvhex = keypair.ecprvhex; // hexadecimal string of EC public key
+     * var pubhex = keypair.ecpubhex; // hexadecimal string of EC public key
+     * var prvhex = keypair.ecprvhex; // hexadecimal string of EC private key (=d)
      */
     this.generateKeyPairHex = function() {
 	var biN = this.ecparams['n'];

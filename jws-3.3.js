@@ -861,7 +861,7 @@ KJUR.jws.JWS.getEncodedSignatureValueFromJWS = function(sJWS) {
  * @memberOf KJUR.jws.JWS
  * @function
  * @static
- * @param {String} o JWK object to be calculated thumbprint
+ * @param {Object} o JWK object to be calculated thumbprint
  * @return {String} Base64 URL encoded JWK thumbprint value
  * @since jsrsasign 5.0.2 jws 3.3.2
  * @description

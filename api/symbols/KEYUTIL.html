@@ -555,6 +555,17 @@ generate PEM formatted encrypted PKCS#5 private key by
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getJWKFromKey">getJWKFromKey</a></b>()
+								</div>
+								<div class="description">convert from RSAKey/KJUR.crypto.ECDSA public/private key object to RFC 7517 JSON Web Key(JWK)
+This static method convert from RSAKey/KJUR.crypto.ECDSA public/private key object 
+to RFC 7517 JSON Web Key(JWK)</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getKey">getKey</a></b>(param, passcode, hextype)
 								</div>
 								<div class="description">get private or public key object from any arguments
@@ -1301,6 +1312,70 @@ var pem = KEYUTIL.getEncryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> hexadecimal string data of PEM contents</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getJWKFromKey"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">KEYUTIL.</span><b>getJWKFromKey</b>()
+					
+					</div>
+					<div class="description">
+						convert from RSAKey/KJUR.crypto.ECDSA public/private key object to RFC 7517 JSON Web Key(JWK)
+This static method convert from RSAKey/KJUR.crypto.ECDSA public/private key object 
+to RFC 7517 JSON Web Key(JWK)
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">kp1 = KEYUTIL.generateKeypair("EC", "P-256");
+jwkPrv1 = KEYUTIL.getJWKFromKey(kp1.prvKeyObj);
+jwkPub1 = KEYUTIL.getJWKFromKey(kp1.pubKeyObj);
+
+kp2 = KEYUTIL.generateKeypair("RSA", 2048);
+jwkPrv2 = KEYUTIL.getJWKFromKey(kp2.prvKeyObj);
+jwkPub2 = KEYUTIL.getJWKFromKey(kp2.pubKeyObj);
+
+// if you need RFC 7636 JWK thumprint as kid do like this:
+jwkPub2.kid = KJUR.jws.JWS.getJWKthumbprint(jwkPub2);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>RSAKey/KJUR.crypto.ECDSA</b>
+									
+								</dt>
+								<dd>public/private key object</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>keyutil 1.0.13 jsrsasign 5.0.14</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> JWK object</dd>
 							
 							</dl>
 						

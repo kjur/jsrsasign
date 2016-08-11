@@ -44,9 +44,11 @@ exports.newline_toDos = newline_toDos;
 exports.intarystrtohex = intarystrtohex;
 exports.strdiffidx = strdiffidx;
 
+exports.KJUR = KJUR;
 exports.crypto = KJUR.crypto;
 exports.asn1 = KJUR.asn1;
 exports.jws = KJUR.jws;
+exports.lang = KJUR.lang;
 
 exports.readFileUTF8 = readFileUTF8;
 exports.readFileHexByBin = readFileHexByBin;

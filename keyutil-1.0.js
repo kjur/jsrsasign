@@ -1,9 +1,9 @@
-/*! keyutil-1.0.12.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! keyutil-1.0.13.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
  *
- * Copyright (c) 2013-2015 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2016 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version keyutil 1.0.12 (2015-Oct-14)
+ * @version keyutil 1.0.13 (2016-Aug-11)
  * @since jsrsasign 4.1.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1422,7 +1422,11 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
         param.d !== undefined) {
 	var ec = new KJUR.crypto.ECDSA({"curve": param.crv});
 	var charlen = ec.ecparams.keylen / 4;
+        var hX   = ("0000000000" + b64utohex(param.x)).slice(- charlen);
+        var hY   = ("0000000000" + b64utohex(param.y)).slice(- charlen);
+        var hPub = "04" + hX + hY;
         var hPrv = ("0000000000" + b64utohex(param.d)).slice(- charlen);
+	ec.setPublicKeyHex(hPub);
 	ec.setPrivateKeyHex(hPrv);
 	return ec;
     }
@@ -1597,6 +1601,7 @@ KEYUTIL.generateKeypair = function(alg, keylenOrCurve) {
         var keypairHex = ec.generateKeyPairHex();
 
         var prvKey = new KJUR.crypto.ECDSA({curve: curve});
+        prvKey.setPublicKeyHex(keypairHex.ecpubhex);
         prvKey.setPrivateKeyHex(keypairHex.ecprvhex);
         prvKey.isPrivate = true;
         prvKey.isPublic = false;
@@ -2018,3 +2023,74 @@ KEYUTIL.parseCSRHex = function(csrHex) {
 
     return result;
 };
+
+// -- OTHER STATIC PUBLIC METHODS  -------------------------------------------------
+
+/**
+ * convert from RSAKey/KJUR.crypto.ECDSA public/private key object to RFC 7517 JSON Web Key(JWK)
+ * @name getJWKFromKey
+ * @memberOf KEYUTIL
+ * @function
+ * @static
+ * @param {Object} RSAKey/KJUR.crypto.ECDSA public/private key object
+ * @return {Object} JWK object
+ * @since keyutil 1.0.13 jsrsasign 5.0.14
+ * @description
+ * This static method convert from RSAKey/KJUR.crypto.ECDSA public/private key object 
+ * to RFC 7517 JSON Web Key(JWK)
+ * @example
+ * kp1 = KEYUTIL.generateKeypair("EC", "P-256");
+ * jwkPrv1 = KEYUTIL.getJWKFromKey(kp1.prvKeyObj);
+ * jwkPub1 = KEYUTIL.getJWKFromKey(kp1.pubKeyObj);
+ *
+ * kp2 = KEYUTIL.generateKeypair("RSA", 2048);
+ * jwkPrv2 = KEYUTIL.getJWKFromKey(kp2.prvKeyObj);
+ * jwkPub2 = KEYUTIL.getJWKFromKey(kp2.pubKeyObj);
+ *
+ * // if you need RFC 7636 JWK thumprint as kid do like this:
+ * jwkPub2.kid = KJUR.jws.JWS.getJWKthumbprint(jwkPub2);
+ */
+KEYUTIL.getJWKFromKey = function(keyObj) {
+    var jwk = {};
+    if (keyObj instanceof RSAKey && keyObj.isPrivate) {
+	jwk.kty = "RSA";
+	jwk.n = hextob64u(keyObj.n.toString(16));
+	jwk.e = hextob64u(keyObj.e.toString(16));
+	jwk.d = hextob64u(keyObj.d.toString(16));
+	jwk.p = hextob64u(keyObj.p.toString(16));
+	jwk.q = hextob64u(keyObj.q.toString(16));
+	jwk.dp = hextob64u(keyObj.dmp1.toString(16));
+	jwk.dq = hextob64u(keyObj.dmq1.toString(16));
+	jwk.qi = hextob64u(keyObj.coeff.toString(16));
+	return jwk;
+    } else if (keyObj instanceof RSAKey && keyObj.isPublic) {
+	jwk.kty = "RSA";
+	jwk.n = hextob64u(keyObj.n.toString(16));
+	jwk.e = hextob64u(keyObj.e.toString(16));
+	return jwk;
+    } else if (keyObj instanceof KJUR.crypto.ECDSA && keyObj.isPrivate) {
+	var name = keyObj.getShortNISTPCurveName();
+	if (name !== "P-256" && name !== "P-384")
+	    throw "unsupported curve name for JWT: " + name;
+	var xy = keyObj.getPublicKeyXYHex();
+	jwk.kty = "EC";
+	jwk.crv =  name;
+	jwk.x = hextob64u(xy.x);
+	jwk.y = hextob64u(xy.y);
+	jwk.d = hextob64u(keyObj.prvKeyHex);
+	return jwk;
+    } else if (keyObj instanceof KJUR.crypto.ECDSA && keyObj.isPublic) {
+	var name = keyObj.getShortNISTPCurveName();
+	if (name !== "P-256" && name !== "P-384")
+	    throw "unsupported curve name for JWT: " + name;
+	var xy = keyObj.getPublicKeyXYHex();
+	jwk.kty = "EC";
+	jwk.crv =  name;
+	jwk.x = hextob64u(xy.x);
+	jwk.y = hextob64u(xy.y);
+	return jwk;
+    }
+    throw "not supported key object";
+};
+
+
