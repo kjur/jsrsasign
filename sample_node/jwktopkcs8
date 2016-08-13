@@ -1,0 +1,53 @@
+#!/usr/bin/env node
+
+/*
+ * jwktopkcs8 - convert JWK file to PKCS#8 private/public key
+ *
+ * Copyright (c) 2016 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * http://kjur.github.com/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ * ---------------------------------------------------------
+ * DESCRIPTION
+ *   This script converts from RFC 7517 JSON Web Key (JWK) file to
+ *   PEM PKCS#8 RSA/ECC private/public key file.
+ *
+ * USAGE
+ *   % jwktopkcs8 [INPUT JWK KEY FILE] [OUTPUT PKCS8 FILE]
+ *   % jwktopkcs8 aaa.prv.jwk aaa.prv.p8
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+var path = require('path');
+
+program
+  .version('1.0.0 (2016-Aug-13)')
+  .description('convert JWK to PEM PKCS#8 private/public key')
+  .usage('[INPUT JWK KEY] [OUTPUT PKCS8]')
+  .parse(process.argv);
+
+if (program.args.length !== 2)
+  throw "wrong number of args"
+
+var inFile = program.args[0];
+var outFile = program.args[1];
+
+var sJWK = rs.readFile(inFile);
+var jwk = rs.jws.JWS.readSafeJSONString(sJWK);
+var key = rs.KEYUTIL.getKey(jwk);
+var pem;
+if (key.isPublic) {
+   pem = rs.KEYUTIL.getPEM(key);
+} else {
+   pem = rs.KEYUTIL.getPEM(key, "PKCS8PRV");
+}
+rs.saveFile(outFile, pem);
+
+
+
