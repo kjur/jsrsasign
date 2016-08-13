@@ -1,6 +1,9 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 5.0.14 to next version
+  - pemtojwk and jwktopkcs8 added to sample node scripts
+
 * Changes between 5.0.13 to 5.0.14
   - keyutil 1.0.12 to 1.0.13
     - KEYUTIL.getJWKFromKey() method added to get
