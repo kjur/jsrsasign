@@ -1,9 +1,9 @@
-/*! asn1-1.0.9.js (c) 2013-2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1-1.0.10.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
  *
- * Copyright (c) 2013-2015 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2016 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.0.9 (2015-Nov-26)
+ * @version asn1 1.0.10 (2016-Aug-27)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -140,6 +140,8 @@ KJUR.asn1.ASN1Util = new function() {
      * @param {String} pemHeader PEM header string (ex. 'RSA PRIVATE KEY')
      * @return {String} PEM formatted string of input data
      * @description
+     * This method converts a hexadecimal string to a PEM string with
+     * a specified header. Its line break will be CRLF("\r\n").
      * @example
      * var pem  = KJUR.asn1.ASN1Util.getPEMStringFromHex('616161', 'RSA PRIVATE KEY');
      * // value of pem will be:
@@ -148,10 +150,7 @@ KJUR.asn1.ASN1Util = new function() {
      * -----END PRIVATE KEY-----
      */
     this.getPEMStringFromHex = function(dataHex, pemHeader) {
-        //var dataB64 = hextob64(dataHex);
-        var ns1 = KJUR.asn1;
-        var dataWA = CryptoJS.enc.Hex.parse(dataHex);
-        var dataB64 = CryptoJS.enc.Base64.stringify(dataWA);
+        var dataB64 = hextob64(dataHex);
         var pemBody = dataB64.replace(/(.{64})/g, "$1\r\n");
         pemBody = pemBody.replace(/\r\n$/, '');
         return "-----BEGIN " + pemHeader + "-----\r\n" + 
