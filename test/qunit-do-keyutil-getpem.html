@@ -34,7 +34,6 @@
 <script src="../ext/base64.js"></script>
 <script src="../ext/rsa.js"></script>
 <script src="../ext/rsa2.js"></script>
-<script src="../ext/sha1.js"></script>
 <script src="../ext/ec.js"></script>
 <script src="../ext/ec-patch.js"></script>
 
@@ -132,7 +131,9 @@ equal(KEYUTIL.getPEM(key).replace(/\r\n/g, "\n"), z1PubP8PEM, "");
 
 test("getPEM public ECDSA k1.pub.p8.pem", function() {
 var key = KEYUTIL.getKey(k1PubP8PEM);
-equal(KEYUTIL.getPEM(key).replace(/\r\n/g, "\n"), k1PubP8PEM, "");
+  equal(hextob64("6161616161"), "YWFhYWE=", "aaaaa");
+  equal(hextob64("305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001"), "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOhmTdK0BSkSFWjzs5vJemLnujwJur3E8NzY35DreQubtkWitw4xEnR7TTxBtRQkiVEV/viPedQ+rlsaTjUY/VkCAwEAAQ==", "k1 pub");
+equal(KEYUTIL.getPEM(key).replace(/\r\n/g, "\n"), k1PubP8PEM, "k1 pub p8 pem");
 });
 
 test("getPEM public DSA d1.pub.p8.pem", function() {
