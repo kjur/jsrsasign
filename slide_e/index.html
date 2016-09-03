@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>jsrsasign - Pure JavaScript cryptographic library</title>
+<meta name="description" content="introduction slides for jsrsasign pure JavaScript cryptographic library">
+<meta name="author" content="Kenji Urushima @kjur">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="stylesheet" href="css/reveal.min.css">
+<!-- link rel="stylesheet" href="css/theme/default.css" id="theme" -->
+<link rel="stylesheet" href="css/theme/night.css" id="theme">
+<!-- For syntax highlighting -->
+<link rel="stylesheet" href="lib/css/zenburn.css">
+<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+<script>
+document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+</script>
+<!--[if lt IE 9]>
+<script src="lib/js/html5shiv.js"></script>
+<![endif]-->
+<script src="jquery-172-min.js"></script>
+<script src="html5_dropfile.js"></script>
+<script src="jsrsasign-latest-all-min.js"></script>
+</head>
+
+<body>
+<div class="reveal">
+<!-- Any section element inside of this container is displayed as a slide -->
+<div class="slides">
+
+<section>
+<h1>introduction to jsrsasign</h1>
+<h3>pure JavaScript cryptographic library</h3>
+<h4><a href="https://kjur.github.io/jsrsasign" target="_blank">https://kjur.github.io/jsrsasign</a></h4>
+<h4><font color="grey">slide r1.0 (2016 Sep 3 for jsrsasign 5.0.15)</font></h4>
+<p>
+<a href="http://twitter/kjur">@kjur / Kenji Urushima</a><br/>
+<br/>
+<br/>
+<br/>
+<font color="#404040">press &larr; &uarr; &rarr; &darr; key or right bottom buttons to move slides</font>
+</p>
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="index.html#/2"</a>Overview</a></li>
+<li><a href="index.html#/3"</a>How to use or install</a></li>
+<li><a href="index.html#/4"</a>RSA/DSA/ECDSA public key cryptography</a></li>
+<li><a href="index.html#/5"</a>Cryptographic Hash (SHA1/SHA2/MD5/RIPEMD160)</a></li>
+<li><a href="index.html#/6"</a>Message Authentication Code (HmacSHA1/SHA2/MD5)</a></li>
+<li><a href="index.html#/7"</a>short ASN.1 introduction</a></li>
+<li><a href="index.html#/8"</a>ASN1HEX: simple ASN.1 parser</a></li>
+<li><a href="index.html#/9"</a>X509: simple X.509 certificate parser</a></li>
+<li><a href="index.html#/10"</a>generate and encode ASN.1</a></li>
+<li><a href="index.html#/11"</a>JSON Web Key/Signature/Token (JWK/JWS/JWT)</a></li>
+<li><a href="index.html#/12"</a>Tools, Demos, Tutorials and API Docs</a></li>
+</ul>
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>Overview</h2>
+<p>
+The "jsrsasign" (<a href="https://kjur.github.io/jsrsasign/">https://kjur.github.io/jsrsasign/</a>) is a open source free cryptograhic library implemented by pure JavaScript. It supports a lot of features such as following:
+</p>
+<table>
+<tr><td>
+<ul>
+<li>strong RSA/DSA/ECDSA key utility</li>
+<li>RSA/DSA/ECDSA digital signature</li>
+<li>message authentication code(MAC)</li>
+<li>hash (MD5,RIPEMD,SHA1,SHA2)</li>
+<li>simple ASN.1 parser</li>
+<li>ASN.1 object generator</li>
+<li>X.509 certificate and CRL</li>
+<li>PKCS#1/5/8 private/public key</li>
+</ul>
+</td><td>
+<ul>
+<li>PKCS#10/CSR</li>
+<li>CMS SignedData</li>
+<li>RFC 3161 TimeStamp</li>
+<li>CAdES long term signature</li>
+<li>JWS (JSON Web Signatures)</li>
+<li>JWT (JSON Web Token)</li>
+<li>JWK (JSON Web Key)</li>
+<li>string utility</li>
+</ul>
+</td></tr>
+</table>
+</p>
+</section>
+
+<section>
+<h2>Overview (cont'd)</h2>
+<ul>
+<li><b>well-documented</b><br/>
+  "jsrsasign" has rich 
+  <a href="https://kjur.github.io/jsrsasign/api/" target="_blank">API reference</a>
+  and 
+  <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial" target="_blank">tutorial</a>
+  so that you can learn easily.</li>
+<li><b>many samples and tools</b><br/>
+  "jsrsasign" provides many samples and tools.</li>
+<li><b>easy installation</b><br/>
+  "jsrsasign" can be easily installed by "git clone", bower and npm. 
+  There is no dependency to other package or module.</li>
+<li><b>works on most of browsers and Node.js</b><br/>
+  "jsrsasign" doesn't require any special feature of JavaScript on the browser such like
+  W3C Web Crypto or Promise. This works on most of browsers and Node.js as if old one. </li>
+<li><b>MIT license</b><br/>
+  "jsrsasign" is licensed under "MIT License" which is short and permissive for 
+  developers convenience.</li>
+</dl>
+</section>
+
+<section>
+<h2>jsrsasign architecture</h2>
+<img src="img-arch2-e.svg" border="0" style="border: 0"/>
+<br clear="all"/>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+<h2>How to use or install</h2>
+<div align="left">
+For bower:
+<blockquote>
+% bower install jsrsasign
+</blockquote>
+For Node.js:
+<blockquote>
+% npm install -g jsrsasign  (for global installation)
+</blockquote>
+Off course, you can use git:
+<blockquote>
+% git clone https://github.com/kjur/jsrsasign.git
+</blockquote>
+Or to use it in your web page, add following in your HTML:
+<blockquote>
+&lt;script src="https://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"&gt;&lt;/script&gt;
+</blockquote>
+
+</div>
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>RSA/DSA/ECDSA public key cryptography</h2>
+</section>
+
+<section>
+<h2>KEYUTIL class: Features</h2>
+<ul>
+<li>supports RSA/DSA/ECC algorithm</li>
+<li>generateKeypair() for RSA/ECC</li>
+<li>getKey(): key loader
+  <ul>
+  <li>PKCS#1/5 plain/encryptped private/public PEM/HEX key</li>
+  <li>PKCS#8 plain/encryptped private/public PEM/HEX key</li>
+  <li>X.509 PEM certificate</li>
+  <li>public/private RFC 7517 JSON Web Key (JWK)</li>
+  </ul>
+</li>
+<li>getPEM() to get plain/encrypted private/public PKCS#1/5/8 PEM</li>
+<li>getJWKFromKey() to get RFC 7517 JSON Web Key (JWK)</li>
+</ul>
+</section>
+
+<section>
+<h2>KEYUTIL.generateKeypair()</h2>
+<p>generateKeypair method can be used to generate RSA/ECC key pair.</p>
+<hr/>
+<div align="left">
+// RSA<br/>
+keypair = KEYUTIL.<font color="yellow">generateKeypair</font>("RSA", 2048);<br/>
+// ECC<br/>
+keypair = KEYUTIL.<font color="yellow">generateKeypair</font>("EC", "secp256r1");<br/>
+// <br/>
+// <font color="yellow">private key object</font>: keypair.prvKeyObj<br/>
+// <font color="yellow">public key object</font>: keypair.pubKeyObj<br/>
+</div>
+<hr/>
+</section>
+
+<section>
+<h2>KEYUTIL.getKey()</h2>
+<p>getKey method can load a lot of format of public and private key such as PKCS#1/5/8 or JWK
+very easily.</p>
+<hr/>
+<div align="left">
+// PKCS#8 public key<br/>
+pub = KEYUTIL.<font color="yellow">getKey</font>("-----BEGIN PUBLIC KEY...");<br/>
+// public key from X.509 certificate<br/>
+pub = KEYUTIL.<font color="yellow">getKey</font>("-----BEGIN CERTIFICATE...");<br/>
+// PKCS#8 encrypted private with password<br/>
+prv = KEYUTIL.<font color="yellow">getKey</font>("-----BEGIN ENCRYPTED PRIVATE KEY...", "pass");<br/>
+</div>
+<hr/>
+</section>
+
+<section>
+<h2>sign data</h2>
+<p>sign a data with your private key using Signature object as like Java JCE.</p>
+<hr/>
+<div align="left">
+// load private key<br/>
+prv = KEYUTIL.getKey("-----BEGIN ENCRYPTED PRIVATE KEY...", "pass");<br/>
+// generate Signature object<br/>
+sig = <font color="yellow">new KJUR.crypto.Signature</font>({"alg": "SHA256withRSA"});<br/>
+// set private key for sign<br/>
+sig.<font color="yellow">init</font>(prv);<br/>
+// update data<br/>
+sig.<font color="yellow">updateString</font>("aaa");<br/>
+// calclate signature<br/>
+sigHex = sig.<font color="yellow">sign()</font>;<br/>
+</div>
+<hr/>
+</section>
+
+<section>
+<h2>verify signature</h2>
+<p>sign a data with your private key using Signature object as like Java JCE.</p>
+<hr/>
+<div align="left">
+// load public key<br/>
+pub = KEYUTIL.getKey("-----BEGIN CERTIFICATE...");<br/>
+// generate Signature object<br/>
+sig = <font color="yellow">new KJUR.crypto.Signature</font>({"alg": "SHA256withRSA"});<br/>
+// set private key for sign<br/>
+sig.<font color="yellow">init</font>(pub);<br/>
+// update data<br/>
+sig.<font color="yellow">updateString</font>("aaa");<br/>
+// verify signature<br/>
+isValid = sig.<font color="yellow">verify</font>(sigValueHex);<br/>
+</div>
+<hr/>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>Cryptographic Hash<br/>
+SHA1/SHA2/MD5/RIPEMD160</h2>
+</section>
+
+<section>
+<h2>calculate hash by MessageDigest class</h2>
+<p>calculate hash using MessageDigest class just like Java JCE</p>
+<hr/>
+<div align="left">
+// generate MessageDigest object for SHA384<br/>
+md = <font color="yellow">new KJUR.crypto.MessageDigest</font>({alg: "sha384"});<br/>
+// append data for hash<br/>
+md.<font color="yellow">updateString</font>("aaa");<br/>
+// calculate hash finally<br/>
+mdHex = md.<font color="yellow">digest</font>();<br/>
+<br/>
+// or use Util class in short. These three will get the same result.<br/>
+mdHex = KJUR.crypto.Util.<font color="yellow">sha384</font>("aaa");<br/>
+mdHex = KJUR.crypto.Util.<font color="yellow">hashString</font>("aaa","sha384");<br/>
+mdHex = KJUR.crypto.Util.<font color="yellow">hashHex</font>("616161","sha384");<br/>
+</div>
+<hr/>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>Message Authentication Code<br/>
+(HmacSHA1/SHA2/MD5)</h2>
+</section>
+
+<section>
+<h2>calculate Mac by Mac class</h2>
+<p>calculate message authentication code by Mac class just like Java JCE</p>
+<hr/>
+<div align="left">
+// generate Mac class<br/>
+mac = <font color="yellow">new KJUR.crypto.Mac</font>({alg: "HmacSHA256", pass: "pass"});<br/>
+// append data for Mac<br/>
+mac.<font color="yellow">updateString</font>('aaa');<br/>
+// get Mac value<br/>
+macHex = md.<font color="yellow">doFinal</font>();<br/>
+</div>
+<hr/>
+<p>pass parameter supports some value formats like this:<br/>
+<table>
+<tr><td>hexadecimal</td><td>{hex: "616161"}</td></tr>
+<tr><td>UTF-8</td><td>{utf8: "東京"}</td></tr>
+<tr><td>Base64</td><td>{b64:  "Mi02/+...a=="}</td></tr>
+<tr><td>Base64URL</td><td>{b64u: "Mi02_-...a"}</td></tr>
+</table>
+</p>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>short ASN.1 introduction</h2>
+</section>
+
+<section>
+<h2>short ASN.1 introduction</h2>
+<p>ASN.1 is a binary encording of structured data consists of a data type tag(T), 
+byte length(L) and value(V).</p>
+<img src="img-asn1-basic-e.svg" border="0" style="border: 0"/>
+<p>
+ASN.1 encoding is used in network protocol or format such like X.509 certificate, 
+private/public key formats, S/MIME data, digital time stamp, Radius. 
+</p>
+<div align="left">
+FEATURE1: variable length data exceeds int or long.<br/>
+FEATURE2: structured data is also available.
+</div>
+</section>
+
+<section>
+<h2>short ASN.1 introduction (cont'd)</h2>
+<p>Structured data can be represented by SEQUENCE or SET.</p>
+<img src="img-asn1-structured-e.svg" border="0" style="border: 0"/>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>ASN1HEX</h2>
+<h4>simple ASN.1 parser for hexadecimal string</h4>
+</section>
+
+<section>
+<h2>ASN1HEX basic methods</h2>
+<p>ASN1HEX methods can be used for getting tag, length or value of ASN.1 object 
+of hexadecimal string at specified position.</p>
+<img src="img-asn1hex-basic.svg" border="0" style="border: 0"/>
+</section>
+
+<section>
+<h2>ASN1HEX basic methods (cont'd)</h2>
+<p>get a list of indexes of child elements.</p>
+<img src="img-asn1hex-child.svg" border="0" style="border: 0"/>
+</section>
+
+<section>
+<h2>ASN1HEX for decendant element</h2>
+<p>
+To refer a decendant element of nested structured ASN.1, use "nthList" 
+which represent indexes for each nested layer. 
+This is very useful to specify a deep nested element 
+such like subject name of X.509 certificate.
+</p>
+
+<blockquote><pre>
+SEQUENCE                     idx=0
+    SET                      [0] idx=4
+        INTEGER 4            [0,0] idx=8 ← You want to refer
+        INTEGER 31           [0,1] idx=14
+    SET                      [1]
+        UTF8STRING "aaa"     [1,0]
+        IA5STRING "bbb"      [1,1]
+</pre></blockquote>
+
+<div align="left">
+getDecendantHexTLVByNthList(s,0,[0,0]) → "020104"
+getDecendantHexLByNthList(s,0,[0,0]) → "01"
+getDecendantHexVByNthList(s,0,[0,0]) → "04"
+getDecendantIndexByNthList(s,0,[0,0]) → 8
+</div>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>X509</h2>
+<h4>simple X.509 certificate parser as ASN.1</h4>
+</section>
+
+<section>
+<h2>X509 class</h2>
+<h4>Basic fields and extensions can be get by X509 class.</h4>
+<hr/>
+<div align="left">
+x = new X509();<br/>
+x.readCertPEM(sCertPEM);<br/>
+hex = X.509.pemToHex(sCertPEM);<br/>
+<br/>
+// get subject<br/>
+subject = x.getSubjectString(); // return like "/C=US/O=OTEST"<br/>
+<br/>
+// get subjectAltName<br/>
+san = X.509.getExtSubjectAltName(hex);<br/>
+// return like ["example.com", "example.org"]<br/>
+</div>
+<hr/>
+<p>
+There are a lot of methods to get fields and extensions. <br/>
+Please see 
+<a href="https://kjur.github.io/jsrsasign/api/symbols/X509.html" target="_blank">manual</a>
+in detail.
+</p>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>generate and encode ASN.1</h2>
+</section>
+
+<section>
+<h3>generate and encode ASN.1 (cont'd)</h3>
+<p>
+Classes for ASN.1 primitives and structured types, as well as X.509 certificate, CRL, CSR, CMS signed data, digital time stamp and CAdES are defined in jsrsasign.
+</p>
+<hr/>
+<p>
+<div align="left">
+i1 = new KJUR.asn1.DERInteger({int: 234});<br/>
+s1 = new KJUR.asn1.DERUTF8String({str: 'Tokyo'}});<br/>
+seq = new KJUR.asn1.DERSequence({array: [i1, s1]});<br/>
+hex = seq.getEncodedHex();<br/>
+</div>
+</p>
+<hr/>
+<p>
+Please see 
+<a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.html" target="_blank">
+manual</a> in detail.<br/>
+It's very similar to BoucyCastle or IAIK Java ASN.1 classes.<br/>
+However, there is much more easy way...
+</p>
+</section>
+
+<section>
+<h3>generate and encode ASN.1 using newObject</h3>
+<p>It's very easy to generate complicated ASN.1 object by ASN1Util.newObject</p>
+</p>
+<p>
+<hr/>
+<div align="left">
+var hex = new KJUR.asn1.ASN1Util.<font color="yellow">newObject</font>(<br/>
+　　{seq: [　　　　　　　　　　　　　　// SEQUENCE<br/>
+　　　　　{int: 234},　　　　　　　　　　// INTEGER<br/>
+　　　　　{utf8str: 'Tokyo'}　　　　　　// UTF8String<br/>
+　　　　　]}<br/>
+).getEncodedHex();<br/>
+</div>
+<hr/>
+</p>
+</section>
+
+<section>
+<h3>get PEM of X.509 certificate by X509Util.newCertPEM</h3>
+<p>It's very easy to generate PEM of X.509 certificate by 
+<a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.X509Util.html#.newCertPEM" target="_blank">X509Util.newCertPEM</a>.
+</p>
+<hr/>
+<div align="left">
+pem = new KJUR.asn1.x509.X509Util.<font color="yellow">newCertPEM</font>({<br/>
+　　serial: {int: 4},<br/>
+　　sigalg: {name: 'SHA256withECDSA', paramempty: true},<br/>
+　　issuer: {str: '/C=US/O=CA1'},<br/>
+　　notbefore: {str: '130504235959Z'}, notafter: {str: '140504235959Z'},<br/>
+　　subject: {str: '/C=US/O=T1'},<br/>
+　　sbjpubkey: "-----BEGIN PUBLIC KEY...",<br/>
+　　ext: [<br/>
+　　　　{basicConstraints: {cA: true, critical: true}},<br/>
+　　　　{keyUsage: {bin: '11'}},<br/>
+　　],<br/>
+　　cakey: ["-----BEGIN PRIVATE KEY...", "pass"]<br/>
+});<br/>
+</div>
+<hr/>
+</section>
+
+<section>
+<h3>get PEM of PKCS#10/CSRT by CSRUtil.newCSRPEM</h3>
+<p>It's very easy to generate PEM of CSR(certificate signing request) by 
+<a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.csr.CSRUtil.html#.newCSRPEM" target="_blank">CSRUtil.newCSRPEM</a>.
+</p>
+<hr/>
+<div align="left">
+kp = KEYUTIL.generateKeypair("RSA", 2048);<br/>
+pem = new KJUR.asn1.csr.CSRUtil.<font color="yellow">newCSRPEM</font>({<br/>
+　　subject: {str: '/C=US/O=Test/CN=example.com'},<br/>
+　　sbjpubkey: kp.pubKeyObj,<br/>
+　　sigalg: "SHA256withRSA",<br/>
+　　sbjprvkey: kp.prvKeyObj<br/>
+});<br/>
+</div>
+<hr/>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>JWK<br/>
+JWS<br/>
+JWT</h2>
+</section>
+
+<section>
+<h2>JWK (JSON Web Key)</h2>
+<p>jsrsasign can load and export RFC 7517 JSON Web Key (JWK).</p>
+<hr/>
+<div align="left">
+// load JWK<br/>
+jwkPub = {kty: "EC", crv: "P-256", x: "f830J3..." ...};<br/>
+keyObj = KEYUTIL.<font color="yellow">getKey</font>(jwkPub);<br/>
+<br/>
+// export to JWK<br/>
+kp = KEYUTIL.generateKeypair("RSA", 2048);<br/>
+jwkPrv = KEYUTIL.<font color="yellow">getJWKFromKey</font>(kp.prvKeyObj);<br/>
+jwkPub = KEYUTIL.<font color="yellow">getJWKFromKey</font>(kp.pubKeyObj);<br/>
+</div>
+<hr/>
+</section>
+
+<section>
+<h2>JWS (JSON Web Signatures)</h2>
+<p>jsrsasign can sign and verify RFC 7515 JSON Web Signatures (JWS).</p>
+<hr/>
+<div align="left">
+// sign JWS<br/>
+header = {alg: "HS256"};<br/>
+payload = {fruit: "orange"};<br/>
+jws = KJUR.jws.JWS.sign("HS256", header, payload, {utf8: "secret"});<br/>
+<font color="grey">// eyJhbGciOiJIUzI1NiJ9.eyJmcnVpdCI6Im9yYW5nZSJ9.<br/>
+// qbIF5WMbXYMFMh_UXjL2CGts5KPVU7yF7AbOdoyoPZI<br/></font>
+<br/>
+// verify JWS<br/>
+isValid = KJUR.jws.JWS.verify(jws, {utf8: "secret"}, ["HS256"]);<br/>
+</div>
+<hr/>
+This result can also be verified at <a href="https://jwt.io/" target="_blank">jwt.io</a>.
+</section>
+
+<section>
+<h2>JWS signature generation flow</h2>
+<img src="img-createjws.png" style="float: left; border: 0;"/>
+</section>
+
+<section>
+<h2>JWT (JSON Web Token)</h2>
+<p>jsrsasign can sign and verify RFC 7519 JSON Web Token (JWT).</p>
+<hr/>
+<div align="left">
+// sign JWT<br/>
+header = {alg: "HS256", typ: "JWT"};<br/>
+payload = {sub: "123456789", name: "John Doe", admin: true};<br/>
+jwt = KJUR.jws.JWS.sign("HS256", header, payload, {utf8: "secret"});<br/>
+<font color="grey">// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY<br/>
+// 3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95<br/>
+// OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ<br/></font>
+<br/>
+// verify JWT<br/>
+isValid = KJUR.jws.JWS.verifyJWT(jwt, {utf8: "secret"}, {<br/>
+　alg: ["HS256"], sub: ["John Doe"]<br/>
+});<br/>
+</div>
+<hr/>
+This result can also be verified at <a href="https://jwt.io/" target="_blank">jwt.io</a>.
+</section>
+
+<section>
+<h2>jsrsasign at jwt.io</h2>
+<p>
+<a href="https://jwt.io/" target="_blank">jwt.io</a> site have kindly listed jsrsasign. 
+jwt.io provides JWT validator which uses 
+<a href="https://jwt.io/vendor/jsrsasign/index.js" target="_blank">old version of jsrsasign 4.1.5</a>.
+</p>
+<table>
+<tr><td><img src="img-jwtio1.png" style="float: left; border: 0;"/></td>
+<td><img src="img-jwtio2.png" style="float: left; border: 0;"/></td></tr>
+</table>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>Tools, Demos, Tutorials and API Docs</h2>
+</section>
+
+<section>
+<h2>Tools and demos</h2>
+<table>
+<tr><td><img src="img-tool1.png" style="float: left; border: 0;"/>
+<br clear="all"/></td>
+<td>
+<div align="left">
+jsrsasign provides a lot of tools which use jsrsasign as example.</div>
+<div align="left">
+Please see the <a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Online-Tools" target="_blank">this list</a> as for onliene tools.</div>
+<div align="left">
+Also see <a href="https://github.com/kjur/jsrsasign/tree/master/sample_node" target="_blank">list</a> 
+as for Node tools.</div>
+<div align="left">
+As for demonstrations, please see 
+<a href="https://kjur.github.io/jsrsasign/index.html#demo" target="_blank">this list</a>.</div>
+</td></tr>
+</table>
+</section>
+
+<section>
+<h2>Tutorials</h2>
+<table>
+<tr><td><img src="img-tutorial1.png" style="float: left; border: 0;"/>
+<br clear="all"/></td>
+<td>
+<div align="left">
+jsrsasign provides <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial" target="_blank">tutorial documents</a> to make it easy to learn jsrsasign programming.</div>
+</td></tr>
+</table>
+</section>
+
+<section>
+<h2>API Reference</h2>
+<table>
+<tr><td><img src="img-apiref1.png" style="float: left; border: 0;"/>
+<br clear="all"/></td>
+<td>
+<div align="left">
+jsrsasign provides detailed 
+<a href="https://kjur.github.io/jsrsasign/api/" target="_blank">API Reference</a> 
+document. API reference also has examples.</div>
+</td></tr>
+</table>
+</section>
+
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+<h2>Thank you for your attention.</h2>
+</section>
+
+<!-- ************************************************************************* -->
+
+</div>
+</div>
+
+<!-- ************************************************************************* -->
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.min.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+controls: true,
+progress: true,
+history: true,
+center: true,
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+// Optional libraries used to extend on reveal.js
+dependencies: [
+{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+]
+});
+</script>
+
+</body>
+</html>
+
