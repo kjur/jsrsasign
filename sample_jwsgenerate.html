@@ -1,7 +1,9 @@
 <html>
 <head>
 <title>Sample JWS Signing Application</title>
-<script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="ext/json-sans-eval-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="jws-3.2.js"></script>
 
 <style type="text/css">
 TD  {vertical-align: top; border: solid 1px #000000; }
@@ -9,18 +11,15 @@ TD  {vertical-align: top; border: solid 1px #000000; }
 <script language="JavaScript" type="text/javascript">
 function _genJWS() {
   var sHead = newline_toDos(document.form1.jwshead1.value);
-  var head = KJUR.jws.JWS.readSafeJSONString(sHead);
   var sPayload = newline_toDos(document.form1.jwspayload1.value);
   var hN = document.form1.pubkey1_n.value;
   var hE = document.form1.pubkey1_e.value;
   var hD = document.form1.pubkey1_d.value;
 
+  var jws = new KJUR.jws.JWS();
   var sResult = null;
-  var prv;
   try {
-    if (hN.match(/^[8-9,a-f]/)) hN = "00" + hN;
-    prv = KEYUTIL.getKey({n: hN, e: hE, d: hD});
-    sResult = KJUR.jws.JWS.sign(head.alg, sHead, sPayload, prv);
+    sResult = jws.generateJWSByNED(sHead, sPayload, hN, hE, hD);
     document.form1.jwsgenerated1.value = sResult;
   } catch (ex) {
     alert("Error: " + ex);
@@ -28,14 +27,13 @@ function _genJWS() {
 }
 
 function _checkIfSame() {
-  var jws1 = new KJUR.jws.JWS();
+  var jws = new new KJUR.jws.JWS();
   var sJWS = document.form1.jwsgenerated1.value;
   var sExpectedEncodedSignatureValue = document.form1.jwsexpectedencsig1.value;
   var sEncodedSignatureValueOfJWS = null;
 
   try {
-    var a = sJWS.split(/\./);
-    sEncodedSignatureValueOfJWS = a[2];
+    sEncodedSignatureValueOfJWS = jws.getEncodedSignatureValueFromJWS(sJWS);
   } catch (ex) {
     alert("Error: " + ex);
     return;
@@ -108,12 +106,20 @@ If it isn't un-supported value, it will raise an error.</li>
 </ol>
 
 <center>
-Copyright &copy; 2012-2016 Kenji Urushima, All Rights Reserved.
+Copyright &copy; 2012-2015 Kenji Urushima, All Rights Reserved.
 </center>
 
 <div align="right">
 <a href="index.html">Go back to index</a>
 </div>
 
+<div align="right">
+<a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
+<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
+</a>
+<a href="http://x5.choumusubi.com/bin/gg?069823300">
+<img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
+</a>
+</div>
 </body>
 </html>
