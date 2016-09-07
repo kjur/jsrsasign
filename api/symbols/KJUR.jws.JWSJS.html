@@ -424,7 +424,7 @@ ul.inheritsList
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				<br />Version
-					1.0 (18 May 2012).<br />
+					2.1.0 (2016 Sep 6).<br />
 				
 				
 			
@@ -525,72 +525,101 @@ ul.inheritsList
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.jws.JWSJS.<b><a href="../symbols/KJUR.jws.JWSJS.html#.addSignatureByHeaderKey">addSignatureByHeaderKey</a></b>(sHead, sPemPrvKey)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.jws.JWSJS.html#addSignature">addSignature</a></b>(alg, spHead, key, pass)
+								</div>
+								<div class="description">add a signature to existing JWS-JS by algorithm, header and key.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.jws.JWSJS.html#addSignatureByHeaderKey">addSignatureByHeaderKey</a></b>(sHead, sPemPrvKey)
 								</div>
 								<div class="description">add a signature to existing JWS-JS by Header and PKCS1 private key.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.jws.JWSJS.<b><a href="../symbols/KJUR.jws.JWSJS.html#.addSignatureByHeaderPayloadKey">addSignatureByHeaderPayloadKey</a></b>(sHead, sPayload, sPemPrvKey)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.jws.JWSJS.html#addSignatureByHeaderPayloadKey">addSignatureByHeaderPayloadKey</a></b>(sHead, sPayload, sPemPrvKey)
 								</div>
 								<div class="description">add a signature to existing JWS-JS by Header, Payload and PKCS1 private key.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.jws.JWSJS.<b><a href="../symbols/KJUR.jws.JWSJS.html#.getJSON">getJSON</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/KJUR.jws.JWSJS.html#getJSON">getJSON</a></b>()
 								</div>
 								<div class="description">get JSON object for this JWS-JS object.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.jws.JWSJS.<b><a href="../symbols/KJUR.jws.JWSJS.html#.init">init</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/KJUR.jws.JWSJS.html#init">init</a></b>()
 								</div>
 								<div class="description">(re-)initialize this object.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.jws.JWSJS.<b><a href="../symbols/KJUR.jws.JWSJS.html#.initWithJWS">initWithJWS</a></b>(sJWS)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.jws.JWSJS.html#initWithJWS">initWithJWS</a></b>(sJWS)
 								</div>
 								<div class="description">(re-)initialize and set first signature with JWS.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.jws.JWSJS.<b><a href="../symbols/KJUR.jws.JWSJS.html#.isEmpty">isEmpty</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/KJUR.jws.JWSJS.html#isEmpty">isEmpty</a></b>()
 								</div>
 								<div class="description">check if this JWS-JS object is empty.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.jws.JWSJS.<b><a href="../symbols/KJUR.jws.JWSJS.html#.raedJWSJS">raedJWSJS</a></b>(string)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.jws.JWSJS.html#readJWSJS">readJWSJS</a></b>(spJWSJS)
 								</div>
-								<div class="description">read JWS-JS string.</div>
+								<div class="description">read JWS-JS string or object<br/>
+NOTE: Loading from JSON object is suppored from 
+jsjws 2.1.0 jsrsasign 5.1.0 (2016-Sep-06).</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.jws.JWSJS.<b><a href="../symbols/KJUR.jws.JWSJS.html#.verifyWithCerts">verifyWithCerts</a></b>(aCert)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.jws.JWSJS.html#verifyAll">verifyAll</a></b>(aKeyAlg)
+								</div>
+								<div class="description">verify all signature of JWS-JS object by array of key and acceptAlgs.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.jws.JWSJS.html#verifyNth">verifyNth</a></b>(idx, key, acceptAlgs)
+								</div>
+								<div class="description">verify Nth signature of JWS-JS object by key and acceptAlgs.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.jws.JWSJS.html#verifyWithCerts">verifyWithCerts</a></b>(aCert)
 								</div>
 								<div class="description">verify JWS-JS object with array of certificate string.</div>
 							</td>
@@ -618,11 +647,40 @@ ul.inheritsList
 				
 				<div class="description">
 					JSON Web Signature JSON Serialization (JWSJS) class.<br/>
+This class generates and verfies "JSON Web Signature JSON Serialization (JWSJS)" of
+<a href="http://tools.ietf.org/html/draft-jones-json-web-signature-json-serialization-01">
+IETF Internet Draft</a>. Here is major methods of this class:
+<ul>
+<li><a href="../symbols/KJUR.jws.JWSJS.html#readJWSJS">KJUR.jws.JWSJS#readJWSJS</a> - initialize with string or JSON object of JWSJS.</li>
+<li><a href="../symbols/KJUR.jws.JWSJS.html#initWithJWS">KJUR.jws.JWSJS#initWithJWS</a> - initialize with JWS as first signature.</li>
+<li><a href="../symbols/KJUR.jws.JWSJS.html#addSignature">KJUR.jws.JWSJS#addSignature</a> - append signature to JWSJS object.</li>
+<li><a href="../symbols/KJUR.jws.JWSJS.html#verifyAll">KJUR.jws.JWSJS#verifyAll</a> - verify all signatures in JWSJS object.</li>
+<li><a href="../symbols/KJUR.jws.JWSJS.html#getJSON">KJUR.jws.JWSJS#getJSON</a> - get result of JWSJS object as JSON object.</li>
+</ul>
 					<br /><i>Author: </i>Kenji Urushima.
 				</div>
 				
 				
 				
+				<pre class="code">// initialize
+jwsjs1 = new KJUR.jws.JWSJS();
+jwsjs1.readJWSJS("{headers: [...], payload: "eyJ...", signatures: [...]}");
+
+// add PS256 signature with RSA private key object
+prvKeyObj = KEYUTIL.getKey("-----BEGIN PRIVATE KEY...");
+jwsjs1.addSignature("PS256", {alg: "PS256"}, prvKeyObj);
+// add HS256 signature with HMAC password "secret"
+jwsjs1.addSignature(null, {alg: "HS256"}, {utf8: "secret"});
+
+// get result finally
+jwsjsObj1 = jwsjs1.getJSON();
+
+// verify all signatures
+isValid = jwsjs1.verifyAll([["-----BEGIN CERT...", ["RS256"]],
+                            [{utf8: "secret"}, ["HS256"]]]);</pre>
+				
+				
+				
 				
 					
 					
@@ -630,18 +688,11 @@ ul.inheritsList
 					
 					
 					
-						<dl class="detailList">
-						<dt class="heading">Requires:</dt>
-						
-							<dd>base64x.js, json-sans-eval.js, jws.js and jsrsasign library</dd>
-						
-						</dl>
-					
 					
 						<dl class="detailList">
 						<dt class="heading">See:</dt>
 						
-							<dd><a href="http://kjur.github.com/jsjws/">'jwjws'(JWS JavaScript Library) home page http://kjur.github.com/jsjws/</a></dd>
+							<dd><a href="http://kjur.github.com/jsjws/">old jwjws home page http://kjur.github.com/jsjws/</a></dd>
 						
 							<dd><a href="http://kjur.github.com/jsrsasigns/">'jwrsasign'(RSA Sign JavaScript Library) home page http://kjur.github.com/jsrsasign/</a></dd>
 						
@@ -733,11 +784,81 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name=".addSignatureByHeaderKey"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="addSignature"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.jws.JWSJS.</span><b>addSignatureByHeaderKey</b>(sHead, sPemPrvKey)
+					<b>addSignature</b>(alg, spHead, key, pass)
+					
+					</div>
+					<div class="description">
+						add a signature to existing JWS-JS by algorithm, header and key.<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">// initialize
+jwsjs1 = new KJUR.jws.JWSJS();
+jwsjs1.readJWSJS("{headers: [...], payload: "eyJ...", signatures: [...]}");
+
+// add PS256 signature with RSA private key object
+prvKeyObj = KEYUTIL.getKey("-----BEGIN PRIVATE KEY...");
+jwsjs1.addSignature("PS256", {alg: "PS256"}, prvKeyObj);
+
+// add HS256 signature with HMAC password "secret"
+jwsjs1.addSignature(null, {alg: "HS256"}, {utf8: "secret"});
+
+// get result finally
+jwsjsObj1 = jwsjs1.getJSON();</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>alg</b>
+									
+								</dt>
+								<dd>JWS algorithm. If null, alg in header will be used.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>spHead</b>
+									
+								</dt>
+								<dd>string or object of JWS Header to add.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>key</b>
+									
+								</dt>
+								<dd>JWS key to sign. key object, PEM private key or HMAC key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pass</b>
+									
+								</dt>
+								<dd>optional password for encrypted PEM private key</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="addSignatureByHeaderKey"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>addSignatureByHeaderKey</b>(sHead, sPemPrvKey)
 					
 					</div>
 					<div class="description">
@@ -767,6 +888,13 @@ ul.inheritsList
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from jwsjs 2.1.0 jsrsasign 5.1.0
+							</dt>
+							</dl>
+						
 						
 						
 						
@@ -775,11 +903,11 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name=".addSignatureByHeaderPayloadKey"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="addSignatureByHeaderPayloadKey"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.jws.JWSJS.</span><b>addSignatureByHeaderPayloadKey</b>(sHead, sPayload, sPemPrvKey)
+					<b>addSignatureByHeaderPayloadKey</b>(sHead, sPayload, sPemPrvKey)
 					
 					</div>
 					<div class="description">
@@ -816,6 +944,13 @@ This is to add first signature to JWS-JS object.
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from jwsjs 2.1.0 jsrsasign 5.1.0
+							</dt>
+							</dl>
+						
 						
 						
 						
@@ -824,11 +959,11 @@ This is to add first signature to JWS-JS object.
 
 					<hr />
 				
-					<a name=".getJSON"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="getJSON"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.jws.JWSJS.</span><b>getJSON</b>()
+					<b>getJSON</b>()
 					
 					</div>
 					<div class="description">
@@ -839,6 +974,13 @@ This is to add first signature to JWS-JS object.
 					
 					
 					
+					<pre class="code">jwsj1 = new KJUR.jws.JWSJS();
+// do some jwsj1 operation then get result by getJSON()
+jwsjsObj1 = jwsjs1.getJSON();
+// jwsjsObj1 &rarr; { headers: [...], payload: "ey...", signatures: [...] }</pre>
+					
+					
+					
 						
 						
 						
@@ -849,11 +991,11 @@ This is to add first signature to JWS-JS object.
 
 					<hr />
 				
-					<a name=".init"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="init"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.jws.JWSJS.</span><b>init</b>()
+					<b>init</b>()
 					
 					</div>
 					<div class="description">
@@ -874,11 +1016,11 @@ This is to add first signature to JWS-JS object.
 
 					<hr />
 				
-					<a name=".initWithJWS"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="initWithJWS"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.jws.JWSJS.</span><b>initWithJWS</b>(sJWS)
+					<b>initWithJWS</b>(sJWS)
 					
 					</div>
 					<div class="description">
@@ -886,6 +1028,11 @@ This is to add first signature to JWS-JS object.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">jwsjs1 = new KJUR.jws.JWSJWS();
+jwsjs1.initWithJWS("eyJ...");</pre>
 					
 					
 					
@@ -910,11 +1057,11 @@ This is to add first signature to JWS-JS object.
 
 					<hr />
 				
-					<a name=".isEmpty"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="isEmpty"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.jws.JWSJS.</span><b>isEmpty</b>()
+					<b>isEmpty</b>()
 					
 					</div>
 					<div class="description">
@@ -942,18 +1089,30 @@ This is to add first signature to JWS-JS object.
 
 					<hr />
 				
-					<a name=".raedJWSJS"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="readJWSJS"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.jws.JWSJS.</span><b>raedJWSJS</b>(string)
+					<b>readJWSJS</b>(spJWSJS)
 					
 					</div>
 					<div class="description">
-						read JWS-JS string.<br/>
+						read JWS-JS string or object<br/>
+NOTE: Loading from JSON object is suppored from 
+jsjws 2.1.0 jsrsasign 5.1.0 (2016-Sep-06).
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">// load JWSJS from string
+jwsjs1 = new KJUR.jws.JWSJS();
+jwsjs1.readJWSJS("{headers: [...], payload: "eyJ...", signatures: [...]}");
+
+// load JWSJS from JSON object
+jwsjs1 = new KJUR.jws.JWSJS();
+jwsjs1.readJWSJS({headers: [...], payload: "eyJ...", signatures: [...]});</pre>
 					
 					
 					
@@ -962,10 +1121,10 @@ This is to add first signature to JWS-JS object.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>string</b>
+									<span class="light fixedFont">{Object}</span> <b>spJWSJS</b>
 									
 								</dt>
-								<dd>of JWS-JS to load.</dd>
+								<dd>string or JSON object of JWS-JS to load.</dd>
 							
 							</dl>
 						
@@ -978,11 +1137,135 @@ This is to add first signature to JWS-JS object.
 
 					<hr />
 				
-					<a name=".verifyWithCerts"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="verifyAll"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.jws.JWSJS.</span><b>verifyWithCerts</b>(aCert)
+					<b>verifyAll</b>(aKeyAlg)
+					
+					</div>
+					<div class="description">
+						verify all signature of JWS-JS object by array of key and acceptAlgs.<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">jwsjs1 = new KJUR.jws.JWSJS();
+jwsjs1.readJWSJS("{headers: [...], payload: "eyJ...", signatures: [...]}");
+isValid = jwsjs1.verifyAll([["-----BEGIN CERT...", ["RS256"]],
+                            [{utf8: "secret"}, ["HS256"]]]);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{array of key and acceptAlgs}</span> <b>aKeyAlg</b>
+									
+								</dt>
+								<dd>a array of key and acceptAlgs</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jwsjs 2.1.0 jsrsasign 5.1.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>true if all signatures are valid otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="verifyNth"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>verifyNth</b>(idx, key, acceptAlgs)
+					
+					</div>
+					<div class="description">
+						verify Nth signature of JWS-JS object by key and acceptAlgs.<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">jwsjs1 = new KJUR.jws.JWSJS();
+jwsjs1.readJWSJS("{headers: [...], payload: "eyJ...", signatures: [...]}");
+isValid1 = jwsjs1.verifyNth(0, "-----BEGIN CERT...", ["RS256"]);
+isValid2 = jwsjs1.verifyNth(1, {utf8: "secret"}, ["HS256"]);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>idx</b>
+									
+								</dt>
+								<dd>nth index of JWS-JS signature to verify</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>key</b>
+									
+								</dt>
+								<dd>key to verify</dd>
+							
+								<dt>
+									<span class="light fixedFont">{array of String}</span> <b>acceptAlgs</b>
+									
+								</dt>
+								<dd>array of acceptable signature algorithms</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jwsjs 2.1.0 jsrsasign 5.1.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>true if signature is valid otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="verifyWithCerts"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>verifyWithCerts</b>(aCert)
 					
 					</div>
 					<div class="description">
@@ -1005,6 +1288,13 @@ This is to add first signature to JWS-JS object.
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from jwsjs 2.1.0 jsrsasign 5.1.0
+							</dt>
+							</dl>
 						
 						
 						

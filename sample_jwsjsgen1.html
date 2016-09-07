@@ -19,9 +19,10 @@ function addSignature() {
   var sPrvKey = document.form1.pemprvkey1.value;
   
   if (jwsjs.isEmpty()) {
-    jwsjs.addSignatureByHeaderPayloadKey(sHeader, sPayload, sPrvKey);
+    var jws1 = KJUR.jws.JWS.sign(null, sHeader, sPayload, sPrvKey);
+    jwsjs.initWithJWS(jws1);
   } else {
-    jwsjs.addSignatureByHeaderKey(sHeader, sPrvKey);
+    jwsjs.addSignature(null, sHeader, sPrvKey);
   }
   document.form1.jwsjs1.value = newline_toDos(JSON.stringify(jwsjs.getJSON(), null, 2));
 }

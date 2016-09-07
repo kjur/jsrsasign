@@ -1,6 +1,18 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 5.0.15 to 5.1.0 (2016-Sep-07)
+  - jwsjs 2.0.x to 2.1.0
+    - refactoring and API document update
+    - addSignature, verifyAll, verifyNth method added
+    - make addSignatureByHeaderKey, 
+      addSignatureByHeaderPayloadKey and verifyWithCerts
+      deprecated.
+  - sample_*.html
+    - review all to work. reference fix. make list in Wiki.
+  - index*.html
+    - update
+
 * Changes between 5.0.14 to 5.0.15 (2016-Aug-26)
   - pemtojwk and jwktopkcs8 added to sample node scripts
   - asn1 1.0.9 to 1.0.10
