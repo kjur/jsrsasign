@@ -2,7 +2,7 @@
 ChangeLog for jsrsasign
 
 * Changes between 5.0.15 to 5.1.0 (2016-Sep-07)
-  - jwsjs 2.0.x to 2.1.0
+  - jwsjs 2.0.15 to 2.1.0
     - refactoring and API document update
     - addSignature, verifyAll, verifyNth method added
     - make addSignatureByHeaderKey, 

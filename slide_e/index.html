@@ -34,7 +34,7 @@ document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.se
 <h1>introduction to jsrsasign</h1>
 <h3>pure JavaScript cryptographic library</h3>
 <h4><a href="https://kjur.github.io/jsrsasign" target="_blank">https://kjur.github.io/jsrsasign</a></h4>
-<h4><font color="grey">slide r1.0 (2016 Sep 3 for jsrsasign 5.0.15)</font></h4>
+<h4><font color="grey">slide r1.1 (2016 Sep 9 for jsrsasign 5.1.0)</font></h4>
 <p>
 <a href="http://twitter/kjur">@kjur / Kenji Urushima</a><br/>
 <br/>
@@ -615,6 +615,32 @@ jwt.io provides JWT validator which uses
 <tr><td><img src="img-jwtio1.png" style="float: left; border: 0;"/></td>
 <td><img src="img-jwtio2.png" style="float: left; border: 0;"/></td></tr>
 </table>
+</section>
+
+<section>
+<h2>JWS-JS</h2>
+<p>
+jsrsasign supports <a href="https://tools.ietf.org/html/draft-jones-json-web-signature-json-serialization-02">IETF JWS-JS Internet Draft,</a> a parallel signature of JWS. This figure shows how to generate JWS-JS.
+<img src="img-jwsjs-gen.png" style="float: center; border: 0;"/>
+</p>
+</section>
+
+<section>
+<h2>JWS-JS</h2>
+<p>generate and verify JWS-JS.</p>
+<hr/>
+<div align="left">
+// add a signature to JWS, then get JWS-JS JSON.<br/>
+jwsjs1 = new KJUR.jws.<font color="yellow">JWSJWS</font>();<br/>
+jwsjs1.<font color="yellow">initWithJWS</font>("eyJ...");<br/>
+jwsjs1.<font color="yellow">addSignature</font>(null, {alg: "HS256"}, {utf8: "secret"});<br/>
+jwsjsJSON = jwsjs1.<font color="yellow">getJSON</font>();<br/>
+<br/>
+// verify JWS-JS signature<br/>
+isValid = jwsjs1.<font color="yellow">verifyAll</font>([<br/>
+　["-----BEGIN CERT...", ["RS256"]],[{utf8: "secret"}, ["HS256"]]]);<br/>
+</div>
+<hr/>
 </section>
 
 </section>
