@@ -24,10 +24,11 @@
 
 var program = require('commander');
 var rs = require('jsrsasign');
+var rsu = require('jsrsasign-util');
 var path = require('path');
 
 program
-  .version('1.0.0 (2016-Aug-13)')
+  .version('1.0.1 (2016-Sep-11)')
   .description('convert JWK to PEM PKCS#8 private/public key')
   .usage('[INPUT JWK KEY] [OUTPUT PKCS8]')
   .parse(process.argv);
@@ -38,7 +39,7 @@ if (program.args.length !== 2)
 var inFile = program.args[0];
 var outFile = program.args[1];
 
-var sJWK = rs.readFile(inFile);
+var sJWK = rsu.readFile(inFile);
 var jwk = rs.jws.JWS.readSafeJSONString(sJWK);
 var key = rs.KEYUTIL.getKey(jwk);
 var pem;
@@ -47,7 +48,8 @@ if (key.isPublic) {
 } else {
    pem = rs.KEYUTIL.getPEM(key, "PKCS8PRV");
 }
-rs.saveFile(outFile, pem);
+rsu.saveFile(outFile, pem);
+
 
 
 

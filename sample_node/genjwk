@@ -28,10 +28,11 @@
 
 var program = require('commander');
 var rs = require('jsrsasign');
+var rsu = require('jsrsasign-util');
 var path = require('path');
 
 program
-  .version('1.0.0 (2016-Aug-11)')
+  .version('1.0.1 (2016-Sep-11)')
   .description('generate keypair, then save them as JWK files')
   .usage('[options] [RSA|EC] [RSASIZE|CURVE] [file head]')
   .parse(process.argv);
@@ -56,10 +57,8 @@ var pubKey = kp.pubKeyObj;
 var prvJWK = rs.KEYUTIL.getJWKFromKey(prvKey);
 var pubJWK = rs.KEYUTIL.getJWKFromKey(pubKey);
 
-rs.saveFile(pubFile, JSON.stringify(pubJWK, null, 2));
-rs.saveFile(prvFile, JSON.stringify(prvJWK, null, 2));
+rsu.saveFile(pubFile, JSON.stringify(pubJWK, null, 2));
+rsu.saveFile(prvFile, JSON.stringify(prvJWK, null, 2));
 
 console.log("all save done.");
-
-
 

@@ -3,7 +3,7 @@
 /*
  * showcert - show X.509 binary or PEM certificate
  *
- * Copyright (c) 2015 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2015-2016 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,9 +16,10 @@
 
 var program = require('commander');
 var rs = require('jsrsasign');
+var rsu = require('jsrsasign-util');
 
 program
-    .version('0.0.1')
+    .version('0.0.2 (2016-Sep-11)')
     .usage('[options] <DER binary or PEM certificate file>')
     .description('show X.509 binary or PEM certificate')
     .parse(process.argv);
@@ -28,7 +29,7 @@ if (program.args.length !== 1)
 
 var file = program.args[0];
 
-var data = rs.readFile(file);
+var data = rsu.readFile(file);
 var pem;
 if (data.substr(0, 5) === "-----") {
     pem = data;

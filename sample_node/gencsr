@@ -32,10 +32,11 @@
 
 var program = require('commander');
 var rs = require('jsrsasign');
+var rsu = require('jsrsasign-util');
 var path = require('path');
 
 program
-  .version('1.0.1 (2016-Mar-07)')
+  .version('1.0.2 (2016-Sep-11)')
   .description('generate keypair and CSR, then save them to FILEHEAD.{pub,prv,csr}')
   .usage('[options] [file head]')
   .option('-a, --keyalg <RSA|EC>', 'public key algorithm. default=RSA', "RSA")
@@ -80,10 +81,9 @@ var csr = rs.asn1.csr.CSRUtil.newCSRPEM({
     sbjprvkey: prvKey
 });
 
-rs.saveFile(pubFile, rs.KEYUTIL.getPEM(pubKey));
-rs.saveFile(prvFile, rs.KEYUTIL.getPEM(prvKey, "PKCS8PRV", pass));
-rs.saveFile(csrFile, csr);
+rsu.saveFile(pubFile, rs.KEYUTIL.getPEM(pubKey));
+rsu.saveFile(prvFile, rs.KEYUTIL.getPEM(prvKey, "PKCS8PRV", pass));
+rsu.saveFile(csrFile, csr);
 console.log("all save done.");
-
 
 

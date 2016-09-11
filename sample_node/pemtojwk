@@ -24,10 +24,11 @@
 
 var program = require('commander');
 var rs = require('jsrsasign');
+var rsu = require('jsrsasign-util');
 var path = require('path');
 
 program
-  .version('1.0.0 (2016-Aug-11)')
+  .version('1.0.1 (2016-Sep-11)')
   .description('convert PEM PKCS#5/#8 private/public key to JWK')
   .usage('[INPUT PEM KEY] [OUTPUT JWK]')
   .parse(process.argv);
@@ -38,10 +39,10 @@ if (program.args.length !== 2)
 var inFile = program.args[0];
 var outFile = program.args[1];
 
-var pem = rs.readFile(inFile);
+var pem = rsu.readFile(inFile);
 var key = rs.KEYUTIL.getKey(pem);
 var jwk = rs.KEYUTIL.getJWKFromKey(key);
-rs.saveFile(outFile, JSON.stringify(jwk, null, 2));
+rsu.saveFile(outFile, JSON.stringify(jwk, null, 2));
 
 
 
