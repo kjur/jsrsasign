@@ -1,6 +1,16 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 5.1.0 to 6.0.0 (2016-Sep-11)
+  - As of so much request to remove Node functions
+    in nodeutil.js, nodeutil.js have been removed from
+    jsrsasign.js package. Then it is moved to
+    new "jsrsasign-util" npm package.
+    Now "jsrsasign" will be CommonJS, Purescript,
+    Webpack and Browserify safe package.
+    Some sample Node.js scripts in "sample_node"
+    will be updated later.
+
 * Changes between 5.0.15 to 5.1.0 (2016-Sep-07)
   - jwsjs 2.0.15 to 2.1.0
     - refactoring and API document update
