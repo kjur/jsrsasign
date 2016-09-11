@@ -6,6 +6,8 @@
 
 Here is sample node utility scripts using 'jsrsasign' module.
 
+NOTE: From jsrsasign 6.0.0 (2016-Sep-11), please install "jsrsasign", "jsrsasign-util" and "commander" npm packages to use scripts here because codes using "fs" have been separated and moved into new "jsrsasign-util" package.
+
 1. [jwtverify](https://github.com/kjur/jsrsasign/tree/master/sample_node/jwtverify) - JWT and JWS verification tool
 
 This script is to verify JWT(JSON Web Token) or JWS(JSON Web Signature) for HMAC password or public key.
