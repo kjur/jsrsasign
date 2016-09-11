@@ -44,3 +44,5 @@ To execute above scripts some npm packages are reuiqred:
 
     % npm install -g commander
     % npm install -g jsrsasign
+    % npm install -g jsrsasign-util
+
