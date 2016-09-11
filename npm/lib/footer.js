@@ -50,9 +50,4 @@ exports.asn1 = KJUR.asn1;
 exports.jws = KJUR.jws;
 exports.lang = KJUR.lang;
 
-exports.readFileUTF8 = readFileUTF8;
-exports.readFileHexByBin = readFileHexByBin;
-exports.readFile = readFile;
-exports.saveFile = saveFile;
-exports.saveFileBinByHex = saveFileBinByHex;
 
