@@ -32,12 +32,13 @@ and this 'jsrsasign' module.
 AVAILABLE CLASSES AND METHODS
 -----------------------------
 
-Most of the classes and methods defined in jsrsasign and jsjws are
+Most of the classes and methods defined in jsrsasign 
 available in this jsrsasign npm module.
 
 After loading the module,
 
     > var r = require('jsrsasign');
+    > var r = require('jsrsasign-util'); // for file I/O utilities
 
 You can refer name spaces, classes, methods and functions 
 by following variables:
@@ -62,9 +63,10 @@ EXAMPLE(1) SIGNATURE
 
 Loading encrypted PKCS#5 private key:
 
-    > var fs = require('fs');
-    > var pem = fs.readFileSync('z1.prv.p5e.pem', 'binary');
-    > var prvKey = a.KEYUTIL.getKey(pem, 'passwd');
+    > var rs = require('jsrsasign');
+    > var rsu = require('jsrsasign-util');
+    > var pem = rsu.readFile('z1.prv.p5e.pem');
+    > var prvKey = rs.KEYUTIL.getKey(pem, 'passwd');
 
 Sign string 'aaa' with the loaded private key:
 
