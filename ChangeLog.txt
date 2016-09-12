@@ -1,6 +1,9 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 6.0.0 to 6.0.1 (2016-Sep-12)
+  - old jsrsasign.js is used in npm package. now fixed.
+
 * Changes between 5.1.0 to 6.0.0 (2016-Sep-11)
   - As of so much request to remove Node functions
     in nodeutil.js, nodeutil.js have been removed from
