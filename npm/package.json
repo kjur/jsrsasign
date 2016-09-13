@@ -28,12 +28,7 @@
     "JOSE", "JWA"
   ],
   "author": "Kenji Urushima",
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://raw.github.com/kjur/jsrsasign/master/LICENSE.txt"
-    }
-  ],
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/kjur/jsrsasign/issues"
   },
