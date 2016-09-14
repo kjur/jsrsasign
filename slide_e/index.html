@@ -34,7 +34,7 @@ document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.se
 <h1>introduction to jsrsasign</h1>
 <h3>pure JavaScript cryptographic library</h3>
 <h4><a href="https://kjur.github.io/jsrsasign" target="_blank">https://kjur.github.io/jsrsasign</a></h4>
-<h4><font color="grey">slide r1.1 (2016 Sep 9 for jsrsasign 5.1.0)</font></h4>
+<h4><font color="grey">slide r1.2 (2016 Sep 15 for jsrsasign 6.0.1)</font></h4>
 <p>
 <a href="http://twitter/kjur">@kjur / Kenji Urushima</a><br/>
 <br/>
@@ -59,7 +59,8 @@ document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.se
 <li><a href="index.html#/9"</a>X509: simple X.509 certificate parser</a></li>
 <li><a href="index.html#/10"</a>generate and encode ASN.1</a></li>
 <li><a href="index.html#/11"</a>JSON Web Key/Signature/Token (JWK/JWS/JWT)</a></li>
-<li><a href="index.html#/12"</a>Tools, Demos, Tutorials and API Docs</a></li>
+<li><a href="index.html#/12"</a>for Node.js</a></li>
+<li><a href="index.html#/13"</a>Tools, Demos, Tutorials and API Docs</a></li>
 </ul>
 </section>
 
@@ -641,6 +642,33 @@ isValid = jwsjs1.<font color="yellow">verifyAll</font>([<br/>
 　["-----BEGIN CERT...", ["RS256"]],[{utf8: "secret"}, ["HS256"]]]);<br/>
 </div>
 <hr/>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>for Node.js</h2>
+</section>
+
+<section>
+<h2>jsrsasign in Node.js</h2>
+<p>This generates a RSA key pair and save its private key as PEM.</p>
+<hr/>
+<div align="left">
+var rs = require("jsrsasign");<br/>
+var rsu = require("jsrsasign-util"); // for file I/O<br/>
+var kp = rs.KEYUTIL.generateKeypair("RSA", 2048);<br/>
+var prvPEM = rs.KEYUTIL.getPEM(kp.prvKeyObj, "PKCS8PRV", "password");<br/>
+rsu.saveFile("foo.key", prvPEM);<br/>
+</div>
+<hr/>
+You can see more Node samples at 
+<a href="https://github.com/kjur/jsrsasign/tree/master/sample_node" target="_blank">
+kjur.github.io/jsrsasign</a>.
 </section>
 
 </section>
