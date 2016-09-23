@@ -1520,6 +1520,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.Time, KJUR.asn1.ASN1Object);
  * @extends KJUR.asn1.ASN1Object
  * @description
  * @example
+ * algId1 = new KJUR.asn1.x509.AlgorithmIdentifier({name: "sha1"});
  */
 KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
     KJUR.asn1.x509.AlgorithmIdentifier.superclass.constructor.call(this);

@@ -299,6 +299,18 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.DERUTF8String.html">KJUR.asn1.DERUTF8String</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.ocsp.html">KJUR.asn1.ocsp</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.CertID.html">KJUR.asn1.ocsp.CertID</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.OCSPRequest.html">KJUR.asn1.ocsp.OCSPRequest</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.OCSPUtil.html">KJUR.asn1.ocsp.OCSPUtil</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.Request.html">KJUR.asn1.ocsp.Request</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.TBSRequest.html">KJUR.asn1.ocsp.TBSRequest</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.tsp.html">KJUR.asn1.tsp</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.AbstractTSAAdapter.html">KJUR.asn1.tsp.AbstractTSAAdapter</a></li>
@@ -799,6 +811,25 @@ This method will get signature value of certificate:</div>
 						</tr>
 					
 						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getSubjectPublicKeyInfoPosFromCertHex">getSubjectPublicKeyInfoPosFromCertHex</a></b>(hexadecimal)
+								</div>
+								<div class="description">get a string index of subjectPublicKeyInfo field from hexadecimal certificate<br/>
+This static method gets a string index of subjectPublicKeyInfo field from hexadecimal certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getSubjectPublicKeyPosFromCertHex">getSubjectPublicKeyPosFromCertHex</a></b>(hexadecimal)
+								</div>
+								<div class="description">get a string index of contents of subjectPublicKeyInfo BITSTRING value from hexadecimal certificate<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getSubjectString">getSubjectString</a></b>()
@@ -895,8 +926,8 @@ X509 class provides following functionality:
   <li>notAfter - <a href="../symbols/X509.html#getNotAfter">X509#getNotAfter</a></li>
   <li>subject - <a href="../symbols/X509.html#getSubjectHex">X509#getSubjectHex</a></li>
   <li>subject - <a href="../symbols/X509.html#getSubjectString">X509#getSubjectString</a></li>
-  <li>subjectPublicKeyInfo - X509.getSubjectPublicKeyPosFromCertHex</li>
-  <li>subjectPublicKeyInfo - X509.getSubjectPublicKeyInfoPosFromCertHex</li>
+  <li>subjectPublicKeyInfo - <a href="../symbols/X509.html#.getSubjectPublicKeyPosFromCertHex">X509.getSubjectPublicKeyPosFromCertHex</a></li>
+  <li>subjectPublicKeyInfo - <a href="../symbols/X509.html#.getSubjectPublicKeyInfoPosFromCertHex">X509.getSubjectPublicKeyInfoPosFromCertHex</a></li>
   <li>subjectPublicKeyInfo - <a href="../symbols/X509.html#.getPublicKeyFromCertPEM">X509.getPublicKeyFromCertPEM</a></li>
   <li>signature algorithm - <a href="../symbols/X509.html#.getSignatureAlgorithmName">X509.getSignatureAlgorithmName</a></li>
   <li>signature value - <a href="../symbols/X509.html#.getSignatureValueHex">X509.getSignatureValueHex</a></li>
@@ -2396,6 +2427,103 @@ var subject = x.getSubjectHex(); // return string like "3013..."</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> hexadecial string of subject DN ASN.1</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getSubjectPublicKeyInfoPosFromCertHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Integer}</span>
+					<span class="light">X509.</span><b>getSubjectPublicKeyInfoPosFromCertHex</b>(hexadecimal)
+					
+					</div>
+					<div class="description">
+						get a string index of subjectPublicKeyInfo field from hexadecimal certificate<br/>
+This static method gets a string index of subjectPublicKeyInfo field from hexadecimal certificate.<br/>
+NOTE1: privateKeyUsagePeriod field of X509v2 not supported.<br/>
+NOTE2: X.509v1 and X.509v3 certificate are supported.<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">idx = X509.getSubjectPublicKeyInfoPosFromCertHex("3082...");</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hexadecimal</b>
+									
+								</dt>
+								<dd>string of DER RSA/ECDSA/DSA X.509 certificate</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Integer}</span> string index of subjectPublicKeyInfo field</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getSubjectPublicKeyPosFromCertHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Integer}</span>
+					<span class="light">X509.</span><b>getSubjectPublicKeyPosFromCertHex</b>(hexadecimal)
+					
+					</div>
+					<div class="description">
+						get a string index of contents of subjectPublicKeyInfo BITSTRING value from hexadecimal certificate<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">idx = X509.getSubjectPublicKeyPosFromCertHex("3082...");</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hexadecimal</b>
+									
+								</dt>
+								<dd>string of DER RSA/ECDSA/DSA X.509 certificate</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Integer}</span> string index of key contents</dd>
 							
 							</dl>
 						

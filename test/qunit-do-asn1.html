@@ -46,7 +46,6 @@ test("Boolean Test", function() {
 
 test("Integer Test", function() {
   var d = new KJUR.asn1.DERInteger();
-  expect(9);
   d.setByBigInteger(new BigInteger("3", 16));
   equal(d.getEncodedHex(), "020103", "setByBigInteger(BI('3',16))");
   d.setByBigInteger(new BigInteger("3f", 16));
@@ -65,6 +64,8 @@ test("Integer Test", function() {
   equal(d3.getEncodedHex(), "0201fd", "constructor int -3");
   var d4 = new KJUR.asn1.DERInteger({'hex': 'fd'});
   equal(d4.getEncodedHex(), "0201fd", "constructor hex fd");
+  var d5 = new KJUR.asn1.DERInteger({'hex': '00fd'});
+  equal(d5.getEncodedHex(), "020200fd", "constructor hex 00fd");
 });
 
 test("BitString Test", function() {
@@ -302,5 +303,7 @@ test("ASN1Util.getPEMStringFromHex", function() {
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
+<a href="index.html">TEST INDEX</a> | 
+<a href="../api/index.html">API</a> | 
 </body>
 </html>

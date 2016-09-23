@@ -1,7 +1,7 @@
 {
   "name": "jsrsasign",
-  "version": "6.0.1",
-  "description": "opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, CMS SignedData, TimeStamp and CAdES and JSON Web Signature(JWS)/Token(JWT)/Key(JWK).",
+  "version": "6.1.0",
+  "description": "opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, OCSP, CMS SignedData, TimeStamp and CAdES and JSON Web Signature(JWS)/Token(JWT)/Key(JWK).",
   "main": "lib/jsrsasign.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,7 +17,7 @@
     "hash function",
     "HMac",
     "ASN.1",
-    "certificate", "X.509",
+    "certificate", "X.509", "CRL", "OCSP",
     "RFC 3161", "Digital Timestamp", "Timestamp", "Time Stamp Token",
     "CMS", "Cryptgraphic Message Syntax", "PKCS#7",   
     "Signature", "Digital Signature", "signing",

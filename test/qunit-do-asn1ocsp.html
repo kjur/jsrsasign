@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta charset="utf-8">
+<title>QUnit for OCSP request/response ASN1 Encoder Class 'asn1ocsp.js'</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script src="../jsrsasign-latest-all-min.js"></script>
+
+<script src="../ext/cj/cryptojs-312-core-fix.js"></script>
+<script src="../ext/cj/x64-core.js"></script>
+<script src="../ext/cj/cipher-core_min.js"></script>
+<script src="../ext/cj/aes_min.js"></script>
+<script src="../ext/cj/tripledes_min.js"></script>
+<script src="../ext/cj/enc-base64_min.js"></script>
+<script src="../ext/cj/md5_min.js"></script>
+<script src="../ext/cj/sha1_min.js"></script>
+<script src="../ext/cj/sha256_min.js"></script>
+<script src="../ext/cj/sha224_min.js"></script>
+<script src="../ext/cj/sha512_min.js"></script>
+<script src="../ext/cj/sha384_min.js"></script>
+<script src="../ext/cj/ripemd160_min.js"></script>
+<script src="../ext/cj/hmac_min.js"></script>
+<script src="../ext/cj/pbkdf2_min.js"></script>
+
+<script src="../ext/yahoo.js"></script>
+<script src="../ext/prng4.js"></script>
+<script src="../ext/rng.js"></script>
+<script src="../ext/jsbn.js"></script>
+<script src="../ext/jsbn2.js"></script>
+<script src="../ext/rsa.js"></script>
+<script src="../ext/rsa2.js"></script>
+<script src="../ext/base64.js"></script>
+<script src="../base64x-1.1.js"></script>
+<script src="../asn1hex-1.1.js"></script>
+<script src="../rsapem-1.1.js"></script>
+<script src="../crypto-1.1.js"></script>
+<script src="../asn1-1.0.js"></script>
+<script src="../asn1x509-1.0.js"></script>
+<script src="../keyutil-1.0.js"></script>
+<script src="../rsasign-1.2.js"></script>
+
+<script src="../asn1-1.0.js"></script>
+<script src="../asn1x509-1.0.js"></script>
+<script src="../asn1ocsp-1.0.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../ext/ec.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/ec-patch.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecdsa-modified-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ecparam-1.0.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../dsa-modified-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+var certCA1 = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIGCDCCA/CgAwIBAgIQKy5u6tl1NmwUim7bo3yMBzANBgkqhkiG9w0BAQwFADCB
+hTELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4G
+A1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxKzApBgNV
+BAMTIkNPTU9ETyBSU0EgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkwHhcNMTQwMjEy
+MDAwMDAwWhcNMjkwMjExMjM1OTU5WjCBkDELMAkGA1UEBhMCR0IxGzAZBgNVBAgT
+EkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMR
+Q09NT0RPIENBIExpbWl0ZWQxNjA0BgNVBAMTLUNPTU9ETyBSU0EgRG9tYWluIFZh
+bGlkYXRpb24gU2VjdXJlIFNlcnZlciBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEP
+ADCCAQoCggEBAI7CAhnhoFmk6zg1jSz9AdDTScBkxwtiBUUWOqigwAwCfx3M28Sh
+bXcDow+G+eMGnD4LgYqbSRutA776S9uMIO3Vzl5ljj4Nr0zCsLdFXlIvNN5IJGS0
+Qa4Al/e+Z96e0HqnU4A7fK31llVvl0cKfIWLIpeNs4TgllfQcBhglo/uLQeTnaG6
+ytHNe+nEKpooIZFNb5JPJaXyejXdJtxGpdCsWTWM/06RQ1A/WZMebFEh7lgUq/51
+UHg+TLAchhP6a5i84DuUHoVS3AOTJBhuyydRReZw3iVDpA3hSqXttn7IzW3uLh0n
+c13cRTCAquOyQQuvvUSH2rnlG51/ruWFgqUCAwEAAaOCAWUwggFhMB8GA1UdIwQY
+MBaAFLuvfgI9+qbxPISOre44mOzZMjLUMB0GA1UdDgQWBBSQr2o6lFoL2JDqElZz
+30O0Oija5zAOBgNVHQ8BAf8EBAMCAYYwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNV
+HSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwGwYDVR0gBBQwEjAGBgRVHSAAMAgG
+BmeBDAECATBMBgNVHR8ERTBDMEGgP6A9hjtodHRwOi8vY3JsLmNvbW9kb2NhLmNv
+bS9DT01PRE9SU0FDZXJ0aWZpY2F0aW9uQXV0aG9yaXR5LmNybDBxBggrBgEFBQcB
+AQRlMGMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9jcnQuY29tb2RvY2EuY29tL0NPTU9E
+T1JTQUFkZFRydXN0Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21v
+ZG9jYS5jb20wDQYJKoZIhvcNAQEMBQADggIBAE4rdk+SHGI2ibp3wScF9BzWRJ2p
+mj6q1WZmAT7qSeaiNbz69t2Vjpk1mA42GHWx3d1Qcnyu3HeIzg/3kCDKo2cuH1Z/
+e+FE6kKVxF0NAVBGFfKBiVlsit2M8RKhjTpCipj4SzR7JzsItG8kO3KdY3RYPBps
+P0/HEZrIqPW1N+8QRcZs2eBelSaz662jue5/DJpmNXMyYE7l3YphLG5SEXdoltMY
+dVEVABt0iN3hxzgEQyjpFv3ZBdRdRydg1vs4O2xyopT4Qhrf7W8GjEXCBgCq5Ojc
+2bXhc3js9iPc0d1sjhqPpepUfJa3w/5Vjo1JXvxku88+vZbrac2/4EjxYoIQ5QxG
+V/Iz2tDIY+3GH5QFlkoakdH368+PUq4NCNk+qKBR6cGHdNXJ93SrLlP7u3r7l+L4
+HyaPs9Kg4DdbKDsx5Q5XLVq4rXmsXiBmGqW5prU5wfWYQ//u+aen/e7KJD2AFsQX
+j4rBYKEMrltDR5FL1ZoXX/nUh8HCjLfn4g8wGTeGrODcQgPmlKidrv0PJFGUzpII
+0fxQ8ANAe4hZ7Q7drNJ3gjTcBpUC2JD5Leo31Rpg0Gcg19hCC0Wvgmje3WYkN5Ap
+lBlGGSW4gNfL1IYoakRwJiNiqZ+Gb7+6kHDSVneFeO/qJakXzlByjAA6quPbYzSf
++AZxAeKCINT+b72x
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+var certEE1 = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIGQzCCBSugAwIBAgIRANCSgmNDA6l/rfVVaKSMqH4wDQYJKoZIhvcNAQELBQAw
+gZAxCzAJBgNVBAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAO
+BgNVBAcTB1NhbGZvcmQxGjAYBgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMTYwNAYD
+VQQDEy1DT01PRE8gUlNBIERvbWFpbiBWYWxpZGF0aW9uIFNlY3VyZSBTZXJ2ZXIg
+Q0EwHhcNMTYwNTEzMDAwMDAwWhcNMTcwMTIyMjM1OTU5WjBOMSEwHwYDVQQLExhE
+b21haW4gQ29udHJvbCBWYWxpZGF0ZWQxFDASBgNVBAsTC1Bvc2l0aXZlU1NMMRMw
+EQYDVQQDEwpyYXltaWkub3JnMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKC
+AgEA0pWu9Vh4ncEYRLhHC/ro/VKR5m6E93uUEfUsp6aq9A5jP/GPjqmIQjFkZ44T
+KeQlNDSRa5Br3g6kgMm3HLBoI8MAQMyqX+z5VaFMjPz7wM1Y7xc/7d68BJ0gFlHI
+RFEMXxdzbB94IZtrA+fcnZbsdOMel7rT9RfBdW1Szm5/zT8oqBod9xQM7qqVnMYp
+U7hXwp6aGy4m0HFuV1bKcuLfkiwPIXuW+YySBz2cquD2Qtb5EnyxN8cSdHeAvyJj
+digCOInYBpuDzL/mgnPki/YoVXS2le4Du0oQatEmJJhrG1FRhxGLxdq/gUgSWf15
+FkEEQEvERsHsUOn6btQCR4POzlw4eN5ErhH0S41imlbPWVZ5nrxOojzo1SpMiz6q
+a2b5ZQ+WgF3AQANkSEujjE/XqB+U2TyFOWsfYAyAw+/H9BOLsgIoOPsivQ7n970C
+v+u9TVu4l2Oun+m4f+P5maJPahdDF/3Ot3c6AN9RZFyyhpvcfuiYLNfj3P4O7sEd
+HXmHaSLil4XRpgqEafkMh6hvZGgx3stYQyOE9lNZd2GjqfJWmeTiS3UzAz4h0AQ9
+pIOmctitceTjyBYS+YzTq3ztK4MxWH9W1jJiLNK3YgIB1xzznYvyXbE29o9+Qka6
+mU3mHZ2VXJBt0ofWBh4JZVAW1Off31wNekNjvXqzqPMkUbECAwEAAaOCAdcwggHT
+MB8GA1UdIwQYMBaAFJCvajqUWgvYkOoSVnPfQ7Q6KNrnMB0GA1UdDgQWBBRwWF+P
+0+/ycWexK0pan6qPMVSlkjAOBgNVHQ8BAf8EBAMCBaAwDAYDVR0TAQH/BAIwADAd
+BgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwTwYDVR0gBEgwRjA6BgsrBgEE
+AbIxAQICBzArMCkGCCsGAQUFBwIBFh1odHRwczovL3NlY3VyZS5jb21vZG8uY29t
+L0NQUzAIBgZngQwBAgEwVAYDVR0fBE0wSzBJoEegRYZDaHR0cDovL2NybC5jb21v
+ZG9jYS5jb20vQ09NT0RPUlNBRG9tYWluVmFsaWRhdGlvblNlY3VyZVNlcnZlckNB
+LmNybDCBhQYIKwYBBQUHAQEEeTB3ME8GCCsGAQUFBzAChkNodHRwOi8vY3J0LmNv
+bW9kb2NhLmNvbS9DT01PRE9SU0FEb21haW5WYWxpZGF0aW9uU2VjdXJlU2VydmVy
+Q0EuY3J0MCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5jb21vZG9jYS5jb20wJQYD
+VR0RBB4wHIIKcmF5bWlpLm9yZ4IOd3d3LnJheW1paS5vcmcwDQYJKoZIhvcNAQEL
+BQADggEBAGQii4T9LzvPto4fDWREgejO1vlIKLqfWRzb8EIVkCr3pAxhKLKSfAId
+wHiqhldr0XmUz+otoG8U3mIPVGUllnCfntjRVwchoFSKovpUEAsi3CqAIYKwOWEz
+9zT6YidvTMu2IeLXg71v6NTot7m8XhwO4XXN+ktxiaUrO7UHrB9yk+nxrHEBsRhV
+p6a22RKiMDWAV+TR4aNuWu7rZrv89Lw3oyelhYH1DH1f1Ywo1tfa7tQKU7jqIbMI
+MJUaIjRu+IdHqw3C3+BATEC7KKfXagL0X+GjmJ8/rXL9Con7+ojAk6EuVYb/66D1
+wrj4GSoGxE7qj4A39l6qDymAfUzIt80=
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+$(document).ready(function(){
+
+// ======= TEST ===============================================================
+
+test("CertID.setByValue", function() {
+var o1 = new KJUR.asn1.ocsp.CertID();
+o1.setByValue("01020304", "05060708", "123456", "sha1");
+
+equal(o1.dHashAlg.getEncodedHex(),        "300906052b0e03021a0500", "sha1");
+equal(o1.dIssuerNameHash.getEncodedHex(), "040401020304", "040401020304");
+equal(o1.dIssuerKeyHash.getEncodedHex(),  "040405060708", "040405060708");
+equal(o1.dSerialNumber.getEncodedHex(),   "0203123456", "0203123456");
+equal(o1.getEncodedHex(), "301c300906052b0e03021a05000404010203040404050607080203123456", "all");
+});
+
+test("CertID.setByCert", function() {
+var o1 = new KJUR.asn1.ocsp.CertID();
+o1.setByCert(certCA1, certEE1, "sha1");
+
+equal(o1.dHashAlg.getEncodedHex(),        "300906052b0e03021a0500", "sha1");
+equal(o1.dIssuerNameHash.getEncodedHex(), "04147ae13ee8a0c42a2cb428cbe7a605461940e2a1e9", "name hash");
+equal(o1.dIssuerKeyHash.getEncodedHex(),  "041490af6a3a945a0bd890ea125673df43b43a28dae7", "key hash");
+equal(o1.dSerialNumber.getEncodedHex(),   "021100d09282634303a97fadf55568a48ca87e", "serial");
+equal(o1.getEncodedHex(), "304a300906052b0e03021a050004147ae13ee8a0c42a2cb428cbe7a605461940e2a1e9041490af6a3a945a0bd890ea125673df43b43a28dae7021100d09282634303a97fadf55568a48ca87e", "all");
+});
+
+test("CertID constructor by value", function() {
+var o1 = new KJUR.asn1.ocsp.CertID({namehash: "01020304",
+                                    keyhash: "05060708",
+                                    serial: "123456",
+                                    alg: "sha1"});
+equal(o1.getEncodedHex(), "301c300906052b0e03021a05000404010203040404050607080203123456", "all");
+});
+
+test("CertID constructor by cert", function() {
+var o1 = new KJUR.asn1.ocsp.CertID({alg: "sha1",
+                                    issuerCert: certCA1,
+                                    subjectCert: certEE1});
+equal(o1.getEncodedHex(), "304a300906052b0e03021a050004147ae13ee8a0c42a2cb428cbe7a605461940e2a1e9041490af6a3a945a0bd890ea125673df43b43a28dae7021100d09282634303a97fadf55568a48ca87e", "all");
+});
+
+test("Request constructor by cert", function() {
+var o1 = new KJUR.asn1.ocsp.Request({alg: "sha1",
+                                     issuerCert: certCA1,
+                                     subjectCert: certEE1});
+equal(o1.getEncodedHex(), "304c304a300906052b0e03021a050004147ae13ee8a0c42a2cb428cbe7a605461940e2a1e9041490af6a3a945a0bd890ea125673df43b43a28dae7021100d09282634303a97fadf55568a48ca87e", "all");
+});
+
+test("TBSRequest constructor by cert", function() {
+var o1 = new KJUR.asn1.ocsp.TBSRequest({reqList: [
+                                          {alg: "sha1", issuerCert: certCA1, subjectCert: certEE1}
+                                       ]});
+equal(o1.getEncodedHex(), "3050304e304c304a300906052b0e03021a050004147ae13ee8a0c42a2cb428cbe7a605461940e2a1e9041490af6a3a945a0bd890ea125673df43b43a28dae7021100d09282634303a97fadf55568a48ca87e", "all");
+});
+
+test("OCSPRequest constructor by cert", function() {
+var o1 = new KJUR.asn1.ocsp.OCSPRequest({reqList: [
+                                           {alg: "sha1", issuerCert: certCA1, subjectCert: certEE1}
+                                        ]});
+equal(o1.getEncodedHex(), "30523050304e304c304a300906052b0e03021a050004147ae13ee8a0c42a2cb428cbe7a605461940e2a1e9041490af6a3a945a0bd890ea125673df43b43a28dae7021100d09282634303a97fadf55568a48ca87e", "all");
+});
+
+test("OCSPUtil.getRequestHex", function() {
+var h = KJUR.asn1.ocsp.OCSPUtil.getRequestHex(certCA1, certEE1);
+equal(h, "30523050304e304c304a300906052b0e03021a050004147ae13ee8a0c42a2cb428cbe7a605461940e2a1e9041490af6a3a945a0bd890ea125673df43b43a28dae7021100d09282634303a97fadf55568a48ca87e", "hex");
+});
+
+});
+
+-->
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+<a href="index.html">TEST INDEX</a> | 
+<a href="../api/index.html">API</a> | 
+</body>
+</html>
+
