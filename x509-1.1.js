@@ -408,6 +408,16 @@ X509.pemToHex = function(sCertPEM) {
     return hCert;
 };
 
+/**
+ * get a string index of contents of subjectPublicKeyInfo BITSTRING value from hexadecimal certificate<br/>
+ * @name getSubjectPublicKeyPosFromCertHex
+ * @memberOf X509
+ * @function
+ * @param {String} hexadecimal string of DER RSA/ECDSA/DSA X.509 certificate
+ * @return {Integer} string index of key contents
+ * @example
+ * idx = X509.getSubjectPublicKeyPosFromCertHex("3082...");
+ */
 // NOTE: Without BITSTRING encapsulation.
 X509.getSubjectPublicKeyPosFromCertHex = function(hCert) {
     var pInfo = X509.getSubjectPublicKeyInfoPosFromCertHex(hCert);
@@ -422,8 +432,20 @@ X509.getSubjectPublicKeyPosFromCertHex = function(hCert) {
     return pBitStringV + 2;
 };
 
-// NOTE: privateKeyUsagePeriod field of X509v2 not supported.
-// NOTE: v1 and v3 supported
+/**
+ * get a string index of subjectPublicKeyInfo field from hexadecimal certificate<br/>
+ * @name getSubjectPublicKeyInfoPosFromCertHex
+ * @memberOf X509
+ * @function
+ * @param {String} hexadecimal string of DER RSA/ECDSA/DSA X.509 certificate
+ * @return {Integer} string index of subjectPublicKeyInfo field
+ * @description
+ * This static method gets a string index of subjectPublicKeyInfo field from hexadecimal certificate.<br/>
+ * NOTE1: privateKeyUsagePeriod field of X509v2 not supported.<br/>
+ * NOTE2: X.509v1 and X.509v3 certificate are supported.<br/>
+ * @example
+ * idx = X509.getSubjectPublicKeyInfoPosFromCertHex("3082...");
+ */
 X509.getSubjectPublicKeyInfoPosFromCertHex = function(hCert) {
     var pTbsCert = ASN1HEX.getStartPosOfV_AtObj(hCert, 0);
     var a = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, pTbsCert); 

@@ -1,6 +1,13 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 6.0.1 to 6.1.0 (2016-Sep-24)
+  - asn1ocsp 1.0.0
+    - now start to add OCSP protocol support
+    - OCSP request ASN.1 classes are added
+  - fix API document in x509 and asn1
+  - test/qunit-do-{asn1,asn1ocsp}.html added or updated
+
 * Changes between 6.0.0 to 6.0.1 (2016-Sep-12)
   - old jsrsasign.js is used in npm package. now fixed.
 
