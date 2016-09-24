@@ -34,7 +34,7 @@ document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.se
 <h1>introduction to jsrsasign</h1>
 <h3>pure JavaScript cryptographic library</h3>
 <h4><a href="https://kjur.github.io/jsrsasign" target="_blank">https://kjur.github.io/jsrsasign</a></h4>
-<h4><font color="grey">slide r1.2 (2016 Sep 15 for jsrsasign 6.0.1)</font></h4>
+<h4><font color="grey">slide r1.3 (2016 Sep 24 for jsrsasign 6.1.0)</font></h4>
 <p>
 <a href="http://twitter/kjur">@kjur / Kenji Urushima</a><br/>
 <br/>
@@ -82,7 +82,7 @@ The "jsrsasign" (<a href="https://kjur.github.io/jsrsasign/">https://kjur.github
 <li>hash (MD5,RIPEMD,SHA1,SHA2)</li>
 <li>simple ASN.1 parser</li>
 <li>ASN.1 object generator</li>
-<li>X.509 certificate and CRL</li>
+<li>X.509 certificate and CRL, OCSP</li>
 <li>PKCS#1/5/8 private/public key</li>
 </ul>
 </td><td>
@@ -513,7 +513,7 @@ pem = new KJUR.asn1.x509.X509Util.<font color="yellow">newCertPEM</font>({<br/>
 </section>
 
 <section>
-<h3>get PEM of PKCS#10/CSRT by CSRUtil.newCSRPEM</h3>
+<h3>get PEM of PKCS#10/CSR by CSRUtil.newCSRPEM</h3>
 <p>It's very easy to generate PEM of CSR(certificate signing request) by 
 <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.csr.CSRUtil.html#.newCSRPEM" target="_blank">CSRUtil.newCSRPEM</a>.
 </p>
@@ -526,6 +526,28 @@ pem = new KJUR.asn1.csr.CSRUtil.<font color="yellow">newCSRPEM</font>({<br/>
 　　sigalg: "SHA256withRSA",<br/>
 　　sbjprvkey: kp.prvKeyObj<br/>
 });<br/>
+</div>
+<hr/>
+</section>
+
+<section>
+<h3>OCSP Request</h3>
+<p>It's very easy to generate OCSP request by 
+<a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.ocsp.OCSPUtil.html#.getRequestHex" target="_blank">OCSPUtil.getRequestHex</a>.
+</p>
+<hr/>
+<div align="left">
+// generate OCSP request<br/>
+hexRequest = KJUR.asn1.ocsp.OCSPUtil.getRequestHex(<br/>
+　　"-----BEGIN CERTIFICATE...",　　// issuer Cert<br/>
+　　"-----BEGIN CERTIFICATE...");　// Cert to be verified<br/>
+</div>
+<hr/>
+<p>You can save this as binary and send it to OCSP responder like this:</p>
+<hr/>
+<div align="left">
+% curl --verbose --data-binary  @req.bin</code><br/>
+　　-H "Content-Type:application/ocsp-request" --url http://ocsp</code>
 </div>
 <hr/>
 </section>
