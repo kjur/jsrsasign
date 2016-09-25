@@ -70,7 +70,6 @@ test("Integer Test", function() {
 
 test("BitString Test", function() {
   var d = new KJUR.asn1.DERBitString();
-  expect(9);
   d.setHexValueIncludingUnusedBits("04bac0");
   equal(d.getEncodedHex(), "030304bac0", "setHexValueIncludingUnusedBits > ub=4, bac0");
   d.setUnusedBitsAndHexValue(5, "bad0");
@@ -89,19 +88,22 @@ test("BitString Test", function() {
   equal(d3.getEncodedHex(), "030204b0", "constructor bin 1011"); 
   var d4 = new KJUR.asn1.DERBitString({"array": [true,false,true,true]});
   equal(d4.getEncodedHex(), "030204b0", "constructor array [t,f,t,t]"); 
+  var d5 = new KJUR.asn1.DERBitString({obj:{seq: [{int: 3},{prnstr: {str: "aaa"}}]}});
+  equal(d5.getEncodedHex(), "030b0030080201031303616161", "constructor params asn1");
 });
 
 test("OctetString Test", function() {
   var d = new KJUR.asn1.DEROctetString();
-  expect(4);
   d.setString('aaa');
   equal(d.getEncodedHex(), "0403616161", "OctetString aaa");
   d.setStringHex('000102');
   equal(d.getEncodedHex(), "0403000102", "OctetString x000102");
-  var d2 = new KJUR.asn1.DEROctetString({'hex':'010203'});
+  var d2 = new KJUR.asn1.DEROctetString({hex:'010203'});
   equal(d2.getEncodedHex(), "0403010203", "constructor params hex");
-  var d3 = new KJUR.asn1.DEROctetString({'str':'aaa'});
+  var d3 = new KJUR.asn1.DEROctetString({str:'aaa'});
   equal(d3.getEncodedHex(), "0403616161", "constructor params str aaa");
+  var d4 = new KJUR.asn1.DEROctetString({obj:{seq: [{int: 3},{prnstr: {str: "aaa"}}]}});
+  equal(d4.getEncodedHex(), "040a30080201031303616161", "constructor params asn1");
 });
 
 test("Null Test", function() {

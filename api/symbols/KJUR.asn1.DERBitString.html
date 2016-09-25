@@ -584,10 +584,34 @@ following properties:
 <li>bin - specify binary string (ex. '10111')</li>
 <li>array - specify array of boolean (ex. [true,false,true,true])</li>
 <li>hex - specify hexadecimal string of ASN.1 value(V) including unused bits</li>
+<li>obj - specify <a href="../symbols/KJUR.asn1.ASN1Util.html#.newObject">KJUR.asn1.ASN1Util.newObject</a> 
+argument for "BitString encapsulates" structure.</li>
 </ul>
-NOTE: 'params' can be omitted.
+NOTE1: 'params' can be omitted.<br/>
+NOTE2: 'obj' parameter have been supported since
+asn1 1.0.11, jsrsasign 6.1.1 (2016-Sep-25).<br/>
 					
 				</div>
+				
+				
+				
+				<pre class="code">// default constructor
+o = new KJUR.asn1.DERBitString();
+// initialize with binary string
+o = new KJUR.asn1.DERBitString({bin: "1011"});
+// initialize with boolean array
+o = new KJUR.asn1.DERBitString({array: [true,false,true,true]});
+// initialize with hexadecimal string (04 is unused bits)
+o = new KJUR.asn1.DEROctetString({hex: "04bac0"});
+// initialize with ASN1Util.newObject argument for encapsulated
+o = new KJUR.asn1.DERBitString({obj: {seq: [{int: 3}, {prnstr: 'aaa'}]}});
+// above generates a ASN.1 data like this:
+// BIT STRING, encapsulates {
+//   SEQUENCE {
+//     INTEGER 3
+//     PrintableString 'aaa'
+//     }
+//   }</pre>
 				
 				
 				
