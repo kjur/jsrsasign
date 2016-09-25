@@ -1,4 +1,4 @@
-/*! asn1-1.0.10.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1-1.0.11.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.0.10 (2016-Aug-27)
+ * @version asn1 1.0.11 (2016-Sep-25)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -827,10 +827,36 @@ YAHOO.lang.extend(KJUR.asn1.DERInteger, KJUR.asn1.ASN1Object);
  * <li>bin - specify binary string (ex. '10111')</li>
  * <li>array - specify array of boolean (ex. [true,false,true,true])</li>
  * <li>hex - specify hexadecimal string of ASN.1 value(V) including unused bits</li>
+ * <li>obj - specify {@link KJUR.asn1.ASN1Util.newObject} 
+ * argument for "BitString encapsulates" structure.</li>
  * </ul>
- * NOTE: 'params' can be omitted.
+ * NOTE1: 'params' can be omitted.<br/>
+ * NOTE2: 'obj' parameter have been supported since
+ * asn1 1.0.11, jsrsasign 6.1.1 (2016-Sep-25).<br/>
+ * @example
+ * // default constructor
+ * o = new KJUR.asn1.DERBitString();
+ * // initialize with binary string
+ * o = new KJUR.asn1.DERBitString({bin: "1011"});
+ * // initialize with boolean array
+ * o = new KJUR.asn1.DERBitString({array: [true,false,true,true]});
+ * // initialize with hexadecimal string (04 is unused bits)
+ * o = new KJUR.asn1.DEROctetString({hex: "04bac0"});
+ * // initialize with ASN1Util.newObject argument for encapsulated
+ * o = new KJUR.asn1.DERBitString({obj: {seq: [{int: 3}, {prnstr: 'aaa'}]}});
+ * // above generates a ASN.1 data like this:
+ * // BIT STRING, encapsulates {
+ * //   SEQUENCE {
+ * //     INTEGER 3
+ * //     PrintableString 'aaa'
+ * //     }
+ * //   } 
  */
 KJUR.asn1.DERBitString = function(params) {
+    if (params !== undefined && typeof params.obj !== "undefined") {
+	var o = KJUR.asn1.ASN1Util.newObject(params.obj);
+	params.hex = "00" + o.getEncodedHex();
+    }
     KJUR.asn1.DERBitString.superclass.constructor.call(this);
     this.hT = "03";
 
@@ -954,15 +980,46 @@ YAHOO.lang.extend(KJUR.asn1.DERBitString, KJUR.asn1.ASN1Object);
 
 // ********************************************************************
 /**
- * class for ASN.1 DER OctetString
+ * class for ASN.1 DER OctetString<br/>
  * @name KJUR.asn1.DEROctetString
  * @class class for ASN.1 DER OctetString
  * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
  * @extends KJUR.asn1.DERAbstractString
  * @description
+ * This class provides ASN.1 OctetString simple type.<br/>
+ * Supported "params" attributes are:
+ * <ul>
+ * <li>str - to set a string as a value</li>
+ * <li>hex - to set a hexadecimal string as a value</li>
+ * <li>obj - to set a encapsulated ASN.1 value by JSON object 
+ * which is defined in {@link KJUR.asn1.ASN1Util.newObject}</li>
+ * </ul>
+ * NOTE: A parameter 'obj' have been supported 
+ * for "OCTET STRING, encapsulates" structure.
+ * since asn1 1.0.11, jsrsasign 6.1.1 (2016-Sep-25).
  * @see KJUR.asn1.DERAbstractString - superclass
+ * @example
+ * // default constructor
+ * o = new KJUR.asn1.DEROctetString();
+ * // initialize with string
+ * o = new KJUR.asn1.DEROctetString({str: "aaa"});
+ * // initialize with hexadecimal string
+ * o = new KJUR.asn1.DEROctetString({hex: "616161"});
+ * // initialize with ASN1Util.newObject argument 
+ * o = new KJUR.asn1.DEROctetString({obj: {seq: [{int: 3}, {prnstr: 'aaa'}]}});
+ * // above generates a ASN.1 data like this:
+ * // OCTET STRING, encapsulates {
+ * //   SEQUENCE {
+ * //     INTEGER 3
+ * //     PrintableString 'aaa'
+ * //     }
+ * //   } 
  */
 KJUR.asn1.DEROctetString = function(params) {
+    if (params !== undefined && typeof params.obj !== "undefined") {
+	var o = KJUR.asn1.ASN1Util.newObject(params.obj);
+	params.hex = o.getEncodedHex();
+    }
     KJUR.asn1.DEROctetString.superclass.constructor.call(this, params);
     this.hT = "04";
 };
@@ -1163,8 +1220,8 @@ KJUR.asn1.DEREnumerated = function(params) {
      * two's complement representation.
      * @example
      * new KJUR.asn1.DEREnumerated(123);
-     * new KJUR.asn1.DEREnumerated({'int': 123});
-     * new KJUR.asn1.DEREnumerated({'hex': '1fad'});
+     * new KJUR.asn1.DEREnumerated({int: 123});
+     * new KJUR.asn1.DEREnumerated({hex: '1fad'});
      */
     this.setValueHex = function(newHexString) {
         this.hV = newHexString;
