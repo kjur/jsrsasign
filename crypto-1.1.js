@@ -818,9 +818,10 @@ KJUR.crypto.Signature = function(params) {
     var hSign = null;
 
     this._setAlgNames = function() {
-	if (this.algName.match(/^(.+)with(.+)$/)) {
-	    this.mdAlgName = RegExp.$1.toLowerCase();
-	    this.pubkeyAlgName = RegExp.$2.toLowerCase();
+    var matchResult = this.algName.match(/^(.+)with(.+)$/);
+	if (matchResult) {
+	    this.mdAlgName = matchResult[1].toLowerCase();
+	    this.pubkeyAlgName = matchResult[2].toLowerCase();
 	}
     };
 

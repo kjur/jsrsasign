@@ -134,12 +134,13 @@ KJUR.jws.JWS = function() {
 	    (sigValNotNeeded || (this.parsedJWS.sigvalH !== undefined))) {
 	    return;
 	}
-	if (sJWS.match(/^([^.]+)\.([^.]+)\.([^.]+)$/) == null) {
+    var matchResult = sJWS.match(/^([^.]+)\.([^.]+)\.([^.]+)$/);
+	if (matchResult == null) {
 	    throw "JWS signature is not a form of 'Head.Payload.SigValue'.";
 	}
-	var b6Head = RegExp.$1;
-	var b6Payload = RegExp.$2;
-	var b6SigVal = RegExp.$3;
+	var b6Head = matchResult[1];
+	var b6Payload = matchResult[2];
+	var b6SigVal = matchResult[3];
 	var sSI = b6Head + "." + b6Payload;
 	this.parsedJWS = {};
 	this.parsedJWS.headB64U = b6Head;
@@ -849,10 +850,11 @@ KJUR.jws.JWS.readSafeJSONString = function(s) {
  * @throws if sJWS is not comma separated string such like "Header.Payload.Signature".
  */
 KJUR.jws.JWS.getEncodedSignatureValueFromJWS = function(sJWS) {
-    if (sJWS.match(/^[^.]+\.[^.]+\.([^.]+)$/) == null) {
+    var matchResult = sJWS.match(/^[^.]+\.[^.]+\.([^.]+)$/);
+    if (matchResult == null) {
 	throw "JWS signature is not a form of 'Head.Payload.SigValue'.";
     }
-    return RegExp.$1;
+    return matchResult[1];
 };
 
 /**
@@ -990,9 +992,9 @@ KJUR.jws.IntDate.get = function(s) {
  * KJUR.jws.IntDate.getZulu("151012125959Z") => 1478...
  */
 KJUR.jws.IntDate.getZulu = function(s) {
-    var a;
-    if (a = s.match(/(\d+)(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)Z/)) {
-        var sYear = RegExp.$1;
+    var matchResult = s.match(/(\d+)(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)Z/);
+    if (matchResult) {
+        var sYear = matchResult[1];
 	var year = parseInt(sYear);
 	if (sYear.length == 4) {
         } else if (sYear.length == 2) {
@@ -1006,11 +1008,11 @@ KJUR.jws.IntDate.getZulu = function(s) {
 	} else {
 	    throw "malformed year string";
 	}
-	var month = parseInt(RegExp.$2) - 1;
-	var day = parseInt(RegExp.$3);
-	var hour = parseInt(RegExp.$4);
-	var min = parseInt(RegExp.$5);
-	var sec = parseInt(RegExp.$6);
+	var month = parseInt(matchResult[2]) - 1;
+	var day = parseInt(matchResult[3]);
+	var hour = parseInt(matchResult[4]);
+	var min = parseInt(matchResult[5]);
+	var sec = parseInt(matchResult[6]);
 	var d = new Date(Date.UTC(year, month, day, hour, min, sec));
 	return ~~(d / 1000);
     }
