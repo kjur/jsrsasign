@@ -1,4 +1,4 @@
-/*! crypto-1.1.8.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! crypto-1.1.9.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.1.8 (2016-Feb-28)
+ * @version 1.1.9 (2016-Oct-08)
  * @since jsrsasign 2.2
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -818,9 +818,10 @@ KJUR.crypto.Signature = function(params) {
     var hSign = null;
 
     this._setAlgNames = function() {
-	if (this.algName.match(/^(.+)with(.+)$/)) {
-	    this.mdAlgName = RegExp.$1.toLowerCase();
-	    this.pubkeyAlgName = RegExp.$2.toLowerCase();
+    var matchResult = this.algName.match(/^(.+)with(.+)$/);
+	if (matchResult) {
+	    this.mdAlgName = matchResult[1].toLowerCase();
+	    this.pubkeyAlgName = matchResult[2].toLowerCase();
 	}
     };
 

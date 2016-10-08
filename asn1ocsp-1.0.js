@@ -1,4 +1,4 @@
-/*! asn1ocsp-1.0.0.js (c) 2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1ocsp-1.0.1.js (c) 2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1ocsp.js - ASN.1 DER encoder classes for OCSP protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1ocsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.0 (2016-Sep-22)
+ * @version 1.0.1 (2016-Oct-02)
  * @since jsrsasign 6.1.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -421,5 +421,43 @@ KJUR.asn1.ocsp.OCSPUtil.getRequestHex = function(issuerCert, subjectCert, alg) {
     var param = {alg: alg, issuerCert: issuerCert, subjectCert: subjectCert};
     var o = new KJUR.asn1.ocsp.OCSPRequest({reqList: [param]});
     return o.getEncodedHex();
+};
+
+KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo = function(h) {
+    var result = {};
+    try {
+	var v = ASN1HEX.getVbyList(h, 0, [0], "0a");
+	result.responseStatus = parseInt(v, 16);
+    } catch(ex) {};
+    if (result.responseStatus !== 0) return result;
+
+    try {
+	// certStatus
+	var idxCertStatus = ASN1HEX.getDecendantIndexByNthList(h, 0, [1,0,1,0,0,2,0,1]);
+	if (h.substr(idxCertStatus, 2) === "80") {
+	    result.certStatus = "good";
+	} else if (h.substr(idxCertStatus, 2) === "a1") {
+	    result.certStatus = "revoked";
+	    result.revocationTime = 
+		hextoutf8(ASN1HEX.getDecendantHexVByNthList(h, idxCertStatus, [0]));
+	} else if (h.substr(idxCertStatus, 2) === "82") {
+	    result.certStatus = "unknown";
+	}
+    } catch (ex) {};
+
+    try {
+	var idxThisUpdate = ASN1HEX.getDecendantIndexByNthList(h, 0, [1,0,1,0,0,2,0,2]);
+	result.thisUpdate = hextoutf8(ASN1HEX.getHexOfV_AtObj(h, idxThisUpdate));
+    } catch (ex) {};
+
+    try {
+	var idxEncapNextUpdate = ASN1HEX.getDecendantIndexByNthList(h, 0, [1,0,1,0,0,2,0,3]);
+	if (h.substr(idxEncapNextUpdate, 2) === "a0") {
+	    result.nextUpdate = 
+		hextoutf8(ASN1HEX.getDecendantHexVByNthList(h, idxEncapNextUpdate, [0]));
+	}
+    } catch (ex) {};
+
+    return result;
 };
 

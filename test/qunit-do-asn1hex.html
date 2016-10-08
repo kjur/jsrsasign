@@ -77,14 +77,23 @@ test("ASN1HEX.getPosOfNextSibling_AtObj", function() {
   equal(ASN1HEX.getPosOfNextSibling_AtObj('ff0202abab0201cdff', 2), 10, "next sibling of ff0202ab...");
 });
 
-test("ASN1HEX.getPosArrayOfChildren_AtObj", function() { 
+test("ASN1HEX.getPosArrayOfChildren_AtObj seq", function() { 
   var h = "3018300f02010102010202010302010402010504027abc0401ff";
   var a = ASN1HEX.getPosArrayOfChildren_AtObj(h, 4);
-  expect(4);
   equal(a.length, 5, "check array size.");
   equal(ASN1HEX.getIntOfL_AtObj(h, 4), 15, "check length.");
   equal(ASN1HEX.getPosOfNextSibling_AtObj(h, 8), 14, "check 2nd sibling.");
   equal(a.join("/"), "8/14/20/26/32", "check array contents.");
+});
+
+test("ASN1HEX.getPosArrayOfChildren_AtObj int5", function() { 
+  var a = ASN1HEX.getPosArrayOfChildren_AtObj("020105", 0);
+  equal(a.join("/"), "4", "int 5>[4]");
+});
+
+test("ASN1HEX.getPosArrayOfChildren_AtObj bitstr0055", function() { 
+  var a = ASN1HEX.getPosArrayOfChildren_AtObj("03020055", 0);
+  equal(a.join("/"), "6", "bitstr 00555>[6]");
 });
 
 test("ASN1HEX.getNthChildIndex_AtObj", function() { 
@@ -173,6 +182,32 @@ test("hextooidstr", function() {
         "1.2.840.113549.1.1.5", "SHA1withRSA");
 });
 
+/*
+{"seq": [
+  {"octstr": {"obj": {"seq": [{"int": 3},{"int":4}]}}},
+  {"bitstr": {"obj": {"seq": [{"int": 5},{"int":6}]}}},
+  {"prnstr": "aaa"}
+  ]} 
+ */
+test("hoge", function() {
+/*
+                                   ^bit  ^seq^int  ^int  ^prn^aaa             
+               ^oct^seq^int  ^int                                    
+ */
+  var h = "301a0408300602010302010403090030060201050201061303616161";
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [0]), 4, "octstr") 
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [1]), 24, "bitstr") 
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [2]), 46, "prnstr") 
+
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [0, 0]), 8, "octstr seq") 
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [0, 0, 0]), 12, "octstr seq int3") 
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [0, 0, 1]), 18, "octstr seq int4") 
+
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [1, 0]), 30, "binstr seq") 
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [1, 0, 0]), 34, "bitstr seq int5") 
+  equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [1, 0, 1]), 40, "bitstr seq int6") 
+});
+
 });
 
 </script>
@@ -181,6 +216,9 @@ test("hextooidstr", function() {
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
+<p>
+<a href="../">TOP</a> | 
+<a href="index.html">TEST INDEX</a> | 
+</p>
 </body>
 </html>
-

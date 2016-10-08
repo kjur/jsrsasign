@@ -1,9 +1,9 @@
-/*! pkcs5pkey-1.0.6.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! pkcs5pkey-1.0.7.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * pkcs5pkey.js - reading passcode protected PKCS#5 PEM formatted RSA private key
  *
- * Copyright (c) 2013-2014 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2016 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name pkcs5pkey-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version pkcs5pkey 1.0.6 (2014-Apr-16)
+ * @version pkcs5pkey 1.0.7 (2016-Oct-08)
  * @since jsrsasign 2.0.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -147,12 +147,14 @@ var PKCS5PKEY = function() {
 
     var _parsePKCS5PEM = function(sPKCS5PEM) {
         var info = {};
-        if (sPKCS5PEM.match(new RegExp("DEK-Info: ([^,]+),([0-9A-Fa-f]+)", "m"))) {
-            info.cipher = RegExp.$1;
-            info.ivsalt = RegExp.$2;
+        var matchResult1 = sPKCS5PEM.match(new RegExp("DEK-Info: ([^,]+),([0-9A-Fa-f]+)", "m"));
+        if (matchResult1) {
+            info.cipher = matchResult1[1];
+            info.ivsalt = matchResult1[2];
         }
-        if (sPKCS5PEM.match(new RegExp("-----BEGIN ([A-Z]+) PRIVATE KEY-----"))) {
-            info.type = RegExp.$1;
+        var matchResult2 = sPKCS5PEM.match(new RegExp("-----BEGIN ([A-Z]+) PRIVATE KEY-----"));
+        if (matchResult2) {
+            info.type = matchResult2[1];
         }
         var i1 = -1;
         var lenNEWLINE = 0;
