@@ -1,4 +1,4 @@
-/*! keyutil-1.0.13.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! keyutil-1.0.14.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version keyutil 1.0.13 (2016-Aug-11)
+ * @version keyutil 1.0.14 (2016-Oct-08)
  * @since jsrsasign 4.1.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */

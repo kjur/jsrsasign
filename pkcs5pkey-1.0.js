@@ -1,9 +1,9 @@
-/*! pkcs5pkey-1.0.6.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! pkcs5pkey-1.0.7.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * pkcs5pkey.js - reading passcode protected PKCS#5 PEM formatted RSA private key
  *
- * Copyright (c) 2013-2014 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2016 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name pkcs5pkey-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version pkcs5pkey 1.0.6 (2014-Apr-16)
+ * @version pkcs5pkey 1.0.7 (2016-Oct-08)
  * @since jsrsasign 2.0.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */

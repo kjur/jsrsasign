@@ -504,7 +504,7 @@ hexadecmal string of ASN.1 DER encoded data.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getByteLengthOfL_AtObj">getByteLengthOfL_AtObj</a></b>(s, pos)
 								</div>
-								<div class="description">get byte length for ASN.1 L(length) bytes</div>
+								<div class="description">get byte length for ASN.1 L(length) bytes<br/></div>
 							</td>
 						</tr>
 					
@@ -531,7 +531,7 @@ hexadecmal string of ASN.1 DER encoded data.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getDecendantIndexByNthList">getDecendantIndexByNthList</a></b>(h, currentIndex, nthList)
 								</div>
-								<div class="description">get string index of nth child object of ASN.1 object refered by h, idx</div>
+								<div class="description">get string index of nth child object of ASN.1 object refered by h, idx<br/></div>
 							</td>
 						</tr>
 					
@@ -540,7 +540,7 @@ hexadecmal string of ASN.1 DER encoded data.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getHexOfL_AtObj">getHexOfL_AtObj</a></b>(s, pos)
 								</div>
-								<div class="description">get hexadecimal string for ASN.1 L(length) bytes</div>
+								<div class="description">get hexadecimal string for ASN.1 L(length) bytes<br/></div>
 							</td>
 						</tr>
 					
@@ -549,7 +549,7 @@ hexadecmal string of ASN.1 DER encoded data.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getHexOfTLV_AtObj">getHexOfTLV_AtObj</a></b>(s, pos)
 								</div>
-								<div class="description">get hexadecimal string of ASN.1 TLV at</div>
+								<div class="description">get hexadecimal string of ASN.1 TLV at<br/></div>
 							</td>
 						</tr>
 					
@@ -567,7 +567,7 @@ hexadecmal string of ASN.1 DER encoded data.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getIntOfL_AtObj">getIntOfL_AtObj</a></b>(s, pos)
 								</div>
-								<div class="description">get integer value of ASN.1 length for ASN.1 data</div>
+								<div class="description">get integer value of ASN.1 length for ASN.1 data<br/></div>
 							</td>
 						</tr>
 					
@@ -576,16 +576,18 @@ hexadecmal string of ASN.1 DER encoded data.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getNthChildIndex_AtObj">getNthChildIndex_AtObj</a></b>(h, idx, nth)
 								</div>
-								<div class="description">get string index of nth child object of ASN.1 object refered by h, idx</div>
+								<div class="description">get string index of nth child object of ASN.1 object refered by h, idx<br/></div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getPosArrayOfChildren_AtObj">getPosArrayOfChildren_AtObj</a></b>(s, start)
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getPosArrayOfChildren_AtObj">getPosArrayOfChildren_AtObj</a></b>(h, pos)
 								</div>
-								<div class="description">get array of indexes of child ASN.1 objects</div>
+								<div class="description">get array of string indexes of child ASN.1 objects<br/>
+This method returns array of integers for a concatination of ASN.1 objects
+in a ASN.1 value.</div>
 							</td>
 						</tr>
 					
@@ -594,7 +596,7 @@ hexadecmal string of ASN.1 DER encoded data.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getPosOfNextSibling_AtObj">getPosOfNextSibling_AtObj</a></b>(s, pos)
 								</div>
-								<div class="description">get next sibling starting index for ASN.1 object string</div>
+								<div class="description">get next sibling starting index for ASN.1 object string<br/></div>
 							</td>
 						</tr>
 					
@@ -610,9 +612,20 @@ hexadecmal string of ASN.1 DER encoded data.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getVbyList">getVbyList</a></b>(h, currentIndex, nthList, checkingTag)
+								</div>
+								<div class="description">get ASN.1 value by nthList<br/>
+This static method is to get a ASN.1 value which specified "nthList" position
+with checking expected tag "checkingTag".</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.hextooidstr">hextooidstr</a></b>(hex)
 								</div>
-								<div class="description">get OID string from hexadecimal encoded value</div>
+								<div class="description">get OID string from hexadecimal encoded value<br/></div>
 							</td>
 						</tr>
 					
@@ -671,6 +684,7 @@ Here are major methods of this class.
 </li>
 <li><b>ACCESS NESTED ASN.1 STRUCTURE</b>
   <ul>
+  <li><a href="../symbols/ASN1HEX.html#.getVbyList">ASN1HEX.getVbyList</a> - get ASN.1 V at specified nth list index with checking expected tag</li>
   <li><a href="../symbols/ASN1HEX.html#.getDecendantHexTLVByNthList">ASN1HEX.getDecendantHexTLVByNthList</a> - get ASN.1 TLV at specified list index</li>
   <li><a href="../symbols/ASN1HEX.html#.getDecendantHexVByNthList">ASN1HEX.getDecendantHexVByNthList</a> - get ASN.1 V at specified list index</li>
   <li><a href="../symbols/ASN1HEX.html#.getDecendantIndexByNthList">ASN1HEX.getDecendantIndexByNthList</a> - get index at specified list index</li>
@@ -844,7 +858,7 @@ SEQUENCE
 					
 					</div>
 					<div class="description">
-						get byte length for ASN.1 L(length) bytes
+						get byte length for ASN.1 L(length) bytes<br/>
 						
 						
 					</div>
@@ -1015,7 +1029,7 @@ SEQUENCE
 					
 					</div>
 					<div class="description">
-						get string index of nth child object of ASN.1 object refered by h, idx
+						get string index of nth child object of ASN.1 object refered by h, idx<br/>
 						
 						
 					</div>
@@ -1090,7 +1104,7 @@ SQUENCE               -
 					
 					</div>
 					<div class="description">
-						get hexadecimal string for ASN.1 L(length) bytes
+						get hexadecimal string for ASN.1 L(length) bytes<br/>
 						
 						
 					</div>
@@ -1139,7 +1153,7 @@ SQUENCE               -
 					
 					</div>
 					<div class="description">
-						get hexadecimal string of ASN.1 TLV at
+						get hexadecimal string of ASN.1 TLV at<br/>
 						
 						
 					</div>
@@ -1168,7 +1182,7 @@ SQUENCE               -
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
-								<dd>1.1</dd>
+								<dd>asn1hex 1.1</dd>
 							</dl>
 							</dl>
 						
@@ -1243,7 +1257,7 @@ SQUENCE               -
 					
 					</div>
 					<div class="description">
-						get integer value of ASN.1 length for ASN.1 data
+						get integer value of ASN.1 length for ASN.1 data<br/>
 						
 						
 					</div>
@@ -1292,7 +1306,7 @@ SQUENCE               -
 					
 					</div>
 					<div class="description">
-						get string index of nth child object of ASN.1 object refered by h, idx
+						get string index of nth child object of ASN.1 object refered by h, idx<br/>
 						
 						
 					</div>
@@ -1349,14 +1363,26 @@ SQUENCE               -
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{Array of Number}</span>
-					<span class="light">ASN1HEX.</span><b>getPosArrayOfChildren_AtObj</b>(s, start)
+					<span class="light">ASN1HEX.</span><b>getPosArrayOfChildren_AtObj</b>(h, pos)
 					
 					</div>
 					<div class="description">
-						get array of indexes of child ASN.1 objects
+						get array of string indexes of child ASN.1 objects<br/>
+This method returns array of integers for a concatination of ASN.1 objects
+in a ASN.1 value. As for BITSTRING, one byte of unusedbits is skipped.
+As for other ASN.1 simple types such as INTEGER, OCTET STRING or PRINTABLE STRING,
+it returns a array of a string index of its ASN.1 value.<br/>
+NOTE: Since asn1hex 1.1.7 of jsrsasign 6.1.2, Encapsulated BitString is supported.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">ASN1HEX.getPosArrayOfChildren_AtObj("0203012345", 0) &rArr; [4] // INTEGER 012345
+ASN1HEX.getPosArrayOfChildren_AtObj("1303616161", 0) &rArr; [4] // PrintableString aaa
+ASN1HEX.getPosArrayOfChildren_AtObj("030300ffff", 0) &rArr; [6] // BITSTRING ffff (unusedbits=00a)
+ASN1HEX.getPosArrayOfChildren_AtObj("3006020104020105", 0) &rArr; [4, 10] // SEQUENCE(INT4,INT5)</pre>
 					
 					
 					
@@ -1365,16 +1391,16 @@ SQUENCE               -
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>s</b>
+									<span class="light fixedFont">{String}</span> <b>h</b>
 									
 								</dt>
 								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
 							
 								<dt>
-									<span class="light fixedFont">{Number}</span> <b>start</b>
+									<span class="light fixedFont">{Number}</span> <b>pos</b>
 									
 								</dt>
-								<dd>string index of ASN.1 object</dd>
+								<dd>start string index of ASN.1 object</dd>
 							
 							</dl>
 						
@@ -1402,7 +1428,7 @@ SQUENCE               -
 					
 					</div>
 					<div class="description">
-						get next sibling starting index for ASN.1 object string
+						get next sibling starting index for ASN.1 object string<br/>
 						
 						
 					</div>
@@ -1485,6 +1511,68 @@ SQUENCE               -
 
 					<hr />
 				
+					<a name=".getVbyList"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">ASN1HEX.</span><b>getVbyList</b>(h, currentIndex, nthList, checkingTag)
+					
+					</div>
+					<div class="description">
+						get ASN.1 value by nthList<br/>
+This static method is to get a ASN.1 value which specified "nthList" position
+with checking expected tag "checkingTag".
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 structure</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>currentIndex</b>
+									
+								</dt>
+								<dd>string index to start searching in hexadecimal string "h"</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>nthList</b>
+									
+								</dt>
+								<dd>array of nth list index</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>checkingTag</b>
+									
+								</dt>
+								<dd>(OPTIONAL) string of expected ASN.1 tag for nthList</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>asn1hex 1.1.4</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name=".hextooidstr"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1493,7 +1581,7 @@ SQUENCE               -
 					
 					</div>
 					<div class="description">
-						get OID string from hexadecimal encoded value
+						get OID string from hexadecimal encoded value<br/>
 						
 						
 					</div>
