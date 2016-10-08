@@ -1265,8 +1265,9 @@ KJUR.asn1.x509.AttributeTypeAndValue = function(params) {
     var defaultDSType = "utf8";
 
     this.setByString = function(attrTypeAndValueStr) {
-        if (attrTypeAndValueStr.match(/^([^=]+)=(.+)$/)) {
-            this.setByAttrTypeAndValueStr(RegExp.$1, RegExp.$2);
+        var matchResult = attrTypeAndValueStr.match(/^([^=]+)=(.+)$/);
+        if (matchResult) {
+            this.setByAttrTypeAndValueStr(matchResult[1], matchResult[2]);
         } else {
             throw "malformed attrTypeAndValueStr: " + attrTypeAndValueStr;
         }

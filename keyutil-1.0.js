@@ -173,12 +173,14 @@ var KEYUTIL = function() {
 
     var _parsePKCS5PEM = function(sPKCS5PEM) {
         var info = {};
-        if (sPKCS5PEM.match(new RegExp("DEK-Info: ([^,]+),([0-9A-Fa-f]+)", "m"))) {
-            info.cipher = RegExp.$1;
-            info.ivsalt = RegExp.$2;
+        var matchResult1 = sPKCS5PEM.match(new RegExp("DEK-Info: ([^,]+),([0-9A-Fa-f]+)", "m"));
+        if (matchResult1) {
+            info.cipher = matchResult1[1];
+            info.ivsalt = matchResult1[2];
         }
-        if (sPKCS5PEM.match(new RegExp("-----BEGIN ([A-Z]+) PRIVATE KEY-----"))) {
-            info.type = RegExp.$1;
+        var matchResult2 = sPKCS5PEM.match(new RegExp("-----BEGIN ([A-Z]+) PRIVATE KEY-----"));
+        if (matchResult2) {
+            info.type = matchResult2[1];
         }
         var i1 = -1;
         var lenNEWLINE = 0;
