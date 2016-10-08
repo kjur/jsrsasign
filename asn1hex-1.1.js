@@ -1,4 +1,4 @@
-/*! asn1hex-1.1.6.js (c) 2012-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1hex-1.1.7.js (c) 2012-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1hex 1.1.6 (2015-Jun-11)
+ * @version asn1hex 1.1.7 (2016-Oct-02)
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -61,6 +61,7 @@
  * </li>
  * <li><b>ACCESS NESTED ASN.1 STRUCTURE</b>
  *   <ul>
+ *   <li>{@link ASN1HEX.getVbyList} - get ASN.1 V at specified nth list index with checking expected tag</li>
  *   <li>{@link ASN1HEX.getDecendantHexTLVByNthList} - get ASN.1 TLV at specified list index</li>
  *   <li>{@link ASN1HEX.getDecendantHexVByNthList} - get ASN.1 V at specified list index</li>
  *   <li>{@link ASN1HEX.getDecendantIndexByNthList} - get index at specified list index</li>
@@ -76,245 +77,275 @@
  * </ul>
  */
 var ASN1HEX = new function() {
-    /**
-     * get byte length for ASN.1 L(length) bytes
-     * @name getByteLengthOfL_AtObj
-     * @memberOf ASN1HEX
-     * @function
-     * @param {String} s hexadecimal string of ASN.1 DER encoded data
-     * @param {Number} pos string index
-     * @return byte length for ASN.1 L(length) bytes
-     */
-    this.getByteLengthOfL_AtObj = function(s, pos) {
-        if (s.substring(pos + 2, pos + 3) != '8') return 1;
-        var i = parseInt(s.substring(pos + 3, pos + 4));
-        if (i == 0) return -1;          // length octet '80' indefinite length
-        if (0 < i && i < 10) return i + 1;      // including '8?' octet;
-        return -2;                              // malformed format
-    };
-
-    /**
-     * get hexadecimal string for ASN.1 L(length) bytes
-     * @name getHexOfL_AtObj
-     * @memberOf ASN1HEX
-     * @function
-     * @param {String} s hexadecimal string of ASN.1 DER encoded data
-     * @param {Number} pos string index
-     * @return {String} hexadecimal string for ASN.1 L(length) bytes
-     */
-    this.getHexOfL_AtObj = function(s, pos) {
-        var len = this.getByteLengthOfL_AtObj(s, pos);
-        if (len < 1) return '';
-        return s.substring(pos + 2, pos + 2 + len * 2);
-    };
-
-    //   getting ASN.1 length value at the position 'idx' of
-    //   hexa decimal string 's'.
-    //
-    //   f('3082025b02...', 0) ... 82025b ... ???
-    //   f('020100', 0) ... 01 ... 1
-    //   f('0203001...', 0) ... 03 ... 3
-    //   f('02818003...', 0) ... 8180 ... 128
-    /**
-     * get integer value of ASN.1 length for ASN.1 data
-     * @name getIntOfL_AtObj
-     * @memberOf ASN1HEX
-     * @function
-     * @param {String} s hexadecimal string of ASN.1 DER encoded data
-     * @param {Number} pos string index
-     * @return ASN.1 L(length) integer value
-     */
-    this.getIntOfL_AtObj = function(s, pos) {
-        var hLength = this.getHexOfL_AtObj(s, pos);
-        if (hLength == '') return -1;
-        var bi;
-        if (parseInt(hLength.substring(0, 1)) < 8) {
-            bi = new BigInteger(hLength, 16);
-        } else {
-            bi = new BigInteger(hLength.substring(2), 16);
-        }
-        return bi.intValue();
-    };
-
-    /**
-     * get ASN.1 value starting string position for ASN.1 object refered by index 'idx'.
-     * @name getStartPosOfV_AtObj
-     * @memberOf ASN1HEX
-     * @function
-     * @param {String} s hexadecimal string of ASN.1 DER encoded data
-     * @param {Number} pos string index
-     */
-    this.getStartPosOfV_AtObj = function(s, pos) {
-        var l_len = this.getByteLengthOfL_AtObj(s, pos);
-        if (l_len < 0) return l_len;
-        return pos + (l_len + 1) * 2;
-    };
-
-    /**
-     * get hexadecimal string of ASN.1 V(value)
-     * @name getHexOfV_AtObj
-     * @memberOf ASN1HEX
-     * @function
-     * @param {String} s hexadecimal string of ASN.1 DER encoded data
-     * @param {Number} pos string index
-     * @return {String} hexadecimal string of ASN.1 value.
-     */
-    this.getHexOfV_AtObj = function(s, pos) {
-        var pos1 = this.getStartPosOfV_AtObj(s, pos);
-        var len = this.getIntOfL_AtObj(s, pos);
-        return s.substring(pos1, pos1 + len * 2);
-    };
-
-    /**
-     * get hexadecimal string of ASN.1 TLV at
-     * @name getHexOfTLV_AtObj
-     * @memberOf ASN1HEX
-     * @function
-     * @param {String} s hexadecimal string of ASN.1 DER encoded data
-     * @param {Number} pos string index
-     * @return {String} hexadecimal string of ASN.1 TLV.
-     * @since 1.1
-     */
-    this.getHexOfTLV_AtObj = function(s, pos) {
-        var hT = s.substr(pos, 2);
-        var hL = this.getHexOfL_AtObj(s, pos);
-        var hV = this.getHexOfV_AtObj(s, pos);
-        return hT + hL + hV;
-    };
-
-    /**
-     * get next sibling starting index for ASN.1 object string
-     * @name getPosOfNextSibling_AtObj
-     * @memberOf ASN1HEX
-     * @function
-     * @param {String} s hexadecimal string of ASN.1 DER encoded data
-     * @param {Number} pos string index
-     * @return next sibling starting index for ASN.1 object string
-     */
-    this.getPosOfNextSibling_AtObj = function(s, pos) {
-        var pos1 = this.getStartPosOfV_AtObj(s, pos);
-        var len = this.getIntOfL_AtObj(s, pos);
-        return pos1 + len * 2;
-    };
-
-    /**
-     * get array of indexes of child ASN.1 objects
-     * @name getPosArrayOfChildren_AtObj
-     * @memberOf ASN1HEX
-     * @function
-     * @param {String} s hexadecimal string of ASN.1 DER encoded data
-     * @param {Number} start string index of ASN.1 object
-     * @return {Array of Number} array of indexes for childen of ASN.1 objects
-     */
-    this.getPosArrayOfChildren_AtObj = function(h, pos) {
-        var a = new Array();
-        var p0 = this.getStartPosOfV_AtObj(h, pos);
-        a.push(p0);
-
-        var len = this.getIntOfL_AtObj(h, pos);
-        var p = p0;
-        var k = 0;
-        while (1) {
-            var pNext = this.getPosOfNextSibling_AtObj(h, p);
-            if (pNext == null || (pNext - p0  >= (len * 2))) break;
-            if (k >= 200) break;
-            
-            a.push(pNext);
-            p = pNext;
-            
-            k++;
-        }
-        
-        return a;
-    };
-
-    /**
-     * get string index of nth child object of ASN.1 object refered by h, idx
-     * @name getNthChildIndex_AtObj
-     * @memberOf ASN1HEX
-     * @function
-     * @param {String} h hexadecimal string of ASN.1 DER encoded data
-     * @param {Number} idx start string index of ASN.1 object
-     * @param {Number} nth for child
-     * @return {Number} string index of nth child.
-     * @since 1.1
-     */
-    this.getNthChildIndex_AtObj = function(h, idx, nth) {
-        var a = this.getPosArrayOfChildren_AtObj(h, idx);
-        return a[nth];
-    };
-
-    // ========== decendant methods ==============================
-    /**
-     * get string index of nth child object of ASN.1 object refered by h, idx
-     * @name getDecendantIndexByNthList
-     * @memberOf ASN1HEX
-     * @function
-     * @param {String} h hexadecimal string of ASN.1 DER encoded data
-     * @param {Number} currentIndex start string index of ASN.1 object
-     * @param {Array of Number} nthList array list of nth
-     * @return {Number} string index refered by nthList
-     * @since 1.1
-     * @example
-     * The "nthList" is a index list of structured ASN.1 object
-     * reference. Here is a sample structure and "nthList"s which
-     * refers each objects.
-     *
-     * SQUENCE               - 
-     *   SEQUENCE            - [0]
-     *     IA5STRING 000     - [0, 0]
-     *     UTF8STRING 001    - [0, 1]
-     *   SET                 - [1]
-     *     IA5STRING 010     - [1, 0]
-     *     UTF8STRING 011    - [1, 1]
-     */
-    this.getDecendantIndexByNthList = function(h, currentIndex, nthList) {
-        if (nthList.length == 0) {
-            return currentIndex;
-        }
-        var firstNth = nthList.shift();
-        var a = this.getPosArrayOfChildren_AtObj(h, currentIndex);
-        return this.getDecendantIndexByNthList(h, a[firstNth], nthList);
-    };
-
-    /**
-     * get hexadecimal string of ASN.1 TLV refered by current index and nth index list.
-     * @name getDecendantHexTLVByNthList
-     * @memberOf ASN1HEX
-     * @function
-     * @param {String} h hexadecimal string of ASN.1 DER encoded data
-     * @param {Number} currentIndex start string index of ASN.1 object
-     * @param {Array of Number} nthList array list of nth
-     * @return {Number} hexadecimal string of ASN.1 TLV refered by nthList
-     * @since 1.1
-     */
-    this.getDecendantHexTLVByNthList = function(h, currentIndex, nthList) {
-        var idx = this.getDecendantIndexByNthList(h, currentIndex, nthList);
-        return this.getHexOfTLV_AtObj(h, idx);
-    };
-
-    /**
-     * get hexadecimal string of ASN.1 V refered by current index and nth index list.
-     * @name getDecendantHexVByNthList
-     * @memberOf ASN1HEX
-     * @function
-     * @param {String} h hexadecimal string of ASN.1 DER encoded data
-     * @param {Number} currentIndex start string index of ASN.1 object
-     * @param {Array of Number} nthList array list of nth
-     * @return {Number} hexadecimal string of ASN.1 V refered by nthList
-     * @since 1.1
-     */
-    this.getDecendantHexVByNthList = function(h, currentIndex, nthList) {
-        var idx = this.getDecendantIndexByNthList(h, currentIndex, nthList);
-        return this.getHexOfV_AtObj(h, idx);
-    };
 };
 
+/**
+ * get byte length for ASN.1 L(length) bytes<br/>
+ * @name getByteLengthOfL_AtObj
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} s hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} pos string index
+ * @return byte length for ASN.1 L(length) bytes
+ */
+ASN1HEX.getByteLengthOfL_AtObj = function(s, pos) {
+    if (s.substring(pos + 2, pos + 3) != '8') return 1;
+    var i = parseInt(s.substring(pos + 3, pos + 4));
+    if (i == 0) return -1;             // length octet '80' indefinite length
+    if (0 < i && i < 10) return i + 1; // including '8?' octet;
+    return -2;                         // malformed format
+};
+
+/**
+ * get hexadecimal string for ASN.1 L(length) bytes<br/>
+ * @name getHexOfL_AtObj
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} s hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} pos string index
+ * @return {String} hexadecimal string for ASN.1 L(length) bytes
+ */
+ASN1HEX.getHexOfL_AtObj = function(s, pos) {
+    var len = ASN1HEX.getByteLengthOfL_AtObj(s, pos);
+    if (len < 1) return '';
+    return s.substring(pos + 2, pos + 2 + len * 2);
+};
+
+/**
+ * get integer value of ASN.1 length for ASN.1 data<br/>
+ * @name getIntOfL_AtObj
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} s hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} pos string index
+ * @return ASN.1 L(length) integer value
+ */
 /*
+ getting ASN.1 length value at the position 'idx' of
+ hexa decimal string 's'.
+ f('3082025b02...', 0) ... 82025b ... ???
+ f('020100', 0) ... 01 ... 1
+ f('0203001...', 0) ... 03 ... 3
+ f('02818003...', 0) ... 8180 ... 128
+ */
+ASN1HEX.getIntOfL_AtObj = function(s, pos) {
+    var hLength = ASN1HEX.getHexOfL_AtObj(s, pos);
+    if (hLength == '') return -1;
+    var bi;
+    if (parseInt(hLength.substring(0, 1)) < 8) {
+        bi = new BigInteger(hLength, 16);
+    } else {
+        bi = new BigInteger(hLength.substring(2), 16);
+    }
+    return bi.intValue();
+};
+
+/**
+ * get ASN.1 value starting string position for ASN.1 object refered by index 'idx'.
+ * @name getStartPosOfV_AtObj
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} s hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} pos string index
+ */
+ASN1HEX.getStartPosOfV_AtObj = function(s, pos) {
+    var l_len = ASN1HEX.getByteLengthOfL_AtObj(s, pos);
+    if (l_len < 0) return l_len;
+    return pos + (l_len + 1) * 2;
+};
+
+/**
+ * get hexadecimal string of ASN.1 V(value)
+ * @name getHexOfV_AtObj
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} s hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} pos string index
+ * @return {String} hexadecimal string of ASN.1 value.
+ */
+ASN1HEX.getHexOfV_AtObj = function(s, pos) {
+    var pos1 = ASN1HEX.getStartPosOfV_AtObj(s, pos);
+    var len = ASN1HEX.getIntOfL_AtObj(s, pos);
+    return s.substring(pos1, pos1 + len * 2);
+};
+
+/**
+ * get hexadecimal string of ASN.1 TLV at<br/>
+ * @name getHexOfTLV_AtObj
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} s hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} pos string index
+ * @return {String} hexadecimal string of ASN.1 TLV.
+ * @since asn1hex 1.1
+ */
+ASN1HEX.getHexOfTLV_AtObj = function(s, pos) {
+    var hT = s.substr(pos, 2);
+    var hL = ASN1HEX.getHexOfL_AtObj(s, pos);
+    var hV = ASN1HEX.getHexOfV_AtObj(s, pos);
+    return hT + hL + hV;
+};
+
+// ========== sibling methods ================================
+/**
+ * get next sibling starting index for ASN.1 object string<br/>
+ * @name getPosOfNextSibling_AtObj
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} s hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} pos string index
+ * @return next sibling starting index for ASN.1 object string
+ */
+ASN1HEX.getPosOfNextSibling_AtObj = function(s, pos) {
+    var pos1 = ASN1HEX.getStartPosOfV_AtObj(s, pos);
+    var len = ASN1HEX.getIntOfL_AtObj(s, pos);
+    return pos1 + len * 2;
+};
+
+// ========== children methods ===============================
+/**
+ * get array of string indexes of child ASN.1 objects<br/>
+ * @name getPosArrayOfChildren_AtObj
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} h hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} pos start string index of ASN.1 object
+ * @return {Array of Number} array of indexes for childen of ASN.1 objects
+ * @description
+ * This method returns array of integers for a concatination of ASN.1 objects
+ * in a ASN.1 value. As for BITSTRING, one byte of unusedbits is skipped.
+ * As for other ASN.1 simple types such as INTEGER, OCTET STRING or PRINTABLE STRING,
+ * it returns a array of a string index of its ASN.1 value.<br/>
+ * NOTE: Since asn1hex 1.1.7 of jsrsasign 6.1.2, Encapsulated BitString is supported.
+ * @example
+ * ASN1HEX.getPosArrayOfChildren_AtObj("0203012345", 0) &rArr; [4] // INTEGER 012345
+ * ASN1HEX.getPosArrayOfChildren_AtObj("1303616161", 0) &rArr; [4] // PrintableString aaa
+ * ASN1HEX.getPosArrayOfChildren_AtObj("030300ffff", 0) &rArr; [6] // BITSTRING ffff (unusedbits=00a)
+ * ASN1HEX.getPosArrayOfChildren_AtObj("3006020104020105", 0) &rArr; [4, 10] // SEQUENCE(INT4,INT5)
+ */
+ASN1HEX.getPosArrayOfChildren_AtObj = function(h, pos) {
+    var a = new Array();
+    var p0 = ASN1HEX.getStartPosOfV_AtObj(h, pos);
+    if (h.substr(pos, 2) == "03") {
+	a.push(p0 + 2); // BITSTRING value without unusedbits
+    } else {
+	a.push(p0);
+    }
+
+    var len = ASN1HEX.getIntOfL_AtObj(h, pos);
+    var p = p0;
+    var k = 0;
+    while (1) {
+        var pNext = ASN1HEX.getPosOfNextSibling_AtObj(h, p);
+        if (pNext == null || (pNext - p0  >= (len * 2))) break;
+        if (k >= 200) break;
+            
+        a.push(pNext);
+        p = pNext;
+            
+        k++;
+    }
+    
+    return a;
+};
+
+/**
+ * get string index of nth child object of ASN.1 object refered by h, idx<br/>
+ * @name getNthChildIndex_AtObj
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} h hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} idx start string index of ASN.1 object
+ * @param {Number} nth for child
+ * @return {Number} string index of nth child.
+ * @since 1.1
+ */
+ASN1HEX.getNthChildIndex_AtObj = function(h, idx, nth) {
+    var a = ASN1HEX.getPosArrayOfChildren_AtObj(h, idx);
+    return a[nth];
+};
+
+// ========== decendant methods ==============================
+/**
+ * get string index of nth child object of ASN.1 object refered by h, idx<br/>
+ * @name getDecendantIndexByNthList
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} h hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} currentIndex start string index of ASN.1 object
+ * @param {Array of Number} nthList array list of nth
+ * @return {Number} string index refered by nthList
+ * @since 1.1
+ * @example
+ * The "nthList" is a index list of structured ASN.1 object
+ * reference. Here is a sample structure and "nthList"s which
+ * refers each objects.
+ *
+ * SQUENCE               - 
+ *   SEQUENCE            - [0]
+ *     IA5STRING 000     - [0, 0]
+ *     UTF8STRING 001    - [0, 1]
+ *   SET                 - [1]
+ *     IA5STRING 010     - [1, 0]
+ *     UTF8STRING 011    - [1, 1]
+ */
+ASN1HEX.getDecendantIndexByNthList = function(h, currentIndex, nthList) {
+    if (nthList.length == 0) {
+        return currentIndex;
+    }
+    var firstNth = nthList.shift();
+    var a = ASN1HEX.getPosArrayOfChildren_AtObj(h, currentIndex);
+    return ASN1HEX.getDecendantIndexByNthList(h, a[firstNth], nthList);
+};
+
+/**
+ * get hexadecimal string of ASN.1 TLV refered by current index and nth index list.
+ * @name getDecendantHexTLVByNthList
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} h hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} currentIndex start string index of ASN.1 object
+ * @param {Array of Number} nthList array list of nth
+ * @return {Number} hexadecimal string of ASN.1 TLV refered by nthList
+ * @since 1.1
+ */
+ASN1HEX.getDecendantHexTLVByNthList = function(h, currentIndex, nthList) {
+    var idx = ASN1HEX.getDecendantIndexByNthList(h, currentIndex, nthList);
+    return ASN1HEX.getHexOfTLV_AtObj(h, idx);
+};
+
+/**
+ * get hexadecimal string of ASN.1 V refered by current index and nth index list.
+ * @name getDecendantHexVByNthList
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} h hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} currentIndex start string index of ASN.1 object
+ * @param {Array of Number} nthList array list of nth
+ * @return {Number} hexadecimal string of ASN.1 V refered by nthList
+ * @since 1.1
+ */
+ASN1HEX.getDecendantHexVByNthList = function(h, currentIndex, nthList) {
+    var idx = ASN1HEX.getDecendantIndexByNthList(h, currentIndex, nthList);
+    return ASN1HEX.getHexOfV_AtObj(h, idx);
+};
+
+/**
+ * get ASN.1 value by nthList<br/>
+ * @name getVbyList
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} h hexadecimal string of ASN.1 structure
+ * @param {Integer} currentIndex string index to start searching in hexadecimal string "h"
+ * @param {Array} nthList array of nth list index
+ * @param {String} checkingTag (OPTIONAL) string of expected ASN.1 tag for nthList 
+ * @description
+ * This static method is to get a ASN.1 value which specified "nthList" position
+ * with checking expected tag "checkingTag".
  * @since asn1hex 1.1.4
  */
 ASN1HEX.getVbyList = function(h, currentIndex, nthList, checkingTag) {
-    var idx = this.getDecendantIndexByNthList(h, currentIndex, nthList);
+    var idx = ASN1HEX.getDecendantIndexByNthList(h, currentIndex, nthList);
     if (idx === undefined) {
         throw "can't find nthList object";
     }
@@ -324,11 +355,11 @@ ASN1HEX.getVbyList = function(h, currentIndex, nthList, checkingTag) {
                 h.substr(idx,2) + "!=" + checkingTag;
         }
     }
-    return this.getHexOfV_AtObj(h, idx);
+    return ASN1HEX.getHexOfV_AtObj(h, idx);
 };
 
 /**
- * get OID string from hexadecimal encoded value
+ * get OID string from hexadecimal encoded value<br/>
  * @name hextooidstr
  * @memberOf ASN1HEX
  * @function
