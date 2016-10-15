@@ -423,6 +423,27 @@ KJUR.asn1.ocsp.OCSPUtil.getRequestHex = function(issuerCert, subjectCert, alg) {
     return o.getEncodedHex();
 };
 
+/**
+ * parse OCSPResponse<br/>
+ * @name getOCSPResponseInfo
+ * @memberOf KJUR.asn1.ocsp.OCSPUtil
+ * @function
+ * @param {String} h hexadecimal string of DER OCSPResponse
+ * @return {Object} JSON object of parsed OCSPResponse
+ * @since jsrsasign 6.1.0 asn1ocsp 1.0.1
+ * @description
+ * This static method parse a hexadecimal string of DER OCSPResponse and
+ * returns JSON object of its parsed result.
+ * Its result has following properties:
+ * <ul>
+ * <li>responseStatus - integer of responseStatus</li>
+ * <li>certStatus - string of certStatus (ex. good, revoked or unknown)</li>
+ * <li>thisUpdate - string of thisUpdate in Zulu(ex. 20151231235959Z)</li>
+ * <li>nextUpdate - string of nextUpdate in Zulu(ex. 20151231235959Z)</li>
+ * </ul>
+ * @example
+ * info = KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo("3082...");
+ */
 KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo = function(h) {
     var result = {};
     try {
@@ -445,11 +466,13 @@ KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo = function(h) {
 	}
     } catch (ex) {};
 
+    // thisUpdate
     try {
 	var idxThisUpdate = ASN1HEX.getDecendantIndexByNthList(h, 0, [1,0,1,0,0,2,0,2]);
 	result.thisUpdate = hextoutf8(ASN1HEX.getHexOfV_AtObj(h, idxThisUpdate));
     } catch (ex) {};
 
+    // nextUpdate
     try {
 	var idxEncapNextUpdate = ASN1HEX.getDecendantIndexByNthList(h, 0, [1,0,1,0,0,2,0,3]);
 	if (h.substr(idxEncapNextUpdate, 2) === "a0") {

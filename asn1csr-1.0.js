@@ -1,9 +1,9 @@
-/*! asn1csr-1.0.0.js (c) 2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1csr-1.0.1.js (c) 2015-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
  *
- * Copyright (c) 2015 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2015-2016 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,8 +16,8 @@
  * @fileOverview
  * @name asn1csr-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.0 (2015-Sep-12)
- * @since jsrsasign 4.8.7
+ * @version 1.0.1 (2016-Oct-15)
+ * @since jsrsasign 4.9.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -52,7 +52,7 @@ if (typeof KJUR.asn1.csr == "undefined" || !KJUR.asn1.csr) KJUR.asn1.csr = {};
  * @class ASN.1 CertificationRequest structure class
  * @param {Array} params associative array of parameters (ex. {})
  * @extends KJUR.asn1.ASN1Object
- * @since jsrsasign 4.8.7 asn1csr 1.0.0
+ * @since jsrsasign 4.9.0 asn1csr 1.0.0
  * @description
  * <br/>
  * @example
@@ -68,6 +68,12 @@ if (typeof KJUR.asn1.csr == "undefined" || !KJUR.asn1.csr) KJUR.asn1.csr = {};
  * //   certificationRequestInfo CertificationRequestInfo,
  * //   signatureAlgorithm       AlgorithmIdentifier{{ SignatureAlgorithms }},
  * //   signature                BIT STRING }
+ * //
+ * // CertificationRequestInfo ::= SEQUENCE {
+ * //   version       INTEGER { v1(0) } (v1,...),
+ * //   subject       Name,
+ * //   subjectPKInfo SubjectPublicKeyInfo{{ PKInfoAlgorithms }},
+ * //   attributes    [0] Attributes{{ CRIAttributes }} }
  */
 KJUR.asn1.csr.CertificationRequest = function(params) {
     KJUR.asn1.csr.CertificationRequest.superclass.constructor.call(this);
@@ -152,7 +158,7 @@ YAHOO.lang.extend(KJUR.asn1.csr.CertificationRequest, KJUR.asn1.ASN1Object);
  * @class ASN.1 CertificationRequestInfo structure class
  * @param {Array} params associative array of parameters (ex. {})
  * @extends KJUR.asn1.ASN1Object
- * @since jsrsasign 4.8.7 asn1csr 1.0.0
+ * @since jsrsasign 4.9.0 asn1csr 1.0.0
  * @description
  * <br/>
  * @example
@@ -251,7 +257,7 @@ KJUR.asn1.csr.CSRUtil = new function() {
  * @memberOf KJUR.asn1.csr.CSRUtil
  * @function
  * @param {Array} param parameter to generate CSR
- * @since jsrsasign 4.8.7 asn1csr 1.0.0
+ * @since jsrsasign 4.9.0 asn1csr 1.0.0
  * @description
  * This method can generate a CSR certificate signing
  * request by a simple JSON object which has following parameters:
@@ -307,4 +313,47 @@ KJUR.asn1.csr.CSRUtil.newCSRPEM = function(param) {
     var pem = csr.getPEMString();
     return pem;
 };
+
+/**
+ * get field values from CSR/PKCS#10 PEM string<br/>
+ * @name getInfo
+ * @memberOf KJUR.asn1.csr.CSRUtil
+ * @function
+ * @param {String} sPEM PEM string of CSR/PKCS#10
+ * @returns {Object} JSON object with parsed parameters such as name or public key
+ * @since jsrsasign 6.1.3 asn1csr 1.0.1
+ * @description
+ * This method parses PEM CSR/PKCS#1 string and retrieves
+ * subject name and public key. Following parameters are available in the
+ * resulted JSON object.
+ * <ul>
+ * <li>subject.name - subject name string (ex. /C=US/O=Test)</li>
+ * <li>subject.hex - hexadecimal string of X.500 Name of subject</li>
+ * <li>pubkey.obj - subject public key object such as RSAKey, KJUR.crypto.{ECDSA,DSA}</li>
+ * <li>pubkey.hex - hexadecimal string of subject public key</li>
+ * </ul>
+ *
+ * @example
+ * o = KJUR.asn1.csr.CSRUtil.getInfo("-----BEGIN CERTIFICATE REQUEST...");
+ * console.log(o.subject.name) &rarr; "/C=US/O=Test"
+ */
+KJUR.asn1.csr.CSRUtil.getInfo = function(sPEM) {
+    var result = {};
+    result.subject = {};
+    result.pubkey = {};
+
+    if (sPEM.indexOf("-----BEGIN CERTIFICATE REQUEST") == -1)
+	throw "argument is not PEM file";
+
+    var hex = KEYUTIL.getHexFromPEM(sPEM, "CERTIFICATE REQUEST");
+
+    result.subject.hex = ASN1HEX.getDecendantHexTLVByNthList(hex, 0, [0, 1]);
+    result.subject.name = X509.hex2dn(result.subject.hex);
+
+    result.pubkey.hex = ASN1HEX.getDecendantHexTLVByNthList(hex, 0, [0, 2]);
+    result.pubkey.obj = KEYUTIL.getKey(result.pubkey.hex, null, "pkcs8pub");
+
+    return result;
+};
+
 

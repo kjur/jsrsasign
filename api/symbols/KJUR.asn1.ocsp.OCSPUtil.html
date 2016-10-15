@@ -490,6 +490,17 @@ This class provides utility static methods for OCSP.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.ocsp.OCSPUtil.<b><a href="../symbols/KJUR.asn1.ocsp.OCSPUtil.html#.getOCSPResponseInfo">getOCSPResponseInfo</a></b>(h)
+								</div>
+								<div class="description">parse OCSPResponse<br/>
+This static method parse a hexadecimal string of DER OCSPResponse and
+returns JSON object of its parsed result.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.asn1.ocsp.OCSPUtil.<b><a href="../symbols/KJUR.asn1.ocsp.OCSPUtil.html#.getRequestHex">getRequestHex</a></b>(issuerCert, subjectCert, algName)
 								</div>
 								<div class="description">generates hexadecimal string of OCSP request<br/>
@@ -553,6 +564,68 @@ This class provides utility static methods for OCSP.
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name=".getOCSPResponseInfo"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">KJUR.asn1.ocsp.OCSPUtil.</span><b>getOCSPResponseInfo</b>(h)
+					
+					</div>
+					<div class="description">
+						parse OCSPResponse<br/>
+This static method parse a hexadecimal string of DER OCSPResponse and
+returns JSON object of its parsed result.
+Its result has following properties:
+<ul>
+<li>responseStatus - integer of responseStatus</li>
+<li>certStatus - string of certStatus (ex. good, revoked or unknown)</li>
+<li>thisUpdate - string of thisUpdate in Zulu(ex. 20151231235959Z)</li>
+<li>nextUpdate - string of nextUpdate in Zulu(ex. 20151231235959Z)</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">info = KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo("3082...");</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of DER OCSPResponse</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.1.0 asn1ocsp 1.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> JSON object of parsed OCSPResponse</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
 				
 					<a name=".getRequestHex"> </a>
 					<div class="fixedFont">&lt;static&gt; 

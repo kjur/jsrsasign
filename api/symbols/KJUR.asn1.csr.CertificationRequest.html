@@ -562,7 +562,13 @@ pem = csr.getPEMString();
 // CertificationRequest ::= SEQUENCE {
 //   certificationRequestInfo CertificationRequestInfo,
 //   signatureAlgorithm       AlgorithmIdentifier{{ SignatureAlgorithms }},
-//   signature                BIT STRING }</pre>
+//   signature                BIT STRING }
+//
+// CertificationRequestInfo ::= SEQUENCE {
+//   version       INTEGER { v1(0) } (v1,...),
+//   subject       Name,
+//   subjectPKInfo SubjectPublicKeyInfo{{ PKInfoAlgorithms }},
+//   attributes    [0] Attributes{{ CRIAttributes }} }</pre>
 				
 				
 				
@@ -583,7 +589,7 @@ pem = csr.getPEMString();
 					
 						<dl class="detailList">
 						<dt class="heading">Since:</dt>
-							<dd>jsrsasign 4.8.7 asn1csr 1.0.0</dd>
+							<dd>jsrsasign 4.9.0 asn1csr 1.0.0</dd>
 						</dl>
 					
 					
