@@ -244,9 +244,17 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
 YAHOO.lang.extend(KJUR.asn1.csr.CertificationRequestInfo, KJUR.asn1.ASN1Object);
 
 /**
- * Certification Request (CSR/PKCS#10) utilities class
+ * Certification Request (CSR/PKCS#10) utilities class<br/>
  * @name KJUR.asn1.csr.CSRUtil
  * @class Certification Request (CSR/PKCS#10) utilities class
+ * @description
+ * This class provides utility static methods for CSR/PKCS#10.
+ * Here is a list of methods:
+ * <ul>
+ * <li>{@link KJUR.asn1.csr.CSRUtil.newCSRPEM}</li>
+ * <li>{@link KJUR.asn1.csr.CSRUtil.getInfo}</li>
+ * </ul>
+ * <br/>
  */
 KJUR.asn1.csr.CSRUtil = new function() {
 };
