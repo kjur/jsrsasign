@@ -489,6 +489,17 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.csr.CSRUtil.<b><a href="../symbols/KJUR.asn1.csr.CSRUtil.html#.getInfo">getInfo</a></b>(sPEM)
+								</div>
+								<div class="description">get field values from CSR/PKCS#10 PEM string<br/>
+This method parses PEM CSR/PKCS#1 string and retrieves
+subject name and public key.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.asn1.csr.CSRUtil.<b><a href="../symbols/KJUR.asn1.csr.CSRUtil.html#.newCSRPEM">newCSRPEM</a></b>(param)
 								</div>
 								<div class="description">generate a PEM format of CSR/PKCS#10 certificate signing request
@@ -548,6 +559,69 @@ request by a simple JSON object which has following parameters:
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name=".getInfo"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">KJUR.asn1.csr.CSRUtil.</span><b>getInfo</b>(sPEM)
+					
+					</div>
+					<div class="description">
+						get field values from CSR/PKCS#10 PEM string<br/>
+This method parses PEM CSR/PKCS#1 string and retrieves
+subject name and public key. Following parameters are available in the
+resulted JSON object.
+<ul>
+<li>subject.name - subject name string (ex. /C=US/O=Test)</li>
+<li>subject.hex - hexadecimal string of X.500 Name of subject</li>
+<li>pubkey.obj - subject public key object such as RSAKey, KJUR.crypto.{ECDSA,DSA}</li>
+<li>pubkey.hex - hexadecimal string of subject public key</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">o = KJUR.asn1.csr.CSRUtil.getInfo("-----BEGIN CERTIFICATE REQUEST...");
+console.log(o.subject.name) &rarr; "/C=US/O=Test"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sPEM</b>
+									
+								</dt>
+								<dd>PEM string of CSR/PKCS#10</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.1.3 asn1csr 1.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> JSON object with parsed parameters such as name or public key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
 				
 					<a name=".newCSRPEM"> </a>
 					<div class="fixedFont">&lt;static&gt; 
@@ -615,7 +689,7 @@ pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
-								<dd>jsrsasign 4.8.7 asn1csr 1.0.0</dd>
+								<dd>jsrsasign 4.9.0 asn1csr 1.0.0</dd>
 							</dl>
 							</dl>
 						

@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+* Changes between 6.1.2 to 6.1.3 (2016-Oct-15)
+  - asn1csr 1.0.0 to 1.1.1
+    - CSRUtil.getInfo method added to parse CSR
+  - asn1ocsp
+    - OCSPUtil.getOCSPResponseInfo API document added
+
 * Changes between 6.1.1 to 6.1.2 (2016-Oct-08)
   - OCSP Response support
   - asn1hex 1.1.6 to 1.1.7
