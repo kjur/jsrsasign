@@ -1,9 +1,9 @@
-/*! base64x-1.1.7 (c) 2012-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! base64x-1.1.8 (c) 2012-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * version: 1.1.7 (2016-Aug-03)
+ * version: 1.1.8 (2016-Oct-16)
  *
  * Copyright (c) 2012-2016 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -21,7 +21,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.1.7 (2016-Aug-03)
+ * @version asn1 1.1.8 (2016-Oct-16)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -37,6 +37,20 @@ if (typeof KJUR.lang == "undefined" || !KJUR.lang) KJUR.lang = {};
  * @author Kenji Urushima
  * @version 1.0 (2016-Aug-05)
  * @since base64x 1.1.7 jsrsasign 5.0.13
+ * @description
+ * <br/>
+ * This class provides static methods for string utility.
+ * <dl>
+ * <dt><b>STRING TYPE CHECKERS</b>
+ * <dd>
+ * <ul>
+ * <li>{@link KJUR.lang.String.isInteger} - check whether argument is an integer</li>
+ * <li>{@link KJUR.lang.String.isHex} - check whether argument is a hexadecimal string</li>
+ * <li>{@link KJUR.lang.String.isBase64} - check whether argument is a Base64 encoded string</li>
+ * <li>{@link KJUR.lang.String.isBase64URL} - check whether argument is a Base64URL encoded string</li>
+ * <li>{@link KJUR.lang.String.isIntegerArray} - check whether argument is an array of integers</li>
+ * </ul>
+ * </dl>
  */
 KJUR.lang.String = function() {};
 
@@ -323,15 +337,35 @@ function rstrtohex(s) {
 
 // ==== hex / b64nl =======================================
 
-/*
- * since base64x 1.1.3
+/**
+ * convert a hexadecimal string to Base64 encoded string<br/>
+ * @param {String} s hexadecimal string
+ * @return {String} resulted Base64 encoded string
+ * @since base64x 1.1.3
+ * @description
+ * This function converts from a hexadecimal string to Base64 encoded
+ * string without new lines.
+ * @example
+ * hextob64("616161") &rarr; "YWFh"
  */
 function hextob64(s) {
     return hex2b64(s);
 }
 
-/*
- * since base64x 1.1.3
+/**
+ * convert a hexadecimal string to Base64 encoded string with new lines<br/>
+ * @param {String} s hexadecimal string
+ * @return {String} resulted Base64 encoded string with new lines
+ * @since base64x 1.1.3
+ * @description
+ * This function converts from a hexadecimal string to Base64 encoded
+ * string with new lines for each 64 characters. This is useful for
+ * PEM encoded file.
+ * @example
+ * hextob64nl("123456789012345678901234567890123456789012345678901234567890")
+ * &rarr;
+ * MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4 // new line
+ * OTAxMjM0NTY3ODkwCg==
  */
 function hextob64nl(s) {
     var b64 = hextob64(s);
@@ -340,14 +374,83 @@ function hextob64nl(s) {
     return b64nl;
 }
 
-/*
- * since base64x 1.1.3
+/**
+ * convert a Base64 encoded string with new lines to a hexadecimal string<br/>
+ * @param {String} s Base64 encoded string with new lines
+ * @return {String} hexadecimal string
+ * @since base64x 1.1.3
+ * @description
+ * This function converts from a Base64 encoded
+ * string with new lines to a hexadecimal string.
+ * This is useful to handle PEM encoded file.
+ * This function removes any non-Base64 characters (i.e. not 0-9,A-Z,a-z,\,+,=)
+ * including new line.
+ * @example
+ * hextob64nl(
+ * "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4\r\n" +
+ * "OTAxMjM0NTY3ODkwCg==\r\n")
+ * &rarr;
+ * "123456789012345678901234567890123456789012345678901234567890")
  */
 function b64nltohex(s) {
     var b64 = s.replace(/[^0-9A-Za-z\/+=]*/g, '');
     var hex = b64tohex(b64);
     return hex;
 } 
+
+// ==== hex / ArrayBuffer =================================
+
+/**
+ * convert a ArrayBuffer to a hexadecimal string<br/>
+ * @param {String} hexadecimal string
+ * @return {ArrayBuffer} buffer ArrayBuffer
+ * @since jsrsasign 6.1.4 base64x 1.1.8
+ * @description
+ * This function converts from a ArrayBuffer to a hexadecimal string.
+ * @example
+ * hextoArrayBuffer("fffa01") &rarr ArrayBuffer of [255, 250, 1]
+ */
+function hextoArrayBuffer(hex) {
+    if (hex.length % 2 != 0) throw "input is not even length";
+    if (hex.match(/^[0-9A-Fa-f]+$/) == null) throw "input is not hexadecimal";
+
+    var buffer = new ArrayBuffer(hex.length / 2);
+    var view = new DataView(buffer);
+
+    for (var i = 0; i < hex.length / 2; i++) {
+	view.setUint8(i, parseInt(hex.substr(i * 2, 2), 16));
+    }
+
+    return buffer;
+}
+
+// ==== ArrayBuffer / hex =================================
+
+/**
+ * convert a ArrayBuffer to a hexadecimal string<br/>
+ * @param {String} hexadecimal string
+ * @return {ArrayBuffer} buffer ArrayBuffer
+ * @since jsrsasign 6.1.4 base64x 1.1.8
+ * @description
+ * This function converts from a ArrayBuffer to a hexadecimal string.
+ * @example
+ * var buffer = new ArrayBuffer(3);
+ * var view = new DataView(buffer);
+ * view.setUint8(0, 0xfa);
+ * view.setUint8(1, 0xfb);
+ * view.setUint8(2, 0x01);
+ * ArrayBuffertohex(buffer) &rarr "fafb01"
+ */
+function ArrayBuffertohex(buffer) {
+    var hex = "";
+    var view = new DataView(buffer);
+
+    for (var i = 0; i < buffer.byteLength; i++) {
+	hex += ("00" + view.getUint8(i).toString(16)).slice(-2);
+    }
+
+    return hex;
+}
 
 // ==== URIComponent / hex ================================
 /**

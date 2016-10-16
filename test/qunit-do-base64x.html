@@ -101,6 +101,26 @@ test("KJUR.lang.String.isIntegerArray", function() {
   equal(KJUR.lang.String.isIntegerArray("[a,3,4]"), false, "[a,3,4]");
 });
 
+test("hextoArrayBuffer", function() {
+  var a = new Uint8Array(hextoArrayBuffer("00010203ff"));
+  equal(a[0], 0, "00010203ff 0");
+  equal(a[1], 1, "00010203ff 1");
+  equal(a[2], 2, "00010203ff 2");
+  equal(a[3], 3, "00010203ff 3");
+  equal(a[4], 255, "00010203ff 4");
+});
+
+test("ArrayBuffertohex", function() {
+  var buffer = new ArrayBuffer(5);
+  var view = new DataView(buffer);
+  view.setUint8(0, 0xfa);
+  view.setUint8(1, 0xfb);
+  view.setUint8(2, 0xfc);
+  view.setUint8(3, 0x01);
+  view.setUint8(4, 0x02);
+  equal(ArrayBuffertohex(buffer), "fafbfc0102", "fafbfc0102");
+});
+
 });
 </script>
   

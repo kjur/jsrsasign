@@ -466,6 +466,27 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#ArrayBuffertohex">ArrayBuffertohex</a></b>(hexadecimal)
+								</div>
+								<div class="description">convert a ArrayBuffer to a hexadecimal string<br/>
+This function converts from a ArrayBuffer to a hexadecimal string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#b64nltohex">b64nltohex</a></b>(s)
+								</div>
+								<div class="description">convert a Base64 encoded string with new lines to a hexadecimal string<br/>
+This function converts from a Base64 encoded
+string with new lines to a hexadecimal string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#b64tob64u">b64tob64u</a></b>(s)
 								</div>
 								<div class="description">convert a Base64 encoded string to a Base64URL encoded string.</div>
@@ -541,6 +562,38 @@ ul.inheritsList
 								<div class="fixedFont"><b><a href="../symbols/global__.html#encodeURIComponentAll">encodeURIComponentAll</a></b>(s)
 								</div>
 								<div class="description">convert UTFa hexadecimal string to a URLComponent string such like "%67%68".</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#hextoArrayBuffer">hextoArrayBuffer</a></b>(hexadecimal)
+								</div>
+								<div class="description">convert a ArrayBuffer to a hexadecimal string<br/>
+This function converts from a ArrayBuffer to a hexadecimal string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#hextob64">hextob64</a></b>(s)
+								</div>
+								<div class="description">convert a hexadecimal string to Base64 encoded string<br/>
+This function converts from a hexadecimal string to Base64 encoded
+string without new lines.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#hextob64nl">hextob64nl</a></b>(s)
+								</div>
+								<div class="description">convert a hexadecimal string to Base64 encoded string with new lines<br/>
+This function converts from a hexadecimal string to Base64 encoded
+string with new lines for each 64 characters.</div>
 							</td>
 						</tr>
 					
@@ -769,6 +822,133 @@ This function only works in Node.js.</div>
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name="ArrayBuffertohex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{ArrayBuffer}</span>
+					<b>ArrayBuffertohex</b>(hexadecimal)
+					
+					</div>
+					<div class="description">
+						convert a ArrayBuffer to a hexadecimal string<br/>
+This function converts from a ArrayBuffer to a hexadecimal string.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var buffer = new ArrayBuffer(3);
+var view = new DataView(buffer);
+view.setUint8(0, 0xfa);
+view.setUint8(1, 0xfb);
+view.setUint8(2, 0x01);
+ArrayBuffertohex(buffer) &rarr "fafb01"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hexadecimal</b>
+									
+								</dt>
+								<dd>string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.1.4 base64x 1.1.8</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{ArrayBuffer}</span> buffer ArrayBuffer</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="b64nltohex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>b64nltohex</b>(s)
+					
+					</div>
+					<div class="description">
+						convert a Base64 encoded string with new lines to a hexadecimal string<br/>
+This function converts from a Base64 encoded
+string with new lines to a hexadecimal string.
+This is useful to handle PEM encoded file.
+This function removes any non-Base64 characters (i.e. not 0-9,A-Z,a-z,\,+,=)
+including new line.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">hextob64nl(
+"MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4\r\n" +
+"OTAxMjM0NTY3ODkwCg==\r\n")
+&rarr;
+"123456789012345678901234567890123456789012345678901234567890")</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>Base64 encoded string with new lines</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>base64x 1.1.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
 				
 					<a name="b64tob64u"> </a>
 					<div class="fixedFont">
@@ -1188,6 +1368,183 @@ all of characters into "%xx" format.
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> URIComponent string such like "%67%68"</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="hextoArrayBuffer"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{ArrayBuffer}</span>
+					<b>hextoArrayBuffer</b>(hexadecimal)
+					
+					</div>
+					<div class="description">
+						convert a ArrayBuffer to a hexadecimal string<br/>
+This function converts from a ArrayBuffer to a hexadecimal string.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">hextoArrayBuffer("fffa01") &rarr ArrayBuffer of [255, 250, 1]</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hexadecimal</b>
+									
+								</dt>
+								<dd>string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.1.4 base64x 1.1.8</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{ArrayBuffer}</span> buffer ArrayBuffer</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="hextob64"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>hextob64</b>(s)
+					
+					</div>
+					<div class="description">
+						convert a hexadecimal string to Base64 encoded string<br/>
+This function converts from a hexadecimal string to Base64 encoded
+string without new lines.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">hextob64("616161") &rarr; "YWFh"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>hexadecimal string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>base64x 1.1.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> resulted Base64 encoded string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="hextob64nl"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>hextob64nl</b>(s)
+					
+					</div>
+					<div class="description">
+						convert a hexadecimal string to Base64 encoded string with new lines<br/>
+This function converts from a hexadecimal string to Base64 encoded
+string with new lines for each 64 characters. This is useful for
+PEM encoded file.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">hextob64nl("123456789012345678901234567890123456789012345678901234567890")
+&rarr;
+MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4 // new line
+OTAxMjM0NTY3ODkwCg==</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>hexadecimal string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>base64x 1.1.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> resulted Base64 encoded string with new lines</dd>
 							
 							</dl>
 						
