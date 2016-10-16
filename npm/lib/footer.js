@@ -43,6 +43,11 @@ exports.newline_toUnix = newline_toUnix;
 exports.newline_toDos = newline_toDos;
 exports.intarystrtohex = intarystrtohex;
 exports.strdiffidx = strdiffidx;
+exports.hextob64 = hextob64;
+exports.hextob64nl = hextob64nl;
+exports.b64nltohex = b64nltohex;
+exports.hextoArrayBuffer = hextoArrayBuffer;
+exports.ArrayBuffertohex = ArrayBuffertohex;
 
 exports.KJUR = KJUR;
 exports.crypto = KJUR.crypto;
