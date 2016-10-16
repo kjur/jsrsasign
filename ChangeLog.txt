@@ -1,13 +1,18 @@
 
 ChangeLog for jsrsasign
 
-* Changes between 6.1.2 to 6.1.3 (2016-Oct-15)
-  - asn1csr 1.0.0 to 1.1.1
+* Changes from 6.1.3 to 6.1.4 (2016-Oct-16)
+  - base64x 1.1.7 to 1.1.8
+    - function hextoArrayBuffer and ArrayBuffertohex added
+    - some API documents added
+
+* Changes from 6.1.2 to 6.1.3 (2016-Oct-15)
+  - asn1csr 1.0.0 to 1.0.1
     - CSRUtil.getInfo method added to parse CSR
   - asn1ocsp
     - OCSPUtil.getOCSPResponseInfo API document added
 
-* Changes between 6.1.1 to 6.1.2 (2016-Oct-08)
+* Changes from 6.1.1 to 6.1.2 (2016-Oct-08)
   - OCSP Response support
   - asn1hex 1.1.6 to 1.1.7
     - refactoring for static methods
@@ -19,24 +24,24 @@ ChangeLog for jsrsasign
     Thank you @huokko.
     (asn1x509, crypto, jws, keyutil, pkcs5pkey)
 
-* Changes between 6.1.0 to 6.1.1 (2016-Sep-25)
+* Changes from 6.1.0 to 6.1.1 (2016-Sep-25)
   - asn1 1.0.10 to 1.0.11
     - encapsulated ASN.1 structure supported
       in DEROctetString and DERBitString.
     - API document update
   - tool_asn1encoder.html added
 
-* Changes between 6.0.1 to 6.1.0 (2016-Sep-24)
+* Changes from 6.0.1 to 6.1.0 (2016-Sep-24)
   - asn1ocsp 1.0.0
     - now start to add OCSP protocol support
     - OCSP request ASN.1 classes are added
   - fix API document in x509 and asn1
   - test/qunit-do-{asn1,asn1ocsp}.html added or updated
 
-* Changes between 6.0.0 to 6.0.1 (2016-Sep-12)
+* Changes from 6.0.0 to 6.0.1 (2016-Sep-12)
   - old jsrsasign.js is used in npm package. now fixed.
 
-* Changes between 5.1.0 to 6.0.0 (2016-Sep-11)
+* Changes from 5.1.0 to 6.0.0 (2016-Sep-11)
   - As of so much request to remove Node functions
     in nodeutil.js, nodeutil.js have been removed from
     jsrsasign.js package. Then it is moved to
@@ -46,7 +51,7 @@ ChangeLog for jsrsasign
     Some sample Node.js scripts in "sample_node"
     will be updated later.
 
-* Changes between 5.0.15 to 5.1.0 (2016-Sep-07)
+* Changes from 5.0.15 to 5.1.0 (2016-Sep-07)
   - jwsjs 2.0.15 to 2.1.0
     - refactoring and API document update
     - addSignature, verifyAll, verifyNth method added
@@ -58,7 +63,7 @@ ChangeLog for jsrsasign
   - index*.html
     - update
 
-* Changes between 5.0.14 to 5.0.15 (2016-Aug-26)
+* Changes from 5.0.14 to 5.0.15 (2016-Aug-26)
   - pemtojwk and jwktopkcs8 added to sample node scripts
   - asn1 1.0.9 to 1.0.10
     - ASN1Util.getPEMStringFromHex modified not to use
@@ -69,7 +74,7 @@ ChangeLog for jsrsasign
     ext/THIRDPARTY_LICENSE.pjhash.txt for
     Paul Johnston's Hash Algorithm JavaScript
 
-* Changes between 5.0.13 to 5.0.14
+* Changes from 5.0.13 to 5.0.14
   - keyutil 1.0.12 to 1.0.13
     - KEYUTIL.getJWKFromKey() method added to get
       RFC 7517 JSON Web Key(JWK) object from RSAKey or
@@ -89,7 +94,7 @@ ChangeLog for jsrsasign
   - tool_certview.html
     - loading script fix
 
-* Changes between 5.0.12 to 5.0.13
+* Changes from 5.0.12 to 5.0.13
   - base64x.js
     - KJUR.lang.String class added and its some static
       methods isHex, isInteger, isBase64, isBase64URL and
@@ -104,7 +109,7 @@ ChangeLog for jsrsasign
   - CryptoJS codes were moved to ext/cj directory.
   - tool_b64u{enc,dec}.html script URL fix
 
-* Changes between 5.0.11 to 5.0.12
+* Changes from 5.0.11 to 5.0.12
   - jws between 3.3.3 to 3.3.4
     - support grace period for verifyJWT method.
       This is to allow time difference between 
@@ -112,7 +117,7 @@ ChangeLog for jsrsasign
   - asn1hex
     - API document update
 
-* Changes between 5.0.10 to 5.0.11
+* Changes from 5.0.10 to 5.0.11
   - X509v1 certificate support in KEYUTIL.getKey and
     X509.getPublicKeyInfoPropOfCertPEM
   - sample_node/showcert added
@@ -130,7 +135,7 @@ ChangeLog for jsrsasign
     - add 'SN' (i.e. SurName) support in distinguished name.
       Thanks @kurtsson.
 
-* Changes between 5.0.9 to 5.0.10
+* Changes from 5.0.9 to 5.0.10
   - sample_node/jwtverify bugfix
   - x509 1.1.7 to 1.1.8
     - following methods are added:
@@ -141,12 +146,12 @@ ChangeLog for jsrsasign
       - getExtSubjectAltName()
       - getExtCRLDistributionPointsURI()
 
-* Changes between 5.0.8 to 5.0.9 (2016-Apr-19)
+* Changes from 5.0.8 to 5.0.9 (2016-Apr-19)
   - ext/rng.js
     - use window.crypto.getRandomValues for SecureRandom
       if available. (ToDo also for Node.js)
 
-* Changes between 5.0.7 to 5.0.8 (2016-Apr-14)
+* Changes from 5.0.7 to 5.0.8 (2016-Apr-14)
   - LICENSE.txt small update for years of copyright.
   - ext/x64-core*.js was missed and added
   - x509 1.1.6 to 1.1.7
@@ -160,21 +165,21 @@ ChangeLog for jsrsasign
   - each *.min.js files are moved to min/ folder.
   - clean up old *-all-min.js
 
-* Changes between 5.0.6 to 5.0.7 (2016-Mar-05)
+* Changes from 5.0.6 to 5.0.7 (2016-Mar-05)
   - tool_csr.html fix for subject parameter.
   - jsrsasign-latest-all-min wrong order in concatination.
     This raise wrong PKCS#5/8 encrypted PEM private key 
     generation in KEYUTIL.getPEM().
   - sample_node/asn1extract added
 
-* Changes between 5.0.5 to 5.0.6 (2016-Feb-28)
+* Changes from 5.0.5 to 5.0.6 (2016-Feb-28)
   - bower.json name space fix
   - crypto-1.0 1.0.4 to 1.0.5
     - file removed
   - crypto-1.1 1.1.7 to 1.1.8
     - remove unnecessary evals for strict mode.
 
-* Changes between 5.0.4 to 5.0.5
+* Changes from 5.0.4 to 5.0.5
   - node sample 'jwssign', 'jwtverify', 'asn1dump'
     and 'pemtobin'  added.
   - base64x 1.1.5 to 1.1.6
@@ -189,12 +194,12 @@ ChangeLog for jsrsasign
   - jsrsasign-{1.2,1.2.1,1.3,1.3.1,2.0.0}.tgz are removed
     since they can get from github release/tags.
 
-* Changes between 5.0.2 to 5.0.4 (2015-Nov-23)
+* Changes from 5.0.2 to 5.0.4 (2015-Nov-23)
   - jwtverify, asn1dump and pemtobin sample Node script in 
     sample_node directory. 
     There is a bower release but not in npm.
 
-* Changes between 5.0.1 to 5.0.2 (2015-Nov-11)
+* Changes from 5.0.1 to 5.0.2 (2015-Nov-11)
   - jws 3.3.1 to 3.3.2
     - RFC 7638 getJWKthumbprint method added
   - base64x 1.1.5 to 1.1.6
@@ -204,11 +209,11 @@ ChangeLog for jsrsasign
   - npm
     - add reference to intarystrtohex and CryptoJS
 
-* Changes between 5.0.0 to 5.0.1 (2015-Oct-17)
+* Changes from 5.0.0 to 5.0.1 (2015-Oct-17)
   - keyutil 1.0.10 to 1.0.11
     - add support for bare RSA NED hexadecimal key in KEYUTIL.getKey
 
-* Changes between 4.9.2 to 5.0.0 (2015-Oct-14)
+* Changes from 4.9.2 to 5.0.0 (2015-Oct-14)
   - *NOTICE* release 4.10.0 declined since API semver violation
   - some JWS HS* and Crypto Mac signature issue was fixed.
   - crypto 1.1.6 to 1.1.7
@@ -233,17 +238,17 @@ ChangeLog for jsrsasign
     - add support for RSA private key without
       P/Q/DP/DQ/COEFF of JWK
 
-* Changes between 4.9.1 to 4.9.2 (2015-Oct-02)
+* Changes from 4.9.1 to 4.9.2 (2015-Oct-02)
   - latest asn1x509 1.0.13 was missed in the latest-min.js and
     it was fixed.
 
-* Changes between 4.9.0 to 4.9.1
+* Changes from 4.9.0 to 4.9.1
   - asn1x509 1.0.12 t 1.0.13
     - setByObject method added to X500Name class
     - {C: "US", O: "test"} representation now can be used
       in newCertPEM method in X509Util class.
 
-* Changes between 4.8.6 to 4.9.0
+* Changes from 4.8.6 to 4.9.0
   - certificate signing request(CSR/PKCS#10) generation support
     asn1csr-1.0.js added
   - asn1 1.0.7 to 1.0.8
@@ -254,19 +259,19 @@ ChangeLog for jsrsasign
     - fix and small program comment update
   - jws: small API document update
 
-* Changes between 4.8.5 to 4.8.6
+* Changes from 4.8.5 to 4.8.6
   - npm package and bower fix
 
-* Changes between 4.8.4 to 4.8.5
+* Changes from 4.8.4 to 4.8.5
   - some of small fix release for npm and jsrsasign-latest-all-min.
   - jwt 3.2.3 to 3.2.4
     - jws.js update for validation of jti confirming to RFC 7519
       as optional in verifyJWT method. Thanks @stephanbacheller.
 
-* Changes between 4.8.3 to 4.8.4
+* Changes from 4.8.3 to 4.8.4
   - some of small fix release for npm.
 
-* Changes between 4.8.2 to 4.8.3
+* Changes from 4.8.2 to 4.8.3
   - crypto 1.1.5 to 1.1.6
     - Signature.sign method fix in automatic detection of private key
   - asn1 1.0.6 to 1.0.7
@@ -284,7 +289,7 @@ ChangeLog for jsrsasign
     - test/qunit-do-asn1-oidhex.html
     - test/qunit-do-asn1hex-dump.html
 
-* Changes between 4.8.1 to 4.8.2
+* Changes from 4.8.1 to 4.8.2
   - keyutil 1.0.8 to 1.0.9
     - getKey EC private/public key bug #69 fix
   - node npm module officially released at npmjs.com
@@ -292,7 +297,7 @@ ChangeLog for jsrsasign
     - ChangeLog.txt
     - keyutil-1.0*.js
 
-* Changes between 4.8.0 to 4.8.1
+* Changes from 4.8.0 to 4.8.1
   - keyutil 1.0.7 to 1.0.8
     - RFC 7517 JSON Web Key(JWK) support 
       for RSA/ECC private/public key added in KEYUTIL.getKey method
@@ -305,7 +310,7 @@ ChangeLog for jsrsasign
     - test/qunit-do-keyutil-jwk.html
     - test/qunit-do-keyutil-pairpem.html
 
-* Changes between 4.7.2 to 4.8.0 (2015-Jun-01)
+* Changes from 4.7.2 to 4.8.0 (2015-Jun-01)
   - Now jsjws JSON Web Signtaure library is merged into
     jsrsasign.
   - RFC 7519 JWT JSON Web Token full validation support.
@@ -330,7 +335,7 @@ ChangeLog for jsrsasign
     - ext/json-sans-eval*.js
     - test/qunit-do-jws*.html
 
-* Changes between 4.7.1 to 4.7.2 (2015-May-18)
+* Changes from 4.7.1 to 4.7.2 (2015-May-18)
   - x509 1.1.4 to 1.1.6
     - add some X.509v3 extension parsing methods.
       following methods are added:
@@ -357,14 +362,14 @@ ChangeLog for jsrsasign
     - ext/yahoo-min.js
     - ext/yahoo.js
 
-* Changes between 4.7.0 to 4.7.1 (2015-May-14)
+* Changes from 4.7.0 to 4.7.1 (2015-May-14)
   - asn1x509 1.0.9 to 1.0.10
     - certissuer and certsubj supported in GeneralName class
   - x509 1.1.3 to 1.1.4
     - getPublicKeyInfoPosOfCertHEX added
   - tool_httpscfg.html added
 
-* Changes between 4.6.0 to 4.7.0 (2014-Jul-07)
+* Changes from 4.6.0 to 4.7.0 (2014-Jul-07)
   - RFC 5126 CAdES format supported
     - CAdES-BES/EPES/T support in this version.
   - asn1cades (NEW)
@@ -386,7 +391,7 @@ ChangeLog for jsrsasign
   - crypto
     - fix for Signature.signHex/Str
 
-* Changes between 4.5.0 to 4.6.0 (2014-May-25)
+* Changes from 4.5.0 to 4.6.0 (2014-May-25)
   - RFC 3161 Time Stamp Protocol generator is now supported.
   - asn1tsp 1.0.0 (NEW)
   - asn1 1.0.5 to 1.0.6
@@ -407,7 +412,7 @@ ChangeLog for jsrsasign
     - fix signing key bug
     - support ExtKeyUsage
 
-* Changes between 4.2.3 to 4.5.0 (2014-May-17)
+* Changes from 4.2.3 to 4.5.0 (2014-May-17)
   - RFC 5652 CMS SignedData generator is now supported.
   - asn1cms 1.0.0 (NEW)
   - asn1 1.0.4 to 1.0.5
@@ -420,13 +425,13 @@ ChangeLog for jsrsasign
   - keyutil 1.0.6 to 1.0.7
     - KEYUTIL.getHexFromPEM can omit sHead now.
 
-* Changes between 4.2.2 to 4.2.3 (2014-May-14) minor update
+* Changes from 4.2.2 to 4.2.3 (2014-May-14) minor update
   - keyutil 1.0.6
     - isPublic and isPrivate flag fix for generateKey method.
   - tool_ca.html
     - fix keyutil.js reference
 
-* Changes between 4.2.1 to 4.2.2 (2014-Apr-19)
+* Changes from 4.2.1 to 4.2.2 (2014-Apr-19)
   - asn1x509 1.0.7 to 1.0.8
     - add setSignatureHex method for Certificate class
     - modify newCertPEM method to support to specify signature
@@ -444,7 +449,7 @@ ChangeLog for jsrsasign
   - Test codes:
     - add test/qunit-do-keyutil-csr.html
 
-* Changes between 4.2.0 to 4.2.1 (2013-Oct-11)
+* Changes from 4.2.0 to 4.2.1 (2013-Oct-11)
   - keyutil 1.0.3 to 1.0.4
     - new getPEM method for exporting keys
     - exporting PKCS#8 encrypted private key also supported.
@@ -452,7 +457,7 @@ ChangeLog for jsrsasign
     - additional DSA support
     - make old methods are marked as deprecated.
 
-* Changes between 4.1.6 to 4.2.0 (2013-Oct-06)
+* Changes from 4.1.6 to 4.2.0 (2013-Oct-06)
   - DSA support added to most of classes.
   - now RSAKey/KJUR.crypto.{ECDSA,DSA} class has new properties
     isPrivate and isPublic
@@ -471,7 +476,7 @@ ChangeLog for jsrsasign
     - method setPrivateKey, setPublicKey are changed to
       setPrivate and setPublic respectively to align RSA/ECDSA class.
 
-* Changes between 4.1.5 to 4.1.6 (2013-Oct-02)
+* Changes from 4.1.5 to 4.1.6 (2013-Oct-02)
   - newly dsa-modified 1.0.0 added
     - This is a DSA algorithm ported from github.com/openpgpjs
     - However Signature and KEYUTIL doesn't support DSA yet.
@@ -482,14 +487,14 @@ ChangeLog for jsrsasign
   - keyutil 1.0.1 to 1.0.2
     - fix typo in newEncryptedPKCS5PEM method.
 
-* Changes between 4.1.4 to 4.1.5 (2013-Sep-29)
+* Changes from 4.1.4 to 4.1.5 (2013-Sep-29)
   - keyutil 1.0.0 to 1.0.1
     - new generateKeypair method added
     - fix getKey method
   - add LICENSE file for YUI.
   - name jsrsasign-4.1.4-all-min.js is the same but updated.
 
-* Changes between 4.1.3 to 4.1.4 (2013-Sep-24)
+* Changes from 4.1.3 to 4.1.4 (2013-Sep-24)
   - ext/cryptojs-312-core-fix*.js added to fix HmacSHA224/384 issue.
     Please use 
       'http://kjur.github.io/jsrsasign/ext/cryptojs-312-core-fix.js' or 
@@ -497,7 +502,7 @@ ChangeLog for jsrsasign
       'http://kjur.github.io/jsrsasign/jsrsasign-4.1.4-all-min.js'
     instead of orignal 'core.js' of CryptoJS.
 
-* Changes between 4.1.2 to 4.1.3 (2013-Sep-23)
+* Changes from 4.1.2 to 4.1.3 (2013-Sep-23)
   - keyutil 1.0.0
     - PKCS5PKEY class is moved to KEYUTIL class.
       PKCS5PKEY is now deprecated and backward compatibility purpose only.
@@ -510,12 +515,12 @@ ChangeLog for jsrsasign
   - ext/base64.js
       fix for "var v;" for strict
 
-* Changes between 4.1.1 to 4.1.2 (2013-Sep-12)
+* Changes from 4.1.1 to 4.1.2 (2013-Sep-12)
   - asn1 1.0.2 to 1.0.3
     - new method ASN1Util.newObject added.
   - all in one script 'jsrsasign-4.1.2-all-min.js' added.
 
-* Changes between 4.1.0 to 4.1.1 (2013-Aug-27)
+* Changes from 4.1.0 to 4.1.1 (2013-Aug-27)
   - crypto 1.1.3 to 1.1.4
     - add hmacmd5, hmacripemd160 support and test code
   - ecdsa-modified 1.0.2 to 1.0.3
@@ -528,7 +533,7 @@ ChangeLog for jsrsasign
       - biRSSigToASN1Sig
   - all QUnit test code is moved for latest QUnit 1.12
 
-* Changes between 4.0.5 to 4.1.0 (2013-Aug-25)
+* Changes from 4.0.5 to 4.1.0 (2013-Aug-25)
   - crypto 1.1.2 to 1.1.3
     - RSAPSS(*withRSAandMGF1) support in Signature class
     - powerful init method to specify any type of key and
@@ -555,16 +560,16 @@ ChangeLog for jsrsasign
   - asn1hex 1.1.1 to 1.1.2
     - encapsulated as class
 
-* Changes between 4.0.4 to 4.0.5 (2013-Aug-16)
+* Changes from 4.0.4 to 4.0.5 (2013-Aug-16)
   - crypto 1.1.1 to 1.1.2
     - KJUR.crypto.Mac (message authentication code) class added
 
-* Changes between 4.0.3 to 4.0.4 (2013-Jul-30)
+* Changes from 4.0.3 to 4.0.4 (2013-Jul-30)
   - rsasign 1.2.4 to 1.2.5
     - verifyStringPSS argument change from BigInteger object biSig 
       to hexadecimal string hSig
       
-* Changes between 4.0.2 to 4.0.3 (2013-Jul-29)
+* Changes from 4.0.2 to 4.0.3 (2013-Jul-29)
   - crypto.js 1.1.0 to 1.1.1
     - Signature and MessageDigest class supports default provider.
       So no need to specify provider.
@@ -580,18 +585,18 @@ ChangeLog for jsrsasign
   - add some QUnit test code
     - test/qunit-do-{pkcs5-pub, rsasign-pss}.html 
 
-* Changes between 4.0.1 to 4.0.2 (2013-Jul-23)
+* Changes from 4.0.1 to 4.0.2 (2013-Jul-23)
   - RSAPSS signing and validation fix by Dave(github.com/davedoesdev)
     (base64x,crypto,rsasign)
 
-* Changes between 4.0.0 to 4.0.1
+* Changes from 4.0.0 to 4.0.1
   - rsasign-1.2.js
     - small fix for PSS by Dave's contribution (github.com/davedoesdev)
     - However still having issue in PSS
   - NEW base64x-1.1.js 
     - moved from github.com/kjur/jsjws
 
-* Changes between 3.1.5 and 4.0.0 (2013-Jul-18)
+* Changes from 3.1.5 and 4.0.0 (2013-Jul-18)
   - newly added ECC key and ECDSA support
     - MODIFY crypto-1.1.js - Signature class now supports ECDSA
     - NEW ecdsa-modified-1.0.js - modifed version of Bitcoin ecdsa.js
@@ -600,22 +605,22 @@ ChangeLog for jsrsasign
     - NEW ext/ec-patch.js - patch to Tom Wu's EC library by Bitcoin
     - supported curves are secp{256r1,256k1,384r1}
 
-* Changes between 3.1.4 and 3.1.5 (2013-Jun-11)
+* Changes from 3.1.4 and 3.1.5 (2013-Jun-11)
   - move third party library to ext directory.
   - fix script URLs in sample-rsasign.html 
 
-* Changes between 3.1.3 and 3.1.4 (2013-May-31)
+* Changes from 3.1.3 and 3.1.4 (2013-May-31)
   - asn1-1.0.js update 1.0.1 to 1.0.2
     - method ASN1Util.getPEMStringFromHex added
   - asn1x509-1.0.js update 1.0.3 to 1.0.4
     - mehtod X509Util.getPKCS8PubKeyPEMfromRSAKey added
 
-* Changes between 3.1.2 and 3.1.3 (2013-May-28)
+* Changes from 3.1.2 and 3.1.3 (2013-May-28)
   - crypto-1.0.js update 1.0.3 to 1.0.4
     - support "sjcl" (i.e. Stanford JavaScript Crypto Library) 
       provider with sha256 in MessageDigest class
 
-* Changes between 3.1.1 and 3.1.2 (2013-May-27)
+* Changes from 3.1.1 and 3.1.2 (2013-May-27)
   - pkcs5pkey-1.0.js update 1.0.2 to 1.0.3
     - following method added to support loading encrypted PKCS#8 priavte key
       - getRSAKeyFromEncryptedPKCS8PEM
@@ -624,23 +629,23 @@ ChangeLog for jsrsasign
       - parseHexOfEncryptedPKCS8
       - getRSAKeyFromPlainPKCS8Hex
 
-* Changes between 3.1.0 and 3.1.1
+* Changes from 3.1.0 and 3.1.1
   - pkcs5pkey-1.0.js update 1.0.1 to 1.0.2
     - method 'getRSAKeyFromEncryptedPKCS5PEM', 'getEryptedPKCS5PEMFromPrvKeyHex'
       'getEryptedPKCS5PEMFromRSAKey' and 'newEncryptedPKCS5PEM'
       added to PKCS5PKEY to get encrypted PEM key.
 
-* Changes between 3.0.5 and 3.1.0
+* Changes from 3.0.5 and 3.1.0
   - asn1x509-1.0.js update 1.0.2 to 1.0.3
     CRL, TBSCertList and CRLEntry class added to KJUR.asn1.x509
     to issue CRL.
 
-* Changes between 3.0.4 and 3.0.5
+* Changes from 3.0.4 and 3.0.5
   - pkcs5peky-1.0 update 1.0.0 to 1.0.1
     method getRSAKeyFromPlainPKCS8PEM added to PKCS5PKEY class to load
     unencrypted PEM formatted PKCS#8 private key.
 
-* Changes between 3.0.3 and 3.0.4
+* Changes from 3.0.3 and 3.0.4
   - rsasign-1.2.js update 1.2.1 to 1.2.2
     - hash algs used were changed from  to MessageDigest(CryptoJS base). 
       So now jsrsasign doesn't use Paul Johnston's
@@ -650,17 +655,17 @@ ChangeLog for jsrsasign
   - crypto-1.0.js update 1.0.2 to 1.0.3
     - add static hash functions {md5,sha1,sha256,sha512,ripemd160} to KJUR.crypto.Util
 
-* Changes between 3.0.2 and 3.0.3
+* Changes from 3.0.2 and 3.0.3
   - asn1x509-1.0.js update to 1.0.1
     - ExtKeyUsage extension class added.
 
-* Changes between 3.0.1 and 3.0.2
+* Changes from 3.0.1 and 3.0.2
   - crypto-1.0.js update to 1.0.2
     - Signature now supports signature verification:
       - initVerifyByPublicKey and initVerifyByCertificatePEM method
         added.
 
-* Changes between 3.0.0 and 3.0.1
+* Changes from 3.0.0 and 3.0.1
   - crypto-1.0.js update to 1.0.1
     - MessageDigest class now support md5, sha224, sha256, sha384, 
       sha512 and ripemd160 of 'cryptojs' provider.
@@ -672,7 +677,7 @@ ChangeLog for jsrsasign
     - Certificate.setRsaPrvKeyByPEMandPass(pem,pass) method added and
       supports new constructor property 'rsaprvpem' and 'rsaprvpas'.
 
-* Changes between 2.0.0 and 3.0.0
+* Changes from 2.0.0 and 3.0.0
   - New features:
     - crypto-1.0.js: MessageDigest and Signature class like Java JCE
     - asn1-1.0.js  : ASN.1 Primitive Encoder class
@@ -687,24 +692,24 @@ ChangeLog for jsrsasign
     - base64.js: small fix
   - gradually moving to CryptoJS library from other hash library
 
-* Changes between 1.3.1 and 2.0.0 [Apr 14, 2013]0
+* Changes from 1.3.1 and 2.0.0 [Apr 14, 2013]0
   - newly added pkcs5pkey.js and PKCS5PKEY class to support 
     passcode encrypted PKCS#5 private key.
 
-* Changes between 1.3 and 1.3.1 [Apr 14, 2013]
+* Changes from 1.3 and 1.3.1 [Apr 14, 2013]
   - rsapem.js updated to 1.1 to 1.1.1
     - method RSAKey.readPrivateKeyFromASN1HexString added.
 
-* Changes between 1.2.1 and 1.3 [May 10, 2012]
+* Changes from 1.2.1 and 1.3 [May 10, 2012]
   - ASN1HEX class defined in asn1hex.js
   - update x509.js and rsapem.js for ASN1HEX class.
   - enhance ASN1HEX and X509class.
   - JavaScript API document is available.
 
-* Changes between 1.2 and 1.2.1 [May 03, 2012]
+* Changes from 1.2 and 1.2.1 [May 03, 2012]
   - now minified files also provided
 
-* Changes between 1.1 and 1.2 [Apr 30, 2012]
+* Changes from 1.1 and 1.2 [Apr 30, 2012]
   - fixed critial signature generation and verification bug related to
     zero padding of big integer.
   - add MD5, SHA512 and RIPEMD-160 support
@@ -712,7 +717,7 @@ ChangeLog for jsrsasign
     Paul Johnston (See http://pajhome.org.uk/crypt/md5/md5.html).
   - now download site is hosted on github.
 
-* Changes between 1.0 and 1.1 [Sep 25, 2010]
+* Changes from 1.0 and 1.1 [Sep 25, 2010]
   - some web contents update
 
 * 1.0 Initial Relasse [Jun 03, 2010]

@@ -251,117 +251,125 @@
 <span class='line'>244</span> </span><span class="NAME">YAHOO.lang.extend</span><span class="PUNC">(</span><span class="NAME">KJUR.asn1.csr.CertificationRequestInfo</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.ASN1Object</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>245</span> 
 <span class='line'>246</span> </span><span class="COMM">/**
-<span class='line'>247</span>  * Certification Request (CSR/PKCS#10) utilities class
+<span class='line'>247</span>  * Certification Request (CSR/PKCS#10) utilities class&lt;br/>
 <span class='line'>248</span>  * @name KJUR.asn1.csr.CSRUtil
 <span class='line'>249</span>  * @class Certification Request (CSR/PKCS#10) utilities class
-<span class='line'>250</span>  */</span><span class="WHIT">
-<span class='line'>251</span> </span><span class="NAME">KJUR.asn1.csr.CSRUtil</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>252</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>253</span> 
-<span class='line'>254</span> </span><span class="COMM">/**
-<span class='line'>255</span>  * generate a PEM format of CSR/PKCS#10 certificate signing request
-<span class='line'>256</span>  * @name newCSRPEM
-<span class='line'>257</span>  * @memberOf KJUR.asn1.csr.CSRUtil
-<span class='line'>258</span>  * @function
-<span class='line'>259</span>  * @param {Array} param parameter to generate CSR
-<span class='line'>260</span>  * @since jsrsasign 4.9.0 asn1csr 1.0.0
-<span class='line'>261</span>  * @description
-<span class='line'>262</span>  * This method can generate a CSR certificate signing
-<span class='line'>263</span>  * request by a simple JSON object which has following parameters:
-<span class='line'>264</span>  * &lt;ul>
-<span class='line'>265</span>  * &lt;li>subject - parameter to be passed to {@link KJUR.asn1.x509.X500Name}&lt;/li>
-<span class='line'>266</span>  * &lt;li>sbjpubkey - parameter to be passed to {@link KEYUTIL.getKey}&lt;/li>
-<span class='line'>267</span>  * &lt;li>sigalg - signature algorithm name (ex. SHA256withRSA)&lt;/li>
-<span class='line'>268</span>  * &lt;li>sbjprvkey - parameter to be passed to {@link KEYUTIL.getKey}&lt;/li>
-<span class='line'>269</span>  * &lt;/ul>
-<span class='line'>270</span>  *
-<span class='line'>271</span>  * @example
-<span class='line'>272</span>  * // 1) by key object
-<span class='line'>273</span>  * pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
-<span class='line'>274</span>  *   subject: {str: '/C=US/O=Test/CN=example.com'},
-<span class='line'>275</span>  *   sbjpubkey: pubKeyObj,
-<span class='line'>276</span>  *   sigalg: "SHA256withRSA",
-<span class='line'>277</span>  *   sbjprvkey: prvKeyObj
-<span class='line'>278</span>  * });
-<span class='line'>279</span>  *
-<span class='line'>280</span>  * // 2) by private/public key PEM 
+<span class='line'>250</span>  * @description
+<span class='line'>251</span>  * This class provides utility static methods for CSR/PKCS#10.
+<span class='line'>252</span>  * Here is a list of methods:
+<span class='line'>253</span>  * &lt;ul>
+<span class='line'>254</span>  * &lt;li>{@link KJUR.asn1.csr.CSRUtil.newCSRPEM}&lt;/li>
+<span class='line'>255</span>  * &lt;li>{@link KJUR.asn1.csr.CSRUtil.getInfo}&lt;/li>
+<span class='line'>256</span>  * &lt;/ul>
+<span class='line'>257</span>  * &lt;br/>
+<span class='line'>258</span>  */</span><span class="WHIT">
+<span class='line'>259</span> </span><span class="NAME">KJUR.asn1.csr.CSRUtil</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>260</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>261</span> 
+<span class='line'>262</span> </span><span class="COMM">/**
+<span class='line'>263</span>  * generate a PEM format of CSR/PKCS#10 certificate signing request
+<span class='line'>264</span>  * @name newCSRPEM
+<span class='line'>265</span>  * @memberOf KJUR.asn1.csr.CSRUtil
+<span class='line'>266</span>  * @function
+<span class='line'>267</span>  * @param {Array} param parameter to generate CSR
+<span class='line'>268</span>  * @since jsrsasign 4.9.0 asn1csr 1.0.0
+<span class='line'>269</span>  * @description
+<span class='line'>270</span>  * This method can generate a CSR certificate signing
+<span class='line'>271</span>  * request by a simple JSON object which has following parameters:
+<span class='line'>272</span>  * &lt;ul>
+<span class='line'>273</span>  * &lt;li>subject - parameter to be passed to {@link KJUR.asn1.x509.X500Name}&lt;/li>
+<span class='line'>274</span>  * &lt;li>sbjpubkey - parameter to be passed to {@link KEYUTIL.getKey}&lt;/li>
+<span class='line'>275</span>  * &lt;li>sigalg - signature algorithm name (ex. SHA256withRSA)&lt;/li>
+<span class='line'>276</span>  * &lt;li>sbjprvkey - parameter to be passed to {@link KEYUTIL.getKey}&lt;/li>
+<span class='line'>277</span>  * &lt;/ul>
+<span class='line'>278</span>  *
+<span class='line'>279</span>  * @example
+<span class='line'>280</span>  * // 1) by key object
 <span class='line'>281</span>  * pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
 <span class='line'>282</span>  *   subject: {str: '/C=US/O=Test/CN=example.com'},
-<span class='line'>283</span>  *   sbjpubkey: pubKeyPEM,
+<span class='line'>283</span>  *   sbjpubkey: pubKeyObj,
 <span class='line'>284</span>  *   sigalg: "SHA256withRSA",
-<span class='line'>285</span>  *   sbjprvkey: prvKeyPEM
+<span class='line'>285</span>  *   sbjprvkey: prvKeyObj
 <span class='line'>286</span>  * });
 <span class='line'>287</span>  *
-<span class='line'>288</span>  * // 3) with generateKeypair
-<span class='line'>289</span>  * kp = KEYUTIL.generateKeypair("RSA", 2048);
-<span class='line'>290</span>  * pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
-<span class='line'>291</span>  *   subject: {str: '/C=US/O=Test/CN=example.com'},
-<span class='line'>292</span>  *   sbjpubkey: kp.pubKeyObj,
-<span class='line'>293</span>  *   sigalg: "SHA256withRSA",
-<span class='line'>294</span>  *   sbjprvkey: kp.prvKeyObj
-<span class='line'>295</span>  * });
-<span class='line'>296</span>  */</span><span class="WHIT">
-<span class='line'>297</span> </span><span class="NAME">KJUR.asn1.csr.CSRUtil.newCSRPEM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">param</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>298</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ns1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.csr</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>299</span> 
-<span class='line'>300</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.subject</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"parameter subject undefined"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>301</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.sbjpubkey</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"parameter sbjpubkey undefined"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>302</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.sigalg</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"parameter sigalg undefined"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>303</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.sbjprvkey</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"parameter sbjpubkey undefined"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>304</span> 
-<span class='line'>305</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">csri</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ns1.CertificationRequestInfo</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>306</span> </span><span class="WHIT">    </span><span class="NAME">csri.setSubjectByParam</span><span class="PUNC">(</span><span class="NAME">param.subject</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>307</span> </span><span class="WHIT">    </span><span class="NAME">csri.setSubjectPublicKeyByGetKey</span><span class="PUNC">(</span><span class="NAME">param.sbjpubkey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>308</span> 
-<span class='line'>309</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">csr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ns1.CertificationRequest</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'csrinfo'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">csri</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>310</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">prvKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KEYUTIL.getKey</span><span class="PUNC">(</span><span class="NAME">param.sbjprvkey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>311</span> </span><span class="WHIT">    </span><span class="NAME">csr.sign</span><span class="PUNC">(</span><span class="NAME">param.sigalg</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">prvKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>288</span>  * // 2) by private/public key PEM 
+<span class='line'>289</span>  * pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
+<span class='line'>290</span>  *   subject: {str: '/C=US/O=Test/CN=example.com'},
+<span class='line'>291</span>  *   sbjpubkey: pubKeyPEM,
+<span class='line'>292</span>  *   sigalg: "SHA256withRSA",
+<span class='line'>293</span>  *   sbjprvkey: prvKeyPEM
+<span class='line'>294</span>  * });
+<span class='line'>295</span>  *
+<span class='line'>296</span>  * // 3) with generateKeypair
+<span class='line'>297</span>  * kp = KEYUTIL.generateKeypair("RSA", 2048);
+<span class='line'>298</span>  * pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
+<span class='line'>299</span>  *   subject: {str: '/C=US/O=Test/CN=example.com'},
+<span class='line'>300</span>  *   sbjpubkey: kp.pubKeyObj,
+<span class='line'>301</span>  *   sigalg: "SHA256withRSA",
+<span class='line'>302</span>  *   sbjprvkey: kp.prvKeyObj
+<span class='line'>303</span>  * });
+<span class='line'>304</span>  */</span><span class="WHIT">
+<span class='line'>305</span> </span><span class="NAME">KJUR.asn1.csr.CSRUtil.newCSRPEM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">param</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>306</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ns1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.csr</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>307</span> 
+<span class='line'>308</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.subject</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"parameter subject undefined"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>309</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.sbjpubkey</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"parameter sbjpubkey undefined"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>310</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.sigalg</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"parameter sigalg undefined"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>311</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.sbjprvkey</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"parameter sbjpubkey undefined"</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>312</span> 
-<span class='line'>313</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pem</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">csr.getPEMString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>314</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">pem</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>315</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>313</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">csri</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ns1.CertificationRequestInfo</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>314</span> </span><span class="WHIT">    </span><span class="NAME">csri.setSubjectByParam</span><span class="PUNC">(</span><span class="NAME">param.subject</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>315</span> </span><span class="WHIT">    </span><span class="NAME">csri.setSubjectPublicKeyByGetKey</span><span class="PUNC">(</span><span class="NAME">param.sbjpubkey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>316</span> 
-<span class='line'>317</span> </span><span class="COMM">/**
-<span class='line'>318</span>  * get field values from CSR/PKCS#10 PEM string&lt;br/>
-<span class='line'>319</span>  * @name getInfo
-<span class='line'>320</span>  * @memberOf KJUR.asn1.csr.CSRUtil
-<span class='line'>321</span>  * @function
-<span class='line'>322</span>  * @param {String} sPEM PEM string of CSR/PKCS#10
-<span class='line'>323</span>  * @returns {Object} JSON object with parsed parameters such as name or public key
-<span class='line'>324</span>  * @since jsrsasign 6.1.3 asn1csr 1.0.1
-<span class='line'>325</span>  * @description
-<span class='line'>326</span>  * This method parses PEM CSR/PKCS#1 string and retrieves
-<span class='line'>327</span>  * subject name and public key. Following parameters are available in the
-<span class='line'>328</span>  * resulted JSON object.
-<span class='line'>329</span>  * &lt;ul>
-<span class='line'>330</span>  * &lt;li>subject.name - subject name string (ex. /C=US/O=Test)&lt;/li>
-<span class='line'>331</span>  * &lt;li>subject.hex - hexadecimal string of X.500 Name of subject&lt;/li>
-<span class='line'>332</span>  * &lt;li>pubkey.obj - subject public key object such as RSAKey, KJUR.crypto.{ECDSA,DSA}&lt;/li>
-<span class='line'>333</span>  * &lt;li>pubkey.hex - hexadecimal string of subject public key&lt;/li>
-<span class='line'>334</span>  * &lt;/ul>
-<span class='line'>335</span>  *
-<span class='line'>336</span>  * @example
-<span class='line'>337</span>  * o = KJUR.asn1.csr.CSRUtil.getInfo("-----BEGIN CERTIFICATE REQUEST...");
-<span class='line'>338</span>  * console.log(o.subject.name) &rarr; "/C=US/O=Test"
-<span class='line'>339</span>  */</span><span class="WHIT">
-<span class='line'>340</span> </span><span class="NAME">KJUR.asn1.csr.CSRUtil.getInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">sPEM</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>341</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>342</span> </span><span class="WHIT">    </span><span class="NAME">result.subject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>343</span> </span><span class="WHIT">    </span><span class="NAME">result.pubkey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>344</span> 
-<span class='line'>345</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">sPEM.indexOf</span><span class="PUNC">(</span><span class="STRN">"-----BEGIN CERTIFICATE REQUEST"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>346</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"argument is not PEM file"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>347</span> 
-<span class='line'>348</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KEYUTIL.getHexFromPEM</span><span class="PUNC">(</span><span class="NAME">sPEM</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"CERTIFICATE REQUEST"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>349</span> 
-<span class='line'>350</span> </span><span class="WHIT">    </span><span class="NAME">result.subject.hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getDecendantHexTLVByNthList</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>351</span> </span><span class="WHIT">    </span><span class="NAME">result.subject.name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">X509.hex2dn</span><span class="PUNC">(</span><span class="NAME">result.subject.hex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>317</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">csr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ns1.CertificationRequest</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'csrinfo'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">csri</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>318</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">prvKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KEYUTIL.getKey</span><span class="PUNC">(</span><span class="NAME">param.sbjprvkey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>319</span> </span><span class="WHIT">    </span><span class="NAME">csr.sign</span><span class="PUNC">(</span><span class="NAME">param.sigalg</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">prvKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>320</span> 
+<span class='line'>321</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pem</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">csr.getPEMString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>322</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">pem</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>323</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>324</span> 
+<span class='line'>325</span> </span><span class="COMM">/**
+<span class='line'>326</span>  * get field values from CSR/PKCS#10 PEM string&lt;br/>
+<span class='line'>327</span>  * @name getInfo
+<span class='line'>328</span>  * @memberOf KJUR.asn1.csr.CSRUtil
+<span class='line'>329</span>  * @function
+<span class='line'>330</span>  * @param {String} sPEM PEM string of CSR/PKCS#10
+<span class='line'>331</span>  * @returns {Object} JSON object with parsed parameters such as name or public key
+<span class='line'>332</span>  * @since jsrsasign 6.1.3 asn1csr 1.0.1
+<span class='line'>333</span>  * @description
+<span class='line'>334</span>  * This method parses PEM CSR/PKCS#1 string and retrieves
+<span class='line'>335</span>  * subject name and public key. Following parameters are available in the
+<span class='line'>336</span>  * resulted JSON object.
+<span class='line'>337</span>  * &lt;ul>
+<span class='line'>338</span>  * &lt;li>subject.name - subject name string (ex. /C=US/O=Test)&lt;/li>
+<span class='line'>339</span>  * &lt;li>subject.hex - hexadecimal string of X.500 Name of subject&lt;/li>
+<span class='line'>340</span>  * &lt;li>pubkey.obj - subject public key object such as RSAKey, KJUR.crypto.{ECDSA,DSA}&lt;/li>
+<span class='line'>341</span>  * &lt;li>pubkey.hex - hexadecimal string of subject public key&lt;/li>
+<span class='line'>342</span>  * &lt;/ul>
+<span class='line'>343</span>  *
+<span class='line'>344</span>  * @example
+<span class='line'>345</span>  * o = KJUR.asn1.csr.CSRUtil.getInfo("-----BEGIN CERTIFICATE REQUEST...");
+<span class='line'>346</span>  * console.log(o.subject.name) &rarr; "/C=US/O=Test"
+<span class='line'>347</span>  */</span><span class="WHIT">
+<span class='line'>348</span> </span><span class="NAME">KJUR.asn1.csr.CSRUtil.getInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">sPEM</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>349</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>350</span> </span><span class="WHIT">    </span><span class="NAME">result.subject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>351</span> </span><span class="WHIT">    </span><span class="NAME">result.pubkey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>352</span> 
-<span class='line'>353</span> </span><span class="WHIT">    </span><span class="NAME">result.pubkey.hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getDecendantHexTLVByNthList</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>354</span> </span><span class="WHIT">    </span><span class="NAME">result.pubkey.obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KEYUTIL.getKey</span><span class="PUNC">(</span><span class="NAME">result.pubkey.hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"pkcs8pub"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>353</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">sPEM.indexOf</span><span class="PUNC">(</span><span class="STRN">"-----BEGIN CERTIFICATE REQUEST"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>354</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"argument is not PEM file"</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>355</span> 
-<span class='line'>356</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>357</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>358</span> 
-<span class='line'>359</span> 
-<span class='line'>360</span> </span></pre></body></html>
+<span class='line'>356</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KEYUTIL.getHexFromPEM</span><span class="PUNC">(</span><span class="NAME">sPEM</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"CERTIFICATE REQUEST"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>357</span> 
+<span class='line'>358</span> </span><span class="WHIT">    </span><span class="NAME">result.subject.hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getDecendantHexTLVByNthList</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>359</span> </span><span class="WHIT">    </span><span class="NAME">result.subject.name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">X509.hex2dn</span><span class="PUNC">(</span><span class="NAME">result.subject.hex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>360</span> 
+<span class='line'>361</span> </span><span class="WHIT">    </span><span class="NAME">result.pubkey.hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getDecendantHexTLVByNthList</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>362</span> </span><span class="WHIT">    </span><span class="NAME">result.pubkey.obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KEYUTIL.getKey</span><span class="PUNC">(</span><span class="NAME">result.pubkey.hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"pkcs8pub"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>363</span> 
+<span class='line'>364</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>365</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>366</span> 
+<span class='line'>367</span> 
+<span class='line'>368</span> </span></pre></body></html>
