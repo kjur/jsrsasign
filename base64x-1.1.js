@@ -402,13 +402,18 @@ function b64nltohex(s) {
 
 /**
  * convert a ArrayBuffer to a hexadecimal string<br/>
- * @param {String} hexadecimal string
- * @return {ArrayBuffer} buffer ArrayBuffer
+ * @param {String} hex hexadecimal string
+ * @return {ArrayBuffer} ArrayBuffer
  * @since jsrsasign 6.1.4 base64x 1.1.8
  * @description
  * This function converts from a ArrayBuffer to a hexadecimal string.
  * @example
- * hextoArrayBuffer("fffa01") &rarr ArrayBuffer of [255, 250, 1]
+ * var buffer = new ArrayBuffer(3);
+ * var view = new DataView(buffer);
+ * view.setUint8(0, 0xfa);
+ * view.setUint8(1, 0xfb);
+ * view.setUint8(2, 0x01);
+ * ArrayBuffertohex(buffer) &rarr "fafb01"
  */
 function hextoArrayBuffer(hex) {
     if (hex.length % 2 != 0) throw "input is not even length";
@@ -428,18 +433,13 @@ function hextoArrayBuffer(hex) {
 
 /**
  * convert a ArrayBuffer to a hexadecimal string<br/>
- * @param {String} hexadecimal string
- * @return {ArrayBuffer} buffer ArrayBuffer
+ * @param {ArrayBuffer} buffer ArrayBuffer
+ * @return {String} hexadecimal string
  * @since jsrsasign 6.1.4 base64x 1.1.8
  * @description
  * This function converts from a ArrayBuffer to a hexadecimal string.
  * @example
- * var buffer = new ArrayBuffer(3);
- * var view = new DataView(buffer);
- * view.setUint8(0, 0xfa);
- * view.setUint8(1, 0xfb);
- * view.setUint8(2, 0x01);
- * ArrayBuffertohex(buffer) &rarr "fafb01"
+ * hextoArrayBuffer("fffa01") &rarr ArrayBuffer of [255, 250, 1]
  */
 function ArrayBuffertohex(buffer) {
     var hex = "";
