@@ -409,44 +409,44 @@
 <span class='line'>402</span> 
 <span class='line'>403</span> </span><span class="COMM">/**
 <span class='line'>404</span>  * convert a ArrayBuffer to a hexadecimal string&lt;br/>
-<span class='line'>405</span>  * @param {String} hexadecimal string
-<span class='line'>406</span>  * @return {ArrayBuffer} buffer ArrayBuffer
+<span class='line'>405</span>  * @param {String} hex hexadecimal string
+<span class='line'>406</span>  * @return {ArrayBuffer} ArrayBuffer
 <span class='line'>407</span>  * @since jsrsasign 6.1.4 base64x 1.1.8
 <span class='line'>408</span>  * @description
 <span class='line'>409</span>  * This function converts from a ArrayBuffer to a hexadecimal string.
 <span class='line'>410</span>  * @example
-<span class='line'>411</span>  * hextoArrayBuffer("fffa01") &rarr ArrayBuffer of [255, 250, 1]
-<span class='line'>412</span>  */</span><span class="WHIT">
-<span class='line'>413</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">hextoArrayBuffer</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>414</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hex.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"input is not even length"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>415</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hex.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9A-Fa-f]+$/</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"input is not hexadecimal"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>416</span> 
-<span class='line'>417</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">buffer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ArrayBuffer</span><span class="PUNC">(</span><span class="NAME">hex.length</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>418</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">view</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">DataView</span><span class="PUNC">(</span><span class="NAME">buffer</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>419</span> 
-<span class='line'>420</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">hex.length</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>421</span> </span><span class="WHIT">	</span><span class="NAME">view.setUint8</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">hex.substr</span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>422</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>423</span> 
-<span class='line'>424</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">buffer</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>425</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>426</span> 
-<span class='line'>427</span> </span><span class="COMM">// ==== ArrayBuffer / hex =================================</span><span class="WHIT">
+<span class='line'>411</span>  * var buffer = new ArrayBuffer(3);
+<span class='line'>412</span>  * var view = new DataView(buffer);
+<span class='line'>413</span>  * view.setUint8(0, 0xfa);
+<span class='line'>414</span>  * view.setUint8(1, 0xfb);
+<span class='line'>415</span>  * view.setUint8(2, 0x01);
+<span class='line'>416</span>  * ArrayBuffertohex(buffer) &rarr "fafb01"
+<span class='line'>417</span>  */</span><span class="WHIT">
+<span class='line'>418</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">hextoArrayBuffer</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>419</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hex.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"input is not even length"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>420</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hex.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9A-Fa-f]+$/</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"input is not hexadecimal"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>421</span> 
+<span class='line'>422</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">buffer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ArrayBuffer</span><span class="PUNC">(</span><span class="NAME">hex.length</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>423</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">view</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">DataView</span><span class="PUNC">(</span><span class="NAME">buffer</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>424</span> 
+<span class='line'>425</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">hex.length</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>426</span> </span><span class="WHIT">	</span><span class="NAME">view.setUint8</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">hex.substr</span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>427</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>428</span> 
-<span class='line'>429</span> </span><span class="COMM">/**
-<span class='line'>430</span>  * convert a ArrayBuffer to a hexadecimal string&lt;br/>
-<span class='line'>431</span>  * @param {String} hexadecimal string
-<span class='line'>432</span>  * @return {ArrayBuffer} buffer ArrayBuffer
-<span class='line'>433</span>  * @since jsrsasign 6.1.4 base64x 1.1.8
-<span class='line'>434</span>  * @description
-<span class='line'>435</span>  * This function converts from a ArrayBuffer to a hexadecimal string.
-<span class='line'>436</span>  * @example
-<span class='line'>437</span>  * var buffer = new ArrayBuffer(3);
-<span class='line'>438</span>  * var view = new DataView(buffer);
-<span class='line'>439</span>  * view.setUint8(0, 0xfa);
-<span class='line'>440</span>  * view.setUint8(1, 0xfb);
-<span class='line'>441</span>  * view.setUint8(2, 0x01);
-<span class='line'>442</span>  * ArrayBuffertohex(buffer) &rarr "fafb01"
+<span class='line'>429</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">buffer</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>430</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>431</span> 
+<span class='line'>432</span> </span><span class="COMM">// ==== ArrayBuffer / hex =================================</span><span class="WHIT">
+<span class='line'>433</span> 
+<span class='line'>434</span> </span><span class="COMM">/**
+<span class='line'>435</span>  * convert a ArrayBuffer to a hexadecimal string&lt;br/>
+<span class='line'>436</span>  * @param {ArrayBuffer} buffer ArrayBuffer
+<span class='line'>437</span>  * @return {String} hexadecimal string
+<span class='line'>438</span>  * @since jsrsasign 6.1.4 base64x 1.1.8
+<span class='line'>439</span>  * @description
+<span class='line'>440</span>  * This function converts from a ArrayBuffer to a hexadecimal string.
+<span class='line'>441</span>  * @example
+<span class='line'>442</span>  * hextoArrayBuffer("fffa01") &rarr ArrayBuffer of [255, 250, 1]
 <span class='line'>443</span>  */</span><span class="WHIT">
 <span class='line'>444</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">ArrayBuffertohex</span><span class="PUNC">(</span><span class="NAME">buffer</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>445</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
