@@ -1939,9 +1939,11 @@ KJUR.asn1.x509.OID = new function(params) {
     this.atype2obj = function(atype) {
         if (typeof this.objCache[atype] != "undefined")
             return this.objCache[atype];
+        var oid;
         if (typeof this.atype2oidList[atype] == "undefined")
-            throw "AttributeType name undefined: " + atype;
-        var oid = this.atype2oidList[atype];
+            oid = atype;//throw "AttributeType name undefined: " + atype;
+        else
+            oid = this.atype2oidList[atype];
         var obj = new KJUR.asn1.DERObjectIdentifier({'oid': oid});
         this.objCache[atype] = obj;
         return obj;
