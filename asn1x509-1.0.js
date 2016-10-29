@@ -1,4 +1,4 @@
-/*! asn1x509-1.0.15.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.16.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -8,7 +8,7 @@
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
  *
- * The above copyright and license notice shall be 
+ * The above copyright and license notice shall be
  * included in all copies or substantial portions of the Software.
  */
 
@@ -16,12 +16,12 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.15 (2016-Oct-08)
+ * @version 1.0.16 (2016-Oct-29)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
-/** 
+/**
  * kjur's class library name space
  * // already documented in asn1-1.0.js
  * @name KJUR
@@ -72,6 +72,7 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * <li>{@link KJUR.asn1.x509.CRLDistributionPoints}</li>
  * <li>{@link KJUR.asn1.x509.ExtKeyUsage}</li>
  * <li>{@link KJUR.asn1.x509.AuthorityKeyIdentifier}</li>
+ * <li>{@link KJUR.asn1.x509.AuthorityInfoAccess}</li>
  * </ul>
  * NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
  * @name KJUR.asn1.x509
@@ -108,7 +109,7 @@ if (typeof KJUR.asn1.x509 == "undefined" || !KJUR.asn1.x509) KJUR.asn1.x509 = {}
  * // Certificate  ::=  SEQUENCE  {
  * //     tbsCertificate       TBSCertificate,
  * //     signatureAlgorithm   AlgorithmIdentifier,
- * //     signature            BIT STRING  }        
+ * //     signature            BIT STRING  }
  */
 KJUR.asn1.x509.Certificate = function(params) {
     KJUR.asn1.x509.Certificate.superclass.constructor.call(this);
@@ -119,7 +120,7 @@ KJUR.asn1.x509.Certificate = function(params) {
     var prvKey = null;
     var rsaPrvKey = null; // DEPRECATED
 
-    
+
     /**
      * set PKCS#5 encrypted RSA PEM private key as CA key
      * @name setRsaPrvKeyByPEMandPass
@@ -138,7 +139,7 @@ KJUR.asn1.x509.Certificate = function(params) {
     this.setRsaPrvKeyByPEMandPass = function(rsaPEM, passPEM) {
         var caKeyHex = PKCS5PKEY.getDecryptedKeyHex(rsaPEM, passPEM);
         var caKey = new RSAKey();
-        caKey.readPrivateKeyFromASN1HexString(caKeyHex);  
+        caKey.readPrivateKeyFromASN1HexString(caKeyHex);
         this.prvKey = caKey;
     };
 
@@ -161,7 +162,7 @@ KJUR.asn1.x509.Certificate = function(params) {
         this.hexSig = sig.sign();
 
         this.asn1Sig = new KJUR.asn1.DERBitString({'hex': '00' + this.hexSig});
-        
+
         var seq = new KJUR.asn1.DERSequence({'array': [this.asn1TBSCert,
                                                        this.asn1SignatureAlg,
                                                        this.asn1Sig]});
@@ -260,7 +261,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
     this._initialize = function() {
         this.asn1Array = new Array();
 
-        this.asn1Version = 
+        this.asn1Version =
             new KJUR.asn1.DERTaggedObject({'obj': new KJUR.asn1.DERInteger({'int': 2})});
         this.asn1SerialNumber = null;
         this.asn1SignatureAlg = null;
@@ -329,7 +330,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
     this.setNotBeforeByParam = function(timeParam) {
         this.asn1NotBefore = new KJUR.asn1.x509.Time(timeParam);
     };
-    
+
     /**
      * set notAfter field by parameter
      * @name setNotAfterByParam
@@ -384,8 +385,8 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * @param {Object} keyParam public key parameter which passed to {@link KEYUTIL.getKey} argument
      * @description
      * @example
-     * tbsc.setSubjectPublicKeyByGetKeyParam(certPEMString); // or 
-     * tbsc.setSubjectPublicKeyByGetKeyParam(pkcs8PublicKeyPEMString); // or 
+     * tbsc.setSubjectPublicKeyByGetKeyParam(certPEMString); // or
+     * tbsc.setSubjectPublicKeyByGetKeyParam(pkcs8PublicKeyPEMString); // or
      * tbsc.setSubjectPublicKeyByGetKeyParam(kjurCryptoECDSAKeyObject); // et.al.
      * @see KJUR.asn1.x509.SubjectPublicKeyInfo
      * @see KEYUTIL.getKey
@@ -426,6 +427,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * tbsc.appendExtensionByName('CRLDistributionPoints', {uri: 'http://aaa.com/a.crl'});
      * tbsc.appendExtensionByName('ExtKeyUsage', {array: [{name: 'clientAuth'}]});
      * tbsc.appendExtensionByName('AuthorityKeyIdentifier', {kid: '1234ab..'});
+     * tbsc.appendExtensionByName('AuthorityInfoAccess', {array: [{accessMethod:{oid:...},accessLocation:{uri:...}}]});
      * @see KJUR.asn1.x509.Extension
      */
     this.appendExtensionByName = function(name, extParams) {
@@ -444,6 +446,9 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
         } else if (name.toLowerCase() == "authoritykeyidentifier") {
             var extObj = new KJUR.asn1.x509.AuthorityKeyIdentifier(extParams);
             this.appendExtension(extObj);
+        } else if (name.toLowerCase() == "authorityinfoaccess") {
+            var extObj = new KJUR.asn1.x509.AuthorityInfoAccess(extParams);
+            this.appendExtension(extObj);
         } else {
             throw "unsupported extension name: " + name;
         }
@@ -452,7 +457,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
     this.getEncodedHex = function() {
         if (this.asn1NotBefore == null || this.asn1NotAfter == null)
             throw "notBefore and/or notAfter not set";
-        var asn1Validity = 
+        var asn1Validity =
             new KJUR.asn1.DERSequence({'array':[this.asn1NotBefore, this.asn1NotAfter]});
 
         this.asn1Array = new Array();
@@ -506,7 +511,7 @@ KJUR.asn1.x509.Extension = function(params) {
 
     this.getEncodedHex = function() {
         var asn1Oid = new KJUR.asn1.DERObjectIdentifier({'oid': this.oid});
-        var asn1EncapExtnValue = 
+        var asn1EncapExtnValue =
             new KJUR.asn1.DEROctetString({'hex': this.getExtnValueHex()});
 
         var asn1Array = new Array();
@@ -569,7 +574,7 @@ KJUR.asn1.x509.BasicConstraints = function(params) {
     this.getExtnValueHex = function() {
         var asn1Array = new Array();
         if (this.cA) asn1Array.push(new KJUR.asn1.DERBoolean());
-        if (this.pathLen > -1) 
+        if (this.pathLen > -1)
             asn1Array.push(new KJUR.asn1.DERInteger({'int': this.pathLen}));
         var asn1Seq = new KJUR.asn1.DERSequence({'array': asn1Array});
         this.asn1ExtnValue = asn1Seq;
@@ -636,7 +641,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRLDistributionPoints, KJUR.asn1.x509.Extension
  * @extends KJUR.asn1.x509.Extension
  * @description
  * @example
- * var e1 = 
+ * var e1 =
  *     new KJUR.asn1.x509.ExtKeyUsage({'critical': true,
  *                                     'array':
  *                                     [{'oid': '2.5.29.37.0',  // anyExtendedKeyUsage
@@ -727,7 +732,7 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
      * @param {Array} param array of {@link KJUR.asn1.DERInteger} parameter
      * @since asn1x509 1.0.8
      * @description
-     * NOTE: Automatic keyIdentifier value calculation by an issuer 
+     * NOTE: Automatic keyIdentifier value calculation by an issuer
      * public key will be supported in future version.
      */
     this.setKIDByParam = function(param) {
@@ -742,7 +747,7 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
      * @param {Array} param array of {@link KJUR.asn1.x509.X500Name} parameter
      * @since asn1x509 1.0.8
      * @description
-     * NOTE: Automatic authorityCertIssuer name setting by an issuer 
+     * NOTE: Automatic authorityCertIssuer name setting by an issuer
      * certificate will be supported in future version.
      */
     this.setCertIssuerByParam = function(param) {
@@ -757,7 +762,7 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
      * @param {Array} param array of {@link KJUR.asn1.DERInteger} parameter
      * @since asn1x509 1.0.8
      * @description
-     * NOTE: Automatic authorityCertSerialNumber setting by an issuer 
+     * NOTE: Automatic authorityCertSerialNumber setting by an issuer
      * certificate will be supported in future version.
      */
     this.setCertSNByParam = function(param) {
@@ -778,6 +783,60 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.AuthorityKeyIdentifier, KJUR.asn1.x509.Extension);
+
+/**
+ * AuthorityInfoAccess ASN.1 structure class
+ * @name KJUR.asn1.x509.AuthorityInfoAccess
+ * @class AuthorityInfoAccess ASN.1 structure class
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.x509.Extension
+ * @since asn1x509 1.0.8
+ * @description
+ * <pre>
+ * id-pe OBJECT IDENTIFIER  ::=  { id-pkix 1 }
+ * id-pe-authorityInfoAccess OBJECT IDENTIFIER ::= { id-pe 1 }
+ * AuthorityInfoAccessSyntax  ::=
+ *         SEQUENCE SIZE (1..MAX) OF AccessDescription
+ * AccessDescription  ::=  SEQUENCE {
+ *         accessMethod          OBJECT IDENTIFIER,
+ *         accessLocation        GeneralName  }
+ * id-ad OBJECT IDENTIFIER ::= { id-pkix 48 }
+ * id-ad-caIssuers OBJECT IDENTIFIER ::= { id-ad 2 }
+ * id-ad-ocsp OBJECT IDENTIFIER ::= { id-ad 1 }
+ * </pre>
+ * @example
+ * var param = {'array':[
+ *               { 'accessMethod':{'oid': '1.3.6.1.5.5.7.48.1'},
+ *                 'accessLocation':{'uri': 'http://ocsp.cacert.org'}
+ *               } ]};
+ * var e1 = new KJUR.asn1.x509.AuthorityInfoAccess(param);
+ */
+KJUR.asn1.x509.AuthorityInfoAccess = function(params) {
+    KJUR.asn1.x509.AuthorityInfoAccess.superclass.constructor.call(this, params);
+
+    this.setAccessDescriptionArray = function(accessDescriptionArray) {
+        var array = new Array();
+        for (var i = 0; i < accessDescriptionArray.length; i++) {
+            var o = new KJUR.asn1.DERObjectIdentifier(accessDescriptionArray[i].accessMethod);
+            var gn = new KJUR.asn1.x509.GeneralName(accessDescriptionArray[i].accessLocation);
+            var accessDescription = new KJUR.asn1.DERSequence({'array':[o, gn]});
+            array.push(accessDescription);
+        }
+        this.asn1ExtnValue = new KJUR.asn1.DERSequence({'array':array});
+    };
+
+    this.getExtnValueHex = function() {
+        return this.asn1ExtnValue.getEncodedHex();
+    };
+
+    this.oid = "1.3.6.1.5.5.7.1.1";
+    if (typeof params != "undefined") {
+        if (typeof params['array'] != "undefined") {
+            this.setAccessDescriptionArray(params['array']);
+        }
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.x509.AuthorityInfoAccess, KJUR.asn1.x509.Extension);
 
 // === END   X.509v3 Extensions Related =======================================
 
@@ -819,7 +878,7 @@ KJUR.asn1.x509.CRL = function(params) {
     var asn1Sig = null;
     var hexSig = null;
     var rsaPrvKey = null;
-    
+
     /**
      * set PKCS#5 encrypted RSA PEM private key as CA key
      * @name setRsaPrvKeyByPEMandPass
@@ -835,7 +894,7 @@ KJUR.asn1.x509.CRL = function(params) {
     this.setRsaPrvKeyByPEMandPass = function(rsaPEM, passPEM) {
         var caKeyHex = PKCS5PKEY.getDecryptedKeyHex(rsaPEM, passPEM);
         var caKey = new RSAKey();
-        caKey.readPrivateKeyFromASN1HexString(caKeyHex);  
+        caKey.readPrivateKeyFromASN1HexString(caKeyHex);
         this.rsaPrvKey = caKey;
     };
 
@@ -858,7 +917,7 @@ KJUR.asn1.x509.CRL = function(params) {
         this.hexSig = sig.sign();
 
         this.asn1Sig = new KJUR.asn1.DERBitString({'hex': '00' + this.hexSig});
-        
+
         var seq = new KJUR.asn1.DERSequence({'array': [this.asn1TBSCertList,
                                                        this.asn1SignatureAlg,
                                                        this.asn1Sig]});
@@ -924,7 +983,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRL, KJUR.asn1.ASN1Object);
  *  o.setNotNextUpdateByParam({'str': '140504235959Z'});
  *  o.addRevokedCert({'int': 4}, {'str':'130514235959Z'}));
  *  o.addRevokedCert({'hex': '0f34dd'}, {'str':'130514235959Z'}));
- * 
+ *
  * // TBSCertList  ::=  SEQUENCE  {
  * //        version                 Version OPTIONAL,
  * //                                     -- if present, MUST be v2
@@ -1066,7 +1125,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.TBSCertList, KJUR.asn1.ASN1Object);
  * @description
  * @example
  * var e = new KJUR.asn1.x509.CRLEntry({'time': {'str': '130514235959Z'}, 'sn': {'int': 234}});
- * 
+ *
  * // revokedCertificates     SEQUENCE OF SEQUENCE  {
  * //     userCertificate         CertificateSerialNumber,
  * //     revocationDate          Time,
@@ -1079,7 +1138,7 @@ KJUR.asn1.x509.CRLEntry = function(params) {
     var time = null;
 
     /**
-     * set DERInteger parameter for serial number of revoked certificate 
+     * set DERInteger parameter for serial number of revoked certificate
      * @name setCertSerial
      * @memberOf KJUR.asn1.x509.CRLEntry
      * @function
@@ -1111,7 +1170,7 @@ KJUR.asn1.x509.CRLEntry = function(params) {
         this.TLV = o.getEncodedHex();
         return this.TLV;
     };
-    
+
     if (typeof params != "undefined") {
         if (typeof params['time'] != "undefined") {
             this.setRevocationDate(params['time']);
@@ -1161,7 +1220,7 @@ KJUR.asn1.x509.X500Name = function(params) {
             this.asn1Array.push(new KJUR.asn1.x509.RDN({'str':a[i]}));
         }
     };
-    
+
     /**
      * set DN by associative array
      * @name setByObject
@@ -1203,7 +1262,7 @@ KJUR.asn1.x509.X500Name = function(params) {
         } else if (typeof params === "object") {
             this.setByObject(params);
         }
-        
+
         if (typeof params.certissuer != "undefined") {
             var x = new X509();
             x.hex = X509.pemToHex(params.certissuer);
@@ -1419,7 +1478,7 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
 
     this._setEC = function(key) {
         var asn1Params = new KJUR.asn1.DERObjectIdentifier({'name': key.curveName});
-        this.asn1AlgId = 
+        this.asn1AlgId =
             new KJUR.asn1.x509.AlgorithmIdentifier({'name': 'ecPublicKey',
                                                     'asn1params': asn1Params});
         this.asn1SubjPKey = new KJUR.asn1.DERBitString({'hex': '00' + key.pubKeyHex});
@@ -1431,7 +1490,7 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
                     {'int': {'bigint': key.q}},
                     {'int': {'bigint': key.g}}]
         });
-        this.asn1AlgId = 
+        this.asn1AlgId =
             new KJUR.asn1.x509.AlgorithmIdentifier({'name': 'dsa',
                                                     'asn1params': asn1Params});
         var pubInt = new KJUR.asn1.DERInteger({'bigint': key.y});
@@ -1497,7 +1556,7 @@ KJUR.asn1.x509.Time = function(params) {
         this.TLV = o.getEncodedHex();
         return this.TLV;
     };
-    
+
     this.type = "utc";
     if (typeof params != "undefined") {
         if (typeof params.type != "undefined") {
@@ -1590,10 +1649,10 @@ YAHOO.lang.extend(KJUR.asn1.x509.AlgorithmIdentifier, KJUR.asn1.ASN1Object);
  *         ediPartyName                    [5]     EDIPartyName,
  *         uniformResourceIdentifier       [6]     IA5String,
  *         iPAddress                       [7]     OCTET STRING,
- *         registeredID                    [8]     OBJECT IDENTIFIER } 
+ *         registeredID                    [8]     OBJECT IDENTIFIER }
  * </pre>
  *
- * 
+ *
  *
  * @example
  * gn = new KJUR.asn1.x509.GeneralName({rfc822:      'test@aaa.com'});
@@ -1614,7 +1673,7 @@ KJUR.asn1.x509.GeneralName = function(params) {
         var v = null;
 
 		if (typeof params == "undefined") return;
-		
+
         if (typeof params.rfc822 != "undefined") {
             this.type = 'rfc822';
             v = new KJUR.asn1.DERIA5String({'str': params[this.type]});
@@ -1690,7 +1749,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.GeneralName, KJUR.asn1.ASN1Object);
  * <br/>
  * <h4>EXAMPLE AND ASN.1 SYNTAX</h4>
  * @example
- * var gns = new KJUR.asn1.x509.GeneralNames([{'uri': 'http://aaa.com/'}, {'uri': 'http://bbb.com/'}]); 
+ * var gns = new KJUR.asn1.x509.GeneralNames([{'uri': 'http://aaa.com/'}, {'uri': 'http://bbb.com/'}]);
  *
  * GeneralNames ::= SEQUENCE SIZE (1..MAX) OF GeneralName
  */
@@ -1803,7 +1862,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.DistributionPoint, KJUR.asn1.ASN1Object);
  * @class static object for OID
  * @property {Assoc Array} atype2oidList for short attribyte type name and oid (i.e. 'C' and '2.5.4.6')
  * @property {Assoc Array} name2oidList for oid name and oid (i.e. 'keyUsage' and '2.5.29.15')
- * @property {Assoc Array} objCache for caching name and DERObjectIdentifier object 
+ * @property {Assoc Array} objCache for caching name and DERObjectIdentifier object
  * @description
  * <dl>
  * <dt><b>atype2oidList</b>
@@ -1874,7 +1933,9 @@ KJUR.asn1.x509.OID = new function(params) {
         'authorityKeyIdentifier':'2.5.29.35',
         'policyConstraints':    '2.5.29.36',
         'extKeyUsage':          '2.5.29.37',
-	'authorityInfoAccess':  '1.3.6.1.5.5.7.1.1',
+        'authorityInfoAccess':  '1.3.6.1.5.5.7.1.1',
+        'ocsp':                 '1.3.6.1.5.5.7.48.1',
+        'caIssuers':            '1.3.6.1.5.5.7.48.2',
 
         'anyExtendedKeyUsage':  '2.5.29.37.0',
         'serverAuth':           '1.3.6.1.5.5.7.3.1',
@@ -2034,8 +2095,8 @@ KJUR.asn1.x509.X509Util = new function() {
  * @description
  * This method can issue a certificate by a simple
  * JSON object.
- * Signature value will be provided by signing with 
- * private key using 'cakey' parameter or 
+ * Signature value will be provided by signing with
+ * private key using 'cakey' parameter or
  * hexa decimal signature value by 'sighex' parameter.
  *
  * NOTE: When using DSA or ECDSA CA signing key,
@@ -2093,14 +2154,14 @@ KJUR.asn1.x509.X509Util.newCertPEM = function(param) {
 
     if (typeof param.sigalg.name == 'string')
         o.setSignatureAlgByParam(param.sigalg);
-    else 
+    else
         throw "unproper signature algorithm name";
 
     if (param.issuer !== undefined)
         o.setIssuerByParam(param.issuer);
     else
         throw "issuer name undefined.";
-    
+
     if (param.notbefore !== undefined)
         o.setNotBeforeByParam(param.notbefore);
     else

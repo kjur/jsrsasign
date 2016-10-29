@@ -2,6 +2,8 @@
 ChangeLog for jsrsasign
 
 * Changes from 6.1.4 to next version
+  - asn1x509 1.0.15 to 1.0.16
+    - AuthorityInfoAccess class added by @lionello 's pull request. Thanks.
   - base64x
     - fix API document
   - npm
