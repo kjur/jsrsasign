@@ -501,6 +501,16 @@ NOTE: (*) is not supported in Java JCE.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.decrypt">decrypt</a></b>(keyObj, s, algName)
+								</div>
+								<div class="description">decrypt encrypted hexadecimal string with specified key and algorithm<br/>
+This static method decrypts encrypted hexadecimal string with specified key and algorithm.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.encrypt">encrypt</a></b>(keyObj, s, algName)
 								</div>
 								<div class="description">encrypt raw string by specified key and algorithm<br/>
@@ -606,6 +616,74 @@ However it is planning to implement also symmetric ciphers near in the future.
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name=".decrypt"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.Cipher.</span><b>decrypt</b>(keyObj, s, algName)
+					
+					</div>
+					<div class="description">
+						decrypt encrypted hexadecimal string with specified key and algorithm<br/>
+This static method decrypts encrypted hexadecimal string with specified key and algorithm.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">
+KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj) &rarr; "1abc2d..."
+KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>keyObj</b>
+									
+								</dt>
+								<dd>RSAKey object or hexadecimal string of symmetric cipher key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>input string to encrypt</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>algName</b>
+									
+								</dt>
+								<dd>short/long algorithm name for encryption/decryption</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.2.0 crypto 1.1.10</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal encrypted string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
 				
 					<a name=".encrypt"> </a>
 					<div class="fixedFont">&lt;static&gt; 

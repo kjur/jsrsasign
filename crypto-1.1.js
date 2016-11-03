@@ -1344,7 +1344,7 @@ KJUR.crypto.Cipher.encrypt = function(s, keyObj, algName) {
 
 /**
  * decrypt encrypted hexadecimal string with specified key and algorithm<br/>
- * @name encrypt
+ * @name decrypt
  * @memberOf KJUR.crypto.Cipher
  * @function
  * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
