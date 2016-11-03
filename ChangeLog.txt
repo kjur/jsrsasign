@@ -1,7 +1,18 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 6.1.4 to next version
+* Changes from 6.1.4 to 6.2.0
+  - RSAKey
+    - CRITICAL BUGFIX: RSA-PSS and RSA-OAEP not working from jsrsasign 5.0.0
+      because rstr_sha1 function is missingand. Now it was fixed.
+      (oaep_pad, oeap_unpad)
+    - API document added.
+  - crypto 1.1.9 to 1.1.10
+    - KJUR.crypto.Cipher class added to encrypt/decrypt data.
+      Currently only RSA, RSAOAEP supported. Other ciphers like
+      AES, 3DES will be supported near in the future.
+    - KJUR.crypto.MessageDigest class
+      - HASHLENGTH, getCanonicalAlgName, getHashLength
   - asn1x509 1.0.15 to 1.0.16
     - AuthorityInfoAccess class added by @lionello 's pull request. Thanks.
   - base64x

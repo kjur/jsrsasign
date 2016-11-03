@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for KJUR.crypto.Cipher</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script src="../jsrsasign-latest-all-min.js"></script>
+<script src="../crypto-1.1.js"></script>
+<script src="../ext/rsa.js"></script>
+<script src="../ext/rsa2.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+test("KJUR.crypto.Cipher.getAlgByKeyAndName", function() {
+  var CY = KJUR.crypto.Cipher;
+  var kp = KEYUTIL.generateKeypair("RSA", 1024);
+  var pub = kp.pubKeyObj;
+  var prv = kp.prvKeyObj;
+  equal(CY.getAlgByKeyAndName(pub), "RSA", "pub RSAKey");
+  equal(CY.getAlgByKeyAndName(prv), "RSA", "prv RSAKey");
+  equal(CY.getAlgByKeyAndName(prv, "RSAOAEP"), "RSAOAEP", "prv RSAKey, RSAOAEP");
+  equal(CY.getAlgByKeyAndName(prv, "RSAOAEP224"), "RSAOAEP224", "prv RSAKey, RSAOAEP224");
+  equal(CY.getAlgByKeyAndName(prv, "RSAOAEP256"), "RSAOAEP256", "prv RSAKey, RSAOAEP256");
+  equal(CY.getAlgByKeyAndName(prv, "RSAOAEP384"), "RSAOAEP384", "prv RSAKey, RSAOAEP384");
+  equal(CY.getAlgByKeyAndName(prv, "RSAOAEP512"), "RSAOAEP512", "prv RSAKey, RSAOAEP512");
+});
+
+test("RSAKey.oaep_pad/oaep_unpad", function() {
+  var bi1 = oaep_pad("aaa", 128);
+  var h1 = bi1.toString(16);
+  var bi2 = new BigInteger(h1, 16);
+  equal(oaep_unpad(bi2, 128), "aaa", "aaa");
+});
+
+test("RSAKey.decryptOAEP/encryptOAEP", function() {
+  var kp = KEYUTIL.generateKeypair("RSA", 1024);
+  var pub = kp.pubKeyObj;
+  var prv = kp.prvKeyObj;
+  equal(prv.decryptOAEP(pub.encryptOAEP("aaa")), "aaa", "aaa");
+  equal(prv.decryptOAEP(pub.encryptOAEP("aaa", "sha256"), "sha256"), "aaa", "aaa");
+});
+
+test("KJUR.crypto.Cipher.encrypt/decrypt", function() {
+  var CY = KJUR.crypto.Cipher;
+  var kp = KEYUTIL.generateKeypair("RSA", 1024);
+  var pub = kp.pubKeyObj;
+  var prv = kp.prvKeyObj;
+  equal(CY.getAlgByKeyAndName(pub, "RSAOAEP"), "RSAOAEP", "get RSAOAEP");
+  equal(CY.getAlgByKeyAndName(pub, "RSAOAEP256"), "RSAOAEP256", "get RSAOAEP256");
+  equal(CY.decrypt(CY.encrypt("aaa", pub), prv), "aaa", "aaa");
+  equal(CY.decrypt(CY.encrypt("aaa", pub, "RSAOAEP"), prv, "RSAOAEP"), "aaa", "aaa");
+  equal(CY.decrypt(CY.encrypt("aaa", pub, "RSAOAEP256"), prv, "RSAOAEP256"), "aaa", "aaa");
+});
+
+});
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+QUnit for 
+<a href="index.html">INDEX</a> | 
+</body>
+<center><p>&copy; 2016 Kenji Urushima</p></center>
+</html>
+
+

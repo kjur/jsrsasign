@@ -50,33 +50,50 @@ function oaep_mgf1_str(seed, len, hash)
     return mask;
 }
 
-// Undo PKCS#1 (OAEP) padding and, if valid, return the plaintext
-function oaep_unpad(d, n, hash, hashLen)
-{
-    if (!hash)
-    {
-        hash = rstr_sha1;
-        hashLen = 20;
+/**
+ * Undo PKCS#1 (OAEP) padding and, if valid, return the plaintext
+ * @name oaep_unpad
+ * @param {BigInteger} d BigInteger object of OAEP padded message
+ * @param n byte length of RSA key (i.e. 128 when RSA 1024bit)
+ * @param hash JavaScript function to calculate raw hash value from raw string or algorithm name (ex. "SHA1") 
+ * @param hashLen byte length of resulted hash value (i.e. 20 for SHA1)
+ * @return {String} raw string of OAEP unpadded message
+ * @description
+ * This function do unpadding OAEP padded message then returns an original message.<br/>
+ * NOTE: Since jsrsasign 6.2.0, 'hash' argument can accept an algorithm name such as "sha1".
+ * @example
+ * // DEFAULT(SHA1)
+ * bi1 = oaep_pad("aaa", 128);
+ * oaep_unpad(bi1, 128) &rarr; "aaa" // SHA-1 by default
+ */
+function oaep_unpad(d, n, hash, hashLen) {
+    var MD = KJUR.crypto.MessageDigest;
+    var Util = KJUR.crypto.Util;
+    var algName = null;
+
+    if (!hash) hash = "sha1";
+
+    if (typeof hash === "string") {
+	algName = MD.getCanonicalAlgName(hash);
+	hashLen = MD.getHashLength(algName);
+        hash = function(s) { return hextorstr(Util.hashString(s, algName)); };
     }
 
     d = d.toByteArray();
 
     var i;
 
-    for (i = 0; i < d.length; i += 1)
-    {
+    for (i = 0; i < d.length; i += 1) {
         d[i] &= 0xff;
     }
 
-    while (d.length < n)
-    {
+    while (d.length < n) {
         d.unshift(0);
     }
 
     d = String.fromCharCode.apply(String, d);
 
-    if (d.length < 2 * hashLen + 2)
-    {
+    if (d.length < 2 * hashLen + 2) {
         throw "Cipher too short";
     }
 
@@ -86,25 +103,22 @@ function oaep_unpad(d, n, hash, hashLen)
     var seedMask = oaep_mgf1_str(maskedDB, hashLen, hash);
     var seed = [], i;
 
-    for (i = 0; i < maskedSeed.length; i += 1)
-    {
+    for (i = 0; i < maskedSeed.length; i += 1) {
         seed[i] = maskedSeed.charCodeAt(i) ^ seedMask.charCodeAt(i);
     }
 
     var dbMask = oaep_mgf1_str(String.fromCharCode.apply(String, seed),
-                           d.length - hashLen, hash);
+                               d.length - hashLen, hash);
 
     var DB = [];
 
-    for (i = 0; i < maskedDB.length; i += 1)
-    {
+    for (i = 0; i < maskedDB.length; i += 1) {
         DB[i] = maskedDB.charCodeAt(i) ^ dbMask.charCodeAt(i);
     }
 
     DB = String.fromCharCode.apply(String, DB);
 
-    if (DB.substr(0, hashLen) !== hash(''))
-    {
+    if (DB.substr(0, hashLen) !== hash('')) {
         throw "Hash mismatch";
     }
 
@@ -113,8 +127,7 @@ function oaep_unpad(d, n, hash, hashLen)
     var first_one = DB.indexOf('\x01');
     var last_zero = (first_one != -1) ? DB.substr(0, first_one).lastIndexOf('\x00') : -1;
 
-    if (last_zero + 1 != first_one)
-    {
+    if (last_zero + 1 != first_one) {
         throw "Malformed data";
     }
 

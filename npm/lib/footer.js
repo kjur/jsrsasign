@@ -8,6 +8,7 @@ exports.DSA = KJUR.crypto.DSA;
 exports.Signature = KJUR.crypto.Signature;
 exports.MessageDigest = KJUR.crypto.MessageDigest;
 exports.Mac = KJUR.crypto.Mac;
+exports.Cipher = KJUR.crypto.Cipher;
 exports.KEYUTIL = KEYUTIL;
 exports.ASN1HEX = ASN1HEX;
 exports.X509 = X509;
@@ -49,6 +50,7 @@ exports.b64nltohex = b64nltohex;
 exports.hextoArrayBuffer = hextoArrayBuffer;
 exports.ArrayBuffertohex = ArrayBuffertohex;
 
+// name spaces
 exports.KJUR = KJUR;
 exports.crypto = KJUR.crypto;
 exports.asn1 = KJUR.asn1;
