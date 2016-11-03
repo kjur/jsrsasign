@@ -1290,6 +1290,7 @@ KJUR.crypto.Signature = function(params) {
 /**
  * Cipher class to encrypt and decrypt data<br/>
  * @name KJUR.crypto.Cipher
+ * @class Cipher class to encrypt and decrypt data<br/>
  * @param {Array} params parameters for constructor
  * @since jsrsasign 6.2.0 crypto 1.1.10
  * @description

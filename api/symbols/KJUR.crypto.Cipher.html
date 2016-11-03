@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 4.8.7 JavaScript API Reference - KJUR.asn1.tsp.PKIFreeText</title>
+		<title>jsrsasign 4.8.7 JavaScript API Reference - KJUR.crypto.Cipher</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -432,26 +432,24 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.tsp.PKIFreeText
+				Class KJUR.crypto.Cipher
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
-				<br />Extends
-					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
-				class for TSP PKIFreeText ASN.1 object
+				Cipher class to encrypt and decrypt data<br/>
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1tsp-1.0.js.html">asn1tsp-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/crypto-1.1.js.html">crypto-1.1.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.tsp.PKIFreeText.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.crypto.Cipher.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -464,12 +462,19 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.tsp.PKIFreeText.html#constructor">KJUR.asn1.tsp.PKIFreeText</a></b>(params)
+								<b><a href="../symbols/KJUR.crypto.Cipher.html#constructor">KJUR.crypto.Cipher</a></b>(params)
 							</div>
-							<div class="description">class for TSP PKIFreeText ASN.1 object
-<pre>
-PKIFreeText ::= SEQUENCE {
-   SIZE (1.</div>
+							<div class="description">Cipher class to encrypt and decrypt data<br/>
+Here is supported canonicalized cipher algorithm names and its standard names:
+<ul>
+<li>RSA - RSA/ECB/PKCS1Padding (default for RSAKey)</li>
+<li>RSAOAEP - RSA/ECB/OAEPWithSHA-1AndMGF1Padding</li>
+<li>RSAOAEP224 - RSA/ECB/OAEPWithSHA-224AndMGF1Padding(*)</li>
+<li>RSAOAEP256 - RSA/ECB/OAEPWithSHA-256AndMGF1Padding</li>
+<li>RSAOAEP384 - RSA/ECB/OAEPWithSHA-384AndMGF1Padding(*)</li>
+<li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
+</ul>
+NOTE: (*) is not supported in Java JCE.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -478,17 +483,55 @@ PKIFreeText ::= SEQUENCE {
 
 <!-- ============================== properties summary ===================== -->
 			
-				
-				
-				
-				
-				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
-				</dl>
-				
-			
 
 <!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.crypto.Cipher.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.encrypt">encrypt</a></b>(keyObj, s, algName)
+								</div>
+								<div class="description">encrypt raw string by specified key and algorithm<br/>
+This static method encrypts raw string with specified key and algorithm.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.getAlgByKeyAndName">getAlgByKeyAndName</a></b>(keyObj, algName)
+								</div>
+								<div class="description">get canonicalized encrypt/decrypt algorithm name by key and short/long algorithm name<br/>
+Here is supported canonicalized cipher algorithm names and its standard names:
+<ul>
+<li>RSA - RSA/ECB/PKCS1Padding (default for RSAKey)</li>
+<li>RSAOAEP - RSA/ECB/OAEPWithSHA-1AndMGF1Padding</li>
+<li>RSAOAEP224 - RSA/ECB/OAEPWithSHA-224AndMGF1Padding(*)</li>
+<li>RSAOAEP256 - RSA/ECB/OAEPWithSHA-256AndMGF1Padding</li>
+<li>RSAOAEP384 - RSA/ECB/OAEPWithSHA-384AndMGF1Padding(*)</li>
+<li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
+</ul>
+NOTE: (*) is not supported in Java JCE.</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -501,17 +544,29 @@ PKIFreeText ::= SEQUENCE {
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.tsp.PKIFreeText</b>(params)
+						<b>KJUR.crypto.Cipher</b>(params)
 				</div>
 				
 				<div class="description">
-					class for TSP PKIFreeText ASN.1 object
-<pre>
-PKIFreeText ::= SEQUENCE {
-   SIZE (1..MAX) OF UTF8String }
-</pre>
+					Cipher class to encrypt and decrypt data<br/>
+Here is supported canonicalized cipher algorithm names and its standard names:
+<ul>
+<li>RSA - RSA/ECB/PKCS1Padding (default for RSAKey)</li>
+<li>RSAOAEP - RSA/ECB/OAEPWithSHA-1AndMGF1Padding</li>
+<li>RSAOAEP224 - RSA/ECB/OAEPWithSHA-224AndMGF1Padding(*)</li>
+<li>RSAOAEP256 - RSA/ECB/OAEPWithSHA-256AndMGF1Padding</li>
+<li>RSAOAEP384 - RSA/ECB/OAEPWithSHA-384AndMGF1Padding(*)</li>
+<li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
+</ul>
+NOTE: (*) is not supported in Java JCE.<br/>
+Currently this class supports only RSA encryption and decryption. 
+However it is planning to implement also symmetric ciphers near in the future.
 					
 				</div>
+				
+				
+				
+				<pre class="code"></pre>
 				
 				
 				
@@ -524,7 +579,7 @@ PKIFreeText ::= SEQUENCE {
 								<span class="light fixedFont">{Array}</span>  <b>params</b>
 								
 							</dt>
-								<dd>associative array of parameters</dd>
+								<dd>parameters for constructor</dd>
 						
 						</dl>
 					
@@ -532,7 +587,7 @@ PKIFreeText ::= SEQUENCE {
 					
 						<dl class="detailList">
 						<dt class="heading">Since:</dt>
-							<dd>jsrsasign 4.6.0 asn1tsp 1.0.0</dd>
+							<dd>jsrsasign 6.2.0 crypto 1.1.10</dd>
 						</dl>
 					
 					
@@ -547,6 +602,150 @@ PKIFreeText ::= SEQUENCE {
 			
 
 <!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name=".encrypt"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.Cipher.</span><b>encrypt</b>(keyObj, s, algName)
+					
+					</div>
+					<div class="description">
+						encrypt raw string by specified key and algorithm<br/>
+This static method encrypts raw string with specified key and algorithm.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">
+KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj) &rarr; "1abc2d..."
+KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>keyObj</b>
+									
+								</dt>
+								<dd>RSAKey object or hexadecimal string of symmetric cipher key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>input string to encrypt</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>algName</b>
+									
+								</dt>
+								<dd>short/long algorithm name for encryption/decryption</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.2.0 crypto 1.1.10</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal encrypted string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getAlgByKeyAndName"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.Cipher.</span><b>getAlgByKeyAndName</b>(keyObj, algName)
+					
+					</div>
+					<div class="description">
+						get canonicalized encrypt/decrypt algorithm name by key and short/long algorithm name<br/>
+Here is supported canonicalized cipher algorithm names and its standard names:
+<ul>
+<li>RSA - RSA/ECB/PKCS1Padding (default for RSAKey)</li>
+<li>RSAOAEP - RSA/ECB/OAEPWithSHA-1AndMGF1Padding</li>
+<li>RSAOAEP224 - RSA/ECB/OAEPWithSHA-224AndMGF1Padding(*)</li>
+<li>RSAOAEP256 - RSA/ECB/OAEPWithSHA-256AndMGF1Padding</li>
+<li>RSAOAEP384 - RSA/ECB/OAEPWithSHA-384AndMGF1Padding(*)</li>
+<li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
+</ul>
+NOTE: (*) is not supported in Java JCE.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">
+KJUR.crypto.Cipher.getAlgByKeyAndName(objRSAKey) &rarr; "RSA"
+KJUR.crypto.Cipher.getAlgByKeyAndName(objRSAKey, "RSAOAEP") &rarr; "RSAOAEP"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>keyObj</b>
+									
+								</dt>
+								<dd>RSAKey object or hexadecimal string of symmetric cipher key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>algName</b>
+									
+								</dt>
+								<dd>short/long algorithm name for encryption/decryption</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.2.0 crypto 1.1.10</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> canonicalized algorithm name for encryption/decryption</dd>
+							
+							</dl>
+						
+						
+						
+
+					
+				
 			
 			
 <!-- ============================== event details ========================= -->		

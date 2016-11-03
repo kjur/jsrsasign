@@ -1297,147 +1297,148 @@
 <span class='line'>1290</span> </span><span class="COMM">/**
 <span class='line'>1291</span>  * Cipher class to encrypt and decrypt data&lt;br/>
 <span class='line'>1292</span>  * @name KJUR.crypto.Cipher
-<span class='line'>1293</span>  * @param {Array} params parameters for constructor
-<span class='line'>1294</span>  * @since jsrsasign 6.2.0 crypto 1.1.10
-<span class='line'>1295</span>  * @description
-<span class='line'>1296</span>  * Here is supported canonicalized cipher algorithm names and its standard names:
-<span class='line'>1297</span>  * &lt;ul>
-<span class='line'>1298</span>  * &lt;li>RSA - RSA/ECB/PKCS1Padding (default for RSAKey)&lt;/li>
-<span class='line'>1299</span>  * &lt;li>RSAOAEP - RSA/ECB/OAEPWithSHA-1AndMGF1Padding&lt;/li>
-<span class='line'>1300</span>  * &lt;li>RSAOAEP224 - RSA/ECB/OAEPWithSHA-224AndMGF1Padding(*)&lt;/li>
-<span class='line'>1301</span>  * &lt;li>RSAOAEP256 - RSA/ECB/OAEPWithSHA-256AndMGF1Padding&lt;/li>
-<span class='line'>1302</span>  * &lt;li>RSAOAEP384 - RSA/ECB/OAEPWithSHA-384AndMGF1Padding(*)&lt;/li>
-<span class='line'>1303</span>  * &lt;li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)&lt;/li>
-<span class='line'>1304</span>  * &lt;/ul>
-<span class='line'>1305</span>  * NOTE: (*) is not supported in Java JCE.&lt;br/>
-<span class='line'>1306</span>  * Currently this class supports only RSA encryption and decryption. 
-<span class='line'>1307</span>  * However it is planning to implement also symmetric ciphers near in the future.
-<span class='line'>1308</span>  * @example
-<span class='line'>1309</span>  */</span><span class="WHIT">
-<span class='line'>1310</span> </span><span class="NAME">KJUR.crypto.Cipher</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1311</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1312</span> 
-<span class='line'>1313</span> </span><span class="COMM">/**
-<span class='line'>1314</span>  * encrypt raw string by specified key and algorithm&lt;br/>
-<span class='line'>1315</span>  * @name encrypt
-<span class='line'>1316</span>  * @memberOf KJUR.crypto.Cipher
-<span class='line'>1317</span>  * @function
-<span class='line'>1318</span>  * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
-<span class='line'>1319</span>  * @param {String} s input string to encrypt
-<span class='line'>1320</span>  * @param {String} algName short/long algorithm name for encryption/decryption
-<span class='line'>1321</span>  * @return {String} hexadecimal encrypted string
-<span class='line'>1322</span>  * @since jsrsasign 6.2.0 crypto 1.1.10
-<span class='line'>1323</span>  * @description
-<span class='line'>1324</span>  * This static method encrypts raw string with specified key and algorithm.
-<span class='line'>1325</span>  * @example 
-<span class='line'>1326</span>  * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj) &rarr; "1abc2d..."
-<span class='line'>1327</span>  * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."
-<span class='line'>1328</span>  */</span><span class="WHIT">
-<span class='line'>1329</span> </span><span class="NAME">KJUR.crypto.Cipher.encrypt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keyObj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1330</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">keyObj</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">RSAKey</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">keyObj.isPublic</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1331</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">algName2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.crypto.Cipher.getAlgByKeyAndName</span><span class="PUNC">(</span><span class="NAME">keyObj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1332</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">algName2</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"RSA"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">keyObj.encrypt</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1333</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">algName2</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"RSAOAEP"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">keyObj.encryptOAEP</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"sha1"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1334</span> 
-<span class='line'>1335</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">algName2.match</span><span class="PUNC">(</span><span class="REGX">/^RSAOAEP(\d+)$/</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1336</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">keyObj.encryptOAEP</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"sha"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1337</span> 
-<span class='line'>1338</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Cipher.encrypt: unsupported algorithm for RSAKey: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1339</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1340</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Cipher.encrypt: unsupported key or algorithm"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1341</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1342</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1343</span> 
-<span class='line'>1344</span> </span><span class="COMM">/**
-<span class='line'>1345</span>  * decrypt encrypted hexadecimal string with specified key and algorithm&lt;br/>
-<span class='line'>1346</span>  * @name encrypt
-<span class='line'>1347</span>  * @memberOf KJUR.crypto.Cipher
-<span class='line'>1348</span>  * @function
-<span class='line'>1349</span>  * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
-<span class='line'>1350</span>  * @param {String} s input string to encrypt
-<span class='line'>1351</span>  * @param {String} algName short/long algorithm name for encryption/decryption
-<span class='line'>1352</span>  * @return {String} hexadecimal encrypted string
-<span class='line'>1353</span>  * @since jsrsasign 6.2.0 crypto 1.1.10
-<span class='line'>1354</span>  * @description
-<span class='line'>1355</span>  * This static method decrypts encrypted hexadecimal string with specified key and algorithm.
-<span class='line'>1356</span>  * @example 
-<span class='line'>1357</span>  * KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj) &rarr; "1abc2d..."
-<span class='line'>1358</span>  * KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."
-<span class='line'>1359</span>  */</span><span class="WHIT">
-<span class='line'>1360</span> </span><span class="NAME">KJUR.crypto.Cipher.decrypt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keyObj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1361</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">keyObj</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">RSAKey</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">keyObj.isPrivate</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1362</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">algName2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.crypto.Cipher.getAlgByKeyAndName</span><span class="PUNC">(</span><span class="NAME">keyObj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1363</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">algName2</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"RSA"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">keyObj.decrypt</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1364</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">algName2</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"RSAOAEP"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">keyObj.decryptOAEP</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"sha1"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1365</span> 
-<span class='line'>1366</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">algName2.match</span><span class="PUNC">(</span><span class="REGX">/^RSAOAEP(\d+)$/</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1367</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">keyObj.decryptOAEP</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"sha"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1368</span> 
-<span class='line'>1369</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Cipher.decrypt: unsupported algorithm for RSAKey: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1370</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1371</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Cipher.decrypt: unsupported key or algorithm"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1372</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1373</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1374</span> 
-<span class='line'>1375</span> </span><span class="COMM">/**
-<span class='line'>1376</span>  * get canonicalized encrypt/decrypt algorithm name by key and short/long algorithm name&lt;br/>
-<span class='line'>1377</span>  * @name getAlgByKeyAndName
-<span class='line'>1378</span>  * @memberOf KJUR.crypto.Cipher
-<span class='line'>1379</span>  * @function
-<span class='line'>1380</span>  * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
-<span class='line'>1381</span>  * @param {String} algName short/long algorithm name for encryption/decryption
-<span class='line'>1382</span>  * @return {String} canonicalized algorithm name for encryption/decryption
-<span class='line'>1383</span>  * @since jsrsasign 6.2.0 crypto 1.1.10
-<span class='line'>1384</span>  * @description
-<span class='line'>1385</span>  * Here is supported canonicalized cipher algorithm names and its standard names:
-<span class='line'>1386</span>  * &lt;ul>
-<span class='line'>1387</span>  * &lt;li>RSA - RSA/ECB/PKCS1Padding (default for RSAKey)&lt;/li>
-<span class='line'>1388</span>  * &lt;li>RSAOAEP - RSA/ECB/OAEPWithSHA-1AndMGF1Padding&lt;/li>
-<span class='line'>1389</span>  * &lt;li>RSAOAEP224 - RSA/ECB/OAEPWithSHA-224AndMGF1Padding(*)&lt;/li>
-<span class='line'>1390</span>  * &lt;li>RSAOAEP256 - RSA/ECB/OAEPWithSHA-256AndMGF1Padding&lt;/li>
-<span class='line'>1391</span>  * &lt;li>RSAOAEP384 - RSA/ECB/OAEPWithSHA-384AndMGF1Padding(*)&lt;/li>
-<span class='line'>1392</span>  * &lt;li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)&lt;/li>
-<span class='line'>1393</span>  * &lt;/ul>
-<span class='line'>1394</span>  * NOTE: (*) is not supported in Java JCE.
-<span class='line'>1395</span>  * @example 
-<span class='line'>1396</span>  * KJUR.crypto.Cipher.getAlgByKeyAndName(objRSAKey) &rarr; "RSA"
-<span class='line'>1397</span>  * KJUR.crypto.Cipher.getAlgByKeyAndName(objRSAKey, "RSAOAEP") &rarr; "RSAOAEP"
-<span class='line'>1398</span>  */</span><span class="WHIT">
-<span class='line'>1399</span> </span><span class="NAME">KJUR.crypto.Cipher.getAlgByKeyAndName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">keyObj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1400</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">keyObj</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">RSAKey</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1401</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">":RSA:RSAOAEP:RSAOAEP224:RSAOAEP256:RSAOAEP384:RSAOAEP512:"</span><span class="PUNC">.</span><span class="NAME">indexOf</span><span class="PUNC">(</span><span class="NAME">algName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>1402</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1403</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">algName</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"RSA"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1404</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"getAlgByKeyAndName: not supported algorithm name for RSAKey: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1405</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1406</span> </span><span class="WHIT">    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"getAlgByKeyAndName: not supported algorithm name: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1407</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1408</span> 
-<span class='line'>1409</span> </span><span class="COMM">// ====== Other Utility class =====================================================</span><span class="WHIT">
-<span class='line'>1410</span> 
-<span class='line'>1411</span> </span><span class="COMM">/**
-<span class='line'>1412</span>  * static object for cryptographic function utilities
-<span class='line'>1413</span>  * @name KJUR.crypto.OID
-<span class='line'>1414</span>  * @class static object for cryptography related OIDs
-<span class='line'>1415</span>  * @property {Array} oidhex2name key value of hexadecimal OID and its name
-<span class='line'>1416</span>  *           (ex. '2a8648ce3d030107' and 'secp256r1')
-<span class='line'>1417</span>  * @since crypto 1.1.3
-<span class='line'>1418</span>  * @description
-<span class='line'>1419</span>  */</span><span class="WHIT">
-<span class='line'>1420</span> </span><span class="NAME">KJUR.crypto.OID</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1421</span> </span><span class="WHIT">    </span><span class="NAME">this.oidhex2name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1422</span> </span><span class="WHIT">	</span><span class="STRN">'2a864886f70d010101'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'rsaEncryption'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1423</span> </span><span class="WHIT">	</span><span class="STRN">'2a8648ce3d0201'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'ecPublicKey'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1424</span> </span><span class="WHIT">	</span><span class="STRN">'2a8648ce380401'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'dsa'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1425</span> </span><span class="WHIT">	</span><span class="STRN">'2a8648ce3d030107'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'secp256r1'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1426</span> </span><span class="WHIT">	</span><span class="STRN">'2b8104001f'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'secp192k1'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1427</span> </span><span class="WHIT">	</span><span class="STRN">'2b81040021'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'secp224r1'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1428</span> </span><span class="WHIT">	</span><span class="STRN">'2b8104000a'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'secp256k1'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1429</span> </span><span class="WHIT">	</span><span class="STRN">'2b81040023'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'secp521r1'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1430</span> </span><span class="WHIT">	</span><span class="STRN">'2b81040022'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'secp384r1'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1431</span> </span><span class="WHIT">	</span><span class="STRN">'2a8648ce380403'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'SHA1withDSA'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// 1.2.840.10040.4.3</span><span class="WHIT">
-<span class='line'>1432</span> </span><span class="WHIT">	</span><span class="STRN">'608648016503040301'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'SHA224withDSA'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// 2.16.840.1.101.3.4.3.1</span><span class="WHIT">
-<span class='line'>1433</span> </span><span class="WHIT">	</span><span class="STRN">'608648016503040302'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'SHA256withDSA'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// 2.16.840.1.101.3.4.3.2</span><span class="WHIT">
-<span class='line'>1434</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1435</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1436</span> </span></pre></body></html>
+<span class='line'>1293</span>  * @class Cipher class to encrypt and decrypt data&lt;br/>
+<span class='line'>1294</span>  * @param {Array} params parameters for constructor
+<span class='line'>1295</span>  * @since jsrsasign 6.2.0 crypto 1.1.10
+<span class='line'>1296</span>  * @description
+<span class='line'>1297</span>  * Here is supported canonicalized cipher algorithm names and its standard names:
+<span class='line'>1298</span>  * &lt;ul>
+<span class='line'>1299</span>  * &lt;li>RSA - RSA/ECB/PKCS1Padding (default for RSAKey)&lt;/li>
+<span class='line'>1300</span>  * &lt;li>RSAOAEP - RSA/ECB/OAEPWithSHA-1AndMGF1Padding&lt;/li>
+<span class='line'>1301</span>  * &lt;li>RSAOAEP224 - RSA/ECB/OAEPWithSHA-224AndMGF1Padding(*)&lt;/li>
+<span class='line'>1302</span>  * &lt;li>RSAOAEP256 - RSA/ECB/OAEPWithSHA-256AndMGF1Padding&lt;/li>
+<span class='line'>1303</span>  * &lt;li>RSAOAEP384 - RSA/ECB/OAEPWithSHA-384AndMGF1Padding(*)&lt;/li>
+<span class='line'>1304</span>  * &lt;li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)&lt;/li>
+<span class='line'>1305</span>  * &lt;/ul>
+<span class='line'>1306</span>  * NOTE: (*) is not supported in Java JCE.&lt;br/>
+<span class='line'>1307</span>  * Currently this class supports only RSA encryption and decryption. 
+<span class='line'>1308</span>  * However it is planning to implement also symmetric ciphers near in the future.
+<span class='line'>1309</span>  * @example
+<span class='line'>1310</span>  */</span><span class="WHIT">
+<span class='line'>1311</span> </span><span class="NAME">KJUR.crypto.Cipher</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1312</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1313</span> 
+<span class='line'>1314</span> </span><span class="COMM">/**
+<span class='line'>1315</span>  * encrypt raw string by specified key and algorithm&lt;br/>
+<span class='line'>1316</span>  * @name encrypt
+<span class='line'>1317</span>  * @memberOf KJUR.crypto.Cipher
+<span class='line'>1318</span>  * @function
+<span class='line'>1319</span>  * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
+<span class='line'>1320</span>  * @param {String} s input string to encrypt
+<span class='line'>1321</span>  * @param {String} algName short/long algorithm name for encryption/decryption
+<span class='line'>1322</span>  * @return {String} hexadecimal encrypted string
+<span class='line'>1323</span>  * @since jsrsasign 6.2.0 crypto 1.1.10
+<span class='line'>1324</span>  * @description
+<span class='line'>1325</span>  * This static method encrypts raw string with specified key and algorithm.
+<span class='line'>1326</span>  * @example 
+<span class='line'>1327</span>  * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj) &rarr; "1abc2d..."
+<span class='line'>1328</span>  * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."
+<span class='line'>1329</span>  */</span><span class="WHIT">
+<span class='line'>1330</span> </span><span class="NAME">KJUR.crypto.Cipher.encrypt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keyObj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1331</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">keyObj</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">RSAKey</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">keyObj.isPublic</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1332</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">algName2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.crypto.Cipher.getAlgByKeyAndName</span><span class="PUNC">(</span><span class="NAME">keyObj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1333</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">algName2</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"RSA"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">keyObj.encrypt</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1334</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">algName2</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"RSAOAEP"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">keyObj.encryptOAEP</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"sha1"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1335</span> 
+<span class='line'>1336</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">algName2.match</span><span class="PUNC">(</span><span class="REGX">/^RSAOAEP(\d+)$/</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1337</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">keyObj.encryptOAEP</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"sha"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1338</span> 
+<span class='line'>1339</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Cipher.encrypt: unsupported algorithm for RSAKey: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1340</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1341</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Cipher.encrypt: unsupported key or algorithm"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1342</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1343</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1344</span> 
+<span class='line'>1345</span> </span><span class="COMM">/**
+<span class='line'>1346</span>  * decrypt encrypted hexadecimal string with specified key and algorithm&lt;br/>
+<span class='line'>1347</span>  * @name encrypt
+<span class='line'>1348</span>  * @memberOf KJUR.crypto.Cipher
+<span class='line'>1349</span>  * @function
+<span class='line'>1350</span>  * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
+<span class='line'>1351</span>  * @param {String} s input string to encrypt
+<span class='line'>1352</span>  * @param {String} algName short/long algorithm name for encryption/decryption
+<span class='line'>1353</span>  * @return {String} hexadecimal encrypted string
+<span class='line'>1354</span>  * @since jsrsasign 6.2.0 crypto 1.1.10
+<span class='line'>1355</span>  * @description
+<span class='line'>1356</span>  * This static method decrypts encrypted hexadecimal string with specified key and algorithm.
+<span class='line'>1357</span>  * @example 
+<span class='line'>1358</span>  * KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj) &rarr; "1abc2d..."
+<span class='line'>1359</span>  * KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."
+<span class='line'>1360</span>  */</span><span class="WHIT">
+<span class='line'>1361</span> </span><span class="NAME">KJUR.crypto.Cipher.decrypt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keyObj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1362</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">keyObj</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">RSAKey</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">keyObj.isPrivate</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1363</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">algName2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.crypto.Cipher.getAlgByKeyAndName</span><span class="PUNC">(</span><span class="NAME">keyObj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1364</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">algName2</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"RSA"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">keyObj.decrypt</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1365</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">algName2</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"RSAOAEP"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">keyObj.decryptOAEP</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"sha1"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1366</span> 
+<span class='line'>1367</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">algName2.match</span><span class="PUNC">(</span><span class="REGX">/^RSAOAEP(\d+)$/</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1368</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">keyObj.decryptOAEP</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"sha"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1369</span> 
+<span class='line'>1370</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Cipher.decrypt: unsupported algorithm for RSAKey: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1371</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1372</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Cipher.decrypt: unsupported key or algorithm"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1373</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1374</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1375</span> 
+<span class='line'>1376</span> </span><span class="COMM">/**
+<span class='line'>1377</span>  * get canonicalized encrypt/decrypt algorithm name by key and short/long algorithm name&lt;br/>
+<span class='line'>1378</span>  * @name getAlgByKeyAndName
+<span class='line'>1379</span>  * @memberOf KJUR.crypto.Cipher
+<span class='line'>1380</span>  * @function
+<span class='line'>1381</span>  * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
+<span class='line'>1382</span>  * @param {String} algName short/long algorithm name for encryption/decryption
+<span class='line'>1383</span>  * @return {String} canonicalized algorithm name for encryption/decryption
+<span class='line'>1384</span>  * @since jsrsasign 6.2.0 crypto 1.1.10
+<span class='line'>1385</span>  * @description
+<span class='line'>1386</span>  * Here is supported canonicalized cipher algorithm names and its standard names:
+<span class='line'>1387</span>  * &lt;ul>
+<span class='line'>1388</span>  * &lt;li>RSA - RSA/ECB/PKCS1Padding (default for RSAKey)&lt;/li>
+<span class='line'>1389</span>  * &lt;li>RSAOAEP - RSA/ECB/OAEPWithSHA-1AndMGF1Padding&lt;/li>
+<span class='line'>1390</span>  * &lt;li>RSAOAEP224 - RSA/ECB/OAEPWithSHA-224AndMGF1Padding(*)&lt;/li>
+<span class='line'>1391</span>  * &lt;li>RSAOAEP256 - RSA/ECB/OAEPWithSHA-256AndMGF1Padding&lt;/li>
+<span class='line'>1392</span>  * &lt;li>RSAOAEP384 - RSA/ECB/OAEPWithSHA-384AndMGF1Padding(*)&lt;/li>
+<span class='line'>1393</span>  * &lt;li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)&lt;/li>
+<span class='line'>1394</span>  * &lt;/ul>
+<span class='line'>1395</span>  * NOTE: (*) is not supported in Java JCE.
+<span class='line'>1396</span>  * @example 
+<span class='line'>1397</span>  * KJUR.crypto.Cipher.getAlgByKeyAndName(objRSAKey) &rarr; "RSA"
+<span class='line'>1398</span>  * KJUR.crypto.Cipher.getAlgByKeyAndName(objRSAKey, "RSAOAEP") &rarr; "RSAOAEP"
+<span class='line'>1399</span>  */</span><span class="WHIT">
+<span class='line'>1400</span> </span><span class="NAME">KJUR.crypto.Cipher.getAlgByKeyAndName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">keyObj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1401</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">keyObj</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">RSAKey</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1402</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">":RSA:RSAOAEP:RSAOAEP224:RSAOAEP256:RSAOAEP384:RSAOAEP512:"</span><span class="PUNC">.</span><span class="NAME">indexOf</span><span class="PUNC">(</span><span class="NAME">algName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>1403</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1404</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">algName</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"RSA"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1405</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"getAlgByKeyAndName: not supported algorithm name for RSAKey: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1406</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1407</span> </span><span class="WHIT">    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"getAlgByKeyAndName: not supported algorithm name: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1408</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1409</span> 
+<span class='line'>1410</span> </span><span class="COMM">// ====== Other Utility class =====================================================</span><span class="WHIT">
+<span class='line'>1411</span> 
+<span class='line'>1412</span> </span><span class="COMM">/**
+<span class='line'>1413</span>  * static object for cryptographic function utilities
+<span class='line'>1414</span>  * @name KJUR.crypto.OID
+<span class='line'>1415</span>  * @class static object for cryptography related OIDs
+<span class='line'>1416</span>  * @property {Array} oidhex2name key value of hexadecimal OID and its name
+<span class='line'>1417</span>  *           (ex. '2a8648ce3d030107' and 'secp256r1')
+<span class='line'>1418</span>  * @since crypto 1.1.3
+<span class='line'>1419</span>  * @description
+<span class='line'>1420</span>  */</span><span class="WHIT">
+<span class='line'>1421</span> </span><span class="NAME">KJUR.crypto.OID</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1422</span> </span><span class="WHIT">    </span><span class="NAME">this.oidhex2name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1423</span> </span><span class="WHIT">	</span><span class="STRN">'2a864886f70d010101'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'rsaEncryption'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1424</span> </span><span class="WHIT">	</span><span class="STRN">'2a8648ce3d0201'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'ecPublicKey'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1425</span> </span><span class="WHIT">	</span><span class="STRN">'2a8648ce380401'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'dsa'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1426</span> </span><span class="WHIT">	</span><span class="STRN">'2a8648ce3d030107'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'secp256r1'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1427</span> </span><span class="WHIT">	</span><span class="STRN">'2b8104001f'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'secp192k1'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1428</span> </span><span class="WHIT">	</span><span class="STRN">'2b81040021'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'secp224r1'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1429</span> </span><span class="WHIT">	</span><span class="STRN">'2b8104000a'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'secp256k1'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1430</span> </span><span class="WHIT">	</span><span class="STRN">'2b81040023'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'secp521r1'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1431</span> </span><span class="WHIT">	</span><span class="STRN">'2b81040022'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'secp384r1'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1432</span> </span><span class="WHIT">	</span><span class="STRN">'2a8648ce380403'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'SHA1withDSA'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// 1.2.840.10040.4.3</span><span class="WHIT">
+<span class='line'>1433</span> </span><span class="WHIT">	</span><span class="STRN">'608648016503040301'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'SHA224withDSA'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// 2.16.840.1.101.3.4.3.1</span><span class="WHIT">
+<span class='line'>1434</span> </span><span class="WHIT">	</span><span class="STRN">'608648016503040302'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'SHA256withDSA'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// 2.16.840.1.101.3.4.3.2</span><span class="WHIT">
+<span class='line'>1435</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1436</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1437</span> </span></pre></body></html>
