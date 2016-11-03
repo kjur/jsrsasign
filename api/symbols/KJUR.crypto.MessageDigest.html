@@ -462,7 +462,7 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/KJUR.crypto.MessageDigest.html#constructor">KJUR.crypto.MessageDigest</a></b>(params)
 							</div>
-							<div class="description">MessageDigest class which is very similar to java.security.MessageDigest class
+							<div class="description">MessageDigest class which is very similar to java.security.MessageDigest class<br/>
 <br/>
 Currently this supports following algorithm and providers combination:
 <ul>
@@ -482,6 +482,34 @@ Currently this supports following algorithm and providers combination:
 			
 
 <!-- ============================== properties summary ===================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class KJUR.crypto.MessageDigest.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/KJUR.crypto.MessageDigest.html#HASHLENGTH">HASHLENGTH</a></b>
+								</div>
+								<div class="description">static Array of resulted byte length of hash (ex.</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
 			
 
 <!-- ============================== methods summary ======================== -->
@@ -509,9 +537,9 @@ Currently this supports following algorithm and providers combination:
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.MessageDigest.<b><a href="../symbols/KJUR.crypto.MessageDigest.html#.digestHex">digestHex</a></b>(hex)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.MessageDigest.html#digestHex">digestHex</a></b>(hex)
 								</div>
 								<div class="description">performs final update on the digest using hexadecimal string, then completes the digest computation
 </div>
@@ -519,9 +547,9 @@ Currently this supports following algorithm and providers combination:
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.MessageDigest.<b><a href="../symbols/KJUR.crypto.MessageDigest.html#.digestString">digestString</a></b>(str)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.MessageDigest.html#digestString">digestString</a></b>(str)
 								</div>
 								<div class="description">performs final update on the digest using string, then completes the digest computation
 </div>
@@ -531,17 +559,39 @@ Currently this supports following algorithm and providers combination:
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.MessageDigest.<b><a href="../symbols/KJUR.crypto.MessageDigest.html#.setAlgAndProvider">setAlgAndProvider</a></b>(alg, prov)
+								<div class="fixedFont">KJUR.crypto.MessageDigest.<b><a href="../symbols/KJUR.crypto.MessageDigest.html#.getCanonicalAlgName">getCanonicalAlgName</a></b>(alg)
 								</div>
-								<div class="description">set hash algorithm and provider
-</div>
+								<div class="description">get canonical hash algorithm name<br/>
+This static method normalizes from any hash algorithm name such as
+"SHA-1", "SHA1", "MD5", "sha512" to lower case name without hyphens
+such as "sha1".</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.MessageDigest.<b><a href="../symbols/KJUR.crypto.MessageDigest.html#.updateHex">updateHex</a></b>(hex)
+								<div class="fixedFont">KJUR.crypto.MessageDigest.<b><a href="../symbols/KJUR.crypto.MessageDigest.html#.getHashLength">getHashLength</a></b>(alg)
+								</div>
+								<div class="description">get resulted hash byte length for specified algorithm name<br/>
+This static method returns resulted byte length for specified algorithm name such as "SHA-1".</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.MessageDigest.html#setAlgAndProvider">setAlgAndProvider</a></b>(alg, prov)
+								</div>
+								<div class="description">set hash algorithm and provider<br/>
+This methods set an algorithm and a cryptographic provider.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.MessageDigest.html#updateHex">updateHex</a></b>(hex)
 								</div>
 								<div class="description">update digest by specified hexadecimal string
 </div>
@@ -549,9 +599,9 @@ Currently this supports following algorithm and providers combination:
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.MessageDigest.<b><a href="../symbols/KJUR.crypto.MessageDigest.html#.updateString">updateString</a></b>(str)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.MessageDigest.html#updateString">updateString</a></b>(str)
 								</div>
 								<div class="description">update digest by specified string
 </div>
@@ -579,7 +629,7 @@ Currently this supports following algorithm and providers combination:
 				</div>
 				
 				<div class="description">
-					MessageDigest class which is very similar to java.security.MessageDigest class
+					MessageDigest class which is very similar to java.security.MessageDigest class<br/>
 <br/>
 Currently this supports following algorithm and providers combination:
 <ul>
@@ -605,7 +655,11 @@ var mdHex = md.digest()
 // SJCL(Stanford JavaScript Crypto Library) provider sample
 var md = new KJUR.crypto.MessageDigest({alg: "sha256", prov: "sjcl"}); // sjcl supports sha256 only
 md.updateString('aaa')
-var mdHex = md.digest()</pre>
+var mdHex = md.digest()
+
+// HASHLENGTH property
+KJUR.crypto.MessageDigest.HASHLENGTH['sha1'] &rarr 20
+KJUR.crypto.MessageDigest.HASHLENGTH['sha512'] &rarr 64</pre>
 				
 				
 				
@@ -633,6 +687,33 @@ var mdHex = md.digest()</pre>
 			
 
 <!-- ============================== field details ========================== -->		
+			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="HASHLENGTH"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>HASHLENGTH</b>
+					
+					</div>
+					<div class="description">
+						static Array of resulted byte length of hash (ex. HASHLENGTH["sha1"] == 20)
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
 			
 
 <!-- ============================== method details ========================= -->		
@@ -671,11 +752,11 @@ var mdHex = md.digest()</pre>
 
 					<hr />
 				
-					<a name=".digestHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="digestHex"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.crypto.MessageDigest.</span><b>digestHex</b>(hex)
+					<b>digestHex</b>(hex)
 					
 					</div>
 					<div class="description">
@@ -712,11 +793,11 @@ var mdHex = md.digest()</pre>
 
 					<hr />
 				
-					<a name=".digestString"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="digestString"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.crypto.MessageDigest.</span><b>digestString</b>(str)
+					<b>digestString</b>(str)
 					
 					</div>
 					<div class="description">
@@ -753,16 +834,141 @@ var mdHex = md.digest()</pre>
 
 					<hr />
 				
-					<a name=".setAlgAndProvider"> </a>
+					<a name=".getCanonicalAlgName"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					
-					<span class="light">KJUR.crypto.MessageDigest.</span><b>setAlgAndProvider</b>(alg, prov)
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.MessageDigest.</span><b>getCanonicalAlgName</b>(alg)
 					
 					</div>
 					<div class="description">
-						set hash algorithm and provider
+						get canonical hash algorithm name<br/>
+This static method normalizes from any hash algorithm name such as
+"SHA-1", "SHA1", "MD5", "sha512" to lower case name without hyphens
+such as "sha1".
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.crypto.MessageDigest.getCanonicalAlgName("SHA-1") &rarr "sha1"
+KJUR.crypto.MessageDigest.getCanonicalAlgName("MD5")   &rarr "md5"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>alg</b>
+									
+								</dt>
+								<dd>hash algorithm name (ex. MD5, SHA-1, SHA1, SHA512 et.al.)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.2.0 crypto 1.1.10</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> canonical hash algorithm name</dd>
+							
+							</dl>
+						
+						
+						
 
+					<hr />
+				
+					<a name=".getHashLength"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Integer}</span>
+					<span class="light">KJUR.crypto.MessageDigest.</span><b>getHashLength</b>(alg)
+					
+					</div>
+					<div class="description">
+						get resulted hash byte length for specified algorithm name<br/>
+This static method returns resulted byte length for specified algorithm name such as "SHA-1".
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.crypto.MessageDigest.getHashLength("SHA-1") &rarr 20
+KJUR.crypto.MessageDigest.getHashLength("sha1") &rarr 20</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>alg</b>
+									
+								</dt>
+								<dd>non-canonicalized hash algorithm name (ex. MD5, SHA-1, SHA1, SHA512 et.al.)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.2.0 crypto 1.1.10</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Integer}</span> resulted hash byte length</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="setAlgAndProvider"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setAlgAndProvider</b>(alg, prov)
+					
+					</div>
+					<div class="description">
+						set hash algorithm and provider<br/>
+This methods set an algorithm and a cryptographic provider.<br/>
+Here is acceptable algorithm names ignoring cases and hyphens:
+<ul>
+<li>MD5</li>
+<li>SHA1</li>
+<li>SHA224</li>
+<li>SHA256</li>
+<li>SHA384</li>
+<li>SHA512</li>
+<li>RIPEMD160</li>
+</ul>
+NOTE: Since jsrsasign 6.2.0 crypto 1.1.10, this method ignores
+upper or lower cases. Also any hyphens (i.e. "-") will be ignored
+so that "SHA1" or "SHA-1" will be acceptable.
 						
 						
 					</div>
@@ -771,6 +977,7 @@ var mdHex = md.digest()</pre>
 					
 					<pre class="code">// for SHA1
 md.setAlgAndProvider('sha1', 'cryptojs');
+md.setAlgAndProvider('SHA1');
 // for RIPEMD160
 md.setAlgAndProvider('ripemd160', 'cryptojs');</pre>
 					
@@ -803,11 +1010,11 @@ md.setAlgAndProvider('ripemd160', 'cryptojs');</pre>
 
 					<hr />
 				
-					<a name=".updateHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="updateHex"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.crypto.MessageDigest.</span><b>updateHex</b>(hex)
+					<b>updateHex</b>(hex)
 					
 					</div>
 					<div class="description">
@@ -844,11 +1051,11 @@ md.setAlgAndProvider('ripemd160', 'cryptojs');</pre>
 
 					<hr />
 				
-					<a name=".updateString"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="updateString"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.crypto.MessageDigest.</span><b>updateString</b>(str)
+					<b>updateString</b>(str)
 					
 					</div>
 					<div class="description">

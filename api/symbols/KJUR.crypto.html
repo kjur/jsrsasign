@@ -473,6 +473,44 @@ This namespace privides following crytpgrahic classes.</div>
 
 <!-- ============================== properties summary ===================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class KJUR.crypto.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								KJUR.crypto.<b><a href="../symbols/KJUR.crypto.html#.Cipher">Cipher</a></b>
+								</div>
+								<div class="description">Cipher class to encrypt and decrypt data<br/>
+Here is supported canonicalized cipher algorithm names and its standard names:
+<ul>
+<li>RSA - RSA/ECB/PKCS1Padding (default for RSAKey)</li>
+<li>RSAOAEP - RSA/ECB/OAEPWithSHA-1AndMGF1Padding</li>
+<li>RSAOAEP224 - RSA/ECB/OAEPWithSHA-224AndMGF1Padding(*)</li>
+<li>RSAOAEP256 - RSA/ECB/OAEPWithSHA-256AndMGF1Padding</li>
+<li>RSAOAEP384 - RSA/ECB/OAEPWithSHA-384AndMGF1Padding(*)</li>
+<li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
+</ul>
+NOTE: (*) is not supported in Java JCE.</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
 
 <!-- ============================== methods summary ======================== -->
 			
@@ -686,6 +724,7 @@ This namespace privides following crytpgrahic classes.
 <ul>
 <li><a href="../symbols/KJUR.crypto.MessageDigest.html">KJUR.crypto.MessageDigest</a> - Java JCE(cryptograhic extension) style MessageDigest class</li>
 <li><a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a> - Java JCE(cryptograhic extension) style Signature class</li>
+<li><a href="../symbols/KJUR.crypto.html#.Cipher">KJUR.crypto.Cipher</a> - class for encrypting and decrypting data</li>
 <li><a href="../symbols/KJUR.crypto.Util.html">KJUR.crypto.Util</a> - cryptographic utility functions and properties</li>
 </ul>
 NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
@@ -708,6 +747,54 @@ NOTE: Please ignore method summary and document of this namespace. This caused b
 			
 
 <!-- ============================== field details ========================== -->		
+			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name=".Cipher"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.crypto.</span><b>Cipher</b>
+					
+					</div>
+					<div class="description">
+						Cipher class to encrypt and decrypt data<br/>
+Here is supported canonicalized cipher algorithm names and its standard names:
+<ul>
+<li>RSA - RSA/ECB/PKCS1Padding (default for RSAKey)</li>
+<li>RSAOAEP - RSA/ECB/OAEPWithSHA-1AndMGF1Padding</li>
+<li>RSAOAEP224 - RSA/ECB/OAEPWithSHA-224AndMGF1Padding(*)</li>
+<li>RSAOAEP256 - RSA/ECB/OAEPWithSHA-256AndMGF1Padding</li>
+<li>RSAOAEP384 - RSA/ECB/OAEPWithSHA-384AndMGF1Padding(*)</li>
+<li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
+</ul>
+NOTE: (*) is not supported in Java JCE.<br/>
+Currently this class supports only RSA encryption and decryption. 
+However it is planning to implement also symmetric ciphers near in the future.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code"></pre>
+					
+					
+
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.2.0 crypto 1.1.10</dd>
+							</dl>
+						
+						
+						
+
+					
+				
 			
 
 <!-- ============================== method details ========================= -->		

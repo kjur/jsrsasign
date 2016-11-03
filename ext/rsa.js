@@ -80,24 +80,42 @@ function oaep_mgf1_arr(seed, len, hash)
     return mask;
 }
 
-// PKCS#1 (OAEP) pad input string s to n bytes, and return a bigint
-function oaep_pad(s, n, hash, hashLen)
-{
-    if (!hash)
-    {
-        hash = rstr_sha1;
-        hashLen = 20;
+/**
+ * PKCS#1 (OAEP) pad input string s to n bytes, and return a bigint
+ * @name oaep_pad
+ * @param s raw string of message
+ * @param n key length of RSA key
+ * @param hash JavaScript function to calculate raw hash value from raw string or algorithm name (ex. "SHA1") 
+ * @param hashLen byte length of resulted hash value (ex. 20 for SHA1)
+ * @return {BigInteger} BigInteger object of resulted PKCS#1 OAEP padded message
+ * @description
+ * This function calculates OAEP padded message from original message.<br/>
+ * NOTE: Since jsrsasign 6.2.0, 'hash' argument can accept an algorithm name such as "sha1".
+ * @example
+ * oaep_pad("aaa", 128) &rarr; big integer object // SHA-1 by default
+ * oaep_pad("aaa", 128, function(s) {...}, 20);
+ * oaep_pad("aaa", 128, "sha1");
+ */
+function oaep_pad(s, n, hash, hashLen) {
+    var MD = KJUR.crypto.MessageDigest;
+    var Util = KJUR.crypto.Util;
+    var algName = null;
+
+    if (!hash) hash = "sha1";
+
+    if (typeof hash === "string") {
+	algName = MD.getCanonicalAlgName(hash);
+	hashLen = MD.getHashLength(algName);
+        hash = function(s) { return hextorstr(Util.hashString(s, algName)); };
     }
 
-    if (s.length + 2 * hashLen + 2 > n)
-    {
+    if (s.length + 2 * hashLen + 2 > n) {
         throw "Message too long for RSA";
     }
 
     var PS = '', i;
 
-    for (i = 0; i < n - s.length - 2 * hashLen - 2; i += 1)
-    {
+    for (i = 0; i < n - s.length - 2 * hashLen - 2; i += 1) {
         PS += '\x00';
     }
 
@@ -108,16 +126,14 @@ function oaep_pad(s, n, hash, hashLen)
     var dbMask = oaep_mgf1_arr(seed, DB.length, hash);
     var maskedDB = [];
 
-    for (i = 0; i < DB.length; i += 1)
-    {
+    for (i = 0; i < DB.length; i += 1) {
         maskedDB[i] = DB.charCodeAt(i) ^ dbMask.charCodeAt(i);
     }
 
     var seedMask = oaep_mgf1_arr(maskedDB, seed.length, hash);
     var maskedSeed = [0];
 
-    for (i = 0; i < seed.length; i += 1)
-    {
+    for (i = 0; i < seed.length; i += 1) {
         maskedSeed[i + 1] = seed[i] ^ seedMask.charCodeAt(i);
     }
 
@@ -169,7 +185,7 @@ function RSAEncrypt(text) {
 
 // Return the PKCS#1 OAEP RSA encryption of "text" as an even-length hex string
 function RSAEncryptOAEP(text, hash, hashLen) {
-  var m = oaep_pad(text, (this.n.bitLength()+7)>>3, hash, hashLen);
+  var m = oaep_pad(text, (this.n.bitLength() + 7) >> 3, hash, hashLen);
   if(m == null) return null;
   var c = this.doPublic(m);
   if(c == null) return null;
