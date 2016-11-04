@@ -1,6 +1,10 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 6.2.0 to next version
+  - crypto 1.1.10 to 1.1.10
+    - API document fix
+
 * Changes from 6.1.4 to 6.2.0
   - RSAKey
     - CRITICAL BUGFIX: RSA-PSS and RSA-OAEP not working from jsrsasign 5.0.0

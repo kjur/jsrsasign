@@ -1290,6 +1290,7 @@ KJUR.crypto.Signature = function(params) {
 /**
  * Cipher class to encrypt and decrypt data<br/>
  * @name KJUR.crypto.Cipher
+ * @class Cipher class to encrypt and decrypt data<br/>
  * @param {Array} params parameters for constructor
  * @since jsrsasign 6.2.0 crypto 1.1.10
  * @description
@@ -1315,8 +1316,8 @@ KJUR.crypto.Cipher = function(params) {
  * @name encrypt
  * @memberOf KJUR.crypto.Cipher
  * @function
- * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
  * @param {String} s input string to encrypt
+ * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
  * @param {String} algName short/long algorithm name for encryption/decryption
  * @return {String} hexadecimal encrypted string
  * @since jsrsasign 6.2.0 crypto 1.1.10
@@ -1343,11 +1344,11 @@ KJUR.crypto.Cipher.encrypt = function(s, keyObj, algName) {
 
 /**
  * decrypt encrypted hexadecimal string with specified key and algorithm<br/>
- * @name encrypt
+ * @name decrypt
  * @memberOf KJUR.crypto.Cipher
  * @function
+ * @param {String} hex hexadecial string of encrypted message
  * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
- * @param {String} s input string to encrypt
  * @param {String} algName short/long algorithm name for encryption/decryption
  * @return {String} hexadecimal encrypted string
  * @since jsrsasign 6.2.0 crypto 1.1.10
