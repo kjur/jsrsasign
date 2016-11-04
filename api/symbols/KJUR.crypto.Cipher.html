@@ -501,7 +501,7 @@ NOTE: (*) is not supported in Java JCE.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.decrypt">decrypt</a></b>(keyObj, s, algName)
+								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.decrypt">decrypt</a></b>(hex, keyObj, algName)
 								</div>
 								<div class="description">decrypt encrypted hexadecimal string with specified key and algorithm<br/>
 This static method decrypts encrypted hexadecimal string with specified key and algorithm.</div>
@@ -511,7 +511,7 @@ This static method decrypts encrypted hexadecimal string with specified key and 
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.encrypt">encrypt</a></b>(keyObj, s, algName)
+								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.encrypt">encrypt</a></b>(s, keyObj, algName)
 								</div>
 								<div class="description">encrypt raw string by specified key and algorithm<br/>
 This static method encrypts raw string with specified key and algorithm.</div>
@@ -621,7 +621,7 @@ However it is planning to implement also symmetric ciphers near in the future.
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{String}</span>
-					<span class="light">KJUR.crypto.Cipher.</span><b>decrypt</b>(keyObj, s, algName)
+					<span class="light">KJUR.crypto.Cipher.</span><b>decrypt</b>(hex, keyObj, algName)
 					
 					</div>
 					<div class="description">
@@ -644,16 +644,16 @@ KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."</pr
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
+									<span class="light fixedFont">{String}</span> <b>hex</b>
+									
+								</dt>
+								<dd>hexadecial string of encrypted message</dd>
+							
+								<dt>
 									<span class="light fixedFont">{Object}</span> <b>keyObj</b>
 									
 								</dt>
 								<dd>RSAKey object or hexadecimal string of symmetric cipher key</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>s</b>
-									
-								</dt>
-								<dd>input string to encrypt</dd>
 							
 								<dt>
 									<span class="light fixedFont">{String}</span> <b>algName</b>
@@ -689,7 +689,7 @@ KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."</pr
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{String}</span>
-					<span class="light">KJUR.crypto.Cipher.</span><b>encrypt</b>(keyObj, s, algName)
+					<span class="light">KJUR.crypto.Cipher.</span><b>encrypt</b>(s, keyObj, algName)
 					
 					</div>
 					<div class="description">
@@ -712,16 +712,16 @@ KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."</pr
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{Object}</span> <b>keyObj</b>
-									
-								</dt>
-								<dd>RSAKey object or hexadecimal string of symmetric cipher key</dd>
-							
-								<dt>
 									<span class="light fixedFont">{String}</span> <b>s</b>
 									
 								</dt>
 								<dd>input string to encrypt</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>keyObj</b>
+									
+								</dt>
+								<dd>RSAKey object or hexadecimal string of symmetric cipher key</dd>
 							
 								<dt>
 									<span class="light fixedFont">{String}</span> <b>algName</b>
