@@ -1,0 +1,64 @@
+#!/usr/bin/env node
+
+/*
+ * jwsview - JWS(JSON Web Signatures) viewer
+ *
+ * Copyright (c) 2016 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * http://kjur.github.com/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ * ---------------------------------------------------------
+ * DESCRIPTION
+ *   This script shows parsed JWS(JSON Web Signature) file.
+ *
+ * USAGE
+ *   % jwsview aaa.jws
+ *
+ *   *** JWS Header ***
+ *   {
+ *     "alg": "RS256"
+ *   }
+ *   *** JWS Payload ***
+ *   {
+ *     "fruit": "apple"
+ *   }
+ *   *** JWS Signature ***
+ *   4d4a17e560c2b945f342e0fbd6a10...
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+var rsu = require('jsrsasign-util');
+
+program
+  .version('1.0.0 (2016-Nov-05)')
+  .usage('[options] <JWS file>')
+  .description('convert any PEM file to binary')
+  .parse(process.argv);
+
+if (program.args.length !== 1)
+  throw "wrong number of arguments";
+
+var inFile  = program.args[0];
+
+var jws = rsu.readFile(inFile);
+var a = jws.split(/\./);
+
+var oHead = rs.KJUR.jws.JWS.readSafeJSONString(rs.b64utoutf8(a[0]));
+console.log("*** JWS Header ***");
+console.log(JSON.stringify(oHead, null, 2));
+
+var oPayload = rs.KJUR.jws.JWS.readSafeJSONString(rs.b64utoutf8(a[1]));
+console.log("*** JWS Payload ***");
+console.log(JSON.stringify(oPayload, null, 2));
+
+console.log("*** JWS Signature ***");
+console.log(rs.b64utohex(a[2]));
+
+
+

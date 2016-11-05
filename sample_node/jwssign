@@ -12,6 +12,15 @@
  * included in all copies or substantial portions of the Software.
  * 
  * Please use '-h' option for this script usage.
+ * ---------------------------------------------------------
+ * DESCRIPTION
+ *   This script generates a JWS(JSON Web Signatures) file.
+ *
+ * USAGE
+ *   % jwssign '{}' '{"fruit":"apple"}' jws.out -t utf8 -p pass -f HS256
+ *   % jwssign '{}' '{"fruit":"apple"}' jws.out -t hex -p 616161 -f HS256 #pass is 'aaa'
+ *   % jwssign '{}' '{"fruit":"apple"}' jws.out -k prv.pem -f RS256
+ *   % jwssign '{}' '{"fruit":"apple"}' jws.out -k prv.pem -f PS256
  */
 
 var program = require('commander');

@@ -12,6 +12,12 @@
  * included in all copies or substantial portions of the Software.
  * 
  * Please use '-h' option for this script usage.
+ * ---------------------------------------------------------
+ * DESCRIPTION
+ *   This script converts any PEM to binary file
+ *
+ * USAGE
+ *   % pemtobin aaa.pem aaa.bin
  */
 
 var program = require('commander');

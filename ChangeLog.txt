@@ -4,8 +4,8 @@ ChangeLog for jsrsasign
 * Changes from 6.2.0 to next version
   - crypto 1.1.10 to 1.1.10
     - API document fix
-  - sample_node
-    - dataencrypt, datadecrypt added
+  - sample_node scripts
+    - dataencrypt, datadecrypt and jwsview added
 
 * Changes from 6.1.4 to 6.2.0 (2016-Nov-03)
   - RSAKey

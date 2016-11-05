@@ -12,6 +12,16 @@
  * included in all copies or substantial portions of the Software.
  * 
  * Please use '-h' option for this script usage.
+ * ---------------------------------------------------------
+ * DESCRIPTION
+ *   This script encrypts a plain text or data file with
+ *   RSA or RSA-OAEP algorithm.
+ *
+ * USAGE
+ *   % dataencrypt data.txt enc.bin rsapub.pem RSA  # with RSA alg
+ *   % dataencrypt data.txt enc.bin rsapub.pem RSAOAEP  # with RSA-OEAP alg
+ *   % dataencrypt data.txt enc.bin rsapub.pem RSAOAEP256  
+ *     # with RSA/ECB/OAEPWithSHA-256AndMGF1Padding 
  */
 
 var program = require('commander');

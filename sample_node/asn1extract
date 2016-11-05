@@ -12,6 +12,18 @@
  * included in all copies or substantial portions of the Software.
  * 
  * Please use '-h' option for this script usage.
+ * ---------------------------------------------------------
+ * DESCRIPTION
+ *   This script extracts descendant ASN.1 structure data from ASN.1 
+ *   DER data file by specifying index list in the ASN.1 nested
+ *   structures.
+ *
+ * USAGE
+ *   % asn1extract out.der z.req 0 0 0 0 1
+ *   idx = 42
+ *   04147ae13ee8a0c42a2cb428cbe7a605461940e2a1e9
+ *   OCTETSTRING 7ae13ee8a0c42a2cb428cbe7a605461940e2a1e9
+ *   # write this to out.der. "z.req" is OCSP request.
  */
 
 var program = require('commander');

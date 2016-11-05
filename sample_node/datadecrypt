@@ -12,6 +12,15 @@
  * included in all copies or substantial portions of the Software.
  * 
  * Please use '-h' option for this script usage.
+ * ---------------------------------------------------------
+ * DESCRIPTION
+ *   This script decrypts a encrypted binary data file with
+ *   RSA or RSA-OAEP algorithm.
+ *
+ * USAGE
+ *   % dataencrypt enc.bin plain.txt rsaprv.pem RSA  # with RSA alg
+ *   % dataencrypt enc.bin plain.txt rsaprv.pem RSAOAEP  # with RSAOAEP alg
+ *   % dataencrypt enc.bin - rsaprv.pem RSA  # output to stdout by '-'
  */
 
 var program = require('commander');
