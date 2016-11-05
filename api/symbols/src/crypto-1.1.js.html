@@ -456,7 +456,7 @@
 <span class='line'>449</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>450</span>      * completes hash calculation and returns hash result
 <span class='line'>451</span>      * @name digest
-<span class='line'>452</span>      * @memberOf KJUR.crypto.MessageDigest
+<span class='line'>452</span>      * @memberOf KJUR.crypto.MessageDigest#
 <span class='line'>453</span>      * @function
 <span class='line'>454</span>      * @description
 <span class='line'>455</span>      * @example
@@ -656,7 +656,7 @@
 <span class='line'>649</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>650</span>      * update digest by specified string
 <span class='line'>651</span>      * @name updateString
-<span class='line'>652</span>      * @memberOf KJUR.crypto.Mac
+<span class='line'>652</span>      * @memberOf KJUR.crypto.Mac#
 <span class='line'>653</span>      * @function
 <span class='line'>654</span>      * @param {String} str string to update
 <span class='line'>655</span>      * @description
@@ -670,7 +670,7 @@
 <span class='line'>663</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>664</span>      * update digest by specified hexadecimal string
 <span class='line'>665</span>      * @name updateHex
-<span class='line'>666</span>      * @memberOf KJUR.crypto.Mac
+<span class='line'>666</span>      * @memberOf KJUR.crypto.Mac#
 <span class='line'>667</span>      * @function
 <span class='line'>668</span>      * @param {String} hex hexadecimal string to update
 <span class='line'>669</span>      * @description
@@ -684,7 +684,7 @@
 <span class='line'>677</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>678</span>      * completes hash calculation and returns hash result
 <span class='line'>679</span>      * @name doFinal
-<span class='line'>680</span>      * @memberOf KJUR.crypto.Mac
+<span class='line'>680</span>      * @memberOf KJUR.crypto.Mac#
 <span class='line'>681</span>      * @function
 <span class='line'>682</span>      * @description
 <span class='line'>683</span>      * @example
@@ -697,7 +697,7 @@
 <span class='line'>690</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>691</span>      * performs final update on the digest using string, then completes the digest computation
 <span class='line'>692</span>      * @name doFinalString
-<span class='line'>693</span>      * @memberOf KJUR.crypto.Mac
+<span class='line'>693</span>      * @memberOf KJUR.crypto.Mac#
 <span class='line'>694</span>      * @function
 <span class='line'>695</span>      * @param {String} str string to final update
 <span class='line'>696</span>      * @description
@@ -712,7 +712,7 @@
 <span class='line'>705</span>      * performs final update on the digest using hexadecimal string, 
 <span class='line'>706</span>      * then completes the digest computation
 <span class='line'>707</span>      * @name doFinalHex
-<span class='line'>708</span>      * @memberOf KJUR.crypto.Mac
+<span class='line'>708</span>      * @memberOf KJUR.crypto.Mac#
 <span class='line'>709</span>      * @function
 <span class='line'>710</span>      * @param {String} hex hexadecimal string to final update
 <span class='line'>711</span>      * @description
@@ -726,7 +726,7 @@
 <span class='line'>719</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>720</span>      * set password for Mac
 <span class='line'>721</span>      * @name setPassword
-<span class='line'>722</span>      * @memberOf KJUR.crypto.Mac
+<span class='line'>722</span>      * @memberOf KJUR.crypto.Mac#
 <span class='line'>723</span>      * @function
 <span class='line'>724</span>      * @param {Object} pass password for Mac
 <span class='line'>725</span>      * @since crypto 1.1.7 jsrsasign 4.9.0
@@ -929,7 +929,7 @@
 <span class='line'>922</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>923</span>      * set signature algorithm and provider
 <span class='line'>924</span>      * @name setAlgAndProvider
-<span class='line'>925</span>      * @memberOf KJUR.crypto.Signature
+<span class='line'>925</span>      * @memberOf KJUR.crypto.Signature#
 <span class='line'>926</span>      * @function
 <span class='line'>927</span>      * @param {String} alg signature algorithm name
 <span class='line'>928</span>      * @param {String} prov provider name
@@ -1072,7 +1072,7 @@
 <span class='line'>1065</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>1066</span>      * Initialize this object for signing or verifying depends on key
 <span class='line'>1067</span>      * @name init
-<span class='line'>1068</span>      * @memberOf KJUR.crypto.Signature
+<span class='line'>1068</span>      * @memberOf KJUR.crypto.Signature#
 <span class='line'>1069</span>      * @function
 <span class='line'>1070</span>      * @param {Object} key specifying public or private key as plain/encrypted PKCS#5/8 PEM file, certificate PEM or {@link RSAKey}, {@link KJUR.crypto.DSA} or {@link KJUR.crypto.ECDSA} object
 <span class='line'>1071</span>      * @param {String} pass (OPTION) passcode for encrypted private key
@@ -1112,7 +1112,7 @@
 <span class='line'>1105</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>1106</span>      * Initialize this object for verifying with a public key
 <span class='line'>1107</span>      * @name initVerifyByPublicKey
-<span class='line'>1108</span>      * @memberOf KJUR.crypto.Signature
+<span class='line'>1108</span>      * @memberOf KJUR.crypto.Signature#
 <span class='line'>1109</span>      * @function
 <span class='line'>1110</span>      * @param {Object} param RSAKey object of public key or associative array for ECDSA
 <span class='line'>1111</span>      * @since 1.0.2
@@ -1137,7 +1137,7 @@
 <span class='line'>1130</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>1131</span>      * Initialize this object for verifying with a certficate
 <span class='line'>1132</span>      * @name initVerifyByCertificatePEM
-<span class='line'>1133</span>      * @memberOf KJUR.crypto.Signature
+<span class='line'>1133</span>      * @memberOf KJUR.crypto.Signature#
 <span class='line'>1134</span>      * @function
 <span class='line'>1135</span>      * @param {String} certPEM PEM formatted string of certificate
 <span class='line'>1136</span>      * @since 1.0.2
@@ -1154,7 +1154,7 @@
 <span class='line'>1147</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>1148</span>      * Initialize this object for signing
 <span class='line'>1149</span>      * @name initSign
-<span class='line'>1150</span>      * @memberOf KJUR.crypto.Signature
+<span class='line'>1150</span>      * @memberOf KJUR.crypto.Signature#
 <span class='line'>1151</span>      * @function
 <span class='line'>1152</span>      * @param {Object} param RSAKey object of public key or associative array for ECDSA
 <span class='line'>1153</span>      * @deprecated from crypto 1.1.5. please use init() method instead.
@@ -1176,7 +1176,7 @@
 <span class='line'>1169</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>1170</span>      * Updates the data to be signed or verified by a string
 <span class='line'>1171</span>      * @name updateString
-<span class='line'>1172</span>      * @memberOf KJUR.crypto.Signature
+<span class='line'>1172</span>      * @memberOf KJUR.crypto.Signature#
 <span class='line'>1173</span>      * @function
 <span class='line'>1174</span>      * @param {String} str string to use for the update
 <span class='line'>1175</span>      * @description
@@ -1190,7 +1190,7 @@
 <span class='line'>1183</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>1184</span>      * Updates the data to be signed or verified by a hexadecimal string
 <span class='line'>1185</span>      * @name updateHex
-<span class='line'>1186</span>      * @memberOf KJUR.crypto.Signature
+<span class='line'>1186</span>      * @memberOf KJUR.crypto.Signature#
 <span class='line'>1187</span>      * @function
 <span class='line'>1188</span>      * @param {String} hex hexadecimal string to use for the update
 <span class='line'>1189</span>      * @description
@@ -1204,7 +1204,7 @@
 <span class='line'>1197</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>1198</span>      * Returns the signature bytes of all data updates as a hexadecimal string
 <span class='line'>1199</span>      * @name sign
-<span class='line'>1200</span>      * @memberOf KJUR.crypto.Signature
+<span class='line'>1200</span>      * @memberOf KJUR.crypto.Signature#
 <span class='line'>1201</span>      * @function
 <span class='line'>1202</span>      * @return the signature bytes as a hexadecimal string
 <span class='line'>1203</span>      * @description
@@ -1218,7 +1218,7 @@
 <span class='line'>1211</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>1212</span>      * performs final update on the sign using string, then returns the signature bytes of all data updates as a hexadecimal string
 <span class='line'>1213</span>      * @name signString
-<span class='line'>1214</span>      * @memberOf KJUR.crypto.Signature
+<span class='line'>1214</span>      * @memberOf KJUR.crypto.Signature#
 <span class='line'>1215</span>      * @function
 <span class='line'>1216</span>      * @param {String} str string to final update
 <span class='line'>1217</span>      * @return the signature bytes of a hexadecimal string
@@ -1233,7 +1233,7 @@
 <span class='line'>1226</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>1227</span>      * performs final update on the sign using hexadecimal string, then returns the signature bytes of all data updates as a hexadecimal string
 <span class='line'>1228</span>      * @name signHex
-<span class='line'>1229</span>      * @memberOf KJUR.crypto.Signature
+<span class='line'>1229</span>      * @memberOf KJUR.crypto.Signature#
 <span class='line'>1230</span>      * @function
 <span class='line'>1231</span>      * @param {String} hex hexadecimal string to final update
 <span class='line'>1232</span>      * @return the signature bytes of a hexadecimal string
@@ -1248,7 +1248,7 @@
 <span class='line'>1241</span> </span><span class="WHIT">    </span><span class="COMM">/**
 <span class='line'>1242</span>      * verifies the passed-in signature.
 <span class='line'>1243</span>      * @name verify
-<span class='line'>1244</span>      * @memberOf KJUR.crypto.Signature
+<span class='line'>1244</span>      * @memberOf KJUR.crypto.Signature#
 <span class='line'>1245</span>      * @function
 <span class='line'>1246</span>      * @param {String} str string to final update
 <span class='line'>1247</span>      * @return {Boolean} true if the signature was verified, otherwise false

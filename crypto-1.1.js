@@ -449,7 +449,7 @@ KJUR.crypto.MessageDigest = function(params) {
     /**
      * completes hash calculation and returns hash result
      * @name digest
-     * @memberOf KJUR.crypto.MessageDigest
+     * @memberOf KJUR.crypto.MessageDigest#
      * @function
      * @description
      * @example
@@ -649,7 +649,7 @@ KJUR.crypto.Mac = function(params) {
     /**
      * update digest by specified string
      * @name updateString
-     * @memberOf KJUR.crypto.Mac
+     * @memberOf KJUR.crypto.Mac#
      * @function
      * @param {String} str string to update
      * @description
@@ -663,7 +663,7 @@ KJUR.crypto.Mac = function(params) {
     /**
      * update digest by specified hexadecimal string
      * @name updateHex
-     * @memberOf KJUR.crypto.Mac
+     * @memberOf KJUR.crypto.Mac#
      * @function
      * @param {String} hex hexadecimal string to update
      * @description
@@ -677,7 +677,7 @@ KJUR.crypto.Mac = function(params) {
     /**
      * completes hash calculation and returns hash result
      * @name doFinal
-     * @memberOf KJUR.crypto.Mac
+     * @memberOf KJUR.crypto.Mac#
      * @function
      * @description
      * @example
@@ -690,7 +690,7 @@ KJUR.crypto.Mac = function(params) {
     /**
      * performs final update on the digest using string, then completes the digest computation
      * @name doFinalString
-     * @memberOf KJUR.crypto.Mac
+     * @memberOf KJUR.crypto.Mac#
      * @function
      * @param {String} str string to final update
      * @description
@@ -705,7 +705,7 @@ KJUR.crypto.Mac = function(params) {
      * performs final update on the digest using hexadecimal string, 
      * then completes the digest computation
      * @name doFinalHex
-     * @memberOf KJUR.crypto.Mac
+     * @memberOf KJUR.crypto.Mac#
      * @function
      * @param {String} hex hexadecimal string to final update
      * @description
@@ -719,7 +719,7 @@ KJUR.crypto.Mac = function(params) {
     /**
      * set password for Mac
      * @name setPassword
-     * @memberOf KJUR.crypto.Mac
+     * @memberOf KJUR.crypto.Mac#
      * @function
      * @param {Object} pass password for Mac
      * @since crypto 1.1.7 jsrsasign 4.9.0
@@ -922,7 +922,7 @@ KJUR.crypto.Signature = function(params) {
     /**
      * set signature algorithm and provider
      * @name setAlgAndProvider
-     * @memberOf KJUR.crypto.Signature
+     * @memberOf KJUR.crypto.Signature#
      * @function
      * @param {String} alg signature algorithm name
      * @param {String} prov provider name
@@ -1065,7 +1065,7 @@ KJUR.crypto.Signature = function(params) {
     /**
      * Initialize this object for signing or verifying depends on key
      * @name init
-     * @memberOf KJUR.crypto.Signature
+     * @memberOf KJUR.crypto.Signature#
      * @function
      * @param {Object} key specifying public or private key as plain/encrypted PKCS#5/8 PEM file, certificate PEM or {@link RSAKey}, {@link KJUR.crypto.DSA} or {@link KJUR.crypto.ECDSA} object
      * @param {String} pass (OPTION) passcode for encrypted private key
@@ -1105,7 +1105,7 @@ KJUR.crypto.Signature = function(params) {
     /**
      * Initialize this object for verifying with a public key
      * @name initVerifyByPublicKey
-     * @memberOf KJUR.crypto.Signature
+     * @memberOf KJUR.crypto.Signature#
      * @function
      * @param {Object} param RSAKey object of public key or associative array for ECDSA
      * @since 1.0.2
@@ -1130,7 +1130,7 @@ KJUR.crypto.Signature = function(params) {
     /**
      * Initialize this object for verifying with a certficate
      * @name initVerifyByCertificatePEM
-     * @memberOf KJUR.crypto.Signature
+     * @memberOf KJUR.crypto.Signature#
      * @function
      * @param {String} certPEM PEM formatted string of certificate
      * @since 1.0.2
@@ -1147,7 +1147,7 @@ KJUR.crypto.Signature = function(params) {
     /**
      * Initialize this object for signing
      * @name initSign
-     * @memberOf KJUR.crypto.Signature
+     * @memberOf KJUR.crypto.Signature#
      * @function
      * @param {Object} param RSAKey object of public key or associative array for ECDSA
      * @deprecated from crypto 1.1.5. please use init() method instead.
@@ -1169,7 +1169,7 @@ KJUR.crypto.Signature = function(params) {
     /**
      * Updates the data to be signed or verified by a string
      * @name updateString
-     * @memberOf KJUR.crypto.Signature
+     * @memberOf KJUR.crypto.Signature#
      * @function
      * @param {String} str string to use for the update
      * @description
@@ -1183,7 +1183,7 @@ KJUR.crypto.Signature = function(params) {
     /**
      * Updates the data to be signed or verified by a hexadecimal string
      * @name updateHex
-     * @memberOf KJUR.crypto.Signature
+     * @memberOf KJUR.crypto.Signature#
      * @function
      * @param {String} hex hexadecimal string to use for the update
      * @description
@@ -1197,7 +1197,7 @@ KJUR.crypto.Signature = function(params) {
     /**
      * Returns the signature bytes of all data updates as a hexadecimal string
      * @name sign
-     * @memberOf KJUR.crypto.Signature
+     * @memberOf KJUR.crypto.Signature#
      * @function
      * @return the signature bytes as a hexadecimal string
      * @description
@@ -1211,7 +1211,7 @@ KJUR.crypto.Signature = function(params) {
     /**
      * performs final update on the sign using string, then returns the signature bytes of all data updates as a hexadecimal string
      * @name signString
-     * @memberOf KJUR.crypto.Signature
+     * @memberOf KJUR.crypto.Signature#
      * @function
      * @param {String} str string to final update
      * @return the signature bytes of a hexadecimal string
@@ -1226,7 +1226,7 @@ KJUR.crypto.Signature = function(params) {
     /**
      * performs final update on the sign using hexadecimal string, then returns the signature bytes of all data updates as a hexadecimal string
      * @name signHex
-     * @memberOf KJUR.crypto.Signature
+     * @memberOf KJUR.crypto.Signature#
      * @function
      * @param {String} hex hexadecimal string to final update
      * @return the signature bytes of a hexadecimal string
@@ -1241,7 +1241,7 @@ KJUR.crypto.Signature = function(params) {
     /**
      * verifies the passed-in signature.
      * @name verify
-     * @memberOf KJUR.crypto.Signature
+     * @memberOf KJUR.crypto.Signature#
      * @function
      * @param {String} str string to final update
      * @return {Boolean} true if the signature was verified, otherwise false
