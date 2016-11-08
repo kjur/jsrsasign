@@ -6,6 +6,8 @@ ChangeLog for jsrsasign
     - API document fix
   - sample_node scripts
     - dataencrypt, datadecrypt and jwsview added
+  - x509 1.1.9 to 1.1.9 (same)
+    - X509.readCertPEMWithoutRSAInit fix by @lionello . Thanks.
 
 * Changes from 6.1.4 to 6.2.0 (2016-Nov-03)
   - RSAKey
