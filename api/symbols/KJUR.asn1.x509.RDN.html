@@ -345,6 +345,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html">KJUR.asn1.x509.AttributeTypeAndValue</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.AuthorityInfoAccess.html">KJUR.asn1.x509.AuthorityInfoAccess</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html">KJUR.asn1.x509.AuthorityKeyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.BasicConstraints.html">KJUR.asn1.x509.BasicConstraints</a></li>
@@ -442,7 +444,7 @@ ul.inheritsList
 					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
-				RDN (Relative Distinguish Name) ASN.1 structure class
+				RDN (Relative Distinguished Name) ASN.1 structure class
 				
 				
 					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
@@ -466,8 +468,9 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/KJUR.asn1.x509.RDN.html#constructor">KJUR.asn1.x509.RDN</a></b>(params)
 							</div>
-							<div class="description">RDN (Relative Distinguish Name) ASN.1 structure class
-</div>
+							<div class="description">RDN (Relative Distinguished Name) ASN.1 structure class
+This class provides RelativeDistinguishedName ASN.1 class structure
+defined in <a href="https://tools.ietf.org/html/rfc2253#section-2">RFC 2253 section 2</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -488,6 +491,59 @@ ul.inheritsList
 
 <!-- ============================== methods summary ======================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.x509.RDN.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.RDN.html#addByMultiValuedString">addByMultiValuedString</a></b>(s)
+								</div>
+								<div class="description">add one AttributeTypeAndValue by multi-valued string<br/>
+This method add multi-valued RDN to RDN object.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.RDN.html#addByString">addByString</a></b>(s)
+								</div>
+								<div class="description">add one AttributeTypeAndValue by string<br/>
+This method add one AttributeTypeAndValue to RDN object.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.RDN.<b><a href="../symbols/KJUR.asn1.x509.RDN.html#.parseString">parseString</a></b>(s)
+								</div>
+								<div class="description">parse multi-valued RDN string and split into array of 'AttributeTypeAndValue'<br/>
+This static method parses multi-valued RDN string and split into
+array of AttributeTypeAndValue.</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+				<dl class="inheritsList">
+				
+				</dl>
+				
+			
 <!-- ============================== events summary ======================== -->
 			
 
@@ -503,14 +559,28 @@ ul.inheritsList
 				</div>
 				
 				<div class="description">
-					RDN (Relative Distinguish Name) ASN.1 structure class
+					RDN (Relative Distinguished Name) ASN.1 structure class
+This class provides RelativeDistinguishedName ASN.1 class structure
+defined in <a href="https://tools.ietf.org/html/rfc2253#section-2">RFC 2253 section 2</a>.
+<blockquote><pre>
+RelativeDistinguishedName ::= SET SIZE (1..MAX) OF
+  AttributeTypeAndValue
 
+AttributeTypeAndValue ::= SEQUENCE {
+  type  AttributeType,
+  value AttributeValue }
+</pre></blockquote>
+<br/>
+NOTE: Multi-valued RDN is supported since jsrsasign 6.2.1 asn1x509 1.0.17.
 					
 				</div>
 				
 				
 				
-				<pre class="code"></pre>
+				<pre class="code">rdn = new KJUR.asn1.x509.RDN({str: "CN=test"});
+rdn = new KJUR.asn1.x509.RDN({str: "O=a+O=bb+O=c"}); // multi-valued
+rdn = new KJUR.asn1.x509.RDN({str: "O=a+O=b\\+b+O=c"}); // plus escaped
+rdn = new KJUR.asn1.x509.RDN({str: "O=a+O=\"b+b\"+O=c"}); // double quoted</pre>
 				
 				
 				
@@ -533,6 +603,17 @@ ul.inheritsList
 					
 					
 					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html">KJUR.asn1.x509.AttributeTypeAndValue</a></dd>
+						
+						</dl>
+					
 
 			</div>
 			
@@ -541,6 +622,177 @@ ul.inheritsList
 			
 
 <!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name="addByMultiValuedString"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>addByMultiValuedString</b>(s)
+					
+					</div>
+					<div class="description">
+						add one AttributeTypeAndValue by multi-valued string<br/>
+This method add multi-valued RDN to RDN object.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">rdn = new KJUR.asn1.x509.RDN();
+rdn.addByMultiValuedString("CN=john+O=test");
+rdn.addByMultiValuedString("O=a+O=b\+b\+b+O=c"); // multi-valued RDN with quoted plus
+rdn.addByMultiValuedString("O=a+O=\"b+b+b\"+O=c"); // multi-valued RDN with quoted quotation</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>string of multi-valued RDN</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.2.1 asn1x509 1.0.17</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> unspecified</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="addByString"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>addByString</b>(s)
+					
+					</div>
+					<div class="description">
+						add one AttributeTypeAndValue by string<br/>
+This method add one AttributeTypeAndValue to RDN object.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">rdn = new KJUR.asn1.x509.RDN();
+rdn.addByString("CN=john");
+rdn.addByString("serialNumber=1234"); // for multi-valued RDN</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>string of AttributeTypeAndValue</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> unspecified</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".parseString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">KJUR.asn1.x509.RDN.</span><b>parseString</b>(s)
+					
+					</div>
+					<div class="description">
+						parse multi-valued RDN string and split into array of 'AttributeTypeAndValue'<br/>
+This static method parses multi-valued RDN string and split into
+array of AttributeTypeAndValue.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.asn1.x509.RDN.parseString("CN=john") &rarr; ["CN=john"]
+KJUR.asn1.x509.RDN.parseString("CN=john+OU=test") &rarr; ["CN=john", "OU=test"]
+KJUR.asn1.x509.RDN.parseString('CN="jo+hn"+OU=test') &rarr; ["CN=jo+hn", "OU=test"]
+KJUR.asn1.x509.RDN.parseString('CN=jo\+hn+OU=test') &rarr; ["CN=jo+hn", "OU=test"]
+KJUR.asn1.x509.RDN.parseString("CN=john+OU=test+OU=t1") &rarr; ["CN=john", "OU=test", "OU=t1"]</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>multi-valued string of RDN</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.2.1 asn1x509 1.0.17</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of string of AttributeTypeAndValue</dd>
+							
+							</dl>
+						
+						
+						
+
+					
+				
 			
 			
 <!-- ============================== event details ========================= -->		

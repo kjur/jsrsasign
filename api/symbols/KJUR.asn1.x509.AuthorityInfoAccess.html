@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 4.8.7 JavaScript API Reference - KJUR.asn1.x509.X509Util</title>
+		<title>jsrsasign 4.8.7 JavaScript API Reference - KJUR.asn1.x509.AuthorityInfoAccess</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -434,15 +434,17 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.x509.X509Util
+				Class KJUR.asn1.x509.AuthorityInfoAccess
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
+				<br />Extends
+					<a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a>.<br />
 				
 			
-				X.509 certificate and CRL utilities class
+				AuthorityInfoAccess ASN.1 structure class
 				
 				
 					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
@@ -451,7 +453,7 @@ ul.inheritsList
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.X509Util.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.AuthorityInfoAccess.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -464,9 +466,14 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.x509.X509Util.html#constructor">KJUR.asn1.x509.X509Util</a></b>()
+								<b><a href="../symbols/KJUR.asn1.x509.AuthorityInfoAccess.html#constructor">KJUR.asn1.x509.AuthorityInfoAccess</a></b>(params)
 							</div>
-							<div class="description">X.509 certificate and CRL utilities class</div>
+							<div class="description">AuthorityInfoAccess ASN.1 structure class
+<pre>
+id-pe OBJECT IDENTIFIER  ::=  { id-pkix 1 }
+id-pe-authorityInfoAccess OBJECT IDENTIFIER ::= { id-pe 1 }
+AuthorityInfoAccessSyntax  ::=
+        SEQUENCE SIZE (1.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -475,47 +482,17 @@ ul.inheritsList
 
 <!-- ============================== properties summary ===================== -->
 			
+				
+				
+				
+				
+				<dl class="inheritsList">
+				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
+				</dl>
+				
+			
 
 <!-- ============================== methods summary ======================== -->
-			
-				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.x509.X509Util.">
-					<caption>Method Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.X509Util.<b><a href="../symbols/KJUR.asn1.x509.X509Util.html#.getPKCS8PubKeyPEMfromRSAKey">getPKCS8PubKeyPEMfromRSAKey</a></b>(rsaKey)
-								</div>
-								<div class="description">get PKCS#8 PEM public key string from RSAKey object
-</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.X509Util.<b><a href="../symbols/KJUR.asn1.x509.X509Util.html#.newCertPEM">newCertPEM</a></b>(param)
-								</div>
-								<div class="description">issue a certificate in PEM format
-This method can issue a certificate by a simple
-JSON object.</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
-				
-				
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -528,19 +505,55 @@ JSON object.</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.x509.X509Util</b>()
+						<b>KJUR.asn1.x509.AuthorityInfoAccess</b>(params)
 				</div>
 				
 				<div class="description">
-					X.509 certificate and CRL utilities class
+					AuthorityInfoAccess ASN.1 structure class
+<pre>
+id-pe OBJECT IDENTIFIER  ::=  { id-pkix 1 }
+id-pe-authorityInfoAccess OBJECT IDENTIFIER ::= { id-pe 1 }
+AuthorityInfoAccessSyntax  ::=
+        SEQUENCE SIZE (1..MAX) OF AccessDescription
+AccessDescription  ::=  SEQUENCE {
+        accessMethod          OBJECT IDENTIFIER,
+        accessLocation        GeneralName  }
+id-ad OBJECT IDENTIFIER ::= { id-pkix 48 }
+id-ad-caIssuers OBJECT IDENTIFIER ::= { id-ad 2 }
+id-ad-ocsp OBJECT IDENTIFIER ::= { id-ad 1 }
+</pre>
 					
 				</div>
 				
 				
 				
+				<pre class="code">var param = {'array':[
+              { 'accessMethod':{'oid': '1.3.6.1.5.5.7.48.1'},
+                'accessLocation':{'uri': 'http://ocsp.cacert.org'}
+              } ]};
+var e1 = new KJUR.asn1.x509.AuthorityInfoAccess(param);</pre>
+				
+				
+				
 				
 					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Array}</span>  <b>params</b>
+								
+							</dt>
+								<dd>associative array of parameters</dd>
+						
+						</dl>
 					
+					
+					
+						<dl class="detailList">
+						<dt class="heading">Since:</dt>
+							<dd>asn1x509 1.0.8</dd>
+						</dl>
 					
 					
 					
@@ -554,144 +567,6 @@ JSON object.</div>
 			
 
 <!-- ============================== method details ========================= -->		
-			
-				<div class="sectionTitle">
-					Method Detail
-				</div>
-				
-					<a name=".getPKCS8PubKeyPEMfromRSAKey"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.x509.X509Util.</span><b>getPKCS8PubKeyPEMfromRSAKey</b>(rsaKey)
-					
-					</div>
-					<div class="description">
-						get PKCS#8 PEM public key string from RSAKey object
-
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">var pem = KJUR.asn1.x509.X509Util.getPKCS8PubKeyPEMfromRSAKey(pubKey);</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> <b>rsaKey</b>
-									
-								</dt>
-								<dd>RSA public key of <a href="../symbols/RSAKey.html">RSAKey</a> object</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".newCertPEM"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.x509.X509Util.</span><b>newCertPEM</b>(param)
-					
-					</div>
-					<div class="description">
-						issue a certificate in PEM format
-This method can issue a certificate by a simple
-JSON object.
-Signature value will be provided by signing with
-private key using 'cakey' parameter or
-hexa decimal signature value by 'sighex' parameter.
-
-NOTE: When using DSA or ECDSA CA signing key,
-use 'paramempty' in 'sigalg' to ommit parameter field
-of AlgorithmIdentifer. In case of RSA, parameter
-NULL will be specified by default.
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">var certPEM = KJUR.asn1.x509.X509Util.newCertPEM(
-{ serial: {int: 4},
-  sigalg: {name: 'SHA1withECDSA', paramempty: true},
-  issuer: {str: '/C=US/O=a'},
-  notbefore: {'str': '130504235959Z'},
-  notafter: {'str': '140504235959Z'},
-  subject: {str: '/C=US/O=b'},
-  sbjpubkey: pubKeyPEM,
-  ext: [
-    {basicConstraints: {cA: true, critical: true}},
-    {keyUsage: {bin: '11'}},
-  ],
-  cakey: [prvkey, pass]}
-);
-// -- or --
-var certPEM = KJUR.asn1.x509.X509Util.newCertPEM(
-{ serial: {int: 1},
-  sigalg: {name: 'SHA1withRSA', paramempty: true},
-  issuer: {str: '/C=US/O=T1'},
-  notbefore: {'str': '130504235959Z'},
-  notafter: {'str': '140504235959Z'},
-  subject: {str: '/C=US/O=T1'},
-  sbjpubkey: pubKeyObj,
-  sighex: '0102030405..'}
-);
-// for the issuer and subject field, another
-// representation is also available
-var certPEM = KJUR.asn1.x509.X509Util.newCertPEM(
-{ serial: {int: 1},
-  sigalg: {name: 'SHA1withRSA', paramempty: true},
-  issuer: {C: "US", O: "T1"},
-  notbefore: {'str': '130504235959Z'},
-  notafter: {'str': '140504235959Z'},
-  subject: {C: "US", O: "T1", CN: "http://example.com/"},
-  sbjpubkey: pubKeyObj,
-  sighex: '0102030405..'}
-);</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Array}</span> <b>param</b>
-									
-								</dt>
-								<dd>parameter to issue a certificate</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>asn1x509 1.0.6</dd>
-							</dl>
-							</dl>
-						
-						
-						
-						
-						
-
-					
-				
 			
 			
 <!-- ============================== event details ========================= -->		

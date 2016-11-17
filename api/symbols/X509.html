@@ -345,6 +345,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html">KJUR.asn1.x509.AttributeTypeAndValue</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.AuthorityInfoAccess.html">KJUR.asn1.x509.AuthorityInfoAccess</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html">KJUR.asn1.x509.AuthorityKeyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.BasicConstraints.html">KJUR.asn1.x509.BasicConstraints</a></li>
@@ -856,8 +858,8 @@ This method will get all extension information of a X.509 certificate.</div>
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getV3ExtItemInfo_AtObj">getV3ExtItemInfo_AtObj</a></b>(hCert, pos)
 								</div>
 								<div class="description">get X.509 V3 extension value information at the specified position
-This method will get some information of a X.509 V extension 
-which is referred by an index of hexadecimal string of X.509 
+This method will get some information of a X.509 V extension
+which is referred by an index of hexadecimal string of X.509
 certificate.</div>
 							</td>
 						</tr>
@@ -1421,7 +1423,7 @@ it returns empty string (i.e. '').
 					
 					<pre class="code">bKeyUsage = X509.getExtKeyUsageBin(hCert);
 // bKeyUsage will be such like '101'.
-// 1 - digitalSignature 
+// 1 - digitalSignature
 // 0 - nonRepudiation
 // 1 - keyEncipherment</pre>
 					
@@ -1648,7 +1650,7 @@ it returns null.
 					<div class="description">
 						get X.509 V3 extension value ASN.1 TLV for specified oid or name
 This method will get X.509v3 extension value of ASN.1 TLV
-which is specifyed by extension name or oid. 
+which is specifyed by extension name or oid.
 If there is no such extension in the certificate, it returns null.
 						
 						
@@ -1711,7 +1713,7 @@ If there is no such extension in the certificate, it returns null.
 					<div class="description">
 						get X.509 V3 extension value ASN.1 V for specified oid or name
 This method will get X.509v3 extension value of ASN.1 value
-which is specifyed by extension name or oid. 
+which is specifyed by extension name or oid.
 If there is no such extension in the certificate, it returns null.
 Available extension names and oids are defined
 in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class.
@@ -1792,7 +1794,7 @@ Basic Fields
   notBefore: 061110000000Z
   notAfter: 311110000000Z
   subject: /C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert High Assurance EV Root CA
-  subject public key info: 
+  subject public key info:
     key algorithm: RSA
     n=c6cce573e6fbd4bb...
     e=10001
@@ -1995,7 +1997,7 @@ var notBefore = x.getNotBefore(); // return string like "151231235959Z"</pre>
 					<div class="description">
 						get index in the certificate hexa string for specified oid or name specified extension
 This method will get X.509v3 extension value of ASN.1 V(value)
-which is specifyed by extension name or oid. 
+which is specifyed by extension name or oid.
 If there is no such extension in the certificate,
 it returns -1.
 Available extension names and oids are defined
@@ -2647,9 +2649,9 @@ a = X509.getV3ExtInfoListOfCertHex(hCert);
 					</div>
 					<div class="description">
 						get X.509 V3 extension value information at the specified position
-This method will get some information of a X.509 V extension 
-which is referred by an index of hexadecimal string of X.509 
-certificate. 
+This method will get some information of a X.509 V extension
+which is referred by an index of hexadecimal string of X.509
+certificate.
 Resulting object has following properties:
 <ul>
 <li>posTLV - index of ASN.1 TLV for the extension. same as 'pos' argument.</li>

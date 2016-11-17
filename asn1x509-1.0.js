@@ -1,4 +1,4 @@
-/*! asn1x509-1.0.16.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.17.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.16 (2016-Oct-29)
+ * @version 1.0.17 (2016-Nov-18)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -208,7 +208,7 @@ KJUR.asn1.x509.Certificate = function(params) {
      * @example
      * var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbs, 'rsaprvkey': prvKey});
      * cert.sign();
-     * var sPEM =  cert.getPEMString();
+     * var sPEM = cert.getPEMString();
      */
     this.getPEMString = function() {
         var hCert = this.getEncodedHex();
@@ -1191,7 +1191,29 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRLEntry, KJUR.asn1.ASN1Object);
  * @class X500Name ASN.1 structure class
  * @param {Array} params associative array of parameters (ex. {'str': '/C=US/O=a'})
  * @extends KJUR.asn1.ASN1Object
+ * @see KJUR.asn1.x509.X500Name
+ * @see KJUR.asn1.x509.RDN
+ * @see KJUR.asn1.x509.AttributeTypeAndValue
  * @description
+ * This class provides DistinguishedName ASN.1 class structure
+ * defined in <a href="https://tools.ietf.org/html/rfc2253#section-2">RFC 2253 section 2</a>.
+ * <blockquote><pre>
+ * DistinguishedName ::= RDNSequence
+ *
+ * RDNSequence ::= SEQUENCE OF RelativeDistinguishedName
+ *
+ * RelativeDistinguishedName ::= SET SIZE (1..MAX) OF
+ *   AttributeTypeAndValue
+ *
+ * AttributeTypeAndValue ::= SEQUENCE {
+ *   type  AttributeType,
+ *   value AttributeValue }
+ * </pre></blockquote>
+ * <br/>
+ * For string representation of distinguished name in jsrsasign,
+ * OpenSSL oneline format is used. Please see <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">wiki article</a> for it.
+ * <br/>
+ * NOTE: Multi-valued RDN is supported since jsrsasign 6.2.1 asn1x509 1.0.17.
  * @example
  * // 1. construct with string
  * o = new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa/OU=bbb/CN=foo@example.com"});
@@ -1205,7 +1227,7 @@ KJUR.asn1.x509.X500Name = function(params) {
     /**
      * set DN by string
      * @name setByString
-     * @memberOf KJUR.asn1.x509.X500Name
+     * @memberOf KJUR.asn1.x509.X500Name#
      * @function
      * @param {Array} dnStr distinguished name by string (ex. /C=US/O=aaa)
      * @description
@@ -1224,7 +1246,7 @@ KJUR.asn1.x509.X500Name = function(params) {
     /**
      * set DN by associative array
      * @name setByObject
-     * @memberOf KJUR.asn1.x509.X500Name
+     * @memberOf KJUR.asn1.x509.X500Name#
      * @function
      * @param {Array} dnObj associative array of DN (ex. {C: "US", O: "aaa"})
      * @since jsrsasign 4.9. asn1x509 1.0.13
@@ -1278,20 +1300,76 @@ KJUR.asn1.x509.X500Name = function(params) {
 YAHOO.lang.extend(KJUR.asn1.x509.X500Name, KJUR.asn1.ASN1Object);
 
 /**
- * RDN (Relative Distinguish Name) ASN.1 structure class
+ * RDN (Relative Distinguished Name) ASN.1 structure class
  * @name KJUR.asn1.x509.RDN
- * @class RDN (Relative Distinguish Name) ASN.1 structure class
+ * @class RDN (Relative Distinguished Name) ASN.1 structure class
  * @param {Array} params associative array of parameters (ex. {'str': 'C=US'})
  * @extends KJUR.asn1.ASN1Object
+ * @see KJUR.asn1.x509.X500Name
+ * @see KJUR.asn1.x509.RDN
+ * @see KJUR.asn1.x509.AttributeTypeAndValue
  * @description
+ * This class provides RelativeDistinguishedName ASN.1 class structure
+ * defined in <a href="https://tools.ietf.org/html/rfc2253#section-2">RFC 2253 section 2</a>.
+ * <blockquote><pre>
+ * RelativeDistinguishedName ::= SET SIZE (1..MAX) OF
+ *   AttributeTypeAndValue
+ *
+ * AttributeTypeAndValue ::= SEQUENCE {
+ *   type  AttributeType,
+ *   value AttributeValue }
+ * </pre></blockquote>
+ * <br/>
+ * NOTE: Multi-valued RDN is supported since jsrsasign 6.2.1 asn1x509 1.0.17.
  * @example
+ * rdn = new KJUR.asn1.x509.RDN({str: "CN=test"});
+ * rdn = new KJUR.asn1.x509.RDN({str: "O=a+O=bb+O=c"}); // multi-valued
+ * rdn = new KJUR.asn1.x509.RDN({str: "O=a+O=b\\+b+O=c"}); // plus escaped
+ * rdn = new KJUR.asn1.x509.RDN({str: "O=a+O=\"b+b\"+O=c"}); // double quoted
  */
 KJUR.asn1.x509.RDN = function(params) {
     KJUR.asn1.x509.RDN.superclass.constructor.call(this);
     this.asn1Array = new Array();
 
-    this.addByString = function(rdnStr) {
-        this.asn1Array.push(new KJUR.asn1.x509.AttributeTypeAndValue({'str':rdnStr}));
+    /**
+     * add one AttributeTypeAndValue by string<br/>
+     * @name addByString
+     * @memberOf KJUR.asn1.x509.RDN#
+     * @function
+     * @param {String} s string of AttributeTypeAndValue
+     * @return {Object} unspecified
+     * @description
+     * This method add one AttributeTypeAndValue to RDN object.
+     * @example
+     * rdn = new KJUR.asn1.x509.RDN();
+     * rdn.addByString("CN=john");
+     * rdn.addByString("serialNumber=1234"); // for multi-valued RDN
+     */
+    this.addByString = function(s) {
+        this.asn1Array.push(new KJUR.asn1.x509.AttributeTypeAndValue({'str': s}));
+    };
+
+    /**
+     * add one AttributeTypeAndValue by multi-valued string<br/>
+     * @name addByMultiValuedString
+     * @memberOf KJUR.asn1.x509.RDN#
+     * @function
+     * @param {String} s string of multi-valued RDN
+     * @return {Object} unspecified
+     * @since jsrsasign 6.2.1 asn1x509 1.0.17
+     * @description
+     * This method add multi-valued RDN to RDN object.
+     * @example
+     * rdn = new KJUR.asn1.x509.RDN();
+     * rdn.addByMultiValuedString("CN=john+O=test");
+     * rdn.addByMultiValuedString("O=a+O=b\+b\+b+O=c"); // multi-valued RDN with quoted plus
+     * rdn.addByMultiValuedString("O=a+O=\"b+b+b\"+O=c"); // multi-valued RDN with quoted quotation
+     */
+    this.addByMultiValuedString = function(s) {
+	var a = KJUR.asn1.x509.RDN.parseString(s);
+	for (var i = 0; i < a.length; i++) {
+	    this.addByString(a[i]);
+	}
     };
 
     this.getEncodedHex = function() {
@@ -1302,11 +1380,79 @@ KJUR.asn1.x509.RDN = function(params) {
 
     if (typeof params != "undefined") {
         if (typeof params['str'] != "undefined") {
-            this.addByString(params['str']);
+            this.addByMultiValuedString(params['str']);
         }
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.RDN, KJUR.asn1.ASN1Object);
+
+/**
+ * parse multi-valued RDN string and split into array of 'AttributeTypeAndValue'<br/>
+ * @name parseString
+ * @memberOf KJUR.asn1.x509.RDN
+ * @function
+ * @param {String} s multi-valued string of RDN
+ * @return {Array} array of string of AttributeTypeAndValue
+ * @since jsrsasign 6.2.1 asn1x509 1.0.17
+ * @description
+ * This static method parses multi-valued RDN string and split into
+ * array of AttributeTypeAndValue.
+ * @example
+ * KJUR.asn1.x509.RDN.parseString("CN=john") &rarr; ["CN=john"]
+ * KJUR.asn1.x509.RDN.parseString("CN=john+OU=test") &rarr; ["CN=john", "OU=test"]
+ * KJUR.asn1.x509.RDN.parseString('CN="jo+hn"+OU=test') &rarr; ["CN=jo+hn", "OU=test"]
+ * KJUR.asn1.x509.RDN.parseString('CN=jo\+hn+OU=test') &rarr; ["CN=jo+hn", "OU=test"]
+ * KJUR.asn1.x509.RDN.parseString("CN=john+OU=test+OU=t1") &rarr; ["CN=john", "OU=test", "OU=t1"]
+ */
+KJUR.asn1.x509.RDN.parseString = function(s) {
+    var a = s.split(/\+/);
+
+    // join \+
+    var isBSbefore = false;
+    var a2 = [];
+    for (var i = 0; a.length > 0; i++) {
+	var item = a.shift();
+	//console.log("item=" + item);
+
+	if (isBSbefore === true) {
+	    var a2last = a2.pop();
+	    var newitem = (a2last + "+" + item).replace(/\\\+/g, "+");
+	    a2.push(newitem);
+	    isBSbefore = false;
+	} else {
+	    a2.push(item);
+	}
+
+	if (item.substr(-1, 1) === "\\") isBSbefore = true;
+    }
+
+    // join quote
+    var beginQuote = false;
+    var a3 = [];
+    for (var i = 0; a2.length > 0; i++) {
+	var item = a2.shift();
+
+	if (beginQuote === true) {
+	    var a3last = a3.pop();
+	    if (item.match(/"$/)) {
+		var newitem = (a3last + "+" + item).replace(/^([^=]+)="(.*)"$/, "$1=$2");
+		a3.push(newitem);
+		beginQuote = false;
+	    } else {
+		a3.push(a3last + "+" + item);
+	    }
+	} else {
+	    a3.push(item);
+	}
+
+	if (item.match(/^[^=]+="/)) {
+	    //console.log(i + "=" + item);
+	    beginQuote = true;
+	}
+    }
+
+    return a3;
+};
 
 /**
  * AttributeTypeAndValue ASN.1 structure class
@@ -1315,6 +1461,9 @@ YAHOO.lang.extend(KJUR.asn1.x509.RDN, KJUR.asn1.ASN1Object);
  * @param {Array} params associative array of parameters (ex. {'str': 'C=US'})
  * @extends KJUR.asn1.ASN1Object
  * @description
+ * @see KJUR.asn1.x509.X500Name
+ * @see KJUR.asn1.x509.RDN
+ * @see KJUR.asn1.x509.AttributeTypeAndValue
  * @example
  */
 KJUR.asn1.x509.AttributeTypeAndValue = function(params) {
