@@ -1770,7 +1770,7 @@ KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
 YAHOO.lang.extend(KJUR.asn1.x509.AlgorithmIdentifier, KJUR.asn1.ASN1Object);
 
 /**
- * GeneralName ASN.1 structure class
+ * GeneralName ASN.1 structure class<br/>
  * @name KJUR.asn1.x509.GeneralName
  * @class GeneralName ASN.1 structure class
  * @description
@@ -1821,56 +1821,63 @@ KJUR.asn1.x509.GeneralName = function(params) {
         var str = null;
         var v = null;
 
-		if (typeof params == "undefined") return;
+	if (typeof params == "undefined") return;
 
         if (typeof params.rfc822 != "undefined") {
             this.type = 'rfc822';
             v = new KJUR.asn1.DERIA5String({'str': params[this.type]});
         }
+
         if (typeof params.dns != "undefined") {
             this.type = 'dns';
             v = new KJUR.asn1.DERIA5String({'str': params[this.type]});
         }
+
         if (typeof params.uri != "undefined") {
             this.type = 'uri';
             v = new KJUR.asn1.DERIA5String({'str': params[this.type]});
         }
-		if (typeof params.certissuer != "undefined") {
-			this.type = 'dn';
-			this.explicit = true;
-			var certStr = params.certissuer;
-			var certHex = null;
-			if (certStr.match(/^[0-9A-Fa-f]+$/)) {
-				certHex == certStr;
+
+	if (typeof params.certissuer != "undefined") {
+	    this.type = 'dn';
+	    this.explicit = true;
+	    var certStr = params.certissuer;
+	    var certHex = null;
+
+	    if (certStr.match(/^[0-9A-Fa-f]+$/)) {
+		certHex == certStr;
             }
-		    if (certStr.indexOf("-----BEGIN ") != -1) {
-				certHex = X509.pemToHex(certStr);
-			}
-		    if (certHex == null) throw "certissuer param not cert";
-			var x = new X509();
-			x.hex = certHex;
-			var dnHex = x.getIssuerHex();
-			v = new KJUR.asn1.ASN1Object();
-			v.hTLV = dnHex;
-		}
-		if (typeof params.certsubj != "undefined") {
-			this.type = 'dn';
-			this.explicit = true;
-			var certStr = params.certsubj;
-			var certHex = null;
-			if (certStr.match(/^[0-9A-Fa-f]+$/)) {
-				certHex == certStr;
+
+	    if (certStr.indexOf("-----BEGIN ") != -1) {
+		certHex = X509.pemToHex(certStr);
+	    }
+
+	    if (certHex == null) throw "certissuer param not cert";
+	    var x = new X509();
+	    x.hex = certHex;
+	    var dnHex = x.getIssuerHex();
+	    v = new KJUR.asn1.ASN1Object();
+	    v.hTLV = dnHex;
+	}
+
+	if (typeof params.certsubj != "undefined") {
+	    this.type = 'dn';
+	    this.explicit = true;
+	    var certStr = params.certsubj;
+	    var certHex = null;
+	    if (certStr.match(/^[0-9A-Fa-f]+$/)) {
+		certHex == certStr;
             }
-		    if (certStr.indexOf("-----BEGIN ") != -1) {
-				certHex = X509.pemToHex(certStr);
-			}
-		    if (certHex == null) throw "certsubj param not cert";
-			var x = new X509();
-			x.hex = certHex;
-			var dnHex = x.getSubjectHex();
-			v = new KJUR.asn1.ASN1Object();
-			v.hTLV = dnHex;
-		}
+	    if (certStr.indexOf("-----BEGIN ") != -1) {
+		certHex = X509.pemToHex(certStr);
+	    }
+	    if (certHex == null) throw "certsubj param not cert";
+	    var x = new X509();
+	    x.hex = certHex;
+	    var dnHex = x.getSubjectHex();
+	    v = new KJUR.asn1.ASN1Object();
+	    v.hTLV = dnHex;
+	}
 
         if (this.type == null)
             throw "unsupported type in params=" + params;
@@ -1891,14 +1898,14 @@ KJUR.asn1.x509.GeneralName = function(params) {
 YAHOO.lang.extend(KJUR.asn1.x509.GeneralName, KJUR.asn1.ASN1Object);
 
 /**
- * GeneralNames ASN.1 structure class
+ * GeneralNames ASN.1 structure class<br/>
  * @name KJUR.asn1.x509.GeneralNames
  * @class GeneralNames ASN.1 structure class
  * @description
  * <br/>
  * <h4>EXAMPLE AND ASN.1 SYNTAX</h4>
  * @example
- * var gns = new KJUR.asn1.x509.GeneralNames([{'uri': 'http://aaa.com/'}, {'uri': 'http://bbb.com/'}]);
+ * gns = new KJUR.asn1.x509.GeneralNames([{'uri': 'http://aaa.com/'}, {'uri': 'http://bbb.com/'}]);
  *
  * GeneralNames ::= SEQUENCE SIZE (1..MAX) OF GeneralName
  */
@@ -1907,17 +1914,17 @@ KJUR.asn1.x509.GeneralNames = function(paramsArray) {
     var asn1Array = null;
 
     /**
-     * set a array of {@link KJUR.asn1.x509.GeneralName} parameters
+     * set a array of {@link KJUR.asn1.x509.GeneralName} parameters<br/>
      * @name setByParamArray
-     * @memberOf KJUR.asn1.x509.GeneralNames
+     * @memberOf KJUR.asn1.x509.GeneralNames#
      * @function
      * @param {Array} paramsArray Array of {@link KJUR.asn1.x509.GeneralNames}
      * @description
      * <br/>
      * <h4>EXAMPLES</h4>
      * @example
-     * var gns = new KJUR.asn1.x509.GeneralNames();
-     * gns.setByParamArray([{'uri': 'http://aaa.com/'}, {'uri': 'http://bbb.com/'}]);
+     * gns = new KJUR.asn1.x509.GeneralNames();
+     * gns.setByParamArray([{uri: 'http://aaa.com/'}, {uri: 'http://bbb.com/'}]);
      */
     this.setByParamArray = function(paramsArray) {
         for (var i = 0; i < paramsArray.length; i++) {

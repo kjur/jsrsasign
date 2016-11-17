@@ -466,7 +466,7 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/KJUR.asn1.x509.GeneralNames.html#constructor">KJUR.asn1.x509.GeneralNames</a></b>()
 							</div>
-							<div class="description">GeneralNames ASN.1 structure class
+							<div class="description">GeneralNames ASN.1 structure class<br/>
 <br/>
 <h4>EXAMPLE AND ASN.1 SYNTAX</h4></div>
 						</td>
@@ -493,11 +493,11 @@ ul.inheritsList
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.GeneralNames.<b><a href="../symbols/KJUR.asn1.x509.GeneralNames.html#.setByParamArray">setByParamArray</a></b>(paramsArray)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.GeneralNames.html#setByParamArray">setByParamArray</a></b>(paramsArray)
 								</div>
-								<div class="description">set a array of <a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a> parameters
+								<div class="description">set a array of <a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a> parameters<br/>
 <br/>
 <h4>EXAMPLES</h4></div>
 							</td>
@@ -524,7 +524,7 @@ ul.inheritsList
 				</div>
 				
 				<div class="description">
-					GeneralNames ASN.1 structure class
+					GeneralNames ASN.1 structure class<br/>
 <br/>
 <h4>EXAMPLE AND ASN.1 SYNTAX</h4>
 					
@@ -532,7 +532,7 @@ ul.inheritsList
 				
 				
 				
-				<pre class="code">var gns = new KJUR.asn1.x509.GeneralNames([{'uri': 'http://aaa.com/'}, {'uri': 'http://bbb.com/'}]);
+				<pre class="code">gns = new KJUR.asn1.x509.GeneralNames([{'uri': 'http://aaa.com/'}, {'uri': 'http://bbb.com/'}]);
 
 GeneralNames ::= SEQUENCE SIZE (1..MAX) OF GeneralName</pre>
 				
@@ -559,15 +559,15 @@ GeneralNames ::= SEQUENCE SIZE (1..MAX) OF GeneralName</pre>
 					Method Detail
 				</div>
 				
-					<a name=".setByParamArray"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setByParamArray"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.x509.GeneralNames.</span><b>setByParamArray</b>(paramsArray)
+					<b>setByParamArray</b>(paramsArray)
 					
 					</div>
 					<div class="description">
-						set a array of <a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a> parameters
+						set a array of <a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a> parameters<br/>
 <br/>
 <h4>EXAMPLES</h4>
 						
@@ -576,8 +576,8 @@ GeneralNames ::= SEQUENCE SIZE (1..MAX) OF GeneralName</pre>
 					
 					
 					
-					<pre class="code">var gns = new KJUR.asn1.x509.GeneralNames();
-gns.setByParamArray([{'uri': 'http://aaa.com/'}, {'uri': 'http://bbb.com/'}]);</pre>
+					<pre class="code">gns = new KJUR.asn1.x509.GeneralNames();
+gns.setByParamArray([{uri: 'http://aaa.com/'}, {uri: 'http://bbb.com/'}]);</pre>
 					
 					
 					
