@@ -345,6 +345,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html">KJUR.asn1.x509.AttributeTypeAndValue</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.AuthorityInfoAccess.html">KJUR.asn1.x509.AuthorityInfoAccess</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html">KJUR.asn1.x509.AuthorityKeyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.BasicConstraints.html">KJUR.asn1.x509.BasicConstraints</a></li>
@@ -467,7 +469,8 @@ ul.inheritsList
 								<b><a href="../symbols/KJUR.asn1.x509.X500Name.html#constructor">KJUR.asn1.x509.X500Name</a></b>(params)
 							</div>
 							<div class="description">X500Name ASN.1 structure class
-</div>
+This class provides DistinguishedName ASN.1 class structure
+defined in <a href="https://tools.ietf.org/html/rfc2253#section-2">RFC 2253 section 2</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -501,9 +504,9 @@ ul.inheritsList
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.X500Name.<b><a href="../symbols/KJUR.asn1.x509.X500Name.html#.setByObject">setByObject</a></b>(dnObj)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.X500Name.html#setByObject">setByObject</a></b>(dnObj)
 								</div>
 								<div class="description">set DN by associative array
 </div>
@@ -511,9 +514,9 @@ ul.inheritsList
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.X500Name.<b><a href="../symbols/KJUR.asn1.x509.X500Name.html#.setByString">setByString</a></b>(dnStr)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.X500Name.html#setByString">setByString</a></b>(dnStr)
 								</div>
 								<div class="description">set DN by string
 </div>
@@ -546,7 +549,25 @@ ul.inheritsList
 				
 				<div class="description">
 					X500Name ASN.1 structure class
+This class provides DistinguishedName ASN.1 class structure
+defined in <a href="https://tools.ietf.org/html/rfc2253#section-2">RFC 2253 section 2</a>.
+<blockquote><pre>
+DistinguishedName ::= RDNSequence
 
+RDNSequence ::= SEQUENCE OF RelativeDistinguishedName
+
+RelativeDistinguishedName ::= SET SIZE (1..MAX) OF
+  AttributeTypeAndValue
+
+AttributeTypeAndValue ::= SEQUENCE {
+  type  AttributeType,
+  value AttributeValue }
+</pre></blockquote>
+<br/>
+For string representation of distinguished name in jsrsasign,
+OpenSSL oneline format is used. Please see <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">wiki article</a> for it.
+<br/>
+NOTE: Multi-valued RDN is supported since jsrsasign 6.2.1 asn1x509 1.0.17.
 					
 				</div>
 				
@@ -578,6 +599,17 @@ o = new KJUR.asn1.x509.X500Name({C: "US", O: "aaa", CN: "http://example.com/"});
 					
 					
 					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html">KJUR.asn1.x509.AttributeTypeAndValue</a></dd>
+						
+						</dl>
+					
 
 			</div>
 			
@@ -591,11 +623,11 @@ o = new KJUR.asn1.x509.X500Name({C: "US", O: "aaa", CN: "http://example.com/"});
 					Method Detail
 				</div>
 				
-					<a name=".setByObject"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setByObject"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.x509.X500Name.</span><b>setByObject</b>(dnObj)
+					<b>setByObject</b>(dnObj)
 					
 					</div>
 					<div class="description">
@@ -639,11 +671,11 @@ name.setByObject({C: "US", O: "aaa", CN="http://example.com/"1});</pre>
 
 					<hr />
 				
-					<a name=".setByString"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setByString"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.x509.X500Name.</span><b>setByString</b>(dnStr)
+					<b>setByString</b>(dnStr)
 					
 					</div>
 					<div class="description">

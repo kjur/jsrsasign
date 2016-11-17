@@ -345,6 +345,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html">KJUR.asn1.x509.AttributeTypeAndValue</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.AuthorityInfoAccess.html">KJUR.asn1.x509.AuthorityInfoAccess</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html">KJUR.asn1.x509.AuthorityKeyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.BasicConstraints.html">KJUR.asn1.x509.BasicConstraints</a></li>
@@ -748,7 +750,8 @@ tbsc.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));</pre>
 tbsc.appendExtensionByName('KeyUsage', {'bin':'11'});
 tbsc.appendExtensionByName('CRLDistributionPoints', {uri: 'http://aaa.com/a.crl'});
 tbsc.appendExtensionByName('ExtKeyUsage', {array: [{name: 'clientAuth'}]});
-tbsc.appendExtensionByName('AuthorityKeyIdentifier', {kid: '1234ab..'});</pre>
+tbsc.appendExtensionByName('AuthorityKeyIdentifier', {kid: '1234ab..'});
+tbsc.appendExtensionByName('AuthorityInfoAccess', {array: [{accessMethod:{oid:...},accessLocation:{uri:...}}]});</pre>
 					
 					
 					
@@ -1076,8 +1079,8 @@ tbsc.appendExtensionByName('AuthorityKeyIdentifier', {kid: '1234ab..'});</pre>
 					
 					
 					
-					<pre class="code">tbsc.setSubjectPublicKeyByGetKeyParam(certPEMString); // or 
-tbsc.setSubjectPublicKeyByGetKeyParam(pkcs8PublicKeyPEMString); // or 
+					<pre class="code">tbsc.setSubjectPublicKeyByGetKeyParam(certPEMString); // or
+tbsc.setSubjectPublicKeyByGetKeyParam(pkcs8PublicKeyPEMString); // or
 tbsc.setSubjectPublicKeyByGetKeyParam(kjurCryptoECDSAKeyObject); // et.al.</pre>
 					
 					
