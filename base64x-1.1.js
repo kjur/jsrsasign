@@ -655,7 +655,7 @@ KJUR.lang.String.isIntegerArray = function(s) {
  * 
  * @example
  * intarystrtohex(" [123, 34, 101, 34, 58] ")
- * -> 7b2265223a (i.e. `{"e":` as string)
+ * &rarr; 7b2265223a (i.e. '{"e":' as string)
  */
 function intarystrtohex(s) {
   s = s.replace(/^\s*\[\s*/, '');
