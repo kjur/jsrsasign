@@ -170,9 +170,10 @@ function b64utos(s) {
 // ==== base64 / base64url ================================
 /**
  * convert a Base64 encoded string to a Base64URL encoded string.<br/>
- * Example: "ab+c3f/==" &rarr; "ab-c3f_"
  * @param {String} s Base64 encoded string
  * @return {String} Base64URL encoded string
+ * @example
+ * b64tob64u("ab+c3f/==") &rarr; "ab-c3f_"
  */
 function b64tob64u(s) {
     s = s.replace(/\=/g, "");
@@ -183,9 +184,10 @@ function b64tob64u(s) {
 
 /**
  * convert a Base64URL encoded string to a Base64 encoded string.<br/>
- * Example: "ab-c3f_" &rarr; "ab+c3f/=="
  * @param {String} s Base64URL encoded string
  * @return {String} Base64 encoded string
+ * @example
+ * b64utob64("ab-c3f_") &rarr; "ab+c3f/=="
  */
 function b64utob64(s) {
     if (s.length % 4 == 2) s = s + "==";
@@ -219,33 +221,14 @@ function b64utohex(s) {
     return b64tohex(b64utob64(s));
 }
 
-var utf8tob64u, b64utoutf8;
-
-if (typeof Buffer === 'function')
-{
-  utf8tob64u = function (s)
-  {
-    return b64tob64u(new Buffer(s, 'utf8').toString('base64'));
-  };
-
-  b64utoutf8 = function (s)
-  {
-    return new Buffer(b64utob64(s), 'base64').toString('utf8');
-  };
-}
-else
-{
 // ==== utf8 / base64url ================================
+
 /**
  * convert a UTF-8 encoded string including CJK or Latin to a Base64URL encoded string.<br/>
  * @param {String} s UTF-8 encoded string
  * @return {String} Base64URL encoded string
  * @since 1.1
  */
-  utf8tob64u = function (s)
-  {
-    return hextob64u(uricmptohex(encodeURIComponentAll(s)));
-  };
 
 /**
  * convert a Base64URL encoded string to a UTF-8 encoded string including CJK or Latin.<br/>
@@ -253,8 +236,23 @@ else
  * @return {String} UTF-8 encoded string
  * @since 1.1
  */
-  b64utoutf8 = function (s)
-  {
+
+var utf8tob64u, b64utoutf8;
+
+if (typeof Buffer === 'function') {
+  utf8tob64u = function (s) {
+    return b64tob64u(new Buffer(s, 'utf8').toString('base64'));
+  };
+
+  b64utoutf8 = function (s) {
+    return new Buffer(b64utob64(s), 'base64').toString('utf8');
+  };
+} else {
+  utf8tob64u = function (s) {
+    return hextob64u(uricmptohex(encodeURIComponentAll(s)));
+  };
+
+  b64utoutf8 = function (s) {
     return decodeURIComponent(hextouricmp(b64utohex(s)));
   };
 }
@@ -390,7 +388,7 @@ function hextob64nl(s) {
  * "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4\r\n" +
  * "OTAxMjM0NTY3ODkwCg==\r\n")
  * &rarr;
- * "123456789012345678901234567890123456789012345678901234567890")
+ * "123456789012345678901234567890123456789012345678901234567890"
  */
 function b64nltohex(s) {
     var b64 = s.replace(/[^0-9A-Za-z\/+=]*/g, '');
@@ -413,7 +411,7 @@ function b64nltohex(s) {
  * view.setUint8(0, 0xfa);
  * view.setUint8(1, 0xfb);
  * view.setUint8(2, 0x01);
- * ArrayBuffertohex(buffer) &rarr "fafb01"
+ * ArrayBuffertohex(buffer) &rarr; "fafb01"
  */
 function hextoArrayBuffer(hex) {
     if (hex.length % 2 != 0) throw "input is not even length";
@@ -439,7 +437,7 @@ function hextoArrayBuffer(hex) {
  * @description
  * This function converts from a ArrayBuffer to a hexadecimal string.
  * @example
- * hextoArrayBuffer("fffa01") &rarr ArrayBuffer of [255, 250, 1]
+ * hextoArrayBuffer("fffa01") &rarr; ArrayBuffer of [255, 250, 1]
  */
 function ArrayBuffertohex(buffer) {
     var hex = "";

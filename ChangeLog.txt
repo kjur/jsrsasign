@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 6.2.2 to next version
+  - sample_node
+    - datasing and dataverify script added
+  - base64x
+    - API document update
+
 * Changes from 6.2.1 to 6.2.2 (2016-Nov-19)
   - x509 1.1.9 to 1.1.10
     - X509 class

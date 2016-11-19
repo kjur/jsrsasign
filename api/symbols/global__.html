@@ -846,7 +846,7 @@ This function converts from a ArrayBuffer to a hexadecimal string.
 					
 					
 					
-					<pre class="code">hextoArrayBuffer("fffa01") &rarr ArrayBuffer of [255, 250, 1]</pre>
+					<pre class="code">hextoArrayBuffer("fffa01") &rarr; ArrayBuffer of [255, 250, 1]</pre>
 					
 					
 					
@@ -911,7 +911,7 @@ including new line.
 "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTIzNDU2Nzg5MDEyMzQ1Njc4\r\n" +
 "OTAxMjM0NTY3ODkwCg==\r\n")
 &rarr;
-"123456789012345678901234567890123456789012345678901234567890")</pre>
+"123456789012345678901234567890123456789012345678901234567890"</pre>
 					
 					
 					
@@ -958,13 +958,16 @@ including new line.
 					</div>
 					<div class="description">
 						convert a Base64 encoded string to a Base64URL encoded string.<br/>
-Example: "ab+c3f/==" &rarr; "ab-c3f_"
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">b64tob64u("ab+c3f/==") &rarr; "ab-c3f_"</pre>
 					
 					
 					
@@ -1057,13 +1060,16 @@ Example: "ab+c3f/==" &rarr; "ab-c3f_"
 					</div>
 					<div class="description">
 						convert a Base64URL encoded string to a Base64 encoded string.<br/>
-Example: "ab-c3f_" &rarr; "ab+c3f/=="
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">b64utob64("ab-c3f_") &rarr; "ab+c3f/=="</pre>
 					
 					
 					
@@ -1399,7 +1405,7 @@ var view = new DataView(buffer);
 view.setUint8(0, 0xfa);
 view.setUint8(1, 0xfb);
 view.setUint8(2, 0x01);
-ArrayBuffertohex(buffer) &rarr "fafb01"</pre>
+ArrayBuffertohex(buffer) &rarr; "fafb01"</pre>
 					
 					
 					
