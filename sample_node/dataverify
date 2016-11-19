@@ -1,0 +1,80 @@
+#!/usr/bin/env node
+
+/*
+ * dataverify - verify signature of text or file
+ *
+ * Copyright (c) 2016 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * http://kjur.github.com/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ * ---------------------------------------------------------
+ * DESCRIPTION
+ *   This script verifies a signature of a text or file data by 
+ *   specified public key and signature algorithm.
+ *
+ * USAGE
+ *   % dataverify aaa.txt a.pub a.sig
+ *   % dataverify aaa.txt a.pub a256.sig SHA256withRSA
+ *   % dataverify "test" a.pub test.sig
+ *
+ *   Resulted signature can also be verified by OpenSSL.
+ *   % openssl dgst -sha1 -verify a.pub -signature a.sig aaa.txt
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+var rsu = require('jsrsasign-util');
+var path = require('path');
+
+program
+  .version('1.0.0 (2016-Nov-19)')
+  .usage('[options] <text or file> <public key> <input signature file> [sig alg]')
+  .description('verify signature of text or file with specified public and sig algorithm.')
+  .parse(process.argv);
+
+if (program.args.length !== 3 && program.args.length !== 4)
+  throw "wrong number of arguments";
+
+var textOrFile = program.args[0];
+var pubFile = program.args[1];
+var sigFile = program.args[2];
+var hashAlg = "SHA1withRSA";
+if (program.args.length === 4) hashAlg = program.args[3];
+
+// 1. public key
+var pubPEM = rsu.readFile(pubFile);
+var pub = rs.KEYUTIL.getKey(pubPEM);
+//console.log(pub);
+
+// 2. data to be verifid
+var text;
+try {
+  text = rsu.readFile(textOrFile);
+} catch(ex) {
+  text = textOrFile;
+}
+
+// 3. load signature
+var sigHex = rsu.readFileHexByBin(sigFile);
+
+var sig = new rs.KJUR.crypto.Signature({alg: hashAlg});
+sig.init(pub);
+sig.updateString(text);
+var isValid = sig.verify(sigHex);
+
+if (isValid) {
+   console.log("signature is valid");
+} else {
+   console.log("signature is invalid");
+}
+
+
+
+
+
+

@@ -1,0 +1,73 @@
+#!/usr/bin/env node
+
+/*
+ * datasign - sign text or file
+ *
+ * Copyright (c) 2016 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * http://kjur.github.com/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ * ---------------------------------------------------------
+ * DESCRIPTION
+ *   This script signes a text or file data by specified private key
+ *   and signature algorithm.
+ *
+ * USAGE
+ *   % datasign aaa.txt a.prv a.sig
+ *   % datasign aaa.txt a.prv a256.sig SHA256withRSA
+ *   % datasign "test" a.prv test.sig
+ *
+ *   Resulted signature can also be verified by OpenSSL.
+ *   % openssl dgst -sha1 -verify a.pub -signature a.sig aaa.txt
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+var rsu = require('jsrsasign-util');
+var path = require('path');
+
+program
+  .version('1.0.0 (2016-Nov-19)')
+  .usage('[options] <text or file> <private key> <output signature file> [sig alg]')
+  .description('sign text or file with specified private key and sig algorithm.')
+  .parse(process.argv);
+
+if (program.args.length !== 3 && program.args.length !== 4)
+  throw "wrong number of arguments";
+
+var textOrFile = program.args[0];
+var prvFile = program.args[1];
+var outFile = program.args[2];
+var hashAlg = "SHA1withRSA";
+if (program.args.length === 4) hashAlg = program.args[3];
+
+// 1. private key
+var prvPEM = rsu.readFile(prvFile);
+var prv = rs.KEYUTIL.getKey(prvPEM);
+//console.log(prv);
+
+// 2. data to be signed
+var text;
+try {
+  text = rsu.readFile(textOrFile);
+} catch(ex) {
+  text = textOrFile;
+}
+
+var sig = new rs.KJUR.crypto.Signature({alg: hashAlg});
+sig.init(prv);
+sig.updateString(text);
+var sigHex = sig.sign();
+rsu.saveFileBinByHex(outFile, sigHex);
+//console.log(sigHex);
+console.log("successfully signed");
+
+
+
+
+
