@@ -1,4 +1,4 @@
-/*! asn1x509-1.0.17.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.18.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.17 (2016-Nov-18)
+ * @version 1.0.18 (2016-Nov-19)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1217,6 +1217,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRLEntry, KJUR.asn1.ASN1Object);
  * @example
  * // 1. construct with string
  * o = new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa/OU=bbb/CN=foo@example.com"});
+ * o = new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa+CN=contact@example.com"}); // multi valued
  * // 2. construct by object
  * o = new KJUR.asn1.x509.X500Name({C: "US", O: "aaa", CN: "http://example.com/"});
  */
@@ -1225,11 +1226,11 @@ KJUR.asn1.x509.X500Name = function(params) {
     this.asn1Array = new Array();
 
     /**
-     * set DN by string
+     * set DN by OpenSSL oneline distinguished name string<br/>
      * @name setByString
      * @memberOf KJUR.asn1.x509.X500Name#
      * @function
-     * @param {Array} dnStr distinguished name by string (ex. /C=US/O=aaa)
+     * @param {String} dnStr distinguished name by string (ex. /C=US/O=aaa)
      * @description
      * @example
      * name = new KJUR.asn1.x509.X500Name();
@@ -1244,7 +1245,24 @@ KJUR.asn1.x509.X500Name = function(params) {
     };
 
     /**
-     * set DN by associative array
+     * set DN by LDAP(RFC 2253) distinguished name string<br/>
+     * @name setByLdapString
+     * @memberOf KJUR.asn1.x509.X500Name#
+     * @function
+     * @param {String} dnStr distinguished name by LDAP string (ex. O=aaa,C=US)
+     * @since jsrsasign 6.2.2 asn1x509 1.0.18
+     * @description
+     * @example
+     * name = new KJUR.asn1.x509.X500Name();
+     * name.setByLdapString("CN=foo@example.com,OU=bbb,O=aaa,C=US");
+     */
+    this.setByLdapString = function(dnStr) {
+	var oneline = KJUR.asn1.x509.X500Name.ldapToOneline(dnStr);
+	this.setByString(oneline);
+    };
+
+    /**
+     * set DN by associative array<br/>
      * @name setByObject
      * @memberOf KJUR.asn1.x509.X500Name#
      * @function
@@ -1275,9 +1293,11 @@ KJUR.asn1.x509.X500Name = function(params) {
         return this.hTLV;
     };
 
-    if (typeof params != "undefined") {
-        if (typeof params['str'] != "undefined") {
-            this.setByString(params['str']);
+    if (params !== undefined) {
+        if (params.str !== undefined) {
+            this.setByString(params.str);
+        } else if (params.ldapstr !== undefined) {
+	    this.setByLdapString(params.ldapstr);
         // If params is an object, then set the ASN1 array just using the object
         // attributes. This is nice for fields that have lots of special
         // characters (i.e. CN: 'http://www.github.com/kjur//').
@@ -1285,12 +1305,12 @@ KJUR.asn1.x509.X500Name = function(params) {
             this.setByObject(params);
         }
 
-        if (typeof params.certissuer != "undefined") {
+        if (params.certissuer !== undefined) {
             var x = new X509();
             x.hex = X509.pemToHex(params.certissuer);
             this.hTLV = x.getIssuerHex();
         }
-        if (typeof params.certsubject != "undefined") {
+        if (params.certsubject !== undefined) {
             var x = new X509();
             x.hex = X509.pemToHex(params.certsubject);
             this.hTLV = x.getSubjectHex();
@@ -1298,6 +1318,79 @@ KJUR.asn1.x509.X500Name = function(params) {
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.X500Name, KJUR.asn1.ASN1Object);
+
+/**
+ * convert OpenSSL oneline distinguished name format string to LDAP(RFC 2253) format<br/>
+ * @name onelineToLDAP
+ * @memberOf KJUR.asn1.x509.X500Name
+ * @function
+ * @param {String} s distinguished name string in OpenSSL oneline format (ex. /C=US/O=test)
+ * @return {String} distinguished name string in LDAP(RFC 2253) format (ex. O=test,C=US)
+ * @since jsrsasign 6.2.2 asn1x509 1.0.18
+ * @description
+ * This static method converts a distinguished name string in OpenSSL oneline 
+ * format to LDAP(RFC 2253) format.
+ * @see <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">jsrsasign wiki: distinguished name string difference between OpenSSL oneline and LDAP(RFC 2253)</a>
+ * @example
+ * KJUR.asn1.x509.X500Name.onelineToLDAP("/C=US/O=test") &rarr; 'O=test,C=US'
+ * KJUR.asn1.x509.X500Name.onelineToLDAP("/C=US/O=a,a") &rarr; 'O=a\,a,C=US'
+ */
+KJUR.asn1.x509.X500Name.onelineToLDAP = function(s) {
+    if (s.substr(0, 1) !== "/") throw "malformed input";
+
+    var result = "";
+    s = s.substr(1);
+
+    var a = s.split("/");
+    a.reverse();
+    a = a.map(function(s) {return s.replace(/,/, "\\,")});
+
+    return a.join(",");
+};
+
+/**
+ * convert LDAP(RFC 2253) distinguished name format string to OpenSSL oneline format<br/>
+ * @name ldapToOneline
+ * @memberOf KJUR.asn1.x509.X500Name
+ * @function
+ * @param {String} s distinguished name string in LDAP(RFC 2253) format (ex. O=test,C=US)
+ * @return {String} distinguished name string in OpenSSL oneline format (ex. /C=US/O=test)
+ * @since jsrsasign 6.2.2 asn1x509 1.0.18
+ * @description
+ * This static method converts a distinguished name string in 
+ * LDAP(RFC 2253) format to OpenSSL oneline format.
+ * @see <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">jsrsasign wiki: distinguished name string difference between OpenSSL oneline and LDAP(RFC 2253)</a>
+ * @example
+ * KJUR.asn1.x509.X500Name.ldapToOneline('O=test,C=US') &rarr; '/C=US/O=test'
+ * KJUR.asn1.x509.X500Name.ldapToOneline('O=a\,a,C=US') &rarr; '/C=US/O=a,a'
+ * KJUR.asn1.x509.X500Name.ldapToOneline('O=a/a,C=US')  &rarr; '/C=US/O=a\/a'
+ */
+KJUR.asn1.x509.X500Name.ldapToOneline = function(s) {
+    var a = s.split(",");
+
+    // join \,
+    var isBSbefore = false;
+    var a2 = [];
+    for (var i = 0; a.length > 0; i++) {
+	var item = a.shift();
+	//console.log("item=" + item);
+
+	if (isBSbefore === true) {
+	    var a2last = a2.pop();
+	    var newitem = (a2last + "," + item).replace(/\\,/g, ",");
+	    a2.push(newitem);
+	    isBSbefore = false;
+	} else {
+	    a2.push(item);
+	}
+
+	if (item.substr(-1, 1) === "\\") isBSbefore = true;
+    }
+
+    a2 = a2.map(function(s) {return s.replace("/", "\\/")});
+    a2.reverse();
+    return "/" + a2.join("/");
+};
 
 /**
  * RDN (Relative Distinguished Name) ASN.1 structure class
@@ -2016,29 +2109,58 @@ YAHOO.lang.extend(KJUR.asn1.x509.DistributionPoint, KJUR.asn1.ASN1Object);
  * static object for OID
  * @name KJUR.asn1.x509.OID
  * @class static object for OID
- * @property {Assoc Array} atype2oidList for short attribyte type name and oid (i.e. 'C' and '2.5.4.6')
- * @property {Assoc Array} name2oidList for oid name and oid (i.e. 'keyUsage' and '2.5.29.15')
+ * @property {Assoc Array} atype2oidList for short attribute type name and oid (ex. 'C' and '2.5.4.6')
+ * @property {Assoc Array} name2oidList for oid name and oid (ex. 'keyUsage' and '2.5.29.15')
  * @property {Assoc Array} objCache for caching name and DERObjectIdentifier object
  * @description
- * <dl>
- * <dt><b>atype2oidList</b>
- * <dd>currently supports 'C', 'O', 'OU', 'ST', 'L' and 'CN' only.
- * <dt><b>name2oidList</b>
- * <dd>currently supports 'SHA1withRSA', 'rsaEncryption' and some extension OIDs
- * </dl>
+ * This class defines OID name and values.
+ * AttributeType names registered in OID.atype2oidList are following:
+ * <table style="border-width: thin; border-style: solid; witdh: 100%">
+ * <tr><th>short</th><th>long</th><th>OID</th></tr>
+ * <tr><td>CN</td>commonName<td></td><td>2.5.4.3</td></tr>
+ * <tr><td>L</td><td>localityName</td><td>2.5.4.7</td></tr>
+ * <tr><td>ST</td><td>stateOrProvinceName</td><td>2.5.4.8</td></tr>
+ * <tr><td>O</td><td>organizationName</td><td>2.5.4.10</td></tr>
+ * <tr><td>OU</td><td>organizationalUnitName</td><td>2.5.4.11</td></tr>
+ * <tr><td>C</td><td></td>countryName<td>2.5.4.6</td></tr>
+ * <tr><td>STREET</td>streetAddress<td></td><td>2.5.4.6</td></tr>
+ * <tr><td>DC</td><td>domainComponent</td><td>0.9.2342.19200300.100.1.25</td></tr>
+ * <tr><td>UID</td><td>userId</td><td>0.9.2342.19200300.100.1.1</td></tr>
+ * <tr><td>SN</td><td>surname</td><td>2.5.4.4</td></tr>
+ * <tr><td>DN</td><td>distinguishedName</td><td>2.5.4.49</td></tr>
+ * <tr><td>E</td><td>emailAddress</td><td>1.2.840.113549.1.9.1</td></tr>
+ * <tr><td></td><td>businessCategory</td><td>2.5.4.15</td></tr>
+ * <tr><td></td><td>postalCode</td><td>2.5.4.17</td></tr>
+ * <tr><td></td><td>jurisdictionOfIncorporationL</td><td>1.3.6.1.4.1.311.60.2.1.1</td></tr>
+ * <tr><td></td><td>jurisdictionOfIncorporationSP</td><td>1.3.6.1.4.1.311.60.2.1.2</td></tr>
+ * <tr><td></td><td>jurisdictionOfIncorporationC</td><td>1.3.6.1.4.1.311.60.2.1.3</td></tr>
+ * </table>
+ *
  * @example
  */
 KJUR.asn1.x509.OID = new function(params) {
     this.atype2oidList = {
-        'C':    '2.5.4.6',
-        'O':    '2.5.4.10',
-        'OU':   '2.5.4.11',
-        'ST':   '2.5.4.8',
-        'L':    '2.5.4.7',
-        'CN':   '2.5.4.3',
-        'SN':   '2.5.4.4',
-        'DN':   '2.5.4.49',
-        'DC':   '0.9.2342.19200300.100.1.25',
+	// RFC 4514 AttributeType name string (MUST recognized)
+        'CN':		'2.5.4.3',
+        'L':		'2.5.4.7',
+        'ST':		'2.5.4.8',
+        'O':		'2.5.4.10',
+        'OU':		'2.5.4.11',
+        'C':		'2.5.4.6',
+        'STREET':	'2.5.4.9',
+        'DC':		'0.9.2342.19200300.100.1.25',
+        'UID':		'0.9.2342.19200300.100.1.1',
+	// other AttributeType name string
+	// http://blog.livedoor.jp/k_urushima/archives/656114.html
+        'SN':		'2.5.4.4', // surname
+        'DN':		'2.5.4.49', // distinguishedName
+        'E':		'1.2.840.113549.1.9.1', // emailAddress in MS.NET or Bouncy
+	// other AttributeType name string (no short name)
+	'businessCategory':		'2.5.4.15',
+	'postalCode':			'2.5.4.17',
+	'jurisdictionOfIncorporationL':	'1.3.6.1.4.1.311.60.2.1.1',
+	'jurisdictionOfIncorporationSP':'1.3.6.1.4.1.311.60.2.1.2',
+	'jurisdictionOfIncorporationC':	'1.3.6.1.4.1.311.60.2.1.3'
     };
     this.name2oidList = {
         'sha1':                 '1.3.14.3.2.26',
@@ -2072,12 +2194,26 @@ KJUR.asn1.x509.OID = new function(params) {
 
         'rsaEncryption':        '1.2.840.113549.1.1.1',
 
-        'countryName':          '2.5.4.6',
-        'organization':         '2.5.4.10',
-        'organizationalUnit':   '2.5.4.11',
-        'stateOrProvinceName':  '2.5.4.8',
-        'locality':             '2.5.4.7',
-        'commonName':           '2.5.4.3',
+	// X.500 AttributeType defined in RFC 4514
+        'commonName':			'2.5.4.3',
+        'localityName':			'2.5.4.7',
+        'stateOrProvinceName':		'2.5.4.8',
+        'organizationName':		'2.5.4.10',
+        'organizationalUnitName':	'2.5.4.11',
+        'countryName':			'2.5.4.6',
+        'streetAddress':		'2.5.4.9',
+        'domainComponent':		'0.9.2342.19200300.100.1.25',
+        'userId':			'0.9.2342.19200300.100.1.1',
+	// other AttributeType name string
+	'surname':			'2.5.4.4',
+	'distinguishedName':		'2.5.4.49',
+	'emailAddress':			'1.2.840.113549.1.9.1',
+	// other AttributeType name string (no short name)
+	'businessCategory':		'2.5.4.15',
+	'postalCode':			'2.5.4.17',
+	'jurisdictionOfIncorporationL':	'1.3.6.1.4.1.311.60.2.1.1',
+	'jurisdictionOfIncorporationSP':'1.3.6.1.4.1.311.60.2.1.2',
+	'jurisdictionOfIncorporationC':	'1.3.6.1.4.1.311.60.2.1.3',
 
         'subjectKeyIdentifier': '2.5.29.14',
         'keyUsage':             '2.5.29.15',
@@ -2144,14 +2280,15 @@ KJUR.asn1.x509.OID = new function(params) {
     };
 
     /**
-     * get DERObjectIdentifier by registered attribyte type name such like 'C' or 'CN'
+     * get DERObjectIdentifier by registered attribute type name such like 'C' or 'CN'<br/>
      * @name atype2obj
      * @memberOf KJUR.asn1.x509.OID
      * @function
      * @param {String} atype short attribute type name such like 'C' or 'CN'
      * @description
      * @example
-     * var asn1ObjOID = OID.atype2obj('CN');
+     * KJUR.asn1.x509.OID.atype2obj('CN') &rarr; 2.5.4.3
+     * KJUR.asn1.x509.OID.atype2obj('OU') &rarr; 2.5.4.11
      */
     this.atype2obj = function(atype) {
         if (typeof this.objCache[atype] != "undefined")
@@ -2165,20 +2302,19 @@ KJUR.asn1.x509.OID = new function(params) {
     };
 };
 
-/*
- * convert OID to name
+/**
+ * convert OID to name<br/>
  * @name oid2name
  * @memberOf KJUR.asn1.x509.OID
  * @function
- * @param {String} dot noted Object Identifer string (ex. 1.2.3.4)
- * @return {String} OID name
+ * @param {String} oid dot noted Object Identifer string (ex. 1.2.3.4)
+ * @return {String} OID name if registered otherwise empty string
+ * @since asn1x509 1.0.9
  * @description
  * This static method converts OID string to its name.
  * If OID is undefined then it returns empty string (i.e. '').
  * @example
- * name = KJUR.asn1.x509.OID.oid2name("1.3.6.1.5.5.7.1.1");
- * // name will be 'authorityInfoAccess'.
- * @since asn1x509 1.0.9
+ * KJUR.asn1.x509.OID.oid2name("1.3.6.1.5.5.7.1.1") &rarr; 'authorityInfoAccess'
  */
 KJUR.asn1.x509.OID.oid2name = function(oid) {
     var list = KJUR.asn1.x509.OID.name2oidList;
@@ -2188,20 +2324,44 @@ KJUR.asn1.x509.OID.oid2name = function(oid) {
     return '';
 };
 
-/*
- * convert name to OID
+/**
+ * convert OID to AttributeType name<br/>
+ * @name oid2atype
+ * @memberOf KJUR.asn1.x509.OID
+ * @function
+ * @param {String} oid dot noted Object Identifer string (ex. 1.2.3.4)
+ * @return {String} OID AttributeType name if registered otherwise oid
+ * @since jsrsasign 6.2.2 asn1x509 1.0.18
+ * @description
+ * This static method converts OID string to its AttributeType name.
+ * If OID is not defined in OID.atype2oidList associative array then it returns OID
+ * specified as argument.
+ * @example
+ * KJUR.asn1.x509.OID.oid2atype("2.5.4.3") &rarr; CN
+ * KJUR.asn1.x509.OID.oid2atype("1.3.6.1.4.1.311.60.2.1.3") &rarr; jurisdictionOfIncorporationC
+ * KJUR.asn1.x509.OID.oid2atype("0.1.2.3.4") &rarr; 0.1.2.3.4 // unregistered OID
+ */
+KJUR.asn1.x509.OID.oid2atype = function(oid) {
+    var list = KJUR.asn1.x509.OID.atype2oidList;
+    for (var atype in list) {
+        if (list[atype] == oid) return atype;
+    }
+    return oid;
+};
+
+/**
+ * convert OID name to OID value<br/>
  * @name name2oid
  * @memberOf KJUR.asn1.x509.OID
  * @function
  * @param {String} OID name
  * @return {String} dot noted Object Identifer string (ex. 1.2.3.4)
+ * @since asn1x509 1.0.11
  * @description
  * This static method converts from OID name to OID string.
  * If OID is undefined then it returns empty string (i.e. '').
  * @example
- * name = KJUR.asn1.x509.OID.name2oid("authorityInfoAccess");
- * // name will be '1.3.6.1.5.5.7.1.1'.
- * @since asn1x509 1.0.11
+ * KJUR.asn1.x509.OID.name2oid("authorityInfoAccess") &rarr; 1.3.6.1.5.5.7.1.1
  */
 KJUR.asn1.x509.OID.name2oid = function(name) {
     var list = KJUR.asn1.x509.OID.name2oidList;

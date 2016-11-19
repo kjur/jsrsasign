@@ -1,4 +1,4 @@
-/*! x509-1.1.9.js (c) 2012-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! x509-1.1.10.js (c) 2012-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version x509 1.1.9 (2016-May-10)
+ * @version x509 1.1.10 (2016-Nov-19)
  * @since jsrsasign 1.x.x
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -485,39 +485,100 @@ X509.getPublicKeyHexArrayFromCertPEM = function(sCertPEM) {
     return a;
 };
 
-X509.hex2dn = function(hDN) {
-    var s = "";
-    var a = ASN1HEX.getPosArrayOfChildren_AtObj(hDN, 0);
-    for (var i = 0; i < a.length; i++) {
-        var hRDN = ASN1HEX.getHexOfTLV_AtObj(hDN, a[i]);
-        s = s + "/" + X509.hex2rdn(hRDN);
+/**
+ * get distinguished name string in OpenSSL online format from hexadecimal string of ASN.1 DER X.500 name<br/>
+ * @name hex2dn
+ * @memberOf X509
+ * @function
+ * @param {String} hex hexadecimal string of ASN.1 DER distinguished name
+ * @param {Integer} idx index of hexadecimal string (DEFAULT=0)
+ * @return {String} OpenSSL online format distinguished name
+ * @description
+ * This static method converts from a hexadecimal string of 
+ * distinguished name (DN)
+ * specified by 'hex' and 'idx' to OpenSSL oneline string representation (ex. /C=US/O=a).
+ * @example
+ * X509.hex2dn("3031310b3...") &rarr; /C=US/O=a/CN=b2+OU=b1
+ */
+X509.hex2dn = function(hex, idx) {
+    if (idx === undefined) idx = 0;
+    if (hex.substr(idx, 2) !== "30") throw "malformed DN";
+
+    var a = new Array();
+
+    var aIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, idx);
+    for (var i = 0; i < aIdx.length; i++) {
+	a.push(X509.hex2rdn(hex, aIdx[i]));
     }
-    return s;
+
+    a = a.map(function(s) { return s.replace("/", "\\/"); });
+    return "/" + a.join("/");
 };
 
-X509.hex2rdn = function(hRDN) {
-    var hType = ASN1HEX.getDecendantHexTLVByNthList(hRDN, 0, [0, 0]);
-    var hValue = ASN1HEX.getDecendantHexVByNthList(hRDN, 0, [0, 1]);
-    var type = "";
-    try { type = X509.DN_ATTRHEX[hType]; } catch (ex) { type = hType; }
-    hValue = hValue.replace(/(..)/g, "%$1");
-    var value = decodeURIComponent(hValue);
-    return type + "=" + value;
+/**
+ * get relative distinguished name string in OpenSSL online format from hexadecimal string of ASN.1 DER RDN<br/>
+ * @name hex2rdn
+ * @memberOf X509
+ * @function
+ * @param {String} hex hexadecimal string of ASN.1 DER concludes relative distinguished name
+ * @param {Integer} idx index of hexadecimal string (DEFAULT=0)
+ * @return {String} OpenSSL online format relative distinguished name
+ * @description
+ * This static method converts from a hexadecimal string of 
+ * relative distinguished name (RDN)
+ * specified by 'hex' and 'idx' to LDAP string representation (ex. O=test+CN=test).<br/>
+ * NOTE: Multi-valued RDN is supported since jsnrsasign 6.2.2 x509 1.1.10.
+ * @example
+ * X509.hex2rdn("310a3008060355040a0c0161") &rarr; O=a
+ * X509.hex2rdn("31143008060355040a0c01613008060355040a0c0162") &rarr; O=a+O=b
+ */
+X509.hex2rdn = function(hex, idx) {
+    if (idx === undefined) idx = 0;
+    if (hex.substr(idx, 2) !== "31") throw "malformed RDN";
+
+    var a = new Array();
+
+    var aIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, idx);
+    for (var i = 0; i < aIdx.length; i++) {
+	a.push(X509.hex2attrTypeValue(hex, aIdx[i]));
+    }
+
+    a = a.map(function(s) { return s.replace("+", "\\+"); });
+    return a.join("+");
 };
 
-X509.DN_ATTRHEX = {
-    "0603550406": "C",
-    "060355040a": "O",
-    "060355040b": "OU",
-    "0603550403": "CN",
-    "0603550405": "SN",
-    "0603550408": "ST",
-    "0603550407": "L",
-    "0603550409": "streetAddress",
-    "060355040f": "businessCategory",
-    "0603550411": "postalCode",
-    "060b2b0601040182373c020102": "jurisdictionOfIncorporationSP",
-    "060b2b0601040182373c020103": "jurisdictionOfIncorporationC",
+/**
+ * get string from hexadecimal string of ASN.1 DER AttributeTypeAndValue<br/>
+ * @name hex2attrTypeValue
+ * @memberOf X509
+ * @function
+ * @param {String} hex hexadecimal string of ASN.1 DER concludes AttributeTypeAndValue
+ * @param {Integer} idx index of hexadecimal string (DEFAULT=0)
+ * @return {String} string representation of AttributeTypeAndValue (ex. C=US)
+ * @description
+ * This static method converts from a hexadecimal string of AttributeTypeAndValue
+ * specified by 'hex' and 'idx' to LDAP string representation (ex. C=US).
+ * @example
+ * X509.hex2attrTypeValue("3008060355040a0c0161") &rarr; O=a
+ * X509.hex2attrTypeValue("300806035504060c0161") &rarr; C=a
+ * X509.hex2attrTypeValue("...3008060355040a0c0161...", 128) &rarr; O=a
+ */
+X509.hex2attrTypeValue = function(hex, idx) {
+    if (idx === undefined) idx = 0;
+    if (hex.substr(idx, 2) !== "30") throw "malformed attribute type and value";
+
+    var aIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, idx);
+    if (aIdx.length !== 2 || hex.substr(aIdx[0], 2) !== "06")
+	"malformed attribute type and value";
+
+    var oidHex = ASN1HEX.getHexOfV_AtObj(hex, aIdx[0]);
+    var oidInt = KJUR.asn1.ASN1Util.oidHexToInt(oidHex);
+    var atype = KJUR.asn1.x509.OID.oid2atype(oidInt);
+
+    var hV = ASN1HEX.getHexOfV_AtObj(hex, aIdx[1]);
+    var rawV = hextorstr(hV);
+
+    return atype + "=" + rawV;
 };
 
 /**

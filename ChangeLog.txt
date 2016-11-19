@@ -1,6 +1,28 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 6.2.1 to 6.2.2 (2016-Nov-19)
+  - x509 1.1.9 to 1.1.10
+    - X509 class
+      - multi-valued RDN support in hex2dn and hex2rdn method.
+      - optional string index argument added to hex2dn and hex2rdn method.
+      - hex2attrTypeAndValue static method added
+    - API document update
+  - asn1x509 1.0.17 to 1.0.18
+    - X500Name class
+      - LDAP(RFC 2253) name support
+      - setByLdapString method added
+      - onelineToLDAP static method added
+      - ldapToOneline static method added
+      - 'ldapstr& constructor parameter is supported
+      - more AttributeType name supported in atype2oidList
+    - OID static class
+      - oid2atype static method added
+    - API document update
+  - asn1 1.0.11 to 1.0.12
+    - refactoring in DERObjectIdentifier
+    - API document update
+
 * Changes from 6.2.0 to 6.2.1 (2016-Nov-18)
   - asn1x509 1.0.16 to 1.0.17
     - multi-valued RDN supported in X500Name and RDN class.
