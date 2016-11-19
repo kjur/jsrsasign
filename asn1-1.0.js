@@ -1,4 +1,4 @@
-/*! asn1-1.0.11.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1-1.0.12.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.0.11 (2016-Sep-25)
+ * @version asn1 1.0.12 (2016-Nov-19)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1135,8 +1135,8 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
      * Otherwise raise error.
      */
     this.setValueName = function(oidName) {
-        if (typeof KJUR.asn1.x509.OID.name2oidList[oidName] != "undefined") {
-            var oid = KJUR.asn1.x509.OID.name2oidList[oidName];
+	var oid = KJUR.asn1.x509.OID.name2oid(oidName);
+	if (oid !== '') {
             this.setValueOidString(oid);
         } else {
             throw "DERObjectIdentifier oidName undefined: " + oidName;
@@ -1147,17 +1147,19 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
         return this.hV;
     };
 
-    if (typeof params != "undefined") {
-        if (typeof params == "string" && params.match(/^[0-2].[0-9.]+$/)) {
-            this.setValueOidString(params);
-        } else if (KJUR.asn1.x509.OID.name2oidList[params] !== undefined) {
-            this.setValueOidString(KJUR.asn1.x509.OID.name2oidList[params]);
-        } else if (typeof params['oid'] != "undefined") {
-            this.setValueOidString(params['oid']);
-        } else if (typeof params['hex'] != "undefined") {
-            this.setValueHex(params['hex']);
-        } else if (typeof params['name'] != "undefined") {
-            this.setValueName(params['name']);
+    if (params !== undefined) {
+        if (typeof params === "string") {
+	    if (params.match(/^[0-2].[0-9.]+$/)) {
+		this.setValueOidString(params);
+	    } else {
+		this.setValueName(params);
+	    }
+        } else if (params.oid !== undefined) {
+            this.setValueOidString(params.oid);
+        } else if (params.hex !== undefined) {
+            this.setValueHex(params.hex);
+        } else if (params.name !== undefined) {
+            this.setValueName(params.name);
         }
     }
 };

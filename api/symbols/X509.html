@@ -867,6 +867,41 @@ certificate.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.hex2attrTypeValue">hex2attrTypeValue</a></b>(hex, idx)
+								</div>
+								<div class="description">get string from hexadecimal string of ASN.1 DER AttributeTypeAndValue<br/>
+This static method converts from a hexadecimal string of AttributeTypeAndValue
+specified by 'hex' and 'idx' to LDAP string representation (ex.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.hex2dn">hex2dn</a></b>(hex, idx)
+								</div>
+								<div class="description">get distinguished name string in OpenSSL online format from hexadecimal string of ASN.1 DER X.500 name<br/>
+This static method converts from a hexadecimal string of 
+distinguished name (DN)
+specified by 'hex' and 'idx' to OpenSSL oneline string representation (ex.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.hex2rdn">hex2rdn</a></b>(hex, idx)
+								</div>
+								<div class="description">get relative distinguished name string in OpenSSL online format from hexadecimal string of ASN.1 DER RDN<br/>
+This static method converts from a hexadecimal string of 
+relative distinguished name (RDN)
+specified by 'hex' and 'idx' to LDAP string representation (ex.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.pemToBase64">pemToBase64</a></b>(sCertPEM)
 								</div>
 								<div class="description">get Base64 string from PEM certificate string</div>
@@ -2699,6 +2734,177 @@ This method is used by <a href="../symbols/X509.html#.getV3ExtInfoListOfCertHex"
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Object}</span> properties for the extension</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".hex2attrTypeValue"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">X509.</span><b>hex2attrTypeValue</b>(hex, idx)
+					
+					</div>
+					<div class="description">
+						get string from hexadecimal string of ASN.1 DER AttributeTypeAndValue<br/>
+This static method converts from a hexadecimal string of AttributeTypeAndValue
+specified by 'hex' and 'idx' to LDAP string representation (ex. C=US).
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">X509.hex2attrTypeValue("3008060355040a0c0161") &rarr; O=a
+X509.hex2attrTypeValue("300806035504060c0161") &rarr; C=a
+X509.hex2attrTypeValue("...3008060355040a0c0161...", 128) &rarr; O=a</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hex</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 DER concludes AttributeTypeAndValue</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>idx</b>
+									
+								</dt>
+								<dd>index of hexadecimal string (DEFAULT=0)</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> string representation of AttributeTypeAndValue (ex. C=US)</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".hex2dn"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">X509.</span><b>hex2dn</b>(hex, idx)
+					
+					</div>
+					<div class="description">
+						get distinguished name string in OpenSSL online format from hexadecimal string of ASN.1 DER X.500 name<br/>
+This static method converts from a hexadecimal string of 
+distinguished name (DN)
+specified by 'hex' and 'idx' to OpenSSL oneline string representation (ex. /C=US/O=a).
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">X509.hex2dn("3031310b3...") &rarr; /C=US/O=a/CN=b2+OU=b1</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hex</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 DER distinguished name</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>idx</b>
+									
+								</dt>
+								<dd>index of hexadecimal string (DEFAULT=0)</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> OpenSSL online format distinguished name</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".hex2rdn"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">X509.</span><b>hex2rdn</b>(hex, idx)
+					
+					</div>
+					<div class="description">
+						get relative distinguished name string in OpenSSL online format from hexadecimal string of ASN.1 DER RDN<br/>
+This static method converts from a hexadecimal string of 
+relative distinguished name (RDN)
+specified by 'hex' and 'idx' to LDAP string representation (ex. O=test+CN=test).<br/>
+NOTE: Multi-valued RDN is supported since jsnrsasign 6.2.2 x509 1.1.10.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">X509.hex2rdn("310a3008060355040a0c0161") &rarr; O=a
+X509.hex2rdn("31143008060355040a0c01613008060355040a0c0162") &rarr; O=a+O=b</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hex</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 DER concludes relative distinguished name</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>idx</b>
+									
+								</dt>
+								<dd>index of hexadecimal string (DEFAULT=0)</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> OpenSSL online format relative distinguished name</dd>
 							
 							</dl>
 						

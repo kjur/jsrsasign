@@ -504,11 +504,43 @@ defined in <a href="https://tools.ietf.org/html/rfc2253#section-2">RFC 2253 sect
 					<tbody>
 					
 						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.X500Name.<b><a href="../symbols/KJUR.asn1.x509.X500Name.html#.ldapToOneline">ldapToOneline</a></b>(s)
+								</div>
+								<div class="description">convert LDAP(RFC 2253) distinguished name format string to OpenSSL oneline format<br/>
+This static method converts a distinguished name string in 
+LDAP(RFC 2253) format to OpenSSL oneline format.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.X500Name.<b><a href="../symbols/KJUR.asn1.x509.X500Name.html#.onelineToLDAP">onelineToLDAP</a></b>(s)
+								</div>
+								<div class="description">convert OpenSSL oneline distinguished name format string to LDAP(RFC 2253) format<br/>
+This static method converts a distinguished name string in OpenSSL oneline 
+format to LDAP(RFC 2253) format.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.X500Name.html#setByLdapString">setByLdapString</a></b>(dnStr)
+								</div>
+								<div class="description">set DN by LDAP(RFC 2253) distinguished name string<br/>
+</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.X500Name.html#setByObject">setByObject</a></b>(dnObj)
 								</div>
-								<div class="description">set DN by associative array
+								<div class="description">set DN by associative array<br/>
 </div>
 							</td>
 						</tr>
@@ -518,7 +550,7 @@ defined in <a href="https://tools.ietf.org/html/rfc2253#section-2">RFC 2253 sect
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.X500Name.html#setByString">setByString</a></b>(dnStr)
 								</div>
-								<div class="description">set DN by string
+								<div class="description">set DN by OpenSSL oneline distinguished name string<br/>
 </div>
 							</td>
 						</tr>
@@ -575,6 +607,7 @@ NOTE: Multi-valued RDN is supported since jsrsasign 6.2.1 asn1x509 1.0.17.
 				
 				<pre class="code">// 1. construct with string
 o = new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa/OU=bbb/CN=foo@example.com"});
+o = new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa+CN=contact@example.com"}); // multi valued
 // 2. construct by object
 o = new KJUR.asn1.x509.X500Name({C: "US", O: "aaa", CN: "http://example.com/"});</pre>
 				
@@ -623,6 +656,181 @@ o = new KJUR.asn1.x509.X500Name({C: "US", O: "aaa", CN: "http://example.com/"});
 					Method Detail
 				</div>
 				
+					<a name=".ldapToOneline"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.asn1.x509.X500Name.</span><b>ldapToOneline</b>(s)
+					
+					</div>
+					<div class="description">
+						convert LDAP(RFC 2253) distinguished name format string to OpenSSL oneline format<br/>
+This static method converts a distinguished name string in 
+LDAP(RFC 2253) format to OpenSSL oneline format.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.asn1.x509.X500Name.ldapToOneline('O=test,C=US') &rarr; '/C=US/O=test'
+KJUR.asn1.x509.X500Name.ldapToOneline('O=a\,a,C=US') &rarr; '/C=US/O=a,a'
+KJUR.asn1.x509.X500Name.ldapToOneline('O=a/a,C=US')  &rarr; '/C=US/O=a\/a'</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>distinguished name string in LDAP(RFC 2253) format (ex. O=test,C=US)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.2.2 asn1x509 1.0.18</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> distinguished name string in OpenSSL oneline format (ex. /C=US/O=test)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">jsrsasign wiki: distinguished name string difference between OpenSSL oneline and LDAP(RFC 2253)</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name=".onelineToLDAP"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.asn1.x509.X500Name.</span><b>onelineToLDAP</b>(s)
+					
+					</div>
+					<div class="description">
+						convert OpenSSL oneline distinguished name format string to LDAP(RFC 2253) format<br/>
+This static method converts a distinguished name string in OpenSSL oneline 
+format to LDAP(RFC 2253) format.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.asn1.x509.X500Name.onelineToLDAP("/C=US/O=test") &rarr; 'O=test,C=US'
+KJUR.asn1.x509.X500Name.onelineToLDAP("/C=US/O=a,a") &rarr; 'O=a\,a,C=US'</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>distinguished name string in OpenSSL oneline format (ex. /C=US/O=test)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.2.2 asn1x509 1.0.18</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> distinguished name string in LDAP(RFC 2253) format (ex. O=test,C=US)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">jsrsasign wiki: distinguished name string difference between OpenSSL oneline and LDAP(RFC 2253)</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="setByLdapString"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setByLdapString</b>(dnStr)
+					
+					</div>
+					<div class="description">
+						set DN by LDAP(RFC 2253) distinguished name string<br/>
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">name = new KJUR.asn1.x509.X500Name();
+name.setByLdapString("CN=foo@example.com,OU=bbb,O=aaa,C=US");</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>dnStr</b>
+									
+								</dt>
+								<dd>distinguished name by LDAP string (ex. O=aaa,C=US)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.2.2 asn1x509 1.0.18</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="setByObject"> </a>
 					<div class="fixedFont">
 					
@@ -631,7 +839,7 @@ o = new KJUR.asn1.x509.X500Name({C: "US", O: "aaa", CN: "http://example.com/"});
 					
 					</div>
 					<div class="description">
-						set DN by associative array
+						set DN by associative array<br/>
 
 						
 						
@@ -679,7 +887,7 @@ name.setByObject({C: "US", O: "aaa", CN="http://example.com/"1});</pre>
 					
 					</div>
 					<div class="description">
-						set DN by string
+						set DN by OpenSSL oneline distinguished name string<br/>
 
 						
 						
@@ -697,7 +905,7 @@ name.setByString("/C=US/O=aaa/OU=bbb/CN=foo@example.com");</pre>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{Array}</span> <b>dnStr</b>
+									<span class="light fixedFont">{String}</span> <b>dnStr</b>
 									
 								</dt>
 								<dd>distinguished name by string (ex. /C=US/O=aaa)</dd>

@@ -467,9 +467,7 @@ ul.inheritsList
 								<b><a href="../symbols/KJUR.asn1.x509.OID.html#constructor">KJUR.asn1.x509.OID</a></b>()
 							</div>
 							<div class="description">static object for OID
-<dl>
-<dt><b>atype2oidList</b>
-<dd>currently supports 'C', 'O', 'OU', 'ST', 'L' and 'CN' only.</div>
+This class defines OID name and values.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -496,7 +494,7 @@ ul.inheritsList
 								<div class="fixedFont">
 								<b><a href="../symbols/KJUR.asn1.x509.OID.html#atype2oidList">atype2oidList</a></b>
 								</div>
-								<div class="description">for short attribyte type name and oid (i.e.</div>
+								<div class="description">for short attribute type name and oid (ex.</div>
 							</td>
 						</tr>
 					
@@ -506,7 +504,7 @@ ul.inheritsList
 								<div class="fixedFont">
 								<b><a href="../symbols/KJUR.asn1.x509.OID.html#name2oidList">name2oidList</a></b>
 								</div>
-								<div class="description">for oid name and oid (i.e.</div>
+								<div class="description">for oid name and oid (ex.</div>
 							</td>
 						</tr>
 					
@@ -546,7 +544,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont">KJUR.asn1.x509.OID.<b><a href="../symbols/KJUR.asn1.x509.OID.html#.atype2obj">atype2obj</a></b>(atype)
 								</div>
-								<div class="description">get DERObjectIdentifier by registered attribyte type name such like 'C' or 'CN'
+								<div class="description">get DERObjectIdentifier by registered attribute type name such like 'C' or 'CN'<br/>
 </div>
 							</td>
 						</tr>
@@ -558,6 +556,36 @@ ul.inheritsList
 								</div>
 								<div class="description">get DERObjectIdentifier by registered OID name
 </div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.OID.<b><a href="../symbols/KJUR.asn1.x509.OID.html#.name2oid">name2oid</a></b>(OID)
+								</div>
+								<div class="description">convert OID name to OID value<br/>
+This static method converts from OID name to OID string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.OID.<b><a href="../symbols/KJUR.asn1.x509.OID.html#.oid2atype">oid2atype</a></b>(oid)
+								</div>
+								<div class="description">convert OID to AttributeType name<br/>
+This static method converts OID string to its AttributeType name.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.OID.<b><a href="../symbols/KJUR.asn1.x509.OID.html#.oid2name">oid2name</a></b>(oid)
+								</div>
+								<div class="description">convert OID to name<br/>
+This static method converts OID string to its name.</div>
 							</td>
 						</tr>
 					
@@ -583,12 +611,28 @@ ul.inheritsList
 				
 				<div class="description">
 					static object for OID
-<dl>
-<dt><b>atype2oidList</b>
-<dd>currently supports 'C', 'O', 'OU', 'ST', 'L' and 'CN' only.
-<dt><b>name2oidList</b>
-<dd>currently supports 'SHA1withRSA', 'rsaEncryption' and some extension OIDs
-</dl>
+This class defines OID name and values.
+AttributeType names registered in OID.atype2oidList are following:
+<table style="border-width: thin; border-style: solid; witdh: 100%">
+<tr><th>short</th><th>long</th><th>OID</th></tr>
+<tr><td>CN</td>commonName<td></td><td>2.5.4.3</td></tr>
+<tr><td>L</td><td>localityName</td><td>2.5.4.7</td></tr>
+<tr><td>ST</td><td>stateOrProvinceName</td><td>2.5.4.8</td></tr>
+<tr><td>O</td><td>organizationName</td><td>2.5.4.10</td></tr>
+<tr><td>OU</td><td>organizationalUnitName</td><td>2.5.4.11</td></tr>
+<tr><td>C</td><td></td>countryName<td>2.5.4.6</td></tr>
+<tr><td>STREET</td>streetAddress<td></td><td>2.5.4.6</td></tr>
+<tr><td>DC</td><td>domainComponent</td><td>0.9.2342.19200300.100.1.25</td></tr>
+<tr><td>UID</td><td>userId</td><td>0.9.2342.19200300.100.1.1</td></tr>
+<tr><td>SN</td><td>surname</td><td>2.5.4.4</td></tr>
+<tr><td>DN</td><td>distinguishedName</td><td>2.5.4.49</td></tr>
+<tr><td>E</td><td>emailAddress</td><td>1.2.840.113549.1.9.1</td></tr>
+<tr><td></td><td>businessCategory</td><td>2.5.4.15</td></tr>
+<tr><td></td><td>postalCode</td><td>2.5.4.17</td></tr>
+<tr><td></td><td>jurisdictionOfIncorporationL</td><td>1.3.6.1.4.1.311.60.2.1.1</td></tr>
+<tr><td></td><td>jurisdictionOfIncorporationSP</td><td>1.3.6.1.4.1.311.60.2.1.2</td></tr>
+<tr><td></td><td>jurisdictionOfIncorporationC</td><td>1.3.6.1.4.1.311.60.2.1.3</td></tr>
+</table>
 					
 				</div>
 				
@@ -624,7 +668,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						for short attribyte type name and oid (i.e. 'C' and '2.5.4.6')
+						for short attribute type name and oid (ex. 'C' and '2.5.4.6')
 						
 						
 					</div>
@@ -646,7 +690,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						for oid name and oid (i.e. 'keyUsage' and '2.5.29.15')
+						for oid name and oid (ex. 'keyUsage' and '2.5.29.15')
 						
 						
 					</div>
@@ -698,7 +742,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						get DERObjectIdentifier by registered attribyte type name such like 'C' or 'CN'
+						get DERObjectIdentifier by registered attribute type name such like 'C' or 'CN'<br/>
 
 						
 						
@@ -706,7 +750,8 @@ ul.inheritsList
 					
 					
 					
-					<pre class="code">var asn1ObjOID = OID.atype2obj('CN');</pre>
+					<pre class="code">KJUR.asn1.x509.OID.atype2obj('CN') &rarr; 2.5.4.3
+KJUR.asn1.x509.OID.atype2obj('OU') &rarr; 2.5.4.11</pre>
 					
 					
 					
@@ -766,6 +811,174 @@ ul.inheritsList
 						
 						
 						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".name2oid"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.asn1.x509.OID.</span><b>name2oid</b>(OID)
+					
+					</div>
+					<div class="description">
+						convert OID name to OID value<br/>
+This static method converts from OID name to OID string.
+If OID is undefined then it returns empty string (i.e. '').
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.asn1.x509.OID.name2oid("authorityInfoAccess") &rarr; 1.3.6.1.5.5.7.1.1</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>OID</b>
+									
+								</dt>
+								<dd>name</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>asn1x509 1.0.11</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> dot noted Object Identifer string (ex. 1.2.3.4)</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".oid2atype"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.asn1.x509.OID.</span><b>oid2atype</b>(oid)
+					
+					</div>
+					<div class="description">
+						convert OID to AttributeType name<br/>
+This static method converts OID string to its AttributeType name.
+If OID is not defined in OID.atype2oidList associative array then it returns OID
+specified as argument.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.asn1.x509.OID.oid2atype("2.5.4.3") &rarr; CN
+KJUR.asn1.x509.OID.oid2atype("1.3.6.1.4.1.311.60.2.1.3") &rarr; jurisdictionOfIncorporationC
+KJUR.asn1.x509.OID.oid2atype("0.1.2.3.4") &rarr; 0.1.2.3.4 // unregistered OID</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>oid</b>
+									
+								</dt>
+								<dd>dot noted Object Identifer string (ex. 1.2.3.4)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.2.2 asn1x509 1.0.18</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> OID AttributeType name if registered otherwise oid</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".oid2name"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.asn1.x509.OID.</span><b>oid2name</b>(oid)
+					
+					</div>
+					<div class="description">
+						convert OID to name<br/>
+This static method converts OID string to its name.
+If OID is undefined then it returns empty string (i.e. '').
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.asn1.x509.OID.oid2name("1.3.6.1.5.5.7.1.1") &rarr; 'authorityInfoAccess'</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>oid</b>
+									
+								</dt>
+								<dd>dot noted Object Identifer string (ex. 1.2.3.4)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>asn1x509 1.0.9</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> OID name if registered otherwise empty string</dd>
+							
+							</dl>
 						
 						
 						
