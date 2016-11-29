@@ -87,6 +87,19 @@ var z1CertPEM = "" +
 "558s\r\n" +
 "-----END CERTIFICATE-----\r\n";
 
+var z1CertIANSANPEM = "" +
+"-----BEGIN CERTIFICATE-----\r\n" +
+"MIIBqTCCAVOgAwIBAgIBBDANBgkqhkiG9w0BAQUFADAZMQswCQYDVQQGEwJVUzEK\r\n" +
+"MAgGA1UECgwBYTAeFw0xMzA1MDQyMzU5NTlaFw0xNDA1MDQyMzU5NTlaMBkxCzAJ\r\n" +
+"BgNVBAYTAlVTMQowCAYDVQQKDAFiMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOhm\r\n" +
+"TdK0BSkSFWjzs5vJemLnujwJur3E8NzY35DreQubtkWitw4xEnR7TTxBtRQkiVEV\r\n" +
+"/viPedQ+rlsaTjUY/VkCAwEAAaOBhTCBgjAPBgNVHRMBAf8EBTADAQH/MAsGA1Ud\r\n" +
+"DwQEAwIGwDAlBgNVHR8EHjAcMBqgGKAWhhRodHRwOi8vYWFhLmNvbS9hLmNybDAT\r\n" +
+"BgNVHSUEDDAKBggrBgEFBQcDAjASBgNVHRIECzAJggdhYWEuY29tMBIGA1UdEQQL\r\n" +
+"MAmCB2FhYS5jb20wDQYJKoZIhvcNAQEFBQADQQDZydhz3UKmgIs4SKDKlInVOPKX\r\n" +
+"njzwm83NGQZH/PRHA5esNtg284ekHIGFS6dg8ThtP1T3mon6VD78z8Z18eI0\r\n" +
+"-----END CERTIFICATE-----\r\n";
+
 // _gitpg/jsrsasign/test/eckey/k1.*
 var k1PubP8PEM = "" +
 "-----BEGIN PUBLIC KEY-----\n" +
@@ -195,6 +208,27 @@ var pem = KJUR.asn1.x509.X509Util.newCertPEM(
 equal(pem, z1CertPEM, "bbb");
 });
 
+test("newCertPEM z1(RSA) {subject,issuer}AltName", function() {
+var pem = KJUR.asn1.x509.X509Util.newCertPEM(
+ { serial: {int: 4},
+   sigalg: {name: 'SHA1withRSA'},
+   issuer: {str: '/C=US/O=a'},
+   notbefore: {'str': '130504235959Z'},
+   notafter: {'str': '140504235959Z'},
+   subject: {str: '/C=US/O=b'},
+   sbjpubkey: z1PubP8PEM,
+   ext: [
+     {basicConstraints: {cA: true, critical: true}},
+     {keyUsage: {bin: '11'}},
+     {cRLDistributionPoints: {uri: 'http://aaa.com/a.crl'}},
+     {extKeyUsage: {array: [{name: 'clientAuth'}]}},
+     {issuerAltName: {array: [{dns: 'aaa.com'}]}},
+     {subjectAltName: {array: [{dns: 'aaa.com'}]}},
+   ],
+   cakey: [z1PrvP5EPEM, z1PrvP5EPass]});
+equal(pem, z1CertIANSANPEM, "z1CertIANSANPEM + san/ian");
+});
+
 test("newCertPEM k1(ECDSA secp256r1)", function() {
 var pem = KJUR.asn1.x509.X509Util.newCertPEM(
  { serial: {int: 4},
@@ -288,6 +322,11 @@ equal(hex, "3082010d3081f2a003020102020101300b06092a864886f70d0101053041310b3009
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
+<a href="index.html">TEST INDEX</a> |
+<a href="qunit-do-x509-hex2dn.html">x509-hex2dn</a> |
+<a href="qunit-do-asn1x509.html">asn1x509</a> |
+<a href="qunit-do-asn1x509-newcrt.html">asn1x509-newcrt</a> |
+<a href="qunit-do-asn1x509-multirdn.html">asn1x509-multirdn</a> |
 </body>
 </html>
 

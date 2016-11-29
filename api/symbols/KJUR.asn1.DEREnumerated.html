@@ -371,11 +371,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html">KJUR.asn1.x509.SubjectPublicKeyInfo</a></li>
 	
@@ -510,27 +514,27 @@ NOTE: 'params' can be omitted.</div>
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DEREnumerated.<b><a href="../symbols/KJUR.asn1.DEREnumerated.html#.setByBigInteger">setByBigInteger</a></b>(bigIntegerValue)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DEREnumerated.html#setByBigInteger">setByBigInteger</a></b>(bigIntegerValue)
 								</div>
 								<div class="description">set value by Tom Wu's BigInteger object</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DEREnumerated.<b><a href="../symbols/KJUR.asn1.DEREnumerated.html#.setByInteger">setByInteger</a></b>(integer)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DEREnumerated.html#setByInteger">setByInteger</a></b>(integer)
 								</div>
 								<div class="description">set value by integer value</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DEREnumerated.<b><a href="../symbols/KJUR.asn1.DEREnumerated.html#.setValueHex">setValueHex</a></b>(hexadecimal)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DEREnumerated.html#setValueHex">setValueHex</a></b>(hexadecimal)
 								</div>
 								<div class="description">set value by integer value
 <br/>
@@ -545,7 +549,7 @@ two's complement representation.</div>
 				
 				
 				<dl class="inheritsList">
-				
+				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a></dd>
 				</dl>
 				
 			
@@ -578,6 +582,12 @@ NOTE: 'params' can be omitted.
 				
 				
 				
+				<pre class="code">new KJUR.asn1.DEREnumerated(123);
+new KJUR.asn1.DEREnumerated({int: 123});
+new KJUR.asn1.DEREnumerated({hex: '1fad'});</pre>
+				
+				
+				
 				
 					
 					
@@ -599,11 +609,11 @@ NOTE: 'params' can be omitted.
 					Method Detail
 				</div>
 				
-					<a name=".setByBigInteger"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setByBigInteger"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.DEREnumerated.</span><b>setByBigInteger</b>(bigIntegerValue)
+					<b>setByBigInteger</b>(bigIntegerValue)
 					
 					</div>
 					<div class="description">
@@ -635,11 +645,11 @@ NOTE: 'params' can be omitted.
 
 					<hr />
 				
-					<a name=".setByInteger"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setByInteger"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.DEREnumerated.</span><b>setByInteger</b>(integer)
+					<b>setByInteger</b>(integer)
 					
 					</div>
 					<div class="description">
@@ -671,11 +681,11 @@ NOTE: 'params' can be omitted.
 
 					<hr />
 				
-					<a name=".setValueHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setValueHex"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.DEREnumerated.</span><b>setValueHex</b>(hexadecimal)
+					<b>setValueHex</b>(hexadecimal)
 					
 					</div>
 					<div class="description">
@@ -686,12 +696,6 @@ two's complement representation.
 						
 						
 					</div>
-					
-					
-					
-					<pre class="code">new KJUR.asn1.DEREnumerated(123);
-new KJUR.asn1.DEREnumerated({int: 123});
-new KJUR.asn1.DEREnumerated({hex: '1fad'});</pre>
 					
 					
 					

@@ -1,4 +1,4 @@
-/*! asn1csr-1.0.1.js (c) 2015-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1csr-1.0.2.js (c) 2015-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1csr-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.1 (2016-Oct-15)
+ * @version 1.0.2 (2016-Nov-26)
  * @since jsrsasign 4.9.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -84,9 +84,9 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
     var prvKey = null;
 
     /**
-     * sign CertificationRequest and set signature value internally
+     * sign CertificationRequest and set signature value internally<br/>
      * @name sign
-     * @memberOf KJUR.asn1.csr.CertificationRequest
+     * @memberOf KJUR.asn1.csr.CertificationRequest#
      * @function
      * @description
      * This method self-signs CertificateRequestInfo with a subject's
@@ -116,9 +116,9 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
     };
 
     /**
-     * get PEM formatted certificate signing request (CSR/PKCS#10)
+     * get PEM formatted certificate signing request (CSR/PKCS#10)<br/>
      * @name getPEMString
-     * @memberOf KJUR.asn1.csr.CertificationRequest
+     * @memberOf KJUR.asn1.csr.CertificationRequest#
      * @function
      * @return PEM formatted string of CSR/PKCS#10
      * @description
@@ -160,19 +160,19 @@ YAHOO.lang.extend(KJUR.asn1.csr.CertificationRequest, KJUR.asn1.ASN1Object);
  * @extends KJUR.asn1.ASN1Object
  * @since jsrsasign 4.9.0 asn1csr 1.0.0
  * @description
- * <br/>
- * @example
- * csri = new KJUR.asn1.csr.CertificationRequestInfo();
- * csri.setSubjectByParam({'str': '/C=US/O=Test/CN=example.com'});
- * csri.setSubjectPublicKeyByGetKey(pubKeyObj);
- *
+ * <pre>
  * // -- DEFINITION OF ASN.1 SYNTAX --
  * // CertificationRequestInfo ::= SEQUENCE {
  * //   version       INTEGER { v1(0) } (v1,...),
  * //   subject       Name,
  * //   subjectPKInfo SubjectPublicKeyInfo{{ PKInfoAlgorithms }},
  * //   attributes    [0] Attributes{{ CRIAttributes }} }
- *
+ * </pre>
+ * <br/>
+ * @example
+ * csri = new KJUR.asn1.csr.CertificationRequestInfo();
+ * csri.setSubjectByParam({'str': '/C=US/O=Test/CN=example.com'});
+ * csri.setSubjectPublicKeyByGetKey(pubKeyObj);
  */
 KJUR.asn1.csr.CertificationRequestInfo = function(params) {
     KJUR.asn1.csr.CertificationRequestInfo.superclass.constructor.call(this);
@@ -189,7 +189,7 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
     /**
      * set subject name field by parameter
      * @name setSubjectByParam
-     * @memberOf KJUR.asn1.csr.CertificationRequestInfo
+     * @memberOf KJUR.asn1.csr.CertificationRequestInfo#
      * @function
      * @param {Array} x500NameParam X500Name parameter
      * @description
@@ -204,7 +204,7 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
     /**
      * set subject public key info by RSA/ECDSA/DSA key parameter
      * @name setSubjectPublicKeyByGetKey
-     * @memberOf KJUR.asn1.csr.CertificationRequestInfo
+     * @memberOf KJUR.asn1.csr.CertificationRequestInfo#
      * @function
      * @param {Object} keyParam public key parameter which passed to {@link KEYUTIL.getKey} argument
      * @description
@@ -220,6 +220,30 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
         this.asn1SubjPKey = new KJUR.asn1.x509.SubjectPublicKeyInfo(keyObj);
     };
 
+    /**
+     * append X.509v3 extension to this object by name and parameters
+     * @name appendExtensionByName
+     * @memberOf KJUR.asn1.csr.CertificationRequestInfo#
+     * @function
+     * @param {name} name name of X.509v3 Extension object
+     * @param {Array} extParams parameters as argument of Extension constructor.
+     * @see KJUR.asn1.x509.Extension
+     * @description
+     * @example
+     * var o = new KJUR.asn1.csr.CertificationRequestInfo();
+     * o.appendExtensionByName('BasicConstraints', {'cA':true, 'critical': true});
+     * o.appendExtensionByName('KeyUsage', {'bin':'11'});
+     * o.appendExtensionByName('CRLDistributionPoints', {uri: 'http://aaa.com/a.crl'});
+     * o.appendExtensionByName('ExtKeyUsage', {array: [{name: 'clientAuth'}]});
+     * o.appendExtensionByName('AuthorityKeyIdentifier', {kid: '1234ab..'});
+     * o.appendExtensionByName('AuthorityInfoAccess', {array: [{accessMethod:{oid:...},accessLocation:{uri:...}}]});
+     */
+    this.appendExtensionByName = function(name, extParams) {
+	KJUR.asn1.x509.Extension.appendByNameToArray(name,
+						     extParams,
+						     this.extensionsArray);
+    };
+
     this.getEncodedHex = function() {
         this.asn1Array = new Array();
 
@@ -227,11 +251,28 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
         this.asn1Array.push(this.asn1Subject);
         this.asn1Array.push(this.asn1SubjPKey);
 
-        var extSeq = new KJUR.asn1.DERSequence({"array": this.extensionsArray});
-        var extTagObj = new KJUR.asn1.DERTaggedObject({'explicit': false,
-                                                       'tag': 'a0',
-                                                       'obj': extSeq});
-        this.asn1Array.push(extTagObj);
+	// extensionRequest
+	if (this.extensionsArray.length > 0) {
+            var extSeq = new KJUR.asn1.DERSequence({array: this.extensionsArray});
+	    var extSet = new KJUR.asn1.DERSet({array: [extSeq]});
+	    var extSeq2 = new KJUR.asn1.DERSequence({array: [
+		new KJUR.asn1.DERObjectIdentifier({oid: "1.2.840.113549.1.9.14"}),
+		extSet
+	    ]});
+            var extTagObj = new KJUR.asn1.DERTaggedObject({
+		explicit: true,
+		tag: 'a0',
+		obj: extSeq2
+	    });
+            this.asn1Array.push(extTagObj);
+	} else {
+            var extTagObj = new KJUR.asn1.DERTaggedObject({
+		explicit: false,
+		tag: 'a0',
+		obj: new KJUR.asn1.DERNull()
+	    });
+            this.asn1Array.push(extTagObj);
+	}
 
         var o = new KJUR.asn1.DERSequence({"array": this.asn1Array});
         this.hTLV = o.getEncodedHex();
@@ -244,9 +285,17 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
 YAHOO.lang.extend(KJUR.asn1.csr.CertificationRequestInfo, KJUR.asn1.ASN1Object);
 
 /**
- * Certification Request (CSR/PKCS#10) utilities class
+ * Certification Request (CSR/PKCS#10) utilities class<br/>
  * @name KJUR.asn1.csr.CSRUtil
  * @class Certification Request (CSR/PKCS#10) utilities class
+ * @description
+ * This class provides utility static methods for CSR/PKCS#10.
+ * Here is a list of methods:
+ * <ul>
+ * <li>{@link KJUR.asn1.csr.CSRUtil.newCSRPEM}</li>
+ * <li>{@link KJUR.asn1.csr.CSRUtil.getInfo}</li>
+ * </ul>
+ * <br/>
  */
 KJUR.asn1.csr.CSRUtil = new function() {
 };
@@ -293,6 +342,17 @@ KJUR.asn1.csr.CSRUtil = new function() {
  *   sigalg: "SHA256withRSA",
  *   sbjprvkey: kp.prvKeyObj
  * });
+ *
+ * // 4) by private/public key PEM with extension
+ * pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
+ *   subject: {str: '/C=US/O=Test/CN=example.com'},
+ *   ext: [
+ *     {subjectAltName: {array: [{dns: 'example.net'}]}
+ *   ],
+ *   sbjpubkey: pubKeyPEM,
+ *   sigalg: "SHA256withRSA",
+ *   sbjprvkey: prvKeyPEM
+ * });
  */
 KJUR.asn1.csr.CSRUtil.newCSRPEM = function(param) {
     var ns1 = KJUR.asn1.csr;
@@ -305,6 +365,14 @@ KJUR.asn1.csr.CSRUtil.newCSRPEM = function(param) {
     var csri = new ns1.CertificationRequestInfo();
     csri.setSubjectByParam(param.subject);
     csri.setSubjectPublicKeyByGetKey(param.sbjpubkey);
+
+    if (param.ext !== undefined && param.ext.length !== undefined) {
+	for (var i = 0; i < param.ext.length; i++) {
+	    for (key in param.ext[i]) {
+                csri.appendExtensionByName(key, param.ext[i][key]);
+	    }
+	}
+    }
 
     var csr = new ns1.CertificationRequest({'csrinfo': csri});
     var prvKey = KEYUTIL.getKey(param.sbjprvkey);

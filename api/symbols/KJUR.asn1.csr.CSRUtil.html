@@ -371,11 +371,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html">KJUR.asn1.x509.SubjectPublicKeyInfo</a></li>
 	
@@ -681,6 +685,17 @@ pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
   sbjpubkey: kp.pubKeyObj,
   sigalg: "SHA256withRSA",
   sbjprvkey: kp.prvKeyObj
+});
+
+// 4) by private/public key PEM with extension
+pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
+  subject: {str: '/C=US/O=Test/CN=example.com'},
+  ext: [
+    {subjectAltName: {array: [{dns: 'example.net'}]}
+  ],
+  sbjpubkey: pubKeyPEM,
+  sigalg: "SHA256withRSA",
+  sbjprvkey: prvKeyPEM
 });</pre>
 					
 					

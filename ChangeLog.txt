@@ -1,10 +1,20 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 6.2.2 to next version
+* Changes from 6.2.2 to 6.2.3
+  - asn1x509 1.0.18 to 1.0.19
+    - GeneralName and GeneralNames class supports dn and ldapdn parameters
+    - SubjectAltName and IssuerAltName extension added
+    - Extension.appendByNameToArray method added
+  - asn1csr 1.0.1 to 1.0.2
+    - CertificationRequestInfo.appendExtensionByName method added
+    - CertificationRequestInfo extensionRequest encoding critical bugfix
+    - CSRUtil.newCSRPEM "ext" parameter for extensionRequest supported
   - sample_node
     - datasing and dataverify script added
   - base64x
+    - API document update
+  - asn1
     - API document update
 
 * Changes from 6.2.1 to 6.2.2 (2016-Nov-19)

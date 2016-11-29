@@ -371,11 +371,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html">KJUR.asn1.x509.SubjectPublicKeyInfo</a></li>
 	
@@ -511,45 +515,45 @@ following properties:
 							<td class="nameDescription">
 								<div class="fixedFont">KJUR.asn1.DERBitString.<b><a href="../symbols/KJUR.asn1.DERBitString.html#.newFalseArray">newFalseArray</a></b>(nLength)
 								</div>
-								<div class="description">generate an array of false with specified length
+								<div class="description">generate an array of falses with specified length<br/>
 This static method may be useful to initialize boolean array.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DERBitString.<b><a href="../symbols/KJUR.asn1.DERBitString.html#.setByBinaryString">setByBinaryString</a></b>(binaryString)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERBitString.html#setByBinaryString">setByBinaryString</a></b>(binaryString)
 								</div>
-								<div class="description">set ASN.1 DER BitString by binary string
+								<div class="description">set ASN.1 DER BitString by binary string<br/>
 Its unused bits will be calculated automatically by length of 
 'binaryValue'.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DERBitString.<b><a href="../symbols/KJUR.asn1.DERBitString.html#.setByBooleanArray">setByBooleanArray</a></b>(booleanArray)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERBitString.html#setByBooleanArray">setByBooleanArray</a></b>(booleanArray)
 								</div>
-								<div class="description">set ASN.1 TLV value(V) by an array of boolean
-NOTE: Trailing falses will be ignored.</div>
+								<div class="description">set ASN.1 TLV value(V) by an array of boolean<br/>
+NOTE: Trailing falses will be ignored in the ASN.1 DER Object.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DERBitString.<b><a href="../symbols/KJUR.asn1.DERBitString.html#.setHexValueIncludingUnusedBits">setHexValueIncludingUnusedBits</a></b>(newHexStringIncludingUnusedBits)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERBitString.html#setHexValueIncludingUnusedBits">setHexValueIncludingUnusedBits</a></b>(newHexStringIncludingUnusedBits)
 								</div>
 								<div class="description">set ASN.1 value(V) by a hexadecimal string including unused bits</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DERBitString.<b><a href="../symbols/KJUR.asn1.DERBitString.html#.setUnusedBitsAndHexValue">setUnusedBitsAndHexValue</a></b>(unusedBits, hValue)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERBitString.html#setUnusedBitsAndHexValue">setUnusedBitsAndHexValue</a></b>(unusedBits, hValue)
 								</div>
 								<div class="description">set ASN.1 value(V) by unused bit and hexadecimal string of value</div>
 							</td>
@@ -561,7 +565,7 @@ NOTE: Trailing falses will be ignored.</div>
 				
 				
 				<dl class="inheritsList">
-				
+				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a></dd>
 				</dl>
 				
 			
@@ -648,11 +652,16 @@ o = new KJUR.asn1.DERBitString({obj: {seq: [{int: 3}, {prnstr: 'aaa'}]}});
 					
 					</div>
 					<div class="description">
-						generate an array of false with specified length
+						generate an array of falses with specified length<br/>
 This static method may be useful to initialize boolean array.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.DERBitString();
+o.newFalseArray(3) &rarr; [false, false, false]</pre>
 					
 					
 					
@@ -675,7 +684,7 @@ This static method may be useful to initialize boolean array.
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{array}</span> array of boolean faluse</dd>
+								<dd><span class="light fixedFont">{array}</span> array of boolean falses</dd>
 							
 							</dl>
 						
@@ -684,21 +693,26 @@ This static method may be useful to initialize boolean array.
 
 					<hr />
 				
-					<a name=".setByBinaryString"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setByBinaryString"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.DERBitString.</span><b>setByBinaryString</b>(binaryString)
+					<b>setByBinaryString</b>(binaryString)
 					
 					</div>
 					<div class="description">
-						set ASN.1 DER BitString by binary string
+						set ASN.1 DER BitString by binary string<br/>
 Its unused bits will be calculated automatically by length of 
 'binaryValue'. <br/>
 NOTE: Trailing zeros '0' will be ignored.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.DERBitString();
+o.setByBooleanArray("01011");</pre>
 					
 					
 					
@@ -723,19 +737,24 @@ NOTE: Trailing zeros '0' will be ignored.
 
 					<hr />
 				
-					<a name=".setByBooleanArray"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setByBooleanArray"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.DERBitString.</span><b>setByBooleanArray</b>(booleanArray)
+					<b>setByBooleanArray</b>(booleanArray)
 					
 					</div>
 					<div class="description">
-						set ASN.1 TLV value(V) by an array of boolean
-NOTE: Trailing falses will be ignored.
+						set ASN.1 TLV value(V) by an array of boolean<br/>
+NOTE: Trailing falses will be ignored in the ASN.1 DER Object.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.DERBitString();
+o.setByBooleanArray([false, true, false, true, true]);</pre>
 					
 					
 					
@@ -760,11 +779,11 @@ NOTE: Trailing falses will be ignored.
 
 					<hr />
 				
-					<a name=".setHexValueIncludingUnusedBits"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setHexValueIncludingUnusedBits"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.DERBitString.</span><b>setHexValueIncludingUnusedBits</b>(newHexStringIncludingUnusedBits)
+					<b>setHexValueIncludingUnusedBits</b>(newHexStringIncludingUnusedBits)
 					
 					</div>
 					<div class="description">
@@ -796,11 +815,11 @@ NOTE: Trailing falses will be ignored.
 
 					<hr />
 				
-					<a name=".setUnusedBitsAndHexValue"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setUnusedBitsAndHexValue"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.DERBitString.</span><b>setUnusedBitsAndHexValue</b>(unusedBits, hValue)
+					<b>setUnusedBitsAndHexValue</b>(unusedBits, hValue)
 					
 					</div>
 					<div class="description">
