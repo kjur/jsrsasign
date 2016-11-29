@@ -128,7 +128,7 @@ KJUR.asn1.x509.Certificate = function(params) {
     /**
      * set PKCS#5 encrypted RSA PEM private key as CA key
      * @name setRsaPrvKeyByPEMandPass
-     * @memberOf KJUR.asn1.x509.Certificate
+     * @memberOf KJUR.asn1.x509.Certificate#
      * @function
      * @param {String} rsaPEM string of PKCS#5 encrypted RSA PEM private key
      * @param {String} passPEM passcode string to decrypt private key
@@ -150,7 +150,7 @@ KJUR.asn1.x509.Certificate = function(params) {
     /**
      * sign TBSCertificate and set signature value internally
      * @name sign
-     * @memberOf KJUR.asn1.x509.Certificate
+     * @memberOf KJUR.asn1.x509.Certificate#
      * @function
      * @description
      * @example
@@ -177,7 +177,7 @@ KJUR.asn1.x509.Certificate = function(params) {
     /**
      * set signature value internally by hex string
      * @name setSignatureHex
-     * @memberOf KJUR.asn1.x509.Certificate
+     * @memberOf KJUR.asn1.x509.Certificate#
      * @function
      * @since asn1x509 1.0.8
      * @description
@@ -205,7 +205,7 @@ KJUR.asn1.x509.Certificate = function(params) {
     /**
      * get PEM formatted certificate string after signed
      * @name getPEMString
-     * @memberOf KJUR.asn1.x509.Certificate
+     * @memberOf KJUR.asn1.x509.Certificate#
      * @function
      * @return PEM formatted string of certificate
      * @description
@@ -637,6 +637,31 @@ YAHOO.lang.extend(KJUR.asn1.x509.BasicConstraints, KJUR.asn1.x509.Extension);
  * @param {Array} params associative array of parameters (ex. {'uri': 'http://a.com/', 'critical': true})
  * @extends KJUR.asn1.x509.Extension
  * @description
+ * <pre>
+ * id-ce-cRLDistributionPoints OBJECT IDENTIFIER ::=  { id-ce 31 }
+ *
+ * CRLDistributionPoints ::= SEQUENCE SIZE (1..MAX) OF DistributionPoint
+ *
+ * DistributionPoint ::= SEQUENCE {
+ *      distributionPoint       [0]     DistributionPointName OPTIONAL,
+ *      reasons                 [1]     ReasonFlags OPTIONAL,
+ *      cRLIssuer               [2]     GeneralNames OPTIONAL }
+ *
+ * DistributionPointName ::= CHOICE {
+ *      fullName                [0]     GeneralNames,
+ *      nameRelativeToCRLIssuer [1]     RelativeDistinguishedName }
+ * 
+ * ReasonFlags ::= BIT STRING {
+ *      unused                  (0),
+ *      keyCompromise           (1),
+ *      cACompromise            (2),
+ *      affiliationChanged      (3),
+ *      superseded              (4),
+ *      cessationOfOperation    (5),
+ *      certificateHold         (6),
+ *      privilegeWithdrawn      (7),
+ *      aACompromise            (8) }
+ * </pre>
  * @example
  */
 KJUR.asn1.x509.CRLDistributionPoints = function(params) {
@@ -764,7 +789,7 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
     /**
      * set keyIdentifier value by DERInteger parameter
      * @name setKIDByParam
-     * @memberOf KJUR.asn1.x509.AuthorityKeyIdentifier
+     * @memberOf KJUR.asn1.x509.AuthorityKeyIdentifier#
      * @function
      * @param {Array} param array of {@link KJUR.asn1.DERInteger} parameter
      * @since asn1x509 1.0.8
@@ -1024,7 +1049,7 @@ KJUR.asn1.x509.CRL = function(params) {
     /**
      * set PKCS#5 encrypted RSA PEM private key as CA key
      * @name setRsaPrvKeyByPEMandPass
-     * @memberOf KJUR.asn1.x509.CRL
+     * @memberOf KJUR.asn1.x509.CRL#
      * @function
      * @param {String} rsaPEM string of PKCS#5 encrypted RSA PEM private key
      * @param {String} passPEM passcode string to decrypt private key
@@ -1043,7 +1068,7 @@ KJUR.asn1.x509.CRL = function(params) {
     /**
      * sign TBSCertList and set signature value internally
      * @name sign
-     * @memberOf KJUR.asn1.x509.CRL
+     * @memberOf KJUR.asn1.x509.CRL#
      * @function
      * @description
      * @example
@@ -1075,7 +1100,7 @@ KJUR.asn1.x509.CRL = function(params) {
     /**
      * get PEM formatted CRL string after signed
      * @name getPEMString
-     * @memberOf KJUR.asn1.x509.CRL
+     * @memberOf KJUR.asn1.x509.CRL#
      * @function
      * @return PEM formatted string of certificate
      * @description
@@ -1148,7 +1173,7 @@ KJUR.asn1.x509.TBSCertList = function(params) {
     /**
      * set signature algorithm field by parameter
      * @name setSignatureAlgByParam
-     * @memberOf KJUR.asn1.x509.TBSCertList
+     * @memberOf KJUR.asn1.x509.TBSCertList#
      * @function
      * @param {Array} algIdParam AlgorithmIdentifier parameter
      * @description
@@ -1162,7 +1187,7 @@ KJUR.asn1.x509.TBSCertList = function(params) {
     /**
      * set issuer name field by parameter
      * @name setIssuerByParam
-     * @memberOf KJUR.asn1.x509.TBSCertList
+     * @memberOf KJUR.asn1.x509.TBSCertList#
      * @function
      * @param {Array} x500NameParam X500Name parameter
      * @description
@@ -1177,7 +1202,7 @@ KJUR.asn1.x509.TBSCertList = function(params) {
     /**
      * set thisUpdate field by parameter
      * @name setThisUpdateByParam
-     * @memberOf KJUR.asn1.x509.TBSCertList
+     * @memberOf KJUR.asn1.x509.TBSCertList#
      * @function
      * @param {Array} timeParam Time parameter
      * @description
@@ -1192,7 +1217,7 @@ KJUR.asn1.x509.TBSCertList = function(params) {
     /**
      * set nextUpdate field by parameter
      * @name setNextUpdateByParam
-     * @memberOf KJUR.asn1.x509.TBSCertList
+     * @memberOf KJUR.asn1.x509.TBSCertList#
      * @function
      * @param {Array} timeParam Time parameter
      * @description
@@ -1207,7 +1232,7 @@ KJUR.asn1.x509.TBSCertList = function(params) {
     /**
      * add revoked certficate by parameter
      * @name addRevokedCert
-     * @memberOf KJUR.asn1.x509.TBSCertList
+     * @memberOf KJUR.asn1.x509.TBSCertList#
      * @function
      * @param {Array} snParam DERInteger parameter for certificate serial number
      * @param {Array} timeParam Time parameter for revocation date
@@ -2194,10 +2219,31 @@ KJUR.asn1.x509.GeneralNames = function(paramsArray) {
 YAHOO.lang.extend(KJUR.asn1.x509.GeneralNames, KJUR.asn1.ASN1Object);
 
 /**
- * DistributionPointName ASN.1 structure class
+ * DistributionPointName ASN.1 structure class<br/>
  * @name KJUR.asn1.x509.DistributionPointName
  * @class DistributionPointName ASN.1 structure class
  * @description
+ * <pre>
+ * DistributionPoint ::= SEQUENCE {
+ *      distributionPoint       [0]     DistributionPointName OPTIONAL,
+ *      reasons                 [1]     ReasonFlags OPTIONAL,
+ *      cRLIssuer               [2]     GeneralNames OPTIONAL }
+ *
+ * DistributionPointName ::= CHOICE {
+ *      fullName                [0]     GeneralNames,
+ *      nameRelativeToCRLIssuer [1]     RelativeDistinguishedName }
+ * 
+ * ReasonFlags ::= BIT STRING {
+ *      unused                  (0),
+ *      keyCompromise           (1),
+ *      cACompromise            (2),
+ *      affiliationChanged      (3),
+ *      superseded              (4),
+ *      cessationOfOperation    (5),
+ *      certificateHold         (6),
+ *      privilegeWithdrawn      (7),
+ *      aACompromise            (8) }
+ * </pre>
  * @example
  */
 KJUR.asn1.x509.DistributionPointName = function(gnOrRdn) {
@@ -2230,10 +2276,31 @@ KJUR.asn1.x509.DistributionPointName = function(gnOrRdn) {
 YAHOO.lang.extend(KJUR.asn1.x509.DistributionPointName, KJUR.asn1.ASN1Object);
 
 /**
- * DistributionPoint ASN.1 structure class
+ * DistributionPoint ASN.1 structure class<br/>
  * @name KJUR.asn1.x509.DistributionPoint
  * @class DistributionPoint ASN.1 structure class
  * @description
+ * <pre>
+ * DistributionPoint ::= SEQUENCE {
+ *      distributionPoint       [0]     DistributionPointName OPTIONAL,
+ *      reasons                 [1]     ReasonFlags OPTIONAL,
+ *      cRLIssuer               [2]     GeneralNames OPTIONAL }
+ *
+ * DistributionPointName ::= CHOICE {
+ *      fullName                [0]     GeneralNames,
+ *      nameRelativeToCRLIssuer [1]     RelativeDistinguishedName }
+ * 
+ * ReasonFlags ::= BIT STRING {
+ *      unused                  (0),
+ *      keyCompromise           (1),
+ *      cACompromise            (2),
+ *      affiliationChanged      (3),
+ *      superseded              (4),
+ *      cessationOfOperation    (5),
+ *      certificateHold         (6),
+ *      privilegeWithdrawn      (7),
+ *      aACompromise            (8) }
+ * </pre>
  * @example
  */
 KJUR.asn1.x509.DistributionPoint = function(params) {
@@ -2410,6 +2477,7 @@ KJUR.asn1.x509.OID = new function(params) {
         'encrypted-data':       '1.2.840.113549.1.7.6', // CMS encrypted-data
         'authenticated-data':   '1.2.840.113549.1.9.16.1.2', // CMS authenticated-data
         'tstinfo':              '1.2.840.113549.1.9.16.1.4', // RFC3161 TSTInfo
+        'extensionRequest':     '1.2.840.113549.1.9.14',// CSR extensionRequest
     };
 
     this.objCache = {};
