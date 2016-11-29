@@ -1,11 +1,11 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 6.2.2 to next version
+* Changes from 6.2.3 to next version
   - asn1x509
     - API document update
 
-* Changes from 6.2.2 to 6.2.3
+* Changes from 6.2.2 to 6.2.3 (2016-Nov-29)
   - asn1x509 1.0.18 to 1.0.19
     - GeneralName and GeneralNames class supports dn and ldapdn parameters
     - SubjectAltName and IssuerAltName extension added
