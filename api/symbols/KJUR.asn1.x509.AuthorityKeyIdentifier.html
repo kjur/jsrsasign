@@ -371,11 +371,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html">KJUR.asn1.x509.SubjectPublicKeyInfo</a></li>
 	
@@ -510,9 +514,9 @@ KeyIdentifier ::= OCTET STRING
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.AuthorityKeyIdentifier.<b><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html#.setCertIssuerByParam">setCertIssuerByParam</a></b>(param)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html#setCertIssuerByParam">setCertIssuerByParam</a></b>(param)
 								</div>
 								<div class="description">set authorityCertIssuer value by X500Name parameter
 NOTE: Automatic authorityCertIssuer name setting by an issuer
@@ -521,9 +525,9 @@ certificate will be supported in future version.</div>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.AuthorityKeyIdentifier.<b><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html#.setCertSerialNumberByParam">setCertSerialNumberByParam</a></b>(param)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html#setCertSerialNumberByParam">setCertSerialNumberByParam</a></b>(param)
 								</div>
 								<div class="description">set authorityCertSerialNumber value by DERInteger parameter
 NOTE: Automatic authorityCertSerialNumber setting by an issuer
@@ -548,7 +552,7 @@ public key will be supported in future version.</div>
 				
 				
 				<dl class="inheritsList">
-				
+				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a></dd>
 				</dl>
 				
 			
@@ -581,11 +585,12 @@ KeyIdentifier ::= OCTET STRING
 				
 				
 				
-				<pre class="code">var param = {'kid': {'hex': '89ab'},
-             'issuer': {'str': '/C=US/CN=a'},
-             'sn': {'hex': '1234'},
-             'critical': true});
-var e1 = new KJUR.asn1.x509.AuthorityKeyIdentifier(param);</pre>
+				<pre class="code">e1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({
+  critical: true,
+  kid:    {hex: '89ab'},
+  issuer: {str: '/C=US/CN=a'},
+  sn:     {hex: '1234'}
+});</pre>
 				
 				
 				
@@ -626,11 +631,11 @@ var e1 = new KJUR.asn1.x509.AuthorityKeyIdentifier(param);</pre>
 					Method Detail
 				</div>
 				
-					<a name=".setCertIssuerByParam"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setCertIssuerByParam"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.x509.AuthorityKeyIdentifier.</span><b>setCertIssuerByParam</b>(param)
+					<b>setCertIssuerByParam</b>(param)
 					
 					</div>
 					<div class="description">
@@ -670,11 +675,11 @@ certificate will be supported in future version.
 
 					<hr />
 				
-					<a name=".setCertSerialNumberByParam"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setCertSerialNumberByParam"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.x509.AuthorityKeyIdentifier.</span><b>setCertSerialNumberByParam</b>(param)
+					<b>setCertSerialNumberByParam</b>(param)
 					
 					</div>
 					<div class="description">

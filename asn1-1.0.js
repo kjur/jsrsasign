@@ -409,7 +409,7 @@ KJUR.asn1.ASN1Object = function() {
     /**
      * get hexadecimal ASN.1 TLV length(L) bytes from TLV value(V)
      * @name getLengthHexFromValue
-     * @memberOf KJUR.asn1.ASN1Object
+     * @memberOf KJUR.asn1.ASN1Object#
      * @function
      * @return {String} hexadecimal string of ASN.1 TLV length(L)
      */
@@ -440,7 +440,7 @@ KJUR.asn1.ASN1Object = function() {
     /**
      * get hexadecimal string of ASN.1 TLV bytes
      * @name getEncodedHex
-     * @memberOf KJUR.asn1.ASN1Object
+     * @memberOf KJUR.asn1.ASN1Object#
      * @function
      * @return {String} hexadecimal string of ASN.1 TLV
      */
@@ -458,7 +458,7 @@ KJUR.asn1.ASN1Object = function() {
     /**
      * get hexadecimal string of ASN.1 TLV value(V) bytes
      * @name getValueHex
-     * @memberOf KJUR.asn1.ASN1Object
+     * @memberOf KJUR.asn1.ASN1Object#
      * @function
      * @return {String} hexadecimal string of ASN.1 TLV value(V) bytes
      */
@@ -498,7 +498,7 @@ KJUR.asn1.DERAbstractString = function(params) {
     /**
      * get string value of this string object
      * @name getString
-     * @memberOf KJUR.asn1.DERAbstractString
+     * @memberOf KJUR.asn1.DERAbstractString#
      * @function
      * @return {String} string value of this string object
      */
@@ -509,7 +509,7 @@ KJUR.asn1.DERAbstractString = function(params) {
     /**
      * set value by a string
      * @name setString
-     * @memberOf KJUR.asn1.DERAbstractString
+     * @memberOf KJUR.asn1.DERAbstractString#
      * @function
      * @param {String} newS value by a string to set
      */
@@ -523,7 +523,7 @@ KJUR.asn1.DERAbstractString = function(params) {
     /**
      * set value by a hexadecimal string
      * @name setStringHex
-     * @memberOf KJUR.asn1.DERAbstractString
+     * @memberOf KJUR.asn1.DERAbstractString#
      * @function
      * @param {String} newHexString value by a hexadecimal string to set
      */
@@ -614,7 +614,7 @@ KJUR.asn1.DERAbstractTime = function(params) {
     /**
      * get string value of this string object
      * @name getString
-     * @memberOf KJUR.asn1.DERAbstractTime
+     * @memberOf KJUR.asn1.DERAbstractTime#
      * @function
      * @return {String} string value of this time object
      */
@@ -625,7 +625,7 @@ KJUR.asn1.DERAbstractTime = function(params) {
     /**
      * set value by a string
      * @name setString
-     * @memberOf KJUR.asn1.DERAbstractTime
+     * @memberOf KJUR.asn1.DERAbstractTime#
      * @function
      * @param {String} newS value by a string to set such like "130430235959Z"
      */
@@ -639,7 +639,7 @@ KJUR.asn1.DERAbstractTime = function(params) {
     /**
      * set value by a Date object
      * @name setByDateValue
-     * @memberOf KJUR.asn1.DERAbstractTime
+     * @memberOf KJUR.asn1.DERAbstractTime#
      * @function
      * @param {Integer} year year of date (ex. 2013)
      * @param {Integer} month month of date between 1 and 12 (ex. 12)
@@ -677,7 +677,7 @@ KJUR.asn1.DERAbstractStructured = function(params) {
     /**
      * set value by array of ASN1Object
      * @name setByASN1ObjectArray
-     * @memberOf KJUR.asn1.DERAbstractStructured
+     * @memberOf KJUR.asn1.DERAbstractStructured#
      * @function
      * @param {array} asn1ObjectArray array of ASN1Object to set
      */
@@ -690,7 +690,7 @@ KJUR.asn1.DERAbstractStructured = function(params) {
     /**
      * append an ASN1Object to internal array
      * @name appendASN1Object
-     * @memberOf KJUR.asn1.DERAbstractStructured
+     * @memberOf KJUR.asn1.DERAbstractStructured#
      * @function
      * @param {ASN1Object} asn1Object to add
      */
@@ -754,7 +754,7 @@ KJUR.asn1.DERInteger = function(params) {
     /**
      * set value by Tom Wu's BigInteger object
      * @name setByBigInteger
-     * @memberOf KJUR.asn1.DERInteger
+     * @memberOf KJUR.asn1.DERInteger#
      * @function
      * @param {BigInteger} bigIntegerValue to set
      */
@@ -779,7 +779,7 @@ KJUR.asn1.DERInteger = function(params) {
     /**
      * set value by integer value
      * @name setValueHex
-     * @memberOf KJUR.asn1.DERInteger
+     * @memberOf KJUR.asn1.DERInteger#
      * @function
      * @param {String} hexadecimal string of integer value
      * @description
@@ -863,7 +863,7 @@ KJUR.asn1.DERBitString = function(params) {
     /**
      * set ASN.1 value(V) by a hexadecimal string including unused bits
      * @name setHexValueIncludingUnusedBits
-     * @memberOf KJUR.asn1.DERBitString
+     * @memberOf KJUR.asn1.DERBitString#
      * @function
      * @param {String} newHexStringIncludingUnusedBits
      */
@@ -876,7 +876,7 @@ KJUR.asn1.DERBitString = function(params) {
     /**
      * set ASN.1 value(V) by unused bit and hexadecimal string of value
      * @name setUnusedBitsAndHexValue
-     * @memberOf KJUR.asn1.DERBitString
+     * @memberOf KJUR.asn1.DERBitString#
      * @function
      * @param {Integer} unusedBits
      * @param {String} hValue
@@ -892,15 +892,18 @@ KJUR.asn1.DERBitString = function(params) {
     };
 
     /**
-     * set ASN.1 DER BitString by binary string
+     * set ASN.1 DER BitString by binary string<br/>
      * @name setByBinaryString
-     * @memberOf KJUR.asn1.DERBitString
+     * @memberOf KJUR.asn1.DERBitString#
      * @function
      * @param {String} binaryString binary value string (i.e. '10111')
      * @description
      * Its unused bits will be calculated automatically by length of 
      * 'binaryValue'. <br/>
      * NOTE: Trailing zeros '0' will be ignored.
+     * @example
+     * o = new KJUR.asn1.DERBitString();
+     * o.setByBooleanArray("01011");
      */
     this.setByBinaryString = function(binaryString) {
         binaryString = binaryString.replace(/0+$/, '');
@@ -922,13 +925,16 @@ KJUR.asn1.DERBitString = function(params) {
     };
 
     /**
-     * set ASN.1 TLV value(V) by an array of boolean
+     * set ASN.1 TLV value(V) by an array of boolean<br/>
      * @name setByBooleanArray
-     * @memberOf KJUR.asn1.DERBitString
+     * @memberOf KJUR.asn1.DERBitString#
      * @function
      * @param {array} booleanArray array of boolean (ex. [true, false, true])
      * @description
-     * NOTE: Trailing falses will be ignored.
+     * NOTE: Trailing falses will be ignored in the ASN.1 DER Object.
+     * @example
+     * o = new KJUR.asn1.DERBitString();
+     * o.setByBooleanArray([false, true, false, true, true]);
      */
     this.setByBooleanArray = function(booleanArray) {
         var s = '';
@@ -943,14 +949,17 @@ KJUR.asn1.DERBitString = function(params) {
     };
 
     /**
-     * generate an array of false with specified length
+     * generate an array of falses with specified length<br/>
      * @name newFalseArray
      * @memberOf KJUR.asn1.DERBitString
      * @function
      * @param {Integer} nLength length of array to generate
-     * @return {array} array of boolean faluse
+     * @return {array} array of boolean falses
      * @description
      * This static method may be useful to initialize boolean array.
+     * @example
+     * o = new KJUR.asn1.DERBitString();
+     * o.newFalseArray(3) &rarr; [false, false, false]
      */
     this.newFalseArray = function(nLength) {
         var a = new Array(nLength);
@@ -1087,7 +1096,7 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
     /**
      * set value by a hexadecimal string
      * @name setValueHex
-     * @memberOf KJUR.asn1.DERObjectIdentifier
+     * @memberOf KJUR.asn1.DERObjectIdentifier#
      * @function
      * @param {String} newHexString hexadecimal value of OID bytes
      */
@@ -1099,11 +1108,14 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
     };
 
     /**
-     * set value by a OID string
+     * set value by a OID string<br/>
      * @name setValueOidString
-     * @memberOf KJUR.asn1.DERObjectIdentifier
+     * @memberOf KJUR.asn1.DERObjectIdentifier#
      * @function
      * @param {String} oidString OID string (ex. 2.5.4.13)
+     * @example
+     * o = new KJUR.asn1.DERObjectIdentifier();
+     * o.setValueOidString("2.5.4.13");
      */
     this.setValueOidString = function(oidString) {
         if (! oidString.match(/^[0-9.]+$/)) {
@@ -1126,13 +1138,16 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
     /**
      * set value by a OID name
      * @name setValueName
-     * @memberOf KJUR.asn1.DERObjectIdentifier
+     * @memberOf KJUR.asn1.DERObjectIdentifier#
      * @function
      * @param {String} oidName OID name (ex. 'serverAuth')
      * @since 1.0.1
      * @description
      * OID name shall be defined in 'KJUR.asn1.x509.OID.name2oidList'.
      * Otherwise raise error.
+     * @example
+     * o = new KJUR.asn1.DERObjectIdentifier();
+     * o.setValueName("serverAuth");
      */
     this.setValueName = function(oidName) {
 	var oid = KJUR.asn1.x509.OID.name2oid(oidName);
@@ -1180,6 +1195,10 @@ YAHOO.lang.extend(KJUR.asn1.DERObjectIdentifier, KJUR.asn1.ASN1Object);
  * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
  * </ul>
  * NOTE: 'params' can be omitted.
+ * @example
+ * new KJUR.asn1.DEREnumerated(123);
+ * new KJUR.asn1.DEREnumerated({int: 123});
+ * new KJUR.asn1.DEREnumerated({hex: '1fad'});
  */
 KJUR.asn1.DEREnumerated = function(params) {
     KJUR.asn1.DEREnumerated.superclass.constructor.call(this);
@@ -1188,7 +1207,7 @@ KJUR.asn1.DEREnumerated = function(params) {
     /**
      * set value by Tom Wu's BigInteger object
      * @name setByBigInteger
-     * @memberOf KJUR.asn1.DEREnumerated
+     * @memberOf KJUR.asn1.DEREnumerated#
      * @function
      * @param {BigInteger} bigIntegerValue to set
      */
@@ -1201,7 +1220,7 @@ KJUR.asn1.DEREnumerated = function(params) {
     /**
      * set value by integer value
      * @name setByInteger
-     * @memberOf KJUR.asn1.DEREnumerated
+     * @memberOf KJUR.asn1.DEREnumerated#
      * @function
      * @param {Integer} integer value to set
      */
@@ -1213,17 +1232,13 @@ KJUR.asn1.DEREnumerated = function(params) {
     /**
      * set value by integer value
      * @name setValueHex
-     * @memberOf KJUR.asn1.DEREnumerated
+     * @memberOf KJUR.asn1.DEREnumerated#
      * @function
      * @param {String} hexadecimal string of integer value
      * @description
      * <br/>
      * NOTE: Value shall be represented by minimum octet length of
      * two's complement representation.
-     * @example
-     * new KJUR.asn1.DEREnumerated(123);
-     * new KJUR.asn1.DEREnumerated({int: 123});
-     * new KJUR.asn1.DEREnumerated({hex: '1fad'});
      */
     this.setValueHex = function(newHexString) {
         this.hV = newHexString;
@@ -1344,23 +1359,26 @@ YAHOO.lang.extend(KJUR.asn1.DERIA5String, KJUR.asn1.DERAbstractString);
  * NOTE: 'params' can be omitted.
  * <h4>EXAMPLES</h4>
  * @example
- * var d1 = new KJUR.asn1.DERUTCTime();
+ * d1 = new KJUR.asn1.DERUTCTime();
  * d1.setString('130430125959Z');
  *
- * var d2 = new KJUR.asn1.DERUTCTime({'str': '130430125959Z'});
- * var d3 = new KJUR.asn1.DERUTCTime({'date': new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0))});
- * var d4 = new KJUR.asn1.DERUTCTime('130430125959Z');
+ * d2 = new KJUR.asn1.DERUTCTime({'str': '130430125959Z'});
+ * d3 = new KJUR.asn1.DERUTCTime({'date': new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0))});
+ * d4 = new KJUR.asn1.DERUTCTime('130430125959Z');
  */
 KJUR.asn1.DERUTCTime = function(params) {
     KJUR.asn1.DERUTCTime.superclass.constructor.call(this, params);
     this.hT = "17";
 
     /**
-     * set value by a Date object
+     * set value by a Date object<br/>
      * @name setByDate
-     * @memberOf KJUR.asn1.DERUTCTime
+     * @memberOf KJUR.asn1.DERUTCTime#
      * @function
      * @param {Date} dateObject Date object to set ASN.1 value(V)
+     * @example
+     * o = new KJUR.asn1.DERUTCTime();
+     * o.setByDate(new Date("2016/12/31"));
      */
     this.setByDate = function(dateObject) {
         this.hTLV = null;
@@ -1422,14 +1440,15 @@ KJUR.asn1.DERGeneralizedTime = function(params) {
     /**
      * set value by a Date object
      * @name setByDate
-     * @memberOf KJUR.asn1.DERGeneralizedTime
+     * @memberOf KJUR.asn1.DERGeneralizedTime#
      * @function
      * @param {Date} dateObject Date object to set ASN.1 value(V)
      * @example
      * When you specify UTC time, use 'Date.UTC' method like this:<br/>
-     * var o = new DERUTCTime();
-     * var date = new Date(Date.UTC(2015, 0, 31, 23, 59, 59, 0)); #2015JAN31 23:59:59
-     * o.setByDate(date);
+     * o1 = new DERUTCTime();
+     * o1.setByDate(date);
+     *
+     * date = new Date(Date.UTC(2015, 0, 31, 23, 59, 59, 0)); #2015JAN31 23:59:59
      */
     this.setByDate = function(dateObject) {
         this.hTLV = null;
@@ -1570,7 +1589,7 @@ KJUR.asn1.DERTaggedObject = function(params) {
     /**
      * set value by an ASN1Object
      * @name setString
-     * @memberOf KJUR.asn1.DERTaggedObject
+     * @memberOf KJUR.asn1.DERTaggedObject#
      * @function
      * @param {Boolean} isExplicitFlag flag for explicit/implicit tag
      * @param {Integer} tagNoHex hexadecimal string of ASN.1 tag

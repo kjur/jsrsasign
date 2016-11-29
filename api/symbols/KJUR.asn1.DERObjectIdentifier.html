@@ -371,11 +371,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html">KJUR.asn1.x509.SubjectPublicKeyInfo</a></li>
 	
@@ -507,18 +511,18 @@ following properties:
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DERObjectIdentifier.<b><a href="../symbols/KJUR.asn1.DERObjectIdentifier.html#.setValueHex">setValueHex</a></b>(newHexString)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERObjectIdentifier.html#setValueHex">setValueHex</a></b>(newHexString)
 								</div>
 								<div class="description">set value by a hexadecimal string</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DERObjectIdentifier.<b><a href="../symbols/KJUR.asn1.DERObjectIdentifier.html#.setValueName">setValueName</a></b>(oidName)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERObjectIdentifier.html#setValueName">setValueName</a></b>(oidName)
 								</div>
 								<div class="description">set value by a OID name
 OID name shall be defined in 'KJUR.asn1.x509.OID.name2oidList'.</div>
@@ -526,11 +530,11 @@ OID name shall be defined in 'KJUR.asn1.x509.OID.name2oidList'.</div>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DERObjectIdentifier.<b><a href="../symbols/KJUR.asn1.DERObjectIdentifier.html#.setValueOidString">setValueOidString</a></b>(oidString)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERObjectIdentifier.html#setValueOidString">setValueOidString</a></b>(oidString)
 								</div>
-								<div class="description">set value by a OID string</div>
+								<div class="description">set value by a OID string<br/></div>
 							</td>
 						</tr>
 					
@@ -540,7 +544,7 @@ OID name shall be defined in 'KJUR.asn1.x509.OID.name2oidList'.</div>
 				
 				
 				<dl class="inheritsList">
-				
+				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a></dd>
 				</dl>
 				
 			
@@ -605,11 +609,11 @@ NOTE: 'params' can be omitted.
 					Method Detail
 				</div>
 				
-					<a name=".setValueHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setValueHex"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.DERObjectIdentifier.</span><b>setValueHex</b>(newHexString)
+					<b>setValueHex</b>(newHexString)
 					
 					</div>
 					<div class="description">
@@ -641,11 +645,11 @@ NOTE: 'params' can be omitted.
 
 					<hr />
 				
-					<a name=".setValueName"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setValueName"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.DERObjectIdentifier.</span><b>setValueName</b>(oidName)
+					<b>setValueName</b>(oidName)
 					
 					</div>
 					<div class="description">
@@ -655,6 +659,11 @@ Otherwise raise error.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.DERObjectIdentifier();
+o.setValueName("serverAuth");</pre>
 					
 					
 					
@@ -685,18 +694,23 @@ Otherwise raise error.
 
 					<hr />
 				
-					<a name=".setValueOidString"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setValueOidString"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.DERObjectIdentifier.</span><b>setValueOidString</b>(oidString)
+					<b>setValueOidString</b>(oidString)
 					
 					</div>
 					<div class="description">
-						set value by a OID string
+						set value by a OID string<br/>
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.DERObjectIdentifier();
+o.setValueOidString("2.5.4.13");</pre>
 					
 					
 					

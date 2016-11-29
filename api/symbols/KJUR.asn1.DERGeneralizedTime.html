@@ -371,11 +371,15 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html">KJUR.asn1.x509.SubjectPublicKeyInfo</a></li>
 	
@@ -530,9 +534,9 @@ following properties:
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.DERGeneralizedTime.<b><a href="../symbols/KJUR.asn1.DERGeneralizedTime.html#.setByDate">setByDate</a></b>(dateObject)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERGeneralizedTime.html#setByDate">setByDate</a></b>(dateObject)
 								</div>
 								<div class="description">set value by a Date object</div>
 							</td>
@@ -544,7 +548,7 @@ following properties:
 				
 				
 				<dl class="inheritsList">
-				
+				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.DERAbstractTime.html">KJUR.asn1.DERAbstractTime</a>: </dt><dd><a href="../symbols/KJUR.asn1.DERAbstractTime.html#getString">getString</a>, <a href="../symbols/KJUR.asn1.DERAbstractTime.html#setByDateValue">setByDateValue</a>, <a href="../symbols/KJUR.asn1.DERAbstractTime.html#setString">setString</a></dd><dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a></dd>
 				</dl>
 				
 			
@@ -639,11 +643,11 @@ NOTE2: 'withMillis' property is supported from asn1 1.0.6.
 					Method Detail
 				</div>
 				
-					<a name=".setByDate"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setByDate"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.DERGeneralizedTime.</span><b>setByDate</b>(dateObject)
+					<b>setByDate</b>(dateObject)
 					
 					</div>
 					<div class="description">
@@ -655,9 +659,10 @@ NOTE2: 'withMillis' property is supported from asn1 1.0.6.
 					
 					
 					<pre class="code">When you specify UTC time, use 'Date.UTC' method like this:<br/>
-var o = new DERUTCTime();
-var date = new Date(Date.UTC(2015, 0, 31, 23, 59, 59, 0)); #2015JAN31 23:59:59
-o.setByDate(date);</pre>
+o1 = new DERUTCTime();
+o1.setByDate(date);
+
+date = new Date(Date.UTC(2015, 0, 31, 23, 59, 59, 0)); #2015JAN31 23:59:59</pre>
 					
 					
 					
