@@ -374,7 +374,21 @@ Full-Width Styles
   background: #212121;
 }
 
-
+.img-no {
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+  position: relative;
+  padding: 0;
+  margin: 0 0 0 0;
+  box-shadow: 0 0 0 #ebebeb;
+  -webkit-box-shadow: 0 0 0 #ebebeb;
+  -moz-box-shadow: 0 0 0 #ebebeb;
+  -o-box-shadow: 0 0 0 #ebebeb;
+  -ms-box-shadow: 0 0 0 #ebebeb;
+  width: auto;
+  max-width: none;
+}
 
 /*******************************************************************************
 Small Device Styles
