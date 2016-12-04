@@ -74,11 +74,11 @@ var certGithubDump = (function() {/*SEQUENCE
           PrintableString 'US'
       SET
         SEQUENCE
-          ObjectIdentifier organization (2 5 4 10)
+          ObjectIdentifier organizationName (2 5 4 10)
           PrintableString 'DigiCert Inc'
       SET
         SEQUENCE
-          ObjectIdentifier organizationalUnit (2 5 4 11)
+          ObjectIdentifier organizationalUnitName (2 5 4 11)
           PrintableString 'www.digicert.com'
       SET
         SEQUENCE
@@ -90,15 +90,15 @@ var certGithubDump = (function() {/*SEQUENCE
     SEQUENCE
       SET
         SEQUENCE
-          ObjectIdentifier (2 5 4 15)
+          ObjectIdentifier businessCategory (2 5 4 15)
           UTF8String 'Private Organization'
       SET
         SEQUENCE
-          ObjectIdentifier (1 3 6 1 4 1 311 60 2 1 3)
+          ObjectIdentifier jurisdictionOfIncorporationC (1 3 6 1 4 1 311 60 2 1 3)
           PrintableString 'US'
       SET
         SEQUENCE
-          ObjectIdentifier (1 3 6 1 4 1 311 60 2 1 2)
+          ObjectIdentifier jurisdictionOfIncorporationSP (1 3 6 1 4 1 311 60 2 1 2)
           PrintableString 'Delaware'
       SET
         SEQUENCE
@@ -106,11 +106,11 @@ var certGithubDump = (function() {/*SEQUENCE
           PrintableString '5157550'
       SET
         SEQUENCE
-          ObjectIdentifier (2 5 4 9)
+          ObjectIdentifier streetAddress (2 5 4 9)
           PrintableString '548 4th Street'
       SET
         SEQUENCE
-          ObjectIdentifier (2 5 4 17)
+          ObjectIdentifier postalCode (2 5 4 17)
           PrintableString '94107'
       SET
         SEQUENCE
@@ -122,11 +122,11 @@ var certGithubDump = (function() {/*SEQUENCE
           PrintableString 'California'
       SET
         SEQUENCE
-          ObjectIdentifier locality (2 5 4 7)
+          ObjectIdentifier localityName (2 5 4 7)
           PrintableString 'San Francisco'
       SET
         SEQUENCE
-          ObjectIdentifier organization (2 5 4 10)
+          ObjectIdentifier organizationName (2 5 4 10)
           PrintableString 'GitHub, Inc.'
       SET
         SEQUENCE
@@ -192,10 +192,10 @@ var certGithubDump = (function() {/*SEQUENCE
           OCTETSTRING, encapsulates
             SEQUENCE
               SEQUENCE
-                ObjectIdentifier (1 3 6 1 5 5 7 48 1)
+                ObjectIdentifier ocsp (1 3 6 1 5 5 7 48 1)
                 [6] http://ocsp.digicert.com
               SEQUENCE
-                ObjectIdentifier (1 3 6 1 5 5 7 48 2)
+                ObjectIdentifier caIssuers (1 3 6 1 5 5 7 48 2)
                 [6] http://cacerts.digicert.com/DigiCertSHA2ExtendedValidationServerCA.crt
         SEQUENCE
           ObjectIdentifier basicConstraints (2 5 29 19)
@@ -253,6 +253,11 @@ test("ASN1HEX.dump longint", function() {
                      "long int");
 });
 
+test("ASN1HEX.dump ASN1Object", function() {
+  equal(ASN1HEX.dump(KJUR.asn1.ASN1Util.newObject({seq: [{int: 1}, {int: 2}]})),
+        "SEQUENCE\n  INTEGER 01\n  INTEGER 02\n", "ASN1Object SEQ INT 1 INT 2");
+});
+
 test("ASN1HEX.isASN1HEX", function() {
   equal(ASN1HEX.isASN1HEX('3006020101020102'), true, "3006020101020102");
   equal(ASN1HEX.isASN1HEX('300602010102010202'), false, "300602010102010202 extra 02");
@@ -263,7 +268,6 @@ test("ASN1HEX.dump cert", function() {
   var hCert = X509.pemToHex(certGithubPEM);
   equal(ASN1HEX.dump(hCert), certGithubDump, "certGithubPEM");
 });
-
 
 });
 

@@ -1,4 +1,4 @@
-/*! asn1hex-1.1.7.js (c) 2012-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1hex-1.1.8.js (c) 2012-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1hex 1.1.7 (2016-Oct-02)
+ * @version asn1hex 1.1.8 (2016-Dec-03)
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -405,14 +405,14 @@ ASN1HEX.hextooidstr = function(hex) {
 };
 
 /**
- * get string of simple ASN.1 dump from hexadecimal ASN.1 data
+ * get string of simple ASN.1 dump from hexadecimal ASN.1 data<br/>
  * @name dump
  * @memberOf ASN1HEX
  * @function
- * @param {String} hex hexadecmal string of ASN.1 data
- * @param {Array} associative array of flags for dump (OPTION)
+ * @param {Object} hexOrObj hexadecmal string of ASN.1 data or ASN1Object object
+ * @param {Array} flags associative array of flags for dump (OPTION)
  * @param {Number} idx string index for starting dump (OPTION)
- * @param {String} indent string (OPTION)
+ * @param {String} indent indent string (OPTION)
  * @return {String} string of simple ASN.1 dump
  * @since jsrsasign 4.8.3 asn1hex 1.1.6
  * @description
@@ -433,25 +433,34 @@ ASN1HEX.hextooidstr = function(hex) {
  *   </ul>
  * </li>
  * </ul>
+ * NOTE1: Argument {@link KJUR.asn1.ASN1Object} object is supported since
+ * jsrsasign 6.2.4 asn1hex 1.0.8
  * @example
- * // ASN.1 INTEGER
+ * // 1) ASN.1 INTEGER
  * ASN1HEX.dump('0203012345')
  * &darr;
  * INTEGER 012345
  *
- * // ASN.1 Object Identifier
+ * // 2) ASN.1 Object Identifier
  * ASN1HEX.dump('06052b0e03021a')
  * &darr;
  * ObjectIdentifier sha1 (1 3 14 3 2 26)
  *
- * // ASN.1 SEQUENCE
+ * // 3) ASN.1 SEQUENCE
  * ASN1HEX.dump('3006020101020102')
  * &darr;
  * SEQUENCE
  *   INTEGER 01
  *   INTEGER 02
  *
- * // ASN.1 DUMP FOR X.509 CERTIFICATE
+ * // 4) ASN.1 SEQUENCE since jsrsasign 6.2.4
+ * o = KJUR.asn1.ASN1Util.newObject({seq: [{int: 1}, {int: 2}]});
+ * ASN1HEX.dump(o)
+ * &darr;
+ * SEQUENCE
+ *   INTEGER 01
+ *   INTEGER 02
+ * // 5) ASN.1 DUMP FOR X.509 CERTIFICATE
  * ASN1HEX.dump(X509.pemToHex(certPEM))
  * &darr;
  * SEQUENCE
@@ -469,7 +478,11 @@ ASN1HEX.hextooidstr = function(hex) {
  *           PrintableString 'US'
  *             :
  */
-ASN1HEX.dump = function(hex, flags, idx, indent) {
+ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
+    var hex = hexOrObj;
+    if (hexOrObj instanceof KJUR.asn1.ASN1Object)
+	hex = hexOrObj.getEncodedHex();
+
     var _skipLongHex = function(hex, limitNumOctet) {
 	if (hex.length <= limitNumOctet * 2) {
 	    return hex;
@@ -603,7 +616,8 @@ ASN1HEX.dump = function(hex, flags, idx, indent) {
 	    return s;
 	}
     }
-    return indent + "UNKNOWN(" + hex.substr(idx, 2) + ") " + ASN1HEX.getHexOfV_AtObj(hex, idx) + "\n";
+    return indent + "UNKNOWN(" + hex.substr(idx, 2) + ") " + 
+	   ASN1HEX.getHexOfV_AtObj(hex, idx) + "\n";
 };
 
 /**
