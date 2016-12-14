@@ -117,11 +117,11 @@ var PKCS5PKEY = function() {
     };
 
     var encryptGeneral = function(f, dataHex, keyHex, ivHex) {
-    var data = CryptoJS.enc.Hex.parse(dataHex);
-    var key = CryptoJS.enc.Hex.parse(keyHex);
-    var iv = CryptoJS.enc.Hex.parse(ivHex);
-    var msg = {};
-    var encryptedHex = f.encrypt(data, key, { iv: iv });
+        var data = CryptoJS.enc.Hex.parse(dataHex);
+        var key = CryptoJS.enc.Hex.parse(keyHex);
+        var iv = CryptoJS.enc.Hex.parse(ivHex);
+        var msg = {};
+        var encryptedHex = f.encrypt(data, key, { iv: iv });
         var encryptedWA = CryptoJS.enc.Hex.parse(encryptedHex.toString());
         var encryptedB64 = CryptoJS.enc.Base64.stringify(encryptedWA);
         return encryptedB64;
@@ -294,7 +294,7 @@ var PKCS5PKEY = function() {
          * @name parsePKCS5PEM
          * @memberOf PKCS5PKEY
          * @function
-         * @param {String} sEncryptedPEM PEM formatted protected passcode protected PKCS#5 private key
+         * @param {String} sPKCS5PEM PEM formatted protected passcode protected PKCS#5 private key
          * @return {Hash} hash of key information
          * @description
          * Resulted hash has following attributes.
@@ -317,7 +317,7 @@ var PKCS5PKEY = function() {
          * @function
          * @param {String} algName name of symmetric key algorithm (ex. 'DES-EBE3-CBC')
          * @param {String} passcode passcode to decrypt private key (ex. 'password')
-         * @param {String} hexadecimal string of IV. heading 8 bytes will be used for passcode salt
+         * @param {String} ivsaltHex hexadecimal string of IV. heading 8 bytes will be used for passcode salt
          * @return {Hash} hash of key and unused IV (ex. {keyhex:2fe3..., ivhex:3fad..})
          */
         getKeyAndUnusedIvByPasscodeAndIvsalt: function(algName, passcode, ivsaltHex) {
@@ -375,7 +375,7 @@ var PKCS5PKEY = function() {
 
         /**
          * get PEM formatted encrypted PKCS#5 private key from hexadecimal string of plain private key
-         * @name getEryptedPKCS5PEMFromPrvKeyHex
+         * @name getEncryptedPKCS5PEMFromPrvKeyHex
          * @memberOf PKCS5PKEY
          * @function
          * @param {String} hPrvKey hexadecimal string of plain private key
@@ -395,15 +395,13 @@ var PKCS5PKEY = function() {
          * </ul>
          * @example
          * var pem = 
-         *   PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password");
+         *   PKCS5PKEY.getEncryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password");
          * var pem2 = 
-         *   PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC");
+         *   PKCS5PKEY.getEncryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC");
          * var pem3 = 
-         *   PKCS5PKEY.getEryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC", "1f3d02...");
+         *   PKCS5PKEY.getEncryptedPKCS5PEMFromPrvKeyHex(plainKeyHex, "password", "AES-128-CBC", "1f3d02...");
          */
-        getEryptedPKCS5PEMFromPrvKeyHex: function(hPrvKey, passcode, sharedKeyAlgName, ivsaltHex) {
-            var sPEM = "";
-
+        getEncryptedPKCS5PEMFromPrvKeyHex: function(hPrvKey, passcode, sharedKeyAlgName, ivsaltHex) {
             // 1. set sharedKeyAlgName if undefined (default AES-256-CBC)
             if (typeof sharedKeyAlgName == "undefined" || sharedKeyAlgName == null) {
                 sharedKeyAlgName = "AES-256-CBC";
@@ -440,7 +438,7 @@ var PKCS5PKEY = function() {
 
         /**
          * get PEM formatted encrypted PKCS#5 private key from RSAKey object of private key
-         * @name getEryptedPKCS5PEMFromRSAKey
+         * @name getEncryptedPKCS5PEMFromRSAKey
          * @memberOf PKCS5PKEY
          * @function
          * @param {RSAKey} pKey RSAKey object of private key
@@ -461,9 +459,9 @@ var PKCS5PKEY = function() {
          * @example
          * var pkey = new RSAKey();
          * pkey.generate(1024, '10001'); // generate 1024bit RSA private key with public exponent 'x010001'
-         * var pem = PKCS5PKEY.getEryptedPKCS5PEMFromRSAKey(pkey, "password");
+         * var pem = PKCS5PKEY.getEncryptedPKCS5PEMFromRSAKey(pkey, "password");
          */
-        getEryptedPKCS5PEMFromRSAKey: function(pKey, passcode, alg, ivsaltHex) {
+        getEncryptedPKCS5PEMFromRSAKey: function(pKey, passcode, alg, ivsaltHex) {
             var version = new KJUR.asn1.DERInteger({'int': 0});
             var n = new KJUR.asn1.DERInteger({'bigint': pKey.n});
             var e = new KJUR.asn1.DERInteger({'int': pKey.e});
@@ -475,7 +473,7 @@ var PKCS5PKEY = function() {
             var coeff = new KJUR.asn1.DERInteger({'bigint': pKey.coeff});
             var seq = new KJUR.asn1.DERSequence({'array': [version, n, e, d, p, q, dmp1, dmq1, coeff]});
             var hex = seq.getEncodedHex();
-            return this.getEryptedPKCS5PEMFromPrvKeyHex(hex, passcode, alg, ivsaltHex);
+            return this.getEncryptedPKCS5PEMFromPrvKeyHex(hex, passcode, alg, ivsaltHex);
         },
 
         /**
@@ -486,7 +484,7 @@ var PKCS5PKEY = function() {
          * @param {String} passcode pass code to protect private key (ex. password)
          * @param {Integer} keyLen key bit length of RSA key to be generated. (default 1024)
          * @param {String} hPublicExponent hexadecimal string of public exponent (default 10001)
-         * @param {String} alg shared key algorithm to encrypt private key (default AES-258-CBC)
+         * @param {String} alg shared key algorithm to encrypt private key (default AES-256-CBC)
          * @return {String} string of PEM formatted encrypted PKCS#5 private key
          * @since pkcs5pkey 1.0.2
          * @example
@@ -547,7 +545,6 @@ var PKCS5PKEY = function() {
             var algIdTLV =ASN1HEX.getHexOfTLV_AtObj(prvKeyHex, a1[1]);
             if (algIdTLV != "300d06092a864886f70d0101010500") // AlgId rsaEncryption
                 throw "PKCS8 AlgorithmIdentifier is not rsaEnc: " + algIdTLV;
-            var algIdTLV = ASN1HEX.getHexOfTLV_AtObj(prvKeyHex, a1[1]);
             var octetStr = ASN1HEX.getHexOfTLV_AtObj(prvKeyHex, a1[2]);
             var p5KeyHex = ASN1HEX.getHexOfV_AtObj(octetStr, 0);
             //alert(p5KeyHex);
@@ -561,7 +558,7 @@ var PKCS5PKEY = function() {
          * @name parseHexOfEncryptedPKCS8
          * @memberOf PKCS5PKEY
          * @function
-         * @param {String} passcode passcode to decrypto private key
+         * @param {String} sHEX passcode to decrypto private key
          * @return {Array} info associative array of PKCS#8 parameters
          * @since pkcs5pkey 1.0.3
          * @description
@@ -819,7 +816,7 @@ var PKCS5PKEY = function() {
          * @name getKeyFromPlainPrivatePKCS8PEM
          * @memberOf PKCS5PKEY
          * @function
-         * @param {String} pkcs8PEM string of plain PEM formatted PKCS#8 private key
+         * @param {String} prvKeyPEM string of plain PEM formatted PKCS#8 private key
          * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
          * @since pkcs5pkey 1.0.5
          */
@@ -880,7 +877,7 @@ var PKCS5PKEY = function() {
          * @name getKeyFromPublicPKCS8PEM
          * @memberOf PKCS5PKEY
          * @function
-         * @param {String} pkcsPub8PEM string of PEM formatted PKCS#8 public key
+         * @param {String} pkcs8PubPEM string of PEM formatted PKCS#8 public key
          * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
          * @since pkcs5pkey 1.0.5
          */
@@ -895,7 +892,7 @@ var PKCS5PKEY = function() {
          * @name getKeyFromPublicPKCS8Hex
          * @memberOf PKCS5PKEY
          * @function
-         * @param {String} pkcsPub8Hex hexadecimal string of PKCS#8 public key
+         * @param {String} pkcs8PubHex hexadecimal string of PKCS#8 public key
          * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
          * @since pkcs5pkey 1.0.5
          */
