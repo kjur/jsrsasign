@@ -6,6 +6,8 @@ ChangeLog for jsrsasign
     - ASN1HEX.dump also supports ASN1Object as argument
   - asn1x509
     - API document update
+  - pkcs5pkey 1.0.7
+    - merge @machinewu's pull request for API doc fix
 
 * Changes from 6.2.2 to 6.2.3 (2016-Nov-29)
   - asn1x509 1.0.18 to 1.0.19
