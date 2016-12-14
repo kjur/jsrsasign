@@ -484,7 +484,7 @@ var PKCS5PKEY = function() {
          * @param {String} passcode pass code to protect private key (ex. password)
          * @param {Integer} keyLen key bit length of RSA key to be generated. (default 1024)
          * @param {String} hPublicExponent hexadecimal string of public exponent (default 10001)
-         * @param {String} alg shared key algorithm to encrypt private key (default AES-258-CBC)
+         * @param {String} alg shared key algorithm to encrypt private key (default AES-256-CBC)
          * @return {String} string of PEM formatted encrypted PKCS#5 private key
          * @since pkcs5pkey 1.0.2
          * @example
