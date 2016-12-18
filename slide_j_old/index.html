@@ -1,0 +1,1002 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>jsrsasignとjsjwsについて</title>
+<meta name="description" content="Pure JavaScript実装の暗号ライブラリjsrsasignについて紹介します">
+<meta name="author" content="Kenji Urushima (漆嶌 賢二) @kjur">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="stylesheet" href="css/reveal.min.css">
+<!-- link rel="stylesheet" href="css/theme/default.css" id="theme" -->
+<link rel="stylesheet" href="css/theme/night.css" id="theme">
+<!-- For syntax highlighting -->
+<link rel="stylesheet" href="lib/css/zenburn.css">
+<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+<script>
+document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+</script>
+<!--[if lt IE 9]>
+<script src="lib/js/html5shiv.js"></script>
+<![endif]-->
+<script src="jquery-172-min.js"></script>
+<script src="html5_dropfile.js"></script>
+<script src="jsrsasign-4.1.4-all-min.js"></script>
+<script src="json-sans-eval-min.js"></script>
+<script src="jws-3.0.min.js"></script>
+</head>
+
+<body>
+<div class="reveal">
+<!-- Any section element inside of this container is displayed as a slide -->
+<div class="slides">
+
+<section>
+<h3>JavaScript実装の暗号ライブラリ、JWT/JWS</h3>
+<h1>jsrsasignとjsjws</h1>
+<h4>JNSA電子署名WG スキルアップTF 講演資料(配布版)<br/>2013年9月30日</h4>
+<p>
+<a href="http://twitter/kjur">@kjur / 漆嶌 賢二</a>
+</p>
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>今日のアジェンダ</h2>
+<ol>
+<li>jsrsasign 暗号ライブラリ</li>
+<li>jsjws JSON署名/認証トークンライブラリ</li>
+</ol>
+</section>
+
+<section>
+<h2>自己紹介</h2>
+<p>
+<ul>
+<li>セキュリティ、PKI、署名、SSL、認証好きな人</li>
+<li>またの名を「証明書ハンター」</li>
+<li>「自堕落な技術者の日記」のブログの人<br/>
+<a href="http://blog.livedoor.jp/k_urushima/">blog.livedoor.jp/k_urushima</a>
+</li>
+<li>Twitterでは @kjur な人</li>
+<li>PKI、ID(SAML)関係ではかれこれ11年くらい</li>
+<li>Challenge PKI、アジアPKI相互接続実証実験、S/MIMEテスト、
+ECOM長期署名実験、ETSIプラグテスト、JIS、ISOなど</li>
+<li>主にECOM、デ協、JNSAで活動</li>
+<li>富士ゼロックスの中の人らしいが今日は個人として来ました</li>
+</ul>
+</p>
+</section>
+
+<section>
+<h2>そもそものきっかけは？</h2>
+<ol>
+<li class="fragment">Javaはやべーな orz</li>
+<li class="fragment">Perlは終わりだな orz</li>
+<li class="fragment">Rubyは既に<br/>暗号ライブラリあるしな orz</li>
+<li class="fragment"><font color="yellow">いやー、今どきの若者はJavaScriptらしいですよ。Node.jsとかあるし。</font></li>
+</ol>
+</section>
+
+<section>
+<h3>きっかけはスタンフォード大Tom Wuさんの<br/>
+<a href="http://web.archive.org/web/20060201000000*/http://www-cs-students.stanford.edu/~tjw/jsbn/">2006年4月</a>からあったらしい<br/>
+JavaScriptでRSA暗号化ができるページ</h3>
+<a href="http://www-cs-students.stanford.edu/~tjw/jsbn/">http://www-cs-students.stanford.edu/~tjw/jsbn/</a>
+<img src="img-tomwu-jsbn.png" height="400"/>
+</section>
+
+<section>
+<h3>2010年、私のはしゃぎっぷり</h3>
+<img src="img-twilog-jsrsa2.png"/>
+<br clear="all"/>
+<img src="img-twilog-jsrsa1.png"/>
+</section>
+
+<section>
+<h2>じゃぁ、jsrsasignで<br/>何ができるの？</h2>
+<h3>RSA署名ができるだけじゃないんです</h3>
+</section>
+
+<section>
+<h2>jsrsasignの機能・特徴</h2>
+<ul>
+<li class="fragment">RSA/RSAPSS/ECDSA署名の生成・検証ができる</li>
+<li class="fragment">秘密鍵、公開鍵、証明書の扱いが簡単</li>
+<li class="fragment">ハッシュ関数、HMACができる</li>
+<li class="fragment">Java JCEみたいに使いやすい</li>
+<li class="fragment">ASN.1の読込み、生成ができる</li>
+<li class="fragment">証明書の発行ができる</li>
+<li class="fragment">Base64、HEX等の文字列変換</li>
+<li class="fragment">スマホブラウザでも動く</li>
+</ul>
+</section>
+
+<section>
+<img src="img-drunken.jpg" style="float: left;"/>
+<h3>酔ってスマホいじって<br/>急にこんなこと<br/>よくあるよね？</h3>
+<hr/>
+<h4 class="fragment" style="text-align:left;">「あ〜、楕円暗号で署名して〜」とか</h4>
+<h4 class="fragment" style="text-align:left;">「あ〜、ハッシュ計算して〜」とか</h4>
+<h4 class="fragment" style="text-align:left;">「あ〜、ASN.1つくりて〜」とか</h4>
+<h4 class="fragment" style="text-align:left;">「あ〜、JWT署名して〜」とか</h4>
+<h3 class="fragment">そんな時、jsrsasign、jsjws</h3>
+</section>
+
+<section>
+<img src="img-tooljwt.png" style="float: left;" height="600"/>
+<h3>例えば、<br/>
+スマホブラウザで<br/>
+JWT署名が</h3>
+<h1 class="fragment">できるんです</h1>
+</section>
+
+<section>
+<h2>jsrsasign,jsjwsの構成</h2>
+<img src="img-arch1.svg" border="0" style="border: 0"/>
+<br clear="all"/>
+こう書くと整然と作った見たいだけど・・・
+</section>
+
+<section>
+<h3>実際は「ハ○ルの動く城」orz</h3>
+<h4>思いついたままに建て増ししただけorz</h4>
+<img src="img-arch-hawlbox.svg" border="0" style="border: 0" width="48%"/>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+<section>
+<h1>使われてんの？</h1>
+</section>
+
+<section>
+<img src="img-cite-persona.jpg" border="0" style="border: 0; float: left;" width="50%" align="bottom"/>
+<p>
+<h3>Mozilla Persona BrowserID</h3>
+Mozillaの認証サービスPersona, BrowserIDでは
+暗号ライブラリとしてMozillaが開発した
+jwcryptoが使われているが、その中では
+jsrsasign が使われている。
+<small>
+<a href="https://login.persona.org/">https://login.persona.org/</a><br/>
+<a href="https://github.com/mozilla/jwcrypto/blob/master/libs/dependencies.txt">https://github.com/mozilla/jwcrypto/blob/master/libs/dependencies.txt</a>
+</small>
+</p>
+</section>
+
+<section>
+<div align="left">
+<img src="img-cite-ndn.jpg" border="0" style="border: 0; float: left; padding: 20px;" width="50%" align="bottom"/>
+<p>
+<h3>Named Data Networking</h3>
+米国立科学財団(NSF)の4つの新プロジェクトの一つで研究費8億円、
+のUCLAのLixia Zhang女史らIETFの重鎮がリードする
+Named Data Networking(NDN)プロジェクトの
+JavaScriptのセキュリティライブラリにjsrsasignが含まれており、
+技術報告でも引用頂いている。
+<small>
+<a href="http://named-data.net/">named-data.net</a><br/>
+<a href="http://www.geekpage.jp/blog/?id=2010/8/31/1">Geekなページ:未来インターネットアーキテクチャ</a><br/>
+<a href="https://github.com/named-data/ndn-js/blob/master/contrib/securityLib/LICENSE.txt">含まれるjsrsasignのライセンス</a><br/>
+<a href="http://named-data.net/wp-content/uploads/2013/07/ndn-js_tr.pdf">NDN技報:Development and Experimentation with NDN-JS, a
+JavaScript Library for Named Data Networking (参考文献[9])</a><br/>
+</small>
+</div>
+</section>
+
+<section>
+<img src="img-cite-h1.png" border="0" style="border: 0; float: left;" width="50%" align="bottom"/>
+<p>
+<h3>The H: </h3>
+WikiLeaksなどの盗聴、情報漏えい対策としてブラウザ上での暗号化、署名が必要
+<br/>
+↓
+<br/>
+そこでjsrsasign
+<small>
+<a href="http://www.h-online.com/open/features/Lessons-from-WikiLeaks-decentralize-decentralize-decentralize-1153977.html?page=2">http://www.h-online.com/open/features/Lessons-from-WikiLeaks-decentralize-decentralize-decentralize-1153977.html?page=2</a>
+</small>
+</p>
+<div style="clear: both;"></div>
+</section>
+
+<section>
+<img src="img-cite-egizgvat.png" border="0" style="border: 0; float: left;" width="50%" align="bottom"/>
+<p>
+<h3>EGIZ オーストリアの電子政府推進機関: </h3>
+クライアント側ウェブアプリのためのJavaScript暗号に関する調査報告
+<br/>
+↓
+<br/>
+そこでjsrsasign
+<small>
+<a href="http://www.egiz.gv.at/files/download/Dokumentation.pdf">http://www.egiz.gv.at/files/download/Dokumentation.pdf</a>
+</small>
+</p>
+<div style="clear: both;"></div>
+</section>
+
+<section>
+<img src="img-cite-spaingov.png" border="0" style="border: 0; float: left;" width="50%" align="bottom"/>
+<div align="left">
+<h3>スペイン電子政府の開発サイト</h3>
+スペイン政府(GOBIERNO DE ESPA&Ntilde;A)の
+通信技術センターの開発のインシデント管理システム(Gestor de incidencias de la Forja del Centro de Transferencia de Tecnolog&iacute;a)で
+電子投票イニシアチブのソースコード(C&oacute;digo del PFG Democracia Electr&oacute;nica - Iniciativas Legislativas Populares)にjsrsasignが使われていたり。
+<br/>
+<small>
+<a href="http://administracionelectronica.gob.es/pae_Home/pae_SolucionesCTT/pae_CTT_Forja_CTT.html">Forja del CTT</a><br/>
+<a href="http://incidencias-ctt.administracionelectronica.gob.es/websvn/listing.php?repname=clienteafirma&path=%2Fbranches%2FIniciativas_Legislativas_Populares%2Fsrc%2Fmain%2Fwebapp%2Fjsrsasign%2F&rev=2865&peg=2865#a5f43176f7842f853042d5dbd1172c3a4">Mantisリポジトリへのリンク</a></small>
+</div>
+<div style="clear: both;"></div>
+</section>
+
+<section>
+<div align="left">
+<img src="img-cite-pirate.jpg" border="0" style="border: 0; float: left;" width="100px" align="bottom"/>
+ドイツの若者から強い支持を集めている政党、ドイツ海賊党のメンバーが3万人の党員電子投票にjsrsasignが使えるかというメール問合せを頂いたり
+<hr/>
+<small>
+<p>
+Hello Kenji,
+</p><p>
+I'm contacting you because I am starting to work on a somewhat bigger project that could use your Library. I am a member of the <font color="orange">german Pirate Party</font> and responsible for the implementation of a provable internet-voting system we just decided to use.
+</p><p>
+In a nutshell I need a way to generate RSA Private Keys, export them via PKCS#1 PEM, X509 Certs or similar methods, as well as signing, encrypting, and verifying signatures.
+</p><p>
+There are a few questions I'd like to get answered, if you have the time.
+Do you deem your project ready for use in a central position for <font color="orange">securing vote integrity for a party of 30.000 people</font>?
+Do you have a way of exporting generated Keys via one of the above mentioned methods in mind for your library?
+I have had trouble trying to export a generated RSAKey, is there a way as of right now?
+</p><p>
+Kind regards,<br/>
+</p>
+<hr/>
+<p>
+参考 NHK: 活躍!ドイツ海賊党 〜ネット世代の政治のゆくえ〜 <br/>
+<a href="http://www.dailymotion.com/video/xy5a70">http://www.dailymotion.com/video/xy5a70</a>
+</p>
+</small>
+</div>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h3>基本機能である</h3>
+<h2>デジタル署名</h2>
+<h2>ハッシュ関数</h2>
+<h2>メッセージ認証(MAC)</h2>
+</section>
+
+<section>
+<h3>概要</h3>
+<div class="fragment" style="text-align:left">・Java JCEと似てて覚えやすい</div>
+<div class="fragment" style="text-align:left">・署名：KJUR.crypto.<font color="yellow">Signature</font></div>
+<div class="fragment" style="text-align:left">・ハッシュ：KJUR.crypto.<font color="yellow">MessageDigest</font></div>
+<div class="fragment" style="text-align:left">・メッセージ認証：KJUR.crypto.<font color="yellow">Mac</font></div>
+<div class="fragment" style="text-align:left">・データ追加 update() に対応</div>
+<div class="fragment" style="text-align:left">・署名の init() はとても便利で簡単</div>
+</section>
+
+<section>
+<h2>対応するアルゴリズム</h2>
+<table style="border: 1px #ffffff solid;">
+<tr><td>署名</td><td>
+*withRSA, *withRSAandMGF1, *withECDSA
+</td></tr>
+<tr><td>ハッシュ</td><td>
+MD5,SHA1/224/256/384/512,RipeMD160
+</td></tr>
+<tr><td>MAC</td><td>
+HmacMD5/SHA1/224/256/384/512
+</td></tr>
+<tr><td>楕円曲線</td><td>
+<ul>
+<li>secp256r1(NIST P-256,P-256,prime256v1)</li>
+<li>secp256k1</li>
+<li>secp384r1(NIST P-384,P-384)</li>
+</ul>
+</td></tr>
+</table>
+</section>
+
+<section>
+<h2>署名:Signature</h2>
+<div align="left">
+RSA, RSAPSS, ECDSAに対応しており、鍵を渡せば鍵データのフォーマット、
+公開鍵/秘密鍵/証明書、生成/検証を自動判定
+<hr/>
+// 生成例<br/>
+var sig = KJUR.crypto.<font color="yellow">Signature</font>({alg: 'SHA1withECDSA'});<br/>
+sig.<font color="yellow">init</font>(PKCS#5/8秘密鍵PEM文字列など[, パスコード]);<br/>
+sig.<font color="yellow">updateString</font>('aaa');<br/>
+var sigValueHex = sig.<font color="yellow">sign</font>();<br/>
+// 検証例<br/>
+var sig2 = KJUR.crypto.<font color="yellow">Signature</font>({alg: 'RSAwithECDSA'});<br/>
+sig2.<font color="yellow">init</font>(PKCS#8公開鍵や証明書など);<br/>
+sig2.<font color="yellow">updateHex</font>('616161');<br/>
+var isValid = sig2.<font color="yellow">verify</font>(sigValueHex2);<br/>
+</div>
+</section>
+
+<section>
+<h2>ハッシュ関数:MessageDigest</h2>
+<div align="left">
+データ入力の追加ができるので長いデータでも大丈夫。
+<hr/>
+var md = new KJUR.crypto.<font color="yellow">MessageDigest</font>({alg: "sha256"});<br/>
+md.<font color="yellow">updateString</font>("aaa");<br/>
+md.<font color="yellow">updateHex</font>("1f3daa34");<br/>
+var hashValue = md.<font color="yellow">digest</font>();<br/>
+// 一行でできるユーティリティーもある<br/>
+KJUR.crypto.Util.<font color="yellow">hashString</font>("aaa", "sha1");<br/>
+KJUR.crypto.Util.<font color="yellow">hashHex</font>("471dfbdaaa30", "ripemd160");<br/>
+</div>
+</section>
+
+<section>
+<h2>メッセージ認証:Mac</h2>
+<div align="left">
+メッセージ認証も同様にパスワードをつけるだけ。
+<hr/>
+var mac = new KJUR.crypto.<font color="yellow">Mac</font>({alg: "HmacSHA1",
+　　　　　　　　　　　　　　　　　　　　　　　　　　　pass: "passwd"});<br/>
+mac.<font color="yellow">updateString</font>("aaa");<br/>
+var macHex = mac.<font color="yellow">doFinal</font>();<br/>
+<hr/>
+(注意) パスワードは16進数でなく文字列
+</div>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>公開鍵暗号の鍵データ</h2>
+</section>
+
+<section>
+<h2>特徴</h2>
+<ul>
+<li>RSAとECC</li>
+<li>RSA/ECC鍵ペア生成 KEYUTIL.generateKeypair</li>
+<li>公開鍵/秘密鍵のロード KEYUTIL.getKey</li>
+<ul>
+<li>PKCS#5 暗号化/平文 PEM秘密鍵</li>
+<li>PKCS#8 暗号化/平文 PEM秘密鍵</li>
+<li>PKCS#8 PEM公開鍵</li>
+<li>PEM X.509公開鍵証明書</li>
+<li>鍵スペック (例 {n: '1f3a76...', e: '010001'})</li>
+</ul>
+<li>鍵オブジェクトからPEMフォーマットの生成</li>
+</ul>
+</section>
+
+<section>
+<h2>鍵ペア生成</h2>
+<div align="left">
+// RSA<br/>
+var keypair = KEYUTIL.<font color="yellow">generateKeypair</font>("RSA", 1024);<br/>
+// ECC<br/>
+var keypair = KEYUTIL.<font color="yellow">generateKeypair</font>("EC", "secp256r1");<br/>
+// で<br/>
+// keypair.prvKeyObjに<font color="yellow">秘密鍵</font>のRSAKey/ECDSAオブジェクトが<br/>
+// keypair.pubKeyObjに<font color="yellow">公開鍵</font>のRSAKey/ECDSAオブジェクトが<br/>
+// 設定されている<br/>
+</div>
+</section>
+
+<section>
+<h2>秘密鍵、公開鍵の読込み</h2>
+鍵の形式毎に読込むメソッドが別でとても面倒でしたよね？<br/>
+<div align="left">
+<hr/>
+var key = <font color="yellow">KEYUTIL.getKey</font>(鍵ファイルor証明書orデータ<br/>
+　　　　　　　　　　　　　　　　　　[, パスワード]<br/>
+　　　　　　　　　　　　　　　　　　[, HEXのデータタイプ]);<br/>
+<hr/>
+PKCS#5でも8でも暗号化されててもECDSAでもRSAでも証明書でもHEXでも
+鍵スペックのJSONでも何でも読込めます。
+</div>
+<div id="droppable1" style="background-color: red;">DROP HERE</div>
+<div align="left">
+ファイル: <span id="fileName"></span><br/>
+アルゴリズム: <span id="keyType"></span><br/>
+鍵タイプ: <span id="prvOrPub"></span><br/>
+</div>
+<script language="javascript">
+var oneFileCallbackFunc1 = function(fileName, fileContents) {
+  $("#fileName").text("... failed ...");
+  $("#keyType").text("... failed ...");
+  $("#prvOrPub").text("... failed ...");
+
+  var key = null;
+
+  $("#fileName").text(fileName);
+  try {
+    key = KEYUTIL.getKey(fileContents, "passwd");
+  } catch (ex) {}
+
+  //if (key == null && KJUR.jws.JWS.isSafeJSONString(fileContents) == 1) {
+  //  key = KEYUTIL.getKey(KJUR.jws.JWS.readSafeJSONString(fileContents));
+  //  alert("OK");
+  //}
+
+  try {
+    if (key.type == "RSA") {
+      $("#keyType").text(key.type + " (" + key.n.bitLength() + "bit)");
+      if (key.d !== undefined || key.d == null) {
+        var text = "秘密鍵";
+        text += " d:" + key.d.toString(16).substr(0, 6) + "...";
+        $("#prvOrPub").text(text);
+      } else {
+        var text = "公開鍵";
+        text += " n:" + key.n.toString(16).substr(0, 6) + "...";
+        $("#prvOrPub").text(text);
+      }
+    } else if (key.type == "EC") {
+      $("#keyType").text(key.type + " (" + key.curveName + ")");
+      if (key.prvKeyHex !== undefined && key.prvKeyHex != null) {
+        var text = "秘密鍵";
+        text += " d:" + key.prvKeyHex.substr(0, 6) + "...";
+        $("#prvOrPub").text(text);
+      } else {
+        var text = "公開鍵";
+        text += " xy:" + key.pubKeyHex.substr(0, 6) + "...";
+        $("#prvOrPub").text(text);
+      }
+    }
+  } catch (ex) {}
+
+};
+setDropOneFileToElementID("droppable1", oneFileCallbackFunc1);
+</script>
+</section>
+
+<section>
+<h2>鍵オブジェクトから<br/>鍵PEM文字列の生成</h2>
+<div align="left">
+今のところRSA秘密鍵のPKCS#5しか作れない
+<hr/>
+KEYUTIL.<font color="yellow">getEncryptedPKCS5PEMFromRSAKey</font>(rsaKey<br/>
+　　　　　　　　　　　　　　　　　　　　　　　　　　, "password");<br/>
+　　　　　　　　鍵保護する共通鍵暗号→　　[, "AES-128-CBC"]);<br/>
+　　　　　　　　そのソルト→　　　　　　　　　　[, "3fa4dd..."]);<br/>
+<hr>
+DES-EBE3-CBC, AES-128-CBC, AES-192-CBC,  AES-256-CBCに対応
+</div>
+
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h1>ASN.1のおさらい</h1>
+</section>
+
+<section>
+<h2>まずはASN.1のおさらい(1)</h2>
+<p>証明書、鍵、タイムスタンプ、署名データなど<br/>多くの通信データはASN.1形式になっている事が多い。</p>
+<img src="img-asn1-basic.svg" border="0" style="border: 0"/>
+<p>
+特徴1：int、longに制限されないとても長いデータを表現可<br/>
+特徴2：構造化データも表現できる
+</p>
+</section>
+
+<section>
+<h2>ASN.1のおさらい(2)</h2>
+<p>
+特徴2：構造化データも表現できる
+</p>
+<img src="img-asn1-structured.svg" border="0" style="border: 0"/>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>簡単なASN.1の読込み<br/>ASN1HEXクラス</h2>
+</section>
+
+<section>
+<h2>ASN1HEXクラスの基本機能</h2>
+<p>
+16進数文字列のASN.1データに対して、指定位置のASN.1オブジェクトのタグ、長さ、値情報が取れる。
+</p>
+<img src="img-asn1hex-basic.svg" border="0" style="border: 0"/>
+</section>
+
+<section>
+<h2>ASN1HEXクラスの基本機能(2)</h2>
+<p>
+子要素のインデックスリストを得る。
+</p>
+<img src="img-asn1hex-child.svg" border="0" style="border: 0"/>
+</section>
+
+<section>
+<h2>ASN1HEXで子孫Objを扱う</h2>
+<p>
+構造型ASN.1の子孫を指定するには、各階層で何番目かを示す"nthList"を使う。ASN.1構造の深い所、例えば証明書の発行者名などを場所指定して取得する場合に重宝する。
+</p>
+
+<blockquote><pre>
+SEQUENCE                     idx=0
+    SET                      [0] idx=4
+        INTEGER 4            [0,0] idx=8 ← 参照したい 
+        INTEGER 31           [0,1] idx=14
+    SET                      [1]
+        UTF8STRING "aaa"     [1,0]
+        IA5STRING "bbb"      [1,1]
+</pre></blockquote>
+
+<div align="left">
+getDecendantHexTLVByNthList(s,0,[0,0]) → "020104"
+getDecendantHexLByNthList(s,0,[0,0]) → "01"
+getDecendantHexVByNthList(s,0,[0,0]) → "04"
+getDecendantIndexByNthList(s,0,[0,0]) → 8
+</div>
+<small>※講演時にはnthList配列の表記に間違いがあり修正しました</small>
+</section>
+
+</section>
+
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>ASN.1オブジェクトの生成</h2>
+</section>
+
+<section>
+<h3>ASN.1オブジェクトの生成(概要)</h3>
+<p>
+基本型、構造型、タグなど全てのASN.1オブジェクトを16進数文字列表現するためのクラスが定義されており、<br/>
+プロパティを渡すだけで簡単に生成できる。
+</p>
+<hr/>
+<p>
+<div align="left">
+var i1 = new KJUR.asn1.DERInteger({'int': 234});<br/>
+var s1 = new KJUR.asn1.DERUTF8String({'str': 'テスト'}});<br/>
+var seq = new KJUR.asn1.DERSequence({'array': [i1, s1]});<br/>
+var hex = seq.getEncodedHex();<br/>
+</div>
+</p>
+<hr/>
+<p>
+BouncyCastleやIAIKと大体同じ。<br/>
+でも、もっと簡単な方法が→
+</p>
+</section>
+
+<section>
+<h3>ASN.1オブジェクトの生成(2)</h3>
+<p>
+newObjectでJSONデータから一発生成
+</p>
+<p>
+<hr/>
+<div align="left">
+var hex = new KJUR.asn1.ASN1Util.<font color="yellow">newObject</font>(<br/>
+　　{seq: [　　　　　　　　　　　　　　// SEQUENCE<br/>
+　　　　　{int: 234},　　　　　　　　　　// INTEGER<br/>
+　　　　　{utf8str: 'テスト'}　　　　　　// UTF8String<br/>
+　　　　　]}<br/>
+).getEncodedHex();<br/>
+</div>
+<hr/>
+</p>
+</section>
+
+</section>
+
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>X.509証明書の<br/>ASN.1オブジェクトの生成</h2>
+</section>
+
+<section>
+<p>X.509証明書 ASN.1の生成は<br/>
+大体、BouncyCastle、IAIKに似ています。</p>
+<div align="left">
+var o = new KJUR.asn1.x509.<font color="yellow">TBSCertificate</font>();<br/>
+o.set<font color="yellow">SerialNumber</font>ByParam({'int': 4});<br/>
+o.set<font color="yellow">SignatureAlg</font>ByParam({'name': 'SHA1withRSA'});<br/>
+o.set<font color="yellow">Issuer</font>ByParam({'str': '/C=US/O=a'});<br/>
+o.set<font color="yellow">NotBefore</font>ByParam({'str': '130504235959Z'});<br/>
+o.set<font color="yellow">NotAfter</font>ByParam({'str': '140504235959Z'});<br/>
+o.set<font color="yellow">Subject</font>ByParam({'str': '/C=US/CN=b'});<br/>
+o.set<font color="yellow">SubjectPublicKey</font>ByParam({'rsakey': rsaKey});<br/>
+// 拡張も足せます<br/>
+o.appendExtension(<br/>
+　　new KJUR.asn1.x509.<font color="yellow">BasicConstraints</font>({'cA':true}));<br/>
+o.appendExtension(<br/>
+　　new KJUR.asn1.x509.<font color="yellow">KeyUsage</font>({'bin':'11'}));<br/>
+// 署名してPEMにしましょう。<br/>
+</div>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h3>OpenID Connect, OAuth2で使われる</h3>
+<h1>JWT、JWSとjsjws</h1>
+</section>
+
+<section>
+<div align="left">
+OpenID Connect、OAuth2などのWeb認証プロトコルではJSON形式({attr: 123})の認証情報が改ざんされないよう
+JWS(JSON Web Signature)やJWT(JSON Web Token)を規定
+<hr>
+<h2>JSON Web Signature(JWS)</h2>
+JSON形式の何のアルゴリズムで署名したかとかいった署名属性に署名対象をつけておこなう署名フォーマット。次で詳しく。
+<hr>
+<h2>JSON Web Token(JWT)</h2>
+JSON形式のデジタル証明書のようなもの。JWSで署名したJWSデータの一種。
+</div>
+</section>
+
+<section>
+<img src="img-createjws.png" style="float: left; border: 0;"/>JWSの作り方
+</section>
+
+<section>
+<h2>JWSの署名アルゴリズム</h2>
+<ul>
+<li>HS256,384,512 - HmacSHA256,384,512</li>
+<li>RS256,384,512 - SHA256,384,512withRSA</li>
+<li>ES256,384,512 - <br/>
+SHA256,384,512withECDSA(NIST P-256,384,521)</li>
+<li>PS256,384,512 - <br/>
+SHA256,384,512withRSAandMGF1(RSAPSS)</li>
+<li>none - 署名なし</li>
+</ul>
+</section>
+
+<section>
+<h2>
+というわけで、jsrsasignには、RSA/ECDSA/RSAPSS署名もHMACもあるし、鍵も簡単に使えるし、Base64URLエンコーディングさえあればJWSなんか簡単にできちゃうぞと!
+</h2>
+</section>
+
+<section>
+<h2>Base64エンコーディングとは</h2>
+<ul>
+<li>バイナリデータを"A-Z","a-z","0-9","+","/"の印字可能文字にエンコードする。任意の3バイトが4文字になる。</li>
+<li>長さが4の倍数にならない時には末尾に"="をつけて揃える。</li>
+<li>メールの添付ファイルや証明書のPEM形式などで使われる</li>
+</ul>
+<hr/>
+<h2>Base64URLエンコーディングとは</h2>
+<ul>
+<li>URL表現おいては"+"や"/"は特別な意味を持つのでBase64では具合が悪いため
+"+"を"-"、"/"を"_"に変換したもの。</li>
+<li>"="は必ず省略する。</li>
+<li>JWS,JWTで多用される。</li>
+</ul>
+</section>
+
+<section>
+<h2>Base64URLエンコーディング変換</h2>
+<div align="left">
+ext/base64.js, base64x.js で様々な文字列変換関数を提供<br/>
+関数：AtoB (例 utf8tob64u)、A、Bには例えば以下が使える
+</div>
+<blockquote>
+<ul>
+<li>s - ASCII文字列</li>
+<li>utf8 - UTF8文字列</li>
+<li>hex - 16進数文字列</li>
+<li>b64 - Base64エンコード文字列</li>
+<li>b64u - Base64URLエンコード文字列</li>
+</ul>
+</blockquote>
+</section>
+
+<section>
+<h2>で、jsjwsを作りました</h2>
+<a href="http://kjur.github.io/jsjws/">kjur.github.io/jsjws</a><br/>
+</section>
+
+<section>
+<h2>jsjwsの特徴</h2>
+<ul>
+<li>RSA, RSAPSS, ECDSA署名をサポート</li>
+<li>サポート率では12/13で世界最多!(w)</li>
+<li>いろんな鍵フォーマットに対応しており簡単</li>
+<li>pure JavaScript実装でスマホブラウザでも動く</li>
+<li>並列署名JWS-JSもサポート(これも世界唯一?)</li>
+</ul>
+</section>
+
+<section>
+<h3>アルゴリズムのサポートは世界最多</h3>
+jsjwsが12/13とサポートアルゴリズムが最も多い。JWS/JWTのJavaScript実装ではjsrsasignを使うのがほぼデファクト
+<img src="img-jws-alglist.png"/>
+<small>
+<a href="http://kjur.github.io/jsjws/index_mat.html">kjur.github.io/jsjws/index_mat.html</a><br/>
+</small>
+</section>
+
+<section>
+<h3>jose4jの作者のスライドで引用頂いた</h3>
+<img src="img-brain1.jpg" height="500"/>
+<img src="img-brain2.jpg" height="500"/>
+<small>
+<a href="http://www.slideshare.net/briandavidcampbell/an-introduction-to-the-emerging-jsonbased-identity-and-security-protocols">www.slideshare.net/briandavidcampbell/an-introduction-to-the-emerging-jsonbased-identity-and-security-protocols</a><br/>
+Brian Campbellさん：Ping Identityの人、2011年Googleセキュリティ殿堂入り
+</small>
+</section>
+
+<section>
+<h2>JWSの生成と検証</h2>
+<div align="left">
+<i>jsjwsなら簡単、アルゴリズムを広範囲でサポート</i><br/>
+<hr/>
+// JWS署名生成<br/>
+JWS.sign(Alg, ヘッダ, ペイロード, 秘密鍵[, 鍵パスワード]);<br/>
+JWS.sign("RS256", '{cty: "JWT"}', '{iss:"aaa",sub:"tom"}',
+　　　　　　　　　 "----BEGIN PRIV...");<br/>
+<hr/>
+// JWS署名検証<br/>
+JWS.verify(JWS署名, 公開鍵情報);<br/>
+JWS.verify("eyBhb...", "---BEGIN X509 CERT...");<br/>
+<hr/>
+いろんな形式の鍵を扱えるのでとても便利なはず
+</div>
+</section>
+
+<section>
+<h2>で、JWTも作れます</h2>
+<div align="left">
+と、いってもほぼJWSと同じ。日時をUNIXオリジン時刻で表し面倒なのでIntDateクラスを加えました。
+<hr/>
+IntDate.get('now') - 今のUNIX時刻<br/>
+IntDate.get('now + 1day') - 24時間後<br/>
+IntDate.get('now + 1year') - 365日後<br/>
+IntDate.get('YYYYmmDDHHMMSSZ') - UTC時刻<br/>
+IntDate.get(1377714748) - UNIX時間(そのまま)<br/>
+</div>
+</section>
+
+<section>
+<h3>RSAPSSのソルト、JWS、OpenSSLの細かい話</h3>
+<ul>
+<li>RSAPSS署名とは「ある仮定の下でその安全性が数学的に証明可能である」ような
+RSA署名</li>
+<li>実装によるソルト長のデフォルトの違い</li>
+<ul>
+<li>BouncyCastle - SHA1で20バイト、それ以外は個別に指定</li>
+<li>OpenSSL - 特別値(-2): 可能な限り長く(鍵長-ハッシュ長-2)</li>
+</ul>
+<li>JWSでは<font color="yellow">ソルト長＝ハッシュ長</font>を想定？でも記載なし</li>
+<li>崎村さん、Mikeさんの調整で明記頂ける方向だそう</li>
+</ul>
+
+<small>
+<div align="left">
+参考<br/>
+Twitterでの会話<a href="https://twitter.com/search?q=rsa_pss_saltlen&src=typd">twitter.com/search?q=rsa_pss_saltlen&src=typd</a><br/>
+<a href="http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-16">tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-16</a><br/>
+</div>
+</small>
+
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>補足</h2>
+</section>
+
+<section>
+<h2>Node.jsとjsrsasignとjsjws</h2>
+<ul>
+<li class="fragment">最近とても流行っているServer Side JavaScript</li>
+<li class="fragment">私はNode.js対応していないが</li>
+<li class="fragment">海外のいろんな人がNode.js対応してnpmリポジトリに置いてる</li>
+</ul>
+</section>
+
+<section>
+<h2>関連npmパッケージ</h2>
+<a href="https://npmjs.org/">npmjs.org</a>で検索してみてください。
+<hr/>
+<ul>
+<li>jsjws - 高速なバイナリRSAつきjsjws</li>
+<li>cryptico - RSAによる簡単な暗号化、署名</li>
+<li>bignumber-jt - RSAによる簡単な暗号化、署名</li>
+<li>node-bignumber - RSAによる簡単な暗号化、署名</li>
+<li>burningpig-encryption - RSAによる簡単な暗号化、署名</li>
+</ul>
+<hr/>
+<div align="left">
+使っているjsrsasign/jsjwsライブラリが古かったり、使いたいメソッドが公開されていない事が
+多いので、自分でnpmを作った方がいいかなと思ってます。
+</div>
+</section>
+
+<section>
+<h2>W3C Web Cryptography API</h2>
+<small><a href="http://www.w3.org/TR/WebCryptoAPI/">www.w3.org/TR/WebCryptoAPI</a></small>
+<div align="left">
+仕様としてはこんなのも作られつつあり、PKCS#11インタフェースや各種暗号をサポートしそうだが
+実装はいつになるか見通しが無さそう。
+</div>
+<img src="img-w3cwebcrypto.png" height="400"/>
+</section>
+
+<section>
+<h2>セキュリティ考察は必要</h2>
+<small><a src="http://www.matasano.com/articles/javascript-cryptography/">www.matasano.com/articles/javascript-cryptography</a></small>
+<div align="left">
+確かに秘密鍵を素で扱えているようなものなので、注意する必要はあるが、今は他に手が無さそう。
+</div>
+<img src="img-matasanosec.jpg"/>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+<section>
+
+<section>
+<h2>開発してみたくなったら<br/>
+サイトに来て下さい</h2>
+</section>
+
+<section>
+<h3>サイトの歩き方</h3>
+<small>
+<a href="http://kjur.github.io/jsrsasign/" target="_blank">http://kjur.github.io/jsrsasign/</a><br/>
+<a href="http://kjur.github.io/jsjws/" target="_blank">http://kjur.github.io/jsjws/</a><br/>
+</small>
+
+<img src="img-jsjws-github.png"/>
+<div align="left">
+その他、gitリポジトリの"test"フォルダにあるQUnitのテストコードはサンプルとして参考になるかと思います。
+</div>
+</section>
+
+<section>
+<h2>ちょっとデモなど</h4>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+
+<section>
+
+<section>
+<h2>クロージング</h2>
+</section>
+
+<section>
+<h2>果てしない戦いは続く</h2>
+今後、対応してみたい野望
+<ul>
+<li>PKCS#7/CMS 署名、暗号データに対応してみたい</li>
+<li>ということはS/MIME署名/暗号メールに対応してみたい</li>
+<li>SSHだってChrome JavaScriptからできる時代なので
+SMTPクライアント実装してS/MIME署名暗号メールを
+ブラウザから送ってみたい</li>
+<li>DSA署名に対応したい(PGPのJavaScript実装が既にこれに対応)</li>
+<li>JCEライクなCipherクラスを実装し共通鍵暗号ラッパーに
+対応したい</li>
+<li>XML署名/暗号に対応したい</li>
+<li>PDF署名に対応したい(JavaScript PDF生成は既にある)</li>
+<li>当然の事ながらCAdES/XAdES長期署名に対応してみたい</li>
+<li>jsrsasign, jsjwsのNode.jsパッケージ作成</li>
+</ul>
+</section>
+
+<section>
+<h2>まとめ</h2>
+<ul>
+<li>jsrsasignは最初、RSA署名だけだったけど今は違う</li>
+<li>今は、BouncyCastleみたいな暗号ライブラリ</li>
+<li>意外と世界中いろんなところで使われている</li>
+<li>署名,ハッシュ,HMACがJava JCEみたいで使いやすい</li>
+<li>どんな秘密鍵、公開鍵でも簡単に扱える</li>
+<li>ASN.1関係も充実</li>
+<li>OpenID Connect用のJWS, JWTにも対応(jsjws)</li>
+<li>JWTのJavaScript実装ではjsrsasignはデファクト</li>
+<li>JWTの署名アルゴリズム対応はかなり世界最強</li>
+<li>スマホブラウザでも無問題で動く、遅いけど</li>
+</ul>
+</section>
+
+<section>
+<h2>おしまい</h2>
+<h4>ご清聴ありがとうございました</h4>
+</section>
+
+<section>
+<h2>リンク集</h2>
+<ul>
+<li>jsrsasign - <a href="http://kjur.github.io/jsrsasign/">http://kjur.github.io/jsrsasign/</a></li>
+<li>jsjws - <a href="http://kjur.github.io/jsrsasign/">http://kjur.github.io/jsrsasign/</a></li>
+</ul>
+</section>
+
+</section>
+
+<!-- ************************************************************************* -->
+
+</div>
+</div>
+
+<!-- ************************************************************************* -->
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.min.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+controls: true,
+progress: true,
+history: true,
+center: true,
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+// Optional libraries used to extend on reveal.js
+dependencies: [
+{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+]
+});
+</script>
+
+</body>
+</html>
+
