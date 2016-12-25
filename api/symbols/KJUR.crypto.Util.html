@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 4.8.7 JavaScript API Reference - KJUR.crypto.Util</title>
+		<title>jsrsasign 7.0.0 JavaScript API Reference - KJUR.crypto.Util</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -554,6 +554,66 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Util.<b><a href="../symbols/KJUR.crypto.Util.html#.getRandomBigIntegerMinToMax">getRandomBigIntegerMinToMax</a></b>(biMin, biMax)
+								</div>
+								<div class="description">get BigInteger object of random value from min value to max value<br/>
+This static method generates a BigInteger object with random value
+greater than or equal to biMin and smaller than or equal to biMax
+(i.e.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Util.<b><a href="../symbols/KJUR.crypto.Util.html#.getRandomBigIntegerOfNbits">getRandomBigIntegerOfNbits</a></b>(n)
+								</div>
+								<div class="description">get BigInteger object of random value from with specified bit length<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Util.<b><a href="../symbols/KJUR.crypto.Util.html#.getRandomBigIntegerOfNbytes">getRandomBigIntegerOfNbytes</a></b>(n)
+								</div>
+								<div class="description">get BigInteger object of random value from with specified byte length<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Util.<b><a href="../symbols/KJUR.crypto.Util.html#.getRandomBigIntegerZeroToMax">getRandomBigIntegerZeroToMax</a></b>(biMax)
+								</div>
+								<div class="description">get BigInteger object of random value from zero to max value<br/>
+This static method generates a BigInteger object with random value
+greater than or equal to zero and smaller than or equal to biMax
+(i.e.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Util.<b><a href="../symbols/KJUR.crypto.Util.html#.getRandomHexOfNbits">getRandomHexOfNbits</a></b>(n)
+								</div>
+								<div class="description">get hexadecimal string of random value from with specified bit length<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Util.<b><a href="../symbols/KJUR.crypto.Util.html#.getRandomHexOfNbytes">getRandomHexOfNbytes</a></b>(n)
+								</div>
+								<div class="description">get hexadecimal string of random value from with specified byte length<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.crypto.Util.<b><a href="../symbols/KJUR.crypto.Util.html#.hashHex">hashHex</a></b>(sHex, alg)
 								</div>
 								<div class="description">get hexadecimal hash of hexadecimal string with specified algorithm</div>
@@ -816,6 +876,343 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name=".getRandomBigIntegerMinToMax"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{BigInteger}</span>
+					<span class="light">KJUR.crypto.Util.</span><b>getRandomBigIntegerMinToMax</b>(biMin, biMax)
+					
+					</div>
+					<div class="description">
+						get BigInteger object of random value from min value to max value<br/>
+This static method generates a BigInteger object with random value
+greater than or equal to biMin and smaller than or equal to biMax
+(i.e. biMin &le; result &le; biMax).
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">biMin = new BigInteger("2fa411...", 16);
+biMax = new BigInteger("3fa411...", 16);
+KJUR.crypto.Util.getRandomBigIntegerMinToMax(biMin, biMax) &rarr; 32f1... of BigInteger</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>biMin</b>
+									
+								</dt>
+								<dd>min value of BigInteger object for random value</dd>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>biMax</b>
+									
+								</dt>
+								<dd>max value of BigInteger object for random value</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.0.0 crypto 1.1.11</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{BigInteger}</span> BigInteger object of specified random value</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getRandomBigIntegerOfNbits"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{BigInteger}</span>
+					<span class="light">KJUR.crypto.Util.</span><b>getRandomBigIntegerOfNbits</b>(n)
+					
+					</div>
+					<div class="description">
+						get BigInteger object of random value from with specified bit length<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.crypto.Util.getRandomBigIntegerOfNbits(24) &rarr; 6314af of BigInteger
+KJUR.crypto.Util.getRandomBigIntegerOfNbits(1024) &rarr; 8fbc... of BigInteger</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>n</b>
+									
+								</dt>
+								<dd>length of bits of random</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.0.0 crypto 1.1.11</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{BigInteger}</span> BigInteger object of specified random value</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getRandomBigIntegerOfNbytes"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{BigInteger}</span>
+					<span class="light">KJUR.crypto.Util.</span><b>getRandomBigIntegerOfNbytes</b>(n)
+					
+					</div>
+					<div class="description">
+						get BigInteger object of random value from with specified byte length<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.crypto.Util.getRandomBigIntegerOfNbytes(3) &rarr; 6314af of BigInteger
+KJUR.crypto.Util.getRandomBigIntegerOfNbytes(128) &rarr; 8fbc... of BigInteger</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>n</b>
+									
+								</dt>
+								<dd>length of bytes of random</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.0.0 crypto 1.1.11</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{BigInteger}</span> BigInteger object of specified random value</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getRandomBigIntegerZeroToMax"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{BigInteger}</span>
+					<span class="light">KJUR.crypto.Util.</span><b>getRandomBigIntegerZeroToMax</b>(biMax)
+					
+					</div>
+					<div class="description">
+						get BigInteger object of random value from zero to max value<br/>
+This static method generates a BigInteger object with random value
+greater than or equal to zero and smaller than or equal to biMax
+(i.e. 0 &le; result &le; biMax).
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">biMax = new BigInteger("3fa411...", 16);
+KJUR.crypto.Util.getRandomBigIntegerZeroToMax(biMax) &rarr; 8fbc... of BigInteger</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>biMax</b>
+									
+								</dt>
+								<dd>max value of BigInteger object for random value</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.0.0 crypto 1.1.11</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{BigInteger}</span> BigInteger object of specified random value</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getRandomHexOfNbits"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.Util.</span><b>getRandomHexOfNbits</b>(n)
+					
+					</div>
+					<div class="description">
+						get hexadecimal string of random value from with specified bit length<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.crypto.Util.getRandomHexOfNbits(24) &rarr; "6314af", "000000" or "001fb4"
+KJUR.crypto.Util.getRandomHexOfNbits(1024) &rarr; "8fbc..." in 1024bits</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>n</b>
+									
+								</dt>
+								<dd>length of bits of random</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.0.0 crypto 1.1.11</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of random</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getRandomHexOfNbytes"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">KJUR.crypto.Util.</span><b>getRandomHexOfNbytes</b>(n)
+					
+					</div>
+					<div class="description">
+						get hexadecimal string of random value from with specified byte length<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.crypto.Util.getRandomHexOfNbytes(3) &rarr; "6314af", "000000" or "001fb4"
+KJUR.crypto.Util.getRandomHexOfNbytes(128) &rarr; "8fbc..." in 1024bits</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>n</b>
+									
+								</dt>
+								<dd>length of bytes of random</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.0.0 crypto 1.1.11</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of random</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".hashHex"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -941,6 +1338,10 @@ ul.inheritsList
 					
 					
 					
+					<pre class="code">Util.md5('aaa') &rarr; 47bce5c74f589f4867dbd57e9ca9f808</pre>
+					
+					
+					
 						
 							<dl class="detailList">
 							<dt class="heading">Parameters:</dt>
@@ -987,6 +1388,10 @@ ul.inheritsList
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">KJUR.crypto.Util.ripemd160("aaa") &rarr; 08889bd7b151aa174c21f33f59147fa65381edea</pre>
 					
 					
 					
@@ -1182,7 +1587,7 @@ ul.inheritsList
 		
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
-                        &copy; 2012-2015 Kenji Urushima, All rights reserved<br/>
+                        &copy; 2012-2016 Kenji Urushima, All rights reserved<br/>
 			
 			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 
 		</div>

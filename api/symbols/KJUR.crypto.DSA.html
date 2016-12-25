@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 4.8.7 JavaScript API Reference - KJUR.crypto.DSA</title>
+		<title>jsrsasign 7.0.0 JavaScript API Reference - KJUR.crypto.DSA</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -449,7 +449,7 @@ ul.inheritsList
 				class for DSA signing and verifcation
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/dsa-modified-1.0.js.html">dsa-modified-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/dsa-2.0.js.html">dsa-2.0.js</a>.
 				
 			</p>
 
@@ -496,45 +496,45 @@ ul.inheritsList
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.DSA.<b><a href="../symbols/KJUR.crypto.DSA.html#.parseASN1Signature">parseASN1Signature</a></b>(hSigVal)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.DSA.html#parseASN1Signature">parseASN1Signature</a></b>(hSigVal)
 								</div>
 								<div class="description">parse hexadecimal ASN.1 DSA signature value</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.DSA.<b><a href="../symbols/KJUR.crypto.DSA.html#.setPrivate">setPrivate</a></b>(p, q, g, y, x)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.DSA.html#setPrivate">setPrivate</a></b>(p, q, g, y, x)
 								</div>
-								<div class="description">set DSA private key by key specs</div>
+								<div class="description">set DSA private key by key parameters</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.DSA.<b><a href="../symbols/KJUR.crypto.DSA.html#.setPublic">setPublic</a></b>(p, q, g, y)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.DSA.html#setPublic">setPublic</a></b>(p, q, g, y)
 								</div>
-								<div class="description">set DSA public key by key specs</div>
+								<div class="description">set DSA public key by key parameters</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.DSA.<b><a href="../symbols/KJUR.crypto.DSA.html#.signWithMessageHash">signWithMessageHash</a></b>(sHashHex)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.DSA.html#signWithMessageHash">signWithMessageHash</a></b>(sHashHex)
 								</div>
 								<div class="description">sign to hashed message by this DSA private key object</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.DSA.<b><a href="../symbols/KJUR.crypto.DSA.html#.verifyWithMessageHash">verifyWithMessageHash</a></b>(sHashHex, hSigVal)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.DSA.html#verifyWithMessageHash">verifyWithMessageHash</a></b>(sHashHex, hSigVal)
 								</div>
 								<div class="description">verify signature by this DSA public key object</div>
 							</td>
@@ -562,7 +562,7 @@ ul.inheritsList
 				
 				<div class="description">
 					class for DSA signing and verification
-<p>CAUTION: Most of the case, you don't need to use this class.Please use <a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a> class instead.</p><p>This class was originally developped by Recurity Labs GmbH for OpenPGP JavaScript library.(See https://github.com/openpgpjs/openpgpjs/blob/master/src/ciphers/asymmetric/dsa.js)</p>
+<p>CAUTION: Most of the case, you don't need to use this class.Please use <a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a> class instead.</p><p>NOTE: Until jsrsasign 6.2.3, DSA class have used codes from openpgpjs library 1.0.0licenced under LGPL licence. To avoid license issue dsa-2.0.js was re-written withmy own codes in jsrsasign 7.0.0. Some random number generators used in dsa-2.0.js was newly definedin KJUR.crypto.Util class. Now all of LGPL codes are removed.</p>
 					
 				</div>
 				
@@ -571,6 +571,11 @@ ul.inheritsList
 				
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">Since:</dt>
+							<dd>jsrsasign 7.0.0 dsa 2.0.0</dd>
+						</dl>
 					
 					
 					
@@ -589,11 +594,11 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name=".parseASN1Signature"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="parseASN1Signature"> </a>
+					<div class="fixedFont">
 					
 					<span class="light">{Array}</span>
-					<span class="light">KJUR.crypto.DSA.</span><b>parseASN1Signature</b>(hSigVal)
+					<b>parseASN1Signature</b>(hSigVal)
 					
 					</div>
 					<div class="description">
@@ -620,7 +625,7 @@ ul.inheritsList
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
-								<dd>dsa-modified 1.0.0</dd>
+								<dd>jsrsasign 7.0.0 dsa 2.0.0</dd>
 							</dl>
 							</dl>
 						
@@ -629,7 +634,7 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{Array}</span> array [s1, s2] of DSA signature value. Both s1 and s2 are BigInteger.</dd>
+								<dd><span class="light fixedFont">{Array}</span> array [r, s] of DSA signature value. Both r and s are BigInteger.</dd>
 							
 							</dl>
 						
@@ -638,15 +643,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name=".setPrivate"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setPrivate"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.crypto.DSA.</span><b>setPrivate</b>(p, q, g, y, x)
+					<b>setPrivate</b>(p, q, g, y, x)
 					
 					</div>
 					<div class="description">
-						set DSA private key by key specs
+						set DSA private key by key parameters
 						
 						
 					</div>
@@ -693,7 +698,7 @@ ul.inheritsList
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
-								<dd>dsa-modified 1.0.0</dd>
+								<dd>jsrsasign 7.0.0 dsa 2.0.0</dd>
 							</dl>
 							</dl>
 						
@@ -704,15 +709,15 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name=".setPublic"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setPublic"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.crypto.DSA.</span><b>setPublic</b>(p, q, g, y)
+					<b>setPublic</b>(p, q, g, y)
 					
 					</div>
 					<div class="description">
-						set DSA public key by key specs
+						set DSA public key by key parameters
 						
 						
 					</div>
@@ -753,7 +758,7 @@ ul.inheritsList
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
-								<dd>dsa-modified 1.0.0</dd>
+								<dd>jsrsasign 7.0.0 dsa 2.0.0</dd>
 							</dl>
 							</dl>
 						
@@ -764,11 +769,11 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name=".signWithMessageHash"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="signWithMessageHash"> </a>
+					<div class="fixedFont">
 					
 					<span class="light">{String}</span>
-					<span class="light">KJUR.crypto.DSA.</span><b>signWithMessageHash</b>(sHashHex)
+					<b>signWithMessageHash</b>(sHashHex)
 					
 					</div>
 					<div class="description">
@@ -795,7 +800,7 @@ ul.inheritsList
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
-								<dd>dsa-modified 1.0.0</dd>
+								<dd>jsrsasign 7.0.0 dsa 2.0.0</dd>
 							</dl>
 							</dl>
 						
@@ -813,11 +818,11 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name=".verifyWithMessageHash"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="verifyWithMessageHash"> </a>
+					<div class="fixedFont">
 					
 					<span class="light">{Boolean}</span>
-					<span class="light">KJUR.crypto.DSA.</span><b>verifyWithMessageHash</b>(sHashHex, hSigVal)
+					<b>verifyWithMessageHash</b>(sHashHex, hSigVal)
 					
 					</div>
 					<div class="description">
@@ -850,7 +855,7 @@ ul.inheritsList
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
-								<dd>dsa-modified 1.0.0</dd>
+								<dd>jsrsasign 7.0.0 dsa 2.0.0</dd>
 							</dl>
 							</dl>
 						
@@ -879,7 +884,7 @@ ul.inheritsList
 		
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
-                        &copy; 2012-2015 Kenji Urushima, All rights reserved<br/>
+                        &copy; 2012-2016 Kenji Urushima, All rights reserved<br/>
 			
 			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 
 		</div>
