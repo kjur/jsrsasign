@@ -1,13 +1,29 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 6.2.3 to next version
+* Changes from 6.2.3 to 7.0.0 (2016-Dec-26)
+  - LGPL license for openpgpjs was removed.
   - asn1hex 1.1.7 to 1.1.8
     - ASN1HEX.dump also supports ASN1Object as argument
   - asn1x509
     - API document update
   - pkcs5pkey 1.0.7
     - merge @machinewu's pull request for API doc fix
+  - dsa 2.0.0
+    - some of my own codes are moved from dsa-modified-1.0.js 
+      to dsa-2.0.0 and old openpgpjs codes are re-writed with
+      my own codes and all of openpgpjs codes are removed from
+      jsrsasign.
+  - crypto 1.1.10 to 1.1.11
+    - some static random number generator methods are
+      added to KJUR.crypto.Util class for new dsa-2.0:
+      getRandomHexOfNbytes, getRandomBigIntegerOfNbytes, 
+      getRandomHexOfNbits, getRandomBigIntegerOfNbits, 
+      getRandomBigIntegerZeroToMax, getRandomBigIntegerMinToMax
+  - REMOVED
+    - dsa-modified-1.0.js, ext/THIRDPARTY_LICENSE.pgp.txt
+  - test/qunit-do-*.html
+    - most of test codes are updated.
 
 * Changes from 6.2.2 to 6.2.3 (2016-Nov-29)
   - asn1x509 1.0.18 to 1.0.19

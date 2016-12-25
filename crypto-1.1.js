@@ -1,4 +1,4 @@
-/*! crypto-1.1.10.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! crypto-1.1.11.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.1.10 (2016-Oct-29)
+ * @version 1.1.11 (2016-Dec-25)
  * @since jsrsasign 2.2
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -250,40 +250,164 @@ KJUR.crypto.Util = new function() {
         return md.digestHex(s);
     };
 
-    /**
-     * get hexadecimal MD5 hash of string
-     * @name md5
-     * @memberOf KJUR.crypto.Util
-     * @function
-     * @param {String} s input string to be hashed
-     * @return {String} hexadecimal string of hash value
-     * @since 1.0.3
-     */
-    this.md5 = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'md5', 'prov':'cryptojs'});
-        return md.digestString(s);
-    };
+};
 
-    /**
-     * get hexadecimal RIPEMD160 hash of string
-     * @name ripemd160
-     * @memberOf KJUR.crypto.Util
-     * @function
-     * @param {String} s input string to be hashed
-     * @return {String} hexadecimal string of hash value
-     * @since 1.0.3
-     */
-    this.ripemd160 = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'ripemd160', 'prov':'cryptojs'});
-        return md.digestString(s);
-    };
+/**
+ * get hexadecimal MD5 hash of string
+ * @name md5
+ * @memberOf KJUR.crypto.Util
+ * @function
+ * @param {String} s input string to be hashed
+ * @return {String} hexadecimal string of hash value
+ * @since 1.0.3
+ * @example
+ * Util.md5('aaa') &rarr; 47bce5c74f589f4867dbd57e9ca9f808
+ */
+KJUR.crypto.Util.md5 = function(s) {
+    var md = new KJUR.crypto.MessageDigest({'alg':'md5', 'prov':'cryptojs'});
+    return md.digestString(s);
+};
 
-    /*
-     * @since 1.1.2
-     */
-    this.getCryptoJSMDByName = function(s) {
-	
-    };
+/**
+ * get hexadecimal RIPEMD160 hash of string
+ * @name ripemd160
+ * @memberOf KJUR.crypto.Util
+ * @function
+ * @param {String} s input string to be hashed
+ * @return {String} hexadecimal string of hash value
+ * @since 1.0.3
+ * @example
+ * KJUR.crypto.Util.ripemd160("aaa") &rarr; 08889bd7b151aa174c21f33f59147fa65381edea
+ */
+KJUR.crypto.Util.ripemd160 = function(s) {
+    var md = new KJUR.crypto.MessageDigest({'alg':'ripemd160', 'prov':'cryptojs'});
+    return md.digestString(s);
+};
+
+// @since jsrsasign 7.0.0 crypto 1.1.11
+KJUR.crypto.Util.SECURERANDOMGEN = new SecureRandom();
+
+/**
+ * get hexadecimal string of random value from with specified byte length<br/>
+ * @name getRandomHexOfNbytes
+ * @memberOf KJUR.crypto.Util
+ * @function
+ * @param {Integer} n length of bytes of random
+ * @return {String} hexadecimal string of random
+ * @since jsrsasign 7.0.0 crypto 1.1.11
+ * @example
+ * KJUR.crypto.Util.getRandomHexOfNbytes(3) &rarr; "6314af", "000000" or "001fb4"
+ * KJUR.crypto.Util.getRandomHexOfNbytes(128) &rarr; "8fbc..." in 1024bits 
+ */
+KJUR.crypto.Util.getRandomHexOfNbytes = function(n) {
+    var ba = new Array(n);
+    KJUR.crypto.Util.SECURERANDOMGEN.nextBytes(ba);
+    return BAtohex(ba);
+};
+
+/**
+ * get BigInteger object of random value from with specified byte length<br/>
+ * @name getRandomBigIntegerOfNbytes
+ * @memberOf KJUR.crypto.Util
+ * @function
+ * @param {Integer} n length of bytes of random
+ * @return {BigInteger} BigInteger object of specified random value
+ * @since jsrsasign 7.0.0 crypto 1.1.11
+ * @example
+ * KJUR.crypto.Util.getRandomBigIntegerOfNbytes(3) &rarr; 6314af of BigInteger
+ * KJUR.crypto.Util.getRandomBigIntegerOfNbytes(128) &rarr; 8fbc... of BigInteger
+ */
+KJUR.crypto.Util.getRandomBigIntegerOfNbytes = function(n) {
+    return new BigInteger(KJUR.crypto.Util.getRandomHexOfNbytes(n), 16);
+};
+
+/**
+ * get hexadecimal string of random value from with specified bit length<br/>
+ * @name getRandomHexOfNbits
+ * @memberOf KJUR.crypto.Util
+ * @function
+ * @param {Integer} n length of bits of random
+ * @return {String} hexadecimal string of random
+ * @since jsrsasign 7.0.0 crypto 1.1.11
+ * @example
+ * KJUR.crypto.Util.getRandomHexOfNbits(24) &rarr; "6314af", "000000" or "001fb4"
+ * KJUR.crypto.Util.getRandomHexOfNbits(1024) &rarr; "8fbc..." in 1024bits 
+ */
+KJUR.crypto.Util.getRandomHexOfNbits = function(n) {
+    var n_remainder = n % 8;
+    var n_quotient = (n - n_remainder) / 8;
+    var ba = new Array(n_quotient + 1);
+    KJUR.crypto.Util.SECURERANDOMGEN.nextBytes(ba);
+    ba[0] = (((255 << n_remainder) & 255) ^ 255) & ba[0];
+    return BAtohex(ba);
+};
+
+/**
+ * get BigInteger object of random value from with specified bit length<br/>
+ * @name getRandomBigIntegerOfNbits
+ * @memberOf KJUR.crypto.Util
+ * @function
+ * @param {Integer} n length of bits of random
+ * @return {BigInteger} BigInteger object of specified random value
+ * @since jsrsasign 7.0.0 crypto 1.1.11
+ * @example
+ * KJUR.crypto.Util.getRandomBigIntegerOfNbits(24) &rarr; 6314af of BigInteger
+ * KJUR.crypto.Util.getRandomBigIntegerOfNbits(1024) &rarr; 8fbc... of BigInteger
+ */
+KJUR.crypto.Util.getRandomBigIntegerOfNbits = function(n) {
+    return new BigInteger(KJUR.crypto.Util.getRandomHexOfNbits(n), 16);
+};
+
+/**
+ * get BigInteger object of random value from zero to max value<br/>
+ * @name getRandomBigIntegerZeroToMax
+ * @memberOf KJUR.crypto.Util
+ * @function
+ * @param {BigInteger} biMax max value of BigInteger object for random value
+ * @return {BigInteger} BigInteger object of specified random value
+ * @since jsrsasign 7.0.0 crypto 1.1.11
+ * @description
+ * This static method generates a BigInteger object with random value
+ * greater than or equal to zero and smaller than or equal to biMax
+ * (i.e. 0 &le; result &le; biMax).
+ * @example
+ * biMax = new BigInteger("3fa411...", 16);
+ * KJUR.crypto.Util.getRandomBigIntegerZeroToMax(biMax) &rarr; 8fbc... of BigInteger
+ */
+KJUR.crypto.Util.getRandomBigIntegerZeroToMax = function(biMax) {
+    var bitLenMax = biMax.bitLength();
+    while (1) {
+	var biRand = KJUR.crypto.Util.getRandomBigIntegerOfNbits(bitLenMax);
+	if (biMax.compareTo(biRand) != -1) return biRand;
+    }
+};
+
+/**
+ * get BigInteger object of random value from min value to max value<br/>
+ * @name getRandomBigIntegerMinToMax
+ * @memberOf KJUR.crypto.Util
+ * @function
+ * @param {BigInteger} biMin min value of BigInteger object for random value
+ * @param {BigInteger} biMax max value of BigInteger object for random value
+ * @return {BigInteger} BigInteger object of specified random value
+ * @since jsrsasign 7.0.0 crypto 1.1.11
+ * @description
+ * This static method generates a BigInteger object with random value
+ * greater than or equal to biMin and smaller than or equal to biMax
+ * (i.e. biMin &le; result &le; biMax).
+ * @example
+ * biMin = new BigInteger("2fa411...", 16);
+ * biMax = new BigInteger("3fa411...", 16);
+ * KJUR.crypto.Util.getRandomBigIntegerMinToMax(biMin, biMax) &rarr; 32f1... of BigInteger
+ */
+KJUR.crypto.Util.getRandomBigIntegerMinToMax = function(biMin, biMax) {
+    var flagCompare = biMin.compareTo(biMax);
+    if (flagCompare == 1) throw "biMin is greater than biMax";
+    if (flagCompare == 0) return biMin;
+
+    var biDiff = biMax.subtract(biMin);
+    var biRand = KJUR.crypto.Util.getRandomBigIntegerZeroToMax(biDiff);
+    return biRand.add(biMin);
 };
 
 // === Mac ===============================================================

@@ -3,6 +3,7 @@
 <html>
 <head>
 <title>QUnit for Cryptographic Provider Class 'crypto.js'</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="qunit.js"></script>
 <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
@@ -24,7 +25,6 @@
 <script src="../ext/cj/pbkdf2_min.js"></script>
 
 <script src="../ext/yahoo.js"></script>
-<script src="../crypto-1.1.js"></script>
 <!-- for rsapem -->
 <script language="JavaScript" type="text/javascript" src="../ext/prng4.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/rng.js"></script>
@@ -33,6 +33,7 @@
 <script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../base64x-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../asn1-1.0.js"></script>
 <script language="JavaScript" type="text/javascript" src="../asn1x509-1.0.js"></script>
 <script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
@@ -44,6 +45,7 @@
 <script language="JavaScript" type="text/javascript" src="../ext/ec.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/ec-patch.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ecdsa-modified-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../crypto-1.1.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -165,9 +167,74 @@ test("Util.hashHex(616161, {sha1,md5}) test", function() {
   equal(KJUR.crypto.Util.hashHex('616161', 'md5'), '47bce5c74f589f4867dbd57e9ca9f808', 'md5 aaa');
 });
 
+test("Util.md5", function() {
+  // echo -n aaa | openssl dgst -md5
+  equal(KJUR.crypto.Util.md5('aaa'), '47bce5c74f589f4867dbd57e9ca9f808', 'aaa');
+});
+
+test("Util.ripemd160", function() {
+  // echo -n aaa | openssl dgst -ripemd160
+  equal(KJUR.crypto.Util.ripemd160('aaa'), '08889bd7b151aa174c21f33f59147fa65381edea', 'aaa');
+});
+
+test("Util.getRandomHexOfNbytes", function() {
+  equal(KJUR.crypto.Util.getRandomHexOfNbytes(1).length, 2, "1"); 
+  equal(KJUR.crypto.Util.getRandomHexOfNbytes(16).length, 32, "16"); 
+  equal(KJUR.crypto.Util.getRandomHexOfNbytes(512).length, 1024, "16"); 
+});
+
+test("Util.getRandomBigIntegerOfNbytes", function() {
+  equal(KJUR.crypto.Util.getRandomBigIntegerOfNbytes(1).bitLength(), 8, "1"); 
+  equal(KJUR.crypto.Util.getRandomBigIntegerOfNbytes(512).bitLength(), 4096, "512"); 
+});
+
+test("Util.getRandomBigIntegerOfNbits", function() {
+  //equal(KJUR.crypto.Util.getRandomHexOfNbits(11), "11", "11"); 
+  //equal((new BigInteger(KJUR.crypto.Util.getRandomHexOfNbits(5), 16)).toString(2), "0", "3"); 
+  equal(KJUR.crypto.Util.getRandomBigIntegerOfNbits(5).bitLength(), 5, "5"); 
+});
+
+test("Util.getRandomBigIntegerZeroToMax", function() {
+  var n = 0;
+  var n0 = 0;
+  var n1 = 0;
+  var n2 = 0;
+  var n3 = 0;
+  for (var i = 0; i < 1000; i++) {
+    var bi = KJUR.crypto.Util.getRandomBigIntegerZeroToMax(new BigInteger("3", 10));
+    var ii = parseInt(bi.toString(10), 10);
+    if (0 <= ii && ii <= 3) n++;
+    if (ii == 0) n0++;
+    if (ii == 1) n1++;
+    if (ii == 2) n2++;
+    if (ii == 3) n3++;
+  }
+  equal(n, 1000, "1000 times success:" + n0 + ":" + n1 + ":" + n2 + ":" + n3);
+});
+
+test("Util.getRandomBigIntegerMinToMax", function() {
+  var bi15 = new BigInteger("15", 10);
+  var bi18 = new BigInteger("18", 10);
+  var n = 0;
+  var n0 = 0;
+  var n1 = 0;
+  var n2 = 0;
+  var n3 = 0;
+  for (var i = 0; i < 100; i++) {
+    var bi = KJUR.crypto.Util.getRandomBigIntegerMinToMax(bi15, bi18);
+    var ii = parseInt(bi.toString(10), 10);
+    //console.log("ii = " + ii);
+    if (15 <= ii && ii <= 18) n++;
+    if (ii == 15) n0++;
+    if (ii == 16) n1++;
+    if (ii == 17) n2++;
+    if (ii == 18) n3++;
+  }
+  equal(n, 100, "100 times success:" + n0 + ":" + n1 + ":" + n2 + ":" + n3);
+});
+
 test("MessageDigest test", function() {
   expect(10);
-
   var md1 = new KJUR.crypto.MessageDigest({"alg": "sha1", "prov": "cryptojs"});
   equal(md1.digestString("aaa"), "7e240de74fb1ed08fa08d38063f6a6a91462a815", "digestString(aaa)");
 

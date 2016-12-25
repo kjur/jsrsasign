@@ -2,7 +2,8 @@
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>QUnit for KJUR.crypto.DSA class 'dsa-modified.js'</title>
+<title>QUnit for KJUR.crypto.DSA class 'dsa-2.0.js' or later</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 
 <!-- script type="text/javascript" src="qunit.js" /script -->
@@ -35,14 +36,14 @@
 <script src="../ext/rsa.js"></script>
 <script src="../ext/rsa2.js"></script>
 
+<script src="../base64x-1.1.js"></script>
 <script src="../asn1hex-1.1.js"></script>
 <script src="../rsapem-1.1.js"></script>
 <script src="../rsasign-1.2.js"></script>
 <script src="../asn1-1.0.js"></script>
 <script src="../crypto-1.1.js"></script>
 <script src="../keyutil-1.0.js"></script>
-<script src="../dsa-modified-1.0.js"></script>
-
+<script src="../dsa-2.0.js"></script>
 <script type="text/javascript">
 <!--
 $(document).ready(function(){
@@ -53,56 +54,6 @@ var q = new BigInteger("832124c3188298f8d6dd1ad84121c2ef33a5d52b", 16);
 var g = new BigInteger("711ac4053baf502aa0a09abcb7af72885495e1efb0de129d93c7bb16f0e4b80a1a10d0409ed52bcd0df0b5511f6e08f74715517e9406edd45d78f0ef15d92b27ef398ea7bf9365fa13591322149fa84635187da277f15cbc8c9a28423feb233221e5d1ad36d926d2e1e0c770f34dc04a616f55685222a9b1cf4f8ecf87c19b7e", 16);
 var y = new BigInteger("8cafd9654ce51818e154613bd0b14ee974fbdffc5a19802c4301302bc854d5e17daf0d6745a4aaa8e46ff96b57c89371fa72cca12a2248821645d1ff75869a2549ad7fd110ceefea5616d00be5941036e1a2d87bbcf0bfbe6c3b1e18ba0d3b3af6d34bacf613270a0b5f67c78668e4ba5b3ec0aa28e762ea1f9f2e0167e0523b", 16);
 var x = new BigInteger("73b3538660ceac98a3bf48e53f88b4e124657c21", 16);
-
-test("t1", function() {
-var s1 = new BigInteger("6e41015afd8597894f42f466dde2190ebba6f15e", 16);
-var s2 = new BigInteger("787f9380a3a33011c88bf877df7ac3b8a62b854c", 16);
-var dsa = new KJUR.crypto.DSA();
-equal(dsa.verify("SHA1", s1, s2, "aaa", p, q, g, y), true, "aaa SHA1");
-});
-
-test("t2", function() {
-var s1 = new BigInteger("78a2596229442d899a973e07014d41901d6687cc", 16);
-var s2 = new BigInteger("407fb52627f287bef7e4f84f7d2582fa47cc26b3", 16);
-var dsa = new KJUR.crypto.DSA();
-equal(dsa.verify("SHA512", s1, s2, "aaa", p, q, g, y), true, "aaa SHA512");
-});
-
-/*
-test("z1", function() {
-var dsa = new KJUR.crypto.DSA();
-equal(dsa.getRandomBytes(8), 1, "8");
-});
- */
-
-test("z1", function() {
-var dsa = new KJUR.crypto.DSA();
-var bi1 = dsa.getRandomBigInteger(1024);
-expect(1);
-equal(bi1 instanceof BigInteger, true, "1 " + bi1.toString(16));
-});
-
-test("z1", function() {
-var dsa = new KJUR.crypto.DSA();
-var bi1 = dsa.getRandomBigInteger(new BigInteger("1", 16), new BigInteger("3", 16));
-expect(1);
-equal(bi1 instanceof BigInteger, true, "isBigInteger " + bi1.toString(16));
-});
-
-test("sign1", function() {
-var dsa = new KJUR.crypto.DSA();
-var sigVal = dsa.sign("SHA1", "aaa", g, p, q, x);
-expect(2);
-equal(sigVal[0] instanceof BigInteger, true, "aaa SHA1 " + sigVal[0].toString(16));
-equal(sigVal[1] instanceof BigInteger, true, "aaa SHA1 " + sigVal[1].toString(16));
-});
-
-test("verify1", function() {
-var s1 = new BigInteger("d599208889e4447e229b7092d9be323c9b38ea8", 16);
-var s2 = new BigInteger("55034b5a995695d6c1cb9c629b4ca298bb95175b", 16);
-var dsa = new KJUR.crypto.DSA();
-equal(dsa.verify("SHA1", s1, s2, "aaa", p, q, g, y), true, "aaa SHA1");
-});
 
 /*
 // This works only on FF. Fail on Chrome.
@@ -181,11 +132,14 @@ test("sign and verifyWithMessageHash test1", function() {
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
-QUnit for 
+<p>
+<a href="../">TOP</a> | 
+<a href="index.html">TEST INDEX</a> | 
+<a href="qunit-do-dsa.html">dsa2.js</a> | 
+<a href="qunit-do-crypto-siginidsa.html">crypto.js for dsa2.js</a> | 
 <a href="qunit-do-keyutil.html">keyutil</a> | 
 <a href="qunit-do-keyutil-eprv.html">keyutil-eprv</a> | 
 <a href="qunit-do-keyutil-pub.html">keyutil-pub</a> | 
+</p>
 </body>
 </html>
-
-
