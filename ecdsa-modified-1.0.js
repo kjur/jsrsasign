@@ -1,9 +1,9 @@
-/*! ecdsa-modified-1.0.5.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
+/*! ecdsa-modified-1.1.0.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
  */
 /*
  * ecdsa-modified.js - modified Bitcoin.ECDSA class
  * 
- * Copyright (c) 2013-2016 Stefan Thomas (github.com/justmoon)
+ * Copyright (c) 2013-2017 Stefan Thomas (github.com/justmoon)
  *                         Kenji Urushima (kenji.urushima@gmail.com)
  * LICENSE
  *   https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
@@ -13,7 +13,7 @@
  * @fileOverview
  * @name ecdsa-modified-1.0.js
  * @author Stefan Thomas (github.com/justmoon) and Kenji Urushima (kenji.urushima@gmail.com)
- * @version 1.0.5 (2016-Aug-11)
+ * @version 1.1.0 (2017-Jan-21)
  * @since jsrsasign 4.0
  * @license <a href="https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE">MIT License</a>
  */
@@ -52,6 +52,8 @@ KJUR.crypto.ECDSA = function(params) {
     var P_OVER_FOUR = null;
 
     this.type = "EC";
+    this.isPrivate = false;
+    this.isPublic = false;
 
     function implShamirsTrick(P, k, Q, l) {
 	var m = Math.max(k.bitLength(), l.bitLength());
@@ -398,6 +400,144 @@ KJUR.crypto.ECDSA = function(params) {
 	return {r: r, s: s, i: i};
     };
 
+    /**
+     * read an ASN.1 hexadecimal string of PKCS#1/5 plain ECC private key<br/>
+     * @name readPKCS5PrvKeyHex
+     * @memberOf KJUR.crypto.ECDSA#
+     * @function
+     * @param {String} h hexadecimal string of PKCS#1/5 ECC private key
+     * @since jsrsasign 7.1.0 ecdsa-modified 1.1.0
+     */
+    this.readPKCS5PrvKeyHex = function(h) {
+	var _ASN1HEX = ASN1HEX;
+	var _getName = KJUR.crypto.ECDSA.getName;
+	var _getVbyList = _ASN1HEX.getVbyList;
+
+	if (_ASN1HEX.isASN1HEX(h) === false)
+	    throw "not ASN.1 hex string";
+
+	var hCurve, hPrv, hPub;
+	try {
+	    hCurve = _getVbyList(h, 0, [2, 0], "06");
+	    hPrv   = _getVbyList(h, 0, [1], "04");
+	    try {
+		hPub = _getVbyList(h, 0, [3, 0], "03").substr(2);
+	    } catch(ex) {};
+	} catch(ex) {
+	    throw "malformed PKCS#1/5 plain ECC private key";
+	}
+
+	this.curveName = _getName(hCurve);
+	if (this.curveName === undefined) throw "unsupported curve name";
+
+	this.setNamedCurve(this.curveName);
+	this.setPublicKeyHex(hPub);
+	this.setPrivateKeyHex(hPrv);
+        this.isPublic = false;
+    };
+
+    /**
+     * read an ASN.1 hexadecimal string of PKCS#8 plain ECC private key<br/>
+     * @name readPKCS8PrvKeyHex
+     * @memberOf KJUR.crypto.ECDSA#
+     * @function
+     * @param {String} h hexadecimal string of PKCS#8 ECC private key
+     * @since jsrsasign 7.1.0 ecdsa-modified 1.1.0
+     */
+    this.readPKCS8PrvKeyHex = function(h) {
+	var _ASN1HEX = ASN1HEX;
+	var _getName = KJUR.crypto.ECDSA.getName;
+	var _getVbyList = _ASN1HEX.getVbyList;
+
+	if (_ASN1HEX.isASN1HEX(h) === false)
+	    throw "not ASN.1 hex string";
+
+	var hECOID, hCurve, hPrv, hPub;
+	try {
+	    hECOID = _getVbyList(h, 0, [1, 0], "06");
+	    hCurve = _getVbyList(h, 0, [1, 1], "06");
+	    hPrv   = _getVbyList(h, 0, [2, 0, 1], "04");
+	    try {
+		hPub = _getVbyList(h, 0, [2, 0, 2, 0], "03").substr(2);
+	    } catch(ex) {};
+	} catch(ex) {
+	    throw "malformed PKCS#8 plain ECC private key";
+	}
+
+	this.curveName = _getName(hCurve);
+	if (this.curveName === undefined) throw "unsupported curve name";
+
+	this.setNamedCurve(this.curveName);
+	this.setPublicKeyHex(hPub);
+	this.setPrivateKeyHex(hPrv);
+        this.isPublic = false;
+    };
+
+    /**
+     * read an ASN.1 hexadecimal string of PKCS#8 ECC public key<br/>
+     * @name readPKCS8PubKeyHex
+     * @memberOf KJUR.crypto.ECDSA#
+     * @function
+     * @param {String} h hexadecimal string of PKCS#8 ECC public key
+     * @since jsrsasign 7.1.0 ecdsa-modified 1.1.0
+     */
+    this.readPKCS8PubKeyHex = function(h) {
+	var _ASN1HEX = ASN1HEX;
+	var _getName = KJUR.crypto.ECDSA.getName;
+	var _getVbyList = _ASN1HEX.getVbyList;
+
+	if (_ASN1HEX.isASN1HEX(h) === false)
+	    throw "not ASN.1 hex string";
+
+	var hECOID, hCurve, hPub;
+	try {
+	    hECOID = _getVbyList(h, 0, [0, 0], "06");
+	    hCurve = _getVbyList(h, 0, [0, 1], "06");
+	    hPub = _getVbyList(h, 0, [1], "03").substr(2);
+	} catch(ex) {
+	    throw "malformed PKCS#8 ECC public key";
+	}
+
+	this.curveName = _getName(hCurve);
+	if (this.curveName === null) throw "unsupported curve name";
+
+	this.setNamedCurve(this.curveName);
+	this.setPublicKeyHex(hPub);
+    };
+
+    /**
+     * read an ASN.1 hexadecimal string of X.509 ECC public key certificate<br/>
+     * @name readCertPubKeyHex
+     * @memberOf KJUR.crypto.ECDSA#
+     * @function
+     * @param {String} h hexadecimal string of X.509 ECC public key certificate
+     * @param {Integer} nthPKI nth index of publicKeyInfo. (DEFAULT: 6 for X509v3)
+     * @since jsrsasign 7.1.0 ecdsa-modified 1.1.0
+     */
+    this.readCertPubKeyHex = function(h, nthPKI) {
+	if (nthPKI !== 5) nthPKI = 6;
+	var _ASN1HEX = ASN1HEX;
+	var _getName = KJUR.crypto.ECDSA.getName;
+	var _getVbyList = _ASN1HEX.getVbyList;
+
+	if (_ASN1HEX.isASN1HEX(h) === false)
+	    throw "not ASN.1 hex string";
+
+	var hCurve, hPub;
+	try {
+	    hCurve = _getVbyList(h, 0, [0, nthPKI, 0, 1], "06");
+	    hPub = _getVbyList(h, 0, [0, nthPKI, 1], "03").substr(2);
+	} catch(ex) {
+	    throw "malformed X.509 certificate ECC public key";
+	}
+
+	this.curveName = _getName(hCurve);
+	if (this.curveName === null) throw "unsupported curve name";
+
+	this.setNamedCurve(this.curveName);
+	this.setPublicKeyHex(hPub);
+    };
+
     /*
      * Recover a public key from a signature.
      *
@@ -501,8 +641,8 @@ KJUR.crypto.ECDSA = function(params) {
     if (this.curveName === undefined) this.curveName = curveName;
     this.setNamedCurve(this.curveName);
     if (params !== undefined) {
-	if (params['prv'] !== undefined) this.setPrivateKeyHex(params['prv']);
-	if (params['pub'] !== undefined) this.setPublicKeyHex(params['pub']);
+	if (params.prv !== undefined) this.setPrivateKeyHex(params.prv);
+	if (params.pub !== undefined) this.setPublicKeyHex(params.pub);
     }
 };
 
@@ -651,5 +791,35 @@ KJUR.crypto.ECDSA.biRSSigToASN1Sig = function(biR, biS) {
     var derS = new KJUR.asn1.DERInteger({'bigint': biS});
     var derSeq = new KJUR.asn1.DERSequence({'array': [derR, derS]});
     return derSeq.getEncodedHex();
+};
+
+/**
+ * static method to get normalized EC curve name from curve name or hexadecimal OID value
+ * @name getName
+ * @memberOf KJUR.crypto.ECDSA
+ * @function
+ * @static
+ * @param {String} s curve name (ex. P-256) or hexadecimal OID value (ex. 2a86...)
+ * @return {String} normalized EC curve name (ex. secp256r1) 
+ * @since jsrsasign 7.1.0 ecdsa-modified 1.1.0 
+ * @description
+ * This static method returns normalized EC curve name 
+ * which is supported in jsrsasign
+ * from curve name or hexadecimal OID value.
+ * When curve is not supported in jsrsasign, this method returns null.
+ * Normalized name will be "secp*" in jsrsasign.
+ * @example
+ * KJUR.crypto.ECDSA.getName("2b8104000a") &rarr; "secp256k1"
+ * KJUR.crypto.ECDSA.getName("NIST P-256") &rarr; "secp256r1"
+ * KJUR.crypto.ECDSA.getName("P-521") &rarr; undefined // not supported
+ */
+KJUR.crypto.ECDSA.getName = function(s) {
+    if (s === "2a8648ce3d030107") return "secp256r1"; // 1.2.840.10045.3.1.7
+    if (s === "2b8104000a") return "secp256k1"; // 1.3.132.0.10
+    if (s === "2b81040022") return "secp384r1"; // 1.3.132.0.34
+    if ("|secp256r1|NIST P-256|P-256|prime256v1|".indexOf(s) !== -1) return "secp256r1";
+    if ("|secp256k1|".indexOf(s) !== -1) return "secp256k1";
+    if ("|secp384r1|NIST P-384|P-384|".indexOf(s) !== -1) return "secp384r1";
+    return null;
 };
 

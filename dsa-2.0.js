@@ -1,9 +1,9 @@
-/*! dsa-2.0.0.js (c) 2016 Kenji Urushimma | kjur.github.com/jsrsasign/license
+/*! dsa-2.1.0.js (c) 2016-2017 Kenji Urushimma | kjur.github.com/jsrsasign/license
  */
 /*
  * dsa.js - new DSA class
  *
- * Copyright (c) 2016 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2016-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name dsa-2.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version dsa 2.0.0 (2016-Dec-24)
+ * @version dsa 2.1.0 (2017-Jan-21)
  * @since jsrsasign 7.0.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -49,20 +49,22 @@ KJUR.crypto.DSA = function() {
     this.y = null;
     this.x = null;
     this.type = "DSA";
+    this.isPrivate = false;
+    this.isPublic = false;
 
     //===========================
     // PUBLIC METHODS
     //===========================
 
     /**
-     * set DSA private key by key parameters
+     * set DSA private key by key parameters of BigInteger object
      * @name setPrivate
      * @memberOf KJUR.crypto.DSA#
      * @function
-     * @param {BigInteger} p prime P
-     * @param {BigInteger} q sub prime Q
-     * @param {BigInteger} g base G
-     * @param {BigInteger} y public key Y
+     * @param {BigInteger} p prime P parameter
+     * @param {BigInteger} q sub prime Q parameter
+     * @param {BigInteger} g base G parameter
+     * @param {BigInteger} y public key Y or null
      * @param {BigInteger} x private key X
      * @since jsrsasign 7.0.0 dsa 2.0.0
      */
@@ -76,13 +78,39 @@ KJUR.crypto.DSA = function() {
     };
 
     /**
-     * set DSA public key by key parameters
+     * set DSA private key by key parameters of hexadecimal string
+     * @name setPrivateHex
+     * @memberOf KJUR.crypto.DSA#
+     * @function
+     * @param {String} hP prime P parameter
+     * @param {String} hQ sub prime Q parameter
+     * @param {String} hG base G parameter
+     * @param {String} hY public key Y or null
+     * @param {String} hX private key X
+     * @since jsrsasign 7.1.0 dsa 2.1.0
+     */
+    this.setPrivateHex = function(hP, hQ, hG, hY, hX) {
+	var biP, biQ, biG, biY, biX;
+        biP = new BigInteger(hP, 16);
+        biQ = new BigInteger(hQ, 16);
+        biG = new BigInteger(hG, 16);
+	if (typeof hY === "string" && hY.length > 1) {
+            biY = new BigInteger(hY, 16);
+	} else {
+	    biY = null;
+	}
+        biX = new BigInteger(hX, 16);
+        this.setPrivate(biP, biQ, biG, biY, biX);
+    };
+
+    /**
+     * set DSA public key by key parameters of BigInteger object
      * @name setPublic
      * @memberOf KJUR.crypto.DSA#
      * @function
-     * @param {BigInteger} p prime P
-     * @param {BigInteger} q sub prime Q
-     * @param {BigInteger} g base G
+     * @param {BigInteger} p prime P parameter
+     * @param {BigInteger} q sub prime Q parameter
+     * @param {BigInteger} g base G parameter
      * @param {BigInteger} y public key Y
      * @since jsrsasign 7.0.0 dsa 2.0.0
      */
@@ -93,6 +121,26 @@ KJUR.crypto.DSA = function() {
 	this.g = g;
 	this.y = y;
 	this.x = null;
+    };
+
+    /**
+     * set DSA public key by key parameters of hexadecimal string
+     * @name setPublicHex
+     * @memberOf KJUR.crypto.DSA#
+     * @function
+     * @param {String} hP prime P parameter
+     * @param {String} hQ sub prime Q parameter
+     * @param {String} hG base G parameter
+     * @param {String} hY public key Y
+     * @since jsrsasign 7.1.0 dsa 2.1.0
+     */
+    this.setPublicHex = function(hP, hQ, hG, hY) {
+	var biP, biQ, biG, biY;
+        biP = new BigInteger(hP, 16);
+        biQ = new BigInteger(hQ, 16);
+        biG = new BigInteger(hG, 16);
+        biY = new BigInteger(hY, 16);
+        this.setPublic(biP, biQ, biG, biY);
     };
 
     /**
@@ -203,4 +251,123 @@ KJUR.crypto.DSA = function() {
 	    throw "malformed ASN.1 DSA signature";
 	}
     }
+
+    /**
+     * read an ASN.1 hexadecimal string of PKCS#1/5 plain DSA private key<br/>
+     * @name readPKCS5PrvKeyHex
+     * @memberOf KJUR.crypto.DSA#
+     * @function
+     * @param {String} h hexadecimal string of PKCS#1/5 DSA private key
+     * @since jsrsasign 7.1.0 dsa 2.1.0
+     */
+    this.readPKCS5PrvKeyHex = function(h) {
+	var hP, hQ, hG, hY, hX;
+	var _ASN1HEX = ASN1HEX;
+	var _getVbyList = _ASN1HEX.getVbyList;
+
+	if (_ASN1HEX.isASN1HEX(h) === false)
+	    throw "not ASN.1 hex string";
+
+	try {
+	    hP = _getVbyList(h, 0, [1], "02");
+	    hQ = _getVbyList(h, 0, [2], "02");
+	    hG = _getVbyList(h, 0, [3], "02");
+	    hY = _getVbyList(h, 0, [4], "02");
+	    hX = _getVbyList(h, 0, [5], "02");
+	} catch(ex) {
+	    console.log("EXCEPTION:" + ex);
+	    throw "malformed PKCS#1/5 plain DSA private key";
+	}
+
+	this.setPrivateHex(hP, hQ, hG, hY, hX);
+    };
+
+    /**
+     * read an ASN.1 hexadecimal string of PKCS#8 plain DSA private key<br/>
+     * @name readPKCS8PrvKeyHex
+     * @memberOf KJUR.crypto.DSA#
+     * @function
+     * @param {String} h hexadecimal string of PKCS#8 DSA private key
+     * @since jsrsasign 7.1.0 dsa 2.1.0
+     */
+    this.readPKCS8PrvKeyHex = function(h) {
+	var hP, hQ, hG, hX;
+	var _ASN1HEX = ASN1HEX;
+	var _getVbyList = _ASN1HEX.getVbyList;
+
+	if (_ASN1HEX.isASN1HEX(h) === false)
+	    throw "not ASN.1 hex string";
+
+	try {
+	    hP = _getVbyList(h, 0, [1, 1, 0], "02");
+	    hQ = _getVbyList(h, 0, [1, 1, 1], "02");
+	    hG = _getVbyList(h, 0, [1, 1, 2], "02");
+	    hX = _getVbyList(h, 0, [2, 0], "02");
+	} catch(ex) {
+	    console.log("EXCEPTION:" + ex);
+	    throw "malformed PKCS#8 plain DSA private key";
+	}
+
+	this.setPrivateHex(hP, hQ, hG, null, hX);
+    };
+
+    /**
+     * read an ASN.1 hexadecimal string of PKCS#8 plain DSA private key<br/>
+     * @name readPKCS8PubKeyHex
+     * @memberOf KJUR.crypto.DSA#
+     * @function
+     * @param {String} h hexadecimal string of PKCS#8 DSA private key
+     * @since jsrsasign 7.1.0 dsa 2.1.0
+     */
+    this.readPKCS8PubKeyHex = function(h) {
+	var hP, hQ, hG, hY;
+	var _ASN1HEX = ASN1HEX;
+	var _getVbyList = _ASN1HEX.getVbyList;
+
+	if (_ASN1HEX.isASN1HEX(h) === false)
+	    throw "not ASN.1 hex string";
+
+	try {
+	    hP = _getVbyList(h, 0, [0, 1, 0], "02");
+	    hQ = _getVbyList(h, 0, [0, 1, 1], "02");
+	    hG = _getVbyList(h, 0, [0, 1, 2], "02");
+	    hY = _getVbyList(h, 0, [1, 0], "02");
+	} catch(ex) {
+	    console.log("EXCEPTION:" + ex);
+	    throw "malformed PKCS#8 DSA public key";
+	}
+
+	this.setPublicHex(hP, hQ, hG, hY);
+    };
+
+    /**
+     * read an ASN.1 hexadecimal string of X.509 DSA public key certificate<br/>
+     * @name readCertPubKeyHex
+     * @memberOf KJUR.crypto.DSA#
+     * @function
+     * @param {String} h hexadecimal string of X.509 DSA public key certificate
+     * @param {Integer} nthPKI nth index of publicKeyInfo. (DEFAULT: 6 for X509v3)
+     * @since jsrsasign 7.1.0 dsa 2.1.0
+     */
+    this.readCertPubKeyHex = function(h, nthPKI) {
+	if (nthPKI !== 5) nthPKI = 6;
+	var hP, hQ, hG, hY;
+	var _ASN1HEX = ASN1HEX;
+	var _getVbyList = _ASN1HEX.getVbyList;
+
+	if (_ASN1HEX.isASN1HEX(h) === false)
+	    throw "not ASN.1 hex string";
+
+	try {
+	    hP = _getVbyList(h, 0, [0, nthPKI, 0, 1, 0], "02");
+	    hQ = _getVbyList(h, 0, [0, nthPKI, 0, 1, 1], "02");
+	    hG = _getVbyList(h, 0, [0, nthPKI, 0, 1, 2], "02");
+	    hY = _getVbyList(h, 0, [0, nthPKI, 1, 0], "02");
+	} catch(ex) {
+	    console.log("EXCEPTION:" + ex);
+	    throw "malformed X.509 certificate DSA public key";
+	}
+
+	this.setPublicHex(hP, hQ, hG, hY);
+    };
 }

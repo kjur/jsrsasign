@@ -1,9 +1,9 @@
-/*! pkcs5pkey-1.0.7.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! pkcs5pkey-1.1.0.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * pkcs5pkey.js - reading passcode protected PKCS#5 PEM formatted RSA private key
  *
- * Copyright (c) 2013-2016 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name pkcs5pkey-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version pkcs5pkey 1.0.7 (2016-Oct-08)
+ * @version pkcs5pkey 1.1.0 (2017-Jan-21)
  * @since jsrsasign 2.0.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -66,7 +66,7 @@
  * </ul>
  * <dt><b>UTITILIY METHODS</b><dd>
  * <ul>
- * <li>{@link PKCS5PKEY.getHexFromPEM} - convert PEM string to hexadecimal data</li>
+ * <li>{@link PKCS5PKEY.getHexFromPEM} - convert PEM string to hexadecimal data (DEPRECATED)</li>
  * <li>{@link PKCS5PKEY.getDecryptedKeyHexByKeyIV} - decrypt key by sharedKey and IV</li>
  * </ul>
  * </dl>
@@ -252,7 +252,7 @@ var PKCS5PKEY = function() {
         version: "1.0.5",
 
         /**
-         * get hexacedimal string of PEM format
+         * (DEPRECATED) get hexacedimal string of PEM format
          * @name getHexFromPEM
          * @memberOf PKCS5PKEY
          * @function
@@ -260,17 +260,10 @@ var PKCS5PKEY = function() {
          * @param {String} sHead PEM header string without BEGIN/END
          * @return {String} hexadecimal string data of PEM contents
          * @since pkcs5pkey 1.0.5
+	 * @deprecated from pkcs5pkey 1.1.0 jsrsasign 7.1.0. please move to {@link ASN1HEX.pemToHex}
          */
         getHexFromPEM: function(sPEM, sHead) {
-            var s = sPEM;
-            if (s.indexOf("BEGIN " + sHead) == -1) {
-                throw "can't find PEM header: " + sHead;
-            }
-            s = s.replace("-----BEGIN " + sHead + "-----", "");
-            s = s.replace("-----END " + sHead + "-----", "");
-            var sB64 = s.replace(/\s+/g, '');
-            var dataHex = b64tohex(sB64);
-            return dataHex;
+	    return ASN1HEX.pemToHex(sPEM, sHead);
         },
 
         /**
@@ -524,7 +517,7 @@ var PKCS5PKEY = function() {
         getRSAKeyFromPlainPKCS8PEM: function(pkcs8PEM) {
             if (pkcs8PEM.match(/ENCRYPTED/))
                 throw "pem shall be not ENCRYPTED";
-            var prvKeyHex = this.getHexFromPEM(pkcs8PEM, "PRIVATE KEY");
+            var prvKeyHex = ASN1HEX.pemToHex(pkcs8PEM, "PRIVATE KEY");
             var rsaKey = this.getRSAKeyFromPlainPKCS8Hex(prvKeyHex);
             return rsaKey;
         },
@@ -539,17 +532,8 @@ var PKCS5PKEY = function() {
          * @since pkcs5pkey 1.0.3
          */
         getRSAKeyFromPlainPKCS8Hex: function(prvKeyHex) {
-            var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(prvKeyHex, 0);
-            if (a1.length != 3)
-                throw "outer DERSequence shall have 3 elements: " + a1.length;
-            var algIdTLV =ASN1HEX.getHexOfTLV_AtObj(prvKeyHex, a1[1]);
-            if (algIdTLV != "300d06092a864886f70d0101010500") // AlgId rsaEncryption
-                throw "PKCS8 AlgorithmIdentifier is not rsaEnc: " + algIdTLV;
-            var octetStr = ASN1HEX.getHexOfTLV_AtObj(prvKeyHex, a1[2]);
-            var p5KeyHex = ASN1HEX.getHexOfV_AtObj(octetStr, 0);
-            //alert(p5KeyHex);
             var rsaKey = new RSAKey();
-            rsaKey.readPrivateKeyFromASN1HexString(p5KeyHex);
+            rsaKey.readPKCS8PrvKeyHex(prvKeyHex);
             return rsaKey;
         },
 
@@ -698,7 +682,7 @@ var PKCS5PKEY = function() {
          */
         getPlainPKCS8HexFromEncryptedPKCS8PEM: function(pkcs8PEM, passcode) {
             // 1. derHex - PKCS#8 private key encrypted by PBKDF2
-            var derHex = this.getHexFromPEM(pkcs8PEM, "ENCRYPTED PRIVATE KEY");
+            var derHex = ASN1HEX.pemToHex(pkcs8PEM, "ENCRYPTED PRIVATE KEY");
             // 2. info - PKCS#5 PBES info
             var info = this.parseHexOfEncryptedPKCS8(derHex);
             // 3. hKey - PBKDF2 key
@@ -821,7 +805,7 @@ var PKCS5PKEY = function() {
          * @since pkcs5pkey 1.0.5
          */
         getKeyFromPlainPrivatePKCS8PEM: function(prvKeyPEM) {
-            var prvKeyHex = this.getHexFromPEM(prvKeyPEM, "PRIVATE KEY");
+            var prvKeyHex = ASN1HEX.pemToHex(prvKeyPEM, "PRIVATE KEY");
             var key = this.getKeyFromPlainPrivatePKCS8Hex(prvKeyHex);
             return key;
         },
@@ -837,23 +821,20 @@ var PKCS5PKEY = function() {
          */
         getKeyFromPlainPrivatePKCS8Hex: function(prvKeyHex) {
             var p8 = this.parsePlainPrivatePKCS8Hex(prvKeyHex);
+	    var key;
             
             if (p8.algoid == "2a864886f70d010101") { // RSA
-                this.parsePrivateRawRSAKeyHexAtObj(prvKeyHex, p8);
-                var k = p8.key;
-                var key = new RSAKey();
-                key.setPrivateEx(k.n, k.e, k.d, k.p, k.q, k.dp, k.dq, k.co);
-                return key;
+		key = new RSAKey();
+	    } else if (p8.algoid == "2a8648ce380401") { // DSA
+		key = new KJUR.crypto.DSA();
             } else if (p8.algoid == "2a8648ce3d0201") { // ECC
-                this.parsePrivateRawECKeyHexAtObj(prvKeyHex, p8);
-                if (KJUR.crypto.OID.oidhex2name[p8.algparam] === undefined)
-                    throw "KJUR.crypto.OID.oidhex2name undefined: " + p8.algparam;
-                var curveName = KJUR.crypto.OID.oidhex2name[p8.algparam];
-                var key = new KJUR.crypto.ECDSA({'curve': curveName, 'prv': p8.key});
-                return key;
+                key = new KJUR.crypto.ECDSA();
             } else {
                 throw "unsupported private key algorithm";
             }
+
+	    key.readPKCS8PrvKeyHex(prvKeyHex);
+	    return key;
         },
 
         // === PKCS8 RSA Public Key ================================================
@@ -867,7 +848,7 @@ var PKCS5PKEY = function() {
          * @since pkcs5pkey 1.0.4
          */
         getRSAKeyFromPublicPKCS8PEM: function(pkcs8PubPEM) {
-            var pubKeyHex = this.getHexFromPEM(pkcs8PubPEM, "PUBLIC KEY");
+            var pubKeyHex = ASN1HEX.pemToHex(pkcs8PubPEM, "PUBLIC KEY");
             var rsaKey = this.getRSAKeyFromPublicPKCS8Hex(pubKeyHex);
             return rsaKey;
         },
@@ -882,7 +863,7 @@ var PKCS5PKEY = function() {
          * @since pkcs5pkey 1.0.5
          */
         getKeyFromPublicPKCS8PEM: function(pkcs8PubPEM) {
-            var pubKeyHex = this.getHexFromPEM(pkcs8PubPEM, "PUBLIC KEY");
+            var pubKeyHex = ASN1HEX.pemToHex(pkcs8PubPEM, "PUBLIC KEY");
             var key = this.getKeyFromPublicPKCS8Hex(pubKeyHex);
             return key;
         },
@@ -897,22 +878,20 @@ var PKCS5PKEY = function() {
          * @since pkcs5pkey 1.0.5
          */
         getKeyFromPublicPKCS8Hex: function(pkcs8PubHex) {
-            var p8 = this.parsePublicPKCS8Hex(pkcs8PubHex);
-            
-            if (p8.algoid == "2a864886f70d010101") { // RSA
-                var aRSA = this.parsePublicRawRSAKeyHex(p8.key);
-                var key = new RSAKey();
-                key.setPublic(aRSA.n, aRSA.e);
-                return key;
-            } else if (p8.algoid == "2a8648ce3d0201") { // ECC
-                if (KJUR.crypto.OID.oidhex2name[p8.algparam] === undefined)
-                    throw "KJUR.crypto.OID.oidhex2name undefined: " + p8.algparam;
-                var curveName = KJUR.crypto.OID.oidhex2name[p8.algparam];
-                var key = new KJUR.crypto.ECDSA({'curve': curveName, 'pub': p8.key});
-                return key;
-            } else {
-                throw "unsupported public key algorithm";
-            }
+	    var key;
+	    var hOID = ASN1HEX.getVbyList(h, 0, [0, 0], "06");
+
+	    if (hOID === "2a864886f70d010101") {    // oid=RSA
+		key = new RSAKey();
+	    } else if (hOID === "2a8648ce380401") { // oid=DSA
+		key = new KJUR.crypto.DSA();
+	    } else if (hOID === "2a8648ce3d0201") { // oid=ECPUB
+		key = new KJUR.crypto.ECDSA();
+	    } else {
+		throw "unsupported PKCS#8 public key hex";
+	    }
+	    key.readPKCS8PubKeyHex(h);
+	    return key;
         },
 
         /**
@@ -1096,38 +1075,9 @@ var PKCS5PKEY = function() {
          * @since pkcs5pkey 1.0.4
          */
         getRSAKeyFromPublicPKCS8Hex: function(pkcs8PubHex) {
-            var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PubHex, 0);
-            if (a1.length != 2)
-                throw "outer DERSequence shall have 2 elements: " + a1.length;
-
-            var algIdTLV =ASN1HEX.getHexOfTLV_AtObj(pkcs8PubHex, a1[0]);
-            if (algIdTLV != "300d06092a864886f70d0101010500") // AlgId rsaEncryption
-                throw "PKCS8 AlgorithmId is not rsaEncryption";
-            
-            if (pkcs8PubHex.substr(a1[1], 2) != "03")
-                throw "PKCS8 Public Key is not BITSTRING encapslated.";
-
-            var idxPub = ASN1HEX.getStartPosOfV_AtObj(pkcs8PubHex, a1[1]) + 2; // 2 for unused bit
-            
-            if (pkcs8PubHex.substr(idxPub, 2) != "30")
-                throw "PKCS8 Public Key is not SEQUENCE.";
-
-            var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PubHex, idxPub);
-            if (a2.length != 2)
-                throw "inner DERSequence shall have 2 elements: " + a2.length;
-
-            if (pkcs8PubHex.substr(a2[0], 2) != "02") 
-                throw "N is not ASN.1 INTEGER";
-            if (pkcs8PubHex.substr(a2[1], 2) != "02") 
-                throw "E is not ASN.1 INTEGER";
-            
-            var hN = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a2[0]);
-            var hE = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a2[1]);
-
-            var pubKey = new RSAKey();
-            pubKey.setPublic(hN, hE);
-            
-            return pubKey;
+	    var key = new RSAKey();
+	    key.readPKCS8PubKeyHex(pkcs8PubHex);
+	    return key;
         },
     };
 }();

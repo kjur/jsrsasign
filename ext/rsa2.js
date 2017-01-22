@@ -155,6 +155,7 @@ function RSASetPrivate(N,E,D) {
 // Set the private key fields N, e, d and CRT params from hex strings
 function RSASetPrivateEx(N,E,D,P,Q,DP,DQ,C) {
   this.isPrivate = true;
+  this.isPublic = false;
   if (N == null) throw "RSASetPrivateEx N == null";
   if (E == null) throw "RSASetPrivateEx E == null";
   if (N.length == 0) throw "RSASetPrivateEx N.length == 0";

@@ -153,19 +153,18 @@ function RSAKey() {
 }
 
 // Set the public key fields N and e from hex strings
-function RSASetPublic(N,E) {
-  this.isPublic = true;
-  if (typeof N !== "string") 
-  {
-    this.n = N;
-    this.e = E;
-  }
-  else if(N != null && E != null && N.length > 0 && E.length > 0) {
-    this.n = parseBigInt(N,16);
-    this.e = parseInt(E,16);
-  }
-  else
-    alert("Invalid RSA public key");
+function RSASetPublic(N, E) {
+    this.isPublic = true;
+    this.isPrivate = false;
+    if (typeof N !== "string") {
+	this.n = N;
+	this.e = E;
+    } else if(N != null && E != null && N.length > 0 && E.length > 0) {
+	this.n = parseBigInt(N,16);
+	this.e = parseInt(E,16);
+    } else {
+	throw "Invalid RSA public key";
+    }
 }
 
 // Perform raw public operation on "x": return x^e (mod n)

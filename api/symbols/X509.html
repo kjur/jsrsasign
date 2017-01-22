@@ -736,9 +736,18 @@ which is specifyed by extension name or oid.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getPublicKeyFromCertHex">getPublicKeyFromCertHex</a></b>(h)
+								</div>
+								<div class="description">get RSA/DSA/ECDSA public key object from X.509 certificate hexadecimal string<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getPublicKeyFromCertPEM">getPublicKeyFromCertPEM</a></b>(sCertPEM)
 								</div>
-								<div class="description">get RSAKey/ECDSA public key object from PEM certificate string
+								<div class="description">get RSA/DSA/ECDSA public key object from PEM certificate string
 NOTE: DSA is also supported since x509 1.1.2.</div>
 							</td>
 						</tr>
@@ -917,7 +926,8 @@ specified by 'hex' and 'idx' to LDAP string representation (ex.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.pemToHex">pemToHex</a></b>(sCertPEM)
 								</div>
-								<div class="description">get a hexa decimal string from PEM certificate string</div>
+								<div class="description">get a hexa decimal string from PEM certificate string
+CAUTION: now X509.pemToHex deprecated and is planed to remove in jsrsasign 8.0.0.</div>
 							</td>
 						</tr>
 					
@@ -994,7 +1004,7 @@ X509 class provides following functionality:
   <li>reading PEM certificate - <a href="../symbols/X509.html#readCertPEM">X509#readCertPEM</a></li>
   <li>get all certificate information - <a href="../symbols/X509.html#getInfo">X509#getInfo</a></li>
   <li>get Base64 from PEM certificate - <a href="../symbols/X509.html#.pemToBase64">X509.pemToBase64</a></li>
-  <li>get hexadecimal string from PEM certificate - <a href="../symbols/X509.html#.pemToHex">X509.pemToHex</a></li>
+  <li>get hexadecimal string from PEM certificate - <a href="../symbols/X509.html#.pemToHex">X509.pemToHex</a> (DEPRECATED)</li>
   </ul>
 </li>
 </ul>
@@ -2092,6 +2102,55 @@ in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class
 
 					<hr />
 				
+					<a name=".getPublicKeyFromCertHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">X509.</span><b>getPublicKeyFromCertHex</b>(h)
+					
+					</div>
+					<div class="description">
+						get RSA/DSA/ECDSA public key object from X.509 certificate hexadecimal string<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate for RSA/ECDSA/DSA public key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrasign 7.1.0 x509 1.1.11</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>returns RSAKey/KJUR.crypto.{ECDSA,DSA} object of public key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".getPublicKeyFromCertPEM"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -2100,7 +2159,7 @@ in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class
 					
 					</div>
 					<div class="description">
-						get RSAKey/ECDSA public key object from PEM certificate string
+						get RSA/DSA/ECDSA public key object from PEM certificate string
 NOTE: DSA is also supported since x509 1.1.2.
 						
 						
@@ -2637,7 +2696,7 @@ This is a position of a content of ENCAPSULATED OCTET STRING.</li>
 					
 					
 					
-					<pre class="code">hCert = X509.pemToHex(certGithubPEM);
+					<pre class="code">hCert = ASN1HEX.pemToHex(certGithubPEM);
 a = X509.getV3ExtInfoListOfCertHex(hCert);
 // Then a will be an array of like following:
 [{posTLV: 1952, oid: "2.5.29.35", critical: false, posV: 1968},
@@ -2973,6 +3032,7 @@ X509.hex2rdn("31143008060355040a0c01613008060355040a0c0162") &rarr; O=a+O=b</pre
 					</div>
 					<div class="description">
 						get a hexa decimal string from PEM certificate string
+CAUTION: now X509.pemToHex deprecated and is planed to remove in jsrsasign 8.0.0.
 						
 						
 					</div>
@@ -2995,6 +3055,13 @@ X509.hex2rdn("31143008060355040a0c01613008060355040a0c0162") &rarr; O=a+O=b</pre
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.11 jsrsasign 7.0.1. please move to <a href="../symbols/ASN1HEX.html#.pemToHex">ASN1HEX.pemToHex</a>
+							</dt>
+							</dl>
 						
 						
 						

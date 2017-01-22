@@ -261,10 +261,10 @@ function _getSHA256HashB64OfCertPEM(sCertPEM) {
 
 function _getPublicKeyInfoHexOfCertPEM(sCertPEM) {
   if (sCertPEM.indexOf("-----BEGIN PUBLIC KEY") != -1) {
-    var hPubkey = X509.pemToHex(sCertPEM);
+    var hPubkey = ASN1HEX.pemToHex(sCertPEM);
     return hPubkey;
   } else {		      
-    var hCert = X509.pemToHex(sCertPEM);
+    var hCert = ASN1HEX.pemToHex(sCertPEM);
     var pos = X509.getPublicKeyInfoPosOfCertHEX(hCert);
     var publicKeyInfoHex = ASN1HEX.getHexOfTLV_AtObj(hCert, pos);
     return publicKeyInfoHex;

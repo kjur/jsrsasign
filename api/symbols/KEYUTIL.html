@@ -568,7 +568,7 @@ generate PEM formatted encrypted PKCS#5 private key by
 							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getHexFromPEM">getHexFromPEM</a></b>(sPEM, sHead)
 								</div>
-								<div class="description">get hexacedimal string of PEM format</div>
+								<div class="description">(DEPRECATED) get hexacedimal string of PEM format</div>
 							</td>
 						</tr>
 					
@@ -635,7 +635,7 @@ for RSA, DSA and ECC.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getKeyFromPlainPrivatePKCS8Hex">getKeyFromPlainPrivatePKCS8Hex</a></b>(prvKeyHex)
 								</div>
-								<div class="description">get RSAKey/ECDSA private key object from HEX plain PEM PKCS#8 private key</div>
+								<div class="description">get RSAKey/DSA/ECDSA private key object from HEX plain PEM PKCS#8 private key</div>
 							</td>
 						</tr>
 					
@@ -1293,7 +1293,7 @@ var pem = KEYUTIL.getEncryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
 					
 					</div>
 					<div class="description">
-						get hexacedimal string of PEM format
+						(DEPRECATED) get hexacedimal string of PEM format
 						
 						
 					</div>
@@ -1318,6 +1318,13 @@ var pem = KEYUTIL.getEncryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from keyutil 1.1.0 jsrsasign 7.0.1. please move to <a href="../symbols/ASN1HEX.html#.pemToHex">ASN1HEX.pemToHex</a>
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">
@@ -1741,7 +1748,7 @@ keyObj = KEYUTIL.getKey({n: "75ab..", e: "010001"});</pre>
 					
 					</div>
 					<div class="description">
-						get RSAKey/ECDSA private key object from HEX plain PEM PKCS#8 private key
+						get RSAKey/DSA/ECDSA private key object from HEX plain PEM PKCS#8 private key
 						
 						
 					</div>
@@ -1773,7 +1780,7 @@ keyObj = KEYUTIL.getKey({n: "75ab..", e: "010001"});</pre>
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{Object}</span> RSAKey or KJUR.crypto.ECDSA private key object</dd>
+								<dd><span class="light fixedFont">{Object}</span> RSAKey or KJUR.crypto.{DSA,ECDSA} private key object</dd>
 							
 							</dl>
 						
@@ -2851,6 +2858,13 @@ Following properties are added to associative array 'info'
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 7.1.0 keyutil 1.1.0
+							</dt>
+							</dl>
+						
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
@@ -2910,6 +2924,13 @@ Following properties are added to associative array 'info'
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 7.1.0 keyutil 1.1.0
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">

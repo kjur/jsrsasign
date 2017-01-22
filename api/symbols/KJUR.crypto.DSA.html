@@ -471,7 +471,8 @@ ul.inheritsList
 								<b><a href="../symbols/KJUR.crypto.DSA.html#constructor">KJUR.crypto.DSA</a></b>()
 							</div>
 							<div class="description">class for DSA signing and verification
-<p>CAUTION: Most of the case, you don't need to use this class.</div>
+<p>
+CAUTION: Most of the case, you don't need to use this class.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -507,9 +508,54 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.DSA.html#readCertPubKeyHex">readCertPubKeyHex</a></b>(h, nthPKI)
+								</div>
+								<div class="description">read an ASN.1 hexadecimal string of X.509 DSA public key certificate<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.DSA.html#readPKCS5PrvKeyHex">readPKCS5PrvKeyHex</a></b>(h)
+								</div>
+								<div class="description">read an ASN.1 hexadecimal string of PKCS#1/5 plain DSA private key<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.DSA.html#readPKCS8PrvKeyHex">readPKCS8PrvKeyHex</a></b>(h)
+								</div>
+								<div class="description">read an ASN.1 hexadecimal string of PKCS#8 plain DSA private key<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.DSA.html#readPKCS8PubKeyHex">readPKCS8PubKeyHex</a></b>(h)
+								</div>
+								<div class="description">read an ASN.1 hexadecimal string of PKCS#8 plain DSA private key<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.DSA.html#setPrivate">setPrivate</a></b>(p, q, g, y, x)
 								</div>
-								<div class="description">set DSA private key by key parameters</div>
+								<div class="description">set DSA private key by key parameters of BigInteger object</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.DSA.html#setPrivateHex">setPrivateHex</a></b>(hP, hQ, hG, hY, hX)
+								</div>
+								<div class="description">set DSA private key by key parameters of hexadecimal string</div>
 							</td>
 						</tr>
 					
@@ -518,7 +564,16 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.DSA.html#setPublic">setPublic</a></b>(p, q, g, y)
 								</div>
-								<div class="description">set DSA public key by key parameters</div>
+								<div class="description">set DSA public key by key parameters of BigInteger object</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.DSA.html#setPublicHex">setPublicHex</a></b>(hP, hQ, hG, hY)
+								</div>
+								<div class="description">set DSA public key by key parameters of hexadecimal string</div>
 							</td>
 						</tr>
 					
@@ -562,7 +617,17 @@ ul.inheritsList
 				
 				<div class="description">
 					class for DSA signing and verification
-<p>CAUTION: Most of the case, you don't need to use this class.Please use <a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a> class instead.</p><p>NOTE: Until jsrsasign 6.2.3, DSA class have used codes from openpgpjs library 1.0.0licenced under LGPL licence. To avoid license issue dsa-2.0.js was re-written withmy own codes in jsrsasign 7.0.0. Some random number generators used in dsa-2.0.js was newly definedin KJUR.crypto.Util class. Now all of LGPL codes are removed.</p>
+<p>
+CAUTION: Most of the case, you don't need to use this class.
+Please use <a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a> class instead.
+</p>
+<p>
+NOTE: Until jsrsasign 6.2.3, DSA class have used codes from openpgpjs library 1.0.0
+licenced under LGPL licence. To avoid license issue dsa-2.0.js was re-written with
+my own codes in jsrsasign 7.0.0. 
+Some random number generators used in dsa-2.0.js was newly defined
+in KJUR.crypto.Util class. Now all of LGPL codes are removed.
+</p>
 					
 				</div>
 				
@@ -643,6 +708,180 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="readCertPubKeyHex"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>readCertPubKeyHex</b>(h, nthPKI)
+					
+					</div>
+					<div class="description">
+						read an ASN.1 hexadecimal string of X.509 DSA public key certificate<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 DSA public key certificate</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>nthPKI</b>
+									
+								</dt>
+								<dd>nth index of publicKeyInfo. (DEFAULT: 6 for X509v3)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.1.0 dsa 2.1.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="readPKCS5PrvKeyHex"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>readPKCS5PrvKeyHex</b>(h)
+					
+					</div>
+					<div class="description">
+						read an ASN.1 hexadecimal string of PKCS#1/5 plain DSA private key<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of PKCS#1/5 DSA private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.1.0 dsa 2.1.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="readPKCS8PrvKeyHex"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>readPKCS8PrvKeyHex</b>(h)
+					
+					</div>
+					<div class="description">
+						read an ASN.1 hexadecimal string of PKCS#8 plain DSA private key<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of PKCS#8 DSA private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.1.0 dsa 2.1.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="readPKCS8PubKeyHex"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>readPKCS8PubKeyHex</b>(h)
+					
+					</div>
+					<div class="description">
+						read an ASN.1 hexadecimal string of PKCS#8 plain DSA private key<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of PKCS#8 DSA private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.1.0 dsa 2.1.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="setPrivate"> </a>
 					<div class="fixedFont">
 					
@@ -651,7 +890,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						set DSA private key by key parameters
+						set DSA private key by key parameters of BigInteger object
 						
 						
 					</div>
@@ -666,25 +905,25 @@ ul.inheritsList
 									<span class="light fixedFont">{BigInteger}</span> <b>p</b>
 									
 								</dt>
-								<dd>prime P</dd>
+								<dd>prime P parameter</dd>
 							
 								<dt>
 									<span class="light fixedFont">{BigInteger}</span> <b>q</b>
 									
 								</dt>
-								<dd>sub prime Q</dd>
+								<dd>sub prime Q parameter</dd>
 							
 								<dt>
 									<span class="light fixedFont">{BigInteger}</span> <b>g</b>
 									
 								</dt>
-								<dd>base G</dd>
+								<dd>base G parameter</dd>
 							
 								<dt>
 									<span class="light fixedFont">{BigInteger}</span> <b>y</b>
 									
 								</dt>
-								<dd>public key Y</dd>
+								<dd>public key Y or null</dd>
 							
 								<dt>
 									<span class="light fixedFont">{BigInteger}</span> <b>x</b>
@@ -709,6 +948,72 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="setPrivateHex"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setPrivateHex</b>(hP, hQ, hG, hY, hX)
+					
+					</div>
+					<div class="description">
+						set DSA private key by key parameters of hexadecimal string
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hP</b>
+									
+								</dt>
+								<dd>prime P parameter</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hQ</b>
+									
+								</dt>
+								<dd>sub prime Q parameter</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hG</b>
+									
+								</dt>
+								<dd>base G parameter</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hY</b>
+									
+								</dt>
+								<dd>public key Y or null</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hX</b>
+									
+								</dt>
+								<dd>private key X</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.1.0 dsa 2.1.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="setPublic"> </a>
 					<div class="fixedFont">
 					
@@ -717,7 +1022,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						set DSA public key by key parameters
+						set DSA public key by key parameters of BigInteger object
 						
 						
 					</div>
@@ -732,19 +1037,19 @@ ul.inheritsList
 									<span class="light fixedFont">{BigInteger}</span> <b>p</b>
 									
 								</dt>
-								<dd>prime P</dd>
+								<dd>prime P parameter</dd>
 							
 								<dt>
 									<span class="light fixedFont">{BigInteger}</span> <b>q</b>
 									
 								</dt>
-								<dd>sub prime Q</dd>
+								<dd>sub prime Q parameter</dd>
 							
 								<dt>
 									<span class="light fixedFont">{BigInteger}</span> <b>g</b>
 									
 								</dt>
-								<dd>base G</dd>
+								<dd>base G parameter</dd>
 							
 								<dt>
 									<span class="light fixedFont">{BigInteger}</span> <b>y</b>
@@ -759,6 +1064,66 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
 								<dd>jsrsasign 7.0.0 dsa 2.0.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="setPublicHex"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setPublicHex</b>(hP, hQ, hG, hY)
+					
+					</div>
+					<div class="description">
+						set DSA public key by key parameters of hexadecimal string
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hP</b>
+									
+								</dt>
+								<dd>prime P parameter</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hQ</b>
+									
+								</dt>
+								<dd>sub prime Q parameter</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hG</b>
+									
+								</dt>
+								<dd>base G parameter</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hY</b>
+									
+								</dt>
+								<dd>public key Y</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.1.0 dsa 2.1.0</dd>
 							</dl>
 							</dl>
 						

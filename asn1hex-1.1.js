@@ -1,9 +1,9 @@
-/*! asn1hex-1.1.8.js (c) 2012-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1hex-1.1.9.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
  *
- * Copyright (c) 2010-2016 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license/
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1hex 1.1.8 (2016-Dec-03)
+ * @version asn1hex 1.1.9 (2017-Jan-14)
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -461,7 +461,7 @@ ASN1HEX.hextooidstr = function(hex) {
  *   INTEGER 01
  *   INTEGER 02
  * // 5) ASN.1 DUMP FOR X.509 CERTIFICATE
- * ASN1HEX.dump(X509.pemToHex(certPEM))
+ * ASN1HEX.dump(ASN1HEX.pemToHex(certPEM))
  * &darr;
  * SEQUENCE
  *   SEQUENCE
@@ -647,4 +647,43 @@ ASN1HEX.isASN1HEX = function(hex) {
     if (hVLength == intL * 2) return true;
 
     return false;
+};
+
+/**
+ * get hexacedimal string from PEM format data<br/>
+ * @name pemToHex
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} s PEM formatted string
+ * @param {String} sHead PEM header string without BEGIN/END(OPTION)
+ * @return {String} hexadecimal string data of PEM contents
+ * @since jsrsasign 7.0.1 asn1hex 1.1.9
+ * @description
+ * This static method gets a hexacedimal string of contents 
+ * from PEM format data. You can explicitly specify PEM header 
+ * by sHead argument. 
+ * Any space characters such as white space or new line
+ * will be omitted.<br/>
+ * NOTE: Now {@link KEYUTIL.getHexFromPEM} and {@link X509.pemToHex}
+ * have been deprecated since jsrsasign 7.0.1. 
+ * Please use this method instead.
+ * @example
+ * ASN1HEX.pemToHex("-----BEGIN PUBLIC KEY...") &rarr; "3082..."
+ * ASN1HEX.pemToHex("-----BEGIN CERTIFICATE...", "CERTIFICATE") &rarr; "3082..."
+ * ASN1HEX.pemToHex(" \r\n-----BEGIN DSA PRIVATE KEY...") &rarr; "3082..."
+ */
+ASN1HEX.pemToHex = function(s, sHead) {
+    if (s.indexOf("-----BEGIN ") == -1)
+        throw "can't find PEM header: " + sHead;
+
+    if (sHead !== undefined) {
+        s = s.replace("-----BEGIN " + sHead + "-----", "");
+        s = s.replace("-----END " + sHead + "-----", "");
+    } else {
+        s = s.replace(/-----BEGIN [^-]+-----/, '');
+        s = s.replace(/-----END [^-]+-----/, '');
+    }
+    var sB64 = s.replace(/\s+/g, '');
+    var dataHex = b64tohex(sB64);
+    return dataHex;
 };

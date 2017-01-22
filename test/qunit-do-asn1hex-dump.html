@@ -265,7 +265,7 @@ test("ASN1HEX.isASN1HEX", function() {
 });
 
 test("ASN1HEX.dump cert", function() {
-  var hCert = X509.pemToHex(certGithubPEM);
+  var hCert = ASN1HEX.pemToHex(certGithubPEM);
   equal(ASN1HEX.dump(hCert), certGithubDump, "certGithubPEM");
 });
 
