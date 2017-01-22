@@ -525,9 +525,9 @@ for generating an EC key pair.</div>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.generateKeyPairHex">generateKeyPairHex</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.ECDSA.html#generateKeyPairHex">generateKeyPairHex</a></b>()
 								</div>
 								<div class="description">generate a EC key pair</div>
 							</td>
@@ -546,18 +546,18 @@ from curve name or hexadecimal OID value.</div>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.getPublicKeyXYHex">getPublicKeyXYHex</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.ECDSA.html#getPublicKeyXYHex">getPublicKeyXYHex</a></b>()
 								</div>
 								<div class="description">get X and Y hexadecimal string value of public key</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.getShortNISTPCurveName">getShortNISTPCurveName</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.ECDSA.html#getShortNISTPCurveName">getShortNISTPCurveName</a></b>()
 								</div>
 								<div class="description">get NIST curve short name such as "P-256" or "P-384"</div>
 							</td>
@@ -627,18 +627,18 @@ from curve name or hexadecimal OID value.</div>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.signHex">signHex</a></b>(hashHex, privHex)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.ECDSA.html#signHex">signHex</a></b>(hashHex, privHex)
 								</div>
 								<div class="description">signing to message hash</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.verifyHex">verifyHex</a></b>(hashHex, sigHex, pubkeyHex)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.ECDSA.html#verifyHex">verifyHex</a></b>(hashHex, sigHex, pubkeyHex)
 								</div>
 								<div class="description">verifying signature with message hash and public key</div>
 							</td>
@@ -859,11 +859,11 @@ Currently this class supports following named curves and their aliases.
 
 					<hr />
 				
-					<a name=".generateKeyPairHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="generateKeyPairHex"> </a>
+					<div class="fixedFont">
 					
 					<span class="light">{Array}</span>
-					<span class="light">KJUR.crypto.ECDSA.</span><b>generateKeyPairHex</b>()
+					<b>generateKeyPairHex</b>()
 					
 					</div>
 					<div class="description">
@@ -964,11 +964,11 @@ KJUR.crypto.ECDSA.getName("P-521") &rarr; undefined // not supported</pre>
 
 					<hr />
 				
-					<a name=".getPublicKeyXYHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="getPublicKeyXYHex"> </a>
+					<div class="fixedFont">
 					
 					<span class="light">{Array}</span>
-					<span class="light">KJUR.crypto.ECDSA.</span><b>getPublicKeyXYHex</b>()
+					<b>getPublicKeyXYHex</b>()
 					
 					</div>
 					<div class="description">
@@ -1007,11 +1007,11 @@ ec.getPublicKeyXYHex() &rarr; { x: '01bacf...', y: 'c3bc22...' }</pre>
 
 					<hr />
 				
-					<a name=".getShortNISTPCurveName"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="getShortNISTPCurveName"> </a>
+					<div class="fixedFont">
 					
 					<span class="light">{String}</span>
-					<span class="light">KJUR.crypto.ECDSA.</span><b>getShortNISTPCurveName</b>()
+					<b>getShortNISTPCurveName</b>()
 					
 					</div>
 					<div class="description">
@@ -1391,11 +1391,11 @@ var hS = sig.s; // hexadecimal string for 's' field of signature.</pre>
 
 					<hr />
 				
-					<a name=".signHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="signHex"> </a>
+					<div class="fixedFont">
 					
 					<span class="light">{String}</span>
-					<span class="light">KJUR.crypto.ECDSA.</span><b>signHex</b>(hashHex, privHex)
+					<b>signHex</b>(hashHex, privHex)
 					
 					</div>
 					<div class="description">
@@ -1451,11 +1451,11 @@ var sigValue = ec.signHex(hash, prvKey);</pre>
 
 					<hr />
 				
-					<a name=".verifyHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="verifyHex"> </a>
+					<div class="fixedFont">
 					
 					<span class="light">{Boolean}</span>
-					<span class="light">KJUR.crypto.ECDSA.</span><b>verifyHex</b>(hashHex, sigHex, pubkeyHex)
+					<b>verifyHex</b>(hashHex, sigHex, pubkeyHex)
 					
 					</div>
 					<div class="description">
