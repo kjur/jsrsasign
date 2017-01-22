@@ -92,10 +92,10 @@ var k1CertPEM = "" +
 "HRMEBTADAQH/MAoGCCqGSM49BAMCA0kAMEYCIQDfAcS/WKBrP6JBgksQVpp4jdq4\n" +
 "C53Yu4F5NkaMgthAHgIhANGRdWAP1QdW9l6tiglQwdqJs4T0e8+NYv+RcAb3VYwn\n" +
 "-----END CERTIFICATE-----\n";
-var k1CertHex = X509.pemToHex(k1CertPEM);
+var k1CertHex = ASN1HEX.pemToHex(k1CertPEM);
 
 test("getV3ExtInfoListOfCertHex test1", function() {
-  var hCert = X509.pemToHex(certGithubPEM);
+  var hCert = ASN1HEX.pemToHex(certGithubPEM);
   var a = X509.getV3ExtInfoListOfCertHex(hCert);
   equal(a.length, 9, "num ext=9");
   equal(a[0].posTLV, 1484, "AKID TLV index");
@@ -124,7 +124,7 @@ test("getV3ExtInfoListOfCertHex test1", function() {
 });
 
 test("getPosOfTLV_V3ExtValue test1", function() {
-  var hCert = X509.pemToHex(certGithubPEM);
+  var hCert = ASN1HEX.pemToHex(certGithubPEM);
   equal(X509.getPosOfTLV_V3ExtValue(hCert, "keyUsage"), 1714, "by keyUsage");
   equal(X509.getPosOfTLV_V3ExtValue(hCert, "2.5.29.15"), 1714, "by 2.5.29.15(=keyUsage)");
   equal(X509.getPosOfTLV_V3ExtValue(hCert, "policyConstraints"), -1,
@@ -134,7 +134,7 @@ test("getPosOfTLV_V3ExtValue test1", function() {
 });
 
 test("getHexOfV_V3ExtValue test1", function() {
-  var hCert = X509.pemToHex(certGithubPEM);
+  var hCert = ASN1HEX.pemToHex(certGithubPEM);
   equal(X509.getHexOfV_V3ExtValue(hCert, "keyUsage"), "05a0", "by keyUsage");
   equal(X509.getHexOfV_V3ExtValue(hCert, "2.5.29.15"), "05a0", "by 2.5.29.15(=keyUsage)");
   equal(X509.getHexOfV_V3ExtValue(hCert, "policyConstraints"), null, 
@@ -144,7 +144,7 @@ test("getHexOfV_V3ExtValue test1", function() {
 });
 
 test("getHexOfTLV_V3ExtValue test1", function() {
-  var hCert = X509.pemToHex(certGithubPEM);
+  var hCert = ASN1HEX.pemToHex(certGithubPEM);
   equal(X509.getHexOfTLV_V3ExtValue(hCert, "keyUsage"), "030205a0", "by keyUsage");
   equal(X509.getHexOfTLV_V3ExtValue(hCert, "2.5.29.15"), "030205a0", "by 2.5.29.15(=keyUsage)");
   equal(X509.getHexOfTLV_V3ExtValue(hCert, "policyConstraints"), null,
@@ -154,17 +154,17 @@ test("getHexOfTLV_V3ExtValue test1", function() {
 });
 
 test("getExtKeyUsageBin", function() {
-  var hCert = X509.pemToHex(certGithubPEM);
+  var hCert = ASN1HEX.pemToHex(certGithubPEM);
   equal(X509.getExtKeyUsageBin(hCert), "101", "101");
 });
 
 test("getExtKeyUsageString", function() {
-  var hCert = X509.pemToHex(certGithubPEM);
+  var hCert = ASN1HEX.pemToHex(certGithubPEM);
   equal(X509.getExtKeyUsageString(hCert), "digitalSignature,keyEncipherment", "digitalSignature,keyEncipherment");
 });
 
 test("getExtAIAInfo", function() {
-  var hCert = X509.pemToHex(certGithubPEM);
+  var hCert = ASN1HEX.pemToHex(certGithubPEM);
   var info = X509.getExtAIAInfo(hCert);
   equal(info.ocsp.length, 1, "number item of ocsp = 1");
   equal(info.ocsp[0], "http://ocsp.digicert.com", "ocsp=http://ocsp.digicert.com");

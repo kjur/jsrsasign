@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for KEYUTIL RSA plain private key reader 'keyutil.js'</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+
+<!-- script type="text/javascript" src="qunit.js" /script -->
+<!-- link rel="stylesheet" href="qunit.css" type="text/css" media="screen" -->
+<script src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="screen"/>
+
+<script src="../ext/jsbn.js"></script>
+<script src="../ext/jsbn2.js"></script>
+<script src="../ext/prng4.js"></script>
+<script src="../ext/rng.js"></script>
+<script src="../ext/base64.js"></script>
+<script src="../ext/rsa.js"></script>
+<script src="../ext/rsa2.js"></script>
+<script src="../asn1hex-1.1.js"></script>
+<script src="../rsapem-1.1.js"></script>
+<script src="../rsasign-1.2.js"></script>
+
+<script src="../ext/cj/cryptojs-312-core-fix.js"></script>
+<script src="../ext/cj/x64-core.js"></script>
+<script src="../ext/cj/cipher-core_min.js"></script>
+<script src="../ext/cj/aes_min.js"></script>
+<script src="../ext/cj/tripledes_min.js"></script>
+<script src="../ext/cj/enc-base64_min.js"></script>
+<script src="../ext/cj/md5_min.js"></script>
+<script src="../ext/cj/sha1_min.js"></script>
+<script src="../ext/cj/sha256_min.js"></script>
+<script src="../ext/cj/sha224_min.js"></script>
+<script src="../ext/cj/sha512_min.js"></script>
+<script src="../ext/cj/sha384_min.js"></script>
+<script src="../ext/cj/ripemd160_min.js"></script>
+<script src="../ext/cj/hmac_min.js"></script>
+<script src="../ext/cj/pbkdf2_min.js"></script>
+
+<script src="../ext/yahoo-min.js"></script>
+<script src="../ext/jsbn.js"></script>
+<script src="../ext/jsbn2.js"></script>
+<script src="../ext/prng4.js"></script>
+<script src="../ext/rng.js"></script>
+<script src="../ext/ec.js"></script>
+<script src="../ext/ec-patch.js"></script>
+
+<script src="../asn1-1.0.js"></script>
+<script src="../keyutil-1.0.js"></script>
+<script src="../dsa-2.0.js"></script>
+<script src="../x509-1.1.js"></script>
+<script src="../crypto-1.1.js"></script>
+<script src="../ecdsa-modified-1.0.js"></script>
+<script src="../ecparam-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+
+
+// ======= TEST ===================================================================================
+var Z1PRVP5HEX = "3082013a020100024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001024078bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d022100fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f022100e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07022100d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b3702201849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa902207d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9";
+
+var Z1PRVP8HEX = "30820154020100300d06092a864886f70d01010105000482013e3082013a020100024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001024078bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d022100fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f022100e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07022100d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b3702201849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa902207d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9"; // z1.prv.p8p.der
+
+var Z1PUBP8HEX = "305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001"; // z1.pub.p8.der
+
+var Z1CERTHEX = "308201753082011fa003020102020105300d06092a864886f70d0101050500301a310b3009060355040613025553310b3009060355040a0c026131301e170d3133303530343033343134315a170d3233303530343033343134315a301a310b3009060355040613025553310b3009060355040a0c026131305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a350304e301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e15300c0603551d13040530030101ff300d06092a864886f70d0101050500034100b2f693af4b8f03987c35efdd35c950014652ab68f8da230892cfd3c7ce7cd059cbe280232d06b2b354ff7b91562a9bb86a809c7f64145c0742338016b01ef174"; // z1.der
+
+var Z1N = new BigInteger("00e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd59", 16);
+var Z1E = new BigInteger("010001", 16);
+var Z1D = new BigInteger("78bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d", 16);
+var Z1P = new BigInteger("00fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f", 16);
+var Z1Q = new BigInteger("00e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07", 16);
+var Z1DP = new BigInteger("00d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b37", 16);
+var Z1DQ = new BigInteger("1849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa9", 16);
+var Z1CO = new BigInteger("7d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9", 16);
+
+var Z5CERTHEX = "308201bd30820126020900f9e5f373734585ed300d06092a864886f70d01010505003023310b3009060355040613024a5031143012060355040a130b30302d544553542d525341301e170d3130303532383032303835315a170d3230303532353032303835315a3023310b3009060355040613024a5031143012060355040a130b30302d544553542d52534130819f300d06092a864886f70d010101050003818d0030818902818100d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a00210203010001300d06092a864886f70d010105050003818100119ea65c516adc0cdf6aa587982cb50118e56ae6006bc6665059cb9b47a683d76454127adda12a01186da24e9b0d00f3489c622e908417a1b86ff36ffccfcc2f284ff8ea0e4e611331e80055032aef5721a1527238513906d41ae8cfe508710ec9ae5051fa111761c5f448d1178e0adce2bebb78af4d28f7cf08eda6e758e57a"; // z5.self.cer1.der X509v1
+
+var Z5N = new BigInteger("00d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021", 16);
+
+test("KEYUTIL.getKeyFromPublicPKCS8Hex(Z1PUBP8HEX) z1.pub.p8.der", function() {
+  var key = KEYUTIL.getKeyFromPublicPKCS8Hex(Z1PUBP8HEX);
+  equal(key.isPublic, true, "isPublic");
+  equal(key.isPrivate, false, "isPrivate");
+  equal(Z1N.compareTo(key.n), 0, "N");
+  equal(key.e, 65537, "E");
+});
+
+test("KEYUTIL.getKeyFromPlainPrivatePKCS8Hex(Z1PRVP8HEX) z1.prv.p8p.der", function() {
+  var key = KEYUTIL.getKeyFromPlainPrivatePKCS8Hex(Z1PRVP8HEX);
+  equal(key.isPublic, false, "isPublic");
+  equal(key.isPrivate, true, "isPrivate");
+  equal(Z1N.compareTo(key.n), 0, "N");
+  equal(key.e, 65537, "E");
+  equal(Z1D.compareTo(key.d), 0, "D");
+  equal(Z1P.compareTo(key.p), 0, "P");
+  equal(Z1Q.compareTo(key.q), 0, "Q");
+  equal(Z1DP.compareTo(key.dmp1), 0, "DP");
+  equal(Z1DQ.compareTo(key.dmq1), 0, "DQ");
+  equal(Z1CO.compareTo(key.coeff), 0, "CO");
+});
+
+test("(DEPRECATED) KEYUTIL.getRSAKeyFromPlainPKCS8Hex(Z1PRVP8HEX) z1.prv.p8p.der", function() {
+  var key = KEYUTIL.getRSAKeyFromPlainPKCS8Hex(Z1PRVP8HEX);
+  equal(key.isPublic, false, "isPublic");
+  equal(key.isPrivate, true, "isPrivate");
+  equal(Z1N.compareTo(key.n), 0, "N");
+  equal(key.e, 65537, "E");
+  equal(Z1D.compareTo(key.d), 0, "D");
+  equal(Z1P.compareTo(key.p), 0, "P");
+  equal(Z1Q.compareTo(key.q), 0, "Q");
+  equal(Z1DP.compareTo(key.dmp1), 0, "DP");
+  equal(Z1DQ.compareTo(key.dmq1), 0, "DQ");
+  equal(Z1CO.compareTo(key.coeff), 0, "CO");
+});
+
+test("KEYUTIL.getKey(Z1PRVP5HEX, null, pkcs5prv) z1.prv.p5p.der", function() {
+  var key = KEYUTIL.getKey(Z1PRVP5HEX, null, "pkcs5prv");
+  equal(key.isPublic, false, "isPublic");
+  equal(key.isPrivate, true, "isPrivate");
+  equal(Z1N.compareTo(key.n), 0, "N");
+  equal(key.e, 65537, "E");
+  equal(Z1D.compareTo(key.d), 0, "D");
+  equal(Z1P.compareTo(key.p), 0, "P");
+  equal(Z1Q.compareTo(key.q), 0, "Q");
+  equal(Z1DP.compareTo(key.dmp1), 0, "DP");
+  equal(Z1DQ.compareTo(key.dmq1), 0, "DQ");
+  equal(Z1CO.compareTo(key.coeff), 0, "CO");
+});
+
+test("KEYUTIL.getKey(Z1PRVP8HEX, null, pkcs8prv) z1.prv.p8p.der", function() {
+  var key = KEYUTIL.getKey(Z1PRVP8HEX, null, "pkcs8prv");
+  equal(key.isPublic, false, "isPublic");
+  equal(key.isPrivate, true, "isPrivate");
+  equal(Z1N.compareTo(key.n), 0, "N");
+  equal(key.e, 65537, "E");
+  equal(Z1D.compareTo(key.d), 0, "D");
+  equal(Z1P.compareTo(key.p), 0, "P");
+  equal(Z1Q.compareTo(key.q), 0, "Q");
+  equal(Z1DP.compareTo(key.dmp1), 0, "DP");
+  equal(Z1DQ.compareTo(key.dmq1), 0, "DQ");
+  equal(Z1CO.compareTo(key.coeff), 0, "CO");
+});
+
+test("KEYUTIL.getKey(Z1PUBP8HEX, null, pkcs8pub) z1.pub.p8.der", function() {
+  var key = KEYUTIL.getKey(Z1PUBP8HEX, null, "pkcs8pub");
+  equal(key.isPublic, true, "isPublic");
+  equal(key.isPrivate, false, "isPrivate");
+  equal(Z1N.compareTo(key.n), 0, "N");
+  equal(key.e, 65537, "E");
+});
+
+test("(DEPRECATED) KEYUTIL.getRSAKeyFromPublicPKCS8Hex(Z1PUBP8HEX) z1.pub.p8.der RSA", function() {
+  var key = KEYUTIL.getRSAKeyFromPublicPKCS8Hex(Z1PUBP8HEX);
+  equal(key.isPublic, true, "isPublic");
+  equal(key.isPrivate, false, "isPrivate");
+  equal(Z1N.compareTo(key.n), 0, "N");
+  equal(key.e, 65537, "E");
+});
+
+test("KEYUTIL.getKey(Z1CERTHEX, null, x509pub) z1.self.cer.der", function() {
+  var key = KEYUTIL.getKey(Z1CERTHEX, null, "x509pub");
+  equal(key.isPublic, true, "isPublic");
+  equal(key.isPrivate, false, "isPrivate");
+  equal(Z1N.compareTo(key.n), 0, "N");
+  equal(key.e, 65537, "E");
+});
+
+test("KEYUTIL.getKey(Z5CERTHEX, null, x509pub) z5.self.cer1.der X509v1", function() {
+  var key = KEYUTIL.getKey(Z5CERTHEX, null, "x509pub");
+  equal(key.isPublic, true, "isPublic");
+  equal(key.isPrivate, false, "isPrivate");
+  equal(Z5N.compareTo(key.n), 0, "N");
+  equal(key.e, 65537, "E");
+});
+
+});
+-->
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+<a href="../">TOP</a> | 
+<a href="index.html">TEST INDEX</a> | 
+<a href="qunit-do-keyutil.html">keyutil</a> | 
+<a href="qunit-do-keyutil-rsa.html">keyutil-rsa</a> | 
+<a href="qunit-do-keyutil-dsa.html">keyutil-dsa</a> | 
+<a href="qunit-do-keyutil-ec.html">keyutil-ec</a> | 
+<a href="qunit-do-keyutil-eprv.html">keyutil-eprv</a> | 
+<a href="qunit-do-keyutil-pub.html">keyutil-pub</a> | 
+</body>
+</html>
+

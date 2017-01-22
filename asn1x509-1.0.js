@@ -1,9 +1,9 @@
-/*! asn1x509-1.0.19.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.20.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
  *
- * Copyright (c) 2013-2016 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.19 (2016-Nov-26)
+ * @version 1.0.20 (2017-Jan-14)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1474,12 +1474,12 @@ KJUR.asn1.x509.X500Name = function(params) {
 
         if (params.certissuer !== undefined) {
             var x = new X509();
-            x.hex = X509.pemToHex(params.certissuer);
+            x.hex = ASN1HEX.pemToHex(params.certissuer);
             this.hTLV = x.getIssuerHex();
         }
         if (params.certsubject !== undefined) {
             var x = new X509();
-            x.hex = X509.pemToHex(params.certsubject);
+            x.hex = ASN1HEX.pemToHex(params.certsubject);
             this.hTLV = x.getSubjectHex();
         }
     }
@@ -1847,10 +1847,10 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
             var rsaB64 = s.replace(/\s+/g, '');
             var rsaWA = CryptoJS.enc.Base64.parse(rsaB64);
             var rsaP8Hex = CryptoJS.enc.Hex.stringify(rsaWA);
-            var a = _rsapem_getHexValueArrayOfChildrenFromHex(rsaP8Hex);
+            var a = RSAKey.getHexValueArrayOfChildrenFromHex(rsaP8Hex);
             var hBitStrVal = a[1];
             var rsaHex = hBitStrVal.substr(2);
-            var a3 = _rsapem_getHexValueArrayOfChildrenFromHex(rsaHex);
+            var a3 = RSAKey.getHexValueArrayOfChildrenFromHex(rsaHex);
             var rsaKey = new RSAKey();
             rsaKey.setPublic(a3[0], a3[1]);
             this.setRSAKey(rsaKey);
@@ -2122,7 +2122,7 @@ KJUR.asn1.x509.GeneralName = function(params) {
             }
 
 	    if (certStr.indexOf("-----BEGIN ") != -1) {
-		certHex = X509.pemToHex(certStr);
+		certHex = ASN1HEX.pemToHex(certStr);
 	    }
 
 	    if (certHex == null) throw "certissuer param not cert";
@@ -2142,7 +2142,7 @@ KJUR.asn1.x509.GeneralName = function(params) {
 		certHex == certStr;
             }
 	    if (certStr.indexOf("-----BEGIN ") != -1) {
-		certHex = X509.pemToHex(certStr);
+		certHex = ASN1HEX.pemToHex(certStr);
 	    }
 	    if (certHex == null) throw "certsubj param not cert";
 	    var x = new X509();

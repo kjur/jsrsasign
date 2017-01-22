@@ -110,7 +110,7 @@ var k1CertPEM = "" +
 "HRMEBTADAQH/MAoGCCqGSM49BAMCA0kAMEYCIQDfAcS/WKBrP6JBgksQVpp4jdq4\n" +
 "C53Yu4F5NkaMgthAHgIhANGRdWAP1QdW9l6tiglQwdqJs4T0e8+NYv+RcAb3VYwn\n" +
 "-----END CERTIFICATE-----\n";
-var k1CertHex = X509.pemToHex(k1CertPEM);
+var k1CertHex = ASN1HEX.pemToHex(k1CertPEM);
 
 test("pemToBase64", function() {
   var sResult = X509.pemToBase64(sCer1PEM);
@@ -118,7 +118,7 @@ test("pemToBase64", function() {
 });
 
 test("pemToHex", function() {
-  var sResult = X509.pemToHex(sCer1PEM);
+  var sResult = ASN1HEX.pemToHex(sCer1PEM);
   equal(sResult, hCer1, "testing pem-hex conversion.");
 });
 
@@ -151,7 +151,7 @@ test("getPublicKeyHexArrayFromCertPEM", function() {
 test("getPublicKeyHexArrayFromCertPEM sCer2PEM", function() {
   expect(8);
   equal(X509.pemToBase64(sCer2PEM), sCer2B64, "check pem to base64.");
-  equal(X509.pemToHex(sCer2PEM), hCer2, "check pem to hex.");
+  equal(ASN1HEX.pemToHex(sCer2PEM), hCer2, "check pem to hex.");
   var pTbsCert = X509.getHexTbsCertificateFromCert(hCer2);
   equal(pTbsCert, 8, "check tbsCert position.");
   equal(X509.getSubjectPublicKeyInfoPosFromCertHex(hCer2), 280,

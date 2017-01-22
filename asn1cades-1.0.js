@@ -1,9 +1,9 @@
-/*! asn1cades-1.0.0.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1cades-1.0.1.js (c) 2014-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1cades.js - ASN.1 DER encoder classes for RFC 5126 CAdES long term signature
  *
- * Copyright (c) 2014 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2014-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cades-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.0 (2014-May-28)
+ * @version 1.0.1 (2017-Jan-14)
  * @since jsrsasign 4.7.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -513,7 +513,7 @@ KJUR.asn1.cades.OtherHash = function(params) {
     this.setByCertPEM = function(certPEM) {
         if (certPEM.indexOf("-----BEGIN ") == -1)
             throw "certPEM not to seem PEM format";
-        var hex = X509.pemToHex(certPEM);
+        var hex = ASN1HEX.pemToHex(certPEM);
         var hash = KJUR.crypto.Util.hashHex(hex, this.alg);
         this.dOtherHash = 
             new nD.OtherHashAlgAndValue({alg: this.alg, hash: hash});

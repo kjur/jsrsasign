@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for KEYUTIL ECC plain private key reader 'keyutil.js'</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+
+<!-- script type="text/javascript" src="qunit.js" /script -->
+<!-- link rel="stylesheet" href="qunit.css" type="text/css" media="screen" -->
+<script src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="screen"/>
+
+<script src="../ext/jsbn.js"></script>
+<script src="../ext/jsbn2.js"></script>
+<script src="../ext/prng4.js"></script>
+<script src="../ext/rng.js"></script>
+<script src="../ext/base64.js"></script>
+<script src="../ext/rsa.js"></script>
+<script src="../ext/rsa2.js"></script>
+<script src="../asn1hex-1.1.js"></script>
+<script src="../rsapem-1.1.js"></script>
+<script src="../rsasign-1.2.js"></script>
+
+<script src="../ext/cj/cryptojs-312-core-fix.js"></script>
+<script src="../ext/cj/x64-core.js"></script>
+<script src="../ext/cj/cipher-core_min.js"></script>
+<script src="../ext/cj/aes_min.js"></script>
+<script src="../ext/cj/tripledes_min.js"></script>
+<script src="../ext/cj/enc-base64_min.js"></script>
+<script src="../ext/cj/md5_min.js"></script>
+<script src="../ext/cj/sha1_min.js"></script>
+<script src="../ext/cj/sha256_min.js"></script>
+<script src="../ext/cj/sha224_min.js"></script>
+<script src="../ext/cj/sha512_min.js"></script>
+<script src="../ext/cj/sha384_min.js"></script>
+<script src="../ext/cj/ripemd160_min.js"></script>
+<script src="../ext/cj/hmac_min.js"></script>
+<script src="../ext/cj/pbkdf2_min.js"></script>
+
+<script src="../ext/yahoo-min.js"></script>
+<script src="../ext/jsbn.js"></script>
+<script src="../ext/jsbn2.js"></script>
+<script src="../ext/prng4.js"></script>
+<script src="../ext/rng.js"></script>
+<script src="../ext/ec.js"></script>
+<script src="../ext/ec-patch.js"></script>
+
+<script src="../asn1-1.0.js"></script>
+<script src="../keyutil-1.0.js"></script>
+<script src="../dsa-2.0.js"></script>
+<script src="../x509-1.1.js"></script>
+<script src="../crypto-1.1.js"></script>
+<script src="../ecdsa-modified-1.0.js"></script>
+<script src="../ecparam-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+
+
+// ======= TEST ===================================================================================
+var K1PRVRAWHEX = "11b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3";
+var K1PUBRAWHEX = "04a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425";
+
+var K1PRVP5HEX = "3077020101042011b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3a00a06082a8648ce3d030107a14403420004a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425";
+
+var K1PRVP8HEX = "308187020100301306072a8648ce3d020106082a8648ce3d030107046d306b020101042011b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3a14403420004a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425";
+
+var K1PUBP8HEX = "3059301306072a8648ce3d020106082a8648ce3d03010703420004a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425"; // k1.pub.p8.der
+
+var K1CERTHEX = "3082017c30820121a003020102020900a6f110b42f4940cd300a06082a8648ce3d040302301a310b3009060355040613025553310b3009060355040a0c024b31301e170d3133303731343032313731375a170d3233303731323032313731375a301a310b3009060355040613025553310b3009060355040a0c024b313059301306072a8648ce3d020106082a8648ce3d03010703420004a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425a350304e301d0603551d0e04160414c847be327cccff638870757496e2be366c44a8fc301f0603551d23041830168014c847be327cccff638870757496e2be366c44a8fc300c0603551d13040530030101ff300a06082a8648ce3d0403020349003046022100df01c4bf58a06b3fa241824b10569a788ddab80b9dd8bb817936468c82d8401e022100d19175600fd50756f65ead8a0950c1da89b384f47bcf8d62ff917006f7558c27"; // k1.self.cer.der
+
+test("KEYUTIL.getKeyFromPlainPrivatePKCS8Hex(K1PRVP8HEX) k1.prv.p8p.der", function() {
+  var key = KEYUTIL.getKeyFromPlainPrivatePKCS8Hex(K1PRVP8HEX);
+  equal(key.isPublic, false, "isPublic");
+  equal(key.isPrivate, true, "isPrivate");
+  equal(key.curveName, "secp256r1", "curveName");
+  equal(key.prvKeyHex, K1PRVRAWHEX, "prvKeyHex");
+  equal(key.pubKeyHex, K1PUBRAWHEX, "pubKeyHex");
+});
+
+test("KEYUTIL.getKey(K1PRVP5HEX, null, pkcs5prv) k1.prv.p5p.der", function() {
+  var key = KEYUTIL.getKey(K1PRVP5HEX, null, "pkcs5prv");
+  equal(key.isPublic, false, "isPublic");
+  equal(key.isPrivate, true, "isPrivate");
+  equal(key.curveName, "secp256r1", "curveName");
+  equal(key.prvKeyHex, K1PRVRAWHEX, "prvKeyHex");
+  equal(key.pubKeyHex, K1PUBRAWHEX, "pubKeyHex");
+});
+
+test("KEYUTIL.getKey(K1PRVP8HEX, null, pkcs8prv) k1.prv.p8p.der", function() {
+  var key = KEYUTIL.getKey(K1PRVP8HEX, null, "pkcs8prv");
+  equal(key.isPublic, false, "isPublic");
+  equal(key.isPrivate, true, "isPrivate");
+  equal(key.curveName, "secp256r1", "curveName");
+  equal(key.prvKeyHex, K1PRVRAWHEX, "prvKeyHex");
+  equal(key.pubKeyHex, K1PUBRAWHEX, "pubKeyHex");
+});
+
+test("KEYUTIL.getKey(K1PUBP8HEX, null, pkcs8pub) k1.pub.p8.der", function() {
+  var key = KEYUTIL.getKey(K1PUBP8HEX, null, "pkcs8pub");
+  equal(key.isPublic, true, "isPublic");
+  equal(key.isPrivate, false, "isPrivate");
+  equal(key.curveName, "secp256r1", "curveName");
+  equal(key.pubKeyHex, K1PUBRAWHEX, "pubKeyHex");
+});
+
+test("KEYUTIL.getKey(K1CERTHEX, null, x509pub) k1.self.cer.der", function() {
+  var key = KEYUTIL.getKey(K1CERTHEX, null, "x509pub");
+  equal(key.isPublic, true, "isPublic");
+  equal(key.isPrivate, false, "isPrivate");
+  equal(key.curveName, "secp256r1", "curveName");
+  equal(key.pubKeyHex, K1PUBRAWHEX, "pubKeyHex");
+});
+
+});
+-->
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+<a href="../">TOP</a> | 
+<a href="index.html">TEST INDEX</a> | 
+<a href="qunit-do-keyutil.html">keyutil</a> | 
+<a href="qunit-do-keyutil-rsa.html">keyutil-rsa</a> | 
+<a href="qunit-do-keyutil-dsa.html">keyutil-dsa</a> | 
+<a href="qunit-do-keyutil-ec.html">keyutil-ec</a> | 
+<a href="qunit-do-keyutil-eprv.html">keyutil-eprv</a> | 
+<a href="qunit-do-keyutil-pub.html">keyutil-pub</a> | 
+</body>
+</html>
+

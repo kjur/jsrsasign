@@ -648,6 +648,17 @@ ASN.1 data or not.</div>
 							</td>
 						</tr>
 					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.pemToHex">pemToHex</a></b>(s, sHead)
+								</div>
+								<div class="description">get hexacedimal string from PEM format data<br/>
+This static method gets a hexacedimal string of contents 
+from PEM format data.</div>
+							</td>
+						</tr>
+					
 					</tbody>
 				</table>
 				
@@ -796,7 +807,7 @@ SEQUENCE
   INTEGER 01
   INTEGER 02
 // 5) ASN.1 DUMP FOR X.509 CERTIFICATE
-ASN1HEX.dump(X509.pemToHex(certPEM))
+ASN1HEX.dump(ASN1HEX.pemToHex(certPEM))
 &darr;
 SEQUENCE
   SEQUENCE
@@ -1689,6 +1700,75 @@ ASN1HEX.isASN1HEX('fa3bcd') &rarr; false // WRONG FOR ASN.1</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Boolean}</span> true if it is hexadecimal string of ASN.1 data otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".pemToHex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">ASN1HEX.</span><b>pemToHex</b>(s, sHead)
+					
+					</div>
+					<div class="description">
+						get hexacedimal string from PEM format data<br/>
+This static method gets a hexacedimal string of contents 
+from PEM format data. You can explicitly specify PEM header 
+by sHead argument. 
+Any space characters such as white space or new line
+will be omitted.<br/>
+NOTE: Now <a href="../symbols/KEYUTIL.html#.getHexFromPEM">KEYUTIL.getHexFromPEM</a> and <a href="../symbols/X509.html#.pemToHex">X509.pemToHex</a>
+have been deprecated since jsrsasign 7.0.1. 
+Please use this method instead.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">ASN1HEX.pemToHex("-----BEGIN PUBLIC KEY...") &rarr; "3082..."
+ASN1HEX.pemToHex("-----BEGIN CERTIFICATE...", "CERTIFICATE") &rarr; "3082..."
+ASN1HEX.pemToHex(" \r\n-----BEGIN DSA PRIVATE KEY...") &rarr; "3082..."</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>PEM formatted string</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sHead</b>
+									
+								</dt>
+								<dd>PEM header string without BEGIN/END(OPTION)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.0.1 asn1hex 1.1.9</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string data of PEM contents</dd>
 							
 							</dl>
 						

@@ -1,9 +1,9 @@
-/*! asn1cms-1.0.2.js (c) 2013-2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1cms-1.0.3.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1cms.js - ASN.1 DER encoder classes for Cryptographic Message Syntax(CMS)
  *
- * Copyright (c) 2014 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cms-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.2 (2014-Jun-07)
+ * @version 1.0.3 (2017-Jan-14)
  * @since jsrsasign 4.2.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -264,7 +264,7 @@ KJUR.asn1.cms.SigningCertificate = function(params) {
     this.setCerts = function(listPEM) {
         var list = [];
         for (var i = 0; i < listPEM.length; i++) {
-            var hex = KEYUTIL.getHexFromPEM(listPEM[i]);
+            var hex = ASN1HEX.pemToHex(listPEM[i]);
             var certHashHex = nY.Util.hashHex(hex, 'sha1');
             var dCertHash = new nA.DEROctetString({hex: certHashHex});
             dCertHash.getEncodedHex();
@@ -334,7 +334,7 @@ KJUR.asn1.cms.SigningCertificateV2 = function(params) {
     this.setCerts = function(listPEM, hashAlg) {
         var list = [];
         for (var i = 0; i < listPEM.length; i++) {
-            var hex = KEYUTIL.getHexFromPEM(listPEM[i]);
+            var hex = ASN1HEX.pemToHex(listPEM[i]);
 
             var a = [];
             if (hashAlg != "sha256")
@@ -405,7 +405,7 @@ KJUR.asn1.cms.IssuerAndSerialNumber = function(params) {
      * @since asn1cms 1.0.1
      */
     this.setByCertPEM = function(certPEM) {
-        var certHex = KEYUTIL.getHexFromPEM(certPEM);
+        var certHex = ASN1HEX.pemToHex(certPEM);
         var x = new X509();
         x.hex = certHex;
         var issuerTLVHex = x.getIssuerHex();
@@ -837,7 +837,7 @@ KJUR.asn1.cms.SignedData = function(params) {
     this.signerInfoList = [new nC.SignerInfo()];
 
     this.addCertificatesByPEM = function(certPEM) {
-        var hex = KEYUTIL.getHexFromPEM(certPEM);
+        var hex = ASN1HEX.pemToHex(certPEM);
         var o = new nA.ASN1Object();
         o.hTLV = hex;
         this.certificateList.push(o);

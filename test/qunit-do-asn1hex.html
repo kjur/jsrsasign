@@ -12,6 +12,7 @@
 <script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
 <script language="JavaScript" type="text/javascript" src="../asn1hex-1.1.js"></script>
 
 <script type="text/javascript">
@@ -182,6 +183,19 @@ test("hextooidstr", function() {
         "1.2.840.113549.1.1.5", "SHA1withRSA");
 });
 
+test("pemToHex", function() {
+  // _data/z0512.pub.p8
+  var pem = "" +
+    "-----BEGIN PUBLIC KEY-----\r\n" +
+    "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALmwAylQX+LtYOxWid3N9blNBatBbhZD\r\n" +
+    "sco/lvxHLusfYu1HaJfxWa6Yt/Ot7Ox5cd619k2aJZAcTcekl3LloCsCAwEAAQ==\r\n" +
+    "-----END PUBLIC KEY-----\r\n";
+  var hex = "305c300d06092a864886f70d0101010500034b003048024100b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b0203010001";
+  equal(ASN1HEX.pemToHex(pem), hex, "pem");
+  equal(ASN1HEX.pemToHex("  " + pem + "  \r\n"), hex, "pem with spaces");
+  equal(ASN1HEX.pemToHex(pem, "PUBLIC KEY"), hex, "pem with specifying header");
+});
+
 /*
 {"seq": [
   {"octstr": {"obj": {"seq": [{"int": 3},{"int":4}]}}},
@@ -189,11 +203,10 @@ test("hextooidstr", function() {
   {"prnstr": "aaa"}
   ]} 
  */
-test("hoge", function() {
-/*
-                                   ^bit  ^seq^int  ^int  ^prn^aaa             
-               ^oct^seq^int  ^int                                    
- */
+
+test("getDecendantIndexByNthList", function() {
+//                                 ^bit  ^seq^int  ^int  ^prn^aaa             
+//             ^oct^seq^int  ^int                                    
   var h = "301a0408300602010302010403090030060201050201061303616161";
   equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [0]), 4, "octstr") 
   equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [1]), 24, "bitstr") 

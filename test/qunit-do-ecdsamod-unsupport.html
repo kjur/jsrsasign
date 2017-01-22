@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta charset="utf-8">
+<title>QUnit 'ecdsamod.js' unsupported curve test (all fails)</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script src="../ext/cj/cryptojs-312-core-fix.js"></script>
+<script src="../ext/cj/x64-core.js"></script>
+<script src="../ext/cj/cipher-core_min.js"></script>
+<script src="../ext/cj/aes_min.js"></script>
+<script src="../ext/cj/tripledes_min.js"></script>
+<script src="../ext/cj/enc-base64_min.js"></script>
+<script src="../ext/cj/md5_min.js"></script>
+<script src="../ext/cj/sha1_min.js"></script>
+<script src="../ext/cj/sha256_min.js"></script>
+<script src="../ext/cj/sha224_min.js"></script>
+<script src="../ext/cj/sha512_min.js"></script>
+<script src="../ext/cj/sha384_min.js"></script>
+<script src="../ext/cj/ripemd160_min.js"></script>
+<script src="../ext/cj/hmac_min.js"></script>
+<script src="../ext/cj/pbkdf2_min.js"></script>
+
+<script src="../ext/yahoo-min.js"></script>
+<script src="../ext/jsbn.js"></script>
+<script src="../ext/jsbn2.js"></script>
+<script src="../ext/prng4.js"></script>
+<script src="../ext/rng.js"></script>
+<script src="../ext/ec.js"></script>
+<script src="../ext/ec-patch.js"></script>
+
+<script src="../asn1hex-1.1.js"></script>
+<script src="../asn1-1.0.js"></script>
+<script src="../crypto-1.1.js"></script>
+<script src="../ecdsa-modified-1.0.js"></script>
+<script src="../ecparam-1.0.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+var hashAAA256Hex = KJUR.crypto.Util.sha256("aaa"); // SHA256 hash value of string "aaa"
+var hashAAB256Hex = KJUR.crypto.Util.sha256("aab"); // SHA256 hash value of string "aab"
+var ECK1PUBHEX = "04a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425"; // k1.pub.pem
+
+test("KNOWN ISSUE: k2.sig.aaa.1 secp192k1 sha256", function() {
+  // signature validation
+  var pub = "04874ca64f193b1080847bf3950366ed6bc05c884185574e21ac17dbd2e63a93d9bfff14a8e251da592bc4677de25458c0"; // k2.pub.pem
+  var ec2 = new KJUR.crypto.ECDSA({"curve": "secp192k1", "pub": pub});
+  var sigHex = "3036021900e3503fd1f491de61f8bf9cb2777f0f203bb28c27f0a5cff9021900e789fc4af8c382ff2cfc97a94f562be1b56841693334e20b"; // k2.sig.aaa.1
+  var result2 = ec2.verifyWithMessageHash(hashAAA256Hex, sigHex);
+  equal(result2, true, "ecdsa sign");
+});
+
+test("KNOWN ISSUE: k3.sig.aaa.1 secp224r1 sha256", function() {
+  // signature validation
+  var pub = "04e34009a6c4dc3ddb0d39e1abac085cd4705e1d39a526d4843398432a093af22eb42891390266eb192cb9221725cd44d0c211317afb97349d"; // k3.pub.pem
+  var ec2 = new KJUR.crypto.ECDSA({"curve": "secp224r1", "pub": pub});
+  var sigHex = "303e021d00e68ea9a165c343432f91df99136f66a3f5f2958a9644b6101880bf40021d008eb7cab62691b6998cbe78b0c5f21a28a84d83a8fda6bf7a69d85363"; // k3.sig.aaa.1
+  var result2 = ec2.verifyWithMessageHash(hashAAA256Hex, sigHex);
+  equal(result2, true, "ecdsa sign");
+});
+
+test("KNOWN ISSUE: k5.sig.aaa.1 secp521r1 sha256", function() {
+  // signature validation
+  var pub = "0400d29a52344c35119ff5bea19ae090f802d05ff9ea31adcc31524d012875ea791344b02af06b58de3c3d26f1ba413d25d5cf9b6b287b5c9cf410bf2a6ea7ad02619d00de221502a15480f064d9d04c0bd40713e587ca72fc3009d338947454d63617b62e08a42fe9820153dcdf88445992e8cf204d8cefc4264c0d49d81e298307ed698f"; // k5.pub.der
+  var ec2 = new KJUR.crypto.ECDSA({"curve": "secp521r1", "pub": pub});
+  var sigHex = "3081880242014ee923bd994ea00f7f20a6d7634a718b38e485ca9ebf0e2a794151fcba86cde56ef22c488245a05e8f158fedb8bfe775d039e3e6663fa104de732116a788627f5d0242010420e96c6ae4c2630575213f33bfc1e7795be6dd4a35ac69250c5a9f65ec62f6a3f5fe4ac66c8c1471afdeb3f0784e2645f0f606859761d4930c39fd8ba11ca4e0"; // k5.sig.aaa.1
+  var result2 = ec2.verifyWithMessageHash(hashAAA256Hex, sigHex);
+  equal(result2, true, "ecdsa sign");
+});
+});
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+
+<b>NOTE:</b>
+<p>
+Currently this library works for only secp256r1, secp256k1 and secp384r1 EC curves
+besides some other curves are pre-defined.
+</p>
+
+<p>
+<a href="index.html">INDEX</a> | 
+ECC related QUnit test pages: 
+<a href="qunit-do-crypto.html">crypto.js</a> | 
+<a href="qunit-do-crypto-ecdsa.html">crypto.js Signature class for ECDSA</a> | 
+<a href="qunit-do-ecdsamod.html">ecdsa-modified.js</a> | 
+<a href="qunit-do-ecdsamod-unsupport.html">ecdsa-modified unsupported curve</a> | 
+<a href="qunit-do-ecparam.html">ecparam.js</a> | 
+</p>
+
+</body>
+</html>

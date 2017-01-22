@@ -1,27 +1,7 @@
 <html>
 <head>
 <title>Sample Application for RSA signing in JavaScript</title>
-<script language="JavaScript" type="text/javascript" src="ext/jsbn.js"></script>
-<script language="JavaScript" type="text/javascript" src="ext/jsbn2.js"></script>
-<script language="JavaScript" type="text/javascript" src="ext/rsa.js"></script>
-<script language="JavaScript" type="text/javascript" src="ext/rsa2.js"></script>
-<script language="JavaScript" type="text/javascript" src="ext/base64.js"></script>
-
-<!-- for crypto.js -->
-<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha256.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/ripemd160.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha512.js"></script>
-
-<script language="JavaScript" type="text/javascript" src="rsapem-1.1.js"></script>
-<script language="JavaScript" type="text/javascript" src="rsasign-1.2.js"></script>
-<script language="JavaScript" type="text/javascript" src="asn1hex-1.1.js"></script>
-<script language="JavaScript" type="text/javascript" src="x509-1.1.js"></script>
-<script language="JavaScript" type="text/javascript" src="crypto-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="jsrsasign-latest-all-min.js"></script>
 <script language="JavaScript" type="text/javascript">
 function doSign() {
   var rsa = new RSAKey();
@@ -35,9 +15,11 @@ function doVerify() {
   var sMsg = document.form1.msgverified.value;
   var hSig = document.form1.sigverified.value;
 
-  var x509 = new X509();
-  x509.readCertPEM(document.form1.cert.value);
-  var isValid = x509.subjectPublicKeyRSA.verifyString(sMsg, hSig);
+  //var x509 = new X509();
+  //x509.readCertPEM(document.form1.cert.value);
+  var pubKey = KEYUTIL.getKey(document.form1.cert.value);
+  //var isValid = x509.subjectPublicKeyRSA.verifyString(sMsg, hSig);
+  var isValid = pubKey.verifyString(sMsg, hSig);
 
   // display verification result
   if (isValid) {
@@ -82,6 +64,7 @@ TD  {vertical-align: top}
 <tr>
 <td>
 PEM RSA Private Key<br/>
+<!-- _test/z5.* for X.509v1 certificate and private key -->
 <textarea name="prvkey1" rows="10" cols="65">
 -----BEGIN RSA PRIVATE KEY-----
 MIICWwIBAAKBgQDRhGF7X4A0ZVlEg594WmODVVUIiiPQs04aLmvfg8SborHss5gQ
@@ -208,19 +191,5 @@ Copyright &copy; 2010-2012 Kenji Urushima, All Rights Reserved.
 <a href="index.html">Go back to index</a>
 </div>
 
-<div align="right">
-<a href="http://blog.livedoor.jp/k_urushima/" target="_blank" alt="kjur's blog">
-<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_livedoor_blog.gif" border="0" width="20"/>
-</a>
-<a href="http://www9.atwiki.jp/kurushima/" target="_blank" alt="kjur's wiki">
-<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_atwiki.gif" border="0" width="20"/>
-</a>
-<a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
-<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
-</a>
-<a href="http://x5.choumusubi.com/bin/gg?069823300">
-<img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
-</a>
-</div>
 </body>
 </html>

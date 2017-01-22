@@ -129,7 +129,6 @@ test("parsePrivateRawECKeyHexAtObj k1(EC)", function() {
 test("parsePrivateRawRSAKeyHexAtObj z1(RSA)", function() {
   var r = KEYUTIL.parsePlainPrivatePKCS8Hex(z1PrvP8pHex);
   KEYUTIL.parsePrivateRawRSAKeyHexAtObj(z1PrvP8pHex, r);
-  expect(8);
   equal(r.key.n, "00e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd59", "n");
   equal(r.key.e, "010001", "e");
   equal(r.key.d, "78bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d", "d");

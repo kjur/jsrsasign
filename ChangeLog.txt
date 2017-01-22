@@ -1,6 +1,45 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 7.0.0 to 7.1.0 (2017-Jan-21)
+  - minor update for loading private/public key
+    - support added: PKCS#5 DSA/ECC hexacedimal string of private key
+  - keyutil 1.0.14 to 1.1.0
+    - BUGFIX: KEYUTIL.getKey for PKCS#5 PEM ECC private key 
+      was not set curve name properly and now it's fixed.
+      (issue #227).
+    - make KEYUTIL.getHexFromPEM deprecated
+    - move from KEYUTIL.getHexFromPEM to ASN1HEX.pemToHex
+  - pkcs5pkey 1.0.7 to 1.1.0
+    - make PKCS5PKEY.getHexFromPEM deprecated
+    - move from getHexFromPEM to ASN1HEX.pemToHex
+  - rsapem 1.1.1 to 1.1.2
+    - refactoring codes
+    - readPKCS5PubKeyHex added
+    - readPKCS8PubKeyHex added
+    - readCertPubKeyHex added
+  - ecdsa-modified 1.0.5 to 1.1.0
+    - readCertPubKeyHex added
+  - dsa 2.0.1 to 2.1.0
+    - setPrivateHex, setPublicHex added
+    - readPKCS5PrvKeyHex added
+    - readPKCS8PrvKeyHex added
+    - readPKCS8PubKeyHex added
+    - readCertPubKeyHex added
+  - asn1hex 1.1.8 to 1.1.9
+    - ASN1HEX.pemToHex added
+    - move from {KEYUTIL,PKCS5PRV}.getHexFromPEM, 
+      X509.pemToHex to ASN1HEX.pemToHex
+  - x509 1.1.10 to 1.1.11
+    - now X509.pemToHex deprecated and is planed to 
+      remove in jsrsasign 8.0.0.
+  - asn1cades 1.0.0 to 1.0.1
+    - move to ASN1HEX.pemToHex
+  - asn1cms 1.0.2 to 1.0.3
+    - move from KEYUTIL.getHexFromPEM to ASN1HEX.pemToHex
+  - asn1csr 1.0.2 to 1.0.3
+    - move from KEYUTIL.getHexFromPEM to ASN1HEX.pemToHex
+
 * Changes from 6.2.3 to 7.0.0 (2016-Dec-26)
   - LGPL license for openpgpjs was removed.
   - asn1hex 1.1.7 to 1.1.8

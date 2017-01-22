@@ -1,9 +1,9 @@
-/*! asn1csr-1.0.2.js (c) 2015-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1csr-1.0.3.js (c) 2015-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
  *
- * Copyright (c) 2015-2016 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2015-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1csr-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.2 (2016-Nov-26)
+ * @version 1.0.3 (2017-Jan-14)
  * @since jsrsasign 4.9.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -413,7 +413,7 @@ KJUR.asn1.csr.CSRUtil.getInfo = function(sPEM) {
     if (sPEM.indexOf("-----BEGIN CERTIFICATE REQUEST") == -1)
 	throw "argument is not PEM file";
 
-    var hex = KEYUTIL.getHexFromPEM(sPEM, "CERTIFICATE REQUEST");
+    var hex = ASN1HEX.pemToHex(sPEM, "CERTIFICATE REQUEST");
 
     result.subject.hex = ASN1HEX.getDecendantHexTLVByNthList(hex, 0, [0, 1]);
     result.subject.name = X509.hex2dn(result.subject.hex);
