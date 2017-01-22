@@ -111,7 +111,7 @@ KJUR.crypto.ECDSA = function(params) {
     /**
      * get X and Y hexadecimal string value of public key
      * @name getPublicKeyXYHex
-     * @memberOf KJUR.crypto.ECDSA
+     * @memberOf KJUR.crypto.ECDSA#
      * @function
      * @return {Array} associative array of x and y value of public key
      * @since ecdsa-modified 1.0.5 jsrsasign 5.0.14
@@ -137,7 +137,7 @@ KJUR.crypto.ECDSA = function(params) {
     /**
      * get NIST curve short name such as "P-256" or "P-384"
      * @name getShortNISTPCurveName
-     * @memberOf KJUR.crypto.ECDSA
+     * @memberOf KJUR.crypto.ECDSA#
      * @function
      * @return {String} short NIST P curve name such as "P-256" or "P-384" if it's NIST P curve otherwise null;
      * @since ecdsa-modified 1.0.5 jsrsasign 5.0.14
@@ -158,7 +158,7 @@ KJUR.crypto.ECDSA = function(params) {
     /**
      * generate a EC key pair
      * @name generateKeyPairHex
-     * @memberOf KJUR.crypto.ECDSA
+     * @memberOf KJUR.crypto.ECDSA#
      * @function
      * @return {Array} associative array of hexadecimal string of private and public key
      * @since ecdsa-modified 1.0.1
@@ -193,7 +193,7 @@ KJUR.crypto.ECDSA = function(params) {
     /**
      * signing to message hash
      * @name signHex
-     * @memberOf KJUR.crypto.ECDSA
+     * @memberOf KJUR.crypto.ECDSA#
      * @function
      * @param {String} hashHex hexadecimal string of hash value of signing message
      * @param {String} privHex hexadecimal string of EC private key
@@ -243,7 +243,7 @@ KJUR.crypto.ECDSA = function(params) {
     /**
      * verifying signature with message hash and public key
      * @name verifyHex
-     * @memberOf KJUR.crypto.ECDSA
+     * @memberOf KJUR.crypto.ECDSA#
      * @function
      * @param {String} hashHex hexadecimal string of hash value of signing message
      * @param {String} sigHex hexadecimal string of signature value
