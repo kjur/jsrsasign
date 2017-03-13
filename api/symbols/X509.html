@@ -940,6 +940,17 @@ CAUTION: now X509.pemToHex deprecated and is planed to remove in jsrsasign 8.0.0
 							</td>
 						</tr>
 					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.verifySignature">verifySignature</a></b>(hCert, pubKey)
+								</div>
+								<div class="description">verifies signature value by public key
+This method verifies signature value of hexadecimal string of 
+X.509 certificate by specified public key object.</div>
+							</td>
+						</tr>
+					
 					</tbody>
 				</table>
 				
@@ -3113,6 +3124,69 @@ x.readCertPEM(sCertPEM); // read certificate</pre>
 						
 						
 						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".verifySignature"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<span class="light">X509.</span><b>verifySignature</b>(hCert, pubKey)
+					
+					</div>
+					<div class="description">
+						verifies signature value by public key
+This method verifies signature value of hexadecimal string of 
+X.509 certificate by specified public key object.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">pubKey = KEYUTIL.getKey(pemPublicKey); // or certificate
+hCert = ASN1HEX.pemToHex(pemCert);
+isValid = X509.verifySignature(hCert, pubKey);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>pubKey</b>
+									
+								</dt>
+								<dd>public key object</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.1.1 x509 1.1.12</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if signature value is valid otherwise false</dd>
+							
+							</dl>
 						
 						
 						

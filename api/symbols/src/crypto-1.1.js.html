@@ -5,12 +5,12 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! crypto-1.1.11.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! crypto-1.1.12.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * crypto.js - Cryptographic Algorithm Provider class
 <span class='line'>  5</span>  *
-<span class='line'>  6</span>  * Copyright (c) 2013-2016 Kenji Urushima (kenji.urushima@gmail.com)
+<span class='line'>  6</span>  * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
 <span class='line'>  7</span>  *
 <span class='line'>  8</span>  * This software is licensed under the terms of the MIT License.
 <span class='line'>  9</span>  * http://kjur.github.com/jsrsasign/license
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name crypto-1.1.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version 1.1.11 (2016-Dec-25)
+<span class='line'> 19</span>  * @version 1.1.12 (2017-Jan-31)
 <span class='line'> 20</span>  * @since jsrsasign 2.2
 <span class='line'> 21</span>  * @license &lt;a href="http://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -1449,14 +1449,14 @@
 <span class='line'>1442</span>  * @function
 <span class='line'>1443</span>  * @param {String} s input string to encrypt
 <span class='line'>1444</span>  * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
-<span class='line'>1445</span>  * @param {String} algName short/long algorithm name for encryption/decryption
+<span class='line'>1445</span>  * @param {String} algName short/long algorithm name for encryption/decryption 
 <span class='line'>1446</span>  * @return {String} hexadecimal encrypted string
 <span class='line'>1447</span>  * @since jsrsasign 6.2.0 crypto 1.1.10
 <span class='line'>1448</span>  * @description
 <span class='line'>1449</span>  * This static method encrypts raw string with specified key and algorithm.
 <span class='line'>1450</span>  * @example 
 <span class='line'>1451</span>  * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj) &rarr; "1abc2d..."
-<span class='line'>1452</span>  * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."
+<span class='line'>1452</span>  * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj, "RSAOAEP") &rarr; "23ab02..."
 <span class='line'>1453</span>  */</span><span class="WHIT">
 <span class='line'>1454</span> </span><span class="NAME">KJUR.crypto.Cipher.encrypt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keyObj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">algName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>1455</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">keyObj</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">RSAKey</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">keyObj.isPublic</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">

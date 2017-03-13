@@ -789,7 +789,7 @@ cert.setSignatureHex('01020304');</pre>
 					
 					
 					
-					<pre class="code">var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbs, 'rsaprvkey': prvKey});
+					<pre class="code">var cert = new KJUR.asn1.x509.Certificate({tbscertobj: tbs, prvkeyobj: prvKey});
 cert.sign();</pre>
 					
 					

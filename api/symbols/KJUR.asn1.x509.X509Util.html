@@ -619,19 +619,18 @@ Signature value will be provided by signing with
 private key using 'cakey' parameter or
 hexa decimal signature value by 'sighex' parameter.
 
-NOTE: When using DSA or ECDSA CA signing key,
-use 'paramempty' in 'sigalg' to ommit parameter field
-of AlgorithmIdentifer. In case of RSA, parameter
-NULL will be specified by default.
+NOTE: Algorithm parameter of AlgorithmIdentifier will
+be set automatically by default. ({@see KJUR.asn1.x509.AlgorithmIdentifier})
+from jsrsasign 7.1.1 asn1x509 1.0.20.
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">var certPEM = KJUR.asn1.x509.X509Util.newCertPEM(
-{ serial: {int: 4},
-  sigalg: {name: 'SHA1withECDSA', paramempty: true},
+					<pre class="code">var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
+  serial: {int: 4},
+  sigalg: {name: 'SHA1withECDSA'},
   issuer: {str: '/C=US/O=a'},
   notbefore: {'str': '130504235959Z'},
   notafter: {'str': '140504235959Z'},
@@ -644,9 +643,9 @@ NULL will be specified by default.
   cakey: [prvkey, pass]}
 );
 // -- or --
-var certPEM = KJUR.asn1.x509.X509Util.newCertPEM(
-{ serial: {int: 1},
-  sigalg: {name: 'SHA1withRSA', paramempty: true},
+var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
+  serial: {int: 1},
+  sigalg: {name: 'SHA1withRSA'},
   issuer: {str: '/C=US/O=T1'},
   notbefore: {'str': '130504235959Z'},
   notafter: {'str': '140504235959Z'},
@@ -656,9 +655,9 @@ var certPEM = KJUR.asn1.x509.X509Util.newCertPEM(
 );
 // for the issuer and subject field, another
 // representation is also available
-var certPEM = KJUR.asn1.x509.X509Util.newCertPEM(
-{ serial: {int: 1},
-  sigalg: {name: 'SHA1withRSA', paramempty: true},
+var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
+  serial: {int: 1},
+  sigalg: {name: 'SHA256withRSA'},
   issuer: {C: "US", O: "T1"},
   notbefore: {'str': '130504235959Z'},
   notafter: {'str': '140504235959Z'},
