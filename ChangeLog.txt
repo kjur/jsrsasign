@@ -1,6 +1,31 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 7.0.0 to 7.1.1 (2017-Mar-10)
+  - CRITICAL BUG FIX: KJUR.asn1.x509.Certificate.sign() and
+    KJUR.asn1.x509.X509Util.newCertPEM() have always 
+    signed signatures with SHA1withRSA algorithm regardless
+    of any specified signature algorithm. This issue was 
+    fixed in this release.
+  - asn1x509 1.0.19 to 1.0.20
+    - Certificate
+      - sign() critical bug fix
+        sign() was always sign with SHA1withRSA regardless of
+        specified any other signature algorithm.
+        This fixes #240 and #241 by @helfloryd.
+    - AlgorithmIdentifier
+      - set algorithm parameter to NULL automatically by default 
+        for "*withRSA" algorithm.
+      - document update
+    - newCertPEM
+      - fix document
+  - x509 1.1.11 to 1.1.12
+    - X509.verifySignature static method added
+  - ext/rng.js
+    - fix #228 from @dzaman. window.crypto.random fix
+  - crypto 1.1.11 to 1.1.12
+    - minor document fix
+
 * Changes from 7.0.0 to 7.1.0 (2017-Jan-21)
   - minor update for loading private/public key
     - support added: PKCS#5 DSA/ECC hexacedimal string of private key

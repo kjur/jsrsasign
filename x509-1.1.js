@@ -1,4 +1,4 @@
-/*! x509-1.1.11.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! x509-1.1.12.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,16 +16,9 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version x509 1.1.11 (2017-Jan-21)
+ * @version x509 1.1.12 (2017-Mar-12)
  * @since jsrsasign 1.x.x
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
- */
-
-/*
- * Depends:
- *   base64.js
- *   rsa.js
- *   asn1hex.js
  */
 
 /**
@@ -1317,14 +1310,30 @@ X509.getSerialNumberHex = function(hCert) {
     return ASN1HEX.getDecendantHexVByNthList(hCert, 0, [0, 1]);
 };
 
-/*
-  X509.prototype.readCertPEM = _x509_readCertPEM;
-  X509.prototype.readCertPEMWithoutRSAInit = _x509_readCertPEMWithoutRSAInit;
-  X509.prototype.getSerialNumberHex = _x509_getSerialNumberHex;
-  X509.prototype.getIssuerHex = _x509_getIssuerHex;
-  X509.prototype.getSubjectHex = _x509_getSubjectHex;
-  X509.prototype.getIssuerString = _x509_getIssuerString;
-  X509.prototype.getSubjectString = _x509_getSubjectString;
-  X509.prototype.getNotBefore = _x509_getNotBefore;
-  X509.prototype.getNotAfter = _x509_getNotAfter;
-*/
+/**
+ * verifies signature value by public key
+ * @name verifySignature
+ * @memberOf X509
+ * @function
+ * @param {String} hCert hexadecimal string of X.509 certificate binary
+ * @param {Object} pubKey public key object
+ * @return {Boolean} true if signature value is valid otherwise false
+ * @since jsrsasign 7.1.1 x509 1.1.12
+ * @description
+ * This method verifies signature value of hexadecimal string of 
+ * X.509 certificate by specified public key object.
+ * @example
+ * pubKey = KEYUTIL.getKey(pemPublicKey); // or certificate
+ * hCert = ASN1HEX.pemToHex(pemCert);
+ * isValid = X509.verifySignature(hCert, pubKey);
+ */
+X509.verifySignature = function(hCert, pubKey) {
+    var algName = X509.getSignatureAlgorithmName(hCert);
+    var hSigVal = X509.getSignatureValueHex(hCert);
+    var hTbsCert = ASN1HEX.getDecendantHexTLVByNthList(hCert, 0, [0]);
+
+    var sig = new KJUR.crypto.Signature({alg: algName});
+    sig.init(pubKey);
+    sig.updateHex(hTbsCert);
+    return sig.verify(hSigVal);
+};

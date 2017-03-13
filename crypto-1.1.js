@@ -1,9 +1,9 @@
-/*! crypto-1.1.11.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! crypto-1.1.12.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
  *
- * Copyright (c) 2013-2016 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.1.11 (2016-Dec-25)
+ * @version 1.1.12 (2017-Jan-31)
  * @since jsrsasign 2.2
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1442,14 +1442,14 @@ KJUR.crypto.Cipher = function(params) {
  * @function
  * @param {String} s input string to encrypt
  * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
- * @param {String} algName short/long algorithm name for encryption/decryption
+ * @param {String} algName short/long algorithm name for encryption/decryption 
  * @return {String} hexadecimal encrypted string
  * @since jsrsasign 6.2.0 crypto 1.1.10
  * @description
  * This static method encrypts raw string with specified key and algorithm.
  * @example 
  * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj) &rarr; "1abc2d..."
- * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."
+ * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj, "RSAOAEP") &rarr; "23ab02..."
  */
 KJUR.crypto.Cipher.encrypt = function(s, keyObj, algName) {
     if (keyObj instanceof RSAKey && keyObj.isPublic) {

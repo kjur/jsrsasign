@@ -215,9 +215,43 @@ test("Time class test", function() {
 });
 
 test("AlgorithmIdentifier class test", function() {
-  expect(1);
-  var o1 = new KJUR.asn1.x509.AlgorithmIdentifier({'name':'SHA1withRSA'});
-  equal(o1.getEncodedHex(), "300d06092a864886f70d0101050500", "constructor name SHA1withRSA");
+  equal(new KJUR.asn1.x509.AlgorithmIdentifier({'name':'SHA1withRSA'}).getEncodedHex(),
+        "300d06092a864886f70d0101050500", "constructor name SHA1withRSA");
+
+  equal(new KJUR.asn1.x509.AlgorithmIdentifier({'name':'SHA256withRSA'}).getEncodedHex(),
+        "300d06092a864886f70d01010b0500", "constructor name SHA256withRSA");
+
+  equal(new KJUR.asn1.x509.AlgorithmIdentifier({'name':'SHA256withRSA', paramempty: true}).getEncodedHex(),
+        "300b06092a864886f70d01010b", "constructor name SHA256withRSA, paramempty");
+
+  equal(new KJUR.asn1.x509.AlgorithmIdentifier({'name':'SHA1withDSA'}).getEncodedHex(),
+        "300906072a8648ce380403", "constructor name SHA1withDSA");
+
+  equal(new KJUR.asn1.x509.AlgorithmIdentifier({'name':'SHA512withECDSA'}).getEncodedHex(),
+        "300a06082a8648ce3d040304", "constructor name SHA512withECDSA");
+
+  equal(new KJUR.asn1.x509.AlgorithmIdentifier({'name':'rsaEncryption'}).getEncodedHex(),
+        "300d06092a864886f70d0101010500", "constructor name rsaEncryption");
+});
+
+test("AlgorithmIdentifier SHA1withECDSA", function() {
+var o = new KJUR.asn1.x509.AlgorithmIdentifier({name: 'SHA1withECDSA', paramempty: true});
+equal(o.getEncodedHex(), "300906072a8648ce3d0401", "aaa");
+});
+
+test("AlgorithmIdentifier SHA256withECDSA", function() {
+var o = new KJUR.asn1.x509.AlgorithmIdentifier({name: 'SHA256withECDSA', paramempty: true});
+equal(o.getEncodedHex(), "300a06082a8648ce3d040302", "aaa");
+});
+
+test("AlgorithmIdentifier SHA1withDSA", function() {
+var o = new KJUR.asn1.x509.AlgorithmIdentifier({name: 'SHA1withDSA', paramempty: true});
+equal(o.getEncodedHex(), "300906072a8648ce380403", "aaa");
+});
+
+test("AlgorithmIdentifier SHA256withDSA", function() {
+var o = new KJUR.asn1.x509.AlgorithmIdentifier({name: 'SHA256withDSA', paramempty: true});
+equal(o.getEncodedHex(), "300b0609608648016503040302", "aaa");
 });
 
 test("GeneralName class test", function() {
