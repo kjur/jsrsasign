@@ -2662,12 +2662,27 @@ KJUR.asn1.x509.X509Util = new function() {
  * Signature value will be provided by signing with
  * private key using 'cakey' parameter or
  * hexa decimal signature value by 'sighex' parameter.
- *
+ * <br/>
  * NOTE: Algorithm parameter of AlgorithmIdentifier will
  * be set automatically by default. (see {@link KJUR.asn1.x509.AlgorithmIdentifier})
  * from jsrsasign 7.1.1 asn1x509 1.0.20.
  *
  * @example
+ * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
+ *   serial: {int: 4},
+ *   sigalg: {name: 'SHA1withECDSA'},
+ *   issuer: {str: '/C=US/O=a'},
+ *   notbefore: {'str': '130504235959Z'},
+ *   notafter: {'str': '140504235959Z'},
+ *   subject: {str: '/C=US/O=b'},
+ *   sbjpubkey: pubKeyObj,
+ *   ext: [
+ *     {basicConstraints: {cA: true, critical: true}},
+ *     {keyUsage: {bin: '11'}},
+ *   ],
+ *   cakey: prvKeyObj
+ * });
+ * // -- or --
  * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
  *   serial: {int: 4},
  *   sigalg: {name: 'SHA1withECDSA'},
@@ -2691,8 +2706,8 @@ KJUR.asn1.x509.X509Util = new function() {
  *   notafter: {'str': '140504235959Z'},
  *   subject: {str: '/C=US/O=T1'},
  *   sbjpubkey: pubKeyObj,
- *   sighex: '0102030405..'}
- * );
+ *   sighex: '0102030405..'
+ * });
  * // for the issuer and subject field, another
  * // representation is also available
  * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
@@ -2703,8 +2718,8 @@ KJUR.asn1.x509.X509Util = new function() {
  *   notafter: {'str': '140504235959Z'},
  *   subject: {C: "US", O: "T1", CN: "http://example.com/"},
  *   sbjpubkey: pubKeyObj,
- *   sighex: '0102030405..'}
- * );
+ *   sighex: '0102030405..'
+ * });
  */
 KJUR.asn1.x509.X509Util.newCertPEM = function(param) {
     var ns1 = KJUR.asn1.x509;
@@ -2778,14 +2793,3 @@ KJUR.asn1.x509.X509Util.newCertPEM = function(param) {
     return cert.getPEMString();
 };
 
-/*
-  org.bouncycastle.asn1.x500
-  AttributeTypeAndValue
-  DirectoryString
-  RDN
-  X500Name
-  X500NameBuilder
-
-  org.bouncycastleasn1.x509
-  TBSCertificate
-*/

@@ -2669,7 +2669,7 @@
 <span class='line'>2662</span>  * Signature value will be provided by signing with
 <span class='line'>2663</span>  * private key using 'cakey' parameter or
 <span class='line'>2664</span>  * hexa decimal signature value by 'sighex' parameter.
-<span class='line'>2665</span>  *
+<span class='line'>2665</span>  * &lt;br/>
 <span class='line'>2666</span>  * NOTE: Algorithm parameter of AlgorithmIdentifier will
 <span class='line'>2667</span>  * be set automatically by default. (see {@link KJUR.asn1.x509.AlgorithmIdentifier})
 <span class='line'>2668</span>  * from jsrsasign 7.1.1 asn1x509 1.0.20.
@@ -2682,118 +2682,122 @@
 <span class='line'>2675</span>  *   notbefore: {'str': '130504235959Z'},
 <span class='line'>2676</span>  *   notafter: {'str': '140504235959Z'},
 <span class='line'>2677</span>  *   subject: {str: '/C=US/O=b'},
-<span class='line'>2678</span>  *   sbjpubkey: pubKeyPEM,
+<span class='line'>2678</span>  *   sbjpubkey: pubKeyObj,
 <span class='line'>2679</span>  *   ext: [
 <span class='line'>2680</span>  *     {basicConstraints: {cA: true, critical: true}},
 <span class='line'>2681</span>  *     {keyUsage: {bin: '11'}},
 <span class='line'>2682</span>  *   ],
-<span class='line'>2683</span>  *   cakey: [prvkey, pass]}
-<span class='line'>2684</span>  * );
+<span class='line'>2683</span>  *   cakey: prvKeyObj
+<span class='line'>2684</span>  * });
 <span class='line'>2685</span>  * // -- or --
 <span class='line'>2686</span>  * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
-<span class='line'>2687</span>  *   serial: {int: 1},
-<span class='line'>2688</span>  *   sigalg: {name: 'SHA1withRSA'},
-<span class='line'>2689</span>  *   issuer: {str: '/C=US/O=T1'},
+<span class='line'>2687</span>  *   serial: {int: 4},
+<span class='line'>2688</span>  *   sigalg: {name: 'SHA1withECDSA'},
+<span class='line'>2689</span>  *   issuer: {str: '/C=US/O=a'},
 <span class='line'>2690</span>  *   notbefore: {'str': '130504235959Z'},
 <span class='line'>2691</span>  *   notafter: {'str': '140504235959Z'},
-<span class='line'>2692</span>  *   subject: {str: '/C=US/O=T1'},
-<span class='line'>2693</span>  *   sbjpubkey: pubKeyObj,
-<span class='line'>2694</span>  *   sighex: '0102030405..'}
-<span class='line'>2695</span>  * );
-<span class='line'>2696</span>  * // for the issuer and subject field, another
-<span class='line'>2697</span>  * // representation is also available
-<span class='line'>2698</span>  * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
-<span class='line'>2699</span>  *   serial: {int: 1},
-<span class='line'>2700</span>  *   sigalg: {name: 'SHA256withRSA'},
-<span class='line'>2701</span>  *   issuer: {C: "US", O: "T1"},
-<span class='line'>2702</span>  *   notbefore: {'str': '130504235959Z'},
-<span class='line'>2703</span>  *   notafter: {'str': '140504235959Z'},
-<span class='line'>2704</span>  *   subject: {C: "US", O: "T1", CN: "http://example.com/"},
-<span class='line'>2705</span>  *   sbjpubkey: pubKeyObj,
-<span class='line'>2706</span>  *   sighex: '0102030405..'}
-<span class='line'>2707</span>  * );
-<span class='line'>2708</span>  */</span><span class="WHIT">
-<span class='line'>2709</span> </span><span class="NAME">KJUR.asn1.x509.X509Util.newCertPEM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">param</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2710</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ns1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2711</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">o</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ns1.TBSCertificate</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2712</span> 
-<span class='line'>2713</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.serial</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>2714</span> </span><span class="WHIT">        </span><span class="NAME">o.setSerialNumberByParam</span><span class="PUNC">(</span><span class="NAME">param.serial</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2715</span> </span><span class="WHIT">    </span><span class="KEYW">else</span><span class="WHIT">
-<span class='line'>2716</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"serial number undefined."</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2717</span> 
-<span class='line'>2718</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">param.sigalg.name</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'string'</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>2719</span> </span><span class="WHIT">        </span><span class="NAME">o.setSignatureAlgByParam</span><span class="PUNC">(</span><span class="NAME">param.sigalg</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2720</span> </span><span class="WHIT">    </span><span class="KEYW">else</span><span class="WHIT">
-<span class='line'>2721</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"unproper signature algorithm name"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2722</span> 
-<span class='line'>2723</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.issuer</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>2724</span> </span><span class="WHIT">        </span><span class="NAME">o.setIssuerByParam</span><span class="PUNC">(</span><span class="NAME">param.issuer</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2725</span> </span><span class="WHIT">    </span><span class="KEYW">else</span><span class="WHIT">
-<span class='line'>2726</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"issuer name undefined."</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2692</span>  *   subject: {str: '/C=US/O=b'},
+<span class='line'>2693</span>  *   sbjpubkey: pubKeyPEM,
+<span class='line'>2694</span>  *   ext: [
+<span class='line'>2695</span>  *     {basicConstraints: {cA: true, critical: true}},
+<span class='line'>2696</span>  *     {keyUsage: {bin: '11'}},
+<span class='line'>2697</span>  *   ],
+<span class='line'>2698</span>  *   cakey: [prvkey, pass]}
+<span class='line'>2699</span>  * );
+<span class='line'>2700</span>  * // -- or --
+<span class='line'>2701</span>  * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
+<span class='line'>2702</span>  *   serial: {int: 1},
+<span class='line'>2703</span>  *   sigalg: {name: 'SHA1withRSA'},
+<span class='line'>2704</span>  *   issuer: {str: '/C=US/O=T1'},
+<span class='line'>2705</span>  *   notbefore: {'str': '130504235959Z'},
+<span class='line'>2706</span>  *   notafter: {'str': '140504235959Z'},
+<span class='line'>2707</span>  *   subject: {str: '/C=US/O=T1'},
+<span class='line'>2708</span>  *   sbjpubkey: pubKeyObj,
+<span class='line'>2709</span>  *   sighex: '0102030405..'
+<span class='line'>2710</span>  * });
+<span class='line'>2711</span>  * // for the issuer and subject field, another
+<span class='line'>2712</span>  * // representation is also available
+<span class='line'>2713</span>  * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
+<span class='line'>2714</span>  *   serial: {int: 1},
+<span class='line'>2715</span>  *   sigalg: {name: 'SHA256withRSA'},
+<span class='line'>2716</span>  *   issuer: {C: "US", O: "T1"},
+<span class='line'>2717</span>  *   notbefore: {'str': '130504235959Z'},
+<span class='line'>2718</span>  *   notafter: {'str': '140504235959Z'},
+<span class='line'>2719</span>  *   subject: {C: "US", O: "T1", CN: "http://example.com/"},
+<span class='line'>2720</span>  *   sbjpubkey: pubKeyObj,
+<span class='line'>2721</span>  *   sighex: '0102030405..'
+<span class='line'>2722</span>  * });
+<span class='line'>2723</span>  */</span><span class="WHIT">
+<span class='line'>2724</span> </span><span class="NAME">KJUR.asn1.x509.X509Util.newCertPEM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">param</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2725</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ns1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2726</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">o</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ns1.TBSCertificate</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>2727</span> 
-<span class='line'>2728</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.notbefore</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>2729</span> </span><span class="WHIT">        </span><span class="NAME">o.setNotBeforeByParam</span><span class="PUNC">(</span><span class="NAME">param.notbefore</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2728</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.serial</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>2729</span> </span><span class="WHIT">        </span><span class="NAME">o.setSerialNumberByParam</span><span class="PUNC">(</span><span class="NAME">param.serial</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>2730</span> </span><span class="WHIT">    </span><span class="KEYW">else</span><span class="WHIT">
-<span class='line'>2731</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"notbefore undefined."</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2731</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"serial number undefined."</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>2732</span> 
-<span class='line'>2733</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.notafter</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>2734</span> </span><span class="WHIT">        </span><span class="NAME">o.setNotAfterByParam</span><span class="PUNC">(</span><span class="NAME">param.notafter</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2733</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">param.sigalg.name</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'string'</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>2734</span> </span><span class="WHIT">        </span><span class="NAME">o.setSignatureAlgByParam</span><span class="PUNC">(</span><span class="NAME">param.sigalg</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>2735</span> </span><span class="WHIT">    </span><span class="KEYW">else</span><span class="WHIT">
-<span class='line'>2736</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"notafter undefined."</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2736</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"unproper signature algorithm name"</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>2737</span> 
-<span class='line'>2738</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.subject</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>2739</span> </span><span class="WHIT">        </span><span class="NAME">o.setSubjectByParam</span><span class="PUNC">(</span><span class="NAME">param.subject</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2738</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.issuer</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>2739</span> </span><span class="WHIT">        </span><span class="NAME">o.setIssuerByParam</span><span class="PUNC">(</span><span class="NAME">param.issuer</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>2740</span> </span><span class="WHIT">    </span><span class="KEYW">else</span><span class="WHIT">
-<span class='line'>2741</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"subject name undefined."</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2741</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"issuer name undefined."</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>2742</span> 
-<span class='line'>2743</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.sbjpubkey</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>2744</span> </span><span class="WHIT">        </span><span class="NAME">o.setSubjectPublicKeyByGetKey</span><span class="PUNC">(</span><span class="NAME">param.sbjpubkey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2743</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.notbefore</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>2744</span> </span><span class="WHIT">        </span><span class="NAME">o.setNotBeforeByParam</span><span class="PUNC">(</span><span class="NAME">param.notbefore</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>2745</span> </span><span class="WHIT">    </span><span class="KEYW">else</span><span class="WHIT">
-<span class='line'>2746</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"subject public key undefined."</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2746</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"notbefore undefined."</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>2747</span> 
-<span class='line'>2748</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.ext</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">param.ext.length</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2749</span> </span><span class="WHIT">        </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">param.ext.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2750</span> </span><span class="WHIT">            </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">key</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">param.ext</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2751</span> </span><span class="WHIT">                </span><span class="NAME">o.appendExtensionByName</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">param.ext</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">key</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2752</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>2753</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>2754</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>2755</span> 
-<span class='line'>2756</span> </span><span class="WHIT">    </span><span class="COMM">// set signature</span><span class="WHIT">
-<span class='line'>2757</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.cakey</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">param.sighex</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>2758</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"param cakey and sighex undefined."</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2759</span> 
-<span class='line'>2760</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">caKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2761</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cert</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2748</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.notafter</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>2749</span> </span><span class="WHIT">        </span><span class="NAME">o.setNotAfterByParam</span><span class="PUNC">(</span><span class="NAME">param.notafter</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2750</span> </span><span class="WHIT">    </span><span class="KEYW">else</span><span class="WHIT">
+<span class='line'>2751</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"notafter undefined."</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2752</span> 
+<span class='line'>2753</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.subject</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>2754</span> </span><span class="WHIT">        </span><span class="NAME">o.setSubjectByParam</span><span class="PUNC">(</span><span class="NAME">param.subject</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2755</span> </span><span class="WHIT">    </span><span class="KEYW">else</span><span class="WHIT">
+<span class='line'>2756</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"subject name undefined."</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2757</span> 
+<span class='line'>2758</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.sbjpubkey</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>2759</span> </span><span class="WHIT">        </span><span class="NAME">o.setSubjectPublicKeyByGetKey</span><span class="PUNC">(</span><span class="NAME">param.sbjpubkey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2760</span> </span><span class="WHIT">    </span><span class="KEYW">else</span><span class="WHIT">
+<span class='line'>2761</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"subject public key undefined."</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>2762</span> 
-<span class='line'>2763</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.cakey</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2764</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.cakey.isPrivate</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2765</span> </span><span class="WHIT">	    </span><span class="NAME">caKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">param.cakey</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2766</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2767</span> </span><span class="WHIT">            </span><span class="NAME">caKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KEYUTIL.getKey.apply</span><span class="PUNC">(</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">param.cakey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2768</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>2769</span> </span><span class="WHIT">        </span><span class="NAME">cert</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ns1.Certificate</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'tbscertobj'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">o</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'prvkeyobj'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">caKey</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2770</span> </span><span class="WHIT">        </span><span class="NAME">cert.sign</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2771</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>2772</span> 
-<span class='line'>2773</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.sighex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2774</span> </span><span class="WHIT">        </span><span class="NAME">cert</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ns1.Certificate</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'tbscertobj'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">o</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2775</span> </span><span class="WHIT">        </span><span class="NAME">cert.setSignatureHex</span><span class="PUNC">(</span><span class="NAME">param.sighex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2776</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2763</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.ext</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">param.ext.length</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2764</span> </span><span class="WHIT">        </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">param.ext.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2765</span> </span><span class="WHIT">            </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">key</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">param.ext</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2766</span> </span><span class="WHIT">                </span><span class="NAME">o.appendExtensionByName</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">param.ext</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">key</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2767</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2768</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2769</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2770</span> 
+<span class='line'>2771</span> </span><span class="WHIT">    </span><span class="COMM">// set signature</span><span class="WHIT">
+<span class='line'>2772</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.cakey</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">param.sighex</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>2773</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"param cakey and sighex undefined."</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2774</span> 
+<span class='line'>2775</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">caKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2776</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cert</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>2777</span> 
-<span class='line'>2778</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">cert.getPEMString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2779</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2780</span> 
-<span class='line'>2781</span> </span><span class="COMM">/*
-<span class='line'>2782</span>   org.bouncycastle.asn1.x500
-<span class='line'>2783</span>   AttributeTypeAndValue
-<span class='line'>2784</span>   DirectoryString
-<span class='line'>2785</span>   RDN
-<span class='line'>2786</span>   X500Name
-<span class='line'>2787</span>   X500NameBuilder
-<span class='line'>2788</span> 
-<span class='line'>2789</span>   org.bouncycastleasn1.x509
-<span class='line'>2790</span>   TBSCertificate
-<span class='line'>2791</span> */</span><span class="WHIT">
-<span class='line'>2792</span> </span></pre></body></html>
+<span class='line'>2778</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.cakey</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2779</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.cakey.isPrivate</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2780</span> </span><span class="WHIT">	    </span><span class="NAME">caKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">param.cakey</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2781</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2782</span> </span><span class="WHIT">            </span><span class="NAME">caKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KEYUTIL.getKey.apply</span><span class="PUNC">(</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">param.cakey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2783</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2784</span> </span><span class="WHIT">        </span><span class="NAME">cert</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ns1.Certificate</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'tbscertobj'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">o</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'prvkeyobj'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">caKey</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2785</span> </span><span class="WHIT">        </span><span class="NAME">cert.sign</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2786</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2787</span> 
+<span class='line'>2788</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param.sighex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2789</span> </span><span class="WHIT">        </span><span class="NAME">cert</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ns1.Certificate</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'tbscertobj'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">o</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2790</span> </span><span class="WHIT">        </span><span class="NAME">cert.setSignatureHex</span><span class="PUNC">(</span><span class="NAME">param.sighex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2791</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2792</span> 
+<span class='line'>2793</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">cert.getPEMString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2794</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2795</span> 
+<span class='line'>2796</span> </span></pre></body></html>
