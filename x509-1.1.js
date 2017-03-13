@@ -74,6 +74,7 @@
  *   <li>reading PEM certificate - {@link X509#readCertPEM}</li>
  *   <li>get all certificate information - {@link X509#getInfo}</li>
  *   <li>get Base64 from PEM certificate - {@link X509.pemToBase64}</li>
+ *   <li>verify signature value - {@link X509.verifySignature}</li>
  *   <li>get hexadecimal string from PEM certificate - {@link X509.pemToHex} (DEPRECATED)</li>
  *   </ul>
  * </li>

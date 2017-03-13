@@ -2664,7 +2664,7 @@ KJUR.asn1.x509.X509Util = new function() {
  * hexa decimal signature value by 'sighex' parameter.
  *
  * NOTE: Algorithm parameter of AlgorithmIdentifier will
- * be set automatically by default. ({@see KJUR.asn1.x509.AlgorithmIdentifier})
+ * be set automatically by default. (see {@link KJUR.asn1.x509.AlgorithmIdentifier})
  * from jsrsasign 7.1.1 asn1x509 1.0.20.
  *
  * @example
