@@ -446,7 +446,7 @@ ul.inheritsList
 				
 				
 			
-				class for PKCS#5 and PKCS#8 private key
+				(DEPRECATED) class for PKCS#5 and PKCS#8 private key
 				
 				
 					<br /><i>Defined in: </i> <a href="../symbols/src/pkcs5pkey-1.0.js.html">pkcs5pkey-1.0.js</a>.
@@ -579,7 +579,7 @@ generate PEM formatted encrypted PKCS#5 private key by
 							<td class="nameDescription">
 								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getHexFromPEM">getHexFromPEM</a></b>(sPEM, sHead)
 								</div>
-								<div class="description">get hexacedimal string of PEM format</div>
+								<div class="description">(DEPRECATED) get hexacedimal string of PEM format</div>
 							</td>
 						</tr>
 					
@@ -888,7 +888,7 @@ following symmetric key algorithms to protect private key.
 </ul>
 <dt><b>UTITILIY METHODS</b><dd>
 <ul>
-<li><a href="../symbols/PKCS5PKEY.html#.getHexFromPEM">PKCS5PKEY.getHexFromPEM</a> - convert PEM string to hexadecimal data</li>
+<li><a href="../symbols/PKCS5PKEY.html#.getHexFromPEM">PKCS5PKEY.getHexFromPEM</a> - convert PEM string to hexadecimal data (DEPRECATED)</li>
 <li><a href="../symbols/PKCS5PKEY.html#.getDecryptedKeyHexByKeyIV">PKCS5PKEY.getDecryptedKeyHexByKeyIV</a> - decrypt key by sharedKey and IV</li>
 </ul>
 </dl>
@@ -1248,7 +1248,7 @@ var pem = PKCS5PKEY.getEncryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
 					
 					</div>
 					<div class="description">
-						get hexacedimal string of PEM format
+						(DEPRECATED) get hexacedimal string of PEM format
 						
 						
 					</div>
@@ -1273,6 +1273,13 @@ var pem = PKCS5PKEY.getEncryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from pkcs5pkey 1.1.0 jsrsasign 7.1.0. please move to <a href="../symbols/ASN1HEX.html#.pemToHex">ASN1HEX.pemToHex</a>
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">

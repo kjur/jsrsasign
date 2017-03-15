@@ -125,7 +125,7 @@ KJUR.asn1.x509.Certificate = function(params) {
     var rsaPrvKey = null; // DEPRECATED
 
     /**
-     * set PKCS#5 encrypted RSA PEM private key as CA key
+     * (DEPRECATED) set PKCS#5 encrypted RSA PEM private key as CA key
      * @name setRsaPrvKeyByPEMandPass
      * @memberOf KJUR.asn1.x509.Certificate#
      * @function

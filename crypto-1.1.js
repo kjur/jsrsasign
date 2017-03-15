@@ -1227,7 +1227,7 @@ KJUR.crypto.Signature = function(params) {
     };
 
     /**
-     * Initialize this object for verifying with a public key
+     * (DEPRECATED) Initialize this object for verifying with a public key
      * @name initVerifyByPublicKey
      * @memberOf KJUR.crypto.Signature#
      * @function
@@ -1252,7 +1252,7 @@ KJUR.crypto.Signature = function(params) {
     };
 
     /**
-     * Initialize this object for verifying with a certficate
+     * (DEPRECATED) Initialize this object for verifying with a certficate
      * @name initVerifyByCertificatePEM
      * @memberOf KJUR.crypto.Signature#
      * @function
@@ -1269,7 +1269,7 @@ KJUR.crypto.Signature = function(params) {
     };
 
     /**
-     * Initialize this object for signing
+     * (DEPRECATED) Initialize this object for signing
      * @name initSign
      * @memberOf KJUR.crypto.Signature#
      * @function

@@ -389,7 +389,7 @@ X509.pemToBase64 = function(sCertPEM) {
 };
 
 /**
- * get a hexa decimal string from PEM certificate string
+ * (DEPRECATED) get a hexa decimal string from PEM certificate string
  * @name pemToHex
  * @memberOf X509
  * @function
