@@ -162,7 +162,7 @@ KJUR.jws.JWSJS = function() {
     };
 
     /**
-     * add a signature to existing JWS-JS by Header and PKCS1 private key.<br/>
+     * (DEPRECATED) add a signature to existing JWS-JS by Header and PKCS1 private key.<br/>
      * @name addSignatureByHeaderKey
      * @memberOf KJUR.jws.JWSJS#
      * @function
@@ -181,7 +181,7 @@ KJUR.jws.JWSJS = function() {
     };
 
     /**
-     * add a signature to existing JWS-JS by Header, Payload and PKCS1 private key.<br/>
+     * (DEPRECATED) add a signature to existing JWS-JS by Header, Payload and PKCS1 private key.<br/>
      * This is to add first signature to JWS-JS object.
      * @name addSignatureByHeaderPayloadKey
      * @memberOf KJUR.jws.JWSJS#
@@ -261,7 +261,7 @@ KJUR.jws.JWSJS = function() {
     };
 
     /**
-     * verify JWS-JS object with array of certificate string.<br/>
+     * (DEPRECATED) verify JWS-JS object with array of certificate string.<br/>
      * @name verifyWithCerts
      * @memberOf KJUR.jws.JWSJS#
      * @function

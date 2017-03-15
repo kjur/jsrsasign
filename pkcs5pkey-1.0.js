@@ -13,7 +13,7 @@
  */
 /**
  * @fileOverview
- * @name pkcs5pkey-1.0.js
+ * @name pkcs5pkey-1.0.js (DEPRECATED)
  * @author Kenji Urushima kenji.urushima@gmail.com
  * @version pkcs5pkey 1.1.0 (2017-Jan-21)
  * @since jsrsasign 2.0.0
@@ -22,7 +22,7 @@
 
 /**
  * @name PKCS5PKEY
- * @class class for PKCS#5 and PKCS#8 private key 
+ * @class (DEPRECATED) class for PKCS#5 and PKCS#8 private key 
  * @deprecated Since jsrsasign 4.1.3. Please use KEYUTIL class.
  * @description 
  * <br/>
