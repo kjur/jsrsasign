@@ -528,8 +528,9 @@ The 'params' argument is an associative array and has following parameters:
 (OPTION)</li>
 <li>paramempty: set algorithm parameter to NULL by force.
 If paramempty is false, algorithm parameter will be set automatically.
-If algorithm name is "rsaEncryption" or "*withRSA" such as "SHA1withRSA", 
-algorithm parameter will be set to NULL by default.
+If paramempty is false and algorithm name is "*withDSA" or "withECDSA" parameter field of
+AlgorithmIdentifier will be ommitted otherwise
+it will be NULL by default.
 (OPTION, DEFAULT = false)</li>
 </ul>
 					

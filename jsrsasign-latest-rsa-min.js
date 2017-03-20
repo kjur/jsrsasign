@@ -1,5 +1,5 @@
 /*
- * jsrsasign(rsa) 7.1.1 (2017-03-15) (c) 2010-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+ * jsrsasign(rsa) 7.1.2 (2017-03-20) (c) 2010-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 
 /*

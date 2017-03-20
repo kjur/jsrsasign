@@ -1,4 +1,4 @@
-/*! asn1x509-1.0.21.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1x509-1.0.22.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.21 (2017-Mar-03)
+ * @version 1.0.22 (2017-Mar-20)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1995,8 +1995,9 @@ YAHOO.lang.extend(KJUR.asn1.x509.Time, KJUR.asn1.ASN1Object);
  * (OPTION)</li>
  * <li>paramempty: set algorithm parameter to NULL by force.
  * If paramempty is false, algorithm parameter will be set automatically.
- * If algorithm name is "rsaEncryption" or "*withRSA" such as "SHA1withRSA", 
- * algorithm parameter will be set to NULL by default.
+ * If paramempty is false and algorithm name is "*withDSA" or "withECDSA" parameter field of
+ * AlgorithmIdentifier will be ommitted otherwise
+ * it will be NULL by default.
  * (OPTION, DEFAULT = false)</li>
  * </ul>
  * @example
@@ -2042,13 +2043,16 @@ KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
         }
     }
 
-    // set algorithm parameters to NULL for "*withRSA"
+    // set algorithm parameters will be ommitted for
+    // "*withDSA" or "*withECDSA" otherwise will be NULL.
     if (this.asn1Params === null &&
 	this.paramEmpty === false &&
-	this.nameAlg !== null &
-	(this.nameAlg.substr(-7, 7).toLowerCase() === "withrsa" ||
-	 this.nameAlg.toLowerCase() === "rsaencryption")) {
-        this.asn1Params = new KJUR.asn1.DERNull();
+	this.nameAlg !== null) {
+	var lcNameAlg = this.nameAlg.toLowerCase();
+	if (lcNameAlg.substr(-7, 7) !== "withdsa" &&
+	    lcNameAlg.substr(-9, 9) !== "withecdsa") {
+            this.asn1Params = new KJUR.asn1.DERNull();
+	}
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.AlgorithmIdentifier, KJUR.asn1.ASN1Object);

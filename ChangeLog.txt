@@ -1,7 +1,17 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 7.0.0 to 7.1.1 (2017-Mar-10)
+* Changes from 7.1.1 to 7.1.2 (2017-Mar-20)
+  - CRITICAL BUG FIX: KJUR.asn1.x509.AlgorithmIdentifier
+    default was wrong in algorithm parameter field.
+    For example "SHA1" AlgorithmIdentifier object
+    will be missing algorithm parameter field by
+    bug. This issue raised just only in 7.1.1 and
+    the issue was fixed.
+    - asn1x509 1.0.21 to 1.0.22
+      - AlgorithmIdentifier bug fix
+
+* Changes from 7.1.0 to 7.1.1 (2017-Mar-10)
   - CRITICAL BUG FIX: KJUR.asn1.x509.Certificate.sign() and
     KJUR.asn1.x509.X509Util.newCertPEM() have always 
     signed signatures with SHA1withRSA algorithm regardless
