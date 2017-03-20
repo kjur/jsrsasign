@@ -232,6 +232,9 @@ test("AlgorithmIdentifier class test", function() {
 
   equal(new KJUR.asn1.x509.AlgorithmIdentifier({'name':'rsaEncryption'}).getEncodedHex(),
         "300d06092a864886f70d0101010500", "constructor name rsaEncryption");
+
+  equal(new KJUR.asn1.x509.AlgorithmIdentifier({'name':'sha1'}).getEncodedHex(),
+        "300906052b0e03021a0500", "constructor name sha1");
 });
 
 test("AlgorithmIdentifier SHA1withECDSA", function() {
