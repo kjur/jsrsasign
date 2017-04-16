@@ -5,14 +5,14 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! jws-3.3.5 (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! jws-3.3.6 (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * jws.js - JSON Web Signature(JWS) and JSON Web Token(JWT) Class
 <span class='line'>  5</span>  *
-<span class='line'>  6</span>  * version: 3.3.4 (2016 May 17)
+<span class='line'>  6</span>  * version: 3.3.6 (2017 Apr 15)
 <span class='line'>  7</span>  *
-<span class='line'>  8</span>  * Copyright (c) 2010-2016 Kenji Urushima (kenji.urushima@gmail.com)
+<span class='line'>  8</span>  * Copyright (c) 2010-2017 Kenji Urushima (kenji.urushima@gmail.com)
 <span class='line'>  9</span>  *
 <span class='line'> 10</span>  * This software is licensed under the terms of the MIT License.
 <span class='line'> 11</span>  * http://kjur.github.com/jsrsasign/license/
@@ -25,7 +25,7 @@
 <span class='line'> 18</span>  * @fileOverview
 <span class='line'> 19</span>  * @name jws-3.3.js
 <span class='line'> 20</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 21</span>  * @version 3.3.5 (2016-Oct-08)
+<span class='line'> 21</span>  * @version 3.3.6 (2017-Apr-15)
 <span class='line'> 22</span>  * @since jsjws 1.0, jsrsasign 4.8.0
 <span class='line'> 23</span>  * @license &lt;a href="http://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 24</span>  */</span><span class="WHIT">
@@ -999,93 +999,69 @@
 <span class='line'>992</span>  * KJUR.jws.IntDate.getZulu("151012125959Z") => 1478...
 <span class='line'>993</span>  */</span><span class="WHIT">
 <span class='line'>994</span> </span><span class="NAME">KJUR.jws.IntDate.getZulu</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>995</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">matchResult</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/(\d+)(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)Z/</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>996</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">matchResult</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>997</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sYear</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">matchResult</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>998</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">sYear</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>999</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">sYear.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">4</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1000</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">sYear.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1001</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NUMB">50</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">100</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1002</span> </span><span class="WHIT">		</span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1900</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">year</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1003</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">50</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1004</span> </span><span class="WHIT">		</span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">2000</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">year</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1005</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1006</span> </span><span class="WHIT">		</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed year string for UTCTime"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1007</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1008</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1009</span> </span><span class="WHIT">	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed year string"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1010</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1011</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">month</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">matchResult</span><span class="PUNC">[</span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1012</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">day</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">matchResult</span><span class="PUNC">[</span><span class="NUMB">3</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1013</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hour</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">matchResult</span><span class="PUNC">[</span><span class="NUMB">4</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1014</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">min</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">matchResult</span><span class="PUNC">[</span><span class="NUMB">5</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1015</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sec</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">matchResult</span><span class="PUNC">[</span><span class="NUMB">6</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1016</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="NAME">Date.UTC</span><span class="PUNC">(</span><span class="NAME">year</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">month</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">day</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">hour</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">min</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sec</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1017</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">~</span><span class="PUNC">~</span><span class="PUNC">(</span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1018</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1019</span> </span><span class="WHIT">    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"unsupported format: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1020</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1021</span> 
-<span class='line'>1022</span> </span><span class="COMM">/**
-<span class='line'>1023</span>  * get UNIX origin time of current time
-<span class='line'>1024</span>  * @name getNow
-<span class='line'>1025</span>  * @memberOf KJUR.jws.IntDate
-<span class='line'>1026</span>  * @function
-<span class='line'>1027</span>  * @static
-<span class='line'>1028</span>  * @return {Integer} UNIX origin time for current time
-<span class='line'>1029</span>  * @since jws 3.0.1
-<span class='line'>1030</span>  * @description
-<span class='line'>1031</span>  * This method provides UNIX origin time for current time
-<span class='line'>1032</span>  * @example
-<span class='line'>1033</span>  * KJUR.jws.IntDate.getNow() => 1478...
-<span class='line'>1034</span>  */</span><span class="WHIT">
-<span class='line'>1035</span> </span><span class="NAME">KJUR.jws.IntDate.getNow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1036</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">~</span><span class="PUNC">~</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1037</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">d</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1038</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1039</span> 
-<span class='line'>1040</span> </span><span class="COMM">/**
-<span class='line'>1041</span>  * get UTC time string from UNIX origin time value
-<span class='line'>1042</span>  * @name intDate2UTCString
-<span class='line'>1043</span>  * @memberOf KJUR.jws.IntDate
-<span class='line'>1044</span>  * @function
-<span class='line'>1045</span>  * @static
-<span class='line'>1046</span>  * @param {Integer} intDate UNIX origin time value (ex. 1478...)
-<span class='line'>1047</span>  * @return {String} UTC time string
-<span class='line'>1048</span>  * @since jws 3.0.1
-<span class='line'>1049</span>  * @description
-<span class='line'>1050</span>  * This method provides UTC time string for UNIX origin time value.
-<span class='line'>1051</span>  * @example
-<span class='line'>1052</span>  * KJUR.jws.IntDate.intDate2UTCString(1478...) => "2015 Oct ..."
-<span class='line'>1053</span>  */</span><span class="WHIT">
-<span class='line'>1054</span> </span><span class="NAME">KJUR.jws.IntDate.intDate2UTCString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1055</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1056</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">d.toUTCString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1057</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1058</span> 
-<span class='line'>1059</span> </span><span class="COMM">/**
-<span class='line'>1060</span>  * get UTC time string from UNIX origin time value
-<span class='line'>1061</span>  * @name intDate2Zulu
-<span class='line'>1062</span>  * @memberOf KJUR.jws.IntDate
-<span class='line'>1063</span>  * @function
-<span class='line'>1064</span>  * @static
-<span class='line'>1065</span>  * @param {Integer} intDate UNIX origin time value (ex. 1478...)
-<span class='line'>1066</span>  * @return {String} Zulu time string
-<span class='line'>1067</span>  * @since jws 3.0.1
-<span class='line'>1068</span>  * @description
-<span class='line'>1069</span>  * This method provides Zulu time string for UNIX origin time value.
-<span class='line'>1070</span>  * @example
-<span class='line'>1071</span>  * KJUR.jws.IntDate.intDate2UTCString(1478...) => "20151012...Z"
-<span class='line'>1072</span>  */</span><span class="WHIT">
-<span class='line'>1073</span> </span><span class="NAME">KJUR.jws.IntDate.intDate2Zulu</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1074</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1075</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">"0000"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCFullYear</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">4</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'>1076</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mon</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">d.getUTCMonth</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'>1077</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">day</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCDate</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'>1078</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hour</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCHours</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'>1079</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">min</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCMinutes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'>1080</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sec</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCSeconds</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
-<span class='line'>1081</span>     </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">mon</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">day</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">hour</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">min</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">sec</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"Z"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1082</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1083</span> 
-<span class='line'>1084</span> </span></pre></body></html>
+<span class='line'>995</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">zulutosec</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>996</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>997</span> 
+<span class='line'>998</span> </span><span class="COMM">/**
+<span class='line'>999</span>  * get UNIX origin time of current time
+<span class='line'>1000</span>  * @name getNow
+<span class='line'>1001</span>  * @memberOf KJUR.jws.IntDate
+<span class='line'>1002</span>  * @function
+<span class='line'>1003</span>  * @static
+<span class='line'>1004</span>  * @return {Integer} UNIX origin time for current time
+<span class='line'>1005</span>  * @since jws 3.0.1
+<span class='line'>1006</span>  * @description
+<span class='line'>1007</span>  * This method provides UNIX origin time for current time
+<span class='line'>1008</span>  * @example
+<span class='line'>1009</span>  * KJUR.jws.IntDate.getNow() => 1478...
+<span class='line'>1010</span>  */</span><span class="WHIT">
+<span class='line'>1011</span> </span><span class="NAME">KJUR.jws.IntDate.getNow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1012</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">~</span><span class="PUNC">~</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1013</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">d</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1014</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1015</span> 
+<span class='line'>1016</span> </span><span class="COMM">/**
+<span class='line'>1017</span>  * get UTC time string from UNIX origin time value
+<span class='line'>1018</span>  * @name intDate2UTCString
+<span class='line'>1019</span>  * @memberOf KJUR.jws.IntDate
+<span class='line'>1020</span>  * @function
+<span class='line'>1021</span>  * @static
+<span class='line'>1022</span>  * @param {Integer} intDate UNIX origin time value (ex. 1478...)
+<span class='line'>1023</span>  * @return {String} UTC time string
+<span class='line'>1024</span>  * @since jws 3.0.1
+<span class='line'>1025</span>  * @description
+<span class='line'>1026</span>  * This method provides UTC time string for UNIX origin time value.
+<span class='line'>1027</span>  * @example
+<span class='line'>1028</span>  * KJUR.jws.IntDate.intDate2UTCString(1478...) => "2015 Oct ..."
+<span class='line'>1029</span>  */</span><span class="WHIT">
+<span class='line'>1030</span> </span><span class="NAME">KJUR.jws.IntDate.intDate2UTCString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1031</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1032</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">d.toUTCString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1033</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1034</span> 
+<span class='line'>1035</span> </span><span class="COMM">/**
+<span class='line'>1036</span>  * get UTC time string from UNIX origin time value
+<span class='line'>1037</span>  * @name intDate2Zulu
+<span class='line'>1038</span>  * @memberOf KJUR.jws.IntDate
+<span class='line'>1039</span>  * @function
+<span class='line'>1040</span>  * @static
+<span class='line'>1041</span>  * @param {Integer} intDate UNIX origin time value (ex. 1478...)
+<span class='line'>1042</span>  * @return {String} Zulu time string
+<span class='line'>1043</span>  * @since jws 3.0.1
+<span class='line'>1044</span>  * @description
+<span class='line'>1045</span>  * This method provides Zulu time string for UNIX origin time value.
+<span class='line'>1046</span>  * @example
+<span class='line'>1047</span>  * KJUR.jws.IntDate.intDate2UTCString(1478...) => "20151012...Z"
+<span class='line'>1048</span>  */</span><span class="WHIT">
+<span class='line'>1049</span> </span><span class="NAME">KJUR.jws.IntDate.intDate2Zulu</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1050</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="NAME">intDate</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1051</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">"0000"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCFullYear</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">4</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'>1052</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mon</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">d.getUTCMonth</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'>1053</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">day</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCDate</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'>1054</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hour</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCHours</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'>1055</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">min</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCMinutes</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'>1056</span>     </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sec</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.getUTCSeconds</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">    
+<span class='line'>1057</span>     </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">mon</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">day</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">hour</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">min</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">sec</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"Z"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1058</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1059</span> 
+<span class='line'>1060</span> </span></pre></body></html>

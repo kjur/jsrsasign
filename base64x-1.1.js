@@ -1,11 +1,11 @@
-/*! base64x-1.1.8 (c) 2012-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! base64x-1.1.9 (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * version: 1.1.8 (2016-Oct-16)
+ * version: 1.1.9 (2017-Apr-08)
  *
- * Copyright (c) 2012-2016 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2012-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsjws/license/
@@ -21,7 +21,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.1.8 (2016-Oct-16)
+ * @version asn1 1.1.9 (2017-Apr-08)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -448,6 +448,112 @@ function ArrayBuffertohex(buffer) {
     }
 
     return hex;
+}
+
+// ==== zulu / int =================================
+/**
+ * GeneralizedTime or UTCTime string to milliseconds from Unix origin<br>
+ * @name zulutomsec
+ * @function
+ * @param {String} s GeneralizedTime or UTCTime string (ex. 20170412235959.384Z)
+ * @return {Number} milliseconds from Unix origin time (i.e. Jan 1, 1970 0:00:00 UTC)
+ * @since jsrsasign 7.1.3 base64x 1.1.9
+ * @description
+ * This function converts from GeneralizedTime string (i.e. YYYYMMDDHHmmSSZ) or
+ * UTCTime string (i.e. YYMMDDHHmmSSZ) to milliseconds from Unix origin time
+ * (i.e. Jan 1 1970 0:00:00 UTC). 
+ * Argument string may have fraction of seconds and
+ * its length is one or more digits such as "20170410235959.1234567Z".
+ * As for UTCTime, if year "YY" is equal or less than 49 then it is 20YY.
+ * If year "YY" is equal or greater than 50 then it is 19YY.
+ * @example
+ * zulutomsec(  "071231235959Z")       &rarr; 1199145599000 #Mon, 31 Dec 2007 23:59:59 GMT
+ * zulutomsec(  "071231235959.1Z")     &rarr; 1199145599100 #Mon, 31 Dec 2007 23:59:59 GMT
+ * zulutomsec(  "071231235959.12345Z") &rarr; 1199145599123 #Mon, 31 Dec 2007 23:59:59 GMT
+ * zulutomsec("20071231235959Z")       &rarr; 1199145599000 #Mon, 31 Dec 2007 23:59:59 GMT
+ * zulutomsec(  "931231235959Z")       &rarr; -410227201000 #Mon, 31 Dec 1956 23:59:59 GMT
+ */
+function zulutomsec(s) {
+    var year, month, day, hour, min, sec, msec, d;
+    var sYear, sFrac, sMsec, matchResult;
+
+    matchResult = s.match(/^(\d{2}|\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)(|\.\d+)Z$/);
+
+    if (matchResult) {
+        sYear = matchResult[1];
+	year = parseInt(sYear);
+        if (sYear.length === 2) {
+	    if (50 <= year && year < 100) {
+		year = 1900 + year;
+	    } else if (0 <= year && year < 50) {
+		year = 2000 + year;
+	    }
+	}
+	month = parseInt(matchResult[2]) - 1;
+	day = parseInt(matchResult[3]);
+	hour = parseInt(matchResult[4]);
+	min = parseInt(matchResult[5]);
+	sec = parseInt(matchResult[6]);
+	msec = 0;
+
+	sFrac = matchResult[7];
+	if (sFrac !== "") {
+	    sMsec = (sFrac.substr(1) + "00").substr(0, 3); // .12 -> 012
+	    msec = parseInt(sMsec);
+	}
+	return Date.UTC(year, month, day, hour, min, sec, msec);
+    }
+    throw "unsupported zulu format: " + s;
+}
+
+/**
+ * GeneralizedTime or UTCTime string to seconds from Unix origin<br>
+ * @name zulutosec
+ * @function
+ * @param {String} s GeneralizedTime or UTCTime string (ex. 20170412235959.384Z)
+ * @return {Number} seconds from Unix origin time (i.e. Jan 1, 1970 0:00:00 UTC)
+ * @since jsrsasign 7.1.3 base64x 1.1.9
+ * @description
+ * This function converts from GeneralizedTime string (i.e. YYYYMMDDHHmmSSZ) or
+ * UTCTime string (i.e. YYMMDDHHmmSSZ) to seconds from Unix origin time
+ * (i.e. Jan 1 1970 0:00:00 UTC). Argument string may have fraction of seconds 
+ * however result value will be omitted.
+ * As for UTCTime, if year "YY" is equal or less than 49 then it is 20YY.
+ * If year "YY" is equal or greater than 50 then it is 19YY.
+ * @example
+ * zulutosec(  "071231235959Z")       &rarr; 1199145599 #Mon, 31 Dec 2007 23:59:59 GMT
+ * zulutosec(  "071231235959.1Z")     &rarr; 1199145599 #Mon, 31 Dec 2007 23:59:59 GMT
+ * zulutosec("20071231235959Z")       &rarr; 1199145599 #Mon, 31 Dec 2007 23:59:59 GMT
+ */
+function zulutosec(s) {
+    var msec = zulutomsec(s);
+    return ~~(msec / 1000);
+}
+
+// ==== zulu / Date =================================
+
+/**
+ * GeneralizedTime or UTCTime string to Date object<br>
+ * @name zulutodate
+ * @function
+ * @param {String} s GeneralizedTime or UTCTime string (ex. 20170412235959.384Z)
+ * @return {Date} Date object for specified time
+ * @since jsrsasign 7.1.3 base64x 1.1.9
+ * @description
+ * This function converts from GeneralizedTime string (i.e. YYYYMMDDHHmmSSZ) or
+ * UTCTime string (i.e. YYMMDDHHmmSSZ) to Date object.
+ * Argument string may have fraction of seconds and
+ * its length is one or more digits such as "20170410235959.1234567Z".
+ * As for UTCTime, if year "YY" is equal or less than 49 then it is 20YY.
+ * If year "YY" is equal or greater than 50 then it is 19YY.
+ * @example
+ * zulutodate(  "071231235959Z").toUTCString()   &rarr; "Mon, 31 Dec 2007 23:59:59 GMT"
+ * zulutodate(  "071231235959.1Z").toUTCString() &rarr; "Mon, 31 Dec 2007 23:59:59 GMT"
+ * zulutodate("20071231235959Z").toUTCString()   &rarr; "Mon, 31 Dec 2007 23:59:59 GMT"
+ * zulutodate(  "071231235959.34").getMilliseconds() &rarr; 340
+ */
+function zulutodate(s) {
+    return new Date(zulutomsec(s));
 }
 
 // ==== URIComponent / hex ================================
