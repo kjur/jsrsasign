@@ -4,7 +4,7 @@ all:
 aaa:
 	cat \
 	lib/header.js \
-	../jsrsasign-latest-all-min.js \
+	../jsrsasign-all-min.js \
 	lib/footer.js \
 	> lib/jsrsasign.js
 

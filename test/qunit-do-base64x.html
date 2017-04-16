@@ -121,6 +121,33 @@ test("ArrayBuffertohex", function() {
   equal(ArrayBuffertohex(buffer), "fafbfc0102", "fafbfc0102");
 });
 
+test("zulutomsec", function() {
+equal(zulutomsec("071231235959Z"), 1199145599000, "071231235959Z");
+equal(zulutomsec("071231235959.345Z"), 1199145599345, "071231235959.345Z");
+equal(zulutomsec("931231235959.345Z"), 757382399345, "931231235959.345Z");
+equal(zulutomsec("20071231235959.345Z"), 1199145599345, "20071231235959.345Z");
+equal(zulutomsec("561231235959Z"), -410227201000, "561231235959Z");
+});
+
+test("zulutosec", function() {
+equal(zulutosec("071231235959Z"), 1199145599, "071231235959Z");
+equal(zulutosec("071231235959Z"), 1199145599, "071231235959.345Z");
+equal(zulutosec("931231235959Z"), 757382399, "931231235959.345Z");
+equal(zulutosec("20071231235959Z"), 1199145599, "20071231235959.345Z");
+equal(zulutosec("561231235959Z"), -410227201, "561231235959Z");
+});
+
+test("zulutodate", function() {
+equal(zulutodate("071231235959Z").toUTCString(),       "Mon, 31 Dec 2007 23:59:59 GMT", "071231235959Z");
+equal(zulutodate("071231235959.345Z").toUTCString(),   "Mon, 31 Dec 2007 23:59:59 GMT", "071231235959.345Z");
+equal(zulutodate("931231235959Z").toUTCString(),       "Fri, 31 Dec 1993 23:59:59 GMT", "931231235959Z");
+equal(zulutodate("931231235959.345Z").toUTCString(),   "Fri, 31 Dec 1993 23:59:59 GMT", "931231235959.345Z");
+equal(zulutodate("20071231235959Z").toUTCString(),     "Mon, 31 Dec 2007 23:59:59 GMT", "20071231235959Z");
+equal(zulutodate("20071231235959.345Z").toUTCString(), "Mon, 31 Dec 2007 23:59:59 GMT", "20071231235959.345Z");
+equal(zulutodate("561231235959Z").toUTCString(),       "Mon, 31 Dec 1956 23:59:59 GMT", "561231235959Z");
+equal(zulutodate("071231235959.34Z").getMilliseconds(), 340, "071231235959.34Z");
+});
+
 });
 </script>
   
@@ -128,5 +155,12 @@ test("ArrayBuffertohex", function() {
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
+
+<p>
+<a href="../">TOP</a> | 
+<a href="index.html">TEST INDEX</a> | 
+<a href="qunit-do-jws-intdate.html">JWS.intDate</a> | 
+</p>
+
 </body>
 </html>

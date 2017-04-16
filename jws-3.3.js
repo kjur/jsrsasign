@@ -1,11 +1,11 @@
-/*! jws-3.3.5 (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! jws-3.3.6 (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * jws.js - JSON Web Signature(JWS) and JSON Web Token(JWT) Class
  *
- * version: 3.3.4 (2016 May 17)
+ * version: 3.3.6 (2017 Apr 15)
  *
- * Copyright (c) 2010-2016 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license/
@@ -18,7 +18,7 @@
  * @fileOverview
  * @name jws-3.3.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 3.3.5 (2016-Oct-08)
+ * @version 3.3.6 (2017-Apr-15)
  * @since jsjws 1.0, jsrsasign 4.8.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -992,31 +992,7 @@ KJUR.jws.IntDate.get = function(s) {
  * KJUR.jws.IntDate.getZulu("151012125959Z") => 1478...
  */
 KJUR.jws.IntDate.getZulu = function(s) {
-    var matchResult = s.match(/(\d+)(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)Z/);
-    if (matchResult) {
-        var sYear = matchResult[1];
-	var year = parseInt(sYear);
-	if (sYear.length == 4) {
-        } else if (sYear.length == 2) {
-	    if (50 <= year && year < 100) {
-		year = 1900 + year;
-	    } else if (0 <= year && year < 50) {
-		year = 2000 + year;
-	    } else {
-		throw "malformed year string for UTCTime";
-	    }
-	} else {
-	    throw "malformed year string";
-	}
-	var month = parseInt(matchResult[2]) - 1;
-	var day = parseInt(matchResult[3]);
-	var hour = parseInt(matchResult[4]);
-	var min = parseInt(matchResult[5]);
-	var sec = parseInt(matchResult[6]);
-	var d = new Date(Date.UTC(year, month, day, hour, min, sec));
-	return ~~(d / 1000);
-    }
-    throw "unsupported format: " + s;
+    return zulutosec(s);
 };
 
 /**

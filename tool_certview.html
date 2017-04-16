@@ -8,20 +8,7 @@
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
     <title>Online Certificate Viewer</title>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
-
-<script language="JavaScript" type="text/javascript" src="ext/jsbn.js"></script>
-<script language="JavaScript" type="text/javascript" src="ext/jsbn2.js"></script>
-<script language="JavaScript" type="text/javascript" src="ext/rsa.js"></script>
-<script language="JavaScript" type="text/javascript" src="ext/rsa2.js"></script>
-<script language="JavaScript" type="text/javascript" src="ext/sha1.js"></script>
-<script language="JavaScript" type="text/javascript" src="ext/base64.js"></script>
-<script language="JavaScript" type="text/javascript" src="crypto-1.1.min.js"></script>
-<script language="JavaScript" type="text/javascript" src="asn1hex-1.1.min.js"></script>
-<script language="JavaScript" type="text/javascript" src="rsapem-1.1.min.js"></script>
-<script language="JavaScript" type="text/javascript" src="rsasign-1.2.min.js"></script>
-<script language="JavaScript" type="text/javascript" src="x509-1.1.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="jsrsasign-all-min.js"></script>
 <script language="JavaScript" type="text/javascript">
 function doView() {
   var sCert = document.form1.cert1.value;
@@ -29,8 +16,8 @@ function doView() {
   c.readCertPEM(sCert);
   document.form1.serial1.value = c.getSerialNumberHex();
   document.form1.issuer1.value = c.getIssuerString();
-  document.form1.notbefore1.value = c.getNotBefore();
-  document.form1.notafter1.value = c.getNotAfter();
+  document.form1.notbefore1.value = zulutodate(c.getNotBefore());
+  document.form1.notafter1.value = zulutodate(c.getNotAfter());
   document.form1.subject1.value = c.getSubjectString();
   var f = function(s) { return KJUR.crypto.Util.hashString(s, 'sha1'); }
   document.form1.thumb1.value = f(c.hex);
@@ -89,8 +76,8 @@ K3V9/Bpi
 <tr><td>SerialNumber:</td><td><input type="text" name="serial1" size="20"/></td></tr>
 <tr><td>Issuer:</td><td><input type="text" name="issuer1" size="80"/></td></tr>
 <tr><td>Validity:</td><td>
-From <input type="text" name="notbefore1" size="15"/>
-To <input type="text" name="notafter1" size="15"/>
+From <input type="text" name="notbefore1" size="60"/><br/>
+To <input type="text" name="notafter1" size="60"/>
 </td></tr>
 <tr><td>Subject:</td><td><input type="text" name="subject1" size="80"/></td></tr>
 <tr><td>SHA1 Thumb Print:</td><td><input type="text" name="thumb1" size="80"/></td></tr>
@@ -108,7 +95,7 @@ To <input type="text" name="notafter1" size="15"/>
         <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
         <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
 <div align="center" style="color: white">
-Copyright &copy; 2010-2012 Kenji Urushima. All rights reserved.
+Copyright &copy; 2010-2017 Kenji Urushima. All rights reserved.
 </div>
       </footer>
     </div>
