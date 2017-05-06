@@ -1,10 +1,7 @@
 <html>
 <head>
 <title>Sample JWS-JS generator with existing JWS</title>
-<script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
-<script language="JavaScript" type="text/javascript" src="ext/json-sans-eval-min.js"></script>
-<script language="JavaScript" type="text/javascript" src="jws-3.2.js"></script>
-<script language="JavaScript" type="text/javascript" src="jwsjs-2.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../jsrsasign-all-min.js"></script>
 
 <style type="text/css">
 TD  {vertical-align: top; border: solid 1px #000000; }
@@ -17,18 +14,18 @@ function doGenerate() {
 
   jwsjs = new KJUR.jws.JWSJS();
   jwsjs.initWithJWS(sJWS);
-  alert(JSON.stringify(jwsjs.getJSON(), null, 2));
+  document.form1.jwsjs1.value = newline_toDos(JSON.stringify(jwsjs.getJSON(), null, 2));
 }
 
 function addSignature() {
-  if (jwsjs == null) {
+  if (jwsjs == null || jwsjs.isEmpty()) {
     alert("Please read first signature");
     return;
   }
   var sHeader = newline_toDos(document.form1.jwshead1.value);
   var sPrvKey = document.form1.pemprvkey1.value;
   
-  jwsjs.addSignatureByHeaderKey(sHeader, sPrvKey);
+  jwsjs.addSignature(null, sHeader, sPrvKey);
   document.form1.jwsjs1.value = newline_toDos(JSON.stringify(jwsjs.getJSON(), null, 2));
 }
 </script>
@@ -94,20 +91,12 @@ more time to generate multiple parallel JWS-JS signature.
 </form>
 
 <center>
-Copyright &copy; 2012-2015 Kenji Urushima, All Rights Reserved.
+Copyright &copy; 2012-2016 Kenji Urushima, All Rights Reserved.
 </center>
 
 <div align="right">
 <a href="index.html">Go back to index</a>
 </div>
 
-<div align="right">
-<a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
-<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
-</a>
-<a href="http://x5.choumusubi.com/bin/gg?069823300">
-<img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
-</a>
-</div>
 </body>
 </html>

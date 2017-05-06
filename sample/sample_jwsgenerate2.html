@@ -1,38 +1,24 @@
 <html>
 <head>
 <title>Sample JWS Signing With PKCS#1 private key</title>
-<script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
-<script language="JavaScript" type="text/javascript" src="ext/json-sans-eval-min.js"></script>
-<script language="JavaScript" type="text/javascript" src="jws-3.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../jsrsasign-all-min.js"></script>
 
 <style type="text/css">
 TD  {vertical-align: top; border: solid 1px #000000; }
 </style>
 <script language="JavaScript" type="text/javascript">
-
-function SecureRandom() { }
-
-SecureRandom.prototype.nextBytes = function(ba) {
-    var ua = new Uint8Array(ba.length), i;
-
-    window.crypto.getRandomValues(ua);
-
-    for (i = 0; i < ba.length; i += 1) {
-        ba[i] = ua[i];
-    }
-};
-
 function _genJWS() {
   var sHead = newline_toDos(document.form1.jwshead1.value);
+  var head = KJUR.jws.JWS.readSafeJSONString(sHead);
   var sPayload = newline_toDos(document.form1.jwspayload1.value);
   var sPemPrvKey = document.form1.pemprvkey1.value;
 
   var jws = new KJUR.jws.JWS();
   var sResult = null;
   try {
-    var key = new RSAKey();
-    key.readPrivateKeyFromPEMString(sPemPrvKey);
-    sResult = jws.generateJWSByKey(sHead, sPayload, key);
+    prv = KEYUTIL.getKey(sPemPrvKey);
+
+    sResult = KJUR.jws.JWS.sign(head.alg, sHead, sPayload, prv);
     document.form1.jwsgenerated1.value = sResult;
   } catch (ex) {
     alert("Error: " + ex);
@@ -53,14 +39,14 @@ Default values are cited from <a href="http://tools.ietf.org/html/draft-jones-js
 <table width="100%">
 <tbody>
 <tr><td rowspan="3">Input</td><td>JWS Header</td><td colspan="2">
-<textarea name="jwshead1" rows="3" cols="100">{"alg":"PS256"}</textarea></td></tr>
+<textarea name="jwshead1" rows="3" cols="100">{"alg":"RS256"}</textarea></td></tr>
 <tr><td>JWS Payload</td><td colspan="2">
 <textarea name="jwspayload1" rows="3" cols="100">{"iss":"joe",
  "exp":1300819380,
  "http://example.com/is_root":true}</textarea>
 </td></tr>
 <tr><td>Signing PKCS#1 RSA Private Key</td><td colspan="2">
-<textarea name="pemprvkey1" rows="10" cols="65">-----BEGIN RSA PRIVATE KEY-----
+<textarea name="pemprvkey1" rows="10" cols="80">-----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEA4qiw8PWs7PpnnC2BUEoDRcwXF8pq8XT1/3Hc3cuUJwX/otNe
 fr/Bomr3dtM0ERLN3DrepCXvuzEU5FcJVDUB3sI+pFtjjLBXD/zJmuL3Afg91J9p
 79+Dm+43cR6wuKywVJx5DJIdswF6oQDDzhwu89d2V5x02aXB9LqdXkPwiO0eR5s/
@@ -101,27 +87,19 @@ vjFmyDdU5Hh6ma4q+BeAqbXZSJz0cfkBcBLCSe2gIJ/QJ3YJVQI=
 <h3>USAGE</h3>
 <ol>
 <li>Just press "Generate JWS Signature" button.</li>
-<li>You can specify signature algorithm name such as "RS256"(SHA256withRSA), "RS512"(SHA512withRSA), "PS256"(SHA256withRSAPSS), "PS512"(SHA512withRSAPSS). 
+<li>You can specify signature algorithm name such es "RS256"(SHA256withRSA) or "RS512"(SHA512withRSA). 
 If it isn't un-supported value, it will raise an error.</li>
 <li>If malformed JWS Head is specified, it will raise an error.</li>
-<li>As for JWS signature verification, please see <a href="sample_verify3.html">this sample</a>.</li>
+<li>As for JWS signature verification, please see <a href="sample_verify2.html">this sample</a>.</li>
 </ol>
 
 <center>
-Copyright &copy; 2013-2015 Kenji Urushima, Dave All Rights Reserved.
+Copyright &copy; 2012-2016 Kenji Urushima, All Rights Reserved.
 </center>
 
 <div align="right">
 <a href="index.html">Go back to index</a>
 </div>
 
-<div align="right">
-<a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
-<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
-</a>
-<a href="http://x5.choumusubi.com/bin/gg?069823300">
-<img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
-</a>
-</div>
 </body>
 </html>

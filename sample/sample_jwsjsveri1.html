@@ -1,10 +1,7 @@
 <html>
 <head>
 <title>Sample JWS Verification Application</title>
-<script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
-<script language="JavaScript" type="text/javascript" src="ext/json-sans-eval-min.js"></script>
-<script language="JavaScript" type="text/javascript" src="jws-3.2.js"></script>
-<script language="JavaScript" type="text/javascript" src="jwsjs-2.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../jsrsasign-all-min.js"></script>
 
 <style type="text/css">
 TD  {vertical-align: top; border: solid 1px #000000; }
@@ -19,8 +16,8 @@ function doVerify() {
   var cert2 = document.form1.cert2.value;
 
   try {
-    var result = jwsjs.verifyWithCerts([cert1, cert2]);
-    if (result == 1) {
+    var result = jwsjs.verifyAll([[cert1, ["RS256"]], [cert2, ["RS256"]]]);
+    if (result === true) {
       alert("JWS-JS valid");
     } else {
       alert("JWS-JS invalid");
@@ -56,7 +53,7 @@ function doVerify() {
 
 <p>
 <b><i>first cerntificate for verification</i></b><br/>
-<textarea name="cert1" cols="65" rows="8">-----BEGIN CERTIFICATE-----
+<textarea name="cert1" cols="80" rows="8">-----BEGIN CERTIFICATE-----
 MIIDMjCCAhqgAwIBAgIJAKMfG/B2MKd5MA0GCSqGSIb3DQEBBQUAMBoxCzAJBgNV
 BAYTAkpQMQswCQYDVQQKEwJ6MzAeFw0xMDA1MzEwNjE4MDhaFw0yMDA1MjgwNjE4
 MDhaMBoxCzAJBgNVBAYTAkpQMQswCQYDVQQKEwJ6MzCCASIwDQYJKoZIhvcNAQEB
@@ -80,7 +77,7 @@ K3V9/Bpi
 
 <p>
 <b><i>second cerntificate for verification</i></b><br/>
-<textarea name="cert2" cols="65" rows="8">-----BEGIN CERTIFICATE-----
+<textarea name="cert2" cols="80" rows="8">-----BEGIN CERTIFICATE-----
 MIIDMjCCAhqgAwIBAgIJAKMfG/B2MKd5MA0GCSqGSIb3DQEBBQUAMBoxCzAJBgNV
 BAYTAkpQMQswCQYDVQQKEwJ6MzAeFw0xMDA1MzEwNjE4MDhaFw0yMDA1MjgwNjE4
 MDhaMBoxCzAJBgNVBAYTAkpQMQswCQYDVQQKEwJ6MzCCASIwDQYJKoZIhvcNAQEB
@@ -118,20 +115,12 @@ You may see an error dialog if it is malformed signature.</li>
 </ol>
 
 <center>
-Copyright &copy; 2012-2015 Kenji Urushima, All Rights Reserved.
+Copyright &copy; 2012-2016 Kenji Urushima, All Rights Reserved.
 </center>
 
 <div align="right">
 <a href="index.html">Go back to index</a>
 </div>
 
-<div align="right">
-<a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
-<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
-</a>
-<a href="http://x5.choumusubi.com/bin/gg?069823300">
-<img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
-</a>
-</div>
 </body>
 </html>

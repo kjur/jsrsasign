@@ -1,9 +1,7 @@
 <html>
 <head>
 <title>Sample JWS Verification Application(NOT WORKS)</title>
-<script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
-<script language="JavaScript" type="text/javascript" src="ext/json-sans-eval-min.js"></script>
-<script language="JavaScript" type="text/javascript" src="jws-3.2.js"></script>
+<script language="JavaScript" type="text/javascript" src="../jsrsasign-all-min.js"></script>
 
 <style type="text/css">
 TD  {vertical-align: top; border: solid 1px #000000; }
@@ -13,12 +11,13 @@ function doVerify() {
   var jws = new KJUR.jws.JWS();
   var sJWS = document.form1.jws1.value;
   var sCert = document.form1.cert1.value;
+  var pubKey;
 
   var result = 0;
   try {
-    var cert = new X509();
-    var pubkey = KEYUTIL.getKey(sCert);
-    result = KJUR.jws.JWS.verify(sJWS, pubkey);
+    pubKey = KEYUTIL.getKey(sCert);
+    jws.parseJWS(sJWS);
+    result = KJUR.jws.JWS.verify(sJWS, pubKey);
   } catch (ex) {
     alert("Error: " + ex);
     result = 0;
@@ -58,7 +57,7 @@ Default values are cited from <a href="http://tools.ietf.org/html/draft-jones-js
 <tr><td rowspan="2">Input</td><td>JWS</td><td colspan="2">
 <textarea name="jws1" rows="8" cols="100">eyJhbGciOiJQUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2p3dC1pZHAuZXhhbXBsZS5jb20iLCJzdWIiOiJtYWlsdG86bWlrZUBleGFtcGxlLmNvbSIsIm5iZiI6MTQzMDA1MTUzMiwiZXhwIjoxNDMwMDU1MTMyLCJpYXQiOjE0MzAwNTE1MzIsImp0aSI6ImlkMTIzNDU2IiwidHlwIjoiaHR0cHM6Ly9leGFtcGxlLmNvbS9yZWdpc3RlciJ9.UbXdFgYOu8Cidtmlmy_BGNvUErCSnyoj0w0FnV8UI8cRP8ftuN8MLxBoQVx9U8_W7owa2I8T9E2_gSv72sdS-bY9SH-M9o058VkbMSSzyfsKs1Fe8s3T30erJmmHd3JGaPmdoCrco8Q_3rgtGd_mlQ0PYovLFuO9gXi7AhZuRJFFN3q2gtaPG4bSCv5nXt15ApMIo_FutCovBNgCZcdBWvsGA6QnuouEEXVLjmsiQuwRKyuw6MhWQeMNp551aSxJNBZVqmfnkKZb-DOasoqDFIK0uaNrvptYCD7fE_URA9emi9k4yXhk7iY0PArLy-R5pdJmiNENdQmW9t2EKSgwIg</textarea></td></tr>
 <tr><td>PEM X.509 Certificate verify with</td><td colspan="2">
-<textarea name="cert1" cols="65" rows="8">-----BEGIN CERTIFICATE-----
+<textarea name="cert1" cols="80" rows="8">-----BEGIN CERTIFICATE-----
 MIIC/zCCAeegAwIBAgIBATANBgkqhkiG9w0BAQUFADAaMQswCQYDVQQGEwJVUzEL
 MAkGA1UECgwCWjQwHhcNMTMwODI4MTgyODM0WhcNMjMwODI4MTgyODM0WjAaMQsw
 CQYDVQQGEwJVUzELMAkGA1UECgwCWjQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw
@@ -119,20 +118,12 @@ You may see an error dialog if it is malformed signature.</li>
 </ol>
 
 <center>
-Copyright &copy; 2013-2015 Kenji Urushima and Dave All Rights Reserved.
+Copyright &copy; 2013-2016 Kenji Urushima and Dave All Rights Reserved.
 </center>
 
 <div align="right">
 <a href="index.html">Go back to index</a>
 </div>
 
-<div align="right">
-<a href="http://twitter.com/kjur/" target="_blank" alt="kjur on twitter">
-<img src="http://www9.atwiki.jp/kurushima/pub/icon/icon_twitter.gif" border="0" width="20"/>
-</a>
-<a href="http://x5.choumusubi.com/bin/gg?069823300">
-<img src="http://x5.choumusubi.com/bin/ll?069823300" border="0" width="20"/>
-</a>
-</div>
 </body>
 </html>
