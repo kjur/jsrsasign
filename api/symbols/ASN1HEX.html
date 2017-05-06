@@ -537,9 +537,11 @@ hexadecmal string of ASN.1 DER encoded data.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getDecendantIndexByNthList">getDecendantIndexByNthList</a></b>(h, currentIndex, nthList)
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getDecendantIndexByNthList">getDecendantIndexByNthList</a></b>(h, currentIndex, nthList, checkingTag)
 								</div>
-								<div class="description">get string index of nth child object of ASN.1 object refered by h, idx<br/></div>
+								<div class="description">(DEPRECATED) get string index of nth child object of ASN.1 object refered by h, idx<br/>
+NOTE: Optional checkingTag has been supported since
+jsrsasign 7.1.4 asn1hex 1.1.10.</div>
 							</td>
 						</tr>
 					
@@ -567,6 +569,16 @@ hexadecmal string of ASN.1 DER encoded data.</div>
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getHexOfV_AtObj">getHexOfV_AtObj</a></b>(s, pos)
 								</div>
 								<div class="description">get hexadecimal string of ASN.1 V(value)</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getIdxbyList">getIdxbyList</a></b>(h, currentIndex, nthList, checkingTag)
+								</div>
+								<div class="description">get string index of nth child object of ASN.1 object refered by h, idx<br/>
+</div>
 							</td>
 						</tr>
 					
@@ -620,7 +632,18 @@ in a ASN.1 value.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getVbyList">getVbyList</a></b>(h, currentIndex, nthList, checkingTag)
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getTLVbyList">getTLVbyList</a></b>(h, currentIndex, nthList, checkingTag)
+								</div>
+								<div class="description">get ASN.1 TLV by nthList<br/>
+This static method is to get a ASN.1 value which specified "nthList" position
+with checking expected tag "checkingTag".</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getVbyList">getVbyList</a></b>(h, currentIndex, nthList, checkingTag, removeUnusedbits)
 								</div>
 								<div class="description">get ASN.1 value by nthList<br/>
 This static method is to get a ASN.1 value which specified "nthList" position
@@ -1053,11 +1076,13 @@ SEQUENCE
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{Number}</span>
-					<span class="light">ASN1HEX.</span><b>getDecendantIndexByNthList</b>(h, currentIndex, nthList)
+					<span class="light">ASN1HEX.</span><b>getDecendantIndexByNthList</b>(h, currentIndex, nthList, checkingTag)
 					
 					</div>
 					<div class="description">
-						get string index of nth child object of ASN.1 object refered by h, idx<br/>
+						(DEPRECATED) get string index of nth child object of ASN.1 object refered by h, idx<br/>
+NOTE: Optional checkingTag has been supported since
+jsrsasign 7.1.4 asn1hex 1.1.10.
 						
 						
 					</div>
@@ -1068,7 +1093,7 @@ SEQUENCE
 reference. Here is a sample structure and "nthList"s which
 refers each objects.
 
-SQUENCE               - 
+SQUENCE               -
   SEQUENCE            - [0]
     IA5STRING 000     - [0, 0]
     UTF8STRING 001    - [0, 1]
@@ -1100,8 +1125,21 @@ SQUENCE               -
 								</dt>
 								<dd>array list of nth</dd>
 							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>checkingTag</b>
+									
+								</dt>
+								<dd>(OPTIONAL) string of expected ASN.1 tag for nthList</dd>
+							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from asn1hex 1.1.10 jsrsasign 7.1.4. please move to ASN1HEX#getIdxbyList
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">
@@ -1269,6 +1307,88 @@ SQUENCE               -
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> hexadecimal string of ASN.1 value.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getIdxbyList"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Number}</span>
+					<span class="light">ASN1HEX.</span><b>getIdxbyList</b>(h, currentIndex, nthList, checkingTag)
+					
+					</div>
+					<div class="description">
+						get string index of nth child object of ASN.1 object refered by h, idx<br/>
+
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">The "nthList" is a index list of structured ASN.1 object
+reference. Here is a sample structure and "nthList"s which
+refers each objects.
+
+SQUENCE               - 
+  SEQUENCE            - [0]
+    IA5STRING 000     - [0, 0]
+    UTF8STRING 001    - [0, 1]
+  SET                 - [1]
+    IA5STRING 010     - [1, 0]
+    UTF8STRING 011    - [1, 1]</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>currentIndex</b>
+									
+								</dt>
+								<dd>start string index of ASN.1 object</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Array of Number}</span> <b>nthList</b>
+									
+								</dt>
+								<dd>array list of nth</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>checkingTag</b>
+									
+								</dt>
+								<dd>(OPTIONAL) string of expected ASN.1 tag for nthList</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.1.4 asn1hex 1.1.10.</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Number}</span> string index refered by nthList</dd>
 							
 							</dl>
 						
@@ -1539,15 +1659,15 @@ ASN1HEX.getPosArrayOfChildren_AtObj("3006020104020105", 0) &rArr; [4, 10] // SEQ
 
 					<hr />
 				
-					<a name=".getVbyList"> </a>
+					<a name=".getTLVbyList"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">ASN1HEX.</span><b>getVbyList</b>(h, currentIndex, nthList, checkingTag)
+					<span class="light">ASN1HEX.</span><b>getTLVbyList</b>(h, currentIndex, nthList, checkingTag)
 					
 					</div>
 					<div class="description">
-						get ASN.1 value by nthList<br/>
+						get ASN.1 TLV by nthList<br/>
 This static method is to get a ASN.1 value which specified "nthList" position
 with checking expected tag "checkingTag".
 						
@@ -1583,6 +1703,76 @@ with checking expected tag "checkingTag".
 									
 								</dt>
 								<dd>(OPTIONAL) string of expected ASN.1 tag for nthList</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.1.4 asn1hex 1.1.10</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getVbyList"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">ASN1HEX.</span><b>getVbyList</b>(h, currentIndex, nthList, checkingTag, removeUnusedbits)
+					
+					</div>
+					<div class="description">
+						get ASN.1 value by nthList<br/>
+This static method is to get a ASN.1 value which specified "nthList" position
+with checking expected tag "checkingTag".
+NOTE: 'removeUnusedbits' flag has been supported since
+jsrsasign 7.1.14 asn1hex 1.1.10.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 structure</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Integer}</span> <b>currentIndex</b>
+									
+								</dt>
+								<dd>string index to start searching in hexadecimal string "h"</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>nthList</b>
+									
+								</dt>
+								<dd>array of nth list index</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>checkingTag</b>
+									
+								</dt>
+								<dd>(OPTIONAL) string of expected ASN.1 tag for nthList</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span> <b>removeUnusedbits</b>
+									
+								</dt>
+								<dd>(OPTIONAL) flag for remove first byte for value (DEFAULT false)</dd>
 							
 							</dl>
 						

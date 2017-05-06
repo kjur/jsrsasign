@@ -1,4 +1,4 @@
-/*! asn1hex-1.1.9.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1hex-1.1.10.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1hex 1.1.9 (2017-Jan-14)
+ * @version asn1hex 1.1.10 (2017-Apr-30)
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -267,15 +267,49 @@ ASN1HEX.getNthChildIndex_AtObj = function(h, idx, nth) {
 
 // ========== decendant methods ==============================
 /**
- * get string index of nth child object of ASN.1 object refered by h, idx<br/>
+ * (DEPRECATED) get string index of nth child object of ASN.1 object refered by h, idx<br/>
  * @name getDecendantIndexByNthList
  * @memberOf ASN1HEX
  * @function
  * @param {String} h hexadecimal string of ASN.1 DER encoded data
  * @param {Number} currentIndex start string index of ASN.1 object
  * @param {Array of Number} nthList array list of nth
+ * @param {String} checkingTag (OPTIONAL) string of expected ASN.1 tag for nthList
  * @return {Number} string index refered by nthList
  * @since 1.1
+ * @deprecated from asn1hex 1.1.10 jsrsasign 7.1.4. please move to {@link ASN1HEX#getIdxbyList}
+ * @description
+ * NOTE: Optional checkingTag has been supported since
+ * jsrsasign 7.1.4 asn1hex 1.1.10.
+ * @example
+ * The "nthList" is a index list of structured ASN.1 object
+ * reference. Here is a sample structure and "nthList"s which
+ * refers each objects.
+ *
+ * SQUENCE               -
+ *   SEQUENCE            - [0]
+ *     IA5STRING 000     - [0, 0]
+ *     UTF8STRING 001    - [0, 1]
+ *   SET                 - [1]
+ *     IA5STRING 010     - [1, 0]
+ *     UTF8STRING 011    - [1, 1]
+ */
+ASN1HEX.getDecendantIndexByNthList = function(h, currentIndex, nthList, checkingTag) {
+    return ASN1HEX.getIdxbyList(h, currentIndex, nthList, checkingTag);
+};
+
+/**
+ * get string index of nth child object of ASN.1 object refered by h, idx<br/>
+ * @name getIdxbyList
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} h hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} currentIndex start string index of ASN.1 object
+ * @param {Array of Number} nthList array list of nth
+ * @param {String} checkingTag (OPTIONAL) string of expected ASN.1 tag for nthList 
+ * @return {Number} string index refered by nthList
+ * @since jsrsasign 7.1.4 asn1hex 1.1.10.
+ * @description
  * @example
  * The "nthList" is a index list of structured ASN.1 object
  * reference. Here is a sample structure and "nthList"s which
@@ -289,14 +323,23 @@ ASN1HEX.getNthChildIndex_AtObj = function(h, idx, nth) {
  *     IA5STRING 010     - [1, 0]
  *     UTF8STRING 011    - [1, 1]
  */
-ASN1HEX.getDecendantIndexByNthList = function(h, currentIndex, nthList) {
+ASN1HEX.getIdxbyList = function(h, currentIndex, nthList, checkingTag) {
+    var _ASN1HEX = ASN1HEX;
+    var firstNth, a;
     if (nthList.length == 0) {
+	if (checkingTag !== undefined) {
+            if (h.substr(currentIndex, 2) !== checkingTag) {
+		throw "checking tag doesn't match: " + 
+                    h.substr(currentIndex, 2) + "!=" + checkingTag;
+            }
+	}
         return currentIndex;
     }
-    var firstNth = nthList.shift();
-    var a = ASN1HEX.getPosArrayOfChildren_AtObj(h, currentIndex);
-    return ASN1HEX.getDecendantIndexByNthList(h, a[firstNth], nthList);
+    firstNth = nthList.shift();
+    a = _ASN1HEX.getPosArrayOfChildren_AtObj(h, currentIndex);
+    return _ASN1HEX.getIdxbyList(h, a[firstNth], nthList, checkingTag);
 };
+
 
 /**
  * get hexadecimal string of ASN.1 TLV refered by current index and nth index list.
@@ -339,13 +382,45 @@ ASN1HEX.getDecendantHexVByNthList = function(h, currentIndex, nthList) {
  * @param {Integer} currentIndex string index to start searching in hexadecimal string "h"
  * @param {Array} nthList array of nth list index
  * @param {String} checkingTag (OPTIONAL) string of expected ASN.1 tag for nthList 
+ * @param {Boolean} removeUnusedbits (OPTIONAL) flag for remove first byte for value (DEFAULT false)
  * @description
  * This static method is to get a ASN.1 value which specified "nthList" position
  * with checking expected tag "checkingTag".
+ * NOTE: 'removeUnusedbits' flag has been supported since
+ * jsrsasign 7.1.14 asn1hex 1.1.10.
  * @since asn1hex 1.1.4
  */
-ASN1HEX.getVbyList = function(h, currentIndex, nthList, checkingTag) {
-    var idx = ASN1HEX.getDecendantIndexByNthList(h, currentIndex, nthList);
+ASN1HEX.getVbyList = function(h, currentIndex, nthList, checkingTag, removeUnusedbits) {
+    var _ASN1HEX = ASN1HEX;
+    var idx, v;
+    idx = _ASN1HEX.getIdxbyList(h, currentIndex, nthList, checkingTag);
+    
+    if (idx === undefined) {
+        throw "can't find nthList object";
+    }
+
+    v = _ASN1HEX.getHexOfV_AtObj(h, idx);
+    if (removeUnusedbits === true) v = v.substr(2);
+    return v;
+};
+
+/**
+ * get ASN.1 TLV by nthList<br/>
+ * @name getTLVbyList
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} h hexadecimal string of ASN.1 structure
+ * @param {Integer} currentIndex string index to start searching in hexadecimal string "h"
+ * @param {Array} nthList array of nth list index
+ * @param {String} checkingTag (OPTIONAL) string of expected ASN.1 tag for nthList 
+ * @since jsrsasign 7.1.4 asn1hex 1.1.10
+ * @description
+ * This static method is to get a ASN.1 value which specified "nthList" position
+ * with checking expected tag "checkingTag".
+ */
+ASN1HEX.getTLVbyList = function(h, currentIndex, nthList, checkingTag) {
+    var _ASN1HEX = ASN1HEX;
+    var idx = _ASN1HEX.getDecendantIndexByNthList(h, currentIndex, nthList);
     if (idx === undefined) {
         throw "can't find nthList object";
     }
@@ -355,7 +430,7 @@ ASN1HEX.getVbyList = function(h, currentIndex, nthList, checkingTag) {
                 h.substr(idx,2) + "!=" + checkingTag;
         }
     }
-    return ASN1HEX.getHexOfV_AtObj(h, idx);
+    return _ASN1HEX.getHexOfTLV_AtObj(h, idx);
 };
 
 /**

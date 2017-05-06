@@ -124,6 +124,7 @@ test("ASN1HEX.getDecendantIndexByNthList", function() {
   equal(ASN1HEX.getHexOfTLV_AtObj(h, 36), "02012b", "02012b");
 });
 
+
 test("ASN1HEX.getDecendantHexTLVByNthList", function() { 
   var h = "3016300902011a02011b02011c300902012a02012b02012c";
   var h2 = "308201a830820152a0030201020209009e775e7d9f43abc9300d06092a864886f70d0101050500301a310b3009060355040613024a50310b3009060355040a13027a32301e170d3130303533313036313735365a170d3230303532383036313735365a301a310b3009060355040613024a50310b3009060355040a13027a32305c300d06092a864886f70d0101010500034b003048024100b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b0203010001a37b3079301d0603551d0e04160414bb30852881898321fd833aa39cc1808a09bdc68c304a0603551d23044330418014bb30852881898321fd833aa39cc1808a09bdc68ca11ea41c301a310b3009060355040613024a50310b3009060355040a13027a328209009e775e7d9f43abc9300c0603551d13040530030101ff300d06092a864886f70d01010505000341005859f3cabb652ed31c470f27ca2043eefc9f20270cdec5d45b0ba7b8c4f68337918425e8a632d29c1c87a59deb2a56f3aa5e978245384afe2e75463836a8c451";
@@ -221,6 +222,33 @@ test("getDecendantIndexByNthList", function() {
   equal(ASN1HEX.getDecendantIndexByNthList(h, 0, [1, 0, 1]), 40, "bitstr seq int6") 
 });
 
+test("getIdxbyList", function() { 
+  var h = "3016300902011a02011b02011c300902012a02012b02012c";
+  equal(ASN1HEX.getPosArrayOfChildren_AtObj(h, 0).join("/"), "4/26", "array level 1");
+  equal(ASN1HEX.getPosArrayOfChildren_AtObj(h, 4).join("/"), "8/14/20", "array level 2-1");
+  equal(ASN1HEX.getPosArrayOfChildren_AtObj(h, 26).join("/"), "30/36/42", "array level 2-2");
+  equal(ASN1HEX.getIdxbyList(h, 0, [0]), 4, "(0)=4");
+  equal(ASN1HEX.getIdxbyList(h, 0, [0], "30"), 4, "(0)=4 with checkTag");
+  equal(ASN1HEX.getIdxbyList(h, 0, [1]), 26, "(1)=26");
+  equal(ASN1HEX.getIdxbyList(h, 0, [0, 0]), 8, "(0,0)=8");
+  equal(ASN1HEX.getIdxbyList(h, 0, [0, 1]), 14, "(0,1)=14");
+  equal(ASN1HEX.getIdxbyList(h, 0, [0, 2]), 20, "(0,2)=20");
+  equal(ASN1HEX.getIdxbyList(h, 0, [1, 0]), 30, "(1,0)=30");
+  equal(ASN1HEX.getIdxbyList(h, 0, [1, 1]), 36, "(1,1)=36");
+  equal(ASN1HEX.getIdxbyList(h, 0, [1, 2]), 42, "(1,2)=42");
+  equal(ASN1HEX.getHexOfTLV_AtObj(h, 36), "02012b", "02012b");
+
+});
+
+test("getIdxbyList exception1 tag-unmatch", function() {
+  var h = "3016300902011a02011b02011c300902012a02012b02012c";
+  throws(function() {
+    ASN1HEX.getIdxbyList(h, 0, [0], "31");
+  },
+  /check/,
+  "(0)=4 with checkTag=31 shall fail");
+});
+
 });
 
 </script>
@@ -235,3 +263,4 @@ test("getDecendantIndexByNthList", function() {
 </p>
 </body>
 </html>
+

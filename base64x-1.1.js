@@ -1,9 +1,9 @@
-/*! base64x-1.1.9 (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! base64x-1.1.10 (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * version: 1.1.9 (2017-Apr-08)
+ * version: 1.1.10 (2017-Apr-27)
  *
  * Copyright (c) 2012-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -21,7 +21,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.1.9 (2017-Apr-08)
+ * @version jsrsasign 7.1.14 base64x 1.1.10 (2017-Apr-27)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -746,6 +746,32 @@ KJUR.lang.String.isIntegerArray = function(s) {
 };
 
 // ==== others ================================
+
+/**
+ * canonicalize hexadecimal string of positive integer<br/>
+ * @param {String} s hexadecimal string 
+ * @return {String} canonicalized hexadecimal string of positive integer
+ * @since base64x 1.1.10 jsrsasign 7.1.4
+ * @description
+ * This method canonicalize a hexadecimal string of positive integer
+ * for two's complement representation.
+ * Canonicalized hexadecimal string of positive integer will be:
+ * <ul>
+ * <li>Its length is always even.</li>
+ * <li>If odd length it will be padded with leading zero.<li>
+ * <li>If it is even length and its first character is "8" or greater,
+ * it will be padded with "00" to make it positive integer.</li>
+ * </ul>
+ * @example
+ * hextoposhex("abcd") &rarr; "00abcd"
+ * hextoposhex("1234") &rarr; "1234"
+ * hextoposhex("12345") &rarr; "012345"
+ */
+function hextoposhex(s) {
+    if (s.length % 2 == 1) return "0" + s;
+    if (s.substr(0, 1) > "7") return "00" + s;
+    return s;
+}
 
 /**
  * convert string of integer array to hexadecimal string.<br/>
