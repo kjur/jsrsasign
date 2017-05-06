@@ -617,6 +617,17 @@ string with new lines for each 64 characters.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#hextoposhex">hextoposhex</a></b>(s)
+								</div>
+								<div class="description">canonicalize hexadecimal string of positive integer<br/>
+This method canonicalize a hexadecimal string of positive integer
+for two's complement representation.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#hextorstr">hextorstr</a></b>(s)
 								</div>
 								<div class="description">convert a hexadecimal encoded string to raw string including non printable characters.</div>
@@ -1638,6 +1649,73 @@ hexadecimal leading "0" is automatically added.
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> Base64URL encoded string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="hextoposhex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>hextoposhex</b>(s)
+					
+					</div>
+					<div class="description">
+						canonicalize hexadecimal string of positive integer<br/>
+This method canonicalize a hexadecimal string of positive integer
+for two's complement representation.
+Canonicalized hexadecimal string of positive integer will be:
+<ul>
+<li>Its length is always even.</li>
+<li>If odd length it will be padded with leading zero.<li>
+<li>If it is even length and its first character is "8" or greater,
+it will be padded with "00" to make it positive integer.</li>
+</ul>
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">hextoposhex("abcd") &rarr; "00abcd"
+hextoposhex("1234") &rarr; "1234"
+hextoposhex("12345") &rarr; "012345"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>hexadecimal string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>base64x 1.1.10 jsrsasign 7.1.4</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> canonicalized hexadecimal string of positive integer</dd>
 							
 							</dl>
 						

@@ -1,4 +1,4 @@
-/*! x509-1.1.12.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! x509-1.1.13.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version x509 1.1.12 (2017-Mar-12)
+ * @version x509 1.1.13 (2017-Apr-27)
  * @since jsrsasign 1.x.x
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -24,10 +24,11 @@
 /**
  * hexadecimal X.509 certificate ASN.1 parser class.<br/>
  * @class hexadecimal X.509 certificate ASN.1 parser class
- * @property {RSAKey} subjectPublicKeyRSA Tom Wu's RSAKey object
- * @property {String} subjectPublicKeyRSA_hN hexadecimal string for modulus of RSA public key
- * @property {String} subjectPublicKeyRSA_hE hexadecimal string for public exponent of RSA public key
+ * @property {RSAKey} subjectPublicKeyRSA Tom Wu's RSAKey object (DEPRECATED from jsrsasign 7.1.4)
+ * @property {String} subjectPublicKeyRSA_hN hexadecimal string for modulus of RSA public key (DEPRECATED from jsrsasign 7.1.4)
+ * @property {String} subjectPublicKeyRSA_hE hexadecimal string for public exponent of RSA public key (DEPRECATED from jsrsasign 7.1.4)
  * @property {String} hex hexacedimal string for X.509 certificate.
+ * @property {Number} version format version (1: X509v1, 3: X509v3, otherwise: unknown) since jsrsasign 7.1.4
  * @author Kenji Urushima
  * @version 1.0.1 (08 May 2012)
  * @see <a href="http://kjur.github.com/jsrsasigns/">'jsrsasign'(RSA Sign JavaScript Library) home page http://kjur.github.com/jsrsasign/</a>
@@ -43,15 +44,22 @@
  * <li><b>TO GET FIELDS</b>
  *   <ul>
  *   <li>serial - {@link X509#getSerialNumberHex}</li>
+ *   <li>serial - (DEPRECATED) {@link X509.getSerialNumberHex}</li>
+ *   <li>signature algorithm field - {@link X509#getSignatureAlgorithmField}</li>
  *   <li>issuer - {@link X509#getIssuerHex}</li>
  *   <li>issuer - {@link X509#getIssuerString}</li>
  *   <li>notBefore - {@link X509#getNotBefore}</li>
  *   <li>notAfter - {@link X509#getNotAfter}</li>
  *   <li>subject - {@link X509#getSubjectHex}</li>
  *   <li>subject - {@link X509#getSubjectString}</li>
- *   <li>subjectPublicKeyInfo - {@link X509.getSubjectPublicKeyPosFromCertHex}</li>
- *   <li>subjectPublicKeyInfo - {@link X509.getSubjectPublicKeyInfoPosFromCertHex}</li>
+ *   <li>subjectPublicKeyInfo - {@link X509#.getPublicKey}</li>
+ *   <li>subjectPublicKeyInfo - {@link X509#.getPublicKeyHex}</li>
+ *   <li>subjectPublicKeyInfo - {@link X509#.getPublicKeyIdx}</li>
  *   <li>subjectPublicKeyInfo - {@link X509.getPublicKeyFromCertPEM}</li>
+ *   <li>subjectPublicKeyInfo - {@link X509.getPublicKeyFromCertHex}</li>
+ *   <li>subjectPublicKeyInfo - (DEPRECATED) {@link X509.getSubjectPublicKeyPosFromCertHex}</li>
+ *   <li>subjectPublicKeyInfo - (DEPRECATED) {@link X509.getSubjectPublicKeyInfoPosFromCertHex}</li>
+ *   <li>subjectPublicKeyInfo - (DEPRECATED) {@link X509.getPublicKeyInfoPosOfCertHEX}</li>
  *   <li>signature algorithm - {@link X509.getSignatureAlgorithmName}</li>
  *   <li>signature value - {@link X509.getSignatureValueHex}</li>
  *   </ul>
@@ -71,7 +79,8 @@
  * </li>
  * <li><b>UTILITIES</b>
  *   <ul>
- *   <li>reading PEM certificate - {@link X509#readCertPEM}</li>
+ *   <li>reading PEM X.509 certificate - {@link X509#readCertPEM}</li>
+ *   <li>reading hexadecimal string of X.509 certificate - {@link X509#readCertHex}</li>
  *   <li>get all certificate information - {@link X509#getInfo}</li>
  *   <li>get Base64 from PEM certificate - {@link X509.pemToBase64}</li>
  *   <li>verify signature value - {@link X509.verifySignature}</li>
@@ -81,12 +90,52 @@
  * </ul>
  */
 function X509() {
-    this.subjectPublicKeyRSA = null;
-    this.subjectPublicKeyRSA_hN = null;
-    this.subjectPublicKeyRSA_hE = null;
+    var _ASN1HEX = ASN1HEX;
+    var _X509 = X509;
+
+    this.subjectPublicKeyRSA = null;	// DEPRECATED from jsrsasign 7.1.4
+    this.subjectPublicKeyRSA_hN = null;	// DEPRECATED from jsrsasign 7.1.4
+    this.subjectPublicKeyRSA_hE = null;	// DEPRECATED from jsrsasign 7.1.4
     this.hex = null;
+    this.version = 0; // version (1: X509v1, 3: X509v3, others: unspecified)
+    this.foffset = 0; // field index offset (-1: for X509v1, 0: for X509v3)
 
     // ===== get basic fields from hex =====================================
+
+    /**
+     * get format version (X.509v1 or v3 certificate)<br/>
+     * @name getVersion
+     * @memberOf X509#
+     * @function
+     * @return {Number} 1 for X509v1, 3 for X509v3, otherwise 0
+     * @since jsrsasign 7.1.14 x509 1.1.13
+     * @description
+     * This method returns a format version of X.509 certificate.
+     * It returns 1 for X.509v1 certificate and 3 for v3 certificate.
+     * Otherwise returns 0.
+     * This method will be automatically called in
+     * {@link X509#readCertPEM}. After then, you can use
+     * {@link X509.version} parameter.
+     * @example
+     * var x = new X509();
+     * x.readCertPEM(sCertPEM);
+     * version = x.getVersion();    // 1 or 3
+     * sn = x.getSerialNumberHex(); // return string like "01ad..."
+     */
+    this.getVersion = function() {
+	if (this.hex === null || this.version !== 0) return this.version;
+
+	// check if the first item of tbsCertificate "[0] { INTEGER 2 }"
+	if (_ASN1HEX.getTLVbyList(this.hex, 0, [0, 0]) !==
+	    "a003020102") {
+	    this.version = 1;
+	    this.foffset = -1;
+	    return 1;
+	}
+
+	this.version = 3;
+	return 3;
+    };
 
     /**
      * get hexadecimal string of serialNumber field of certificate.<br/>
@@ -100,9 +149,8 @@ function X509() {
      * var sn = x.getSerialNumberHex(); // return string like "01ad..."
      */
     this.getSerialNumberHex = function() {
-        return ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 1]);
+	return _ASN1HEX.getVbyList(this.hex, 0, [0, 1 + this.foffset], "02");
     };
-
 
     /**
      * get signature algorithm name in basic field
@@ -119,7 +167,7 @@ function X509() {
      * algName = x.getSignatureAlgorithmField();
      */
     this.getSignatureAlgorithmField = function() {
-	var sigAlgOidHex = ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 2, 0]);
+	var sigAlgOidHex = _ASN1HEX.getVbyList(this.hex, 0, [0, 2 + this.foffset, 0], "06");
 	var sigAlgOidInt = KJUR.asn1.ASN1Util.oidHexToInt(sigAlgOidHex);
 	var sigAlgName = KJUR.asn1.x509.OID.oid2name(sigAlgOidInt);
 	return sigAlgName;
@@ -137,7 +185,7 @@ function X509() {
      * var issuer = x.getIssuerHex(); // return string like "3013..."
      */
     this.getIssuerHex = function() {
-        return ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 3]);
+	return _ASN1HEX.getTLVbyList(this.hex, 0, [0, 3 + this.foffset], "30");
     };
 
     /**
@@ -152,7 +200,7 @@ function X509() {
      * var issuer = x.getIssuerString(); // return string like "/C=US/O=TEST"
      */
     this.getIssuerString = function() {
-        return X509.hex2dn(ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 3]));
+        return _X509.hex2dn(this.getIssuerHex());
     };
 
     /**
@@ -167,7 +215,7 @@ function X509() {
      * var subject = x.getSubjectHex(); // return string like "3013..."
      */
     this.getSubjectHex = function() {
-        return ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 5]);
+	return _ASN1HEX.getTLVbyList(this.hex, 0, [0, 5 + this.foffset], "30");
     };
 
     /**
@@ -182,7 +230,7 @@ function X509() {
      * var subject = x.getSubjectString(); // return string like "/C=US/O=TEST"
      */
     this.getSubjectString = function() {
-        return X509.hex2dn(ASN1HEX.getDecendantHexTLVByNthList(this.hex, 0, [0, 5]));
+        return _X509.hex2dn(this.getSubjectHex());
     };
 
     /**
@@ -197,7 +245,7 @@ function X509() {
      * var notBefore = x.getNotBefore(); // return string like "151231235959Z"
      */
     this.getNotBefore = function() {
-        var s = ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 4, 0]);
+        var s = _ASN1HEX.getVbyList(this.hex, 0, [0, 4 + this.foffset, 0]);
         s = s.replace(/(..)/g, "%$1");
         s = decodeURIComponent(s);
         return s;
@@ -215,13 +263,59 @@ function X509() {
      * var notAfter = x.getNotAfter(); // return string like "151231235959Z"
      */
     this.getNotAfter = function() {
-        var s = ASN1HEX.getDecendantHexVByNthList(this.hex, 0, [0, 4, 1]);
+	var s = _ASN1HEX.getVbyList(this.hex, 0, [0, 4 + this.foffset, 1]);
         s = s.replace(/(..)/g, "%$1");
         s = decodeURIComponent(s);
         return s;
     };
 
-    // ===== read certificate public key ==========================
+    /**
+     * get a hexadecimal string of subjectPublicKeyInfo field.<br/>
+     * @name getPublicKeyHex
+     * @memberOf X509#
+     * @function
+     * @return {String} ASN.1 SEQUENCE hexadecimal string of subjectPublicKeyInfo field
+     * @since jsrsasign 7.1.4 x509 1.1.13
+     * @example
+     * x = new X509();
+     * x.readCertPEM(sCertPEM);
+     * hSPKI = x.getPublicKeyHex(); // return string like "30820122..."
+     */
+    this.getPublicKeyHex = function() {
+	return _ASN1HEX.getTLVbyList(this.hex, 0, [0, 6 + this.foffset], "30");
+    };
+
+    /**
+     * get a string index of subjectPublicKeyInfo field for hexadecimal string certificate.<br/>
+     * @name getPublicKeyIdx
+     * @memberOf X509#
+     * @function
+     * @return {Number} string index of subjectPublicKeyInfo field for hexadecimal string certificate.
+     * @since jsrsasign 7.1.4 x509 1.1.13
+     * @example
+     * x = new X509();
+     * x.readCertPEM(sCertPEM);
+     * idx = x.getPublicKeyIdx(); // return string index in x.hex parameter
+     */
+    this.getPublicKeyIdx = function() {
+	return _ASN1HEX.getIdxbyList(this.hex, 0, [0, 6 + this.foffset], "30");
+    };
+
+    /**
+     * get a RSAKey/ECDSA/DSA public key object of subjectPublicKeyInfo field.<br/>
+     * @name getPublicKey
+     * @memberOf X509#
+     * @function
+     * @return {Object} RSAKey/ECDSA/DSA public key object of subjectPublicKeyInfo field
+     * @since jsrsasign 7.1.4 x509 1.1.13
+     * @example
+     * x = new X509();
+     * x.readCertPEM(sCertPEM);
+     * pubkey= x.getPublicKey();
+     */
+    this.getPublicKey = function() {
+	return KEYUTIL.getKey(this.getPublicKeyHex(), null, "pkcs8pub");
+    };
 
     // ===== read certificate =====================================
     /**
@@ -235,19 +329,37 @@ function X509() {
      * x.readCertPEM(sCertPEM); // read certificate
      */
     this.readCertPEM = function(sCertPEM) {
-        var hCert = ASN1HEX.pemToHex(sCertPEM);
-        var a = X509.getPublicKeyHexArrayFromCertHex(hCert);
-        var rsa = new RSAKey();
-        rsa.setPublic(a[0], a[1]);
-        this.subjectPublicKeyRSA = rsa;
-        this.subjectPublicKeyRSA_hN = a[0];
-        this.subjectPublicKeyRSA_hE = a[1];
-        this.hex = hCert;
+        this.readCertHex(_ASN1HEX.pemToHex(sCertPEM));
     };
 
+    /**
+     * read a hexadecimal string of X.509 certificate<br/>
+     * @name readCertHex
+     * @memberOf X509#
+     * @function
+     * @param {String} sCertHex hexadecimal string of X.509 certificate
+     * @since jsrsasign 7.1.4 x509 1.1.13
+     * @example
+     * x = new X509();
+     * x.readCertHex("3082..."); // read certificate
+     */
+    this.readCertHex = function(sCertHex) {
+        this.hex = sCertHex;
+	this.getVersion(); // set version parameter
+	pubkey = this.getPublicKey();
+
+	// deprecated field settings. will remove this block after 8.0.0
+	if (pubkey instanceof RSAKey) { 
+            this.subjectPublicKeyRSA = pubkey;
+            this.subjectPublicKeyRSA_hN = hextoposhex(pubkey.n.toString(16));
+            this.subjectPublicKeyRSA_hE = hextoposhex(pubkey.e.toString(16));
+	}
+    };
+
+    // DEPRECATED. will remove after 8.0.0
     this.readCertPEMWithoutRSAInit = function(sCertPEM) {
-        var hCert = ASN1HEX.pemToHex(sCertPEM);
-        var a = X509.getPublicKeyHexArrayFromCertHex(hCert);
+        var hCert = _ASN1HEX.pemToHex(sCertPEM);
+        var a = _X509.getPublicKeyHexArrayFromCertHex(hCert);
         if (typeof this.subjectPublicKeyRSA.setPublic === "function") {
             this.subjectPublicKeyRSA.setPublic(a[0], a[1]);
         }
@@ -292,7 +404,9 @@ function X509() {
      * signature: 1c1a0697dcd79c9f...
      */
     this.getInfo = function() {
-	var s = "Basic Fields\n";
+	var _X509 = X509;
+	var s, pubkey, aExt;
+	s  = "Basic Fields\n";
         s += "  serial number: " + this.getSerialNumberHex() + "\n";
 	s += "  signature algorithm: " + this.getSignatureAlgorithmField() + "\n";
 	s += "  issuer: " + this.getIssuerString() + "\n";
@@ -302,19 +416,17 @@ function X509() {
 	s += "  subject public key info: " + "\n";
 
 	// subject public key info
-	var pSPKI = X509.getSubjectPublicKeyInfoPosFromCertHex(this.hex);
-	var hSPKI = ASN1HEX.getHexOfTLV_AtObj(this.hex, pSPKI);
-	var keyObj = KEYUTIL.getKey(hSPKI, null, "pkcs8pub");
-	//s += "    " + JSON.stringify(keyObj) + "\n";
-	if (keyObj instanceof RSAKey) {
-	    s += "    key algorithm: RSA\n";
-	    s += "    n=" + keyObj.n.toString(16).substr(0, 16) + "...\n";
-	    s += "    e=" + keyObj.e.toString(16) + "\n";
+	pubkey = this.getPublicKey();
+	s += "    key algorithm: " + pubkey.type + "\n";
+
+	if (pubkey.type === "RSA") {
+	    s += "    n=" + hextoposhex(pubkey.n.toString(16)).substr(0, 16) + "...\n";
+	    s += "    e=" + hextoposhex(pubkey.e.toString(16)) + "\n";
 	}
 
         s += "X509v3 Extensions:\n";
 
-	var aExt = X509.getV3ExtInfoListOfCertHex(this.hex);
+	aExt = _X509.getV3ExtInfoListOfCertHex(this.hex);
         for (var i = 0; i < aExt.length; i++) {
 	    var info = aExt[i];
 
@@ -329,7 +441,7 @@ function X509() {
 
 	    // show extension value if supported
 	    if (extName === "basicConstraints") {
-		var bc = X509.getExtBasicConstraints(this.hex);
+		var bc = _X509.getExtBasicConstraints(this.hex);
 		if (bc.cA === undefined) {
 		    s += "    {}\n";
 		} else {
@@ -339,24 +451,24 @@ function X509() {
 		    s += "\n";
 		}
 	    } else if (extName === "keyUsage") {
-		s += "    " + X509.getExtKeyUsageString(this.hex) + "\n";
+		s += "    " + _X509.getExtKeyUsageString(this.hex) + "\n";
 	    } else if (extName === "subjectKeyIdentifier") {
-		s += "    " + X509.getExtSubjectKeyIdentifier(this.hex) + "\n";
+		s += "    " + _X509.getExtSubjectKeyIdentifier(this.hex) + "\n";
 	    } else if (extName === "authorityKeyIdentifier") {
-		var akid = X509.getExtAuthorityKeyIdentifier(this.hex);
+		var akid = _X509.getExtAuthorityKeyIdentifier(this.hex);
 		if (akid.kid !== undefined)
 		    s += "    kid=" + akid.kid + "\n";
 	    } else if (extName === "extKeyUsage") {
-		var eku = X509.getExtExtKeyUsageName(this.hex);
+		var eku = _X509.getExtExtKeyUsageName(this.hex);
 		s += "    " + eku.join(", ") + "\n";
 	    } else if (extName === "subjectAltName") {
-		var san = X509.getExtSubjectAltName(this.hex);
+		var san = _X509.getExtSubjectAltName(this.hex);
 		s += "    " + san.join(", ") + "\n";
 	    } else if (extName === "cRLDistributionPoints") {
-		var cdp = X509.getExtCRLDistributionPointsURI(this.hex);
+		var cdp = _X509.getExtCRLDistributionPointsURI(this.hex);
 		s += "    " + cdp + "\n";
 	    } else if (extName === "authorityInfoAccess") {
-		var aia = X509.getExtAIAInfo(this.hex);
+		var aia = _X509.getExtAIAInfo(this.hex);
 		if (aia.ocsp !== undefined)
 		    s += "    ocsp: " + aia.ocsp.join(",") + "\n";
 		if (aia.caissuer !== undefined)
@@ -364,8 +476,8 @@ function X509() {
 	    }
         }
 
-	s += "signature algorithm: " + X509.getSignatureAlgorithmName(this.hex) + "\n";
-	s += "signature: " + X509.getSignatureValueHex(this.hex).substr(0, 16) + "...\n";
+	s += "signature algorithm: " + _X509.getSignatureAlgorithmName(this.hex) + "\n";
+	s += "signature: " + _X509.getSignatureValueHex(this.hex).substr(0, 16) + "...\n";
 	return s;
     };
 };
@@ -406,12 +518,13 @@ X509.pemToHex = function(sCertPEM) {
 };
 
 /**
- * get a string index of contents of subjectPublicKeyInfo BITSTRING value from hexadecimal certificate<br/>
+ * (DEPRECATED) get a string index of contents of subjectPublicKeyInfo BITSTRING value from hexadecimal certificate<br/>
  * @name getSubjectPublicKeyPosFromCertHex
  * @memberOf X509
  * @function
  * @param {String} hexadecimal string of DER RSA/ECDSA/DSA X.509 certificate
  * @return {Integer} string index of key contents
+ * @deprecated from x509 1.1.13 jsrsasign 7.1.14. This static method will be removed in 8.0.0 release.
  * @example
  * idx = X509.getSubjectPublicKeyPosFromCertHex("3082...");
  */
@@ -430,12 +543,13 @@ X509.getSubjectPublicKeyPosFromCertHex = function(hCert) {
 };
 
 /**
- * get a string index of subjectPublicKeyInfo field from hexadecimal certificate<br/>
+ * (DEPRECATED) get a string index of subjectPublicKeyInfo field from hexadecimal certificate<br/>
  * @name getSubjectPublicKeyInfoPosFromCertHex
  * @memberOf X509
  * @function
  * @param {String} hexadecimal string of DER RSA/ECDSA/DSA X.509 certificate
  * @return {Integer} string index of subjectPublicKeyInfo field
+ * @deprecated since jsrsasign 7.1.14 x509 1.1.13. This will be removed in 8.0.0 release.
  * @description
  * This static method gets a string index of subjectPublicKeyInfo field from hexadecimal certificate.<br/>
  * NOTE1: privateKeyUsagePeriod field of X509v2 not supported.<br/>
@@ -444,24 +558,28 @@ X509.getSubjectPublicKeyPosFromCertHex = function(hCert) {
  * idx = X509.getSubjectPublicKeyInfoPosFromCertHex("3082...");
  */
 X509.getSubjectPublicKeyInfoPosFromCertHex = function(hCert) {
-    var pTbsCert = ASN1HEX.getStartPosOfV_AtObj(hCert, 0);
-    var a = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, pTbsCert);
-    if (a.length < 1) return -1;
-    if (hCert.substring(a[0], a[0] + 10) == "a003020102") { // v3
-        if (a.length < 6) return -1;
-        return a[6];
-    } else {
-        if (a.length < 5) return -1;
-        return a[5];
-    }
+    var x = new X509();
+    x.readCertHex(hCert);
+    return x.getPublicKeyIdx();
 };
 
+/**
+ * (DEPRECATED) get an array of N and E for RSA subject public key in HEX certificate<br/>
+ * @name getPublicKeyHexArrayFromCertHex
+ * @memberOf X509
+ * @function
+ * @param {String} hCert hexadecimal string of RSA X.509 certificate
+ * @return {Array} array of N and E parameter of RSA subject public key
+ * @deprecated since jsrsasign 7.1.14 x509 1.1.13. This will be removed in 8.0.0 release.
+ */
 X509.getPublicKeyHexArrayFromCertHex = function(hCert) {
-    var p = X509.getSubjectPublicKeyPosFromCertHex(hCert);
-    var a = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, p);
+    var _ASN1HEX = ASN1HEX;
+    var p, a, hN, hE;
+    p = X509.getSubjectPublicKeyPosFromCertHex(hCert);
+    a = _ASN1HEX.getPosArrayOfChildren_AtObj(hCert, p);
     if (a.length != 2) return [];
-    var hN = ASN1HEX.getHexOfV_AtObj(hCert, a[0]);
-    var hE = ASN1HEX.getHexOfV_AtObj(hCert, a[1]);
+    hN = _ASN1HEX.getHexOfV_AtObj(hCert, a[0]);
+    hE = _ASN1HEX.getHexOfV_AtObj(hCert, a[1]);
     if (hN != null && hE != null) {
         return [hN, hE];
     } else {
@@ -474,6 +592,15 @@ X509.getHexTbsCertificateFromCert = function(hCert) {
     return pTbsCert;
 };
 
+/**
+ * (DEPRECATED) get an array of N and E for RSA subject public key in PEM certificate<br/>
+ * @name getPublicKeyHexArrayFromCertHex
+ * @memberOf X509
+ * @function
+ * @param {String} sCertPEM PEM string of RSA X.509 certificate
+ * @return {Array} array of N and E parameter of RSA subject public key
+ * @deprecated since jsrsasign 7.1.14 x509 1.1.13. This will be removed in 8.0.0 release.
+ */
 X509.getPublicKeyHexArrayFromCertPEM = function(sCertPEM) {
     var hCert = ASN1HEX.pemToHex(sCertPEM);
     var a = X509.getPublicKeyHexArrayFromCertHex(hCert);
@@ -559,18 +686,19 @@ X509.hex2rdn = function(hex, idx) {
  * X509.hex2attrTypeValue("...3008060355040a0c0161...", 128) &rarr; O=a
  */
 X509.hex2attrTypeValue = function(hex, idx) {
+    var _ASN1HEX = ASN1HEX;
     if (idx === undefined) idx = 0;
     if (hex.substr(idx, 2) !== "30") throw "malformed attribute type and value";
 
-    var aIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, idx);
+    var aIdx = _ASN1HEX.getPosArrayOfChildren_AtObj(hex, idx);
     if (aIdx.length !== 2 || hex.substr(aIdx[0], 2) !== "06")
 	"malformed attribute type and value";
 
-    var oidHex = ASN1HEX.getHexOfV_AtObj(hex, aIdx[0]);
+    var oidHex = _ASN1HEX.getHexOfV_AtObj(hex, aIdx[0]);
     var oidInt = KJUR.asn1.ASN1Util.oidHexToInt(oidHex);
     var atype = KJUR.asn1.x509.OID.oid2atype(oidInt);
 
-    var hV = ASN1HEX.getHexOfV_AtObj(hex, aIdx[1]);
+    var hV = _ASN1HEX.getHexOfV_AtObj(hex, aIdx[1]);
     var rawV = hextorstr(hV);
 
     return atype + "=" + rawV;
@@ -586,28 +714,9 @@ X509.hex2attrTypeValue = function(hex, idx) {
  * @since jsrasign 7.1.0 x509 1.1.11
  */
 X509.getPublicKeyFromCertHex = function(h) {
-    var key, hKEYOID, hItem1;
-    var nthPKI = 6; // for publicKeyInfo index is 6 for v3 or 5 for v1
-    var _ASN1HEX = ASN1HEX;
-    var _getVbyList = _ASN1HEX.getVbyList;
-
-    hItem1 = _ASN1HEX.getDecendantHexTLVByNthList(h, 0, [0, 0]);
-    if (hItem1 !== "a003020102") { // tbsCert first item is version(=v3)
-	nthPKI = 5;
-    }
-
-    hKEYOID = _getVbyList(h, 0, [0, nthPKI, 0, 0], "06");
-    if (hKEYOID === "2a864886f70d010101") {    // RSA
-        key = new RSAKey();
-    } else if (hKEYOID === "2a8648ce380401") { // DSA
-        key = new KJUR.crypto.DSA();
-    } else if (hKEYOID === "2a8648ce3d0201") { // CC
-        key = new KJUR.crypto.ECDSA();
-    } else {
-        throw "unsupported public key in X.509 cert";
-    }
-    key.readCertPubKeyHex(h, nthPKI);
-    return key;
+    var x = new X509();
+    x.readCertHex(h);
+    return x.getPublicKey();
 };
 
 /**
@@ -622,9 +731,9 @@ X509.getPublicKeyFromCertHex = function(h) {
  * NOTE: DSA is also supported since x509 1.1.2.
  */
 X509.getPublicKeyFromCertPEM = function(sCertPEM) {
-    var _ASN1HEX = ASN1HEX;
-    var h = _ASN1HEX.pemToHex(sCertPEM);
-    return X509.getPublicKeyFromCertHex(h);
+    var x = new X509();
+    x.readCertPEM(sCertPEM);
+    return x.getPublicKey();
 };
 
 /**
@@ -645,86 +754,42 @@ X509.getPublicKeyFromCertPEM = function(sCertPEM) {
  * NOTE: X509v1 certificate is also supported since x509.js 1.1.9.
  */
 X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
+    var _ASN1HEX = ASN1HEX;
     var result = {};
+    var x, hSPKI, pubkey;
     result.algparam = null;
-    var hCert = ASN1HEX.pemToHex(sCertPEM);
 
-    // 1. Certificate ASN.1
-    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0);
-    if (a1.length != 3)
-        throw "malformed X.509 certificate PEM (code:001)"; // not 3 item of seq Cert
+    x = new X509();
+    x.readCertPEM(sCertPEM);
 
-    // 2. tbsCertificate
-    if (hCert.substr(a1[0], 2) != "30")
-        throw "malformed X.509 certificate PEM (code:002)"; // tbsCert not seq
+    hSPKI = x.getPublicKeyHex();
+    result.keyhex = _ASN1HEX.getVbyList(hSPKI, 0, [1], "03").substr(2);
+    result.algoid = _ASN1HEX.getVbyList(hSPKI, 0, [0, 0], "06");
 
-    var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]);
-
-    // 3. subjectPublicKeyInfo
-    var idx_spi = 6; // subjectPublicKeyInfo index in tbsCert for v3 cert
-    if (hCert.substr(a2[0], 2) !== "a0") idx_spi = 5;
-
-    if (a2.length < idx_spi + 1)
-        throw "malformed X.509 certificate PEM (code:003)"; // no subjPubKeyInfo
-
-    var a3 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a2[idx_spi]);
-
-    if (a3.length != 2)
-        throw "malformed X.509 certificate PEM (code:004)"; // not AlgId and PubKey
-
-    // 4. AlgId
-    var a4 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a3[0]);
-
-    if (a4.length != 2)
-        throw "malformed X.509 certificate PEM (code:005)"; // not 2 item in AlgId
-
-    result.algoid = ASN1HEX.getHexOfV_AtObj(hCert, a4[0]);
-
-    if (hCert.substr(a4[1], 2) == "06") { // EC
-        result.algparam = ASN1HEX.getHexOfV_AtObj(hCert, a4[1]);
-    } else if (hCert.substr(a4[1], 2) == "30") { // DSA
-        result.algparam = ASN1HEX.getHexOfTLV_AtObj(hCert, a4[1]);
-    }
-
-    // 5. Public Key Hex
-    if (hCert.substr(a3[1], 2) != "03")
-        throw "malformed X.509 certificate PEM (code:006)"; // not bitstring
-
-    var unusedBitAndKeyHex = ASN1HEX.getHexOfV_AtObj(hCert, a3[1]);
-    result.keyhex = unusedBitAndKeyHex.substr(2);
+    if (result.algoid === "2a8648ce3d0201") { // ecPublicKey
+	result.algparam = _ASN1HEX.getVbyList(hSPKI, 0, [0, 1], "06");
+    };
 
     return result;
 };
 
 /**
- * get position of subjectPublicKeyInfo field from HEX certificate
+ * (DEPRECATED) static method to get position of subjectPublicKeyInfo field from HEX certificate
  * @name getPublicKeyInfoPosOfCertHEX
  * @memberOf X509
  * @function
  * @param {String} hCert hexadecimal string of certificate
  * @return {Integer} position in hexadecimal string
  * @since x509 1.1.4
+ * @deprecated from x509 1.1.13 jsrsasign 7.1.14.
  * @description
  * get position for SubjectPublicKeyInfo field in the hexadecimal string of
  * certificate.
  */
 X509.getPublicKeyInfoPosOfCertHEX = function(hCert) {
-    // 1. Certificate ASN.1
-    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0);
-    if (a1.length != 3)
-        throw "malformed X.509 certificate PEM (code:001)"; // not 3 item of seq Cert
-
-    // 2. tbsCertificate
-    if (hCert.substr(a1[0], 2) != "30")
-        throw "malformed X.509 certificate PEM (code:002)"; // tbsCert not seq
-
-    var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]);
-
-    // 3. subjectPublicKeyInfo
-    if (a2.length < 7)
-        throw "malformed X.509 certificate PEM (code:003)"; // no subjPubKeyInfo
-
-    return a2[6];
+    var x = new X509();
+    x.readCertHex(hCert);
+    return x.getPublicKeyIdx();
 };
 
 /**
@@ -753,36 +818,11 @@ X509.getPublicKeyInfoPosOfCertHEX = function(hCert) {
  *  {posTLV: 1974, oid: "2.5.29.19", critical: true, posV: 1986}, ...]
  */
 X509.getV3ExtInfoListOfCertHex = function(hCert) {
-    // 1. Certificate ASN.1
-    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0);
-    if (a1.length != 3)
-        throw "malformed X.509 certificate PEM (code:001)"; // not 3 item of seq Cert
+    // 1. find index for SEQUENCE in v3 extension field ("[3]")
+    var extSeqIdx = ASN1HEX.getIdxbyList(hCert, 0, [0, 7, 0], "30");
+    var a4 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, extSeqIdx);
 
-    // 2. tbsCertificate
-    if (hCert.substr(a1[0], 2) != "30")
-        throw "malformed X.509 certificate PEM (code:002)"; // tbsCert not seq
-
-    var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]);
-
-    // 3. v3Extension EXPLICIT Tag [3]
-    // ver, seri, alg, iss, validity, subj, spki, (iui,) (sui,) ext
-    if (a2.length < 8)
-        throw "malformed X.509 certificate PEM (code:003)"; // tbsCert num field too short
-
-    if (hCert.substr(a2[7], 2) != "a3")
-        throw "malformed X.509 certificate PEM (code:004)"; // not [3] tag
-
-    var a3 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a2[7]);
-    if (a3.length != 1)
-        throw "malformed X.509 certificate PEM (code:005)"; // [3]tag numChild!=1
-
-    // 4. v3Extension SEQUENCE
-    if (hCert.substr(a3[0], 2) != "30")
-        throw "malformed X.509 certificate PEM (code:006)"; // not SEQ
-
-    var a4 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a3[0]);
-
-    // 5. v3Extension item position
+    // 2. v3Extension item position
     var numExt = a4.length;
     var aInfo = new Array(numExt);
     for (var i = 0; i < numExt; i++) {
@@ -792,7 +832,7 @@ X509.getV3ExtInfoListOfCertHex = function(hCert) {
 };
 
 /**
- * get X.509 V3 extension value information at the specified position
+ * get X.509 V3 extension value information at the specified position<br/>
  * @name getV3ExtItemInfo_AtObj
  * @memberOf X509
  * @function
@@ -815,20 +855,21 @@ X509.getV3ExtInfoListOfCertHex = function(hCert) {
  * This method is used by {@link X509.getV3ExtInfoListOfCertHex} internally.
  */
 X509.getV3ExtItemInfo_AtObj = function(hCert, pos) {
+    var _ASN1HEX = ASN1HEX;
     var info = {};
 
     // posTLV - extension TLV
     info.posTLV = pos;
 
-    var a  = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, pos);
+    var a  = _ASN1HEX.getPosArrayOfChildren_AtObj(hCert, pos);
     if (a.length != 2 && a.length != 3)
         throw "malformed X.509v3 Ext (code:001)"; // oid,(critical,)val
 
     // oid - extension OID
     if (hCert.substr(a[0], 2) != "06")
         throw "malformed X.509v3 Ext (code:002)"; // not OID "06"
-    var valueHex = ASN1HEX.getHexOfV_AtObj(hCert, a[0]);
-    info.oid = ASN1HEX.hextooidstr(valueHex);
+    var valueHex = _ASN1HEX.getHexOfV_AtObj(hCert, a[0]);
+    info.oid = _ASN1HEX.hextooidstr(valueHex);
 
     // critical - extension critical flag
     info.critical = false; // critical false by default
@@ -839,7 +880,7 @@ X509.getV3ExtItemInfo_AtObj = function(hCert, pos) {
     var posExtV = a[a.length - 1];
     if (hCert.substr(posExtV, 2) != "04")
         throw "malformed X.509v3 Ext (code:003)"; // not EncapOctet "04"
-    info.posV = ASN1HEX.getStartPosOfV_AtObj(hCert, posExtV);
+    info.posV = _ASN1HEX.getStartPosOfV_AtObj(hCert, posExtV);
 
     return info;
 };
@@ -914,7 +955,9 @@ X509.getHexOfV_V3ExtValue = function(hCert, oidOrName) {
  */
 X509.getPosOfTLV_V3ExtValue = function(hCert, oidOrName) {
     var oid = oidOrName;
-    if (! oidOrName.match(/^[0-9.]+$/)) oid = KJUR.asn1.x509.OID.name2oid(oidOrName);
+    if (! oidOrName.match(/^[0-9.]+$/)) {
+	oid = KJUR.asn1.x509.OID.name2oid(oidOrName);
+    }
     if (oid == '') return -1;
 
     var infoList = X509.getV3ExtInfoListOfCertHex(hCert);
@@ -1187,21 +1230,22 @@ X509.getExtSubjectAltName = function(hCert) {
  * ["http://example.com/aaa.crl", "http://example.org/aaa.crl"]
  */
 X509.getExtCRLDistributionPointsURI = function(hCert) {
+    var _ASN1HEX = ASN1HEX;
     var result = new Array();
     var h = X509.getHexOfTLV_V3ExtValue(hCert, "cRLDistributionPoints");
 
-    var a = ASN1HEX.getPosArrayOfChildren_AtObj(h, 0);
+    var a = _ASN1HEX.getPosArrayOfChildren_AtObj(h, 0);
     for (var i = 0; i < a.length; i++) {
-	var hDP = ASN1HEX.getHexOfTLV_AtObj(h, a[i]);
+	var hDP = _ASN1HEX.getHexOfTLV_AtObj(h, a[i]);
 
-	var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hDP, 0);
+	var a1 = _ASN1HEX.getPosArrayOfChildren_AtObj(hDP, 0);
 	for (var j = 0; j < a1.length; j++) {
 	    if (hDP.substr(a1[j], 2) === "a0") {
-		var hDPN = ASN1HEX.getHexOfV_AtObj(hDP, a1[j]);
+		var hDPN = _ASN1HEX.getHexOfV_AtObj(hDP, a1[j]);
 		if (hDPN.substr(0, 2) === "a0") {
-		    var hFullName = ASN1HEX.getHexOfV_AtObj(hDPN, 0);
+		    var hFullName = _ASN1HEX.getHexOfV_AtObj(hDPN, 0);
 		    if (hFullName.substr(0, 2) === "86") {
-			var hURI = ASN1HEX.getHexOfV_AtObj(hFullName, 0);
+			var hURI = _ASN1HEX.getHexOfV_AtObj(hFullName, 0);
 			var uri = hextoutf8(hURI);
 			result.push(uri);
 		    }
@@ -1281,14 +1325,14 @@ X509.getExtAIAInfo = function(hCert) {
  * algName = X509.getSignatureAlgorithmName(hCert);
  */
 X509.getSignatureAlgorithmName = function(hCert) {
-    var sigAlgOidHex = ASN1HEX.getDecendantHexVByNthList(hCert, 0, [1, 0]);
+    var sigAlgOidHex = ASN1HEX.getVbyList(hCert, 0, [1, 0], "06");
     var sigAlgOidInt = KJUR.asn1.ASN1Util.oidHexToInt(sigAlgOidHex);
     var sigAlgName = KJUR.asn1.x509.OID.oid2name(sigAlgOidInt);
     return sigAlgName;
 };
 
 /**
- * get signature value in hexadecimal string
+ * get signature value in hexadecimal string<br/>
  * @name getSignatureValueHex
  * @memberOf X509
  * @function
@@ -1301,18 +1345,28 @@ X509.getSignatureAlgorithmName = function(hCert) {
  * sigHex = X509.getSignatureValueHex(hCert);
  */
 X509.getSignatureValueHex = function(hCert) {
-    var h = ASN1HEX.getDecendantHexVByNthList(hCert, 0, [2]);
-    if (h.substr(0, 2) !== "00")
-	throw "can't get signature value";
-    return h.substr(2);
-};
-
-X509.getSerialNumberHex = function(hCert) {
-    return ASN1HEX.getDecendantHexVByNthList(hCert, 0, [0, 1]);
+    return ASN1HEX.getVbyList(hCert, 0, [2], "03", true);
 };
 
 /**
- * verifies signature value by public key
+ * (DEPRECATED) static method to get hexadecimal string of serialNumber field of certificate.<br/>
+ * @name getSerialNumberHex
+ * @memberOf X509
+ * @function
+ * @param {String} hCert hexadecimal string of X.509 certificate binary
+ * @return {String} hexadecimal string of certificate serial number
+ * @deprecated from x509 1.1.13 jsrsasign 7.1.4. please use {@link X509#getSerialNumberHex}
+ * @example
+ * sn = X509.getSerialNumberHex("3082...");
+ */
+X509.getSerialNumberHex = function(hCert) {
+    var x = new X509();
+    x.readCertHex(hCert);
+    return x.getSerialNumberHex();
+};
+
+/**
+ * verifies signature value by public key<br/>
  * @name verifySignature
  * @memberOf X509
  * @function
@@ -1331,7 +1385,7 @@ X509.getSerialNumberHex = function(hCert) {
 X509.verifySignature = function(hCert, pubKey) {
     var algName = X509.getSignatureAlgorithmName(hCert);
     var hSigVal = X509.getSignatureValueHex(hCert);
-    var hTbsCert = ASN1HEX.getDecendantHexTLVByNthList(hCert, 0, [0]);
+    var hTbsCert = ASN1HEX.getTLVbyList(hCert, 0, [0], "30");
 
     var sig = new KJUR.crypto.Signature({alg: algName});
     sig.init(pubKey);

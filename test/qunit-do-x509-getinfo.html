@@ -155,8 +155,8 @@ var certDigicertOUT = (function() {/*Basic Fields
   subject: /C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert High Assurance EV Root CA
   subject public key info: 
     key algorithm: RSA
-    n=c6cce573e6fbd4bb...
-    e=10001
+    n=00c6cce573e6fbd4...
+    e=010001
 X509v3 Extensions:
   keyUsage CRITICAL:
     digitalSignature,keyCertSign,cRLSign
@@ -180,8 +180,8 @@ var certCioGovOUT = (function() {/*Basic Fields
   subject: /CN=pulse.cio.gov
   subject public key info: 
     key algorithm: RSA
-    n=cabe2d702f0a180c...
-    e=10001
+    n=00cabe2d702f0a18...
+    e=010001
 X509v3 Extensions:
   keyUsage CRITICAL:
     digitalSignature,keyEncipherment
@@ -210,11 +210,11 @@ var certGithubOUT = (function() {/*Basic Fields
   issuer: /C=US/O=DigiCert Inc/OU=www.digicert.com/CN=DigiCert SHA2 Extended Validation Server CA
   notBefore: 140408000000Z
   notAfter: 160412120000Z
-  subject: /businessCategory=Private Organization/jurisdictionOfIncorporationC=US/jurisdictionOfIncorporationSP=Delaware/SN=5157550/streetAddress=548 4th Street/postalCode=94107/C=US/ST=California/L=San Francisco/O=GitHub, Inc./CN=github.com
+  subject: /businessCategory=Private Organization/jurisdictionOfIncorporationC=US/jurisdictionOfIncorporationSP=Delaware/serialNumber=5157550/STREET=548 4th Street/postalCode=94107/C=US/ST=California/L=San Francisco/O=GitHub, Inc./CN=github.com
   subject public key info: 
     key algorithm: RSA
-    n=b1d4dc3caffdf34e...
-    e=10001
+    n=00b1d4dc3caffdf3...
+    e=010001
 X509v3 Extensions:
   authorityKeyIdentifier :
     kid=3dd350a5d6a0adeef34a600a65d321d4f8f8d60f
@@ -273,10 +273,11 @@ test("X509.getInfo() github.com SSL cert", function() {
 <a href="qunit-do-x509-key.html">x509-key</a> | 
 <a href="qunit-do-x509-kid.html">x509-kid</a> | 
 <a href="qunit-do-x509-getinfo.html">x509-getinfo</a> | 
+<a href="qunit-do-x509-v1.html">x509-v1</a> | 
 </p>
 
 </body>
-<center><p>&copy; 2016 Kenji Urushima</p></center>
+<center><p>&copy; 2016-2017 Kenji Urushima</p></center>
 </html>
 
 
