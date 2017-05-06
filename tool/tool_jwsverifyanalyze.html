@@ -1,37 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="jsjws : pure JavaScript implementation of JSON Web Signature" />
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    <title>Online JWS verifier/analyzer</title>
-<script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
-<script language="JavaScript" type="text/javascript" src="ext/json-sans-eval-min.js"></script>
-<script language="JavaScript" type="text/javascript" src="jws-3.2.js"></script>
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsjws : pure JavaScript implementation of JSON Web Signature" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<title>Online JWS verifier/analyzer</title>
+<script language="JavaScript" type="text/javascript" src="../jsrsasign-all-min.js"></script>
 
-    <script language="JavaScript" type="text/javascript">
+<script language="JavaScript" type="text/javascript">
 function doVerify() {
   var sJWS = document.form1.jws1.value;
-  var sCert = document.form1.cert1.value;
+  var sKey = document.form1.cert1.value;
 
-  var jws = new KJUR.jws.JWS();
   var result = 0;
   try {
-    result = jws.verifyJWSByPemX509Cert(sJWS, sCert);
+    result = KJUR.jws.JWS.verify(sJWS, sKey);
   } catch (ex) {
     alert("Error: " + ex);
     result = 0;
   }
-
-  document.form1.im_enchead1.value = jws.parsedJWS.headB64U;
-  document.form1.im_encpayload1.value = jws.parsedJWS.payloadB64U;
-  document.form1.im_encsigval1.value = jws.parsedJWS.sigvalB64U;
-  document.form1.im_siginput1.value = jws.parsedJWS.si;
-  document.form1.im_sigval_h1.value = jws.parsedJWS.sigvalH;
-
-  document.form1.im_head1.value = jws.parsedJWS.headS;
-  document.form1.im_payload1.value = jws.parsedJWS.payloadS;
 
   if (result == 1) {
     alert("JWS signature is *Valid*.");
@@ -60,8 +48,8 @@ function doAnalyze() {
   document.form1.im_head1.value = jws.parsedJWS.headS;
   document.form1.im_payload1.value = jws.parsedJWS.payloadS;
 }
-    </script>
-  </head>
+</script>
+</head>
 
   <body>
 
