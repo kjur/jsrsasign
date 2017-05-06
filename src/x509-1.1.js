@@ -52,9 +52,9 @@
  *   <li>notAfter - {@link X509#getNotAfter}</li>
  *   <li>subject - {@link X509#getSubjectHex}</li>
  *   <li>subject - {@link X509#getSubjectString}</li>
- *   <li>subjectPublicKeyInfo - {@link X509#.getPublicKey}</li>
- *   <li>subjectPublicKeyInfo - {@link X509#.getPublicKeyHex}</li>
- *   <li>subjectPublicKeyInfo - {@link X509#.getPublicKeyIdx}</li>
+ *   <li>subjectPublicKeyInfo - {@link X509#getPublicKey}</li>
+ *   <li>subjectPublicKeyInfo - {@link X509#getPublicKeyHex}</li>
+ *   <li>subjectPublicKeyInfo - {@link X509#getPublicKeyIdx}</li>
  *   <li>subjectPublicKeyInfo - {@link X509.getPublicKeyFromCertPEM}</li>
  *   <li>subjectPublicKeyInfo - {@link X509.getPublicKeyFromCertHex}</li>
  *   <li>subjectPublicKeyInfo - (DEPRECATED) {@link X509.getSubjectPublicKeyPosFromCertHex}</li>
