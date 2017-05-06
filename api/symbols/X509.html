@@ -885,7 +885,7 @@ This method will get signature value of certificate:</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getSubjectPublicKeyInfoPosFromCertHex">getSubjectPublicKeyInfoPosFromCertHex</a></b>(hexadecimal)
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getSubjectPublicKeyInfoPosFromCertHex">getSubjectPublicKeyInfoPosFromCertHex</a></b>(hCert)
 								</div>
 								<div class="description">(DEPRECATED) get a string index of subjectPublicKeyInfo field from hexadecimal certificate<br/>
 This static method gets a string index of subjectPublicKeyInfo field from hexadecimal certificate.</div>
@@ -895,7 +895,7 @@ This static method gets a string index of subjectPublicKeyInfo field from hexade
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getSubjectPublicKeyPosFromCertHex">getSubjectPublicKeyPosFromCertHex</a></b>(hexadecimal)
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getSubjectPublicKeyPosFromCertHex">getSubjectPublicKeyPosFromCertHex</a></b>(hCert)
 								</div>
 								<div class="description">(DEPRECATED) get a string index of contents of subjectPublicKeyInfo BITSTRING value from hexadecimal certificate<br/></div>
 							</td>
@@ -2900,7 +2900,7 @@ var subject = x.getSubjectHex(); // return string like "3013..."</pre>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{Integer}</span>
-					<span class="light">X509.</span><b>getSubjectPublicKeyInfoPosFromCertHex</b>(hexadecimal)
+					<span class="light">X509.</span><b>getSubjectPublicKeyInfoPosFromCertHex</b>(hCert)
 					
 					</div>
 					<div class="description">
@@ -2923,10 +2923,10 @@ NOTE2: X.509v1 and X.509v3 certificate are supported.<br/>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>hexadecimal</b>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
 									
 								</dt>
-								<dd>string of DER RSA/ECDSA/DSA X.509 certificate</dd>
+								<dd>hexadecimal string of DER RSA/ECDSA/DSA X.509 certificate</dd>
 							
 							</dl>
 						
@@ -2957,7 +2957,7 @@ NOTE2: X.509v1 and X.509v3 certificate are supported.<br/>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{Integer}</span>
-					<span class="light">X509.</span><b>getSubjectPublicKeyPosFromCertHex</b>(hexadecimal)
+					<span class="light">X509.</span><b>getSubjectPublicKeyPosFromCertHex</b>(hCert)
 					
 					</div>
 					<div class="description">
@@ -2977,10 +2977,10 @@ NOTE2: X.509v1 and X.509v3 certificate are supported.<br/>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>hexadecimal</b>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
 									
 								</dt>
-								<dd>string of DER RSA/ECDSA/DSA X.509 certificate</dd>
+								<dd>hexadecimal string of DER RSA/ECDSA/DSA X.509 certificate</dd>
 							
 							</dl>
 						

@@ -522,7 +522,7 @@ X509.pemToHex = function(sCertPEM) {
  * @name getSubjectPublicKeyPosFromCertHex
  * @memberOf X509
  * @function
- * @param {String} hexadecimal string of DER RSA/ECDSA/DSA X.509 certificate
+ * @param {String} hCert hexadecimal string of DER RSA/ECDSA/DSA X.509 certificate
  * @return {Integer} string index of key contents
  * @deprecated from x509 1.1.13 jsrsasign 7.1.14. This static method will be removed in 8.0.0 release.
  * @example
@@ -547,7 +547,7 @@ X509.getSubjectPublicKeyPosFromCertHex = function(hCert) {
  * @name getSubjectPublicKeyInfoPosFromCertHex
  * @memberOf X509
  * @function
- * @param {String} hexadecimal string of DER RSA/ECDSA/DSA X.509 certificate
+ * @param {String} hCert hexadecimal string of DER RSA/ECDSA/DSA X.509 certificate
  * @return {Integer} string index of subjectPublicKeyInfo field
  * @deprecated since jsrsasign 7.1.14 x509 1.1.13. This will be removed in 8.0.0 release.
  * @description
