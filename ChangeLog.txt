@@ -3,6 +3,8 @@ ChangeLog for jsrsasign
 
 * Changes from 7.1.4 to x.x.x (2017-May-xx)
   - sample/sample*.html tool/tool*.html test/qunit*.html link fixed
+  - npm jsrsasign@7.1.4 had wrong reference in navigator.
+    So jsrsasign@7.1.4 has been unpublished.
   - ext/rng.js
     - msCrypto fallback for IE11 to prevent error 
       when calling window.crypto. (pull/254)
