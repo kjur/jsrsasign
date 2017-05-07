@@ -1,3 +1,8 @@
+
+var navigator = {};
+navigator.userAgent = false;
+
+var window = {};
 /*
  * jsrsasign(all) 7.1.4 (2017-05-06) (c) 2010-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
@@ -287,3 +292,63 @@ if(typeof KJUR=="undefined"||!KJUR){KJUR={}}if(typeof KJUR.jws=="undefined"||!KJ
 /*! jwsjs-2.1.0 (c) 2010-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 if(typeof KJUR=="undefined"||!KJUR){KJUR={}}if(typeof KJUR.jws=="undefined"||!KJUR.jws){KJUR.jws={}}KJUR.jws.JWSJS=function(){var b=KJUR.jws.JWS;var a=KJUR.jws.JWS;this.aHeader=[];this.sPayload="";this.aSignature=[];this.init=function(){this.aHeader=[];this.sPayload=undefined;this.aSignature=[]};this.initWithJWS=function(d){this.init();var c=d.split(".");if(c.length!=3){throw"malformed input JWS"}this.aHeader.push(c[0]);this.sPayload=c[1];this.aSignature.push(c[2])};this.addSignature=function(c,f,k,i){if(this.sPayload===undefined||this.sPayload===null){throw"there's no JSON-JS signature to add."}var j=this.aHeader.length;if(this.aHeader.length!=this.aSignature.length){throw"aHeader.length != aSignature.length"}try{var d=KJUR.jws.JWS.sign(c,f,this.sPayload,k,i);var h=d.split(".");var l=h[0];var e=h[2];this.aHeader.push(h[0]);this.aSignature.push(h[2])}catch(g){if(this.aHeader.length>j){this.aHeader.pop()}if(this.aSignature.length>j){this.aSignature.pop()}throw"addSignature failed: "+g}};this.addSignatureByHeaderKey=function(f,c){var e=b64utoutf8(this.sPayload);var d=new KJUR.jws.JWS();var g=d.generateJWSByP1PrvKey(f,e,c);this.aHeader.push(d.parsedJWS.headB64U);this.aSignature.push(d.parsedJWS.sigvalB64U)};this.addSignatureByHeaderPayloadKey=function(f,e,c){var d=new KJUR.jws.JWS();var g=d.generateJWSByP1PrvKey(f,e,c);this.aHeader.push(d.parsedJWS.headB64U);this.sPayload=d.parsedJWS.payloadB64U;this.aSignature.push(d.parsedJWS.sigvalB64U)};this.verifyAll=function(f){if(this.aHeader.length!==f.length||this.aSignature.length!==f.length){return false}for(var e=0;e<f.length;e++){var d=f[e];if(d.length!==2){return false}var c=this.verifyNth(e,d[0],d[1]);if(c===false){return false}}return true};this.verifyNth=function(d,h,e){if(this.aHeader.length<=d||this.aSignature.length<=d){return false}var f=this.aHeader[d];var i=this.aSignature[d];var j=f+"."+this.sPayload+"."+i;var c=false;try{c=a.verify(j,h,e)}catch(g){return false}return c};this.verifyWithCerts=function(d){if(this.aHeader.length!=d.length){throw"num headers does not match with num certs"}if(this.aSignature.length!=d.length){throw"num signatures does not match with num certs"}var l=this.sPayload;var h="";for(var e=0;e<d.length;e++){var f=d[e];var g=this.aHeader[e];var n=this.aSignature[e];var c=g+"."+l+"."+n;var k=new KJUR.jws.JWS();try{var m=k.verifyJWSByPemX509Cert(c,f);if(m!=1){h+=(e+1)+"th signature unmatch. "}}catch(j){h+=(e+1)+"th signature fail("+j+"). "}}if(h==""){return 1}else{throw h}};this.readJWSJS=function(e){if(typeof e==="string"){var d=b.readSafeJSONString(e);if(d==null){throw"argument is not safe JSON object string"}this.aHeader=d.headers;this.sPayload=d.payload;this.aSignature=d.signatures}else{try{if(e.headers.length>0){this.aHeader=e.headers}else{throw"malformed header"}if(typeof e.payload==="string"){this.sPayload=e.payload}else{throw"malformed signatures"}if(e.signatures.length>0){this.signatures=e.signatures}else{throw"malformed signatures"}}catch(c){throw"malformed JWS-JS JSON object: "+c}}};this.getJSON=function(){return{headers:this.aHeader,payload:this.sPayload,signatures:this.aSignature}};this.isEmpty=function(){if(this.aHeader.length==0){return 1}return 0}};
+exports.SecureRandom = SecureRandom;
+exports.rng_seed_time = rng_seed_time;
+
+exports.BigInteger = BigInteger;
+exports.RSAKey = RSAKey;
+exports.ECDSA = KJUR.crypto.ECDSA;
+exports.DSA = KJUR.crypto.DSA;
+exports.Signature = KJUR.crypto.Signature;
+exports.MessageDigest = KJUR.crypto.MessageDigest;
+exports.Mac = KJUR.crypto.Mac;
+exports.Cipher = KJUR.crypto.Cipher;
+exports.KEYUTIL = KEYUTIL;
+exports.ASN1HEX = ASN1HEX;
+exports.X509 = X509;
+exports.CryptoJS = CryptoJS;
+
+// ext/base64.js
+exports.b64tohex = b64tohex;
+exports.b64toBA = b64toBA;
+
+// base64x.js
+exports.stoBA = stoBA;
+exports.BAtos = BAtos;
+exports.BAtohex = BAtohex;
+exports.stohex = stohex;
+exports.stob64 = stob64;
+exports.stob64u = stob64u;
+exports.b64utos = b64utos;
+exports.b64tob64u = b64tob64u;
+exports.b64utob64 = b64utob64;
+exports.hex2b64 = hex2b64;
+exports.hextob64u = hextob64u;
+exports.b64utohex = b64utohex;
+exports.b64tohex = b64tohex;
+exports.utf8tob64u = utf8tob64u;
+exports.b64utoutf8 = b64utoutf8;
+exports.utf8tob64 = utf8tob64;
+exports.b64toutf8 = b64toutf8;
+exports.utf8tohex = utf8tohex;
+exports.hextoutf8 = hextoutf8;
+exports.hextorstr = hextorstr;
+exports.rstrtohex = rstrtohex;
+exports.newline_toUnix = newline_toUnix;
+exports.newline_toDos = newline_toDos;
+exports.intarystrtohex = intarystrtohex;
+exports.strdiffidx = strdiffidx;
+exports.hextob64 = hextob64;
+exports.hextob64nl = hextob64nl;
+exports.b64nltohex = b64nltohex;
+exports.hextoArrayBuffer = hextoArrayBuffer;
+exports.ArrayBuffertohex = ArrayBuffertohex;
+
+// name spaces
+exports.KJUR = KJUR;
+exports.crypto = KJUR.crypto;
+exports.asn1 = KJUR.asn1;
+exports.jws = KJUR.jws;
+exports.lang = KJUR.lang;
+
+
