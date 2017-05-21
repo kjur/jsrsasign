@@ -1,4 +1,4 @@
-/*! dsa-2.1.0.js (c) 2016-2017 Kenji Urushimma | kjur.github.com/jsrsasign/license
+/*! dsa-2.1.1.js (c) 2016-2017 Kenji Urushimma | kjur.github.com/jsrsasign/license
  */
 /*
  * dsa.js - new DSA class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name dsa-2.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version dsa 2.1.0 (2017-Jan-21)
+ * @version jsrsasign 7.2.0 dsa 2.1.1 (2017-May-11)
  * @since jsrsasign 7.0.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -214,7 +214,7 @@ KJUR.crypto.DSA = function() {
 	    throw "invalid DSA signature";
 
 	// 3.2. 0 < s < q
-	if (BigInteger.ZERO.compareTo(s) > 0 || s.compareTo(q) > 0)
+	if (BigInteger.ZERO.compareTo(s) >= 0 || s.compareTo(q) > 0)
 	    throw "invalid DSA signature";
 
 	// 4. get w where w = s^-1 mod q

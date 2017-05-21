@@ -1,4 +1,4 @@
-/*! asn1csr-1.0.3.js (c) 2015-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1csr-1.0.4.js (c) 2015-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1csr-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.3 (2017-Jan-14)
+ * @version jsrsasign 7.2.0 asn1csr 1.0.4 (2017-May-21)
  * @since jsrsasign 4.9.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -406,6 +406,9 @@ KJUR.asn1.csr.CSRUtil.newCSRPEM = function(param) {
  * console.log(o.subject.name) &rarr; "/C=US/O=Test"
  */
 KJUR.asn1.csr.CSRUtil.getInfo = function(sPEM) {
+    var _ASN1HEX = ASN1HEX;
+    var _getTLVbyList = _ASN1HEX.getTLVbyList;
+
     var result = {};
     result.subject = {};
     result.pubkey = {};
@@ -415,10 +418,10 @@ KJUR.asn1.csr.CSRUtil.getInfo = function(sPEM) {
 
     var hex = ASN1HEX.pemToHex(sPEM, "CERTIFICATE REQUEST");
 
-    result.subject.hex = ASN1HEX.getDecendantHexTLVByNthList(hex, 0, [0, 1]);
+    result.subject.hex = _getTLVbyList(hex, 0, [0, 1]);
     result.subject.name = X509.hex2dn(result.subject.hex);
 
-    result.pubkey.hex = ASN1HEX.getDecendantHexTLVByNthList(hex, 0, [0, 2]);
+    result.pubkey.hex = _getTLVbyList(hex, 0, [0, 2]);
     result.pubkey.obj = KEYUTIL.getKey(result.pubkey.hex, null, "pkcs8pub");
 
     return result;

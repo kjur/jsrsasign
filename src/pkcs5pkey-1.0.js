@@ -1,4 +1,4 @@
-/*! pkcs5pkey-1.1.0.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! pkcs5pkey-1.1.1.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * pkcs5pkey.js - reading passcode protected PKCS#5 PEM formatted RSA private key
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name pkcs5pkey-1.0.js (DEPRECATED)
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version pkcs5pkey 1.1.0 (2017-Jan-21)
+ * @version jsrsasign 7.2.0 pkcs5pkey 1.1.1 (2017-May-12)
  * @since jsrsasign 2.0.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -565,57 +565,60 @@ var PKCS5PKEY = function() {
          * % openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem
          */
         parseHexOfEncryptedPKCS8: function(sHEX) {
+	    var _ASN1HEX = ASN1HEX;
+	    var _getChildIdx = _ASN1HEX.getChildIdx;
+	    var _getV = _ASN1HEX.getV;
             var info = {};
-        
-            var a0 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, 0);
+            
+            var a0 = _getChildIdx(sHEX, 0);
             if (a0.length != 2)
                 throw "malformed format: SEQUENCE(0).items != 2: " + a0.length;
 
             // 1. ciphertext
-            info.ciphertext = ASN1HEX.getHexOfV_AtObj(sHEX, a0[1]);
+            info.ciphertext = _getV(sHEX, a0[1]);
 
             // 2. pkcs5PBES2
-            var a0_0 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0[0]); 
+            var a0_0 = _getChildIdx(sHEX, a0[0]); 
             if (a0_0.length != 2)
                 throw "malformed format: SEQUENCE(0.0).items != 2: " + a0_0.length;
 
             // 2.1 check if pkcs5PBES2(1 2 840 113549 1 5 13)
-            if (ASN1HEX.getHexOfV_AtObj(sHEX, a0_0[0]) != "2a864886f70d01050d")
+            if (_getV(sHEX, a0_0[0]) != "2a864886f70d01050d")
                 throw "this only supports pkcs5PBES2";
 
             // 2.2 pkcs5PBES2 param
-            var a0_0_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0[1]); 
+            var a0_0_1 = _getChildIdx(sHEX, a0_0[1]); 
             if (a0_0.length != 2)
                 throw "malformed format: SEQUENCE(0.0.1).items != 2: " + a0_0_1.length;
 
             // 2.2.1 encryptionScheme
-            var a0_0_1_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1[1]); 
+            var a0_0_1_1 = _getChildIdx(sHEX, a0_0_1[1]); 
             if (a0_0_1_1.length != 2)
                 throw "malformed format: SEQUENCE(0.0.1.1).items != 2: " + a0_0_1_1.length;
-            if (ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_1[0]) != "2a864886f70d0307")
+            if (_getV(sHEX, a0_0_1_1[0]) != "2a864886f70d0307")
                 throw "this only supports TripleDES";
             info.encryptionSchemeAlg = "TripleDES";
 
             // 2.2.1.1 IV of encryptionScheme
-            info.encryptionSchemeIV = ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_1[1]);
+            info.encryptionSchemeIV = _getV(sHEX, a0_0_1_1[1]);
 
             // 2.2.2 keyDerivationFunc
-            var a0_0_1_0 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1[0]); 
+            var a0_0_1_0 = _getChildIdx(sHEX, a0_0_1[0]); 
             if (a0_0_1_0.length != 2)
                 throw "malformed format: SEQUENCE(0.0.1.0).items != 2: " + a0_0_1_0.length;
-            if (ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_0[0]) != "2a864886f70d01050c")
+            if (_getV(sHEX, a0_0_1_0[0]) != "2a864886f70d01050c")
                 throw "this only supports pkcs5PBKDF2";
-            
+
             // 2.2.2.1 pkcs5PBKDF2 param
-            var a0_0_1_0_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1_0[1]); 
+            var a0_0_1_0_1 = _getChildIdx(sHEX, a0_0_1_0[1]); 
             if (a0_0_1_0_1.length < 2)
                 throw "malformed format: SEQUENCE(0.0.1.0.1).items < 2: " + a0_0_1_0_1.length;
 
             // 2.2.2.1.1 PBKDF2 salt
-            info.pbkdf2Salt = ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_0_1[0]);
+            info.pbkdf2Salt = _getV(sHEX, a0_0_1_0_1[0]);
 
             // 2.2.2.1.2 PBKDF2 iter
-            var iterNumHex = ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_0_1[1]);
+            var iterNumHex = _getV(sHEX, a0_0_1_0_1[1]);
             try {
                 info.pbkdf2Iter = parseInt(iterNumHex, 16);
             } catch(ex) {
@@ -623,7 +626,7 @@ var PKCS5PKEY = function() {
             }
 
             return info;
-        },
+	},
 
         /**
          * generate PBKDF2 key hexstring with specified passcode and information
@@ -756,6 +759,9 @@ var PKCS5PKEY = function() {
          * </ul>
          */
         parsePlainPrivatePKCS8Hex: function(pkcs8PrvHex) {
+	    var _ASN1HEX = ASN1HEX;
+	    var _getChildIdx = _ASN1HEX.getChildIdx;
+	    var _getV = _ASN1HEX.getV;
             var result = {};
             result.algparam = null;
 
@@ -763,7 +769,7 @@ var PKCS5PKEY = function() {
             if (pkcs8PrvHex.substr(0, 2) != "30")
                 throw "malformed plain PKCS8 private key(code:001)"; // not sequence
 
-            var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PrvHex, 0);
+            var a1 = _getChildIdx(pkcs8PrvHex, 0);
             if (a1.length != 3)
                 throw "malformed plain PKCS8 private key(code:002)";
 
@@ -771,7 +777,7 @@ var PKCS5PKEY = function() {
             if (pkcs8PrvHex.substr(a1[1], 2) != "30")
                 throw "malformed PKCS8 private key(code:003)"; // AlgId not sequence
 
-            var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PrvHex, a1[1]);
+            var a2 = _getChildIdx(pkcs8PrvHex, a1[1]);
             if (a2.length != 2)
                 throw "malformed PKCS8 private key(code:004)"; // AlgId not have two elements
 
@@ -779,21 +785,21 @@ var PKCS5PKEY = function() {
             if (pkcs8PrvHex.substr(a2[0], 2) != "06")
                 throw "malformed PKCS8 private key(code:005)"; // AlgId.oid is not OID
 
-            result.algoid = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a2[0]);
+            result.algoid = _getV(pkcs8PrvHex, a2[0]);
 
             // 2.2. AlgID param
             if (pkcs8PrvHex.substr(a2[1], 2) == "06") {
-                result.algparam = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a2[1]);
+                result.algparam = _getV(pkcs8PrvHex, a2[1]);
             }
 
             // 3. Key index
             if (pkcs8PrvHex.substr(a1[2], 2) != "04")
                 throw "malformed PKCS8 private key(code:006)"; // not octet string
 
-            result.keyidx = ASN1HEX.getStartPosOfV_AtObj(pkcs8PrvHex, a1[2]);
+            result.keyidx = _ASN1HEX.getVidx(pkcs8PrvHex, a1[2]);
 
             return result;
-        },
+	},
 
         /**
          * get RSAKey/ECDSA private key object from PEM plain PEM PKCS#8 private key
@@ -873,11 +879,11 @@ var PKCS5PKEY = function() {
          * @name getKeyFromPublicPKCS8Hex
          * @memberOf PKCS5PKEY
          * @function
-         * @param {String} pkcs8PubHex hexadecimal string of PKCS#8 public key
+         * @param {String} h hexadecimal string of PKCS#8 public key
          * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
          * @since pkcs5pkey 1.0.5
          */
-        getKeyFromPublicPKCS8Hex: function(pkcs8PubHex) {
+        getKeyFromPublicPKCS8Hex: function(h) {
 	    var key;
 	    var hOID = ASN1HEX.getVbyList(h, 0, [0, 0], "06");
 
@@ -910,13 +916,16 @@ var PKCS5PKEY = function() {
          * </ul>
          */
         parsePublicRawRSAKeyHex: function(pubRawRSAHex) {
+	    var _ASN1HEX = ASN1HEX;
+	    var _getChildIdx = _ASN1HEX.getChildIdx;
+	    var _getV = _ASN1HEX.getV;
             var result = {};
             
             // 1. Sequence
             if (pubRawRSAHex.substr(0, 2) != "30")
                 throw "malformed RSA key(code:001)"; // not sequence
             
-            var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pubRawRSAHex, 0);
+            var a1 = _getChildIdx(pubRawRSAHex, 0);
             if (a1.length != 2)
                 throw "malformed RSA key(code:002)"; // not 2 items in seq
 
@@ -924,16 +933,16 @@ var PKCS5PKEY = function() {
             if (pubRawRSAHex.substr(a1[0], 2) != "02")
                 throw "malformed RSA key(code:003)"; // 1st item is not integer
 
-            result.n = ASN1HEX.getHexOfV_AtObj(pubRawRSAHex, a1[0]);
+            result.n = _getV(pubRawRSAHex, a1[0]);
 
             // 3. public key "E"
             if (pubRawRSAHex.substr(a1[1], 2) != "02")
                 throw "malformed RSA key(code:004)"; // 2nd item is not integer
 
-            result.e = ASN1HEX.getHexOfV_AtObj(pubRawRSAHex, a1[1]);
+            result.e = _getV(pubRawRSAHex, a1[1]);
 
             return result;
-        },
+	},
 
         /**
          * parse hexadecimal string of RSA private key
@@ -957,27 +966,26 @@ var PKCS5PKEY = function() {
          * </ul>
          */
         parsePrivateRawRSAKeyHexAtObj: function(pkcs8PrvHex, info) {
-            var keyIdx = info.keyidx;
-            
-            // 1. sequence
-            if (pkcs8PrvHex.substr(keyIdx, 2) != "30")
-                throw "malformed RSA private key(code:001)"; // not sequence
+	    var _ASN1HEX = ASN1HEX;
+	    var _getChildIdx = _ASN1HEX.getChildIdx;
+	    var _getV = _ASN1HEX.getV;
 
-            var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PrvHex, keyIdx);
-            if (a1.length != 9)
-                throw "malformed RSA private key(code:002)"; // not sequence
+	    var idxSeq = _ASN1HEX.getIdxbyList(pkcs8PrvHex, 0, [2, 0]);
+	    var a = _getChildIdx(pkcs8PrvHex, idxSeq);
+	    
+	    if (a.length !== 9) throw "malformed PKCS#8 plain RSA private key";
 
             // 2. RSA key
             info.key = {};
-            info.key.n = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[1]);
-            info.key.e = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[2]);
-            info.key.d = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[3]);
-            info.key.p = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[4]);
-            info.key.q = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[5]);
-            info.key.dp = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[6]);
-            info.key.dq = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[7]);
-            info.key.co = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[8]);
-        },
+            info.key.n  = _getV(pkcs8PrvHex, a[1]);
+            info.key.e  = _getV(pkcs8PrvHex, a[2]);
+            info.key.d  = _getV(pkcs8PrvHex, a[3]);
+            info.key.p  = _getV(pkcs8PrvHex, a[4]);
+            info.key.q  = _getV(pkcs8PrvHex, a[5]);
+            info.key.dp = _getV(pkcs8PrvHex, a[6]);
+            info.key.dq = _getV(pkcs8PrvHex, a[7]);
+            info.key.co = _getV(pkcs8PrvHex, a[8]);
+	},
 
         /**
          * parse hexadecimal string of ECC private key
@@ -995,20 +1003,12 @@ var PKCS5PKEY = function() {
          */
         parsePrivateRawECKeyHexAtObj: function(pkcs8PrvHex, info) {
             var keyIdx = info.keyidx;
-            
-            // 1. sequence
-            if (pkcs8PrvHex.substr(keyIdx, 2) != "30")
-                throw "malformed ECC private key(code:001)"; // not sequence
 
-            var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PrvHex, keyIdx);
-            if (a1.length != 3)
-                throw "malformed ECC private key(code:002)"; // not sequence
-
-            // 2. EC private key
-            if (pkcs8PrvHex.substr(a1[1], 2) != "04")
-                throw "malformed ECC private key(code:003)"; // not octetstring
-
-            info.key = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a1[1]);
+	    var ec = new KJUR.crypto.ECDSA();
+	    ec.readPKCS8PrvKeyHex(pkcs8PrvHex);
+	    
+            info.key = ec.prvKeyHex;
+	    info.pubkey = ec.pubKeyHex;
         },
 
         /**
@@ -1027,11 +1027,14 @@ var PKCS5PKEY = function() {
          * </ul>
          */
         parsePublicPKCS8Hex: function(pkcs8PubHex) {
+	    var _ASN1HEX = ASN1HEX;
+	    var _getChildIdx = _ASN1HEX.getChildIdx;
+	    var _getV = _ASN1HEX.getV;
             var result = {};
             result.algparam = null;
 
             // 1. AlgID and Key bit string
-            var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PubHex, 0);
+            var a1 = _getChildIdx(pkcs8PubHex, 0);
             if (a1.length != 2)
                 throw "outer DERSequence shall have 2 elements: " + a1.length;
 
@@ -1040,7 +1043,7 @@ var PKCS5PKEY = function() {
             if (pkcs8PubHex.substr(idxAlgIdTLV, 2) != "30")
                 throw "malformed PKCS8 public key(code:001)"; // AlgId not sequence
 
-            var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PubHex, idxAlgIdTLV);
+            var a2 = _getChildIdx(pkcs8PubHex, idxAlgIdTLV);
             if (a2.length != 2)
                 throw "malformed PKCS8 public key(code:002)"; // AlgId not have two elements
 
@@ -1048,22 +1051,27 @@ var PKCS5PKEY = function() {
             if (pkcs8PubHex.substr(a2[0], 2) != "06")
                 throw "malformed PKCS8 public key(code:003)"; // AlgId.oid is not OID
 
-            result.algoid = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a2[0]);
+            result.algoid = _getV(pkcs8PubHex, a2[0]);
 
             // 2.2. AlgID param
-            if (pkcs8PubHex.substr(a2[1], 2) == "06") {
-                result.algparam = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a2[1]);
+            if (pkcs8PubHex.substr(a2[1], 2) == "06") { // OID for EC
+                result.algparam = _getV(pkcs8PubHex, a2[1]);
+            } else if (pkcs8PubHex.substr(a2[1], 2) == "30") { // SEQ for DSA
+                result.algparam = {};
+                result.algparam.p = _ASN1HEX.getVbyList(pkcs8PubHex, a2[1], [0], "02");
+                result.algparam.q = _ASN1HEX.getVbyList(pkcs8PubHex, a2[1], [1], "02");
+                result.algparam.g = _ASN1HEX.getVbyList(pkcs8PubHex, a2[1], [2], "02");
             }
 
             // 3. Key
             if (pkcs8PubHex.substr(a1[1], 2) != "03")
                 throw "malformed PKCS8 public key(code:004)"; // Key is not bit string
 
-            result.key = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a1[1]).substr(2);
+            result.key = _getV(pkcs8PubHex, a1[1]).substr(2);
             
             // 4. return result assoc array
             return result;
-        },
+	},
 
         /**
          * provide hexadecimal string of unencrypted PKCS#8 private key and returns RSAKey object

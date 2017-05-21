@@ -1,4 +1,4 @@
-/*! keyutil-1.0.15.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! keyutil-1.1.1.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version keyutil 1.1.0 (2017-Jan-14)
+ * @version jsrsasign 7.2.0 keyutil 1.1.1 (2017-May-21)
  * @since jsrsasign 4.1.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -599,57 +599,60 @@ var KEYUTIL = function() {
          * % openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem
          */
         parseHexOfEncryptedPKCS8: function(sHEX) {
+	    var _ASN1HEX = ASN1HEX;
+	    var _getChildIdx = _ASN1HEX.getChildIdx;
+	    var _getV = _ASN1HEX.getV;
             var info = {};
             
-            var a0 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, 0);
+            var a0 = _getChildIdx(sHEX, 0);
             if (a0.length != 2)
                 throw "malformed format: SEQUENCE(0).items != 2: " + a0.length;
 
             // 1. ciphertext
-            info.ciphertext = ASN1HEX.getHexOfV_AtObj(sHEX, a0[1]);
+            info.ciphertext = _getV(sHEX, a0[1]);
 
             // 2. pkcs5PBES2
-            var a0_0 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0[0]); 
+            var a0_0 = _getChildIdx(sHEX, a0[0]); 
             if (a0_0.length != 2)
                 throw "malformed format: SEQUENCE(0.0).items != 2: " + a0_0.length;
 
             // 2.1 check if pkcs5PBES2(1 2 840 113549 1 5 13)
-            if (ASN1HEX.getHexOfV_AtObj(sHEX, a0_0[0]) != "2a864886f70d01050d")
+            if (_getV(sHEX, a0_0[0]) != "2a864886f70d01050d")
                 throw "this only supports pkcs5PBES2";
 
             // 2.2 pkcs5PBES2 param
-            var a0_0_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0[1]); 
+            var a0_0_1 = _getChildIdx(sHEX, a0_0[1]); 
             if (a0_0.length != 2)
                 throw "malformed format: SEQUENCE(0.0.1).items != 2: " + a0_0_1.length;
 
             // 2.2.1 encryptionScheme
-            var a0_0_1_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1[1]); 
+            var a0_0_1_1 = _getChildIdx(sHEX, a0_0_1[1]); 
             if (a0_0_1_1.length != 2)
                 throw "malformed format: SEQUENCE(0.0.1.1).items != 2: " + a0_0_1_1.length;
-            if (ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_1[0]) != "2a864886f70d0307")
+            if (_getV(sHEX, a0_0_1_1[0]) != "2a864886f70d0307")
                 throw "this only supports TripleDES";
             info.encryptionSchemeAlg = "TripleDES";
 
             // 2.2.1.1 IV of encryptionScheme
-            info.encryptionSchemeIV = ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_1[1]);
+            info.encryptionSchemeIV = _getV(sHEX, a0_0_1_1[1]);
 
             // 2.2.2 keyDerivationFunc
-            var a0_0_1_0 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1[0]); 
+            var a0_0_1_0 = _getChildIdx(sHEX, a0_0_1[0]); 
             if (a0_0_1_0.length != 2)
                 throw "malformed format: SEQUENCE(0.0.1.0).items != 2: " + a0_0_1_0.length;
-            if (ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_0[0]) != "2a864886f70d01050c")
+            if (_getV(sHEX, a0_0_1_0[0]) != "2a864886f70d01050c")
                 throw "this only supports pkcs5PBKDF2";
 
             // 2.2.2.1 pkcs5PBKDF2 param
-            var a0_0_1_0_1 = ASN1HEX.getPosArrayOfChildren_AtObj(sHEX, a0_0_1_0[1]); 
+            var a0_0_1_0_1 = _getChildIdx(sHEX, a0_0_1_0[1]); 
             if (a0_0_1_0_1.length < 2)
                 throw "malformed format: SEQUENCE(0.0.1.0.1).items < 2: " + a0_0_1_0_1.length;
 
             // 2.2.2.1.1 PBKDF2 salt
-            info.pbkdf2Salt = ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_0_1[0]);
+            info.pbkdf2Salt = _getV(sHEX, a0_0_1_0_1[0]);
 
             // 2.2.2.1.2 PBKDF2 iter
-            var iterNumHex = ASN1HEX.getHexOfV_AtObj(sHEX, a0_0_1_0_1[1]);
+            var iterNumHex = _getV(sHEX, a0_0_1_0_1[1]);
             try {
                 info.pbkdf2Iter = parseInt(iterNumHex, 16);
             } catch(ex) {
@@ -791,6 +794,9 @@ var KEYUTIL = function() {
          * </ul>
          */
         parsePlainPrivatePKCS8Hex: function(pkcs8PrvHex) {
+	    var _ASN1HEX = ASN1HEX;
+	    var _getChildIdx = _ASN1HEX.getChildIdx;
+	    var _getV = _ASN1HEX.getV;
             var result = {};
             result.algparam = null;
 
@@ -798,7 +804,7 @@ var KEYUTIL = function() {
             if (pkcs8PrvHex.substr(0, 2) != "30")
                 throw "malformed plain PKCS8 private key(code:001)"; // not sequence
 
-            var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PrvHex, 0);
+            var a1 = _getChildIdx(pkcs8PrvHex, 0);
             if (a1.length != 3)
                 throw "malformed plain PKCS8 private key(code:002)";
 
@@ -806,7 +812,7 @@ var KEYUTIL = function() {
             if (pkcs8PrvHex.substr(a1[1], 2) != "30")
                 throw "malformed PKCS8 private key(code:003)"; // AlgId not sequence
 
-            var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PrvHex, a1[1]);
+            var a2 = _getChildIdx(pkcs8PrvHex, a1[1]);
             if (a2.length != 2)
                 throw "malformed PKCS8 private key(code:004)"; // AlgId not have two elements
 
@@ -814,18 +820,18 @@ var KEYUTIL = function() {
             if (pkcs8PrvHex.substr(a2[0], 2) != "06")
                 throw "malformed PKCS8 private key(code:005)"; // AlgId.oid is not OID
 
-            result.algoid = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a2[0]);
+            result.algoid = _getV(pkcs8PrvHex, a2[0]);
 
             // 2.2. AlgID param
             if (pkcs8PrvHex.substr(a2[1], 2) == "06") {
-                result.algparam = ASN1HEX.getHexOfV_AtObj(pkcs8PrvHex, a2[1]);
+                result.algparam = _getV(pkcs8PrvHex, a2[1]);
             }
 
             // 3. Key index
             if (pkcs8PrvHex.substr(a1[2], 2) != "04")
                 throw "malformed PKCS8 private key(code:006)"; // not octet string
 
-            result.keyidx = ASN1HEX.getStartPosOfV_AtObj(pkcs8PrvHex, a1[2]);
+            result.keyidx = _ASN1HEX.getVidx(pkcs8PrvHex, a1[2]);
 
             return result;
         },
@@ -948,13 +954,16 @@ var KEYUTIL = function() {
          * </ul>
          */
         parsePublicRawRSAKeyHex: function(pubRawRSAHex) {
+	    var _ASN1HEX = ASN1HEX;
+	    var _getChildIdx = _ASN1HEX.getChildIdx;
+	    var _getV = _ASN1HEX.getV;
             var result = {};
             
             // 1. Sequence
             if (pubRawRSAHex.substr(0, 2) != "30")
                 throw "malformed RSA key(code:001)"; // not sequence
             
-            var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pubRawRSAHex, 0);
+            var a1 = _getChildIdx(pubRawRSAHex, 0);
             if (a1.length != 2)
                 throw "malformed RSA key(code:002)"; // not 2 items in seq
 
@@ -962,13 +971,13 @@ var KEYUTIL = function() {
             if (pubRawRSAHex.substr(a1[0], 2) != "02")
                 throw "malformed RSA key(code:003)"; // 1st item is not integer
 
-            result.n = ASN1HEX.getHexOfV_AtObj(pubRawRSAHex, a1[0]);
+            result.n = _getV(pubRawRSAHex, a1[0]);
 
             // 3. public key "E"
             if (pubRawRSAHex.substr(a1[1], 2) != "02")
                 throw "malformed RSA key(code:004)"; // 2nd item is not integer
 
-            result.e = ASN1HEX.getHexOfV_AtObj(pubRawRSAHex, a1[1]);
+            result.e = _getV(pubRawRSAHex, a1[1]);
 
             return result;
         },
@@ -997,10 +1006,11 @@ var KEYUTIL = function() {
          */
         parsePrivateRawRSAKeyHexAtObj: function(pkcs8PrvHex, info) {
 	    var _ASN1HEX = ASN1HEX;
-	    var _getV = _ASN1HEX.getHexOfV_AtObj;
+	    var _getChildIdx = _ASN1HEX.getChildIdx;
+	    var _getV = _ASN1HEX.getV;
 
-	    var idxSeq = _ASN1HEX.getDecendantIndexByNthList(pkcs8PrvHex, 0, [2, 0]);
-	    var a = _ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PrvHex, idxSeq);
+	    var idxSeq = _ASN1HEX.getIdxbyList(pkcs8PrvHex, 0, [2, 0]);
+	    var a = _getChildIdx(pkcs8PrvHex, idxSeq);
 	    
 	    if (a.length !== 9) throw "malformed PKCS#8 plain RSA private key";
 
@@ -1032,8 +1042,6 @@ var KEYUTIL = function() {
          * </ul>
          */
         parsePrivateRawECKeyHexAtObj: function(pkcs8PrvHex, info) {
-	    var _ASN1HEX = ASN1HEX;
-
             var keyIdx = info.keyidx;
 
 	    var ec = new KJUR.crypto.ECDSA();
@@ -1059,11 +1067,14 @@ var KEYUTIL = function() {
          * </ul>
          */
         parsePublicPKCS8Hex: function(pkcs8PubHex) {
+	    var _ASN1HEX = ASN1HEX;
+	    var _getChildIdx = _ASN1HEX.getChildIdx;
+	    var _getV = _ASN1HEX.getV;
             var result = {};
             result.algparam = null;
 
             // 1. AlgID and Key bit string
-            var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PubHex, 0);
+            var a1 = _getChildIdx(pkcs8PubHex, 0);
             if (a1.length != 2)
                 throw "outer DERSequence shall have 2 elements: " + a1.length;
 
@@ -1072,7 +1083,7 @@ var KEYUTIL = function() {
             if (pkcs8PubHex.substr(idxAlgIdTLV, 2) != "30")
                 throw "malformed PKCS8 public key(code:001)"; // AlgId not sequence
 
-            var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(pkcs8PubHex, idxAlgIdTLV);
+            var a2 = _getChildIdx(pkcs8PubHex, idxAlgIdTLV);
             if (a2.length != 2)
                 throw "malformed PKCS8 public key(code:002)"; // AlgId not have two elements
 
@@ -1080,23 +1091,23 @@ var KEYUTIL = function() {
             if (pkcs8PubHex.substr(a2[0], 2) != "06")
                 throw "malformed PKCS8 public key(code:003)"; // AlgId.oid is not OID
 
-            result.algoid = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a2[0]);
+            result.algoid = _getV(pkcs8PubHex, a2[0]);
 
             // 2.2. AlgID param
             if (pkcs8PubHex.substr(a2[1], 2) == "06") { // OID for EC
-                result.algparam = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a2[1]);
+                result.algparam = _getV(pkcs8PubHex, a2[1]);
             } else if (pkcs8PubHex.substr(a2[1], 2) == "30") { // SEQ for DSA
                 result.algparam = {};
-                result.algparam.p = ASN1HEX.getVbyList(pkcs8PubHex, a2[1], [0], "02");
-                result.algparam.q = ASN1HEX.getVbyList(pkcs8PubHex, a2[1], [1], "02");
-                result.algparam.g = ASN1HEX.getVbyList(pkcs8PubHex, a2[1], [2], "02");
+                result.algparam.p = _ASN1HEX.getVbyList(pkcs8PubHex, a2[1], [0], "02");
+                result.algparam.q = _ASN1HEX.getVbyList(pkcs8PubHex, a2[1], [1], "02");
+                result.algparam.g = _ASN1HEX.getVbyList(pkcs8PubHex, a2[1], [2], "02");
             }
 
             // 3. Key
             if (pkcs8PubHex.substr(a1[1], 2) != "03")
                 throw "malformed PKCS8 public key(code:004)"; // Key is not bit string
 
-            result.key = ASN1HEX.getHexOfV_AtObj(pkcs8PubHex, a1[1]).substr(2);
+            result.key = _getV(pkcs8PubHex, a1[1]).substr(2);
             
             // 4. return result assoc array
             return result;
@@ -1193,12 +1204,21 @@ var KEYUTIL = function() {
  * keyObj = KEYUTIL.getKey({n: "75ab..", e: "010001"});
  */
 KEYUTIL.getKey = function(param, passcode, hextype) {
+    var _ASN1HEX = ASN1HEX;
+    var _getChildIdx = _ASN1HEX.getChildIdx;
+    var _getV = _ASN1HEX.getV;
+    var _getVbyList = _ASN1HEX.getVbyList;
+    var _KJUR_crypto = KJUR.crypto;
+    var _KJUR_crypto_ECDSA = _KJUR_crypto.ECDSA;
+    var _KJUR_crypto_DSA = _KJUR_crypto.DSA;
+    var _RSAKey = RSAKey;
+
     // 1. by key RSAKey/KJUR.crypto.ECDSA/KJUR.crypto.DSA object
-    if (typeof RSAKey != 'undefined' && param instanceof RSAKey)
+    if (typeof _RSAKey != 'undefined' && param instanceof _RSAKey)
         return param;
-    if (typeof KJUR.crypto.ECDSA != 'undefined' && param instanceof KJUR.crypto.ECDSA)
+    if (typeof _KJUR_crypto_ECDSA != 'undefined' && param instanceof _KJUR_crypto_ECDSA)
         return param;
-    if (typeof KJUR.crypto.DSA != 'undefined' && param instanceof KJUR.crypto.DSA)
+    if (typeof _KJUR_crypto_DSA != 'undefined' && param instanceof _KJUR_crypto_DSA)
         return param;
 
     // 2. by parameters of key
@@ -1207,12 +1227,12 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     // 2.1.1. bare ECC public key by hex values
     if (param.curve !== undefined &&
 	param.xy !== undefined && param.d === undefined) {
-        return new KJUR.crypto.ECDSA({pub: param.xy, curve: param.curve});
+        return new _KJUR_crypto_ECDSA({pub: param.xy, curve: param.curve});
     }
 
     // 2.1.2. bare ECC private key by hex values
     if (param.curve !== undefined && param.d !== undefined) {
-        return new KJUR.crypto.ECDSA({prv: param.d, curve: param.curve});
+        return new _KJUR_crypto_ECDSA({prv: param.d, curve: param.curve});
     }
 
     // 2.2. bare RSA
@@ -1220,7 +1240,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     if (param.kty === undefined &&
 	param.n !== undefined && param.e !== undefined &&
         param.d === undefined) {
-        var key = new RSAKey();
+        var key = new _RSAKey();
         key.setPublic(param.n, param.e);
         return key;
     }
@@ -1236,7 +1256,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	param.dq !== undefined &&
 	param.co !== undefined &&
         param.qi === undefined) {
-        var key = new RSAKey();
+        var key = new _RSAKey();
         key.setPrivateEx(param.n, param.e, param.d, param.p, param.q,
                          param.dp, param.dq, param.co);
         return key;
@@ -1248,7 +1268,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	param.e !== undefined &&
 	param.d !== undefined &&
         param.p === undefined) {
-        var key = new RSAKey();
+        var key = new _RSAKey();
         key.setPrivate(param.n, param.e, param.d);
         return key;
     }
@@ -1258,7 +1278,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     if (param.p !== undefined && param.q !== undefined &&
 	param.g !== undefined &&
         param.y !== undefined && param.x === undefined) {
-        var key = new KJUR.crypto.DSA();
+        var key = new _KJUR_crypto_DSA();
         key.setPublic(param.p, param.q, param.g, param.y);
         return key;
     }
@@ -1267,7 +1287,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     if (param.p !== undefined && param.q !== undefined &&
 	param.g !== undefined &&
         param.y !== undefined && param.x !== undefined) {
-        var key = new KJUR.crypto.DSA();
+        var key = new _KJUR_crypto_DSA();
         key.setPrivate(param.p, param.q, param.g, param.y, param.x);
         return key;
     }
@@ -1279,7 +1299,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	param.n !== undefined &&
 	param.e !== undefined &&
 	param.d === undefined) {
-	var key = new RSAKey();
+	var key = new _RSAKey();
 	key.setPublic(b64utohex(param.n), b64utohex(param.e));
 	return key;
     }
@@ -1294,7 +1314,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	param.dp !== undefined &&
 	param.dq !== undefined &&
 	param.qi !== undefined) {
-	var key = new RSAKey();
+	var key = new _RSAKey();
         key.setPrivateEx(b64utohex(param.n),
 			 b64utohex(param.e),
 			 b64utohex(param.d),
@@ -1312,7 +1332,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	param.n !== undefined &&
 	param.e !== undefined &&
 	param.d !== undefined) {
-	var key = new RSAKey();
+	var key = new _RSAKey();
         key.setPrivate(b64utohex(param.n),
 		       b64utohex(param.e),
 		       b64utohex(param.d));
@@ -1326,7 +1346,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	param.x !== undefined &&
 	param.y !== undefined &&
         param.d === undefined) {
-	var ec = new KJUR.crypto.ECDSA({"curve": param.crv});
+	var ec = new _KJUR_crypto_ECDSA({"curve": param.crv});
 	var charlen = ec.ecparams.keylen / 4;
         var hX   = ("0000000000" + b64utohex(param.x)).slice(- charlen);
         var hY   = ("0000000000" + b64utohex(param.y)).slice(- charlen);
@@ -1341,7 +1361,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	param.x !== undefined &&
 	param.y !== undefined &&
         param.d !== undefined) {
-	var ec = new KJUR.crypto.ECDSA({"curve": param.crv});
+	var ec = new _KJUR_crypto_ECDSA({"curve": param.crv});
 	var charlen = ec.ecparams.keylen / 4;
         var hX   = ("0000000000" + b64utohex(param.x)).slice(- charlen);
         var hY   = ("0000000000" + b64utohex(param.y)).slice(- charlen);
@@ -1356,16 +1376,16 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     // 4.1. get private key by PKCS#5 plain RSA/DSA/ECDSA hexadecimal string
     if (hextype === "pkcs5prv") {
 	var h = param, _ASN1HEX = ASN1HEX, a, key;
-	a = _ASN1HEX.getPosArrayOfChildren_AtObj(h, 0);
+	a = _getChildIdx(h, 0);
 	if (a.length === 9) {        // RSA (INT x 9)
-	    key = new RSAKey();
+	    key = new _RSAKey();
             key.readPrivateKeyFromASN1HexString(param);
 	} else if (a.length === 6) { // DSA (INT x 6)
-	    key = new KJUR.crypto.DSA();
+	    key = new _KJUR_crypto_DSA();
 	    key.readPKCS5PrvKeyHex(h);
 	} else if (a.length > 2 &&   // ECDSA (INT, OCT prv, [0] curve, [1] pub)
 		   h.substr(a[1], 2) === "04") {
-	    key = new KJUR.crypto.ECDSA();
+	    key = new _KJUR_crypto_ECDSA();
 	    key.readPKCS5PrvKeyHex(h);
 	} else {
 	    throw "unsupported PKCS#1/5 hexadecimal key";
@@ -1406,7 +1426,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     //    getKey("-----BEGIN RSA PRIVATE KEY-...")
     if (param.indexOf("-END RSA PRIVATE KEY-") != -1 &&
         param.indexOf("4,ENCRYPTED") == -1) {
-        var hex = ASN1HEX.pemToHex(param, "RSA PRIVATE KEY");
+        var hex = _ASN1HEX.pemToHex(param, "RSA PRIVATE KEY");
         return KEYUTIL.getKey(hex, null, "pkcs5prv");
     }
 
@@ -1414,13 +1434,13 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     if (param.indexOf("-END DSA PRIVATE KEY-") != -1 &&
         param.indexOf("4,ENCRYPTED") == -1) {
 
-        var hKey = ASN1HEX.pemToHex(param, "DSA PRIVATE KEY");
-        var p = ASN1HEX.getVbyList(hKey, 0, [1], "02");
-        var q = ASN1HEX.getVbyList(hKey, 0, [2], "02");
-        var g = ASN1HEX.getVbyList(hKey, 0, [3], "02");
-        var y = ASN1HEX.getVbyList(hKey, 0, [4], "02");
-        var x = ASN1HEX.getVbyList(hKey, 0, [5], "02");
-        var key = new KJUR.crypto.DSA();
+        var hKey = _ASN1HEX.pemToHex(param, "DSA PRIVATE KEY");
+        var p = _getVbyList(hKey, 0, [1], "02");
+        var q = _getVbyList(hKey, 0, [2], "02");
+        var g = _getVbyList(hKey, 0, [3], "02");
+        var y = _getVbyList(hKey, 0, [4], "02");
+        var x = _getVbyList(hKey, 0, [5], "02");
+        var key = new _KJUR_crypto_DSA();
         key.setPrivate(new BigInteger(p, 16),
                        new BigInteger(q, 16),
                        new BigInteger(g, 16),
@@ -1445,9 +1465,9 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
         param.indexOf("4,ENCRYPTED") != -1) {
         var hKey = KEYUTIL.getDecryptedKeyHex(param, passcode);
 
-        var key = ASN1HEX.getVbyList(hKey, 0, [1], "04");
-        var curveNameOidHex = ASN1HEX.getVbyList(hKey, 0, [2,0], "06");
-        var pubkey = ASN1HEX.getVbyList(hKey, 0, [3,0], "03").substr(2);
+        var key = _getVbyList(hKey, 0, [1], "04");
+        var curveNameOidHex = _getVbyList(hKey, 0, [2,0], "06");
+        var pubkey = _getVbyList(hKey, 0, [3,0], "03").substr(2);
         var curveName = "";
 
         if (KJUR.crypto.OID.oidhex2name[curveNameOidHex] !== undefined) {
@@ -1456,7 +1476,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
             throw "undefined OID(hex) in KJUR.crypto.OID: " + curveNameOidHex;
         }
 
-        var ec = new KJUR.crypto.ECDSA({'curve': curveName});
+        var ec = new _KJUR_crypto_ECDSA({'curve': curveName});
         ec.setPublicKeyHex(pubkey);
         ec.setPrivateKeyHex(key);
         ec.isPublic = false;
@@ -1467,12 +1487,12 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     if (param.indexOf("-END DSA PRIVATE KEY-") != -1 &&
         param.indexOf("4,ENCRYPTED") != -1) {
         var hKey = KEYUTIL.getDecryptedKeyHex(param, passcode);
-        var p = ASN1HEX.getVbyList(hKey, 0, [1], "02");
-        var q = ASN1HEX.getVbyList(hKey, 0, [2], "02");
-        var g = ASN1HEX.getVbyList(hKey, 0, [3], "02");
-        var y = ASN1HEX.getVbyList(hKey, 0, [4], "02");
-        var x = ASN1HEX.getVbyList(hKey, 0, [5], "02");
-        var key = new KJUR.crypto.DSA();
+        var p = _getVbyList(hKey, 0, [1], "02");
+        var q = _getVbyList(hKey, 0, [2], "02");
+        var g = _getVbyList(hKey, 0, [3], "02");
+        var y = _getVbyList(hKey, 0, [4], "02");
+        var x = _getVbyList(hKey, 0, [5], "02");
+        var key = new _KJUR_crypto_DSA();
         key.setPrivate(new BigInteger(p, 16),
                        new BigInteger(q, 16),
                        new BigInteger(g, 16),
@@ -1940,6 +1960,9 @@ KEYUTIL.getKeyFromCSRHex = function(csrHex) {
  * </ul>
  */
 KEYUTIL.parseCSRHex = function(csrHex) {
+    var _ASN1HEX = ASN1HEX;
+    var _getChildIdx = _ASN1HEX.getChildIdx;
+    var _getTLV = _ASN1HEX.getTLV;
     var result = {};
     var h = csrHex;
 
@@ -1947,7 +1970,7 @@ KEYUTIL.parseCSRHex = function(csrHex) {
     if (h.substr(0, 2) != "30")
         throw "malformed CSR(code:001)"; // not sequence
 
-    var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(h, 0);
+    var a1 = _getChildIdx(h, 0);
     if (a1.length < 1)
         throw "malformed CSR(code:002)"; // short length
 
@@ -1955,11 +1978,11 @@ KEYUTIL.parseCSRHex = function(csrHex) {
     if (h.substr(a1[0], 2) != "30")
         throw "malformed CSR(code:003)"; // not sequence
 
-    var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(h, a1[0]);
+    var a2 = _getChildIdx(h, a1[0]);
     if (a2.length < 3)
         throw "malformed CSR(code:004)"; // 2nd seq short elem
 
-    result.p8pubkeyhex = ASN1HEX.getHexOfTLV_AtObj(h, a2[2]);
+    result.p8pubkeyhex = _getTLV(h, a2[2]);
 
     return result;
 };

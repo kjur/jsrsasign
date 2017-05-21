@@ -1,9 +1,9 @@
-/*! asn1ocsp-1.0.1.js (c) 2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1ocsp-1.0.2.js (c) 2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1ocsp.js - ASN.1 DER encoder classes for OCSP protocol
  *
- * Copyright (c) 2016 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2016-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1ocsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.1 (2016-Oct-02)
+ * @version jsrsasign 7.2.0 asn1ocsp 1.0.2 (2017-May-12)
  * @since jsrsasign 6.1.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -445,22 +445,28 @@ KJUR.asn1.ocsp.OCSPUtil.getRequestHex = function(issuerCert, subjectCert, alg) {
  * info = KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo("3082...");
  */
 KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo = function(h) {
+    var _ASN1HEX = ASN1HEX;
+    var _getVbyList = _ASN1HEX.getVbyList;
+    var _getIdxbyList = _ASN1HEX.getIdxbyList;
+    var _getVbyList = _ASN1HEX.getVbyList;
+    var _getV = _ASN1HEX.getV;
+
     var result = {};
     try {
-	var v = ASN1HEX.getVbyList(h, 0, [0], "0a");
+	var v = _getVbyList(h, 0, [0], "0a");
 	result.responseStatus = parseInt(v, 16);
     } catch(ex) {};
     if (result.responseStatus !== 0) return result;
 
     try {
 	// certStatus
-	var idxCertStatus = ASN1HEX.getDecendantIndexByNthList(h, 0, [1,0,1,0,0,2,0,1]);
+	var idxCertStatus = _getIdxbyList(h, 0, [1,0,1,0,0,2,0,1]);
 	if (h.substr(idxCertStatus, 2) === "80") {
 	    result.certStatus = "good";
 	} else if (h.substr(idxCertStatus, 2) === "a1") {
 	    result.certStatus = "revoked";
 	    result.revocationTime = 
-		hextoutf8(ASN1HEX.getDecendantHexVByNthList(h, idxCertStatus, [0]));
+		hextoutf8(_getVbyList(h, idxCertStatus, [0]));
 	} else if (h.substr(idxCertStatus, 2) === "82") {
 	    result.certStatus = "unknown";
 	}
@@ -468,16 +474,16 @@ KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo = function(h) {
 
     // thisUpdate
     try {
-	var idxThisUpdate = ASN1HEX.getDecendantIndexByNthList(h, 0, [1,0,1,0,0,2,0,2]);
-	result.thisUpdate = hextoutf8(ASN1HEX.getHexOfV_AtObj(h, idxThisUpdate));
+	var idxThisUpdate = _getIdxbyList(h, 0, [1,0,1,0,0,2,0,2]);
+	result.thisUpdate = hextoutf8(_getV(h, idxThisUpdate));
     } catch (ex) {};
 
     // nextUpdate
     try {
-	var idxEncapNextUpdate = ASN1HEX.getDecendantIndexByNthList(h, 0, [1,0,1,0,0,2,0,3]);
+	var idxEncapNextUpdate = _getIdxbyList(h, 0, [1,0,1,0,0,2,0,3]);
 	if (h.substr(idxEncapNextUpdate, 2) === "a0") {
 	    result.nextUpdate = 
-		hextoutf8(ASN1HEX.getDecendantHexVByNthList(h, idxEncapNextUpdate, [0]));
+		hextoutf8(_getVbyList(h, idxEncapNextUpdate, [0]));
 	}
     } catch (ex) {};
 

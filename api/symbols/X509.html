@@ -569,6 +569,20 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtAIAInfo">getExtAIAInfo</a></b>(hCert)
 								</div>
+								<div class="description">(DEPRECATED) get AuthorityInfoAccess extension value in the certificate as associative array<br/>
+This method will get authority info access value
+as associate array which has following properties:
+<ul>
+<li>ocsp - array of string for OCSP responder URL</li>
+<li>caissuer - array of string for caIssuer value (i.e.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtAIAInfo">getExtAIAInfo</a></b>()
+								</div>
 								<div class="description">get AuthorityInfoAccess extension value in the certificate as associative array
 This method will get authority info access value
 as associate array which has following properties:
@@ -583,16 +597,27 @@ as associate array which has following properties:
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtAuthorityKeyIdentifier">getExtAuthorityKeyIdentifier</a></b>(hCert)
 								</div>
-								<div class="description">get authorityKeyIdentifier value as JSON object in the certificate
+								<div class="description">(DEPRECATED) get authorityKeyIdentifier value as JSON object in the certificate<br/>
 This method will get authority key identifier extension value
 as JSON object.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtBasicConstraints">getExtBasicConstraints</a></b>(hCert)
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtAuthorityKeyIdentifier">getExtAuthorityKeyIdentifier</a></b>()
+								</div>
+								<div class="description">get authorityKeyIdentifier value as JSON object in the certificate<br/>
+This method will get authority key identifier extension value
+as JSON object.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtBasicConstraints">getExtBasicConstraints</a></b>(hCert)
 								</div>
 								<div class="description">get BasicConstraints extension value as object in the certificate
 This method will get basic constraints extension value as object with following paramters.</div>
@@ -602,7 +627,35 @@ This method will get basic constraints extension value as object with following 
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtCRLDistributionPointsURI">getExtCRLDistributionPointsURI</a></b>(hCert)
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtBasicConstraints">getExtBasicConstraints</a></b>(hCert)
+								</div>
+								<div class="description">(DEPRECATED) get BasicConstraints extension value as object in the certificate<br/>
+This method will get basic constraints extension value as object with following paramters.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtCertificatePolicies">getExtCertificatePolicies</a></b>()
+								</div>
+								<div class="description">get CertificatePolicies extension value in the certificate as array
+This method will get certificate policies value
+as an array of JSON object which has following properties:
+<ul>
+<li>id - </li>
+<li>cps - URI of certification practice statement</li>
+<li>unotice - string of UserNotice explicitText</li>
+</ul>
+If there is this extension in the certificate,
+it returns undefined;</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtCRLDistributionPointsURI">getExtCRLDistributionPointsURI</a></b>()
 								</div>
 								<div class="description">get array of string for fullName URIs in cRLDistributionPoints(CDP) in the certificate
 This method will get all fullName URIs of cRLDistributionPoints extension
@@ -613,20 +666,51 @@ in the certificate as array of URI string.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtExtKeyUsageName">getExtExtKeyUsageName</a></b>(hCert)
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtCRLDistributionPointsURI">getExtCRLDistributionPointsURI</a></b>(hCert)
 								</div>
-								<div class="description">get extKeyUsage value as array of name string in the certificate
-This method will get extended key usage extension value
-as array of name or OID string.</div>
+								<div class="description">(DEPRECATED) get array of string for fullName URIs in cRLDistributionPoints(CDP) in the certificate
+This method will get all fullName URIs of cRLDistributionPoints extension
+in the certificate as array of URI string.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtKeyUsageBin">getExtKeyUsageBin</a></b>(hCert)
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtExtKeyUsageName">getExtExtKeyUsageName</a></b>(hCert)
 								</div>
-								<div class="description">get KeyUsage extension value as binary string in the certificate
+								<div class="description">(DEPRECATED) get extKeyUsage value as array of name string in the certificate
+This method will get extended key usage extension value
+as array of name or OID string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtExtKeyUsageName">getExtExtKeyUsageName</a></b>()
+								</div>
+								<div class="description">get extKeyUsage value as array of name string in the certificate<br/>
+This method will get extended key usage extension value
+as array of name or OID string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtInfo">getExtInfo</a></b>(oidOrName)
+								</div>
+								<div class="description">get a X.509v3 extesion information such as extension OID, criticality and value index for specified oid or name.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtKeyUsageBin">getExtKeyUsageBin</a></b>()
+								</div>
+								<div class="description">get KeyUsage extension value as binary string in the certificate<br/>
 This method will get key usage extension value
 as binary string such like '101'.</div>
 							</td>
@@ -635,9 +719,31 @@ as binary string such like '101'.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtKeyUsageBin">getExtKeyUsageBin</a></b>(hCert)
+								</div>
+								<div class="description">(DEPRECATED) get KeyUsage extension value as binary string in the certificate<br/>
+This method will get key usage extension value
+as binary string such like '101'.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtKeyUsageString">getExtKeyUsageString</a></b>()
+								</div>
+								<div class="description">get KeyUsage extension value as names in the certificate<br/>
+This method will get key usage extension value
+as comma separated string of usage names.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtKeyUsageString">getExtKeyUsageString</a></b>(hCert)
 								</div>
-								<div class="description">get KeyUsage extension value as names in the certificate
+								<div class="description">(DEPRECATED) get KeyUsage extension value as names in the certificate<br/>
 This method will get key usage extension value
 as comma separated string of usage names.</div>
 							</td>
@@ -648,9 +754,31 @@ as comma separated string of usage names.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtSubjectAltName">getExtSubjectAltName</a></b>(hCert)
 								</div>
+								<div class="description">(DEPRECATED) get subjectAltName value as array of string in the certificate
+This method will get subject alt name extension value
+as array of name.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtSubjectAltName">getExtSubjectAltName</a></b>()
+								</div>
 								<div class="description">get subjectAltName value as array of string in the certificate
 This method will get subject alt name extension value
 as array of name.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtSubjectKeyIdentifier">getExtSubjectKeyIdentifier</a></b>()
+								</div>
+								<div class="description">get subjectKeyIdentifier value as hexadecimal string in the certificate<br/>
+This method will get subject key identifier extension value
+as hexadecimal string.</div>
 							</td>
 						</tr>
 					
@@ -659,7 +787,7 @@ as array of name.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getExtSubjectKeyIdentifier">getExtSubjectKeyIdentifier</a></b>(hCert)
 								</div>
-								<div class="description">get subjectKeyIdentifier value as hexadecimal string in the certificate
+								<div class="description">(DEPRECATED) get subjectKeyIdentifier value as hexadecimal string in the certificate<br/>
 This method will get subject key identifier extension value
 as hexadecimal string.</div>
 							</td>
@@ -670,7 +798,7 @@ as hexadecimal string.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getHexOfTLV_V3ExtValue">getHexOfTLV_V3ExtValue</a></b>(hCert, oidOrName)
 								</div>
-								<div class="description">get X.509 V3 extension value ASN.1 TLV for specified oid or name
+								<div class="description">(DEPRECATED) get X.509 V3 extension value ASN.1 TLV for specified oid or name
 This method will get X.509v3 extension value of ASN.1 TLV
 which is specifyed by extension name or oid.</div>
 							</td>
@@ -681,7 +809,7 @@ which is specifyed by extension name or oid.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getHexOfV_V3ExtValue">getHexOfV_V3ExtValue</a></b>(hCert, oidOrName)
 								</div>
-								<div class="description">get X.509 V3 extension value ASN.1 V for specified oid or name
+								<div class="description">(DEPRECATED) get X.509 V3 extension value ASN.1 V for specified oid or name
 This method will get X.509v3 extension value of ASN.1 value
 which is specifyed by extension name or oid.</div>
 							</td>
@@ -737,7 +865,7 @@ which is specifyed by extension name or oid.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getPosOfTLV_V3ExtValue">getPosOfTLV_V3ExtValue</a></b>(hCert, oidOrName)
 								</div>
-								<div class="description">get index in the certificate hexa string for specified oid or name specified extension
+								<div class="description">(DEPRECATED) get index in the certificate hexa string for specified oid or name specified extension
 This method will get X.509v3 extension value of ASN.1 V(value)
 which is specifyed by extension name or oid.</div>
 							</td>
@@ -790,6 +918,15 @@ NOTE: DSA is also supported since x509 1.1.2.</div>
 						</tr>
 					
 						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getPublicKeyHexArrayFromCertPEM">getPublicKeyHexArrayFromCertPEM</a></b>(sCertPEM)
+								</div>
+								<div class="description">(DEPRECATED) get an array of N and E for RSA subject public key in PEM certificate<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getPublicKeyIdx">getPublicKeyIdx</a></b>()
@@ -826,20 +963,20 @@ NOTE: X509v1 certificate is also supported since x509.js 1.1.9.</div>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getSerialNumberHex">getSerialNumberHex</a></b>()
-								</div>
-								<div class="description">get hexadecimal string of serialNumber field of certificate.</div>
-							</td>
-						</tr>
-					
-						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getSerialNumberHex">getSerialNumberHex</a></b>(hCert)
 								</div>
 								<div class="description">(DEPRECATED) static method to get hexadecimal string of serialNumber field of certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getSerialNumberHex">getSerialNumberHex</a></b>()
+								</div>
+								<div class="description">get hexadecimal string of serialNumber field of certificate.</div>
 							</td>
 						</tr>
 					
@@ -854,9 +991,9 @@ This method will get a name of signature algorithm field of certificate:</div>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getSignatureAlgorithmName">getSignatureAlgorithmName</a></b>(hCert)
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getSignatureAlgorithmName">getSignatureAlgorithmName</a></b>(hCert)
 								</div>
 								<div class="description">get signature algorithm name from hexadecimal certificate data
 This method will get signature algorithm name of certificate:</div>
@@ -866,7 +1003,27 @@ This method will get signature algorithm name of certificate:</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getSignatureAlgorithmName">getSignatureAlgorithmName</a></b>(hCert)
+								</div>
+								<div class="description">(DEPRECATED) get signature algorithm name from hexadecimal certificate data
+This method will get signature algorithm name of certificate:</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getSignatureValueHex">getSignatureValueHex</a></b>(hCert)
+								</div>
+								<div class="description">(DEPRECATED) get signature value in hexadecimal string<br/>
+This method will get signature value of certificate:</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getSignatureValueHex">getSignatureValueHex</a></b>()
 								</div>
 								<div class="description">get signature value in hexadecimal string<br/>
 This method will get signature value of certificate:</div>
@@ -915,7 +1072,7 @@ This static method gets a string index of subjectPublicKeyInfo field from hexade
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getV3ExtInfoListOfCertHex">getV3ExtInfoListOfCertHex</a></b>(hCert)
 								</div>
-								<div class="description">get array of X.509 V3 extension value information in hex string of certificate
+								<div class="description">(DEPRECATED) get array of X.509 V3 extension value information in hex string of certificate<br/>
 This method will get all extension information of a X.509 certificate.</div>
 							</td>
 						</tr>
@@ -925,7 +1082,7 @@ This method will get all extension information of a X.509 certificate.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.getV3ExtItemInfo_AtObj">getV3ExtItemInfo_AtObj</a></b>(hCert, pos)
 								</div>
-								<div class="description">get X.509 V3 extension value information at the specified position<br/>
+								<div class="description">(DEPRECATED) get X.509 V3 extension value information at the specified position<br/>
 This method will get some information of a X.509 V extension
 which is referred by an index of hexadecimal string of X.509
 certificate.</div>
@@ -978,6 +1135,15 @@ specified by 'hex' and 'idx' to LDAP string representation (ex.</div>
 						</tr>
 					
 						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#parseExt">parseExt</a></b>()
+								</div>
+								<div class="description">set array of X.509v3 extesion information such as extension OID, criticality and value index.</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.pemToBase64">pemToBase64</a></b>(sCertPEM)
@@ -1001,7 +1167,8 @@ CAUTION: now X509.pemToHex deprecated and is planed to remove in jsrsasign 8.0.0
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#readCertHex">readCertHex</a></b>(sCertHex)
 								</div>
-								<div class="description">read a hexadecimal string of X.509 certificate<br/></div>
+								<div class="description">read a hexadecimal string of X.509 certificate<br/>
+NOTE: <a href="../symbols/X509.html#parseExt">X509#parseExt</a> will called internally since jsrsasign 7.2.0.</div>
 							</td>
 						</tr>
 					
@@ -1018,6 +1185,17 @@ CAUTION: now X509.pemToHex deprecated and is planed to remove in jsrsasign 8.0.0
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.verifySignature">verifySignature</a></b>(hCert, pubKey)
+								</div>
+								<div class="description">(DEPRECATED) verifies signature value by public key<br/>
+This method verifies signature value of hexadecimal string of 
+X.509 certificate by specified public key object.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#verifySignature">verifySignature</a></b>(pubKey)
 								</div>
 								<div class="description">verifies signature value by public key<br/>
 This method verifies signature value of hexadecimal string of 
@@ -1074,21 +1252,37 @@ X509 class provides following functionality:
   <li>subjectPublicKeyInfo - (DEPRECATED) <a href="../symbols/X509.html#.getSubjectPublicKeyPosFromCertHex">X509.getSubjectPublicKeyPosFromCertHex</a></li>
   <li>subjectPublicKeyInfo - (DEPRECATED) <a href="../symbols/X509.html#.getSubjectPublicKeyInfoPosFromCertHex">X509.getSubjectPublicKeyInfoPosFromCertHex</a></li>
   <li>subjectPublicKeyInfo - (DEPRECATED) <a href="../symbols/X509.html#.getPublicKeyInfoPosOfCertHEX">X509.getPublicKeyInfoPosOfCertHEX</a></li>
-  <li>signature algorithm - <a href="../symbols/X509.html#.getSignatureAlgorithmName">X509.getSignatureAlgorithmName</a></li>
-  <li>signature value - <a href="../symbols/X509.html#.getSignatureValueHex">X509.getSignatureValueHex</a></li>
+  <li>signature algorithm - (DEPRECATED) <a href="../symbols/X509.html#.getSignatureAlgorithmName">X509.getSignatureAlgorithmName</a></li>
+  <li>signature algorithm - <a href="../symbols/X509.html#getSignatureAlgorithmName">X509#getSignatureAlgorithmName</a></li>
+  <li>signature value - (DEPRECATED) <a href="../symbols/X509.html#.getSignatureValueHex">X509.getSignatureValueHex</a></li>
+  <li>signature value - <a href="../symbols/X509.html#getSignatureValueHex">X509#getSignatureValueHex</a></li>
   </ul>
 </li>
-<li><b>TO GET EXTENSIONS</b>
+<li><b>X509 METHODS TO GET EXTENSIONS</b>
   <ul>
-  <li>basicConstraints - <a href="../symbols/X509.html#.getExtBasicConstraints">X509.getExtBasicConstraints</a></li>
-  <li>keyUsage - <a href="../symbols/X509.html#.getExtKeyUsageBin">X509.getExtKeyUsageBin</a></li>
-  <li>keyUsage - <a href="../symbols/X509.html#.getExtKeyUsageString">X509.getExtKeyUsageString</a></li>
-  <li>subjectKeyIdentifier - <a href="../symbols/X509.html#.getExtSubjectKeyIdentifier">X509.getExtSubjectKeyIdentifier</a></li>
-  <li>authorityKeyIdentifier - <a href="../symbols/X509.html#.getExtAuthorityKeyIdentifier">X509.getExtAuthorityKeyIdentifier</a></li>
-  <li>extKeyUsage - <a href="../symbols/X509.html#.getExtExtKeyUsageName">X509.getExtExtKeyUsageName</a></li>
-  <li>subjectAltName - <a href="../symbols/X509.html#.getExtSubjectAltName">X509.getExtSubjectAltName</a></li>
-  <li>cRLDistributionPoints - <a href="../symbols/X509.html#.getExtCRLDistributionPointsURI">X509.getExtCRLDistributionPointsURI</a></li>
-  <li>authorityInfoAccess - <a href="../symbols/X509.html#.getExtAIAInfo">X509.getExtAIAInfo</a></li>
+  <li>basicConstraints - <a href="../symbols/X509.html#getExtBasicConstraints">X509#getExtBasicConstraints</a></li>
+  <li>keyUsage - <a href="../symbols/X509.html#getExtKeyUsageBin">X509#getExtKeyUsageBin</a></li>
+  <li>keyUsage - <a href="../symbols/X509.html#getExtKeyUsageString">X509#getExtKeyUsageString</a></li>
+  <li>subjectKeyIdentifier - <a href="../symbols/X509.html#getExtSubjectKeyIdentifier">X509#getExtSubjectKeyIdentifier</a></li>
+  <li>authorityKeyIdentifier - <a href="../symbols/X509.html#getExtAuthorityKeyIdentifier">X509#getExtAuthorityKeyIdentifier</a></li>
+  <li>extKeyUsage - <a href="../symbols/X509.html#getExtExtKeyUsageName">X509#getExtExtKeyUsageName</a></li>
+  <li>subjectAltName - <a href="../symbols/X509.html#getExtSubjectAltName">X509#getExtSubjectAltName</a></li>
+  <li>cRLDistributionPoints - <a href="../symbols/X509.html#getExtCRLDistributionPointsURI">X509#getExtCRLDistributionPointsURI</a></li>
+  <li>authorityInfoAccess - <a href="../symbols/X509.html#getExtAIAInfo">X509#getExtAIAInfo</a></li>
+  <li>certificatePolicies - <a href="../symbols/X509.html#getExtCertificatePolicies">X509#getExtCertificatePolicies</a></li>
+  </ul>
+</li>
+<li><b>(DEPRECATED) STATIC METHODS TO GET EXTENSIONS</b>
+  <ul>
+  <li>basicConstraints - (DEPRECATED) <a href="../symbols/X509.html#.getExtBasicConstraints">X509.getExtBasicConstraints</a></li>
+  <li>keyUsage - (DEPRECATED) <a href="../symbols/X509.html#.getExtKeyUsageBin">X509.getExtKeyUsageBin</a></li>
+  <li>keyUsage - (DEPRECATED) <a href="../symbols/X509.html#.getExtKeyUsageString">X509.getExtKeyUsageString</a></li>
+  <li>subjectKeyIdentifier - (DEPRECATED) <a href="../symbols/X509.html#.getExtSubjectKeyIdentifier">X509.getExtSubjectKeyIdentifier</a></li>
+  <li>authorityKeyIdentifier - (DEPRECATED) <a href="../symbols/X509.html#.getExtAuthorityKeyIdentifier">X509.getExtAuthorityKeyIdentifier</a></li>
+  <li>extKeyUsage - (DEPRECATED) <a href="../symbols/X509.html#.getExtExtKeyUsageName">X509.getExtExtKeyUsageName</a></li>
+  <li>subjectAltName - (DEPRECATED) <a href="../symbols/X509.html#.getExtSubjectAltName">X509.getExtSubjectAltName</a></li>
+  <li>cRLDistributionPoints - (DEPRECATED) <a href="../symbols/X509.html#.getExtCRLDistributionPointsURI">X509.getExtCRLDistributionPointsURI</a></li>
+  <li>authorityInfoAccess - (DEPRECATED) <a href="../symbols/X509.html#.getExtAIAInfo">X509.getExtAIAInfo</a></li>
   </ul>
 </li>
 <li><b>UTILITIES</b>
@@ -1096,6 +1290,7 @@ X509 class provides following functionality:
   <li>reading PEM X.509 certificate - <a href="../symbols/X509.html#readCertPEM">X509#readCertPEM</a></li>
   <li>reading hexadecimal string of X.509 certificate - <a href="../symbols/X509.html#readCertHex">X509#readCertHex</a></li>
   <li>get all certificate information - <a href="../symbols/X509.html#getInfo">X509#getInfo</a></li>
+  <li>get specified extension information - <a href="../symbols/X509.html#getExtInfo">X509#getExtInfo</a></li>
   <li>get Base64 from PEM certificate - <a href="../symbols/X509.html#.pemToBase64">X509.pemToBase64</a></li>
   <li>verify signature value - <a href="../symbols/X509.html#.verifySignature">X509.verifySignature</a></li>
   <li>get hexadecimal string from PEM certificate - <a href="../symbols/X509.html#.pemToHex">X509.pemToHex</a> (DEPRECATED)</li>
@@ -1258,7 +1453,7 @@ X509 class provides following functionality:
 					
 					</div>
 					<div class="description">
-						get AuthorityInfoAccess extension value in the certificate as associative array
+						(DEPRECATED) get AuthorityInfoAccess extension value in the certificate as associative array<br/>
 This method will get authority info access value
 as associate array which has following properties:
 <ul>
@@ -1293,10 +1488,70 @@ it returns null;
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.14 jsrsasign 7.2.0 please move to <a href="../symbols/X509.html#getExtAIAInfo">X509#getExtAIAInfo</a>
+							</dt>
+							</dl>
+						
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
 								<dd>x509 1.1.6</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> associative array of AIA extension properties</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getExtAIAInfo"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getExtAIAInfo</b>()
+					
+					</div>
+					<div class="description">
+						get AuthorityInfoAccess extension value in the certificate as associative array
+This method will get authority info access value
+as associate array which has following properties:
+<ul>
+<li>ocsp - array of string for OCSP responder URL</li>
+<li>caissuer - array of string for caIssuer value (i.e. CA certificates URL)</li>
+</ul>
+If there is this in the certificate, it returns undefined;
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+x.getExtAIAInfo(hCert) &rarr; 
+{ ocsp:     ["http://ocsp.foo.com"],
+  caissuer: ["http://rep.foo.com/aaa.p8m"] }</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 x509 1.1.14</dd>
 							</dl>
 							</dl>
 						
@@ -1322,7 +1577,7 @@ it returns null;
 					
 					</div>
 					<div class="description">
-						get authorityKeyIdentifier value as JSON object in the certificate
+						(DEPRECATED) get authorityKeyIdentifier value as JSON object in the certificate<br/>
 This method will get authority key identifier extension value
 as JSON object.
 If there is no its extension in the certificate,
@@ -1356,6 +1611,13 @@ be return in the JSON object.
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.14 jsrsasign 7.2.0 please move to <a href="../symbols/X509.html#getExtAuthorityKeyIdentifier">X509#getExtAuthorityKeyIdentifier</a>
+							</dt>
+							</dl>
+						
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
@@ -1377,6 +1639,124 @@ be return in the JSON object.
 
 					<hr />
 				
+					<a name="getExtAuthorityKeyIdentifier"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getExtAuthorityKeyIdentifier</b>()
+					
+					</div>
+					<div class="description">
+						get authorityKeyIdentifier value as JSON object in the certificate<br/>
+This method will get authority key identifier extension value
+as JSON object.
+If there is this in the certificate, it returns undefined;
+<br>
+NOTE: Currently this method only supports keyIdentifier so that
+authorityCertIssuer and authorityCertSerialNumber will not
+be return in the JSON object.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+x.getExtAuthorityKeyIdentifier() &rarr; { kid: "1234abcd..." }</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 x509 1.1.14</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> JSON object of authority key identifier or null</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getExtBasicConstraints"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getExtBasicConstraints</b>(hCert)
+					
+					</div>
+					<div class="description">
+						get BasicConstraints extension value as object in the certificate
+This method will get basic constraints extension value as object with following paramters.
+<ul>
+<li>cA - CA flag whether CA or not</li>
+<li>pathLen - maximum intermediate certificate length</li>
+</ul>
+There are use cases for return values:
+<ul>
+<li>{cA:true, pathLen:3} - cA flag is true and pathLen is 3</li>
+<li>{cA:true} - cA flag is true and no pathLen</li>
+<li>{} - basic constraints has no value in case of end entity certificate</li>
+<li>undefined - there is no basic constraints extension</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+x.getExtBasicConstraints() &rarr; { cA: true, pathLen: 3 };</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 x509 1.1.14</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> associative array which may have "cA" and "pathLen" parameters</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".getExtBasicConstraints"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1385,7 +1765,7 @@ be return in the JSON object.
 					
 					</div>
 					<div class="description">
-						get BasicConstraints extension value as object in the certificate
+						(DEPRECATED) get BasicConstraints extension value as object in the certificate<br/>
 This method will get basic constraints extension value as object with following paramters.
 <ul>
 <li>cA - CA flag whether CA or not</li>
@@ -1421,6 +1801,13 @@ There are use cases for return values:
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.14 jsrsasign 7.2.0 please move to <a href="../symbols/X509.html#getExtBasicConstraints">X509#getExtBasicConstraints</a>
+							</dt>
+							</dl>
+						
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
@@ -1442,6 +1829,113 @@ There are use cases for return values:
 
 					<hr />
 				
+					<a name="getExtCertificatePolicies"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getExtCertificatePolicies</b>()
+					
+					</div>
+					<div class="description">
+						get CertificatePolicies extension value in the certificate as array
+This method will get certificate policies value
+as an array of JSON object which has following properties:
+<ul>
+<li>id - </li>
+<li>cps - URI of certification practice statement</li>
+<li>unotice - string of UserNotice explicitText</li>
+</ul>
+If there is this extension in the certificate,
+it returns undefined;
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+x.getExtCertificatePolicies &rarr; 
+[{ id: 1.2.3.4,
+   cps: "http://example.com/cps",
+   unotice: "explicit text" }]</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 x509 1.1.14</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> array of PolicyInformation JSON object</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getExtCRLDistributionPointsURI"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getExtCRLDistributionPointsURI</b>()
+					
+					</div>
+					<div class="description">
+						get array of string for fullName URIs in cRLDistributionPoints(CDP) in the certificate
+This method will get all fullName URIs of cRLDistributionPoints extension
+in the certificate as array of URI string.
+If there is this in the certificate, it returns undefined;
+<br>
+NOTE: Currently this method supports only fullName URI so that
+other parameters will not be returned.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+x.getExtCRLDistributionPointsURI() &rarr;
+["http://example.com/aaa.crl", "http://example.org/aaa.crl"]</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 x509 1.1.14</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> array of fullName URIs of CDP of the certificate</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".getExtCRLDistributionPointsURI"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1450,7 +1944,7 @@ There are use cases for return values:
 					
 					</div>
 					<div class="description">
-						get array of string for fullName URIs in cRLDistributionPoints(CDP) in the certificate
+						(DEPRECATED) get array of string for fullName URIs in cRLDistributionPoints(CDP) in the certificate
 This method will get all fullName URIs of cRLDistributionPoints extension
 in the certificate as array of URI string.
 If there is no its extension in the certificate,
@@ -1483,6 +1977,13 @@ other parameters will not be returned.
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.14 jsrsasign 7.2.0 please move to <a href="../symbols/X509.html#getExtCRLDistributionPointsURI">X509#getExtCRLDistributionPointsURI</a>
+							</dt>
+							</dl>
+						
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
@@ -1512,7 +2013,7 @@ other parameters will not be returned.
 					
 					</div>
 					<div class="description">
-						get extKeyUsage value as array of name string in the certificate
+						(DEPRECATED) get extKeyUsage value as array of name string in the certificate
 This method will get extended key usage extension value
 as array of name or OID string.
 If there is no its extension in the certificate,
@@ -1545,6 +2046,13 @@ name2oidList parameter in asn1x509.js file.
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.14 jsrsasign 7.2.0 please move to <a href="../symbols/X509.html#getExtExtKeyUsageName">X509#getExtExtKeyUsageName</a>
+							</dt>
+							</dl>
+						
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
@@ -1566,6 +2074,169 @@ name2oidList parameter in asn1x509.js file.
 
 					<hr />
 				
+					<a name="getExtExtKeyUsageName"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getExtExtKeyUsageName</b>()
+					
+					</div>
+					<div class="description">
+						get extKeyUsage value as array of name string in the certificate<br/>
+This method will get extended key usage extension value
+as array of name or OID string.
+If there is this in the certificate, it returns undefined;
+<br>
+NOTE: Supported extended key usage ID names are defined in
+name2oidList parameter in asn1x509.js file.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+x.getExtExtKeyUsageName() &rarr; ["serverAuth", "clientAuth", "0.1.2.3.4.5"]</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 x509 1.1.14</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> array of extended key usage ID name or oid</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getExtInfo"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getExtInfo</b>(oidOrName)
+					
+					</div>
+					<div class="description">
+						get a X.509v3 extesion information such as extension OID, criticality and value index for specified oid or name.<br/>
+This method will get an X.509v3 extension information JSON object
+having extension OID, criticality and value idx for specified
+extension OID or name.
+If there is no such extension, this returns undefined.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+
+x.getExtInfo("keyUsage") &rarr; { oid: "2.5.29.15", critical: true, vidx: 1714 }
+x.getExtInfo("unknownExt") &rarr; undefined</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>oidOrName</b>
+									
+								</dt>
+								<dd>X.509 extension oid or name (ex. keyUsage or 2.5.29.19)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 x509 1.1.14</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>X.509 extension information such as extension OID or value indx (see <a href="../symbols/X509.html#parseExt">X509#parseExt</a>)</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getExtKeyUsageBin"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>getExtKeyUsageBin</b>()
+					
+					</div>
+					<div class="description">
+						get KeyUsage extension value as binary string in the certificate<br/>
+This method will get key usage extension value
+as binary string such like '101'.
+Key usage bits definition is in the RFC 5280.
+If there is no key usage extension in the certificate,
+it returns empty string (i.e. '').
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+x.getExtKeyUsageBin() &rarr; '101'
+// 1 - digitalSignature
+// 0 - nonRepudiation
+// 1 - keyEncipherment</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 x509 1.1.14</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> binary string of key usage bits (ex. '101')</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".getExtKeyUsageBin"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1574,7 +2245,7 @@ name2oidList parameter in asn1x509.js file.
 					
 					</div>
 					<div class="description">
-						get KeyUsage extension value as binary string in the certificate
+						(DEPRECATED) get KeyUsage extension value as binary string in the certificate<br/>
 This method will get key usage extension value
 as binary string such like '101'.
 Key usage bits definition is in the RFC 5280.
@@ -1607,6 +2278,13 @@ it returns empty string (i.e. '').
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.14 jsrsasign 7.2.0 please move to <a href="../symbols/X509.html#getExtKeyUsageBin">X509#getExtKeyUsageBin</a>
+							</dt>
+							</dl>
+						
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
@@ -1628,6 +2306,54 @@ it returns empty string (i.e. '').
 
 					<hr />
 				
+					<a name="getExtKeyUsageString"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>getExtKeyUsageString</b>()
+					
+					</div>
+					<div class="description">
+						get KeyUsage extension value as names in the certificate<br/>
+This method will get key usage extension value
+as comma separated string of usage names.
+If there is no key usage extension in the certificate,
+it returns empty string (i.e. '').
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+x.getExtKeyUsageString() &rarr; "digitalSignature,keyEncipherment"</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 x509 1.1.14</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> comma separated string of key usage</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".getExtKeyUsageString"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1636,7 +2362,7 @@ it returns empty string (i.e. '').
 					
 					</div>
 					<div class="description">
-						get KeyUsage extension value as names in the certificate
+						(DEPRECATED) get KeyUsage extension value as names in the certificate<br/>
 This method will get key usage extension value
 as comma separated string of usage names.
 If there is no key usage extension in the certificate,
@@ -1664,6 +2390,13 @@ it returns empty string (i.e. '').
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.14 jsrsasign 7.2.0 please move to <a href="../symbols/X509.html#getExtKeyUsageString">X509#getExtKeyUsageString</a>
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">
@@ -1694,7 +2427,7 @@ it returns empty string (i.e. '').
 					
 					</div>
 					<div class="description">
-						get subjectAltName value as array of string in the certificate
+						(DEPRECATED) get subjectAltName value as array of string in the certificate
 This method will get subject alt name extension value
 as array of name.
 If there is no its extension in the certificate,
@@ -1727,6 +2460,13 @@ other name type such like iPAddress or generalName will not be returned.
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.14 jsrsasign 7.2.0 please move to X509#getExtExtSubjectAltName
+							</dt>
+							</dl>
+						
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
@@ -1748,6 +2488,103 @@ other name type such like iPAddress or generalName will not be returned.
 
 					<hr />
 				
+					<a name="getExtSubjectAltName"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getExtSubjectAltName</b>()
+					
+					</div>
+					<div class="description">
+						get subjectAltName value as array of string in the certificate
+This method will get subject alt name extension value
+as array of name.
+If there is this in the certificate, it returns undefined;
+<br>
+NOTE: Currently this method supports only dNSName so that
+other name type such like iPAddress or generalName will not be returned.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+x.getExtSubjectAltName(hCert) &rarr; ["example.com", "example.org"]</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 x509 1.1.14</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> array of alt names</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getExtSubjectKeyIdentifier"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>getExtSubjectKeyIdentifier</b>()
+					
+					</div>
+					<div class="description">
+						get subjectKeyIdentifier value as hexadecimal string in the certificate<br/>
+This method will get subject key identifier extension value
+as hexadecimal string.
+If there is this in the certificate, it returns undefined;
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+x.getExtSubjectKeyIdentifier() &rarr; "1b3347ab...";</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 x509 1.1.14</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of subject key identifier or null</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".getExtSubjectKeyIdentifier"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1756,7 +2593,7 @@ other name type such like iPAddress or generalName will not be returned.
 					
 					</div>
 					<div class="description">
-						get subjectKeyIdentifier value as hexadecimal string in the certificate
+						(DEPRECATED) get subjectKeyIdentifier value as hexadecimal string in the certificate<br/>
 This method will get subject key identifier extension value
 as hexadecimal string.
 If there is no its extension in the certificate,
@@ -1783,6 +2620,13 @@ it returns null.
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.14 jsrsasign 7.2.0 please move to <a href="../symbols/X509.html#getExtSubjectKeyIdentifier">X509#getExtSubjectKeyIdentifier</a>
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">
@@ -1813,7 +2657,7 @@ it returns null.
 					
 					</div>
 					<div class="description">
-						get X.509 V3 extension value ASN.1 TLV for specified oid or name
+						(DEPRECATED) get X.509 V3 extension value ASN.1 TLV for specified oid or name
 This method will get X.509v3 extension value of ASN.1 TLV
 which is specifyed by extension name or oid.
 If there is no such extension in the certificate, it returns null.
@@ -1847,6 +2691,13 @@ If there is no such extension in the certificate, it returns null.
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.14 jsrsasign 7.2.0
+							</dt>
+							</dl>
+						
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
@@ -1876,7 +2727,7 @@ If there is no such extension in the certificate, it returns null.
 					
 					</div>
 					<div class="description">
-						get X.509 V3 extension value ASN.1 V for specified oid or name
+						(DEPRECATED) get X.509 V3 extension value ASN.1 V for specified oid or name
 This method will get X.509v3 extension value of ASN.1 value
 which is specifyed by extension name or oid.
 If there is no such extension in the certificate, it returns null.
@@ -1911,6 +2762,13 @@ in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.14 jsrsasign 7.2.0
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">
@@ -2160,7 +3018,7 @@ var notBefore = x.getNotBefore(); // return string like "151231235959Z"</pre>
 					
 					</div>
 					<div class="description">
-						get index in the certificate hexa string for specified oid or name specified extension
+						(DEPRECATED) get index in the certificate hexa string for specified oid or name specified extension
 This method will get X.509v3 extension value of ASN.1 V(value)
 which is specifyed by extension name or oid.
 If there is no such extension in the certificate,
@@ -2196,6 +3054,13 @@ in the <a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> class
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.14 jsrsasign 7.2.0
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">
@@ -2455,6 +3320,56 @@ hSPKI = x.getPublicKeyHex(); // return string like "30820122..."</pre>
 
 					<hr />
 				
+					<a name=".getPublicKeyHexArrayFromCertPEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Array}</span>
+					<span class="light">X509.</span><b>getPublicKeyHexArrayFromCertPEM</b>(sCertPEM)
+					
+					</div>
+					<div class="description">
+						(DEPRECATED) get an array of N and E for RSA subject public key in PEM certificate<br/>
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sCertPEM</b>
+									
+								</dt>
+								<dd>PEM string of RSA X.509 certificate</dd>
+							
+							</dl>
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 7.1.14 x509 1.1.13. This will be removed in 8.0.0 release.
+							</dt>
+							</dl>
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of N and E parameter of RSA subject public key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="getPublicKeyIdx"> </a>
 					<div class="fixedFont">
 					
@@ -2532,7 +3447,7 @@ certificate.
 							<dl class="detailList">
 							<dt class="heading">Deprecated:</dt>
 							<dt>
-								from x509 1.1.13 jsrsasign 7.1.14.
+								from jsrsasign 7.1.14 x509 1.1.13
 							</dt>
 							</dl>
 						
@@ -2613,44 +3528,6 @@ NOTE: X509v1 certificate is also supported since x509.js 1.1.9.
 
 					<hr />
 				
-					<a name="getSerialNumberHex"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>getSerialNumberHex</b>()
-					
-					</div>
-					<div class="description">
-						get hexadecimal string of serialNumber field of certificate.<br/>
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">var x = new X509();
-x.readCertPEM(sCertPEM);
-var sn = x.getSerialNumberHex(); // return string like "01ad..."</pre>
-					
-					
-					
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> hexadecimal string of certificate serial number</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
 					<a name=".getSerialNumberHex"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -2689,6 +3566,44 @@ var sn = x.getSerialNumberHex(); // return string like "01ad..."</pre>
 								from x509 1.1.13 jsrsasign 7.1.4. please use <a href="../symbols/X509.html#getSerialNumberHex">X509#getSerialNumberHex</a>
 							</dt>
 							</dl>
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of certificate serial number</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getSerialNumberHex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>getSerialNumberHex</b>()
+					
+					</div>
+					<div class="description">
+						get hexadecimal string of serialNumber field of certificate.<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var x = new X509();
+x.readCertPEM(sCertPEM);
+var sn = x.getSerialNumberHex(); // return string like "01ad..."</pre>
+					
+					
+					
+						
 						
 						
 						
@@ -2750,6 +3665,62 @@ algName = x.getSignatureAlgorithmField();</pre>
 
 					<hr />
 				
+					<a name="getSignatureAlgorithmName"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>getSignatureAlgorithmName</b>(hCert)
+					
+					</div>
+					<div class="description">
+						get signature algorithm name from hexadecimal certificate data
+This method will get signature algorithm name of certificate:
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var x = new X509();
+x.readCertPEM(sCertPEM);
+x.getSignatureAlgorithmName() &rarr; "SHA256withRSA"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCert</b>
+									
+								</dt>
+								<dd>hexadecimal string of X.509 certificate binary</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 x509 1.1.14</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> signature algorithm name (ex. SHA1withRSA, SHA256withECDSA)</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".getSignatureAlgorithmName"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -2758,7 +3729,7 @@ algName = x.getSignatureAlgorithmField();</pre>
 					
 					</div>
 					<div class="description">
-						get signature algorithm name from hexadecimal certificate data
+						(DEPRECATED) get signature algorithm name from hexadecimal certificate data
 This method will get signature algorithm name of certificate:
 						
 						
@@ -2782,6 +3753,13 @@ This method will get signature algorithm name of certificate:
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 7.1.16 x509 1.1.14. Please move to <a href="../symbols/X509.html#getSignatureAlgorithmName">X509#getSignatureAlgorithmName</a>
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">
@@ -2812,7 +3790,7 @@ This method will get signature algorithm name of certificate:
 					
 					</div>
 					<div class="description">
-						get signature value in hexadecimal string<br/>
+						(DEPRECATED) get signature value in hexadecimal string<br/>
 This method will get signature value of certificate:
 						
 						
@@ -2837,10 +3815,62 @@ This method will get signature value of certificate:
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 7.1.16 x509 1.1.14. Please move to <a href="../symbols/X509.html#getSignatureValueHex">X509#getSignatureValueHex</a>
+							</dt>
+							</dl>
+						
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
 								<dd>x509 1.1.7</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> signature value hexadecimal string without BitString unused bits</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getSignatureValueHex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>getSignatureValueHex</b>()
+					
+					</div>
+					<div class="description">
+						get signature value in hexadecimal string<br/>
+This method will get signature value of certificate:
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var x = new X509();
+x.readCertPEM(sCertPEM);
+x.getSignatureValueHex() &rarr "8a4c47913..."</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 x509 1.1.14</dd>
 							</dl>
 							</dl>
 						
@@ -3053,7 +4083,7 @@ var subject = x.getSubjectString(); // return string like "/C=US/O=TEST"</pre>
 					
 					</div>
 					<div class="description">
-						get array of X.509 V3 extension value information in hex string of certificate
+						(DEPRECATED) get array of X.509 V3 extension value information in hex string of certificate<br/>
 This method will get all extension information of a X.509 certificate.
 Items of resulting array has following properties:
 <ul>
@@ -3090,6 +4120,13 @@ a = X509.getV3ExtInfoListOfCertHex(hCert);
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.14 jsrsasign 7.2.0
+							</dt>
+							</dl>
+						
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
@@ -3119,7 +4156,7 @@ a = X509.getV3ExtInfoListOfCertHex(hCert);
 					
 					</div>
 					<div class="description">
-						get X.509 V3 extension value information at the specified position<br/>
+						(DEPRECATED) get X.509 V3 extension value information at the specified position<br/>
 This method will get some information of a X.509 V extension
 which is referred by an index of hexadecimal string of X.509
 certificate.
@@ -3156,6 +4193,13 @@ This method is used by <a href="../symbols/X509.html#.getV3ExtInfoListOfCertHex"
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.14 jsrsasign 7.2.0
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">
@@ -3400,6 +4444,51 @@ X509.hex2rdn("31143008060355040a0c01613008060355040a0c0162") &rarr; O=a+O=b</pre
 
 					<hr />
 				
+					<a name="parseExt"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>parseExt</b>()
+					
+					</div>
+					<div class="description">
+						set array of X.509v3 extesion information such as extension OID, criticality and value index.<br/>
+This method will set an array of X.509v3 extension information having 
+following parameters:
+<ul>
+<li>oid - extension OID (ex. 2.5.29.19)</li>
+<li>critical - true or false</li>
+<li>vidx - string index for extension value</li>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+
+x.aExtInfo &rarr;
+[ { oid: "2.5.29,19", critical: true, vidx: 2504 }, ... ]</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 x509 1.1.14</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name=".pemToBase64"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -3511,6 +4600,7 @@ CAUTION: now X509.pemToHex deprecated and is planed to remove in jsrsasign 8.0.0
 					</div>
 					<div class="description">
 						read a hexadecimal string of X.509 certificate<br/>
+NOTE: <a href="../symbols/X509.html#parseExt">X509#parseExt</a> will called internally since jsrsasign 7.2.0.
 						
 						
 					</div>
@@ -3598,7 +4688,7 @@ x.readCertPEM(sCertPEM); // read certificate</pre>
 					
 					</div>
 					<div class="description">
-						verifies signature value by public key<br/>
+						(DEPRECATED) verifies signature value by public key<br/>
 This method verifies signature value of hexadecimal string of 
 X.509 certificate by specified public key object.
 						
@@ -3632,10 +4722,75 @@ isValid = X509.verifySignature(hCert, pubKey);</pre>
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from x509 1.1.14 jsrsasign 7.2.0. please use <a href="../symbols/X509.html#verifySignature">X509#verifySignature</a>
+							</dt>
+							</dl>
+						
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
 								<dd>jsrsasign 7.1.1 x509 1.1.12</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if signature value is valid otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="verifySignature"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Boolean}</span>
+					<b>verifySignature</b>(pubKey)
+					
+					</div>
+					<div class="description">
+						verifies signature value by public key<br/>
+This method verifies signature value of hexadecimal string of 
+X.509 certificate by specified public key object.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">pubKey = KEYUTIL.getKey(pemPublicKey); // or certificate
+x = new X509();
+x.readCertPEM(pemCert);
+x.verifySignature(pubKey) &rarr; true, false or raising exception</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>pubKey</b>
+									
+								</dt>
+								<dd>public key object</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 x509 1.1.14</dd>
 							</dl>
 							</dl>
 						

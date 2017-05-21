@@ -1,4 +1,4 @@
-/*! ecdsa-modified-1.1.0.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
+/*! ecdsa-modified-1.1.1.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
  */
 /*
  * ecdsa-modified.js - modified Bitcoin.ECDSA class
@@ -13,7 +13,7 @@
  * @fileOverview
  * @name ecdsa-modified-1.0.js
  * @author Stefan Thomas (github.com/justmoon) and Kenji Urushima (kenji.urushima@gmail.com)
- * @version 1.1.0 (2017-Jan-21)
+ * @version jsrsasign 7.2.0 ecdsa-modified 1.1.1 (2017-May-12)
  * @since jsrsasign 4.0
  * @license <a href="https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE">MIT License</a>
  */
@@ -685,12 +685,16 @@ KJUR.crypto.ECDSA.parseSigHex = function(sigHex) {
  * var hS = sig.s; // hexadecimal string for 's' field of signature.
  */
 KJUR.crypto.ECDSA.parseSigHexInHexRS = function(sigHex) {
+    var _ASN1HEX = ASN1HEX;
+    var _getChildIdx = _ASN1HEX.getChildIdx;
+    var _getV = _ASN1HEX.getV;
+
     // 1. ASN.1 Sequence Check
     if (sigHex.substr(0, 2) != "30")
 	throw "signature is not a ASN.1 sequence";
 
     // 2. Items of ASN.1 Sequence Check
-    var a = ASN1HEX.getPosArrayOfChildren_AtObj(sigHex, 0);
+    var a = _getChildIdx(sigHex, 0);
     if (a.length != 2)
 	throw "number of signature ASN.1 sequence elements seem wrong";
     
@@ -703,8 +707,8 @@ KJUR.crypto.ECDSA.parseSigHexInHexRS = function(sigHex) {
 	throw "2nd item of sequene of signature is not ASN.1 integer";
 
     // 4. getting value
-    var hR = ASN1HEX.getHexOfV_AtObj(sigHex, iTLV1);
-    var hS = ASN1HEX.getHexOfV_AtObj(sigHex, iTLV2);
+    var hR = _getV(sigHex, iTLV1);
+    var hS = _getV(sigHex, iTLV2);
     
     return {'r': hR, 's': hS};
 };
@@ -787,9 +791,10 @@ KJUR.crypto.ECDSA.hexRSSigToASN1Sig = function(hR, hS) {
  * @since ecdsa-modified 1.0.3
  */
 KJUR.crypto.ECDSA.biRSSigToASN1Sig = function(biR, biS) {
-    var derR = new KJUR.asn1.DERInteger({'bigint': biR});
-    var derS = new KJUR.asn1.DERInteger({'bigint': biS});
-    var derSeq = new KJUR.asn1.DERSequence({'array': [derR, derS]});
+    var _KJUR_asn1 = KJUR.asn1;
+    var derR = new _KJUR_asn1.DERInteger({'bigint': biR});
+    var derS = new _KJUR_asn1.DERInteger({'bigint': biS});
+    var derSeq = new _KJUR_asn1.DERSequence({'array': [derR, derS]});
     return derSeq.getEncodedHex();
 };
 

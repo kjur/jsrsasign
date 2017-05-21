@@ -1,9 +1,9 @@
-/*! asn1tsp-1.0.1.js (c) 2014 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1tsp-1.0.2.js (c) 2014-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1tsp.js - ASN.1 DER encoder classes for RFC 3161 Time Stamp Protocol
  *
- * Copyright (c) 2014 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2014-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1tsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.1 (2014-Jun-07)
+ * @version jsrsasign 7.2.0 asn1tsp 1.0.2 (2017-May-12)
  * @since jsrsasign 4.5.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -748,26 +748,30 @@ KJUR.asn1.tsp.TSPUtil.newTimeStampToken = function(param) {
  *  certreq: true}                   // certReq (OPTION)
  */
 KJUR.asn1.tsp.TSPUtil.parseTimeStampReq = function(reqHex) {
+    var _ASN1HEX = ASN1HEX;
+    var _getChildIdx = _ASN1HEX.getChildIdx;
+    var _getV = _ASN1HEX.getV;
+    var _getTLV = _ASN1HEX.getTLV;
     var json = {};
     json.certreq = false;
 
-    var idxList = ASN1HEX.getPosArrayOfChildren_AtObj(reqHex, 0);
+    var idxList = _getChildIdx(reqHex, 0);
 
     if (idxList.length < 2)
         throw "TimeStampReq must have at least 2 items";
 
-    var miHex = ASN1HEX.getHexOfTLV_AtObj(reqHex, idxList[1]);
+    var miHex = _getTLV(reqHex, idxList[1]);
     json.mi = KJUR.asn1.tsp.TSPUtil.parseMessageImprint(miHex); 
 
     for (var i = 2; i < idxList.length; i++) {
         var idx = idxList[i];
         var tag = reqHex.substr(idx, 2);
         if (tag == "06") { // case OID
-            var policyHex = ASN1HEX.getHexOfV_AtObj(reqHex, idx);
-            json.policy = ASN1HEX.hextooidstr(policyHex);
+            var policyHex = _getV(reqHex, idx);
+            json.policy = _ASN1HEX.hextooidstr(policyHex);
         }
         if (tag == "02") { // case INTEGER
-            json.nonce = ASN1HEX.getHexOfV_AtObj(reqHex, idx);
+            json.nonce = _getV(reqHex, idx);
         }
         if (tag == "01") { // case BOOLEAN
             json.certreq = true;
@@ -794,26 +798,27 @@ KJUR.asn1.tsp.TSPUtil.parseTimeStampReq = function(reqHex) {
  *  hashValue: 'a1a2a3a4...'}   // MessageImprint hashValue
  */
 KJUR.asn1.tsp.TSPUtil.parseMessageImprint = function(miHex) {
+    var _ASN1HEX = ASN1HEX;
+    var _getChildIdx = _ASN1HEX.getChildIdx;
+    var _getV = _ASN1HEX.getV;
+    var _getIdxbyList = _ASN1HEX.getIdxbyList;
     var json = {};
 
     if (miHex.substr(0, 2) != "30")
         throw "head of messageImprint hex shall be '30'";
 
-    var idxList = ASN1HEX.getPosArrayOfChildren_AtObj(miHex, 0);
-    var hashAlgOidIdx = 
-        ASN1HEX.getDecendantIndexByNthList(miHex, 0, [0, 0]);
-    var hashAlgHex = ASN1HEX.getHexOfV_AtObj(miHex, hashAlgOidIdx);
-    var hashAlgOid = ASN1HEX.hextooidstr(hashAlgHex);
+    var idxList = _getChildIdx(miHex, 0);
+    var hashAlgOidIdx = _getIdxbyList(miHex, 0, [0, 0]);
+    var hashAlgHex = _getV(miHex, hashAlgOidIdx);
+    var hashAlgOid = _ASN1HEX.hextooidstr(hashAlgHex);
     var hashAlgName = KJUR.asn1.x509.OID.oid2name(hashAlgOid);
     if (hashAlgName == '')
         throw "hashAlg name undefined: " + hashAlgOid;
     var hashAlg = hashAlgName;
-
-    var hashValueIdx =
-        ASN1HEX.getDecendantIndexByNthList(miHex, 0, [1]);
+    var hashValueIdx = _getIdxbyList(miHex, 0, [1]);
 
     json.hashAlg = hashAlg;
-    json.hashValue = ASN1HEX.getHexOfV_AtObj(miHex, hashValueIdx); 
+    json.hashValue = _getV(miHex, hashValueIdx); 
 
     return json;
 };
