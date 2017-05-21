@@ -40,15 +40,23 @@ exports.utf8tohex = utf8tohex;
 exports.hextoutf8 = hextoutf8;
 exports.hextorstr = hextorstr;
 exports.rstrtohex = rstrtohex;
-exports.newline_toUnix = newline_toUnix;
-exports.newline_toDos = newline_toDos;
-exports.intarystrtohex = intarystrtohex;
-exports.strdiffidx = strdiffidx;
 exports.hextob64 = hextob64;
 exports.hextob64nl = hextob64nl;
 exports.b64nltohex = b64nltohex;
 exports.hextoArrayBuffer = hextoArrayBuffer;
 exports.ArrayBuffertohex = ArrayBuffertohex;
+exports.zulutomsec = zulutomsec;
+exports.zulutosec = zulutosec;
+exports.zulutodate = zulutodate;
+exports.datetozulu = datetozulu;
+exports.uricmptohex = uricmptohex;
+exports.hextouricmp = hextouricmp;
+exports.encodeURIComponentAll = encodeURIComponentAll;
+exports.newline_toUnix = newline_toUnix;
+exports.newline_toDos = newline_toDos;
+exports.hextoposhex = hextoposhex;
+exports.intarystrtohex = intarystrtohex;
+exports.strdiffidx = strdiffidx;
 
 // name spaces
 exports.KJUR = KJUR;

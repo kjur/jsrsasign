@@ -1,4 +1,4 @@
-/*! asn1cades-1.0.1.js (c) 2014-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! asn1cades-1.0.2.js (c) 2014-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1cades.js - ASN.1 DER encoder classes for RFC 5126 CAdES long term signature
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cades-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.1 (2017-Jan-14)
+ * @version jsrsasign 7.2.0 asn1cades 1.0.2 (2017-May-12)
  * @since jsrsasign 4.7.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -590,33 +590,38 @@ KJUR.asn1.cades.CAdESUtil.addSigTS = function(dCMS, siIdx, sigTSHex) {
  * sd = info.obj;
  */
 KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned = function(hex) {
+    var _ASN1HEX = ASN1HEX;
+    var _getChildIdx = _ASN1HEX.getChildIdx;
+    var _getTLV = _ASN1HEX.getTLV;
+    var _getTLVbyList = _ASN1HEX.getTLVbyList;
+    var _getIdxbyList = _ASN1HEX.getIdxbyList;
+    
     var nA = KJUR.asn1;
     var nC = KJUR.asn1.cms;
     var nU = KJUR.asn1.cades.CAdESUtil;
     var r = {};
 
     // 1. not oid signed-data then error
-    if (ASN1HEX.getDecendantHexTLVByNthList(hex, 0, [0]) != 
-        "06092a864886f70d010702")
+    if (_getTLVbyList(hex, 0, [0]) != "06092a864886f70d010702")
         throw "hex is not CMS SignedData";
 
-    var iSD = ASN1HEX.getDecendantIndexByNthList(hex, 0, [1, 0]);
-    var aSDChildIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, iSD);
+    var iSD = _getIdxbyList(hex, 0, [1, 0]);
+    var aSDChildIdx = _getChildIdx(hex, iSD);
     if (aSDChildIdx.length < 4)
         throw "num of SignedData elem shall be 4 at least";
 
     // 2. HEXs of SignedData children
     // 2.1. SignedData.CMSVersion
     var iVersion = aSDChildIdx.shift();
-    r.version = ASN1HEX.getHexOfTLV_AtObj(hex, iVersion);
+    r.version = _getTLV(hex, iVersion);
 
     // 2.2. SignedData.DigestAlgorithms
     var iAlgs = aSDChildIdx.shift();
-    r.algs = ASN1HEX.getHexOfTLV_AtObj(hex, iAlgs);
+    r.algs = _getTLV(hex, iAlgs);
 
     // 2.3. SignedData.EncapContentInfo
     var iEncapContent = aSDChildIdx.shift();
-    r.encapcontent = ASN1HEX.getHexOfTLV_AtObj(hex, iEncapContent);
+    r.encapcontent = _getTLV(hex, iEncapContent);
 
     // 2.4. [0]Certs 
     r.certs = null;
@@ -625,13 +630,13 @@ KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned = function(hex) {
 
     var iNext = aSDChildIdx.shift();
     if (hex.substr(iNext, 2) == "a0") {
-        r.certs = ASN1HEX.getHexOfTLV_AtObj(hex, iNext);
+        r.certs = _getTLV(hex, iNext);
         iNext = aSDChildIdx.shift();
     }
 
     // 2.5. [1]Revs
     if (hex.substr(iNext, 2) == "a1") {
-        r.revs = ASN1HEX.getHexOfTLV_AtObj(hex, iNext);
+        r.revs = _getTLV(hex, iNext);
         iNext = aSDChildIdx.shift();
     }
 
@@ -640,7 +645,7 @@ KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned = function(hex) {
     if (hex.substr(iSignerInfos, 2) != "31")
         throw "Can't find signerInfos";
 
-    var aSIIndex = ASN1HEX.getPosArrayOfChildren_AtObj(hex, iSignerInfos);
+    var aSIIndex = _getChildIdx(hex, iSignerInfos);
     //alert(aSIIndex.join("-"));
 
     for (var i = 0; i < aSIIndex.length; i++) {
@@ -704,12 +709,16 @@ KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned = function(hex) {
  * future version. That's way this version provides support
  * for CAdES-T and not for CAdES-C.
  */
-KJUR.asn1.cades.CAdESUtil.parseSignerInfoForAddingUnsigned = 
-    function(hex, iSI, nth) {
+KJUR.asn1.cades.CAdESUtil.parseSignerInfoForAddingUnsigned = function(hex, iSI, nth) {
+    var _ASN1HEX = ASN1HEX;
+    var _getChildIdx = _ASN1HEX.getChildIdx;
+    var _getTLV = _ASN1HEX.getTLV;
+    var _getV = _ASN1HEX.getV;
+
     var nA = KJUR.asn1;
     var nC = KJUR.asn1.cms;
     var r = {};
-    var aSIChildIdx = ASN1HEX.getPosArrayOfChildren_AtObj(hex, iSI);
+    var aSIChildIdx = _getChildIdx(hex, iSI);
     //alert(aSIChildIdx.join("="));
 
     if (aSIChildIdx.length != 6)
@@ -717,28 +726,28 @@ KJUR.asn1.cades.CAdESUtil.parseSignerInfoForAddingUnsigned =
 
     // 1. SignerInfo.CMSVersion
     var iVersion = aSIChildIdx.shift();
-    r.version = ASN1HEX.getHexOfTLV_AtObj(hex, iVersion);
+    r.version = _getTLV(hex, iVersion);
 
     // 2. SignerIdentifier(IssuerAndSerialNumber)
     var iIdentifier = aSIChildIdx.shift();
-    r.si = ASN1HEX.getHexOfTLV_AtObj(hex, iIdentifier);
+    r.si = _getTLV(hex, iIdentifier);
 
     // 3. DigestAlgorithm
     var iDigestAlg = aSIChildIdx.shift();
-    r.digalg = ASN1HEX.getHexOfTLV_AtObj(hex, iDigestAlg);
+    r.digalg = _getTLV(hex, iDigestAlg);
 
     // 4. SignedAttrs
     var iSignedAttrs = aSIChildIdx.shift();
-    r.sattrs = ASN1HEX.getHexOfTLV_AtObj(hex, iSignedAttrs);
+    r.sattrs = _getTLV(hex, iSignedAttrs);
 
     // 5. SigAlg
     var iSigAlg = aSIChildIdx.shift();
-    r.sigalg = ASN1HEX.getHexOfTLV_AtObj(hex, iSigAlg);
+    r.sigalg = _getTLV(hex, iSigAlg);
 
     // 6. Signature
     var iSig = aSIChildIdx.shift();
-    r.sig = ASN1HEX.getHexOfTLV_AtObj(hex, iSig);
-    r.sigval = ASN1HEX.getHexOfV_AtObj(hex, iSig);
+    r.sig = _getTLV(hex, iSig);
+    r.sigval = _getV(hex, iSig);
 
     // 7. obj(SignerInfo)
     var tmp = null;

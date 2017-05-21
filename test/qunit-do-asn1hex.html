@@ -8,18 +8,21 @@
 <script type="text/javascript" src="qunit.js"></script>
 <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
 
+<script language="JavaScript" type="text/javascript" src="../ext/yahoo.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
 <script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
+<script language="JavaScript" type="text/javascript" src="../src/base64x-1.1.js"></script>
 <script language="JavaScript" type="text/javascript" src="../src/asn1hex-1.1.js"></script>
+<script language="JavaScript" type="text/javascript" src="../src/asn1-1.0.js"></script>
+<script language="JavaScript" type="text/javascript" src="../src/asn1x509-1.0.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
 
 test("ASN1HEX.getByteLengthOfL_AtObj", function() {
-  expect(6);
   equal(ASN1HEX.getByteLengthOfL_AtObj('020100', 0), 1, "checking L.len of 020100 is 1.");
   equal(ASN1HEX.getByteLengthOfL_AtObj('020300', 0), 1, "checking L.len of 020300 is 1.");
   equal(ASN1HEX.getByteLengthOfL_AtObj('02818003...', 0), 2, "checking L.len of 02818003... is 2.");
@@ -247,6 +250,12 @@ test("getIdxbyList exception1 tag-unmatch", function() {
   },
   /check/,
   "(0)=4 with checkTag=31 shall fail");
+});
+
+test("oidname", function() {
+  equal(ASN1HEX.oidname("2.5.29.37"), "extKeyUsage", "2.5.29.37 > extKeyUsage");
+  equal(ASN1HEX.oidname("551d25"), "extKeyUsage", "551d25 > extKeyUsage");
+  equal(ASN1HEX.oidname("0.1.2.3"), "0.1.2.3", "0.1.2.3 > 0.1.2.3");
 });
 
 });

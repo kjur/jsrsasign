@@ -1,9 +1,9 @@
-/*! base64x-1.1.10 (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/*! base64x-1.1.11 (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * version: 1.1.10 (2017-Apr-27)
+ * version: 1.1.11 (2017-May-20)
  *
  * Copyright (c) 2012-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -21,7 +21,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.1.14 base64x 1.1.10 (2017-Apr-27)
+ * @version jsrsasign 7.2.0 base64x 1.1.11 (2017-May-20)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -554,6 +554,57 @@ function zulutosec(s) {
  */
 function zulutodate(s) {
     return new Date(zulutomsec(s));
+}
+
+// ==== Date / zulu =================================
+
+/**
+ * Date object to zulu time string<br>
+ * @name datetozulu
+ * @function
+ * @param {Date} d Date object for specified time
+ * @param {Boolean} flagUTCTime if this is true year will be YY otherwise YYYY
+ * @param {Boolean} flagMilli if this is true result concludes milliseconds
+ * @return {String} GeneralizedTime or UTCTime string (ex. 20170412235959.384Z)
+ * @since jsrsasign 7.2.0 base64x 1.1.11
+ * @description
+ * This function converts from Date object to GeneralizedTime string (i.e. YYYYMMDDHHmmSSZ) or
+ * UTCTime string (i.e. YYMMDDHHmmSSZ).
+ * As for UTCTime, if year "YY" is equal or less than 49 then it is 20YY.
+ * If year "YY" is equal or greater than 50 then it is 19YY.
+ * If flagMilli is true its result concludes milliseconds such like
+ * "20170520235959.42Z". 
+ * @example
+ * d = new Date(Date.UTC(2017,4,20,23,59,59,670));
+ * datetozulu(d) &rarr; "20170520235959Z"
+ * datetozulu(d, true) &rarr; "170520235959Z"
+ * datetozulu(d, false, true) &rarr; "20170520235959.67Z"
+ */
+function datetozulu(d, flagUTCTime, flagMilli) {
+    var s;
+    var year = d.getUTCFullYear();
+    if (flagUTCTime) {
+	if (year < 1950 || 2049 < year) 
+	    throw "not proper year for UTCTime: " + year;
+	s = ("" + year).slice(-2);
+    } else {
+	s = ("000" + year).slice(-4);
+    }
+    s += ("0" + (d.getUTCMonth() + 1)).slice(-2);
+    s += ("0" + d.getUTCDate()).slice(-2);
+    s += ("0" + d.getUTCHours()).slice(-2);
+    s += ("0" + d.getUTCMinutes()).slice(-2);
+    s += ("0" + d.getUTCSeconds()).slice(-2);
+    if (flagMilli) {
+	var milli = d.getUTCMilliseconds();
+	if (milli !== 0) {
+	    milli = ("00" + milli).slice(-3);
+	    milli = milli.replace(/0+$/g, "");
+	    s += "." + milli;
+	}
+    }
+    s += "Z";
+    return s;
 }
 
 // ==== URIComponent / hex ================================

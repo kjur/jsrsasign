@@ -622,7 +622,7 @@ generate PEM formatted encrypted PKCS#5 private key by
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getKeyFromPublicPKCS8Hex">getKeyFromPublicPKCS8Hex</a></b>(pkcs8PubHex)
+								<div class="fixedFont">PKCS5PKEY.<b><a href="../symbols/PKCS5PKEY.html#.getKeyFromPublicPKCS8Hex">getKeyFromPublicPKCS8Hex</a></b>(h)
 								</div>
 								<div class="description">get RSAKey/ECDSA public key object from hexadecimal string of PKCS#8 public key</div>
 							</td>
@@ -1514,7 +1514,7 @@ var pem = PKCS5PKEY.getEncryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{Object}</span>
-					<span class="light">PKCS5PKEY.</span><b>getKeyFromPublicPKCS8Hex</b>(pkcs8PubHex)
+					<span class="light">PKCS5PKEY.</span><b>getKeyFromPublicPKCS8Hex</b>(h)
 					
 					</div>
 					<div class="description">
@@ -1530,7 +1530,7 @@ var pem = PKCS5PKEY.getEncryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>pkcs8PubHex</b>
+									<span class="light fixedFont">{String}</span> <b>h</b>
 									
 								</dt>
 								<dd>hexadecimal string of PKCS#8 public key</dd>

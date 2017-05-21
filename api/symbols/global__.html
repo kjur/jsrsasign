@@ -567,6 +567,16 @@ string with new lines to a hexadecimal string.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#datetozulu">datetozulu</a></b>(d, flagUTCTime, flagMilli)
+								</div>
+								<div class="description">Date object to zulu time string<br>
+This function converts from Date object to GeneralizedTime string (i.e.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#encodeURIComponentAll">encodeURIComponentAll</a></b>(s)
 								</div>
 								<div class="description">convert UTFa hexadecimal string to a URLComponent string such like "%67%68".</div>
@@ -1362,6 +1372,83 @@ NOTE: This can't be used for Base64URL encoded non ASCII characters.
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> s</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="datetozulu"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>datetozulu</b>(d, flagUTCTime, flagMilli)
+					
+					</div>
+					<div class="description">
+						Date object to zulu time string<br>
+This function converts from Date object to GeneralizedTime string (i.e. YYYYMMDDHHmmSSZ) or
+UTCTime string (i.e. YYMMDDHHmmSSZ).
+As for UTCTime, if year "YY" is equal or less than 49 then it is 20YY.
+If year "YY" is equal or greater than 50 then it is 19YY.
+If flagMilli is true its result concludes milliseconds such like
+"20170520235959.42Z".
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">d = new Date(Date.UTC(2017,4,20,23,59,59,670));
+datetozulu(d) &rarr; "20170520235959Z"
+datetozulu(d, true) &rarr; "170520235959Z"
+datetozulu(d, false, true) &rarr; "20170520235959.67Z"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Date}</span> <b>d</b>
+									
+								</dt>
+								<dd>Date object for specified time</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span> <b>flagUTCTime</b>
+									
+								</dt>
+								<dd>if this is true year will be YY otherwise YYYY</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span> <b>flagMilli</b>
+									
+								</dt>
+								<dd>if this is true result concludes milliseconds</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.0 base64x 1.1.11</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> GeneralizedTime or UTCTime string (ex. 20170412235959.384Z)</dd>
 							
 							</dl>
 						

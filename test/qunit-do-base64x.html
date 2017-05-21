@@ -148,6 +148,13 @@ equal(zulutodate("561231235959Z").toUTCString(),       "Mon, 31 Dec 1956 23:59:5
 equal(zulutodate("071231235959.34Z").getMilliseconds(), 340, "071231235959.34Z");
 });
 
+test("datetozulu", function() {
+var d = new Date(Date.UTC(2017,4,20,23,59,59,670));
+equal(datetozulu(d), "20170520235959Z", "GenTime");
+equal(datetozulu(d, true), "170520235959Z", "UTCTime");
+equal(datetozulu(d, false, true), "20170520235959.67Z", "GenTime with milli");
+});
+
 });
 </script>
   
