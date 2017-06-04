@@ -1,4 +1,4 @@
-/*! x509-1.1.14.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* x509-1.1.15.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.0 x509 1.1.14 (2017-May-12)
+ * @version jsrsasign 7.2.1 x509 1.1.15 (2017-Jun-03)
  * @since jsrsasign 1.x.x
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -107,16 +107,17 @@
  * </ul>
  */
 function X509() {
-    var _ASN1HEX = ASN1HEX;
-    var _X509 = X509;
-    var _getChildIdx = _ASN1HEX.getChildIdx;
-    var _getV = _ASN1HEX.getV;
-    var _getTLV = _ASN1HEX.getTLV;
-    var _getVbyList = _ASN1HEX.getVbyList;
-    var _getTLVbyList = _ASN1HEX.getTLVbyList;
-    var _getIdxbyList = _ASN1HEX.getIdxbyList;
-    var _getVidx = _ASN1HEX.getVidx;
-    var _oidname = _ASN1HEX.oidname;
+    var _ASN1HEX = ASN1HEX,
+	_getChildIdx = _ASN1HEX.getChildIdx,
+	_getV = _ASN1HEX.getV,
+	_getTLV = _ASN1HEX.getTLV,
+	_getVbyList = _ASN1HEX.getVbyList,
+	_getTLVbyList = _ASN1HEX.getTLVbyList,
+	_getIdxbyList = _ASN1HEX.getIdxbyList,
+	_getVidx = _ASN1HEX.getVidx,
+	_oidname = _ASN1HEX.oidname,
+	_X509 = X509,
+	_pemtohex = pemtohex;
 
     this.hex = null;
     this.version = 0; // version (1: X509v1, 3: X509v3, others: unspecified)
@@ -864,7 +865,7 @@ function X509() {
      * x.readCertPEM(sCertPEM); // read certificate
      */
     this.readCertPEM = function(sCertPEM) {
-        this.readCertHex(_ASN1HEX.pemToHex(sCertPEM));
+        this.readCertHex(_pemtohex(sCertPEM));
     };
 
     /**
@@ -898,7 +899,7 @@ function X509() {
 
     // DEPRECATED. will remove after 8.0.0
     this.readCertPEMWithoutRSAInit = function(sCertPEM) {
-        var hCert = _ASN1HEX.pemToHex(sCertPEM);
+        var hCert = _pemtohex(sCertPEM);
         var a = _X509.getPublicKeyHexArrayFromCertHex(hCert);
         if (typeof this.subjectPublicKeyRSA.setPublic === "function") {
             this.subjectPublicKeyRSA.setPublic(a[0], a[1]);
@@ -1023,21 +1024,18 @@ function X509() {
 };
 
 /**
- * get Base64 string from PEM certificate string
+ * (DEPRECATED) get Base64 string from PEM certificate string
  * @name pemToBase64
  * @memberOf X509
  * @function
  * @param {String} sCertPEM PEM formatted RSA/ECDSA/DSA X.509 certificate
  * @return {String} Base64 string of PEM certificate
+ * @deprecated jsrsasign 7.2.1 x509 1.1.15 
  * @example
  * b64 = X509.pemToBase64(certPEM);
  */
 X509.pemToBase64 = function(sCertPEM) {
-    var s = sCertPEM;
-    s = s.replace("-----BEGIN CERTIFICATE-----", "");
-    s = s.replace("-----END CERTIFICATE-----", "");
-    s = s.replace(/[ \n]+/g, "");
-    return s;
+    return hextob64(pemtohex(sCertPEM));
 };
 
 /**
@@ -1054,7 +1052,7 @@ X509.pemToBase64 = function(sCertPEM) {
  * hex = X509.pemToHex(certPEM);
  */
 X509.pemToHex = function(sCertPEM) {
-    return ASN1HEX.pemToHex(sCertPEM);
+    return pemtohex(sCertPEM);
 };
 
 /**
@@ -1142,7 +1140,7 @@ X509.getHexTbsCertificateFromCert = function(hCert) {
  * @deprecated since jsrsasign 7.1.14 x509 1.1.13. This will be removed in 8.0.0 release.
  */
 X509.getPublicKeyHexArrayFromCertPEM = function(sCertPEM) {
-    var hCert = ASN1HEX.pemToHex(sCertPEM);
+    var hCert = pemtohex(sCertPEM);
     var a = X509.getPublicKeyHexArrayFromCertHex(hCert);
     return a;
 };
@@ -1356,7 +1354,7 @@ X509.getPublicKeyInfoPosOfCertHEX = function(hCert) {
  * This is a position of a content of ENCAPSULATED OCTET STRING.</li>
  * </ul>
  * @example
- * hCert = ASN1HEX.pemToHex(certGithubPEM);
+ * hCert = pemtohex(certGithubPEM);
  * a = X509.getV3ExtInfoListOfCertHex(hCert);
  * // Then a will be an array of like following:
  * [{posTLV: 1952, oid: "2.5.29.35", critical: false, posV: 1968},
@@ -1856,7 +1854,7 @@ X509.getSerialNumberHex = function(hCert) {
  * X.509 certificate by specified public key object.
  * @example
  * pubKey = KEYUTIL.getKey(pemPublicKey); // or certificate
- * hCert = ASN1HEX.pemToHex(pemCert);
+ * hCert = pemtohex(pemCert);
  * isValid = X509.verifySignature(hCert, pubKey);
  */
 X509.verifySignature = function(hCert, pubKey) {

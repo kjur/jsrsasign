@@ -770,7 +770,7 @@ a specified string of number dot notation (i.e.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.pemToHex">pemToHex</a></b>(s, sHead)
 								</div>
-								<div class="description">get hexacedimal string from PEM format data<br/>
+								<div class="description">(DEPRECATED) get hexacedimal string from PEM format data<br/>
 This static method gets a hexacedimal string of contents 
 from PEM format data.</div>
 							</td>
@@ -933,7 +933,7 @@ SEQUENCE
   INTEGER 01
   INTEGER 02
 // 5) ASN.1 DUMP FOR X.509 CERTIFICATE
-ASN1HEX.dump(ASN1HEX.pemToHex(certPEM))
+ASN1HEX.dump(pemtohex(certPEM))
 &darr;
 SEQUENCE
   SEQUENCE
@@ -2625,7 +2625,7 @@ ASN1HEX.oidname("0.1.2.3") &rarr; 0.1.2.3 // unknown</pre>
 					
 					</div>
 					<div class="description">
-						get hexacedimal string from PEM format data<br/>
+						(DEPRECATED) get hexacedimal string from PEM format data<br/>
 This static method gets a hexacedimal string of contents 
 from PEM format data. You can explicitly specify PEM header 
 by sHead argument. 
@@ -2664,6 +2664,13 @@ ASN1HEX.pemToHex(" \r\n-----BEGIN DSA PRIVATE KEY...") &rarr; "3082..."</pre>
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 7.2.1 asn1hex 1.1.12. Please move to <a href="../symbols/global__.html#pemtohex">pemtohex</a>
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">

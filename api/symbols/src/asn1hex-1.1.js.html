@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/*! asn1hex-1.1.11.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1hex-1.1.12.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * asn1hex.js - Hexadecimal represented ASN.1 string library
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name asn1hex-1.1.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version asn1hex 1.1.11 (2017-May-11)
+<span class='line'> 19</span>  * @version asn1hex 1.1.12 (2017-Jun-03)
 <span class='line'> 20</span>  * @license &lt;a href="http://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 21</span>  */</span><span class="WHIT">
 <span class='line'> 22</span> 
@@ -665,7 +665,7 @@
 <span class='line'>658</span>  *   INTEGER 01
 <span class='line'>659</span>  *   INTEGER 02
 <span class='line'>660</span>  * // 5) ASN.1 DUMP FOR X.509 CERTIFICATE
-<span class='line'>661</span>  * ASN1HEX.dump(ASN1HEX.pemToHex(certPEM))
+<span class='line'>661</span>  * ASN1HEX.dump(pemtohex(certPEM))
 <span class='line'>662</span>  * &darr;
 <span class='line'>663</span>  * SEQUENCE
 <span class='line'>664</span>  *   SEQUENCE
@@ -883,7 +883,7 @@
 <span class='line'>876</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>877</span> 
 <span class='line'>878</span> </span><span class="COMM">/**
-<span class='line'>879</span>  * get hexacedimal string from PEM format data&lt;br/>
+<span class='line'>879</span>  * (DEPRECATED) get hexacedimal string from PEM format data&lt;br/>
 <span class='line'>880</span>  * @name pemToHex
 <span class='line'>881</span>  * @memberOf ASN1HEX
 <span class='line'>882</span>  * @function
@@ -891,33 +891,22 @@
 <span class='line'>884</span>  * @param {String} sHead PEM header string without BEGIN/END(OPTION)
 <span class='line'>885</span>  * @return {String} hexadecimal string data of PEM contents
 <span class='line'>886</span>  * @since jsrsasign 7.0.1 asn1hex 1.1.9
-<span class='line'>887</span>  * @description
-<span class='line'>888</span>  * This static method gets a hexacedimal string of contents 
-<span class='line'>889</span>  * from PEM format data. You can explicitly specify PEM header 
-<span class='line'>890</span>  * by sHead argument. 
-<span class='line'>891</span>  * Any space characters such as white space or new line
-<span class='line'>892</span>  * will be omitted.&lt;br/>
-<span class='line'>893</span>  * NOTE: Now {@link KEYUTIL.getHexFromPEM} and {@link X509.pemToHex}
-<span class='line'>894</span>  * have been deprecated since jsrsasign 7.0.1. 
-<span class='line'>895</span>  * Please use this method instead.
-<span class='line'>896</span>  * @example
-<span class='line'>897</span>  * ASN1HEX.pemToHex("-----BEGIN PUBLIC KEY...") &rarr; "3082..."
-<span class='line'>898</span>  * ASN1HEX.pemToHex("-----BEGIN CERTIFICATE...", "CERTIFICATE") &rarr; "3082..."
-<span class='line'>899</span>  * ASN1HEX.pemToHex(" \r\n-----BEGIN DSA PRIVATE KEY...") &rarr; "3082..."
-<span class='line'>900</span>  */</span><span class="WHIT">
-<span class='line'>901</span> </span><span class="NAME">ASN1HEX.pemToHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sHead</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>902</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.indexOf</span><span class="PUNC">(</span><span class="STRN">"-----BEGIN "</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>903</span> </span><span class="WHIT">        </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"can't find PEM header: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">sHead</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>904</span> 
-<span class='line'>905</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">sHead</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>906</span> </span><span class="WHIT">        </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="STRN">"-----BEGIN "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">sHead</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"-----"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>907</span> </span><span class="WHIT">        </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="STRN">"-----END "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">sHead</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"-----"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>908</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>909</span> </span><span class="WHIT">        </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/-----BEGIN [^-]+-----/</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>910</span> </span><span class="WHIT">        </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/-----END [^-]+-----/</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>911</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>912</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sB64</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\s+/g</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>913</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dataHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">b64tohex</span><span class="PUNC">(</span><span class="NAME">sB64</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>914</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">dataHex</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>915</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>916</span> </span></pre></body></html>
+<span class='line'>887</span>  * @deprecated since jsrsasign 7.2.1 asn1hex 1.1.12. Please move to {@link pemtohex}
+<span class='line'>888</span>  * @description
+<span class='line'>889</span>  * This static method gets a hexacedimal string of contents 
+<span class='line'>890</span>  * from PEM format data. You can explicitly specify PEM header 
+<span class='line'>891</span>  * by sHead argument. 
+<span class='line'>892</span>  * Any space characters such as white space or new line
+<span class='line'>893</span>  * will be omitted.&lt;br/>
+<span class='line'>894</span>  * NOTE: Now {@link KEYUTIL.getHexFromPEM} and {@link X509.pemToHex}
+<span class='line'>895</span>  * have been deprecated since jsrsasign 7.0.1. 
+<span class='line'>896</span>  * Please use this method instead.
+<span class='line'>897</span>  * @example
+<span class='line'>898</span>  * ASN1HEX.pemToHex("-----BEGIN PUBLIC KEY...") &rarr; "3082..."
+<span class='line'>899</span>  * ASN1HEX.pemToHex("-----BEGIN CERTIFICATE...", "CERTIFICATE") &rarr; "3082..."
+<span class='line'>900</span>  * ASN1HEX.pemToHex(" \r\n-----BEGIN DSA PRIVATE KEY...") &rarr; "3082..."
+<span class='line'>901</span>  */</span><span class="WHIT">
+<span class='line'>902</span> </span><span class="NAME">ASN1HEX.pemToHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sHead</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>903</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">pemtohex</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sHead</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>904</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>905</span> </span></pre></body></html>

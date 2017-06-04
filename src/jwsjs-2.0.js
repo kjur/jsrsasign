@@ -1,11 +1,9 @@
-/*! jwsjs-2.1.0 (c) 2010-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* jwsjs-2.1.1 (c) 2010-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * jwsjs.js - JSON Web Signature JSON Serialization (JWSJS) Class
  *
- * version: 2.1.0 (2016 Sep 6)
- *
- * Copyright (c) 2010-2016 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license/
@@ -18,7 +16,7 @@
  * @fileOverview
  * @name jwsjs-2.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 2.1.0 (2016 Sep 6)
+ * @version jsrsasign 7.2.1 jwsjs 2.1.1 (2017-Jun-03)
  * @since jsjws 1.2, jsrsasign 4.8.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -71,14 +69,16 @@ if (typeof KJUR.jws == "undefined" || !KJUR.jws) KJUR.jws = {};
  * 
  */
 KJUR.jws.JWSJS = function() {
-    var ns1 = KJUR.jws.JWS;
-    var nJWS = KJUR.jws.JWS;
+    var _KJUR = KJUR,
+	_KJUR_jws = _KJUR.jws,
+	_KJUR_jws_JWS = _KJUR_jws.JWS,
+	_readSafeJSONString = _KJUR_jws_JWS.readSafeJSONString;
 
     this.aHeader = [];
     this.sPayload = "";
     this.aSignature = [];
 
-    // == initialize ===================================================================
+    // == initialize ==========================================================
     /**
      * (re-)initialize this object.<br/>
      * @name init
@@ -113,7 +113,7 @@ KJUR.jws.JWSJS = function() {
 	this.aSignature.push(a[2]);
     };
 
-    // == add signature ===================================================================
+    // == add signature =======================================================
     /**
      * add a signature to existing JWS-JS by algorithm, header and key.<br/>
      * @name addSignature
@@ -200,7 +200,7 @@ KJUR.jws.JWSJS = function() {
 	this.aSignature.push(jws.parsedJWS.sigvalB64U);
     };
 
-    // == verify signature ===================================================================
+    // == verify signature ====================================================
     /**
      * verify all signature of JWS-JS object by array of key and acceptAlgs.<br/>
      * @name verifyAll
@@ -253,7 +253,7 @@ KJUR.jws.JWSJS = function() {
 	var sJWS = sHeader + "." + this.sPayload + "." + sSignature;
 	var result = false;
 	try {
-	    result = nJWS.verify(sJWS, key, acceptAlgs);
+	    result = _KJUR_jws_JWS.verify(sJWS, key, acceptAlgs);
 	} catch (ex) {
 	    return false;
 	}
@@ -323,7 +323,7 @@ KJUR.jws.JWSJS = function() {
      */
     this.readJWSJS = function(spJWSJS) {
 	if (typeof spJWSJS === "string") {
-	    var oJWSJS = ns1.readSafeJSONString(spJWSJS);
+	    var oJWSJS = _readSafeJSONString(spJWSJS);
 	    if (oJWSJS == null) throw "argument is not safe JSON object string";
 
 	    this.aHeader = oJWSJS.headers;
@@ -352,7 +352,7 @@ KJUR.jws.JWSJS = function() {
 	}
     };
 
-    // == utility ===================================================================
+    // == utility =============================================================
     /**
      * get JSON object for this JWS-JS object.<br/>
      * @name getJSON

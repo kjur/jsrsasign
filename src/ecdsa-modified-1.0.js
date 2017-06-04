@@ -1,4 +1,4 @@
-/*! ecdsa-modified-1.1.1.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
+/* ecdsa-modified-1.1.1.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
  */
 /*
  * ecdsa-modified.js - modified Bitcoin.ECDSA class

@@ -1,4 +1,4 @@
-/*! crypto-1.1.12.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* crypto-1.1.12.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class

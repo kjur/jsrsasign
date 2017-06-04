@@ -1148,7 +1148,7 @@ specified by 'hex' and 'idx' to LDAP string representation (ex.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.pemToBase64">pemToBase64</a></b>(sCertPEM)
 								</div>
-								<div class="description">get Base64 string from PEM certificate string</div>
+								<div class="description">(DEPRECATED) get Base64 string from PEM certificate string</div>
 							</td>
 						</tr>
 					
@@ -4099,7 +4099,7 @@ This is a position of a content of ENCAPSULATED OCTET STRING.</li>
 					
 					
 					
-					<pre class="code">hCert = ASN1HEX.pemToHex(certGithubPEM);
+					<pre class="code">hCert = pemtohex(certGithubPEM);
 a = X509.getV3ExtInfoListOfCertHex(hCert);
 // Then a will be an array of like following:
 [{posTLV: 1952, oid: "2.5.29.35", critical: false, posV: 1968},
@@ -4497,7 +4497,7 @@ x.aExtInfo &rarr;
 					
 					</div>
 					<div class="description">
-						get Base64 string from PEM certificate string
+						(DEPRECATED) get Base64 string from PEM certificate string
 						
 						
 					</div>
@@ -4520,6 +4520,13 @@ x.aExtInfo &rarr;
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								jsrsasign 7.2.1 x509 1.1.15
+							</dt>
+							</dl>
 						
 						
 						
@@ -4698,7 +4705,7 @@ X.509 certificate by specified public key object.
 					
 					
 					<pre class="code">pubKey = KEYUTIL.getKey(pemPublicKey); // or certificate
-hCert = ASN1HEX.pemToHex(pemCert);
+hCert = pemtohex(pemCert);
 isValid = X509.verifySignature(hCert, pubKey);</pre>
 					
 					

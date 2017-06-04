@@ -1,4 +1,4 @@
-/*! asn1tsp-1.0.2.js (c) 2014-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1tsp-1.0.3.js (c) 2014-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1tsp.js - ASN.1 DER encoder classes for RFC 3161 Time Stamp Protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1tsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.0 asn1tsp 1.0.2 (2017-May-12)
+ * @version jsrsasign 7.2.1 asn1tsp 1.0.3 (2017-Jun-03)
  * @since jsrsasign 4.5.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -80,8 +80,14 @@ if (typeof KJUR.asn1.tsp == "undefined" || !KJUR.asn1.tsp) KJUR.asn1.tsp = {};
  *                                 micros: 500});
  */
 KJUR.asn1.tsp.Accuracy = function(params) {
-    KJUR.asn1.tsp.Accuracy.superclass.constructor.call(this);
-    var nA = KJUR.asn1;
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERInteger = _KJUR_asn1.DERInteger,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_DERTaggedObject = _KJUR_asn1.DERTaggedObject;
+
+    _KJUR_asn1.tsp.Accuracy.superclass.constructor.call(this);
+
     this.seconds = null;
     this.millis = null;
     this.micros = null;
@@ -93,29 +99,29 @@ KJUR.asn1.tsp.Accuracy = function(params) {
         
         var a = [];
         if (this.seconds != null) {
-            dSeconds = new nA.DERInteger({'int': this.seconds});
+            dSeconds = new _DERInteger({'int': this.seconds});
             a.push(dSeconds);
         }
         if (this.millis != null) {
-            var dMillis = new nA.DERInteger({'int': this.millis});
-            dTagMillis = new nA.DERTaggedObject({obj: dMillis,
-                                                 tag: '80',
-                                                 explicit: false});
+            var dMillis = new _DERInteger({'int': this.millis});
+            dTagMillis = new _DERTaggedObject({obj: dMillis,
+                                               tag: '80',
+                                               explicit: false});
             a.push(dTagMillis);
         }
         if (this.micros != null) {
-            var dMicros = new nA.DERInteger({'int': this.micros});
-            dTagMicros = new nA.DERTaggedObject({obj: dMicros,
-                                                 tag: '81',
-                                                 explicit: false});
+            var dMicros = new _DERInteger({'int': this.micros});
+            dTagMicros = new _DERTaggedObject({obj: dMicros,
+                                               tag: '81',
+                                               explicit: false});
             a.push(dTagMicros);
         }
-        var seq = new nA.DERSequence({array: a});
+        var seq = new _DERSequence({array: a});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
 
-    if (typeof params != "undefined") {
+    if (params !== undefined) {
         if (typeof params.seconds == "number") this.seconds = params.seconds;
         if (typeof params.millis == "number") this.millis = params.millis;
         if (typeof params.micros == "number") this.micros = params.micros;
@@ -141,25 +147,31 @@ YAHOO.lang.extend(KJUR.asn1.tsp.Accuracy, KJUR.asn1.ASN1Object);
  *                                       hashValue: '1f3dea...'});
  */
 KJUR.asn1.tsp.MessageImprint = function(params) {
-    KJUR.asn1.tsp.MessageImprint.superclass.constructor.call(this);
-    var nA = KJUR.asn1;
-    var nX = KJUR.asn1.x509;
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_DEROctetString = _KJUR_asn1.DEROctetString,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_AlgorithmIdentifier = _KJUR_asn1_x509.AlgorithmIdentifier;
+
+    _KJUR_asn1.tsp.MessageImprint.superclass.constructor.call(this);
+
     this.dHashAlg = null;
     this.dHashValue = null;
 
     this.getEncodedHex = function() {
         if (typeof this.hTLV == "string") return this.hTLV;
         var seq = 
-            new nA.DERSequence({array: [this.dHashAlg, this.dHashValue]});
+            new _DERSequence({array: [this.dHashAlg, this.dHashValue]});
         return seq.getEncodedHex();
     };
 
-    if (typeof params != "undefined") {
+    if (params !== undefined) {
         if (typeof params.hashAlg == "string") {
-            this.dHashAlg = new nX.AlgorithmIdentifier({name: params.hashAlg});
+            this.dHashAlg = new _AlgorithmIdentifier({name: params.hashAlg});
         } 
         if (typeof params.hashValue == "string") {
-            this.dHashValue = new nA.DEROctetString({hex: params.hashValue});
+            this.dHashValue = new _DEROctetString({hex: params.hashValue});
         }
     }
 };
@@ -184,22 +196,30 @@ YAHOO.lang.extend(KJUR.asn1.tsp.MessageImprint, KJUR.asn1.ASN1Object);
  * </pre>
  */
 KJUR.asn1.tsp.TimeStampReq = function(params) {
-    KJUR.asn1.tsp.TimeStampReq.superclass.constructor.call(this);
-    var nA = KJUR.asn1;
-    var nT = KJUR.asn1.tsp;
-    this.dVersion = new nA.DERInteger({'int': 1});
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_DERInteger = _KJUR_asn1.DERInteger,
+	_DERBoolean = _KJUR_asn1.DERBoolean,
+	_DERObjectIdentifier = _KJUR_asn1.DERObjectIdentifier,
+	_KJUR_asn1_tsp = _KJUR_asn1.tsp,
+	_MessageImprint = _KJUR_asn1_tsp.MessageImprint;
+
+    _KJUR_asn1_tsp.TimeStampReq.superclass.constructor.call(this);
+
+    this.dVersion = new _DERInteger({'int': 1});
     this.dMessageImprint = null;
     this.dPolicy = null;
     this.dNonce = null;
     this.certReq = true;
 
     this.setMessageImprint = function(params) {
-        if (params instanceof KJUR.asn1.tsp.MessageImprint) {
+        if (params instanceof _MessageImprint) {
             this.dMessageImprint = params;
             return;
         }
         if (typeof params == "object") {
-            this.dMessageImprint = new nT.MessageImprint(params);
+            this.dMessageImprint = new _MessageImprint(params);
         }
     };
 
@@ -210,22 +230,22 @@ KJUR.asn1.tsp.TimeStampReq = function(params) {
         var a = [this.dVersion, this.dMessageImprint];
         if (this.dPolicy != null) a.push(this.dPolicy);
         if (this.dNonce != null)  a.push(this.dNonce);
-        if (this.certReq)         a.push(new nA.DERBoolean());
+        if (this.certReq)         a.push(new _DERBoolean());
 
-        var seq = new nA.DERSequence({array: a});
+        var seq = new _DERSequence({array: a});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
 
-    if (typeof params != "undefined") {
+    if (params !== undefined) {
         if (typeof params.mi == "object") {
             this.setMessageImprint(params.mi);
         }
         if (typeof params.policy == "object") {
-            this.dPolicy = new nA.DERObjectIdentifier(params.policy);
+            this.dPolicy = new _DERObjectIdentifier(params.policy);
         }
         if (typeof params.nonce == "object") {
-            this.dNonce = new nA.DERInteger(params.nonce);
+            this.dNonce = new _DERInteger(params.nonce);
         }
         if (typeof params.certreq == "boolean") {
             this.certReq = params.certreq;
@@ -267,12 +287,21 @@ YAHOO.lang.extend(KJUR.asn1.tsp.TimeStampReq, KJUR.asn1.ASN1Object);
  * });
  */
 KJUR.asn1.tsp.TSTInfo = function(params) {
-    KJUR.asn1.tsp.TSTInfo.superclass.constructor.call(this);
-    var nA = KJUR.asn1;
-    var nX = KJUR.asn1.x509;
-    var nT = KJUR.asn1.tsp;
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_DERInteger = _KJUR_asn1.DERInteger,
+	_DERBoolean = _KJUR_asn1.DERBoolean,
+	_DERGeneralizedTime = _KJUR_asn1.DERGeneralizedTime,
+	_DERObjectIdentifier = _KJUR_asn1.DERObjectIdentifier,
+	_KJUR_asn1_tsp = _KJUR_asn1.tsp,
+	_MessageImprint = _KJUR_asn1_tsp.MessageImprint,
+	_Accuracy = _KJUR_asn1_tsp.Accuracy,
+        _X500Name = _KJUR_asn1.x509.X500Name;
 
-    this.dVersion = new nA.DERInteger({'int': 1});
+    _KJUR_asn1_tsp.TSTInfo.superclass.constructor.call(this);
+
+    this.dVersion = new _DERInteger({'int': 1});
     this.dPolicy = null;
     this.dMessageImprint = null;
     this.dSerialNumber = null;
@@ -305,38 +334,38 @@ KJUR.asn1.tsp.TSTInfo = function(params) {
         if (this.dNonce != null) a.push(this.dNonce);
         if (this.dTsa != null) a.push(this.dTsa);
 
-        var seq = new nA.DERSequence({array: a});
+        var seq = new _DERSequence({array: a});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
 
-    if (typeof params != "undefined") {
+    if (params !== undefined) {
         if (typeof params.policy == "string") {
             if (! params.policy.match(/^[0-9.]+$/))
                 throw "policy shall be oid like 0.1.4.134";
-            this.dPolicy = new nA.DERObjectIdentifier({oid: params.policy});
+            this.dPolicy = new _DERObjectIdentifier({oid: params.policy});
         }
-        if (typeof params.messageImprint != "undefined") {
-            this.dMessageImprint = new nT.MessageImprint(params.messageImprint);
+        if (params.messageImprint !== undefined) {
+            this.dMessageImprint = new _MessageImprint(params.messageImprint);
         }
-        if (typeof params.serialNumber != "undefined") {
-            this.dSerialNumber = new nA.DERInteger(params.serialNumber);
+        if (params.serialNumber !== undefined) {
+            this.dSerialNumber = new _DERInteger(params.serialNumber);
         }
-        if (typeof params.genTime != "undefined") {
-            this.dGenTime = new nA.DERGeneralizedTime(params.genTime);
+        if (params.genTime !== undefined) {
+            this.dGenTime = new _DERGeneralizedTime(params.genTime);
         }
-        if (typeof params.accuracy != "undefind") {
-            this.dAccuracy = new nT.Accuracy(params.accuracy);
+        if (params.accuracy !== undefined) {
+            this.dAccuracy = new _Accuracy(params.accuracy);
         }
-        if (typeof params.ordering != "undefined" &&
+        if (params.ordering !== undefined &&
             params.ordering == true) {
-            this.dOrdering = new nA.DERBoolean();
+            this.dOrdering = new _DERBoolean();
         }
-        if (typeof params.nonce != "undefined") {
-            this.dNonce = new nA.DERInteger(params.nonce);
+        if (params.nonce !== undefined) {
+            this.dNonce = new _DERInteger(params.nonce);
         }
-        if (typeof params.tsa != "undefined") {
-            this.dTsa = new nX.X500Name(params.tsa);
+        if (params.tsa !== undefined) {
+            this.dTsa = new _X500Name(params.tsa);
         }
     }
 };
@@ -357,9 +386,15 @@ YAHOO.lang.extend(KJUR.asn1.tsp.TSTInfo, KJUR.asn1.ASN1Object);
  * </pre>
  */
 KJUR.asn1.tsp.TimeStampResp = function(params) {
-    KJUR.asn1.tsp.TimeStampResp.superclass.constructor.call(this);
-    var nA = KJUR.asn1;
-    var nT = KJUR.asn1.tsp;
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_ASN1Object = _KJUR_asn1.ASN1Object,
+	_KJUR_asn1_tsp = _KJUR_asn1.tsp,
+	_PKIStatusInfo = _KJUR_asn1_tsp.PKIStatusInfo;
+
+    _KJUR_asn1_tsp.TimeStampResp.superclass.constructor.call(this);
+
     this.dStatus = null;
     this.dTST = null;
 
@@ -368,17 +403,17 @@ KJUR.asn1.tsp.TimeStampResp = function(params) {
             throw "status shall be specified";
         var a = [this.dStatus];
         if (this.dTST != null) a.push(this.dTST);
-        var seq = new nA.DERSequence({array: a});
+        var seq = new _DERSequence({array: a});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
 
-    if (typeof params != "undefined") {
+    if (params !== undefined) {
         if (typeof params.status == "object") {
-            this.dStatus = new nT.PKIStatusInfo(params.status);
+            this.dStatus = new _PKIStatusInfo(params.status);
         }
-        if (typeof params.tst != "undefined" &&
-            params.tst instanceof KJUR.asn1.ASN1Object) {
+        if (params.tst !== undefined &&
+            params.tst instanceof _ASN1Object) {
             this.dTST = params.tst.getContentInfo();
         }
     }
@@ -403,9 +438,16 @@ YAHOO.lang.extend(KJUR.asn1.tsp.TimeStampResp, KJUR.asn1.ASN1Object);
  * </pre>
  */
 KJUR.asn1.tsp.PKIStatusInfo = function(params) {
-    KJUR.asn1.tsp.PKIStatusInfo.superclass.constructor.call(this);
-    var nA = KJUR.asn1;
-    var nT = KJUR.asn1.tsp;
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_KJUR_asn1_tsp = _KJUR_asn1.tsp,
+	_PKIStatus = _KJUR_asn1_tsp.PKIStatus,
+	_PKIFreeText = _KJUR_asn1_tsp.PKIFreeText,
+	_PKIFailureInfo = _KJUR_asn1_tsp.PKIFailureInfo;
+
+    _KJUR_asn1_tsp.PKIStatusInfo.superclass.constructor.call(this);
+
     this.dStatus = null;
     this.dStatusString = null;
     this.dFailureInfo = null;
@@ -416,22 +458,22 @@ KJUR.asn1.tsp.PKIStatusInfo = function(params) {
         var a = [this.dStatus];
         if (this.dStatusString != null) a.push(this.dStatusString);
         if (this.dFailureInfo != null) a.push(this.dFailureInfo);
-        var seq = new nA.DERSequence({array: a});
+        var seq = new _DERSequence({array: a});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
 
-    if (typeof params != "undefined") {
+    if (params !== undefined) {
         if (typeof params.status == "object") { // param for int
-            this.dStatus = new nT.PKIStatus(params.status);
+            this.dStatus = new _PKIStatus(params.status);
         }
         if (typeof params.statstr == "object") { // array of str
             this.dStatusString = 
-                new nT.PKIFreeText({array: params.statstr});
+                new _PKIFreeText({array: params.statstr});
         }
         if (typeof params.failinfo == "object") {
             this.dFailureInfo = 
-                new nT.PKIFailureInfo(params.failinfo); // param for bitstr
+                new _PKIFailureInfo(params.failinfo); // param for bitstr
         }
     };
 };
@@ -456,9 +498,14 @@ YAHOO.lang.extend(KJUR.asn1.tsp.PKIStatusInfo, KJUR.asn1.ASN1Object);
  * </pre>
  */
 KJUR.asn1.tsp.PKIStatus = function(params) {
-    KJUR.asn1.tsp.PKIStatus.superclass.constructor.call(this);
-    var nA = KJUR.asn1;
-    var nT = KJUR.asn1.tsp;
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERInteger = _KJUR_asn1.DERInteger,
+	_KJUR_asn1_tsp = _KJUR_asn1.tsp,
+	_PKIStatus = _KJUR_asn1_tsp.PKIStatus;
+
+    _KJUR_asn1_tsp.PKIStatus.superclass.constructor.call(this);
+
     var dStatus = null;
 
     this.getEncodedHex = function() {
@@ -466,15 +513,15 @@ KJUR.asn1.tsp.PKIStatus = function(params) {
         return this.hTLV;
     };
 
-    if (typeof params != "undefined") {
-        if (typeof params.name != "undefined") {
-            var list = nT.PKIStatus.valueList;
-            if (typeof list[params.name] == "undefined")
+    if (params !== undefined) {
+        if (params.name !== undefined) {
+            var list = _PKIStatus.valueList;
+            if (list[params.name] === undefined)
                 throw "name undefined: " + params.name;
             this.dStatus = 
-                new nA.DERInteger({'int': list[params.name]});
+                new _DERInteger({'int': list[params.name]});
         } else {
-            this.dStatus = new nA.DERInteger(params);
+            this.dStatus = new _DERInteger(params);
         }
     }
 };
@@ -503,21 +550,27 @@ KJUR.asn1.tsp.PKIStatus.valueList = {
  * </pre>
  */
 KJUR.asn1.tsp.PKIFreeText = function(params) {
-    KJUR.asn1.tsp.PKIFreeText.superclass.constructor.call(this);
-    var nA = KJUR.asn1;
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_DERUTF8String = _KJUR_asn1.DERUTF8String,
+	_KJUR_asn1_tsp = _KJUR_asn1.tsp;
+
+    _KJUR_asn1_tsp.PKIFreeText.superclass.constructor.call(this);
+
     this.textList = [];
 
     this.getEncodedHex = function() {
         var a = [];
         for (var i = 0; i < this.textList.length; i++) {
-            a.push(new nA.DERUTF8String({str: this.textList[i]}));
+            a.push(new _DERUTF8String({str: this.textList[i]}));
         }
-        var seq = new nA.DERSequence({array: a});
+        var seq = new _DERSequence({array: a});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
 
-    if (typeof params != "undefined") {
+    if (params !== undefined) {
         if (typeof params.array == "object") {
             this.textList = params.array;
         }
@@ -546,25 +599,30 @@ YAHOO.lang.extend(KJUR.asn1.tsp.PKIFreeText, KJUR.asn1.ASN1Object);
  * </pre>
  */
 KJUR.asn1.tsp.PKIFailureInfo = function(params) {
-    KJUR.asn1.tsp.PKIFailureInfo.superclass.constructor.call(this);
-    var nA = KJUR.asn1;
-    var nT = KJUR.asn1.tsp;
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERBitString = _KJUR_asn1.DERBitString,
+	_KJUR_asn1_tsp = _KJUR_asn1.tsp,
+	_PKIFailureInfo = _KJUR_asn1_tsp.PKIFailureInfo;
+
+    _PKIFailureInfo.superclass.constructor.call(this);
+
     this.value = null;
 
     this.getEncodedHex = function() {
         if (this.value == null)
             throw "value shall be specified";
         var binValue = new Number(this.value).toString(2);
-        var dValue = new nA.DERBitString();
+        var dValue = new _DERBitString();
         dValue.setByBinaryString(binValue);
         this.hTLV = dValue.getEncodedHex();
         return this.hTLV;
     };
 
-    if (typeof params != "undefined") {
+    if (params !== undefined) {
         if (typeof params.name == "string") {
-            var list = nT.PKIFailureInfo.valueList;
-            if (typeof list[params.name] == "undefined")
+            var list = _PKIFailureInfo.valueList;
+            if (list[params.name] === undefined)
                 throw "name undefined: " + params.name;
             this.value = list[params.name];
         } else if (typeof params['int'] == "number") {
@@ -610,13 +668,18 @@ KJUR.asn1.tsp.AbstractTSAAdapter = function(params) {
  * @description
  */
 KJUR.asn1.tsp.SimpleTSAAdapter = function(initParams) {
-    KJUR.asn1.tsp.SimpleTSAAdapter.superclass.constructor.call(this);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_KJUR_asn1_tsp = _KJUR_asn1.tsp,
+	_hashHex = _KJUR.crypto.Util.hashHex;
+
+    _KJUR_asn1_tsp.SimpleTSAAdapter.superclass.constructor.call(this);
     this.params = null;
     this.serial = 0;
 
     this.getTSTHex = function(msgHex, hashAlg) {
         // messageImprint
-        var hashHex = KJUR.crypto.Util.hashHex(msgHex, hashAlg);
+        var hashHex = _hashHex(msgHex, hashAlg);
         this.params.tstInfo.messageImprint =
             {hashAlg: hashAlg, hashValue: hashHex};
 
@@ -628,11 +691,11 @@ KJUR.asn1.tsp.SimpleTSAAdapter = function(initParams) {
         this.params.tstInfo.nonce = {'int': nonceValue};
 
         var obj = 
-            KJUR.asn1.tsp.TSPUtil.newTimeStampToken(this.params);
+            _KJUR_asn1_tsp.TSPUtil.newTimeStampToken(this.params);
         return obj.getContentInfoEncodedHex();
     };
 
-    if (typeof initParams != "undefined") {
+    if (initParams !== undefined) {
         this.params = initParams;
     }
 };
@@ -658,21 +721,26 @@ YAHOO.lang.extend(KJUR.asn1.tsp.SimpleTSAAdapter,
  * Those values are provided by initial parameters.
  */
 KJUR.asn1.tsp.FixedTSAAdapter = function(initParams) {
-    KJUR.asn1.tsp.FixedTSAAdapter.superclass.constructor.call(this);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_KJUR_asn1_tsp = _KJUR_asn1.tsp,
+	_hashHex = _KJUR.crypto.Util.hashHex; //o
+
+    _KJUR_asn1_tsp.FixedTSAAdapter.superclass.constructor.call(this);
     this.params = null;
 
     this.getTSTHex = function(msgHex, hashAlg) {
         // fixed serialNumber
         // fixed nonce        
-        var hashHex = KJUR.crypto.Util.hashHex(msgHex, hashAlg);
+        var hashHex = _hashHex(msgHex, hashAlg);
         this.params.tstInfo.messageImprint =
             {hashAlg: hashAlg, hashValue: hashHex};
         var obj = 
-            KJUR.asn1.tsp.TSPUtil.newTimeStampToken(this.params);
+            _KJUR_asn1_tsp.TSPUtil.newTimeStampToken(this.params);
         return obj.getContentInfoEncodedHex();
     };
 
-    if (typeof initParams != "undefined") {
+    if (initParams !== undefined) {
         this.params = initParams;
     }
 };
@@ -699,11 +767,15 @@ KJUR.asn1.tsp.TSPUtil = new function() {
  * @example
  */
 KJUR.asn1.tsp.TSPUtil.newTimeStampToken = function(param) {
-    var nC = KJUR.asn1.cms;
-    var nT = KJUR.asn1.tsp;
-    var sd = new nC.SignedData();
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_KJUR_asn1_cms = _KJUR_asn1.cms,
+	_KJUR_asn1_tsp = _KJUR_asn1.tsp,
+	_TSTInfo = _KJUR_asn1.tsp.TSTInfo;
 
-    var dTSTInfo = new nT.TSTInfo(param.tstInfo);
+    var sd = new _KJUR_asn1_cms.SignedData();
+
+    var dTSTInfo = new _TSTInfo(param.tstInfo);
     var tstInfoHex = dTSTInfo.getEncodedHex();
     sd.dEncapContentInfo.setContentValue({hex: tstInfoHex});
     sd.dEncapContentInfo.setContentType('tstinfo');
@@ -720,7 +792,7 @@ KJUR.asn1.tsp.TSPUtil.newTimeStampToken = function(param) {
                              eciObj: sd.dEncapContentInfo,
                              hashAlg: param.hashAlg});
     var signingCertificate = 
-        new nC.SigningCertificate({array: [param.signerCert]});
+        new _KJUR_asn1_cms.SigningCertificate({array: [param.signerCert]});
     si.dSignedAttrs.add(signingCertificate);
 
     si.sign(param.signerPrvKey, param.sigAlg);

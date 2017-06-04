@@ -1,4 +1,4 @@
-/*! asn1cms-1.0.3.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1cms-1.0.4.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1cms.js - ASN.1 DER encoder classes for Cryptographic Message Syntax(CMS)
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cms-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.3 (2017-Jan-14)
+ * @version 1.0.4 (2017-May-30)
  * @since jsrsasign 4.2.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -91,21 +91,24 @@ if (typeof KJUR.asn1.cms == "undefined" || !KJUR.asn1.cms) KJUR.asn1.cms = {};
  * </pre>
  */
 KJUR.asn1.cms.Attribute = function(params) {
-    KJUR.asn1.cms.Attribute.superclass.constructor.call(this);
-    var valueList = []; // array of values
+    var valueList = [], // array of values
+	_KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1;
+
+    _KJUR_asn1.cms.Attribute.superclass.constructor.call(this);
 
     this.getEncodedHex = function() {
         var attrTypeASN1, attrValueASN1, seq;
-        attrTypeASN1 = new KJUR.asn1.DERObjectIdentifier({"oid": this.attrTypeOid});
+        attrTypeASN1 = new _KJUR_asn1.DERObjectIdentifier({"oid": this.attrTypeOid});
 
-        attrValueASN1 = new KJUR.asn1.DERSet({"array": this.valueList});
+        attrValueASN1 = new _KJUR_asn1.DERSet({"array": this.valueList});
         try {
             attrValueASN1.getEncodedHex();
         } catch (ex) {
             throw "fail valueSet.getEncodedHex in Attribute(1)/" + ex;
         }
 
-        seq = new KJUR.asn1.DERSequence({"array": [attrTypeASN1, attrValueASN1]});
+        seq = new _KJUR_asn1.DERSequence({"array": [attrTypeASN1, attrValueASN1]});
         try {
             this.hTLV = seq.getEncodedHex();
         } catch (ex) {
@@ -137,12 +140,16 @@ YAHOO.lang.extend(KJUR.asn1.cms.Attribute, KJUR.asn1.ASN1Object);
  * o = new KJUR.asn1.cms.ContentType({oid: '1.2.840.113549.1.9.16.1.4'});
  */
 KJUR.asn1.cms.ContentType = function(params) {
-    KJUR.asn1.cms.ContentType.superclass.constructor.call(this);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1;
+
+    _KJUR_asn1.cms.ContentType.superclass.constructor.call(this);
+
     this.attrTypeOid = "1.2.840.113549.1.9.3";
     var contentTypeASN1 = null;
 
     if (typeof params != "undefined") {
-        var contentTypeASN1 = new KJUR.asn1.DERObjectIdentifier(params);
+        var contentTypeASN1 = new _KJUR_asn1.DERObjectIdentifier(params);
         this.valueList = [contentTypeASN1];
     }
 };
@@ -167,20 +174,25 @@ YAHOO.lang.extend(KJUR.asn1.cms.ContentType, KJUR.asn1.cms.Attribute);
  * o = new KJUR.asn1.cms.MessageDigest({hex: 'a1a2a3a4...'});
  */
 KJUR.asn1.cms.MessageDigest = function(params) {
-    KJUR.asn1.cms.MessageDigest.superclass.constructor.call(this);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DEROctetString = _KJUR_asn1.DEROctetString,
+	_KJUR_asn1_cms = _KJUR_asn1.cms;
+
+    _KJUR_asn1_cms.MessageDigest.superclass.constructor.call(this);
     this.attrTypeOid = "1.2.840.113549.1.9.4";
 
-    if (typeof params != "undefined") {
-        if (params.eciObj instanceof KJUR.asn1.cms.EncapsulatedContentInfo &&
-            typeof params.hashAlg == "string") {
+    if (params !== undefined) {
+        if (params.eciObj instanceof _KJUR_asn1_cms.EncapsulatedContentInfo &&
+            typeof params.hashAlg === "string") {
             var dataHex = params.eciObj.eContentValueHex;
             var hashAlg = params.hashAlg;
-            var hashValueHex = KJUR.crypto.Util.hashHex(dataHex, hashAlg);
-            var dAttrValue1 = new KJUR.asn1.DEROctetString({hex: hashValueHex});
+            var hashValueHex = _KJUR.crypto.Util.hashHex(dataHex, hashAlg);
+            var dAttrValue1 = new _DEROctetString({hex: hashValueHex});
             dAttrValue1.getEncodedHex();
             this.valueList = [dAttrValue1];
         } else {
-            var dAttrValue1 = new KJUR.asn1.DEROctetString(params);
+            var dAttrValue1 = new _DEROctetString(params);
             dAttrValue1.getEncodedHex();
             this.valueList = [dAttrValue1];
         }
@@ -213,11 +225,14 @@ YAHOO.lang.extend(KJUR.asn1.cms.MessageDigest, KJUR.asn1.cms.Attribute);
  * o = new KJUR.asn1.cms.SigningTime({str: '140517093800Z'}); // specified UTCTime
  */
 KJUR.asn1.cms.SigningTime = function(params) {
-    KJUR.asn1.cms.SigningTime.superclass.constructor.call(this);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1;
+
+    _KJUR_asn1.cms.SigningTime.superclass.constructor.call(this);
     this.attrTypeOid = "1.2.840.113549.1.9.5";
 
-    if (typeof params != "undefined") {
-        var asn1 = new KJUR.asn1.x509.Time(params);
+    if (params !== undefined) {
+        var asn1 = new _KJUR_asn1.x509.Time(params);
         try {
             asn1.getEncodedHex();
         } catch (ex) {
@@ -255,34 +270,38 @@ YAHOO.lang.extend(KJUR.asn1.cms.SigningTime, KJUR.asn1.cms.Attribute);
  * o = new KJUR.asn1.cms.SigningCertificate({array: [certPEM]});
  */
 KJUR.asn1.cms.SigningCertificate = function(params) {
-    KJUR.asn1.cms.SigningCertificate.superclass.constructor.call(this);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_KJUR_asn1_cms = _KJUR_asn1.cms,
+	_KJUR_crypto = _KJUR.crypto;
+
+    _KJUR_asn1_cms.SigningCertificate.superclass.constructor.call(this);
     this.attrTypeOid = "1.2.840.113549.1.9.16.2.12";
-    var nA = KJUR.asn1;
-    var nC = KJUR.asn1.cms;
-    var nY = KJUR.crypto;
 
     this.setCerts = function(listPEM) {
         var list = [];
         for (var i = 0; i < listPEM.length; i++) {
-            var hex = ASN1HEX.pemToHex(listPEM[i]);
-            var certHashHex = nY.Util.hashHex(hex, 'sha1');
-            var dCertHash = new nA.DEROctetString({hex: certHashHex});
+            var hex = pemtohex(listPEM[i]);
+            var certHashHex = _KJUR.crypto.Util.hashHex(hex, 'sha1');
+            var dCertHash = 
+		new _KJUR_asn1.DEROctetString({hex: certHashHex});
             dCertHash.getEncodedHex();
             var dIssuerSerial =
-                new nC.IssuerAndSerialNumber({cert: listPEM[i]});
+                new _KJUR_asn1_cms.IssuerAndSerialNumber({cert: listPEM[i]});
             dIssuerSerial.getEncodedHex();
             var dESSCertID =
-                new nA.DERSequence({array: [dCertHash, dIssuerSerial]});
+                new _DERSequence({array: [dCertHash, dIssuerSerial]});
             dESSCertID.getEncodedHex();
             list.push(dESSCertID);
         }
 
-        var dValue = new nA.DERSequence({array: list});
+        var dValue = new _DERSequence({array: list});
         dValue.getEncodedHex();
         this.valueList = [dValue];
     };
 
-    if (typeof params != "undefined") {
+    if (params !== undefined) {
         if (typeof params.array == "object") {
             this.setCerts(params.array);
         }
@@ -324,44 +343,46 @@ YAHOO.lang.extend(KJUR.asn1.cms.SigningCertificate, KJUR.asn1.cms.Attribute);
  *                                             hashAlg: 'sha512'});
  */
 KJUR.asn1.cms.SigningCertificateV2 = function(params) {
-    KJUR.asn1.cms.SigningCertificateV2.superclass.constructor.call(this);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_KJUR_asn1_cms = _KJUR_asn1.cms,
+	_KJUR_crypto = _KJUR.crypto;
+
+    _KJUR_asn1_cms.SigningCertificateV2.superclass.constructor.call(this);
     this.attrTypeOid = "1.2.840.113549.1.9.16.2.47";
-    var nA = KJUR.asn1;
-    var nX = KJUR.asn1.x509;
-    var nC = KJUR.asn1.cms;
-    var nY = KJUR.crypto;
 
     this.setCerts = function(listPEM, hashAlg) {
         var list = [];
         for (var i = 0; i < listPEM.length; i++) {
-            var hex = ASN1HEX.pemToHex(listPEM[i]);
+            var hex = pemtohex(listPEM[i]);
 
             var a = [];
-            if (hashAlg != "sha256")
-                a.push(new nX.AlgorithmIdentifier({name: hashAlg}));
+            if (hashAlg !== "sha256")
+                a.push(new _KJUR_asn1_x509.AlgorithmIdentifier({name: hashAlg}));
 
-            var certHashHex = nY.Util.hashHex(hex, hashAlg);
-            var dCertHash = new nA.DEROctetString({hex: certHashHex});
+            var certHashHex = _KJUR_crypto.Util.hashHex(hex, hashAlg);
+            var dCertHash = new _KJUR_asn1.DEROctetString({hex: certHashHex});
             dCertHash.getEncodedHex();
             a.push(dCertHash);
 
             var dIssuerSerial =
-                new nC.IssuerAndSerialNumber({cert: listPEM[i]});
+                new _KJUR_asn1_cms.IssuerAndSerialNumber({cert: listPEM[i]});
             dIssuerSerial.getEncodedHex();
             a.push(dIssuerSerial);
 
-            var dESSCertIDv2 =
-                new nA.DERSequence({array: a});
+            var dESSCertIDv2 = new _DERSequence({array: a});
             dESSCertIDv2.getEncodedHex();
             list.push(dESSCertIDv2);
         }
 
-        var dValue = new nA.DERSequence({array: list});
+        var dValue = new _DERSequence({array: list});
         dValue.getEncodedHex();
         this.valueList = [dValue];
     };
 
-    if (typeof params != "undefined") {
+    if (params !== undefined) {
         if (typeof params.array == "object") {
             var hashAlg = "sha256"; // sha2 default
             if (typeof params.hashAlg == "string") 
@@ -395,48 +416,54 @@ YAHOO.lang.extend(KJUR.asn1.cms.SigningCertificateV2, KJUR.asn1.cms.Attribute);
  * o = new KJUR.asn1.cms.IssuerAndSerialNumber(certPEM); // since 1.0.3
  */
 KJUR.asn1.cms.IssuerAndSerialNumber = function(params) {
-    KJUR.asn1.cms.IssuerAndSerialNumber.superclass.constructor.call(this);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERInteger = _KJUR_asn1.DERInteger,
+	_KJUR_asn1_cms = _KJUR_asn1.cms,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_X500Name = _KJUR_asn1_x509.X500Name,
+	_X509 = X509;
+
+    _KJUR_asn1_cms.IssuerAndSerialNumber.superclass.constructor.call(this);
     var dIssuer = null;
     var dSerial = null;
-    var nA = KJUR.asn1;
-    var nX = nA.x509;
 
     /*
      * @since asn1cms 1.0.1
      */
     this.setByCertPEM = function(certPEM) {
-        var certHex = ASN1HEX.pemToHex(certPEM);
-        var x = new X509();
+        var certHex = pemtohex(certPEM);
+        var x = new _X509();
         x.hex = certHex;
         var issuerTLVHex = x.getIssuerHex();
-        this.dIssuer = new nX.X500Name();
+        this.dIssuer = new _X500Name();
         this.dIssuer.hTLV = issuerTLVHex;
         var serialVHex = x.getSerialNumberHex();
-        this.dSerial = new nA.DERInteger({hex: serialVHex});
+        this.dSerial = new _DERInteger({hex: serialVHex});
     };
 
     this.getEncodedHex = function() {
-        var seq = new KJUR.asn1.DERSequence({"array": [this.dIssuer,
-                                                       this.dSerial]});
+        var seq = new _KJUR_asn1.DERSequence({"array": [this.dIssuer,
+							this.dSerial]});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
 
-    if (typeof params != "undefined") {
+    if (params !== undefined) {
         if (typeof params == "string" &&
             params.indexOf("-----BEGIN ") != -1) {
             this.setByCertPEM(params);
         }
         if (params.issuer && params.serial) {
-            if (params.issuer instanceof KJUR.asn1.x509.X500Name) {
+            if (params.issuer instanceof _X500Name) {
                 this.dIssuer = params.issuer;
             } else {
-                this.dIssuer = new KJUR.asn1.x509.X500Name(params.issuer);
+                this.dIssuer = new _X500Name(params.issuer);
             }
-            if (params.serial instanceof KJUR.asn1.DERInteger) {
+            if (params.serial instanceof _DERInteger) {
                 this.dSerial = params.serial;
             } else {
-                this.dSerial = new KJUR.asn1.DERInteger(params.serial);
+                this.dSerial = new _DERInteger(params.serial);
             }
         }
         if (typeof params.cert == "string") {
@@ -470,12 +497,16 @@ YAHOO.lang.extend(KJUR.asn1.cms.IssuerAndSerialNumber, KJUR.asn1.ASN1Object);
  * hex = o.getEncodedHex();                // get hex encoded ASN.1 data
  */
 KJUR.asn1.cms.AttributeList = function(params) {
-    KJUR.asn1.cms.AttributeList.superclass.constructor.call(this);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_KJUR_asn1_cms = _KJUR_asn1.cms;
+
+    _KJUR_asn1_cms.AttributeList.superclass.constructor.call(this);
     this.list = new Array();
     this.sortFlag = true;
 
     this.add = function(item) {
-        if (item instanceof KJUR.asn1.cms.Attribute) {
+        if (item instanceof _KJUR_asn1_cms.Attribute) {
             this.list.push(item);
         }
     };
@@ -492,13 +523,13 @@ KJUR.asn1.cms.AttributeList = function(params) {
 
     this.getEncodedHex = function() {
         if (typeof this.hTLV == "string") return this.hTLV;
-        var set = new KJUR.asn1.DERSet({array: this.list, 
-                                        sortflag: this.sortFlag});
+        var set = new _KJUR_asn1.DERSet({array: this.list, 
+                                         sortflag: this.sortFlag});
         this.hTLV = set.getEncodedHex();
         return this.hTLV;
     };
 
-    if (typeof params != "undefined") {
+    if (params !== undefined) {
         if (typeof params.sortflag != "undefined" &&
             params.sortflag == false)
             this.sortFlag = false;
@@ -533,18 +564,29 @@ YAHOO.lang.extend(KJUR.asn1.cms.AttributeList, KJUR.asn1.ASN1Object);
  * o.sign(privteKeyParam, "SHA1withRSA");
  */
 KJUR.asn1.cms.SignerInfo = function(params) {
-    KJUR.asn1.cms.SignerInfo.superclass.constructor.call(this);
-    var nA = KJUR.asn1;
-    var nC = KJUR.asn1.cms;
-    var nX = KJUR.asn1.x509;
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERTaggedObject = _KJUR_asn1.DERTaggedObject,
+	_KJUR_asn1_cms = _KJUR_asn1.cms,
+	_AttributeList = _KJUR_asn1_cms.AttributeList,
+	_ContentType = _KJUR_asn1_cms.ContentType,
+	_EncapsulatedContentInfo = _KJUR_asn1_cms.EncapsulatedContentInfo,
+	_MessageDigest = _KJUR_asn1_cms.MessageDigest,
+	_SignedData = _KJUR_asn1_cms.SignedData,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_AlgorithmIdentifier = _KJUR_asn1_x509.AlgorithmIdentifier,
+	_KJUR_crypto = _KJUR.crypto,
+	_KEYUTIL = KEYUTIL;
 
-    this.dCMSVersion = new nA.DERInteger({'int': 1});
+    _KJUR_asn1_cms.SignerInfo.superclass.constructor.call(this);
+
+    this.dCMSVersion = new _KJUR_asn1.DERInteger({'int': 1});
     this.dSignerIdentifier = null;
     this.dDigestAlgorithm = null;
-    this.dSignedAttrs = new nC.AttributeList();
+    this.dSignedAttrs = new _AttributeList();
     this.dSigAlg = null;
     this.dSig = null;
-    this.dUnsignedAttrs = new nC.AttributeList();
+    this.dUnsignedAttrs = new _AttributeList();
 
     this.setSignerIdentifier = function(params) {
         if (typeof params == "string" &&
@@ -554,7 +596,7 @@ KJUR.asn1.cms.SignerInfo = function(params) {
 
             var certPEM = params;
             this.dSignerIdentifier = 
-                new nC.IssuerAndSerialNumber({cert: params});
+                new _KJUR_asn1_cms.IssuerAndSerialNumber({cert: params});
         }
     };
 
@@ -585,36 +627,36 @@ KJUR.asn1.cms.SignerInfo = function(params) {
      *                                  hashAlg: 'sha256'});
      */
     this.setForContentAndHash = function(params) {
-        if (typeof params != "undefined") {
-            if (params.eciObj instanceof KJUR.asn1.cms.EncapsulatedContentInfo) {
-                this.dSignedAttrs.add(new nC.ContentType({oid: '1.2.840.113549.1.7.1'}));
-                this.dSignedAttrs.add(new nC.MessageDigest({eciObj: params.eciObj,
-                                                            hashAlg: params.hashAlg}));
+        if (params !== undefined) {
+            if (params.eciObj instanceof _EncapsulatedContentInfo) {
+                this.dSignedAttrs.add(new _ContentType({oid: '1.2.840.113549.1.7.1'}));
+                this.dSignedAttrs.add(new _MessageDigest({eciObj: params.eciObj,
+                                                          hashAlg: params.hashAlg}));
             }
-            if (typeof params.sdObj != "undefined" &&
-                params.sdObj instanceof KJUR.asn1.cms.SignedData) {
+            if (params.sdObj !== undefined &&
+                params.sdObj instanceof _SignedData) {
                 if (params.sdObj.digestAlgNameList.join(":").indexOf(params.hashAlg) == -1) {
                     params.sdObj.digestAlgNameList.push(params.hashAlg);
                 }
             }
             if (typeof params.hashAlg == "string") {
-                this.dDigestAlgorithm = new nX.AlgorithmIdentifier({name: params.hashAlg});
+                this.dDigestAlgorithm = new _AlgorithmIdentifier({name: params.hashAlg});
             }
         }
     };
 
     this.sign = function(keyParam, sigAlg) {
         // set algorithm
-        this.dSigAlg = new nX.AlgorithmIdentifier({name: sigAlg});
+        this.dSigAlg = new _AlgorithmIdentifier({name: sigAlg});
 
         // set signature
         var data = this.dSignedAttrs.getEncodedHex();
-        var prvKey = KEYUTIL.getKey(keyParam);
-        var sig = new KJUR.crypto.Signature({alg: sigAlg});
+        var prvKey = _KEYUTIL.getKey(keyParam);
+        var sig = new _KJUR_crypto.Signature({alg: sigAlg});
         sig.init(prvKey);
         sig.updateHex(data);
         var sigValHex = sig.sign();
-        this.dSig = new nA.DEROctetString({hex: sigValHex});
+        this.dSig = new _KJUR_asn1.DEROctetString({hex: sigValHex});
     };
 
     /*
@@ -628,16 +670,16 @@ KJUR.asn1.cms.SignerInfo = function(params) {
 
     this.getEncodedHex = function() {
         //alert("sattrs.hTLV=" + this.dSignedAttrs.hTLV);
-        if (this.dSignedAttrs instanceof KJUR.asn1.cms.AttributeList &&
+        if (this.dSignedAttrs instanceof _AttributeList &&
             this.dSignedAttrs.length() == 0) {
             throw "SignedAttrs length = 0 (empty)";
         }
-        var sa = new nA.DERTaggedObject({obj: this.dSignedAttrs,
-                                         tag: 'a0', explicit: false});
+        var sa = new _DERTaggedObject({obj: this.dSignedAttrs,
+                                       tag: 'a0', explicit: false});
         var ua = null;;
         if (this.dUnsignedAttrs.length() > 0) {
-            ua = new nA.DERTaggedObject({obj: this.dUnsignedAttrs,
-                                         tag: 'a1', explicit: false});
+            ua = new _DERTaggedObject({obj: this.dUnsignedAttrs,
+                                       tag: 'a1', explicit: false});
         }
 
         var items = [
@@ -650,7 +692,7 @@ KJUR.asn1.cms.SignerInfo = function(params) {
         ];
         if (ua != null) items.push(ua);
 
-        var seq = new nA.DERSequence({array: items});
+        var seq = new _KJUR_asn1.DERSequence({array: items});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
@@ -681,25 +723,31 @@ YAHOO.lang.extend(KJUR.asn1.cms.SignerInfo, KJUR.asn1.ASN1Object);
  * o.isDetached = true;               // false as default 
  */
 KJUR.asn1.cms.EncapsulatedContentInfo = function(params) {
-    KJUR.asn1.cms.EncapsulatedContentInfo.superclass.constructor.call(this);
-    var nA = KJUR.asn1;
-    var nC = KJUR.asn1.cms;
-    var nX = KJUR.asn1.x509;
-    this.dEContentType = new nA.DERObjectIdentifier({name: 'data'});
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERTaggedObject = _KJUR_asn1.DERTaggedObject,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_DERObjectIdentifier = _KJUR_asn1.DERObjectIdentifier,
+	_DEROctetString = _KJUR_asn1.DEROctetString,
+	_KJUR_asn1_cms = _KJUR_asn1.cms;
+
+    _KJUR_asn1_cms.EncapsulatedContentInfo.superclass.constructor.call(this);
+
+    this.dEContentType = new _DERObjectIdentifier({name: 'data'});
     this.dEContent = null;
     this.isDetached = false;
     this.eContentValueHex = null;
     
     this.setContentType = function(nameOrOid) {
         if (nameOrOid.match(/^[0-2][.][0-9.]+$/)) {
-            this.dEContentType = new nA.DERObjectIdentifier({oid: nameOrOid});
+            this.dEContentType = new _DERObjectIdentifier({oid: nameOrOid});
         } else {
-            this.dEContentType = new nA.DERObjectIdentifier({name: nameOrOid});
+            this.dEContentType = new _DERObjectIdentifier({name: nameOrOid});
         }
     };
 
     this.setContentValue = function(params) {
-        if (typeof params != "undefined") {
+        if (params !== undefined) {
             if (typeof params.hex == "string") {
                 this.eContentValueHex = params.hex;
             } else if (typeof params.str == "string") {
@@ -721,14 +769,14 @@ KJUR.asn1.cms.EncapsulatedContentInfo = function(params) {
             throw "eContentValue not yet set";
         }
 
-        var dValue = new nA.DEROctetString({hex: this.eContentValueHex});
-        this.dEContent = new nA.DERTaggedObject({obj: dValue,
-                                                 tag: 'a0',
-                                                 explicit: true});
+        var dValue = new _DEROctetString({hex: this.eContentValueHex});
+        this.dEContent = new _DERTaggedObject({obj: dValue,
+                                               tag: 'a0',
+                                               explicit: true});
 
         var a = [this.dEContentType];
         if (! this.isDetached) a.push(this.dEContent);
-        var seq = new nA.DERSequence({array: a});
+        var seq = new _DERSequence({array: a});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
@@ -758,30 +806,38 @@ YAHOO.lang.extend(KJUR.asn1.cms.EncapsulatedContentInfo, KJUR.asn1.ASN1Object);
  * o = new KJUR.asn1.cms.ContentInfo({type: 'data', obj: seq});
  */
 KJUR.asn1.cms.ContentInfo = function(params) {
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERTaggedObject = _KJUR_asn1.DERTaggedObject,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509;
+
     KJUR.asn1.cms.ContentInfo.superclass.constructor.call(this);
-    var nA = KJUR.asn1;
-    var nC = KJUR.asn1.cms;
-    var nX = KJUR.asn1.x509;
 
     this.dContentType = null;
     this.dContent = null;
 
     this.setContentType = function(params) {
         if (typeof params == "string") {
-            this.dContentType = nX.OID.name2obj(params);
+            this.dContentType = _KJUR_asn1_x509.OID.name2obj(params);
         }
     };
 
     this.getEncodedHex = function() {
-        var dContent0 = new nA.DERTaggedObject({obj: this.dContent, tag: 'a0', explicit: true});
-        var seq = new nA.DERSequence({array: [this.dContentType, dContent0]});
+        var dContent0 = new _DERTaggedObject({obj:      this.dContent,
+					      tag:      'a0',
+					      explicit: true});
+        var seq = new _DERSequence({array: [this.dContentType, dContent0]});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
 
-    if (typeof params != "undefined") {
-        if (params.type) this.setContentType(params.type);
-        if (params.obj && params.obj instanceof nA.ASN1Object) this.dContent = params.obj;
+    if (params !== undefined) {
+        if (params.type) 
+	    this.setContentType(params.type);
+        if (params.obj && 
+	    params.obj instanceof _KJUR_asn1.ASN1Object)
+	    this.dContent = params.obj;
     }
 };
 YAHOO.lang.extend(KJUR.asn1.cms.ContentInfo, KJUR.asn1.ASN1Object);
@@ -822,23 +878,34 @@ YAHOO.lang.extend(KJUR.asn1.cms.ContentInfo, KJUR.asn1.ASN1Object);
  * hex = sd.getContentInfoEncodedHex();
  */
 KJUR.asn1.cms.SignedData = function(params) {
-    KJUR.asn1.cms.SignedData.superclass.constructor.call(this);
-    var nA = KJUR.asn1;
-    var nC = KJUR.asn1.cms;
-    var nX = KJUR.asn1.x509;
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_ASN1Object = _KJUR_asn1.ASN1Object,
+	_DERInteger = _KJUR_asn1.DERInteger,
+	_DERSet = _KJUR_asn1.DERSet,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_DERTaggedObject = _KJUR_asn1.DERTaggedObject,
+	_KJUR_asn1_cms = _KJUR_asn1.cms,
+	_EncapsulatedContentInfo = _KJUR_asn1_cms.EncapsulatedContentInfo,
+	_SignerInfo = _KJUR_asn1_cms.SignerInfo,
+	_ContentInfo = _KJUR_asn1_cms.ContentInfo,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_AlgorithmIdentifier = _KJUR_asn1_x509.AlgorithmIdentifier;
 
-    this.dCMSVersion = new nA.DERInteger({'int': 1});
+    KJUR.asn1.cms.SignedData.superclass.constructor.call(this);
+
+    this.dCMSVersion = new _DERInteger({'int': 1});
     this.dDigestAlgs = null;
     this.digestAlgNameList = [];
-    this.dEncapContentInfo = new nC.EncapsulatedContentInfo();
+    this.dEncapContentInfo = new _EncapsulatedContentInfo();
     this.dCerts = null;
     this.certificateList = [];
     this.crlList = [];
-    this.signerInfoList = [new nC.SignerInfo()];
+    this.signerInfoList = [new _SignerInfo()];
 
     this.addCertificatesByPEM = function(certPEM) {
-        var hex = ASN1HEX.pemToHex(certPEM);
-        var o = new nA.ASN1Object();
+        var hex = pemtohex(certPEM);
+        var o = new _ASN1Object();
         o.hTLV = hex;
         this.certificateList.push(o);
     };
@@ -850,10 +917,10 @@ KJUR.asn1.cms.SignedData = function(params) {
             var digestAlgList = [];
             for (var i = 0; i < this.digestAlgNameList.length; i++) {
                 var name = this.digestAlgNameList[i];
-                var o = new nX.AlgorithmIdentifier({name: name});
+                var o = new _AlgorithmIdentifier({name: name});
                 digestAlgList.push(o);
             }
-            this.dDigestAlgs = new nA.DERSet({array: digestAlgList});
+            this.dDigestAlgs = new _DERSet({array: digestAlgList});
         }
 
         var a = [this.dCMSVersion,
@@ -862,26 +929,26 @@ KJUR.asn1.cms.SignedData = function(params) {
 
         if (this.dCerts == null) {
             if (this.certificateList.length > 0) {
-                var o1 = new nA.DERSet({array: this.certificateList});
+                var o1 = new _DERSet({array: this.certificateList});
                 this.dCerts
-                    = new nA.DERTaggedObject({obj: o1,
-                                              tag: 'a0',
-                                              explicit: false});
+                    = new _DERTaggedObject({obj:      o1,
+                                            tag:      'a0',
+                                            explicit: false});
             }
         }
         if (this.dCerts != null) a.push(this.dCerts);
         
-        var dSignerInfos = new nA.DERSet({array: this.signerInfoList});
+        var dSignerInfos = new _DERSet({array: this.signerInfoList});
         a.push(dSignerInfos);
 
-        var seq = new nA.DERSequence({array: a});
+        var seq = new _DERSequence({array: a});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
 
     this.getContentInfo = function() {
         this.getEncodedHex();
-        var ci = new nC.ContentInfo({type: 'signed-data', obj: this});
+        var ci = new _ContentInfo({type: 'signed-data', obj: this});
         return ci;
     };
 
@@ -892,9 +959,7 @@ KJUR.asn1.cms.SignedData = function(params) {
     };
 
     this.getPEM = function() {
-        var hex = this.getContentInfoEncodedHex();
-        var pem = nA.ASN1Util.getPEMStringFromHex(hex, "CMS");
-        return pem;
+        return hextopem(this.getContentInfoEncodedHex(), "CMS");
     };
 };
 YAHOO.lang.extend(KJUR.asn1.cms.SignedData, KJUR.asn1.ASN1Object);
@@ -933,9 +998,18 @@ KJUR.asn1.cms.CMSUtil = new function() {
  * });
  */
 KJUR.asn1.cms.CMSUtil.newSignedData = function(param) {
-    var nC = KJUR.asn1.cms;
-    var nE = KJUR.asn1.cades;
-    var sd = new nC.SignedData();
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_KJUR_asn1_cms = _KJUR_asn1.cms,
+	_SignerInfo = _KJUR_asn1_cms.SignerInfo,
+	_SignedData = _KJUR_asn1_cms.SignedData,
+	_SigningTime = _KJUR_asn1_cms.SigningTime,
+	_SigningCertificate = _KJUR_asn1_cms.SigningCertificate,
+	_SigningCertificateV2 = _KJUR_asn1_cms.SigningCertificateV2,
+	_KJUR_asn1_cades = _KJUR_asn1.cades,
+	_SignaturePolicyIdentifier = _KJUR_asn1_cades.SignaturePolicyIdentifier;
+
+    var sd = new _SignedData();
 
     sd.dEncapContentInfo.setContentValue(param.content);
 
@@ -948,29 +1022,29 @@ KJUR.asn1.cms.CMSUtil.newSignedData = function(param) {
     sd.signerInfoList = [];
     for (var i = 0; i < param.signerInfos.length; i++) {
         var siParam = param.signerInfos[i];
-        var si = new nC.SignerInfo();
+        var si = new _SignerInfo();
         si.setSignerIdentifier(siParam.signerCert);
 
-        si.setForContentAndHash({sdObj: sd,
-                                 eciObj: sd.dEncapContentInfo,
+        si.setForContentAndHash({sdObj:   sd,
+                                 eciObj:  sd.dEncapContentInfo,
                                  hashAlg: siParam.hashAlg});
 
         for (attrName in siParam.sAttr) {
             var attrParam = siParam.sAttr[attrName];
             if (attrName == "SigningTime") {
-                var attr = new nC.SigningTime(attrParam);
+                var attr = new _SigningTime(attrParam);
                 si.dSignedAttrs.add(attr);
             }
             if (attrName == "SigningCertificate") {
-                var attr = new nC.SigningCertificate(attrParam);
+                var attr = new _SigningCertificate(attrParam);
                 si.dSignedAttrs.add(attr);
             }
             if (attrName == "SigningCertificateV2") {
-                var attr = new nC.SigningCertificateV2(attrParam);
+                var attr = new _SigningCertificateV2(attrParam);
                 si.dSignedAttrs.add(attr);
             }
             if (attrName == "SignaturePolicyIdentifier") {
-                var attr = new nE.SignaturePolicyIdentifier(attrParam);
+                var attr = new _SignaturePolicyIdentifier(attrParam);
                 si.dSignedAttrs.add(attr);
             }
         }

@@ -1,9 +1,9 @@
-/*! base64x-1.1.11 (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* base64x-1.1.12 (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * version: 1.1.11 (2017-May-20)
+ * version: 1.1.12 (2017-Jun-03)
  *
  * Copyright (c) 2012-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -21,7 +21,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.0 base64x 1.1.11 (2017-May-20)
+ * @version jsrsasign 7.2.1 base64x 1.1.12 (2017-Jun-03)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -439,6 +439,68 @@ function b64nltohex(s) {
     var hex = b64tohex(b64);
     return hex;
 } 
+
+// ==== hex / pem =========================================
+
+/**
+ * get PEM string from hexadecimal data and header string
+ * @name hextopem
+ * @function
+ * @param {String} dataHex hexadecimal string of PEM body
+ * @param {String} pemHeader PEM header string (ex. 'RSA PRIVATE KEY')
+ * @return {String} PEM formatted string of input data
+ * @since jsrasign 7.2.1 base64x 1.1.12
+ * @description
+ * This function converts a hexadecimal string to a PEM string with
+ * a specified header. Its line break will be CRLF("\r\n").
+ * @example
+ * hextopem('616161', 'RSA PRIVATE KEY') &rarr;
+ * -----BEGIN PRIVATE KEY-----
+ * YWFh
+ * -----END PRIVATE KEY-----
+ */
+function hextopem(dataHex, pemHeader) {
+    var pemBody = hextob64nl(dataHex);
+    return "-----BEGIN " + pemHeader + "-----\r\n" + 
+        pemBody + 
+        "\r\n-----END " + pemHeader + "-----\r\n";
+}
+
+/**
+ * get hexacedimal string from PEM format data<br/>
+ * @name pemtohex
+ * @function
+ * @param {String} s PEM formatted string
+ * @param {String} sHead PEM header string without BEGIN/END(OPTION)
+ * @return {String} hexadecimal string data of PEM contents
+ * @since jsrsasign 7.2.1 base64x 1.1.12
+ * @description
+ * This static method gets a hexacedimal string of contents 
+ * from PEM format data. You can explicitly specify PEM header 
+ * by sHead argument. 
+ * Any space characters such as white space or new line
+ * will be omitted.<br/>
+ * NOTE: Now {@link KEYUTIL.getHexFromPEM} and {@link X509.pemToHex}
+ * have been deprecated since jsrsasign 7.2.1. 
+ * Please use this method instead.
+ * @example
+ * pemtohex("-----BEGIN PUBLIC KEY...") &rarr; "3082..."
+ * pemtohex("-----BEGIN CERTIFICATE...", "CERTIFICATE") &rarr; "3082..."
+ * pemtohex(" \r\n-----BEGIN DSA PRIVATE KEY...") &rarr; "3082..."
+ */
+function pemtohex(s, sHead) {
+    if (s.indexOf("-----BEGIN ") == -1)
+        throw "can't find PEM header: " + sHead;
+
+    if (sHead !== undefined) {
+        s = s.replace("-----BEGIN " + sHead + "-----", "");
+        s = s.replace("-----END " + sHead + "-----", "");
+    } else {
+        s = s.replace(/-----BEGIN [^-]+-----/, '');
+        s = s.replace(/-----END [^-]+-----/, '');
+    }
+    return b64nltohex(s);
+}
 
 // ==== hex / ArrayBuffer =================================
 

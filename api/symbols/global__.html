@@ -540,9 +540,9 @@ string with new lines to a hexadecimal string.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b>b64utoutf8</b>(s)
+								<div class="fixedFont"><b><a href="../symbols/global__.html#b64utoutf8">b64utoutf8</a></b>(s)
 								</div>
-								<div class="description"></div>
+								<div class="description">convert a Base64URL encoded string to a UTF-8 encoded string including CJK or Latin.</div>
 							</td>
 						</tr>
 					
@@ -627,6 +627,17 @@ string with new lines for each 64 characters.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#hextopem">hextopem</a></b>(dataHex, pemHeader)
+								</div>
+								<div class="description">get PEM string from hexadecimal data and header string
+This function converts a hexadecimal string to a PEM string with
+a specified header.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#hextoposhex">hextoposhex</a></b>(s)
 								</div>
 								<div class="description">canonicalize hexadecimal string of positive integer<br/>
@@ -688,6 +699,17 @@ a String "s".</div>
 								</div>
 								<div class="description">convert all DOS new line("\r\n") to UNIX new line("\n") in 
 a String "s".</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#pemtohex">pemtohex</a></b>(s, sHead)
+								</div>
+								<div class="description">get hexacedimal string from PEM format data<br/>
+This static method gets a hexacedimal string of contents 
+from PEM format data.</div>
 							</td>
 						</tr>
 					
@@ -816,9 +838,9 @@ This function only works in Node.js.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b>utf8tob64u</b>(s)
+								<div class="fixedFont"><b><a href="../symbols/global__.html#utf8tob64u">utf8tob64u</a></b>(s)
 								</div>
-								<div class="description"></div>
+								<div class="description">convert a UTF-8 encoded string including CJK or Latin to a Base64URL encoded string.</div>
 							</td>
 						</tr>
 					
@@ -1252,12 +1274,12 @@ NOTE: This can't be used for Base64URL encoded non ASCII characters.
 					<a name="b64utoutf8"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{String}</span>
 					<b>b64utoutf8</b>(s)
 					
 					</div>
 					<div class="description">
-						
+						convert a Base64URL encoded string to a UTF-8 encoded string including CJK or Latin.<br/>
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -1272,16 +1294,29 @@ NOTE: This can't be used for Base64URL encoded non ASCII characters.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>s</b>
+									<span class="light fixedFont">{String}</span> <b>s</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>Base64URL encoded string</dd>
 							
 							</dl>
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>1.1</dd>
+							</dl>
+							</dl>
 						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> UTF-8 encoded string</dd>
+							
+							</dl>
 						
 						
 						
@@ -1744,6 +1779,73 @@ hexadecimal leading "0" is automatically added.
 
 					<hr />
 				
+					<a name="hextopem"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>hextopem</b>(dataHex, pemHeader)
+					
+					</div>
+					<div class="description">
+						get PEM string from hexadecimal data and header string
+This function converts a hexadecimal string to a PEM string with
+a specified header. Its line break will be CRLF("\r\n").
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">hextopem('616161', 'RSA PRIVATE KEY') &rarr;
+-----BEGIN PRIVATE KEY-----
+YWFh
+-----END PRIVATE KEY-----</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>dataHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of PEM body</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>pemHeader</b>
+									
+								</dt>
+								<dd>PEM header string (ex. 'RSA PRIVATE KEY')</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrasign 7.2.1 base64x 1.1.12</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> PEM formatted string of input data</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="hextoposhex"> </a>
 					<div class="fixedFont">
 					
@@ -2130,6 +2232,78 @@ a String "s".
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> converted string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="pemtohex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>pemtohex</b>(s, sHead)
+					
+					</div>
+					<div class="description">
+						get hexacedimal string from PEM format data<br/>
+This static method gets a hexacedimal string of contents 
+from PEM format data. You can explicitly specify PEM header 
+by sHead argument. 
+Any space characters such as white space or new line
+will be omitted.<br/>
+NOTE: Now <a href="../symbols/KEYUTIL.html#.getHexFromPEM">KEYUTIL.getHexFromPEM</a> and <a href="../symbols/X509.html#.pemToHex">X509.pemToHex</a>
+have been deprecated since jsrsasign 7.2.1. 
+Please use this method instead.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">pemtohex("-----BEGIN PUBLIC KEY...") &rarr; "3082..."
+pemtohex("-----BEGIN CERTIFICATE...", "CERTIFICATE") &rarr; "3082..."
+pemtohex(" \r\n-----BEGIN DSA PRIVATE KEY...") &rarr; "3082..."</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>PEM formatted string</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>sHead</b>
+									
+								</dt>
+								<dd>PEM header string without BEGIN/END(OPTION)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 7.2.1 base64x 1.1.12</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string data of PEM contents</dd>
 							
 							</dl>
 						
@@ -2786,12 +2960,12 @@ strdiffidx("abcdefgh", "abcdef") -> 6</pre>
 					<a name="utf8tob64u"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{String}</span>
 					<b>utf8tob64u</b>(s)
 					
 					</div>
 					<div class="description">
-						
+						convert a UTF-8 encoded string including CJK or Latin to a Base64URL encoded string.<br/>
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -2806,16 +2980,29 @@ strdiffidx("abcdefgh", "abcdef") -> 6</pre>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>s</b>
+									<span class="light fixedFont">{String}</span> <b>s</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>UTF-8 encoded string</dd>
 							
 							</dl>
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>1.1</dd>
+							</dl>
+							</dl>
 						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> Base64URL encoded string</dd>
+							
+							</dl>
 						
 						
 						

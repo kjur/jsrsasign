@@ -1,4 +1,4 @@
-/*! asn1ocsp-1.0.2.js (c) 2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1ocsp-1.0.3.js (c) 2016 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1ocsp.js - ASN.1 DER encoder classes for OCSP protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1ocsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.0 asn1ocsp 1.0.2 (2017-May-12)
+ * @version jsrsasign 7.2.1 asn1ocsp 1.0.3 (2017-Jun-03)
  * @since jsrsasign 6.1.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -84,9 +84,22 @@ KJUR.asn1.ocsp.DEFAULT_HASH = "sha1";
  * o = new KJUR.asn1.ocsp.CertID({namehash: "1a...", keyhash: "ad...", serial: "1234", alg: "sha256"});
  */
 KJUR.asn1.ocsp.CertID = function(params) {
-    KJUR.asn1.ocsp.CertID.superclass.constructor.call(this);
-    var nA = KJUR.asn1;
-    var nX = KJUR.asn1.x509;
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DEROctetString = _KJUR_asn1.DEROctetString,
+	_DERInteger = _KJUR_asn1.DERInteger,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_AlgorithmIdentifier = _KJUR_asn1_x509.AlgorithmIdentifier,
+	_KJUR_asn1_ocsp = _KJUR_asn1.ocsp,
+	_DEFAULT_HASH = _KJUR_asn1_ocsp.DEFAULT_HASH,
+	_KJUR_crypto = _KJUR.crypto,
+	_hashHex = _KJUR_crypto.Util.hashHex,
+	_X509 = X509,
+	_ASN1HEX = ASN1HEX;
+
+    _KJUR_asn1_ocsp.CertID.superclass.constructor.call(this);
+
     this.dHashAlg = null;
     this.dIssuerNameHash = null;
     this.dIssuerKeyHash = null;
@@ -109,12 +122,11 @@ KJUR.asn1.ocsp.CertID = function(params) {
      */
     this.setByValue = function(issuerNameHashHex, issuerKeyHashHex,
 			       serialNumberHex, algName) {
-	if (algName === undefined)
-	    algName = KJUR.asn1.ocsp.DEFAULT_HASH;
-	this.dHashAlg =        new nX.AlgorithmIdentifier({name: algName});
-	this.dIssuerNameHash = new nA.DEROctetString({hex: issuerNameHashHex});
-	this.dIssuerKeyHash =  new nA.DEROctetString({hex: issuerKeyHashHex});
-	this.dSerialNumber =   new nA.DERInteger({hex: serialNumberHex});
+	if (algName === undefined) algName = _DEFAULT_HASH;
+	this.dHashAlg =        new _AlgorithmIdentifier({name: algName});
+	this.dIssuerNameHash = new _DEROctetString({hex: issuerNameHashHex});
+	this.dIssuerKeyHash =  new _DEROctetString({hex: issuerKeyHashHex});
+	this.dSerialNumber =   new _DERInteger({hex: serialNumberHex});
     };
 
     /**
@@ -132,19 +144,19 @@ KJUR.asn1.ocsp.CertID = function(params) {
      * o.setByCert("-----BEGIN...", "-----BEGIN...", "sha256");
      */
     this.setByCert = function(issuerCert, subjectCert, algName) {
-	if (algName === undefined)
-	    algName = KJUR.asn1.ocsp.DEFAULT_HASH;
+	if (algName === undefined) algName = _DEFAULT_HASH;
 
-	var xSbj = new X509();
+	var xSbj = new _X509();
 	xSbj.readCertPEM(subjectCert);
-	var xIss = new X509();
+	var xIss = new _X509();
 	xIss.readCertPEM(issuerCert);
-	var kiPropIss = X509.getPublicKeyInfoPropOfCertPEM(issuerCert);
-        var issuerKeyHex = kiPropIss.keyhex;
+
+	var hISS_SPKI = xIss.getPublicKeyHex();
+	var issuerKeyHex = _ASN1HEX.getTLVbyList(hISS_SPKI, 0, [1, 0], "30");
 
 	var serialNumberHex = xSbj.getSerialNumberHex();
-	var issuerNameHashHex = KJUR.crypto.Util.hashHex(xIss.getSubjectHex(), algName);
-	var issuerKeyHashHex = KJUR.crypto.Util.hashHex(issuerKeyHex, algName);
+	var issuerNameHashHex = _hashHex(xIss.getSubjectHex(), algName);
+	var issuerKeyHashHex = _hashHex(issuerKeyHex, algName);
 	this.setByValue(issuerNameHashHex, issuerKeyHashHex,
 			serialNumberHex, algName);
 	this.hoge = xSbj.getSerialNumberHex();
@@ -159,23 +171,23 @@ KJUR.asn1.ocsp.CertID = function(params) {
 
 	var a = [this.dHashAlg, this.dIssuerNameHash,
 		 this.dIssuerKeyHash, this.dSerialNumber];
-	var seq = new nA.DERSequence({array: a});
+	var seq = new _DERSequence({array: a});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
 
-    if (typeof params !== "undefined") {
+    if (params !== undefined) {
 	var p = params;
-	if (typeof p.issuerCert !== "undefined" &&
-	    typeof p.subjectCert !== "undefined") {
-	    var alg = KJUR.asn1.ocsp.DEFAULT_HASH;
-	    if (typeof p.alg === "undefined") alg = undefined;
+	if (p.issuerCert !== undefined &&
+	    p.subjectCert !== undefined) {
+	    var alg = _DEFAULT_HASH;
+	    if (p.alg === undefined) alg = undefined;
 	    this.setByCert(p.issuerCert, p.subjectCert, alg);
-	} else if (typeof p.namehash !== "undefined" &&
-		   typeof p.keyhash !== "undefined" &&
-		   typeof p.serial !== "undefined") {
-	    var alg = KJUR.asn1.ocsp.DEFAULT_HASH;
-	    if (typeof p.alg === "undefined") alg = undefined;
+	} else if (p.namehash !== undefined &&
+		   p.keyhash !== undefined &&
+		   p.serial !== undefined) {
+	    var alg = _DEFAULT_HASH;
+	    if (p.alg === undefined) alg = undefined;
 	    this.setByValue(p.namehash, p.keyhash, p.serial, alg);
 	} else {
 	    throw "invalid constructor arguments";
@@ -211,7 +223,12 @@ YAHOO.lang.extend(KJUR.asn1.ocsp.CertID, KJUR.asn1.ASN1Object);
  * o = new KJUR.asn1.ocsp.Request({namehash: "1a...", keyhash: "ad...", serial: "1234", alg: "sha256"});
  */
 KJUR.asn1.ocsp.Request = function(params) {
-    KJUR.asn1.ocsp.Request.superclass.constructor.call(this);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_KJUR_asn1_ocsp = _KJUR_asn1.ocsp;
+    
+    _KJUR_asn1_ocsp.Request.superclass.constructor.call(this);
     this.dReqCert = null;
     this.dExt = null;
     
@@ -226,13 +243,13 @@ KJUR.asn1.ocsp.Request = function(params) {
 	// 2. singleRequestExtensions (not supported yet)
 
 	// 3. construct SEQUENCE
-	var seq = new KJUR.asn1.DERSequence({array: a});
+	var seq = new _DERSequence({array: a});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
 
     if (typeof params !== "undefined") {
-	var o = new KJUR.asn1.ocsp.CertID(params);
+	var o = new _KJUR_asn1_ocsp.CertID(params);
 	this.dReqCert = o;
     }
 };
@@ -265,7 +282,12 @@ YAHOO.lang.extend(KJUR.asn1.ocsp.Request, KJUR.asn1.ASN1Object);
  * ]});
  */
 KJUR.asn1.ocsp.TBSRequest = function(params) {
-    KJUR.asn1.ocsp.TBSRequest.superclass.constructor.call(this);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_KJUR_asn1_ocsp = _KJUR_asn1.ocsp;
+
+    _KJUR_asn1_ocsp.TBSRequest.superclass.constructor.call(this);
     this.version = 0;
     this.dRequestorName = null;
     this.dRequestList = [];
@@ -288,7 +310,7 @@ KJUR.asn1.ocsp.TBSRequest = function(params) {
     this.setRequestListByParam = function(aParams) {
 	var a = [];
 	for (var i = 0; i < aParams.length; i++) {
-	    var dReq = new KJUR.asn1.ocsp.Request(aParams[0]);
+	    var dReq = new _KJUR_asn1_ocsp.Request(aParams[0]);
 	    a.push(dReq);
 	}
 	this.dRequestList = a;
@@ -307,7 +329,7 @@ KJUR.asn1.ocsp.TBSRequest = function(params) {
 
 	// 3. requestList
 	var seqRequestList = 
-	    new KJUR.asn1.DERSequence({array: this.dRequestList});
+	    new _DERSequence({array: this.dRequestList});
 	a.push(seqRequestList);
 
 	// 4. requestExtensions
@@ -315,13 +337,13 @@ KJUR.asn1.ocsp.TBSRequest = function(params) {
 	    throw "requestExtensions not supported";
 
 	// 5. construct SEQUENCE
-	var seq = new KJUR.asn1.DERSequence({array: a});
+	var seq = new _DERSequence({array: a});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
 
-    if (typeof params !== "undefined") {
-	if (typeof params.reqList !== "undefined")
+    if (params !== undefined) {
+	if (params.reqList !== undefined)
 	    this.setRequestListByParam(params.reqList);
     }
 };
@@ -354,7 +376,12 @@ YAHOO.lang.extend(KJUR.asn1.ocsp.TBSRequest, KJUR.asn1.ASN1Object);
  * ]});
  */
 KJUR.asn1.ocsp.OCSPRequest = function(params) {
-    KJUR.asn1.ocsp.OCSPRequest.superclass.constructor.call(this);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_KJUR_asn1_ocsp = _KJUR_asn1.ocsp;
+
+    _KJUR_asn1_ocsp.OCSPRequest.superclass.constructor.call(this);
     this.dTbsRequest = null;
     this.dOptionalSignature = null;
 
@@ -373,14 +400,14 @@ KJUR.asn1.ocsp.OCSPRequest = function(params) {
 	    throw "optionalSignature not supported";
 
 	// 3. construct SEQUENCE
-	var seq = new KJUR.asn1.DERSequence({array: a});
+	var seq = new _DERSequence({array: a});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
 
-    if (typeof params !== "undefined") {
-	if (typeof params.reqList !== "undefined") {
-	    var o = new KJUR.asn1.ocsp.TBSRequest(params);
+    if (params !== undefined) {
+	if (params.reqList !== undefined) {
+	    var o = new _KJUR_asn1_ocsp.TBSRequest(params);
 	    this.dTbsRequest = o;
 	}
     }
@@ -417,9 +444,13 @@ KJUR.asn1.ocsp.OCSPUtil = {};
  * hReq = KJUR.asn1.ocsp.OCSPUtil.getRequestHex("-----BEGIN...", "-----BEGIN...");
  */
 KJUR.asn1.ocsp.OCSPUtil.getRequestHex = function(issuerCert, subjectCert, alg) {
-    if (alg === undefined) alg = KJUR.asn1.ocsp.DEFAULT_HASH;
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_KJUR_asn1_ocsp = _KJUR_asn1.ocsp;
+
+    if (alg === undefined) alg = _KJUR_asn1_ocsp.DEFAULT_HASH;
     var param = {alg: alg, issuerCert: issuerCert, subjectCert: subjectCert};
-    var o = new KJUR.asn1.ocsp.OCSPRequest({reqList: [param]});
+    var o = new _KJUR_asn1_ocsp.OCSPRequest({reqList: [param]});
     return o.getEncodedHex();
 };
 
