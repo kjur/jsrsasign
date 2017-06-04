@@ -1,6 +1,31 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 7.2.0 to 7.2.1 (2017-Jun-04)
+  - base64x 1.1.11 to 1.1.12
+    - function hextopem, pemtohex added
+  - asn1hex 1.1.11 to 1.1.12
+    - make ASN1HEX.pemToHex deprecated
+  - asn1 1.0.12 to 1.0.13
+    - make KJUR.asn1.ASN1Util.getPEMStringFromHex deprecated
+  - rsapem 1.2.1 to 1.2.2
+    - make RSAKey.pemToBase64 deprecated
+  - x509 1.1.14 to 1.1.15
+    - make X509.pemToBase64 deprecated
+  - further refactoring. reducing min.js size by refactoring
+    - asn1 1.0.12 to 1.0.13
+    - asn1cades 1.0.2 to 1.0.3
+    - asn1cms 1.0.3 to 1.0.4
+    - asn1csr 1.0.4 to 1.0.5
+    - asn1ocsp 1.0.2 to 1.0.3
+    - asn1tsp 1.0.2 to 1.0.3
+    - asn1x509 1.0.23 to 1.0.24
+    - jws 3.3.6 to 3.3.7
+    - jwsjs 2.1.0 to 2.1.1
+    - keyutil 1.1.1 to 1.1.2
+    - pkcs5pkey 1.1.1 to 1.1.2
+    - x509 1.1.14 to 1.1.15
+
 * Changes from 7.1.4 to 7.2.0 (2017-May-21)
   - major refactoring before reducing file size
   - major refactoring for ASN1HEX

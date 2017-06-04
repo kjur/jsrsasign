@@ -1,4 +1,4 @@
-/*! asn1csr-1.0.4.js (c) 2015-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1csr-1.0.5.js (c) 2015-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1csr-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.0 asn1csr 1.0.4 (2017-May-21)
+ * @version jsrsasign 7.2.1 asn1csr 1.0.5 (2017-Jun-03)
  * @since jsrsasign 4.9.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -76,7 +76,15 @@ if (typeof KJUR.asn1.csr == "undefined" || !KJUR.asn1.csr) KJUR.asn1.csr = {};
  * //   attributes    [0] Attributes{{ CRIAttributes }} }
  */
 KJUR.asn1.csr.CertificationRequest = function(params) {
-    KJUR.asn1.csr.CertificationRequest.superclass.constructor.call(this);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERBitString = _KJUR_asn1.DERBitString,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_KJUR_asn1_csr = _KJUR_asn1.csr,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509;
+
+    _KJUR_asn1_csr.CertificationRequest.superclass.constructor.call(this);
+
     var asn1CSRInfo = null;
     var asn1SignatureAlg = null;
     var asn1Sig = null;
@@ -100,17 +108,17 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
 	if (this.prvKey == null) this.prvKey = prvKeyObj;
 
 	this.asn1SignatureAlg = 
-	    new KJUR.asn1.x509.AlgorithmIdentifier({'name': sigAlgName});
+	    new _KJUR_asn1_x509.AlgorithmIdentifier({'name': sigAlgName});
 
-        sig = new KJUR.crypto.Signature({'alg': sigAlgName});
+        sig = new _KJUR.crypto.Signature({'alg': sigAlgName});
         sig.initSign(this.prvKey);
         sig.updateHex(this.asn1CSRInfo.getEncodedHex());
         this.hexSig = sig.sign();
 
-        this.asn1Sig = new KJUR.asn1.DERBitString({'hex': '00' + this.hexSig});
-        var seq = new KJUR.asn1.DERSequence({'array': [this.asn1CSRInfo,
-                                                       this.asn1SignatureAlg,
-                                                       this.asn1Sig]});
+        this.asn1Sig = new _DERBitString({'hex': '00' + this.hexSig});
+        var seq = new _DERSequence({'array': [this.asn1CSRInfo,
+                                              this.asn1SignatureAlg,
+                                              this.asn1Sig]});
         this.hTLV = seq.getEncodedHex();
         this.isModified = false;
     };
@@ -134,9 +142,7 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
      * // -----END CERTIFICATE REQUEST-----
      */
     this.getPEMString = function() {
-	var pem = KJUR.asn1.ASN1Util.getPEMStringFromHex(this.getEncodedHex(),
-							 "CERTIFICATE REQUEST");
-	return pem;
+	return hextopem(this.getEncodedHex(), "CERTIFICATE REQUEST");
     };
 
     this.getEncodedHex = function() {
@@ -144,10 +150,8 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
         throw "not signed yet";
     };
 
-    if (typeof params != "undefined") {
-        if (typeof params['csrinfo'] != "undefined") {
-            this.asn1CSRInfo = params['csrinfo'];
-        }
+    if (params !== undefined && params.csrinfo !== undefined) {
+        this.asn1CSRInfo = params.csrinfo;
     }
 };
 YAHOO.lang.extend(KJUR.asn1.csr.CertificationRequest, KJUR.asn1.ASN1Object);
@@ -175,12 +179,26 @@ YAHOO.lang.extend(KJUR.asn1.csr.CertificationRequest, KJUR.asn1.ASN1Object);
  * csri.setSubjectPublicKeyByGetKey(pubKeyObj);
  */
 KJUR.asn1.csr.CertificationRequestInfo = function(params) {
-    KJUR.asn1.csr.CertificationRequestInfo.superclass.constructor.call(this);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERInteger = _KJUR_asn1.DERInteger,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_DERSet = _KJUR_asn1.DERSet,
+	_DERNull = _KJUR_asn1.DERNull,
+	_DERTaggedObject = _KJUR_asn1.DERTaggedObject,
+	_DERObjectIdentifier = _KJUR_asn1.DERObjectIdentifier,
+	_KJUR_asn1_csr = _KJUR_asn1.csr,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_X500Name = _KJUR_asn1_x509.X500Name,
+	_Extension = _KJUR_asn1_x509.Extension,
+	_KEYUTIL = KEYUTIL;
+
+    _KJUR_asn1_csr.CertificationRequestInfo.superclass.constructor.call(this);
 
     this._initialize = function() {
         this.asn1Array = new Array();
 
-	this.asn1Version = new KJUR.asn1.DERInteger({'int': 0});
+	this.asn1Version = new _DERInteger({'int': 0});
 	this.asn1Subject = null;
 	this.asn1SubjPKey = null;
 	this.extensionsArray = new Array();
@@ -198,7 +216,7 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
      * @see KJUR.asn1.x509.X500Name
      */
     this.setSubjectByParam = function(x500NameParam) {
-        this.asn1Subject = new KJUR.asn1.x509.X500Name(x500NameParam);
+        this.asn1Subject = new _X500Name(x500NameParam);
     };
 
     /**
@@ -216,8 +234,9 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
      * @see KEYUTIL.getKey
      */
     this.setSubjectPublicKeyByGetKey = function(keyParam) {
-        var keyObj = KEYUTIL.getKey(keyParam);
-        this.asn1SubjPKey = new KJUR.asn1.x509.SubjectPublicKeyInfo(keyObj);
+        var keyObj = _KEYUTIL.getKey(keyParam);
+        this.asn1SubjPKey = 
+	    new _KJUR_asn1_x509.SubjectPublicKeyInfo(keyObj);
     };
 
     /**
@@ -239,9 +258,9 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
      * o.appendExtensionByName('AuthorityInfoAccess', {array: [{accessMethod:{oid:...},accessLocation:{uri:...}}]});
      */
     this.appendExtensionByName = function(name, extParams) {
-	KJUR.asn1.x509.Extension.appendByNameToArray(name,
-						     extParams,
-						     this.extensionsArray);
+	_Extension.appendByNameToArray(name,
+				       extParams,
+				       this.extensionsArray);
     };
 
     this.getEncodedHex = function() {
@@ -253,28 +272,28 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
 
 	// extensionRequest
 	if (this.extensionsArray.length > 0) {
-            var extSeq = new KJUR.asn1.DERSequence({array: this.extensionsArray});
-	    var extSet = new KJUR.asn1.DERSet({array: [extSeq]});
-	    var extSeq2 = new KJUR.asn1.DERSequence({array: [
-		new KJUR.asn1.DERObjectIdentifier({oid: "1.2.840.113549.1.9.14"}),
+            var extSeq = new _DERSequence({array: this.extensionsArray});
+	    var extSet = new _DERSet({array: [extSeq]});
+	    var extSeq2 = new _DERSequence({array: [
+		new _DERObjectIdentifier({oid: "1.2.840.113549.1.9.14"}),
 		extSet
 	    ]});
-            var extTagObj = new KJUR.asn1.DERTaggedObject({
+            var extTagObj = new _DERTaggedObject({
 		explicit: true,
 		tag: 'a0',
 		obj: extSeq2
 	    });
             this.asn1Array.push(extTagObj);
 	} else {
-            var extTagObj = new KJUR.asn1.DERTaggedObject({
+            var extTagObj = new _DERTaggedObject({
 		explicit: false,
 		tag: 'a0',
-		obj: new KJUR.asn1.DERNull()
+		obj: new _DERNull()
 	    });
             this.asn1Array.push(extTagObj);
 	}
 
-        var o = new KJUR.asn1.DERSequence({"array": this.asn1Array});
+        var o = new _DERSequence({"array": this.asn1Array});
         this.hTLV = o.getEncodedHex();
         this.isModified = false;
         return this.hTLV;
@@ -355,14 +374,15 @@ KJUR.asn1.csr.CSRUtil = new function() {
  * });
  */
 KJUR.asn1.csr.CSRUtil.newCSRPEM = function(param) {
-    var ns1 = KJUR.asn1.csr;
+    var _KEYUTIL = KEYUTIL,
+	_KJUR_asn1_csr = KJUR.asn1.csr;
 
     if (param.subject === undefined) throw "parameter subject undefined";
     if (param.sbjpubkey === undefined) throw "parameter sbjpubkey undefined";
     if (param.sigalg === undefined) throw "parameter sigalg undefined";
     if (param.sbjprvkey === undefined) throw "parameter sbjpubkey undefined";
 
-    var csri = new ns1.CertificationRequestInfo();
+    var csri = new _KJUR_asn1_csr.CertificationRequestInfo();
     csri.setSubjectByParam(param.subject);
     csri.setSubjectPublicKeyByGetKey(param.sbjpubkey);
 
@@ -374,8 +394,8 @@ KJUR.asn1.csr.CSRUtil.newCSRPEM = function(param) {
 	}
     }
 
-    var csr = new ns1.CertificationRequest({'csrinfo': csri});
-    var prvKey = KEYUTIL.getKey(param.sbjprvkey);
+    var csr = new _KJUR_asn1_csr.CertificationRequest({'csrinfo': csri});
+    var prvKey = _KEYUTIL.getKey(param.sbjprvkey);
     csr.sign(param.sigalg, prvKey);
 
     var pem = csr.getPEMString();
@@ -416,7 +436,7 @@ KJUR.asn1.csr.CSRUtil.getInfo = function(sPEM) {
     if (sPEM.indexOf("-----BEGIN CERTIFICATE REQUEST") == -1)
 	throw "argument is not PEM file";
 
-    var hex = ASN1HEX.pemToHex(sPEM, "CERTIFICATE REQUEST");
+    var hex = pemtohex(sPEM, "CERTIFICATE REQUEST");
 
     result.subject.hex = _getTLVbyList(hex, 0, [0, 1]);
     result.subject.name = X509.hex2dn(result.subject.hex);

@@ -1,9 +1,9 @@
-/*! asn1-1.0.12.js (c) 2013-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1-1.0.13.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
  *
- * Copyright (c) 2013-2016 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.0.12 (2016-Nov-19)
+ * @version asn1 1.0.13 (2017-Jun-02)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -150,12 +150,7 @@ KJUR.asn1.ASN1Util = new function() {
      * -----END PRIVATE KEY-----
      */
     this.getPEMStringFromHex = function(dataHex, pemHeader) {
-        var dataB64 = hextob64(dataHex);
-        var pemBody = dataB64.replace(/(.{64})/g, "$1\r\n");
-        pemBody = pemBody.replace(/\r\n$/, '');
-        return "-----BEGIN " + pemHeader + "-----\r\n" + 
-            pemBody + 
-            "\r\n-----END " + pemHeader + "-----\r\n";
+	return hextopem(dataHex, pemHeader);
     };
 
     /**
@@ -209,7 +204,27 @@ KJUR.asn1.ASN1Util = new function() {
      *                   ]});
      */
     this.newObject = function(param) {
-        var ns1 = KJUR.asn1;
+	var _KJUR = KJUR,
+	    _KJUR_asn1 = _KJUR.asn1,
+	    _DERBoolean = _KJUR_asn1.DERBoolean,
+	    _DERInteger = _KJUR_asn1.DERInteger,
+	    _DERBitString = _KJUR_asn1.DERBitString,
+	    _DEROctetString = _KJUR_asn1.DEROctetString,
+	    _DERNull = _KJUR_asn1.DERNull,
+	    _DERObjectIdentifier = _KJUR_asn1.DERObjectIdentifier,
+	    _DEREnumerated = _KJUR_asn1.DEREnumerated,
+	    _DERUTF8String = _KJUR_asn1.DERUTF8String,
+	    _DERNumericString = _KJUR_asn1.DERNumericString,
+	    _DERPrintableString = _KJUR_asn1.DERPrintableString,
+	    _DERTeletexString = _KJUR_asn1.DERTeletexString,
+	    _DERIA5String = _KJUR_asn1.DERIA5String,
+	    _DERUTCTime = _KJUR_asn1.DERUTCTime,
+	    _DERGeneralizedTime = _KJUR_asn1.DERGeneralizedTime,
+	    _DERSequence = _KJUR_asn1.DERSequence,
+	    _DERSet = _KJUR_asn1.DERSet,
+	    _DERTaggedObject = _KJUR_asn1.DERTaggedObject,
+	    _newObject = _KJUR_asn1.ASN1Util.newObject;
+
         var keys = Object.keys(param);
         if (keys.length != 1)
             throw "key of param shall be only one.";
@@ -218,47 +233,49 @@ KJUR.asn1.ASN1Util = new function() {
         if (":bool:int:bitstr:octstr:null:oid:enum:utf8str:numstr:prnstr:telstr:ia5str:utctime:gentime:seq:set:tag:".indexOf(":" + key + ":") == -1)
             throw "undefined key: " + key;
 
-        if (key == "bool")    return new ns1.DERBoolean(param[key]);
-        if (key == "int")     return new ns1.DERInteger(param[key]);
-        if (key == "bitstr")  return new ns1.DERBitString(param[key]);
-        if (key == "octstr")  return new ns1.DEROctetString(param[key]);
-        if (key == "null")    return new ns1.DERNull(param[key]);
-        if (key == "oid")     return new ns1.DERObjectIdentifier(param[key]);
-        if (key == "enum")    return new ns1.DEREnumerated(param[key]);
-        if (key == "utf8str") return new ns1.DERUTF8String(param[key]);
-        if (key == "numstr")  return new ns1.DERNumericString(param[key]);
-        if (key == "prnstr")  return new ns1.DERPrintableString(param[key]);
-        if (key == "telstr")  return new ns1.DERTeletexString(param[key]);
-        if (key == "ia5str")  return new ns1.DERIA5String(param[key]);
-        if (key == "utctime") return new ns1.DERUTCTime(param[key]);
-        if (key == "gentime") return new ns1.DERGeneralizedTime(param[key]);
+        if (key == "bool")    return new _DERBoolean(param[key]);
+        if (key == "int")     return new _DERInteger(param[key]);
+        if (key == "bitstr")  return new _DERBitString(param[key]);
+        if (key == "octstr")  return new _DEROctetString(param[key]);
+        if (key == "null")    return new _DERNull(param[key]);
+        if (key == "oid")     return new _DERObjectIdentifier(param[key]);
+        if (key == "enum")    return new _DEREnumerated(param[key]);
+        if (key == "utf8str") return new _DERUTF8String(param[key]);
+        if (key == "numstr")  return new _DERNumericString(param[key]);
+        if (key == "prnstr")  return new _DERPrintableString(param[key]);
+        if (key == "telstr")  return new _DERTeletexString(param[key]);
+        if (key == "ia5str")  return new _DERIA5String(param[key]);
+        if (key == "utctime") return new _DERUTCTime(param[key]);
+        if (key == "gentime") return new _DERGeneralizedTime(param[key]);
 
         if (key == "seq") {
             var paramList = param[key];
             var a = [];
             for (var i = 0; i < paramList.length; i++) {
-                var asn1Obj = ns1.ASN1Util.newObject(paramList[i]);
+                var asn1Obj = _newObject(paramList[i]);
                 a.push(asn1Obj);
             }
-            return new ns1.DERSequence({'array': a});
+            return new _DERSequence({'array': a});
         }
 
         if (key == "set") {
             var paramList = param[key];
             var a = [];
             for (var i = 0; i < paramList.length; i++) {
-                var asn1Obj = ns1.ASN1Util.newObject(paramList[i]);
+                var asn1Obj = _newObject(paramList[i]);
                 a.push(asn1Obj);
             }
-            return new ns1.DERSet({'array': a});
+            return new _DERSet({'array': a});
         }
 
         if (key == "tag") {
             var tagParam = param[key];
             if (Object.prototype.toString.call(tagParam) === '[object Array]' &&
                 tagParam.length == 3) {
-                var obj = ns1.ASN1Util.newObject(tagParam[2]);
-                return new ns1.DERTaggedObject({tag: tagParam[0], explicit: tagParam[1], obj: obj});
+                var obj = _newObject(tagParam[2]);
+                return new _DERTaggedObject({tag: tagParam[0],
+					     explicit: tagParam[1],
+					     obj: obj});
             } else {
                 var newParam = {};
                 if (tagParam.explicit !== undefined)
@@ -267,8 +284,8 @@ KJUR.asn1.ASN1Util = new function() {
                     newParam.tag = tagParam.tag;
                 if (tagParam.obj === undefined)
                     throw "obj shall be specified for 'tag'.";
-                newParam.obj = ns1.ASN1Util.newObject(tagParam.obj);
-                return new ns1.DERTaggedObject(newParam);
+                newParam.obj = _newObject(tagParam.obj);
+                return new _DERTaggedObject(newParam);
             }
         }
     };

@@ -1,9 +1,9 @@
-/*! base64x-1.1.11 (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* base64x-1.1.12 (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * version: 1.1.11 (2017-May-20)
+ * version: 1.1.12 (2017-Jun-03)
  *
  * Copyright (c) 2012-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -21,7 +21,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.0 base64x 1.1.11 (2017-May-20)
+ * @version jsrsasign 7.2.1 base64x 1.1.12 (2017-Jun-03)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -84,6 +84,8 @@ function Base64x() {
 // ==== string / byte array ================================
 /**
  * convert a string to an array of character codes
+ * @name stoBA
+ * @function
  * @param {String} s
  * @return {Array of Numbers} 
  */
@@ -97,6 +99,8 @@ function stoBA(s) {
 
 /**
  * convert an array of character codes to a string
+ * @name BAtos
+ * @function
  * @param {Array of Numbers} a array of character codes
  * @return {String} s
  */
@@ -111,6 +115,8 @@ function BAtos(a) {
 // ==== byte array / hex ================================
 /**
  * convert an array of bytes(Number) to hexadecimal string.<br/>
+ * @name BAtohex
+ * @function
  * @param {Array of Numbers} a array of bytes
  * @return {String} hexadecimal string
  */
@@ -128,6 +134,8 @@ function BAtohex(a) {
 /**
  * convert a ASCII string to a hexadecimal string of ASCII codes.<br/>
  * NOTE: This can't be used for non ASCII characters.
+ * @name stohex
+ * @function
  * @param {s} s ASCII string
  * @return {String} hexadecimal string
  */
@@ -139,6 +147,8 @@ function stohex(s) {
 /**
  * convert a ASCII string to a Base64 encoded string.<br/>
  * NOTE: This can't be used for non ASCII characters.
+ * @name stob64
+ * @function
  * @param {s} s ASCII string
  * @return {String} Base64 encoded string
  */
@@ -150,6 +160,8 @@ function stob64(s) {
 /**
  * convert a ASCII string to a Base64URL encoded string.<br/>
  * NOTE: This can't be used for non ASCII characters.
+ * @name stob64u
+ * @function
  * @param {s} s ASCII string
  * @return {String} Base64URL encoded string
  */
@@ -160,6 +172,8 @@ function stob64u(s) {
 /**
  * convert a Base64URL encoded string to a ASCII string.<br/>
  * NOTE: This can't be used for Base64URL encoded non ASCII characters.
+ * @name b64utos
+ * @function
  * @param {s} s Base64URL encoded string
  * @return {String} ASCII string
  */
@@ -170,6 +184,8 @@ function b64utos(s) {
 // ==== base64 / base64url ================================
 /**
  * convert a Base64 encoded string to a Base64URL encoded string.<br/>
+ * @name b64tob64u
+ * @function
  * @param {String} s Base64 encoded string
  * @return {String} Base64URL encoded string
  * @example
@@ -184,6 +200,8 @@ function b64tob64u(s) {
 
 /**
  * convert a Base64URL encoded string to a Base64 encoded string.<br/>
+ * @name b64utob64
+ * @function
  * @param {String} s Base64URL encoded string
  * @return {String} Base64 encoded string
  * @example
@@ -200,6 +218,8 @@ function b64utob64(s) {
 // ==== hex / base64url ================================
 /**
  * convert a hexadecimal string to a Base64URL encoded string.<br/>
+ * @name hextob64u
+ * @function
  * @param {String} s hexadecimal string
  * @return {String} Base64URL encoded string
  * @description
@@ -214,6 +234,8 @@ function hextob64u(s) {
 
 /**
  * convert a Base64URL encoded string to a hexadecimal string.<br/>
+ * @name b64utohex
+ * @function
  * @param {String} s Base64URL encoded string
  * @return {String} hexadecimal string
  */
@@ -225,6 +247,8 @@ function b64utohex(s) {
 
 /**
  * convert a UTF-8 encoded string including CJK or Latin to a Base64URL encoded string.<br/>
+ * @name utf8tob64u
+ * @function
  * @param {String} s UTF-8 encoded string
  * @return {String} Base64URL encoded string
  * @since 1.1
@@ -232,6 +256,8 @@ function b64utohex(s) {
 
 /**
  * convert a Base64URL encoded string to a UTF-8 encoded string including CJK or Latin.<br/>
+ * @name b64utoutf8
+ * @function
  * @param {String} s Base64URL encoded string
  * @return {String} UTF-8 encoded string
  * @since 1.1
@@ -260,6 +286,8 @@ if (typeof Buffer === 'function') {
 // ==== utf8 / base64url ================================
 /**
  * convert a UTF-8 encoded string including CJK or Latin to a Base64 encoded string.<br/>
+ * @name utf8tob64
+ * @function
  * @param {String} s UTF-8 encoded string
  * @return {String} Base64 encoded string
  * @since 1.1.1
@@ -270,6 +298,8 @@ function utf8tob64(s) {
 
 /**
  * convert a Base64 encoded string to a UTF-8 encoded string including CJK or Latin.<br/>
+ * @name b64toutf8
+ * @function
  * @param {String} s Base64 encoded string
  * @return {String} UTF-8 encoded string
  * @since 1.1.1
@@ -281,6 +311,8 @@ function b64toutf8(s) {
 // ==== utf8 / hex ================================
 /**
  * convert a UTF-8 encoded string including CJK or Latin to a hexadecimal encoded string.<br/>
+ * @name utf8tohex
+ * @function
  * @param {String} s UTF-8 encoded string
  * @return {String} hexadecimal encoded string
  * @since 1.1.1
@@ -293,6 +325,8 @@ function utf8tohex(s) {
  * convert a hexadecimal encoded string to a UTF-8 encoded string including CJK or Latin.<br/>
  * Note that when input is improper hexadecimal string as UTF-8 string, this function returns
  * 'null'.
+ * @name hextoutf8
+ * @function
  * @param {String} s hexadecimal encoded string
  * @return {String} UTF-8 encoded string or null
  * @since 1.1.1
@@ -303,6 +337,8 @@ function hextoutf8(s) {
 
 /**
  * convert a hexadecimal encoded string to raw string including non printable characters.<br/>
+ * @name hextorstr
+ * @function
  * @param {String} s hexadecimal encoded string
  * @return {String} raw string
  * @since 1.1.2
@@ -319,6 +355,8 @@ function hextorstr(sHex) {
 
 /**
  * convert a raw string including non printable characters to hexadecimal encoded string.<br/>
+ * @name rstrtohex
+ * @function
  * @param {String} s raw string
  * @return {String} hexadecimal encoded string
  * @since 1.1.2
@@ -337,6 +375,8 @@ function rstrtohex(s) {
 
 /**
  * convert a hexadecimal string to Base64 encoded string<br/>
+ * @name hextob64
+ * @function
  * @param {String} s hexadecimal string
  * @return {String} resulted Base64 encoded string
  * @since base64x 1.1.3
@@ -352,6 +392,8 @@ function hextob64(s) {
 
 /**
  * convert a hexadecimal string to Base64 encoded string with new lines<br/>
+ * @name hextob64nl
+ * @function
  * @param {String} s hexadecimal string
  * @return {String} resulted Base64 encoded string with new lines
  * @since base64x 1.1.3
@@ -374,6 +416,8 @@ function hextob64nl(s) {
 
 /**
  * convert a Base64 encoded string with new lines to a hexadecimal string<br/>
+ * @name b64nltohex
+ * @function
  * @param {String} s Base64 encoded string with new lines
  * @return {String} hexadecimal string
  * @since base64x 1.1.3
@@ -396,10 +440,74 @@ function b64nltohex(s) {
     return hex;
 } 
 
+// ==== hex / pem =========================================
+
+/**
+ * get PEM string from hexadecimal data and header string
+ * @name hextopem
+ * @function
+ * @param {String} dataHex hexadecimal string of PEM body
+ * @param {String} pemHeader PEM header string (ex. 'RSA PRIVATE KEY')
+ * @return {String} PEM formatted string of input data
+ * @since jsrasign 7.2.1 base64x 1.1.12
+ * @description
+ * This function converts a hexadecimal string to a PEM string with
+ * a specified header. Its line break will be CRLF("\r\n").
+ * @example
+ * hextopem('616161', 'RSA PRIVATE KEY') &rarr;
+ * -----BEGIN PRIVATE KEY-----
+ * YWFh
+ * -----END PRIVATE KEY-----
+ */
+function hextopem(dataHex, pemHeader) {
+    var pemBody = hextob64nl(dataHex);
+    return "-----BEGIN " + pemHeader + "-----\r\n" + 
+        pemBody + 
+        "\r\n-----END " + pemHeader + "-----\r\n";
+}
+
+/**
+ * get hexacedimal string from PEM format data<br/>
+ * @name pemtohex
+ * @function
+ * @param {String} s PEM formatted string
+ * @param {String} sHead PEM header string without BEGIN/END(OPTION)
+ * @return {String} hexadecimal string data of PEM contents
+ * @since jsrsasign 7.2.1 base64x 1.1.12
+ * @description
+ * This static method gets a hexacedimal string of contents 
+ * from PEM format data. You can explicitly specify PEM header 
+ * by sHead argument. 
+ * Any space characters such as white space or new line
+ * will be omitted.<br/>
+ * NOTE: Now {@link KEYUTIL.getHexFromPEM} and {@link X509.pemToHex}
+ * have been deprecated since jsrsasign 7.2.1. 
+ * Please use this method instead.
+ * @example
+ * pemtohex("-----BEGIN PUBLIC KEY...") &rarr; "3082..."
+ * pemtohex("-----BEGIN CERTIFICATE...", "CERTIFICATE") &rarr; "3082..."
+ * pemtohex(" \r\n-----BEGIN DSA PRIVATE KEY...") &rarr; "3082..."
+ */
+function pemtohex(s, sHead) {
+    if (s.indexOf("-----BEGIN ") == -1)
+        throw "can't find PEM header: " + sHead;
+
+    if (sHead !== undefined) {
+        s = s.replace("-----BEGIN " + sHead + "-----", "");
+        s = s.replace("-----END " + sHead + "-----", "");
+    } else {
+        s = s.replace(/-----BEGIN [^-]+-----/, '');
+        s = s.replace(/-----END [^-]+-----/, '');
+    }
+    return b64nltohex(s);
+}
+
 // ==== hex / ArrayBuffer =================================
 
 /**
  * convert a ArrayBuffer to a hexadecimal string<br/>
+ * @name hextoArrayBuffer
+ * @function
  * @param {String} hex hexadecimal string
  * @return {ArrayBuffer} ArrayBuffer
  * @since jsrsasign 6.1.4 base64x 1.1.8
@@ -431,6 +539,8 @@ function hextoArrayBuffer(hex) {
 
 /**
  * convert a ArrayBuffer to a hexadecimal string<br/>
+ * @name ArrayBuffertohex
+ * @function
  * @param {ArrayBuffer} buffer ArrayBuffer
  * @return {String} hexadecimal string
  * @since jsrsasign 6.1.4 base64x 1.1.8
@@ -610,6 +720,8 @@ function datetozulu(d, flagUTCTime, flagMilli) {
 // ==== URIComponent / hex ================================
 /**
  * convert a URLComponent string such like "%67%68" to a hexadecimal string.<br/>
+ * @name uricmptohex
+ * @function
  * @param {String} s URIComponent string such like "%67%68"
  * @return {String} hexadecimal string
  * @since 1.1
@@ -620,6 +732,8 @@ function uricmptohex(s) {
 
 /**
  * convert a hexadecimal string to a URLComponent string such like "%67%68".<br/>
+ * @name hextouricmp
+ * @function
  * @param {String} s hexadecimal string
  * @return {String} URIComponent string such like "%67%68"
  * @since 1.1
@@ -635,6 +749,8 @@ function hextouricmp(s) {
  * converted to "%xx" format by builtin 'encodeURIComponent()' function.
  * However this 'encodeURIComponentAll()' function will convert 
  * all of characters into "%xx" format.
+ * @name encodeURIComponentAll
+ * @function
  * @param {String} s hexadecimal string
  * @return {String} URIComponent string such like "%67%68"
  * @since 1.1
@@ -657,6 +773,8 @@ function encodeURIComponentAll(u8) {
 /**
  * convert all DOS new line("\r\n") to UNIX new line("\n") in 
  * a String "s".
+ * @name newline_toUnix
+ * @function
  * @param {String} s string 
  * @return {String} converted string
  */
@@ -668,6 +786,8 @@ function newline_toUnix(s) {
 /**
  * convert all UNIX new line("\r\n") to DOS new line("\n") in 
  * a String "s".
+ * @name newline_toDos
+ * @function
  * @param {String} s string 
  * @return {String} converted string
  */
@@ -800,6 +920,8 @@ KJUR.lang.String.isIntegerArray = function(s) {
 
 /**
  * canonicalize hexadecimal string of positive integer<br/>
+ * @name hextoposhex
+ * @function
  * @param {String} s hexadecimal string 
  * @return {String} canonicalized hexadecimal string of positive integer
  * @since base64x 1.1.10 jsrsasign 7.1.4
@@ -826,6 +948,8 @@ function hextoposhex(s) {
 
 /**
  * convert string of integer array to hexadecimal string.<br/>
+ * @name intarystrtohex
+ * @function
  * @param {String} s string of integer array
  * @return {String} hexadecimal string
  * @since base64x 1.1.6 jsrsasign 5.0.2
@@ -859,6 +983,8 @@ function intarystrtohex(s) {
 
 /**
  * find index of string where two string differs
+ * @name strdiffidx
+ * @function
  * @param {String} s1 string to compare
  * @param {String} s2 string to compare
  * @return {Number} string index of where character differs. Return -1 if same.

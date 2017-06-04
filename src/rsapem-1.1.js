@@ -1,4 +1,4 @@
-/*! rsapem-1.2.1.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* rsapem-1.2.2.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * rsapem.js - Cryptographic Algorithm Provider class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name rsapem-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.0 rsapem 1.2.1 (2017-May-12)
+ * @version jsrsasign 7.2.1 rsapem 1.2.2 (2017-Jun-03)
  * @since jsrsasign 1.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -28,6 +28,7 @@
  * @function
  * @param {String} sPEMPrivateKey PEM PKCS#1/5 s private key string
  * @return {String} Base64 string of private key
+ * @deprecated jsrsasign 7.2.1 rsapem 1.1.2
  * @description
  * removing PEM header, PEM footer and space characters including
  * new lines from PEM formatted RSA private key string.
@@ -35,11 +36,7 @@
  * RSAKey.pemToBase64("----BEGIN PRIVATE KEY-...") &rarr; "MIICW..."
  */
 RSAKey.pemToBase64 = function(sPEMPrivateKey) {
-    var s = sPEMPrivateKey;
-    s = s.replace("-----BEGIN RSA PRIVATE KEY-----", "");
-    s = s.replace("-----END RSA PRIVATE KEY-----", "");
-    s = s.replace(/[ \n]+/g, "");
-    return s;
+    return hextob64(pemtohex(sPEMPrivateKey));
 };
 
 /**

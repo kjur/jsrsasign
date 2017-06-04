@@ -1,4 +1,4 @@
-/*! asn1hex-1.1.11.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1hex-1.1.12.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1hex 1.1.11 (2017-May-11)
+ * @version asn1hex 1.1.12 (2017-Jun-03)
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -658,7 +658,7 @@ ASN1HEX.hextooidstr = function(hex) {
  *   INTEGER 01
  *   INTEGER 02
  * // 5) ASN.1 DUMP FOR X.509 CERTIFICATE
- * ASN1HEX.dump(ASN1HEX.pemToHex(certPEM))
+ * ASN1HEX.dump(pemtohex(certPEM))
  * &darr;
  * SEQUENCE
  *   SEQUENCE
@@ -876,7 +876,7 @@ ASN1HEX.oidname = function(oidDotOrHex) {
 };
 
 /**
- * get hexacedimal string from PEM format data<br/>
+ * (DEPRECATED) get hexacedimal string from PEM format data<br/>
  * @name pemToHex
  * @memberOf ASN1HEX
  * @function
@@ -884,6 +884,7 @@ ASN1HEX.oidname = function(oidDotOrHex) {
  * @param {String} sHead PEM header string without BEGIN/END(OPTION)
  * @return {String} hexadecimal string data of PEM contents
  * @since jsrsasign 7.0.1 asn1hex 1.1.9
+ * @deprecated since jsrsasign 7.2.1 asn1hex 1.1.12. Please move to {@link pemtohex}
  * @description
  * This static method gets a hexacedimal string of contents 
  * from PEM format data. You can explicitly specify PEM header 
@@ -899,17 +900,5 @@ ASN1HEX.oidname = function(oidDotOrHex) {
  * ASN1HEX.pemToHex(" \r\n-----BEGIN DSA PRIVATE KEY...") &rarr; "3082..."
  */
 ASN1HEX.pemToHex = function(s, sHead) {
-    if (s.indexOf("-----BEGIN ") == -1)
-        throw "can't find PEM header: " + sHead;
-
-    if (sHead !== undefined) {
-        s = s.replace("-----BEGIN " + sHead + "-----", "");
-        s = s.replace("-----END " + sHead + "-----", "");
-    } else {
-        s = s.replace(/-----BEGIN [^-]+-----/, '');
-        s = s.replace(/-----END [^-]+-----/, '');
-    }
-    var sB64 = s.replace(/\s+/g, '');
-    var dataHex = b64tohex(sB64);
-    return dataHex;
+    return pemtohex(s, sHead);
 };

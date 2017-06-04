@@ -1,4 +1,4 @@
-/*! pkcs5pkey-1.1.1.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* pkcs5pkey-1.1.2.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * pkcs5pkey.js - reading passcode protected PKCS#5 PEM formatted RSA private key
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name pkcs5pkey-1.0.js (DEPRECATED)
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.0 pkcs5pkey 1.1.1 (2017-May-12)
+ * @version jsrsasign 7.2.1 pkcs5pkey 1.1.2 (2017-Jun-03)
  * @since jsrsasign 2.0.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -263,7 +263,7 @@ var PKCS5PKEY = function() {
 	 * @deprecated from pkcs5pkey 1.1.0 jsrsasign 7.1.0. please move to {@link ASN1HEX.pemToHex}
          */
         getHexFromPEM: function(sPEM, sHead) {
-	    return ASN1HEX.pemToHex(sPEM, sHead);
+	    return pemtohex(sPEM, sHead);
         },
 
         /**
@@ -517,7 +517,7 @@ var PKCS5PKEY = function() {
         getRSAKeyFromPlainPKCS8PEM: function(pkcs8PEM) {
             if (pkcs8PEM.match(/ENCRYPTED/))
                 throw "pem shall be not ENCRYPTED";
-            var prvKeyHex = ASN1HEX.pemToHex(pkcs8PEM, "PRIVATE KEY");
+            var prvKeyHex = pemtohex(pkcs8PEM, "PRIVATE KEY");
             var rsaKey = this.getRSAKeyFromPlainPKCS8Hex(prvKeyHex);
             return rsaKey;
         },
@@ -685,7 +685,7 @@ var PKCS5PKEY = function() {
          */
         getPlainPKCS8HexFromEncryptedPKCS8PEM: function(pkcs8PEM, passcode) {
             // 1. derHex - PKCS#8 private key encrypted by PBKDF2
-            var derHex = ASN1HEX.pemToHex(pkcs8PEM, "ENCRYPTED PRIVATE KEY");
+            var derHex = pemtohex(pkcs8PEM, "ENCRYPTED PRIVATE KEY");
             // 2. info - PKCS#5 PBES info
             var info = this.parseHexOfEncryptedPKCS8(derHex);
             // 3. hKey - PBKDF2 key
@@ -811,7 +811,7 @@ var PKCS5PKEY = function() {
          * @since pkcs5pkey 1.0.5
          */
         getKeyFromPlainPrivatePKCS8PEM: function(prvKeyPEM) {
-            var prvKeyHex = ASN1HEX.pemToHex(prvKeyPEM, "PRIVATE KEY");
+            var prvKeyHex = pemtohex(prvKeyPEM, "PRIVATE KEY");
             var key = this.getKeyFromPlainPrivatePKCS8Hex(prvKeyHex);
             return key;
         },
@@ -854,7 +854,7 @@ var PKCS5PKEY = function() {
          * @since pkcs5pkey 1.0.4
          */
         getRSAKeyFromPublicPKCS8PEM: function(pkcs8PubPEM) {
-            var pubKeyHex = ASN1HEX.pemToHex(pkcs8PubPEM, "PUBLIC KEY");
+            var pubKeyHex = pemtohex(pkcs8PubPEM, "PUBLIC KEY");
             var rsaKey = this.getRSAKeyFromPublicPKCS8Hex(pubKeyHex);
             return rsaKey;
         },
@@ -869,7 +869,7 @@ var PKCS5PKEY = function() {
          * @since pkcs5pkey 1.0.5
          */
         getKeyFromPublicPKCS8PEM: function(pkcs8PubPEM) {
-            var pubKeyHex = ASN1HEX.pemToHex(pkcs8PubPEM, "PUBLIC KEY");
+            var pubKeyHex = pemtohex(pkcs8PubPEM, "PUBLIC KEY");
             var key = this.getKeyFromPublicPKCS8Hex(pubKeyHex);
             return key;
         },
