@@ -127,7 +127,7 @@ KJUR.asn1.tsp.Accuracy = function(params) {
         if (typeof params.micros == "number") this.micros = params.micros;
     }
 };
-YAHOO.lang.extend(KJUR.asn1.tsp.Accuracy, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.tsp.Accuracy, KJUR.asn1.ASN1Object);
 
 /**
  * class for TSP MessageImprint ASN.1 object
@@ -175,7 +175,7 @@ KJUR.asn1.tsp.MessageImprint = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.tsp.MessageImprint, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.tsp.MessageImprint, KJUR.asn1.ASN1Object);
 
 /**
  * class for TSP TimeStampReq ASN.1 object
@@ -252,7 +252,7 @@ KJUR.asn1.tsp.TimeStampReq = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.tsp.TimeStampReq, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.tsp.TimeStampReq, KJUR.asn1.ASN1Object);
 
 /**
  * class for TSP TSTInfo ASN.1 object
@@ -369,7 +369,7 @@ KJUR.asn1.tsp.TSTInfo = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.tsp.TSTInfo, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.tsp.TSTInfo, KJUR.asn1.ASN1Object);
 
 /**
  * class for TSP TimeStampResp ASN.1 object
@@ -418,7 +418,7 @@ KJUR.asn1.tsp.TimeStampResp = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.tsp.TimeStampResp, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.tsp.TimeStampResp, KJUR.asn1.ASN1Object);
 
 // --- BEGIN OF RFC 2510 CMP -----------------------------------------------
 
@@ -477,7 +477,7 @@ KJUR.asn1.tsp.PKIStatusInfo = function(params) {
         }
     };
 };
-YAHOO.lang.extend(KJUR.asn1.tsp.PKIStatusInfo, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.tsp.PKIStatusInfo, KJUR.asn1.ASN1Object);
 
 /**
  * class for TSP PKIStatus ASN.1 object
@@ -525,7 +525,7 @@ KJUR.asn1.tsp.PKIStatus = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.tsp.PKIStatus, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.tsp.PKIStatus, KJUR.asn1.ASN1Object);
 
 KJUR.asn1.tsp.PKIStatus.valueList = {
     granted:                0,
@@ -576,7 +576,7 @@ KJUR.asn1.tsp.PKIFreeText = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.tsp.PKIFreeText, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.tsp.PKIFreeText, KJUR.asn1.ASN1Object);
 
 /**
  * class for TSP PKIFailureInfo ASN.1 object
@@ -630,7 +630,7 @@ KJUR.asn1.tsp.PKIFailureInfo = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.tsp.PKIFailureInfo, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.tsp.PKIFailureInfo, KJUR.asn1.ASN1Object);
 
 KJUR.asn1.tsp.PKIFailureInfo.valueList = {
     badAlg:                 0,
@@ -699,7 +699,7 @@ KJUR.asn1.tsp.SimpleTSAAdapter = function(initParams) {
         this.params = initParams;
     }
 };
-YAHOO.lang.extend(KJUR.asn1.tsp.SimpleTSAAdapter,
+UTIL.extend(KJUR.asn1.tsp.SimpleTSAAdapter,
                   KJUR.asn1.tsp.AbstractTSAAdapter);
 
 /**
@@ -744,7 +744,7 @@ KJUR.asn1.tsp.FixedTSAAdapter = function(initParams) {
         this.params = initParams;
     }
 };
-YAHOO.lang.extend(KJUR.asn1.tsp.FixedTSAAdapter,
+UTIL.extend(KJUR.asn1.tsp.FixedTSAAdapter,
                   KJUR.asn1.tsp.AbstractTSAAdapter);
 
 // --- TSP utilities -------------------------------------------------

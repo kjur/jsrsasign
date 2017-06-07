@@ -565,7 +565,7 @@ KJUR.asn1.DERAbstractString = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.DERAbstractString, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.DERAbstractString, KJUR.asn1.ASN1Object);
 // == END   DERAbstractString ================================================
 
 // == BEGIN DERAbstractTime ==================================================
@@ -674,7 +674,7 @@ KJUR.asn1.DERAbstractTime = function(params) {
         return this.hV;
     };
 };
-YAHOO.lang.extend(KJUR.asn1.DERAbstractTime, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.DERAbstractTime, KJUR.asn1.ASN1Object);
 // == END   DERAbstractTime ==================================================
 
 // == BEGIN DERAbstractStructured ============================================
@@ -724,7 +724,7 @@ KJUR.asn1.DERAbstractStructured = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.DERAbstractStructured, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.DERAbstractStructured, KJUR.asn1.ASN1Object);
 
 
 // ********************************************************************
@@ -745,7 +745,7 @@ KJUR.asn1.DERBoolean = function() {
     this.hT = "01";
     this.hTLV = "0101ff";
 };
-YAHOO.lang.extend(KJUR.asn1.DERBoolean, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.DERBoolean, KJUR.asn1.ASN1Object);
 
 // ********************************************************************
 /**
@@ -828,7 +828,7 @@ KJUR.asn1.DERInteger = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.DERInteger, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.DERInteger, KJUR.asn1.ASN1Object);
 
 // ********************************************************************
 /**
@@ -1002,7 +1002,7 @@ KJUR.asn1.DERBitString = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.DERBitString, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.DERBitString, KJUR.asn1.ASN1Object);
 
 // ********************************************************************
 /**
@@ -1049,7 +1049,7 @@ KJUR.asn1.DEROctetString = function(params) {
     KJUR.asn1.DEROctetString.superclass.constructor.call(this, params);
     this.hT = "04";
 };
-YAHOO.lang.extend(KJUR.asn1.DEROctetString, KJUR.asn1.DERAbstractString);
+UTIL.extend(KJUR.asn1.DEROctetString, KJUR.asn1.DERAbstractString);
 
 // ********************************************************************
 /**
@@ -1065,7 +1065,7 @@ KJUR.asn1.DERNull = function() {
     this.hT = "05";
     this.hTLV = "0500";
 };
-YAHOO.lang.extend(KJUR.asn1.DERNull, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.DERNull, KJUR.asn1.ASN1Object);
 
 // ********************************************************************
 /**
@@ -1195,7 +1195,7 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.DERObjectIdentifier, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.DERObjectIdentifier, KJUR.asn1.ASN1Object);
 
 // ********************************************************************
 /**
@@ -1275,7 +1275,7 @@ KJUR.asn1.DEREnumerated = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.DEREnumerated, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.DEREnumerated, KJUR.asn1.ASN1Object);
 
 // ********************************************************************
 /**
@@ -1291,7 +1291,7 @@ KJUR.asn1.DERUTF8String = function(params) {
     KJUR.asn1.DERUTF8String.superclass.constructor.call(this, params);
     this.hT = "0c";
 };
-YAHOO.lang.extend(KJUR.asn1.DERUTF8String, KJUR.asn1.DERAbstractString);
+UTIL.extend(KJUR.asn1.DERUTF8String, KJUR.asn1.DERAbstractString);
 
 // ********************************************************************
 /**
@@ -1307,7 +1307,7 @@ KJUR.asn1.DERNumericString = function(params) {
     KJUR.asn1.DERNumericString.superclass.constructor.call(this, params);
     this.hT = "12";
 };
-YAHOO.lang.extend(KJUR.asn1.DERNumericString, KJUR.asn1.DERAbstractString);
+UTIL.extend(KJUR.asn1.DERNumericString, KJUR.asn1.DERAbstractString);
 
 // ********************************************************************
 /**
@@ -1323,7 +1323,7 @@ KJUR.asn1.DERPrintableString = function(params) {
     KJUR.asn1.DERPrintableString.superclass.constructor.call(this, params);
     this.hT = "13";
 };
-YAHOO.lang.extend(KJUR.asn1.DERPrintableString, KJUR.asn1.DERAbstractString);
+UTIL.extend(KJUR.asn1.DERPrintableString, KJUR.asn1.DERAbstractString);
 
 // ********************************************************************
 /**
@@ -1339,7 +1339,7 @@ KJUR.asn1.DERTeletexString = function(params) {
     KJUR.asn1.DERTeletexString.superclass.constructor.call(this, params);
     this.hT = "14";
 };
-YAHOO.lang.extend(KJUR.asn1.DERTeletexString, KJUR.asn1.DERAbstractString);
+UTIL.extend(KJUR.asn1.DERTeletexString, KJUR.asn1.DERAbstractString);
 
 // ********************************************************************
 /**
@@ -1355,7 +1355,7 @@ KJUR.asn1.DERIA5String = function(params) {
     KJUR.asn1.DERIA5String.superclass.constructor.call(this, params);
     this.hT = "16";
 };
-YAHOO.lang.extend(KJUR.asn1.DERIA5String, KJUR.asn1.DERAbstractString);
+UTIL.extend(KJUR.asn1.DERIA5String, KJUR.asn1.DERAbstractString);
 
 // ********************************************************************
 /**
@@ -1426,7 +1426,7 @@ KJUR.asn1.DERUTCTime = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.DERUTCTime, KJUR.asn1.DERAbstractTime);
+UTIL.extend(KJUR.asn1.DERUTCTime, KJUR.asn1.DERAbstractTime);
 
 // ********************************************************************
 /**
@@ -1499,7 +1499,7 @@ KJUR.asn1.DERGeneralizedTime = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.DERGeneralizedTime, KJUR.asn1.DERAbstractTime);
+UTIL.extend(KJUR.asn1.DERGeneralizedTime, KJUR.asn1.DERAbstractTime);
 
 // ********************************************************************
 /**
@@ -1529,7 +1529,7 @@ KJUR.asn1.DERSequence = function(params) {
         return this.hV;
     };
 };
-YAHOO.lang.extend(KJUR.asn1.DERSequence, KJUR.asn1.DERAbstractStructured);
+UTIL.extend(KJUR.asn1.DERSequence, KJUR.asn1.DERAbstractStructured);
 
 // ********************************************************************
 /**
@@ -1569,7 +1569,7 @@ KJUR.asn1.DERSet = function(params) {
             this.sortFlag = false;
     }
 };
-YAHOO.lang.extend(KJUR.asn1.DERSet, KJUR.asn1.DERAbstractStructured);
+UTIL.extend(KJUR.asn1.DERSet, KJUR.asn1.DERAbstractStructured);
 
 // ********************************************************************
 /**
@@ -1645,4 +1645,4 @@ KJUR.asn1.DERTaggedObject = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.DERTaggedObject, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.DERTaggedObject, KJUR.asn1.ASN1Object);

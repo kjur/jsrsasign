@@ -267,7 +267,7 @@ KJUR.asn1.cades.SignaturePolicyIdentifier = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.cades.SignaturePolicyIdentifier,
+UTIL.extend(KJUR.asn1.cades.SignaturePolicyIdentifier,
                   KJUR.asn1.cms.Attribute);
 
 /**
@@ -314,7 +314,7 @@ KJUR.asn1.cades.OtherHashAlgAndValue = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.cades.OtherHashAlgAndValue, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.cades.OtherHashAlgAndValue, KJUR.asn1.ASN1Object);
 
 /**
  * class for RFC 5126 CAdES SignatureTimeStamp attribute
@@ -365,7 +365,7 @@ KJUR.asn1.cades.SignatureTimeStamp = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.cades.SignatureTimeStamp,
+UTIL.extend(KJUR.asn1.cades.SignatureTimeStamp,
                   KJUR.asn1.cms.Attribute);
 
 /**
@@ -416,7 +416,7 @@ KJUR.asn1.cades.CompleteCertificateRefs = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.cades.CompleteCertificateRefs,
+UTIL.extend(KJUR.asn1.cades.CompleteCertificateRefs,
                   KJUR.asn1.cms.Attribute);
 
 /**
@@ -492,7 +492,7 @@ KJUR.asn1.cades.OtherCertID = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.cades.OtherCertID, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.cades.OtherCertID, KJUR.asn1.ASN1Object);
 
 /**
  * class for OtherHash ASN.1 object
@@ -575,7 +575,7 @@ KJUR.asn1.cades.OtherHash = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.cades.OtherHash, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.cades.OtherHash, KJUR.asn1.ASN1Object);
 
 
 // == BEGIN UTILITIES =====================================================

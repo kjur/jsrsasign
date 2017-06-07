@@ -194,7 +194,7 @@ KJUR.asn1.ocsp.CertID = function(params) {
 	}
     }
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.CertID, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.ocsp.CertID, KJUR.asn1.ASN1Object);
 
 /**
  * ASN.1 Request class for OCSP<br/>
@@ -253,7 +253,7 @@ KJUR.asn1.ocsp.Request = function(params) {
 	this.dReqCert = o;
     }
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.Request, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.ocsp.Request, KJUR.asn1.ASN1Object);
 
 /**
  * ASN.1 TBSRequest class for OCSP<br/>
@@ -347,7 +347,7 @@ KJUR.asn1.ocsp.TBSRequest = function(params) {
 	    this.setRequestListByParam(params.reqList);
     }
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.TBSRequest, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.ocsp.TBSRequest, KJUR.asn1.ASN1Object);
 
 
 /**
@@ -412,7 +412,7 @@ KJUR.asn1.ocsp.OCSPRequest = function(params) {
 	}
     }
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.OCSPRequest, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.ocsp.OCSPRequest, KJUR.asn1.ASN1Object);
 
 /**
  * Utility class for OCSP<br/>
