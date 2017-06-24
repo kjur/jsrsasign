@@ -240,7 +240,7 @@ KJUR.asn1.x509.Certificate = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.Certificate, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.Certificate, KJUR.asn1.ASN1Object);
 
 /**
  * ASN.1 TBSCertificate structure class
@@ -487,7 +487,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
 
     this._initialize();
 };
-YAHOO.lang.extend(KJUR.asn1.x509.TBSCertificate, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.TBSCertificate, KJUR.asn1.ASN1Object);
 
 // === END   TBSCertificate ===================================================
 
@@ -538,7 +538,7 @@ KJUR.asn1.x509.Extension = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.Extension, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.Extension, KJUR.asn1.ASN1Object);
 
 /**
  * append X.509v3 extension to any specified array<br/>
@@ -614,7 +614,7 @@ KJUR.asn1.x509.KeyUsage = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.KeyUsage, KJUR.asn1.x509.Extension);
+UTIL.extend(KJUR.asn1.x509.KeyUsage, KJUR.asn1.x509.Extension);
 
 /**
  * BasicConstraints ASN.1 structure class
@@ -652,7 +652,7 @@ KJUR.asn1.x509.BasicConstraints = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.BasicConstraints, KJUR.asn1.x509.Extension);
+UTIL.extend(KJUR.asn1.x509.BasicConstraints, KJUR.asn1.x509.Extension);
 
 /**
  * CRLDistributionPoints ASN.1 structure class
@@ -718,7 +718,7 @@ KJUR.asn1.x509.CRLDistributionPoints = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.CRLDistributionPoints, KJUR.asn1.x509.Extension);
+UTIL.extend(KJUR.asn1.x509.CRLDistributionPoints, KJUR.asn1.x509.Extension);
 
 /**
  * KeyUsage ASN.1 structure class
@@ -763,7 +763,7 @@ KJUR.asn1.x509.ExtKeyUsage = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.ExtKeyUsage, KJUR.asn1.x509.Extension);
+UTIL.extend(KJUR.asn1.x509.ExtKeyUsage, KJUR.asn1.x509.Extension);
 
 /**
  * AuthorityKeyIdentifier ASN.1 structure class
@@ -877,7 +877,7 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.AuthorityKeyIdentifier, KJUR.asn1.x509.Extension);
+UTIL.extend(KJUR.asn1.x509.AuthorityKeyIdentifier, KJUR.asn1.x509.Extension);
 
 /**
  * AuthorityInfoAccess ASN.1 structure class
@@ -936,7 +936,7 @@ KJUR.asn1.x509.AuthorityInfoAccess = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.AuthorityInfoAccess, KJUR.asn1.x509.Extension);
+UTIL.extend(KJUR.asn1.x509.AuthorityInfoAccess, KJUR.asn1.x509.Extension);
 
 /**
  * SubjectAltName ASN.1 structure class<br/>
@@ -988,7 +988,7 @@ KJUR.asn1.x509.SubjectAltName = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.SubjectAltName, KJUR.asn1.x509.Extension);
+UTIL.extend(KJUR.asn1.x509.SubjectAltName, KJUR.asn1.x509.Extension);
 
 /**
  * IssuerAltName ASN.1 structure class<br/>
@@ -1040,7 +1040,7 @@ KJUR.asn1.x509.IssuerAltName = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.IssuerAltName, KJUR.asn1.x509.Extension);
+UTIL.extend(KJUR.asn1.x509.IssuerAltName, KJUR.asn1.x509.Extension);
 
 // === END   X.509v3 Extensions Related =======================================
 
@@ -1166,7 +1166,7 @@ KJUR.asn1.x509.CRL = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.CRL, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.CRL, KJUR.asn1.ASN1Object);
 
 /**
  * ASN.1 TBSCertList structure class for CRL
@@ -1324,7 +1324,7 @@ KJUR.asn1.x509.TBSCertList = function(params) {
 
     this._initialize();
 };
-YAHOO.lang.extend(KJUR.asn1.x509.TBSCertList, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.TBSCertList, KJUR.asn1.ASN1Object);
 
 /**
  * ASN.1 CRLEntry structure class for CRL
@@ -1393,7 +1393,7 @@ KJUR.asn1.x509.CRLEntry = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.CRLEntry, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.CRLEntry, KJUR.asn1.ASN1Object);
 
 // === END   CRL Related ===================================================
 
@@ -1534,7 +1534,7 @@ KJUR.asn1.x509.X500Name = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.X500Name, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.X500Name, KJUR.asn1.ASN1Object);
 
 /**
  * convert OpenSSL oneline distinguished name format string to LDAP(RFC 2253) format<br/>
@@ -1694,7 +1694,7 @@ KJUR.asn1.x509.RDN = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.RDN, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.RDN, KJUR.asn1.ASN1Object);
 
 /**
  * parse multi-valued RDN string and split into array of 'AttributeTypeAndValue'<br/>
@@ -1820,7 +1820,7 @@ KJUR.asn1.x509.AttributeTypeAndValue = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.AttributeTypeAndValue, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.AttributeTypeAndValue, KJUR.asn1.ASN1Object);
 
 // === END   X500Name Related =================================================
 
@@ -1982,7 +1982,7 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.SubjectPublicKeyInfo, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.SubjectPublicKeyInfo, KJUR.asn1.ASN1Object);
 
 /**
  * Time ASN.1 structure class
@@ -2043,7 +2043,7 @@ KJUR.asn1.x509.Time = function(params) {
         this.timeParams = params;
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.Time, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.Time, KJUR.asn1.ASN1Object);
 
 /**
  * AlgorithmIdentifier ASN.1 structure class
@@ -2121,7 +2121,7 @@ KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
 	}
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.AlgorithmIdentifier, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.AlgorithmIdentifier, KJUR.asn1.ASN1Object);
 
 /**
  * GeneralName ASN.1 structure class<br/>
@@ -2270,7 +2270,7 @@ KJUR.asn1.x509.GeneralName = function(params) {
     }
 
 };
-YAHOO.lang.extend(KJUR.asn1.x509.GeneralName, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.GeneralName, KJUR.asn1.ASN1Object);
 
 /**
  * GeneralNames ASN.1 structure class<br/>
@@ -2320,7 +2320,7 @@ KJUR.asn1.x509.GeneralNames = function(paramsArray) {
         this.setByParamArray(paramsArray);
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.GeneralNames, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.GeneralNames, KJUR.asn1.ASN1Object);
 
 /**
  * DistributionPointName ASN.1 structure class<br/>
@@ -2380,7 +2380,7 @@ KJUR.asn1.x509.DistributionPointName = function(gnOrRdn) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.DistributionPointName, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.DistributionPointName, KJUR.asn1.ASN1Object);
 
 /**
  * DistributionPoint ASN.1 structure class<br/>
@@ -2434,7 +2434,7 @@ KJUR.asn1.x509.DistributionPoint = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.x509.DistributionPoint, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.x509.DistributionPoint, KJUR.asn1.ASN1Object);
 
 /**
  * static object for OID

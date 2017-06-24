@@ -118,7 +118,7 @@ KJUR.asn1.cms.Attribute = function(params) {
         return this.hTLV;
     };
 };
-YAHOO.lang.extend(KJUR.asn1.cms.Attribute, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.cms.Attribute, KJUR.asn1.ASN1Object);
 
 /**
  * class for CMS ContentType attribute
@@ -153,7 +153,7 @@ KJUR.asn1.cms.ContentType = function(params) {
         this.valueList = [contentTypeASN1];
     }
 };
-YAHOO.lang.extend(KJUR.asn1.cms.ContentType, KJUR.asn1.cms.Attribute);
+UTIL.extend(KJUR.asn1.cms.ContentType, KJUR.asn1.cms.Attribute);
 
 /**
  * class for CMS MessageDigest attribute
@@ -198,7 +198,7 @@ KJUR.asn1.cms.MessageDigest = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.cms.MessageDigest, KJUR.asn1.cms.Attribute);
+UTIL.extend(KJUR.asn1.cms.MessageDigest, KJUR.asn1.cms.Attribute);
 
 /**
  * class for CMS SigningTime attribute
@@ -241,7 +241,7 @@ KJUR.asn1.cms.SigningTime = function(params) {
         this.valueList = [asn1];
     }
 };
-YAHOO.lang.extend(KJUR.asn1.cms.SigningTime, KJUR.asn1.cms.Attribute);
+UTIL.extend(KJUR.asn1.cms.SigningTime, KJUR.asn1.cms.Attribute);
 
 /**
  * class for CMS SigningCertificate attribute
@@ -307,7 +307,7 @@ KJUR.asn1.cms.SigningCertificate = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.cms.SigningCertificate, KJUR.asn1.cms.Attribute);
+UTIL.extend(KJUR.asn1.cms.SigningCertificate, KJUR.asn1.cms.Attribute);
 
 /**
  * class for CMS SigningCertificateV2 attribute
@@ -391,7 +391,7 @@ KJUR.asn1.cms.SigningCertificateV2 = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.cms.SigningCertificateV2, KJUR.asn1.cms.Attribute);
+UTIL.extend(KJUR.asn1.cms.SigningCertificateV2, KJUR.asn1.cms.Attribute);
 
 /**
  * class for IssuerAndSerialNumber ASN.1 structure for CMS
@@ -471,7 +471,7 @@ KJUR.asn1.cms.IssuerAndSerialNumber = function(params) {
         }
     }
 };
-YAHOO.lang.extend(KJUR.asn1.cms.IssuerAndSerialNumber, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.cms.IssuerAndSerialNumber, KJUR.asn1.ASN1Object);
 
 /**
  * class for Attributes ASN.1 structure for CMS
@@ -535,7 +535,7 @@ KJUR.asn1.cms.AttributeList = function(params) {
             this.sortFlag = false;
     }
 };
-YAHOO.lang.extend(KJUR.asn1.cms.AttributeList, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.cms.AttributeList, KJUR.asn1.ASN1Object);
 
 /**
  * class for SignerInfo ASN.1 structure of CMS SignedData
@@ -697,7 +697,7 @@ KJUR.asn1.cms.SignerInfo = function(params) {
         return this.hTLV;
     };
 };
-YAHOO.lang.extend(KJUR.asn1.cms.SignerInfo, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.cms.SignerInfo, KJUR.asn1.ASN1Object);
 
 /**
  * class for EncapsulatedContentInfo ASN.1 structure for CMS
@@ -781,7 +781,7 @@ KJUR.asn1.cms.EncapsulatedContentInfo = function(params) {
         return this.hTLV;
     };
 };
-YAHOO.lang.extend(KJUR.asn1.cms.EncapsulatedContentInfo, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.cms.EncapsulatedContentInfo, KJUR.asn1.ASN1Object);
 
 // - type
 // - obj
@@ -840,7 +840,7 @@ KJUR.asn1.cms.ContentInfo = function(params) {
 	    this.dContent = params.obj;
     }
 };
-YAHOO.lang.extend(KJUR.asn1.cms.ContentInfo, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.cms.ContentInfo, KJUR.asn1.ASN1Object);
 
 /**
  * class for SignerInfo ASN.1 structure of CMS SignedData
@@ -962,7 +962,7 @@ KJUR.asn1.cms.SignedData = function(params) {
         return hextopem(this.getContentInfoEncodedHex(), "CMS");
     };
 };
-YAHOO.lang.extend(KJUR.asn1.cms.SignedData, KJUR.asn1.ASN1Object);
+UTIL.extend(KJUR.asn1.cms.SignedData, KJUR.asn1.ASN1Object);
 
 /**
  * CMS utiliteis class
