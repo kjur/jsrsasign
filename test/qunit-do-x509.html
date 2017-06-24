@@ -24,7 +24,7 @@
 <script src="../ext/cj/hmac_min.js"></script>
 <script src="../ext/cj/pbkdf2_min.js"></script>
 
-<script src="../ext/yahoo-min.js"></script>
+<script src="../ext/yahoo.js"></script>
 <script src="../ext/jsbn.js"></script>
 <script src="../ext/jsbn2.js"></script>
 <script src="../ext/prng4.js"></script>
@@ -274,6 +274,28 @@ RZ/j3h+wpditI6OHi+deN1VG8Uym5CdV/uBL14wDQ6yAOPWiGOH7xQ==
 -----END PUBLIC KEY-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+// https://github.com/Unicon/cas-adfs-integration/blob/master/cas-server-support-wsfederation/src/test/resources/adfs-signing.crt X509v3 without ext
+var ADFS_CER = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIC3DCCAcSgAwIBAgIQfvG8NFyPxbVHf9gz7U8TOTANBgkqhkiG9w0BAQsFADAq
+MSgwJgYDVQQDEx9BREZTIFNpZ25pbmcgLSBhZGZzLmV4YW1wbGUuY29tMB4XDTE0
+MDIyNjIyMDcyOVoXDTE1MDIyNjIyMDcyOVowKjEoMCYGA1UEAxMfQURGUyBTaWdu
+aW5nIC0gYWRmcy5leGFtcGxlLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC
+AQoCggEBAJTATfLi3ZWlVemGuK576Sup3dNBD+hRs1Ki+VBk4WszR2+/UIiUkraK
+VcnUgNpCrBGna1VntVmxZSGZyaLoFQq//RkLNKqRUfl5aMYBXiEa0r7sh4INRXtj
+gKtBXne1ifxLMdZTtyYfOKWX6GMzi9bLyen+cIMgODivnpiFG8MuxL32ZeChC3if
+uYojwgGgPb6u/o0bKjTr07GvuQyhpfwzmF/6ZYK/3a/NWJ5P1RtsUhtuFoOWJqn8
+cxn4AzcJTuxKyIUEgxpWaW+iRwqPALtgr+EhXbRR/2kDnJCGxh7PEXEUkKSA7AWx
+kqB6VZU+V2g5vwLWyI8Ke09h7xSZ0z8CAwEAATANBgkqhkiG9w0BAQsFAAOCAQEA
+fVY/99ZPq1k/uHI+pM+sigus7Jm2wfY0y95wDK265ZuhMKEiNYdOzT9tsXGFe4Aq
+9DDygixD0Zk2Ud0q3F1Y1eyxXn5JATmW6iyMtr5x/dhRnzQSZWJw0evAxC2OjHSB
+i3dQwcP6fjWFA1VH9r+1HQyEangF2AyTUoRddFh7UcoxzYFfhDCyNU9xOaovXNuE
+g6H9KJX41xBSLnI8cBg+rAGelXWuLVdrJ3CJ0c6WB9iDrq96vGW0HuKXgeKbq/xD
+V5el1gq/hD+kqd9lVSIAR73tLyl7WC++nSpj6JLuNAzA36Cxu1dNaGscaMPgegQK
+h4JQjIleD89XV2sdjwXsog==
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
 // **** TEST **********
 
 test("pemToBase64", function() {
@@ -337,6 +359,12 @@ test("X509.readCertPEM", function() {
   equal(c.subjectPublicKeyRSA_hE, "010001", "check E");
   equal(c.subjectPublicKeyRSA.n.toString(16), "b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
   equal(c.subjectPublicKeyRSA.e.toString(16), "10001", "check E");
+});
+
+test("X509.readCertPEM - X509v3 without ext adfs-signing.crt", function() {
+  var c = new X509();
+  c.readCertPEM(ADFS_CER);
+  equal(c.aExtInfo, null, "aExtInfo == null");
 });
 
 test("X509.subjectPublicKeyRSA.verifyString integration test", function() {

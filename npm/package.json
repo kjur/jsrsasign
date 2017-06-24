@@ -1,10 +1,10 @@
 {
   "name": "jsrsasign",
-  "version": "7.2.1",
+  "version": "7.2.2",
   "description": "opensource free pure JavaScript cryptographic library supports RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, OCSP, CMS SignedData, TimeStamp and CAdES and JSON Web Signature(JWS)/Token(JWT)/Key(JWK).",
   "main": "lib/jsrsasign.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -33,5 +33,8 @@
   "bugs": {
     "url": "https://github.com/kjur/jsrsasign/issues"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+      "mocha": "~1.7.4"
+  }
 }
