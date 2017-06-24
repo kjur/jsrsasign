@@ -243,7 +243,6 @@ KJUR.jws.JWS.sign = function(alg, spHeader, spPayload, key, pass) {
 	_ECDSA = _KJUR_crypto.ECDSA,
 	_Mac = _KJUR_crypto.Mac,
 	_Signature = _KJUR_crypto.Signature,
-	_RSAKey = RSAKey,
 	_JSON = JSON;
 
     var sHeader, pHeader, sPayload;
