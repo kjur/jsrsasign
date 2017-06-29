@@ -37,7 +37,7 @@
 <script src="../src/rsasign-1.2.js"></script>
 <script src="../src/asn1hex-1.1.js"></script>
 <script src="../src/crypto-1.1.js"></script>
-<script src="../src/pkcs5pkey-1.0.js"></script>
+<script src="../src/keyutil-1.0.js"></script>
 <script src="../src/base64x-1.1.js"></script>
 
 <script src="../ext/ec.js"></script>
@@ -108,7 +108,7 @@ var sKp1SigAAA5 = "0bc25d05bc518cd752e5fe956382dbced768cd7d2f3751e96ca948d6b78c3
 module("Verifier Test");
 
 test("Signature(SHA1withRSAandMGF1) kp1.sig.aaa.-1.1 verify test", function() {
-  var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
+  var pubKey = KEYUTIL.getKey(sKp1PubPEM);
   var s1 = new KJUR.crypto.Signature({"alg": "SHA1withRSAandMGF1"});
   s1.initVerifyByPublicKey(pubKey);
   s1.updateString('aaa');
@@ -117,7 +117,7 @@ test("Signature(SHA1withRSAandMGF1) kp1.sig.aaa.-1.1 verify test", function() {
 });
 
 test("Signature(SHA1withRSAandMGF1) kp1.sig.aaa.-1.2 verify test", function() {
-  var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
+  var pubKey = KEYUTIL.getKey(sKp1PubPEM);
   var s1 = new KJUR.crypto.Signature({"alg": "SHA1withRSAandMGF1"});
   s1.initVerifyByPublicKey(pubKey);
   s1.updateString('aaa');
@@ -126,7 +126,7 @@ test("Signature(SHA1withRSAandMGF1) kp1.sig.aaa.-1.2 verify test", function() {
 });
 
 test("Signature(SHA1withRSAandMGF1) kp1.sig.aaa.-2.3 verify test", function() {
-  var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
+  var pubKey = KEYUTIL.getKey(sKp1PubPEM);
   var s1 = new KJUR.crypto.Signature({"alg": "SHA1withRSAandMGF1",
                                       "psssaltlen": -2});
   s1.initVerifyByPublicKey(pubKey);
@@ -136,7 +136,7 @@ test("Signature(SHA1withRSAandMGF1) kp1.sig.aaa.-2.3 verify test", function() {
 });
 
 test("Signature(SHA1withRSAandMGF1) kp1.sig.aaa.-2.4 verify test", function() {
-  var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
+  var pubKey = KEYUTIL.getKey(sKp1PubPEM);
   var s1 = new KJUR.crypto.Signature({"alg": "SHA1withRSAandMGF1",
                                       "psssaltlen": -2});
   s1.initVerifyByPublicKey(pubKey);
@@ -146,7 +146,7 @@ test("Signature(SHA1withRSAandMGF1) kp1.sig.aaa.-2.4 verify test", function() {
 });
 
 test("Signature(SHA1withRSAandMGF1) PSS1.out.1 verify test", function() {
-  var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
+  var pubKey = KEYUTIL.getKey(sKp1PubPEM);
   var s1 = new KJUR.crypto.Signature({"alg": "SHA1withRSAandMGF1"});
   s1.initVerifyByPublicKey(pubKey);
   s1.updateString('aaa');
@@ -162,7 +162,7 @@ test("Signature(SHA1withRSAandMGF1) kp1 sign and verify", function() {
   s1.updateString('aaa');
   var hSigValue = s1.sign();
 
-  var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
+  var pubKey = KEYUTIL.getKey(sKp1PubPEM);
   var s2 = new KJUR.crypto.Signature({"alg": "SHA1withRSAandMGF1"});
   s2.initVerifyByPublicKey(pubKey);
   s2.updateString('aaa');
@@ -179,7 +179,7 @@ test("Signature(SHA256withRSAandMGF1) kp1 sign and verify", function() {
   s1.updateString('aaa');
   var hSigValue = s1.sign();
 
-  var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
+  var pubKey = KEYUTIL.getKey(sKp1PubPEM);
   var s2 = new KJUR.crypto.Signature({"alg": "SHA256withRSAandMGF1"});
   s2.initVerifyByPublicKey(pubKey);
   s2.updateString('aaa');

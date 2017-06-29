@@ -81,12 +81,12 @@ test("Certificate class test", function() {
   o.setNotBeforeByParam({'str': '130504235959Z'});
   o.setNotAfterByParam({'str': '140504235959Z'});
   o.setSubjectByParam({'str': '/C=US/CN=b'});
-  o.setSubjectPublicKeyByParam({'rsakey': pubKey});
+  o.setSubjectPublicKey(pubKey);
   o.appendExtension(new KJUR.asn1.x509.BasicConstraints({'cA':true}));
   o.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));
 
   var prvKey = new RSAKey();
-  prvKey.readPrivateKeyFromASN1HexString("3082013a020100024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001024078bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d022100fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f022100e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07022100d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b3702201849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa902207d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9");
+  prvKey.readPKCS5PrvKeyHex("3082013a020100024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001024078bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d022100fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f022100e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07022100d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b3702201849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa902207d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9");
   var crt1 = new KJUR.asn1.x509.Certificate({tbscertobj: o,
                                              prvkeyobj:  prvKey});
   crt1.sign();					  
@@ -117,7 +117,7 @@ test("TBSCertificate class test", function() {
   o.setNotBeforeByParam({'str': '130504235959Z'});
   o.setNotAfterByParam({'str': '140504235959Z'});
   o.setSubjectByParam({'str': '/C=US/CN=b'});
-  o.setSubjectPublicKeyByParam({'rsakey': rsaKey});
+  o.setSubjectPublicKey(rsaKey);
   o.appendExtension(new KJUR.asn1.x509.BasicConstraints({'cA':true}));
   o.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));
 
@@ -182,20 +182,20 @@ test("AttributeTypeAndValue class test", function() {
 // === BEGIN Other ASN1 structure class  ======================================
 
 test("SubjectPublicKeyInfo class test", function() {
-  expect(4);
   var rsaKey = new RSAKey();
   rsaKey.setPublic('e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a', '10001');
-  var o1 = new KJUR.asn1.x509.SubjectPublicKeyInfo({'rsakey': rsaKey});
+  var o1 = new KJUR.asn1.x509.SubjectPublicKeyInfo(rsaKey);
   equal(o1.getEncodedHex(), "3057300d06092a864886f70d01010105000346003043023c00e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a0203010001", "constructor default rsaKey");
-  equal(o1.rsaKey.e.toString(16), "10001", "rsa1");
 
+  var pubpem2 =
+    "-----BEGIN PUBLIC KEY-----\n" +
+    "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOtpGHibL8Ue+MXPPufkcrNES40rCT5L\n" +
+    "RIU9MjTZ8/7owG5bAsiFA9Xxh3uZK1T5QA64jNJVbp2ojHAtNyWPuwsCAwEAAQ==" +
+    "-----END PUBLIC KEY-----\n" 
+  var pubobj2 = KEYUTIL.getKey(pubpem2);
   var o2 = new KJUR.asn1.x509.SubjectPublicKeyInfo();
-  o2.setRSAPEM("-----BEGIN PUBLIC KEY-----\n" +
-               "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOtpGHibL8Ue+MXPPufkcrNES40rCT5L\n" +
-               "RIU9MjTZ8/7owG5bAsiFA9Xxh3uZK1T5QA64jNJVbp2ojHAtNyWPuwsCAwEAAQ==" +
-               "-----END PUBLIC KEY-----\n");
-  equal(o2.rsaKey.n.toString(16), "eb6918789b2fc51ef8c5cf3ee7e472b3444b8d2b093e4b44853d3234d9f3fee8c06e5b02c88503d5f1877b992b54f9400eb88cd2556e9da88c702d37258fbb0b", "setRSAPEM rsaKey.n");
-  equal(o2.rsaKey.e.toString(16), "10001", "setRSAPEM rsaKey.e");
+  o2.setPubKey(pubobj2);
+  equal(o2.getEncodedHex(), "305c300d06092a864886f70d0101010500034b003048024100eb6918789b2fc51ef8c5cf3ee7e472b3444b8d2b093e4b44853d3234d9f3fee8c06e5b02c88503d5f1877b992b54f9400eb88cd2556e9da88c702d37258fbb0b0203010001", "pubpem2");
 });
 
 test("Time class test", function() {
@@ -432,9 +432,9 @@ test("CRL class test", function() {
   o.setNextUpdateByParam({'str': '130604235959Z'});
 
   var prvKey = new RSAKey();
-  prvKey.readPrivateKeyFromASN1HexString("3082013a020100024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001024078bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d022100fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f022100e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07022100d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b3702201849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa902207d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9");
+  prvKey.readPKCS5PrvKeyHex("3082013a020100024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001024078bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d022100fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f022100e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07022100d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b3702201849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa902207d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9");
 
-  var crl1 = new KJUR.asn1.x509.CRL({'tbsobj': o,'rsaprvkey': prvKey});
+  var crl1 = new KJUR.asn1.x509.CRL({'tbsobj': o,'prvkeyobj': prvKey});
   crl1.sign();
   equal(crl1.getEncodedHex(), "30819c3048300d06092a864886f70d01010505003019310b3009060355040613025553310a3008060355040a0c0161170d3133303530343233353935395a170d3133303630343233353935395a300d06092a864886f70d0101050500034100161f6e8b3cbe992aa4eece8894516a65d530543c6f23e83860cc391ae8289504cbe91f118fd20e2b96966182f695f9dce27b3e76f7d84beeab293cc3c9649740", "crl sign");
 });
@@ -466,20 +466,6 @@ test("CRLEntry class test", function() {
   expect(1);
   var e = new KJUR.asn1.x509.CRLEntry({'time':{'str':'130514235959Z'}, 'sn':{'int':3}});
   equal(e.getEncodedHex(), "3012020103170d3133303531343233353935395a", "constructor/1");
-});
-
-test("(DEPRECATED) X509Util.getPKCS8PubKeyPEMfromRSAKey", function() {
-  var s = "" +
-"-----BEGIN PUBLIC KEY-----\r\n" + 
-"MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOtpGHibL8Ue+MXPPufkcrNES40rCT5L\r\n" + 
-"RIU9MjTZ8/7owG5bAsiFA9Xxh3uZK1T5QA64jNJVbp2ojHAtNyWPuwsCAwEAAQ==\r\n" + 
-"-----END PUBLIC KEY-----\r\n";
-
-  var rsaKey = new RSAKey();
-  rsaKey.setPublic("eb6918789b2fc51ef8c5cf3ee7e472b3444b8d2b093e4b44853d3234d9f3fee8c06e5b02c88503d5f1877b992b54f9400eb88cd2556e9da88c702d37258fbb0b", "10001"); // z1.pubp8.der
-  var pem = KJUR.asn1.x509.X509Util.getPKCS8PubKeyPEMfromRSAKey(rsaKey);
-
-  equal(pem, s, "z1.pubp8.pem");
 });
 
 });

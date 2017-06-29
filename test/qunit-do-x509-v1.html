@@ -76,7 +76,7 @@ vAFw1qhcoTZb+EymNNl5xstmby25fd3jVVOwa5FbrImCdCglNbq+7UC4ZgCd9F7F
 -----END CERTIFICATE-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
-var cert1hex = ASN1HEX.pemToHex(cert1pem);
+var cert1hex = pemtohex(cert1pem);
 
 // **** TEST **********
 test("X509v1 field test", function() {
@@ -97,11 +97,6 @@ test("X509v1 field test", function() {
   equal(hextoposhex(x.getPublicKey().n.toString(16)).substr(0, 14), "00daf068fc86dc", "public key rsa.n daf0..");
   equal(x.getPublicKey().e.toString(16), "10001", "public key rsa.e 10001");
 });
-
-test("X509.getSerialNumberHex", function() {
-  equal(X509.getSerialNumberHex(cert1hex), "0b", "sn = 0b");
-});
-
 
 });
 </script>

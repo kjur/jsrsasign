@@ -84,8 +84,8 @@ var Z5CERTHEX = "308201bd30820126020900f9e5f373734585ed300d06092a864886f70d01010
 
 var Z5N = new BigInteger("00d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021", 16);
 
-test("KEYUTIL.getKeyFromPublicPKCS8Hex(Z1PUBP8HEX) z1.pub.p8.der", function() {
-  var key = KEYUTIL.getKeyFromPublicPKCS8Hex(Z1PUBP8HEX);
+test("KEYUTIL.getKey(Z1PUBP8HEX, null, pkcs8pub) z1.pub.p8.der", function() {
+  var key = KEYUTIL.getKey(Z1PUBP8HEX, null, "pkcs8pub");
   equal(key.isPublic, true, "isPublic");
   equal(key.isPrivate, false, "isPrivate");
   equal(Z1N.compareTo(key.n), 0, "N");
@@ -106,8 +106,8 @@ test("KEYUTIL.getKeyFromPlainPrivatePKCS8Hex(Z1PRVP8HEX) z1.prv.p8p.der", functi
   equal(Z1CO.compareTo(key.coeff), 0, "CO");
 });
 
-test("(DEPRECATED) KEYUTIL.getRSAKeyFromPlainPKCS8Hex(Z1PRVP8HEX) z1.prv.p8p.der", function() {
-  var key = KEYUTIL.getRSAKeyFromPlainPKCS8Hex(Z1PRVP8HEX);
+test("KEYUTIL.getKey(Z1PRVP8HEX, null, pkcs8prv) z1.prv.p8p.der", function() {
+  var key = KEYUTIL.getKey(Z1PRVP8HEX, null, "pkcs8prv");
   equal(key.isPublic, false, "isPublic");
   equal(key.isPrivate, true, "isPrivate");
   equal(Z1N.compareTo(key.n), 0, "N");
@@ -156,8 +156,8 @@ test("KEYUTIL.getKey(Z1PUBP8HEX, null, pkcs8pub) z1.pub.p8.der", function() {
   equal(key.e, 65537, "E");
 });
 
-test("(DEPRECATED) KEYUTIL.getRSAKeyFromPublicPKCS8Hex(Z1PUBP8HEX) z1.pub.p8.der RSA", function() {
-  var key = KEYUTIL.getRSAKeyFromPublicPKCS8Hex(Z1PUBP8HEX);
+test("(KEYUTIL.getKey(Z1PUBP8HEX) z1.pub.p8.der RSA", function() {
+  var key = KEYUTIL.getKey(Z1PUBP8HEX, null, "pkcs8pub");
   equal(key.isPublic, true, "isPublic");
   equal(key.isPrivate, false, "isPrivate");
   equal(Z1N.compareTo(key.n), 0, "N");

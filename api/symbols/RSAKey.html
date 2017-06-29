@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 7.0.0 JavaScript API Reference - RSAKey</title>
+		<title>jsrsasign 8.0.0 JavaScript API Reference - RSAKey</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -423,8 +423,6 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.lang.String.html">KJUR.lang.String</a></li>
 	
-	<li><a href="../symbols/PKCS5PKEY.html">PKCS5PKEY</a></li>
-	
 	<li><a href="../symbols/RSAKey.html">RSAKey</a></li>
 	
 	<li><a href="../symbols/X509.html">X509</a></li>
@@ -513,15 +511,6 @@ ul.inheritsList
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.pemToBase64">pemToBase64</a></b>(sPEMPrivateKey)
-								</div>
-								<div class="description">static method to extract Base64 string from PKCS#5 PEM RSA private key.</div>
-							</td>
-						</tr>
-					
-						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#readCertPubKeyHex">readCertPubKeyHex</a></b>(h, nthPKI)
@@ -569,15 +558,6 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#readPrivateKeyFromASN1HexString">readPrivateKeyFromASN1HexString</a></b>(keyHex)
-								</div>
-								<div class="description">(DEPRECATED) read RSA private key from a ASN.1 hexadecimal string<br/></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#readPrivateKeyFromPEMString">readPrivateKeyFromPEMString</a></b>(keyPEM)
 								</div>
 								<div class="description">read PKCS#1 private key from a string<br/></div>
@@ -587,7 +567,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.signString">signString</a></b>(s, hashAlg)
+								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.sign">sign</a></b>(s, hashAlg)
 								</div>
 								<div class="description">sign for a message string with RSA private key.</div>
 							</td>
@@ -596,7 +576,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.signStringPSS">signStringPSS</a></b>(s, hashAlg, sLen)
+								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.signPSS">signPSS</a></b>(s, hashAlg, sLen)
 								</div>
 								<div class="description">sign for a message string with RSA private key by PKCS#1 PSS signing.</div>
 							</td>
@@ -623,7 +603,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#verifyString">verifyString</a></b>(sMsg, hSig)
+								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#verify">verify</a></b>(sMsg, hSig)
 								</div>
 								<div class="description">verifies a sigature for a message string with RSA public key.</div>
 							</td>
@@ -632,7 +612,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.verifyStringPSS">verifyStringPSS</a></b>(sMsg, hSig, hashAlg, sLen)
+								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.verifyPSS">verifyPSS</a></b>(sMsg, hSig, hashAlg, sLen)
 								</div>
 								<div class="description">verifies a sigature for a message string with RSA public key by PKCS#1 PSS sign.</div>
 							</td>
@@ -796,65 +776,6 @@ ul.inheritsList
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Array}</span> array of field positions</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".pemToBase64"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">RSAKey.</span><b>pemToBase64</b>(sPEMPrivateKey)
-					
-					</div>
-					<div class="description">
-						static method to extract Base64 string from PKCS#5 PEM RSA private key.<br/>
-removing PEM header, PEM footer and space characters including
-new lines from PEM formatted RSA private key string.
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsapem-1.1.js.html">rsapem-1.1.js</a>.
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">RSAKey.pemToBase64("----BEGIN PRIVATE KEY-...") &rarr; "MIICW..."</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sPEMPrivateKey</b>
-									
-								</dt>
-								<dd>PEM PKCS#1/5 s private key string</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								jsrsasign 7.2.1 rsapem 1.1.2
-							</dt>
-							</dl>
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> Base64 string of private key</dd>
 							
 							</dl>
 						
@@ -1101,58 +1022,6 @@ new lines from PEM formatted RSA private key string.
 
 					<hr />
 				
-					<a name="readPrivateKeyFromASN1HexString"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>readPrivateKeyFromASN1HexString</b>(keyHex)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) read RSA private key from a ASN.1 hexadecimal string<br/>
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsapem-1.1.js.html">rsapem-1.1.js</a>.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>keyHex</b>
-									
-								</dt>
-								<dd>ASN.1 hexadecimal string of PKCS#1 private key.</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								since jsrsasign 7.1.0 rsapem 1.2.0, please use RSAKey.readPKCS5PrvKeyHex instead.
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>rsapem 1.1.1</dd>
-							</dl>
-							</dl>
-						
-						
-						
-						
-						
-
-					<hr />
-				
 					<a name="readPrivateKeyFromPEMString"> </a>
 					<div class="fixedFont">
 					
@@ -1192,11 +1061,11 @@ new lines from PEM formatted RSA private key string.
 
 					<hr />
 				
-					<a name=".signString"> </a>
+					<a name=".sign"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">RSAKey.</span><b>signString</b>(s, hashAlg)
+					<span class="light">RSAKey.</span><b>sign</b>(s, hashAlg)
 					
 					</div>
 					<div class="description">
@@ -1241,11 +1110,11 @@ new lines from PEM formatted RSA private key string.
 
 					<hr />
 				
-					<a name=".signStringPSS"> </a>
+					<a name=".signPSS"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">RSAKey.</span><b>signStringPSS</b>(s, hashAlg, sLen)
+					<span class="light">RSAKey.</span><b>signPSS</b>(s, hashAlg, sLen)
 					
 					</div>
 					<div class="description">
@@ -1426,11 +1295,11 @@ new lines from PEM formatted RSA private key string.
 
 					<hr />
 				
-					<a name="verifyString"> </a>
+					<a name="verify"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>verifyString</b>(sMsg, hSig)
+					<b>verify</b>(sMsg, hSig)
 					
 					</div>
 					<div class="description">
@@ -1476,11 +1345,11 @@ new lines from PEM formatted RSA private key string.
 
 					<hr />
 				
-					<a name=".verifyStringPSS"> </a>
+					<a name=".verifyPSS"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">RSAKey.</span><b>verifyStringPSS</b>(sMsg, hSig, hashAlg, sLen)
+					<span class="light">RSAKey.</span><b>verifyPSS</b>(sMsg, hSig, hashAlg, sLen)
 					
 					</div>
 					<div class="description">
@@ -1685,7 +1554,7 @@ new lines from PEM formatted RSA private key string.
 		
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
-                        &copy; 2012-2016 Kenji Urushima, All rights reserved<br/>
+                        &copy; 2012-2017 Kenji Urushima, All rights reserved<br/>
 			
 			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 
 		</div>

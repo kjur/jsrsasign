@@ -118,7 +118,7 @@ var k1CertPEM = "" +
 "HRMEBTADAQH/MAoGCCqGSM49BAMCA0kAMEYCIQDfAcS/WKBrP6JBgksQVpp4jdq4\n" +
 "C53Yu4F5NkaMgthAHgIhANGRdWAP1QdW9l6tiglQwdqJs4T0e8+NYv+RcAb3VYwn\n" +
 "-----END CERTIFICATE-----\n";
-var k1CertHex = ASN1HEX.pemToHex(k1CertPEM);
+var k1CertHex = pemtohex(k1CertPEM);
 
 // _test/z1.self.sha1.cer
 var Z1SELFSHA1CER = (function() {/*
@@ -298,89 +298,41 @@ h4JQjIleD89XV2sdjwXsog==
 
 // **** TEST **********
 
-test("pemToBase64", function() {
-  var sResult = X509.pemToBase64(sCer1PEM);
-  equal(sResult, sCer1B64, "testing pem-base64 conversion.");
+test("getPublicKeyIdx", function() {
+  var x = new X509();
+  x.readCertHex(hCer1);
+  equal(x.getPublicKeyIdx(), 127 * 2, "check position of subject public key info.");
 });
 
-test("pemToHex", function() {
-  var sResult = ASN1HEX.pemToHex(sCer1PEM);
-  equal(sResult, hCer1, "testing pem-hex conversion.");
+test("getPublicKeyContentIdx", function() {
+  var x = new X509();
+  x.readCertHex(hCer1);
+  equal(x.getPublicKeyContentIdx(), 147 * 2, "check position of subject public key without encapsulation.");
 });
 
-test("getSubjectPublicKeyInfoPosFromCertHex", function() {
-  var pSPK = X509.getSubjectPublicKeyInfoPosFromCertHex(hCer1);
-  equal(pSPK, 127 * 2, "check position of subject public key info.");
-});
-
-test("getSubjectPublicKeyPosFromCertHex", function() {
-  var pSPK = X509.getSubjectPublicKeyPosFromCertHex(hCer1);
-  equal(pSPK, 147 * 2, "check position of subject public key without encapsulation.");
-});
-
-test("getPublicKeyHexArrayFromCertHex", function() {
-  var a = X509.getPublicKeyHexArrayFromCertHex(hCer1);
-  expect(3);
-  equal(a.length, 2, "check array length.");
-  equal(a[0], "00b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
-  equal(a[1], "010001", "check E");
-});
-
-test("getPublicKeyHexArrayFromCertPEM", function() {
-  var a = X509.getPublicKeyHexArrayFromCertPEM(sCer1PEM);
-  expect(3);
-  equal(a.length, 2, "check array length.");
-  equal(a[0], "00b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
-  equal(a[1], "010001", "check E");
-});
-
-test("getPublicKeyHexArrayFromCertPEM sCer2PEM", function() {
-  expect(8);
-  equal(X509.pemToBase64(sCer2PEM), sCer2B64, "check pem to base64.");
-  equal(ASN1HEX.pemToHex(sCer2PEM), hCer2, "check pem to hex.");
-  var pTbsCert = X509.getHexTbsCertificateFromCert(hCer2);
-  equal(pTbsCert, 8, "check tbsCert position.");
-  equal(X509.getSubjectPublicKeyInfoPosFromCertHex(hCer2), 280,
-         "check subjectPublicKeyInfo position.");
-  var a = ASN1HEX.getPosArrayOfChildren_AtObj(hCer2, pTbsCert); 
-  equal(a.join("/"), "16/38/68/142/206/280", "check postion array of tbsCert.");
-
-  var a = X509.getPublicKeyHexArrayFromCertPEM(sCer2PEM);
-  equal(a.length, 2, "check array length.");
-  equal(a[0], "00d184617b5f8034655944839f785a63835555088a23d0b34e1a2e6bdf83c49ba2b1ecb398105eed1a21d513ea76f9ad3879843db27e91765885ba33ccf45b1461c227205f08bcd07d5a2cf7fa9443cf2ef376f448503630699059002546d2f2eba124478ac34704e3d83cd1e041178042a922fa3c541b3fdfeb072c5dc44a0021", "check N");
-  equal(a[1], "010001", "check E");
-});
-
-test("X509.readCertPEM", function() {
+test("readCertPEM", function() {
   var c = new X509();
   c.readCertPEM(sCer1PEM);
-  expect(4);
-  equal(c.subjectPublicKeyRSA_hN, "00b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
-  equal(c.subjectPublicKeyRSA_hE, "010001", "check E");
-  equal(c.subjectPublicKeyRSA.n.toString(16), "b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b", "check N");
-  equal(c.subjectPublicKeyRSA.e.toString(16), "10001", "check E");
+  equal(c.hex, hCer1, "c.hex");
 });
 
-test("X509.readCertPEM - X509v3 without ext adfs-signing.crt", function() {
+test("readCertPEM - X509v3 without ext adfs-signing.crt", function() {
   var c = new X509();
   c.readCertPEM(ADFS_CER);
   equal(c.aExtInfo, null, "aExtInfo == null");
 });
 
-test("X509.subjectPublicKeyRSA.verifyString integration test", function() {
-  RSAKey.prototype.verifyString = _rsasign_verifyString;
+test("getPublicKey(), RSAKey.verify() integration test", function() {
   var c = new X509();
   c.readCertPEM(sCer1PEM);
-  expect(2);
-  equal(c.subjectPublicKeyRSA.verifyString("aaa", hSig3), true, "check sig is valid");
-  equal(c.subjectPublicKeyRSA.verifyString("aab", hSig3), false, "check sig is invalid.");
+  var key = c.getPublicKey();
+  equal(key.verify("aaa", hSig3), true, "check sig is valid");
+  equal(key.verify("aab", hSig3), false, "check sig is invalid.");
 });
 
 test("new X509(PEM).getSerialNumber/Issuer/Subject/NotBefore/NotAfter test", function() {
-  RSAKey.prototype.verifyString = _rsasign_verifyString;
   var c = new X509();
   c.readCertPEM(sCer1PEM);
-  expect(8);
   equal(c.getSerialNumberHex(), "009e775e7d9f43abc9", "sn = 02");
   equal(c.getIssuerHex(), "301a310b3009060355040613024a50310b3009060355040a13027a32", "issuer");
   equal(c.getSubjectHex(), "301a310b3009060355040613024a50310b3009060355040a13027a32", "subject");
@@ -389,10 +341,6 @@ test("new X509(PEM).getSerialNumber/Issuer/Subject/NotBefore/NotAfter test", fun
   equal(X509.hex2dn(c.getSubjectHex()), "/C=JP/O=z2", "subjecthex2str");
   equal(c.getIssuerString(), "/C=JP/O=z2", "issuer str");
   equal(c.getSubjectString(), "/C=JP/O=z2", "subject str");
-});
-
-test("X509.getSerialNumber(hCert)", function() {
-  equal(X509.getSerialNumberHex(hCer1), "009e775e7d9f43abc9", "sn = 02");
 });
 
 /*
@@ -423,11 +371,6 @@ test("getPublicKeyInfoPropOfCertPEM k1(ECC)", function() {
   equal(r.keyhex, "04a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425", "keyhex");
 });
 
-test("(DEPRECATED) X509.getSignatureAlgorithmName k1(ECC)", function() {
-  var r = X509.getSignatureAlgorithmName(k1CertHex);
-  equal(r, "SHA256withECDSA", "k1(ECC) SHA256withECDSA");
-});
-
 test("getSignatureAlgorithmName k1(ECC)", function() {
   var x = new X509();
   x.readCertHex(k1CertHex);
@@ -435,13 +378,10 @@ test("getSignatureAlgorithmName k1(ECC)", function() {
 });
 
 test("getSignatureAlgorithmName z2(RSA)", function() {
-  var r = X509.getSignatureAlgorithmName(hCer1);
+  var x = new X509();
+  x.readCertHex(hCer1);
+  var r = x.getSignatureAlgorithmName();
   equal(r, "SHA1withRSA", "z2(RSA) SHA1withRSA");
-});
-
-test("(DEPRECATED) X509.getSignatureValueHex k1(ECC)", function() {
-  var r = X509.getSignatureValueHex(k1CertHex);
-  equal(r, "3046022100df01c4bf58a06b3fa241824b10569a788ddab80b9dd8bb817936468c82d8401e022100d19175600fd50756f65ead8a0950c1da89b384f47bcf8d62ff917006f7558c27", "k1(ECC) SHA256withECDSA");
 });
 
 test("getSignatureValueHex k1(ECC)", function() {
@@ -452,74 +392,86 @@ test("getSignatureValueHex k1(ECC)", function() {
 
 test("verifySignature RSA z1.self.sha1.cer with z1.pub.p8 VALID", function() {
 var pubkey = KEYUTIL.getKey(Z1PUBP8);
-var hCert = ASN1HEX.pemToHex(Z1SELFSHA1CER);
-equal(X509.verifySignature(hCert, pubkey), true, "true");
+var x = new X509();
+x.readCertPEM(Z1SELFSHA1CER);
+equal(x.verifySignature(pubkey), true, "true");
 });
 
 test("verifySignature RSA z1.self.sha1.cer with z2.pub.p8 INVALID", function() {
 var pubkey = KEYUTIL.getKey(Z2PUBP8);
-var hCert = ASN1HEX.pemToHex(Z1SELFSHA1CER);
-equal(X509.verifySignature(hCert, pubkey), false, "false");
+var x = new X509();
+x.readCertPEM(Z1SELFSHA1CER);
+equal(x.verifySignature(pubkey), false, "false");
 });
 
 test("verifySignature RSA z1.self.sha256.cer with z1.pub.p8 VALID", function() {
 var pubkey = KEYUTIL.getKey(Z1PUBP8);
-var hCert = ASN1HEX.pemToHex(Z1SELFSHA256CER);
-equal(X509.verifySignature(hCert, pubkey), true, "true");
+var x = new X509();
+x.readCertPEM(Z1SELFSHA256CER);
+equal(x.verifySignature(pubkey), true, "true");
 });
 
 test("verifySignature RSA z1.self.sha256.cer with z2.pub.p8 INVALID", function() {
 var pubkey = KEYUTIL.getKey(Z2PUBP8);
-var hCert = ASN1HEX.pemToHex(Z1SELFSHA256CER);
-equal(X509.verifySignature(hCert, pubkey), false, "false");
+var x = new X509();
+x.readCertPEM(Z1SELFSHA256CER);
+equal(x.verifySignature(pubkey), false, "false");
 });
 
 test("verifySignature DSA d1.self.sha1.cer with d1.pub.p8 VALID", function() {
 var pubkey = KEYUTIL.getKey(D1PUBP8);
-var hCert = ASN1HEX.pemToHex(D1SELFSHA1CER);
-equal(X509.verifySignature(hCert, pubkey), true, "true");
+var x = new X509();
+x.readCertPEM(D1SELFSHA1CER);
+equal(x.verifySignature(pubkey), true, "true");
 });
 
 test("verifySignature DSA d1.self.sha1.cer with d2.pub.p8 INVALID", function() {
 var pubkey = KEYUTIL.getKey(D2PUBP8);
-var hCert = ASN1HEX.pemToHex(D1SELFSHA1CER);
-equal(X509.verifySignature(hCert, pubkey), false, "false");
+var x = new X509();
+x.readCertPEM(D1SELFSHA1CER);
+equal(x.verifySignature(pubkey), false, "false");
 });
 
 test("verifySignature DSA d1.self.sha256.cer with d1.pub.p8 VALID", function() {
 var pubkey = KEYUTIL.getKey(D1PUBP8);
-var hCert = ASN1HEX.pemToHex(D1SELFSHA256CER);
-equal(X509.verifySignature(hCert, pubkey), true, "true");
+var x = new X509();
+x.readCertPEM(D1SELFSHA256CER);
+equal(x.verifySignature(pubkey), true, "true");
 });
 
 test("verifySignature DSA d1.self.sha256.cer with d2.pub.p8 INVALID", function() {
 var pubkey = KEYUTIL.getKey(D2PUBP8);
-var hCert = ASN1HEX.pemToHex(D1SELFSHA256CER);
-equal(X509.verifySignature(hCert, pubkey), false, "false");
+var x = new X509();
+x.readCertPEM(D1SELFSHA256CER);
+equal(x.verifySignature(pubkey), false, "false");
 });
 
 test("verifySignature ECDSA k1.self.sha1.cer with k1.pub.p8 VALID", function() {
 var pubkey = KEYUTIL.getKey(K1PUBP8);
-var hCert = ASN1HEX.pemToHex(K1SELFSHA1CER);
-equal(X509.verifySignature(hCert, pubkey), true, "true");
+var x = new X509();
+x.readCertPEM(K1SELFSHA1CER);
+equal(x.verifySignature(pubkey), true, "true");
 });
 
 test("verifySignature ECDSA k1.self.sha1.cer with k4.pub.p8 INVALID", function() {
 var pubkey = KEYUTIL.getKey(K4PUBP8);
-var hCert = ASN1HEX.pemToHex(K1SELFSHA1CER);
-equal(X509.verifySignature(hCert, pubkey), false, "false");
+var x = new X509();
+x.readCertPEM(K1SELFSHA1CER);
+equal(x.verifySignature(pubkey), false, "false");
 });
 
 test("verifySignature ECDSA k1.self.sha256.cer with k1.pub.p8 VALID", function() {
 var pubkey = KEYUTIL.getKey(K1PUBP8);
-var hCert = ASN1HEX.pemToHex(K1SELFSHA256CER);
-equal(X509.verifySignature(hCert, pubkey), true, "true");
+var x = new X509();
+x.readCertPEM(K1SELFSHA256CER);
+equal(x.verifySignature(pubkey), true, "true");
 });
 
 test("verifySignature ECDSA k1.self.sha256.cer with k4.pub.p8 INVALID", function() {
 var pubkey = KEYUTIL.getKey(K4PUBP8);
-var hCert = ASN1HEX.pemToHex(K1SELFSHA256CER);
-equal(X509.verifySignature(hCert, pubkey), false, "false");
+var x = new X509();
+x.readCertPEM(K1SELFSHA256CER);
+equal(x.verifySignature(pubkey), false, "false");
 });
 
 });

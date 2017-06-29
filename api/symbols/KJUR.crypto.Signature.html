@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 7.0.0 JavaScript API Reference - KJUR.crypto.Signature</title>
+		<title>jsrsasign 8.0.0 JavaScript API Reference - KJUR.crypto.Signature</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -423,8 +423,6 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.lang.String.html">KJUR.lang.String</a></li>
 	
-	<li><a href="../symbols/PKCS5PKEY.html">PKCS5PKEY</a></li>
-	
 	<li><a href="../symbols/RSAKey.html">RSAKey</a></li>
 	
 	<li><a href="../symbols/X509.html">X509</a></li>
@@ -535,46 +533,6 @@ As for params of constructor's argument, it can be specify following attributes:
 This method is very useful initialize method for Signature class since
 you just specify key then this method will automatically initialize it
 using <a href="../symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> method.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Signature.html#initSign">initSign</a></b>(param)
-								</div>
-								<div class="description">(DEPRECATED) Initialize this object for signing
-Private key information will be provided as 'param' parameter and the value will be
-following:
-<ul>
-<li><a href="../symbols/RSAKey.html">RSAKey</a> object for RSA signing</li>
-<li>associative array for ECDSA signing
-    (ex.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Signature.html#initVerifyByCertificatePEM">initVerifyByCertificatePEM</a></b>(certPEM)
-								</div>
-								<div class="description">(DEPRECATED) Initialize this object for verifying with a certficate
-</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Signature.html#initVerifyByPublicKey">initVerifyByPublicKey</a></b>(param)
-								</div>
-								<div class="description">(DEPRECATED) Initialize this object for verifying with a public key
-Public key information will be provided as 'param' parameter and the value will be
-following:
-<ul>
-<li><a href="../symbols/RSAKey.html">RSAKey</a> object for RSA verification</li>
-<li>associative array for ECDSA verification
-    (ex.</div>
 							</td>
 						</tr>
 					
@@ -866,175 +824,6 @@ As for 'key',  following argument type are supported:
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
 								<dd>crypto 1.1.3</dd>
-							</dl>
-							</dl>
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="initSign"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>initSign</b>(param)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) Initialize this object for signing
-Private key information will be provided as 'param' parameter and the value will be
-following:
-<ul>
-<li><a href="../symbols/RSAKey.html">RSAKey</a> object for RSA signing</li>
-<li>associative array for ECDSA signing
-    (ex. <code>{'ecprvhex': '1d3f..', 'eccurvename': 'secp256r1'}</code>)</li>
-</ul>
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">sig.initSign(prvKey)</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>param</b>
-									
-								</dt>
-								<dd>RSAKey object of public key or associative array for ECDSA</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from crypto 1.1.5. please use init() method instead.
-							</dt>
-							</dl>
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="initVerifyByCertificatePEM"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>initVerifyByCertificatePEM</b>(certPEM)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) Initialize this object for verifying with a certficate
-
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">sig.initVerifyByCertificatePEM(certPEM)</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>certPEM</b>
-									
-								</dt>
-								<dd>PEM formatted string of certificate</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from crypto 1.1.5. please use init() method instead.
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>1.0.2</dd>
-							</dl>
-							</dl>
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="initVerifyByPublicKey"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>initVerifyByPublicKey</b>(param)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) Initialize this object for verifying with a public key
-Public key information will be provided as 'param' parameter and the value will be
-following:
-<ul>
-<li><a href="../symbols/RSAKey.html">RSAKey</a> object for RSA verification</li>
-<li>associative array for ECDSA verification
-    (ex. <code>{'ecpubhex': '041f..', 'eccurvename': 'secp256r1'}</code>)
-</li>
-</ul>
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">sig.initVerifyByPublicKey(rsaPrvKey)</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>param</b>
-									
-								</dt>
-								<dd>RSAKey object of public key or associative array for ECDSA</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from crypto 1.1.5. please use init() method instead.
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>1.0.2</dd>
 							</dl>
 							</dl>
 						
@@ -1366,7 +1155,7 @@ following:
 		
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
-                        &copy; 2012-2016 Kenji Urushima, All rights reserved<br/>
+                        &copy; 2012-2017 Kenji Urushima, All rights reserved<br/>
 			
 			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 
 		</div>

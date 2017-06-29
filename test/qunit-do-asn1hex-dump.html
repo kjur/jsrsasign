@@ -228,7 +228,7 @@ test("ASN1HEX.dump", function() {
                      "UTCTime 230501235959Z\n", "UTCTime 2023");
   equal(ASN1HEX.dump('180f32303233303530313233353935395a'),
                      "GeneralizedTime 20230501235959Z\n", "GenTime 2023");
-  var aIdx = ASN1HEX.getPosArrayOfChildren_AtObj("3006020101020102", 0);
+  var aIdx = ASN1HEX.getChildIdx("3006020101020102", 0);
   equal(aIdx.length, 2, "aIdx.length");
   equal(aIdx[0], 4, "aIdx[0]");
   equal(aIdx[1], 10, "aIdx[1]");
@@ -265,7 +265,7 @@ test("ASN1HEX.isASN1HEX", function() {
 });
 
 test("ASN1HEX.dump cert", function() {
-  var hCert = ASN1HEX.pemToHex(certGithubPEM);
+  var hCert = pemtohex(certGithubPEM);
   equal(ASN1HEX.dump(hCert), certGithubDump, "certGithubPEM");
 });
 

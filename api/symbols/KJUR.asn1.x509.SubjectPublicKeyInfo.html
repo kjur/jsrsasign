@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 7.0.0 JavaScript API Reference - KJUR.asn1.x509.SubjectPublicKeyInfo</title>
+		<title>jsrsasign 8.0.0 JavaScript API Reference - KJUR.asn1.x509.SubjectPublicKeyInfo</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -423,8 +423,6 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.lang.String.html">KJUR.lang.String</a></li>
 	
-	<li><a href="../symbols/PKCS5PKEY.html">PKCS5PKEY</a></li>
-	
 	<li><a href="../symbols/RSAKey.html">RSAKey</a></li>
 	
 	<li><a href="../symbols/X509.html">X509</a></li>
@@ -480,8 +478,6 @@ following properties:
 <li><a href="../symbols/RSAKey.html">RSAKey</a> object</li>
 <li><a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a> object</li>
 <li><a href="../symbols/KJUR.crypto.DSA.html">KJUR.crypto.DSA</a> object</li>
-<li>(DEPRECATED)rsakey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object of subject public key</li>
-<li>(DEPRECATED)rsapem - specify a string of PEM public key of RSA key</li>
 </ul>
 NOTE1: 'params' can be omitted.</div>
 						</td>
@@ -517,22 +513,11 @@ NOTE1: 'params' can be omitted.</div>
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.SubjectPublicKeyInfo.<b><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html#.setRSAKey">setRSAKey</a></b>(rsaKey)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html#setPubKey">setPubKey</a></b>({@link)
 								</div>
-								<div class="description">(DEPRECATED) set RSAKey object as subject public key
-</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.SubjectPublicKeyInfo.<b><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html#.setRSAPEM">setRSAPEM</a></b>(rsaPubPEM)
-								</div>
-								<div class="description">(DEPRECATED) set a PEM formatted RSA public key string as RSA public key
-</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
@@ -569,8 +554,6 @@ following properties:
 <li><a href="../symbols/RSAKey.html">RSAKey</a> object</li>
 <li><a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a> object</li>
 <li><a href="../symbols/KJUR.crypto.DSA.html">KJUR.crypto.DSA</a> object</li>
-<li>(DEPRECATED)rsakey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object of subject public key</li>
-<li>(DEPRECATED)rsapem - specify a string of PEM public key of RSA key</li>
 </ul>
 NOTE1: 'params' can be omitted.<br/>
 NOTE2: DSA/ECDSA key object is also supported since asn1x509 1.0.6.<br/>
@@ -580,9 +563,9 @@ NOTE2: DSA/ECDSA key object is also supported since asn1x509 1.0.6.<br/>
 				
 				
 				
-				<pre class="code">var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(RSAKey_object);
-var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoECDSA_object);
-var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoDSA_object);</pre>
+				<pre class="code">spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(RSAKey_object);
+spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoECDSA_object);
+spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoDSA_object);</pre>
 				
 				
 				
@@ -618,23 +601,24 @@ var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoDSA_object);</pre>
 					Method Detail
 				</div>
 				
-					<a name=".setRSAKey"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setPubKey"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.x509.SubjectPublicKeyInfo.</span><b>setRSAKey</b>(rsaKey)
+					<b>setPubKey</b>({@link)
 					
 					</div>
 					<div class="description">
-						(DEPRECATED) set RSAKey object as subject public key
-
+						
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">spki.setRSAKey(rsaKey);</pre>
+					<pre class="code">spki = new KJUR.asn1.x509.SubjectPublicKeyInfo();
+pubKey = KEYUTIL.getKey(PKCS8PUBKEYPEM);
+spki.setPubKey(pubKey);</pre>
 					
 					
 					
@@ -643,62 +627,20 @@ var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoDSA_object);</pre>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> <b>rsaKey</b>
+									<span class="light fixedFont">{Object}</span> <b>{@link</b>
 									
 								</dt>
-								<dd><a href="../symbols/RSAKey.html">RSAKey</a> object for RSA public key</dd>
+								<dd>RSAKey}, <a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a> or <a href="../symbols/KJUR.crypto.DSA.html">KJUR.crypto.DSA</a> object</dd>
 							
 							</dl>
 						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".setRSAPEM"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.x509.SubjectPublicKeyInfo.</span><b>setRSAPEM</b>(rsaPubPEM)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) set a PEM formatted RSA public key string as RSA public key
-
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">spki.setRSAPEM(rsaPubPEM);</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>rsaPubPEM</b>
-									
-								</dt>
-								<dd>PEM formatted RSA public key string</dd>
-							
-							</dl>
 						
 						
 							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from jsrsasign 7.1.1 asn1x509 1.0.20.
-							</dt>
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 8.0.0 asn1x509 1.1.0</dd>
 							</dl>
-						
+							</dl>
 						
 						
 						
@@ -718,7 +660,7 @@ var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoDSA_object);</pre>
 		
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
-                        &copy; 2012-2016 Kenji Urushima, All rights reserved<br/>
+                        &copy; 2012-2017 Kenji Urushima, All rights reserved<br/>
 			
 			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 
 		</div>

@@ -155,6 +155,19 @@ equal(datetozulu(d, true), "170520235959Z", "UTCTime");
 equal(datetozulu(d, false, true), "20170520235959.67Z", "GenTime with milli");
 });
 
+test("pemtohex", function() {
+  // _data/z0512.pub.p8
+  var pem = "" +
+    "-----BEGIN PUBLIC KEY-----\r\n" +
+    "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALmwAylQX+LtYOxWid3N9blNBatBbhZD\r\n" +
+    "sco/lvxHLusfYu1HaJfxWa6Yt/Ot7Ox5cd619k2aJZAcTcekl3LloCsCAwEAAQ==\r\n" +
+    "-----END PUBLIC KEY-----\r\n";
+  var hex = "305c300d06092a864886f70d0101010500034b003048024100b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b0203010001";
+  equal(pemtohex(pem), hex, "pem");
+  equal(pemtohex("  " + pem + "  \r\n"), hex, "pem with spaces");
+  equal(pemtohex(pem, "PUBLIC KEY"), hex, "pem with specifying header");
+});
+
 });
 </script>
   

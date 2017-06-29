@@ -1,6 +1,15 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 7.2.2 to 8.0.0 (2017-Jun-30)
+  - all of deprecated classes, methods and files are
+    removed.
+    - get smaller all-min.js than before.
+    - following files are refactored:
+    - asn1hex, asn1x509, crypto, jwsjs, keyutil,
+      rsapem, rsasign, x509.
+  - npm/lib/footer.js fix for issue #270.
+
 * Changes from 7.2.1 to 7.2.2 (2017-Jun-23)
   - jws 3.3.7 to 3.3.8
     - merge pull request #266

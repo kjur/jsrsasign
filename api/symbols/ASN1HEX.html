@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 7.0.0 JavaScript API Reference - ASN1HEX</title>
+		<title>jsrsasign 8.0.0 JavaScript API Reference - ASN1HEX</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -423,8 +423,6 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.lang.String.html">KJUR.lang.String</a></li>
 	
-	<li><a href="../symbols/PKCS5PKEY.html">PKCS5PKEY</a></li>
-	
 	<li><a href="../symbols/RSAKey.html">RSAKey</a></li>
 	
 	<li><a href="../symbols/X509.html">X509</a></li>
@@ -510,15 +508,6 @@ hexadecmal string of ASN.1 DER encoded data.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getByteLengthOfL_AtObj">getByteLengthOfL_AtObj</a></b>(s, idx)
-								</div>
-								<div class="description">(DEPRECATED) get byte length for ASN.1 L(length) bytes<br/></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getChildIdx">getChildIdx</a></b>(h, pos)
 								</div>
 								<div class="description">get array of string indexes of child ASN.1 objects<br/>
@@ -530,75 +519,10 @@ in a ASN.1 value.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getDecendantHexTLVByNthList">getDecendantHexTLVByNthList</a></b>(h, currentIndex, nthList)
-								</div>
-								<div class="description">(DEPRECATED) get hexadecimal string of ASN.1 TLV refered by current index and nth index list.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getDecendantHexVByNthList">getDecendantHexVByNthList</a></b>(h, currentIndex, nthList)
-								</div>
-								<div class="description">(DEPRECATED) get hexadecimal string of ASN.1 V refered by current index and nth index list.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getDecendantIndexByNthList">getDecendantIndexByNthList</a></b>(h, currentIndex, nthList, checkingTag)
-								</div>
-								<div class="description">(DEPRECATED) get string index of nth child object of ASN.1 object refered by h, idx<br/>
-NOTE: Optional checkingTag has been supported since
-jsrsasign 7.1.4 asn1hex 1.1.10.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getHexOfL_AtObj">getHexOfL_AtObj</a></b>(s, idx)
-								</div>
-								<div class="description">(DEPRECATED) get hexadecimal string for ASN.1 L(length) bytes<br/></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getHexOfTLV_AtObj">getHexOfTLV_AtObj</a></b>(s, idx)
-								</div>
-								<div class="description">(DEPRECATED) get hexadecimal string of ASN.1 TLV at<br/></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getHexOfV_AtObj">getHexOfV_AtObj</a></b>(s, pos)
-								</div>
-								<div class="description">(DEPRECATED) get hexadecimal string of ASN.1 V(value)</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getIdxbyList">getIdxbyList</a></b>(h, currentIndex, nthList, checkingTag)
 								</div>
 								<div class="description">get string index of nth child object of ASN.1 object refered by h, idx<br/>
 </div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getIntOfL_AtObj">getIntOfL_AtObj</a></b>(s, pos)
-								</div>
-								<div class="description">(DEPRECATED) get integer value of ASN.1 length for ASN.1 data<br/></div>
 							</td>
 						</tr>
 					
@@ -635,44 +559,6 @@ jsrsasign 7.1.4 asn1hex 1.1.10.</div>
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getNthChildIdx">getNthChildIdx</a></b>(h, idx, nth)
 								</div>
 								<div class="description">get string index of nth child object of ASN.1 object refered by h, idx<br/></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getNthChildIndex_AtObj">getNthChildIndex_AtObj</a></b>(h, idx, nth)
-								</div>
-								<div class="description">(DEPRECATED) get string index of nth child object of ASN.1 object refered by h, idx<br/></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getPosArrayOfChildren_AtObj">getPosArrayOfChildren_AtObj</a></b>(h, idx)
-								</div>
-								<div class="description">(DEPRECATED) get array of string indexes of child ASN.1 objects<br/>
-This method returns array of integers for a concatination of ASN.1 objects
-in a ASN.1 value.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getPosOfNextSibling_AtObj">getPosOfNextSibling_AtObj</a></b>(s, idx)
-								</div>
-								<div class="description">(DEPRECATED) get next sibling starting index for ASN.1 object string<br/></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getStartPosOfV_AtObj">getStartPosOfV_AtObj</a></b>(s, idx)
-								</div>
-								<div class="description">(DEPRECATED) get ASN.1 value starting string position for ASN.1 object refered by index 'idx'.</div>
 							</td>
 						</tr>
 					
@@ -765,17 +651,6 @@ a specified string of number dot notation (i.e.</div>
 							</td>
 						</tr>
 					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.pemToHex">pemToHex</a></b>(s, sHead)
-								</div>
-								<div class="description">(DEPRECATED) get hexacedimal string from PEM format data<br/>
-This static method gets a hexacedimal string of contents 
-from PEM format data.</div>
-							</td>
-						</tr>
-					
 					</tbody>
 				</table>
 				
@@ -810,19 +685,13 @@ Here are major methods of this class.
   <li><a href="../symbols/ASN1HEX.html#.getVidx">ASN1HEX.getVidx</a> - get ASN.1 V position from its ASN.1 TLV position</li>
   <li><a href="../symbols/ASN1HEX.html#.getL">ASN1HEX.getL</a> - get hexadecimal ASN.1 L at specified position</li>
   <li><a href="../symbols/ASN1HEX.html#.getLblen">ASN1HEX.getLblen</a> - get byte length for ASN.1 L(length) bytes</li>
-  <li>(DEPRECATED) <a href="../symbols/ASN1HEX.html#.getHexOfTLV_AtObj">ASN1HEX.getHexOfTLV_AtObj</a> - get ASN.1 TLV at specified position</li>
-  <li>(DEPRECATED) <a href="../symbols/ASN1HEX.html#.getHexOfV_AtObj">ASN1HEX.getHexOfV_AtObj</a> - get ASN.1 V at specified position</li>
-  <li>(DEPRECATED) <a href="../symbols/ASN1HEX.html#.getHexOfL_AtObj">ASN1HEX.getHexOfL_AtObj</a> - get hexadecimal ASN.1 L at specified position</li>
-  <li>(DEPRECATED) <a href="../symbols/ASN1HEX.html#.getIntOfL_AtObj">ASN1HEX.getIntOfL_AtObj</a> - get integer ASN.1 L at specified position</li>
-  <li>(DEPRECATED) <a href="../symbols/ASN1HEX.html#.getStartPosOfV_AtObj">ASN1HEX.getStartPosOfV_AtObj</a> - get ASN.1 V position from its ASN.1 TLV position</li>
-  <li>(DEPRECATED) <a href="../symbols/ASN1HEX.html#.getByteLengthOfL_AtObj">ASN1HEX.getByteLengthOfL_AtObj</a> - get byte length for ASN.1 L(length) bytes</li>
   </ul>
 </li>
 <li><b>ACCESS FOR CHILD ITEM</b>
   <ul>
-  <li><a href="../symbols/ASN1HEX.html#.getNthChildIndex_AtObj">ASN1HEX.getNthChildIndex_AtObj</a> - get nth child index at specified position</li>
-  <li><a href="../symbols/ASN1HEX.html#.getPosArrayOfChildren_AtObj">ASN1HEX.getPosArrayOfChildren_AtObj</a> - get indexes of children</li>
-  <li><a href="../symbols/ASN1HEX.html#.getPosOfNextSibling_AtObj">ASN1HEX.getPosOfNextSibling_AtObj</a> - get position of next sibling</li>
+  <li>ASN1HEX.getNthChildIndex_AtObj - get nth child index at specified position</li>
+  <li>ASN1HEX.getPosArrayOfChildren_AtObj - get indexes of children</li>
+  <li>ASN1HEX.getPosOfNextSibling_AtObj - get position of next sibling</li>
   </ul>
 </li>
 <li><b>ACCESS NESTED ASN.1 STRUCTURE</b>
@@ -830,9 +699,6 @@ Here are major methods of this class.
   <li><a href="../symbols/ASN1HEX.html#.getTLVbyList">ASN1HEX.getTLVbyList</a> - get ASN.1 TLV at specified list index</li>
   <li><a href="../symbols/ASN1HEX.html#.getVbyList">ASN1HEX.getVbyList</a> - get ASN.1 V at specified nth list index with checking expected tag</li>
   <li><a href="../symbols/ASN1HEX.html#.getIdxbyList">ASN1HEX.getIdxbyList</a> - get index at specified list index</li>
-  <li>(DEPRECATED) <a href="../symbols/ASN1HEX.html#.getDecendantHexTLVByNthList">ASN1HEX.getDecendantHexTLVByNthList</a> - get ASN.1 TLV at specified list index</li>
-  <li>(DEPRECATED) <a href="../symbols/ASN1HEX.html#.getDecendantHexVByNthList">ASN1HEX.getDecendantHexVByNthList</a> - get ASN.1 V at specified list index</li>
-  <li>(DEPRECATED) <a href="../symbols/ASN1HEX.html#.getDecendantIndexByNthList">ASN1HEX.getDecendantIndexByNthList</a> - get index at specified list index</li>
   </ul>
 </li>
 <li><b>UTILITIES</b>
@@ -1004,62 +870,6 @@ SEQUENCE
 
 					<hr />
 				
-					<a name=".getByteLengthOfL_AtObj"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">ASN1HEX.</span><b>getByteLengthOfL_AtObj</b>(s, idx)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get byte length for ASN.1 L(length) bytes<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>s</b>
-									
-								</dt>
-								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>idx</b>
-									
-								</dt>
-								<dd>string index</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from asn1hex 1.1.11 jsrsasign 7.2.0 please move to <a href="../symbols/ASN1HEX.html#.getLblen">ASN1HEX.getLblen</a>
-							</dt>
-							</dl>
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>byte length for ASN.1 L(length) bytes</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
 					<a name=".getChildIdx"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1119,378 +929,6 @@ ASN1HEX.getChildIdx("3006020104020105", 0) &rArr; [4, 10] // SEQUENCE(INT4,INT5)
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Array of Number}</span> array of indexes for childen of ASN.1 objects</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getDecendantHexTLVByNthList"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{Number}</span>
-					<span class="light">ASN1HEX.</span><b>getDecendantHexTLVByNthList</b>(h, currentIndex, nthList)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get hexadecimal string of ASN.1 TLV refered by current index and nth index list.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>h</b>
-									
-								</dt>
-								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>currentIndex</b>
-									
-								</dt>
-								<dd>start string index of ASN.1 object</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Array of Number}</span> <b>nthList</b>
-									
-								</dt>
-								<dd>array list of nth</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>1.1</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Number}</span> hexadecimal string of ASN.1 TLV refered by nthList</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getDecendantHexVByNthList"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{Number}</span>
-					<span class="light">ASN1HEX.</span><b>getDecendantHexVByNthList</b>(h, currentIndex, nthList)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get hexadecimal string of ASN.1 V refered by current index and nth index list.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>h</b>
-									
-								</dt>
-								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>currentIndex</b>
-									
-								</dt>
-								<dd>start string index of ASN.1 object</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Array of Number}</span> <b>nthList</b>
-									
-								</dt>
-								<dd>array list of nth</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>1.1</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Number}</span> hexadecimal string of ASN.1 V refered by nthList</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getDecendantIndexByNthList"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{Number}</span>
-					<span class="light">ASN1HEX.</span><b>getDecendantIndexByNthList</b>(h, currentIndex, nthList, checkingTag)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get string index of nth child object of ASN.1 object refered by h, idx<br/>
-NOTE: Optional checkingTag has been supported since
-jsrsasign 7.1.4 asn1hex 1.1.10.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>h</b>
-									
-								</dt>
-								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>currentIndex</b>
-									
-								</dt>
-								<dd>start string index of ASN.1 object</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Array of Number}</span> <b>nthList</b>
-									
-								</dt>
-								<dd>array list of nth</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>checkingTag</b>
-									
-								</dt>
-								<dd>(OPTIONAL) string of expected ASN.1 tag for nthList</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from asn1hex 1.1.10 jsrsasign 7.1.4. please move to <a href="../symbols/ASN1HEX.html#.getIdxbyList">ASN1HEX.getIdxbyList</a>
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>1.1</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Number}</span> string index refered by nthList</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getHexOfL_AtObj"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">ASN1HEX.</span><b>getHexOfL_AtObj</b>(s, idx)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get hexadecimal string for ASN.1 L(length) bytes<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>s</b>
-									
-								</dt>
-								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>idx</b>
-									
-								</dt>
-								<dd>string index to get L of ASN.1 object</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from asn1hex 1.1.11 jsrsasign 7.2.0 please move to <a href="../symbols/ASN1HEX.html#.getL">ASN1HEX.getL</a>
-							</dt>
-							</dl>
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> hexadecimal string for ASN.1 L(length) bytes</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getHexOfTLV_AtObj"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">ASN1HEX.</span><b>getHexOfTLV_AtObj</b>(s, idx)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get hexadecimal string of ASN.1 TLV at<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>s</b>
-									
-								</dt>
-								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>idx</b>
-									
-								</dt>
-								<dd>string index</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from asn1hex 1.1.11 jsrsasign 7.2.0 please move to <a href="../symbols/ASN1HEX.html#.getTLV">ASN1HEX.getTLV</a>
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>asn1hex 1.1</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> hexadecimal string of ASN.1 TLV.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getHexOfV_AtObj"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">ASN1HEX.</span><b>getHexOfV_AtObj</b>(s, pos)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get hexadecimal string of ASN.1 V(value)
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>s</b>
-									
-								</dt>
-								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>pos</b>
-									
-								</dt>
-								<dd>string index</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from asn1hex 1.1.11 jsrsasign 7.2.0 please move to <a href="../symbols/ASN1HEX.html#.getV">ASN1HEX.getV</a>
-							</dt>
-							</dl>
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> hexadecimal string of ASN.1 value.</dd>
 							
 							</dl>
 						
@@ -1573,62 +1011,6 @@ SQUENCE               -
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Number}</span> string index refered by nthList</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getIntOfL_AtObj"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">ASN1HEX.</span><b>getIntOfL_AtObj</b>(s, pos)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get integer value of ASN.1 length for ASN.1 data<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>s</b>
-									
-								</dt>
-								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>pos</b>
-									
-								</dt>
-								<dd>string index</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from asn1hex 1.1.11 jsrsasign 7.2.0 please move to <a href="../symbols/ASN1HEX.html#.getVblen">ASN1HEX.getVblen</a>
-							</dt>
-							</dl>
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>ASN.1 L(length) integer value</dd>
 							
 							</dl>
 						
@@ -1874,233 +1256,6 @@ getNextSiblingIdx("3006020103020104", 4) & rarr 10</pre>
 								<dd><span class="light fixedFont">{Number}</span> string index of nth child.</dd>
 							
 							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getNthChildIndex_AtObj"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{Number}</span>
-					<span class="light">ASN1HEX.</span><b>getNthChildIndex_AtObj</b>(h, idx, nth)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get string index of nth child object of ASN.1 object refered by h, idx<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>h</b>
-									
-								</dt>
-								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>idx</b>
-									
-								</dt>
-								<dd>start string index of ASN.1 object</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>nth</b>
-									
-								</dt>
-								<dd>for child</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from asn1hex 1.1.11 jsrsasign 7.2.0 please move to <a href="../symbols/ASN1HEX.html#.getNthChildIdx">ASN1HEX.getNthChildIdx</a>
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>1.1</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Number}</span> string index of nth child.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getPosArrayOfChildren_AtObj"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{Array of Number}</span>
-					<span class="light">ASN1HEX.</span><b>getPosArrayOfChildren_AtObj</b>(h, idx)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get array of string indexes of child ASN.1 objects<br/>
-This method returns array of integers for a concatination of ASN.1 objects
-in a ASN.1 value. As for BITSTRING, one byte of unusedbits is skipped.
-As for other ASN.1 simple types such as INTEGER, OCTET STRING or PRINTABLE STRING,
-it returns a array of a string index of its ASN.1 value.<br/>
-NOTE: Since asn1hex 1.1.7 of jsrsasign 6.1.2, Encapsulated BitString is supported.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>h</b>
-									
-								</dt>
-								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>idx</b>
-									
-								</dt>
-								<dd>start string index of ASN.1 object</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Array of Number}</span> array of indexes for childen of ASN.1 objects</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getPosOfNextSibling_AtObj"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">ASN1HEX.</span><b>getPosOfNextSibling_AtObj</b>(s, idx)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get next sibling starting index for ASN.1 object string<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>s</b>
-									
-								</dt>
-								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>idx</b>
-									
-								</dt>
-								<dd>string index</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from asn1hex 1.1.11 jsrsasign 7.2.0 please move to <a href="../symbols/ASN1HEX.html#.getNextSiblingIdx">ASN1HEX.getNextSiblingIdx</a>
-							</dt>
-							</dl>
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>next sibling starting index for ASN.1 object string</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getStartPosOfV_AtObj"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">ASN1HEX.</span><b>getStartPosOfV_AtObj</b>(s, idx)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get ASN.1 value starting string position for ASN.1 object refered by index 'idx'.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>s</b>
-									
-								</dt>
-								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span> <b>idx</b>
-									
-								</dt>
-								<dd>string index</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from asn1hex 1.1.11 jsrsasign 7.2.0 please move to <a href="../symbols/ASN1HEX.html#.getVidx">ASN1HEX.getVidx</a>
-							</dt>
-							</dl>
-						
-						
-						
 						
 						
 						
@@ -2615,82 +1770,6 @@ ASN1HEX.oidname("0.1.2.3") &rarr; 0.1.2.3 // unknown</pre>
 						
 						
 
-					<hr />
-				
-					<a name=".pemToHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">ASN1HEX.</span><b>pemToHex</b>(s, sHead)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get hexacedimal string from PEM format data<br/>
-This static method gets a hexacedimal string of contents 
-from PEM format data. You can explicitly specify PEM header 
-by sHead argument. 
-Any space characters such as white space or new line
-will be omitted.<br/>
-NOTE: Now <a href="../symbols/KEYUTIL.html#.getHexFromPEM">KEYUTIL.getHexFromPEM</a> and <a href="../symbols/X509.html#.pemToHex">X509.pemToHex</a>
-have been deprecated since jsrsasign 7.0.1. 
-Please use this method instead.
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">ASN1HEX.pemToHex("-----BEGIN PUBLIC KEY...") &rarr; "3082..."
-ASN1HEX.pemToHex("-----BEGIN CERTIFICATE...", "CERTIFICATE") &rarr; "3082..."
-ASN1HEX.pemToHex(" \r\n-----BEGIN DSA PRIVATE KEY...") &rarr; "3082..."</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>s</b>
-									
-								</dt>
-								<dd>PEM formatted string</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sHead</b>
-									
-								</dt>
-								<dd>PEM header string without BEGIN/END(OPTION)</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								since jsrsasign 7.2.1 asn1hex 1.1.12. Please move to <a href="../symbols/global__.html#pemtohex">pemtohex</a>
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>jsrsasign 7.0.1 asn1hex 1.1.9</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> hexadecimal string data of PEM contents</dd>
-							
-							</dl>
-						
-						
-						
-
 					
 				
 			
@@ -2704,7 +1783,7 @@ ASN1HEX.pemToHex(" \r\n-----BEGIN DSA PRIVATE KEY...") &rarr; "3082..."</pre>
 		
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
-                        &copy; 2012-2016 Kenji Urushima, All rights reserved<br/>
+                        &copy; 2012-2017 Kenji Urushima, All rights reserved<br/>
 			
 			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 
 		</div>

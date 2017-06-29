@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* jwsjs-2.1.1 (c) 2010-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* jwsjs-2.2.0 (c) 2010-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * jwsjs.js - JSON Web Signature JSON Serialization (JWSJS) Class
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name jwsjs-2.0.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign 7.2.1 jwsjs 2.1.1 (2017-Jun-03)
+<span class='line'> 19</span>  * @version jsrsasign 8.0.0 jwsjs 2.2.0 (2017-Jun-25)
 <span class='line'> 20</span>  * @since jsjws 1.2, jsrsasign 4.8.0
 <span class='line'> 21</span>  * @license &lt;a href="http://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -168,226 +168,145 @@
 <span class='line'>161</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>162</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>163</span> 
-<span class='line'>164</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>165</span>      * (DEPRECATED) add a signature to existing JWS-JS by Header and PKCS1 private key.&lt;br/>
-<span class='line'>166</span>      * @name addSignatureByHeaderKey
-<span class='line'>167</span>      * @memberOf KJUR.jws.JWSJS#
-<span class='line'>168</span>      * @function
-<span class='line'>169</span>      * @param {String} sHead JSON string of JWS Header for adding signature.
-<span class='line'>170</span>      * @param {String} sPemPrvKey string of PKCS1 private key
-<span class='line'>171</span>      * @deprecated from jwsjs 2.1.0 jsrsasign 5.1.0
-<span class='line'>172</span>      */</span><span class="WHIT">
-<span class='line'>173</span> </span><span class="WHIT">    </span><span class="NAME">this.addSignatureByHeaderKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">sHead</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sPemPrvKey</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>174</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sPayload</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">b64utoutf8</span><span class="PUNC">(</span><span class="NAME">this.sPayload</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>175</span> 
-<span class='line'>176</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">jws</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">KJUR.jws.JWS</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>177</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sJWS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">jws.generateJWSByP1PrvKey</span><span class="PUNC">(</span><span class="NAME">sHead</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sPayload</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sPemPrvKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>178</span> </span><span class="WHIT">  
-<span class='line'>179</span> 	</span><span class="NAME">this.aHeader.push</span><span class="PUNC">(</span><span class="NAME">jws.parsedJWS.headB64U</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>180</span> </span><span class="WHIT">	</span><span class="NAME">this.aSignature.push</span><span class="PUNC">(</span><span class="NAME">jws.parsedJWS.sigvalB64U</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>181</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>182</span> 
-<span class='line'>183</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>184</span>      * (DEPRECATED) add a signature to existing JWS-JS by Header, Payload and PKCS1 private key.&lt;br/>
-<span class='line'>185</span>      * This is to add first signature to JWS-JS object.
-<span class='line'>186</span>      * @name addSignatureByHeaderPayloadKey
-<span class='line'>187</span>      * @memberOf KJUR.jws.JWSJS#
-<span class='line'>188</span>      * @function
-<span class='line'>189</span>      * @param {String} sHead JSON string of JWS Header for adding signature.
-<span class='line'>190</span>      * @param {String} sPayload string of JWS Payload for adding signature.
-<span class='line'>191</span>      * @param {String} sPemPrvKey string of PKCS1 private key
-<span class='line'>192</span>      * @deprecated from jwsjs 2.1.0 jsrsasign 5.1.0
-<span class='line'>193</span>      */</span><span class="WHIT">
-<span class='line'>194</span> </span><span class="WHIT">    </span><span class="NAME">this.addSignatureByHeaderPayloadKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">sHead</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sPayload</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sPemPrvKey</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>195</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">jws</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">KJUR.jws.JWS</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>196</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sJWS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">jws.generateJWSByP1PrvKey</span><span class="PUNC">(</span><span class="NAME">sHead</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sPayload</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sPemPrvKey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>197</span> </span><span class="WHIT">  
-<span class='line'>198</span> 	</span><span class="NAME">this.aHeader.push</span><span class="PUNC">(</span><span class="NAME">jws.parsedJWS.headB64U</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>199</span> </span><span class="WHIT">	</span><span class="NAME">this.sPayload</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">jws.parsedJWS.payloadB64U</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>200</span> </span><span class="WHIT">	</span><span class="NAME">this.aSignature.push</span><span class="PUNC">(</span><span class="NAME">jws.parsedJWS.sigvalB64U</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>201</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>202</span> 
-<span class='line'>203</span> </span><span class="WHIT">    </span><span class="COMM">// == verify signature ====================================================</span><span class="WHIT">
-<span class='line'>204</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>205</span>      * verify all signature of JWS-JS object by array of key and acceptAlgs.&lt;br/>
-<span class='line'>206</span>      * @name verifyAll
-<span class='line'>207</span>      * @memberOf KJUR.jws.JWSJS#
-<span class='line'>208</span>      * @function
-<span class='line'>209</span>      * @param {array of key and acceptAlgs} aKeyAlg a array of key and acceptAlgs
-<span class='line'>210</span>      * @return true if all signatures are valid otherwise false
-<span class='line'>211</span>      * @since jwsjs 2.1.0 jsrsasign 5.1.0
-<span class='line'>212</span>      * @example
-<span class='line'>213</span>      * jwsjs1 = new KJUR.jws.JWSJS();
-<span class='line'>214</span>      * jwsjs1.readJWSJS("{headers: [...], payload: "eyJ...", signatures: [...]}");
-<span class='line'>215</span>      * isValid = jwsjs1.verifyAll([["-----BEGIN CERT...", ["RS256"]],
-<span class='line'>216</span>      *                             [{utf8: "secret"}, ["HS256"]]]); 
-<span class='line'>217</span>      */</span><span class="WHIT">
-<span class='line'>218</span> </span><span class="WHIT">    </span><span class="NAME">this.verifyAll</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">aKeyAlg</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>219</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.aHeader.length</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">aKeyAlg.length</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT">
-<span class='line'>220</span> </span><span class="WHIT">	    </span><span class="NAME">this.aSignature.length</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">aKeyAlg.length</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>221</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>222</span> 
-<span class='line'>223</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">aKeyAlg.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>224</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">keyAlg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aKeyAlg</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>225</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">keyAlg.length</span><span class="WHIT">  </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>226</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.verifyNth</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keyAlg</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keyAlg</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>227</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>228</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>229</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>230</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>231</span> 
-<span class='line'>232</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>233</span>      * verify Nth signature of JWS-JS object by key and acceptAlgs.&lt;br/>
-<span class='line'>234</span>      * @name verifyNth
-<span class='line'>235</span>      * @memberOf KJUR.jws.JWSJS#
-<span class='line'>236</span>      * @function
-<span class='line'>237</span>      * @param {Integer} idx nth index of JWS-JS signature to verify
-<span class='line'>238</span>      * @param {Object} key key to verify
-<span class='line'>239</span>      * @param {array of String} acceptAlgs array of acceptable signature algorithms
-<span class='line'>240</span>      * @return true if signature is valid otherwise false
-<span class='line'>241</span>      * @since jwsjs 2.1.0 jsrsasign 5.1.0
-<span class='line'>242</span>      * @example
-<span class='line'>243</span>      * jwsjs1 = new KJUR.jws.JWSJS();
-<span class='line'>244</span>      * jwsjs1.readJWSJS("{headers: [...], payload: "eyJ...", signatures: [...]}");
-<span class='line'>245</span>      * isValid1 = jwsjs1.verifyNth(0, "-----BEGIN CERT...", ["RS256"]);
-<span class='line'>246</span>      * isValid2 = jwsjs1.verifyNth(1, {utf8: "secret"}, ["HS256"]);
-<span class='line'>247</span>      */</span><span class="WHIT">
-<span class='line'>248</span> </span><span class="WHIT">    </span><span class="NAME">this.verifyNth</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">key</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">acceptAlgs</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>249</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.aHeader.length</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">this.aSignature.length</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>250</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>251</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sHeader</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.aHeader</span><span class="PUNC">[</span><span class="NAME">idx</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>252</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sSignature</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.aSignature</span><span class="PUNC">[</span><span class="NAME">idx</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>253</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sJWS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sHeader</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.sPayload</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">sSignature</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>254</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>255</span> </span><span class="WHIT">	</span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>256</span> </span><span class="WHIT">	    </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_KJUR_jws_JWS.verify</span><span class="PUNC">(</span><span class="NAME">sJWS</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">key</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">acceptAlgs</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>257</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>258</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>259</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>260</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>261</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>262</span> 
-<span class='line'>263</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>264</span>      * (DEPRECATED) verify JWS-JS object with array of certificate string.&lt;br/>
-<span class='line'>265</span>      * @name verifyWithCerts
-<span class='line'>266</span>      * @memberOf KJUR.jws.JWSJS#
-<span class='line'>267</span>      * @function
-<span class='line'>268</span>      * @param {array of String} aCert array of string for X.509 PEM certificate.
-<span class='line'>269</span>      * @return 1 if signature is valid.
-<span class='line'>270</span>      * @throw if JWS-JS signature is invalid.
-<span class='line'>271</span>      * @deprecated from jwsjs 2.1.0 jsrsasign 5.1.0
-<span class='line'>272</span>      */</span><span class="WHIT">
-<span class='line'>273</span> </span><span class="WHIT">    </span><span class="NAME">this.verifyWithCerts</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">aCert</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>274</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.aHeader.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">aCert.length</span><span class="PUNC">)</span><span class="WHIT"> 
-<span class='line'>275</span> 	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"num headers does not match with num certs"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>276</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.aSignature.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">aCert.length</span><span class="PUNC">)</span><span class="WHIT"> 
-<span class='line'>277</span> 	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"num signatures does not match with num certs"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>278</span> 
-<span class='line'>279</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">payload</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.sPayload</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>280</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">errMsg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>281</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">aCert.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>282</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cert</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aCert</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>283</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">header</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.aHeader</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>284</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.aSignature</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>285</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sJWS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">header</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">payload</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">sig</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>286</span> 
-<span class='line'>287</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">jws</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">KJUR.jws.JWS</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>288</span> </span><span class="WHIT">	    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>289</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">jws.verifyJWSByPemX509Cert</span><span class="PUNC">(</span><span class="NAME">sJWS</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">cert</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>290</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>291</span> </span><span class="WHIT">		    </span><span class="NAME">errMsg</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"th signature unmatch. "</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>292</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>293</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>294</span> </span><span class="WHIT">		</span><span class="NAME">errMsg</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"th signature fail("</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">ex</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"). "</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>295</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>296</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>297</span> 
-<span class='line'>298</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">errMsg</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>299</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>300</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>301</span> </span><span class="WHIT">	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="NAME">errMsg</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>302</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>303</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="WHIT">    </span><span class="COMM">// == verify signature ====================================================</span><span class="WHIT">
+<span class='line'>165</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>166</span>      * verify all signature of JWS-JS object by array of key and acceptAlgs.&lt;br/>
+<span class='line'>167</span>      * @name verifyAll
+<span class='line'>168</span>      * @memberOf KJUR.jws.JWSJS#
+<span class='line'>169</span>      * @function
+<span class='line'>170</span>      * @param {array of key and acceptAlgs} aKeyAlg a array of key and acceptAlgs
+<span class='line'>171</span>      * @return true if all signatures are valid otherwise false
+<span class='line'>172</span>      * @since jwsjs 2.1.0 jsrsasign 5.1.0
+<span class='line'>173</span>      * @example
+<span class='line'>174</span>      * jwsjs1 = new KJUR.jws.JWSJS();
+<span class='line'>175</span>      * jwsjs1.readJWSJS("{headers: [...], payload: "eyJ...", signatures: [...]}");
+<span class='line'>176</span>      * isValid = jwsjs1.verifyAll([["-----BEGIN CERT...", ["RS256"]],
+<span class='line'>177</span>      *                             [{utf8: "secret"}, ["HS256"]]]); 
+<span class='line'>178</span>      */</span><span class="WHIT">
+<span class='line'>179</span> </span><span class="WHIT">    </span><span class="NAME">this.verifyAll</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">aKeyAlg</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>180</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.aHeader.length</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">aKeyAlg.length</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="WHIT">	    </span><span class="NAME">this.aSignature.length</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">aKeyAlg.length</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>182</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>183</span> 
+<span class='line'>184</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">aKeyAlg.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>185</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">keyAlg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aKeyAlg</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>186</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">keyAlg.length</span><span class="WHIT">  </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>187</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.verifyNth</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keyAlg</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keyAlg</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>188</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>189</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>190</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>191</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>192</span> 
+<span class='line'>193</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>194</span>      * verify Nth signature of JWS-JS object by key and acceptAlgs.&lt;br/>
+<span class='line'>195</span>      * @name verifyNth
+<span class='line'>196</span>      * @memberOf KJUR.jws.JWSJS#
+<span class='line'>197</span>      * @function
+<span class='line'>198</span>      * @param {Integer} idx nth index of JWS-JS signature to verify
+<span class='line'>199</span>      * @param {Object} key key to verify
+<span class='line'>200</span>      * @param {array of String} acceptAlgs array of acceptable signature algorithms
+<span class='line'>201</span>      * @return true if signature is valid otherwise false
+<span class='line'>202</span>      * @since jwsjs 2.1.0 jsrsasign 5.1.0
+<span class='line'>203</span>      * @example
+<span class='line'>204</span>      * jwsjs1 = new KJUR.jws.JWSJS();
+<span class='line'>205</span>      * jwsjs1.readJWSJS("{headers: [...], payload: "eyJ...", signatures: [...]}");
+<span class='line'>206</span>      * isValid1 = jwsjs1.verifyNth(0, "-----BEGIN CERT...", ["RS256"]);
+<span class='line'>207</span>      * isValid2 = jwsjs1.verifyNth(1, {utf8: "secret"}, ["HS256"]);
+<span class='line'>208</span>      */</span><span class="WHIT">
+<span class='line'>209</span> </span><span class="WHIT">    </span><span class="NAME">this.verifyNth</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">key</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">acceptAlgs</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>210</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.aHeader.length</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">this.aSignature.length</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>211</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>212</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sHeader</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.aHeader</span><span class="PUNC">[</span><span class="NAME">idx</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>213</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sSignature</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.aSignature</span><span class="PUNC">[</span><span class="NAME">idx</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>214</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sJWS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sHeader</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.sPayload</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">sSignature</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>216</span> </span><span class="WHIT">	</span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>217</span> </span><span class="WHIT">	    </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_KJUR_jws_JWS.verify</span><span class="PUNC">(</span><span class="NAME">sJWS</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">key</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">acceptAlgs</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>219</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>220</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>221</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>222</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>223</span> 
+<span class='line'>224</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>225</span>      * read JWS-JS string or object&lt;br/>
+<span class='line'>226</span>      * @name readJWSJS
+<span class='line'>227</span>      * @memberOf KJUR.jws.JWSJS#
+<span class='line'>228</span>      * @function
+<span class='line'>229</span>      * @param {Object} spJWSJS string or JSON object of JWS-JS to load.
+<span class='line'>230</span>      * @throw if sJWSJS is malformed or not JSON string.
+<span class='line'>231</span>      * @description
+<span class='line'>232</span>      * NOTE: Loading from JSON object is suppored from 
+<span class='line'>233</span>      * jsjws 2.1.0 jsrsasign 5.1.0 (2016-Sep-06).
+<span class='line'>234</span>      * @example
+<span class='line'>235</span>      * // load JWSJS from string
+<span class='line'>236</span>      * jwsjs1 = new KJUR.jws.JWSJS();
+<span class='line'>237</span>      * jwsjs1.readJWSJS("{headers: [...], payload: "eyJ...", signatures: [...]}");
+<span class='line'>238</span>      *
+<span class='line'>239</span>      * // load JWSJS from JSON object
+<span class='line'>240</span>      * jwsjs1 = new KJUR.jws.JWSJS();
+<span class='line'>241</span>      * jwsjs1.readJWSJS({headers: [...], payload: "eyJ...", signatures: [...]});
+<span class='line'>242</span>      */</span><span class="WHIT">
+<span class='line'>243</span> </span><span class="WHIT">    </span><span class="NAME">this.readJWSJS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">spJWSJS</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>244</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">spJWSJS</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>245</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oJWSJS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_readSafeJSONString</span><span class="PUNC">(</span><span class="NAME">spJWSJS</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>246</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">oJWSJS</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"argument is not safe JSON object string"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>247</span> 
+<span class='line'>248</span> </span><span class="WHIT">	    </span><span class="NAME">this.aHeader</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">oJWSJS.headers</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>249</span> </span><span class="WHIT">	    </span><span class="NAME">this.sPayload</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">oJWSJS.payload</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>250</span> </span><span class="WHIT">	    </span><span class="NAME">this.aSignature</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">oJWSJS.signatures</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>251</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>252</span> </span><span class="WHIT">	    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>253</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">spJWSJS.headers.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>254</span> </span><span class="WHIT">		    </span><span class="NAME">this.aHeader</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">spJWSJS.headers</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>255</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>256</span> </span><span class="WHIT">		    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed header"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>257</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>258</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">spJWSJS.payload</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>259</span> </span><span class="WHIT">		    </span><span class="NAME">this.sPayload</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">spJWSJS.payload</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>260</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>261</span> </span><span class="WHIT">		    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed signatures"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>262</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>263</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">spJWSJS.signatures.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>264</span> </span><span class="WHIT">		    </span><span class="NAME">this.signatures</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">spJWSJS.signatures</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>265</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>266</span> </span><span class="WHIT">		    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed signatures"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>267</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>268</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>269</span> </span><span class="WHIT">		</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed JWS-JS JSON object: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">ex</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>270</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>271</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>272</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>273</span> 
+<span class='line'>274</span> </span><span class="WHIT">    </span><span class="COMM">// == utility =============================================================</span><span class="WHIT">
+<span class='line'>275</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>276</span>      * get JSON object for this JWS-JS object.&lt;br/>
+<span class='line'>277</span>      * @name getJSON
+<span class='line'>278</span>      * @memberOf KJUR.jws.JWSJS#
+<span class='line'>279</span>      * @function
+<span class='line'>280</span>      * @example
+<span class='line'>281</span>      * jwsj1 = new KJUR.jws.JWSJS();
+<span class='line'>282</span>      * // do some jwsj1 operation then get result by getJSON()
+<span class='line'>283</span>      * jwsjsObj1 = jwsjs1.getJSON();
+<span class='line'>284</span>      * // jwsjsObj1 &rarr; { headers: [...], payload: "ey...", signatures: [...] }
+<span class='line'>285</span>      */</span><span class="WHIT">
+<span class='line'>286</span> </span><span class="WHIT">    </span><span class="NAME">this.getJSON</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>287</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="STRN">"headers"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.aHeader</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>288</span> </span><span class="WHIT">		 </span><span class="STRN">"payload"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.sPayload</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>289</span> </span><span class="WHIT">		 </span><span class="STRN">"signatures"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.aSignature</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT"> 
+<span class='line'>290</span>     </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>291</span> 
+<span class='line'>292</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>293</span>      * check if this JWS-JS object is empty.&lt;br/>
+<span class='line'>294</span>      * @name isEmpty
+<span class='line'>295</span>      * @memberOf KJUR.jws.JWSJS#
+<span class='line'>296</span>      * @function
+<span class='line'>297</span>      * @return 1 if there is no signatures in this object, otherwise 0.
+<span class='line'>298</span>      */</span><span class="WHIT">
+<span class='line'>299</span> </span><span class="WHIT">    </span><span class="NAME">this.isEmpty</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>300</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.aHeader.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT"> 
+<span class='line'>301</span> 	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>302</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>303</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>304</span> 
-<span class='line'>305</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>306</span>      * read JWS-JS string or object&lt;br/>
-<span class='line'>307</span>      * @name readJWSJS
-<span class='line'>308</span>      * @memberOf KJUR.jws.JWSJS#
-<span class='line'>309</span>      * @function
-<span class='line'>310</span>      * @param {Object} spJWSJS string or JSON object of JWS-JS to load.
-<span class='line'>311</span>      * @throw if sJWSJS is malformed or not JSON string.
-<span class='line'>312</span>      * @description
-<span class='line'>313</span>      * NOTE: Loading from JSON object is suppored from 
-<span class='line'>314</span>      * jsjws 2.1.0 jsrsasign 5.1.0 (2016-Sep-06).
-<span class='line'>315</span>      * @example
-<span class='line'>316</span>      * // load JWSJS from string
-<span class='line'>317</span>      * jwsjs1 = new KJUR.jws.JWSJS();
-<span class='line'>318</span>      * jwsjs1.readJWSJS("{headers: [...], payload: "eyJ...", signatures: [...]}");
-<span class='line'>319</span>      *
-<span class='line'>320</span>      * // load JWSJS from JSON object
-<span class='line'>321</span>      * jwsjs1 = new KJUR.jws.JWSJS();
-<span class='line'>322</span>      * jwsjs1.readJWSJS({headers: [...], payload: "eyJ...", signatures: [...]});
-<span class='line'>323</span>      */</span><span class="WHIT">
-<span class='line'>324</span> </span><span class="WHIT">    </span><span class="NAME">this.readJWSJS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">spJWSJS</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>325</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">spJWSJS</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>326</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oJWSJS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_readSafeJSONString</span><span class="PUNC">(</span><span class="NAME">spJWSJS</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>327</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">oJWSJS</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"argument is not safe JSON object string"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>328</span> 
-<span class='line'>329</span> </span><span class="WHIT">	    </span><span class="NAME">this.aHeader</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">oJWSJS.headers</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>330</span> </span><span class="WHIT">	    </span><span class="NAME">this.sPayload</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">oJWSJS.payload</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>331</span> </span><span class="WHIT">	    </span><span class="NAME">this.aSignature</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">oJWSJS.signatures</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>332</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>333</span> </span><span class="WHIT">	    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>334</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">spJWSJS.headers.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>335</span> </span><span class="WHIT">		    </span><span class="NAME">this.aHeader</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">spJWSJS.headers</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>336</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>337</span> </span><span class="WHIT">		    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed header"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>338</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>339</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">spJWSJS.payload</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>340</span> </span><span class="WHIT">		    </span><span class="NAME">this.sPayload</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">spJWSJS.payload</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>341</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>342</span> </span><span class="WHIT">		    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed signatures"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>343</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>344</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">spJWSJS.signatures.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>345</span> </span><span class="WHIT">		    </span><span class="NAME">this.signatures</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">spJWSJS.signatures</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>346</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>347</span> </span><span class="WHIT">		    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed signatures"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>348</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>349</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>350</span> </span><span class="WHIT">		</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed JWS-JS JSON object: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">ex</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>351</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>352</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>353</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>354</span> 
-<span class='line'>355</span> </span><span class="WHIT">    </span><span class="COMM">// == utility =============================================================</span><span class="WHIT">
-<span class='line'>356</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>357</span>      * get JSON object for this JWS-JS object.&lt;br/>
-<span class='line'>358</span>      * @name getJSON
-<span class='line'>359</span>      * @memberOf KJUR.jws.JWSJS#
-<span class='line'>360</span>      * @function
-<span class='line'>361</span>      * @example
-<span class='line'>362</span>      * jwsj1 = new KJUR.jws.JWSJS();
-<span class='line'>363</span>      * // do some jwsj1 operation then get result by getJSON()
-<span class='line'>364</span>      * jwsjsObj1 = jwsjs1.getJSON();
-<span class='line'>365</span>      * // jwsjsObj1 &rarr; { headers: [...], payload: "ey...", signatures: [...] }
-<span class='line'>366</span>      */</span><span class="WHIT">
-<span class='line'>367</span> </span><span class="WHIT">    </span><span class="NAME">this.getJSON</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>368</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="STRN">"headers"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.aHeader</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>369</span> </span><span class="WHIT">		 </span><span class="STRN">"payload"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.sPayload</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>370</span> </span><span class="WHIT">		 </span><span class="STRN">"signatures"</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.aSignature</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT"> 
-<span class='line'>371</span>     </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>372</span> 
-<span class='line'>373</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>374</span>      * check if this JWS-JS object is empty.&lt;br/>
-<span class='line'>375</span>      * @name isEmpty
-<span class='line'>376</span>      * @memberOf KJUR.jws.JWSJS#
-<span class='line'>377</span>      * @function
-<span class='line'>378</span>      * @return 1 if there is no signatures in this object, otherwise 0.
-<span class='line'>379</span>      */</span><span class="WHIT">
-<span class='line'>380</span> </span><span class="WHIT">    </span><span class="NAME">this.isEmpty</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>381</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.aHeader.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT"> 
-<span class='line'>382</span> 	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>383</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>384</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>385</span> 
-<span class='line'>386</span> </span></pre></body></html>
+<span class='line'>305</span> </span></pre></body></html>
