@@ -1,4 +1,4 @@
-/* keyutil-1.1.2.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* keyutil-1.2.0.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.1 keyutil 1.1.2 (2017-Jun-03)
+ * @version jsrsasign 8.0.0 keyutil 1.2.0 (2017-Jun-26)
  * @since jsrsasign 4.1.4
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -26,7 +26,6 @@
  * @description 
  * <br/>
  * {@link KEYUTIL} class is an update of former {@link PKCS5PKEY} class.
- * So for now, {@link PKCS5PKEY} is deprecated class.
  * {@link KEYUTIL} class has following features:
  * <dl>
  * <dt><b>key loading - {@link KEYUTIL.getKey}</b>
@@ -78,27 +77,6 @@
  * var pem = KEYUTIL.getPEM(privateKeyObj, "PKCS8PRV", "passcode");
  * // 4. exporting public key
  * var pem = KEYUTIL.getPEM(publicKeyObj);
- */
-/*
- * DEPRECATED METHODS
- * GET PKCS8
- * KEYUTIL.getRSAKeyFromPlainPKCS8PEM
- * KEYUTIL.getRSAKeyFromPlainPKCS8Hex
- * KEYUTIL.getRSAKeyFromEncryptedPKCS8PEM
- * P8 UTIL (make internal use)
- * KEYUTIL.getPlainPKCS8HexFromEncryptedPKCS8PEM
- * GET PKCS8 PUB
- * KEYUTIL.getKeyFromPublicPKCS8PEM
- * KEYUTIL.getKeyFromPublicPKCS8Hex
- * KEYUTIL.getRSAKeyFromPublicPKCS8PEM
- * KEYUTIL.getRSAKeyFromPublicPKCS8Hex
- * GET PKCS5
- * KEYUTIL.getRSAKeyFromEncryptedPKCS5PEM
- * PUT PKCS5
- * KEYUTIL.getEncryptedPKCS5PEMFromRSAKey
- * OTHER METHODS (FOR INTERNAL?)
- * KEYUTIL.getHexFromPEM
- * KEYUTIL.getDecryptedKeyHexByKeyIV
  */
 var KEYUTIL = function() {
     // *****************************************************************
@@ -278,37 +256,6 @@ var KEYUTIL = function() {
         version: "1.0.0",
 
         /**
-         * (DEPRECATED) get hexacedimal string of PEM format
-         * @name getHexFromPEM
-         * @memberOf KEYUTIL
-         * @function
-         * @param {String} sPEM PEM formatted string
-         * @param {String} sHead PEM header string without BEGIN/END
-         * @return {String} hexadecimal string data of PEM contents
-         * @since pkcs5pkey 1.0.5
-	 * @deprecated from keyutil 1.1.0 jsrsasign 7.0.1. please move to {@link ASN1HEX.pemToHex}
-         */
-        getHexFromPEM: function(sPEM, sHead) {
-	    return pemtohex(sPEM, sHead);
-        },
-
-        /**
-         * decrypt private key by shared key
-         * @name getDecryptedKeyHexByKeyIV
-         * @memberOf KEYUTIL
-         * @function
-         * @param {String} encryptedKeyHex hexadecimal string of encrypted private key
-         * @param {String} algName name of symmetric key algorithm (ex. 'DES-EBE3-CBC')
-         * @param {String} sharedKeyHex hexadecimal string of symmetric key
-         * @param {String} ivHex hexadecimal string of initial vector(IV).
-         * @return {String} hexadecimal string of decrypted privated key
-         */
-        getDecryptedKeyHexByKeyIV: function(encryptedKeyHex, algName, sharedKeyHex, ivHex) {
-            var f1 = getFuncByName(algName);
-            return f1(encryptedKeyHex, sharedKeyHex, ivHex);
-        },
-
-        /**
          * parse PEM formatted passcode protected PKCS#5 private key
          * @name parsePKCS5PEM
          * @memberOf KEYUTIL
@@ -373,24 +320,6 @@ var KEYUTIL = function() {
             // 3. decrypt private key
             var decryptedKey = _decryptKeyB64(privateKeyB64, sharedKeyAlgName, sharedKeyHex, ivsaltHex);
             return decryptedKey;
-        },
-
-        /**
-         * (DEPRECATED) read PEM formatted encrypted PKCS#5 private key and returns RSAKey object
-         * @name getRSAKeyFromEncryptedPKCS5PEM
-         * @memberOf KEYUTIL
-         * @function
-         * @param {String} sEncryptedP5PEM PEM formatted encrypted PKCS#5 private key
-         * @param {String} passcode passcode to decrypt private key
-         * @return {RSAKey} loaded RSAKey object of RSA private key
-         * @since pkcs5pkey 1.0.2
-         * @deprecated From jsrsasign 4.2.1 please use {@link KEYUTIL.getKey#}.
-         */
-        getRSAKeyFromEncryptedPKCS5PEM: function(sEncryptedP5PEM, passcode) {
-            var hPKey = this.getDecryptedKeyHex(sEncryptedP5PEM, passcode);
-            var rsaKey = new RSAKey();
-            rsaKey.readPrivateKeyFromASN1HexString(hPKey);
-            return rsaKey;
         },
 
         /*
@@ -460,116 +389,7 @@ var KEYUTIL = function() {
             return sPEM;
         },
 
-        /**
-         * (DEPRECATED) get PEM formatted encrypted PKCS#5 private key from RSAKey object of private key
-         * @name getEncryptedPKCS5PEMFromRSAKey
-         * @memberOf KEYUTIL
-         * @function
-         * @param {RSAKey} pKey RSAKey object of private key
-         * @param {String} passcode pass code to protect private key (ex. password)
-         * @param {String} alg algorithm name to protect private key (default AES-256-CBC)
-         * @param {String} ivsaltHex hexadecimal string of IV and salt (default generated random IV)
-         * @return {String} string of PEM formatted encrypted PKCS#5 private key
-         * @since pkcs5pkey 1.0.2
-         * @deprecated From jsrsasign 4.2.1 please use {@link KEYUTIL.getPEM#}.
-         * @description
-         * <br/>
-         * generate PEM formatted encrypted PKCS#5 private key by
-         * {@link RSAKey} object of RSA private key and passcode.
-         * Following argument can be omitted.
-         * <ul>
-         * <li>alg - AES-256-CBC will be used if omitted.</li>
-         * <li>ivsaltHex - automatically generate IV and salt which length depends on algorithm</li>
-         * </ul>
-         * @example
-         * var pkey = new RSAKey();
-         * pkey.generate(1024, '10001'); // generate 1024bit RSA private key with public exponent 'x010001'
-         * var pem = KEYUTIL.getEncryptedPKCS5PEMFromRSAKey(pkey, "password");
-         */
-        getEncryptedPKCS5PEMFromRSAKey: function(pKey, passcode, alg, ivsaltHex) {
-            var version = new KJUR.asn1.DERInteger({'int': 0});
-            var n = new KJUR.asn1.DERInteger({'bigint': pKey.n});
-            var e = new KJUR.asn1.DERInteger({'int': pKey.e});
-            var d = new KJUR.asn1.DERInteger({'bigint': pKey.d});
-            var p = new KJUR.asn1.DERInteger({'bigint': pKey.p});
-            var q = new KJUR.asn1.DERInteger({'bigint': pKey.q});
-            var dmp1 = new KJUR.asn1.DERInteger({'bigint': pKey.dmp1});
-            var dmq1 = new KJUR.asn1.DERInteger({'bigint': pKey.dmq1});
-            var coeff = new KJUR.asn1.DERInteger({'bigint': pKey.coeff});
-            var seq = new KJUR.asn1.DERSequence({'array': [version, n, e, d, p, q, dmp1, dmq1, coeff]});
-            var hex = seq.getEncodedHex();
-            return this.getEncryptedPKCS5PEMFromPrvKeyHex("RSA", hex, passcode, alg, ivsaltHex);
-        },
-
-        /**
-         * generate RSAKey and PEM formatted encrypted PKCS#5 private key
-         * @name newEncryptedPKCS5PEM
-         * @memberOf KEYUTIL
-         * @function
-         * @param {String} passcode pass code to protect private key (ex. password)
-         * @param {Integer} keyLen key bit length of RSA key to be generated. (default 1024)
-         * @param {String} hPublicExponent hexadecimal string of public exponent (default 10001)
-         * @param {String} alg shared key algorithm to encrypt private key (default AES-258-CBC)
-         * @return {String} string of PEM formatted encrypted PKCS#5 private key
-         * @since pkcs5pkey 1.0.2
-         * @example
-         * var pem1 = KEYUTIL.newEncryptedPKCS5PEM("password");           // RSA1024bit/10001/AES-256-CBC
-         * var pem2 = KEYUTIL.newEncryptedPKCS5PEM("password", 512);      // RSA 512bit/10001/AES-256-CBC
-         * var pem3 = KEYUTIL.newEncryptedPKCS5PEM("password", 512, '3'); // RSA 512bit/    3/AES-256-CBC
-         */
-        newEncryptedPKCS5PEM: function(passcode, keyLen, hPublicExponent, alg) {
-            if (typeof keyLen == "undefined" || keyLen == null) {
-                keyLen = 1024;
-            }
-            if (typeof hPublicExponent == "undefined" || hPublicExponent == null) {
-                hPublicExponent = '10001';
-            }
-            var pKey = new RSAKey();
-            pKey.generate(keyLen, hPublicExponent);
-            var pem = null;
-            if (typeof alg == "undefined" || alg == null) {
-                pem = this.getEncryptedPKCS5PEMFromRSAKey(pKey, passcode);
-            } else {
-                pem = this.getEncryptedPKCS5PEMFromRSAKey(pKey, passcode, alg);
-            }
-            return pem;
-        },
-
         // === PKCS8 ===============================================================
-
-        /**
-         * (DEPRECATED) read PEM formatted unencrypted PKCS#8 private key and returns RSAKey object
-         * @name getRSAKeyFromPlainPKCS8PEM
-         * @memberOf KEYUTIL
-         * @function
-         * @param {String} pkcs8PEM PEM formatted unencrypted PKCS#8 private key
-         * @return {RSAKey} loaded RSAKey object of RSA private key
-         * @since pkcs5pkey 1.0.1
-         * @deprecated From jsrsasign 4.2.1 please use {@link KEYUTIL.getKey#}.
-         */
-        getRSAKeyFromPlainPKCS8PEM: function(pkcs8PEM) {
-            if (pkcs8PEM.match(/ENCRYPTED/))
-                throw "pem shall be not ENCRYPTED";
-            var prvKeyHex = pemtohex(pkcs8PEM, "PRIVATE KEY");
-            var rsaKey = this.getRSAKeyFromPlainPKCS8Hex(prvKeyHex);
-            return rsaKey;
-        },
-
-        /**
-         * (DEPRECATED) provide hexadecimal string of unencrypted PKCS#8 private key and returns RSAKey object
-         * @name getRSAKeyFromPlainPKCS8Hex
-         * @memberOf KEYUTIL
-         * @function
-         * @param {String} prvKeyHex hexadecimal string of unencrypted PKCS#8 private key
-         * @return {RSAKey} loaded RSAKey object of RSA private key
-         * @since pkcs5pkey 1.0.3
-         * @deprecated From jsrsasign 4.2.1 please use {@link KEYUTIL.getKey#}.
-         */
-        getRSAKeyFromPlainPKCS8Hex: function(prvKeyHex) {
-            var rsaKey = new RSAKey();
-            rsaKey.readPKCS8PrvKeyHex(prvKeyHex);
-            return rsaKey;
-	},
 
         /**
          * generate PBKDF2 key hexstring with specified passcode and information
@@ -697,7 +517,7 @@ var KEYUTIL = function() {
             return pbkdf2KeyHex;
         },
 
-        /**
+        /*
          * read PEM formatted encrypted PKCS#8 private key and returns hexadecimal string of plain PKCS#8 private key
          * @name getPlainPKCS8HexFromEncryptedPKCS8PEM
          * @memberOf KEYUTIL
@@ -717,7 +537,7 @@ var KEYUTIL = function() {
          * // key with PBKDF2 with TripleDES
          * % openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem
          */
-        getPlainPKCS8HexFromEncryptedPKCS8PEM: function(pkcs8PEM, passcode) {
+        _getPlainPKCS8HexFromEncryptedPKCS8PEM: function(pkcs8PEM, passcode) {
             // 1. derHex - PKCS#8 private key encrypted by PBKDF2
             var derHex = pemtohex(pkcs8PEM, "ENCRYPTED PRIVATE KEY");
             // 2. info - PKCS#5 PBES info
@@ -735,33 +555,6 @@ var KEYUTIL = function() {
         },
 
         /**
-         * (DEPRECATED) read PEM formatted encrypted PKCS#8 private key and returns RSAKey object
-         * @name getRSAKeyFromEncryptedPKCS8PEM
-         * @memberOf KEYUTIL
-         * @function
-         * @param {String} pkcs8PEM PEM formatted encrypted PKCS#8 private key
-         * @param {String} passcode passcode to decrypto private key
-         * @return {RSAKey} loaded RSAKey object of RSA private key
-         * @since pkcs5pkey 1.0.3
-         * @deprecated From jsrsasign 4.2.1 please use {@link KEYUTIL.getKey#}.
-         * @description
-         * Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.
-         * <ul>
-         * <li>keyDerivationFunc = pkcs5PBKDF2 with HmacSHA1</li>
-         * <li>encryptionScheme = des-EDE3-CBC(i.e. TripleDES</li>
-         * </ul>
-         * @example
-         * // to convert plain PKCS#5 private key to encrypted PKCS#8 private
-         * // key with PBKDF2 with TripleDES
-         * % openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem
-         */
-        getRSAKeyFromEncryptedPKCS8PEM: function(pkcs8PEM, passcode) {
-            var prvKeyHex = this.getPlainPKCS8HexFromEncryptedPKCS8PEM(pkcs8PEM, passcode);
-            var rsaKey = this.getRSAKeyFromPlainPKCS8Hex(prvKeyHex);
-            return rsaKey;
-        },
-
-        /**
          * get RSAKey/ECDSA private key object from encrypted PEM PKCS#8 private key
          * @name getKeyFromEncryptedPKCS8PEM
          * @memberOf KEYUTIL
@@ -772,7 +565,7 @@ var KEYUTIL = function() {
          * @since pkcs5pkey 1.0.5
          */
         getKeyFromEncryptedPKCS8PEM: function(pkcs8PEM, passcode) {
-            var prvKeyHex = this.getPlainPKCS8HexFromEncryptedPKCS8PEM(pkcs8PEM, passcode);
+            var prvKeyHex = this._getPlainPKCS8HexFromEncryptedPKCS8PEM(pkcs8PEM, passcode);
             var key = this.getKeyFromPlainPrivatePKCS8Hex(prvKeyHex);
             return key;
         },
@@ -879,49 +672,17 @@ var KEYUTIL = function() {
         },
 
         // === PKCS8 RSA Public Key ================================================
-        /**
-         * (DEPRECATED) read PEM formatted PKCS#8 public key and returns RSAKey object
-         * @name getRSAKeyFromPublicPKCS8PEM
-         * @memberOf KEYUTIL
-         * @function
-         * @param {String} pkcs8PubPEM PEM formatted PKCS#8 public key
-         * @return {RSAKey} loaded RSAKey object of RSA public key
-         * @since pkcs5pkey 1.0.4
-         * @deprecated From jsrsasign 4.2.1 please use {@link KEYUTIL.getKey#}.
-         */
-        getRSAKeyFromPublicPKCS8PEM: function(pkcs8PubPEM) {
-            var pubKeyHex = pemtohex(pkcs8PubPEM, "PUBLIC KEY");
-            var rsaKey = this.getRSAKeyFromPublicPKCS8Hex(pubKeyHex);
-            return rsaKey;
-        },
 
-        /**
-         * (DEPRECATED) get RSAKey/ECDSA public key object from PEM PKCS#8 public key
-         * @name getKeyFromPublicPKCS8PEM
-         * @memberOf KEYUTIL
-         * @function
-         * @param {String} pkcsPub8PEM string of PEM formatted PKCS#8 public key
-         * @return {Object} RSAKey or KJUR.crypto.ECDSA private key object
-         * @since pkcs5pkey 1.0.5
-         * @deprecated From jsrsasign 4.2.1 please use {@link KEYUTIL.getKey#}.
-         */
-        getKeyFromPublicPKCS8PEM: function(pkcs8PubPEM) {
-            var pubKeyHex = pemtohex(pkcs8PubPEM, "PUBLIC KEY");
-            var key = this.getKeyFromPublicPKCS8Hex(pubKeyHex);
-            return key;
-        },
-
-        /**
-         * (DEPRECATED) get RSAKey/DSA/ECDSA public key object from hexadecimal string of PKCS#8 public key
-         * @name getKeyFromPublicPKCS8Hex
+        /*
+         * get RSAKey/DSA/ECDSA public key object from hexadecimal string of PKCS#8 public key
+         * @name _getKeyFromPublicPKCS8Hex
          * @memberOf KEYUTIL
          * @function
          * @param {String} pkcsPub8Hex hexadecimal string of PKCS#8 public key
          * @return {Object} RSAKey or KJUR.crypto.{ECDSA,DSA} private key object
          * @since pkcs5pkey 1.0.5
-         * @deprecated From jsrsasign 4.2.1 please use {@link KEYUTIL.getKey#}.
          */
-        getKeyFromPublicPKCS8Hex: function(h) {
+        _getKeyFromPublicPKCS8Hex: function(h) {
 	    var key;
 	    var hOID = ASN1HEX.getVbyList(h, 0, [0, 0], "06");
 
@@ -980,75 +741,6 @@ var KEYUTIL = function() {
             result.e = _getV(pubRawRSAHex, a1[1]);
 
             return result;
-        },
-
-        /**
-         * parse hexadecimal string of RSA private key
-         * @name parsePrivateRawRSAKeyHexAtObj
-         * @memberOf KEYUTIL
-         * @function
-         * @param {String} pkcs8PrvHex hexadecimal string of PKCS#8 private key concluding RSA private key
-         * @return {Array} info associative array to add parsed RSA private key information
-         * @since pkcs5pkey 1.0.5
-	 * @deprecated since jsrsasign 7.1.0 keyutil 1.1.0
-         * @description
-         * Following properties are added to associative array 'info'
-         * <ul>
-         * <li>n - hexadecimal string of public key
-         * <li>e - hexadecimal string of public exponent
-         * <li>d - hexadecimal string of private key
-         * <li>p - hexadecimal string
-         * <li>q - hexadecimal string
-         * <li>dp - hexadecimal string
-         * <li>dq - hexadecimal string
-         * <li>co - hexadecimal string
-         * </ul>
-         */
-        parsePrivateRawRSAKeyHexAtObj: function(pkcs8PrvHex, info) {
-	    var _ASN1HEX = ASN1HEX;
-	    var _getChildIdx = _ASN1HEX.getChildIdx;
-	    var _getV = _ASN1HEX.getV;
-
-	    var idxSeq = _ASN1HEX.getIdxbyList(pkcs8PrvHex, 0, [2, 0]);
-	    var a = _getChildIdx(pkcs8PrvHex, idxSeq);
-	    
-	    if (a.length !== 9) throw "malformed PKCS#8 plain RSA private key";
-
-            // 2. RSA key
-            info.key = {};
-            info.key.n  = _getV(pkcs8PrvHex, a[1]);
-            info.key.e  = _getV(pkcs8PrvHex, a[2]);
-            info.key.d  = _getV(pkcs8PrvHex, a[3]);
-            info.key.p  = _getV(pkcs8PrvHex, a[4]);
-            info.key.q  = _getV(pkcs8PrvHex, a[5]);
-            info.key.dp = _getV(pkcs8PrvHex, a[6]);
-            info.key.dq = _getV(pkcs8PrvHex, a[7]);
-            info.key.co = _getV(pkcs8PrvHex, a[8]);
-        },
-
-        /**
-         * parse hexadecimal string of ECC private key
-         * @name parsePrivateRawECKeyHexAtObj
-         * @memberOf KEYUTIL
-         * @function
-         * @param {String} pkcs8PrvHex hexadecimal string of PKCS#8 private key concluding EC private key
-         * @return {Array} info associative array to add parsed ECC private key information
-         * @since pkcs5pkey 1.0.5
-	 * @deprecated since jsrsasign 7.1.0 keyutil 1.1.0
-         * @description
-         * Following properties are added to associative array 'info'
-         * <ul>
-         * <li>key - hexadecimal string of ECC private key
-         * </ul>
-         */
-        parsePrivateRawECKeyHexAtObj: function(pkcs8PrvHex, info) {
-            var keyIdx = info.keyidx;
-
-	    var ec = new KJUR.crypto.ECDSA();
-	    ec.readPKCS8PrvKeyHex(pkcs8PrvHex);
-	    
-            info.key = ec.prvKeyHex;
-	    info.pubkey = ec.pubKeyHex;
         },
 
         /**
@@ -1112,22 +804,6 @@ var KEYUTIL = function() {
             // 4. return result assoc array
             return result;
         },
-
-        /**
-         * (DEPRECATED) provide hexadecimal string of unencrypted PKCS#8 private key and returns RSAKey object
-         * @name getRSAKeyFromPublicPKCS8Hex
-         * @memberOf KEYUTIL
-         * @function
-         * @param {String} pkcs8PubHex hexadecimal string of unencrypted PKCS#8 public key
-         * @return {RSAKey} loaded RSAKey object of RSA public key
-         * @since pkcs5pkey 1.0.4
-         * @deprecated From jsrsasign 4.2.1 please use {@link KEYUTIL.getKey#}.
-         */
-        getRSAKeyFromPublicPKCS8Hex: function(pkcs8PubHex) {
-	    var key = new RSAKey();
-	    key.readPKCS8PubKeyHex(pkcs8PubHex);
-	    return key;
-	},
     };
 }();
 
@@ -1212,7 +888,8 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	_KJUR_crypto_ECDSA = _KJUR_crypto.ECDSA,
 	_KJUR_crypto_DSA = _KJUR_crypto.DSA,
 	_RSAKey = RSAKey,
-	_pemtohex = pemtohex;
+	_pemtohex = pemtohex,
+	_KEYUTIL = KEYUTIL;
 
     // 1. by key RSAKey/KJUR.crypto.ECDSA/KJUR.crypto.DSA object
     if (typeof _RSAKey != 'undefined' && param instanceof _RSAKey)
@@ -1380,7 +1057,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	a = _getChildIdx(h, 0);
 	if (a.length === 9) {        // RSA (INT x 9)
 	    key = new _RSAKey();
-            key.readPrivateKeyFromASN1HexString(param);
+            key.readPKCS5PrvKeyHex(h);
 	} else if (a.length === 6) { // DSA (INT x 6)
 	    key = new _KJUR_crypto_DSA();
 	    key.readPKCS5PrvKeyHex(h);
@@ -1397,13 +1074,13 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 
     // 4.2. get private key by PKCS#8 plain RSA/DSA/ECDSA hexadecimal string
     if (hextype === "pkcs8prv") {
-	var key = KEYUTIL.getKeyFromPlainPrivatePKCS8Hex(param);
+	var key = _KEYUTIL.getKeyFromPlainPrivatePKCS8Hex(param);
         return key;
     }
 
     // 4.3. get public key by PKCS#8 RSA/DSA/ECDSA hexadecimal string
     if (hextype === "pkcs8pub") {
-        return KEYUTIL.getKeyFromPublicPKCS8Hex(param);
+        return _KEYUTIL._getKeyFromPublicPKCS8Hex(param);
     }
 
     // 4.4. get public key by X.509 hexadecimal string for RSA/DSA/ECDSA
@@ -1420,7 +1097,8 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 
     // 6. public key by PKCS#8 PEM string
     if (param.indexOf("-END PUBLIC KEY-") != -1) {
-        return KEYUTIL.getKeyFromPublicPKCS8PEM(param);
+        var pubKeyHex = pemtohex(param, "PUBLIC KEY");
+        return _KEYUTIL._getKeyFromPublicPKCS8Hex(pubKeyHex);
     }
     
     // 8.1 private key by plain PKCS#5 PEM RSA string 
@@ -1428,7 +1106,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     if (param.indexOf("-END RSA PRIVATE KEY-") != -1 &&
         param.indexOf("4,ENCRYPTED") == -1) {
         var hex = _pemtohex(param, "RSA PRIVATE KEY");
-        return KEYUTIL.getKey(hex, null, "pkcs5prv");
+        return _KEYUTIL.getKey(hex, null, "pkcs5prv");
     }
 
     // 8.2. private key by plain PKCS#5 PEM DSA string
@@ -1452,19 +1130,22 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 
     // 10. private key by plain PKCS#8 PEM ECC/RSA string
     if (param.indexOf("-END PRIVATE KEY-") != -1) {
-        return KEYUTIL.getKeyFromPlainPrivatePKCS8PEM(param);
+        return _KEYUTIL.getKeyFromPlainPrivatePKCS8PEM(param);
     }
 
     // 11.1 private key by encrypted PKCS#5 PEM RSA string
     if (param.indexOf("-END RSA PRIVATE KEY-") != -1 &&
         param.indexOf("4,ENCRYPTED") != -1) {
-        return KEYUTIL.getRSAKeyFromEncryptedPKCS5PEM(param, passcode);
+        var hPKey = _KEYUTIL.getDecryptedKeyHex(param, passcode);
+        var rsaKey = new RSAKey();
+        rsaKey.readPKCS5PrvKeyHex(hPKey);
+        return rsaKey;
     }
 
     // 11.2. private key by encrypted PKCS#5 PEM ECDSA string
     if (param.indexOf("-END EC PRIVATE KEY-") != -1 &&
         param.indexOf("4,ENCRYPTED") != -1) {
-        var hKey = KEYUTIL.getDecryptedKeyHex(param, passcode);
+        var hKey = _KEYUTIL.getDecryptedKeyHex(param, passcode);
 
         var key = _getVbyList(hKey, 0, [1], "04");
         var curveNameOidHex = _getVbyList(hKey, 0, [2,0], "06");
@@ -1487,7 +1168,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     // 11.3. private key by encrypted PKCS#5 PEM DSA string
     if (param.indexOf("-END DSA PRIVATE KEY-") != -1 &&
         param.indexOf("4,ENCRYPTED") != -1) {
-        var hKey = KEYUTIL.getDecryptedKeyHex(param, passcode);
+        var hKey = _KEYUTIL.getDecryptedKeyHex(param, passcode);
         var p = _getVbyList(hKey, 0, [1], "02");
         var q = _getVbyList(hKey, 0, [2], "02");
         var g = _getVbyList(hKey, 0, [3], "02");
@@ -1504,7 +1185,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 
     // 11. private key by encrypted PKCS#8 hexadecimal RSA/ECDSA string
     if (param.indexOf("-END ENCRYPTED PRIVATE KEY-") != -1) {
-        return KEYUTIL.getKeyFromEncryptedPKCS8PEM(param, passcode);
+        return _KEYUTIL.getKeyFromEncryptedPKCS8PEM(param, passcode);
     }
 
     throw "not supported argument";
@@ -1591,6 +1272,8 @@ KEYUTIL.generateKeypair = function(alg, keylenOrCurve) {
  * @param {String} formatType (OPTION) output format type of "PKCS1PRV", "PKCS5PRV" or "PKCS8PRV" for private key
  * @param {String} passwd (OPTION) password to protect private key
  * @param {String} encAlg (OPTION) encryption algorithm for PKCS#5. currently supports DES-CBC, DES-EDE3-CBC and AES-{128,192,256}-CBC
+ * @param {String} hexType (OPTION) type of hex string (ex. pkcs5prv, pkcs8prv)
+ * @param {String} ivsaltHex hexadecimal string of IV and salt (default generated random IV)
  * @since keyutil 1.0.4
  * @description
  * <dl>
@@ -1601,6 +1284,9 @@ KEYUTIL.generateKeypair = function(alg, keylenOrCurve) {
  * <dt><b>NOTE2:</b>
  * <dd>
  * OpenSSL supports
+ * <dt><b>NOTE3:</b>
+ * <dd>
+ * Parameter "ivsaltHex" supported since jsrsasign 8.0.0 keyutil 1.2.0.
  * </dl>
  * @example
  * KEUUTIL.getPEM(publicKey) =&gt; generates PEM PKCS#8 public key 
@@ -1613,7 +1299,7 @@ KEYUTIL.generateKeypair = function(alg, keylenOrCurve) {
  * KEUUTIL.getPEM(privateKey, "PKCS8PRV", "pass") =&gt; generates PEM PKCS#8 encrypted private key
  *                                                      with PBKDF2_HmacSHA1_3DES
  */
-KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType) {
+KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsaltHex) {
     var _KJUR = KJUR,
 	_KJUR_asn1 = _KJUR.asn1,
 	_DERObjectIdentifier = _KJUR_asn1.DERObjectIdentifier,
@@ -1740,7 +1426,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType) {
         var asn1Hex = asn1Obj.getEncodedHex();
 
         if (encAlg === undefined) encAlg = "DES-EDE3-CBC";
-        return this.getEncryptedPKCS5PEMFromPrvKeyHex("RSA", asn1Hex, passwd, encAlg);
+        return this.getEncryptedPKCS5PEMFromPrvKeyHex("RSA", asn1Hex, passwd, encAlg, ivsaltHex);
     }
 
     // x. PEM PKCS#5 encrypted private key of ECDSA private key object
@@ -1754,7 +1440,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType) {
         var asn1Hex = asn1Obj.getEncodedHex();
 
         if (encAlg === undefined) encAlg = "DES-EDE3-CBC";
-        return this.getEncryptedPKCS5PEMFromPrvKeyHex("EC", asn1Hex, passwd, encAlg);
+        return this.getEncryptedPKCS5PEMFromPrvKeyHex("EC", asn1Hex, passwd, encAlg, ivsaltHex);
     }
 
     // x. PEM PKCS#5 encrypted private key of DSA private key object
@@ -1768,7 +1454,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType) {
         var asn1Hex = asn1Obj.getEncodedHex();
 
         if (encAlg === undefined) encAlg = "DES-EDE3-CBC";
-        return this.getEncryptedPKCS5PEMFromPrvKeyHex("DSA", asn1Hex, passwd, encAlg);
+        return this.getEncryptedPKCS5PEMFromPrvKeyHex("DSA", asn1Hex, passwd, encAlg, ivsaltHex);
     }
 
     // x. ======================================================================

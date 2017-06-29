@@ -31,7 +31,6 @@ exports.b64utob64 = b64utob64;
 exports.hex2b64 = hex2b64;
 exports.hextob64u = hextob64u;
 exports.b64utohex = b64utohex;
-exports.b64tohex = b64tohex;
 exports.utf8tob64u = utf8tob64u;
 exports.b64utoutf8 = b64utoutf8;
 exports.utf8tob64 = utf8tob64;

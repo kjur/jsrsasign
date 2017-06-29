@@ -1,4 +1,4 @@
-/* crypto-1.1.12.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* crypto-1.2.0.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.1.12 (2017-Jan-31)
+ * @version 1.2.0 (2017-Jun-26)
  * @since jsrsasign 2.2
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1064,9 +1064,9 @@ KJUR.crypto.Signature = function(params) {
 		this.md = new KJUR.crypto.MessageDigest({'alg':this.mdAlgName});
 	    } catch (ex) {
 		throw "setAlgAndProvider hash alg set fail alg=" +
-                      this.mdAlgName + "/" + ex;
+                    this.mdAlgName + "/" + ex;
 	    }
-
+	    
 	    this.init = function(keyparam, pass) {
 		var keyObj = null;
 		try {
@@ -1088,37 +1088,6 @@ KJUR.crypto.Signature = function(params) {
 		} else {
 		    throw "init failed.:" + keyObj;
 		}
-	    };
-
-	    this.initSign = function(params) {
-		if (typeof params['ecprvhex'] == 'string' &&
-                    typeof params['eccurvename'] == 'string') {
-		    this.ecprvhex = params['ecprvhex'];
-		    this.eccurvename = params['eccurvename'];
-		} else {
-		    this.prvKey = params;
-		}
-		this.state = "SIGN";
-	    };
-
-	    this.initVerifyByPublicKey = function(params) {
-		if (typeof params['ecpubhex'] == 'string' &&
-		    typeof params['eccurvename'] == 'string') {
-		    this.ecpubhex = params['ecpubhex'];
-		    this.eccurvename = params['eccurvename'];
-		} else if (params instanceof KJUR.crypto.ECDSA) {
-		    this.pubKey = params;
-		} else if (params instanceof RSAKey) {
-		    this.pubKey = params;
-		}
-		this.state = "VERIFY";
-	    };
-
-	    this.initVerifyByCertificatePEM = function(certPEM) {
-		var x509 = new X509();
-		x509.readCertPEM(certPEM);
-		this.pubKey = x509.subjectPublicKeyRSA;
-		this.state = "VERIFY";
 	    };
 
 	    this.updateString = function(str) {
@@ -1173,11 +1142,13 @@ KJUR.crypto.Signature = function(params) {
 								this.mdAlgName,
 								this.pssSaltLen);
 		} else if (this.pubKey instanceof RSAKey &&
-			   this.pubkeyAlgName == "rsa") {
+			   this.pubkeyAlgName === "rsa") {
 		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
-		} else if (this.pubKey instanceof KJUR.crypto.ECDSA) {
+		} else if (KJUR.crypto.ECDSA !== undefined &&
+			   this.pubKey instanceof KJUR.crypto.ECDSA) {
 		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
-		} else if (this.pubKey instanceof KJUR.crypto.DSA) {
+		} else if (KJUR.crypto.DSA !== undefined &&
+			   this.pubKey instanceof KJUR.crypto.DSA) {
 		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
 		} else {
 		    throw "Signature: unsupported public key alg: " + this.pubkeyAlgName;
@@ -1224,70 +1195,6 @@ KJUR.crypto.Signature = function(params) {
     this.init = function(key, pass) {
 	throw "init(key, pass) not supported for this alg:prov=" +
 	      this.algProvName;
-    };
-
-    /**
-     * (DEPRECATED) Initialize this object for verifying with a public key
-     * @name initVerifyByPublicKey
-     * @memberOf KJUR.crypto.Signature#
-     * @function
-     * @param {Object} param RSAKey object of public key or associative array for ECDSA
-     * @since 1.0.2
-     * @deprecated from crypto 1.1.5. please use init() method instead.
-     * @description
-     * Public key information will be provided as 'param' parameter and the value will be
-     * following:
-     * <ul>
-     * <li>{@link RSAKey} object for RSA verification</li>
-     * <li>associative array for ECDSA verification
-     *     (ex. <code>{'ecpubhex': '041f..', 'eccurvename': 'secp256r1'}</code>)
-     * </li>
-     * </ul>
-     * @example
-     * sig.initVerifyByPublicKey(rsaPrvKey)
-     */
-    this.initVerifyByPublicKey = function(rsaPubKey) {
-	throw "initVerifyByPublicKey(rsaPubKeyy) not supported for this alg:prov=" +
-	      this.algProvName;
-    };
-
-    /**
-     * (DEPRECATED) Initialize this object for verifying with a certficate
-     * @name initVerifyByCertificatePEM
-     * @memberOf KJUR.crypto.Signature#
-     * @function
-     * @param {String} certPEM PEM formatted string of certificate
-     * @since 1.0.2
-     * @deprecated from crypto 1.1.5. please use init() method instead.
-     * @description
-     * @example
-     * sig.initVerifyByCertificatePEM(certPEM)
-     */
-    this.initVerifyByCertificatePEM = function(certPEM) {
-	throw "initVerifyByCertificatePEM(certPEM) not supported for this alg:prov=" +
-	    this.algProvName;
-    };
-
-    /**
-     * (DEPRECATED) Initialize this object for signing
-     * @name initSign
-     * @memberOf KJUR.crypto.Signature#
-     * @function
-     * @param {Object} param RSAKey object of public key or associative array for ECDSA
-     * @deprecated from crypto 1.1.5. please use init() method instead.
-     * @description
-     * Private key information will be provided as 'param' parameter and the value will be
-     * following:
-     * <ul>
-     * <li>{@link RSAKey} object for RSA signing</li>
-     * <li>associative array for ECDSA signing
-     *     (ex. <code>{'ecprvhex': '1d3f..', 'eccurvename': 'secp256r1'}</code>)</li>
-     * </ul>
-     * @example
-     * sig.initSign(prvKey)
-     */
-    this.initSign = function(prvKey) {
-	throw "initSign(prvKey) not supported for this alg:prov=" + this.algProvName;
     };
 
     /**
@@ -1380,12 +1287,12 @@ KJUR.crypto.Signature = function(params) {
     this.initParams = params;
 
     if (params !== undefined) {
-	if (params['alg'] !== undefined) {
-	    this.algName = params['alg'];
-	    if (params['prov'] === undefined) {
+	if (params.alg !== undefined) {
+	    this.algName = params.alg;
+	    if (params.prov === undefined) {
 		this.provName = KJUR.crypto.Util.DEFAULTPROVIDER[this.algName];
 	    } else {
-		this.provName = params['prov'];
+		this.provName = params.prov;
 	    }
 	    this.algProvName = this.algName + ":" + this.provName;
 	    this.setAlgAndProvider(this.algName, this.provName);
@@ -1394,14 +1301,13 @@ KJUR.crypto.Signature = function(params) {
 
 	if (params['psssaltlen'] !== undefined) this.pssSaltLen = params['psssaltlen'];
 
-	if (params['prvkeypem'] !== undefined) {
-	    if (params['prvkeypas'] !== undefined) {
+	if (params.prvkeypem !== undefined) {
+	    if (params.prvkeypas !== undefined) {
 		throw "both prvkeypem and prvkeypas parameters not supported";
 	    } else {
 		try {
-		    var prvKey = new RSAKey();
-		    prvKey.readPrivateKeyFromPEMString(params['prvkeypem']);
-		    this.initSign(prvKey);
+		    var prvKey = KEYUTIL.getKey(params.prvkeypem);
+		    this.init(prvKey);
 		} catch (ex) {
 		    throw "fatal error to load pem private key: " + ex;
 		}

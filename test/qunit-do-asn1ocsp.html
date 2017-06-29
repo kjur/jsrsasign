@@ -234,53 +234,53 @@ equal(p1.nextUpdate, "20160925033451Z", "nextUpdate=20160925033451Z");
 });
 
 test("pos test OCSP valid", function() {
-var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hOCSPRES_wikipedia_good, 0);   //
+var a1 = ASN1HEX.getChildIdx(hOCSPRES_wikipedia_good, 0);   //
 equal(a1.join("/"), "8/14", "lv1");
 
-var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hOCSPRES_wikipedia_good, 14);  //[1] 
+var a2 = ASN1HEX.getChildIdx(hOCSPRES_wikipedia_good, 14);  //[1] 
 equal(a2.join("/"), "22", "lv2");
 
-var a3 = ASN1HEX.getPosArrayOfChildren_AtObj(hOCSPRES_wikipedia_good, 22);  //[1,0] 
+var a3 = ASN1HEX.getChildIdx(hOCSPRES_wikipedia_good, 22);  //[1,0] 
 equal(a3.join("/"), "30/52", "lv3");
 
-var a4 = ASN1HEX.getPosArrayOfChildren_AtObj(hOCSPRES_wikipedia_good, 52);  //[1,0,1] 
+var a4 = ASN1HEX.getChildIdx(hOCSPRES_wikipedia_good, 52);  //[1,0,1] 
 equal(a4.join("/"), "60", "lv4");
 
-var a5 = ASN1HEX.getPosArrayOfChildren_AtObj(hOCSPRES_wikipedia_good, 60);  //[1,0,1,0]
+var a5 = ASN1HEX.getChildIdx(hOCSPRES_wikipedia_good, 60);  //[1,0,1,0]
 equal(a5.join("/"), "68/468/498/1020", "lv5");
 
-var a6 = ASN1HEX.getPosArrayOfChildren_AtObj(hOCSPRES_wikipedia_good, 68);  //[1,0,1,0,0] 
+var a6 = ASN1HEX.getChildIdx(hOCSPRES_wikipedia_good, 68);  //[1,0,1,0,0] 
 equal(a6.join("/"), "74/122/156/394", "lv6");
 
-var a7 = ASN1HEX.getPosArrayOfChildren_AtObj(hOCSPRES_wikipedia_good, 156); //[1,0,1,0,0,2] 
+var a7 = ASN1HEX.getChildIdx(hOCSPRES_wikipedia_good, 156); //[1,0,1,0,0,2] 
 equal(a7.join("/"), "160", "lv7");
 
-var a8 = ASN1HEX.getPosArrayOfChildren_AtObj(hOCSPRES_wikipedia_good, 160); //[1,0,1,0,0,2,0] 
+var a8 = ASN1HEX.getChildIdx(hOCSPRES_wikipedia_good, 160); //[1,0,1,0,0,2,0] 
 equal(a8.join("/"), "164/318/322/356", "lv8");
 
-equal(ASN1HEX.getHexOfTLV_AtObj(hOCSPRES_wikipedia_good, 318), "8000", "i2 8000 good");
-equal(ASN1HEX.getHexOfTLV_AtObj(hOCSPRES_wikipedia_good, 322), "180f32303136313030323033323730325a", "i3 gentime1");
-equal(ASN1HEX.getHexOfTLV_AtObj(hOCSPRES_wikipedia_good, 356), "a011180f32303136313030363033323730325a", "i4 [0] gentime2");
+equal(ASN1HEX.getTLV(hOCSPRES_wikipedia_good, 318), "8000", "i2 8000 good");
+equal(ASN1HEX.getTLV(hOCSPRES_wikipedia_good, 322), "180f32303136313030323033323730325a", "i3 gentime1");
+equal(ASN1HEX.getTLV(hOCSPRES_wikipedia_good, 356), "a011180f32303136313030363033323730325a", "i4 [0] gentime2");
 
-equal(ASN1HEX.getDecendantIndexByNthList(hOCSPRES_wikipedia_good, 0, [1,0,1,0,0,2,0,1]),
+equal(ASN1HEX.getIdxbyList(hOCSPRES_wikipedia_good, 0, [1,0,1,0,0,2,0,1]),
       318, "i good 318");
-equal(ASN1HEX.getDecendantHexTLVByNthList(hOCSPRES_wikipedia_good, 0, [1,0,1,0,0,2,0,1]),
+equal(ASN1HEX.getTLVbyList(hOCSPRES_wikipedia_good, 0, [1,0,1,0,0,2,0,1]),
       "8000", "o good 8000");
-equal(ASN1HEX.getDecendantIndexByNthList(hOCSPRES_wikipedia_good, 0, [1,0,1,0,0,2,0,2]),
+equal(ASN1HEX.getIdxbyList(hOCSPRES_wikipedia_good, 0, [1,0,1,0,0,2,0,2]),
       322, "i t1 322");
-equal(ASN1HEX.getDecendantIndexByNthList(hOCSPRES_wikipedia_good, 0, [1,0,1,0,0,2,0,3]),
+equal(ASN1HEX.getIdxbyList(hOCSPRES_wikipedia_good, 0, [1,0,1,0,0,2,0,3]),
       356, "i t2 356");
 });
 
 test("pos test OCSP revoked", function() {
-equal(ASN1HEX.getDecendantHexTLVByNthList(hOCSPRES_wikipedia_revoked, 0, [1,0,1,0,0,2,0,1]),
+equal(ASN1HEX.getTLVbyList(hOCSPRES_wikipedia_revoked, 0, [1,0,1,0,0,2,0,1]),
       "a116180f32303136303432363137343430375aa0030a0100", "o revoked");
-equal(ASN1HEX.getDecendantHexTLVByNthList(hOCSPRES_wikipedia_revoked, 0, [1,0,1,0,0,2,0,1,0]),
+equal(ASN1HEX.getTLVbyList(hOCSPRES_wikipedia_revoked, 0, [1,0,1,0,0,2,0,1,0]),
       "180f32303136303432363137343430375a", "o revoked time");
 
-equal(ASN1HEX.getDecendantHexTLVByNthList(hOCSPRES_wikipedia_revoked, 0, [1,0,1,0,0,2,0,2]),
+equal(ASN1HEX.getTLVbyList(hOCSPRES_wikipedia_revoked, 0, [1,0,1,0,0,2,0,2]),
       "180f32303136313030323032353332375a", "o t1");
-equal(ASN1HEX.getDecendantHexTLVByNthList(hOCSPRES_wikipedia_revoked, 0, [1,0,1,0,0,2,0,3,0]),
+equal(ASN1HEX.getTLVbyList(hOCSPRES_wikipedia_revoked, 0, [1,0,1,0,0,2,0,3,0]),
       "180f32303136313030363032353332375a", "o t2");
 });
 

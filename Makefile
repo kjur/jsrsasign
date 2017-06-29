@@ -14,7 +14,6 @@ FILES_MIN = \
 	min/ecdsa-modified-1.0.min.js \
 	min/ecparam-1.0.min.js \
 	min/dsa-2.0.min.js \
-	min/pkcs5pkey-1.0.min.js \
 	min/keyutil-1.0.min.js \
 	min/rsapem-1.1.min.js \
 	min/rsasign-1.2.min.js \

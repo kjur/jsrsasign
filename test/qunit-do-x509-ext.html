@@ -153,7 +153,7 @@ var k1CertPEM = "" +
 "HRMEBTADAQH/MAoGCCqGSM49BAMCA0kAMEYCIQDfAcS/WKBrP6JBgksQVpp4jdq4\n" +
 "C53Yu4F5NkaMgthAHgIhANGRdWAP1QdW9l6tiglQwdqJs4T0e8+NYv+RcAb3VYwn\n" +
 "-----END CERTIFICATE-----\n";
-var k1CertHex = ASN1HEX.pemToHex(k1CertPEM);
+var k1CertHex = pemtohex(k1CertPEM);
 
 // test/z1.der1-p3 basicConstraints={ca:true, pathlen:3}
 var z1P3CertHex = "3082017630820120a003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333134313832365a170d3236303431333134313832365a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a3533051301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e15300f0603551d13040830060101ff020103300d06092a864886f70d01010b0500034100862bf6d5f0c366dd1c71af10df93e2e9e0b7210b6912d1774e27107203f2dc257f9b132285bc1ce8d32d8ffc69470cd6c52ec76b7d68708eca3bbd49556f3005";
@@ -330,22 +330,23 @@ test("getCertificatePolicies", function() {
 
 // === OLD STATIC METHODS ==================
 
-test("DEPRECATED X509.getV3ExtInfoListOfCertHex test1", function() {
-  var hCert = ASN1HEX.pemToHex(certGithubPEM);
-  var a = X509.getV3ExtInfoListOfCertHex(hCert);
+test("readCertPEM, parseExt aExtInfo github.com", function() {
+  var x = new X509();
+  x.readCertPEM(certGithubPEM);
+  var a = x.aExtInfo;
   equal(a.length, 9, "num ext=9");
-  equal(a[0].posTLV, 1484, "AKID TLV index");
+  equal(a[0].vidx, 1502, "AKID TLV index");
   equal(a[0].oid, "2.5.29.35", "AKID oid");
   equal(a[0].critical, false, "AKID critical");
-  equal(a[0].posV, 1502, "AKID value index");
+  equal(a[0].vidx, 1502, "AKID value index");
   equal(a[1].oid, "2.5.29.14", "SKID oid");
   equal(a[1].critical, false, "SKID critical");
   equal(a[2].oid, "2.5.29.17", "SAN oid");
   equal(a[2].critical, false, "SAN critical");
   equal(a[3].oid, "2.5.29.15", "KeyUsage oid");
   equal(a[3].critical, true, "KeyUsage critical");
-  equal(a[3].posV, 1714, "KeyUsage posV");
-  equal(ASN1HEX.getHexOfTLV_AtObj(hCert, a[3].posV), "030205a0", "KeyUsage value 030205a0");
+  equal(a[3].vidx, 1714, "KeyUsage posV");
+  equal(ASN1HEX.getTLV(x.hex, a[3].vidx), "030205a0", "KeyUsage value 030205a0");
   equal(a[4].oid, "2.5.29.37", "ExtKeyUsage oid");
   equal(a[4].critical, false, "ExtKeyUsage critical");
   equal(a[5].oid, "2.5.29.31", "CDP oid");
@@ -356,82 +357,101 @@ test("DEPRECATED X509.getV3ExtInfoListOfCertHex test1", function() {
   equal(a[7].critical, false, "AIA critical");
   equal(a[8].oid, "2.5.29.19", "basicConstraints oid");
   equal(a[8].critical, true, "basicConstraints critical");
-  equal(ASN1HEX.getHexOfTLV_AtObj(hCert, a[8].posV), "3000", "basicConst value 3000");
+  equal(ASN1HEX.getTLV(x.hex, a[8].vidx), "3000", "basicConst value 3000");
 });
 
-test("DEPRECATED X509.getPosOfTLV_V3ExtValue test1", function() {
-  var hCert = ASN1HEX.pemToHex(certGithubPEM);
-  equal(X509.getPosOfTLV_V3ExtValue(hCert, "keyUsage"), 1714, "by keyUsage");
-  equal(X509.getPosOfTLV_V3ExtValue(hCert, "2.5.29.15"), 1714, "by 2.5.29.15(=keyUsage)");
-  equal(X509.getPosOfTLV_V3ExtValue(hCert, "policyConstraints"), -1,
-        "by policyConstraints -> -1, no such extension");
-  equal(X509.getPosOfTLV_V3ExtValue(hCert, "0.0.0.0"), -1,
-        "by 0.0.0.0 -> -1, no such extension");
+test("getExtInfo vidx github.com", function() {
+  var x = new X509();
+  x.readCertPEM(certGithubPEM);
+
+  equal(x.getExtInfo("keyUsage").vidx, 1714, "by keyUsage");
+  equal(x.getExtInfo("2.5.29.15").vidx, 1714, "by 2.5.29.15(=keyUsage)");
+
+  equal(x.getExtInfo("policyConstraints"), undefined,
+        "by policyConstraints -> undefined, no such extension");
+  equal(x.getExtInfo("0.0.0.0"), undefined,
+        "by 0.0.0.0 -> undefined, no such extension");
 });
 
-test("DEPRECATED X509.getHexOfV_V3ExtValue test1", function() {
-  var hCert = ASN1HEX.pemToHex(certGithubPEM);
-  equal(X509.getHexOfV_V3ExtValue(hCert, "keyUsage"), "05a0", "by keyUsage");
-  equal(X509.getHexOfV_V3ExtValue(hCert, "2.5.29.15"), "05a0", "by 2.5.29.15(=keyUsage)");
-  equal(X509.getHexOfV_V3ExtValue(hCert, "policyConstraints"), null, 
-        "by policyConstraints -> null, no such extention");
-  equal(X509.getHexOfV_V3ExtValue(hCert, "0.0.0.0"), null, 
-        "by 0.0.0.0 -> null, no such extension");
+test("getExtInfo getV github.com", function() {
+  var x = new X509();
+  x.readCertPEM(certGithubPEM);
+
+  var ku = x.getExtInfo("keyUsage");
+  equal(ASN1HEX.getV(x.hex, ku.vidx), "05a0", "by keyUsage");
+
+  equal(x.getExtInfo("policyConstraints"), undefined,
+        "by policyConstraints -> undefined, no such extension");
+  equal(x.getExtInfo("0.0.0.0"), undefined,
+        "by 0.0.0.0 -> undefined, no such extension");
 });
 
-test("DEPRECATED X509.getHexOfTLV_V3ExtValue test1", function() {
-  var hCert = ASN1HEX.pemToHex(certGithubPEM);
-  equal(X509.getHexOfTLV_V3ExtValue(hCert, "keyUsage"), "030205a0", "by keyUsage");
-  equal(X509.getHexOfTLV_V3ExtValue(hCert, "2.5.29.15"), "030205a0", "by 2.5.29.15(=keyUsage)");
-  equal(X509.getHexOfTLV_V3ExtValue(hCert, "policyConstraints"), null,
-        "by policyConstraints -> null, no such extension");
-  equal(X509.getHexOfTLV_V3ExtValue(hCert, "0.0.0.0"), null,
-        "by 0.0.0.0 -> null, no such extension");
+test("getExtInfo getTLV github.com", function() {
+  var x = new X509();
+  x.readCertPEM(certGithubPEM);
+
+  var ku = x.getExtInfo("keyUsage");
+  equal(ASN1HEX.getTLV(x.hex, ku.vidx), "030205a0", "by keyUsage");
+  equal(x.getExtInfo("policyConstraints"), undefined,
+        "by policyConstraints -> undefined, no such extension");
+  equal(x.getExtInfo("0.0.0.0"), undefined,
+        "by 0.0.0.0 -> undefined, no such extension");
 });
 
-test("X509.getExtKeyUsageBin", function() {
-  var hCert = ASN1HEX.pemToHex(certGithubPEM);
-  equal(X509.getExtKeyUsageBin(hCert), "101", "101");
+test("getExtKeyUsageBin", function() {
+  var x = new X509();
+  x.readCertPEM(certGithubPEM);
+  equal(x.getExtKeyUsageBin(), "101", "101");
 });
 
-test("X509.getExtKeyUsageString", function() {
-  var hCert = ASN1HEX.pemToHex(certGithubPEM);
-  equal(X509.getExtKeyUsageString(hCert), "digitalSignature,keyEncipherment", "digitalSignature,keyEncipherment");
+test("getExtKeyUsageString", function() {
+  var x = new X509();
+  x.readCertPEM(certGithubPEM);
+  equal(x.getExtKeyUsageString(), "digitalSignature,keyEncipherment", "digitalSignature,keyEncipherment");
 });
 
-test("X509.getExtAIAInfo", function() {
-  var hCert = ASN1HEX.pemToHex(certGithubPEM);
-  var info = X509.getExtAIAInfo(hCert);
+test("getExtAIAInfo", function() {
+  var x = new X509();
+  x.readCertPEM(certGithubPEM);
+  var info = x.getExtAIAInfo();
   equal(info.ocsp.length, 1, "number item of ocsp = 1");
   equal(info.ocsp[0], "http://ocsp.digicert.com", "ocsp=http://ocsp.digicert.com");
   equal(info.caissuer.length, 1, "number item of caIssuer = 1");
   equal(info.caissuer[0], "http://cacerts.digicert.com/DigiCertSHA2ExtendedValidationServerCA.crt", "caIssuer=http://cacerts.digicert.com/DigiCertSHA2ExtendedValidationServerCA.crt");
 });
 
-test("X509.getExtBasicConstraints k1 {cA:true}", function() {
-  var r = X509.getExtBasicConstraints(k1CertHex);
+test("getExtBasicConstraints k1 {cA:true}", function() {
+  var x = new X509();
+  x.readCertHex(k1CertHex);
+  var r = x.getExtBasicConstraints();
   equal(typeof r, "object");
   equal(r.cA, true);
   equal(r.pathLen === undefined, true);
 });
 
 // test/z1.der1-p3 basicConstraints={ca:true, pathlen:3}
-test("X509.getExtBasicConstraints z1.der1-p3 {cA:true,pathLen:3}", function() {
-  var r = X509.getExtBasicConstraints("3082017630820120a003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333134313832365a170d3236303431333134313832365a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a3533051301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e15300f0603551d13040830060101ff020103300d06092a864886f70d01010b0500034100862bf6d5f0c366dd1c71af10df93e2e9e0b7210b6912d1774e27107203f2dc257f9b132285bc1ce8d32d8ffc69470cd6c52ec76b7d68708eca3bbd49556f3005");
+test("getExtBasicConstraints z1.der1-p3 {cA:true,pathLen:3}", function() {
+  var x = new X509();
+  x.readCertHex("3082017630820120a003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333134313832365a170d3236303431333134313832365a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a3533051301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e15300f0603551d13040830060101ff020103300d06092a864886f70d01010b0500034100862bf6d5f0c366dd1c71af10df93e2e9e0b7210b6912d1774e27107203f2dc257f9b132285bc1ce8d32d8ffc69470cd6c52ec76b7d68708eca3bbd49556f3005");
+  var r = x.getExtBasicConstraints();
   equal(typeof r, "object");
   equal(r.cA, true);
   equal(r.pathLen, 3);
 });
 
 // test/z1.der2-no basicConstraints has empty value (for EE)
-test("X509.getExtBasicConstraints z1.der2-emp {}", function() {
-  var r = X509.getExtBasicConstraints("308201703082011aa003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333134313934345a170d3236303431333134313934345a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a34d304b301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e1530090603551d1304023000300d06092a864886f70d01010b050003410039de7f9c2975d1d309edd707609c3052c6adeda0b440c55e86410d303abd3363e4d66a1858c5c7f747fee590c38cf68a9ae39ce394175e36d12308490d3b94f2");
+test("getExtBasicConstraints z1.der2-emp {}", function() {
+  var x = new X509();
+  x.readCertHex("308201703082011aa003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333134313934345a170d3236303431333134313934345a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a34d304b301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e1530090603551d1304023000300d06092a864886f70d01010b050003410039de7f9c2975d1d309edd707609c3052c6adeda0b440c55e86410d303abd3363e4d66a1858c5c7f747fee590c38cf68a9ae39ce394175e36d12308490d3b94f2");
+  var r = x.getExtBasicConstraints();
   deepEqual(r, {}, "der2-emp");
 });
 
 // test/z1.der3-no (no basic constraints)
-test("X509.getExtBasicConstraints z1.der3-no (no basic constraints)", function() {
-  var r = X509.getExtBasicConstraints("308201653082010fa003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333135313332335a170d3236303431333135313332335a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a3423040301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e15300d06092a864886f70d01010b050003410016f823db6f65546958157ec08c20e736b0243fb6fa2fba6b74ac036f0115786c070d80d94b428f2f9d174169fb19e00fadfa5dbfbd19f27e2782adbd7bec644b");
+test("getExtBasicConstraints z1.der3-no (no basic constraints)", function() {
+  var x = new X509();
+  x.readCertHex("308201653082010fa003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333135313332335a170d3236303431333135313332335a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a3423040301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e15300d06092a864886f70d01010b050003410016f823db6f65546958157ec08c20e736b0243fb6fa2fba6b74ac036f0115786c070d80d94b428f2f9d174169fb19e00fadfa5dbfbd19f27e2782adbd7bec644b");
+  var r = x.getExtBasicConstraints();
   equal(r, null);
 });
 

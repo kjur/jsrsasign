@@ -25,10 +25,10 @@ var _hSigAAA = "6f7df91d8f973a0619d525c319337741130b77b21f9667dc7d1d74853b644cbe
 describe("rsasign", function() {
   describe("z1.pkcs1.pem", function() {
     var prv = new rs.RSAKey();
-    prv.readPrivateKeyFromPEMString(_Z1PKCS1PEM);
+    prv.readPKCS5PrvKeyHex(rs.pemtohex(_Z1PKCS1PEM));
     it('load and sign properly', function() {
       assert.equal(1024, prv.n.bitLength());
-      assert.equal(_hSigAAA, prv.signStringWithSHA1("aaa"));
+      assert.equal(_hSigAAA, prv.sign("aaa", "sha1"));
     });
   });
 });

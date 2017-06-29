@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 7.0.0 JavaScript API Reference - KEYUTIL</title>
+		<title>jsrsasign 8.0.0 JavaScript API Reference - KEYUTIL</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -423,8 +423,6 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.lang.String.html">KJUR.lang.String</a></li>
 	
-	<li><a href="../symbols/PKCS5PKEY.html">PKCS5PKEY</a></li>
-	
 	<li><a href="../symbols/RSAKey.html">RSAKey</a></li>
 	
 	<li><a href="../symbols/X509.html">X509</a></li>
@@ -471,7 +469,7 @@ ul.inheritsList
 								<b><a href="../symbols/KEYUTIL.html#constructor">KEYUTIL</a></b>()
 							</div>
 							<div class="description"><br/>
-<a href="../symbols/KEYUTIL.html">KEYUTIL</a> class is an update of former <a href="../symbols/PKCS5PKEY.html">PKCS5PKEY</a> class.</div>
+<a href="../symbols/KEYUTIL.html">KEYUTIL</a> class is an update of former PKCS5PKEY class.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -539,36 +537,6 @@ version string of KEYUTIL class</div>
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getDecryptedKeyHex">getDecryptedKeyHex</a></b>(sEncryptedPEM, passcode)
 								</div>
 								<div class="description">decrypt PEM formatted protected PKCS#5 private key with passcode</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getDecryptedKeyHexByKeyIV">getDecryptedKeyHexByKeyIV</a></b>(encryptedKeyHex, algName, sharedKeyHex, ivHex)
-								</div>
-								<div class="description">decrypt private key by shared key</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getEncryptedPKCS5PEMFromRSAKey">getEncryptedPKCS5PEMFromRSAKey</a></b>(pKey, passcode, alg, ivsaltHex)
-								</div>
-								<div class="description">(DEPRECATED) get PEM formatted encrypted PKCS#5 private key from RSAKey object of private key
-<br/>
-generate PEM formatted encrypted PKCS#5 private key by
-<a href="../symbols/RSAKey.html">RSAKey</a> object of RSA private key and passcode.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getHexFromPEM">getHexFromPEM</a></b>(sPEM, sHead)
-								</div>
-								<div class="description">(DEPRECATED) get hexacedimal string of PEM format</div>
 							</td>
 						</tr>
 					
@@ -651,24 +619,6 @@ for RSA, DSA and ECC.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getKeyFromPublicPKCS8Hex">getKeyFromPublicPKCS8Hex</a></b>(pkcsPub8Hex)
-								</div>
-								<div class="description">(DEPRECATED) get RSAKey/DSA/ECDSA public key object from hexadecimal string of PKCS#8 public key</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getKeyFromPublicPKCS8PEM">getKeyFromPublicPKCS8PEM</a></b>(pkcsPub8PEM)
-								</div>
-								<div class="description">(DEPRECATED) get RSAKey/ECDSA public key object from PEM PKCS#8 public key</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getPBKDF2KeyHexFromParam">getPBKDF2KeyHexFromParam</a></b>(info, passcode)
 								</div>
 								<div class="description">generate PBKDF2 key hexstring with specified passcode and information
@@ -684,7 +634,7 @@ Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 an
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getPEM">getPEM</a></b>(keyObjOrHex, formatType, passwd, encAlg)
+								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getPEM">getPEM</a></b>(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsaltHex)
 								</div>
 								<div class="description">get PEM formatted private or public key file from a RSA/ECDSA/DSA key object
 <dl>
@@ -695,81 +645,9 @@ DES-EDE3-CBC and AES-{128,192,256}-CBC
 <dt><b>NOTE2:</b>
 <dd>
 OpenSSL supports
-</dl></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getPlainPKCS8HexFromEncryptedPKCS8PEM">getPlainPKCS8HexFromEncryptedPKCS8PEM</a></b>(pkcs8PEM, passcode)
-								</div>
-								<div class="description">read PEM formatted encrypted PKCS#8 private key and returns hexadecimal string of plain PKCS#8 private key
-Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getRSAKeyFromEncryptedPKCS5PEM">getRSAKeyFromEncryptedPKCS5PEM</a></b>(sEncryptedP5PEM, passcode)
-								</div>
-								<div class="description">(DEPRECATED) read PEM formatted encrypted PKCS#5 private key and returns RSAKey object</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getRSAKeyFromEncryptedPKCS8PEM">getRSAKeyFromEncryptedPKCS8PEM</a></b>(pkcs8PEM, passcode)
-								</div>
-								<div class="description">(DEPRECATED) read PEM formatted encrypted PKCS#8 private key and returns RSAKey object
-Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getRSAKeyFromPlainPKCS8Hex">getRSAKeyFromPlainPKCS8Hex</a></b>(prvKeyHex)
-								</div>
-								<div class="description">(DEPRECATED) provide hexadecimal string of unencrypted PKCS#8 private key and returns RSAKey object</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getRSAKeyFromPlainPKCS8PEM">getRSAKeyFromPlainPKCS8PEM</a></b>(pkcs8PEM)
-								</div>
-								<div class="description">(DEPRECATED) read PEM formatted unencrypted PKCS#8 private key and returns RSAKey object</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getRSAKeyFromPublicPKCS8Hex">getRSAKeyFromPublicPKCS8Hex</a></b>(pkcs8PubHex)
-								</div>
-								<div class="description">(DEPRECATED) provide hexadecimal string of unencrypted PKCS#8 private key and returns RSAKey object</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getRSAKeyFromPublicPKCS8PEM">getRSAKeyFromPublicPKCS8PEM</a></b>(pkcs8PubPEM)
-								</div>
-								<div class="description">(DEPRECATED) read PEM formatted PKCS#8 public key and returns RSAKey object</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.newEncryptedPKCS5PEM">newEncryptedPKCS5PEM</a></b>(passcode, keyLen, hPublicExponent, alg)
-								</div>
-								<div class="description">generate RSAKey and PEM formatted encrypted PKCS#5 private key</div>
+<dt><b>NOTE3:</b>
+<dd>
+Parameter "ivsaltHex" supported since jsrsasign 8.0.0 keyutil 1.2.0.</div>
 							</td>
 						</tr>
 					
@@ -832,39 +710,6 @@ Resulted associative array has following properties:
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.parsePrivateRawECKeyHexAtObj">parsePrivateRawECKeyHexAtObj</a></b>(pkcs8PrvHex)
-								</div>
-								<div class="description">parse hexadecimal string of ECC private key
-Following properties are added to associative array 'info'
-<ul>
-<li>key - hexadecimal string of ECC private key
-</ul></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.parsePrivateRawRSAKeyHexAtObj">parsePrivateRawRSAKeyHexAtObj</a></b>(pkcs8PrvHex)
-								</div>
-								<div class="description">parse hexadecimal string of RSA private key
-Following properties are added to associative array 'info'
-<ul>
-<li>n - hexadecimal string of public key
-<li>e - hexadecimal string of public exponent
-<li>d - hexadecimal string of private key
-<li>p - hexadecimal string
-<li>q - hexadecimal string
-<li>dp - hexadecimal string
-<li>dq - hexadecimal string
-<li>co - hexadecimal string
-</ul></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.parsePublicPKCS8Hex">parsePublicPKCS8Hex</a></b>(pkcs8PubHex)
 								</div>
 								<div class="description">parse hexadecimal string of PKCS#8 RSA/EC/DSA public key
@@ -908,8 +753,7 @@ Resulted associative array has following properties:
 				
 				<div class="description">
 					<br/>
-<a href="../symbols/KEYUTIL.html">KEYUTIL</a> class is an update of former <a href="../symbols/PKCS5PKEY.html">PKCS5PKEY</a> class.
-So for now, <a href="../symbols/PKCS5PKEY.html">PKCS5PKEY</a> is deprecated class.
+<a href="../symbols/KEYUTIL.html">KEYUTIL</a> class is an update of former PKCS5PKEY class.
 <a href="../symbols/KEYUTIL.html">KEYUTIL</a> class has following features:
 <dl>
 <dt><b>key loading - <a href="../symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a></b>
@@ -1128,217 +972,6 @@ var ecKeypair = KEYUTIL.generateKeypair("EC", "secp256r1");</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> hexadecimal string of decrypted RSA priavte key</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getDecryptedKeyHexByKeyIV"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">KEYUTIL.</span><b>getDecryptedKeyHexByKeyIV</b>(encryptedKeyHex, algName, sharedKeyHex, ivHex)
-					
-					</div>
-					<div class="description">
-						decrypt private key by shared key
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>encryptedKeyHex</b>
-									
-								</dt>
-								<dd>hexadecimal string of encrypted private key</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>algName</b>
-									
-								</dt>
-								<dd>name of symmetric key algorithm (ex. 'DES-EBE3-CBC')</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sharedKeyHex</b>
-									
-								</dt>
-								<dd>hexadecimal string of symmetric key</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>ivHex</b>
-									
-								</dt>
-								<dd>hexadecimal string of initial vector(IV).</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> hexadecimal string of decrypted privated key</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getEncryptedPKCS5PEMFromRSAKey"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">KEYUTIL.</span><b>getEncryptedPKCS5PEMFromRSAKey</b>(pKey, passcode, alg, ivsaltHex)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get PEM formatted encrypted PKCS#5 private key from RSAKey object of private key
-<br/>
-generate PEM formatted encrypted PKCS#5 private key by
-<a href="../symbols/RSAKey.html">RSAKey</a> object of RSA private key and passcode.
-Following argument can be omitted.
-<ul>
-<li>alg - AES-256-CBC will be used if omitted.</li>
-<li>ivsaltHex - automatically generate IV and salt which length depends on algorithm</li>
-</ul>
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">var pkey = new RSAKey();
-pkey.generate(1024, '10001'); // generate 1024bit RSA private key with public exponent 'x010001'
-var pem = KEYUTIL.getEncryptedPKCS5PEMFromRSAKey(pkey, "password");</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> <b>pKey</b>
-									
-								</dt>
-								<dd>RSAKey object of private key</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>passcode</b>
-									
-								</dt>
-								<dd>pass code to protect private key (ex. password)</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>alg</b>
-									
-								</dt>
-								<dd>algorithm name to protect private key (default AES-256-CBC)</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>ivsaltHex</b>
-									
-								</dt>
-								<dd>hexadecimal string of IV and salt (default generated random IV)</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								From jsrsasign 4.2.1 please use KEYUTIL.getPEM#.
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>pkcs5pkey 1.0.2</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> string of PEM formatted encrypted PKCS#5 private key</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getHexFromPEM"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">KEYUTIL.</span><b>getHexFromPEM</b>(sPEM, sHead)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get hexacedimal string of PEM format
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sPEM</b>
-									
-								</dt>
-								<dd>PEM formatted string</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sHead</b>
-									
-								</dt>
-								<dd>PEM header string without BEGIN/END</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								from keyutil 1.1.0 jsrsasign 7.0.1. please move to <a href="../symbols/ASN1HEX.html#.pemToHex">ASN1HEX.pemToHex</a>
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>pkcs5pkey 1.0.5</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> hexadecimal string data of PEM contents</dd>
 							
 							</dl>
 						
@@ -1838,118 +1471,6 @@ keyObj = KEYUTIL.getKey({n: "75ab..", e: "010001"});</pre>
 
 					<hr />
 				
-					<a name=".getKeyFromPublicPKCS8Hex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{Object}</span>
-					<span class="light">KEYUTIL.</span><b>getKeyFromPublicPKCS8Hex</b>(pkcsPub8Hex)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get RSAKey/DSA/ECDSA public key object from hexadecimal string of PKCS#8 public key
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>pkcsPub8Hex</b>
-									
-								</dt>
-								<dd>hexadecimal string of PKCS#8 public key</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								From jsrsasign 4.2.1 please use KEYUTIL.getKey#.
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>pkcs5pkey 1.0.5</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Object}</span> RSAKey or KJUR.crypto.{ECDSA,DSA} private key object</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getKeyFromPublicPKCS8PEM"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{Object}</span>
-					<span class="light">KEYUTIL.</span><b>getKeyFromPublicPKCS8PEM</b>(pkcsPub8PEM)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) get RSAKey/ECDSA public key object from PEM PKCS#8 public key
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>pkcsPub8PEM</b>
-									
-								</dt>
-								<dd>string of PEM formatted PKCS#8 public key</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								From jsrsasign 4.2.1 please use KEYUTIL.getKey#.
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>pkcs5pkey 1.0.5</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Object}</span> RSAKey or KJUR.crypto.ECDSA private key object</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
 					<a name=".getPBKDF2KeyHexFromParam"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -2025,7 +1546,7 @@ Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 an
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">KEYUTIL.</span><b>getPEM</b>(keyObjOrHex, formatType, passwd, encAlg)
+					<span class="light">KEYUTIL.</span><b>getPEM</b>(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsaltHex)
 					
 					</div>
 					<div class="description">
@@ -2038,6 +1559,9 @@ DES-EDE3-CBC and AES-{128,192,256}-CBC
 <dt><b>NOTE2:</b>
 <dd>
 OpenSSL supports
+<dt><b>NOTE3:</b>
+<dd>
+Parameter "ivsaltHex" supported since jsrsasign 8.0.0 keyutil 1.2.0.
 </dl>
 						
 						
@@ -2085,6 +1609,18 @@ KEUUTIL.getPEM(privateKey, "PKCS8PRV", "pass") =&gt; generates PEM PKCS#8 encryp
 								</dt>
 								<dd>(OPTION) encryption algorithm for PKCS#5. currently supports DES-CBC, DES-EDE3-CBC and AES-{128,192,256}-CBC</dd>
 							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hexType</b>
+									
+								</dt>
+								<dd>(OPTION) type of hex string (ex. pkcs5prv, pkcs8prv)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>ivsaltHex</b>
+									
+								</dt>
+								<dd>hexadecimal string of IV and salt (default generated random IV)</dd>
+							
 							</dl>
 						
 						
@@ -2096,504 +1632,6 @@ KEUUTIL.getPEM(privateKey, "PKCS8PRV", "pass") =&gt; generates PEM PKCS#8 encryp
 							</dl>
 						
 						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getPlainPKCS8HexFromEncryptedPKCS8PEM"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">KEYUTIL.</span><b>getPlainPKCS8HexFromEncryptedPKCS8PEM</b>(pkcs8PEM, passcode)
-					
-					</div>
-					<div class="description">
-						read PEM formatted encrypted PKCS#8 private key and returns hexadecimal string of plain PKCS#8 private key
-Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.
-<ul>
-<li>keyDerivationFunc = pkcs5PBKDF2 with HmacSHA1</li>
-<li>encryptionScheme = des-EDE3-CBC(i.e. TripleDES</li>
-</ul>
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">// to convert plain PKCS#5 private key to encrypted PKCS#8 private
-// key with PBKDF2 with TripleDES
-% openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>pkcs8PEM</b>
-									
-								</dt>
-								<dd>PEM formatted encrypted PKCS#8 private key</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>passcode</b>
-									
-								</dt>
-								<dd>passcode to decrypto private key</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>pkcs5pkey 1.0.3</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> hexadecimal string of plain PKCS#8 private key</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getRSAKeyFromEncryptedPKCS5PEM"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
-					<span class="light">KEYUTIL.</span><b>getRSAKeyFromEncryptedPKCS5PEM</b>(sEncryptedP5PEM, passcode)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) read PEM formatted encrypted PKCS#5 private key and returns RSAKey object
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sEncryptedP5PEM</b>
-									
-								</dt>
-								<dd>PEM formatted encrypted PKCS#5 private key</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>passcode</b>
-									
-								</dt>
-								<dd>passcode to decrypt private key</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								From jsrsasign 4.2.1 please use KEYUTIL.getKey#.
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>pkcs5pkey 1.0.2</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> loaded RSAKey object of RSA private key</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getRSAKeyFromEncryptedPKCS8PEM"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
-					<span class="light">KEYUTIL.</span><b>getRSAKeyFromEncryptedPKCS8PEM</b>(pkcs8PEM, passcode)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) read PEM formatted encrypted PKCS#8 private key and returns RSAKey object
-Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.
-<ul>
-<li>keyDerivationFunc = pkcs5PBKDF2 with HmacSHA1</li>
-<li>encryptionScheme = des-EDE3-CBC(i.e. TripleDES</li>
-</ul>
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">// to convert plain PKCS#5 private key to encrypted PKCS#8 private
-// key with PBKDF2 with TripleDES
-% openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>pkcs8PEM</b>
-									
-								</dt>
-								<dd>PEM formatted encrypted PKCS#8 private key</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>passcode</b>
-									
-								</dt>
-								<dd>passcode to decrypto private key</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								From jsrsasign 4.2.1 please use KEYUTIL.getKey#.
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>pkcs5pkey 1.0.3</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> loaded RSAKey object of RSA private key</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getRSAKeyFromPlainPKCS8Hex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
-					<span class="light">KEYUTIL.</span><b>getRSAKeyFromPlainPKCS8Hex</b>(prvKeyHex)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) provide hexadecimal string of unencrypted PKCS#8 private key and returns RSAKey object
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>prvKeyHex</b>
-									
-								</dt>
-								<dd>hexadecimal string of unencrypted PKCS#8 private key</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								From jsrsasign 4.2.1 please use KEYUTIL.getKey#.
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>pkcs5pkey 1.0.3</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> loaded RSAKey object of RSA private key</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getRSAKeyFromPlainPKCS8PEM"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
-					<span class="light">KEYUTIL.</span><b>getRSAKeyFromPlainPKCS8PEM</b>(pkcs8PEM)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) read PEM formatted unencrypted PKCS#8 private key and returns RSAKey object
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>pkcs8PEM</b>
-									
-								</dt>
-								<dd>PEM formatted unencrypted PKCS#8 private key</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								From jsrsasign 4.2.1 please use KEYUTIL.getKey#.
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>pkcs5pkey 1.0.1</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> loaded RSAKey object of RSA private key</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getRSAKeyFromPublicPKCS8Hex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
-					<span class="light">KEYUTIL.</span><b>getRSAKeyFromPublicPKCS8Hex</b>(pkcs8PubHex)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) provide hexadecimal string of unencrypted PKCS#8 private key and returns RSAKey object
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>pkcs8PubHex</b>
-									
-								</dt>
-								<dd>hexadecimal string of unencrypted PKCS#8 public key</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								From jsrsasign 4.2.1 please use KEYUTIL.getKey#.
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>pkcs5pkey 1.0.4</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> loaded RSAKey object of RSA public key</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getRSAKeyFromPublicPKCS8PEM"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span>
-					<span class="light">KEYUTIL.</span><b>getRSAKeyFromPublicPKCS8PEM</b>(pkcs8PubPEM)
-					
-					</div>
-					<div class="description">
-						(DEPRECATED) read PEM formatted PKCS#8 public key and returns RSAKey object
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>pkcs8PubPEM</b>
-									
-								</dt>
-								<dd>PEM formatted PKCS#8 public key</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								From jsrsasign 4.2.1 please use KEYUTIL.getKey#.
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>pkcs5pkey 1.0.4</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{<a href="../symbols/RSAKey.html">RSAKey</a>}</span> loaded RSAKey object of RSA public key</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".newEncryptedPKCS5PEM"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">KEYUTIL.</span><b>newEncryptedPKCS5PEM</b>(passcode, keyLen, hPublicExponent, alg)
-					
-					</div>
-					<div class="description">
-						generate RSAKey and PEM formatted encrypted PKCS#5 private key
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">var pem1 = KEYUTIL.newEncryptedPKCS5PEM("password");           // RSA1024bit/10001/AES-256-CBC
-var pem2 = KEYUTIL.newEncryptedPKCS5PEM("password", 512);      // RSA 512bit/10001/AES-256-CBC
-var pem3 = KEYUTIL.newEncryptedPKCS5PEM("password", 512, '3'); // RSA 512bit/    3/AES-256-CBC</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>passcode</b>
-									
-								</dt>
-								<dd>pass code to protect private key (ex. password)</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Integer}</span> <b>keyLen</b>
-									
-								</dt>
-								<dd>key bit length of RSA key to be generated. (default 1024)</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hPublicExponent</b>
-									
-								</dt>
-								<dd>hexadecimal string of public exponent (default 10001)</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>alg</b>
-									
-								</dt>
-								<dd>shared key algorithm to encrypt private key (default AES-258-CBC)</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>pkcs5pkey 1.0.2</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> string of PEM formatted encrypted PKCS#5 private key</dd>
-							
-							</dl>
 						
 						
 						
@@ -2826,133 +1864,6 @@ Resulted associative array has following properties:
 
 					<hr />
 				
-					<a name=".parsePrivateRawECKeyHexAtObj"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{Array}</span>
-					<span class="light">KEYUTIL.</span><b>parsePrivateRawECKeyHexAtObj</b>(pkcs8PrvHex)
-					
-					</div>
-					<div class="description">
-						parse hexadecimal string of ECC private key
-Following properties are added to associative array 'info'
-<ul>
-<li>key - hexadecimal string of ECC private key
-</ul>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>pkcs8PrvHex</b>
-									
-								</dt>
-								<dd>hexadecimal string of PKCS#8 private key concluding EC private key</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								since jsrsasign 7.1.0 keyutil 1.1.0
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>pkcs5pkey 1.0.5</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Array}</span> info associative array to add parsed ECC private key information</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".parsePrivateRawRSAKeyHexAtObj"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{Array}</span>
-					<span class="light">KEYUTIL.</span><b>parsePrivateRawRSAKeyHexAtObj</b>(pkcs8PrvHex)
-					
-					</div>
-					<div class="description">
-						parse hexadecimal string of RSA private key
-Following properties are added to associative array 'info'
-<ul>
-<li>n - hexadecimal string of public key
-<li>e - hexadecimal string of public exponent
-<li>d - hexadecimal string of private key
-<li>p - hexadecimal string
-<li>q - hexadecimal string
-<li>dp - hexadecimal string
-<li>dq - hexadecimal string
-<li>co - hexadecimal string
-</ul>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>pkcs8PrvHex</b>
-									
-								</dt>
-								<dd>hexadecimal string of PKCS#8 private key concluding RSA private key</dd>
-							
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Deprecated:</dt>
-							<dt>
-								since jsrsasign 7.1.0 keyutil 1.1.0
-							</dt>
-							</dl>
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>pkcs5pkey 1.0.5</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Array}</span> info associative array to add parsed RSA private key information</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
 					<a name=".parsePublicPKCS8Hex"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -3067,7 +1978,7 @@ Resulted associative array has following properties:
 		
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
-                        &copy; 2012-2016 Kenji Urushima, All rights reserved<br/>
+                        &copy; 2012-2017 Kenji Urushima, All rights reserved<br/>
 			
 			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 
 		</div>

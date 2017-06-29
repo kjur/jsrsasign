@@ -133,12 +133,28 @@ var key2prvhex = "308204a50201000282010100e7fd901cc041be2aeb8ae7218a9479d3645ade
 
 var key2prvb64 = "MIIEpQIBAAKCAQEA5/2QHMBBvirriuchipR502Ra3oN/jduXlIFi0eWpQem2S0IrKwgiBX9+hNnjhqMhOXp4k/6IuCOH6PIRpJSkF1N/tu7ypzTVwnT8LQof5daRQteHFPU3w3MelduE5nGPjJl8jcV36jtvt7nnkZjJvZPluQLNAt6azIvI31BQqNID1x3RIDTxVa6A952undto669sUuOcjUCFxwYCk3u5m89RpayoyAEK3rq6XbSF+spirWLHeDF0d58hMGvbwI8YPnp7dNRPU08Wg9QUJE8lJEfMyAXOYa2eKRk9mqB7jkEYDHiqNPzjsm3CT0amn8e2B+dQUYgSe3Rnj58ToiIrxQIDAQABAoIBAQCeXYe9OLkoWiBEyBcrhMPNPJqTf2zZp+fH5rNQ2dg7OJHKujbBv2GKI0h45EzfogiSNjqNvJoUKZ0jteu5UAbcLZHnjSJ0Zirt/fIPxPOVcG3lFUAPXH5em/1rC1mj/i2iKzzNgtmjOkO/RdcAmy5MjeOp8nGE3fUKYPoVB7yoILi44W7yLbSUctyFDAPCGLyjyN0N3Yq5dcyv5F+Ec3aQhEVQ8282iAcP6/gQBg/fC1SnIOLd8UGM0EyuFhxkH5L5lQDT4obcEStzF8lm6+53WTd9nTTNE9GRDBXySFVQmX82lfWjcLW2+8cXgzC04ozpRrQnH+stgRUC67OcSX0ZAoGBAPwTuZwJirT3gMQgcyTozFoLGD1kRCjBW18tw0pE8C/ZAHaT4DaDkDpzWddkiyCHSInyGIXcT1gbBgvMF4wqIYzMRjtlj88mgK//gHLhWjiCVTh76wgG3XmLsOiL+cxjFX/XQWI5kocABzYbJThRjxOxi1zQ3MFOZVmR7LRQuvCfAoGBAOuZ0CEQI1A2LBWJAl0KAgHcre4VfBMETTbFecs4Pul4fqSQcxlSU7x43ZLUAEEWAs3PnjN4Z6WmANdrEMlAdSv+PO8nbjA7gC5BMrlzc1TTnj2Z42SYT9AsTe+N/dAWv7KfAFjDVfwEKY9a21sChU0oV+ohcJsExeM5JXonulUbAoGBANlx1nmwjXNf0Tbd2xWqr6S4z1cd5+HUMZKf8kddwmcz5L9k/lNoGAEjwgsYkx8jM8KzEM5f5h3VadjBXEqviTNgfvD7whrqVrX7S/1NQbtfSk4oLu1EpsYTZy6imH/jtQcLUz589VX5Az98GRZE3IwbamFNVjB2BN1IEIzW2vt3AoGAMrpgnO3bnKa9YTmp35yLCBma/Zt0pqeTdIqaic4nhZ+jLQ3JKpeWXgtsMfQhxeHWYrgkaRKwxnLy1W9BIwQU9o78UcYcrJfzJoJ1SIb6OzaBaOQcmQlOjhUsBrt8/fQX/H7N1U7h0ayXwj0e4/6r8wwPueLPWyFw9lbUofOx5CcCgYEAvTTcxuj6jscA33tFPa+SWM2QT8JFMxftjVTitUBdPntRWCawwzqYyIaCKBkF8f03cTS3yz1ZiE3M1OQs1zuaUxJVTr1VpSUV+pxTuZ3gq3i/9QHadVrEMGpevmzMV1eLDgIjvOUFkBskHqfKieaNYsP33jnqlv6Zi8Z6NVYPVDc=";
 
+var sk10pem = "" +
+"-----BEGIN RSA PRIVATE KEY-----\r\n" +
+"Proc-Type: 4,ENCRYPTED\r\n" +
+"DEK-Info: AES-256-CBC,40555967F759530864FE022E257DE34E\r\n" +
+"\r\n" +
+"jV7uXajRw4cccDaliagcqiLOiQEUCe19l761pXRxzgQP+DH4rCi12T4puTdZyy6l\r\n" +
+"eJHcSHZ/IC9N9iS3XNLgm/rRdUBahf0l1HOerHY76xIb74tB9v1S6sZe/IaOIYTO\r\n" +
+"E/t63rzNmj33AzEup5xMyzuAninLL3jJGKwcwkTG5u+n8p7fuMPcML0L7beVBkvZ\r\n" +
+"oXyySfMVB8h4u7yyZdhjU3O4K8QX1g1jntGJpQsh4ikfjM+3ddG/qaBrwzTBfC0C\r\n" +
+"F9SUbv+Sz0nZX60PhAYEDhb7194ol7F5Y4QZuDhf6K6d1v8r5b9RqDo98INqwdsD\r\n" +
+"1El24sGa3eBXi3lnpAytX7dOOBQKRh1uJyL3IuKyuFcNJj3OOGjBkR6imZwD895e\r\n" +
+"qxLS+BASmyGm4DME6m+kltZ12LXwPgNU6+d+XQ4NXSA=\r\n" +
+"-----END RSA PRIVATE KEY-----\r\n";
+
+var sk10pem_passcode = "hogehoge";
+
 test("KEYUTIL.getKey RSA PKCS5PRVPEM, PKCS5PRVHEX comparison", function() {
 var k1 = KEYUTIL.getKey(key2prv);
 var k2 = KEYUTIL.getKey(key2prvhex, null, "pkcs5prv");
 
-equal(KEYUTIL.getHexFromPEM(key2prv, "RSA PRIVATE KEY"), key2prvhex, "same hex");
-equal(KEYUTIL.getHexFromPEM(key2prv), key2prvhex, "same hex");
+equal(pemtohex(key2prv, "RSA PRIVATE KEY"), key2prvhex, "same hex");
+equal(pemtohex(key2prv), key2prvhex, "same hex");
 equal(k1.n.bitLength(), k2.n.bitLength(), "n.bitLength = " + k1.n.bitLength());
 equal(k1.n.compareTo(k2.n), 0, "same n");
 equal(k1.e, k2.e, "same e " + k1.e);
@@ -148,6 +164,12 @@ equal(k1.q.compareTo(k2.q), 0, "same q");
 equal(k1.dmp1.compareTo(k2.dmp1), 0, "same dmp1");
 equal(k1.dmq1.compareTo(k2.dmq1), 0, "same dmq1");
 equal(k1.coeff.compareTo(k2.coeff), 0, "same coeff " + k1.coeff.toString(16) + " " + k2.coeff.toString(16));
+});
+
+test("getRSAKeyFromEncryptedPKCS5PEM_k10", function() {
+  var k = KEYUTIL.getKey(sk10pem, "hogehoge");
+  expect(1);
+  equal(k.e.toString(16), "10001", "e of key");
 });
 
 });

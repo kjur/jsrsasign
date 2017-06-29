@@ -37,7 +37,7 @@
 <script src="../src/rsasign-1.2.js"></script>
 <script src="../src/asn1hex-1.1.js"></script>
 <script src="../src/crypto-1.1.js"></script>
-<script src="../src/pkcs5pkey-1.0.js"></script>
+<script src="../src/keyutil-1.0.js"></script>
 <script src="../src/base64x-1.1.js"></script>
 
 <script>
@@ -101,25 +101,25 @@ var sKp1SigAAA4 = "455cda85ae69b91d29b82c27ec3cd8d335d443153558fd6a28599b5da5957
 module("Verifier Test");
 
 test("RSAPSS kp1.sig.aaa.-1.1 verify test", function() {
-  var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
+  var pubKey = KEYUTIL.getKey(sKp1PubPEM);
   var result = pubKey.verifyPSS("aaa", sKp1SigAAA1, "sha1", -1);
   equal(result, true, 'kp1.sig');
 });
 
 test("RSAPSS kp1.sig.aaa.-1.2 verify test", function() {
-  var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
+  var pubKey = KEYUTIL.getKey(sKp1PubPEM);
   var result = pubKey.verifyPSS("aaa", sKp1SigAAA2, "sha1", -1);
   equal(result, true, 'kp1.sig');
 });
 
 test("RSAPSS kp1.sig.aaa.-2.3 verify test", function() {
-  var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
+  var pubKey = KEYUTIL.getKey(sKp1PubPEM);
   var result = pubKey.verifyPSS("aaa", sKp1SigAAA3, "sha1", -2);
   equal(result, true, 'kp1.sig');
 });
 
 test("RSAPSS kp1.sig.aaa.-2.4 verify test", function() {
-  var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
+  var pubKey = KEYUTIL.getKey(sKp1PubPEM);
   var result = pubKey.verifyPSS("aaa", sKp1SigAAA4, "sha1", -2);
   equal(result, true, 'kp1.sig');
 });
@@ -129,7 +129,7 @@ test("RSAPSS kp1 sign and verify", function() {
   prvKey.readPrivateKeyFromPEMString(sKp1PrvPEM);
   var hSigValue = prvKey.signPSS("aaa", "sha1", -2);
 
-  var pubKey = PKCS5PKEY.getRSAKeyFromPublicPKCS8PEM(sKp1PubPEM);
+  var pubKey = KEYUTIL.getKey(sKp1PubPEM);
   var result = pubKey.verifyPSS("aaa", hSigValue, "sha1", -2);
   equal(result, true, 'kp1.sig');
 });

@@ -47,6 +47,7 @@
 <script src="../src/ecparam-1.0.js"></script>
 <script src="../src/x509-1.1.js"></script>
 <script src="../src/keyutil-1.0.js"></script>
+<script src="../src/asn1x509-1.0.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -201,13 +202,7 @@ test("getDecryptedKeyHex_k10", function() {
   equal(decrypted, sk10dechex, "key is the same.");
 });
 
-test("getRSAKeyFromEncryptedPKCS5PEM_k10", function() {
-  var k = KEYUTIL.getRSAKeyFromEncryptedPKCS5PEM(sk10pem, "hogehoge");
-  expect(1);
-  equal(k.e.toString(16), "10001", "e of key");
-});
-
-test("getRSAKeyFromPlainPKCS8PEM", function() {
+test("getKey RSA z1.prv.p8.pem", function() {
   var s = // =z1.prv.p8.pem
 "-----BEGIN PRIVATE KEY-----\n" + 
 "MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEA6GZN0rQFKRIVaPOz\n" + 
@@ -219,8 +214,7 @@ test("getRSAKeyFromPlainPKCS8PEM", function() {
 "LaLGdd9G63kLg85eldSy55uIAXsvqQIgfSYaliVtSbAgyx1Yfs3hJ+CTpNKzTNv/\n" + 
 "Fx80EltYV6k=\n" + 
 "-----END PRIVATE KEY-----\n";
-  var pkey = KEYUTIL.getRSAKeyFromPlainPKCS8PEM(s);
-  expect(3);
+  var pkey = KEYUTIL.getKey(s);
   equal(pkey.n.toString(16), "e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd59", "n of key is the same.");
   equal(pkey.e.toString(16), "10001", "e of key is the same.");
   equal(pkey.d.toString(16), "78bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d", "d of key is the same.");
@@ -260,45 +254,35 @@ test("getEncryptedPKCS5PEMFromPrvKeyHex/4-2 alg check", function() {
         "supports alg AES-128-CBC");
 });
 
-test("getEncryptedPKCS5PEMFromRSAKey/1 key encryption", function() {
+test("getPEM, getEncryptedPKCS5PEMFromPrvKeyHex/1 key encryption", function() {
   var k = new RSAKey();
-  k.readPrivateKeyFromASN1HexString(sk10dechex);
-  var p = KEYUTIL.getEncryptedPKCS5PEMFromRSAKey(k, "hogehoge", "AES-256-CBC", "40555967F759530864FE022E257DE34E");
+  k.readPKCS5PrvKeyHex(sk10dechex);
+  var p = KEYUTIL.getPEM(k, "PKCS5PRV", "hogehoge", "AES-256-CBC", null, "40555967F759530864FE022E257DE34E");
   equal(p, sk10pem, "encrypted");
 });
 
-test("getEncryptedPKCS5PEMFromRSAKey/2 without IV", function() {
+test("getPEM, getEncryptedPKCS5PEMFromPrvKeyHex/2 without IV", function() {
   var k = new RSAKey();
-  k.readPrivateKeyFromASN1HexString(sk10dechex);
-  var pem = KEYUTIL.getEncryptedPKCS5PEMFromRSAKey(k, "moge", "AES-256-CBC");
+  k.readPKCS5PrvKeyHex(sk10dechex);
+  var pem = KEYUTIL.getPEM(k, "PKCS5PRV", "moge", "AES-256-CBC");
   // when AES-256-CBC, iv shall be 16 bytes (i.e. 32 chars)
   equal(pem.match(/DEK-Info: AES-256-CBC,([0-9A-F]{32})\s+/) != null, true, "iv len match: iv=" + RegExp.$1 );
 });
 
-test("getEncryptedPKCS5PEMFromRSAKey/3 without Alg and IV", function() {
+test("getPEM, getEncryptedPKCS5PEMFromPrvKeyHex/3 without Alg and IV", function() {
   var k = new RSAKey();
-  k.readPrivateKeyFromASN1HexString(sk10dechex);
-  var pem = KEYUTIL.getEncryptedPKCS5PEMFromRSAKey(k, "moge");
+  k.readPKCS5PrvKeyHex(sk10dechex);
+  var pem = KEYUTIL.getPEM(k, "PKCS5PRV", "moge");
   // when AES-256-CBC, iv shall be 16 bytes (i.e. 32 chars)
-  equal(pem.match(/DEK-Info: AES-256-CBC,([0-9A-F]{32})\s+/) != null, true, "iv len match: iv=" + RegExp.$1 );
+  equal(pem.match(/DEK-Info: DES-EDE3-CBC,([0-9A-F]{16})\s+/) != null, true, "iv len match: iv=" + RegExp.$1 + "--" + pem );
 });
 
-test("getEncryptedPKCS5PEMFromRSAKey/4 with key generation", function() {
+test("getPEM, getEncryptedPKCS5PEMFromPrvKeyHex/4 with key generation", function() {
   var k = new RSAKey();
   k.generate(512, '10001');
-  var pem = KEYUTIL.getEncryptedPKCS5PEMFromRSAKey(k, "moge");
+  var pem = KEYUTIL.getPEM(k, "PKCS5PRV", "moge");
   // when AES-256-CBC, iv shall be 16 bytes (i.e. 32 chars)
-  equal(pem.match(/DEK-Info: AES-256-CBC,([0-9A-F]{32})\s+/) != null, true, "iv len match: iv=" + RegExp.$1 );
-});
-
-test("getHexFromPEM", function() {
-  var s = "-----BEGIN AAA TEST-----\r\n" +
-          "YWFh\r\n" +
-          "-----END AAA TEST-----\r\n";
-
-  expect(2);
-  equal(KEYUTIL.getHexFromPEM(s, "AAA TEST"), "616161", "(s, AAA TEST)-aaa"); 
-  equal(KEYUTIL.getHexFromPEM(s), "616161", "no sHead (s)-aaa"); 
+  equal(pem.match(/DEK-Info: DES-EDE3-CBC,([0-9A-F]{16})\s+/) != null, true, "iv len match: iv=" + RegExp.$1 + "--" + pem);
 });
 
 test("parseHexOfEncryptedPKCS8", function() {
@@ -318,14 +302,14 @@ test("getPBKDF2KeyHexFromParam", function() {
   equal(hKey, "c540389de62486834ff3a208a9ab457291df38f4372ad920", "getPBKDF2KeyHexFromParam");
 });
 
-test("getPlainPKCS8HexFromEncryptedPKCS8PEM", function() {
-  var h = KEYUTIL.getPlainPKCS8HexFromEncryptedPKCS8PEM(sk12pem, "hoge");
+test("_getPlainPKCS8HexFromEncryptedPKCS8PEM", function() {
+  var h = KEYUTIL._getPlainPKCS8HexFromEncryptedPKCS8PEM(sk12pem, "hoge");
   equal(h, sk12plainhex, "sk12pem -> sk12plainhex");
 });
 
-test("getRSAKeyFromEncryptedPKCS8PEM", function() {
-  var k = KEYUTIL.getRSAKeyFromEncryptedPKCS8PEM(sk12pem, "hoge");
-  expect(3);
+test("getKey(PKCS8PEM, pass)", function() {
+  //var k = KEYUTIL.getRSAKeyFromEncryptedPKCS8PEM(sk12pem, "hoge");
+  var k = KEYUTIL.getKey(sk12pem, "hoge");
   // n,e,d,p,q,dmp1,dmq1,coeff
   equal(k.n.toString(16), "dc6d990d4a71c769ec704db7cce04da8b8f15bfad7b6e3e129e191c30df7db0243635a8ffb293a6e4a74599911c0d15ae8e72d9c84bd8dcf19ffee839fd05167", "rsaKey.n");
   equal(k.e.toString(16), "10001", "rsaKey.e");

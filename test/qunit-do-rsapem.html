@@ -44,11 +44,6 @@ $(document).ready(function(){
 
   var sk10dechex = '30820139020100024100b1e5aa7d6827b8c69037b269907bd8f4a7a1e6b798776e3be519fbda2966260dd56f6f3389d489a276a0a1e1b19e51328bc2d6a623f24be6b2e6718f3b292d5b02030100010240763582206ac15a4ab7320b5f921e797fb894205706fcf546df6970acfaad61c2db1fb6f9e335a1867c0f7c40a2ad39aa92b9312459bbf90d5eab831793c69321022100e584720c8f676623e94e7fb8616e667d66cd379559ffe36acd9068495e68adc5022100c66c72386fbdeded99c5963422d7380c19100757a4dcec581bd645d3d924409f0220101798337f3e7dafd8e4d319a763293673a5c1d6ebe7801775f0410f9bd9f50d02201bff2b329959a41b9549d2c2b273c97db37f9679a05267aa9aeae5d959570b23022043ea618b8f31af3aa762171cf2b5e9d563c5041a99a2217b6c692f807e18f81a';
 
-test("pemToBase64", function() {
-  var sResult = RSAKey.pemToBase64(sKey1PEM);
-  equal(sResult, sKey1B64, "testing pem-base64 conversion.");
-});
-
 test("getPosArrayOfChildrenFromHex", function() {
   var hPrivateKey = b64tohex(sKey1B64);
   var a = RSAKey.getPosArrayOfChildrenFromHex(hPrivateKey);
@@ -79,8 +74,7 @@ test("RSAKey.readPrivateKeyFromPEMString(keyPEM)", function() {
 
 test("RSAKey.readPrivateKeyFromASN1HexString(keyHex)", function() {
   var k = new RSAKey();
-  k.readPrivateKeyFromASN1HexString(sk10dechex);
-  expect(8);
+  k.readPKCS5PrvKeyHex(sk10dechex);
   equal(k.n.toString(16), "b1e5aa7d6827b8c69037b269907bd8f4a7a1e6b798776e3be519fbda2966260dd56f6f3389d489a276a0a1e1b19e51328bc2d6a623f24be6b2e6718f3b292d5b", "check public (n) of Key2");
   equal(k.e.toString(16), "10001", "check public exponent(e) of Key2");
   equal(k.d.toString(16), "763582206ac15a4ab7320b5f921e797fb894205706fcf546df6970acfaad61c2db1fb6f9e335a1867c0f7c40a2ad39aa92b9312459bbf90d5eab831793c69321", "check public exponent(d) of Key2");

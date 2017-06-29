@@ -70,14 +70,14 @@ var rsacsr1pem = "" +
 
 // 
 test("parseCSRHex test/eckey/rsacsr1.csr", function() {
-  var csrHex = KEYUTIL.getHexFromPEM(rsacsr1pem, "CERTIFICATE REQUEST");
+  var csrHex = pemtohex(rsacsr1pem, "CERTIFICATE REQUEST");
   var info = KEYUTIL.parseCSRHex(csrHex);
   var pubkey = KEYUTIL.getKey(info.p8pubkeyhex, null, "pkcs8pub");
   equal(info.p8pubkeyhex, "30820122300d06092a864886f70d01010105000382010f003082010a0282010100b78ba84d262740e1468c34a3592d18971ad9789750165f479f124a1b6444cc0464f52c8d671c7e53ae83a88c3b3491dfbacd0b03c066f002135ba1dc0c1ae17587dfa9da4107a38e10f526e841fb551019a844ede4819acdd817f5c866f1d941ad46965ee515fa2e25530b0f53772cdab35d164c84a41ba7879318234aae00655c6b73db5c6a20f42776f57f7c912b387a962fed8f69fb83d01a84e59f8a905e0c5229a18699a6b3aa43621bdca882fce68913851f7aa07f9111852f7726537e8ebc52b55fd480dd394a98d3094ff1bfb678534fc4b0f593fdb9529163b75a0d16865e7d256e9a89899d08610758406e31a3666080cc7faadcabbf6838be59b30203010001", "pubkey");
 });
 
 test("getKeyFromCSRHex test/eckey/rsacsr1.csr", function() {
-  var csrHex = KEYUTIL.getHexFromPEM(rsacsr1pem, "CERTIFICATE REQUEST");
+  var csrHex = pemtohex(rsacsr1pem, "CERTIFICATE REQUEST");
   var key = KEYUTIL.getKeyFromCSRHex(csrHex);
   equal(key.e.toString(16), "10001", "e of key");
 });

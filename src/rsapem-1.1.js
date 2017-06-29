@@ -1,4 +1,4 @@
-/* rsapem-1.2.2.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* rsapem-1.3.0.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * rsapem.js - Cryptographic Algorithm Provider class
@@ -16,28 +16,10 @@
  * @fileOverview
  * @name rsapem-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.1 rsapem 1.2.2 (2017-Jun-03)
+ * @version jsrsasign 8.0.0 rsapem 1.3.0 (2017-Jun-24)
  * @since jsrsasign 1.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
-
-/**
- * static method to extract Base64 string from PKCS#5 PEM RSA private key.<br/>
- * @name pemToBase64
- * @memberOf RSAKey
- * @function
- * @param {String} sPEMPrivateKey PEM PKCS#1/5 s private key string
- * @return {String} Base64 string of private key
- * @deprecated jsrsasign 7.2.1 rsapem 1.1.2
- * @description
- * removing PEM header, PEM footer and space characters including
- * new lines from PEM formatted RSA private key string.
- * @example
- * RSAKey.pemToBase64("----BEGIN PRIVATE KEY-...") &rarr; "MIICW..."
- */
-RSAKey.pemToBase64 = function(sPEMPrivateKey) {
-    return hextob64(pemtohex(sPEMPrivateKey));
-};
 
 /**
  * static method to get array of field positions from hexadecimal PKCS#5 RSA private key.<br/>
@@ -89,23 +71,9 @@ RSAKey.getHexValueArrayOfChildrenFromHex = function(hPrivateKey) {
  * @param {String} keyPEM string of PKCS#1 private key.
  */
 RSAKey.prototype.readPrivateKeyFromPEMString = function(keyPEM) {
-    var keyB64 = RSAKey.pemToBase64(keyPEM);
-    var keyHex = b64tohex(keyB64) // depends base64.js
+    var keyHex = pemtohex(keyPEM);
     var a = RSAKey.getHexValueArrayOfChildrenFromHex(keyHex);
     this.setPrivateEx(a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8]);
-};
-
-/**
- * (DEPRECATED) read RSA private key from a ASN.1 hexadecimal string<br/>
- * @name readPrivateKeyFromASN1HexString
- * @memberOf RSAKey#
- * @function
- * @param {String} keyHex ASN.1 hexadecimal string of PKCS#1 private key.
- * @since rsapem 1.1.1
- * @deprecated since jsrsasign 7.1.0 rsapem 1.2.0, please use {@link RSAKey.readPKCS5PrvKeyHex} instead.
- */
-RSAKey.prototype.readPrivateKeyFromASN1HexString = function(keyHex) {
-    this.readPKCS5PrvKeyHex(keyHex);
 };
 
 /**

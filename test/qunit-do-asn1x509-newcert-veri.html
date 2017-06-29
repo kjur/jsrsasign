@@ -78,8 +78,10 @@ tmpl.sigalg.name = "SHA1withRSA";
 tmpl.sbjpubkey = kpRSA.pubKeyObj;
 tmpl.cakey = kpRSA.prvKeyObj;
 var certPEM = KJUR.asn1.x509.X509Util.newCertPEM(tmpl);
-var hCert = ASN1HEX.pemToHex(certPEM);
-equal(X509.verifySignature(hCert, kpRSA.pubKeyObj), true, "VALID");
+var hCert = pemtohex(certPEM);
+var x = new X509();
+x.readCertHex(hCert);
+equal(x.verifySignature(kpRSA.pubKeyObj), true, "VALID");
 });
 
 test("newCertPEM SHA256withRSA signature value verify", function() {
@@ -88,8 +90,10 @@ tmpl.sigalg.name = "SHA256withRSA";
 tmpl.sbjpubkey = kpRSA.pubKeyObj;
 tmpl.cakey = kpRSA.prvKeyObj;
 var certPEM = KJUR.asn1.x509.X509Util.newCertPEM(tmpl);
-var hCert = ASN1HEX.pemToHex(certPEM);
-equal(X509.verifySignature(hCert, kpRSA.pubKeyObj), true, "VALID");
+var hCert = pemtohex(certPEM);
+var x = new X509();
+x.readCertHex(hCert);
+equal(x.verifySignature(kpRSA.pubKeyObj), true, "VALID");
 });
 
 test("newCertPEM SHA1withECDSA signature value verify", function() {
@@ -98,8 +102,10 @@ tmpl.sigalg.name = "SHA1withECDSA";
 tmpl.sbjpubkey = kpEC.pubKeyObj;
 tmpl.cakey = kpEC.prvKeyObj;
 var certPEM = KJUR.asn1.x509.X509Util.newCertPEM(tmpl);
-var hCert = ASN1HEX.pemToHex(certPEM);
-equal(X509.verifySignature(hCert, kpEC.pubKeyObj), true, "VALID");
+var hCert = pemtohex(certPEM);
+var x = new X509();
+x.readCertHex(hCert);
+equal(x.verifySignature(kpEC.pubKeyObj), true, "VALID");
 });
 
 test("newCertPEM SHA256withECDSA signature value verify", function() {
@@ -108,8 +114,10 @@ tmpl.sigalg.name = "SHA256withECDSA";
 tmpl.sbjpubkey = kpEC.pubKeyObj;
 tmpl.cakey = kpEC.prvKeyObj;
 var certPEM = KJUR.asn1.x509.X509Util.newCertPEM(tmpl);
-var hCert = ASN1HEX.pemToHex(certPEM);
-equal(X509.verifySignature(hCert, kpEC.pubKeyObj), true, "VALID");
+var hCert = pemtohex(certPEM);
+var x = new X509();
+x.readCertHex(hCert);
+equal(x.verifySignature(kpEC.pubKeyObj), true, "VALID");
 });
 
 });
