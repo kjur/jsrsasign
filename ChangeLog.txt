@@ -1,6 +1,18 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.0 to 8.0.1 (2017-Ju1-01)
+  - x509 1.1.16 to 1.1.17
+    - add getExtSubjectAltName2 which supports
+      GeneralName type
+    - make getExtSubjectAltName deprecated
+    - fix getExtCRLDistributionPointsURI() for #269.
+      caused error if CDP containts directory name.
+      now fixed.
+    - getInfo now supports certificatePolicies
+  - tool/tool_certview.html
+    - SHA1 fingerprint issue fixed for #273
+
 * Changes from 7.2.2 to 8.0.0 (2017-Jun-30)
   - all of deprecated classes, methods and files are
     removed.

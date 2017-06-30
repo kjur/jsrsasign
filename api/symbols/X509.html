@@ -643,9 +643,20 @@ as comma separated string of usage names.</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtSubjectAltName">getExtSubjectAltName</a></b>()
 								</div>
-								<div class="description">get subjectAltName value as array of string in the certificate
+								<div class="description">(DEPRECATED) get subjectAltName value as array of string in the certificate
 This method will get subject alt name extension value
 as array of name.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtSubjectAltName2">getExtSubjectAltName2</a></b>()
+								</div>
+								<div class="description">get subjectAltName value as array of string in the certificate
+This method will get subject alt name extension value
+as array of type and name.</div>
 							</td>
 						</tr>
 					
@@ -1559,7 +1570,7 @@ x.getExtKeyUsageString() &rarr; "digitalSignature,keyEncipherment"</pre>
 					
 					</div>
 					<div class="description">
-						get subjectAltName value as array of string in the certificate
+						(DEPRECATED) get subjectAltName value as array of string in the certificate
 This method will get subject alt name extension value
 as array of name.
 If there is this in the certificate, it returns undefined;
@@ -1574,11 +1585,18 @@ other name type such like iPAddress or generalName will not be returned.
 					
 					<pre class="code">x = new X509();
 x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
-x.getExtSubjectAltName(hCert) &rarr; ["example.com", "example.org"]</pre>
+x.getExtSubjectAltName() &rarr; ["example.com", "example.org"]</pre>
 					
 					
 					
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 8.0.1 x509 1.1.17. Please move to <a href="../symbols/X509.html#getExtSubjectAltName2">X509#getExtSubjectAltName2</a>
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">
@@ -1593,6 +1611,66 @@ x.getExtSubjectAltName(hCert) &rarr; ["example.com", "example.org"]</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Object}</span> array of alt names</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getExtSubjectAltName2"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getExtSubjectAltName2</b>()
+					
+					</div>
+					<div class="description">
+						get subjectAltName value as array of string in the certificate
+This method will get subject alt name extension value
+as array of type and name.
+If there is this in the certificate, it returns undefined;
+Type of GeneralName will be shown as following:
+<ul>
+<li>"MAIL" - [1]rfc822Name</li>
+<li>"DNS"  - [2]dNSName</li>
+<li>"DN"   - [4]directoryName</li>
+<li>"URI"  - [6]uniformResourceIdentifier</li>
+<li>"IP"   - [7]iPAddress</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+x.getExtSubjectAltName2() &rarr;
+[["DNS",  "example.com"],
+ ["DNS",  "example.org"],
+ ["MAIL", "foo@example.com"],
+ ["IP",   "192.168.1.1"],
+ ["DN",   "/C=US/O=TEST1"]]</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 8.0.1 x509 1.1.17</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> array of alt name array</dd>
 							
 							</dl>
 						
