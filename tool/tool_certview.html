@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
     <title>Online Certificate Viewer</title>
 <script language="JavaScript" type="text/javascript" src="../jsrsasign-all-min.js"></script>
+<script language="JavaScript" type="text/javascript" src="../src/x509-1.1.js"></script>
 <script language="JavaScript" type="text/javascript">
 function doView() {
   var sCert = document.form1.cert1.value;
@@ -19,8 +20,8 @@ function doView() {
   document.form1.notbefore1.value = zulutodate(c.getNotBefore());
   document.form1.notafter1.value = zulutodate(c.getNotAfter());
   document.form1.subject1.value = c.getSubjectString();
-  var f = function(s) { return KJUR.crypto.Util.hashString(s, 'sha1'); }
-  document.form1.thumb1.value = f(c.hex);
+  document.form1.thumb1.value = KJUR.crypto.Util.hashHex(c.hex, 'sha1');
+  document.form1.getinfo1.value = c.getInfo();
 }
 </script>
   </head>
@@ -66,7 +67,8 @@ nzTGvoa6oTOOTmmj3Bwl3CHwonvgAJUCHY/UmWFzH8Sf0dDW7iJBj+ZWfjuSlSQe
 2ninrEpfA4v2V1p3LOH+layZLDMJHkNCq8eoU1MbJi07cHxLWtlwliNOiRboaiYl
 1wtWR7ZY4HZCPeyb0tanf58rBQAXElaCF3fmfHrlpxoJBsQP1NbFrBs2haOIEZ4E
 K3V9/Bpi
------END CERTIFICATE-----</textarea>
+-----END CERTIFICATE-----
+</textarea><br/>
 
 <h4>(Step2) Press "View" button</h4>
 <input type="button" value="Analyze it!" onClick="doView();"/>
@@ -80,8 +82,12 @@ From <input type="text" name="notbefore1" size="60"/><br/>
 To <input type="text" name="notafter1" size="60"/>
 </td></tr>
 <tr><td>Subject:</td><td><input type="text" name="subject1" size="80"/></td></tr>
+<tr><td colspan="2">
+<textarea name="getinfo1" cols="100" rows="20"></textarea>
+</td></tr>
 <tr><td>SHA1 Thumb Print:</td><td><input type="text" name="thumb1" size="80"/></td></tr>
 </table>
+
 </form>
 
 <!-- now editing -->

@@ -1,4 +1,4 @@
-/* x509-1.1.16.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* x509-1.1.17.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.1 x509 1.1.16 (2017-Jun-23)
+ * @version jsrsasign 8.0.1 x509 1.1.17 (2017-Jun-30)
  * @since jsrsasign 1.x.x
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -671,12 +671,13 @@ function X509() {
     };
 
     /**
-     * get subjectAltName value as array of string in the certificate
+     * (DEPRECATED) get subjectAltName value as array of string in the certificate
      * @name getExtSubjectAltName
      * @memberOf X509#
      * @function
      * @return {Object} array of alt names
      * @since jsrsasign 7.2.0 x509 1.1.14
+     * @deprecated since jsrsasign 8.0.1 x509 1.1.17. Please move to {@link X509#getExtSubjectAltName2}
      * @description
      * This method will get subject alt name extension value
      * as array of name.
@@ -687,9 +688,49 @@ function X509() {
      * @example
      * x = new X509();
      * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
-     * x.getExtSubjectAltName(hCert) &rarr; ["example.com", "example.org"]
+     * x.getExtSubjectAltName() &rarr; ["example.com", "example.org"]
      */
     this.getExtSubjectAltName = function() {
+	var a = this.getExtSubjectAltName2();
+	var result = new Array();
+
+	for (var i = 0; i < a.length; i++) {
+	    if (a[i][0] === "DNS") result.push(a[i][1]);
+	}
+	return result;
+    };
+
+    /**
+     * get subjectAltName value as array of string in the certificate
+     * @name getExtSubjectAltName2
+     * @memberOf X509#
+     * @function
+     * @return {Object} array of alt name array
+     * @since jsrsasign 8.0.1 x509 1.1.17
+     * @description
+     * This method will get subject alt name extension value
+     * as array of type and name.
+     * If there is this in the certificate, it returns undefined;
+     * Type of GeneralName will be shown as following:
+     * <ul>
+     * <li>"MAIL" - [1]rfc822Name</li>
+     * <li>"DNS"  - [2]dNSName</li>
+     * <li>"DN"   - [4]directoryName</li>
+     * <li>"URI"  - [6]uniformResourceIdentifier</li>
+     * <li>"IP"   - [7]iPAddress</li>
+     * </ul>
+     * @example
+     * x = new X509();
+     * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+     * x.getExtSubjectAltName2() &rarr;
+     * [["DNS",  "example.com"],
+     *  ["DNS",  "example.org"],
+     *  ["MAIL", "foo@example.com"],
+     *  ["IP",   "192.168.1.1"],
+     *  ["DN",   "/C=US/O=TEST1"]]
+     */
+    this.getExtSubjectAltName2 = function() {
+	var gnValueHex, gnValueStr, gnTag;
 	var info = this.getExtInfo("subjectAltName");
 	if (info === undefined) return info;
 
@@ -698,9 +739,34 @@ function X509() {
 
 	var a = _getChildIdx(h, 0);
 	for (var i = 0; i < a.length; i++) {
-	    if (h.substr(a[i], 2) === "82") {
-		var fqdn = hextoutf8(_getV(h, a[i]));
-		result.push(fqdn);
+	    gnTag = h.substr(a[i], 2);
+	    gnValueHex = _getV(h, a[i]);
+	    
+	    if (gnTag === "81") { // rfc822Name [1]
+		gnValueStr = hextoutf8(gnValueHex);
+		result.push(["MAIL", gnValueStr]);
+	    }
+	    if (gnTag === "82") { // dNSName [2]
+		gnValueStr = hextoutf8(gnValueHex);
+		result.push(["DNS", gnValueStr]);
+	    }
+	    if (gnTag === "84") { // directoryName [4]
+		gnValueStr = X509.hex2dn(gnValueHex, 0);
+		result.push(["DN", gnValueStr]);
+	    }
+	    if (gnTag === "86") { // uniformResourceIdentifier [6]
+		gnValueStr = hextoutf8(gnValueHex);
+		result.push(["URI", gnValueStr]);
+	    }
+	    if (gnTag === "87") { // iPAddress [7]
+		try {
+		    gnValueStr = 
+			parseInt(gnValueStr.substr(0, 2), 16) + "." +
+			parseInt(gnValueStr.substr(2, 2), 16) + "." +
+			parseInt(gnValueStr.substr(4, 2), 16) + "." +
+			parseInt(gnValueStr.substr(6, 2), 16);
+		    result.push(["IP", gnValueStr]);
+		} catch (ex) {};
 	    }
 	}
 	return result;
@@ -733,9 +799,11 @@ function X509() {
 	var result = new Array();
 	var a = _getChildIdx(this.hex, info.vidx);
 	for (var i = 0; i < a.length; i++) {
-	    var hURI = _getVbyList(this.hex, a[i], [0, 0, 0], "86");
-	    var uri = hextoutf8(hURI);
-	    result.push(uri);
+	    try {
+		var hURI = _getVbyList(this.hex, a[i], [0, 0, 0], "86");
+		var uri = hextoutf8(hURI);
+		result.push(uri);
+	    } catch(ex) {};
 	}
 
 	return result;
@@ -975,8 +1043,8 @@ function X509() {
 		var eku = this.getExtExtKeyUsageName();
 		s += "    " + eku.join(", ") + "\n";
 	    } else if (extName === "subjectAltName") {
-		var san = this.getExtSubjectAltName();
-		s += "    " + san.join(", ") + "\n";
+		var san = this.getExtSubjectAltName2();
+		s += "    " + san + "\n";
 	    } else if (extName === "cRLDistributionPoints") {
 		var cdp = this.getExtCRLDistributionPointsURI();
 		s += "    " + cdp + "\n";
@@ -986,6 +1054,14 @@ function X509() {
 		    s += "    ocsp: " + aia.ocsp.join(",") + "\n";
 		if (aia.caissuer !== undefined)
 		    s += "    caissuer: " + aia.caissuer.join(",") + "\n";
+	    } else if (extName === "certificatePolicies") {
+		var aCP = this.getExtCertificatePolicies();
+		for (var j = 0; j < aCP.length; j++) {
+		    if (aCP[j].id !== undefined)
+			s += "    policy oid: " + aCP[j].id + "\n";
+		    if (aCP[j].cps !== undefined)
+			s += "    cps: " + aCP[j].cps + "\n";
+		}
 	    }
         }
 
