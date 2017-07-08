@@ -1,6 +1,10 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.1 to 8.0.2 (xxxx-xxx-xx)
+  - sample/sample-rsasign.html fix for #274.
+  - test qunit-do-package-rsa.html fix
+
 * Changes from 8.0.0 to 8.0.1 (2017-Ju1-01)
   - x509 1.1.16 to 1.1.17
     - add getExtSubjectAltName2 which supports
