@@ -1,4 +1,4 @@
-/* jws-3.3.8 (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* jws-3.3.9 (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * jws.js - JSON Web Signature(JWS) and JSON Web Token(JWT) Class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name jws-3.3.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.1 jws 3.3.8 (2017-Jun-23)
+ * @version jsrsasign 8.0.2 jws 3.3.9 (2017-Jul-08)
  * @since jsjws 1.0, jsrsasign 4.8.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -398,7 +398,9 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
 	_ECDSA = _KJUR_crypto.ECDSA,
 	_Mac = _KJUR_crypto.Mac,
 	_Signature = _KJUR_crypto.Signature,
-	_RSAKey = RSAKey;
+	_RSAKey;
+    
+    if (typeof RSAKey === undefined) _RSAKey = RSAKey;
 
     var a = sJWS.split(".");
     var uHeader = a[0];

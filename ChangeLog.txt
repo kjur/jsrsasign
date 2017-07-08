@@ -1,7 +1,9 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 8.0.1 to 8.0.2 (xxxx-xxx-xx)
+* Changes from 8.0.1 to 8.0.2 (2017-Jul-08)
+  - jws 3.3.8 to 3.3.9
+    - fix for jsrsasign-jwths-min.js
   - sample/sample-rsasign.html fix for #274.
   - test qunit-do-package-rsa.html fix
 
