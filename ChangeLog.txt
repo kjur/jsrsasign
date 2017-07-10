@@ -1,6 +1,10 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.2 to 8.0.3 (2017-Jul-11)
+  - jws 3.3.9 to 3.3.10
+    - fix JWS.verify fail for #276
+
 * Changes from 8.0.1 to 8.0.2 (2017-Jul-08)
   - jws 3.3.8 to 3.3.9
     - fix for jsrsasign-jwths-min.js
