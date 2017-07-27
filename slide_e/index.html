@@ -172,8 +172,8 @@ Or to use it in your web page, add following in your HTML:
 <li>generateKeypair() for RSA/ECC</li>
 <li>getKey(): key loader
   <ul>
-  <li>PKCS#1/5 plain/encryptped private/public PEM/HEX key</li>
-  <li>PKCS#8 plain/encryptped private/public PEM/HEX key</li>
+  <li>PKCS#1/5 plain/encrypted private/public PEM/HEX key</li>
+  <li>PKCS#8 plain/encrypted private/public PEM/HEX key</li>
   <li>X.509 PEM certificate</li>
   <li>public/private RFC 7517 JSON Web Key (JWK)</li>
   </ul>
@@ -228,7 +228,7 @@ sig = <font color="yellow">new KJUR.crypto.Signature</font>({"alg": "SHA256withR
 sig.<font color="yellow">init</font>(prv);<br/>
 // update data<br/>
 sig.<font color="yellow">updateString</font>("aaa");<br/>
-// calclate signature<br/>
+// calculate signature<br/>
 sigHex = sig.<font color="yellow">sign()</font>;<br/>
 </div>
 <hr/>
@@ -330,7 +330,7 @@ macHex = md.<font color="yellow">doFinal</font>();<br/>
 
 <section>
 <h2>short ASN.1 introduction</h2>
-<p>ASN.1 is a binary encording of structured data consists of a data type tag(T), 
+<p>ASN.1 is a binary encoding of structured data consists of a data type tag(T),
 byte length(L) and value(V).</p>
 <img src="img-asn1-basic-e.svg" border="0" style="border: 0"/>
 <p>
@@ -374,9 +374,9 @@ of hexadecimal string at specified position.</p>
 </section>
 
 <section>
-<h2>ASN1HEX for decendant element</h2>
+<h2>ASN1HEX for descendant element</h2>
 <p>
-To refer a decendant element of nested structured ASN.1, use "nthList" 
+To refer a descendant element of nested structured ASN.1, use "nthList" 
 which represent indexes for each nested layer. 
 This is very useful to specify a deep nested element 
 such like subject name of X.509 certificate.
@@ -465,7 +465,7 @@ hex = seq.getEncodedHex();<br/>
 Please see 
 <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.html" target="_blank">
 manual</a> in detail.<br/>
-It's very similar to BoucyCastle or IAIK Java ASN.1 classes.<br/>
+It's very similar to BouncyCastle or IAIK Java ASN.1 classes.<br/>
 However, there is much more easy way...
 </p>
 </section>
@@ -712,7 +712,7 @@ kjur.github.io/jsrsasign</a>.
 <div align="left">
 jsrsasign provides a lot of tools which use jsrsasign as example.</div>
 <div align="left">
-Please see the <a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Online-Tools" target="_blank">this list</a> as for onliene tools.</div>
+Please see the <a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Online-Tools" target="_blank">this list</a> as for online tools.</div>
 <div align="left">
 Also see <a href="https://github.com/kjur/jsrsasign/tree/master/sample_node" target="_blank">list</a> 
 as for Node tools.</div>
