@@ -1,6 +1,9 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.3 to 8.0.x (2017-xxx-xx)
+  - fix sample/sample-ecdsa.html in sig.init.
+
 * Changes from 8.0.2 to 8.0.3 (2017-Jul-11)
   - jws 3.3.9 to 3.3.10
     - fix JWS.verify fail for #276
