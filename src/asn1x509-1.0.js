@@ -1,4 +1,4 @@
-/* asn1x509-1.0.24.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-1.1.0.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.24 (2017-May-28)
+ * @version jsrsasign 8.0.0 asn1x509 1.1.0 (2017-Jun-25)
  * @since jsrsasign 2.1
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -99,8 +99,6 @@ if (typeof KJUR.asn1.x509 == "undefined" || !KJUR.asn1.x509) KJUR.asn1.x509 = {}
  * <ul>
  * <li>tbscertobj - specify {@link KJUR.asn1.x509.TBSCertificate} object</li>
  * <li>prvkeyobj - specify {@link RSAKey}, {@link KJUR.crypto.ECDSA} or {@link KJUR.crypto.DSA} object for CA private key to sign the certificate</li>
- * <li>(DEPRECATED)rsaprvkey - specify {@link RSAKey} object CA private key</li>
- * <li>(DEPRECATED)rsaprvpem - specify PEM string of RSA CA private key</li>
  * </ul>
  * NOTE1: 'params' can be omitted.<br/>
  * NOTE2: DSA/ECDSA is also supported for CA signging key from asn1x509 1.0.6.
@@ -122,35 +120,11 @@ KJUR.asn1.x509.Certificate = function(params) {
 	asn1Sig = null,
 	hexSig = null,
         prvKey = null,
-        rsaPrvKey = null, // DEPRECATED
 	_KJUR = KJUR,
 	_KJUR_crypto = _KJUR.crypto,
 	_KJUR_asn1 = _KJUR.asn1,
 	_DERSequence = _KJUR_asn1.DERSequence,
 	_DERBitString = _KJUR_asn1.DERBitString;
-
-    /**
-     * (DEPRECATED) set PKCS#5 encrypted RSA PEM private key as CA key
-     * @name setRsaPrvKeyByPEMandPass
-     * @memberOf KJUR.asn1.x509.Certificate#
-     * @function
-     * @param {String} rsaPEM string of PKCS#5 encrypted RSA PEM private key
-     * @param {String} passPEM passcode string to decrypt private key
-     * @since 1.0.1
-     * @deprecated 
-     * @description
-     * <br/>
-     * <h4>EXAMPLES</h4>
-     * @example
-     * var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbs});
-     * cert.setRsaPrvKeyByPEMandPass("-----BEGIN RSA PRIVATE..(snip)", "password");
-     */
-    this.setRsaPrvKeyByPEMandPass = function(rsaPEM, passPEM) {
-        var caKeyHex = PKCS5PKEY.getDecryptedKeyHex(rsaPEM, passPEM);
-        var caKey = new RSAKey();
-        caKey.readPrivateKeyFromASN1HexString(caKeyHex);
-        this.prvKey = caKey;
-    };
 
     /**
      * sign TBSCertificate and set signature value internally
@@ -215,7 +189,7 @@ KJUR.asn1.x509.Certificate = function(params) {
      * @return PEM formatted string of certificate
      * @description
      * @example
-     * var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbs, 'rsaprvkey': prvKey});
+     * var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbs, 'prvkeyobj': prvKey});
      * cert.sign();
      * var sPEM = cert.getPEMString();
      */
@@ -232,11 +206,6 @@ KJUR.asn1.x509.Certificate = function(params) {
         }
         if (params.prvkeyobj !== undefined) {
             this.prvKey = params.prvkeyobj;
-        } else if (params.rsaprvkey !== undefined) {
-            this.prvKey = params.rsaprvkey;
-        } else if ((params.rsaprvpem !== undefined) &&
-                   (params.rsaprvpas !== undefined)) {
-            this.setRsaPrvKeyByPEMandPass(params.rsaprvpem, params.rsaprvpas);
         }
     }
 };
@@ -259,7 +228,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.Certificate, KJUR.asn1.ASN1Object);
  *  o.setNotBeforeByParam({'str': '130504235959Z'});
  *  o.setNotAfterByParam({'str': '140504235959Z'});
  *  o.setSubjectByParam({'str': '/C=US/CN=b'});
- *  o.setSubjectPublicKeyByParam({'rsakey': rsaKey});
+ *  o.setSubjectPublicKey(rsaPubKey);
  *  o.appendExtension(new KJUR.asn1.x509.BasicConstraints({'cA':true}));
  *  o.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));
  */
@@ -380,19 +349,18 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
     };
 
     /**
-     * (DEPRECATED) set subject public key info field by RSA key parameter
-     * @name setSubjectPublicKeyByParam
+     * set subject public key info field by key object
+     * @name setSubjectPublicKey
      * @memberOf KJUR.asn1.x509.TBSCertificate#
      * @function
-     * @param {Array} subjPKeyParam SubjectPublicKeyInfo parameter of RSA
-     * @deprecated
+     * @param {Array} param {@link KJUR.asn1.x509.SubjectPublicKeyInfo} class constructor parameter
      * @description
      * @example
-     * tbsc.setSubjectPublicKeyByParam({'rsakey': pubKey});
+     * tbsc.setSubjectPublicKey(keyobj);
      * @see KJUR.asn1.x509.SubjectPublicKeyInfo
      */
-    this.setSubjectPublicKeyByParam = function(subjPKeyParam) {
-        this.asn1SubjPKey = new _SubjectPublicKeyInfo(subjPKeyParam);
+    this.setSubjectPublicKey = function(param) {
+        this.asn1SubjPKey = new _SubjectPublicKeyInfo(param);
     };
 
     /**
@@ -1065,7 +1033,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.IssuerAltName, KJUR.asn1.x509.Extension);
  * @example
  * var prvKey = new RSAKey(); // CA's private key
  * prvKey.readPrivateKeyFromASN1HexString("3080...");
- * var crl = new KJUR.asn1x509.CRL({'tbsobj': tbs, 'rsaprvkey': prvKey});
+ * var crl = new KJUR.asn1x509.CRL({'tbsobj': tbs, 'prvkeyobj': prvKey});
  * crl.sign(); // issue CRL by CA's private key
  * var hCRL = crl.getEncodedHex();
  *
@@ -1081,26 +1049,7 @@ KJUR.asn1.x509.CRL = function(params) {
 	asn1SignatureAlg = null,
 	asn1Sig = null,
 	hexSig = null,
-	rsaPrvKey = null;
-
-    /**
-     * set PKCS#5 encrypted RSA PEM private key as CA key
-     * @name setRsaPrvKeyByPEMandPass
-     * @memberOf KJUR.asn1.x509.CRL#
-     * @function
-     * @param {String} rsaPEM string of PKCS#5 encrypted RSA PEM private key
-     * @param {String} passPEM passcode string to decrypt private key
-     * @description
-     * <br/>
-     * <h4>EXAMPLES</h4>
-     * @example
-     */
-    this.setRsaPrvKeyByPEMandPass = function(rsaPEM, passPEM) {
-        var caKeyHex = PKCS5PKEY.getDecryptedKeyHex(rsaPEM, passPEM);
-        var caKey = new RSAKey();
-        caKey.readPrivateKeyFromASN1HexString(caKeyHex);
-        this.rsaPrvKey = caKey;
-    };
+	prvKey = null;
 
     /**
      * sign TBSCertList and set signature value internally
@@ -1109,14 +1058,14 @@ KJUR.asn1.x509.CRL = function(params) {
      * @function
      * @description
      * @example
-     * var cert = new KJUR.asn1.x509.CRL({'tbsobj': tbs, 'rsaprvkey': prvKey});
+     * var cert = new KJUR.asn1.x509.CRL({'tbsobj': tbs, 'prvkeyobj': prvKey});
      * cert.sign();
      */
     this.sign = function() {
         this.asn1SignatureAlg = this.asn1TBSCertList.asn1SignatureAlg;
 
         sig = new KJUR.crypto.Signature({'alg': 'SHA1withRSA', 'prov': 'cryptojs/jsrsa'});
-        sig.initSign(this.rsaPrvKey);
+        sig.initSign(this.prvKey);
         sig.updateHex(this.asn1TBSCertList.getEncodedHex());
         this.hexSig = sig.sign();
 
@@ -1153,16 +1102,12 @@ KJUR.asn1.x509.CRL = function(params) {
 	    "\r\n-----END X509 CRL-----\r\n";
     };
 
-    if (typeof params != "undefined") {
-        if (typeof params['tbsobj'] != "undefined") {
-            this.asn1TBSCertList = params['tbsobj'];
+    if (params !== undefined) {
+        if (params.tbsobj !== undefined) {
+            this.asn1TBSCertList = params.tbsobj;
         }
-        if (typeof params['rsaprvkey'] != "undefined") {
-            this.rsaPrvKey = params['rsaprvkey'];
-        }
-        if ((typeof params['rsaprvpem'] != "undefined") &&
-            (typeof params['rsaprvpas'] != "undefined")) {
-            this.setRsaPrvKeyByPEMandPass(params['rsaprvpem'], params['rsaprvpas']);
+        if (params.prvkeyobj !== undefined) {
+            this.prvKey = params.prvkeyobj;
         }
     }
 };
@@ -1840,22 +1785,19 @@ YAHOO.lang.extend(KJUR.asn1.x509.AttributeTypeAndValue, KJUR.asn1.ASN1Object);
  * <li>{@link RSAKey} object</li>
  * <li>{@link KJUR.crypto.ECDSA} object</li>
  * <li>{@link KJUR.crypto.DSA} object</li>
- * <li>(DEPRECATED)rsakey - specify {@link RSAKey} object of subject public key</li>
- * <li>(DEPRECATED)rsapem - specify a string of PEM public key of RSA key</li>
  * </ul>
  * NOTE1: 'params' can be omitted.<br/>
  * NOTE2: DSA/ECDSA key object is also supported since asn1x509 1.0.6.<br/>
  * <h4>EXAMPLE</h4>
  * @example
- * var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(RSAKey_object);
- * var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoECDSA_object);
- * var spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoDSA_object);
+ * spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(RSAKey_object);
+ * spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoECDSA_object);
+ * spki = new KJUR.asn1.x509.SubjectPublicKeyInfo(KJURcryptoDSA_object);
  */
 KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
     KJUR.asn1.x509.SubjectPublicKeyInfo.superclass.constructor.call(this);
     var asn1AlgId = null,
 	asn1SubjPKey = null,
-	rsaKey = null,
 	_KJUR = KJUR,
 	_KJUR_asn1 = _KJUR.asn1,
 	_DERInteger = _KJUR_asn1.DERInteger,
@@ -1868,55 +1810,6 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
 	_KJUR_crypto = _KJUR.crypto,
 	_KJUR_crypto_ECDSA = _KJUR_crypto.ECDSA,
 	_KJUR_crypto_DSA = _KJUR_crypto.DSA;
-
-    /**
-     * (DEPRECATED) set RSAKey object as subject public key
-     * @name setRSAKey
-     * @memberOf KJUR.asn1.x509.SubjectPublicKeyInfo
-     * @function
-     * @param {RSAKey} rsaKey {@link RSAKey} object for RSA public key
-     * @description
-     * @deprecated
-     * @example
-     * spki.setRSAKey(rsaKey);
-     */
-    this.setRSAKey = function(rsaKey) {
-        if (! RSAKey.prototype.isPrototypeOf(rsaKey))
-            throw "argument is not RSAKey instance";
-        this.rsaKey = rsaKey;
-        var asn1RsaN = new _DERInteger({'bigint': rsaKey.n});
-        var asn1RsaE = new _DERInteger({'int': rsaKey.e});
-        var asn1RsaPub = new _KJUR_asn1.DERSequence({'array': [asn1RsaN, asn1RsaE]});
-        var rsaKeyHex = asn1RsaPub.getEncodedHex();
-        this.asn1AlgId = new _KJUR_asn1.x509.AlgorithmIdentifier({'name':'rsaEncryption'});
-        this.asn1SubjPKey = new _KJUR_asn1.DERBitString({'hex':'00'+rsaKeyHex});
-    };
-
-    /**
-     * (DEPRECATED) set a PEM formatted RSA public key string as RSA public key
-     * @name setRSAPEM
-     * @memberOf KJUR.asn1.x509.SubjectPublicKeyInfo
-     * @function
-     * @param {String} rsaPubPEM PEM formatted RSA public key string
-     * @deprecated from jsrsasign 7.1.1 asn1x509 1.0.20.
-     * @description
-     * @example
-     * spki.setRSAPEM(rsaPubPEM);
-     */
-    this.setRSAPEM = function(rsaPubPEM) {
-        if (rsaPubPEM.match(/-----BEGIN PUBLIC KEY-----/)) {
-	    var rsaP8Hex = pemtohex(rsaPubPEM);
-            var a = RSAKey.getHexValueArrayOfChildrenFromHex(rsaP8Hex);
-            var hBitStrVal = a[1];
-            var rsaHex = hBitStrVal.substr(2);
-            var a3 = RSAKey.getHexValueArrayOfChildrenFromHex(rsaHex);
-            var rsaKey = new RSAKey();
-            rsaKey.setPublic(a3[0], a3[1]);
-            this.setRSAKey(rsaKey);
-        } else {
-            throw "key not supported";
-        }
-    };
 
     /*
      * @since asn1x509 1.0.7
@@ -1935,51 +1828,59 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
         return this.hTLV;
     };
 
-    this._setRSAKey = function(key) {
-        var asn1RsaPub = _newObject({
-            'seq': [{'int': {'bigint': key.n}}, {'int': {'int': key.e}}]
-        });
-        var rsaKeyHex = asn1RsaPub.getEncodedHex();
-        this.asn1AlgId = new _AlgorithmIdentifier({'name':'rsaEncryption'});
-        this.asn1SubjPKey = new _DERBitString({'hex':'00'+rsaKeyHex});
+    /**
+     * @name setPubKey
+     * @memberOf KJUR.asn1.x509.SubjectPublicKeyInfo#
+     * @function
+     * @param {Object} {@link RSAKey}, {@link KJUR.crypto.ECDSA} or {@link KJUR.crypto.DSA} object
+     * @since jsrsasign 8.0.0 asn1x509 1.1.0
+     * @description
+     * @example
+     * spki = new KJUR.asn1.x509.SubjectPublicKeyInfo();
+     * pubKey = KEYUTIL.getKey(PKCS8PUBKEYPEM);
+     * spki.setPubKey(pubKey);
+     */
+    this.setPubKey = function(key) {
+	try {
+	    if (key instanceof RSAKey) {
+		var asn1RsaPub = _newObject({
+		    'seq': [{'int': {'bigint': key.n}}, {'int': {'int': key.e}}]
+		});
+		var rsaKeyHex = asn1RsaPub.getEncodedHex();
+		this.asn1AlgId = new _AlgorithmIdentifier({'name':'rsaEncryption'});
+		this.asn1SubjPKey = new _DERBitString({'hex':'00'+rsaKeyHex});
+	    }
+	} catch(ex) {};
+
+	try {
+	    if (key instanceof KJUR.crypto.ECDSA) {
+		var asn1Params = new _DERObjectIdentifier({'name': key.curveName});
+		this.asn1AlgId =
+		    new _AlgorithmIdentifier({'name': 'ecPublicKey',
+					      'asn1params': asn1Params});
+		this.asn1SubjPKey = new _DERBitString({'hex': '00' + key.pubKeyHex});
+	    }
+	} catch(ex) {};
+
+	try {
+	    if (key instanceof KJUR.crypto.DSA) {
+		var asn1Params = new _newObject({
+		    'seq': [{'int': {'bigint': key.p}},
+			    {'int': {'bigint': key.q}},
+			    {'int': {'bigint': key.g}}]
+		});
+		this.asn1AlgId =
+		    new _AlgorithmIdentifier({'name': 'dsa',
+					      'asn1params': asn1Params});
+		var pubInt = new _DERInteger({'bigint': key.y});
+		this.asn1SubjPKey = 
+		    new _DERBitString({'hex': '00' + pubInt.getEncodedHex()});
+	    }
+	} catch(ex) {};
     };
 
-    this._setEC = function(key) {
-        var asn1Params = new _DERObjectIdentifier({'name': key.curveName});
-        this.asn1AlgId =
-            new _AlgorithmIdentifier({'name': 'ecPublicKey',
-                                      'asn1params': asn1Params});
-        this.asn1SubjPKey = new _DERBitString({'hex': '00' + key.pubKeyHex});
-    };
-
-    this._setDSA = function(key) {
-        var asn1Params = new _newObject({
-            'seq': [{'int': {'bigint': key.p}},
-                    {'int': {'bigint': key.q}},
-                    {'int': {'bigint': key.g}}]
-        });
-        this.asn1AlgId =
-            new _AlgorithmIdentifier({'name': 'dsa',
-                                      'asn1params': asn1Params});
-        var pubInt = new _DERInteger({'bigint': key.y});
-        this.asn1SubjPKey = 
-	    new _DERBitString({'hex': '00' + pubInt.getEncodedHex()});
-    };
-
-    if (typeof params != "undefined") {
-        if (typeof RSAKey != 'undefined' && params instanceof RSAKey) {
-            this._setRSAKey(params);
-        } else if (typeof _KJUR_crypto_ECDSA != 'undefined' &&
-                   params instanceof _KJUR_crypto_ECDSA) {
-            this._setEC(params);
-        } else if (typeof _KJUR_crypto_DSA != 'undefined' &&
-                   params instanceof _KJUR_crypto_DSA) {
-            this._setDSA(params);
-        } else if (params.rsakey !== undefined) {
-            this.setRSAKey(params.rsakey);
-        } else if (params.rsapem !== undefined) {
-            this.setRSAPEM(params.rsapem);
-        }
+    if (params !== undefined) {
+	this.setPubKey(params);
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.SubjectPublicKeyInfo, KJUR.asn1.ASN1Object);
@@ -2707,30 +2608,8 @@ KJUR.asn1.x509.OID.name2oid = function(name) {
  * X.509 certificate and CRL utilities class<br/>
  * @name KJUR.asn1.x509.X509Util
  * @class X.509 certificate and CRL utilities class
- * @deprecated jsrsasign 7.2.1 asn1x509 1.0.24
  */
-KJUR.asn1.x509.X509Util = new function() {
-    var _KJUR = KJUR,
-	_KJUR_asn1 = _KJUR.asn1,
-	_DERInteger = _KJUR_asn1.DERInteger,
-	_DERSequence = _KJUR_asn1.DERSequence,
-	_ASN1Util = _KJUR_asn1.ASN1Util;
-
-    /**
-     * get PKCS#8 PEM public key string from RSAKey object
-     * @name getPKCS8PubKeyPEMfromRSAKey
-     * @memberOf KJUR.asn1.x509.X509Util
-     * @function
-     * @param {RSAKey} rsaKey RSA public key of {@link RSAKey} object
-     * @deprecated jsrsasign 7.2.1 asn1x509 1.0.24 use {@link KEYUTIL.getPEM}
-     * @description
-     * @example
-     * var pem = KJUR.asn1.x509.X509Util.getPKCS8PubKeyPEMfromRSAKey(pubKey);
-     */
-    this.getPKCS8PubKeyPEMfromRSAKey = function(rsaKey) {
-	return KEYUTIL.getPEM(rsaKey); 
-    };
-};
+KJUR.asn1.x509.X509Util = {};
 
 /**
  * issue a certificate in PEM format

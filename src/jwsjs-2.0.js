@@ -1,4 +1,4 @@
-/* jwsjs-2.1.1 (c) 2010-2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* jwsjs-2.2.0 (c) 2010-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * jwsjs.js - JSON Web Signature JSON Serialization (JWSJS) Class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name jwsjs-2.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.1 jwsjs 2.1.1 (2017-Jun-03)
+ * @version jsrsasign 8.0.0 jwsjs 2.2.0 (2017-Jun-25)
  * @since jsjws 1.2, jsrsasign 4.8.0
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -161,45 +161,6 @@ KJUR.jws.JWSJS = function() {
 	}
     };
 
-    /**
-     * (DEPRECATED) add a signature to existing JWS-JS by Header and PKCS1 private key.<br/>
-     * @name addSignatureByHeaderKey
-     * @memberOf KJUR.jws.JWSJS#
-     * @function
-     * @param {String} sHead JSON string of JWS Header for adding signature.
-     * @param {String} sPemPrvKey string of PKCS1 private key
-     * @deprecated from jwsjs 2.1.0 jsrsasign 5.1.0
-     */
-    this.addSignatureByHeaderKey = function(sHead, sPemPrvKey) {
-	var sPayload = b64utoutf8(this.sPayload);
-
-	var jws = new KJUR.jws.JWS();
-	var sJWS = jws.generateJWSByP1PrvKey(sHead, sPayload, sPemPrvKey);
-  
-	this.aHeader.push(jws.parsedJWS.headB64U);
-	this.aSignature.push(jws.parsedJWS.sigvalB64U);
-    };
-
-    /**
-     * (DEPRECATED) add a signature to existing JWS-JS by Header, Payload and PKCS1 private key.<br/>
-     * This is to add first signature to JWS-JS object.
-     * @name addSignatureByHeaderPayloadKey
-     * @memberOf KJUR.jws.JWSJS#
-     * @function
-     * @param {String} sHead JSON string of JWS Header for adding signature.
-     * @param {String} sPayload string of JWS Payload for adding signature.
-     * @param {String} sPemPrvKey string of PKCS1 private key
-     * @deprecated from jwsjs 2.1.0 jsrsasign 5.1.0
-     */
-    this.addSignatureByHeaderPayloadKey = function(sHead, sPayload, sPemPrvKey) {
-	var jws = new KJUR.jws.JWS();
-	var sJWS = jws.generateJWSByP1PrvKey(sHead, sPayload, sPemPrvKey);
-  
-	this.aHeader.push(jws.parsedJWS.headB64U);
-	this.sPayload = jws.parsedJWS.payloadB64U;
-	this.aSignature.push(jws.parsedJWS.sigvalB64U);
-    };
-
     // == verify signature ====================================================
     /**
      * verify all signature of JWS-JS object by array of key and acceptAlgs.<br/>
@@ -258,48 +219,6 @@ KJUR.jws.JWSJS = function() {
 	    return false;
 	}
 	return result;
-    };
-
-    /**
-     * (DEPRECATED) verify JWS-JS object with array of certificate string.<br/>
-     * @name verifyWithCerts
-     * @memberOf KJUR.jws.JWSJS#
-     * @function
-     * @param {array of String} aCert array of string for X.509 PEM certificate.
-     * @return 1 if signature is valid.
-     * @throw if JWS-JS signature is invalid.
-     * @deprecated from jwsjs 2.1.0 jsrsasign 5.1.0
-     */
-    this.verifyWithCerts = function(aCert) {
-	if (this.aHeader.length != aCert.length) 
-	    throw "num headers does not match with num certs";
-	if (this.aSignature.length != aCert.length) 
-	    throw "num signatures does not match with num certs";
-
-	var payload = this.sPayload;
-	var errMsg = "";
-	for (var i = 0; i < aCert.length; i++) {
-	    var cert = aCert[i];
-	    var header = this.aHeader[i];
-	    var sig = this.aSignature[i];
-	    var sJWS = header + "." + payload + "." + sig;
-
-	    var jws = new KJUR.jws.JWS();
-	    try {
-		var result = jws.verifyJWSByPemX509Cert(sJWS, cert);
-		if (result != 1) {
-		    errMsg += (i + 1) + "th signature unmatch. ";
-		}
-	    } catch (ex) {
-		errMsg += (i + 1) + "th signature fail(" + ex + "). ";
-	    }
-	}
-
-	if (errMsg == "") {
-	    return 1;
-	} else {
-	    throw errMsg;
-	}
     };
 
     /**
