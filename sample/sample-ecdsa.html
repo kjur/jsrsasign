@@ -28,7 +28,7 @@ function doSign() {
   var msg1 = f1.msg1.value;
 
   var sig = new KJUR.crypto.Signature({"alg": sigalg});
-  sig.initSign({'ecprvhex': prvkey, 'eccurvename': curve});
+  sig.init({d: prvkey, curve: curve});
   sig.updateString(msg1);
   var sigValueHex = sig.sign();
   
