@@ -1707,7 +1707,7 @@ KEYUTIL.parseCSRHex = function(csrHex) {
  * jwkPrv2 = KEYUTIL.getJWKFromKey(kp2.prvKeyObj);
  * jwkPub2 = KEYUTIL.getJWKFromKey(kp2.pubKeyObj);
  *
- * // if you need RFC 7636 JWK thumprint as kid do like this:
+ * // if you need RFC 7638 JWK thumprint as kid do like this:
  * jwkPub2.kid = KJUR.jws.JWS.getJWKthumbprint(jwkPub2);
  */
 KEYUTIL.getJWKFromKey = function(keyObj) {
