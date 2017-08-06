@@ -8,7 +8,7 @@
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsrsasign/license
  *
- * The above copyright and license notice shall be
+ * The above copyright and license notice shall be 
  * included in all copies or substantial portions of the Software.
  */
 
@@ -21,7 +21,7 @@
  * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
-/**
+/** 
  * kjur's class library name space
  * @name KJUR
  * @namespace kjur's class library name space
@@ -297,7 +297,7 @@ KJUR.crypto.Util.SECURERANDOMGEN = new SecureRandom();
  * @since jsrsasign 7.0.0 crypto 1.1.11
  * @example
  * KJUR.crypto.Util.getRandomHexOfNbytes(3) &rarr; "6314af", "000000" or "001fb4"
- * KJUR.crypto.Util.getRandomHexOfNbytes(128) &rarr; "8fbc..." in 1024bits
+ * KJUR.crypto.Util.getRandomHexOfNbytes(128) &rarr; "8fbc..." in 1024bits 
  */
 KJUR.crypto.Util.getRandomHexOfNbytes = function(n) {
     var ba = new Array(n);
@@ -331,7 +331,7 @@ KJUR.crypto.Util.getRandomBigIntegerOfNbytes = function(n) {
  * @since jsrsasign 7.0.0 crypto 1.1.11
  * @example
  * KJUR.crypto.Util.getRandomHexOfNbits(24) &rarr; "6314af", "000000" or "001fb4"
- * KJUR.crypto.Util.getRandomHexOfNbits(1024) &rarr; "8fbc..." in 1024bits
+ * KJUR.crypto.Util.getRandomHexOfNbits(1024) &rarr; "8fbc..." in 1024bits 
  */
 KJUR.crypto.Util.getRandomHexOfNbits = function(n) {
     var n_remainder = n % 8;
@@ -681,7 +681,7 @@ KJUR.crypto.MessageDigest.HASHLENGTH = {
 // === Mac ===============================================================
 
 /**
- * Mac(Message Authentication Code) class which is very similar to java.security.Mac class
+ * Mac(Message Authentication Code) class which is very similar to java.security.Mac class 
  * @name KJUR.crypto.Mac
  * @class Mac class which is very similar to java.security.Mac class
  * @param {Array} params parameters for constructor
@@ -710,7 +710,7 @@ KJUR.crypto.MessageDigest.HASHLENGTH = {
  * mac.updateString('aaa')
  * var macHex = mac.doFinal()
  *
- * // other password representation
+ * // other password representation 
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"hex":  "6161"}});
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"utf8": "aa"}});
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"rstr": "\x61\x61"}});
@@ -826,7 +826,7 @@ KJUR.crypto.Mac = function(params) {
     };
 
     /**
-     * performs final update on the digest using hexadecimal string,
+     * performs final update on the digest using hexadecimal string, 
      * then completes the digest computation
      * @name doFinalHex
      * @memberOf KJUR.crypto.Mac#
@@ -860,7 +860,7 @@ KJUR.crypto.Mac = function(params) {
      * <li>{b64u: "Mi7-_"}: explicitly specified as Base64URL string</li>
      * </ul>
      * It is *STRONGLY RECOMMENDED* that explicit representation of password argument
-     * to avoid ambiguity. For example string  "6161" can mean a string "6161" or
+     * to avoid ambiguity. For example string  "6161" can mean a string "6161" or 
      * a hexadecimal string of "aa" (i.e. \x61\x61).
      * @example
      * mac = KJUR.crypto.Mac({'alg': 'hmacsha256'});
@@ -900,7 +900,7 @@ KJUR.crypto.Mac = function(params) {
 
 	if (typeof pass != 'object')
 	    throw "KJUR.crypto.Mac unsupported password type: " + pass;
-
+	
 	var hPass = null;
 	if (pass.hex  !== undefined) {
 	    if (pass.hex.length % 2 != 0 || ! pass.hex.match(/^[0-9A-Fa-f]+$/))
@@ -993,7 +993,7 @@ KJUR.crypto.Mac = function(params) {
  * sig2.init(certPEM);
  * sig.updateString('aaa');
  * var isValid = sig2.verify(hSigVal);
- *
+ * 
  * // ECDSA signing
  * var sig = new KJUR.crypto.Signature({'alg':'SHA1withECDSA'});
  * sig.init(prvKeyPEM);
@@ -1066,7 +1066,7 @@ KJUR.crypto.Signature = function(params) {
 		throw "setAlgAndProvider hash alg set fail alg=" +
                     this.mdAlgName + "/" + ex;
 	    }
-
+	    
 	    this.init = function(keyparam, pass) {
 		var keyObj = null;
 		try {
@@ -1138,7 +1138,7 @@ KJUR.crypto.Signature = function(params) {
 		    return ec.verifyHex(this.sHashHex, hSigVal, this.ecpubhex);
 		} else if (this.pubKey instanceof RSAKey &&
 			   this.pubkeyAlgName == "rsaandmgf1") {
-		    return this.pubKey.verifyWithMessageHashPSS(this.sHashHex, hSigVal,
+		    return this.pubKey.verifyWithMessageHashPSS(this.sHashHex, hSigVal, 
 								this.mdAlgName,
 								this.pssSaltLen);
 		} else if (this.pubKey instanceof RSAKey &&
@@ -1334,7 +1334,7 @@ KJUR.crypto.Signature = function(params) {
  * <li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
  * </ul>
  * NOTE: (*) is not supported in Java JCE.<br/>
- * Currently this class supports only RSA encryption and decryption.
+ * Currently this class supports only RSA encryption and decryption. 
  * However it is planning to implement also symmetric ciphers near in the future.
  * @example
  */
@@ -1348,12 +1348,12 @@ KJUR.crypto.Cipher = function(params) {
  * @function
  * @param {String} s input string to encrypt
  * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
- * @param {String} algName short/long algorithm name for encryption/decryption
+ * @param {String} algName short/long algorithm name for encryption/decryption 
  * @return {String} hexadecimal encrypted string
  * @since jsrsasign 6.2.0 crypto 1.1.10
  * @description
  * This static method encrypts raw string with specified key and algorithm.
- * @example
+ * @example 
  * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj) &rarr; "1abc2d..."
  * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj, "RSAOAEP") &rarr; "23ab02..."
  */
@@ -1384,7 +1384,7 @@ KJUR.crypto.Cipher.encrypt = function(s, keyObj, algName) {
  * @since jsrsasign 6.2.0 crypto 1.1.10
  * @description
  * This static method decrypts encrypted hexadecimal string with specified key and algorithm.
- * @example
+ * @example 
  * KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj) &rarr; "1abc2d..."
  * KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."
  */
@@ -1423,7 +1423,7 @@ KJUR.crypto.Cipher.decrypt = function(hex, keyObj, algName) {
  * <li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
  * </ul>
  * NOTE: (*) is not supported in Java JCE.
- * @example
+ * @example 
  * KJUR.crypto.Cipher.getAlgByKeyAndName(objRSAKey) &rarr; "RSA"
  * KJUR.crypto.Cipher.getAlgByKeyAndName(objRSAKey, "RSAOAEP") &rarr; "RSAOAEP"
  */

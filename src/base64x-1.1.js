@@ -10,7 +10,7 @@
  * This software is licensed under the terms of the MIT License.
  * http://kjur.github.com/jsjws/license/
  *
- * The above copyright and license notice shall be
+ * The above copyright and license notice shall be 
  * included in all copies or substantial portions of the Software.
  *
  * DEPENDS ON:
@@ -70,7 +70,7 @@ KJUR.lang.String = function() {};
  * </ul>
  * All functions in 'base64x.js' are defined in {@link _global_} and not
  * in this class.
- *
+ * 
  * @class Base64URL and supplementary functions for Tom Wu's base64.js library
  * @author Kenji Urushima
  * @version 1.1 (07 May 2012)
@@ -87,7 +87,7 @@ function Base64x() {
  * @name stoBA
  * @function
  * @param {String} s
- * @return {Array of Numbers}
+ * @return {Array of Numbers} 
  */
 function stoBA(s) {
     var a = new Array();
@@ -438,7 +438,7 @@ function b64nltohex(s) {
     var b64 = s.replace(/[^0-9A-Za-z\/+=]*/g, '');
     var hex = b64tohex(b64);
     return hex;
-}
+} 
 
 // ==== hex / pem =========================================
 
@@ -461,8 +461,8 @@ function b64nltohex(s) {
  */
 function hextopem(dataHex, pemHeader) {
     var pemBody = hextob64nl(dataHex);
-    return "-----BEGIN " + pemHeader + "-----\r\n" +
-        pemBody +
+    return "-----BEGIN " + pemHeader + "-----\r\n" + 
+        pemBody + 
         "\r\n-----END " + pemHeader + "-----\r\n";
 }
 
@@ -475,13 +475,13 @@ function hextopem(dataHex, pemHeader) {
  * @return {String} hexadecimal string data of PEM contents
  * @since jsrsasign 7.2.1 base64x 1.1.12
  * @description
- * This static method gets a hexacedimal string of contents
- * from PEM format data. You can explicitly specify PEM header
- * by sHead argument.
+ * This static method gets a hexacedimal string of contents 
+ * from PEM format data. You can explicitly specify PEM header 
+ * by sHead argument. 
  * Any space characters such as white space or new line
  * will be omitted.<br/>
  * NOTE: Now {@link KEYUTIL.getHexFromPEM} and {@link X509.pemToHex}
- * have been deprecated since jsrsasign 7.2.1.
+ * have been deprecated since jsrsasign 7.2.1. 
  * Please use this method instead.
  * @example
  * pemtohex("-----BEGIN PUBLIC KEY...") &rarr; "3082..."
@@ -571,7 +571,7 @@ function ArrayBuffertohex(buffer) {
  * @description
  * This function converts from GeneralizedTime string (i.e. YYYYMMDDHHmmSSZ) or
  * UTCTime string (i.e. YYMMDDHHmmSSZ) to milliseconds from Unix origin time
- * (i.e. Jan 1 1970 0:00:00 UTC).
+ * (i.e. Jan 1 1970 0:00:00 UTC). 
  * Argument string may have fraction of seconds and
  * its length is one or more digits such as "20170410235959.1234567Z".
  * As for UTCTime, if year "YY" is equal or less than 49 then it is 20YY.
@@ -626,7 +626,7 @@ function zulutomsec(s) {
  * @description
  * This function converts from GeneralizedTime string (i.e. YYYYMMDDHHmmSSZ) or
  * UTCTime string (i.e. YYMMDDHHmmSSZ) to seconds from Unix origin time
- * (i.e. Jan 1 1970 0:00:00 UTC). Argument string may have fraction of seconds
+ * (i.e. Jan 1 1970 0:00:00 UTC). Argument string may have fraction of seconds 
  * however result value will be omitted.
  * As for UTCTime, if year "YY" is equal or less than 49 then it is 20YY.
  * If year "YY" is equal or greater than 50 then it is 19YY.
@@ -683,7 +683,7 @@ function zulutodate(s) {
  * As for UTCTime, if year "YY" is equal or less than 49 then it is 20YY.
  * If year "YY" is equal or greater than 50 then it is 19YY.
  * If flagMilli is true its result concludes milliseconds such like
- * "20170520235959.42Z".
+ * "20170520235959.42Z". 
  * @example
  * d = new Date(Date.UTC(2017,4,20,23,59,59,670));
  * datetozulu(d) &rarr; "20170520235959Z"
@@ -694,7 +694,7 @@ function datetozulu(d, flagUTCTime, flagMilli) {
     var s;
     var year = d.getUTCFullYear();
     if (flagUTCTime) {
-	if (year < 1950 || 2049 < year)
+	if (year < 1950 || 2049 < year) 
 	    throw "not proper year for UTCTime: " + year;
 	s = ("" + year).slice(-2);
     } else {
@@ -747,7 +747,7 @@ function hextouricmp(s) {
  * convert UTFa hexadecimal string to a URLComponent string such like "%67%68".<br/>
  * Note that these "<code>0-9A-Za-z!'()*-._~</code>" characters will not
  * converted to "%xx" format by builtin 'encodeURIComponent()' function.
- * However this 'encodeURIComponentAll()' function will convert
+ * However this 'encodeURIComponentAll()' function will convert 
  * all of characters into "%xx" format.
  * @name encodeURIComponentAll
  * @function
@@ -771,11 +771,11 @@ function encodeURIComponentAll(u8) {
 
 // ==== new lines ================================
 /**
- * convert all DOS new line("\r\n") to UNIX new line("\n") in
+ * convert all DOS new line("\r\n") to UNIX new line("\n") in 
  * a String "s".
  * @name newline_toUnix
  * @function
- * @param {String} s string
+ * @param {String} s string 
  * @return {String} converted string
  */
 function newline_toUnix(s) {
@@ -784,11 +784,11 @@ function newline_toUnix(s) {
 }
 
 /**
- * convert all UNIX new line("\r\n") to DOS new line("\n") in
+ * convert all UNIX new line("\r\n") to DOS new line("\n") in 
  * a String "s".
  * @name newline_toDos
  * @function
- * @param {String} s string
+ * @param {String} s string 
  * @return {String} converted string
  */
 function newline_toDos(s) {
@@ -922,7 +922,7 @@ KJUR.lang.String.isIntegerArray = function(s) {
  * canonicalize hexadecimal string of positive integer<br/>
  * @name hextoposhex
  * @function
- * @param {String} s hexadecimal string
+ * @param {String} s hexadecimal string 
  * @return {String} canonicalized hexadecimal string of positive integer
  * @since base64x 1.1.10 jsrsasign 7.1.4
  * @description
@@ -956,10 +956,10 @@ function hextoposhex(s) {
  * @throws "malformed integer array string: *" for wrong input
  * @description
  * This function converts a string of JavaScript integer array to
- * a hexadecimal string. Each integer value shall be in a range
+ * a hexadecimal string. Each integer value shall be in a range 
  * from 0 to 255 otherwise it raise exception. Input string can
  * have extra space or newline string so that they will be ignored.
- *
+ * 
  * @example
  * intarystrtohex(" [123, 34, 101, 34, 58] ")
  * &rarr; 7b2265223a (i.e. '{"e":' as string)
