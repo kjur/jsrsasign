@@ -6,7 +6,7 @@
  * Copyright (c) 2010-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
- * http://kjur.github.com/jsrsasign/license/
+ * https://kjur.github.io/jsrsasign/license/
  *
  * The above copyright and license notice shall be 
  * included in all copies or substantial portions of the Software.
@@ -17,7 +17,7 @@
  * @name rsasign-1.2.js
  * @author Kenji Urushima kenji.urushima@gmail.com
  * @version jsrsasign 8.0.0 rsasign 1.3.0 (2017-Jun-28)
- * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
+ * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
 var _RE_HEXDECONLY = new RegExp("");

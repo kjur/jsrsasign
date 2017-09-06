@@ -8,9 +8,9 @@ The 'jsrsasign' (RSA-Sign JavaScript Library) is an opensource free pure JavaScr
 [![npm version](https://badge.fury.io/js/jsrsasign.svg)](https://badge.fury.io/js/jsrsasign)
 [![CDNJS](https://img.shields.io/cdnjs/v/jsrsasign.svg)](https://cdnjs.com/libraries/jsrsasign)
 
-Public page is http://kjur.github.com/jsrsasign .
+Public page is https://kjur.github.io/jsrsasign .
 
-[github TOP](http://kjur.github.io/jsrsasign/)|[API doc](http://kjur.github.io/jsrsasign/api/)|[Wiki](https://github.com/kjur/jsrsasign/wiki)|[Node sample](https://github.com/kjur/jsrsasign/tree/master/sample_node)
+[github TOP](https://kjur.github.io/jsrsasign/)|[API doc](https://kjur.github.io/jsrsasign/api/)|[Wiki](https://github.com/kjur/jsrsasign/wiki)|[Node sample](https://github.com/kjur/jsrsasign/tree/master/sample_node)
 
 DIFFERENCE WITH CRYPTO MODULE
 -----------------------------
@@ -49,17 +49,17 @@ You can refer name spaces, classes, methods and functions
 by following variables:
 
 - r.BigInteger - BigInteger class
-- r.RSAKey - [RSAKey class](http://kjur.github.io/jsrsasign/api/symbols/RSAKey.html)
-- r.ECDSA - [KJUR.crypto.ECDSA class](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.ECDSA.html)
-- r.DSA - [KJUR.crypto.DSA class](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.DSA.html)
-- r.Signature - [KJUR.crypto.Signature class](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Signature.html)
-- r.MessageDigest - [KJUR.crypto.MessageDigest class](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.MessageDigest.html)
-- r.Mac - [KJUR.crypto.Mac class](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Mac.html)
-- r.KEYUTIL - [KEYUTIL class](http://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html)
-- r.ASN1HEX - [ASN1HEX class](http://kjur.github.io/jsrsasign/api/symbols/ASN1HEX.html)
-- r.crypto - [KJUR.crypto name space](http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.html)
-- r.asn1 - [KJUR.asn1 name space](http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.html)
-- r.jws - [KJUR.jws name space](http://kjur.github.io/jsjws/api/)
+- r.RSAKey - [RSAKey class](https://kjur.github.io/jsrsasign/api/symbols/RSAKey.html)
+- r.ECDSA - [KJUR.crypto.ECDSA class](https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.ECDSA.html)
+- r.DSA - [KJUR.crypto.DSA class](https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.DSA.html)
+- r.Signature - [KJUR.crypto.Signature class](https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Signature.html)
+- r.MessageDigest - [KJUR.crypto.MessageDigest class](https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.MessageDigest.html)
+- r.Mac - [KJUR.crypto.Mac class](https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Mac.html)
+- r.KEYUTIL - [KEYUTIL class](https://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html)
+- r.ASN1HEX - [ASN1HEX class](https://kjur.github.io/jsrsasign/api/symbols/ASN1HEX.html)
+- r.crypto - [KJUR.crypto name space](https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.html)
+- r.asn1 - [KJUR.asn1 name space](https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.html)
+- r.jws - [KJUR.jws name space](https://kjur.github.io/jsjws/api/)
 
 Please see API reference in the above links.
 

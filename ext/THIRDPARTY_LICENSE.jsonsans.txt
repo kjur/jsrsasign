@@ -91,7 +91,7 @@ json-sans-eval - A fast and secure JSON parser in JavaScript
 
 json-sans-eval.js - Apache License, Version 2.0
 
-http://code.google.com/p/json-sans-eval/
+https://code.google.com/p/json-sans-eval/
 http://www.apache.org/licenses/LICENSE-2.0
 
 *********************************************************
