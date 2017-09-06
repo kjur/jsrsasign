@@ -6,7 +6,7 @@
  * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
- * http://kjur.github.com/jsrsasign/license
+ * https://kjur.github.io/jsrsasign/license
  *
  * The above copyright and license notice shall be 
  * included in all copies or substantial portions of the Software.
@@ -17,7 +17,7 @@
  * @author Kenji Urushima kenji.urushima@gmail.com
  * @version jsrsasign 7.2.1 pkcs5pkey 1.1.2 (2017-Jun-03)
  * @since jsrsasign 2.0.0
- * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
+ * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
 /**

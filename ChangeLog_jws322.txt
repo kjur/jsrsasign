@@ -23,9 +23,9 @@ remove alg=none signature validation support.
 * 3.0.2 Release (2013-Sep-24)
  - add HS384 support with jsrsasign 4.1.4 or later.
    Please use 
-     'http://kjur.github.io/jsrsasign/ext/cryptojs-312-core-fix.js' or 
-     'http://kjur.github.io/jsrsasign/ext/cryptojs-312-core-fix-min.js' or 
-     'http://kjur.github.io/jsrsasign/jsrsasign-4.1.4-all-min.js'
+     'https://kjur.github.io/jsrsasign/ext/cryptojs-312-core-fix.js' or 
+     'https://kjur.github.io/jsrsasign/ext/cryptojs-312-core-fix-min.js' or 
+     'https://kjur.github.io/jsrsasign/jsrsasign-4.1.4-all-min.js'
    instead of orignal 'core.js' of CryptoJS.
 
 * 3.0.1 Release (2013-Aug-28)
