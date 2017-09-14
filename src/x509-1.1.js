@@ -6,7 +6,7 @@
  * Copyright (c) 2010-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
- * http://kjur.github.com/jsrsasign/license
+ * https://kjur.github.io/jsrsasign/license
  *
  * The above copyright and license notice shall be
  * included in all copies or substantial portions of the Software.
@@ -18,7 +18,7 @@
  * @author Kenji Urushima kenji.urushima@gmail.com
  * @version jsrsasign 8.0.1 x509 1.1.17 (2017-Jun-30)
  * @since jsrsasign 1.x.x
- * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
+ * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
 /**
@@ -28,7 +28,7 @@
  * @property {Number} version format version (1: X509v1, 3: X509v3, otherwise: unknown) since jsrsasign 7.1.4
  * @author Kenji Urushima
  * @version 1.0.1 (08 May 2012)
- * @see <a href="http://kjur.github.com/jsrsasigns/">'jsrsasign'(RSA Sign JavaScript Library) home page http://kjur.github.com/jsrsasign/</a>
+ * @see <a href="https://kjur.github.io/jsrsasigns/">'jsrsasign'(RSA Sign JavaScript Library) home page https://kjur.github.io/jsrsasign/</a>
  * @description
  * X509 class provides following functionality:
  * <ul>
