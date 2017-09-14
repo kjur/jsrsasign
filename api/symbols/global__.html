@@ -177,7 +177,7 @@ ul.inheritsList
 <!-- ============================== header ================================= -->	
 		<!-- begin static/header.html -->
 		<div id="header" style="background: #7F8FB1; color: white; margin: -10px">
-&nbsp; <b><a href="https://kjur.github.io/jsrsasign/" style="color: white">jsrsasign</a></b> JavaScript API Reference
+&nbsp; <b><a href="http://kjur.github.com/jsrsasign/" style="color: white">jsrsasign</a></b> JavaScript API Reference
 </div>
 
 		<!-- end static/header.html -->
@@ -474,8 +474,8 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#ArrayBuffertohex">ArrayBuffertohex</a></b>(buffer)
 								</div>
-								<div class="description">convert a ArrayBuffer to a hexadecimal string<br/>
-This function converts from a ArrayBuffer to a hexadecimal string.</div>
+								<div class="description">convert an ArrayBuffer to a hexadecimal string<br/>
+This function converts from an ArrayBuffer to a hexadecimal string.</div>
 							</td>
 						</tr>
 					
@@ -586,8 +586,8 @@ This function converts from Date object to GeneralizedTime string (i.e.</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#hextoArrayBuffer">hextoArrayBuffer</a></b>(hex)
 								</div>
-								<div class="description">convert a ArrayBuffer to a hexadecimal string<br/>
-This function converts from a ArrayBuffer to a hexadecimal string.</div>
+								<div class="description">convert a hexadecimal string to an ArrayBuffer<br/>
+This function converts from a hexadecimal string to an ArrayBuffer.</div>
 							</td>
 						</tr>
 					
@@ -910,8 +910,8 @@ This function converts from GeneralizedTime string (i.e.</div>
 					
 					</div>
 					<div class="description">
-						convert a ArrayBuffer to a hexadecimal string<br/>
-This function converts from a ArrayBuffer to a hexadecimal string.
+						convert an ArrayBuffer to a hexadecimal string<br/>
+This function converts from an ArrayBuffer to a hexadecimal string.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -921,7 +921,12 @@ This function converts from a ArrayBuffer to a hexadecimal string.
 					
 					
 					
-					<pre class="code">hextoArrayBuffer("fffa01") &rarr; ArrayBuffer of [255, 250, 1]</pre>
+					<pre class="code">var buffer = new ArrayBuffer(3);
+var view = new DataView(buffer);
+view.setUint8(0, 0xfa);
+view.setUint8(1, 0xfb);
+view.setUint8(2, 0x01);
+ArrayBuffertohex(buffer) &rarr; "fafb01"</pre>
 					
 					
 					
@@ -1554,8 +1559,8 @@ all of characters into "%xx" format.
 					
 					</div>
 					<div class="description">
-						convert a ArrayBuffer to a hexadecimal string<br/>
-This function converts from a ArrayBuffer to a hexadecimal string.
+						convert a hexadecimal string to an ArrayBuffer<br/>
+This function converts from a hexadecimal string to an ArrayBuffer.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -1565,12 +1570,7 @@ This function converts from a ArrayBuffer to a hexadecimal string.
 					
 					
 					
-					<pre class="code">var buffer = new ArrayBuffer(3);
-var view = new DataView(buffer);
-view.setUint8(0, 0xfa);
-view.setUint8(1, 0xfb);
-view.setUint8(2, 0x01);
-ArrayBuffertohex(buffer) &rarr; "fafb01"</pre>
+					<pre class="code">hextoArrayBuffer("fffa01") &rarr; ArrayBuffer of [255, 250, 1]</pre>
 					
 					
 					

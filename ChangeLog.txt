@@ -1,8 +1,20 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 8.0.3 to 8.0.x (2017-xxx-xx)
+* Changes from 8.0.3 to 8.0.4 (2017-Sep-15)
+  - asn1cms 1.0.4 to 1.0.5
+    - add KJUR.asn1.cms.CMSUtil.verifySignedData method to
+      verify CMS signed data.
+  - crypto 1.2.0 to 1.2.1
+    - small refactoring
+  - x509 1.1.17 to 1.1.18
+    - fix getInfo() to support no extension.
+  - add sample_node/cmssign
   - fix sample/sample-ecdsa.html in sig.init.
+  - fix sample_node/asn1extract in ASN1HEX method call
+  - merge PR #292 for https
+  - merge PR #283 to fix document and example
+  - merge PR #281 to fix JWK Thumbprint RFC number
 
 * Changes from 8.0.2 to 8.0.3 (2017-Jul-11)
   - jws 3.3.9 to 3.3.10

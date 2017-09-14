@@ -1,7 +1,7 @@
-/* asn1cms-1.0.4.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1cms-1.0.5.js (c) 2013-2017 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
- * asn1cms.js - ASN.1 DER encoder classes for Cryptographic Message Syntax(CMS)
+ * asn1cms.js - ASN.1 DER encoder and verifier classes for Cryptographic Message Syntax(CMS)
  *
  * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cms-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.4 (2017-May-30)
+ * @version 1.0.5 (2017-Sep-15)
  * @since jsrsasign 4.2.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -47,6 +47,7 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * <h4>FEATURES</h4>
  * <ul>
  * <li>easily generate CMS SignedData</li>
+ * <li>easily verify CMS SignedData</li>
  * <li>APIs are very similar to BouncyCastle library ASN.1 classes. So easy to learn.</li>
  * </ul>
  * 
@@ -971,6 +972,7 @@ YAHOO.lang.extend(KJUR.asn1.cms.SignedData, KJUR.asn1.ASN1Object);
  */
 KJUR.asn1.cms.CMSUtil = new function() {
 };
+
 /**
  * generate SignedData object specified by JSON parameters
  * @name newSignedData
@@ -1055,4 +1057,257 @@ KJUR.asn1.cms.CMSUtil.newSignedData = function(param) {
 
     return sd;
 };
+
+/**
+ * verify SignedData specified by JSON parameters
+ *
+ * @name verifySignedData
+ * @memberOf KJUR.asn1.cms.CMSUtil
+ * @function
+ * @param {Array} param JSON parameter to verify CMS SignedData
+ * @return {Object} JSON data as the result of validation
+ * @since jsrsasign 8.0.4 asn1cms 1.0.5
+ * @description
+ * This method provides validation for CMS SignedData.
+ * Following parameters can be applied:
+ * <ul>
+ * <li>cms - hexadecimal data of DER CMS SignedData (aka. PKCS#7 or p7s)</li>
+ *     to verify (OPTION)</li>
+ * </ul>
+ * @example
+ * KJUR.asn1.cms.CMSUtil.verifySignedData({ cms: "3082058a..." }) 
+ * &rarr;
+ * {
+ *   isValid: true,
+ *   parse: ... // parsed data
+ *   signerInfos: [
+ *     {
+ *     }
+ *   ]
+ * }
+ */
+KJUR.asn1.cms.CMSUtil.verifySignedData = function(param) {
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_KJUR_asn1_cms = _KJUR_asn1.cms,
+	_SignerInfo = _KJUR_asn1_cms.SignerInfo,
+	_SignedData = _KJUR_asn1_cms.SignedData,
+	_SigningTime = _KJUR_asn1_cms.SigningTime,
+	_SigningCertificate = _KJUR_asn1_cms.SigningCertificate,
+	_SigningCertificateV2 = _KJUR_asn1_cms.SigningCertificateV2,
+	_KJUR_asn1_cades = _KJUR_asn1.cades,
+	_SignaturePolicyIdentifier = _KJUR_asn1_cades.SignaturePolicyIdentifier,
+	_isHex = _KJUR.lang.String.isHex,
+	_ASN1HEX = ASN1HEX,
+	_getVbyList = _ASN1HEX.getVbyList,
+	_getTLVbyList = _ASN1HEX.getTLVbyList,
+	_getIdxbyList = _ASN1HEX.getIdxbyList,
+	_getChildIdx = _ASN1HEX.getChildIdx,
+	_getTLV = _ASN1HEX.getTLV,
+	_oidname = _ASN1HEX.oidname,
+	_hashHex = _KJUR.crypto.Util.hashHex;
+
+    if (param.cms === undefined &&
+        ! _isHex(param.cms)) {
+    }
+
+    var hCMS = param.cms;
+
+    var _findSignerInfos = function(hCMS, result) {
+	var idx;
+	for (var i = 3; i < 6; i++) {
+	    idx = _getIdxbyList(hCMS, 0, [1, 0, i]);
+	    if (idx !== undefined) {
+		var tag = hCMS.substr(idx, 2);
+		if (tag === "a0") result.certsIdx = idx;
+		if (tag === "a1") result.revinfosIdx = idx;
+		if (tag === "31") result.signerinfosIdx = idx;
+	    }
+	}
+    };
+
+    var _parseSignerInfos = function(hCMS, result) {
+	var idxSignerInfos = result.signerinfosIdx;
+	if (idxSignerInfos === undefined) return;
+	var idxList = _getChildIdx(hCMS, idxSignerInfos);
+	result.signerInfoIdxList = idxList;
+	for (var i = 0; i < idxList.length; i++) {
+	    var idxSI = idxList[i];
+	    var info = { idx: idxSI };
+	    _parseSignerInfo(hCMS, info);
+	    result.signerInfos.push(info);
+	};
+    };
+
+    var _parseSignerInfo = function(hCMS, info) {
+	var idx = info.idx;
+
+	// 1. signer identifier
+	info.signerid_issuer1 = _getTLVbyList(hCMS, idx, [1, 0], "30");
+	info.signerid_serial1 = _getVbyList(hCMS, idx, [1, 1], "02");
+
+	// 2. hash alg
+	info.hashalg = _oidname(_getVbyList(hCMS, idx, [2, 0], "06"));
+
+	// 3. [0] singedAtttrs
+	var idxSignedAttrs = _getIdxbyList(hCMS, idx, [3], "a0");
+	info.idxSignedAttrs = idxSignedAttrs;
+	_parseSignedAttrs(hCMS, info, idxSignedAttrs);
+
+	var aIdx = _getChildIdx(hCMS, idx);
+	var n = aIdx.length;
+	if (n < 6) throw "malformed SignerInfo";
+	
+	info.sigalg = _oidname(_getVbyList(hCMS, idx, [n - 2, 0], "06"));
+	info.sigval = _getVbyList(hCMS, idx, [n - 1], "04");
+	//info.sigval = _getVbyList(hCMS, 0, [1, 0, 4, 0, 5], "04");
+	//info.sigval = hCMS;
+    };
+
+    var _parseSignedAttrs = function(hCMS, info, idx) {
+	var aIdx = _getChildIdx(hCMS, idx);
+	info.signedAttrIdxList = aIdx;
+	for (var i = 0; i < aIdx.length; i++) {
+	    var idxAttr = aIdx[i];
+	    var hAttrType = _getVbyList(hCMS, idxAttr, [0], "06");
+	    var v;
+
+	    if (hAttrType === "2a864886f70d010905") { // siging time
+		v = hextoutf8(_getVbyList(hCMS, idxAttr, [1, 0]));
+		info.saSigningTime = v;
+	    } else if (hAttrType === "2a864886f70d010904") { // message digest
+		v = _getVbyList(hCMS, idxAttr, [1, 0], "04");
+		info.saMessageDigest = v;
+	    }
+	}
+    };
+
+    var _parseSignedData = function(hCMS, result) {
+	// check if signedData (1.2.840.113549.1.7.2) type
+	if (_getVbyList(hCMS, 0, [0], "06") !== "2a864886f70d010702") {
+	    return result;
+	}
+	result.cmsType = "signedData";
+
+	// find eContent data
+	result.econtent = _getVbyList(hCMS, 0, [1, 0, 2, 1, 0]);
+
+	// find certificates,revInfos,signerInfos index
+	_findSignerInfos(hCMS, result);
+
+	result.signerInfos = [];
+	_parseSignerInfos(hCMS, result);
+    };
+
+    var _verify = function(hCMS, result) {
+	var aSI = result.parse.signerInfos;
+	var n = aSI.length;
+	var isValid = true;
+	for (var i = 0; i < n; i++) {
+	    var si = aSI[i];
+	    _verifySignerInfo(hCMS, result, si, i);
+	    if (! si.isValid)
+		isValid = false;
+	}
+	result.isValid = isValid;
+    };
+
+    /*
+     * _findCert
+     * 
+     * @param hCMS {String} hexadecimal string of CMS signed data
+     * @param result {Object} JSON object of validation result
+     * @param si {Object} JSON object of signerInfo in the result above
+     * @param idx {Number} index of signerInfo???
+     */
+    var _findCert = function(hCMS, result, si, idx) {
+	var certsIdx = result.parse.certsIdx;
+	var aCert;
+
+	if (result.certs === undefined) {
+	    aCert = [];
+	    result.certkeys = [];
+	    var aIdx = _getChildIdx(hCMS, certsIdx);
+	    for (var i = 0; i < aIdx.length; i++) {
+		var hCert = _getTLV(hCMS, aIdx[i]);
+		var x = new X509();
+		x.readCertHex(hCert);
+		aCert[i] = x;
+		result.certkeys[i] = x.getPublicKey();
+	    }
+	    result.certs = aCert;
+	} else {
+	    aCert = result.certs;
+	}
+
+	result.cccc = aCert.length;
+	result.cccci = aIdx.length;
+
+	for (var i = 0; i < aCert.length; i++) {
+	    var issuer2 = x.getIssuerHex();
+	    var serial2 = x.getSerialNumberHex();
+	    if (si.signerid_issuer1 === issuer2 &&
+		si.signerid_serial1 === serial2) {
+		si.certkey_idx = i;
+	    }
+	}
+    };
+
+    var _verifySignerInfo = function(hCMS, result, si, idx) {
+	si.verifyDetail = {};
+
+	var _detail = si.verifyDetail;
+
+	var econtent = result.parse.econtent;
+
+	// verify MessageDigest signed attribute
+	var hashalg = si.hashalg;
+	var saMessageDigest = si.saMessageDigest;
+	
+	// verify messageDigest
+	_detail.validMessageDigest = false;
+	//_detail._econtent = econtent;
+	//_detail._hashalg = hashalg;
+	//_detail._saMD = saMessageDigest;
+	if (_hashHex(econtent, hashalg) === saMessageDigest)
+	    _detail.validMessageDigest = true;
+
+	// find signing certificate
+	_findCert(hCMS, result, si, idx);
+	//if (si.signerid_cert === undefined)
+	//    throw Error("can't find signer certificate");
+
+	// verify signature value
+	_detail.validSignatureValue = false;
+	var sigalg = si.sigalg;
+	var hSignedAttr = "31" + _getTLV(hCMS, si.idxSignedAttrs).substr(2);
+	si.signedattrshex = hSignedAttr;
+	var pubkey = result.certs[si.certkey_idx].getPublicKey();
+	var sig = new KJUR.crypto.Signature({alg: sigalg});
+	sig.init(pubkey);
+	sig.updateHex(hSignedAttr);
+	var isValid = sig.verify(si.sigval);
+	_detail.validSignatureValue_isValid = isValid;
+	if (isValid === true)
+	    _detail.validSignatureValue = true;
+
+	// verify SignerInfo totally
+	si.isValid =false;
+	if (_detail.validMessageDigest &&
+	    _detail.validSignatureValue) {
+	    si.isValid = true;
+	}
+    };
+
+    var _findSignerCert = function() {
+    };
+
+    var result = { isValid: false, parse: {} };
+    _parseSignedData(hCMS, result.parse);
+
+    _verify(hCMS, result);
+    
+    return result;
+};
+
 

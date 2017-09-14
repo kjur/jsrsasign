@@ -1,4 +1,4 @@
-/* crypto-1.2.0.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* crypto-1.2.1.js (c) 2013-2017 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.2.0 (2017-Jun-26)
+ * @version 1.2.1 (2017-Sep-15)
  * @since jsrsasign 2.2
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -708,7 +708,7 @@ KJUR.crypto.MessageDigest.HASHLENGTH = {
  * @example
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA1", "pass": "pass"});
  * mac.updateString('aaa')
- * var macHex = md.doFinal()
+ * var macHex = mac.doFinal()
  *
  * // other password representation 
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"hex":  "6161"}});
@@ -778,7 +778,7 @@ KJUR.crypto.Mac = function(params) {
      * @param {String} str string to update
      * @description
      * @example
-     * md.updateString('New York');
+     * mac.updateString('New York');
      */
     this.updateString = function(str) {
 	throw "updateString(str) not supported for this alg/prov: " + this.algProv;
@@ -792,7 +792,7 @@ KJUR.crypto.Mac = function(params) {
      * @param {String} hex hexadecimal string to update
      * @description
      * @example
-     * md.updateHex('0afe36');
+     * mac.updateHex('0afe36');
      */
     this.updateHex = function(hex) {
 	throw "updateHex(hex) not supported for this alg/prov: " + this.algProv;
@@ -805,7 +805,7 @@ KJUR.crypto.Mac = function(params) {
      * @function
      * @description
      * @example
-     * md.digest()
+     * mac.digest()
      */
     this.doFinal = function() {
 	throw "digest() not supported for this alg/prov: " + this.algProv;
@@ -819,7 +819,7 @@ KJUR.crypto.Mac = function(params) {
      * @param {String} str string to final update
      * @description
      * @example
-     * md.digestString('aaa')
+     * mac.digestString('aaa')
      */
     this.doFinalString = function(str) {
 	throw "digestString(str) not supported for this alg/prov: " + this.algProv;
@@ -834,7 +834,7 @@ KJUR.crypto.Mac = function(params) {
      * @param {String} hex hexadecimal string to final update
      * @description
      * @example
-     * md.digestHex('0f2abd')
+     * mac.digestHex('0f2abd')
      */
     this.doFinalHex = function(hex) {
 	throw "digestHex(hex) not supported for this alg/prov: " + this.algProv;
@@ -1105,12 +1105,12 @@ KJUR.crypto.Signature = function(params) {
 		    var ec = new KJUR.crypto.ECDSA({'curve': this.eccurvename});
 		    this.hSign = ec.signHex(this.sHashHex, this.ecprvhex);
 		} else if (this.prvKey instanceof RSAKey &&
-		           this.pubkeyAlgName == "rsaandmgf1") {
+		           this.pubkeyAlgName === "rsaandmgf1") {
 		    this.hSign = this.prvKey.signWithMessageHashPSS(this.sHashHex,
 								    this.mdAlgName,
 								    this.pssSaltLen);
 		} else if (this.prvKey instanceof RSAKey &&
-			   this.pubkeyAlgName == "rsa") {
+			   this.pubkeyAlgName === "rsa") {
 		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex,
 								 this.mdAlgName);
 		} else if (this.prvKey instanceof KJUR.crypto.ECDSA) {
@@ -1118,7 +1118,7 @@ KJUR.crypto.Signature = function(params) {
 		} else if (this.prvKey instanceof KJUR.crypto.DSA) {
 		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex);
 		} else {
-		    throw "Signature: unsupported public key alg: " + this.pubkeyAlgName;
+		    throw "Signature: unsupported private key alg: " + this.pubkeyAlgName;
 		}
 		return this.hSign;
 	    };
@@ -1137,7 +1137,7 @@ KJUR.crypto.Signature = function(params) {
 		    var ec = new KJUR.crypto.ECDSA({curve: this.eccurvename});
 		    return ec.verifyHex(this.sHashHex, hSigVal, this.ecpubhex);
 		} else if (this.pubKey instanceof RSAKey &&
-			   this.pubkeyAlgName == "rsaandmgf1") {
+			   this.pubkeyAlgName === "rsaandmgf1") {
 		    return this.pubKey.verifyWithMessageHashPSS(this.sHashHex, hSigVal, 
 								this.mdAlgName,
 								this.pssSaltLen);

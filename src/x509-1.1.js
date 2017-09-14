@@ -1,4 +1,4 @@
-/* x509-1.1.17.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* x509-1.1.18.js (c) 2012-2017 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.1 x509 1.1.17 (2017-Jun-30)
+ * @version jsrsasign 8.0.4 x509 1.1.18 (2017-Sep-15)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1005,62 +1005,66 @@ function X509() {
 	    s += "    e=" + hextoposhex(pubkey.e.toString(16)) + "\n";
 	}
 
-        s += "X509v3 Extensions:\n";
-
+	// X.509v3 Extensions
         aExt = this.aExtInfo;
-        for (var i = 0; i < aExt.length; i++) {
-	    var info = aExt[i];
 
-	    // show extension name and critical flag
-	    var extName = KJUR.asn1.x509.OID.oid2name(info["oid"]);
-	    if (extName === '') extName = info["oid"];
+	if (aExt !== undefined && aExt !== null) {
+            s += "X509v3 Extensions:\n";
+	    
+            for (var i = 0; i < aExt.length; i++) {
+		var info = aExt[i];
 
-	    var critical = '';
-	    if (info["critical"] === true) critical = "CRITICAL";
+		// show extension name and critical flag
+		var extName = KJUR.asn1.x509.OID.oid2name(info["oid"]);
+		if (extName === '') extName = info["oid"];
 
-	    s += "  " + extName + " " + critical + ":\n";
+		var critical = '';
+		if (info["critical"] === true) critical = "CRITICAL";
 
-	    // show extension value if supported
-	    if (extName === "basicConstraints") {
-		var bc = this.getExtBasicConstraints();
-		if (bc.cA === undefined) {
-		    s += "    {}\n";
-		} else {
-		    s += "    cA=true";
-		    if (bc.pathLen !== undefined)
-			s += ", pathLen=" + bc.pathLen;
-		    s += "\n";
-		}
-	    } else if (extName === "keyUsage") {
-		s += "    " + this.getExtKeyUsageString() + "\n";
-	    } else if (extName === "subjectKeyIdentifier") {
-		s += "    " + this.getExtSubjectKeyIdentifier() + "\n";
-	    } else if (extName === "authorityKeyIdentifier") {
-		var akid = this.getExtAuthorityKeyIdentifier();
-		if (akid.kid !== undefined)
-		    s += "    kid=" + akid.kid + "\n";
-	    } else if (extName === "extKeyUsage") {
-		var eku = this.getExtExtKeyUsageName();
-		s += "    " + eku.join(", ") + "\n";
-	    } else if (extName === "subjectAltName") {
-		var san = this.getExtSubjectAltName2();
-		s += "    " + san + "\n";
-	    } else if (extName === "cRLDistributionPoints") {
-		var cdp = this.getExtCRLDistributionPointsURI();
-		s += "    " + cdp + "\n";
-	    } else if (extName === "authorityInfoAccess") {
-		var aia = this.getExtAIAInfo();
-		if (aia.ocsp !== undefined)
-		    s += "    ocsp: " + aia.ocsp.join(",") + "\n";
-		if (aia.caissuer !== undefined)
-		    s += "    caissuer: " + aia.caissuer.join(",") + "\n";
-	    } else if (extName === "certificatePolicies") {
-		var aCP = this.getExtCertificatePolicies();
-		for (var j = 0; j < aCP.length; j++) {
-		    if (aCP[j].id !== undefined)
-			s += "    policy oid: " + aCP[j].id + "\n";
-		    if (aCP[j].cps !== undefined)
-			s += "    cps: " + aCP[j].cps + "\n";
+		s += "  " + extName + " " + critical + ":\n";
+
+		// show extension value if supported
+		if (extName === "basicConstraints") {
+		    var bc = this.getExtBasicConstraints();
+		    if (bc.cA === undefined) {
+			s += "    {}\n";
+		    } else {
+			s += "    cA=true";
+			if (bc.pathLen !== undefined)
+			    s += ", pathLen=" + bc.pathLen;
+			s += "\n";
+		    }
+		} else if (extName === "keyUsage") {
+		    s += "    " + this.getExtKeyUsageString() + "\n";
+		} else if (extName === "subjectKeyIdentifier") {
+		    s += "    " + this.getExtSubjectKeyIdentifier() + "\n";
+		} else if (extName === "authorityKeyIdentifier") {
+		    var akid = this.getExtAuthorityKeyIdentifier();
+		    if (akid.kid !== undefined)
+			s += "    kid=" + akid.kid + "\n";
+		} else if (extName === "extKeyUsage") {
+		    var eku = this.getExtExtKeyUsageName();
+		    s += "    " + eku.join(", ") + "\n";
+		} else if (extName === "subjectAltName") {
+		    var san = this.getExtSubjectAltName2();
+		    s += "    " + san + "\n";
+		} else if (extName === "cRLDistributionPoints") {
+		    var cdp = this.getExtCRLDistributionPointsURI();
+		    s += "    " + cdp + "\n";
+		} else if (extName === "authorityInfoAccess") {
+		    var aia = this.getExtAIAInfo();
+		    if (aia.ocsp !== undefined)
+			s += "    ocsp: " + aia.ocsp.join(",") + "\n";
+		    if (aia.caissuer !== undefined)
+			s += "    caissuer: " + aia.caissuer.join(",") + "\n";
+		} else if (extName === "certificatePolicies") {
+		    var aCP = this.getExtCertificatePolicies();
+		    for (var j = 0; j < aCP.length; j++) {
+			if (aCP[j].id !== undefined)
+			    s += "    policy oid: " + aCP[j].id + "\n";
+			if (aCP[j].cps !== undefined)
+			    s += "    cps: " + aCP[j].cps + "\n";
+		    }
 		}
 	    }
         }

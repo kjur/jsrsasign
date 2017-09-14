@@ -1462,7 +1462,7 @@ KJUR.asn1.x509.X500Name = function(params) {
 	    this.setByLdapString(params.ldapstr);
         // If params is an object, then set the ASN1 array just using the object
         // attributes. This is nice for fields that have lots of special
-        // characters (i.e. CN: 'http://www.github.com/kjur//').
+        // characters (i.e. CN: 'https://www.github.com/kjur//').
         } else if (typeof params === "object") {
             this.setByObject(params);
         }
