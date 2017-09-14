@@ -708,7 +708,7 @@ KJUR.crypto.MessageDigest.HASHLENGTH = {
  * @example
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA1", "pass": "pass"});
  * mac.updateString('aaa')
- * var macHex = md.doFinal()
+ * var macHex = mac.doFinal()
  *
  * // other password representation 
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"hex":  "6161"}});
@@ -778,7 +778,7 @@ KJUR.crypto.Mac = function(params) {
      * @param {String} str string to update
      * @description
      * @example
-     * md.updateString('New York');
+     * mac.updateString('New York');
      */
     this.updateString = function(str) {
 	throw "updateString(str) not supported for this alg/prov: " + this.algProv;
@@ -792,7 +792,7 @@ KJUR.crypto.Mac = function(params) {
      * @param {String} hex hexadecimal string to update
      * @description
      * @example
-     * md.updateHex('0afe36');
+     * mac.updateHex('0afe36');
      */
     this.updateHex = function(hex) {
 	throw "updateHex(hex) not supported for this alg/prov: " + this.algProv;
@@ -805,7 +805,7 @@ KJUR.crypto.Mac = function(params) {
      * @function
      * @description
      * @example
-     * md.digest()
+     * mac.digest()
      */
     this.doFinal = function() {
 	throw "digest() not supported for this alg/prov: " + this.algProv;
@@ -819,7 +819,7 @@ KJUR.crypto.Mac = function(params) {
      * @param {String} str string to final update
      * @description
      * @example
-     * md.digestString('aaa')
+     * mac.digestString('aaa')
      */
     this.doFinalString = function(str) {
 	throw "digestString(str) not supported for this alg/prov: " + this.algProv;
@@ -834,7 +834,7 @@ KJUR.crypto.Mac = function(params) {
      * @param {String} hex hexadecimal string to final update
      * @description
      * @example
-     * md.digestHex('0f2abd')
+     * mac.digestHex('0f2abd')
      */
     this.doFinalHex = function(hex) {
 	throw "digestHex(hex) not supported for this alg/prov: " + this.algProv;

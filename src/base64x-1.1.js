@@ -505,21 +505,16 @@ function pemtohex(s, sHead) {
 // ==== hex / ArrayBuffer =================================
 
 /**
- * convert a ArrayBuffer to a hexadecimal string<br/>
+ * convert a hexadecimal string to an ArrayBuffer<br/>
  * @name hextoArrayBuffer
  * @function
  * @param {String} hex hexadecimal string
  * @return {ArrayBuffer} ArrayBuffer
  * @since jsrsasign 6.1.4 base64x 1.1.8
  * @description
- * This function converts from a ArrayBuffer to a hexadecimal string.
+ * This function converts from a hexadecimal string to an ArrayBuffer.
  * @example
- * var buffer = new ArrayBuffer(3);
- * var view = new DataView(buffer);
- * view.setUint8(0, 0xfa);
- * view.setUint8(1, 0xfb);
- * view.setUint8(2, 0x01);
- * ArrayBuffertohex(buffer) &rarr; "fafb01"
+ * hextoArrayBuffer("fffa01") &rarr; ArrayBuffer of [255, 250, 1]
  */
 function hextoArrayBuffer(hex) {
     if (hex.length % 2 != 0) throw "input is not even length";
@@ -538,16 +533,21 @@ function hextoArrayBuffer(hex) {
 // ==== ArrayBuffer / hex =================================
 
 /**
- * convert a ArrayBuffer to a hexadecimal string<br/>
+ * convert an ArrayBuffer to a hexadecimal string<br/>
  * @name ArrayBuffertohex
  * @function
  * @param {ArrayBuffer} buffer ArrayBuffer
  * @return {String} hexadecimal string
  * @since jsrsasign 6.1.4 base64x 1.1.8
  * @description
- * This function converts from a ArrayBuffer to a hexadecimal string.
+ * This function converts from an ArrayBuffer to a hexadecimal string.
  * @example
- * hextoArrayBuffer("fffa01") &rarr; ArrayBuffer of [255, 250, 1]
+ * var buffer = new ArrayBuffer(3);
+ * var view = new DataView(buffer);
+ * view.setUint8(0, 0xfa);
+ * view.setUint8(1, 0xfb);
+ * view.setUint8(2, 0x01);
+ * ArrayBuffertohex(buffer) &rarr; "fafb01"
  */
 function ArrayBuffertohex(buffer) {
     var hex = "";
