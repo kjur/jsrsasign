@@ -44,7 +44,7 @@ function doVerify() {
   var sigval = f1.sigval1.value;
 
   var sig = new KJUR.crypto.Signature({"alg": sigalg, "prov": "cryptojs/jsrsa"});
-  sig.initVerifyByPublicKey({'ecpubhex': pubkey, 'eccurvename': curve});
+  sig.init({xy: pubkey, curve: curve});
   sig.updateString(msg1);
   var result = sig.verify(sigval);
   if (result) {

@@ -1,0 +1,75 @@
+#!/usr/bin/env node
+
+/*
+ * cmssign - generate CMS signed data
+ *
+ * Copyright (c) 2017 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * https://kjur.github.io/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ * ---------------------------------------------------------
+ * DESCRIPTION
+ *   This script signes a text or file data by specified private key
+ *   and signature algorithm.
+ *
+ * USAGE
+ *   % cmssign aaa.bin a.prv aaa.p7s
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+var rsu = require('jsrsasign-util');
+var path = require('path');
+
+program
+  .version('1.0.0 (2017-Jul-30)')
+  .usage('[options] <data file to be signed> <private key> <cert> <output cms file> [sig alg]')
+  .description('generate CMS signed data for data file.')
+  .parse(process.argv);
+
+if (program.args.length !== 4 && program.args.length !== 5)
+  throw "wrong number of arguments";
+
+var textOrFile = program.args[0];
+var prvFile = program.args[1];
+var certFile = program.args[2];
+var outFile = program.args[3];
+var hashAlg = "SHA256withRSA";
+if (program.args.length === 5) hashAlg = program.args[4];
+
+// 1. data to be signed
+var hContent = rsu.readFileHexByBin(textOrFile);
+
+// 2. prv key
+var prvPEM = rsu.readFile(prvFile);
+
+// 3. cert file
+var certPEM = rsu.readFile(certFile);
+
+var sd = rs.KJUR.asn1.cms.CMSUtil.newSignedData({
+  content: {hex: hContent},
+  certs: [certPEM],
+  signerInfos: [{
+    hashAlg: 'sha256',
+    sAttr: {
+      SigningTime: {},
+      SigningCertificateV2: {array: [certPEM]}
+    },
+    signerCert: certPEM,
+    sigAlg: 'SHA256withRSA',
+    signerPrvKey: prvPEM
+  }],
+
+});
+
+rsu.saveFileBinByHex(outFile, sd.getContentInfoEncodedHex());
+console.log("generate CMS signed data and save to file done.");
+
+
+
+
