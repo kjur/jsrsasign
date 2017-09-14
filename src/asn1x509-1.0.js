@@ -6,7 +6,7 @@
  * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
- * http://kjur.github.com/jsrsasign/license
+ * https://kjur.github.io/jsrsasign/license
  *
  * The above copyright and license notice shall be
  * included in all copies or substantial portions of the Software.
@@ -18,7 +18,7 @@
  * @author Kenji Urushima kenji.urushima@gmail.com
  * @version jsrsasign 8.0.0 asn1x509 1.1.0 (2017-Jun-25)
  * @since jsrsasign 2.1
- * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
+ * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
 /**
@@ -1462,7 +1462,7 @@ KJUR.asn1.x509.X500Name = function(params) {
 	    this.setByLdapString(params.ldapstr);
         // If params is an object, then set the ASN1 array just using the object
         // attributes. This is nice for fields that have lots of special
-        // characters (i.e. CN: 'http://www.github.com/kjur//').
+        // characters (i.e. CN: 'https://www.github.com/kjur//').
         } else if (typeof params === "object") {
             this.setByObject(params);
         }

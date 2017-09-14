@@ -6,7 +6,7 @@
  * Copyright (c) 2010-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
- * http://kjur.github.com/jsrsasign/license/
+ * https://kjur.github.io/jsrsasign/license/
  *
  * The above copyright and license notice shall be 
  * included in all copies or substantial portions of the Software.
@@ -18,7 +18,7 @@
  * @author Kenji Urushima kenji.urushima@gmail.com
  * @version jsrsasign 8.0.3 jws 3.3.10 (2017-Jul-11)
  * @since jsjws 1.0, jsrsasign 4.8.0
- * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
+ * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
 if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
@@ -43,8 +43,8 @@ if (typeof KJUR.jws == "undefined" || !KJUR.jws) KJUR.jws = {};
  * JSON Web Signature(JWS) class.<br/>
  * @name KJUR.jws.JWS
  * @class JSON Web Signature(JWS) class
- * @see <a href="http://kjur.github.com/jsjws/">'jwjws'(JWS JavaScript Library) home page http://kjur.github.com/jsjws/</a>
- * @see <a href="http://kjur.github.com/jsrsasigns/">'jwrsasign'(RSA Sign JavaScript Library) home page http://kjur.github.com/jsrsasign/</a>
+ * @see <a href="https://kjur.github.io/jsjws/">'jwjws'(JWS JavaScript Library) home page https://kjur.github.io/jsjws/</a>
+ * @see <a href="https://kjur.github.io/jsrsasigns/">'jwrsasign'(RSA Sign JavaScript Library) home page https://kjur.github.io/jsrsasign/</a>
  * @see <a href="http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14">IETF I-D JSON Web Algorithms (JWA)</a>
  * @since jsjws 1.0
  * @description
@@ -180,8 +180,8 @@ KJUR.jws.JWS = function() {
  * @param {String} pass (OPTION)passcode to use encrypted asymmetric private key 
  * @return {String} JWS signature string
  * @since jws 3.0.0
- * @see <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Signature.html">jsrsasign KJUR.crypto.Signature method</a>
- * @see <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Mac.html">jsrsasign KJUR.crypto.Mac method</a>
+ * @see <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Signature.html">jsrsasign KJUR.crypto.Signature method</a>
+ * @see <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Mac.html">jsrsasign KJUR.crypto.Mac method</a>
  * @description
  * This method supports following algorithms.
  * <table>
@@ -332,8 +332,8 @@ KJUR.jws.JWS.sign = function(alg, spHeader, spPayload, key, pass) {
  * @param {String} acceptAlgs array of algorithm name strings (OPTION)
  * @return {Boolean} true if the signature is valid otherwise false
  * @since jws 3.0.0
- * @see <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Signature.html">jsrsasign KJUR.crypto.Signature method</a>
- * @see <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Mac.html">jsrsasign KJUR.crypto.Mac method</a>
+ * @see <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Signature.html">jsrsasign KJUR.crypto.Signature method</a>
+ * @see <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Mac.html">jsrsasign KJUR.crypto.Mac method</a>
  * @description
  * <p>
  * This method verifies a JSON Web Signature Compact Serialization string by the validation 

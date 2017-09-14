@@ -8,7 +8,7 @@
  * Copyright (c) 2012-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
- * http://kjur.github.com/jsjws/license/
+ * https://kjur.github.io/jsjws/license/
  *
  * The above copyright and license notice shall be 
  * included in all copies or substantial portions of the Software.
@@ -23,7 +23,7 @@
  * @author Kenji Urushima kenji.urushima@gmail.com
  * @version jsrsasign 7.2.1 base64x 1.1.12 (2017-Jun-03)
  * @since jsrsasign 2.1
- * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
+ * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
 var KJUR;
@@ -75,8 +75,8 @@ KJUR.lang.String = function() {};
  * @author Kenji Urushima
  * @version 1.1 (07 May 2012)
  * @requires base64.js
- * @see <a href="http://kjur.github.com/jsjws/">'jwjws'(JWS JavaScript Library) home page http://kjur.github.com/jsjws/</a>
- * @see <a href="http://kjur.github.com/jsrsasigns/">'jwrsasign'(RSA Sign JavaScript Library) home page http://kjur.github.com/jsrsasign/</a>
+ * @see <a href="https://kjur.github.io/jsjws/">'jwjws'(JWS JavaScript Library) home page https://kjur.github.io/jsjws/</a>
+ * @see <a href="https://kjur.github.io/jsrsasigns/">'jwrsasign'(RSA Sign JavaScript Library) home page https://kjur.github.io/jsrsasign/</a>
  */
 function Base64x() {
 }

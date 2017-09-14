@@ -6,7 +6,7 @@
  * Copyright (c) 2010-2017 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
- * http://kjur.github.com/jsrsasign/license/
+ * https://kjur.github.io/jsrsasign/license/
  *
  * The above copyright and license notice shall be 
  * included in all copies or substantial portions of the Software.
@@ -18,7 +18,7 @@
  * @author Kenji Urushima kenji.urushima@gmail.com
  * @version jsrsasign 8.0.0 jwsjs 2.2.0 (2017-Jun-25)
  * @since jsjws 1.2, jsrsasign 4.8.0
- * @license <a href="http://kjur.github.io/jsrsasign/license/">MIT License</a>
+ * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
 if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
@@ -33,8 +33,8 @@ if (typeof KJUR.jws == "undefined" || !KJUR.jws) KJUR.jws = {};
  * @property {array of String} aSignature array of Encoded JWS signature value
  * @author Kenji Urushima
  * @version 2.1.0 (2016 Sep 6)
- * @see <a href="http://kjur.github.com/jsjws/">old jwjws home page http://kjur.github.com/jsjws/</a>
- * @see <a href="http://kjur.github.com/jsrsasigns/">'jwrsasign'(RSA Sign JavaScript Library) home page http://kjur.github.com/jsrsasign/</a>
+ * @see <a href="https://kjur.github.io/jsjws/">old jwjws home page https://kjur.github.io/jsjws/</a>
+ * @see <a href="https://kjur.github.io/jsrsasigns/">'jwrsasign'(RSA Sign JavaScript Library) home page https://kjur.github.io/jsrsasign/</a>
  * @see <a href="http://tools.ietf.org/html/draft-jones-json-web-signature-json-serialization-01">IETF I-D JSON Web Signature JSON Serialization (JWS-JS) specification</a>
  *
  * @description

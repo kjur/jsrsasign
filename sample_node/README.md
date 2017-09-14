@@ -11,7 +11,7 @@ NOTE: From jsrsasign 6.0.0 (2016-Sep-11), please install "jsrsasign", "jsrsasign
 1. [jwtverify](https://github.com/kjur/jsrsasign/tree/master/sample_node/jwtverify) - JWT and JWS verification tool
 
 This script is to verify JWT(JSON Web Token) or JWS(JSON Web Signature) for HMAC password or public key.
-using [KJUR.jws.JWS.verifyJWT()](http://kjur.github.io/jsrsasign/api/symbols/KJUR.jws.JWS.html#.verifyJWT) method. 
+using [KJUR.jws.JWS.verifyJWT()](https://kjur.github.io/jsrsasign/api/symbols/KJUR.jws.JWS.html#.verifyJWT) method. 
 See [here](https://github.com/kjur/jsrsasign/wiki/Sample-Node-Script---jwtverify) in detail.
 
 1. [asn1dump](https://github.com/kjur/jsrsasign/tree/master/sample_node/asn1dump) - simple ASN.1 dumper
@@ -28,7 +28,7 @@ This script dumps ASN.1 DER formatted binary file.
 1. [jwssign](https://github.com/kjur/jsrsasign/tree/master/sample_node/jwssign) - sign JWS by header and payload file or string
 
 This script is to sign JWS(JSON Web Signature) for specified header and payload file or string
-using [KJUR.jws.JWS.sign()](http://kjur.github.io/jsrsasign/api/symbols/KJUR.jws.JWS.html#.sign) method. 
+using [KJUR.jws.JWS.sign()](https://kjur.github.io/jsrsasign/api/symbols/KJUR.jws.JWS.html#.sign) method. 
 See [here](https://github.com/kjur/jsrsasign/wiki/Sample-Node-Script---jwssign) in detail.
 
 1. [pemtobin](https://github.com/kjur/jsrsasign/tree/master/sample_node/pemtobin) - convert any PEM file to binary
