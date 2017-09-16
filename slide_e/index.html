@@ -22,7 +22,7 @@ document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.se
 <![endif]-->
 <script src="jquery-172-min.js"></script>
 <script src="html5_dropfile.js"></script>
-<script src="jsrsasign-latest-all-min.js"></script>
+<script src="jsrsasign-all-min.js"></script>
 </head>
 
 <body>
@@ -34,7 +34,7 @@ document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.se
 <h1>introduction to jsrsasign</h1>
 <h3>pure JavaScript cryptographic library</h3>
 <h4><a href="https://kjur.github.io/jsrsasign" target="_blank">https://kjur.github.io/jsrsasign</a></h4>
-<h4><font color="grey">slide r1.3 (2016 Sep 24 for jsrsasign 6.1.0)</font></h4>
+<h4><font color="grey">slide r1.4 (2017 Sep 16 for jsrsasign 8.0.4)</font></h4>
 <p>
 <a href="http://twitter/kjur">@kjur / Kenji Urushima</a><br/>
 <br/>
@@ -151,7 +151,7 @@ Off course, you can use git:
 </blockquote>
 Or to use it in your web page, add following in your HTML:
 <blockquote>
-&lt;script src="https://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"&gt;&lt;/script&gt;
+&lt;script src="https://kjur.github.io/jsrsasign/jsrsasign-all-min.js"&gt;&lt;/script&gt;
 </blockquote>
 
 </div>
@@ -376,7 +376,7 @@ of hexadecimal string at specified position.</p>
 <section>
 <h2>ASN1HEX for descendant element</h2>
 <p>
-To refer a descendant element of nested structured ASN.1, use "nthList" 
+To refer a descendant element of nested structured ASN.1, use "List" 
 which represent indexes for each nested layer. 
 This is very useful to specify a deep nested element 
 such like subject name of X.509 certificate.
@@ -393,10 +393,15 @@ SEQUENCE                     idx=0
 </pre></blockquote>
 
 <div align="left">
-getDecendantHexTLVByNthList(s,0,[0,0]) → "020104"
-getDecendantHexLByNthList(s,0,[0,0]) → "01"
-getDecendantHexVByNthList(s,0,[0,0]) → "04"
-getDecendantIndexByNthList(s,0,[0,0]) → 8
+<table>
+<tr>
+<td>getTLVbyList(s,0,[0,0]) → "020104"</td>
+<td>getVbyList(s,0,[0,0]) → "04"</td>
+</tr><tr>
+<td>getIdxbyList(s,0,[0,0]) → 8</td>
+<td>getLbyList(s,0,[0,0]) → "01"</td>
+</tr>
+</table>
 </div>
 </section>
 
@@ -418,13 +423,13 @@ getDecendantIndexByNthList(s,0,[0,0]) → 8
 <div align="left">
 x = new X509();<br/>
 x.readCertPEM(sCertPEM);<br/>
-hex = X.509.pemToHex(sCertPEM);<br/>
+hex = pemtohex(sCertPEM);<br/>
 <br/>
 // get subject<br/>
 subject = x.getSubjectString(); // return like "/C=US/O=OTEST"<br/>
 <br/>
 // get subjectAltName<br/>
-san = X.509.getExtSubjectAltName(hex);<br/>
+san = x.getExtSubjectAltName(hex);<br/>
 // return like ["example.com", "example.org"]<br/>
 </div>
 <hr/>
