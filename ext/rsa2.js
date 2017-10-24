@@ -74,8 +74,8 @@ function oaep_unpad(d, n, hash, hashLen) {
     if (!hash) hash = "sha1";
 
     if (typeof hash === "string") {
-	    algName = MD.getCanonicalAlgName(hash);
-	    hashLen = MD.getHashLength(algName);
+        algName = MD.getCanonicalAlgName(hash);
+        hashLen = MD.getHashLength(algName);
         hash = function(s) {
             return hextorstr(Util.hashHex(rstrtohex(s), algName));
         };
