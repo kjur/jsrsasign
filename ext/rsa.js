@@ -104,9 +104,11 @@ function oaep_pad(s, n, hash, hashLen) {
     if (!hash) hash = "sha1";
 
     if (typeof hash === "string") {
-	algName = MD.getCanonicalAlgName(hash);
-	hashLen = MD.getHashLength(algName);
-        hash = function(s) { return hextorstr(Util.hashString(s, algName)); };
+        algName = MD.getCanonicalAlgName(hash);
+        hashLen = MD.getHashLength(algName);
+        hash = function(s) {
+            return hextorstr(Util.hashHex(rstrtohex(s), algName));
+        };
     }
 
     if (s.length + 2 * hashLen + 2 > n) {
