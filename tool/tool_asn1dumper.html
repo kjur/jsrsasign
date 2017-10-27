@@ -54,7 +54,7 @@ function _doDump() {
   try {
     var s = f1.s_in.value;
     if (s.indexOf("-----BEGIN") != -1) {
-      s = ASN1HEX.pemToHex(s);
+      s = pemtohex(s);
     } else {
       s = s.replace(/^\s+/, '');
       s = s.replace(/\s+$/, '');
