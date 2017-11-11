@@ -8,7 +8,7 @@
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
  *
- * The above copyright and license notice shall be 
+ * The above copyright and license notice shall be
  * included in all copies or substantial portions of the Software.
  */
 
@@ -62,7 +62,7 @@ if (typeof KJUR.asn1.csr == "undefined" || !KJUR.asn1.csr) KJUR.asn1.csr = {};
  * csr = new KJUR.asn1.csr.CertificationRequest({'csrinfo': csri});
  * csr.sign("SHA256withRSA", prvKeyObj);
  * pem = csr.getPEMString();
- * 
+ *
  * // -- DEFINITION OF ASN.1 SYNTAX --
  * // CertificationRequest ::= SEQUENCE {
  * //   certificationRequestInfo CertificationRequestInfo,
@@ -107,11 +107,11 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
     this.sign = function(sigAlgName, prvKeyObj) {
 	if (this.prvKey == null) this.prvKey = prvKeyObj;
 
-	this.asn1SignatureAlg = 
+	this.asn1SignatureAlg =
 	    new _KJUR_asn1_x509.AlgorithmIdentifier({'name': sigAlgName});
 
         sig = new _KJUR.crypto.Signature({'alg': sigAlgName});
-        sig.initSign(this.prvKey);
+        sig.init(this.prvKey);
         sig.updateHex(this.asn1CSRInfo.getEncodedHex());
         this.hexSig = sig.sign();
 
@@ -227,15 +227,15 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
      * @param {Object} keyParam public key parameter which passed to {@link KEYUTIL.getKey} argument
      * @description
      * @example
-     * csri.setSubjectPublicKeyByGetKeyParam(certPEMString); // or 
-     * csri.setSubjectPublicKeyByGetKeyParam(pkcs8PublicKeyPEMString); // or 
+     * csri.setSubjectPublicKeyByGetKeyParam(certPEMString); // or
+     * csri.setSubjectPublicKeyByGetKeyParam(pkcs8PublicKeyPEMString); // or
      * csir.setSubjectPublicKeyByGetKeyParam(kjurCryptoECDSAKeyObject); // et.al.
      * @see KJUR.asn1.x509.SubjectPublicKeyInfo
      * @see KEYUTIL.getKey
      */
     this.setSubjectPublicKeyByGetKey = function(keyParam) {
         var keyObj = _KEYUTIL.getKey(keyParam);
-        this.asn1SubjPKey = 
+        this.asn1SubjPKey =
 	    new _KJUR_asn1_x509.SubjectPublicKeyInfo(keyObj);
     };
 
@@ -345,7 +345,7 @@ KJUR.asn1.csr.CSRUtil = new function() {
  *   sbjprvkey: prvKeyObj
  * });
  *
- * // 2) by private/public key PEM 
+ * // 2) by private/public key PEM
  * pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
  *   subject: {str: '/C=US/O=Test/CN=example.com'},
  *   sbjpubkey: pubKeyPEM,
@@ -446,5 +446,3 @@ KJUR.asn1.csr.CSRUtil.getInfo = function(sPEM) {
 
     return result;
 };
-
-
