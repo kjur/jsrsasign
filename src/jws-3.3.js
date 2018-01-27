@@ -625,7 +625,7 @@ KJUR.jws.JWS.parse = function(sJWS) {
  * <li>alg - array of acceptable signature algorithm names (ex. ["HS256", "HS384"])</li>
  * <li>iss - array of acceptable issuer names (ex. ['http://foo.com'])</li>
  * <li>sub - array of acceptable subject names (ex. ['mailto:john@foo.com'])</li>
- * <li>aud - array or string of acceptable audience name(s) (ex. ['http://foo.com'])</li>
+ * <li>aud - array of acceptable audience name (ex. ['http://foo.com'])</li>
  * <li>jti - string of acceptable JWT ID (OPTION) (ex. 'id1234')</li>
  * <li>
  * verifyAt - time to verify 'nbf', 'iat' and 'exp' in UNIX seconds 

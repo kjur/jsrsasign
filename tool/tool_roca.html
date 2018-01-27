@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : ROCA vulnerable key checker" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<title>ROCA vulnerable key checker</title>
+<script language="JavaScript" type="text/javascript" src="../jsrsasign-all-min.js"></script>
+<script language="JavaScript" type="text/javascript">
+// primes
+var primes_int = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167];
+var primes = primes_int.map(function(x) {
+    return new BigInteger("" + x, 10);
+});
+
+// prints
+var prints = [
+  new BigInteger("6", 10),
+  new BigInteger("30", 10),
+  new BigInteger("126", 10),
+  new BigInteger("1026", 10),
+  new BigInteger("5658", 10),
+  new BigInteger("107286", 10),
+  new BigInteger("199410", 10),
+  new BigInteger("8388606", 10),
+  new BigInteger("536870910", 10),
+  new BigInteger("2147483646", 10),
+  new BigInteger("67109890", 10),
+  new BigInteger("2199023255550", 10),
+  new BigInteger("8796093022206", 10),
+  new BigInteger("140737488355326", 10),
+  new BigInteger("5310023542746834", 10),
+  new BigInteger("576460752303423486", 10),
+  new BigInteger("1455791217086302986", 10),
+  new BigInteger("147573952589676412926", 10),
+  new BigInteger("20052041432995567486", 10),
+  new BigInteger("6041388139249378920330", 10),
+  new BigInteger("207530445072488465666", 10),
+  new BigInteger("9671406556917033397649406", 10),
+  new BigInteger("618970019642690137449562110", 10),
+  new BigInteger("79228162521181866724264247298", 10),
+  new BigInteger("2535301200456458802993406410750", 10),
+  new BigInteger("1760368345969468176824550810518", 10),
+  new BigInteger("50079290986288516948354744811034", 10),
+  new BigInteger("473022961816146413042658758988474", 10),
+  new BigInteger("10384593717069655257060992658440190", 10),
+  new BigInteger("144390480366845522447407333004847678774", 10),
+  new BigInteger("2722258935367507707706996859454145691646", 10),
+  new BigInteger("174224571863520493293247799005065324265470", 10),
+  new BigInteger("696898287454081973172991196020261297061886", 10),
+  new BigInteger("713623846352979940529142984724747568191373310", 10),
+  new BigInteger("1800793591454480341970779146165214289059119882", 10),
+  new BigInteger("126304807362733370595828809000324029340048915994", 10),
+  new BigInteger("11692013098647223345629478661730264157247460343806", 10),
+  new BigInteger("187072209578355573530071658587684226515959365500926", 10)
+];
+
+function isZero(bi) {
+    return BigInteger.ZERO.compareTo(bi) == 0;
+}
+
+// returns A << B
+function bitShift(biA, biB) {
+    var biResult = new BigInteger();
+    biA.lShiftTo(biB, biResult);
+    return biResult;
+}
+
+// if (1 << (modulus % primes[i])) & prints[i] == 0:
+function isROCAvulnerable(modulus) {
+    for (var i = 0; i < primes.length; i++) {
+	if (isZero(prints[i].and(bitShift(BigInteger.ONE, modulus.mod(primes[i]))))) {
+	    return false;
+	}
+    }
+    return true;
+}
+
+function doIt() {
+  var f1 = document.form1;
+
+  var keyPEM = f1.key1.value;
+  var pubKeyObj = KEYUTIL.getKey(keyPEM);
+
+  if (!(pubKeyObj instanceof RSAKey)) {
+    alert("can't read RSA public key");
+    return;
+  }
+
+  if (isROCAvulnerable(pubKeyObj.n)) {
+    alert("This key is ROCA *VULNERABLE* weak key.");
+  } else {
+    alert("This key is *NOT* ROCA vulnerable.");
+  }
+}
+</script>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">ROCA vulnerable key checker</h1>
+<h2 id="project_tagline">for weak RSA public key</h2>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://github.com/kjur/jsrsasign/tags/" target="_blank">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+<a href="https://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+<!-- now editing -->
+<form name="form1">
+<p>
+This tool verifies whether specified public key is 
+<a href="https://crocs.fi.muni.cz/public/papers/rsa_ccs17">ROCA vulnerable</a>.
+Supported key formats are PEM formatted X.509 certificate,
+PKCS#8 public key or CSR.
+</p>
+
+<h4>(Step1) Fill PEM formatted key to check</h4>
+<textarea name="key1" cols="80" rows="6">-----BEGIN CERTIFICATE-----
+MIICpTCCAYwCCQC2u0PIfFaGMjANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDDAls
+b2NhbGhvc3QwHhcNMTcxMDE2MTkzODIxWhcNMTgxMDE2MTkzODIxWjAUMRIwEAYD
+VQQDDAlsb2NhbGhvc3QwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQJZ
+J7UrpeaMjJJou5IY83ZzYUymVBj0dFsUPNTuU/lJHJoOHC8jqVFjBq/784ZnuHG8
+DMguYPW7Gp+hWlZxp2XJ8huVh9gBFZZDcqODyIOw3L9sd1cGsx6v8+P9SIVZoIze
+og+al8TFm2uKjuykV9SoINSVCfdZM2MCvKGjaQsICRgR+Fjy6M6lpiNVrW4EHRk1
+7aWSibWXaDtz4mV650v/x2Dk1RPMh9uTVZGOqgjTmLvl9oNdyHElIRubNrOgvHC5
+k6bLP30stAYd5z25cslCrfmVW2/kzZDwDQiK7ASvH17/kfIa9e1EYXx9uAk/lTZt
+smWAxK85neuU+bFBMFvhAgMBAAEwDQYJKoZIhvcNAQELBQADggECAAG7W49CYRUk
+YAFRGXu3M85MKOISyc/kkJ8nbHdV6GxJ05FkoDKbcbZ7nncJiIp2VMAMEIP4bRTJ
+5U4g4vSZlmCs8BDmV3Ts/tbDCM6eqK+2hwjhUnCnmmsLt4xVUeAAsWUHl9AVtjzd
+oYlm1Kk20QBzNpsvM/gFS5B+duHvTSfELfoq9Pdfvmn2gEXJHe9scO8bfT3fm15z
+R6AUYsSsxAhup2Rix6jgJ14KGsh6uVm6jhz9aBTBcgx7iMuuP8zUbUE6nryHYXnR
+cSvuYSesTCoFfnL7elrZDak/n0jLfwUD80aWnReJfu9QQGdqdDnSG8lSQ1XPOC7O
+/hFW9l0TCzOE
+-----END CERTIFICATE-----</textarea>
+<br/>
+NOTE: Here is sample vulnerable key in "roca/tests/data/cert04.pem" by default.
+
+<!-- ============================================================== -->
+
+<h4>(Step2) Press "ROCA Check" button</h4>
+<input type="button" value="ROCA Check" onClick="doIt();"/>
+<input type="reset" name="reset" value="Reset"/>
+</form>
+
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2017 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>

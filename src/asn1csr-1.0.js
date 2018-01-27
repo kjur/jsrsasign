@@ -1,9 +1,9 @@
-/* asn1csr-1.0.5.js (c) 2015-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1csr-1.0.6.js (c) 2015-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
  *
- * Copyright (c) 2015-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2015-2018 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1csr-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.1 asn1csr 1.0.5 (2017-Jun-03)
+ * @version jsrsasign 8.0.5 asn1csr 1.0.6 (2018-Jan-13)
  * @since jsrsasign 4.9.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -111,7 +111,7 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
 	    new _KJUR_asn1_x509.AlgorithmIdentifier({'name': sigAlgName});
 
         sig = new _KJUR.crypto.Signature({'alg': sigAlgName});
-        sig.initSign(this.prvKey);
+        sig.init(this.prvKey);
         sig.updateHex(this.asn1CSRInfo.getEncodedHex());
         this.hexSig = sig.sign();
 
