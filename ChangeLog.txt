@@ -5,6 +5,8 @@ ChangeLog for jsrsasign
   - tool/tool_asn1dumper.html
     - #304 pemtohex issue fix
   - tool/tool_roca.html added to check ROCA vulnerablity for public key
+  - src/asn1csr 1.0.6 to 1.0.7
+    - fix init of fix #308
 
 * Changes from 8.0.3 to 8.0.4 (2017-Sep-15)
   - asn1cms 1.0.4 to 1.0.5
