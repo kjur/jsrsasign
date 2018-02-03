@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.5 to 8.x.x (2018-Feb-03)
+  - src/x509 1.1.18 to 1.1.19
+    - fix getSubjectAltName for IP addr of PR #317
+  - test/qunit-do-x509-ext
+    - add test getSubjectAltName for DNS and IP
+
 * Changes from 8.0.4 to 8.0.5 (2018-Jan-27)
   - tool/tool_asn1dumper.html
     - #304 pemtohex issue fix

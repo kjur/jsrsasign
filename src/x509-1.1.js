@@ -1,9 +1,9 @@
-/* x509-1.1.18.js (c) 2012-2017 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-1.1.19.js (c) 2012-2019 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
  *
- * Copyright (c) 2010-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2018 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.4 x509 1.1.18 (2017-Sep-15)
+ * @version jsrsasign 8.0.6 x509 1.1.19 (2018-Feb-03)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */

@@ -181,7 +181,8 @@ U2rgoKzYAzliiC89n3hrNbm7rcBLgDFfWsHUtO1w2PDfRAqJcHWoTQiIQNUCPTa8
 B9LZ8g==
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
-var clientPEM = (function() {/*
+// with SAN(client, client.somedomain, 192.168.56.101, 10.20.44.10)
+var certSANIPDNS = (function() {/*
 -----BEGIN CERTIFICATE-----
 MIIFKTCCAxGgAwIBAgIJAJSzyYlwlyKcMA0GCSqGSIb3DQEBCwUAMIGvMQswCQYD
 VQQGEwJVUzETMBEGA1UECAwKQ2FsaWZvcm5pYTEUMBIGA1UEBwwLU2FudGEgQ2xh
@@ -352,20 +353,20 @@ test("getExtExtKeyUsage", function() {
   deepEqual(x.getExtExtKeyUsageName(), ["serverAuth", "clientAuth"], "for GitHub.com site");
 });
 
-test("getExtSubjectAltName", function() {
+test("getExtSubjectAltName github.com", function() {
   var x = new X509();
   x.readCertPEM(certGithubPEM);
   deepEqual(x.getExtSubjectAltName(), ["github.com", "www.github.com"], "for GitHub.com site");
 });
 
-test("getExtSubjectAltName2", function () {
+test("getExtSubjectAltName with DNSx2 IPx2", function () {
   var x = new X509();
-  x.readCertPEM(clientPEM);
+  x.readCertPEM(certSANIPDNS);
   var expected = [
     ["DNS", "cleint"], ["DNS", "cleint.somedomain.com"],
     ["IP", "192.168.56.101"], ["IP", "10.20.44.10"]
   ]
-  deepEqual(x.getExtSubjectAltName2(), expected, "for GitHub.com site");
+  deepEqual(x.getExtSubjectAltName2(), expected, "SAN with IPx2, DNSx2");
 });
 
 test("getExtCRLDistributionPointsURI github", function() {
