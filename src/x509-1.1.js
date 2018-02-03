@@ -761,10 +761,10 @@ function X509() {
 	    if (gnTag === "87") { // iPAddress [7]
 		try {
 		    gnValueStr = 
-			parseInt(gnValueStr.substr(0, 2), 16) + "." +
-			parseInt(gnValueStr.substr(2, 2), 16) + "." +
-			parseInt(gnValueStr.substr(4, 2), 16) + "." +
-			parseInt(gnValueStr.substr(6, 2), 16);
+			parseInt(gnValueHex.substr(0, 2), 16) + "." +
+			parseInt(gnValueHex.substr(2, 2), 16) + "." +
+			parseInt(gnValueHex.substr(4, 2), 16) + "." +
+			parseInt(gnValueHex.substr(6, 2), 16);
 		    result.push(["IP", gnValueStr]);
 		} catch (ex) {};
 	    }

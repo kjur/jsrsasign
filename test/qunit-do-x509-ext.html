@@ -181,6 +181,39 @@ U2rgoKzYAzliiC89n3hrNbm7rcBLgDFfWsHUtO1w2PDfRAqJcHWoTQiIQNUCPTa8
 B9LZ8g==
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+var clientPEM = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIFKTCCAxGgAwIBAgIJAJSzyYlwlyKcMA0GCSqGSIb3DQEBCwUAMIGvMQswCQYD
+VQQGEwJVUzETMBEGA1UECAwKQ2FsaWZvcm5pYTEUMBIGA1UEBwwLU2FudGEgQ2xh
+cmExGjAYBgNVBAoMEU9yZ2FuaXphdGlvbiBOYW1lMRIwEAYDVQQLDAlVbml0IE5h
+bWUxHTAbBgNVBAMMFGNlcnRpZmljYXRlLWF1dG9yaXR5MSYwJAYJKoZIhvcNAQkB
+Fhd1c2VybmFtZUBzb21lZG9tYWluLmNvbTAeFw0xNzEyMjAwMTM4MDFaFw0yMDA5
+MTQwMTM4MDFaMIGlMQswCQYDVQQGEwJVUzETMBEGA1UECAwKQ2FsaWZvcm5pYTEU
+MBIGA1UEBwwLU2FudGEgQ2xhcmExGjAYBgNVBAoMEU9yZ2FuaXphdGlvbiBOYW1l
+MRIwEAYDVQQLDAlVbml0IE5hbWUxEzARBgNVBAMMCmNsaWVudE5hbWUxJjAkBgkq
+hkiG9w0BCQEWF3VzZXJuYW1lQHNvbWVkb21haW4uY29tMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAw8WmiYnCLEI+TIvdPD/P6hf6a5PyG3Q4eT5gthdH
+f5ZVPeCaXjUuL6/2jytQENBqx0f22A7+DQJPzc9bA8SDt16/4Y+bWNjkWHyMAZT+
+BaBf84pExh7F0zFlW0QvFcHWSSK4LFc/GYcn8p83Co2wgDmvfJ1ltRDJVEVyrjrU
+CSRcOWY27MhJAy/vsZGZGGBcX97Oeneqdr5BUWl2MTd/9rb5Ftn4yulB1joLvOR+
+Gi6+ja0Er1UWmQT63vdOZ+Or3sFE4pSA36G1vSqJ7JoVLVFvQmoowaqmkoQ8tG3/
+Ohq+eN8TI+nXeDn+atluF8T78Z+1SPIqZstrJUmk9xfq1QIDAQABo1AwTjAJBgNV
+HRMEAjAAMAsGA1UdDwQEAwIF4DA0BgNVHREELTArggZjbGVpbnSCFWNsZWludC5z
+b21lZG9tYWluLmNvbYcEwKg4ZYcEChQsCjANBgkqhkiG9w0BAQsFAAOCAgEAiOih
+qQi6MDpw8HaLOZxEj97yJTGQYCHLPdqz0ijbq1FRBoBigqZUlBPUJQflwhhIApZt
+xB6Ha0QtcF5L3cMsYEO0ZCTkHYWocAdkIz7uS0EF0WWbZhjNugbN6HATXSZKFjIR
+7ePfFg8EEmxJeSRxMbhI1acAwXN3II89DTAvh8d4+S0faIr0c+7b0YJ2gPzcWzv/
+HWxY+d3K7VEBCCzA0NFzCiY3ezVYeNoA+50rJxbh5V8nRdZQw8JF27fefwt7S4lo
+teakGFIrTzx//2n25mHdbwT7sMSEkG3ChXkCG5ri3VnRdRCRcKck+CXral1Otfxj
+5KqN4SRk7NayoLvNKvfXHh3C3ANih17Si5EtXIX+k9DhYfrmWqKiqH1OhaPnpgtA
+vrBnd/mDMcrrSDWPlocfmW1YJk/J+euRCnfIfnA3GtGyYuZ/soK85Z/qKuLQ/lVU
+dLxyX7nku8UxljJkQbFP29Bw0SuJtfd3t+xAdeBXUWN/YBkh79LFTfq6D4IXwcZk
+EuSaFaQXYZO5KJEoXFsQYz9DE1OZgX2Q9Rwg0LPmWjkwQaQSsndfLPLxoKy9+Iz3
+VXS1CyM7ud+5li8hcx6ciS5N456T9SVEWtwSB+WaWM8lak0nuS5roFY0vrxaoy0g
+Ty4xiTJKapQKFNSsEI1z7DV4eH0YQv9BQlbmQuI=
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
 // _gitpg/jsrsasign/test/eckey/k1.self.cer
 var k1CertPEM = "" +
 "-----BEGIN CERTIFICATE-----\n" +
@@ -323,6 +356,16 @@ test("getExtSubjectAltName", function() {
   var x = new X509();
   x.readCertPEM(certGithubPEM);
   deepEqual(x.getExtSubjectAltName(), ["github.com", "www.github.com"], "for GitHub.com site");
+});
+
+test("getExtSubjectAltName2", function () {
+  var x = new X509();
+  x.readCertPEM(clientPEM);
+  var expected = [
+    ["DNS", "cleint"], ["DNS", "cleint.somedomain.com"],
+    ["IP", "192.168.56.101"], ["IP", "10.20.44.10"]
+  ]
+  deepEqual(x.getExtSubjectAltName2(), expected, "for GitHub.com site");
 });
 
 test("getExtCRLDistributionPointsURI github", function() {
