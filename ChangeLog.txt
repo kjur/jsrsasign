@@ -1,12 +1,20 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 8.0.4 to 8.x.x (2017-xxx-xx)
+* Changes from 8.0.5 to 8.x.x (2018-Feb-03)
+  - src/x509 1.1.18 to 1.1.19
+    - fix getSubjectAltName for IP addr of PR #317
+  - test/qunit-do-x509-ext
+    - add test getSubjectAltName for DNS and IP
+
+* Changes from 8.0.4 to 8.0.5 (2018-Jan-27)
   - tool/tool_asn1dumper.html
     - #304 pemtohex issue fix
   - tool/tool_roca.html added to check ROCA vulnerablity for public key
   - src/asn1csr 1.0.6 to 1.0.7
     - fix init of fix #308
+  - src/jws 3.3.10
+    - fix aud verification in vertifyJWT document #318
 
 * Changes from 8.0.3 to 8.0.4 (2017-Sep-15)
   - asn1cms 1.0.4 to 1.0.5
