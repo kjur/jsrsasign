@@ -728,16 +728,25 @@ KJUR.crypto.ECDSA.asn1SigToConcatSig = function(asn1Sig) {
     var hR = pSig.r;
     var hS = pSig.s;
 
-    if (hR.substr(0, 2) == "00" && (((hR.length / 2) * 8) % (16 * 8)) == 8) 
+    // R and S length is assumed multiple of 128bit(32chars in hex).
+    // If leading is "00" and modulo of length is 2(chars) then
+    // leading "00" is for two's complement and will be removed.
+    if (hR.substr(0, 2) == "00" && (hR.length % 32) == 2)
 	hR = hR.substr(2);
 
-    if (hS.substr(0, 2) == "00" && (((hS.length / 2) * 8) % (16 * 8)) == 8) 
+    if (hS.substr(0, 2) == "00" && (hS.length % 32) == 2)
 	hS = hS.substr(2);
 
-    if ((((hR.length / 2) * 8) % (16 * 8)) != 0)
-	throw "unknown ECDSA sig r length error";
+    // R and S length is assumed multiple of 128bit(32chars in hex).
+    // If missing two chars then it will be padded by "00".
+    if ((hR.length % 32) == 30) hR = "00" + hR;
+    if ((hS.length % 32) == 30) hS = "00" + hS;
 
-    if ((((hS.length / 2) * 8) % (16 * 8)) != 0)
+    // If R and S length is not still multiple of 128bit(32 chars),
+    // then error
+    if (hR.length % 32 != 0)
+	throw "unknown ECDSA sig r length error";
+    if (hS.length % 32 != 0)
 	throw "unknown ECDSA sig s length error";
 
     return hR + hS;

@@ -21,9 +21,18 @@ FILES_MIN = \
 	min/jws-3.3.min.js \
 	min/jwsjs-2.0.min.js
 
+FILES_EXT_MIN = \
+	ext/rsa-min.js \
+	ext/rsa2-min.js
+
 all-min: $(FILES_MIN)
 	@echo "all min converted."
+
+all-ext-min: $(FILES_EXT_MIN)
+	@echo "all ext min converted."
 
 min/%.min.js: src/%.js
 	yuicmp $^ -o $@
 
+ext/%-min.js: ext/%.js
+	yuicmp $^ -o $@

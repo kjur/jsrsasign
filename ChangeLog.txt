@@ -1,11 +1,18 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 8.0.5 to 8.x.x (2018-Feb-03)
+* Changes from 8.0.5 to 8.0.6 (2018-Feb-10)
   - src/x509 1.1.18 to 1.1.19
     - fix getSubjectAltName for IP addr of PR #317
   - test/qunit-do-x509-ext
     - add test getSubjectAltName for DNS and IP
+  - src/rsa, rsa2
+    - fix for alert function for issue #325
+  - src/ecdsa-modified
+    - fix asn1SigToConcatSig for issue #315
+  - npm/lib
+    - jsrsasign-{all,jwths,rsa}-min.js are added
+      per requested issue #314, #313
 
 * Changes from 8.0.4 to 8.0.5 (2018-Jan-27)
   - tool/tool_asn1dumper.html
