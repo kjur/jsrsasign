@@ -2391,6 +2391,7 @@ KJUR.asn1.x509.OID = new function(params) {
 	'businessCategory':		'2.5.4.15',
 	'postalCode':			'2.5.4.17',
 	'serialNumber':			'2.5.4.5',
+	'uniqueIdentifier':		'2.5.4.45',
 	'jurisdictionOfIncorporationL':	'1.3.6.1.4.1.311.60.2.1.1',
 	'jurisdictionOfIncorporationSP':'1.3.6.1.4.1.311.60.2.1.2',
 	'jurisdictionOfIncorporationC':	'1.3.6.1.4.1.311.60.2.1.3'
@@ -2444,6 +2445,7 @@ KJUR.asn1.x509.OID = new function(params) {
 	// other AttributeType name string (no short name)
 	'businessCategory':		'2.5.4.15',
 	'postalCode':			'2.5.4.17',
+	'uniqueIdentifier':		'2.5.4.45',
 	'jurisdictionOfIncorporationL':	'1.3.6.1.4.1.311.60.2.1.1',
 	'jurisdictionOfIncorporationSP':'1.3.6.1.4.1.311.60.2.1.2',
 	'jurisdictionOfIncorporationC':	'1.3.6.1.4.1.311.60.2.1.3',
