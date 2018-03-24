@@ -1,9 +1,9 @@
-/* jwsjs-2.2.0 (c) 2010-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* jwsjs-2.2.1 (c) 2010-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * jwsjs.js - JSON Web Signature JSON Serialization (JWSJS) Class
  *
- * Copyright (c) 2010-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2018 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license/
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name jwsjs-2.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.0 jwsjs 2.2.0 (2017-Jun-25)
+ * @version jsrsasign 8.0.0 jwsjs 2.2.1 (2018-Mar-24)
  * @since jsjws 1.2, jsrsasign 4.8.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -261,7 +261,7 @@ KJUR.jws.JWSJS = function() {
 		    throw "malformed signatures";
 		}
 		if (spJWSJS.signatures.length > 0) {
-		    this.signatures = spJWSJS.signatures;
+		    this.aSignatures = spJWSJS.signatures;
 		} else {
 		    throw "malformed signatures";
 		}

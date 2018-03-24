@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.6 to x.x.x (2018-Mar-11)
+  - src/jws 3.3.10 to 3.3.11
+    - verify method returns false in case of
+      without all of head, payload and signature
+      to fix issue #332.
+  - src/jwsjs 2.2.0 to 2.2.1
+    - readJWSJS fix for wrong initialization as #336
+
 * Changes from 8.0.5 to 8.0.6 (2018-Feb-10)
   - src/x509 1.1.18 to 1.1.19
     - fix getSubjectAltName for IP addr of PR #317

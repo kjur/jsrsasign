@@ -1,9 +1,9 @@
-/* jws-3.3.10 (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* jws-3.3.11 (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * jws.js - JSON Web Signature(JWS) and JSON Web Token(JWT) Class
  *
- * Copyright (c) 2010-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2018 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license/
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name jws-3.3.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.3 jws 3.3.10 (2017-Jul-11)
+ * @version jsrsasign 8.0.3 jws 3.3.11 (2018-Mar-11)
  * @since jsjws 1.0, jsrsasign 4.8.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -330,7 +330,7 @@ KJUR.jws.JWS.sign = function(alg, spHeader, spPayload, key, pass) {
  * @param {String} sJWS string of JWS signature to verify
  * @param {Object} key string of public key, certificate or key object to verify
  * @param {String} acceptAlgs array of algorithm name strings (OPTION)
- * @return {Boolean} true if the signature is valid otherwise false
+ * @return {Boolean} true if the signature is valid otherwise false including no signature case or without head and payload
  * @since jws 3.0.0
  * @see <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Signature.html">jsrsasign KJUR.crypto.Signature method</a>
  * @see <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Mac.html">jsrsasign KJUR.crypto.Mac method</a>
@@ -403,6 +403,8 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
     if (typeof RSAKey !== undefined) _RSAKey = RSAKey;
 
     var a = sJWS.split(".");
+    if (a.length !== 3) return false;
+
     var uHeader = a[0];
     var uPayload = a[1];
     var uSignatureInput = uHeader + "." + uPayload;
