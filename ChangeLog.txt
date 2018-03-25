@@ -1,6 +1,19 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.6 to 8.0.7 (2018-Mar-25)
+  - src/jws 3.3.10 to 3.3.11
+    - verify method returns false in case of
+      without all of head, payload and signature
+      to fix issue #332.
+  - src/jwsjs 2.2.0 to 2.2.1
+    - readJWSJS fix for wrong initialization as #336
+  - src/asn1x509 1.1.0 to 1.1.1
+    - add DN uniqueIdentifier(2.5.4.45) and
+      description(2.5.4.13) attribute type by PR #335.
+  - ext/{rsa,rsa2}
+    - OAEP fix by PR #303.
+
 * Changes from 8.0.5 to 8.0.6 (2018-Feb-10)
   - src/x509 1.1.18 to 1.1.19
     - fix getSubjectAltName for IP addr of PR #317
