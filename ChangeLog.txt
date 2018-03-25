@@ -1,7 +1,7 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 8.0.6 to x.x.x (2018-Mar-11)
+* Changes from 8.0.6 to 8.0.7 (2018-Mar-25)
   - src/jws 3.3.10 to 3.3.11
     - verify method returns false in case of
       without all of head, payload and signature

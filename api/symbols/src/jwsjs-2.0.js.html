@@ -5,12 +5,12 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* jwsjs-2.2.0 (c) 2010-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* jwsjs-2.2.1 (c) 2010-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * jwsjs.js - JSON Web Signature JSON Serialization (JWSJS) Class
 <span class='line'>  5</span>  *
-<span class='line'>  6</span>  * Copyright (c) 2010-2017 Kenji Urushima (kenji.urushima@gmail.com)
+<span class='line'>  6</span>  * Copyright (c) 2010-2018 Kenji Urushima (kenji.urushima@gmail.com)
 <span class='line'>  7</span>  *
 <span class='line'>  8</span>  * This software is licensed under the terms of the MIT License.
 <span class='line'>  9</span>  * https://kjur.github.io/jsrsasign/license/
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name jwsjs-2.0.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign 8.0.0 jwsjs 2.2.0 (2017-Jun-25)
+<span class='line'> 19</span>  * @version jsrsasign 8.0.0 jwsjs 2.2.1 (2018-Mar-24)
 <span class='line'> 20</span>  * @since jsjws 1.2, jsrsasign 4.8.0
 <span class='line'> 21</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -268,7 +268,7 @@
 <span class='line'>261</span> </span><span class="WHIT">		    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed signatures"</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>262</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>263</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">spJWSJS.signatures.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>264</span> </span><span class="WHIT">		    </span><span class="NAME">this.signatures</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">spJWSJS.signatures</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>264</span> </span><span class="WHIT">		    </span><span class="NAME">this.aSignatures</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">spJWSJS.signatures</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>265</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>266</span> </span><span class="WHIT">		    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed signatures"</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>267</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
