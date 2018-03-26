@@ -1,6 +1,10 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.7 to 8.x.x (2018-xxx-xx)
+  - tool/tool_ca.html
+    - subjectPublicKeyInfo setting fix.
+
 * Changes from 8.0.6 to 8.0.7 (2018-Mar-25)
   - src/jws 3.3.10 to 3.3.11
     - verify method returns false in case of
