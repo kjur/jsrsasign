@@ -24,7 +24,7 @@ function doIssue() {
   tbsc.setNotBeforeByParam({'str': f1.notbefore1.value});
   tbsc.setNotAfterByParam({'str': f1.notafter1.value});
   tbsc.setSubjectByParam({'str': f1.subject1.value});  
-  tbsc.setSubjectPublicKeyByParam({'rsapem': f1.pubkey1.value});
+  tbsc.setSubjectPublicKeyByGetKey(f1.pubkey1.value);
 
   if (f1.bc_exists.checked) {
     var param = {};
@@ -202,7 +202,7 @@ URL<input type="text" name="cdp_uri" value="http://test.com/jsca.crl" size="80"/
         <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
         <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
 <div align="center" style="color: white">
-Copyright &copy; 2010-2012 Kenji Urushima. All rights reserved.
+Copyright &copy; 2010-2018 Kenji Urushima. All rights reserved.
 </div>
       </footer>
     </div>
