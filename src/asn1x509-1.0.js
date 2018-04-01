@@ -1,4 +1,4 @@
-/* asn1x509-1.1.1.js (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-1.1.2.js (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.0 asn1x509 1.1.1 (2018-Mar-24)
+ * @version jsrsasign 8.0.0 asn1x509 1.1.2 (2018-Apr-02)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -407,6 +407,19 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * @param {name} name name of X.509v3 Extension object
      * @param {Array} extParams parameters as argument of Extension constructor.
      * @description
+     * This method adds a X.509v3 extension specified by name 
+     * and extParams to internal extension array of X.509v3 extension objects.
+     * Here is supported names of extension:
+     * <ul>
+     * <li>BasicConstraints</li>
+     * <li>KeyUsage</li>
+     * <li>CRLDistributionPoints</li>
+     * <li>ExtKeyUsage</li>
+     * <li>AuthorityKeyIdentifier</li>
+     * <li>AuthorityInfoAccess</li>
+     * <li>SubjectAltName</li>
+     * <li>IssuerAltName</li>
+     * </ul>
      * @example
      * var o = new KJUR.asn1.x509.TBSCertificate();
      * o.appendExtensionByName('BasicConstraints', {'cA':true, 'critical': true});
@@ -521,6 +534,8 @@ YAHOO.lang.extend(KJUR.asn1.x509.Extension, KJUR.asn1.ASN1Object);
  * @description
  * This static function add a X.509v3 extension specified by name and extParams to
  * array 'a' so that 'a' will be an array of X.509v3 extension objects.
+ * See {@link KJUR.asn1.x509.TBSCertificate#appendExtensionByName}
+ * for supported names of extensions.
  * @example
  * var a = new Array();
  * KJUR.asn1.x509.Extension.appendByNameToArray("BasicConstraints", {'cA':true, 'critical': true}, a);
@@ -1065,7 +1080,7 @@ KJUR.asn1.x509.CRL = function(params) {
         this.asn1SignatureAlg = this.asn1TBSCertList.asn1SignatureAlg;
 
         sig = new KJUR.crypto.Signature({'alg': 'SHA1withRSA', 'prov': 'cryptojs/jsrsa'});
-        sig.initSign(this.prvKey);
+        sig.init(this.prvKey);
         sig.updateHex(this.asn1TBSCertList.getEncodedHex());
         this.hexSig = sig.sign();
 
@@ -2075,6 +2090,7 @@ KJUR.asn1.x509.GeneralName = function(params) {
 	pTag = {rfc822: '81', dns: '82', dn: 'a4',  uri: '86'},
 	_KJUR = KJUR,
 	_KJUR_asn1 = _KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
 	_DERIA5String = _KJUR_asn1.DERIA5String,
 	_DERTaggedObject = _KJUR_asn1.DERTaggedObject,
 	_ASN1Object = _KJUR_asn1.ASN1Object,
@@ -2106,11 +2122,13 @@ KJUR.asn1.x509.GeneralName = function(params) {
 
         if (params.dn !== undefined) {
 	    this.type = 'dn';
+	    this.explicit = true;
 	    v = new _X500Name({str: params.dn});
 	}
 
         if (params.ldapdn !== undefined) {
 	    this.type = 'dn';
+	    this.explicit = true;
 	    v = new _X500Name({ldapstr: params.ldapdn});
 	}
 

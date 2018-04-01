@@ -521,7 +521,8 @@ ul.inheritsList
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#appendExtensionByName">appendExtensionByName</a></b>(name, extParams)
 								</div>
 								<div class="description">append X.509v3 extension to this object by name and parameters
-</div>
+This method adds a X.509v3 extension specified by name 
+and extParams to internal extension array of X.509v3 extension objects.</div>
 							</td>
 						</tr>
 					
@@ -741,7 +742,19 @@ tbsc.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));</pre>
 					</div>
 					<div class="description">
 						append X.509v3 extension to this object by name and parameters
-
+This method adds a X.509v3 extension specified by name 
+and extParams to internal extension array of X.509v3 extension objects.
+Here is supported names of extension:
+<ul>
+<li>BasicConstraints</li>
+<li>KeyUsage</li>
+<li>CRLDistributionPoints</li>
+<li>ExtKeyUsage</li>
+<li>AuthorityKeyIdentifier</li>
+<li>AuthorityInfoAccess</li>
+<li>SubjectAltName</li>
+<li>IssuerAltName</li>
+</ul>
 						
 						
 					</div>

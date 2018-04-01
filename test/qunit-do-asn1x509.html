@@ -274,10 +274,10 @@ test("GeneralName class test", function() {
   equal(o5.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b06035504030c0454534131", "constructor certsubj cert1");
 
   var o6 = new KJUR.asn1.x509.GeneralName({dn: '/C=US/O=Test'});
-  equal(o6.getEncodedHex(), "a41c310b3009060355040613025553310d300b060355040a0c0454657374", "dn /C=US/O=Test");
+  equal(o6.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "dn /C=US/O=Test");
 
   var o7 = new KJUR.asn1.x509.GeneralName({ldapdn: 'O=Test,C=US'});
-  equal(o7.getEncodedHex(), "a41c310b3009060355040613025553310d300b060355040a0c0454657374", "ldapdn O=Test,C=US");
+  equal(o7.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "ldapdn O=Test,C=US");
 });
 
 test("GeneralNames class test", function() {
