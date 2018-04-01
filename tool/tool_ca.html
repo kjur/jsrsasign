@@ -74,6 +74,30 @@ function doIssue() {
     tbsc.appendExtension(new KJUR.asn1.x509.CRLDistributionPoints(param));
   }
 
+  // SAN
+  var aSAN = [];
+  if (f1.san1_val.value !== "") {
+    var san = {};
+    san[f1.san1_type.value] = f1.san1_val.value;
+    aSAN.push(san);
+  }
+  if (f1.san2_val.value !== "") { 
+    var san = {};
+    san[f1.san2_type.value] = f1.san2_val.value;
+    aSAN.push(san);
+  }
+  if (f1.san3_val.value !== "") {
+    var san = {};
+    san[f1.san3_type.value] = f1.san3_val.value;
+    aSAN.push(san);
+  }
+  if (aSAN.length !== 0) {
+    var param = {};
+    param.critical = (f1.san_critical.checked) ? true : false;
+    param.array = aSAN;
+    tbsc.appendExtensionByName("SubjectAltName", param);
+  }
+
   // generate and sign certificate
   var caKey = KEYUTIL.getKey.apply(null, [f1.cakey1.value, f1.cakeypass1.value]);
   var cert = new KJUR.asn1.x509.Certificate({tbscertobj: tbsc,
@@ -180,6 +204,34 @@ critical<input type="checkbox" name="cdp_critical" value="1"/>
 <br/>
 URL<input type="text" name="cdp_uri" value="http://crl.example.com/jsca.crl" size="80"/>
 </td></tr>
+<tr><td colspan="2">
+subjectAltName:
+critical<input type="checkbox" name="san_critical" value="0"/>
+<br/>
+<select name="san1_type">
+<option value="dns" selected>DNS
+<option value="rfc822">rfc822
+<option value="uri">URI
+<option value="dn">DN
+</select>
+<input type="text" name="san1_val" size="80"><br/>
+
+<select name="san2_type">
+<option value="dns">DNS
+<option value="rfc822" selected>rfc822
+<option value="uri">URI
+<option value="dn">DN
+</select>
+<input type="text" name="san2_val" size="80"><br/>
+
+<select name="san3_type">
+<option value="dns">DNS
+<option value="rfc822">rfc822
+<option value="uri" selected>URI
+<option value="dn">DN
+</select>
+<input type="text" name="san3_val" size="80"><br/>
+</tr>
 </table>
 
 <h4>(Step3) Press "Issue Certificate" button</h4>

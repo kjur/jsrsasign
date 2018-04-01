@@ -1,9 +1,18 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 8.0.7 to 8.x.x (2018-xxx-xx)
+* Changes from 8.0.7 to 8.0.8 (2018-Apr-02)
+  - src/asn1x509 1.1.1 to 1.1.2
+    - GeneralName fix for dn and ldapdn of explicit.
+      This have caused wrong GeneralName dn/ldapdn ASN.1
+      encoding.
+    - CRL.sign fix for init
   - tool/tool_ca.html
+    - subjectAltName extension support added.
     - subjectPublicKeyInfo setting fix.
+  - test/qunit-do-asn1x509
+    - fix for CRL and GeneralName dn/ldapdn test
+  - npm/test/t_sig_rsasha1.js added
 
 * Changes from 8.0.6 to 8.0.7 (2018-Mar-25)
   - src/jws 3.3.10 to 3.3.11
