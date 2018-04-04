@@ -548,7 +548,8 @@ NOTE: 'params' can be omitted.</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERAbstractString.html#setString">setString</a></b>(newS)
 								</div>
-								<div class="description">set value by a string</div>
+								<div class="description">set value by a string
+This method set value by string.</div>
 							</td>
 						</tr>
 					
@@ -700,9 +701,20 @@ NOTE: 'params' can be omitted.
 					</div>
 					<div class="description">
 						set value by a string
+This method set value by string. <br/>
+NOTE: This method assumes that the argument string is
+UTF-8 encoded even though ASN.1 primitive 
+such as IA5String or PrintableString doesn't
+support all of UTF-8 characters.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.DERIA5String();
+o.setString("abc");
+o.setString("あいう");</pre>
 					
 					
 					

@@ -1,4 +1,4 @@
-/* asn1x509-1.1.2.js (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-1.1.3.js (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.0 asn1x509 1.1.2 (2018-Apr-02)
+ * @version jsrsasign 8.0.0 asn1x509 1.1.3 (2018-Apr-03)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -2403,14 +2403,16 @@ KJUR.asn1.x509.OID = new function(params) {
 	// other AttributeType name string
 	// http://blog.livedoor.jp/k_urushima/archives/656114.html
         'SN':		'2.5.4.4', // surname
+        'T':		'2.5.4.12', // title
         'DN':		'2.5.4.49', // distinguishedName
         'E':		'1.2.840.113549.1.9.1', // emailAddress in MS.NET or Bouncy
 	// other AttributeType name string (no short name)
+	'description':			'2.5.4.13',
 	'businessCategory':		'2.5.4.15',
 	'postalCode':			'2.5.4.17',
 	'serialNumber':			'2.5.4.5',
 	'uniqueIdentifier':		'2.5.4.45',
-	'description':			'2.5.4.13',
+	'organizationIdentifier':	'2.5.4.97',
 	'jurisdictionOfIncorporationL':	'1.3.6.1.4.1.311.60.2.1.1',
 	'jurisdictionOfIncorporationSP':'1.3.6.1.4.1.311.60.2.1.2',
 	'jurisdictionOfIncorporationC':	'1.3.6.1.4.1.311.60.2.1.3'
@@ -2449,23 +2451,25 @@ KJUR.asn1.x509.OID = new function(params) {
 
 	// X.500 AttributeType defined in RFC 4514
         'commonName':			'2.5.4.3',
+        'countryName':			'2.5.4.6',
         'localityName':			'2.5.4.7',
         'stateOrProvinceName':		'2.5.4.8',
+        'streetAddress':		'2.5.4.9',
         'organizationName':		'2.5.4.10',
         'organizationalUnitName':	'2.5.4.11',
-        'countryName':			'2.5.4.6',
-        'streetAddress':		'2.5.4.9',
         'domainComponent':		'0.9.2342.19200300.100.1.25',
         'userId':			'0.9.2342.19200300.100.1.1',
 	// other AttributeType name string
 	'surname':			'2.5.4.4',
+        'title':			'2.5.4.12',
 	'distinguishedName':		'2.5.4.49',
 	'emailAddress':			'1.2.840.113549.1.9.1',
 	// other AttributeType name string (no short name)
+	'description':			'2.5.4.13',
 	'businessCategory':		'2.5.4.15',
 	'postalCode':			'2.5.4.17',
 	'uniqueIdentifier':		'2.5.4.45',
-	'description':			'2.5.4.13',
+	'organizationIdentifier':	'2.5.4.97',
 	'jurisdictionOfIncorporationL':	'1.3.6.1.4.1.311.60.2.1.1',
 	'jurisdictionOfIncorporationSP':'1.3.6.1.4.1.311.60.2.1.2',
 	'jurisdictionOfIncorporationC':	'1.3.6.1.4.1.311.60.2.1.3',

@@ -131,16 +131,16 @@ test("ObjectIdentifier Test", function() {
 
 test("UTF8String Test", function() {
   var d = new KJUR.asn1.DERUTF8String();
-  expect(2);
   d.setString('aaa');
   equal(d.getEncodedHex(), "0c03616161", "UTF8String aaa");
   d.setString('bbb');
   equal(d.getEncodedHex(), "0c03626262", "UTF8String bbb");
+  d.setString('あ');
+  equal(d.getEncodedHex(), "0c03e38182", "UTF8String あ");
 });
 
 test("NumericString Test", function() {
   var d = new KJUR.asn1.DERNumericString();
-  expect(2);
   d.setString('aaa');
   equal(d.getEncodedHex(), "1203616161", "NumericString aaa");
   d.setString('bbb');
@@ -167,11 +167,12 @@ test("TeletexString Test", function() {
 
 test("IA5String Test", function() {
   var d = new KJUR.asn1.DERIA5String();
-  expect(2);
   d.setString('aaa');
   equal(d.getEncodedHex(), "1603616161", "IA5String aaa");
   d.setString('bbb');
   equal(d.getEncodedHex(), "1603626262", "IA5String bbb");
+  d.setString('あ');
+  equal(d.getEncodedHex(), "1603e38182", "IA5String あ");
 });
 
 test("UTCTime Test", function() {
