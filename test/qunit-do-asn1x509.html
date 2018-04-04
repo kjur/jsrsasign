@@ -134,6 +134,12 @@ test("X500Name class test", function() {
          "setByString(/C=US/O=aaa)");
 
   o = new KJUR.asn1.x509.X500Name();
+  o.setByString("/C=US/O=あ");
+  equal(o.getEncodedHex(), 
+         "301b310b3009060355040613025553310c300a060355040a0c03e38182",
+         "setByString(/C=US/O=あ)");
+
+  o = new KJUR.asn1.x509.X500Name();
   o.setByObject({C: "US", O: "aaa"});
   equal(o.getEncodedHex(), 
          "301b310b3009060355040613025553310c300a060355040a0c03616161",
@@ -166,7 +172,6 @@ test("RDN class test", function() {
 });
 
 test("AttributeTypeAndValue class test", function() {
-  expect(3);
   var o1 = new KJUR.asn1.x509.AttributeTypeAndValue();
   o1.setByAttrTypeAndValueStr("O", "aaa");
   equal(o1.getEncodedHex(), "300a060355040a0c03616161", "setByAttrTypeAndValueStr O aaa");
@@ -177,6 +182,9 @@ test("AttributeTypeAndValue class test", function() {
 
   var o3 = new KJUR.asn1.x509.AttributeTypeAndValue({'str':'O=aaa'});
   equal(o3.getEncodedHex(), "300a060355040a0c03616161", "constructor str O=aaa");
+
+  var o4 = new KJUR.asn1.x509.AttributeTypeAndValue({'str':'O=あ'});
+  equal(o4.getEncodedHex(), "300a060355040a0c03e38182", "constructor str O=あ");
 });
 
 // === BEGIN Other ASN1 structure class  ======================================

@@ -1,9 +1,9 @@
-/* asn1-1.0.13.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1-1.0.14.js (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
  *
- * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2018 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.0.13 (2017-Jun-02)
+ * @version asn1 1.0.14 (2018-Apr-03)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -529,12 +529,22 @@ KJUR.asn1.DERAbstractString = function(params) {
      * @memberOf KJUR.asn1.DERAbstractString#
      * @function
      * @param {String} newS value by a string to set
+     * @description
+     * This method set value by string. <br/>
+     * NOTE: This method assumes that the argument string is
+     * UTF-8 encoded even though ASN.1 primitive 
+     * such as IA5String or PrintableString doesn't
+     * support all of UTF-8 characters.
+     * @example
+     * o = new KJUR.asn1.DERIA5String();
+     * o.setString("abc");
+     * o.setString("あいう");
      */
     this.setString = function(newS) {
         this.hTLV = null;
         this.isModified = true;
         this.s = newS;
-        this.hV = stohex(this.s);
+        this.hV = utf8tohex(this.s).toLowerCase();
     };
 
     /**
