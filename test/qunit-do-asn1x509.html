@@ -266,26 +266,39 @@ equal(o.getEncodedHex(), "300b0609608648016503040302", "aaa");
 });
 
 test("GeneralName class test", function() {
-  var o1 = new KJUR.asn1.x509.GeneralName({'rfc822':'u1@foo.com'});
-  equal(o1.getEncodedHex(), "810a753140666f6f2e636f6d", "constructor rfc822 u1@foo.com");
+  var o;
+  o = new KJUR.asn1.x509.GeneralName({'rfc822':'u1@foo.com'});
+  equal(o.getEncodedHex(), "810a753140666f6f2e636f6d", "constructor rfc822 u1@foo.com");
 
-  var o2 = new KJUR.asn1.x509.GeneralName({'dns':'foo.com'});
-  equal(o2.getEncodedHex(), "8207666f6f2e636f6d", "constructor dns foo.com");
+  o = new KJUR.asn1.x509.GeneralName({'dns':'foo.com'});
+  equal(o.getEncodedHex(), "8207666f6f2e636f6d", "constructor dns foo.com");
 
-  var o3 = new KJUR.asn1.x509.GeneralName({'uri':'http://aaa.com/'});
-  equal(o3.getEncodedHex(), "860f687474703a2f2f6161612e636f6d2f", "constructor uri http://aaa.com/");
+  o = new KJUR.asn1.x509.GeneralName({'uri':'http://aaa.com/'});
+  equal(o.getEncodedHex(), "860f687474703a2f2f6161612e636f6d2f", "constructor uri http://aaa.com/");
 
-  var o4 = new KJUR.asn1.x509.GeneralName({certissuer: z4TSACERT});
-  equal(o4.getEncodedHex(), "a41d301b310b3009060355040613025553310c300a060355040a0c03434131", "constructor certissuer cert1");
+  o = new KJUR.asn1.x509.GeneralName({certissuer: z4TSACERT});
+  equal(o.getEncodedHex(), "a41d301b310b3009060355040613025553310c300a060355040a0c03434131", "constructor certissuer cert1");
 
-  var o5 = new KJUR.asn1.x509.GeneralName({certsubj: z4TSACERT});
-  equal(o5.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b06035504030c0454534131", "constructor certsubj cert1");
+  o = new KJUR.asn1.x509.GeneralName({certsubj: z4TSACERT});
+  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b06035504030c0454534131", "constructor certsubj cert1");
 
-  var o6 = new KJUR.asn1.x509.GeneralName({dn: '/C=US/O=Test'});
-  equal(o6.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "dn /C=US/O=Test");
+  o = new KJUR.asn1.x509.GeneralName({dn: '/C=US/O=Test'});
+  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "dn /C=US/O=Test");
 
-  var o7 = new KJUR.asn1.x509.GeneralName({ldapdn: 'O=Test,C=US'});
-  equal(o7.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "ldapdn O=Test,C=US");
+  o = new KJUR.asn1.x509.GeneralName({ldapdn: 'O=Test,C=US'});
+  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "ldapdn O=Test,C=US");
+
+  o = new KJUR.asn1.x509.GeneralName({ip: '192.168.1.1'});
+  equal(o.getEncodedHex(), "8704c0a80101", "ip: 192.168.1.1");
+
+  o = new KJUR.asn1.x509.GeneralName({ip: '2001:db8::4'});
+  equal(o.getEncodedHex(), "871020010db8000000000000000000000004", "ip: 2001:db8::4");
+
+  o = new KJUR.asn1.x509.GeneralName({ip: '2606:4700:4700::1111'});
+  equal(o.getEncodedHex(), "871026064700470000000000000000001111", "ip: 2606:4700:4700::1111");
+
+  o = new KJUR.asn1.x509.GeneralName({ip: 'c0a80101'});
+  equal(o.getEncodedHex(), "8704c0a80101", "ip: c0a80101");
 });
 
 test("GeneralNames class test", function() {

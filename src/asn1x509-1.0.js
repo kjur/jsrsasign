@@ -1,4 +1,4 @@
-/* asn1x509-1.1.3.js (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-1.1.4.js (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.0 asn1x509 1.1.3 (2018-Apr-03)
+ * @version jsrsasign 8.0.0 asn1x509 1.1.4 (2018-Apr-04)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -2055,9 +2055,11 @@ YAHOO.lang.extend(KJUR.asn1.x509.AlgorithmIdentifier, KJUR.asn1.ASN1Object);
  * <li>ldapdn - directoryName[4] (ex. O=Test,C=US)</li>
  * <li>certissuer - directoryName[4] (PEM or hex string of cert)</li>
  * <li>certsubj - directoryName[4] (PEM or hex string of cert)</li>
+ * <li>ip - iPAddress[7] (ex. 192.168.1.1, 2001:db3::43, 3faa0101...)</li>
  * </ul>
  * NOTE1: certissuer and certsubj were supported since asn1x509 1.0.10.<br/>
  * NOTE2: dn and ldapdn were supported since jsrsasign 6.2.3 asn1x509 1.0.19.<br/>
+ * NOTE3: ip were supported since jsrsasign 8.0.10 asn1x509 1.1.4.<br/>
  *
  * Here is definition of the ASN.1 syntax:
  * <pre>
@@ -2082,15 +2084,19 @@ YAHOO.lang.extend(KJUR.asn1.x509.AlgorithmIdentifier, KJUR.asn1.ASN1Object);
  * gn = new KJUR.asn1.x509.GeneralName({ldapdn:     'O=Test,C=US'});
  * gn = new KJUR.asn1.x509.GeneralName({certissuer: certPEM});
  * gn = new KJUR.asn1.x509.GeneralName({certsubj:   certPEM});
+ * gn = new KJUR.asn1.x509.GeneralName({ip:         '192.168.1.1'});
+ * gn = new KJUR.asn1.x509.GeneralName({ip:         '2001:db4::4:1'});
+ * gn = new KJUR.asn1.x509.GeneralName({ip:         'c0a80101'});
  */
 KJUR.asn1.x509.GeneralName = function(params) {
     KJUR.asn1.x509.GeneralName.superclass.constructor.call(this);
     var asn1Obj = null,
 	type = null,
-	pTag = {rfc822: '81', dns: '82', dn: 'a4',  uri: '86'},
+	pTag = {rfc822: '81', dns: '82', dn: 'a4',  uri: '86', ip: '87'},
 	_KJUR = KJUR,
 	_KJUR_asn1 = _KJUR.asn1,
 	_DERSequence = _KJUR_asn1.DERSequence,
+	_DEROctetString = _KJUR_asn1.DEROctetString,
 	_DERIA5String = _KJUR_asn1.DERIA5String,
 	_DERTaggedObject = _KJUR_asn1.DERTaggedObject,
 	_ASN1Object = _KJUR_asn1.ASN1Object,
@@ -2171,6 +2177,25 @@ KJUR.asn1.x509.GeneralName = function(params) {
 	    var dnHex = x.getSubjectHex();
 	    v = new _ASN1Object();
 	    v.hTLV = dnHex;
+	}
+
+	if (params.ip !== undefined) {
+	    this.type = 'ip';
+	    this.explicit = false;
+	    var ip = params.ip;
+	    var hIP;
+	    var malformedIPMsg = "malformed IP address";
+	    if (ip.match(/^[0-9.]+[.][0-9.]+$/)) { // ipv4
+		hIP = intarystrtohex("[" + ip.split(".").join(",") + "]");
+		if (hIP.length !== 8) throw malformedIPMsg;
+	    } else if (ip.match(/^[0-9A-Fa-f:]+:[0-9A-Fa-f:]+$/)) { // ipv6
+		hIP = ipv6tohex(ip);
+	    } else if (ip.match(/^([0-9A-Fa-f][0-9A-Fa-f]){1,}$/)) { // hex
+		hIP = ip;
+	    } else {
+		throw malformedIPMsg;
+	    }
+	    v = new _DEROctetString({hex: hIP});
 	}
 
         if (this.type == null)

@@ -512,9 +512,11 @@ following properties:
 <li>ldapdn - directoryName[4] (ex. O=Test,C=US)</li>
 <li>certissuer - directoryName[4] (PEM or hex string of cert)</li>
 <li>certsubj - directoryName[4] (PEM or hex string of cert)</li>
+<li>ip - iPAddress[7] (ex. 192.168.1.1, 2001:db3::43, 3faa0101...)</li>
 </ul>
 NOTE1: certissuer and certsubj were supported since asn1x509 1.0.10.<br/>
 NOTE2: dn and ldapdn were supported since jsrsasign 6.2.3 asn1x509 1.0.19.<br/>
+NOTE3: ip were supported since jsrsasign 8.0.10 asn1x509 1.1.4.<br/>
 
 Here is definition of the ASN.1 syntax:
 <pre>
@@ -541,7 +543,10 @@ gn = new KJUR.asn1.x509.GeneralName({uri:        'http://aaa.com/'});
 gn = new KJUR.asn1.x509.GeneralName({dn:         '/C=US/O=Test'});
 gn = new KJUR.asn1.x509.GeneralName({ldapdn:     'O=Test,C=US'});
 gn = new KJUR.asn1.x509.GeneralName({certissuer: certPEM});
-gn = new KJUR.asn1.x509.GeneralName({certsubj:   certPEM});</pre>
+gn = new KJUR.asn1.x509.GeneralName({certsubj:   certPEM});
+gn = new KJUR.asn1.x509.GeneralName({ip:         '192.168.1.1'});
+gn = new KJUR.asn1.x509.GeneralName({ip:         '2001:db4::4:1'});
+gn = new KJUR.asn1.x509.GeneralName({ip:         'c0a80101'});</pre>
 				
 				
 				

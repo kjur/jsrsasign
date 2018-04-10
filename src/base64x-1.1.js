@@ -1,27 +1,24 @@
-/* base64x-1.1.12 (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* base64x-1.1.13 (c) 2012-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * version: 1.1.12 (2017-Jun-03)
+ * version: 1.1.13 (2018-Apr-07)
  *
- * Copyright (c) 2012-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2012-2018 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
- * https://kjur.github.io/jsjws/license/
+ * https://kjur.github.io/jsrsasign/license
  *
  * The above copyright and license notice shall be 
  * included in all copies or substantial portions of the Software.
- *
- * DEPENDS ON:
- *   - base64.js - Tom Wu's Base64 library
  */
 
 /**
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.1 base64x 1.1.12 (2017-Jun-03)
+ * @version jsrsasign 8.0.10 base64x 1.1.13 (2018-Apr-06)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -740,6 +737,130 @@ function uricmptohex(s) {
  */
 function hextouricmp(s) {
   return s.replace(/(..)/g, "%$1");
+}
+
+// ==== hex / ipv6 =================================
+
+/**
+ * convert any IPv6 address to a 16 byte hexadecimal string
+ * @function
+ * @param s string of IPv6 address
+ * @return {String} 16 byte hexadecimal string of IPv6 address
+ * @description
+ * This function converts any IPv6 address representation string
+ * to a 16 byte hexadecimal string of address.
+ * @example
+ * 
+ */
+function ipv6tohex(s) {
+  var msgMalformedAddress = "malformed IPv6 address";
+  if (! s.match(/^[0-9A-Fa-f:]+$/))
+    throw msgMalformedAddress;
+
+  // 1. downcase
+  s = s.toLowerCase();
+
+  // 2. expand ::
+  var num_colon = s.split(':').length - 1;
+  if (num_colon < 2) throw msgMalformedAddress;
+  var colon_replacer = ':'.repeat(7 - num_colon + 2);
+  s = s.replace('::', colon_replacer);
+
+  // 3. fill zero
+  var a = s.split(':');
+  if (a.length != 8) throw msgMalformedAddress;
+  for (var i = 0; i < 8; i++) {
+    a[i] = ("0000" + a[i]).slice(-4);
+  }
+  return a.join('');
+}
+
+/**
+ * convert a 16 byte hexadecimal string to RFC 5952 canonicalized IPv6 address<br/>
+ * @name hextoipv6
+ * @function
+ * @param {String} s hexadecimal string of 16 byte IPv6 address
+ * @return {String} IPv6 address string canonicalized by RFC 5952
+ * @since jsrsasign 8.0.10 base64x 1.1.13
+ * @description
+ * This function converts a 16 byte hexadecimal string to 
+ * <a href="https://tools.ietf.org/html/rfc5952">RFC 5952</a>
+ * canonicalized IPv6 address string.
+ * 
+ */
+function hextoipv6(s) {
+  if (! s.match(/^[0-9A-Fa-f]{32}$/))
+    throw "malformed IPv6 address octet";
+
+  // 1. downcase
+  s = s.toLowerCase();
+
+  // 2. split 4
+  var r = new RegExp(".{1," + 4 + "}", "g");
+  var a = s.match(r);
+  // 3. trim leading 0
+  for (var i = 0; i < 8; i++) {
+    a[i] = a[i].replace(/^0+/, "");
+    if (a[i] == '') a[i] = '0';
+  }
+  s = a.join(":");
+
+  // 4. shrink ::
+  var re = new RegExp(/(0:){1,}0/g);
+  var aZero = s.match(re);
+  if (aZero === null) return s;
+  var item = '';
+  for (var i = 0; i < aZero.length; i++) {
+    if (aZero[i].length > item.length) item = aZero[i];
+  }
+  var prefix = "";
+  var suffix = "";
+  if (s.startsWith(item)) prefix = ':';
+  if (s.endsWith(item)) suffix = ":";
+  return prefix + s.replace(item, '') + suffix;
+}
+
+// ==== hex / ipv6 =================================
+
+/**
+ * convert a hexadecimal string to IP addresss<br/>
+ * @name hextoip
+ * @function
+ * @param {String} s hexadecimal string of IP address
+ * @return {String} IP address string
+ * @since jsrsasign 8.0.10 base64x 1.1.13
+ * @description
+ * This function converts a hexadecimal string of IPv4 or 
+ * IPv6 address to IPv4 or IPv6 address string.
+ * If byte length is not 4 nor 16, this returns a
+ * hexadecimal string without conversion.
+ * @see {@link hextoipv6}
+ * @example
+ * hextoip("c0a80101") &rarr "192.168.1.1"
+ * hextoip("871020010db8000000000000000000000004") &rarr "2001:db8::4"
+ * hextoip("c0a801010203") &rarr "c0a801010203" // 6 bytes
+ * hextoip("zzz")) &rarr raise exception because of not hexadecimal
+ */
+function hextoip(s) {
+  var malformedMsg = "malformed hex value";
+  if (! s.match(/^([0-9A-Fa-f][0-9A-Fa-f]){1,}$/))
+    throw malformedMsg;
+  if (s.length == 8) { // ipv4
+    var ip;
+    try {
+      ip = parseInt(s.substr(0, 2), 16) + "." +
+           parseInt(s.substr(2, 2), 16) + "." +
+           parseInt(s.substr(4, 2), 16) + "." +
+           parseInt(s.substr(6, 2), 16);
+      return ip;
+    } catch (ex) {
+      throw malformedMsg;
+    }
+  } else if (s.length == 32) {
+    return hextoipv6(s);
+  } else {
+    return s;
+  }
 }
 
 // ==== URIComponent ================================

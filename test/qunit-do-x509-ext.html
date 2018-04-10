@@ -141,6 +141,34 @@ huwF7BwiYT9T3KZrcukwsj5BUinH75i4
 -----END CERTIFICATE-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+// _test/0cert_sites/ip1.1.1.1.cer
+var cfip1111PEM = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIID9DCCA3qgAwIBAgIQBWzetBRl/ycHFsBukRYuGTAKBggqhkjOPQQDAjBMMQsw
+CQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMSYwJAYDVQQDEx1EaWdp
+Q2VydCBFQ0MgU2VjdXJlIFNlcnZlciBDQTAeFw0xODAzMzAwMDAwMDBaFw0yMDAz
+MjUxMjAwMDBaMGwxCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMN
+U2FuIEZyYW5jaXNjbzEZMBcGA1UEChMQQ2xvdWRmbGFyZSwgSW5jLjEdMBsGA1UE
+AwwUKi5jbG91ZGZsYXJlLWRucy5jb20wWTATBgcqhkjOPQIBBggqhkjOPQMBBwNC
+AASyRQsxrFBjziHmfDQjGsXBU0WWl3oxh7vg6h2V9f8lBMp18PY/td9R6VvJPa20
+AwVzIJI+dL6OSxviaIZEbmK7o4ICHDCCAhgwHwYDVR0jBBgwFoAUo53mH/naOU/A
+buiRy5Wl2jHiCp8wHQYDVR0OBBYEFN+XTeVDs7BBp0LykM+Jf64SV4ThMGMGA1Ud
+EQRcMFqCFCouY2xvdWRmbGFyZS1kbnMuY29thwQBAQEBhwQBAAABghJjbG91ZGZs
+YXJlLWRucy5jb22HECYGRwBHAAAAAAAAAAAAERGHECYGRwBHAAAAAAAAAAAAEAEw
+DgYDVR0PAQH/BAQDAgeAMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjBp
+BgNVHR8EYjBgMC6gLKAqhihodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vc3NjYS1l
+Y2MtZzEuY3JsMC6gLKAqhihodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vc3NjYS1l
+Y2MtZzEuY3JsMEwGA1UdIARFMEMwNwYJYIZIAYb9bAEBMCowKAYIKwYBBQUHAgEW
+HGh0dHBzOi8vd3d3LmRpZ2ljZXJ0LmNvbS9DUFMwCAYGZ4EMAQICMHsGCCsGAQUF
+BwEBBG8wbTAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29tMEUG
+CCsGAQUFBzAChjlodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vRGlnaUNlcnRF
+Q0NTZWN1cmVTZXJ2ZXJDQS5jcnQwDAYDVR0TAQH/BAIwADAKBggqhkjOPQQDAgNo
+ADBlAjEAjoyy2Ogh1i1/Kh9+psMc1OChlQIvQF6AkojZS8yliar6m8q5nqC3qe0h
+HR0fExwLAjAueWRnHX4QJ9loqMhsPk3NB0Cs0mStsNDNG6/DpCYw7XmjoG3y1LS7
+ZkZZmqNn2Q8=
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
 // _test/0cert_sites/danmarksapotuser1.cer
 var danmarksUser1PEM = (function() {/*
 -----BEGIN CERTIFICATE-----
@@ -357,6 +385,17 @@ test("getExtSubjectAltName github.com", function() {
   var x = new X509();
   x.readCertPEM(certGithubPEM);
   deepEqual(x.getExtSubjectAltName(), ["github.com", "www.github.com"], "for GitHub.com site");
+});
+
+test("getExtSubjectAltName ip1.1.1.1", function() {
+  var x = new X509();
+  x.readCertPEM(cfip1111PEM);
+  deepEqual(x.getExtSubjectAltName2(), [
+    ["DNS", "*.cloudflare-dns.com"],
+    ["IP", "1.1.1.1"], ["IP", "1.0.0.1"], 
+    ["DNS", "cloudflare-dns.com"],
+    ["IP", "2606:4700:470:1111"], ["IP", "2606:4700:470:1001"]
+  ], "ip1.1.1.1 site");
 });
 
 test("getExtSubjectAltName with DNSx2 IPx2", function () {

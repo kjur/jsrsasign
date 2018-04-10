@@ -1,4 +1,4 @@
-/* x509-1.1.19.js (c) 2012-2019 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-1.1.20.js (c) 2012-2018 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.6 x509 1.1.19 (2018-Feb-03)
+ * @version jsrsasign 8.0.10 x509 1.1.20 (2018-Apr-09)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -759,14 +759,8 @@ function X509() {
 		result.push(["URI", gnValueStr]);
 	    }
 	    if (gnTag === "87") { // iPAddress [7]
-		try {
-		    gnValueStr = 
-			parseInt(gnValueHex.substr(0, 2), 16) + "." +
-			parseInt(gnValueHex.substr(2, 2), 16) + "." +
-			parseInt(gnValueHex.substr(4, 2), 16) + "." +
-			parseInt(gnValueHex.substr(6, 2), 16);
-		    result.push(["IP", gnValueStr]);
-		} catch (ex) {};
+		gnValueStr = hextoip(gnValueHex);
+		result.push(["IP", gnValueStr]);
 	    }
 	}
 	return result;
