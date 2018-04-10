@@ -986,7 +986,8 @@ X509 class provides following functionality:
   <li>subjectKeyIdentifier - <a href="../symbols/X509.html#getExtSubjectKeyIdentifier">X509#getExtSubjectKeyIdentifier</a></li>
   <li>authorityKeyIdentifier - <a href="../symbols/X509.html#getExtAuthorityKeyIdentifier">X509#getExtAuthorityKeyIdentifier</a></li>
   <li>extKeyUsage - <a href="../symbols/X509.html#getExtExtKeyUsageName">X509#getExtExtKeyUsageName</a></li>
-  <li>subjectAltName - <a href="../symbols/X509.html#getExtSubjectAltName">X509#getExtSubjectAltName</a></li>
+  <li>subjectAltName(DEPRECATED) - <a href="../symbols/X509.html#getExtSubjectAltName">X509#getExtSubjectAltName</a></li>
+  <li>subjectAltName2 - <a href="../symbols/X509.html#getExtSubjectAltName2">X509#getExtSubjectAltName2</a></li>
   <li>cRLDistributionPoints - <a href="../symbols/X509.html#getExtCRLDistributionPointsURI">X509#getExtCRLDistributionPointsURI</a></li>
   <li>authorityInfoAccess - <a href="../symbols/X509.html#getExtAIAInfo">X509#getExtAIAInfo</a></li>
   <li>certificatePolicies - <a href="../symbols/X509.html#getExtCertificatePolicies">X509#getExtCertificatePolicies</a></li>
@@ -1652,6 +1653,7 @@ x.getExtSubjectAltName2() &rarr;
  ["DNS",  "example.org"],
  ["MAIL", "foo@example.com"],
  ["IP",   "192.168.1.1"],
+ ["IP",   "2001:db8::2:1"],
  ["DN",   "/C=US/O=TEST1"]]</pre>
 					
 					

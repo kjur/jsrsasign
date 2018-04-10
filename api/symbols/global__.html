@@ -625,6 +625,29 @@ string with new lines for each 64 characters.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#hextoip">hextoip</a></b>(s)
+								</div>
+								<div class="description">convert a hexadecimal string to IP addresss<br/>
+This function converts a hexadecimal string of IPv4 or 
+IPv6 address to IPv4 or IPv6 address string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#hextoipv6">hextoipv6</a></b>(s)
+								</div>
+								<div class="description">convert a 16 byte hexadecimal string to RFC 5952 canonicalized IPv6 address<br/>
+This function converts a 16 byte hexadecimal string to 
+<a href="https://tools.ietf.org/html/rfc5952">RFC 5952</a>
+canonicalized IPv6 address string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#hextopem">hextopem</a></b>(dataHex, pemHeader)
 								</div>
 								<div class="description">get PEM string from hexadecimal data and header string
@@ -677,6 +700,17 @@ for two's complement representation.</div>
 								<div class="fixedFont"><b><a href="../symbols/global__.html#intarystrtohex">intarystrtohex</a></b>(s)
 								</div>
 								<div class="description">convert string of integer array to hexadecimal string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#ipv6tohex">ipv6tohex</a></b>(s)
+								</div>
+								<div class="description">convert any IPv6 address to a 16 byte hexadecimal string
+This function converts any IPv6 address representation string
+to a 16 byte hexadecimal string of address.</div>
 							</td>
 						</tr>
 					
@@ -1777,6 +1811,131 @@ hexadecimal leading "0" is automatically added.
 
 					<hr />
 				
+					<a name="hextoip"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>hextoip</b>(s)
+					
+					</div>
+					<div class="description">
+						convert a hexadecimal string to IP addresss<br/>
+This function converts a hexadecimal string of IPv4 or 
+IPv6 address to IPv4 or IPv6 address string.
+If byte length is not 4 nor 16, this returns a
+hexadecimal string without conversion.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">hextoip("c0a80101") &rarr "192.168.1.1"
+hextoip("871020010db8000000000000000000000004") &rarr "2001:db8::4"
+hextoip("c0a801010203") &rarr "c0a801010203" // 6 bytes
+hextoip("zzz")) &rarr raise exception because of not hexadecimal</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>hexadecimal string of IP address</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 8.0.10 base64x 1.1.13</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> IP address string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="hextoipv6"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>hextoipv6</b>(s)
+					
+					</div>
+					<div class="description">
+						convert a 16 byte hexadecimal string to RFC 5952 canonicalized IPv6 address<br/>
+This function converts a 16 byte hexadecimal string to 
+<a href="https://tools.ietf.org/html/rfc5952">RFC 5952</a>
+canonicalized IPv6 address string.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>hexadecimal string of 16 byte IPv6 address</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 8.0.10 base64x 1.1.13</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> IPv6 address string canonicalized by RFC 5952</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="hextopem"> </a>
 					<div class="fixedFont">
 					
@@ -2136,6 +2295,58 @@ have extra space or newline string so that they will be ignored.
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> hexadecimal string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="ipv6tohex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>ipv6tohex</b>(s)
+					
+					</div>
+					<div class="description">
+						convert any IPv6 address to a 16 byte hexadecimal string
+This function converts any IPv6 address representation string
+to a 16 byte hexadecimal string of address.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code"></pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>s</b>
+									
+								</dt>
+								<dd>string of IPv6 address</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> 16 byte hexadecimal string of IPv6 address</dd>
 							
 							</dl>
 						
