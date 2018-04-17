@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.10 to 8.0.11 (2018-Apr-17)
+  - asn1x509 1.1.4 to 1.1.5
+    - X500Name.setByString fix for attribute value with slash.
+  - testcase added to confirm above fixes.
+    - qunit-do-asn1x509.html
+
 * Changes from 8.0.9 to 8.0.10 (2018-Apr-09)
   - IPv6 address support in certificate
   - LICENSE.txt

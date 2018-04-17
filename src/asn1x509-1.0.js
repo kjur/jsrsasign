@@ -1,4 +1,4 @@
-/* asn1x509-1.1.4.js (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-1.1.5.js (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.0 asn1x509 1.1.4 (2018-Apr-04)
+ * @version jsrsasign 8.0.0 asn1x509 1.1.5 (2018-Apr-17)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1409,15 +1409,32 @@ KJUR.asn1.x509.X500Name = function(params) {
      * @function
      * @param {String} dnStr distinguished name by string (ex. /C=US/O=aaa)
      * @description
+     * Sets distinguished name by string. 
+     * dnStr must be formatted as 
+     * "/type0=value0/type1=value1/type2=value2...".
+     * No need to escape a slash in an attribute value.
      * @example
      * name = new KJUR.asn1.x509.X500Name();
      * name.setByString("/C=US/O=aaa/OU=bbb/CN=foo@example.com");
+     * // no need to escape slash in an attribute value
+     * name.setByString("/C=US/O=aaa/CN=1980/12/31");
      */
     this.setByString = function(dnStr) {
         var a = dnStr.split('/');
         a.shift();
-        for (var i = 0; i < a.length; i++) {
-            this.asn1Array.push(new _KJUR_asn1_x509.RDN({'str':a[i]}));
+
+	var a1 = [];
+	for (var i = 0; i < a.length; i++) {
+	  if (a[i].match(/^[^=]+=.+$/)) {
+	    a1.push(a[i]);
+	  } else {
+	    var lastidx = a1.length - 1;
+	    a1[lastidx] = a1[lastidx] + "/" + a[i];
+	  }
+	}
+
+        for (var i = 0; i < a1.length; i++) {
+            this.asn1Array.push(new _KJUR_asn1_x509.RDN({'str':a1[i]}));
         }
     };
 

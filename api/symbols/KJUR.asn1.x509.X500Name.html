@@ -553,7 +553,7 @@ format to LDAP(RFC 2253) format.</div>
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.X500Name.html#setByString">setByString</a></b>(dnStr)
 								</div>
 								<div class="description">set DN by OpenSSL oneline distinguished name string<br/>
-</div>
+Sets distinguished name by string.</div>
 							</td>
 						</tr>
 					
@@ -890,7 +890,10 @@ name.setByObject({C: "US", O: "aaa", CN="http://example.com/"1});</pre>
 					</div>
 					<div class="description">
 						set DN by OpenSSL oneline distinguished name string<br/>
-
+Sets distinguished name by string. 
+dnStr must be formatted as 
+"/type0=value0/type1=value1/type2=value2...".
+No need to escape a slash in an attribute value.
 						
 						
 					</div>
@@ -898,7 +901,9 @@ name.setByObject({C: "US", O: "aaa", CN="http://example.com/"1});</pre>
 					
 					
 					<pre class="code">name = new KJUR.asn1.x509.X500Name();
-name.setByString("/C=US/O=aaa/OU=bbb/CN=foo@example.com");</pre>
+name.setByString("/C=US/O=aaa/OU=bbb/CN=foo@example.com");
+// no need to escape slash in an attribute value
+name.setByString("/C=US/O=aaa/CN=1980/12/31");</pre>
 					
 					
 					

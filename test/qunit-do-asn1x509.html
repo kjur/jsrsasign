@@ -159,6 +159,11 @@ test("X500Name class test", function() {
   equal(o.getEncodedHex(),
          "301b310b3009060355040613025553310c300a060355040a0c0361612f",
          "constructor obj C:US, O:aa/");
+
+  o = new KJUR.asn1.x509.X500Name({'str': '/O=a/O=b/b/O=c/c/c'});
+  equal(o.getEncodedHex(),
+         "302a310a3008060355040a0c0161310c300a060355040a0c03622f62310e300c060355040a0c05632f632f63",
+         "constructor str /O=a/O=b/b/O=c/c/c");
 });
 
 test("RDN class test", function() {
