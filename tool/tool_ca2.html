@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="jsrsasign : The 'jsrsasign' (RSA-Sign JavaScript Library) is a open source free pure JavaScript implementation of PKCS#1 v2.1 RSASSA-PKCS1-v1_5 RSA signing and validation algorithm." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+    <title>JS Certification Authority :)</title>
+<!-- for pkcs5pkey -->
+<script language="JavaScript" type="text/javascript" src="../jsrsasign-all-min.js"></script>
+<script language="JavaScript" type="text/javascript">
+function doIssue() {
+  var f1 = document.form1;
+
+  f1.newcert1.value = "issuing ...";
+
+  var certparam;
+  try {
+    certparam = JSON.parse(f1.certparam1.value);
+  } catch (ex) {
+    f1.newcert1.value = "wrong certificate parameter: " + ex;
+    return;
+  }
+
+  if (certparam.sbjpubkey === "%PUBKEY%") {
+    var pubkey = KEYUTIL.getKey(f1.pubkey1.value);
+    certparam.sbjpubkey = pubkey;
+  }
+
+  if (certparam.cakey === "%PRVKEY%") {
+    var prvkey;
+    if (f1.cakeypass1 !== "") {
+      prvkey = KEYUTIL.getKey(f1.cakey1.value, f1.cakeypass1.value);
+    } else {
+      prvkey = KEYUTIL.getKey(f1.cakey1.value);
+    }
+    certparam.cakey = prvkey;
+  }
+
+  f1.newcert1.value = KJUR.asn1.x509.X509Util.newCertPEM(certparam);
+}
+</script>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <h1 id="project_title">JS Certification Authority by parameter</h1>
+          <h2 id="project_tagline">This is the world's first test certification authority by pure JavaScript ;)</h2>
+
+          <a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+          <a href="https://github.com/kjur/jsrsasign/tags/" target="_blank">DOWNLOADS</a> | 
+          <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+          <a href="https://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
+          <a href="https://kjur.github.io/jsrsasign/index.html#demo" target="_blank">DEMOS</a> | 
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+<!-- now editing -->
+<form name="form1">
+<h4>(Step1) Fill CA private key (PEM formatted PKCS#5 RSA key) and passcode</h4>
+<textarea name="cakey1" cols="80" rows="6">-----BEGIN RSA PRIVATE KEY-----
+Proc-Type: 4,ENCRYPTED
+DEK-Info: DES-EDE3-CBC,A6AE7A163CC2609A
+
+DtnpA2/qSFl0xKMETlh4oMxeo7PZSpX4+7Oo6yNvncNBGzzdLerMfo9vmjNGRJY2
+L2DhpI2XxQwNTlNZFKi/9kjDOV79d14Pkw14AC74ZpiRZhEQoXcxHVuQPJir2ym5
+oLWGQ1o3e6W0iIJJSPV9REv82TtBAOAhs6yKcm8pRhXlMPh1v4x5uYJJ7QhJBzii
+FMQUkY+fsFCU5KSvN2mvNV71pW63Tk7p8y61+UjZxvC3TPv5JiY+7hsNGw/GqwPS
+Zykh1G2YT6HhFp/Ym5ngbZi8UiuR7rtwR/zKLSJzKoGU3aWUKUssWLLUUZfxrKYa
+XiT4w49daOJmFJ7TcYo/w/9NTHDqQjFJUmUAbzluWgNRLv43MX0/rOzYprkp2Jl0
+mkzy+YGw5PR7zyLheMPrork14eBY/uVR327SsGEogP9Y4t8wlwp9dSaxmaPe7/yi
+nQRqPSJqbD+9gJqZRYrfN4cq+dibu2v/P1z7rZ/nmKPxiq4m4OSOl2ah8ZuQjPkd
+lyD5LXMUYRVX9BaKMYGT8YwlvUJJ0LgSYYUnyDzPm3posWoj+BNuLnybRDvHCnGZ
+DxPlHOI47swSQ4j4Khcv3O1V/UXIoREw+Fz7IGKqUb7Ku9cNjr7h4zJrbLRwksZ7
+VtTH73u+IB98qkDBIaTKNSEJ8DsxQ6xFZTnfZsYcDvXVfoUoF1sfL0sTmgvrNqUn
+OG9V34LwWOxfMc/SIFX/06u8TuAow+7PH0rvLzqdRrZme8iG4bNNcQClaiJzcFjC
+ZKazMs0Pt1sc/htY3SjXEqGvdlXJWg8q5nOOtx6TBAbJphtNrfmRBuQK5jV4g4bs
+W1p1q7KHvyq3qONIRPtGCT10sB7Ss5PT1WxscXyWDKMnPtEFCX85fNCMEfqSUsFd
+ny2kq8CDcVWYeoAbWZ8wi/QgJFoVE3/ktVxUHMSbH2f4mbpYcHEgD7A+xNQCYgIC
+bAUZqMGnmiXXVBRCROSsYSaM0AgeXMd1htvqvuLsWSsJpbD5eAbMMSIyrDKbHkU5
+A8oe013Woa/M7OReXTC/lUp4XE/IjK19aXqN2A6LbU15kMx5e1inDZ3ZLQaMb2+j
+fkysSkGpQRxoD95BmuiQJmXfRl+gHt3EX4kd6E9an8/t6jrRsfgXFN98eCiB5lGw
+Q35OzV3EeYV6n4QSEOJgkB42b8oeGbmpHf6dEWVksTtGNJRNYW0elXVCW2L/6bOA
+PiPQR2y5fbaNntBjsisGG9XDMK7Nexn+NOQYqBvEr5Z4p/odci2q/yPvkWdIYW6q
+NyEJG3R48H4OB5ZfXa168oQolke//2J1Bz9BYcxHRtT/WnfQeU5XS1LXbuJ83Q51
+/g6HqxRCng+4cLHuOTZ5sZa9qelbWllS8/D21CUGzUP28/2IGgdCqM+goZQZUH4E
+0PSEC4YbhvNqz4g8+TG+WKYFJOyTk0ntYkSitQAzDmA/rIQuIbQ9+JAj4g+fCjXJ
+gpeOxNW7g4FC0ZrzJhHiblwk7i7PthBDFOkEPGMDMFSMUzzkOxBcBiQ7oKVZXPuE
+ectXs6OFc5EXAkUZzgI/dsoGaqv7b1ikarKWdX1HqiRpxLO/Ol17Pg==
+-----END RSA PRIVATE KEY-----</textarea>
+<br/>
+CA KEY PASSCODE(=hoge): <input type="password" name="cakeypass1" value="hoge" size="0"/> 
+<br/>
+
+<h4>(Step2) Fill Public Key</h4>
+<textarea name="pubkey1" cols="80" rows="3">-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4qiw8PWs7PpnnC2BUEoD
+RcwXF8pq8XT1/3Hc3cuUJwX/otNefr/Bomr3dtM0ERLN3DrepCXvuzEU5FcJVDUB
+3sI+pFtjjLBXD/zJmuL3Afg91J9p79+Dm+43cR6wuKywVJx5DJIdswF6oQDDzhwu
+89d2V5x02aXB9LqdXkPwiO0eR5s/xHXgASl+hqDdVL9hLod3iGa9nV7cElCbcl8U
+VXNPJnQAfaiKazF+hCdl/syrIh0KCZ5opggsTJibo8qFXBmG4PkT5YbhHE11wYKI
+LwZFSvZ9iddRPQK3CtgFiBnXbVwU5t67tn9pMizHgypgsfBoeoyBrpTuc4egSCpj
+sQIDAQAB
+-----END PUBLIC KEY-----</textarea><br/>
+
+<h4>(Step3) Set certificate parameters</h4>
+<textarea name="certparam1" cols="120" rows="26">
+{
+  "serial": {"int": 4},
+  "sigalg": {"name": "SHA256withRSA"},
+  "issuer": {"str": "/C=US/O=a"},
+  "notbefore": {"str": "150504235959Z"},
+  "notafter": {"str": "200504235959Z"},
+  "subject": {"str": "/C=US/O=b"},
+  "sbjpubkey": "%PUBKEY%",
+  "ext": [
+    {"basicConstraints": {"cA": false, "critical": true}},
+    {"keyUsage": {"bin": "11"}},
+    {"cRLDistributionPoints": {"uri": "http://rep.example.com/aaa.crl"}},
+    {"extKeyUsage": {"array": [{"name": "clientAuth"}]}},
+    {"subjectAltName": {"array": [
+      {"uri": "http://example.com/"},
+      {"rfc822": "user1@example.com"},
+      {"dn": "/C=US/O=example/CN=user1"},
+      {"ip": "2601:db1::4:3"}
+    ]}}
+  ],
+  "cakey": "%PRVKEY%"
+}
+</textarea><br/>
+NOTE: The keywords "%PUBKEY%" and "%PRVKEY%" will be replaced
+by keys specified above.<br/>
+
+<!-- ============================================================== -->
+<h4>(Step4) Press "Issue Certificate" button</h4>
+<input type="button" value="Issue Certificate" onClick="doIssue();"/>
+<input type="reset" name="reset" value="Reset"/>
+
+<h2>Issued Certificate</h2>
+<textarea name="newcert1" cols="80" rows="8"></textarea>
+
+</form>
+
+<!-- now editing -->
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2018 Kenji Urushima. All rights reserved.
+</div>
+      </footer>
+    </div>
+
+  </body>
+</html>

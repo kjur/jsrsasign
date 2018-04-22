@@ -202,6 +202,9 @@ test("hextoipv6", function() {
   equal(hextoipv6('20010db80000000000000000abcdef12'),
         '2001:db8::abcd:ef12',
         '2001:db8::abcd:ef12');
+  equal(hextoipv6('26064700470000000000000000001111'), // cloudflare 1.1.1.1
+        '2606:4700:4700::1111',
+        'cloudflare 2606:4700:4700::1111');
 });
 
 test("hextoip", function() {
@@ -228,7 +231,13 @@ test("hextoip", function() {
         '123456abcd');
 });
 
-
+test("iptohex", function() {
+  equal(iptohex('192.168.1.1'), 'c0a80101', 'c0a80101=192.168.1.1');
+  equal(iptohex('192.168.1.10'), 'c0a8010a', 'c0a8010a=192.168.1.10');
+  equal(iptohex('2001:db8::abcd:ef12'),
+        '20010db80000000000000000abcdef12',
+        '2001:db8::abcd:ef12');
+});
 
 });
 </script>

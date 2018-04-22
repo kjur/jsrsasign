@@ -5,12 +5,12 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* base64x-1.1.13 (c) 2012-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* base64x-1.1.14 (c) 2012-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
 <span class='line'>  5</span>  *
-<span class='line'>  6</span>  * version: 1.1.13 (2018-Apr-07)
+<span class='line'>  6</span>  * version: 1.1.14 (2018-Apr-21)
 <span class='line'>  7</span>  *
 <span class='line'>  8</span>  * Copyright (c) 2012-2018 Kenji Urushima (kenji.urushima@gmail.com)
 <span class='line'>  9</span>  *
@@ -25,7 +25,7 @@
 <span class='line'> 18</span>  * @fileOverview
 <span class='line'> 19</span>  * @name base64x-1.1.js
 <span class='line'> 20</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 21</span>  * @version jsrsasign 8.0.10 base64x 1.1.13 (2018-Apr-06)
+<span class='line'> 21</span>  * @version jsrsasign 8.0.12 base64x 1.1.14 (2018-Apr-22)
 <span class='line'> 22</span>  * @since jsrsasign 2.1
 <span class='line'> 23</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 24</span>  */</span><span class="WHIT">
@@ -793,345 +793,389 @@
 <span class='line'>786</span>  * This function converts a 16 byte hexadecimal string to 
 <span class='line'>787</span>  * &lt;a href="https://tools.ietf.org/html/rfc5952">RFC 5952&lt;/a>
 <span class='line'>788</span>  * canonicalized IPv6 address string.
-<span class='line'>789</span>  * 
-<span class='line'>790</span>  */</span><span class="WHIT">
-<span class='line'>791</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">hextoipv6</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>792</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9A-Fa-f]{32}$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>793</span> </span><span class="WHIT">    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed IPv6 address octet"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>794</span> 
-<span class='line'>795</span> </span><span class="WHIT">  </span><span class="COMM">// 1. downcase</span><span class="WHIT">
-<span class='line'>796</span> </span><span class="WHIT">  </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.toLowerCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>789</span>  * @example
+<span class='line'>790</span>  * hextoip("871020010db8000000000000000000000004") &rarr "2001:db8::4"
+<span class='line'>791</span>  * hextoip("871020010db8000000000000000000") &rarr raise exception
+<span class='line'>792</span>  * hextoip("xyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyz") &rarr raise exception
+<span class='line'>793</span>  */</span><span class="WHIT">
+<span class='line'>794</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">hextoipv6</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>795</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9A-Fa-f]{32}$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>796</span> </span><span class="WHIT">    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed IPv6 address octet"</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>797</span> 
-<span class='line'>798</span> </span><span class="WHIT">  </span><span class="COMM">// 2. split 4</span><span class="WHIT">
-<span class='line'>799</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">r</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">RegExp</span><span class="PUNC">(</span><span class="STRN">".{1,"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">4</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"}"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"g"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>800</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="NAME">r</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>801</span> </span><span class="WHIT">  </span><span class="COMM">// 3. trim leading 0</span><span class="WHIT">
-<span class='line'>802</span> </span><span class="WHIT">  </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">8</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>803</span> </span><span class="WHIT">    </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">replace</span><span class="PUNC">(</span><span class="REGX">/^0+/</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>804</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'0'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>805</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>806</span> </span><span class="WHIT">  </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">a.join</span><span class="PUNC">(</span><span class="STRN">":"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>807</span> 
-<span class='line'>808</span> </span><span class="WHIT">  </span><span class="COMM">// 4. shrink ::</span><span class="WHIT">
-<span class='line'>809</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">re</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">RegExp</span><span class="PUNC">(</span><span class="REGX">/(0:){1,}0/g</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>810</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aZero</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="NAME">re</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>811</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">aZero</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>812</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">item</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>813</span> </span><span class="WHIT">  </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">aZero.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>814</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">aZero</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">item.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">item</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aZero</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>815</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>816</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">prefix</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>817</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">suffix</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>818</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.startsWith</span><span class="PUNC">(</span><span class="NAME">item</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">prefix</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">':'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>819</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.endsWith</span><span class="PUNC">(</span><span class="NAME">item</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">suffix</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">":"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>820</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">prefix</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="NAME">item</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">suffix</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>821</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>798</span> </span><span class="WHIT">  </span><span class="COMM">// 1. downcase</span><span class="WHIT">
+<span class='line'>799</span> </span><span class="WHIT">  </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.toLowerCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>800</span> 
+<span class='line'>801</span> </span><span class="WHIT">  </span><span class="COMM">// 2. split 4</span><span class="WHIT">
+<span class='line'>802</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/.{1,4}/g</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>803</span> 
+<span class='line'>804</span> </span><span class="WHIT">  </span><span class="COMM">// 3. trim leading 0</span><span class="WHIT">
+<span class='line'>805</span> </span><span class="WHIT">  </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">8</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>806</span> </span><span class="WHIT">    </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">replace</span><span class="PUNC">(</span><span class="REGX">/^0+/</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>807</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'0'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>808</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>809</span> </span><span class="WHIT">  </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">":"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">a.join</span><span class="PUNC">(</span><span class="STRN">":"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">":"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>810</span> 
+<span class='line'>811</span> </span><span class="WHIT">  </span><span class="COMM">// 4. find shrinkables :0:0:...</span><span class="WHIT">
+<span class='line'>812</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aZero</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/:(0:){2,}/g</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>813</span> 
+<span class='line'>814</span> </span><span class="WHIT">  </span><span class="COMM">// 5. no shrinkable</span><span class="WHIT">
+<span class='line'>815</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">aZero</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s.slice</span><span class="PUNC">(</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>816</span> 
+<span class='line'>817</span> </span><span class="WHIT">  </span><span class="COMM">// 6. find max length :0:0:...</span><span class="WHIT">
+<span class='line'>818</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">item</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>819</span> </span><span class="WHIT">  </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">aZero.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>820</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">aZero</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">item.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">item</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aZero</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>821</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>822</span> 
-<span class='line'>823</span> </span><span class="COMM">// ==== hex / ipv6 =================================</span><span class="WHIT">
-<span class='line'>824</span> 
-<span class='line'>825</span> </span><span class="COMM">/**
-<span class='line'>826</span>  * convert a hexadecimal string to IP addresss&lt;br/>
-<span class='line'>827</span>  * @name hextoip
-<span class='line'>828</span>  * @function
-<span class='line'>829</span>  * @param {String} s hexadecimal string of IP address
-<span class='line'>830</span>  * @return {String} IP address string
-<span class='line'>831</span>  * @since jsrsasign 8.0.10 base64x 1.1.13
-<span class='line'>832</span>  * @description
-<span class='line'>833</span>  * This function converts a hexadecimal string of IPv4 or 
-<span class='line'>834</span>  * IPv6 address to IPv4 or IPv6 address string.
-<span class='line'>835</span>  * If byte length is not 4 nor 16, this returns a
-<span class='line'>836</span>  * hexadecimal string without conversion.
-<span class='line'>837</span>  * @see {@link hextoipv6}
-<span class='line'>838</span>  * @example
-<span class='line'>839</span>  * hextoip("c0a80101") &rarr "192.168.1.1"
-<span class='line'>840</span>  * hextoip("871020010db8000000000000000000000004") &rarr "2001:db8::4"
-<span class='line'>841</span>  * hextoip("c0a801010203") &rarr "c0a801010203" // 6 bytes
-<span class='line'>842</span>  * hextoip("zzz")) &rarr raise exception because of not hexadecimal
-<span class='line'>843</span>  */</span><span class="WHIT">
-<span class='line'>844</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">hextoip</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>845</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">malformedMsg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"malformed hex value"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>846</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^([0-9A-Fa-f][0-9A-Fa-f]){1,}$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>847</span> </span><span class="WHIT">    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="NAME">malformedMsg</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>848</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">8</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">// ipv4</span><span class="WHIT">
-<span class='line'>849</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ip</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>850</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>851</span> </span><span class="WHIT">      </span><span class="NAME">ip</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">s.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>852</span> </span><span class="WHIT">           </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">s.substr</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>853</span> </span><span class="WHIT">           </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">s.substr</span><span class="PUNC">(</span><span class="NUMB">4</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='line'>854</span> </span><span class="WHIT">           </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">s.substr</span><span class="PUNC">(</span><span class="NUMB">6</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>855</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">ip</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>856</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>857</span> </span><span class="WHIT">      </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="NAME">malformedMsg</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>858</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>859</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">32</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>860</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">hextoipv6</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>861</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>862</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>863</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>864</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>865</span> 
-<span class='line'>866</span> </span><span class="COMM">// ==== URIComponent ================================</span><span class="WHIT">
-<span class='line'>867</span> </span><span class="COMM">/**
-<span class='line'>868</span>  * convert UTFa hexadecimal string to a URLComponent string such like "%67%68".&lt;br/>
-<span class='line'>869</span>  * Note that these "&lt;code>0-9A-Za-z!'()*-._~&lt;/code>" characters will not
-<span class='line'>870</span>  * converted to "%xx" format by builtin 'encodeURIComponent()' function.
-<span class='line'>871</span>  * However this 'encodeURIComponentAll()' function will convert 
-<span class='line'>872</span>  * all of characters into "%xx" format.
-<span class='line'>873</span>  * @name encodeURIComponentAll
+<span class='line'>823</span> </span><span class="WHIT">  </span><span class="COMM">// 7. shrink</span><span class="WHIT">
+<span class='line'>824</span> </span><span class="WHIT">  </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="NAME">item</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'::'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>825</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s.slice</span><span class="PUNC">(</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>826</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>827</span> 
+<span class='line'>828</span> </span><span class="COMM">// ==== hex / ip =================================</span><span class="WHIT">
+<span class='line'>829</span> 
+<span class='line'>830</span> </span><span class="COMM">/**
+<span class='line'>831</span>  * convert a hexadecimal string to IP addresss&lt;br/>
+<span class='line'>832</span>  * @name hextoip
+<span class='line'>833</span>  * @function
+<span class='line'>834</span>  * @param {String} s hexadecimal string of IP address
+<span class='line'>835</span>  * @return {String} IP address string
+<span class='line'>836</span>  * @since jsrsasign 8.0.10 base64x 1.1.13
+<span class='line'>837</span>  * @description
+<span class='line'>838</span>  * This function converts a hexadecimal string of IPv4 or 
+<span class='line'>839</span>  * IPv6 address to IPv4 or IPv6 address string.
+<span class='line'>840</span>  * If byte length is not 4 nor 16, this returns a
+<span class='line'>841</span>  * hexadecimal string without conversion.
+<span class='line'>842</span>  * @see {@link hextoipv6}
+<span class='line'>843</span>  * @example
+<span class='line'>844</span>  * hextoip("c0a80101") &rarr "192.168.1.1"
+<span class='line'>845</span>  * hextoip("871020010db8000000000000000000000004") &rarr "2001:db8::4"
+<span class='line'>846</span>  * hextoip("c0a801010203") &rarr "c0a801010203" // 6 bytes
+<span class='line'>847</span>  * hextoip("zzz")) &rarr raise exception because of not hexadecimal
+<span class='line'>848</span>  */</span><span class="WHIT">
+<span class='line'>849</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">hextoip</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>850</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">malformedMsg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"malformed hex value"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>851</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^([0-9A-Fa-f][0-9A-Fa-f]){1,}$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>852</span> </span><span class="WHIT">    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="NAME">malformedMsg</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>853</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">8</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">// ipv4</span><span class="WHIT">
+<span class='line'>854</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ip</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>855</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>856</span> </span><span class="WHIT">      </span><span class="NAME">ip</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">s.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>857</span> </span><span class="WHIT">           </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">s.substr</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>858</span> </span><span class="WHIT">           </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">s.substr</span><span class="PUNC">(</span><span class="NUMB">4</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>859</span> </span><span class="WHIT">           </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">s.substr</span><span class="PUNC">(</span><span class="NUMB">6</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>860</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">ip</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>861</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>862</span> </span><span class="WHIT">      </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="NAME">malformedMsg</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>863</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>864</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">32</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>865</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">hextoipv6</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>866</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>867</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>868</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>869</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>870</span> 
+<span class='line'>871</span> </span><span class="COMM">/**
+<span class='line'>872</span>  * convert IPv4/v6 addresss to a hexadecimal string&lt;br/>
+<span class='line'>873</span>  * @name iptohex
 <span class='line'>874</span>  * @function
-<span class='line'>875</span>  * @param {String} s hexadecimal string
-<span class='line'>876</span>  * @return {String} URIComponent string such like "%67%68"
-<span class='line'>877</span>  * @since 1.1
-<span class='line'>878</span>  */</span><span class="WHIT">
-<span class='line'>879</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">encodeURIComponentAll</span><span class="PUNC">(</span><span class="NAME">u8</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>880</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">encodeURIComponent</span><span class="PUNC">(</span><span class="NAME">u8</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>881</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">s2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>882</span> </span><span class="WHIT">  </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">s.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>883</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"%"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>884</span> </span><span class="WHIT">      </span><span class="NAME">s2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s2</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">s.substr</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>885</span> </span><span class="WHIT">      </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>886</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>887</span> </span><span class="WHIT">      </span><span class="NAME">s2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s2</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"%"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">stohex</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>888</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>889</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>890</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s2</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>891</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>892</span> 
-<span class='line'>893</span> </span><span class="COMM">// ==== new lines ================================</span><span class="WHIT">
-<span class='line'>894</span> </span><span class="COMM">/**
-<span class='line'>895</span>  * convert all DOS new line("\r\n") to UNIX new line("\n") in 
-<span class='line'>896</span>  * a String "s".
-<span class='line'>897</span>  * @name newline_toUnix
-<span class='line'>898</span>  * @function
-<span class='line'>899</span>  * @param {String} s string 
-<span class='line'>900</span>  * @return {String} converted string
-<span class='line'>901</span>  */</span><span class="WHIT">
-<span class='line'>902</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">newline_toUnix</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>903</span> </span><span class="WHIT">    </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\r\n/mg</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"\n"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>904</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>905</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>906</span> 
-<span class='line'>907</span> </span><span class="COMM">/**
-<span class='line'>908</span>  * convert all UNIX new line("\r\n") to DOS new line("\n") in 
-<span class='line'>909</span>  * a String "s".
-<span class='line'>910</span>  * @name newline_toDos
-<span class='line'>911</span>  * @function
-<span class='line'>912</span>  * @param {String} s string 
-<span class='line'>913</span>  * @return {String} converted string
-<span class='line'>914</span>  */</span><span class="WHIT">
-<span class='line'>915</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">newline_toDos</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>916</span> </span><span class="WHIT">    </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\r\n/mg</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"\n"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>917</span> </span><span class="WHIT">    </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\n/mg</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"\r\n"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>918</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>919</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>920</span> 
-<span class='line'>921</span> </span><span class="COMM">// ==== string type checker ===================</span><span class="WHIT">
-<span class='line'>922</span> 
-<span class='line'>923</span> </span><span class="COMM">/**
-<span class='line'>924</span>  * check whether a string is an integer string or not&lt;br/>
-<span class='line'>925</span>  * @name isInteger
-<span class='line'>926</span>  * @memberOf KJUR.lang.String
-<span class='line'>927</span>  * @function
-<span class='line'>928</span>  * @static
-<span class='line'>929</span>  * @param {String} s input string
-<span class='line'>930</span>  * @return {Boolean} true if a string "s" is an integer string otherwise false
-<span class='line'>931</span>  * @since base64x 1.1.7 jsrsasign 5.0.13
-<span class='line'>932</span>  * @example
-<span class='line'>933</span>  * KJUR.lang.String.isInteger("12345") &rarr; true
-<span class='line'>934</span>  * KJUR.lang.String.isInteger("123ab") &rarr; false
-<span class='line'>935</span>  */</span><span class="WHIT">
-<span class='line'>936</span> </span><span class="NAME">KJUR.lang.String.isInteger</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>937</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>938</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>939</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^-[0-9]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>940</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>941</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>942</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>943</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>944</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>945</span> 
-<span class='line'>946</span> </span><span class="COMM">/**
-<span class='line'>947</span>  * check whether a string is an hexadecimal string or not&lt;br/>
-<span class='line'>948</span>  * @name isHex
-<span class='line'>949</span>  * @memberOf KJUR.lang.String
-<span class='line'>950</span>  * @function
-<span class='line'>951</span>  * @static
-<span class='line'>952</span>  * @param {String} s input string
-<span class='line'>953</span>  * @return {Boolean} true if a string "s" is an hexadecimal string otherwise false
-<span class='line'>954</span>  * @since base64x 1.1.7 jsrsasign 5.0.13
-<span class='line'>955</span>  * @example
-<span class='line'>956</span>  * KJUR.lang.String.isHex("1234") &rarr; true
-<span class='line'>957</span>  * KJUR.lang.String.isHex("12ab") &rarr; true
-<span class='line'>958</span>  * KJUR.lang.String.isHex("12AB") &rarr; true
-<span class='line'>959</span>  * KJUR.lang.String.isHex("12ZY") &rarr; false
-<span class='line'>960</span>  * KJUR.lang.String.isHex("121") &rarr; false -- odd length
-<span class='line'>961</span>  */</span><span class="WHIT">
-<span class='line'>962</span> </span><span class="NAME">KJUR.lang.String.isHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>963</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
-<span class='line'>964</span> </span><span class="WHIT">	</span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9a-f]+$/</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9A-F]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>965</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>966</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>967</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>968</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>969</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>970</span> 
-<span class='line'>971</span> </span><span class="COMM">/**
-<span class='line'>972</span>  * check whether a string is a base64 encoded string or not&lt;br/>
-<span class='line'>973</span>  * Input string can conclude new lines or space characters.
-<span class='line'>974</span>  * @name isBase64
-<span class='line'>975</span>  * @memberOf KJUR.lang.String
-<span class='line'>976</span>  * @function
-<span class='line'>977</span>  * @static
-<span class='line'>978</span>  * @param {String} s input string
-<span class='line'>979</span>  * @return {Boolean} true if a string "s" is a base64 encoded string otherwise false
-<span class='line'>980</span>  * @since base64x 1.1.7 jsrsasign 5.0.13
-<span class='line'>981</span>  * @example
-<span class='line'>982</span>  * KJUR.lang.String.isBase64("YWE=") &rarr; true
-<span class='line'>983</span>  * KJUR.lang.String.isBase64("YW_=") &rarr; false
-<span class='line'>984</span>  * KJUR.lang.String.isBase64("YWE") &rarr; false -- length shall be multiples of 4
-<span class='line'>985</span>  */</span><span class="WHIT">
-<span class='line'>986</span> </span><span class="NAME">KJUR.lang.String.isBase64</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>987</span> </span><span class="WHIT">    </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\s+/g</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>988</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9A-Za-z+\/]+={0,3}$/</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">4</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>989</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>990</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>991</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>992</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>993</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>994</span> 
-<span class='line'>995</span> </span><span class="COMM">/**
-<span class='line'>996</span>  * check whether a string is a base64url encoded string or not&lt;br/>
-<span class='line'>997</span>  * Input string can conclude new lines or space characters.
-<span class='line'>998</span>  * @name isBase64URL
-<span class='line'>999</span>  * @memberOf KJUR.lang.String
-<span class='line'>1000</span>  * @function
-<span class='line'>1001</span>  * @static
-<span class='line'>1002</span>  * @param {String} s input string
-<span class='line'>1003</span>  * @return {Boolean} true if a string "s" is a base64url encoded string otherwise false
-<span class='line'>1004</span>  * @since base64x 1.1.7 jsrsasign 5.0.13
-<span class='line'>1005</span>  * @example
-<span class='line'>1006</span>  * KJUR.lang.String.isBase64URL("YWE") &rarr; true
-<span class='line'>1007</span>  * KJUR.lang.String.isBase64URL("YW-") &rarr; true
-<span class='line'>1008</span>  * KJUR.lang.String.isBase64URL("YW+") &rarr; false
-<span class='line'>1009</span>  */</span><span class="WHIT">
-<span class='line'>1010</span> </span><span class="NAME">KJUR.lang.String.isBase64URL</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1011</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/[+/</span><span class="PUNC">=</span><span class="PUNC">]</span><span class="PUNC">/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1012</span> </span><span class="WHIT">    </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">b64utob64</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1013</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KJUR.lang.String.isBase64</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1014</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1015</span> 
-<span class='line'>1016</span> </span><span class="COMM">/**
-<span class='line'>1017</span>  * check whether a string is a string of integer array or not&lt;br/>
-<span class='line'>1018</span>  * Input string can conclude new lines or space characters.
-<span class='line'>1019</span>  * @name isIntegerArray
-<span class='line'>1020</span>  * @memberOf KJUR.lang.String
-<span class='line'>1021</span>  * @function
-<span class='line'>1022</span>  * @static
-<span class='line'>1023</span>  * @param {String} s input string
-<span class='line'>1024</span>  * @return {Boolean} true if a string "s" is a string of integer array otherwise false
-<span class='line'>1025</span>  * @since base64x 1.1.7 jsrsasign 5.0.13
-<span class='line'>1026</span>  * @example
-<span class='line'>1027</span>  * KJUR.lang.String.isIntegerArray("[1,2,3]") &rarr; true
-<span class='line'>1028</span>  * KJUR.lang.String.isIntegerArray("  [1, 2, 3  ] ") &rarr; true
-<span class='line'>1029</span>  * KJUR.lang.String.isIntegerArray("[a,2]") &rarr; false
-<span class='line'>1030</span>  */</span><span class="WHIT">
-<span class='line'>1031</span> </span><span class="NAME">KJUR.lang.String.isIntegerArray</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1032</span> </span><span class="WHIT">    </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\s+/g</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1033</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^\[[0-9,]+\]$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1034</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1035</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1036</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1037</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1038</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1039</span> 
-<span class='line'>1040</span> </span><span class="COMM">// ==== others ================================</span><span class="WHIT">
-<span class='line'>1041</span> 
-<span class='line'>1042</span> </span><span class="COMM">/**
-<span class='line'>1043</span>  * canonicalize hexadecimal string of positive integer&lt;br/>
-<span class='line'>1044</span>  * @name hextoposhex
-<span class='line'>1045</span>  * @function
-<span class='line'>1046</span>  * @param {String} s hexadecimal string 
-<span class='line'>1047</span>  * @return {String} canonicalized hexadecimal string of positive integer
-<span class='line'>1048</span>  * @since base64x 1.1.10 jsrsasign 7.1.4
-<span class='line'>1049</span>  * @description
-<span class='line'>1050</span>  * This method canonicalize a hexadecimal string of positive integer
-<span class='line'>1051</span>  * for two's complement representation.
-<span class='line'>1052</span>  * Canonicalized hexadecimal string of positive integer will be:
-<span class='line'>1053</span>  * &lt;ul>
-<span class='line'>1054</span>  * &lt;li>Its length is always even.&lt;/li>
-<span class='line'>1055</span>  * &lt;li>If odd length it will be padded with leading zero.&lt;li>
-<span class='line'>1056</span>  * &lt;li>If it is even length and its first character is "8" or greater,
-<span class='line'>1057</span>  * it will be padded with "00" to make it positive integer.&lt;/li>
-<span class='line'>1058</span>  * &lt;/ul>
-<span class='line'>1059</span>  * @example
-<span class='line'>1060</span>  * hextoposhex("abcd") &rarr; "00abcd"
-<span class='line'>1061</span>  * hextoposhex("1234") &rarr; "1234"
-<span class='line'>1062</span>  * hextoposhex("12345") &rarr; "012345"
-<span class='line'>1063</span>  */</span><span class="WHIT">
-<span class='line'>1064</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">hextoposhex</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1065</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1066</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="STRN">"7"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1067</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1068</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1069</span> 
-<span class='line'>1070</span> </span><span class="COMM">/**
-<span class='line'>1071</span>  * convert string of integer array to hexadecimal string.&lt;br/>
-<span class='line'>1072</span>  * @name intarystrtohex
-<span class='line'>1073</span>  * @function
-<span class='line'>1074</span>  * @param {String} s string of integer array
-<span class='line'>1075</span>  * @return {String} hexadecimal string
-<span class='line'>1076</span>  * @since base64x 1.1.6 jsrsasign 5.0.2
-<span class='line'>1077</span>  * @throws "malformed integer array string: *" for wrong input
-<span class='line'>1078</span>  * @description
-<span class='line'>1079</span>  * This function converts a string of JavaScript integer array to
-<span class='line'>1080</span>  * a hexadecimal string. Each integer value shall be in a range 
-<span class='line'>1081</span>  * from 0 to 255 otherwise it raise exception. Input string can
-<span class='line'>1082</span>  * have extra space or newline string so that they will be ignored.
-<span class='line'>1083</span>  * 
-<span class='line'>1084</span>  * @example
-<span class='line'>1085</span>  * intarystrtohex(" [123, 34, 101, 34, 58] ")
-<span class='line'>1086</span>  * &rarr; 7b2265223a (i.e. '{"e":' as string)
-<span class='line'>1087</span>  */</span><span class="WHIT">
-<span class='line'>1088</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">intarystrtohex</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1089</span> </span><span class="WHIT">  </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/^\s*\[\s*/</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1090</span> </span><span class="WHIT">  </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\s*\]\s*$/</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1091</span> </span><span class="WHIT">  </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\s*/g</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1092</span> </span><span class="WHIT">  </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1093</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.split</span><span class="PUNC">(</span><span class="REGX">/,/</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">map</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">index</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">array</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1094</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1095</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">255</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"integer not in range 0-255"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1096</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hI</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">i.toString</span><span class="PUNC">(</span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1097</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">hI</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1098</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">join</span><span class="PUNC">(</span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1099</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">hex</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1100</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1101</span> </span><span class="WHIT">    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed integer array string: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">ex</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1102</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1103</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1104</span> 
-<span class='line'>1105</span> </span><span class="COMM">/**
-<span class='line'>1106</span>  * find index of string where two string differs
-<span class='line'>1107</span>  * @name strdiffidx
-<span class='line'>1108</span>  * @function
-<span class='line'>1109</span>  * @param {String} s1 string to compare
-<span class='line'>1110</span>  * @param {String} s2 string to compare
-<span class='line'>1111</span>  * @return {Number} string index of where character differs. Return -1 if same.
-<span class='line'>1112</span>  * @since jsrsasign 4.9.0 base64x 1.1.5
-<span class='line'>1113</span>  * @example
-<span class='line'>1114</span>  * strdiffidx("abcdefg", "abcd4fg") -> 4
-<span class='line'>1115</span>  * strdiffidx("abcdefg", "abcdefg") -> -1
-<span class='line'>1116</span>  * strdiffidx("abcdefg", "abcdef") -> 6
-<span class='line'>1117</span>  * strdiffidx("abcdefgh", "abcdef") -> 6
-<span class='line'>1118</span>  */</span><span class="WHIT">
-<span class='line'>1119</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">strdiffidx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">s2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1120</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s1.length</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1121</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s1.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">s2.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s2.length</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1122</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">n</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1123</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s1.charCodeAt</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">s2.charCodeAt</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1124</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1125</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s1.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">s2.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">n</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1126</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// same</span><span class="WHIT">
-<span class='line'>1127</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1128</span> 
-<span class='line'>1129</span> 
-<span class='line'>1130</span> </span></pre></body></html>
+<span class='line'>875</span>  * @param {String} s IPv4/v6 address string
+<span class='line'>876</span>  * @return {String} hexadecimal string of IP address
+<span class='line'>877</span>  * @since jsrsasign 8.0.12 base64x 1.1.14
+<span class='line'>878</span>  * @description
+<span class='line'>879</span>  * This function converts IPv4 or IPv6 address string to
+<span class='line'>880</span>  * a hexadecimal string of IPv4 or IPv6 address.
+<span class='line'>881</span>  * @example
+<span class='line'>882</span>  * iptohex("192.168.1.1") &rarr "c0a80101"
+<span class='line'>883</span>  * iptohex("2001:db8::4") &rarr "871020010db8000000000000000000000004"
+<span class='line'>884</span>  * iptohex("zzz")) &rarr raise exception
+<span class='line'>885</span>  */</span><span class="WHIT">
+<span class='line'>886</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">iptohex</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>887</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">malformedMsg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"malformed IP address"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>888</span> </span><span class="WHIT">  </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.toLowerCase</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>889</span> 
+<span class='line'>890</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9.]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>891</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.split</span><span class="PUNC">(</span><span class="STRN">"."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>892</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NUMB">4</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="NAME">malformedMsg</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>893</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>894</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>895</span> </span><span class="WHIT">      </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">4</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>896</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>897</span> </span><span class="WHIT">        </span><span class="NAME">hex</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">"0"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">d.toString</span><span class="PUNC">(</span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>898</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>899</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">hex</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>900</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>901</span> </span><span class="WHIT">      </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="NAME">malformedMsg</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>902</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>903</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9a-f:]+$/</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">s.indexOf</span><span class="PUNC">(</span><span class="STRN">":"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>904</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">ipv6tohex</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>905</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>906</span> </span><span class="WHIT">    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="NAME">malformedMsg</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>907</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>908</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>909</span> 
+<span class='line'>910</span> </span><span class="COMM">// ==== URIComponent ================================</span><span class="WHIT">
+<span class='line'>911</span> </span><span class="COMM">/**
+<span class='line'>912</span>  * convert UTFa hexadecimal string to a URLComponent string such like "%67%68".&lt;br/>
+<span class='line'>913</span>  * Note that these "&lt;code>0-9A-Za-z!'()*-._~&lt;/code>" characters will not
+<span class='line'>914</span>  * converted to "%xx" format by builtin 'encodeURIComponent()' function.
+<span class='line'>915</span>  * However this 'encodeURIComponentAll()' function will convert 
+<span class='line'>916</span>  * all of characters into "%xx" format.
+<span class='line'>917</span>  * @name encodeURIComponentAll
+<span class='line'>918</span>  * @function
+<span class='line'>919</span>  * @param {String} s hexadecimal string
+<span class='line'>920</span>  * @return {String} URIComponent string such like "%67%68"
+<span class='line'>921</span>  * @since 1.1
+<span class='line'>922</span>  */</span><span class="WHIT">
+<span class='line'>923</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">encodeURIComponentAll</span><span class="PUNC">(</span><span class="NAME">u8</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>924</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">encodeURIComponent</span><span class="PUNC">(</span><span class="NAME">u8</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>925</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">s2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>926</span> </span><span class="WHIT">  </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">s.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>927</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"%"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>928</span> </span><span class="WHIT">      </span><span class="NAME">s2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s2</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">s.substr</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>929</span> </span><span class="WHIT">      </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>930</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>931</span> </span><span class="WHIT">      </span><span class="NAME">s2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s2</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"%"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">stohex</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>932</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>933</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>934</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s2</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>935</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>936</span> 
+<span class='line'>937</span> </span><span class="COMM">// ==== new lines ================================</span><span class="WHIT">
+<span class='line'>938</span> </span><span class="COMM">/**
+<span class='line'>939</span>  * convert all DOS new line("\r\n") to UNIX new line("\n") in 
+<span class='line'>940</span>  * a String "s".
+<span class='line'>941</span>  * @name newline_toUnix
+<span class='line'>942</span>  * @function
+<span class='line'>943</span>  * @param {String} s string 
+<span class='line'>944</span>  * @return {String} converted string
+<span class='line'>945</span>  */</span><span class="WHIT">
+<span class='line'>946</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">newline_toUnix</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>947</span> </span><span class="WHIT">    </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\r\n/mg</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"\n"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>948</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>949</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>950</span> 
+<span class='line'>951</span> </span><span class="COMM">/**
+<span class='line'>952</span>  * convert all UNIX new line("\r\n") to DOS new line("\n") in 
+<span class='line'>953</span>  * a String "s".
+<span class='line'>954</span>  * @name newline_toDos
+<span class='line'>955</span>  * @function
+<span class='line'>956</span>  * @param {String} s string 
+<span class='line'>957</span>  * @return {String} converted string
+<span class='line'>958</span>  */</span><span class="WHIT">
+<span class='line'>959</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">newline_toDos</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>960</span> </span><span class="WHIT">    </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\r\n/mg</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"\n"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>961</span> </span><span class="WHIT">    </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\n/mg</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"\r\n"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>962</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>963</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>964</span> 
+<span class='line'>965</span> </span><span class="COMM">// ==== string type checker ===================</span><span class="WHIT">
+<span class='line'>966</span> 
+<span class='line'>967</span> </span><span class="COMM">/**
+<span class='line'>968</span>  * check whether a string is an integer string or not&lt;br/>
+<span class='line'>969</span>  * @name isInteger
+<span class='line'>970</span>  * @memberOf KJUR.lang.String
+<span class='line'>971</span>  * @function
+<span class='line'>972</span>  * @static
+<span class='line'>973</span>  * @param {String} s input string
+<span class='line'>974</span>  * @return {Boolean} true if a string "s" is an integer string otherwise false
+<span class='line'>975</span>  * @since base64x 1.1.7 jsrsasign 5.0.13
+<span class='line'>976</span>  * @example
+<span class='line'>977</span>  * KJUR.lang.String.isInteger("12345") &rarr; true
+<span class='line'>978</span>  * KJUR.lang.String.isInteger("123ab") &rarr; false
+<span class='line'>979</span>  */</span><span class="WHIT">
+<span class='line'>980</span> </span><span class="NAME">KJUR.lang.String.isInteger</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>981</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>982</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>983</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^-[0-9]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>984</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>985</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>986</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>987</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>988</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>989</span> 
+<span class='line'>990</span> </span><span class="COMM">/**
+<span class='line'>991</span>  * check whether a string is an hexadecimal string or not&lt;br/>
+<span class='line'>992</span>  * @name isHex
+<span class='line'>993</span>  * @memberOf KJUR.lang.String
+<span class='line'>994</span>  * @function
+<span class='line'>995</span>  * @static
+<span class='line'>996</span>  * @param {String} s input string
+<span class='line'>997</span>  * @return {Boolean} true if a string "s" is an hexadecimal string otherwise false
+<span class='line'>998</span>  * @since base64x 1.1.7 jsrsasign 5.0.13
+<span class='line'>999</span>  * @example
+<span class='line'>1000</span>  * KJUR.lang.String.isHex("1234") &rarr; true
+<span class='line'>1001</span>  * KJUR.lang.String.isHex("12ab") &rarr; true
+<span class='line'>1002</span>  * KJUR.lang.String.isHex("12AB") &rarr; true
+<span class='line'>1003</span>  * KJUR.lang.String.isHex("12ZY") &rarr; false
+<span class='line'>1004</span>  * KJUR.lang.String.isHex("121") &rarr; false -- odd length
+<span class='line'>1005</span>  */</span><span class="WHIT">
+<span class='line'>1006</span> </span><span class="NAME">KJUR.lang.String.isHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1007</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>1008</span> </span><span class="WHIT">	</span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9a-f]+$/</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9A-F]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1009</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1010</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1011</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1012</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1013</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1014</span> 
+<span class='line'>1015</span> </span><span class="COMM">/**
+<span class='line'>1016</span>  * check whether a string is a base64 encoded string or not&lt;br/>
+<span class='line'>1017</span>  * Input string can conclude new lines or space characters.
+<span class='line'>1018</span>  * @name isBase64
+<span class='line'>1019</span>  * @memberOf KJUR.lang.String
+<span class='line'>1020</span>  * @function
+<span class='line'>1021</span>  * @static
+<span class='line'>1022</span>  * @param {String} s input string
+<span class='line'>1023</span>  * @return {Boolean} true if a string "s" is a base64 encoded string otherwise false
+<span class='line'>1024</span>  * @since base64x 1.1.7 jsrsasign 5.0.13
+<span class='line'>1025</span>  * @example
+<span class='line'>1026</span>  * KJUR.lang.String.isBase64("YWE=") &rarr; true
+<span class='line'>1027</span>  * KJUR.lang.String.isBase64("YW_=") &rarr; false
+<span class='line'>1028</span>  * KJUR.lang.String.isBase64("YWE") &rarr; false -- length shall be multiples of 4
+<span class='line'>1029</span>  */</span><span class="WHIT">
+<span class='line'>1030</span> </span><span class="NAME">KJUR.lang.String.isBase64</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1031</span> </span><span class="WHIT">    </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\s+/g</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1032</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9A-Za-z+\/]+={0,3}$/</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">4</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1033</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1034</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1035</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1036</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1037</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1038</span> 
+<span class='line'>1039</span> </span><span class="COMM">/**
+<span class='line'>1040</span>  * check whether a string is a base64url encoded string or not&lt;br/>
+<span class='line'>1041</span>  * Input string can conclude new lines or space characters.
+<span class='line'>1042</span>  * @name isBase64URL
+<span class='line'>1043</span>  * @memberOf KJUR.lang.String
+<span class='line'>1044</span>  * @function
+<span class='line'>1045</span>  * @static
+<span class='line'>1046</span>  * @param {String} s input string
+<span class='line'>1047</span>  * @return {Boolean} true if a string "s" is a base64url encoded string otherwise false
+<span class='line'>1048</span>  * @since base64x 1.1.7 jsrsasign 5.0.13
+<span class='line'>1049</span>  * @example
+<span class='line'>1050</span>  * KJUR.lang.String.isBase64URL("YWE") &rarr; true
+<span class='line'>1051</span>  * KJUR.lang.String.isBase64URL("YW-") &rarr; true
+<span class='line'>1052</span>  * KJUR.lang.String.isBase64URL("YW+") &rarr; false
+<span class='line'>1053</span>  */</span><span class="WHIT">
+<span class='line'>1054</span> </span><span class="NAME">KJUR.lang.String.isBase64URL</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1055</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/[+/</span><span class="PUNC">=</span><span class="PUNC">]</span><span class="PUNC">/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1056</span> </span><span class="WHIT">    </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">b64utob64</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1057</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KJUR.lang.String.isBase64</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1058</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1059</span> 
+<span class='line'>1060</span> </span><span class="COMM">/**
+<span class='line'>1061</span>  * check whether a string is a string of integer array or not&lt;br/>
+<span class='line'>1062</span>  * Input string can conclude new lines or space characters.
+<span class='line'>1063</span>  * @name isIntegerArray
+<span class='line'>1064</span>  * @memberOf KJUR.lang.String
+<span class='line'>1065</span>  * @function
+<span class='line'>1066</span>  * @static
+<span class='line'>1067</span>  * @param {String} s input string
+<span class='line'>1068</span>  * @return {Boolean} true if a string "s" is a string of integer array otherwise false
+<span class='line'>1069</span>  * @since base64x 1.1.7 jsrsasign 5.0.13
+<span class='line'>1070</span>  * @example
+<span class='line'>1071</span>  * KJUR.lang.String.isIntegerArray("[1,2,3]") &rarr; true
+<span class='line'>1072</span>  * KJUR.lang.String.isIntegerArray("  [1, 2, 3  ] ") &rarr; true
+<span class='line'>1073</span>  * KJUR.lang.String.isIntegerArray("[a,2]") &rarr; false
+<span class='line'>1074</span>  */</span><span class="WHIT">
+<span class='line'>1075</span> </span><span class="NAME">KJUR.lang.String.isIntegerArray</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1076</span> </span><span class="WHIT">    </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\s+/g</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1077</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^\[[0-9,]+\]$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1078</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1079</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1080</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1081</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1082</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1083</span> 
+<span class='line'>1084</span> </span><span class="COMM">// ==== others ================================</span><span class="WHIT">
+<span class='line'>1085</span> 
+<span class='line'>1086</span> </span><span class="COMM">/**
+<span class='line'>1087</span>  * canonicalize hexadecimal string of positive integer&lt;br/>
+<span class='line'>1088</span>  * @name hextoposhex
+<span class='line'>1089</span>  * @function
+<span class='line'>1090</span>  * @param {String} s hexadecimal string 
+<span class='line'>1091</span>  * @return {String} canonicalized hexadecimal string of positive integer
+<span class='line'>1092</span>  * @since base64x 1.1.10 jsrsasign 7.1.4
+<span class='line'>1093</span>  * @description
+<span class='line'>1094</span>  * This method canonicalize a hexadecimal string of positive integer
+<span class='line'>1095</span>  * for two's complement representation.
+<span class='line'>1096</span>  * Canonicalized hexadecimal string of positive integer will be:
+<span class='line'>1097</span>  * &lt;ul>
+<span class='line'>1098</span>  * &lt;li>Its length is always even.&lt;/li>
+<span class='line'>1099</span>  * &lt;li>If odd length it will be padded with leading zero.&lt;li>
+<span class='line'>1100</span>  * &lt;li>If it is even length and its first character is "8" or greater,
+<span class='line'>1101</span>  * it will be padded with "00" to make it positive integer.&lt;/li>
+<span class='line'>1102</span>  * &lt;/ul>
+<span class='line'>1103</span>  * @example
+<span class='line'>1104</span>  * hextoposhex("abcd") &rarr; "00abcd"
+<span class='line'>1105</span>  * hextoposhex("1234") &rarr; "1234"
+<span class='line'>1106</span>  * hextoposhex("12345") &rarr; "012345"
+<span class='line'>1107</span>  */</span><span class="WHIT">
+<span class='line'>1108</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">hextoposhex</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1109</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1110</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="STRN">"7"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1111</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1112</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1113</span> 
+<span class='line'>1114</span> </span><span class="COMM">/**
+<span class='line'>1115</span>  * convert string of integer array to hexadecimal string.&lt;br/>
+<span class='line'>1116</span>  * @name intarystrtohex
+<span class='line'>1117</span>  * @function
+<span class='line'>1118</span>  * @param {String} s string of integer array
+<span class='line'>1119</span>  * @return {String} hexadecimal string
+<span class='line'>1120</span>  * @since base64x 1.1.6 jsrsasign 5.0.2
+<span class='line'>1121</span>  * @throws "malformed integer array string: *" for wrong input
+<span class='line'>1122</span>  * @description
+<span class='line'>1123</span>  * This function converts a string of JavaScript integer array to
+<span class='line'>1124</span>  * a hexadecimal string. Each integer value shall be in a range 
+<span class='line'>1125</span>  * from 0 to 255 otherwise it raise exception. Input string can
+<span class='line'>1126</span>  * have extra space or newline string so that they will be ignored.
+<span class='line'>1127</span>  * 
+<span class='line'>1128</span>  * @example
+<span class='line'>1129</span>  * intarystrtohex(" [123, 34, 101, 34, 58] ")
+<span class='line'>1130</span>  * &rarr; 7b2265223a (i.e. '{"e":' as string)
+<span class='line'>1131</span>  */</span><span class="WHIT">
+<span class='line'>1132</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">intarystrtohex</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1133</span> </span><span class="WHIT">  </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/^\s*\[\s*/</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1134</span> </span><span class="WHIT">  </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\s*\]\s*$/</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1135</span> </span><span class="WHIT">  </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="REGX">/\s*/g</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1136</span> </span><span class="WHIT">  </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1137</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.split</span><span class="PUNC">(</span><span class="REGX">/,/</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">map</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">index</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">array</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1138</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1139</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">255</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"integer not in range 0-255"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1140</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hI</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">"00"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">i.toString</span><span class="PUNC">(</span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1141</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">hI</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1142</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">join</span><span class="PUNC">(</span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1143</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">hex</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1144</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1145</span> </span><span class="WHIT">    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"malformed integer array string: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">ex</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1146</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1147</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1148</span> 
+<span class='line'>1149</span> </span><span class="COMM">/**
+<span class='line'>1150</span>  * find index of string where two string differs
+<span class='line'>1151</span>  * @name strdiffidx
+<span class='line'>1152</span>  * @function
+<span class='line'>1153</span>  * @param {String} s1 string to compare
+<span class='line'>1154</span>  * @param {String} s2 string to compare
+<span class='line'>1155</span>  * @return {Number} string index of where character differs. Return -1 if same.
+<span class='line'>1156</span>  * @since jsrsasign 4.9.0 base64x 1.1.5
+<span class='line'>1157</span>  * @example
+<span class='line'>1158</span>  * strdiffidx("abcdefg", "abcd4fg") -> 4
+<span class='line'>1159</span>  * strdiffidx("abcdefg", "abcdefg") -> -1
+<span class='line'>1160</span>  * strdiffidx("abcdefg", "abcdef") -> 6
+<span class='line'>1161</span>  * strdiffidx("abcdefgh", "abcdef") -> 6
+<span class='line'>1162</span>  */</span><span class="WHIT">
+<span class='line'>1163</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">strdiffidx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">s2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1164</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s1.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1165</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s1.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">s2.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s2.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1166</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">n</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1167</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s1.charCodeAt</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">s2.charCodeAt</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1168</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1169</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s1.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">s2.length</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">n</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1170</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// same</span><span class="WHIT">
+<span class='line'>1171</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1172</span> 
+<span class='line'>1173</span> 
+<span class='line'>1174</span> </span></pre></body></html>

@@ -1,4 +1,4 @@
-/* asn1x509-1.1.5.js (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-1.1.6.js (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.0 asn1x509 1.1.5 (2018-Apr-17)
+ * @version jsrsasign 8.0.12 asn1x509 1.1.6 (2018-Apr-22)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -411,14 +411,14 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * and extParams to internal extension array of X.509v3 extension objects.
      * Here is supported names of extension:
      * <ul>
-     * <li>BasicConstraints</li>
-     * <li>KeyUsage</li>
-     * <li>CRLDistributionPoints</li>
-     * <li>ExtKeyUsage</li>
-     * <li>AuthorityKeyIdentifier</li>
-     * <li>AuthorityInfoAccess</li>
-     * <li>SubjectAltName</li>
-     * <li>IssuerAltName</li>
+     * <li>BasicConstraints - {@link KJUR.asn1.x509.BasicConstraints}</li>
+     * <li>KeyUsage - {@link KJUR.asn1.x509.KeyUsage}</li>
+     * <li>CRLDistributionPoints - {@link KJUR.asn1.x509.CRLDistributionPoints}</li>
+     * <li>ExtKeyUsage - {@link KJUR.asn1.x509.ExtKeyUsage}</li>
+     * <li>AuthorityKeyIdentifier - {@link KJUR.asn1.x509.AuthorityKeyIdentifier}</li>
+     * <li>AuthorityInfoAccess - {@link KJUR.asn1.x509.AuthorityInfoAccess}</li>
+     * <li>SubjectAltName - {@link KJUR.asn1.x509.SubjectAltName}</li>
+     * <li>IssuerAltName - {@link KJUR.asn1.x509.IssuerAltName}</li>
      * </ul>
      * @example
      * var o = new KJUR.asn1.x509.TBSCertificate();
@@ -513,9 +513,9 @@ KJUR.asn1.x509.Extension = function(params) {
     };
 
     this.critical = false;
-    if (typeof params != "undefined") {
-        if (typeof params['critical'] != "undefined") {
-            this.critical = params['critical'];
+    if (params !== undefined) {
+        if (params.critical !== undefined) {
+            this.critical = params.critical;
         }
     }
 };
@@ -581,20 +581,53 @@ KJUR.asn1.x509.Extension.appendByNameToArray = function(name, extParams, a) {
  * @param {Array} params associative array of parameters (ex. {'bin': '11', 'critical': true})
  * @extends KJUR.asn1.x509.Extension
  * @description
+ * This class is for <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.3" target="_blank">KeyUsage</a> X.509v3 extension.
+ * <pre>
+ * id-ce-keyUsage OBJECT IDENTIFIER ::=  { id-ce 15 }
+ * KeyUsage ::= BIT STRING {
+ *   digitalSignature   (0),
+ *   nonRepudiation     (1),
+ *   keyEncipherment    (2),
+ *   dataEncipherment   (3),
+ *   keyAgreement       (4),
+ *   keyCertSign        (5),
+ *   cRLSign            (6),
+ *   encipherOnly       (7),
+ *   decipherOnly       (8) }
+ * </pre><br/>
+ * NOTE: 'names' parameter is supprted since jsrsasign 8.0.14.
  * @example
+ * o = new KJUR.asn1.x509.KeyUsage({bin: "11"});
+ * o = new KJUR.asn1.x509.KeyUsage({critical: true, bin: "11"});
+ * o = new KJUR.asn1.x509.KeyUsage({names: ['digitalSignature', 'keyAgreement']});
  */
 KJUR.asn1.x509.KeyUsage = function(params) {
     KJUR.asn1.x509.KeyUsage.superclass.constructor.call(this, params);
+    var _KEYUSAGE_NAME = X509.KEYUSAGE_NAME;
 
     this.getExtnValueHex = function() {
         return this.asn1ExtnValue.getEncodedHex();
     };
 
     this.oid = "2.5.29.15";
-    if (typeof params != "undefined") {
-        if (typeof params['bin'] != "undefined") {
+    if (params !== undefined) {
+        if (params.bin !== undefined) {
             this.asn1ExtnValue = new KJUR.asn1.DERBitString(params);
         }
+	if (params.names !== undefined &&
+	    params.names.length !== undefined) {
+	    var names = params.names;
+	    var s = "000000000";
+	    for (var i = 0; i < names.length; i++) {
+		for (var j = 0; j < _KEYUSAGE_NAME.length; j++) {
+		    if (names[i] === _KEYUSAGE_NAME[j]) {
+			s = s.substring(0, j) + '1' + 
+			    s.substring(j + 1, s.length);
+		    }
+		}
+	    }
+            this.asn1ExtnValue = new KJUR.asn1.DERBitString({bin: s});
+	}
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.KeyUsage, KJUR.asn1.x509.Extension);
@@ -626,12 +659,12 @@ KJUR.asn1.x509.BasicConstraints = function(params) {
     this.oid = "2.5.29.19";
     this.cA = false;
     this.pathLen = -1;
-    if (typeof params != "undefined") {
-        if (typeof params['cA'] != "undefined") {
-            this.cA = params['cA'];
+    if (params !== undefined) {
+        if (params.cA !== undefined) {
+            this.cA = params.cA;
         }
-        if (typeof params['pathLen'] != "undefined") {
-            this.pathLen = params['pathLen'];
+        if (params.pathLen !== undefined) {
+            this.pathLen = params.pathLen;
         }
     }
 };
@@ -693,11 +726,11 @@ KJUR.asn1.x509.CRLDistributionPoints = function(params) {
     };
 
     this.oid = "2.5.29.31";
-    if (typeof params != "undefined") {
-        if (typeof params['array'] != "undefined") {
-            this.setByDPArray(params['array']);
-        } else if (typeof params['uri'] != "undefined") {
-            this.setByOneURI(params['uri']);
+    if (params !== undefined) {
+        if (params.array !== undefined) {
+            this.setByDPArray(params.array);
+        } else if (params.uri !== undefined) {
+            this.setByOneURI(params.uri);
         }
     }
 };
@@ -740,9 +773,9 @@ KJUR.asn1.x509.ExtKeyUsage = function(params) {
     };
 
     this.oid = "2.5.29.37";
-    if (typeof params != "undefined") {
-        if (typeof params['array'] != "undefined") {
-            this.setPurposeArray(params['array']);
+    if (params !== undefined) {
+        if (params.array !== undefined) {
+            this.setPurposeArray(params.array);
         }
     }
 };
@@ -848,15 +881,15 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
     };
 
     this.oid = "2.5.29.35";
-    if (typeof params != "undefined") {
-        if (typeof params['kid'] != "undefined") {
-            this.setKIDByParam(params['kid']);
+    if (params !== undefined) {
+        if (params.kid !== undefined) {
+            this.setKIDByParam(params.kid);
         }
-        if (typeof params['issuer'] != "undefined") {
-            this.setCertIssuerByParam(params['issuer']);
+        if (params.issuer !== undefined) {
+            this.setCertIssuerByParam(params.issuer);
         }
-        if (typeof params['sn'] != "undefined") {
-            this.setCertSNByParam(params['sn']);
+        if (params.sn !== undefined) {
+            this.setCertSNByParam(params.sn);
         }
     }
 };
@@ -913,9 +946,9 @@ KJUR.asn1.x509.AuthorityInfoAccess = function(params) {
     };
 
     this.oid = "1.3.6.1.5.5.7.1.1";
-    if (typeof params != "undefined") {
-        if (typeof params['array'] != "undefined") {
-            this.setAccessDescriptionArray(params['array']);
+    if (params !== undefined) {
+        if (params.array !== undefined) {
+            this.setAccessDescriptionArray(params.array);
         }
     }
 };
@@ -1665,9 +1698,9 @@ KJUR.asn1.x509.RDN = function(params) {
         return this.TLV;
     };
 
-    if (typeof params != "undefined") {
-        if (typeof params['str'] != "undefined") {
-            this.addByMultiValuedString(params['str']);
+    if (params !== undefined) {
+        if (params.str !== undefined) {
+            this.addByMultiValuedString(params.str);
         }
     }
 };
@@ -1791,9 +1824,9 @@ KJUR.asn1.x509.AttributeTypeAndValue = function(params) {
         return this.TLV;
     };
 
-    if (typeof params != "undefined") {
-        if (typeof params['str'] != "undefined") {
-            this.setByString(params['str']);
+    if (params !== undefined) {
+        if (params.str !== undefined) {
+            this.setByString(params.str);
         }
     }
 };

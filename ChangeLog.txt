@@ -1,6 +1,20 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.11 to 8.0.12 (2018-Apr-22)
+  - base64x 1.1.13 to 1.1.14
+    - function iptohex added
+    - fix hextoipv6 for wrong "::" shrinking
+  - asn1x509 1.1.5 to 1.1.6
+    - KeyUsage class now supports names parameter such as
+      ['digitalSignature', 'nonRepudiation'].
+    - some refactoring
+  - tool/tool_ca2.html added for
+    yet another certificate generation tool by.
+  - testcase added for above methods/functions
+    - qunit-do-base64x.html
+    - qunit-do-asn1x509.html
+
 * Changes from 8.0.10 to 8.0.11 (2018-Apr-17)
   - asn1x509 1.1.4 to 1.1.5
     - X500Name.setByString fix for attribute value with slash.

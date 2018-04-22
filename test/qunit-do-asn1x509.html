@@ -356,13 +356,22 @@ test("BasicConstraints class test", function() {
 
 // KeyUsage
 test("KeyUsage class test", function() {
-  expect(3);
-  var o = new KJUR.asn1.x509.KeyUsage({'bin':'11'});
+  var o;
+  o = new KJUR.asn1.x509.KeyUsage({'bin':'11'});
   equal(o.getExtnValueHex(), "030206c0", "constructor bin 11 getExtnValueHex");
   equal(o.getEncodedHex(), "300b0603551d0f0404030206c0", "constructor bin 11 getEncodedHex");
 
-  var o2 = new KJUR.asn1.x509.KeyUsage({'bin':'11', 'critical': true});
-  equal(o2.getEncodedHex(), "300e0603551d0f0101ff0404030206c0", "constructor bin 11 critical getEncodedHex");
+  o = new KJUR.asn1.x509.KeyUsage({'bin':'11', 'critical': true});
+  equal(o.getEncodedHex(), "300e0603551d0f0101ff0404030206c0", "constructor bin 11 critical getEncodedHex");
+
+  o = new KJUR.asn1.x509.KeyUsage({'names': ['digitalSignature', 'nonRepudiation']});
+  equal(o.getEncodedHex(), "300b0603551d0f0404030206c0", "constructor names [digitalSignature, nonRepudiation]");
+
+  o = new KJUR.asn1.x509.KeyUsage({'bin':'000000011'});
+  equal(o.getEncodedHex(), "300c0603551d0f04050303070180", "constructor bin 000000011");
+
+  o = new KJUR.asn1.x509.KeyUsage({'names': ['encipherOnly', 'decipherOnly']});
+  equal(o.getEncodedHex(), "300c0603551d0f04050303070180", "constructor names [encipherOnly, decipherOnly]");
 });
 
 // CRLDP

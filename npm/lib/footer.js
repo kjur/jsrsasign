@@ -55,6 +55,7 @@ exports.hextouricmp = hextouricmp;
 exports.ipv6tohex = ipv6tohex;
 exports.hextoipv6 = hextoipv6;
 exports.hextoip = hextoip;
+exports.iptohex = iptohex;
 exports.encodeURIComponentAll = encodeURIComponentAll;
 exports.newline_toUnix = newline_toUnix;
 exports.newline_toDos = newline_toDos;

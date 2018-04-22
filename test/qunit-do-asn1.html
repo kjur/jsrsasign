@@ -76,8 +76,13 @@ test("BitString Test", function() {
   equal(d.getEncodedHex(), "030305bad0", "setUnusedBitsAndHexValue > ub=5, bad0");
   d.setByBinaryString('1011');
   equal(d.getEncodedHex(), "030204b0", "setByBinaryString 1011 > ub=4, b0"); 
+
+  d.setByBinaryString('1011000');
+  equal(d.getEncodedHex(), "030204b0", "setByBinaryString 1011000 > ub=4, b0"); 
+
   d.setByBinaryString('11111111');
   equal(d.getEncodedHex(), "030200ff", "setByBinaryString 1(8) > ub=0, ff"); 
+
   d.setByBinaryString('111111111');
   equal(d.getEncodedHex(), "030307ff80", "setByBinaryString 1(9) > ub=7, ff80"); 
   d.setByBooleanArray([true, false, true, true, false]);
