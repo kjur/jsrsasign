@@ -66,7 +66,8 @@
  *   <li>subjectKeyIdentifier - {@link X509#getExtSubjectKeyIdentifier}</li>
  *   <li>authorityKeyIdentifier - {@link X509#getExtAuthorityKeyIdentifier}</li>
  *   <li>extKeyUsage - {@link X509#getExtExtKeyUsageName}</li>
- *   <li>subjectAltName - {@link X509#getExtSubjectAltName}</li>
+ *   <li>subjectAltName(DEPRECATED) - {@link X509#getExtSubjectAltName}</li>
+ *   <li>subjectAltName2 - {@link X509#getExtSubjectAltName2}</li>
  *   <li>cRLDistributionPoints - {@link X509#getExtCRLDistributionPointsURI}</li>
  *   <li>authorityInfoAccess - {@link X509#getExtAIAInfo}</li>
  *   <li>certificatePolicies - {@link X509#getExtCertificatePolicies}</li>
@@ -727,6 +728,7 @@ function X509() {
      *  ["DNS",  "example.org"],
      *  ["MAIL", "foo@example.com"],
      *  ["IP",   "192.168.1.1"],
+     *  ["IP",   "2001:db8::2:1"],
      *  ["DN",   "/C=US/O=TEST1"]]
      */
     this.getExtSubjectAltName2 = function() {

@@ -471,7 +471,7 @@ ul.inheritsList
 								<b><a href="../symbols/KJUR.asn1.x509.KeyUsage.html#constructor">KJUR.asn1.x509.KeyUsage</a></b>(params)
 							</div>
 							<div class="description">KeyUsage ASN.1 structure class
-</div>
+This class is for <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.3" target="_blank">KeyUsage</a> X.509v3 extension.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -517,13 +517,29 @@ ul.inheritsList
 				
 				<div class="description">
 					KeyUsage ASN.1 structure class
-
+This class is for <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.3" target="_blank">KeyUsage</a> X.509v3 extension.
+<pre>
+id-ce-keyUsage OBJECT IDENTIFIER ::=  { id-ce 15 }
+KeyUsage ::= BIT STRING {
+  digitalSignature   (0),
+  nonRepudiation     (1),
+  keyEncipherment    (2),
+  dataEncipherment   (3),
+  keyAgreement       (4),
+  keyCertSign        (5),
+  cRLSign            (6),
+  encipherOnly       (7),
+  decipherOnly       (8) }
+</pre><br/>
+NOTE: 'names' parameter is supprted since jsrsasign 8.0.14.
 					
 				</div>
 				
 				
 				
-				<pre class="code"></pre>
+				<pre class="code">o = new KJUR.asn1.x509.KeyUsage({bin: "11"});
+o = new KJUR.asn1.x509.KeyUsage({critical: true, bin: "11"});
+o = new KJUR.asn1.x509.KeyUsage({names: ['digitalSignature', 'keyAgreement']});</pre>
 				
 				
 				
