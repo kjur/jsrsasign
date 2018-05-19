@@ -222,6 +222,26 @@ function _rsasign_getAlgNameAndHashFromHexDisgestInfo(hDigestInfo) {
 }
 
 /**
+ * verifies a raw RSA sigature for a message string with RSA public key.<br/>
+ * @name verifyRawWithMessageHex
+ * @memberOf RSAKey#
+ * @function
+ * @param {String} sMsgHex hexadecimal string of message to be verified.
+ * @param {String} hSig hexadecimal string of raw siganture.<br/>
+ *                 non-hexadecimal charactors including new lines will be ignored.
+ * @return returns 1 if valid, otherwise 0
+ */
+RSAKey.prototype.verifyRawWithMessageHex = function(sMsgHex, hSig) {
+    hSig = hSig.replace(_RE_HEXDECONLY, '');
+    hSig = hSig.replace(/[ \n]+/g, "");
+    var biSig = parseBigInt(hSig, 16);
+    if (biSig.bitLength() > this.n.bitLength()) return 0;
+    var biDecryptedSig = this.doPublic(biSig);
+    var hMsgHex = biDecryptedSig.toString(16).replace(/^1f+00/, '');
+    return (hMsgHex == sMsgHex);
+};
+
+/**
  * verifies a sigature for a message string with RSA public key.<br/>
  * @name verify
  * @memberOf RSAKey#
