@@ -366,7 +366,7 @@ KJUR.asn1.csr.CSRUtil = new function() {
  * pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
  *   subject: {str: '/C=US/O=Test/CN=example.com'},
  *   ext: [
- *     {subjectAltName: {array: [{dns: 'example.net'}]}
+ *     {subjectAltName: {array: [{dns: 'example.net'}]}}
  *   ],
  *   sbjpubkey: pubKeyPEM,
  *   sigalg: "SHA256withRSA",
