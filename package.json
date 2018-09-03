@@ -1,0 +1,22 @@
+{
+  "name": "jsrsasign",
+  "version": "8.0.13",
+  "description": "jsrsasign\r =========",
+  "main": "jsrsasign-all-min.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fincha/jsrsasign.git"
+  },
+  "author": "Alexander Frischbutter <alexander@fribu.de> (http://fribu.de)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fincha/jsrsasign/issues"
+  },
+  "homepage": "https://github.com/fincha/jsrsasign#readme"
+}
