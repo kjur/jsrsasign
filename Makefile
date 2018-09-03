@@ -32,7 +32,7 @@ all-ext-min: $(FILES_EXT_MIN)
 	@echo "all ext min converted."
 
 min/%.min.js: src/%.js
-	yuicmp $^ -o $@
+	yuicompressor $^ -o $@
 
 ext/%-min.js: ext/%.js
-	yuicmp $^ -o $@
+	yuicompressor $^ -o $@

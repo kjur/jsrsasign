@@ -1,7 +1,7 @@
 {
   "name": "jsrsasign",
-  "version": "8.0.13",
-  "description": "jsrsasign\r =========",
+  "version": "8.0.14",
+  "description": "jsrsasign",
   "main": "jsrsasign-all-min.js",
   "directories": {
     "test": "test"
@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/fincha/jsrsasign/issues"
   },
-  "homepage": "https://github.com/fincha/jsrsasign#readme"
+  "homepage": "https://github.com/fincha/jsrsasign#readme",
+  "devDependencies": {
+    "yuicompressor": "^2.4.8"
+  }
 }
