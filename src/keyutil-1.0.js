@@ -1128,6 +1128,13 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
         return key;
     }
 
+    // 8.3. private key by plain PKCS#5 PEM ECDSA string
+    if (param.indexOf("-END EC PRIVATE KEY-") != -1 &&
+        param.indexOf("4,ENCRYPTED") == -1) {
+        var hex = _pemtohex(param, "EC PRIVATE KEY");
+        return _KEYUTIL.getKey(hex, null, "pkcs5prv");
+    }
+
     // 10. private key by plain PKCS#8 PEM ECC/RSA string
     if (param.indexOf("-END PRIVATE KEY-") != -1) {
         return _KEYUTIL.getKeyFromPlainPrivatePKCS8PEM(param);
