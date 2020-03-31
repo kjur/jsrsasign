@@ -1,6 +1,17 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.12 to 8.0.13 (2020-Mar-31)
+  - LICENSE.txt
+    - fixed wrong description from BSD to MIT License
+  - ext/ec.js
+    - mitigate Minerva timing attack in ECPointFp.multiply method
+　　　https://minerva.crocs.fi.muni.cz/
+  - test/qunit-do-crypto-ecdsa.html
+    - testcase fix
+  - sample_node/tsr2certs added
+    - script to extract certificates from timestamp response or token
+
 * Changes from 8.0.11 to 8.0.12 (2018-Apr-22)
   - base64x 1.1.13 to 1.1.14
     - function iptohex added
