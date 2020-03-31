@@ -1,0 +1,75 @@
+#!/usr/bin/env node
+
+/*
+ * tsr2certs - extract certificates from RFC 3161 timestamp response or token
+ *
+ * Copyright (c) 2020 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * https://kjur.github.io/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ * ---------------------------------------------------------
+ * DESCRIPTION
+ *   This script extracts DER certificates from DER timestamp response 
+ *   or token.
+ *
+ * USAGE
+ *   tsr2certs [-t|--tst] inputFile
+ *
+ * EXAMPLE
+ *   % tsr2certs tsr.der // extract from timestamp response
+ *   writing number of certs: 2
+ *   tsr.der.1.cer
+ *   tsr.der.2.cer
+ *
+ *   % tsr2certs -t tst.der // extract from timestamp token with -t
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+var rsu = require('jsrsasign-util');
+
+program
+  .version('1.0.2 (2020-Mar-31)')
+  .description('extract certificate files from RFC 3161 timestamp response or token')
+  .usage('[options] <DER timestamp response or token>')
+  .option('-t, --tst', 'extract from timstamp token not response')
+  .parse(process.argv);
+
+if (program.args.length != 1 && program.args.length != 2)
+  throw "wrong number of arguments";
+
+var inFile = program.args[program.args.length - 1];
+
+var hex;
+try {
+  hex = rsu.readFileHexByBin(inFile);
+} catch(ex) {
+  throw "can't read file: " + inFile;
+}
+
+// string idx of [0]certificates of timestamp token
+if (! program.tst) {
+   var idxCerts = rs.ASN1HEX.getIdxbyList(hex, 0, [1, 1, 0, 3], "a0"); // tsr
+} else {
+   var idxCerts = rs.ASN1HEX.getIdxbyList(hex, 0, [1, 0, 3], "a0"); // tst
+}
+var idxList = rs.ASN1HEX.getChildIdx(hex, idxCerts);
+console.log("writing number of certs: " + idxList.length);
+for (var i = 0; i < idxList.length; i++) {
+    var outFile = inFile + "." + (i + 1) + ".cer";
+    var hCert = rs.ASN1HEX.getTLV(hex, idxList[i]);
+    rsu.saveFileBinByHex(outFile, hCert);
+    console.log(outFile);
+}
+
+/*
+extract certs from tsr
+asn1extract cert1out.der tsr.der 1 1 0 3 0 # 1st cert
+asn1extract cert2out.der tsr.der 1 1 0 3 1 # 2nd cert
+ */
+

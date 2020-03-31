@@ -18,6 +18,11 @@ exports.CryptoJS = CryptoJS;
 exports.b64tohex = b64tohex;
 exports.b64toBA = b64toBA;
 
+// ext/ec*.js
+exports.ECFieldElementFp = ECFieldElementFp;
+exports.ECPointFp = ECPointFp;
+exports.ECCurveFp = ECCurveFp;
+
 // base64x.js
 exports.stoBA = stoBA;
 exports.BAtos = BAtos;

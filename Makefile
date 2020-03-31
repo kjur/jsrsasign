@@ -22,6 +22,7 @@ FILES_MIN = \
 	min/jwsjs-2.0.min.js
 
 FILES_EXT_MIN = \
+	ext/ec-min.js \
 	ext/rsa-min.js \
 	ext/rsa2-min.js
 
