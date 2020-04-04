@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.12 to 8.0.14 (2020-Apr-03)
+  - src/asn1csr-1.0.js
+    document fix (pull #356)
+  - npm_util/Makefile
+    merged (pull #216)
+  - src/rsasign-1.2.js
+    merged for RegExp (pull #419)
+
 * Changes from 8.0.12 to 8.0.13 (2020-Mar-31)
   - LICENSE.txt
     - fixed wrong description from BSD to MIT License
