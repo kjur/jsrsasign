@@ -1,9 +1,9 @@
-/* rsasign-1.3.0.js (c) 2010-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* rsasign-1.3.1.js (c) 2010-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * rsa-sign.js - adding signing functions to RSAKey class.
  *
- * Copyright (c) 2010-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license/
@@ -20,8 +20,7 @@
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
-var _RE_HEXDECONLY = new RegExp("");
-_RE_HEXDECONLY.compile("[^0-9a-f]", "gi");
+var _RE_HEXDECONLY = new RegExp("[^0-9a-f]", "gi");
 
 // ========================================================================
 // Signature Generation
