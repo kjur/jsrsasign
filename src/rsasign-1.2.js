@@ -20,8 +20,7 @@
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
-var _RE_HEXDECONLY = new RegExp("");
-_RE_HEXDECONLY.compile("[^0-9a-f]", "gi");
+var _RE_HEXDECONLY = new RegExp("[^0-9a-f]", "gi");
 
 // ========================================================================
 // Signature Generation
