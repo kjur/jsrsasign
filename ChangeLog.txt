@@ -8,6 +8,8 @@ ChangeLog for jsrsasign
     merged (pull #216)
   - src/rsasign-1.2.js
     merged for RegExp (pull #419)
+  - src/asn1-1.0.js
+    merged for strict fix (pull #389)
 
 * Changes from 8.0.12 to 8.0.13 (2020-Mar-31)
   - LICENSE.txt

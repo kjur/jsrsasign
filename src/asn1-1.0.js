@@ -595,7 +595,7 @@ KJUR.asn1.DERAbstractTime = function(params) {
 
     // --- PRIVATE METHODS --------------------
     this.localDateToUTC = function(d) {
-        utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+        var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
         var utcDate = new Date(utc);
         return utcDate;
     };
