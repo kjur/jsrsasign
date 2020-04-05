@@ -10,6 +10,8 @@ ChangeLog for jsrsasign
     merged for RegExp (pull #419)
   - src/asn1-1.0.js
     merged for strict fix (pull #389)
+  - src/cipher-1.0.js
+    document fix in return of decrypt method (issue #383)
 
 * Changes from 8.0.12 to 8.0.13 (2020-Mar-31)
   - LICENSE.txt

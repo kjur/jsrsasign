@@ -1380,7 +1380,7 @@ KJUR.crypto.Cipher.encrypt = function(s, keyObj, algName) {
  * @param {String} hex hexadecial string of encrypted message
  * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
  * @param {String} algName short/long algorithm name for encryption/decryption
- * @return {String} hexadecimal encrypted string
+ * @return {String} decrypted raw string
  * @since jsrsasign 6.2.0 crypto 1.1.10
  * @description
  * This static method decrypts encrypted hexadecimal string with specified key and algorithm.
