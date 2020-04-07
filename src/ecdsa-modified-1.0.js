@@ -830,7 +830,14 @@ KJUR.crypto.ECDSA.biRSSigToASN1Sig = function(biR, biS) {
 KJUR.crypto.ECDSA.getName = function(s) {
     if (s === "2a8648ce3d030107") return "secp256r1"; // 1.2.840.10045.3.1.7
     if (s === "2b8104000a") return "secp256k1"; // 1.3.132.0.10
-    if (s === "2b81040022") return "secp384r1"; // 1.3.132.0.34
+	if (s === "2b81040022") return "secp384r1"; // 1.3.132.0.34
+	if (s === "2b2403030208010101") return "brainpoolP160r1"; // 1.3.36.3.3.2.8.1.1.1
+	if (s === "2b2403030208010103") return "brainpoolP192r1"; // 1.3.36.3.3.2.8.1.1.3
+	if (s === "2b2403030208010105") return "brainpoolP224r1"; // 1.3.36.3.3.2.8.1.1.5
+	if (s === "2b2403030208010107") return "brainpoolP256r1"; // 1.3.36.3.3.2.8.1.1.7
+	if (s === "2b2403030208010109") return "brainpoolP320r1"; // 1.3.36.3.3.2.8.1.1.9
+	if (s === "2b240303020801010b") return "brainpoolP384r1"; // 1.3.36.3.3.2.8.1.1.11
+	if (s === "2b240303020801010d") return "brainpoolP512r1"; // 1.3.36.3.3.2.8.1.1.13
     if ("|secp256r1|NIST P-256|P-256|prime256v1|".indexOf(s) !== -1) return "secp256r1";
     if ("|secp256k1|".indexOf(s) !== -1) return "secp256k1";
     if ("|secp384r1|NIST P-384|P-384|".indexOf(s) !== -1) return "secp384r1";
