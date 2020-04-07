@@ -246,6 +246,8 @@ KJUR.crypto.ECParameterDB.regist(
   "011839296a789a3bc0045c8a5fb42c7d1bd998f54449579b446817afbd17273e662c97ee72995ef42640c550b9013fad0761353c7086a272c24088be94769fd16650", // gy
   ["NIST P-521", "P-521"]); // alias
 
+
+// Curves defined on the RFC 5639 https://tools.ietf.org/html/rfc5639#section-3
 KJUR.crypto.ECParameterDB.regist(
   "brainpoolP160r1", // name
   160, 
