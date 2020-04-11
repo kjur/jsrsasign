@@ -196,7 +196,8 @@ function X509() {
      * @example
      * var x = new X509();
      * x.readCertPEM(sCertPEM);
-     * var issuer = x.getIssuerString(); // return string like "/C=US/O=TEST"
+     * var dn1 = x.getIssuerString(); // return string like "/C=US/O=TEST"
+     * var dn2 = KJUR.asn1.x509.X500Name.onelineToLDAP(dn1); // returns "O=TEST, C=US"
      */
     this.getIssuerString = function() {
         return _X509.hex2dn(this.getIssuerHex());
@@ -226,7 +227,8 @@ function X509() {
      * @example
      * var x = new X509();
      * x.readCertPEM(sCertPEM);
-     * var subject = x.getSubjectString(); // return string like "/C=US/O=TEST"
+     * var dn1 = x.getSubjectString(); // return string like "/C=US/O=TEST"
+     * var dn2 = KJUR.asn1.x509.X500Name.onelineToLDAP(dn1); // returns "O=TEST, C=US"
      */
     this.getSubjectString = function() {
         return _X509.hex2dn(this.getSubjectHex());

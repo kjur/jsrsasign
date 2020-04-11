@@ -437,6 +437,22 @@ test("AuthorityKeyIdentifier class test (KID critical)", function() {
   equal(o1.getEncodedHex(), "30100603551d230101ff04063004800289ab", "ext hex");
 });
 
+// SubjectKeyIdentifier
+test("SubjectKeyIdentifier class test (KID)", function() {
+  var o1 = new KJUR.asn1.x509.SubjectKeyIdentifier({'kid': {'hex': '89ab'}});
+  equal(o1 instanceof KJUR.asn1.x509.SubjectKeyIdentifier, true, "instance of");
+  equal(o1.asn1KID instanceof KJUR.asn1.DEROctetString, true, "asn1KID instanceof OctetString");
+  equal(o1.getExtnValueHex(), "040289ab", "kid value");
+  equal(o1.getEncodedHex(), "300b0603551d0e0404040289ab", "ext hex");
+});
+
+test("SubjectKeyIdentifier class test (KID critical)", function() {
+  var o1 = new KJUR.asn1.x509.SubjectKeyIdentifier({'kid': {'hex': '89ab'}, 'critical': true});
+  equal(o1 instanceof KJUR.asn1.x509.SubjectKeyIdentifier, true, "instance of");
+  equal(o1.getEncodedHex(), "300e0603551d0e0101ff0404040289ab", "ext hex");
+});
+
+// SubjectAltName
 test("SubjectAltName", function() {
   var o1 = new KJUR.asn1.x509.SubjectAltName({
     critical: true,

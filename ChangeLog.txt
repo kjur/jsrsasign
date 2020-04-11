@@ -2,6 +2,21 @@
 ChangeLog for jsrsasign
 
 * Changes from 8.0.13 to 8.0.14 (2020-Apr-03)
+  - src/asn1x509-1.0.js
+    - add SubjectKeyIdentifier class (issue #402)
+      - add SubjectKeyIdentifier support in 
+        TBSCertificate.appendExtensionByName method
+      - test/qunit-do-asn1x509.html
+        SubjectKeyIdentifier test added
+  - src/base64x.js
+    - add multi section support for pemtohex
+      such as EC PRIVATE KEY and EC PARAMETRS
+    - test/qunit-do-base64x.html 
+      pemtohex testcase added
+  - src/keyutil.js (pull #415)
+    - add support for multi section plain PKCS#5 EC PRIVATE KEY
+    - test/qunit-do-keyutil-ec.html
+      plain PKCS#5 EC PRIVATE KEY testcase added
   - src/asn1csr-1.0.js
     document fix (pull #356)
   - npm_util/Makefile
@@ -12,6 +27,8 @@ ChangeLog for jsrsasign
     merged for strict fix (pull #389)
   - src/cipher-1.0.js
     document fix in return of decrypt method (issue #383)
+  - src/x509-1.1.js
+    onelineToLDAP sample added in document (issue #428)
 
 * Changes from 8.0.12 to 8.0.13 (2020-Mar-31)
   - LICENSE.txt

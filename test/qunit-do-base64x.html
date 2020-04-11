@@ -168,6 +168,22 @@ test("pemtohex", function() {
   equal(pemtohex(pem, "PUBLIC KEY"), hex, "pem with specifying header");
 });
 
+test("pemtohex multi section EC PRIVATE KEY PEM", function() {
+// _test/0cert_ec/k1.prv.p5p.pem
+var K1PRVP5PPEM = (function() {/*
+-----BEGIN EC PARAMETERS-----
+BggqhkjOPQMBBw==
+-----END EC PARAMETERS-----
+-----BEGIN EC PRIVATE KEY-----
+MHcCAQEEIBG1c3z52T8XwMsahGVdOZWgKCQJfv+l7djuJjgetdbDoAoGCCqGSM49
+AwEHoUQDQgAEoBUyo8CQAFPeYPvv78ylh5MwFZjTCLQeb042TjiMJxG+9DLFmRSM
+lBQ9T/RsLLc+PmpB1+7yPAR+oR5gZn3kJQ==
+-----END EC PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+equal(pemtohex(K1PRVP5PPEM, "EC PRIVATE KEY"), "3077020101042011b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3a00a06082a8648ce3d030107a14403420004a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425", "k1.prv.p5p.pem=3077...");
+});
+
 test("ipv6tohex", function() {
   equal(ipv6tohex('2001:db8:0:1:0:1:9d6:8'),
         '20010db8000000010000000109d60008',

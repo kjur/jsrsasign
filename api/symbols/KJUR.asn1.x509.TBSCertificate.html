@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 8.0.0 JavaScript API Reference - KJUR.asn1.x509.TBSCertificate</title>
+		<title>jsrsasign JavaScript API Reference - KJUR.asn1.x509.TBSCertificate</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -381,6 +381,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.SubjectKeyIdentifier.html">KJUR.asn1.x509.SubjectKeyIdentifier</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html">KJUR.asn1.x509.SubjectPublicKeyInfo</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html">KJUR.asn1.x509.TBSCertificate</a></li>
@@ -751,6 +753,7 @@ Here is supported names of extension:
 <li>CRLDistributionPoints - <a href="../symbols/KJUR.asn1.x509.CRLDistributionPoints.html">KJUR.asn1.x509.CRLDistributionPoints</a></li>
 <li>ExtKeyUsage - <a href="../symbols/KJUR.asn1.x509.ExtKeyUsage.html">KJUR.asn1.x509.ExtKeyUsage</a></li>
 <li>AuthorityKeyIdentifier - <a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html">KJUR.asn1.x509.AuthorityKeyIdentifier</a></li>
+<li>SubjectKeyIdentifier - <a href="../symbols/KJUR.asn1.x509.SubjectKeyIdentifier.html">KJUR.asn1.x509.SubjectKeyIdentifier</a></li>
 <li>AuthorityInfoAccess - <a href="../symbols/KJUR.asn1.x509.AuthorityInfoAccess.html">KJUR.asn1.x509.AuthorityInfoAccess</a></li>
 <li>SubjectAltName - <a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></li>
 <li>IssuerAltName - <a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
@@ -767,6 +770,7 @@ o.appendExtensionByName('KeyUsage', {'bin':'11'});
 o.appendExtensionByName('CRLDistributionPoints', {uri: 'http://aaa.com/a.crl'});
 o.appendExtensionByName('ExtKeyUsage', {array: [{name: 'clientAuth'}]});
 o.appendExtensionByName('AuthorityKeyIdentifier', {kid: '1234ab..'});
+o.appendExtensionByName('SubjectKeyIdentifier', {kid: '1234ab..'});
 o.appendExtensionByName('AuthorityInfoAccess', {array: [{accessMethod:{oid:...},accessLocation:{uri:...}}]});</pre>
 					
 					

@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign JavaScript API Reference - KJUR.asn1.cms</title>
+		<title>jsrsasign JavaScript API Reference - KJUR.asn1.x509.SubjectKeyIdentifier</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -438,25 +438,27 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Namespace KJUR.asn1.cms
+				Class KJUR.asn1.x509.SubjectKeyIdentifier
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
+				<br />Extends
+					<a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a>.<br />
 				
 			
+				SubjectKeyIdentifier ASN.1 structure class
 				
 				
-				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1cms-1.0.js.html">asn1cms-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.cms.">
-				<caption>Namespace Summary</caption>
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.SubjectKeyIdentifier.">
+				<caption>Class Summary</caption>
 				<thead>
 					<tr>
 						<th scope="col">Constructor Attributes</th>
@@ -468,13 +470,14 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.cms.html#constructor">KJUR.asn1.cms</a></b>
+								<b><a href="../symbols/KJUR.asn1.x509.SubjectKeyIdentifier.html#constructor">KJUR.asn1.x509.SubjectKeyIdentifier</a></b>(params)
 							</div>
-							<div class="description">kjur's ASN.1 class for Cryptographic Message Syntax(CMS)
-<p>
-This name space provides 
-<a href="https://tools.ietf.org/html/rfc5652">RFC 5652
-Cryptographic Message Syntax (CMS)</a> SignedData generator.</div>
+							<div class="description">SubjectKeyIdentifier ASN.1 structure class
+<pre>
+d-ce-subjectKeyIdentifier OBJECT IDENTIFIER ::=  { id-ce 14 }
+SubjectKeyIdentifier ::= KeyIdentifier
+KeyIdentifier ::= OCTET STRING
+</pre></div>
 						</td>
 					</tr>
 				</tbody>
@@ -483,12 +486,21 @@ Cryptographic Message Syntax (CMS)</a> SignedData generator.</div>
 
 <!-- ============================== properties summary ===================== -->
 			
+				
+				
+				
+				
+				<dl class="inheritsList">
+				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
+				</dl>
+				
+			
 
 <!-- ============================== methods summary ======================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.cms.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.x509.SubjectKeyIdentifier.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -499,29 +511,13 @@ Cryptographic Message Syntax (CMS)</a> SignedData generator.</div>
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.cms.<b>getEncodedHex</b>()
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.SubjectKeyIdentifier.html#setKIDByParam">setKIDByParam</a></b>(param)
 								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.cms.<b>setCerts</b>(listPEM)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.cms.<b>setContentType</b>(nameOrOid)
-								</div>
-								<div class="description"></div>
+								<div class="description">set keyIdentifier value by DERInteger parameter
+NOTE: Automatic keyIdentifier value calculation by an issuer
+public key will be supported in future version.</div>
 							</td>
 						</tr>
 					
@@ -529,6 +525,10 @@ Cryptographic Message Syntax (CMS)</a> SignedData generator.</div>
 				</table>
 				
 				
+				
+				<dl class="inheritsList">
+				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a></dd>
+				</dl>
 				
 			
 <!-- ============================== events summary ======================== -->
@@ -538,54 +538,51 @@ Cryptographic Message Syntax (CMS)</a> SignedData generator.</div>
 			
 			<div class="details"><a name="constructor"> </a>
 				<div class="sectionTitle">
-					Namespace Detail
+					Class Detail
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.cms</b>
+						<b>KJUR.asn1.x509.SubjectKeyIdentifier</b>(params)
 				</div>
 				
 				<div class="description">
-					kjur's ASN.1 class for Cryptographic Message Syntax(CMS)
-<p>
-This name space provides 
-<a href="https://tools.ietf.org/html/rfc5652">RFC 5652
-Cryptographic Message Syntax (CMS)</a> SignedData generator.
-
-<h4>FEATURES</h4>
-<ul>
-<li>easily generate CMS SignedData</li>
-<li>easily verify CMS SignedData</li>
-<li>APIs are very similar to BouncyCastle library ASN.1 classes. So easy to learn.</li>
-</ul>
-
-<h4>PROVIDED CLASSES</h4>
-<ul>
-<li><a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a></li>
-<li><a href="../symbols/KJUR.asn1.cms.SignerInfo.html">KJUR.asn1.cms.SignerInfo</a></li>
-<li><a href="../symbols/KJUR.asn1.cms.AttributeList.html">KJUR.asn1.cms.AttributeList</a></li>
-<li><a href="../symbols/KJUR.asn1.cms.ContentInfo.html">KJUR.asn1.cms.ContentInfo</a></li>
-<li><a href="../symbols/KJUR.asn1.cms.EncapsulatedContentInfo.html">KJUR.asn1.cms.EncapsulatedContentInfo</a></li>
-<li><a href="../symbols/KJUR.asn1.cms.IssuerAndSerialNumber.html">KJUR.asn1.cms.IssuerAndSerialNumber</a></li>
-<li><a href="../symbols/KJUR.asn1.cms.CMSUtil.html">KJUR.asn1.cms.CMSUtil</a></li>
-<li><a href="../symbols/KJUR.asn1.cms.Attribute.html">KJUR.asn1.cms.Attribute</a></li>
-<li><a href="../symbols/KJUR.asn1.cms.ContentType.html">KJUR.asn1.cms.ContentType</a></li>
-<li><a href="../symbols/KJUR.asn1.cms.MessageDigest.html">KJUR.asn1.cms.MessageDigest</a></li>
-<li><a href="../symbols/KJUR.asn1.cms.SigningTime.html">KJUR.asn1.cms.SigningTime</a></li>
-<li><a href="../symbols/KJUR.asn1.cms.SigningCertificate.html">KJUR.asn1.cms.SigningCertificate</a></li>
-<li><a href="../symbols/KJUR.asn1.cms.SigningCertificateV2.html">KJUR.asn1.cms.SigningCertificateV2</a></li>
-</ul>
-NOTE: Please ignore method summary and document of this namespace. 
-This caused by a bug of jsdoc2.
-</p>
+					SubjectKeyIdentifier ASN.1 structure class
+<pre>
+d-ce-subjectKeyIdentifier OBJECT IDENTIFIER ::=  { id-ce 14 }
+SubjectKeyIdentifier ::= KeyIdentifier
+KeyIdentifier ::= OCTET STRING
+</pre>
 					
 				</div>
 				
 				
 				
+				<pre class="code">e1 = new KJUR.asn1.x509.SubjectKeyIdentifier({
+  critical: true,
+  kid:    {hex: '89ab'},
+});</pre>
+				
+				
+				
 				
 					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Array}</span>  <b>params</b>
+								
+							</dt>
+								<dd>associative array of parameters (ex. {kid: {hex: '89ab...'}, critical: true})</dd>
+						
+						</dl>
 					
+					
+					
+						<dl class="detailList">
+						<dt class="heading">Since:</dt>
+							<dd>asn1x509 1.1.7 jsrsasign 8.0.14</dd>
+						</dl>
 					
 					
 					
@@ -604,40 +601,17 @@ This caused by a bug of jsdoc2.
 					Method Detail
 				</div>
 				
-					<a name=".getEncodedHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="setKIDByParam"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.cms.</span><b>getEncodedHex</b>()
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".setCerts"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.cms.</span><b>setCerts</b>(listPEM)
+					<b>setKIDByParam</b>(param)
 					
 					</div>
 					<div class="description">
-						
+						set keyIdentifier value by DERInteger parameter
+NOTE: Automatic keyIdentifier value calculation by an issuer
+public key will be supported in future version.
 						
 						
 					</div>
@@ -649,50 +623,20 @@ This caused by a bug of jsdoc2.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>listPEM</b>
+									<span class="light fixedFont">{Array}</span> <b>param</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>array of <a href="../symbols/KJUR.asn1.DERInteger.html">KJUR.asn1.DERInteger</a> parameter</dd>
 							
 							</dl>
 						
 						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".setContentType"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.cms.</span><b>setContentType</b>(nameOrOid)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
 						
 							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>nameOrOid</b>
-									
-								</dt>
-								<dd></dd>
-							
+							<dt class="heading">Since:</dt>
+								<dd>asn1x509 1.1.7 jsrsasign 8.0.14</dd>
 							</dl>
-						
-						
+							</dl>
 						
 						
 						

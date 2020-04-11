@@ -2,7 +2,7 @@
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>QUnit for KEYUTIL ECC plain private key reader 'keyutil.js'</title>
+<title>QUnit for KEYUTIL EC plain private key reader 'keyutil.js'</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 
@@ -60,7 +60,6 @@
 <!--
 $(document).ready(function(){
 
-
 // ======= TEST ===================================================================================
 var K1PRVRAWHEX = "11b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3";
 var K1PUBRAWHEX = "04a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425";
@@ -72,6 +71,18 @@ var K1PRVP8HEX = "308187020100301306072a8648ce3d020106082a8648ce3d030107046d306b
 var K1PUBP8HEX = "3059301306072a8648ce3d020106082a8648ce3d03010703420004a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425"; // k1.pub.p8.der
 
 var K1CERTHEX = "3082017c30820121a003020102020900a6f110b42f4940cd300a06082a8648ce3d040302301a310b3009060355040613025553310b3009060355040a0c024b31301e170d3133303731343032313731375a170d3233303731323032313731375a301a310b3009060355040613025553310b3009060355040a0c024b313059301306072a8648ce3d020106082a8648ce3d03010703420004a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425a350304e301d0603551d0e04160414c847be327cccff638870757496e2be366c44a8fc301f0603551d23041830168014c847be327cccff638870757496e2be366c44a8fc300c0603551d13040530030101ff300a06082a8648ce3d0403020349003046022100df01c4bf58a06b3fa241824b10569a788ddab80b9dd8bb817936468c82d8401e022100d19175600fd50756f65ead8a0950c1da89b384f47bcf8d62ff917006f7558c27"; // k1.self.cer.der
+
+// _test/0cert_ec/k1.prv.p5p.pem
+var K1PRVP5PPEM = (function() {/*
+-----BEGIN EC PARAMETERS-----
+BggqhkjOPQMBBw==
+-----END EC PARAMETERS-----
+-----BEGIN EC PRIVATE KEY-----
+MHcCAQEEIBG1c3z52T8XwMsahGVdOZWgKCQJfv+l7djuJjgetdbDoAoGCCqGSM49
+AwEHoUQDQgAEoBUyo8CQAFPeYPvv78ylh5MwFZjTCLQeb042TjiMJxG+9DLFmRSM
+lBQ9T/RsLLc+PmpB1+7yPAR+oR5gZn3kJQ==
+-----END EC PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
 
 test("KEYUTIL.getKeyFromPlainPrivatePKCS8Hex(K1PRVP8HEX) k1.prv.p8p.der", function() {
   var key = KEYUTIL.getKeyFromPlainPrivatePKCS8Hex(K1PRVP8HEX);
@@ -113,6 +124,16 @@ test("KEYUTIL.getKey(K1CERTHEX, null, x509pub) k1.self.cer.der", function() {
   equal(key.isPublic, true, "isPublic");
   equal(key.isPrivate, false, "isPrivate");
   equal(key.curveName, "secp256r1", "curveName");
+  equal(key.pubKeyHex, K1PUBRAWHEX, "pubKeyHex");
+});
+
+test("KEYUTIL.getKey(K1PRVP5PPEM) EC k1.prv.p5p.pem", function() {
+  //alert(K1PRVP5PPEM);
+  var key = KEYUTIL.getKey(K1PRVP5PPEM);
+  equal(key.isPublic, false, "isPublic");
+  equal(key.isPrivate, true, "isPrivate");
+  equal(key.curveName, "secp256r1", "curveName");
+  equal(key.prvKeyHex, K1PRVRAWHEX, "prvKeyHex");
   equal(key.pubKeyHex, K1PUBRAWHEX, "pubKeyHex");
 });
 
