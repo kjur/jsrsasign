@@ -1,11 +1,11 @@
-/* base64x-1.1.14 (c) 2012-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* base64x-1.1.15 (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * version: 1.1.14 (2018-Apr-21)
+ * version: 1.1.15 (2020-Apr-11)
  *
- * Copyright (c) 2012-2018 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2012-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -18,7 +18,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.12 base64x 1.1.14 (2018-Apr-22)
+ * @version jsrsasign 8.0.12 base64x 1.1.15 (2020-Apr-11)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -480,21 +480,24 @@ function hextopem(dataHex, pemHeader) {
  * NOTE: Now {@link KEYUTIL.getHexFromPEM} and {@link X509.pemToHex}
  * have been deprecated since jsrsasign 7.2.1. 
  * Please use this method instead.
+ * NOTE2: From jsrsasign 8.0.14 this can process multi
+ * "BEGIN...END" section such as "EC PRIVATE KEY" with "EC PARAMETERS".
  * @example
  * pemtohex("-----BEGIN PUBLIC KEY...") &rarr; "3082..."
  * pemtohex("-----BEGIN CERTIFICATE...", "CERTIFICATE") &rarr; "3082..."
  * pemtohex(" \r\n-----BEGIN DSA PRIVATE KEY...") &rarr; "3082..."
+ * pemtohex("-----BEGIN EC PARAMETERS...----BEGIN EC PRIVATE KEY...." &rarr; "3082..."
  */
 function pemtohex(s, sHead) {
     if (s.indexOf("-----BEGIN ") == -1)
         throw "can't find PEM header: " + sHead;
 
     if (sHead !== undefined) {
-        s = s.replace("-----BEGIN " + sHead + "-----", "");
-        s = s.replace("-----END " + sHead + "-----", "");
+        s = s.replace(new RegExp('^[^]*-----BEGIN ' + sHead + '-----'), '');
+        s = s.replace(new RegExp('-----END ' + sHead + '-----[^]*$'), '');
     } else {
-        s = s.replace(/-----BEGIN [^-]+-----/, '');
-        s = s.replace(/-----END [^-]+-----/, '');
+        s = s.replace(/^[^]*-----BEGIN [^-]+-----/, '');
+        s = s.replace(/-----END [^-]+-----[^]*$/, '');
     }
     return b64nltohex(s);
 }

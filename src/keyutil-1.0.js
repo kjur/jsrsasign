@@ -1,9 +1,9 @@
-/* keyutil-1.2.0.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* keyutil-1.2.1.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
  *
- * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.0 keyutil 1.2.0 (2017-Jun-26)
+ * @version jsrsasign 8.0.14 keyutil 1.2.1 (2020-Apr-11)
  * @since jsrsasign 4.1.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -64,6 +64,7 @@
  * // 1. loading PEM private key
  * var key = KEYUTIL.getKey(pemPKCS1PrivateKey);
  * var key = KEYUTIL.getKey(pemPKCS5EncryptedPrivateKey, "passcode");
+ * var key = KEYUTIL.getKey(pemPKCS5PlainRsaDssEcPrivateKey);
  * var key = KEYUTIL.getKey(pemPKC85PlainPrivateKey);
  * var key = KEYUTIL.getKey(pemPKC85EncryptedPrivateKey, "passcode");
  * // 2. loading PEM public key
@@ -842,10 +843,10 @@ var KEYUTIL = function() {
  * <li>PKCS#8 hexadecimal RSA/ECC public key: param=pemString, null, "pkcs8pub"</li>
  * <li>PKCS#8 PEM RSA/DSA/ECC public key: param=pemString</li>
  * <li>PKCS#5 plain hexadecimal RSA private key: param=hexString, null, "pkcs5prv"</li>
- * <li>PKCS#5 plain PEM DSA/RSA private key: param=pemString</li>
- * <li>PKCS#8 plain PEM RSA/ECDSA private key: param=pemString</li>
- * <li>PKCS#5 encrypted PEM RSA/DSA private key: param=pemString, passcode</li>
- * <li>PKCS#8 encrypted PEM RSA/ECDSA private key: param=pemString, passcode</li>
+ * <li>PKCS#5 plain PEM RSA/DSA/EC private key: param=pemString</li>
+ * <li>PKCS#8 plain PEM RSA/EC private key: param=pemString</li>
+ * <li>PKCS#5 encrypted PEM RSA/DSA/EC private key: param=pemString, passcode</li>
+ * <li>PKCS#8 encrypted PEM RSA/EC private key: param=pemString, passcode</li>
  * </ul>
  * Please note following limitation on encrypted keys:
  * <ul>
@@ -866,6 +867,7 @@ var KEYUTIL = function() {
  * keyObj = KEYUTIL.getKey("-----BEGIN RSA PRIVATE KEY..., "passcode");
  * keyObj = KEYUTIL.getKey("-----BEGIN PRIVATE KEY...");
  * keyObj = KEYUTIL.getKey("-----BEGIN PRIVATE KEY...", "passcode");
+ * keyObj = KEYUTIL.getKey("-----BEGIN EC PARAMETERS...-----BEGIN EC PRIVATE KEY...");
  * // 2. loading public key from PEM string
  * keyObj = KEYUTIL.getKey("-----BEGIN PUBLIC KEY...");
  * keyObj = KEYUTIL.getKey("-----BEGIN X509 CERTIFICATE...");
@@ -1126,6 +1128,13 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
                        new BigInteger(y, 16),
                        new BigInteger(x, 16));
         return key;
+    }
+
+    // 8.3. private key by plain PKCS#5 PEM EC string
+    if (param.indexOf("-END EC PRIVATE KEY-") != -1 &&
+        param.indexOf("4,ENCRYPTED") == -1) {
+        var hex = _pemtohex(param, "EC PRIVATE KEY");
+        return _KEYUTIL.getKey(hex, null, "pkcs5prv");
     }
 
     // 10. private key by plain PKCS#8 PEM ECC/RSA string

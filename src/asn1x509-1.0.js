@@ -1,9 +1,9 @@
-/* asn1x509-1.1.6.js (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-1.1.7.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
  *
- * Copyright (c) 2013-2018 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.12 asn1x509 1.1.6 (2018-Apr-22)
+ * @version jsrsasign 8.0.14 asn1x509 1.1.7 (2020-Apr-11)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -72,6 +72,7 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * <li>{@link KJUR.asn1.x509.CRLDistributionPoints}</li>
  * <li>{@link KJUR.asn1.x509.ExtKeyUsage}</li>
  * <li>{@link KJUR.asn1.x509.AuthorityKeyIdentifier}</li>
+ * <li>{@link KJUR.asn1.x509.SubjectKeyIdentifier}</li>
  * <li>{@link KJUR.asn1.x509.AuthorityInfoAccess}</li>
  * <li>{@link KJUR.asn1.x509.SubjectAltName}</li>
  * <li>{@link KJUR.asn1.x509.IssuerAltName}</li>
@@ -416,6 +417,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * <li>CRLDistributionPoints - {@link KJUR.asn1.x509.CRLDistributionPoints}</li>
      * <li>ExtKeyUsage - {@link KJUR.asn1.x509.ExtKeyUsage}</li>
      * <li>AuthorityKeyIdentifier - {@link KJUR.asn1.x509.AuthorityKeyIdentifier}</li>
+     * <li>SubjectKeyIdentifier - {@link KJUR.asn1.x509.SubjectKeyIdentifier}</li>
      * <li>AuthorityInfoAccess - {@link KJUR.asn1.x509.AuthorityInfoAccess}</li>
      * <li>SubjectAltName - {@link KJUR.asn1.x509.SubjectAltName}</li>
      * <li>IssuerAltName - {@link KJUR.asn1.x509.IssuerAltName}</li>
@@ -427,6 +429,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * o.appendExtensionByName('CRLDistributionPoints', {uri: 'http://aaa.com/a.crl'});
      * o.appendExtensionByName('ExtKeyUsage', {array: [{name: 'clientAuth'}]});
      * o.appendExtensionByName('AuthorityKeyIdentifier', {kid: '1234ab..'});
+     * o.appendExtensionByName('SubjectKeyIdentifier', {kid: '1234ab..'});
      * o.appendExtensionByName('AuthorityInfoAccess', {array: [{accessMethod:{oid:...},accessLocation:{uri:...}}]});
      * @see KJUR.asn1.x509.Extension
      */
@@ -559,6 +562,9 @@ KJUR.asn1.x509.Extension.appendByNameToArray = function(name, extParams, a) {
         a.push(extObj);
     } else if (_lowname == "authoritykeyidentifier") {
         var extObj = new _KJUR_asn1_x509.AuthorityKeyIdentifier(extParams);
+        a.push(extObj);
+    } else if (_lowname == "subjectkeyidentifier") {
+        var extObj = new _KJUR_asn1_x509.SubjectKeyIdentifier(extParams);
         a.push(extObj);
     } else if (_lowname == "authorityinfoaccess") {
         var extObj = new _KJUR_asn1_x509.AuthorityInfoAccess(extParams);
@@ -785,7 +791,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.ExtKeyUsage, KJUR.asn1.x509.Extension);
  * AuthorityKeyIdentifier ASN.1 structure class
  * @name KJUR.asn1.x509.AuthorityKeyIdentifier
  * @class AuthorityKeyIdentifier ASN.1 structure class
- * @param {Array} params associative array of parameters (ex. {'uri': 'http://a.com/', 'critical': true})
+ * @param {Array} params associative array of parameters (ex. {kid: {hex: '89ab...'}, critical: true})
  * @extends KJUR.asn1.x509.Extension
  * @since asn1x509 1.0.8
  * @description
@@ -894,6 +900,62 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.AuthorityKeyIdentifier, KJUR.asn1.x509.Extension);
+
+/**
+ * SubjectKeyIdentifier ASN.1 structure class
+ * @name KJUR.asn1.x509.SubjectKeyIdentifier
+ * @class SubjectKeyIdentifier ASN.1 structure class
+ * @param {Array} params associative array of parameters (ex. {kid: {hex: '89ab...'}, critical: true})
+ * @extends KJUR.asn1.x509.Extension
+ * @since asn1x509 1.1.7 jsrsasign 8.0.14
+ * @description
+ * <pre>
+ * d-ce-subjectKeyIdentifier OBJECT IDENTIFIER ::=  { id-ce 14 }
+ * SubjectKeyIdentifier ::= KeyIdentifier
+ * KeyIdentifier ::= OCTET STRING
+ * </pre>
+ * @example
+ * e1 = new KJUR.asn1.x509.SubjectKeyIdentifier({
+ *   critical: true,
+ *   kid:    {hex: '89ab'},
+ * });
+ */
+KJUR.asn1.x509.SubjectKeyIdentifier = function(params) {
+    KJUR.asn1.x509.SubjectKeyIdentifier.superclass.constructor.call(this, params);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DEROctetString = _KJUR_asn1.DEROctetString;
+
+    this.asn1KID = null;
+
+    this.getExtnValueHex = function() {
+        this.asn1ExtnValue = this.asn1KID;
+        return this.asn1ExtnValue.getEncodedHex();
+    };
+
+    /**
+     * set keyIdentifier value by DERInteger parameter
+     * @name setKIDByParam
+     * @memberOf KJUR.asn1.x509.SubjectKeyIdentifier#
+     * @function
+     * @param {Array} param array of {@link KJUR.asn1.DERInteger} parameter
+     * @since asn1x509 1.1.7 jsrsasign 8.0.14
+     * @description
+     * NOTE: Automatic keyIdentifier value calculation by an issuer
+     * public key will be supported in future version.
+     */
+    this.setKIDByParam = function(param) {
+        this.asn1KID = new _DEROctetString(param);
+    };
+
+    this.oid = "2.5.29.14";
+    if (params !== undefined) {
+        if (params.kid !== undefined) {
+            this.setKIDByParam(params.kid);
+        }
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.x509.SubjectKeyIdentifier, KJUR.asn1.x509.Extension);
 
 /**
  * AuthorityInfoAccess ASN.1 structure class

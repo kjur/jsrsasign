@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 8.0.0 JavaScript API Reference - KEYUTIL</title>
+		<title>jsrsasign JavaScript API Reference - KEYUTIL</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -380,6 +380,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.SubjectKeyIdentifier.html">KJUR.asn1.x509.SubjectKeyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html">KJUR.asn1.x509.SubjectPublicKeyInfo</a></li>
 	
@@ -795,6 +797,7 @@ NOTE: <a href="../symbols/KJUR.crypto.DSA.html">KJUR.crypto.DSA</a> is not yet s
 				<pre class="code">// 1. loading PEM private key
 var key = KEYUTIL.getKey(pemPKCS1PrivateKey);
 var key = KEYUTIL.getKey(pemPKCS5EncryptedPrivateKey, "passcode");
+var key = KEYUTIL.getKey(pemPKCS5PlainRsaDssEcPrivateKey);
 var key = KEYUTIL.getKey(pemPKC85PlainPrivateKey);
 var key = KEYUTIL.getKey(pemPKC85EncryptedPrivateKey, "passcode");
 // 2. loading PEM public key
@@ -1075,10 +1078,10 @@ NOTE: Each value shall be hexadecimal string of key spec.</li>
 <li>PKCS#8 hexadecimal RSA/ECC public key: param=pemString, null, "pkcs8pub"</li>
 <li>PKCS#8 PEM RSA/DSA/ECC public key: param=pemString</li>
 <li>PKCS#5 plain hexadecimal RSA private key: param=hexString, null, "pkcs5prv"</li>
-<li>PKCS#5 plain PEM DSA/RSA private key: param=pemString</li>
-<li>PKCS#8 plain PEM RSA/ECDSA private key: param=pemString</li>
-<li>PKCS#5 encrypted PEM RSA/DSA private key: param=pemString, passcode</li>
-<li>PKCS#8 encrypted PEM RSA/ECDSA private key: param=pemString, passcode</li>
+<li>PKCS#5 plain PEM RSA/DSA/EC private key: param=pemString</li>
+<li>PKCS#8 plain PEM RSA/EC private key: param=pemString</li>
+<li>PKCS#5 encrypted PEM RSA/DSA/EC private key: param=pemString, passcode</li>
+<li>PKCS#8 encrypted PEM RSA/EC private key: param=pemString, passcode</li>
 </ul>
 Please note following limitation on encrypted keys:
 <ul>
@@ -1104,6 +1107,7 @@ keyObj = KEYUTIL.getKey("-----BEGIN RSA PRIVATE KEY...");
 keyObj = KEYUTIL.getKey("-----BEGIN RSA PRIVATE KEY..., "passcode");
 keyObj = KEYUTIL.getKey("-----BEGIN PRIVATE KEY...");
 keyObj = KEYUTIL.getKey("-----BEGIN PRIVATE KEY...", "passcode");
+keyObj = KEYUTIL.getKey("-----BEGIN EC PARAMETERS...-----BEGIN EC PRIVATE KEY...");
 // 2. loading public key from PEM string
 keyObj = KEYUTIL.getKey("-----BEGIN PUBLIC KEY...");
 keyObj = KEYUTIL.getKey("-----BEGIN X509 CERTIFICATE...");

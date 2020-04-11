@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 8.0.0 JavaScript API Reference - X509</title>
+		<title>jsrsasign JavaScript API Reference - X509</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -380,6 +380,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.SubjectKeyIdentifier.html">KJUR.asn1.x509.SubjectKeyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html">KJUR.asn1.x509.SubjectPublicKeyInfo</a></li>
 	
@@ -1850,7 +1852,8 @@ var issuer = x.getIssuerHex(); // return string like "3013..."</pre>
 					
 					<pre class="code">var x = new X509();
 x.readCertPEM(sCertPEM);
-var issuer = x.getIssuerString(); // return string like "/C=US/O=TEST"</pre>
+var dn1 = x.getIssuerString(); // return string like "/C=US/O=TEST"
+var dn2 = KJUR.asn1.x509.X500Name.onelineToLDAP(dn1); // returns "O=TEST, C=US"</pre>
 					
 					
 					
@@ -2517,7 +2520,8 @@ var subject = x.getSubjectHex(); // return string like "3013..."</pre>
 					
 					<pre class="code">var x = new X509();
 x.readCertPEM(sCertPEM);
-var subject = x.getSubjectString(); // return string like "/C=US/O=TEST"</pre>
+var dn1 = x.getSubjectString(); // return string like "/C=US/O=TEST"
+var dn2 = KJUR.asn1.x509.X500Name.onelineToLDAP(dn1); // returns "O=TEST, C=US"</pre>
 					
 					
 					

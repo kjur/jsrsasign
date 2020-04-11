@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign 8.0.0 JavaScript API Reference - global__</title>
+		<title>jsrsasign JavaScript API Reference - global__</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -380,6 +380,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.SubjectKeyIdentifier.html">KJUR.asn1.x509.SubjectKeyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html">KJUR.asn1.x509.SubjectPublicKeyInfo</a></li>
 	
@@ -2543,6 +2545,8 @@ will be omitted.<br/>
 NOTE: Now KEYUTIL.getHexFromPEM and X509.pemToHex
 have been deprecated since jsrsasign 7.2.1. 
 Please use this method instead.
+NOTE2: From jsrsasign 8.0.14 this can process multi
+"BEGIN...END" section such as "EC PRIVATE KEY" with "EC PARAMETERS".
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -2554,7 +2558,8 @@ Please use this method instead.
 					
 					<pre class="code">pemtohex("-----BEGIN PUBLIC KEY...") &rarr; "3082..."
 pemtohex("-----BEGIN CERTIFICATE...", "CERTIFICATE") &rarr; "3082..."
-pemtohex(" \r\n-----BEGIN DSA PRIVATE KEY...") &rarr; "3082..."</pre>
+pemtohex(" \r\n-----BEGIN DSA PRIVATE KEY...") &rarr; "3082..."
+pemtohex("-----BEGIN EC PARAMETERS...----BEGIN EC PRIVATE KEY...." &rarr; "3082..."</pre>
 					
 					
 					
