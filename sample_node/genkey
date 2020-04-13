@@ -1,0 +1,106 @@
+#!/usr/bin/env node
+
+/*
+ * genkey - generate RSA or EC keypair and save them to files.
+ *
+ * Copyright (c) 2020 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * https://kjur.github.io/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ * ---------------------------------------------------------
+ * DESCRIPTION
+ *   This script generates RSA and EC public key pair and 
+ *   save them as:
+ *   - PKCS#1 or 8 PEM plain private key file
+ *   - PKCS#8 PEM public key file
+ *
+ * USAGE
+ *   RSA KEY
+ *     generate RSA 2048bit key by default and write to zprv.key and zpub.key
+ *     % genkey
+ *     generate RSA 1024bit key and write to zprv.key and zpub.key
+ *     % genkey -l 1024
+ *   EC KEY
+ *     generate EC secp256r1 curve key and write to zprv.key and zpub.key
+ *     % genkey -a ec
+ *     generate EC secp256k1 curve key and write to zprv.key and zpub.key
+ *     % genkey -a ec -c secp256k1
+ *   OUTPUT PRIVATE KEY FORMAT
+ *     write private key in PKCS#1 by default
+ *     % genkey
+ *     write private key in PKCS#8 format
+ *     % genkey --pkcs 8
+ *   OUTPUT FILE
+ *     write to zprv.key and zpub.key by default
+ *     % genkey
+ *     specify output file name
+ *     % genkey -o private.key -O public.key
+ *     set file head 'k1' and write to k1.prv.pem and k1.pub.pem
+ *     % genkey --head k1
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+var rsu = require('jsrsasign-util');
+var path = require('path');
+
+program
+  .version('1.0.0 (2020-APr-12)')
+  .description('generate RSA or EC keypair')
+  .usage('[-a rsa -l 1024|-a ec -c secp256r1] [-o prvout] [-O pubout] [--head filehead]')
+  .option('-a, --keyalg <rsa|ec>', 'public key algorithm. default=rsa', "rsa")
+  .option('-l, --keysize <key size>', 'RSA key size. default=2048', "2048")
+  .option('-c, --curve <curve name>', 'EC curve name. default=secp256r1', 'secp256r1')
+  .option('-o, --prvout <file>', 'PKCS#1/5 PEM private key output file', 'zprv.key')
+  .option('-O, --pubout <file>', 'PKCS#8 PEM public key output file', 'zpub.key')
+  .option('--head <file prefix>', 'output file name prefix for private and public key. overwrites -o and -O')
+  .option('--pkcs <1|5|8>', 'private key PEM format version. 1 and 5 are the same. default=1', "1")
+  .option('--hex', 'save private and public key as hexadecimal string')
+  .parse(process.argv);
+
+var kp;
+var keyalg = program.keyalg;
+if (keyalg === "rsa") {
+   var keysize = parseInt(program.keysize);
+   console.log("generating RSA " + keysize + "bit key pair...");
+   kp = rs.KEYUTIL.generateKeypair("RSA", keysize);
+} else if (keyalg === "ec") {
+   console.log("generating EC curve " + program.curve + " key pair...");
+   kp = rs.KEYUTIL.generateKeypair("EC", program.curve);
+} else {
+   throw "unsupported key algorithm: " + keyalg;
+}
+
+if (program.head !== undefined) {
+  program.prvout = program.head + ".prv.pem"
+  program.pubout = program.head + ".pub.pem"
+}
+
+var prvKey = kp.prvKeyObj;
+var pubKey = kp.pubKeyObj;
+
+var prvKeyPEM, pubKeyPEM;
+if (program.pkcs === "8") {
+  prvKeyPEM = rs.KEYUTIL.getPEM(prvKey, "PKCS8PRV");
+} else {
+  prvKeyPEM = rs.KEYUTIL.getPEM(prvKey, "PKCS1PRV");
+}
+pubKeyPEM = rs.KEYUTIL.getPEM(pubKey);
+
+if (program.hex === true && program.keyalg === "ec") {
+  prvKeyPEM = prvKey.prvKeyHex;
+  pubKeyPEM = pubKey.pubKeyHex;
+  console.log(prvKey.ecparams.keylen)
+} 
+
+console.log("write private key: " + program.prvout);
+rsu.saveFile(program.prvout, prvKeyPEM)
+console.log("write public key: " + program.pubout);
+rsu.saveFile(program.pubout, pubKeyPEM)
+console.log("done.");
+

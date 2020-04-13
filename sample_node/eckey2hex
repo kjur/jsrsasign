@@ -1,0 +1,57 @@
+#!/usr/bin/env node
+
+/*
+ * eckey2hex - read PKCS#1/5/8 PEM EC private or public key and show key in hexadecimal
+ *
+ * Copyright (c) 2020 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * https://kjur.github.io/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ * ---------------------------------------------------------
+ * DESCRIPTION
+ *   read PKCS#1/5/8 PEM EC private or public key and show key in hexadecimal
+ *
+ * USAGE
+ *   % eckey2hex private.key
+ *   private key = 1234abcd...
+ *   public key = 04abcd...
+ *   % eckey2hex public.key
+ *   public key = 04abcd...
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+var rsu = require('jsrsasign-util');
+var path = require('path');
+
+program
+  .version('1.0.0 (2020-APr-12)')
+  .description('read EC key and show key in hexadecimal string')
+  .usage(' ec-key-file')
+  .parse(process.argv);
+
+if (program.args.length != 1)
+  throw "wrong number of arguments";
+
+var inFile = program.args[program.args.length - 1];
+
+var pem;
+try {
+  pem = rsu.readFile(inFile);
+} catch (ex) {
+  throw "can't read file: " + inFile
+}
+
+var key = rs.KEYUTIL.getKey(pem);
+if (key instanceof rs.KJUR.crypto.ECDSA) {
+  if (key.prvKeyHex != null)
+    console.log("private key = " + key.prvKeyHex);
+  if (key.pubKeyHex != null)
+    console.log("public key = " + key.pubKeyHex);
+}
+
