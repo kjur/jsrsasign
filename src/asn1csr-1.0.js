@@ -110,7 +110,7 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
 	this.asn1SignatureAlg = 
 	    new _KJUR_asn1_x509.AlgorithmIdentifier({'name': sigAlgName});
 
-        sig = new _KJUR.crypto.Signature({'alg': sigAlgName});
+        var sig = new _KJUR.crypto.Signature({'alg': sigAlgName});
         sig.init(this.prvKey);
         sig.updateHex(this.asn1CSRInfo.getEncodedHex());
         this.hexSig = sig.sign();
