@@ -308,7 +308,7 @@ KJUR.jws.JWS.sign = function(alg, spHeader, spPayload, key, pass) {
 	var sig = new _Signature({'alg': sigAlg});
 	sig.init(key, pass);
 	sig.updateString(uSignatureInput);
-	hASN1Sig = sig.sign();
+	var hASN1Sig = sig.sign();
 	hSig = KJUR.crypto.ECDSA.asn1SigToConcatSig(hASN1Sig);
     } else if (sigAlg != "none") {
 	var sig = new _Signature({'alg': sigAlg});
