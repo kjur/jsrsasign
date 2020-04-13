@@ -261,7 +261,7 @@ KJUR.jws.JWSJS = function() {
 		    throw "malformed signatures";
 		}
 		if (spJWSJS.signatures.length > 0) {
-		    this.aSignatures = spJWSJS.signatures;
+		    this.aSignature = spJWSJS.signatures;
 		} else {
 		    throw "malformed signatures";
 		}
