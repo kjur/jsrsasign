@@ -41,6 +41,82 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
+// msghash values for aaa.txt by shasum command
+var AAA = {
+"sha1": "7e240de74fb1ed08fa08d38063f6a6a91462a815",
+"sha224": "ed782653bfec275cf37d027511a68cece08d1e53df1360c762ce043a",
+"sha256": "9834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f0",
+"sha384": "8e07e5bdd64aa37536c1f257a6b44963cc327b7d7dcb2cb47a22073d33414462bfa184487cf372ce0a19dfc83f8336d8",
+"sha512": "d6f644b19812e97b5d871658d6d3400ecd4787faeb9b8990c1e7608288664be77257104a58d033bcf1a0e0945ff06468ebe53e2dff36e248424c7273117dac09"
+};
+
+var KEYHEX = {
+  "k2": {
+    "prv": "5e83d67ee4592c673eab19d3db98d541f15e2145188b81ca",
+    "pub": "04874ca64f193b1080847bf3950366ed6bc05c884185574e21ac17dbd2e63a93d9bfff14a8e251da592bc4677de25458c0",
+    "curve": "secp192k1"
+  },
+  "k3": {
+    "prv": "aaa001fceead632938ab715bf712eb2a9b3702895850f4dcc2ece1e3",
+    "pub": "04e34009a6c4dc3ddb0d39e1abac085cd4705e1d39a526d4843398432a093af22eb42891390266eb192cb9221725cd44d0c211317afb97349d",
+    "curve": "secp224r1"
+  },
+  "k5": {
+    "prv": "0144d110f18d60c03307f299decfdbaae0e0cb13f293c7b782ccc34a946448871ffc328dbe07d39128f305938a27d30156ed3faba7b3695e6d70c533981d24dfee65",
+    "pub": "0400d29a52344c35119ff5bea19ae090f802d05ff9ea31adcc31524d012875ea791344b02af06b58de3c3d26f1ba413d25d5cf9b6b287b5c9cf410bf2a6ea7ad02619d00de221502a15480f064d9d04c0bd40713e587ca72fc3009d338947454d63617b62e08a42fe9820153dcdf88445992e8cf204d8cefc4264c0d49d81e298307ed698f",
+    "curve": "secp521r1"
+  },
+  "k6": {
+    "prv": "1a992b5bd177a9df2dec5b0dae49201d50f92043d46f8659f1f17115398cb6b5e87af53d289fbee36b4da6d379fcb7c5",
+    "pub": "04543526abdfc47394a3f2645b0d48651a9f3a4d46d8740be322915107f050250c730ca40b37e1dc85e082b4bb181b8847bd6d0fa278bae5eb1c05474c9a4e2beec28c970be49c1949f09e96979a277a514830e32a5b9de1ec68ab99f492dd300a",
+    "curve": "secp384r1",
+  },
+  "k7": {
+    "prv": "53f2336625c011af9bfa17b3214339f968e68457bf0cc3b964f8bf7fc6548923",
+    "pub": "04bdebb48fca9431f08ea767a3568ad160a3ca527ffe5a6155e48c55bc2dd5863a629d6549e28af0765a68481bab85324b7cfb80bcce40bb6cde430fb283d48251",
+    "curve": "secp256r1"
+  }
+};
+
+// OpenSSL generated signature for each key and hash algorithm
+var OSSIGHEX = {
+  "k2": {
+    "sha1": "303402181fe21ea693ae465779a1b57b21aceafe451a85c56b9bee500218345723fd745b3029089d362029fc29f0373cffe8cb7b1eab",
+    "sha224": "3035021900dd4496206cc4a37ff8939db80cf296a40c9817956e851bcd02184094ac226c7f50185bcaf1e83155c9462607f1e2bea7728b",
+    "sha256": "30360219008605679ccb712960cf254f142e9a67e0ad49bb9a4751c41b021900e3d44ea90529cc013be79e25741682ec37d17f4a2d2f78a2",
+    "sha384": "303402182d59dbed77d07f3cf1382f7c3a18b3643b9b5dcc839b674e02184960dde528f9301d297a20294efae0e95cffad59ab137c40",
+    "sha512": "3035021826b3ab1d9cf0cece96987785b2912e7f9840be6ee88fcbc9021900faa799af2d26daee0def42df99cee437a54d217098340aec"
+  },
+  "k3": {
+    "sha1": "303c021c32545abd1f19d25d7c1a329a0eb5b47cfea2bbafe9ce531e8cfbb586021c4002acfe8351ef3470eb49d3bb8eb6909eb14db048c189b2b2a650b1",
+    "sha224": "303d021c7b9423d241231a44582201beb873dae44070fcd0ca2e29a04e7262d8021d00b7b2cea9741e77d7eba425f415f25a12ba7b717cc73bcc576b9072f2",
+    "sha256": "303c021c21f90179b90a781acd50be8935c60f21b984d0bb41a1123d3b553975021c22ab92ce4014092c00f3f773f08be8651269fea386a70135428bec7e",
+    "sha384": "303c021c0b8f57209fe7c53e0ad1f55ee2125085aefed60d43ad8f89f3d47b86021c54132910c796fc319f9c86a7362773b5d4cb372cf07127c2f2213870",
+    "sha512": "303d021d00820ed0e5e4eaec461ef1e54560a8fc239ee4f29cb4e76e2f93e8235f021c69598c4b5c056579d7bf805204f226a5e20f4321cc085c48e77196a0"
+  },
+  "k5": {
+    "sha1": "308186024164f6b34ba7348a7d987257df7969843925b0716c5b96e5bdbb4eb71bf5f5ddcb3f4cbf7ae6aca31e57e931ef68cd15b5bbac892110f6b48c7d436076b9de4245a5024136f0edafb5c6d78e2dd02bf4c233c3f72401c0da68789a0046f6b971d7ef02a638ec351d2d893edc3ac95ee4e003fd22859100ac5cf56267f1ffe599662307e2e5",
+    "sha224": "308187024200cbc3a03db405928995973ba2e2a33b6f42ecd2992d416cd03beee2bb277d9b610896e06c6104d14010c4d34eb102c90b31723888250398b8602d6bbfc140962121024102f95b9612429d7e975be58ffb6ae163b66e5f69a1e98394291f793d4856cdd2af89c89df91fe717b3bf8c8564040cbba92693fca3f510948fe6ae14f1aa8935cd",
+    "sha256": "308188024201e1a66f447ce86608e717f4a66d1ab046a13964e4269daa790922506e594667feafcd89b372525b3c07a7fefc085bea1f3ff50e10687230b27de4d1179a05781930024200f60de78284181ccf85f8ff32a842866a2d0436b9a4da2702c15d2f97194ecf6d880059ba932e2e347be1002b20fa64d9dd46d05f1b8c4b62163eefc583f9bf153c",
+    "sha384": "30818702412c9aec49efcb936d8e20e99f2b6977c6c2c98661cf766508529f6d192e38e64da4a3dec4f5214d00bc6005e635218042376af50fbedd0358be720693b9d00aad210242017af0515664d4bf12e2b3c1b25e13e66714437e2358a2bcab1e95b25687b88343ec2078a44d246c02b33f4cfbbbc4a008e82c4ff35d4105bc3b714bf4f28ff08dff",
+    "sha512": "308187024103268bca0a5c5fc7b9910efa9f4925d9b1eb411d08bdbf91941c469e4e06fea5b7f6115c67006e836a2f240e057c96d84e10a964e5db87ad281afe59cec1efd609024200fd5d6d9b874fe743cc9cc6ab6b66de667d1c3952e94dffb3d113f8fce92b3f3b419555ed97e54ed038ef091a90242baf84a626d697faf9a169eb75710bdb11b843"
+  },
+  "k6": {
+    "sha1": "3065023100a1a8b67c1631d786fdcab40b4056c6d183af65ddadef9d16b2221b3bef28b04ac05ed4668ec5a13917ead8254506772102302104e03b53babfad35ab1533ca10f006be000c9639901613c20187b794b15a64c44b4edc3f949fe6f16e5ee24914e64f",
+    "sha224": "3064023030ff2c434742949ef193f00a90c9a4bf8dd99f0442d487502b4fdad4dcbfc44e3164479f9c766dab3e4685dfbff46d3502302f4da9694360b868ffc83763123d82ac6d21bb4d7491e63ead157f8b2d2043e2fbcee860dcdcd3b2401f3004352dd05e",
+    "sha256": "3065023100cccd5d3937cd815bc4de89f2f066436118c928a1928ac3d7bba4d585bfd8b143e6bc768b47c77156495ee94074d7caf50230221659eb987e5db5feb858fff51fe4562b48d03343438b79e5dfb8a06402dbb0b95fcf350d636ed88a7b84c98b55c39a",
+    "sha384": "3065023042958d6ae304e1acc9414517bc4d90d8d9dea7bb9548a14cc46b86a8614bd3f51737eaf8353a9963856c9d4186e8e46a023100ec025b8368c33facf235541f1f5fcd86049c7f69f9bee67ba905786507e1b016c59aca93ca06535d450c1572d8b4512b",
+    "sha512": "30650231009398b1262ff8aac3796388ed97fc516d9061d2473ec79c95f27694058f781788940bf97a48817ea3a6af214d5625b37e023064ede21a004d7ede2d2357cb2ef2753c3491107957604a4860a825416c20004f39cb58414ff0dfad523e98dac0bd0092"
+  },
+  "k7": {
+    "sha1": "3045022100b3a961321a614c9fee6b1a202be63afb93610b34c03dc19bd6f59a76db9f60cd0220416aec2061790e41a5d6b228ea0ff46dc0e2fdda5da9d54b03fba062919845c2",
+    "sha224": "3045022100f2383ca9290167e1ec4db408252f8b4ddf94195346de6606aa42588f98d446690220121cf0db718ccf033903b1cf6c2c6109c66c99c4e3d8e47a04d5ebe7a2f567e1",
+    "sha256": "304502205eb5d99ad13adc09bd6df2105c16d7f7565b768e1e9f2e2b8a5e42bcb5f0f083022100b1d8b2091958df331b700c97698c96e2d4c6aebb2cf7b68fc57901b9794582af",
+    "sha384": "3045022003af466a49bd70d7e2146a0c04375a5a8a9cfef836c09235643bedcfb2dd1447022100b0512371a5ed5bd8565c95d7c064fcc4d5408e2c27a98b6cb80bf9dfb12db695",
+    "sha512": "3046022100f3ee83e040657dc7228ad28350a512fc48139a5eba421ec8e04c3692d4645cf202210086701829886e409ab81f2388226047453e089090e450e2a9026df52de16dfadf"
+  }
+};
+
 var hashAAA256Hex = KJUR.crypto.Util.sha256("aaa"); // SHA256 hash value of string "aaa"
 var hashAAB256Hex = KJUR.crypto.Util.sha256("aab"); // SHA256 hash value of string "aab"
 var ECK1PUBHEX = "04a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425"; // k1.pub.pem
@@ -64,19 +140,6 @@ test("default(secp256r1) sign and verify aaa", function() {
   equal(result2, true, "ecdsa sign");
 });
 
-test("secp192k1 sign and verify aaa", function() {
-  // signing a message
-  var prv = "5e83d67ee4592c673eab19d3db98d541f15e2145188b81ca";
-  var ec1 = new KJUR.crypto.ECDSA({'curve': 'secp192k1', 'prv': prv});
-  var sigHex = ec1.signWithMessageHash(hashAAA256Hex);
-
-  // signature validation
-  var pub = "04874ca64f193b1080847bf3950366ed6bc05c884185574e21ac17dbd2e63a93d9bfff14a8e251da592bc4677de25458c0";
-  var ec2 = new KJUR.crypto.ECDSA({'curve': 'secp192k1', 'pub': pub});
-  var result2 = ec2.verifyWithMessageHash(hashAAA256Hex, sigHex);
-  equal(result2, true, "ecdsa sign");
-});
-
 test("default(secp256r1) sign and verify aaa<>aab", function() {
   // signing a message
   var prv = "11b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3";
@@ -90,41 +153,49 @@ test("default(secp256r1) sign and verify aaa<>aab", function() {
   equal(result2, false, "ecdsa sign");
 });
 
-test("k1.sig.aaa.1 secp256r1 sha256", function() {
-  // signature validation
-  var pub = "04a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425"; // k1.pub.pem
-  var ec2 = new KJUR.crypto.ECDSA({'pub': pub});
-  var sigHex = "3045022100f729843c8bb5f285380ef5e4d708608d7449dadfa50129112668e972d30f210b0220051c589f0ebdad7a41370e9d9ce405734e854788387f21997028312a305ddae8"; // k1.sig.aaa.1
-  var result2 = ec2.verifyWithMessageHash(hashAAA256Hex, sigHex);
-  equal(result2, true, "ecdsa sign");
-});
+// === OpenSSL generated signature validation ======================================================
 
-test("k1.sig.aaa.2 secp256r1 sha256", function() {
-  // signature validation
-  var pub = "04a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425"; // k1.pub.pem
-  var ec2 = new KJUR.crypto.ECDSA({curve: 'secp256r1', 'pub': pub});
-  var sigHex = "304502202241c432b03179b65f63ac66ed9273531a7f5c00feab5e55a7921c81a8f74275022100a51a260c76a33718e77b0459b239cc709209a7da7ba9a7311059413546598ec0"; // k1.sig.aaa.2
-  var result2 = ec2.verifyWithMessageHash(hashAAA256Hex, sigHex);
-  equal(result2, true, "ecdsa sign");
-});
+var keys = ['k7', 'k2', 'k3', 'k6', 'k5'];
+var algs = ['sha1', 'sha224', 'sha256', 'sha384', 'sha512'];
+for (var i = 0; i < keys.length; i++) {
+  var key = keys[i];
+  var curve = KEYHEX[key]['curve'];
+  for (var j = 0; j < algs.length; j++) {
+    var alg = algs[j];
+    // key.sigos+alg
+    test("verifyWithMessageHash OpenSSL generated "+alg+"withECDSA("+key+","+curve+",aaa.txt)", function() {
+    var ec = new KJUR.crypto.ECDSA({"curve": curve, "pub": KEYHEX[key]['pub']});
+    var result = ec.verifyWithMessageHash(AAA[alg], OSSIGHEX[key][alg]);
+    equal(result, true, "valid");
 
-test("k4.sig.aaa.1 secp256k1 sha256", function() {
-  // signature validation
-  var pub = "0422353f380062b2bde67712091386faa369ec5ef1a244d06c459fe3de1fb0a5d8ad23a3878be75e375546f14ca6e42755fee04bd78c0343ac8038f5a218e1fbc5"; // k4.pub.pem
-  var ec2 = new KJUR.crypto.ECDSA({"curve": "secp256k1", "pub": pub});
-  var sigHex = "30450220350cc4ac81e68fce3cd134ab1cf4ae0e853a297be0f5f0508b0abc3681ba3364022100a601afe06571a95554f722f4fd0114a3335e9e3c155b390aba53dffbb3eedfec"; // k4.sig.aaa.1
-  var result2 = ec2.verifyWithMessageHash(hashAAA256Hex, sigHex);
-  equal(result2, true, "ecdsa sign");
-});
+    var ec2 = new KJUR.crypto.ECDSA({"curve": curve, "pub": KEYHEX[key]['pub']});
+    var result2 = ec2.verifyWithMessageHash("ff" + AAA[alg].substring(2), OSSIGHEX[key][alg]);
+    equal(result2, false, "invalid for forged msghash");
+    });
+  }
+}
 
-test("k6.sig.aaa.1 secp384r1 sha256", function() {
-  // signature validation
-  var pub = "04543526abdfc47394a3f2645b0d48651a9f3a4d46d8740be322915107f050250c730ca40b37e1dc85e082b4bb181b8847bd6d0fa278bae5eb1c05474c9a4e2beec28c970be49c1949f09e96979a277a514830e32a5b9de1ec68ab99f492dd300a";
-  var ec2 = new KJUR.crypto.ECDSA({"curve": "secp384r1", "pub": pub});
-  var sigHex = "306502303725858ae53a59a71b0d48553d5c3b0d450a4a76c1da2fd5b508cdb598607a418d7bc622006afe0655e894c2ac6b2b03023100dfffc7d84c02d0e3625a19c9305a1a8caa01fab7da4c4f847086774d5a9205f3de2fe041c76aca429c0229d3c74769b0"; // k6.sig.aaa.1
-  var result2 = ec2.verifyWithMessageHash(hashAAA256Hex, sigHex);
-  equal(result2, true, "ecdsa sign");
-});
+// === signature generation and validation ====================================
+
+var keys = ['k7', 'k2', 'k3', 'k6'];
+var algs = ['sha1', 'sha224', 'sha256', 'sha384', 'sha512'];
+for (var i = 0; i < keys.length; i++) {
+  var key = keys[i];
+  var curve = KEYHEX[key]['curve'];
+  for (var j = 0; j < algs.length; j++) {
+    var alg = algs[j];
+    // k7.sigos+alg
+    test("signWithMessageHash + verifyWithMessageHash ("+key+" "+alg+"withECDSA "+curve+" aaa.txt)", function() {
+    // sign
+    var ecprv = new KJUR.crypto.ECDSA({"curve": curve, "prv": KEYHEX[key]['prv']});
+    var sighex = ecprv.signWithMessageHash(AAA[alg]);
+    equal(sighex.substring(0, 2), "30", "sighex[0:2]=30, sighex=" + sighex); 
+    // verify
+    var ecpub = new KJUR.crypto.ECDSA({"curve": curve, "pub": KEYHEX[key]['pub']});
+    equal(ecpub.verifyWithMessageHash(AAA[alg], sighex), true, "valid");
+    });
+  }
+}
 
 // === ECC KEY GENERATION ===============================================================
 test("generate ECC key for secp256r1 curve", function() {

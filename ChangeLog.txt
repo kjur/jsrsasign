@@ -1,6 +1,18 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.14 to 8.0.15 (2020-Apr-13)
+  - src/ecdsa-modified.js
+    - SHA384withECDSA, SHA512withECDSA signature
+      wrong validation result issue was fixed (issue #394)
+    - secp192k1, secp224r1 curve are now supported
+    - test/qunit-do-ecdsamod.html
+      testcase added for SHA1/SHA384/SHA512 and 
+      secp192k1/secp224r1
+  - sample_node command added
+    - genkey: keypair generation
+    - eckey2hex: show EC PKCS#1/8 private/public key in hex format
+
 * Changes from 8.0.13 to 8.0.14 (2020-Apr-03)
   - src/asn1x509-1.0.js
     - add SubjectKeyIdentifier class (issue #402)
@@ -25,7 +37,7 @@ ChangeLog for jsrsasign
     merged for RegExp (pull #419)
   - src/asn1-1.0.js
     merged for strict fix (pull #389)
-  - src/cipher-1.0.js
+  - src/crypto-1.0.js
     document fix in return of decrypt method (issue #383)
   - src/x509-1.1.js
     onelineToLDAP sample added in document (issue #428)
