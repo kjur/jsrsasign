@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.15 to next version (2020-Apr-14)
+  - src/asn1csr.js
+    - strict mode fix (pull #410)
+  - src/jws.js
+    - strict mode fix (pull #347)
+
 SHA384/512withECDSA wrong signature fix and add some curves support
 * Changes from 8.0.14 to 8.0.15 (2020-Apr-13)
   - src/ecdsa-modified.js
