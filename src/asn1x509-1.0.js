@@ -1,4 +1,4 @@
-/* asn1x509-1.1.7.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-1.1.8.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.14 asn1x509 1.1.7 (2020-Apr-11)
+ * @version jsrsasign 8.0.16 asn1x509 1.1.8 (2020-May-25)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -795,6 +795,17 @@ YAHOO.lang.extend(KJUR.asn1.x509.ExtKeyUsage, KJUR.asn1.x509.Extension);
  * @extends KJUR.asn1.x509.Extension
  * @since asn1x509 1.0.8
  * @description
+ * This class represents ASN.1 structure for <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.1">AuthorityKeyIdentifier in RFC 5280</a>.
+ * Constructor of this class may have following parameters.: 
+ * <ul>
+ * <li>kid - When key object (RSA, KJUR.crypto.ECDSA/DSA) or PEM string of authority public key or authcertificate is specified, key identifier will be automatically calculated by the method specified in RFC 5280. When a hexadecimal string is specifed, kid will be set explicitly by it.</li>
+ * <li>isscert - When PEM string of authority certificate is specified, both authorityCertIssuer and authorityCertSerialNumber will be set by the certificate.</li>
+ * <li>issuer - {@link KJUR.asn1.x509.X500Name} parameter to specify issuer name explicitly.</li>
+ * <li>sn - hexadecimal string to specify serial number explicitly.</li>
+ * <li>critical - boolean to specify criticality of this extension
+ * however conforming CA must mark this extension as non-critical in RFC 5280.</li>
+ * </ul>
+ * 
  * <pre>
  * d-ce-authorityKeyIdentifier OBJECT IDENTIFIER ::=  { id-ce 35 }
  * AuthorityKeyIdentifier ::= SEQUENCE {
@@ -803,22 +814,37 @@ YAHOO.lang.extend(KJUR.asn1.x509.ExtKeyUsage, KJUR.asn1.x509.Extension);
  *    authorityCertSerialNumber [2] CertificateSerialNumber OPTIONAL  }
  * KeyIdentifier ::= OCTET STRING
  * </pre>
+ *
  * @example
- * e1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({
- *   critical: true,
- *   kid:    {hex: '89ab'},
- *   issuer: {str: '/C=US/CN=a'},
- *   sn:     {hex: '1234'}
+ * // 1. kid by key object
+ * keyobj = KEYUTIL.getKey("-----BEGIN PUBLIC KEY...");
+ * e1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({kid: keyobj});
+ * // 2. kid by PEM string of authority certificate or public key
+ * e1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({kid: "-----BEGIN..."});
+ * // 3. specify kid explicitly
+ * e1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({kid: "8ab1d3..."});
  * });
+ * // 4. issuer and serial number by auhtority PEM certificate
+ * e1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({isscert: "-----BEGIN..."});
+ * // 5. issuer and serial number explicitly
+ * e1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({
+ *   issuer: {ldapstr: "O=test,C=US"},
+ *   sn: {hex: "1ac7..."}});
+ * // 6. combination
+ * e1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({
+ *   kid: "-----BEGIN CERTIFICATE...",
+ *   isscert: "-----BEGIN CERTIFICATE..."});
  */
 KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
     KJUR.asn1.x509.AuthorityKeyIdentifier.superclass.constructor.call(this, params);
     var _KJUR = KJUR,
 	_KJUR_asn1 = _KJUR.asn1,
-	_DERTaggedObject = _KJUR_asn1.DERTaggedObject;
+	_DERTaggedObject = _KJUR_asn1.DERTaggedObject,
+	_GeneralNames = _KJUR_asn1.x509.GeneralNames,
+	_isKey = _KJUR.crypto.Util.isKey;
 
     this.asn1KID = null;
-    this.asn1CertIssuer = null;
+    this.asn1CertIssuer = null; // X500Name hTLV
     this.asn1CertSN = null;
 
     this.getExtnValueHex = function() {
@@ -827,10 +853,12 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
             a.push(new _DERTaggedObject({'explicit': false,
                                          'tag': '80',
                                          'obj': this.asn1KID}));
+
         if (this.asn1CertIssuer)
             a.push(new _DERTaggedObject({'explicit': false,
                                          'tag': 'a1',
-                                         'obj': this.asn1CertIssuer}));
+                                         'obj': new _GeneralNames([{dn: this.asn1CertIssuer}])}));
+
         if (this.asn1CertSN)
             a.push(new _DERTaggedObject({'explicit': false,
                                          'tag': '82',
@@ -842,18 +870,66 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
     };
 
     /**
-     * set keyIdentifier value by DERInteger parameter
+     * set keyIdentifier value by DEROctetString parameter, key object or PEM file
      * @name setKIDByParam
      * @memberOf KJUR.asn1.x509.AuthorityKeyIdentifier#
      * @function
-     * @param {Array} param array of {@link KJUR.asn1.DERInteger} parameter
+     * @param {Array} param parameter to set key identifier
      * @since asn1x509 1.0.8
      * @description
-     * NOTE: Automatic keyIdentifier value calculation by an issuer
-     * public key will be supported in future version.
+     * This method will set keyIdentifier by param.
+     * Its key identifier value can be set by following type of param argument:
+     * <ul>
+     * <li>{str: "123"} - by raw string</li>
+     * <li>{hex: "01af..."} - by hexadecimal value</li>
+     * <li>RSAKey/DSA/ECDSA - by RSAKey, KJUR.crypto.{DSA/ECDSA} public key object.
+     * key identifier value will be calculated by the method described in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2">RFC 5280 4.2.1.2 (1)</a>.
+     * </li>
+     * <li>certificate PEM string - extract subjectPublicKeyInfo from specified PEM
+     * certificate and
+     * key identifier value will be calculated by the method described in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2">RFC 5280 4.2.1.2 (1)</a>.
+     * <li>PKCS#1/#8 public key PEM string - pem will be converted to a key object and
+     * to PKCS#8 ASN.1 structure then calculate 
+     * a key identifier value will be calculated by the method described in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2">RFC 5280 4.2.1.2 (1)</a>.
+     * </ul>
+     *
+     * NOTE1: Automatic key identifier calculation is supported
+     * since jsrsasign 8.0.16.
+     *
+     * @see KEYUTIL.getKeyID
+     * 
+     * @example
+     * o = new KJUR.asn1.x509.AuthorityKeyIdentifier();
+     * // set by hexadecimal string
+     * o.setKIDByParam({hex: '1ad9...'});
+     * // set by SubjectPublicKeyInfo of PEM certificate string
+     * o.setKIDByParam("-----BEGIN CERTIFICATE...");
+     * // set by PKCS#8 PEM public key string
+     * o.setKIDByParam("-----BEGIN PUBLIC KEY...");
+     * // set by public key object
+     * pubkey = KEYUTIL.getKey("-----BEGIN CERTIFICATE...");
+     * o.setKIDByParam(pubkey);
      */
     this.setKIDByParam = function(param) {
-        this.asn1KID = new KJUR.asn1.DEROctetString(param);
+	if (param.str !== undefined ||
+	    param.hex !== undefined) {
+	    this.asn1KID = new KJUR.asn1.DEROctetString(param);
+	} else if ((typeof param === "object" &&
+		    KJUR.crypto.Util.isKey(param)) ||
+		   (typeof param === "string" &&
+		    param.indexOf("BEGIN ") != -1)) {
+
+	    var keyobj = param;
+	    if (typeof param === "string") {
+		keyobj = KEYUTIL.getKey(param);
+	    }
+
+	    var kid = KEYUTIL.getKeyID(keyobj);
+	    this.asn1KID = new KJUR.asn1.DEROctetString({hex: kid});
+	}
     };
 
     /**
@@ -861,29 +937,84 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
      * @name setCertIssuerByParam
      * @memberOf KJUR.asn1.x509.AuthorityKeyIdentifier#
      * @function
-     * @param {Array} param array of {@link KJUR.asn1.x509.X500Name} parameter
+     * @param {Array} param parameter to set issuer name
      * @since asn1x509 1.0.8
      * @description
-     * NOTE: Automatic authorityCertIssuer name setting by an issuer
-     * certificate will be supported in future version.
+     * This method will set authorityCertIssuer name by param.
+     * Issuer name can be set by following type of param argument:
+     * <ul>
+     * <li>str/ldapstr/hex/certsubject/certissuer - 
+     * set issuer by {@link KJUR.asn1.x509.X500Name}
+     * object with specified parameters.</li>
+     * <li>PEM CERTIFICATE STRING - extract its subject name from 
+     * specified issuer PEM certificate and set.
+     * </ul>
+     * NOTE1: Automatic authorityCertIssuer setting by certificate
+     * is supported since jsrsasign 8.0.16.
+     *
+     * @see KJUR.asn1.x509.X500Name
+     * @see KJUR.asn1.x509.GeneralNames
+     * @see X509.getSubjectHex
+     *
+     * @example
+     * var o = new KJUR.asn1.x509.AuthorityKeyIdentifier();
+     * // 1. set it by string
+     * o.setCertIssuerByParam({str: '/C=US/O=Test'});
+     * // 2. set it by issuer PEM certificate
+     * o.setCertIssuerByParam("-----BEGIN CERTIFICATE...");
+     *
      */
     this.setCertIssuerByParam = function(param) {
-        this.asn1CertIssuer = new KJUR.asn1.x509.X500Name(param);
+	if (param.str !== undefined ||
+	    param.ldapstr !== undefined ||
+	    param.hex !== undefined ||
+	    param.certsubject !== undefined ||
+	    param.certissuer !== undefined) {
+            this.asn1CertIssuer = new KJUR.asn1.x509.X500Name(param);
+	} else if (typeof param === "string" &&
+		   param.indexOf("BEGIN ") != -1 &&
+		   param.indexOf("CERTIFICATE") != -1) {
+            this.asn1CertIssuer = new KJUR.asn1.x509.X500Name({certissuer: param});
+	}
     };
 
     /**
-     * set authorityCertSerialNumber value by DERInteger parameter
+     * set authorityCertSerialNumber value
      * @name setCertSerialNumberByParam
      * @memberOf KJUR.asn1.x509.AuthorityKeyIdentifier#
      * @function
-     * @param {Array} param array of {@link KJUR.asn1.DERInteger} parameter
+     * @param {Object} param parameter to set serial number
      * @since asn1x509 1.0.8
      * @description
-     * NOTE: Automatic authorityCertSerialNumber setting by an issuer
-     * certificate will be supported in future version.
+     * This method will set authorityCertSerialNumber by param.
+     * Serial number can be set by following type of param argument:
+     *
+     * <ul>
+     * <li>{int: 123} - by integer value</li>
+     * <li>{hex: "01af"} - by hexadecimal integer value</li>
+     * <li>{bigint: new BigInteger(...)} - by hexadecimal integer value</li>
+     * <li>PEM CERTIFICATE STRING - extract serial number from issuer certificate and
+     * set serial number.
+     * 
+     * NOTE1: Automatic authorityCertSerialNumber setting by certificate
+     * is supported since jsrsasign 8.0.16.
+     *
+     * @see X509.getSerialNumberHex
      */
     this.setCertSNByParam = function(param) {
-        this.asn1CertSN = new KJUR.asn1.DERInteger(param);
+	if (param.str !== undefined ||
+	    param.bigint !== undefined ||
+	    param.hex !== undefined) {
+            this.asn1CertSN = new KJUR.asn1.DERInteger(param);
+	} else if (typeof param === "string" &&
+		   param.indexOf("BEGIN ") != -1 &&
+		   param.indexOf("CERTIFICATE")) {
+
+            var x = new X509();
+            x.readCertPEM(param);
+	    var sn = x.getSerialNumberHex();
+	    this.asn1CertSN = new KJUR.asn1.DERInteger({hex: sn});
+	}
     };
 
     this.oid = "2.5.29.35";
@@ -897,6 +1028,14 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
         if (params.sn !== undefined) {
             this.setCertSNByParam(params.sn);
         }
+
+	if (params.issuersn !== undefined &&
+	    typeof params.issuersn === "string" &&
+	    params.issuersn.indexOf("BEGIN ") != -1 &&
+	    params.issuersn.indexOf("CERTIFICATE")) {
+	    this.setCertSNByParam(params.issuersn);
+	    this.setCertIssuerByParam(params.issuersn);
+	}
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.AuthorityKeyIdentifier, KJUR.asn1.x509.Extension);
@@ -909,16 +1048,27 @@ YAHOO.lang.extend(KJUR.asn1.x509.AuthorityKeyIdentifier, KJUR.asn1.x509.Extensio
  * @extends KJUR.asn1.x509.Extension
  * @since asn1x509 1.1.7 jsrsasign 8.0.14
  * @description
+ * This class represents ASN.1 structure for <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2">SubjectKeyIdentifier in RFC 5280</a>.
+ * Constructor of this class may have following parameters:
+ * <ul>
+ * <li>kid - When key object (RSA, KJUR.crypto.ECDSA/DSA) or PEM string of authority public key or authcertificate is specified, key identifier will be automatically calculated by the method specified in RFC 5280. When a hexadecimal string is specifed, kid will be set explicitly by it.</li>
+ * <li>critical - boolean to specify criticality of this extension
+ * however conforming CA must mark this extension as non-critical in RFC 5280.</li>
+ * </ul>
  * <pre>
  * d-ce-subjectKeyIdentifier OBJECT IDENTIFIER ::=  { id-ce 14 }
  * SubjectKeyIdentifier ::= KeyIdentifier
  * KeyIdentifier ::= OCTET STRING
  * </pre>
+ *
  * @example
- * e1 = new KJUR.asn1.x509.SubjectKeyIdentifier({
- *   critical: true,
- *   kid:    {hex: '89ab'},
- * });
+ * // set by hexadecimal string
+ * e = new KJUR.asn1.x509.SubjectKeyIdentifier({kid: {hex: '89ab'}});
+ * // set by PEM public key or certificate string
+ * e = new KJUR.asn1.x509.SubjectKeyIdentifier({kid: "-----BEGIN CERTIFICATE..."});
+ * // set by public key object
+ * pubkey = KEYUTIL.getKey("-----BEGIN CERTIFICATE...");
+ * e = new KJUR.asn1.x509.SubjectKeyIdentifier({kid: pubkey});
  */
 KJUR.asn1.x509.SubjectKeyIdentifier = function(params) {
     KJUR.asn1.x509.SubjectKeyIdentifier.superclass.constructor.call(this, params);
@@ -934,25 +1084,71 @@ KJUR.asn1.x509.SubjectKeyIdentifier = function(params) {
     };
 
     /**
-     * set keyIdentifier value by DERInteger parameter
+     * set keyIdentifier value by DEROctetString parameter, key object or PEM file
      * @name setKIDByParam
      * @memberOf KJUR.asn1.x509.SubjectKeyIdentifier#
      * @function
      * @param {Array} param array of {@link KJUR.asn1.DERInteger} parameter
      * @since asn1x509 1.1.7 jsrsasign 8.0.14
      * @description
-     * NOTE: Automatic keyIdentifier value calculation by an issuer
-     * public key will be supported in future version.
+     * <ul>
+     * <li>{str: "123"} - by raw string</li>
+     * <li>{hex: "01af..."} - by hexadecimal value</li>
+     * <li>RSAKey/DSA/ECDSA - by RSAKey, KJUR.crypto.{DSA/ECDSA} public key object.
+     * key identifier value will be calculated by the method described in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2">RFC 5280 4.2.1.2 (1)</a>.
+     * </li>
+     * <li>certificate PEM string - extract subjectPublicKeyInfo from specified PEM
+     * certificate and
+     * key identifier value will be calculated by the method described in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2">RFC 5280 4.2.1.2 (1)</a>.
+     * <li>PKCS#1/#8 public key PEM string - pem will be converted to a key object and
+     * to PKCS#8 ASN.1 structure then calculate 
+     * a key identifier value will be calculated by the method described in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2">RFC 5280 4.2.1.2 (1)</a>.
+     * </ul>
+     *
+     * NOTE1: Automatic key identifier calculation is supported
+     * since jsrsasign 8.0.16.
+     *
+     * @see KEYUTIL.getKeyID
+     *
+     * @example
+     * o = new KJUR.asn1.x509.SubjectKeyIdentifier();
+     * // set by hexadecimal string
+     * o.setKIDByParam({hex: '1ad9...'});
+     * // set by SubjectPublicKeyInfo of PEM certificate string
+     * o.setKIDByParam("-----BEGIN CERTIFICATE...");
+     * // set by PKCS#8 PEM public key string
+     * o.setKIDByParam("-----BEGIN PUBLIC KEY...");
+     * // set by public key object
+     * pubkey = KEYUTIL.getKey("-----BEGIN CERTIFICATE...");
+     * o.setKIDByParam(pubkey);
      */
     this.setKIDByParam = function(param) {
-        this.asn1KID = new _DEROctetString(param);
+	if (param.str !== undefined ||
+	    param.hex !== undefined) {
+	    this.asn1KID = new _DEROctetString(param);
+	} else if ((typeof param === "object" &&
+		    KJUR.crypto.Util.isKey(param)) ||
+		   (typeof param === "string" &&
+		    param.indexOf("BEGIN") != -1)) {
+
+	    var keyobj = param;
+	    if (typeof param === "string") {
+		keyobj = KEYUTIL.getKey(param);
+	    }
+
+	    var kid = KEYUTIL.getKeyID(keyobj);
+	    this.asn1KID = new KJUR.asn1.DEROctetString({hex: kid});
+	}
     };
 
     this.oid = "2.5.29.14";
     if (params !== undefined) {
-        if (params.kid !== undefined) {
-            this.setKIDByParam(params.kid);
-        }
+	if (params.kid !== undefined) {
+	    this.setKIDByParam(params.kid);
+	}
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.SubjectKeyIdentifier, KJUR.asn1.x509.Extension);
@@ -1478,15 +1674,29 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRLEntry, KJUR.asn1.ASN1Object);
  *   value AttributeValue }
  * </pre></blockquote>
  * <br/>
- * For string representation of distinguished name in jsrsasign,
- * OpenSSL oneline format is used. Please see <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">wiki article</a> for it.
+ * Argument for the constructor can be one of following parameters:
+ * <ul>
+ * <li>str - string for distingish name in OpenSSL One line foramt (ex: /C=US/O=test/CN=test) See <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">this</a> in detail.</li>
+ * <li>ldapstr - string for distinguish name in LDAP format (ex: CN=test,O=test,C=US)</li>
+ * <li>hex - hexadecimal string for ASN.1 distinguish name structure</li>
+ * <li>certissuer - issuer name in the specified PEM certificate</li>
+ * <li>certsubject - subject name in the specified PEM certificate</li>
+ * </ul>
  * <br/>
  * NOTE: Multi-valued RDN is supported since jsrsasign 6.2.1 asn1x509 1.0.17.
  * @example
  * // 1. construct with string
  * o = new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa/OU=bbb/CN=foo@example.com"});
  * o = new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa+CN=contact@example.com"}); // multi valued
- * // 2. construct by object
+ * // 2. construct by LDAP string
+ * o = new KJUR.asn1.x509.X500Name({ldapstr: "CN=foo@example.com,OU=bbb,C=US"});
+ * // 3. construct by ASN.1 hex string
+ * o = new KJUR.asn1.x509.X500Name({hex: "304c3120..."});
+ * // 4. construct by issuer of PEM certificate
+ * o = new KJUR.asn1.x509.X500Name({certsubject: "-----BEGIN CERT..."});
+ * // 5. construct by subject of PEM certificate
+ * o = new KJUR.asn1.x509.X500Name({certissuer: "-----BEGIN CERT..."});
+ * // 6. construct by object
  * o = new KJUR.asn1.x509.X500Name({C: "US", O: "aaa", CN: "http://example.com/"});
  */
 KJUR.asn1.x509.X500Name = function(params) {
@@ -1587,22 +1797,23 @@ KJUR.asn1.x509.X500Name = function(params) {
             this.setByString(params.str);
         } else if (params.ldapstr !== undefined) {
 	    this.setByLdapString(params.ldapstr);
+	} else if (params.hex !== undefined) {
+	    this.hTLV = params.hex;
+        } else if (params.certissuer !== undefined) {
+            var x = new X509();
+            x.readCertPEM(params.certissuer);
+            this.hTLV = x.getIssuerHex();
+        } else if (params.certsubject !== undefined) {
+            var x = new X509();
+            x.readCertPEM(params.certsubject);
+            this.hTLV = x.getSubjectHex();
         // If params is an object, then set the ASN1 array just using the object
         // attributes. This is nice for fields that have lots of special
         // characters (i.e. CN: 'https://www.github.com/kjur//').
-        } else if (typeof params === "object") {
+        } else if (typeof params === "object" &&
+		   params.certsubject === undefined &&
+		   params.certissuer === undefined) {
             this.setByObject(params);
-        }
-
-        if (params.certissuer !== undefined) {
-            var x = new X509();
-            x.hex = _pemtohex(params.certissuer);
-            this.hTLV = x.getIssuerHex();
-        }
-        if (params.certsubject !== undefined) {
-            var x = new X509();
-            x.hex = _pemtohex(params.certsubject);
-            this.hTLV = x.getSubjectHex();
         }
     }
 };
@@ -2163,7 +2374,9 @@ YAHOO.lang.extend(KJUR.asn1.x509.AlgorithmIdentifier, KJUR.asn1.ASN1Object);
  * <li>rfc822 - rfc822Name[1] (ex. user1@foo.com)</li>
  * <li>dns - dNSName[2] (ex. foo.com)</li>
  * <li>uri - uniformResourceIdentifier[6] (ex. http://foo.com/)</li>
- * <li>dn - directoryName[4] (ex. /C=US/O=Test)</li>
+ * <li>dn - directoryName[4] 
+ * distinguished name string or X500Name class parameters can be
+ * specified (ex. "/C=US/O=Test", {hex: '301c...')</li>
  * <li>ldapdn - directoryName[4] (ex. O=Test,C=US)</li>
  * <li>certissuer - directoryName[4] (PEM or hex string of cert)</li>
  * <li>certsubj - directoryName[4] (PEM or hex string of cert)</li>
@@ -2172,6 +2385,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.AlgorithmIdentifier, KJUR.asn1.ASN1Object);
  * NOTE1: certissuer and certsubj were supported since asn1x509 1.0.10.<br/>
  * NOTE2: dn and ldapdn were supported since jsrsasign 6.2.3 asn1x509 1.0.19.<br/>
  * NOTE3: ip were supported since jsrsasign 8.0.10 asn1x509 1.1.4.<br/>
+ * NOTE4: X500Name parameters in dn were supported since jsrsasign 8.0.16.<br/>
  *
  * Here is definition of the ASN.1 syntax:
  * <pre>
@@ -2189,16 +2403,23 @@ YAHOO.lang.extend(KJUR.asn1.x509.AlgorithmIdentifier, KJUR.asn1.ASN1Object);
  * </pre>
  *
  * @example
- * gn = new KJUR.asn1.x509.GeneralName({rfc822:     'test@aaa.com'});
- * gn = new KJUR.asn1.x509.GeneralName({dns:        'aaa.com'});
- * gn = new KJUR.asn1.x509.GeneralName({uri:        'http://aaa.com/'});
- * gn = new KJUR.asn1.x509.GeneralName({dn:         '/C=US/O=Test'});
- * gn = new KJUR.asn1.x509.GeneralName({ldapdn:     'O=Test,C=US'});
- * gn = new KJUR.asn1.x509.GeneralName({certissuer: certPEM});
- * gn = new KJUR.asn1.x509.GeneralName({certsubj:   certPEM});
- * gn = new KJUR.asn1.x509.GeneralName({ip:         '192.168.1.1'});
- * gn = new KJUR.asn1.x509.GeneralName({ip:         '2001:db4::4:1'});
- * gn = new KJUR.asn1.x509.GeneralName({ip:         'c0a80101'});
+ * gn = new KJUR.asn1.x509.GeneralName({dn:     '/C=US/O=Test'});
+ * gn = new KJUR.asn1.x509.GeneralName({dn:     X500NameObject);
+ * gn = new KJUR.asn1.x509.GeneralName({dn:     {str: /C=US/O=Test'});
+ * gn = new KJUR.asn1.x509.GeneralName({dn:     {ldapstr: 'O=Test,C=US'});
+ * gn = new KJUR.asn1.x509.GeneralName({dn:     {hex: '301c...'});
+ * gn = new KJUR.asn1.x509.GeneralName({dn:     {certissuer: PEMCERTSTRING});
+ * gn = new KJUR.asn1.x509.GeneralName({dn:     {certsubject: PEMCERTSTRING});
+ * gn = new KJUR.asn1.x509.GeneralName({ip:     '192.168.1.1'});
+ * gn = new KJUR.asn1.x509.GeneralName({ip:     '2001:db4::4:1'});
+ * gn = new KJUR.asn1.x509.GeneralName({ip:     'c0a80101'});
+ * gn = new KJUR.asn1.x509.GeneralName({rfc822: 'test@aaa.com'});
+ * gn = new KJUR.asn1.x509.GeneralName({dns:    'aaa.com'});
+ * gn = new KJUR.asn1.x509.GeneralName({uri:    'http://aaa.com/'});
+ *
+ * gn = new KJUR.asn1.x509.GeneralName({ldapdn:     'O=Test,C=US'}); // DEPRECATED
+ * gn = new KJUR.asn1.x509.GeneralName({certissuer: certPEM});       // DEPRECATED
+ * gn = new KJUR.asn1.x509.GeneralName({certsubj:   certPEM});       // DEPRECATED
  */
 KJUR.asn1.x509.GeneralName = function(params) {
     KJUR.asn1.x509.GeneralName.superclass.constructor.call(this);
@@ -2241,7 +2462,13 @@ KJUR.asn1.x509.GeneralName = function(params) {
         if (params.dn !== undefined) {
 	    this.type = 'dn';
 	    this.explicit = true;
-	    v = new _X500Name({str: params.dn});
+	    if (typeof params.dn === "string") {
+		v = new _X500Name({str: params.dn});
+	    } else if (params.dn instanceof KJUR.asn1.x509.X500Name) {
+		v = params.dn;
+	    } else {
+		v = new _X500Name(params.dn);
+	    }
 	}
 
         if (params.ldapdn !== undefined) {

@@ -510,7 +510,9 @@ following properties:
 <li>rfc822 - rfc822Name[1] (ex. user1@foo.com)</li>
 <li>dns - dNSName[2] (ex. foo.com)</li>
 <li>uri - uniformResourceIdentifier[6] (ex. http://foo.com/)</li>
-<li>dn - directoryName[4] (ex. /C=US/O=Test)</li>
+<li>dn - directoryName[4] 
+distinguished name string or X500Name class parameters can be
+specified (ex. "/C=US/O=Test", {hex: '301c...')</li>
 <li>ldapdn - directoryName[4] (ex. O=Test,C=US)</li>
 <li>certissuer - directoryName[4] (PEM or hex string of cert)</li>
 <li>certsubj - directoryName[4] (PEM or hex string of cert)</li>
@@ -519,6 +521,7 @@ following properties:
 NOTE1: certissuer and certsubj were supported since asn1x509 1.0.10.<br/>
 NOTE2: dn and ldapdn were supported since jsrsasign 6.2.3 asn1x509 1.0.19.<br/>
 NOTE3: ip were supported since jsrsasign 8.0.10 asn1x509 1.1.4.<br/>
+NOTE4: X500Name parameters in dn were supported since jsrsasign 8.0.16.<br/>
 
 Here is definition of the ASN.1 syntax:
 <pre>
@@ -539,16 +542,23 @@ GeneralName ::= CHOICE {
 				
 				
 				
-				<pre class="code">gn = new KJUR.asn1.x509.GeneralName({rfc822:     'test@aaa.com'});
-gn = new KJUR.asn1.x509.GeneralName({dns:        'aaa.com'});
-gn = new KJUR.asn1.x509.GeneralName({uri:        'http://aaa.com/'});
-gn = new KJUR.asn1.x509.GeneralName({dn:         '/C=US/O=Test'});
-gn = new KJUR.asn1.x509.GeneralName({ldapdn:     'O=Test,C=US'});
-gn = new KJUR.asn1.x509.GeneralName({certissuer: certPEM});
-gn = new KJUR.asn1.x509.GeneralName({certsubj:   certPEM});
-gn = new KJUR.asn1.x509.GeneralName({ip:         '192.168.1.1'});
-gn = new KJUR.asn1.x509.GeneralName({ip:         '2001:db4::4:1'});
-gn = new KJUR.asn1.x509.GeneralName({ip:         'c0a80101'});</pre>
+				<pre class="code">gn = new KJUR.asn1.x509.GeneralName({dn:     '/C=US/O=Test'});
+gn = new KJUR.asn1.x509.GeneralName({dn:     X500NameObject);
+gn = new KJUR.asn1.x509.GeneralName({dn:     {str: /C=US/O=Test'});
+gn = new KJUR.asn1.x509.GeneralName({dn:     {ldapstr: 'O=Test,C=US'});
+gn = new KJUR.asn1.x509.GeneralName({dn:     {hex: '301c...'});
+gn = new KJUR.asn1.x509.GeneralName({dn:     {certissuer: PEMCERTSTRING});
+gn = new KJUR.asn1.x509.GeneralName({dn:     {certsubject: PEMCERTSTRING});
+gn = new KJUR.asn1.x509.GeneralName({ip:     '192.168.1.1'});
+gn = new KJUR.asn1.x509.GeneralName({ip:     '2001:db4::4:1'});
+gn = new KJUR.asn1.x509.GeneralName({ip:     'c0a80101'});
+gn = new KJUR.asn1.x509.GeneralName({rfc822: 'test@aaa.com'});
+gn = new KJUR.asn1.x509.GeneralName({dns:    'aaa.com'});
+gn = new KJUR.asn1.x509.GeneralName({uri:    'http://aaa.com/'});
+
+gn = new KJUR.asn1.x509.GeneralName({ldapdn:     'O=Test,C=US'}); // DEPRECATED
+gn = new KJUR.asn1.x509.GeneralName({certissuer: certPEM});       // DEPRECATED
+gn = new KJUR.asn1.x509.GeneralName({certsubj:   certPEM});       // DEPRECATED</pre>
 				
 				
 				

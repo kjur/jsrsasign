@@ -600,8 +600,14 @@ AttributeTypeAndValue ::= SEQUENCE {
   value AttributeValue }
 </pre></blockquote>
 <br/>
-For string representation of distinguished name in jsrsasign,
-OpenSSL oneline format is used. Please see <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">wiki article</a> for it.
+Argument for the constructor can be one of following parameters:
+<ul>
+<li>str - string for distingish name in OpenSSL One line foramt (ex: /C=US/O=test/CN=test) See <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">this</a> in detail.</li>
+<li>ldapstr - string for distinguish name in LDAP format (ex: CN=test,O=test,C=US)</li>
+<li>hex - hexadecimal string for ASN.1 distinguish name structure</li>
+<li>certissuer - issuer name in the specified PEM certificate</li>
+<li>certsubject - subject name in the specified PEM certificate</li>
+</ul>
 <br/>
 NOTE: Multi-valued RDN is supported since jsrsasign 6.2.1 asn1x509 1.0.17.
 					
@@ -612,7 +618,15 @@ NOTE: Multi-valued RDN is supported since jsrsasign 6.2.1 asn1x509 1.0.17.
 				<pre class="code">// 1. construct with string
 o = new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa/OU=bbb/CN=foo@example.com"});
 o = new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa+CN=contact@example.com"}); // multi valued
-// 2. construct by object
+// 2. construct by LDAP string
+o = new KJUR.asn1.x509.X500Name({ldapstr: "CN=foo@example.com,OU=bbb,C=US"});
+// 3. construct by ASN.1 hex string
+o = new KJUR.asn1.x509.X500Name({hex: "304c3120..."});
+// 4. construct by issuer of PEM certificate
+o = new KJUR.asn1.x509.X500Name({certsubject: "-----BEGIN CERT..."});
+// 5. construct by subject of PEM certificate
+o = new KJUR.asn1.x509.X500Name({certissuer: "-----BEGIN CERT..."});
+// 6. construct by object
 o = new KJUR.asn1.x509.X500Name({C: "US", O: "aaa", CN: "http://example.com/"});</pre>
 				
 				

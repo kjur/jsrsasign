@@ -1,13 +1,42 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 8.0.15 to next version (2020-Apr-14)
+extended Authority/SubjectKeyIdentifier support
+* Changes from 8.0.15 to 8.0.16 (2020-Mar-29)
+  - src/asn1x509.js
+    - AuthorityKeyIdentifier class
+      - issuerDN ASN.1 encoding bug fixed
+      - now keyIdentifier is automatically calculated
+        by certificate or key
+      - issuer dn and serial number can be set
+        by certificate
+    - SubjectKeyIdentifier class
+      - now keyIdentifier is automatically calculated
+        by certificate or key
+    - X500Name class
+      - certissuer and certsubject parameter is added
+        to set value by issuer or subject of certificate.
+    - GeneralName class
+      - dn parameter support was updated.
+  - src/keyutil.js
+    - getKeyID method added to calcalate a key identifier 
+      for certificate.
+  - crypto.js
+    - Util.isKey static method added
+    - Signature.{sign,verify} method bug fix for ECDSA
+    - code refactoring
   - src/asn1csr.js
     - strict mode fix (pull #410)
   - src/jws.js
     - strict mode fix (pull #347)
   - src/jwsjs.js
     - readJWSJS fix (pull #373)
+  - sample_node/asn1extract2
+    - sample added. more flexible use than asn1extract.
+  - test/qunit-do-crypto.html
+    - getRandom test fix
+  - test/qunit-do-asn1x509-newcrt.html
+    - test case expected value fix
 
 SHA384/512withECDSA wrong signature fix and add some curves support
 * Changes from 8.0.14 to 8.0.15 (2020-Apr-13)

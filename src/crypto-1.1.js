@@ -1,9 +1,9 @@
-/* crypto-1.2.1.js (c) 2013-2017 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* crypto-1.2.3.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
  *
- * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2012 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.2.1 (2017-Sep-15)
+ * @version 1.2.3 (2020-May-28)
  * @since jsrsasign 2.2
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -173,7 +173,7 @@ KJUR.crypto.Util = new function() {
      * @name hashString
      * @memberOf KJUR.crypto.Util
      * @function
-     * @param {String} s input string to be hashed
+     * @param {String} s raw input string to be hashed
      * @param {String} alg hash algorithm name
      * @return {String} hexadecimal string of hash value
      * @since 1.1.1
@@ -203,13 +203,12 @@ KJUR.crypto.Util = new function() {
      * @name sha1
      * @memberOf KJUR.crypto.Util
      * @function
-     * @param {String} s input string to be hashed
+     * @param {String} s raw input string to be hashed
      * @return {String} hexadecimal string of hash value
      * @since 1.0.3
      */
     this.sha1 = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'sha1', 'prov':'cryptojs'});
-        return md.digestString(s);
+	return this.hashString(s, 'sha1');
     };
 
     /**
@@ -217,18 +216,16 @@ KJUR.crypto.Util = new function() {
      * @name sha256
      * @memberOf KJUR.crypto.Util
      * @function
-     * @param {String} s input string to be hashed
+     * @param {String} s raw input string to be hashed
      * @return {String} hexadecimal string of hash value
      * @since 1.0.3
      */
     this.sha256 = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'sha256', 'prov':'cryptojs'});
-        return md.digestString(s);
+	return this.hashString(s, 'sha256');
     };
 
     this.sha256Hex = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'sha256', 'prov':'cryptojs'});
-        return md.digestHex(s);
+	return this.hashHex(s, 'sha256');
     };
 
     /**
@@ -236,20 +233,36 @@ KJUR.crypto.Util = new function() {
      * @name sha512
      * @memberOf KJUR.crypto.Util
      * @function
-     * @param {String} s input string to be hashed
+     * @param {String} s raw input string to be hashed
      * @return {String} hexadecimal string of hash value
      * @since 1.0.3
      */
     this.sha512 = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'sha512', 'prov':'cryptojs'});
-        return md.digestString(s);
+	return this.hashString(s, 'sha512');
     };
 
     this.sha512Hex = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'sha512', 'prov':'cryptojs'});
-        return md.digestHex(s);
+	return this.hashHex(s, 'sha512');
     };
 
+    /**
+     * check if key object (RSA/DSA/ECDSA) or not
+     * @name isKey
+     * @memberOf KJUR.crypto.Util
+     * @function
+     * @param {Object} obj any type argument to be checked
+     * @return {Boolean} true if this is key object otherwise false
+     * @since 1.0.3
+     */
+    this.isKey = function(obj) {
+	if (obj instanceof RSAKey ||
+	    obj instanceof KJUR.crypto.DSA ||
+	    obj instanceof KJUR.crypto.ECDSA) {
+	    return true;
+	} else {
+	    return false;
+	}
+    };
 };
 
 /**
@@ -1100,21 +1113,30 @@ KJUR.crypto.Signature = function(params) {
 
 	    this.sign = function() {
 		this.sHashHex = this.md.digest();
-		if (typeof this.ecprvhex != "undefined" &&
-		    typeof this.eccurvename != "undefined") {
-		    var ec = new KJUR.crypto.ECDSA({'curve': this.eccurvename});
-		    this.hSign = ec.signHex(this.sHashHex, this.ecprvhex);
-		} else if (this.prvKey instanceof RSAKey &&
-		           this.pubkeyAlgName === "rsaandmgf1") {
+		// hex parameter EC public key
+		if (this.prvKey === undefined &&
+		    this.ecprvhex !== undefined &&
+		    this.eccurvename !== undefined &&
+		    KJUR.crypto.ECDSA !== undefined) {
+		    this.prvKey = new KJUR.crypto.ECDSA({'curve': this.eccurvename,
+							 prv: this.ecprvhex});
+		}
+
+		// RSAPSS
+		if (this.prvKey instanceof RSAKey &&
+		    this.pubkeyAlgName === "rsaandmgf1") {
 		    this.hSign = this.prvKey.signWithMessageHashPSS(this.sHashHex,
 								    this.mdAlgName,
 								    this.pssSaltLen);
+		// RSA
 		} else if (this.prvKey instanceof RSAKey &&
 			   this.pubkeyAlgName === "rsa") {
 		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex,
 								 this.mdAlgName);
+		// ECDSA
 		} else if (this.prvKey instanceof KJUR.crypto.ECDSA) {
 		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex);
+		// DSA
 		} else if (this.prvKey instanceof KJUR.crypto.DSA) {
 		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex);
 		} else {
@@ -1132,21 +1154,30 @@ KJUR.crypto.Signature = function(params) {
 	    };
 	    this.verify = function(hSigVal) {
 	        this.sHashHex = this.md.digest();
-		if (typeof this.ecpubhex != "undefined" &&
-		    typeof this.eccurvename != "undefined") {
-		    var ec = new KJUR.crypto.ECDSA({curve: this.eccurvename});
-		    return ec.verifyHex(this.sHashHex, hSigVal, this.ecpubhex);
-		} else if (this.pubKey instanceof RSAKey &&
-			   this.pubkeyAlgName === "rsaandmgf1") {
+		// hex parameter EC public key
+		if (this.pubKey === undefined &&
+		    this.ecpubhex !== undefined &&
+		    this.eccurvename !== undefined &&
+		    KJUR.crypto.ECDSA !== undefined) {
+		    this.pubKey = new KJUR.crypto.ECDSA({curve: this.eccurvename,
+							 pub: this.ecpubhex});
+		}
+
+		// RSAPSS
+		if (this.pubKey instanceof RSAKey &&
+		    this.pubkeyAlgName === "rsaandmgf1") {
 		    return this.pubKey.verifyWithMessageHashPSS(this.sHashHex, hSigVal, 
 								this.mdAlgName,
 								this.pssSaltLen);
+		// RSA
 		} else if (this.pubKey instanceof RSAKey &&
 			   this.pubkeyAlgName === "rsa") {
 		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
+                // ECDSA
 		} else if (KJUR.crypto.ECDSA !== undefined &&
 			   this.pubKey instanceof KJUR.crypto.ECDSA) {
 		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
+                // DSA
 		} else if (KJUR.crypto.DSA !== undefined &&
 			   this.pubKey instanceof KJUR.crypto.DSA) {
 		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
