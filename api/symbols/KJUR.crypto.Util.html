@@ -632,6 +632,15 @@ greater than or equal to zero and smaller than or equal to biMax
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.crypto.Util.<b><a href="../symbols/KJUR.crypto.Util.html#.isKey">isKey</a></b>(obj)
+								</div>
+								<div class="description">check if key object (RSA/DSA/ECDSA) or not</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.crypto.Util.<b><a href="../symbols/KJUR.crypto.Util.html#.md5">md5</a></b>(s)
 								</div>
 								<div class="description">get hexadecimal MD5 hash of string</div>
@@ -1291,7 +1300,7 @@ KJUR.crypto.Util.getRandomHexOfNbytes(128) &rarr; "8fbc..." in 1024bits</pre>
 									<span class="light fixedFont">{String}</span> <b>s</b>
 									
 								</dt>
-								<dd>input string to be hashed</dd>
+								<dd>raw input string to be hashed</dd>
 							
 								<dt>
 									<span class="light fixedFont">{String}</span> <b>alg</b>
@@ -1315,6 +1324,55 @@ KJUR.crypto.Util.getRandomHexOfNbytes(128) &rarr; "8fbc..." in 1024bits</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> hexadecimal string of hash value</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".isKey"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<span class="light">KJUR.crypto.Util.</span><b>isKey</b>(obj)
+					
+					</div>
+					<div class="description">
+						check if key object (RSA/DSA/ECDSA) or not
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>obj</b>
+									
+								</dt>
+								<dd>any type argument to be checked</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>1.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if this is key object otherwise false</dd>
 							
 							</dl>
 						
@@ -1452,7 +1510,7 @@ KJUR.crypto.Util.getRandomHexOfNbytes(128) &rarr; "8fbc..." in 1024bits</pre>
 									<span class="light fixedFont">{String}</span> <b>s</b>
 									
 								</dt>
-								<dd>input string to be hashed</dd>
+								<dd>raw input string to be hashed</dd>
 							
 							</dl>
 						
@@ -1501,7 +1559,7 @@ KJUR.crypto.Util.getRandomHexOfNbytes(128) &rarr; "8fbc..." in 1024bits</pre>
 									<span class="light fixedFont">{String}</span> <b>s</b>
 									
 								</dt>
-								<dd>input string to be hashed</dd>
+								<dd>raw input string to be hashed</dd>
 							
 							</dl>
 						
@@ -1550,7 +1608,7 @@ KJUR.crypto.Util.getRandomHexOfNbytes(128) &rarr; "8fbc..." in 1024bits</pre>
 									<span class="light fixedFont">{String}</span> <b>s</b>
 									
 								</dt>
-								<dd>input string to be hashed</dd>
+								<dd>raw input string to be hashed</dd>
 							
 							</dl>
 						

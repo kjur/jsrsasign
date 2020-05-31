@@ -1,4 +1,4 @@
-/* keyutil-1.2.1.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* keyutil-1.2.2.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.14 keyutil 1.2.1 (2020-Apr-11)
+ * @version jsrsasign 8.0.16 keyutil 1.2.2 (2020-May-25)
  * @since jsrsasign 4.1.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1693,7 +1693,39 @@ KEYUTIL.parseCSRHex = function(csrHex) {
     return result;
 };
 
-// -- OTHER STATIC PUBLIC METHODS  -------------------------------------------------
+// -- OTHER STATIC PUBLIC METHODS  --------------------------------------------
+
+/**
+ * get key ID by public key object for subject or authority key identifier
+ * @name getKeyID
+ * @memberof KEYUTIL
+ * @function
+ * @static
+ * @param {Object} obj RSAKey/KJUR.crypto.ECDSA,DSA public key object or public key PEM string
+ * @return hexadecimal string of public key identifier
+ * @since keyutil 1.2.2 jsrsasign 5.0.16
+ * @description
+ * This static method generates a key identifier from a public key
+ * by the method described in 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2"
+ * target="_blank">RFC 5280 4.2.1.2. Subject Key Identifier (1)</a>.
+ * @example
+ * pubkeyobj = KEYUTIL.getKey(...);
+ * KEYTUTIL.getKey(pubkeyobj) &rarr; "a612..."
+ */
+KEYUTIL.getKeyID = function(obj) {
+    var _KEYUTIL = KEYUTIL;
+    var _ASN1HEX = ASN1HEX;
+
+    if (typeof obj  === "string" && obj.indexOf("BEGIN ") != -1) {
+	obj = _KEYUTIL.getKey(obj);
+    }
+
+    var p8hex = pemtohex(_KEYUTIL.getPEM(obj));
+    var idx = _ASN1HEX.getIdxbyList(p8hex, 0, [1]); // BITSTRING
+    var hV = _ASN1HEX.getV(p8hex, idx).substring(2); // value without unused bit
+    return KJUR.crypto.Util.hashHex(hV, "sha1");
+}
 
 /**
  * convert from RSAKey/KJUR.crypto.ECDSA public/private key object to RFC 7517 JSON Web Key(JWK)

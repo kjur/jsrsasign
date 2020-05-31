@@ -621,6 +621,19 @@ for RSA, DSA and ECC.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getKeyID">getKeyID</a></b>(obj)
+								</div>
+								<div class="description">get key ID by public key object for subject or authority key identifier
+This static method generates a key identifier from a public key
+by the method described in 
+<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2"
+target="_blank">RFC 5280 4.2.1.2.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getPBKDF2KeyHexFromParam">getPBKDF2KeyHexFromParam</a></b>(info, passcode)
 								</div>
 								<div class="description">generate PBKDF2 key hexstring with specified passcode and information
@@ -1467,6 +1480,64 @@ keyObj = KEYUTIL.getKey({n: "75ab..", e: "010001"});</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Object}</span> RSAKey or KJUR.crypto.ECDSA private key object</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getKeyID"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KEYUTIL.</span><b>getKeyID</b>(obj)
+					
+					</div>
+					<div class="description">
+						get key ID by public key object for subject or authority key identifier
+This static method generates a key identifier from a public key
+by the method described in 
+<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2"
+target="_blank">RFC 5280 4.2.1.2. Subject Key Identifier (1)</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">pubkeyobj = KEYUTIL.getKey(...);
+KEYTUTIL.getKey(pubkeyobj) &rarr; "a612..."</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>obj</b>
+									
+								</dt>
+								<dd>RSAKey/KJUR.crypto.ECDSA,DSA public key object or public key PEM string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>keyutil 1.2.2 jsrsasign 5.0.16</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>hexadecimal string of public key identifier</dd>
 							
 							</dl>
 						
