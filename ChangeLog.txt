@@ -1,6 +1,10 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.16 to next version
+  - sample_node
+    - pemtobin was fixed for pemtohex function
+
 extended Authority/SubjectKeyIdentifier support
 * Changes from 8.0.15 to 8.0.16 (2020-Mar-29)
   - src/asn1x509.js
