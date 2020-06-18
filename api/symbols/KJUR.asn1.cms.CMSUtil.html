@@ -583,6 +583,7 @@ CMS SignedData ASN.1 structure by JSON data.
 					<pre class="code">var sd = KJUR.asn1.cms.CMSUtil.newSignedData({
   content: {str: "jsrsasign"},
   certs: [certPEM],
+  detached: false,
   signerInfos: [{
     hashAlg: 'sha256',
     sAttr: {

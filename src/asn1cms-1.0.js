@@ -987,6 +987,7 @@ KJUR.asn1.cms.CMSUtil = new function() {
  * var sd = KJUR.asn1.cms.CMSUtil.newSignedData({
  *   content: {str: "jsrsasign"},
  *   certs: [certPEM],
+ *   detached: false,
  *   signerInfos: [{
  *     hashAlg: 'sha256',
  *     sAttr: {
@@ -1014,6 +1015,10 @@ KJUR.asn1.cms.CMSUtil.newSignedData = function(param) {
     var sd = new _SignedData();
 
     sd.dEncapContentInfo.setContentValue(param.content);
+
+    if (typeof param.detached == "boolean") {
+      sd.dEncapContentInfo.isDetached = param.detached
+    }
 
     if (typeof param.certs == "object") {
         for (var i = 0; i < param.certs.length; i++) {
