@@ -1,4 +1,4 @@
-/* asn1x509-1.1.8.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-1.1.9.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.16 asn1x509 1.1.8 (2020-May-25)
+ * @version jsrsasign 8.0.17 asn1x509 1.1.9 (2020-Jun-19)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1337,8 +1337,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.IssuerAltName, KJUR.asn1.x509.Extension);
  * NOTE: 'params' can be omitted.
  * <h4>EXAMPLE</h4>
  * @example
- * var prvKey = new RSAKey(); // CA's private key
- * prvKey.readPrivateKeyFromASN1HexString("3080...");
+ * var prvKey = KEYUTIL.getKEY("-----BEGIN PRIVATE..."); // CA's private key
  * var crl = new KJUR.asn1x509.CRL({'tbsobj': tbs, 'prvkeyobj': prvKey});
  * crl.sign(); // issue CRL by CA's private key
  * var hCRL = crl.getEncodedHex();

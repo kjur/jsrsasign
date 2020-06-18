@@ -2,6 +2,10 @@
 ChangeLog for jsrsasign
 
 * Changes from 8.0.16 to next version
+  - src/asn1x509.js
+    - allow alternative algorithms to sign CRLs (#440)
+  - src/asn1cms.js
+    - improve CMSUtil.newSignedData helper with detached signatures (#441)
   - sample_node
     - pemtobin was fixed for pemtohex function
 
