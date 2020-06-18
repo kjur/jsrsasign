@@ -1370,7 +1370,7 @@ KJUR.asn1.x509.CRL = function(params) {
     this.sign = function() {
         this.asn1SignatureAlg = this.asn1TBSCertList.asn1SignatureAlg;
 
-        sig = new KJUR.crypto.Signature({'alg': 'SHA1withRSA', 'prov': 'cryptojs/jsrsa'});
+        sig = new KJUR.crypto.Signature({'alg': this.asn1SignatureAlg.nameAlg, 'prov': 'cryptojs/jsrsa'});
         sig.init(this.prvKey);
         sig.updateHex(this.asn1TBSCertList.getEncodedHex());
         this.hexSig = sig.sign();
