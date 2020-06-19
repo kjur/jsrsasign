@@ -1,6 +1,22 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.16 to 8.0.17
+  - src/rsasign.js
+    - verifyWithMessageHashPSS fixed for prepending zeros maleability (#438)
+  - src/asn1x509.js
+    - allow alternative algorithms to sign CRLs (#440)
+  - src/asn1cms.js
+    - improve CMSUtil.newSignedData helper with detached signatures (#441)
+  - ext/rsa2.js
+    - RSAGenerate fixed for not having requesting key length (#442)
+  - sample_node
+    - pemtobin was fixed for pemtohex function
+  - test
+    - qunit-do-rsagenkeylen.html new test code for (#442)
+    - qunit-do-rsasign-pss.html add maleability test code (#438)
+    - index.html, qunit-do-x509.html link update
+
 extended Authority/SubjectKeyIdentifier support
 * Changes from 8.0.15 to 8.0.16 (2020-Mar-29)
   - src/asn1x509.js

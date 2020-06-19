@@ -1,4 +1,4 @@
-/* rsasign-1.3.1.js (c) 2010-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* rsasign-1.3.2.js (c) 2010-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * rsa-sign.js - adding signing functions to RSAKey class.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name rsasign-1.2.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.0 rsasign 1.3.0 (2017-Jun-28)
+ * @version jsrsasign 8.0.17 rsasign 1.3.2 (2020-Jun-19)
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -319,11 +319,11 @@ RSAKey.prototype.verifyPSS = function(sMsg, hSig, hashAlg, sLen) {
  * @since rsasign 1.2.6
  */
 RSAKey.prototype.verifyWithMessageHashPSS = function(hHash, hSig, hashAlg, sLen) {
-    var biSig = new BigInteger(hSig, 16);
-
-    if (biSig.bitLength() > this.n.bitLength()) {
-        return false;
+    if (hSig.length != Math.ceil(this.n.bitLength() / 4.0)) {
+	return false;
     }
+
+    var biSig = new BigInteger(hSig, 16);
 
     var hashFunc = function(sHex) { return KJUR.crypto.Util.hashHex(sHex, hashAlg); };
     var mHash = hextorstr(hHash);

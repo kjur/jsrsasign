@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for RSAKey genarated key length test</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script src="../ext/jsbn.js"></script>
+<script src="../ext/jsbn2.js"></script>
+<script src="../ext/prng4.js"></script>
+<script src="../ext/rng.js"></script>
+<script src="../ext/rsa.js"></script>
+<script src="../ext/rsa2.js"></script>
+
+<script>
+$(document).ready(function(){
+//=========================================================================
+module("RSAKey.generate() Test");
+
+test("RSAGenerate 100 generated 512bit key size check test", function() {
+  var nbit = 512;
+  //var nbit = 1024;
+  //var nbit = 2048;
+  var isCorrectLength = true;
+  for (var i = 0; i < 100; i++) {
+    var key = new RSAKey();
+    key.generate(nbit, '10001');
+    if (key.n.bitLength() != nbit) isCorrectLength = false;
+  }
+  equal(isCorrectLength, true, "all 100 keys are " + nbit + "bit length");
+});
+
+});
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+
+<p>
+<a href="../">TOP</a> | 
+<a href="index.html">TEST INDEX</a> | 
+</p>
+
+</body>
+</html>

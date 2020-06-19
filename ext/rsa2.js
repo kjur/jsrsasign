@@ -202,11 +202,13 @@ function RSAGenerate(B,E) {
     var phi = p1.multiply(q1);
     if(phi.gcd(ee).compareTo(BigInteger.ONE) == 0) {
       this.n = this.p.multiply(this.q);	// this.n = p * q
-      this.d = ee.modInverse(phi);	// this.d = 
-      this.dmp1 = this.d.mod(p1);	// this.dmp1 = d mod (p - 1)
-      this.dmq1 = this.d.mod(q1);	// this.dmq1 = d mod (q - 1)
-      this.coeff = this.q.modInverse(this.p);	// this.coeff = (q ^ -1) mod p
-      break;
+      if (this.n.bitLength() == B) {
+        this.d = ee.modInverse(phi);	// this.d = 
+        this.dmp1 = this.d.mod(p1);	// this.dmp1 = d mod (p - 1)
+        this.dmq1 = this.d.mod(q1);	// this.dmq1 = d mod (q - 1)
+        this.coeff = this.q.modInverse(this.p);	// this.coeff = (q ^ -1) mod p
+        break;
+      }
     }
   }
   this.isPrivate = true;

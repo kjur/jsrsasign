@@ -1,9 +1,9 @@
-/* asn1cms-1.0.5.js (c) 2013-2017 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1cms-1.0.6.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1cms.js - ASN.1 DER encoder and verifier classes for Cryptographic Message Syntax(CMS)
  *
- * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cms-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.5 (2017-Sep-15)
+ * @version jsrsasign 8.0.17 asn1cms 1.0.6 (2020-Jun-19)
  * @since jsrsasign 4.2.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -983,10 +983,31 @@ KJUR.asn1.cms.CMSUtil = new function() {
  * @description
  * This method provides more easy way to genereate
  * CMS SignedData ASN.1 structure by JSON data.
+ * <br>
+ * Here is major parameters:
+ * <ul>
+ * <li>content - to specify data to be signed in eContent field.</li>
+ * <li>certs - a list of certificate PEM strings to specify 
+ * certificate field</li>
+ * <li>detached - 'true' or 'false' to specify detached signature or not.
+ * The default is 'false'</li>
+ * <li>signerInfos - array of signerInfo parameters. 
+ *   SignerInfo parameters listed here:
+ *   <ul>
+ *   <li>hashAlg - string of messageDigest hash algorithm name</li>
+ *   <li>sAttr - list of signedAttribute parameters</li>
+ *   <li>signerCert - string of signer certificate PEM</li>
+ *   <li>sigAlg - string of signature algorithm name</li>
+ *   <li>signerPrvKey - string of PEM signer private key</li>
+ *   </ul>
+ * </li>
+ * </ul>
+ * 
  * @example
  * var sd = KJUR.asn1.cms.CMSUtil.newSignedData({
  *   content: {str: "jsrsasign"},
  *   certs: [certPEM],
+ *   detached: false,
  *   signerInfos: [{
  *     hashAlg: 'sha256',
  *     sAttr: {
@@ -1014,6 +1035,10 @@ KJUR.asn1.cms.CMSUtil.newSignedData = function(param) {
     var sd = new _SignedData();
 
     sd.dEncapContentInfo.setContentValue(param.content);
+
+    if (typeof param.detached == "boolean") {
+      sd.dEncapContentInfo.isDetached = param.detached
+    }
 
     if (typeof param.certs == "object") {
         for (var i = 0; i < param.certs.length; i++) {
