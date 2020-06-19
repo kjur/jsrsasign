@@ -1,7 +1,9 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 8.0.16 to next version
+* Changes from 8.0.16 to 8.0.17
+  - src/rsasign.js
+    - verifyWithMessageHashPSS fixed for prepending zeros maleability (#438)
   - src/asn1x509.js
     - allow alternative algorithms to sign CRLs (#440)
   - src/asn1cms.js
@@ -12,6 +14,7 @@ ChangeLog for jsrsasign
     - pemtobin was fixed for pemtohex function
   - test
     - qunit-do-rsagenkeylen.html new test code for (#442)
+    - qunit-do-rsasign-pss.html add maleability test code (#438)
     - index.html, qunit-do-x509.html link update
 
 extended Authority/SubjectKeyIdentifier support
