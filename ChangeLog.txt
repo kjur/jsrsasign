@@ -4,7 +4,7 @@ ChangeLog for jsrsasign
 RSA decryption and RSA signature validation maleability fix
 * Changes from 8.0.17 to 8.0.18
   - ext/rsa2.js
-    - RSADecrypt fixed for zero prepending maleability (#???)
+    - RSADecrypt fixed for zero prepending maleability (#439)
     - RSADecryptOAEP fixed for zero prepending maleability
   - src/rsasign.js
     - verifyWithMessageHash fixed for zero prepending maleability
