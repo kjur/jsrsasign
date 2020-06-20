@@ -1,6 +1,16 @@
 
 ChangeLog for jsrsasign
 
+RSA decryption and RSA signature validation maleability fix
+* Changes from 8.0.17 to 8.0.18
+  - ext/rsa2.js
+    - RSADecrypt fixed for zero prepending maleability (#???)
+    - RSADecryptOAEP fixed for zero prepending maleability
+  - src/rsasign.js
+    - verifyWithMessageHash fixed for zero prepending maleability
+  - test
+    - qunit-do-crypto-cipher.html: some test case added for above    
+
 * Changes from 8.0.16 to 8.0.17
   - src/rsasign.js
     - verifyWithMessageHashPSS fixed for prepending zeros maleability (#438)
@@ -102,6 +112,7 @@ SHA384/512withECDSA wrong signature fix and add some curves support
   - ext/ec.js
     - mitigate Minerva timing attack in ECPointFp.multiply method
 　　　https://minerva.crocs.fi.muni.cz/
+      https://www.npmjs.com/advisories/1505
   - test/qunit-do-crypto-ecdsa.html
     - testcase fix
   - sample_node/tsr2certs added

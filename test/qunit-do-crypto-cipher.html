@@ -50,6 +50,44 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
+// z4.pub.p8.pem
+var Z4PRVPEM = (function() {/*
+-----BEGIN PRIVATE KEY-----
+MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDfdOqotHd55SYO
+0dLz2oXengw/tZ+q3ZmOPeVmMuOMIYO/Cv1wk2U0OK4pug4OBSJPhl09Zs6IwB8N
+wPOU7EDTgMOcQUYB/6QNCI1J7Zm2oLtuchzz4pIb+o4ZAhVprLhRyvqi8OTKQ7kf
+Gfs5Tuwmn1M/0fQkfzMxADpjOKNgf0uy6lN6utjdTrPKKFUQNdc6/Ty8EeTnQEwU
+lsT2LAXCfEKxTn5RlRljDztS7Sfgs8VL0FPy1Qi8B+dFcgRYKFrcpsVaZ1lBmXKs
+XDRu5QR/Rg3f9DRq4GR1sNH8RLY9uApMl2SNz+sR4zRPG85R/se5Q06Gu0BUQ3UP
+m67ETVZLAgMBAAECggEADjU54mYvHpICXHjc5+JiFqiH8NkUgOG8LL4kwt3DeBp9
+bP0+5hSJH8vmzwJkeGG9L79EWG4b/bfxgYdeNX7cFFagmWPRFrlxbd64VRYFawZH
+RJt+2cbzMVI6DL8EK4bu5Ux5qTiV44Jw19hoD9nDzCTfPzSTSGrKD3iLPdnREYaI
+GDVxcjBv3Tx6rrv3Z2lhHHKhEHb0RRjATcjAVKV9NZhMajJ4l9pqJ3A4IQrCBl95
+ux6Xm1oXP0i6aR78cjchsCpcMXdP3WMsvHgTlsZT0RZLFHrvkiNHlPiil4G2/eHk
+wvT//CrcbO6SmI/zCtMmypuHJqcr+Xb7GPJoa64WoQKBgQDwrfelf3Rdfo9kaK/b
+rBmbu1++qWpYVPTedQy84DK2p3GE7YfKyI+fhbnw5ol3W1jjfvZCmK/p6eZR4jgy
+J0KJ76z53T8HoDTF+FTkR55oM3TEM46XzI36RppWP1vgcNHdz3U4DAqkMlAh4lVm
+3GiKPGX5JHHe7tWz/uZ55Kk58QKBgQDtrkqdSzWlOjvYD4mq4m8jPgS7v3hiHd+1
+OT8S37zdoT8VVzo2T4SF+fBhI2lWYzpQp2sCjLmCwK9k/Gur55H2kTBTwzlQ6WSL
+Te9Zj+eoMGklIirA+8YdQHXrO+CCw9BTJAF+c3c3xeUOLXafzyW29bASGfUtA7Ax
+QAsR+Rr3+wKBgAwfZxrh6ZWP+17+WuVArOWIMZFj7SRX2yGdWa/lxwgmNPSSFkXj
+hkBttujoY8IsSrTivzqpgCrTCjPTpir4iURzWw4W08bpjd7u3C/HX7Y16Uq8ohEJ
+T5lslveDJ3iNljSK74eMK7kLg7fBM7YDogxccHJ1IHsvInp3e1pmZxOxAoGAO+bS
+TUQ4N/UuQezgkF3TDrnBraO67leDGwRbfiE/U0ghQvqh5DA0QSPVzlWDZc9KUitv
+j8vxsR9o1PW9GS0an17GJEYuetLnkShKK3NWOhBBX6d1yP9rVdH6JhgIJEy/g0Su
+z7TAFiFc8i7JF8u4QJ05C8bZAMhOLotqftQeVOMCgYAid8aaRvaM2Q8a42Jn6ZTT
+5ms6AvNr98sv0StnfmNQ+EYXN0bEk2huSW+w2hN34TYYBTjViQmHbhudwwu8lVjE
+ccDmIXsUFbHVK+kTIpWGGchy5cYPs3k9s1nMR2av0Lojtw9WRY76xRXvN8W6R7Eh
+wA2ax3+gEEYpGhjM/lO2Lg==
+-----END PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// aaa RSA encrypted by z4prv (a000)
+var AAAENCZ4 = "a0a2cc4570c2887c9125b983df8be8ee807168761f9d2a171c84504bec086e9705129e5f3cf3d943abb3ee808e227be8ebad6c00166dff55bbb876e397dd8599fd4e5ae95632e27b7e55bcb7bdb3985012092ff4869471b17ac706e945f9b69c6ebff4d16c51047f06c1a5abd33e39b21e20c1644ed66ae1b0ce213e5c1d0cc09bde1c61f30f077f47c834f1c4c515f3e1ad1a39674458e0a881586ebb67fe305ed8a9bb0c6c4ed1d0cf81d1c48d2113fa8b29a8604870f1c9209a03c53d48cd1f1395f9744f64e3cc77fb411840d30c611c7842e8efb74360719583769088e4bf08b0331c022a9c6aa91c60465bae91062940373de73e5ebf8d634b3753a746";
+
+// aaa RSAOAEP encrypted by z4prv (b000)
+var AAAOAEPENCZ4 = "6249fb5dbcd9bdfc8f8b92878f9c2ea10efad01341ab91475cf0245cb8b83e5cd222f3568e232a983590e8193718d004c8d7d2b4fc6c631f6b05d2590439025eba83ce50a7eaa2a39c91eabe70900017d2e9adb72633b285db6b2953b0da121719f1f00d4bab2c4be655aa510eebc9a2b2a084fa7e9859093d9ae9a99d4d48953b7fa871b80e617b237e267563fb7b6ab4562cdccb12e8146a547d4ca80719059ea7aad18e36a9741141d86ba02afebaaf17aa6878a27b0a7683804f10211c656da9d7e74b44630a5cc36ab1aa838d8af0493d1e4168b10b2380e165de6744e317274f64f3aff8b285be56e5f7049eafc2ea58a58cdb0e3da8e6427c45c1e2b5";
+
 test("KJUR.crypto.Cipher.getAlgByKeyAndName", function() {
   var CY = KJUR.crypto.Cipher;
   var kp = KEYUTIL.generateKeypair("RSA", 1024);
@@ -91,6 +129,32 @@ test("KJUR.crypto.Cipher.encrypt/decrypt", function() {
   equal(CY.decrypt(CY.encrypt("aaa", pub, "RSAOAEP256"), prv, "RSAOAEP256"), "aaa", "aaa");
 });
 
+test("KJUR.crypto.Cipher.encrypt/decrypt RSA maleability test", function() {
+  var prv = KEYUTIL.getKey(Z4PRVPEM);
+
+  equal(KJUR.crypto.Cipher.decrypt(AAAENCZ4, prv), "aaa", "aaa decrypted by z4.prv");
+
+  throws(function() {
+    KJUR.crypto.Cipher.decrypt("0000" + AAAENCZ4, prv);
+  },
+  Error,
+  "raise error for wrong ctext length"
+  );
+});
+
+test("KJUR.crypto.Cipher.encrypt/decrypt RSAOAEP maleability test", function() {
+  var prv = KEYUTIL.getKey(Z4PRVPEM);
+
+  equal(KJUR.crypto.Cipher.decrypt(AAAOAEPENCZ4, prv, "RSAOAEP"), "aaa", "aaa decrypted by z4.prv");
+
+  throws(function() {
+    KJUR.crypto.Cipher.decrypt("0000" + AAAOAEPENCZ4, prv, "RSAOAEP");
+  },
+  Error,
+  "raise error for wrong ctext length"
+  );
+});
+
 });
 </script>
   
@@ -98,10 +162,11 @@ test("KJUR.crypto.Cipher.encrypt/decrypt", function() {
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
-QUnit for 
+
+<p>
+<a href="../">TOP</a> | 
 <a href="index.html">INDEX</a> | 
+</p>
+
 </body>
-<center><p>&copy; 2016-2017 Kenji Urushima</p></center>
 </html>
-
-

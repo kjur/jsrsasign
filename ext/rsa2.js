@@ -235,6 +235,10 @@ function RSADoPrivate(x) {
 // Return the PKCS#1 RSA decryption of "ctext".
 // "ctext" is an even-length hex string and the output is a plain string.
 function RSADecrypt(ctext) {
+  if (ctext.length != Math.ceil(this.n.bitLength() / 4.0)) {
+    throw new Error("wrong ctext length");
+  }
+
   var c = parseBigInt(ctext, 16);
   var m = this.doPrivate(c);
   if(m == null) return null;
@@ -244,6 +248,10 @@ function RSADecrypt(ctext) {
 // Return the PKCS#1 OAEP RSA decryption of "ctext".
 // "ctext" is an even-length hex string and the output is a plain string.
 function RSADecryptOAEP(ctext, hash, hashLen) {
+  if (ctext.length != Math.ceil(this.n.bitLength() / 4.0)) {
+    throw new Error("wrong ctext length");
+  }
+
   var c = parseBigInt(ctext, 16);
   var m = this.doPrivate(c);
   if(m == null) return null;
