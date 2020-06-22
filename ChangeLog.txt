@@ -1,10 +1,27 @@
 
 ChangeLog for jsrsasign
 
+ECDSA signature validation maleability fix and others
+* Changes from 8.0.18 to 8.0.19
+  - src/ecdsa-mod.js
+    - ECDSA.verifyHex fixed for some types of maleability (#437)
+  - src/asn1hex.js
+    - ASN1HEX.checkStrictDER added
+  - src/asn1x509.js
+    - It's founded that OpenSSL's DN representation like
+      "/C=US/O=test" is "compat" format. So those methods
+      are added and existing method is now deprecated.
+      - X500Name.{ldapToOneline, onelineToLdap} are now deprecated.
+      - X500Name.{ldapToCompat, compatToLdap} are added.
+  - src/x509.js
+    - update for compatToLdap and ldapToCompat
+  - src/crypto.js
+    - document update
+
 RSA decryption and RSA signature validation maleability fix
 * Changes from 8.0.17 to 8.0.18
   - ext/rsa2.js
-    - RSADecrypt fixed for zero prepending maleability (#439)
+    - CVE-2020-14967 RSADecrypt fixed for zero prepending maleability (#439)
     - RSADecryptOAEP fixed for zero prepending maleability
   - src/rsasign.js
     - verifyWithMessageHash fixed for zero prepending maleability
@@ -13,7 +30,8 @@ RSA decryption and RSA signature validation maleability fix
 
 * Changes from 8.0.16 to 8.0.17
   - src/rsasign.js
-    - verifyWithMessageHashPSS fixed for prepending zeros maleability (#438)
+    - CVE-2020-14968
+      verifyWithMessageHashPSS fixed for prepending zeros maleability (#438)
   - src/asn1x509.js
     - allow alternative algorithms to sign CRLs (#440)
   - src/asn1cms.js

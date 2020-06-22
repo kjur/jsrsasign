@@ -499,6 +499,17 @@ DER encoded ASN.1 binary data.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.checkStrictDER">checkStrictDER</a></b>(hex)
+								</div>
+								<div class="description">strict ASN.1 DER hexadecimal string checker
+This method checks wheather the argument 'hex' is a hexadecimal string of
+ASN.1 data or not.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.dump">dump</a></b>(hexOrObj, flags, idx, indent)
 								</div>
 								<div class="description">get string of simple ASN.1 dump from hexadecimal ASN.1 data<br/>
@@ -636,7 +647,7 @@ with checking expected tag "checkingTag".</div>
 							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.isASN1HEX">isASN1HEX</a></b>(hex)
 								</div>
-								<div class="description">check wheather the string is ASN.1 hexadecimal string or not
+								<div class="description">simple ASN.1 DER hexadecimal string checker
 This method checks wheather the argument 'hex' is a hexadecimal string of
 ASN.1 data or not.</div>
 							</td>
@@ -683,7 +694,7 @@ Here are major methods of this class.
   <ul>
   <li><a href="../symbols/ASN1HEX.html#.getTLV">ASN1HEX.getTLV</a> - get ASN.1 TLV at specified position</li>
   <li><a href="../symbols/ASN1HEX.html#.getV">ASN1HEX.getV</a> - get ASN.1 V at specified position</li>
-  <li>ASN1HEX.getVlen - get integer ASN.1 L at specified position</li>
+  <li><a href="../symbols/ASN1HEX.html#.getVblen">ASN1HEX.getVblen</a> - get integer ASN.1 L at specified position</li>
   <li><a href="../symbols/ASN1HEX.html#.getVidx">ASN1HEX.getVidx</a> - get ASN.1 V position from its ASN.1 TLV position</li>
   <li><a href="../symbols/ASN1HEX.html#.getL">ASN1HEX.getL</a> - get hexadecimal ASN.1 L at specified position</li>
   <li><a href="../symbols/ASN1HEX.html#.getLblen">ASN1HEX.getLblen</a> - get byte length for ASN.1 L(length) bytes</li>
@@ -706,7 +717,8 @@ Here are major methods of this class.
 <li><b>UTILITIES</b>
   <ul>
   <li><a href="../symbols/ASN1HEX.html#.dump">ASN1HEX.dump</a> - dump ASN.1 structure</li>
-  <li><a href="../symbols/ASN1HEX.html#.isASN1HEX">ASN1HEX.isASN1HEX</a> - check whether ASN.1 hexadecimal string or not</li>
+  <li><a href="../symbols/ASN1HEX.html#.isASN1HEX">ASN1HEX.isASN1HEX</a> - simple ASN.1 DER hexadecimal string checker</li>
+  <li><a href="../symbols/ASN1HEX.html#.checkStrictDER">ASN1HEX.checkStrictDER</a> - strict ASN.1 DER hexadecimal string checker</li>
   <li><a href="../symbols/ASN1HEX.html#.hextooidstr">ASN1HEX.hextooidstr</a> - convert hexadecimal string of OID to dotted integer list</li>
   </ul>
 </li>
@@ -741,6 +753,75 @@ Here are major methods of this class.
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name=".checkStrictDER"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">ASN1HEX.</span><b>checkStrictDER</b>(hex)
+					
+					</div>
+					<div class="description">
+						strict ASN.1 DER hexadecimal string checker
+This method checks wheather the argument 'hex' is a hexadecimal string of
+ASN.1 data or not. If the argument is not DER string, this 
+raise an exception.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">ASN1HEX.checkStrictDER('0203012345') &rarr; NO EXCEPTION FOR PROPER ASN.1 INTEGER
+ASN1HEX.checkStrictDER('0203012345ff') &rarr; RAISE EXCEPTION FOR TOO LONG VALUE
+ASN1HEX.checkStrictDER('02030123') &rarr; false RAISE EXCEPITON FOR TOO SHORT VALUE
+ASN1HEX.checkStrictDER('fa3bcd') &rarr; false RAISE EXCEPTION FOR WRONG ASN.1</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hex</b>
+									
+								</dt>
+								<dd>string to check whether it is hexadecmal string for ASN.1 DER or not</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 8.0.19 asn1hex 1.2.1</dd>
+							</dl>
+							</dl>
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Throws:</dt>
+							
+								<dt>
+									 <b></b>
+								</dt>
+								<dd>Error when malformed ASN.1 DER hexadecimal string</dd>
+							
+							</dl>
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>unspecified</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
 				
 					<a name=".dump"> </a>
 					<div class="fixedFont">&lt;static&gt; 
@@ -1666,7 +1747,7 @@ jsrsasign 7.1.14 asn1hex 1.1.10.
 					
 					</div>
 					<div class="description">
-						check wheather the string is ASN.1 hexadecimal string or not
+						simple ASN.1 DER hexadecimal string checker
 This method checks wheather the argument 'hex' is a hexadecimal string of
 ASN.1 data or not.
 						

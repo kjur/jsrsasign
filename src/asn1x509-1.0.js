@@ -1,4 +1,4 @@
-/* asn1x509-1.1.9.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-1.1.10.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.17 asn1x509 1.1.9 (2020-Jun-19)
+ * @version jsrsasign 8.0.19 asn1x509 1.1.10 (2020-Jun-22)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1749,14 +1749,15 @@ KJUR.asn1.x509.X500Name = function(params) {
      * @function
      * @param {String} dnStr distinguished name by LDAP string (ex. O=aaa,C=US)
      * @since jsrsasign 6.2.2 asn1x509 1.0.18
+     * @see {@link KJUR.asn1.x509.X500Name.ldapToCompat}
      * @description
      * @example
      * name = new KJUR.asn1.x509.X500Name();
      * name.setByLdapString("CN=foo@example.com,OU=bbb,O=aaa,C=US");
      */
     this.setByLdapString = function(dnStr) {
-	var oneline = _KJUR_asn1_x509.X500Name.ldapToOneline(dnStr);
-	this.setByString(oneline);
+	var compat = _KJUR_asn1_x509.X500Name.ldapToCompat(dnStr);
+	this.setByString(compat);
     };
 
     /**
@@ -1819,22 +1820,23 @@ KJUR.asn1.x509.X500Name = function(params) {
 YAHOO.lang.extend(KJUR.asn1.x509.X500Name, KJUR.asn1.ASN1Object);
 
 /**
- * convert OpenSSL oneline distinguished name format string to LDAP(RFC 2253) format<br/>
- * @name onelineToLDAP
+ * convert OpenSSL compat distinguished name format string to LDAP(RFC 2253) format<br/>
+ * @name compatToLDAP
  * @memberOf KJUR.asn1.x509.X500Name
  * @function
- * @param {String} s distinguished name string in OpenSSL oneline format (ex. /C=US/O=test)
+ * @param {String} s distinguished name string in OpenSSL oneline compat (ex. /C=US/O=test)
  * @return {String} distinguished name string in LDAP(RFC 2253) format (ex. O=test,C=US)
- * @since jsrsasign 6.2.2 asn1x509 1.0.18
+ * @since jsrsasign 8.0.19 asn1x509 1.1.20
  * @description
- * This static method converts a distinguished name string in OpenSSL oneline 
+ * This static method converts a distinguished name string in OpenSSL compat
  * format to LDAP(RFC 2253) format.
- * @see <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">jsrsasign wiki: distinguished name string difference between OpenSSL oneline and LDAP(RFC 2253)</a>
+ * @see <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">jsrsasign wiki: distinguished name string difference between OpenSSL compat and LDAP(RFC 2253)</a>
+ * @see <a href="https://www.openssl.org/docs/man1.0.2/man1/openssl-x509.html#NAME-OPTIONS">OpenSSL x509 command manual - NAME OPTIONS</a>
  * @example
- * KJUR.asn1.x509.X500Name.onelineToLDAP("/C=US/O=test") &rarr; 'O=test,C=US'
- * KJUR.asn1.x509.X500Name.onelineToLDAP("/C=US/O=a,a") &rarr; 'O=a\,a,C=US'
+ * KJUR.asn1.x509.X500Name.compatToLDAP("/C=US/O=test") &rarr; 'O=test,C=US'
+ * KJUR.asn1.x509.X500Name.compatToLDAP("/C=US/O=a,a") &rarr; 'O=a\,a,C=US'
  */
-KJUR.asn1.x509.X500Name.onelineToLDAP = function(s) {
+KJUR.asn1.x509.X500Name.compatToLDAP = function(s) {
     if (s.substr(0, 1) !== "/") throw "malformed input";
 
     var result = "";
@@ -1848,23 +1850,40 @@ KJUR.asn1.x509.X500Name.onelineToLDAP = function(s) {
 };
 
 /**
- * convert LDAP(RFC 2253) distinguished name format string to OpenSSL oneline format<br/>
- * @name ldapToOneline
+ * convert OpenSSL compat distinguished name format string to LDAP(RFC 2253) format (DEPRECATED)<br/>
+ * @name onelineToLDAP
+ * @memberOf KJUR.asn1.x509.X500Name
+ * @function
+ * @param {String} s distinguished name string in OpenSSL compat format (ex. /C=US/O=test)
+ * @return {String} distinguished name string in LDAP(RFC 2253) format (ex. O=test,C=US)
+ * @since jsrsasign 6.2.2 asn1x509 1.0.18
+ * @see KJUR.asn1.x509.X500Name.compatToLDAP
+ * @description
+ * This method is deprecated. Please use 
+ * {@link KJUR.asn1.x509.X500Name.compatToLDAP} instead.
+ */
+KJUR.asn1.x509.X500Name.onelineToLDAP = function(s) {
+    return KJUR.asn1.x509.X500Name.compatToLDAP(s);
+}
+
+/**
+ * convert LDAP(RFC 2253) distinguished name format string to OpenSSL compat format<br/>
+ * @name ldapToCompat
  * @memberOf KJUR.asn1.x509.X500Name
  * @function
  * @param {String} s distinguished name string in LDAP(RFC 2253) format (ex. O=test,C=US)
- * @return {String} distinguished name string in OpenSSL oneline format (ex. /C=US/O=test)
- * @since jsrsasign 6.2.2 asn1x509 1.0.18
+ * @return {String} distinguished name string in OpenSSL compat format (ex. /C=US/O=test)
+ * @since jsrsasign 8.0.19 asn1x509 1.1.10
  * @description
  * This static method converts a distinguished name string in 
- * LDAP(RFC 2253) format to OpenSSL oneline format.
- * @see <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">jsrsasign wiki: distinguished name string difference between OpenSSL oneline and LDAP(RFC 2253)</a>
+ * LDAP(RFC 2253) format to OpenSSL compat format.
+ * @see <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">jsrsasign wiki: distinguished name string difference between OpenSSL compat and LDAP(RFC 2253)</a>
  * @example
- * KJUR.asn1.x509.X500Name.ldapToOneline('O=test,C=US') &rarr; '/C=US/O=test'
- * KJUR.asn1.x509.X500Name.ldapToOneline('O=a\,a,C=US') &rarr; '/C=US/O=a,a'
- * KJUR.asn1.x509.X500Name.ldapToOneline('O=a/a,C=US')  &rarr; '/C=US/O=a\/a'
+ * KJUR.asn1.x509.X500Name.ldapToCompat('O=test,C=US') &rarr; '/C=US/O=test'
+ * KJUR.asn1.x509.X500Name.ldapToCompat('O=a\,a,C=US') &rarr; '/C=US/O=a,a'
+ * KJUR.asn1.x509.X500Name.ldapToCompat('O=a/a,C=US')  &rarr; '/C=US/O=a\/a'
  */
-KJUR.asn1.x509.X500Name.ldapToOneline = function(s) {
+KJUR.asn1.x509.X500Name.ldapToCompat = function(s) {
     var a = s.split(",");
 
     // join \,
@@ -1889,6 +1908,22 @@ KJUR.asn1.x509.X500Name.ldapToOneline = function(s) {
     a2 = a2.map(function(s) {return s.replace("/", "\\/")});
     a2.reverse();
     return "/" + a2.join("/");
+};
+
+/**
+ * convert LDAP(RFC 2253) distinguished name format string to OpenSSL compat format (DEPRECATED)<br/>
+ * @name ldapToOneline
+ * @memberOf KJUR.asn1.x509.X500Name
+ * @function
+ * @param {String} s distinguished name string in LDAP(RFC 2253) format (ex. O=test,C=US)
+ * @return {String} distinguished name string in OpenSSL compat format (ex. /C=US/O=test)
+ * @since jsrsasign 6.2.2 asn1x509 1.0.18
+ * @description
+ * This method is deprecated. Please use 
+ * {@link KJUR.asn1.x509.X500Name.ldapToCompat} instead.
+ */
+KJUR.asn1.x509.X500Name.ldapToOneline = function(s) {
+    return KJUR.asn1.x509.X500Name.ldapToCompat(s);
 };
 
 /**

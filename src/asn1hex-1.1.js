@@ -1,9 +1,9 @@
-/* asn1hex-1.2.0.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1hex-1.2.1.js (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
  *
- * Copyright (c) 2010-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license/
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1hex 1.2.0 (2017-Jun-24)
+ * @version jsrsasign 8.0.19 asn1hex 1.2.1 (2020-Jun-22)
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -47,7 +47,7 @@
  *   <ul>
  *   <li>{@link ASN1HEX.getTLV} - get ASN.1 TLV at specified position</li>
  *   <li>{@link ASN1HEX.getV} - get ASN.1 V at specified position</li>
- *   <li>{@link ASN1HEX.getVlen} - get integer ASN.1 L at specified position</li>
+ *   <li>{@link ASN1HEX.getVblen} - get integer ASN.1 L at specified position</li>
  *   <li>{@link ASN1HEX.getVidx} - get ASN.1 V position from its ASN.1 TLV position</li>
  *   <li>{@link ASN1HEX.getL} - get hexadecimal ASN.1 L at specified position</li>
  *   <li>{@link ASN1HEX.getLblen} - get byte length for ASN.1 L(length) bytes</li>
@@ -70,7 +70,8 @@
  * <li><b>UTILITIES</b>
  *   <ul>
  *   <li>{@link ASN1HEX.dump} - dump ASN.1 structure</li>
- *   <li>{@link ASN1HEX.isASN1HEX} - check whether ASN.1 hexadecimal string or not</li>
+ *   <li>{@link ASN1HEX.isASN1HEX} - simple ASN.1 DER hexadecimal string checker</li>
+ *   <li>{@link ASN1HEX.checkStrictDER} - strict ASN.1 DER hexadecimal string checker</li>
  *   <li>{@link ASN1HEX.hextooidstr} - convert hexadecimal string of OID to dotted integer list</li>
  *   </ul>
  * </li>
@@ -652,7 +653,7 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
 };
 
 /**
- * check wheather the string is ASN.1 hexadecimal string or not
+ * simple ASN.1 DER hexadecimal string checker
  * @name isASN1HEX
  * @memberOf ASN1HEX
  * @function
@@ -673,12 +674,110 @@ ASN1HEX.isASN1HEX = function(hex) {
     if (hex.length % 2 == 1) return false;
 
     var intL = _ASN1HEX.getVblen(hex, 0);
-    var tV = hex.substr(0, 2);
-    var lV = _ASN1HEX.getL(hex, 0);
-    var hVLength = hex.length - tV.length - lV.length;
+    var hT = hex.substr(0, 2);
+    var hL = _ASN1HEX.getL(hex, 0);
+    var hVLength = hex.length - hT.length - hL.length;
     if (hVLength == intL * 2) return true;
 
     return false;
+};
+
+/**
+ * strict ASN.1 DER hexadecimal string checker
+ * @name checkStrictDER
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} hex string to check whether it is hexadecmal string for ASN.1 DER or not
+ * @return unspecified
+ * @since jsrsasign 8.0.19 asn1hex 1.2.1
+ * @throws Error when malformed ASN.1 DER hexadecimal string
+ * @description
+ * This method checks wheather the argument 'hex' is a hexadecimal string of
+ * ASN.1 data or not. If the argument is not DER string, this 
+ * raise an exception.
+ * @example
+ * ASN1HEX.checkStrictDER('0203012345') &rarr; NO EXCEPTION FOR PROPER ASN.1 INTEGER
+ * ASN1HEX.checkStrictDER('0203012345ff') &rarr; RAISE EXCEPTION FOR TOO LONG VALUE
+ * ASN1HEX.checkStrictDER('02030123') &rarr; false RAISE EXCEPITON FOR TOO SHORT VALUE
+ * ASN1HEX.checkStrictDER('fa3bcd') &rarr; false RAISE EXCEPTION FOR WRONG ASN.1
+ */
+ASN1HEX.checkStrictDER = function(h, idx, maxHexLen, maxByteLen, maxLbyteLen) {
+    var _ASN1HEX = ASN1HEX;
+
+    if (maxHexLen === undefined) {
+	// 1. hex string check
+	if (typeof h != "string") throw new Error("not hex string");
+	h = h.toLowerCase();
+	if (! KJUR.lang.String.isHex(h)) throw new Error("not hex string");
+
+	// 2. set max if needed
+	// max length of hexadecimal string
+	maxHexLen = h.length;
+	// max length of octets
+	maxByteLen = h.length / 2;
+	// max length of L octets of TLV
+	if (maxByteLen < 0x80) {
+	    maxLbyteLen = 1;
+	} else {
+	    maxLbyteLen = Math.ceil(maxByteLen.toString(16)) + 1;
+	}
+    }
+    //console.log(maxHexLen + ":" + maxByteLen + ":" + maxLbyteLen);
+
+    // 3. check if L(length) string not exceeds maxLbyteLen
+    var hL = _ASN1HEX.getL(h, idx);
+    if (hL.length > maxLbyteLen * 2)
+	throw new Error("L of TLV too long: idx=" + idx);
+
+    // 4. check if V(value) octet length (i.e. L(length) value) 
+    //    not exceeds maxByteLen
+    var vblen = _ASN1HEX.getVblen(h, idx);
+    if (vblen > maxByteLen) 
+	throw new Error("value of L too long than hex: idx=" + idx);
+
+    // 5. check V string length and L's value are the same
+    var hTLV = _ASN1HEX.getTLV(h, idx);
+    var hVLength = 
+	hTLV.length - 2 - _ASN1HEX.getL(h, idx).length;
+    if (hVLength !== (vblen * 2))
+	throw new Error("V string length and L's value not the same:" +
+		        hVLength + "/" + (vblen * 2));
+
+    // 6. check appending garbled string
+    if (idx === 0) {
+	if (h.length != hTLV.length)
+	    throw new Error("total length and TLV length unmatch:" +
+			    h.length + "!=" + hTLV.length);
+    }
+
+    // 7. check if there isn't prepending zeros in DER INTEGER value
+    var hT = h.substr(idx, 2);
+    if (hT === '02') {
+	var vidx = _ASN1HEX.getVidx(h, idx);
+	// check if DER INTEGER VALUE have least leading zeros 
+	// for two's complement
+	// GOOD - 3fabde... 008fad...
+	// BAD  - 000012... 007fad...
+	if (h.substr(vidx, 2) == "00" && h.charCodeAt(vidx + 2) < 56) // '8'=56
+	    throw new Error("not least zeros for DER INTEGER");
+    }
+
+    // 8. check if all of elements in a structured item are conformed to
+    //    strict DER encoding rules.
+    if (parseInt(hT, 16) & 32) { // structured tag?
+	var intL = _ASN1HEX.getVblen(h, idx);
+	var sum = 0;
+	var aIdx = _ASN1HEX.getChildIdx(h, idx);
+	for (var i = 0; i < aIdx.length; i++) {
+	    var tlv = _ASN1HEX.getTLV(h, aIdx[i]);
+	    sum += tlv.length;
+	    _ASN1HEX.checkStrictDER(h, aIdx[i], 
+				   maxHexLen, maxByteLen, maxLbyteLen);
+	}
+	if ((intL * 2) != sum)
+	    throw new Error("sum of children's TLV length and L unmatch: " +
+			    (intL * 2) + "!=" + sum);
+    }
 };
 
 /**

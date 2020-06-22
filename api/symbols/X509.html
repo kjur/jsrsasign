@@ -1853,7 +1853,7 @@ var issuer = x.getIssuerHex(); // return string like "3013..."</pre>
 					<pre class="code">var x = new X509();
 x.readCertPEM(sCertPEM);
 var dn1 = x.getIssuerString(); // return string like "/C=US/O=TEST"
-var dn2 = KJUR.asn1.x509.X500Name.onelineToLDAP(dn1); // returns "O=TEST, C=US"</pre>
+var dn2 = KJUR.asn1.x509.X500Name.compatToLDAP(dn1); // returns "O=TEST, C=US"</pre>
 					
 					
 					
@@ -2521,7 +2521,7 @@ var subject = x.getSubjectHex(); // return string like "3013..."</pre>
 					<pre class="code">var x = new X509();
 x.readCertPEM(sCertPEM);
 var dn1 = x.getSubjectString(); // return string like "/C=US/O=TEST"
-var dn2 = KJUR.asn1.x509.X500Name.onelineToLDAP(dn1); // returns "O=TEST, C=US"</pre>
+var dn2 = KJUR.asn1.x509.X500Name.compatToLDAP(dn1); // returns "O=TEST, C=US"</pre>
 					
 					
 					

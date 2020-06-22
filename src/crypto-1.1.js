@@ -1365,10 +1365,9 @@ KJUR.crypto.Signature = function(params) {
  * <li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
  * </ul>
  * NOTE: (*) is not supported in Java JCE.<br/>
- * Currently this class supports only RSA encryption and decryption. 
- * However it is planning to implement also symmetric ciphers near in the future.
- * @example
- */
+ * Currently this class supports only RSA encryption and decryption 
+ * based on RSAES-OAEP and RSAES-PKCS1-v1_5 scheme. 
+ * However it is planning to implement also symmetric ciphers near in the future */
 KJUR.crypto.Cipher = function(params) {
 };
 
