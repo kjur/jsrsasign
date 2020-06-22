@@ -5,12 +5,12 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* x509-1.1.20.js (c) 2012-2018 Kenji Urushima | kjur.github.io/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* x509-1.1.21.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * x509.js - X509 class to read subject public key from certificate.
 <span class='line'>  5</span>  *
-<span class='line'>  6</span>  * Copyright (c) 2010-2018 Kenji Urushima (kenji.urushima@gmail.com)
+<span class='line'>  6</span>  * Copyright (c) 2010-2020 Kenji Urushima (kenji.urushima@gmail.com)
 <span class='line'>  7</span>  *
 <span class='line'>  8</span>  * This software is licensed under the terms of the MIT License.
 <span class='line'>  9</span>  * https://kjur.github.io/jsrsasign/license
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name x509-1.1.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign 8.0.10 x509 1.1.20 (2018-Apr-09)
+<span class='line'> 19</span>  * @version jsrsasign 8.0.19 x509 1.1.21 (2020-Jun-21)
 <span class='line'> 20</span>  * @since jsrsasign 1.x.x
 <span class='line'> 21</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -204,7 +204,7 @@
 <span class='line'>197</span>      * var x = new X509();
 <span class='line'>198</span>      * x.readCertPEM(sCertPEM);
 <span class='line'>199</span>      * var dn1 = x.getIssuerString(); // return string like "/C=US/O=TEST"
-<span class='line'>200</span>      * var dn2 = KJUR.asn1.x509.X500Name.onelineToLDAP(dn1); // returns "O=TEST, C=US"
+<span class='line'>200</span>      * var dn2 = KJUR.asn1.x509.X500Name.compatToLDAP(dn1); // returns "O=TEST, C=US"
 <span class='line'>201</span>      */</span><span class="WHIT">
 <span class='line'>202</span> </span><span class="WHIT">    </span><span class="NAME">this.getIssuerString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>203</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_X509.hex2dn</span><span class="PUNC">(</span><span class="NAME">this.getIssuerHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
@@ -235,7 +235,7 @@
 <span class='line'>228</span>      * var x = new X509();
 <span class='line'>229</span>      * x.readCertPEM(sCertPEM);
 <span class='line'>230</span>      * var dn1 = x.getSubjectString(); // return string like "/C=US/O=TEST"
-<span class='line'>231</span>      * var dn2 = KJUR.asn1.x509.X500Name.onelineToLDAP(dn1); // returns "O=TEST, C=US"
+<span class='line'>231</span>      * var dn2 = KJUR.asn1.x509.X500Name.compatToLDAP(dn1); // returns "O=TEST, C=US"
 <span class='line'>232</span>      */</span><span class="WHIT">
 <span class='line'>233</span> </span><span class="WHIT">    </span><span class="NAME">this.getSubjectString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>234</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_X509.hex2dn</span><span class="PUNC">(</span><span class="NAME">this.getSubjectHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">

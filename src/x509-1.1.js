@@ -1,9 +1,9 @@
-/* x509-1.1.20.js (c) 2012-2018 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-1.1.21.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
  *
- * Copyright (c) 2010-2018 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.10 x509 1.1.20 (2018-Apr-09)
+ * @version jsrsasign 8.0.19 x509 1.1.21 (2020-Jun-21)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -197,7 +197,7 @@ function X509() {
      * var x = new X509();
      * x.readCertPEM(sCertPEM);
      * var dn1 = x.getIssuerString(); // return string like "/C=US/O=TEST"
-     * var dn2 = KJUR.asn1.x509.X500Name.onelineToLDAP(dn1); // returns "O=TEST, C=US"
+     * var dn2 = KJUR.asn1.x509.X500Name.compatToLDAP(dn1); // returns "O=TEST, C=US"
      */
     this.getIssuerString = function() {
         return _X509.hex2dn(this.getIssuerHex());
@@ -228,7 +228,7 @@ function X509() {
      * var x = new X509();
      * x.readCertPEM(sCertPEM);
      * var dn1 = x.getSubjectString(); // return string like "/C=US/O=TEST"
-     * var dn2 = KJUR.asn1.x509.X500Name.onelineToLDAP(dn1); // returns "O=TEST, C=US"
+     * var dn2 = KJUR.asn1.x509.X500Name.compatToLDAP(dn1); // returns "O=TEST, C=US"
      */
     this.getSubjectString = function() {
         return _X509.hex2dn(this.getSubjectHex());

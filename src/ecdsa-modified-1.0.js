@@ -1,4 +1,4 @@
-/* ecdsa-modified-1.1.2.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
+/* ecdsa-modified-1.1.3.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
  */
 /*
  * ecdsa-modified.js - modified Bitcoin.ECDSA class
@@ -13,7 +13,7 @@
  * @fileOverview
  * @name ecdsa-modified-1.0.js
  * @author Stefan Thomas (github.com/justmoon) and Kenji Urushima (kenji.urushima@gmail.com)
- * @version jsrsasign 8.0.15 ecdsa-modified 1.1.2 (2020-Apr-12)
+ * @version jsrsasign 8.0.20 ecdsa-modified 1.1.3 (2020-Jun-22)
  * @since jsrsasign 4.0
  * @license <a href="https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE">MIT License</a>
  */
@@ -262,18 +262,22 @@ KJUR.crypto.ECDSA = function(params) {
      * var result = ec.verifyHex(msgHashHex, sigHex, pubkeyHex);
      */
     this.verifyHex = function(hashHex, sigHex, pubkeyHex) {
-	var r,s;
+	try {
+	    var r,s;
 
-	var obj = _KJUR_crypto_ECDSA.parseSigHex(sigHex);
-	r = obj.r;
-	s = obj.s;
+	    var obj = _KJUR_crypto_ECDSA.parseSigHex(sigHex);
+	    r = obj.r;
+	    s = obj.s;
+	    
+	    var Q = _ECPointFp.decodeFromHex(this.ecparams['curve'], pubkeyHex);
 
-	var Q = _ECPointFp.decodeFromHex(this.ecparams['curve'], pubkeyHex);
+	    // message hash is truncated with curve key length (FIPS 186-4 6.4)
+            var e = new _BigInteger(hashHex.substring(0, this.ecparams.keylen / 4), 16);
 
-	// message hash is truncated with curve key length (FIPS 186-4 6.4)
-        var e = new _BigInteger(hashHex.substring(0, this.ecparams.keylen / 4), 16);
-
-	return this.verifyRaw(e, r, s, Q);
+	    return this.verifyRaw(e, r, s, Q);
+	} catch (ex) {
+	    return false;
+	}
     };
 
     this.verify = function (hash, sig, pubkey) {
@@ -663,6 +667,9 @@ KJUR.crypto.ECDSA = function(params) {
  * @param {String} sigHex hexadecimal string of ECDSA signature value
  * @return {Array} associative array of signature field r and s of BigInteger
  * @since ecdsa-modified 1.0.1
+ * @see {@link KJUR.crypto.ECDSA.parseSigHexInHexRS}
+ * @see {@link ASN1HEX.checkStrictDER}
+ * @throws Error when signature value is malformed.
  * @example
  * var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
  * var sig = ec.parseSigHex('30...');
@@ -686,6 +693,9 @@ KJUR.crypto.ECDSA.parseSigHex = function(sigHex) {
  * @param {String} sigHex hexadecimal string of ECDSA signature value
  * @return {Array} associative array of signature field r and s in hexadecimal
  * @since ecdsa-modified 1.0.3
+ * @see {@link KJUR.crypto.ECDSA.parseSigHex}
+ * @see {@link ASN1HEX.checkStrictDER}
+ * @throws Error when signature value is malformed.
  * @example
  * var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
  * var sig = ec.parseSigHexInHexRS('30...');
@@ -697,27 +707,31 @@ KJUR.crypto.ECDSA.parseSigHexInHexRS = function(sigHex) {
 	_getChildIdx = _ASN1HEX.getChildIdx,
 	_getV = _ASN1HEX.getV;
 
-    // 1. ASN.1 Sequence Check
+    // 1. strict DER check
+    _ASN1HEX.checkStrictDER(sigHex, 0);
+
+    // 2. ASN.1 Sequence Check
     if (sigHex.substr(0, 2) != "30")
-	throw "signature is not a ASN.1 sequence";
+	throw new Error("signature is not a ASN.1 sequence");
 
     // 2. Items of ASN.1 Sequence Check
     var a = _getChildIdx(sigHex, 0);
     if (a.length != 2)
-	throw "number of signature ASN.1 sequence elements seem wrong";
-    
-    // 3. Integer check
+	throw new Error("signature shall have two elements");
+
+    // 3. Integer tag check
     var iTLV1 = a[0];
     var iTLV2 = a[1];
-    if (sigHex.substr(iTLV1, 2) != "02")
-	throw "1st item of sequene of signature is not ASN.1 integer";
-    if (sigHex.substr(iTLV2, 2) != "02")
-	throw "2nd item of sequene of signature is not ASN.1 integer";
 
-    // 4. getting value
+    if (sigHex.substr(iTLV1, 2) != "02")
+	throw new Error("1st item not ASN.1 integer");
+    if (sigHex.substr(iTLV2, 2) != "02")
+	throw new Error("2nd item not ASN.1 integer");
+
+    // 4. getting value and least zero check for DER
     var hR = _getV(sigHex, iTLV1);
     var hS = _getV(sigHex, iTLV2);
-    
+
     return {'r': hR, 's': hS};
 };
 
