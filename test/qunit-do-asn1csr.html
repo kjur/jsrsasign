@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+s<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -223,6 +223,26 @@ var csrextpem = "" +
 "aeFpEQeMdw==\r\n" +
 "-----END CERTIFICATE REQUEST-----\r\n";
 
+// _data/0csrext/certbot1.csr.pem
+var csrcertbot1 = (function() {/*
+-----BEGIN CERTIFICATE REQUEST-----
+MIICeDCCAWACAQIwADCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMf6
+wBbRavWLUCZfLNF+C4uNO/T6N2YCxWgM/XI04hPLqQodfTudcIwsbWGGkRpJSwGG
+pDXQs3A1fH5xrfev7PlWaDYCkhC4jrrZ/1L8HGR/nUxrS3jFTbzZTGA84TbkW8FH
+fyugWWqnjrnoxOJW0XdiWe1Drsr5vaqVS0N4qEISH/ciLnaVeV//tLJc/V5g3sFu
+4AQZQykvkltGD7w8vBhM4a/KQGeV3hG+ctCAwV5+RhQxForDgUv3ZPt76yVt142x
+TJGsq8fsdEqBjg7xVQn+458Z3yMMQVMLCf/aEHFLYurc6PD2kEzJf+mRYXY3sNwy
+4l38Qf8velG6Ij+8eVkCAwEAAaAzMDEGCSqGSIb3DQEJDjEkMCIwIAYDVR0RBBkw
+F4IVbm9kZWpzLnJ6LWJzZC5teS5jb3JwMA0GCSqGSIb3DQEBCwUAA4IBAQB0isgR
+I57C2GCszZdLdouAjpIZXa8W1C3FjOHcd6RQ77Fd+h22fn63gEMBUQk3AFzq4t2b
+8JeOH1xjZ4gjTEXH4whOh95gR+LDvVmK3khIHBLMVCyJgUEUNTZJoaMu7adhpbJX
+taiHpny63sQvh3QtEh7arMx8EaDh8MKYBQ5iTylvN0SS/yQcUvaS4kFs5CJTE/YG
+FepaWdBWPlE4C5oJ956lnuZSRHlugKHUzWD/V/tSYLDJmQVJ7sPNJM1JaTd79cDq
+cbtqMCqhg0GKH4OmbrS+Zu99iox+I7Mbsu9+F4rZjinez1looQ5hfJ+6FAtxE1HI
+2/x4YDGRZtDqwcFe
+-----END CERTIFICATE REQUEST-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
 // ======= TEST ===============================================================
 
 test("CertificationRequestInfo", function() {
@@ -342,7 +362,6 @@ var pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
 equal(pem, csrextpem, "CSR PEM keyusage, basicconstraints");
 });
 
-
 test("CSRUtil.getInfo key2.csr", function() {
 var p = KJUR.asn1.csr.CSRUtil.getInfo(key2csrpem);
 equal(p.subject.hex, "3032310b3009060355040613025553310d300b060355040a0c04546573743114301206035504030c0b6578616d706c652e636f6d", "subject.hex");
@@ -350,6 +369,14 @@ equal(p.subject.name, "/C=US/O=Test/CN=example.com", "subject.name");
 equal(p.pubkey.hex, "30820122300d06092a864886f70d01010105000382010f003082010a0282010100e7fd901cc041be2aeb8ae7218a9479d3645ade837f8ddb97948162d1e5a941e9b64b422b2b0822057f7e84d9e386a321397a7893fe88b82387e8f211a494a417537fb6eef2a734d5c274fc2d0a1fe5d69142d78714f537c3731e95db84e6718f8c997c8dc577ea3b6fb7b9e79198c9bd93e5b902cd02de9acc8bc8df5050a8d203d71dd12034f155ae80f79dae9ddb68ebaf6c52e39c8d4085c70602937bb99bcf51a5aca8c8010adebaba5db485faca62ad62c7783174779f21306bdbc08f183e7a7b74d44f534f1683d414244f252447ccc805ce61ad9e29193d9aa07b8e41180c78aa34fce3b26dc24f46a69fc7b607e7505188127b74678f9f13a2222bc50203010001", "pubkey.hex");
 equal(p.pubkey.obj.n.compareTo(new BigInteger("00e7fd901cc041be2aeb8ae7218a9479d3645ade837f8ddb97948162d1e5a941e9b64b422b2b0822057f7e84d9e386a321397a7893fe88b82387e8f211a494a417537fb6eef2a734d5c274fc2d0a1fe5d69142d78714f537c3731e95db84e6718f8c997c8dc577ea3b6fb7b9e79198c9bd93e5b902cd02de9acc8bc8df5050a8d203d71dd12034f155ae80f79dae9ddb68ebaf6c52e39c8d4085c70602937bb99bcf51a5aca8c8010adebaba5db485faca62ad62c7783174779f21306bdbc08f183e7a7b74d44f534f1683d414244f252447ccc805ce61ad9e29193d9aa07b8e41180c78aa34fce3b26dc24f46a69fc7b607e7505188127b74678f9f13a2222bc5", 16)), 0, "pubkey.obj.n");
 equal(p.pubkey.obj.e, 65537, "pubkey.obj.e");
+});
+
+test("CSRUtil.getInfo certbot1.csr.pem (with san, no sbjname)", function() {
+  var p = KJUR.asn1.csr.CSRUtil.getInfo(csrcertbot1);
+  equal(p != undefined, true, "p");
+  equal(p.pubkey != undefined, true, "p.pubkey");
+  equal(p.pubkey.hex, "30820122300d06092a864886f70d01010105000382010f003082010a0282010100c7fac016d16af58b50265f2cd17e0b8b8d3bf4fa376602c5680cfd7234e213cba90a1d7d3b9d708c2c6d6186911a494b0186a435d0b370357c7e71adf7afecf9566836029210b88ebad9ff52fc1c647f9d4c6b4b78c54dbcd94c603ce136e45bc1477f2ba0596aa78eb9e8c4e256d1776259ed43aecaf9bdaa954b4378a842121ff7222e7695795fffb4b25cfd5e60dec16ee0041943292f925b460fbc3cbc184ce1afca406795de11be72d080c15e7e461431168ac3814bf764fb7beb256dd78db14c91acabc7ec744a818e0ef15509fee39f19df230c41530b09ffda10714b62eadce8f0f6904cc97fe991617637b0dc32e25dfc41ff2f7a51ba223fbc79590203010001", "30820122...");
+  deepEqual(p.ext, [{subjectAltName: {array: [["DNS", "nodejs.rz-bsd.my.corp"]]}}], "ext=" + JSON.stringify(p.ext));
 });
 
 });

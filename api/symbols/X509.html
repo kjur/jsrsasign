@@ -894,9 +894,9 @@ specified by 'hex' and 'idx' to LDAP string representation (ex.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#parseExt">parseExt</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/X509.html#parseExt">parseExt</a></b>(hCSR)
 								</div>
-								<div class="description">set array of X.509v3 extesion information such as extension OID, criticality and value index.</div>
+								<div class="description">set array of X.509v3 and CSR extesion information such as extension OID, criticality and value index.</div>
 							</td>
 						</tr>
 					
@@ -2768,17 +2768,22 @@ X509.hex2rdn("31143008060355040a0c01613008060355040a0c0162") &rarr; O=a+O=b</pre
 					<div class="fixedFont">
 					
 					
-					<b>parseExt</b>()
+					<b>parseExt</b>(hCSR)
 					
 					</div>
 					<div class="description">
-						set array of X.509v3 extesion information such as extension OID, criticality and value index.<br/>
+						set array of X.509v3 and CSR extesion information such as extension OID, criticality and value index.<br/>
 This method will set an array of X.509v3 extension information having 
 following parameters:
 <ul>
 <li>oid - extension OID (ex. 2.5.29.19)</li>
 <li>critical - true or false</li>
 <li>vidx - string index for extension value</li>
+<br/>
+When you want to parse extensionRequest of CSR,
+argument 'hCSR' shall be specified.
+<br/>
+NOTE: CSR is supported from jsrsasign 8.0.20 x509 1.1.22.
 						
 						
 					</div>
@@ -2789,10 +2794,27 @@ following parameters:
 x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
 
 x.aExtInfo &rarr;
+[ { oid: "2.5.29,19", critical: true, vidx: 2504 }, ... ]
+
+// to parse CSR
+X = new X509()
+x.parseExt("-----BEGIN CERTIFICATE REQUEST-----...");
+x.aExtInfo &rarr;
 [ { oid: "2.5.29,19", critical: true, vidx: 2504 }, ... ]</pre>
 					
 					
 					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hCSR</b>
+									
+								</dt>
+								<dd>- PEM string of certificate signing requrest(CSR) (OPTION)</dd>
+							
+							</dl>
 						
 						
 						

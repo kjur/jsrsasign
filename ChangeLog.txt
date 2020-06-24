@@ -1,6 +1,21 @@
 
 ChangeLog for jsrsasign
 
+add CSR support for subjectAltName
+* Changes From 8.0.19 to 8.0.20
+  - src/asn1csr.js
+    - CSRUtil.getInfo
+      - add ext parameter to show subjectAltName property
+      - change not to raise error when subject name is empty in CSR
+  - src/x509.js
+    - X509.parseExt
+      - add support for CSR extension request field
+  - src/asn1hex.js
+    - ASN1HEX.getIdxbyList
+      - small update for exception
+  - test/
+    - qunit-do-{asn1csr, x509}.html to add tests for above.
+
 ECDSA signature validation maleability fix and others
 * Changes from 8.0.18 to 8.0.19
   - src/ecdsa-mod.js

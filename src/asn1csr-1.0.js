@@ -1,9 +1,9 @@
-/* asn1csr-1.0.6.js (c) 2015-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1csr-1.0.7.js (c) 2015-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
  *
- * Copyright (c) 2015-2018 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2015-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1csr-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.5 asn1csr 1.0.6 (2018-Jan-13)
+ * @version jsrsasign 8.0.20 asn1csr 1.0.7 (2020-Jun-24)
  * @since jsrsasign 4.9.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -419,11 +419,18 @@ KJUR.asn1.csr.CSRUtil.newCSRPEM = function(param) {
  * <li>subject.hex - hexadecimal string of X.500 Name of subject</li>
  * <li>pubkey.obj - subject public key object such as RSAKey, KJUR.crypto.{ECDSA,DSA}</li>
  * <li>pubkey.hex - hexadecimal string of subject public key</li>
+ * <li>ext - array of extensionRequest parameters</li>
  * </ul>
+ * NOTE: 'ext' property is supported since jsrsasign 8.0.20 asn1csr 1.0.7 and
+ * ext only support subjectAltName extension at current stage.
  *
  * @example
- * o = KJUR.asn1.csr.CSRUtil.getInfo("-----BEGIN CERTIFICATE REQUEST...");
- * console.log(o.subject.name) &rarr; "/C=US/O=Test"
+ * KJUR.asn1.csr.CSRUtil.getInfo("-----BEGIN CERTIFICATE REQUEST...") &rarr;
+ * {
+ *   subject: { name: "/C=US/O=Test", hex: "30..." },
+ *   pubkey: { hex: "30...", obj: KEYOBJECT },
+ *   ext: [ { subjectAltName: { array: [["DNS", "example.com"]] } } ]
+ * }
  */
 KJUR.asn1.csr.CSRUtil.getInfo = function(sPEM) {
     var _ASN1HEX = ASN1HEX;
@@ -438,11 +445,23 @@ KJUR.asn1.csr.CSRUtil.getInfo = function(sPEM) {
 
     var hex = pemtohex(sPEM, "CERTIFICATE REQUEST");
 
-    result.subject.hex = _getTLVbyList(hex, 0, [0, 1]);
-    result.subject.name = X509.hex2dn(result.subject.hex);
+    try {
+	result.subject.hex = _getTLVbyList(hex, 0, [0, 1]);
+    } catch (ex) {};
+
+    try {
+	result.subject.name = X509.hex2dn(result.subject.hex);
+    } catch (ex) {};
 
     result.pubkey.hex = _getTLVbyList(hex, 0, [0, 2]);
     result.pubkey.obj = KEYUTIL.getKey(result.pubkey.hex, null, "pkcs8pub");
+
+    try {
+	result.ext = [];
+	var x = new X509();
+	x.parseExt(sPEM);
+	result.ext.push({"subjectAltName": {"array": x.getExtSubjectAltName2()}});
+    } catch (ex) {};
 
     return result;
 };

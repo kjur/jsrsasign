@@ -403,11 +403,13 @@ function X509() {
 
     // ===== parse extension ======================================
     /**
-     * set array of X.509v3 extesion information such as extension OID, criticality and value index.<br/>
+     * set array of X.509v3 and CSR extesion information such as extension OID, criticality and value index.<br/>
      * @name parseExt
      * @memberOf X509#
      * @function
+     * @param {String} hCSR - PEM string of certificate signing requrest(CSR) (OPTION)
      * @since jsrsasign 7.2.0 x509 1.1.14
+     *
      * @description
      * This method will set an array of X.509v3 extension information having 
      * following parameters:
@@ -415,23 +417,53 @@ function X509() {
      * <li>oid - extension OID (ex. 2.5.29.19)</li>
      * <li>critical - true or false</li>
      * <li>vidx - string index for extension value</li>
+     * <br/>
+     * When you want to parse extensionRequest of CSR,
+     * argument 'hCSR' shall be specified.
+     * <br/>
+     * NOTE: CSR is supported from jsrsasign 8.0.20 x509 1.1.22.
+     *
      * @example
      * x = new X509();
      * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
      *
      * x.aExtInfo &rarr;
      * [ { oid: "2.5.29,19", critical: true, vidx: 2504 }, ... ]
+     *
+     * // to parse CSR
+     * X = new X509()
+     * x.parseExt("-----BEGIN CERTIFICATE REQUEST-----...");
+     * x.aExtInfo &rarr;
+     * [ { oid: "2.5.29,19", critical: true, vidx: 2504 }, ... ]
      */
-    this.parseExt = function() {
-	if (this.version !== 3) return -1;
-	var iExtSeq = _getIdxbyList(this.hex, 0, [0, 7, 0], "30");
-	var aExtIdx = _getChildIdx(this.hex, iExtSeq);
+    this.parseExt = function(hCSR) {
+	var iExtSeq, aExtIdx, h;
 
+	if (hCSR === undefined) {
+	    h = this.hex;
+	    if (this.version !== 3) return -1;
+	    iExtSeq = _getIdxbyList(h, 0, [0, 7, 0], "30");
+	    aExtIdx = _getChildIdx(h, iExtSeq);
+	} else {
+	    h = pemtohex(hCSR);
+	    var idx1 = _getIdxbyList(h, 0, [0, 3, 0, 0], "06");
+
+	    if (_getV(h, idx1) != "2a864886f70d01090e") {
+		this.aExtInfo = new Array();
+		return;
+	    }
+
+	    iExtSeq = _getIdxbyList(h, 0, [0, 3, 0, 1, 0], "30");
+	    aExtIdx = _getChildIdx(h, iExtSeq);
+
+	    this.hex = h;
+	}
+	    
 	this.aExtInfo = new Array();
 	for (var i = 0; i < aExtIdx.length; i++) {
 	    var item = {};
 	    item.critical = false;
-	    var a = _getChildIdx(this.hex, aExtIdx[i]);
+	    var a = _getChildIdx(h, aExtIdx[i]);
 	    var offset = 0;
 
 	    if (a.length === 3) {
@@ -439,9 +471,9 @@ function X509() {
 		offset = 1;
 	    }
 
-	    item.oid = _ASN1HEX.hextooidstr(_getVbyList(this.hex, aExtIdx[i], [0], "06"));
-	    var octidx = _getIdxbyList(this.hex, aExtIdx[i], [1 + offset]);
-	    item.vidx = _getVidx(this.hex, octidx);
+	    item.oid = _ASN1HEX.hextooidstr(_getVbyList(h, aExtIdx[i], [0], "06"));
+	    var octidx = _getIdxbyList(h, aExtIdx[i], [1 + offset]);
+	    item.vidx = _getVidx(h, octidx);
 	    this.aExtInfo.push(item);
 	}
     };

@@ -260,6 +260,26 @@ var k1CertHex = pemtohex(k1CertPEM);
 // test/z1.der1-p3 basicConstraints={ca:true, pathlen:3}
 var z1P3CertHex = "3082017630820120a003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333134313832365a170d3236303431333134313832365a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a3533051301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e15300f0603551d13040830060101ff020103300d06092a864886f70d01010b0500034100862bf6d5f0c366dd1c71af10df93e2e9e0b7210b6912d1774e27107203f2dc257f9b132285bc1ce8d32d8ffc69470cd6c52ec76b7d68708eca3bbd49556f3005";
 
+// _data/0csrext/certbot1.csr.pem
+var csrcertbot1 = (function() {/*
+-----BEGIN CERTIFICATE REQUEST-----
+MIICeDCCAWACAQIwADCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMf6
+wBbRavWLUCZfLNF+C4uNO/T6N2YCxWgM/XI04hPLqQodfTudcIwsbWGGkRpJSwGG
+pDXQs3A1fH5xrfev7PlWaDYCkhC4jrrZ/1L8HGR/nUxrS3jFTbzZTGA84TbkW8FH
+fyugWWqnjrnoxOJW0XdiWe1Drsr5vaqVS0N4qEISH/ciLnaVeV//tLJc/V5g3sFu
+4AQZQykvkltGD7w8vBhM4a/KQGeV3hG+ctCAwV5+RhQxForDgUv3ZPt76yVt142x
+TJGsq8fsdEqBjg7xVQn+458Z3yMMQVMLCf/aEHFLYurc6PD2kEzJf+mRYXY3sNwy
+4l38Qf8velG6Ij+8eVkCAwEAAaAzMDEGCSqGSIb3DQEJDjEkMCIwIAYDVR0RBBkw
+F4IVbm9kZWpzLnJ6LWJzZC5teS5jb3JwMA0GCSqGSIb3DQEBCwUAA4IBAQB0isgR
+I57C2GCszZdLdouAjpIZXa8W1C3FjOHcd6RQ77Fd+h22fn63gEMBUQk3AFzq4t2b
+8JeOH1xjZ4gjTEXH4whOh95gR+LDvVmK3khIHBLMVCyJgUEUNTZJoaMu7adhpbJX
+taiHpny63sQvh3QtEh7arMx8EaDh8MKYBQ5iTylvN0SS/yQcUvaS4kFs5CJTE/YG
+FepaWdBWPlE4C5oJ956lnuZSRHlugKHUzWD/V/tSYLDJmQVJ7sPNJM1JaTd79cDq
+cbtqMCqhg0GKH4OmbrS+Zu99iox+I7Mbsu9+F4rZjinez1looQ5hfJ+6FAtxE1HI
+2/x4YDGRZtDqwcFe
+-----END CERTIFICATE REQUEST-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
 test("parseExt github.com", function() {
   var x = new X509();
   x.readCertPEM(certGithubPEM); // parseExt  called internally
@@ -394,7 +414,7 @@ test("getExtSubjectAltName ip1.1.1.1", function() {
     ["DNS", "*.cloudflare-dns.com"],
     ["IP", "1.1.1.1"], ["IP", "1.0.0.1"], 
     ["DNS", "cloudflare-dns.com"],
-    ["IP", "2606:4700:470:1111"], ["IP", "2606:4700:470:1001"]
+    ["IP", "2606:4700:4700::1111"], ["IP", "2606:4700:4700::1001"]
   ], "ip1.1.1.1 site");
 });
 
@@ -456,6 +476,8 @@ test("getCertificatePolicies", function() {
               unotice: "This Certificate may only be relied upon by Relying Parties and only in accordance with the Certificate Policy found at https://letsencrypt.org/repository/"
             }],
             "for pulse.cio.gov site Let's Encrypt cert");
+
+
 
 });
 
@@ -586,6 +608,13 @@ test("getExtBasicConstraints z1.der3-no (no basic constraints)", function() {
   equal(r, null);
 });
 
+test("parseExt(CSR) test (csrcertbot1)", function() {
+  var x = new X509();
+  x.parseExt(csrcertbot1);
+  //equal(1, 1);
+  deepEqual(x.aExtInfo, [{"critical":false,"oid":"2.5.29.17","vidx":670}], "aExtInfo=" + JSON.stringify(x.aExtInfo));
+  deepEqual(x.getExtSubjectAltName2(), [["DNS", "nodejs.rz-bsd.my.corp"]], "info=" + JSON.stringify(x.getExtSubjectAltName2()));
+});
 });
 </script>
   
