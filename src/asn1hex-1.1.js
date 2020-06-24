@@ -317,8 +317,8 @@ ASN1HEX.getIdxbyList = function(h, currentIndex, nthList, checkingTag) {
     if (nthList.length == 0) {
 	if (checkingTag !== undefined) {
             if (h.substr(currentIndex, 2) !== checkingTag) {
-		throw "checking tag doesn't match: " + 
-                    h.substr(currentIndex, 2) + "!=" + checkingTag;
+		throw Error("checking tag doesn't match: " + 
+			    h.substr(currentIndex, 2) + "!=" + checkingTag);
             }
 	}
         return currentIndex;
