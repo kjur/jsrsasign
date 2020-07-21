@@ -23,3 +23,16 @@ Your bugfix and pull request contribution are always welcomed :)
 
 Here is [full published security advisory list](https://github.com/kjur/jsrsasign/security/advisories?state=published).
 
+## DONATIONS
+
+If you like jsrsasign and my other project, you can support their development by donation through any of the platform/services below. Thank you as always.
+
+### Github Sponsors
+You can sponsor jsrsasign with the [GitHub Sponsors](https://github.com/sponsors/kjur) program.
+
+### Cryptocurrency
+You can donate cryptocurrency to jsrsasign using the following addresses:
+- Bitcoin(BTC): [34vSRe7XHoMy78HKgps9YJ5BrBLYJLeM22](https://en.cryptobadges.io/donate/34vSRe7XHoMy78HKgps9YJ5BrBLYJLeM22)
+- Ethereum(ETH): [0x9c4cdbb531e5b84796ff5f91a9f652704761e64e](https://en.cryptobadges.io/donate/0x9c4cdbb531e5b84796ff5f91a9f652704761e64e)
+- Litecoin(LTC): [LPf3VDJVamwPcNJNjjVtrUQuJQ17ZyWzeU](https://en.cryptobadges.io/donate/LPf3VDJVamwPcNJNjjVtrUQuJQ17ZyWzeU)
+- Bitcoin Cash(BCH): bitcoincash:pq3hy08pc9vm57q6ddgsc06cqdffmfzwwqxd9yejyf
