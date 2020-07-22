@@ -32,6 +32,65 @@
 
 <dl>
 
+<dt><b>2017-May-21</b>:
+<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/7.2.0">
+Release 7.2.0</a> is now available.
+Major refactoring before major release update.
+Making Many long name methods deprecated and
+new short name methods are provided to reducing file size.
+
+<dt><b>2017-Mar-15</b>:
+<dd>
+NOTICE: 
+Some people complains that 'jsrsasign' is too huge to use in the web sites.
+The 'jsrsasign' is 'swiss army knife' style crypto library which 
+has a lot of functionality some users may think not necessary.
+So I'm planning to remove all of deprecated codes in the next 
+major release 3 month later (may be 8.0.0 in July) to 
+to shrink size. Until then please use 
+<a href="https://github.com/kjur/jsrsasign/wiki/NOTE-jsrsasign-subset-package">subset package</a>.
+Thanks.
+
+<dt><b>2016-Nov-03</b>:
+<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/6.2.0">
+Release 6.2.0</a> is now available.
+<a href="api/symbols/KJUR.crypto.Cipher.html">Cipher class</a> added.
+
+<dt><b>2016-Sep-24</b>:
+<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/6.1.0">
+Release 6.1.0</a> is now available.
+<a href="https://tools.ietf.org/html/rfc6960">RFC 6960</a>
+OCSP protocol support added.
+
+<dt><b>2016-Sep-11</b>:
+<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/6.0.0">
+Release 6.0.0</a> is now available.
+Now "jsrsasign" become "fs" safe so that it will be available 
+for CommonJS or Webpack.
+
+<dt><b>2016-Sep-03</b>:
+<dd><a href="slide_e/">Slides for jsrsasign introduction</a> is available.
+
+<dt><b>2016-Feb-28</b>:
+<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/5.0.6">
+Release 5.0.6</a> is now available.
+Now jsrsasign can be used in strict mode (--use_strict) of Node.JS.
+
+<dt><b>2015-Nov-23</b>:
+<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/5.0.3">
+Release 5.0.4</a> is now available.
+There is no library and npm update but 
+<a href="https://github.com/kjur/jsrsasign/tree/master/sample_node">sample Node scripts</a>
+ are added. Especially I hope <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/jwtverify">jwtverify</a> tool is very useful for JOSE guys :).
+
+<dt><b>2015-Nov-11</b>:
+<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/5.0.2">
+Release 5.0.2</a> is now available.
+<a href="api/symbols/KJUR.jws.JWS.html#.getJWKthumbprint">RFC 7638 JWK thumbprint</a>
+supported.
+<a href="api/symbols/global__.html">Some file read/save functions</a> added for Node.js
+in <a href="api/symbols/src/nodeutil-1.0.js.html">nodeutil.js</a>.
+
 <dt><b>2015-Oct-14</b>:
 <dd><a href="https://github.com/kjur/jsrsasign/releases/tag/5.0.0">
 Release 5.0.0</a> is now available.
@@ -301,7 +360,7 @@ Back to <a href="index.html">TOP</a>.
         <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
         <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
 <div align="center" style="color: white">
-Copyright &copy; 2010-2016 Kenji Urushima. All rights reserved.
+Copyright &copy; 2010-2020 Kenji Urushima. All rights reserved.
 </div>
       </footer>
     </div>
