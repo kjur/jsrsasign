@@ -1197,7 +1197,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
         return _KEYUTIL.getKeyFromEncryptedPKCS8PEM(param, passcode);
     }
 
-    throw "not supported argument";
+    throw new Error("not supported argument");
 };
 
 /**

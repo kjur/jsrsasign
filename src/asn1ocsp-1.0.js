@@ -1,9 +1,9 @@
-/* asn1ocsp-1.0.3.js (c) 2016 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1ocsp-1.0.4.js (c) 2016-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1ocsp.js - ASN.1 DER encoder classes for OCSP protocol
  *
- * Copyright (c) 2016-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2016-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1ocsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.1 asn1ocsp 1.0.3 (2017-Jun-03)
+ * @version jsrsasign 8.0.21 asn1ocsp 1.0.4 (2020-Jul-24)
  * @since jsrsasign 6.1.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -476,15 +476,16 @@ KJUR.asn1.ocsp.OCSPUtil.getRequestHex = function(issuerCert, subjectCert, alg) {
  * info = KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo("3082...");
  */
 KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo = function(h) {
-    var _ASN1HEX = ASN1HEX;
-    var _getVbyList = _ASN1HEX.getVbyList;
-    var _getIdxbyList = _ASN1HEX.getIdxbyList;
-    var _getVbyList = _ASN1HEX.getVbyList;
-    var _getV = _ASN1HEX.getV;
+    var _ASN1HEX = ASN1HEX,
+	_getVbyList = _ASN1HEX.getVbyList,
+	_getVbyListEx = _ASN1HEX.getVbyListEx,
+	_getIdxbyList = _ASN1HEX.getIdxbyList,
+	_getIdxbyListEx = _ASN1HEX.getIdxbyListEx,
+	_getV = _ASN1HEX.getV;
 
     var result = {};
     try {
-	var v = _getVbyList(h, 0, [0], "0a");
+	var v = _getVbyListEx(h, 0, [0], "0a");
 	result.responseStatus = parseInt(v, 16);
     } catch(ex) {};
     if (result.responseStatus !== 0) return result;

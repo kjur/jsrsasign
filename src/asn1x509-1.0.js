@@ -1,4 +1,4 @@
-/* asn1x509-1.1.10.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-1.1.11.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.19 asn1x509 1.1.10 (2020-Jun-22)
+ * @version jsrsasign 8.0.21 asn1x509 1.1.11 (2020-Jul-28)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -281,6 +281,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * @memberOf KJUR.asn1.x509.TBSCertificate#
      * @function
      * @param {Array} algIdParam AlgorithmIdentifier parameter
+     * @see {@link KJUR.asn1.x509.AlgorithmIdentifier}
      * @description
      * @example
      * tbsc.setSignatureAlgByParam({'name': 'SHA1withRSA'});
@@ -2337,14 +2338,42 @@ YAHOO.lang.extend(KJUR.asn1.x509.Time, KJUR.asn1.ASN1Object);
  * it will be NULL by default.
  * (OPTION, DEFAULT = false)</li>
  * </ul>
+ * RSA-PSS algorithm names such as SHA{,256,384,512}withRSAandMGF1 are
+ * special names. They will set a suite of algorithm OID and multiple algorithm
+ * parameters. Its ASN.1 schema is defined in 
+ * <a href="https://tools.ietf.org/html/rfc3447#appendix-A.2.3">RFC 3447 PKCS#1 2.1
+ * section A.2.3</a>.
+ * <blockquote><pre>
+ * id-RSASSA-PSS  OBJECT IDENTIFIER ::= { pkcs-1 10 }
+ * RSASSA-PSS-params ::= SEQUENCE {
+ *   hashAlgorithm      [0] HashAlgorithm    DEFAULT sha1,
+ *   maskGenAlgorithm   [1] MaskGenAlgorithm DEFAULT mgf1SHA1,
+ *   saltLength         [2] INTEGER          DEFAULT 20,
+ *   trailerField       [3] TrailerField     DEFAULT trailerFieldBC }
+ * mgf1SHA1    MaskGenAlgorithm ::= {
+ *   algorithm   id-mgf1,
+ *   parameters  HashAlgorithm : sha1 }
+ * id-mgf1     OBJECT IDENTIFIER ::= { pkcs-1 8 }
+ * TrailerField ::= INTEGER { trailerFieldBC(1) }
+ * </pre></blockquote>
+ * Here is a table for PSS parameters:
+ * <table>
+ * <tr><th>Name</th><th>alg oid</th><th>pss hash</th><th>maskgen</th></th><th>pss saltlen</th><th>trailer</th></tr>
+ * <tr><td>SHAwithRSAandMGF1</td><td>1.2.840.113549.1.1.10(rsapss)</td><td>default(sha1)</td><td>default(mgf1sha1)</td><td>default(20)</td><td>default(1)</td></tr>
+ * <tr><td>SHA256withRSAandMGF1</td><td>1.2.840.113549.1.1.10(rsapss)</td><td>sha256</td><td>mgf1sha256</td><td>32</td><td>default(1)</td></tr>
+ * <tr><td>SHA384withRSAandMGF1</td><td>1.2.840.113549.1.1.10(rsapss)</td><td>sha384</td><td>mgf1sha384</td><td>48</td><td>default(1)</td></tr>
+ * <tr><td>SHA512withRSAandMGF1</td><td>1.2.840.113549.1.1.10(rsapss)</td><td>sha512</td><td>mgf1sha512</td><td>64</td><td>default(1)</td></tr>
+ * </table>
+ * Default value is omitted as defined in ASN.1 schema.
+ * These parameters are interoperable to OpenSSL or IAIK toolkit.
+ * <br/>
+ * NOTE: RSA-PSS algorihtm names are supported since jsrsasign 8.0.21. 
  * @example
- * algId = new KJUR.asn1.x509.AlgorithmIdentifier({name: "sha1"});
- * // set parameter to NULL authomatically if algorithm name is "*withRSA".
- * algId = new KJUR.asn1.x509.AlgorithmIdentifier({name: "SHA256withRSA"});
- * // set parameter to NULL authomatically if algorithm name is "rsaEncryption".
- * algId = new KJUR.asn1.x509.AlgorithmIdentifier({name: "rsaEncryption"});
- * // SHA256withRSA and set parameter empty by force
- * algId = new KJUR.asn1.x509.AlgorithmIdentifier({name: "SHA256withRSA", paramempty: true});
+ * new KJUR.asn1.x509.AlgorithmIdentifier({name: "sha1"})
+ * new KJUR.asn1.x509.AlgorithmIdentifier({name: "SHA256withRSA"})
+ * new KJUR.asn1.x509.AlgorithmIdentifier({name: "SHA512withRSAandMGF1"}) // set parameters automatically
+ * new KJUR.asn1.x509.AlgorithmIdentifier({name: "SHA256withRSA", paramempty: true})
+ * new KJUR.asn1.x509.AlgorithmIdentifier({name: "rsaEncryption"})
  */
 KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
     KJUR.asn1.x509.AlgorithmIdentifier.superclass.constructor.call(this);
@@ -2352,13 +2381,31 @@ KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
     this.asn1Alg = null;
     this.asn1Params = null;
     this.paramEmpty = false;
+
     var _KJUR = KJUR,
-	_KJUR_asn1 = _KJUR.asn1;
+	_KJUR_asn1 = _KJUR.asn1,
+	_PSSNAME2ASN1TLV = _KJUR_asn1.x509.AlgorithmIdentifier.PSSNAME2ASN1TLV;
 
     this.getEncodedHex = function() {
         if (this.nameAlg === null && this.asn1Alg === null) {
-            throw "algorithm not specified";
+            throw new Error("algorithm not specified");
         }
+
+	// for RSAPSS algorithm name
+	//  && this.hTLV === null
+	if (this.nameAlg !== null) {
+	    var hTLV = null;
+	    for (var key in _PSSNAME2ASN1TLV) {
+		if (key === this.nameAlg) {
+		    hTLV = _PSSNAME2ASN1TLV[key];
+		}
+	    }
+	    if (hTLV !== null) {
+		this.hTLV = hTLV;
+		return this.hTLV;
+	    }
+	}
+
         if (this.nameAlg !== null && this.asn1Alg === null) {
             this.asn1Alg = _KJUR_asn1.x509.OID.name2obj(this.nameAlg);
         }
@@ -2395,6 +2442,21 @@ KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.AlgorithmIdentifier, KJUR.asn1.ASN1Object);
+
+/**
+ * AlgorithmIdentifier ASN.1 TLV string associative array for RSA-PSS algorithm names
+ * @const
+ */
+KJUR.asn1.x509.AlgorithmIdentifier.PSSNAME2ASN1TLV = {
+    "SHAwithRSAandMGF1":
+    "300d06092a864886f70d01010a3000",
+    "SHA256withRSAandMGF1":
+    "303d06092a864886f70d01010a3030a00d300b0609608648016503040201a11a301806092a864886f70d010108300b0609608648016503040201a203020120",
+    "SHA384withRSAandMGF1":
+    "303d06092a864886f70d01010a3030a00d300b0609608648016503040202a11a301806092a864886f70d010108300b0609608648016503040202a203020130",
+    "SHA512withRSAandMGF1":
+    "303d06092a864886f70d01010a3030a00d300b0609608648016503040203a11a301806092a864886f70d010108300b0609608648016503040203a203020140"
+};
 
 /**
  * GeneralName ASN.1 structure class<br/>
@@ -3050,8 +3112,15 @@ KJUR.asn1.x509.X509Util = {};
  * hexa decimal signature value by 'sighex' parameter.
  * <br/>
  * NOTE: Algorithm parameter of AlgorithmIdentifier will
- * be set automatically by default. (see {@link KJUR.asn1.x509.AlgorithmIdentifier})
+ * be set automatically by default. 
+ * (see {@link KJUR.asn1.x509.AlgorithmIdentifier})
  * from jsrsasign 7.1.1 asn1x509 1.0.20.
+ * <br/>
+ * NOTE2: 
+ * RSA-PSS algorithm has been supported from jsrsasign 8.0.21.
+ * As for RSA-PSS signature algorithm names and signing parameters 
+ * such as MGF function and salt length, please see
+ * {@link KJUR.asn1.x509.AlgorithmIdentifier} class.
  *
  * @example
  * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({

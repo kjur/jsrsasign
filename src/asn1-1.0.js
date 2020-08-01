@@ -354,9 +354,11 @@ KJUR.asn1.ASN1Util.oidHexToInt = function(hex) {
  * @param {String} oidString dot noted string of object identifier
  * @return {String} hexadecimal value of object identifier
  * @since jsrsasign 4.8.3 asn1 1.0.7
+ * @see {@link ASN1HEX.hextooidstr}
  * @description
  * This static method converts from object identifier value string.
  * to hexadecimal string representation of it.
+ * {@link ASN1HEX.hextooidstr} is a reverse function of this.
  * @example
  * KJUR.asn1.ASN1Util.oidIntToHex("2.5.4.6") &rarr; "550406"
  */

@@ -1,9 +1,9 @@
-/* dsa-2.1.1.js (c) 2016-2017 Kenji Urushimma | kjur.github.com/jsrsasign/license
+/* dsa-2.1.2.js (c) 2016-2020 Kenji Urushimma | kjur.github.com/jsrsasign/license
  */
 /*
  * dsa.js - new DSA class
  *
- * Copyright (c) 2016-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2016-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name dsa-2.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.0 dsa 2.1.1 (2017-May-11)
+ * @version jsrsasign 8.0.21 dsa 2.1.2 (2020-Jul-24)
  * @since jsrsasign 7.0.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -43,6 +43,11 @@ if (typeof KJUR.crypto == "undefined" || !KJUR.crypto) KJUR.crypto = {};
  * </p>
  */
 KJUR.crypto.DSA = function() {
+    var _ASN1HEX = ASN1HEX,
+        _getVbyList = _ASN1HEX.getVbyList,
+        _getVbyListEx = _ASN1HEX.getVbyListEx,
+	_isASN1HEX = _ASN1HEX.isASN1HEX,
+	_BigInteger = BigInteger;
     this.p = null;
     this.q = null;
     this.g = null;
@@ -244,11 +249,11 @@ KJUR.crypto.DSA = function() {
      */
     this.parseASN1Signature = function(hSigVal) {
 	try {
-	    var r = new BigInteger(ASN1HEX.getVbyList(hSigVal, 0, [0], "02"), 16);
-	    var s = new BigInteger(ASN1HEX.getVbyList(hSigVal, 0, [1], "02"), 16);
+	    var r = new _BigInteger(_getVbyListEx(hSigVal, 0, [0], "02"), 16);
+	    var s = new _BigInteger(_getVbyListEx(hSigVal, 0, [1], "02"), 16);
 	    return [r, s];
 	} catch (ex) {
-	    throw "malformed ASN.1 DSA signature";
+	    throw new Error("malformed ASN.1 DSA signature");
 	}
     }
 
@@ -262,21 +267,19 @@ KJUR.crypto.DSA = function() {
      */
     this.readPKCS5PrvKeyHex = function(h) {
 	var hP, hQ, hG, hY, hX;
-	var _ASN1HEX = ASN1HEX;
-	var _getVbyList = _ASN1HEX.getVbyList;
 
-	if (_ASN1HEX.isASN1HEX(h) === false)
-	    throw "not ASN.1 hex string";
+	if (_isASN1HEX(h) === false)
+	    throw new Error("not ASN.1 hex string");
 
 	try {
-	    hP = _getVbyList(h, 0, [1], "02");
-	    hQ = _getVbyList(h, 0, [2], "02");
-	    hG = _getVbyList(h, 0, [3], "02");
-	    hY = _getVbyList(h, 0, [4], "02");
-	    hX = _getVbyList(h, 0, [5], "02");
+	    hP = _getVbyListEx(h, 0, [1], "02");
+	    hQ = _getVbyListEx(h, 0, [2], "02");
+	    hG = _getVbyListEx(h, 0, [3], "02");
+	    hY = _getVbyListEx(h, 0, [4], "02");
+	    hX = _getVbyListEx(h, 0, [5], "02");
 	} catch(ex) {
-	    console.log("EXCEPTION:" + ex);
-	    throw "malformed PKCS#1/5 plain DSA private key";
+	    //console.log("EXCEPTION:" + ex);
+	    throw new Error("malformed PKCS#1/5 plain DSA private key");
 	}
 
 	this.setPrivateHex(hP, hQ, hG, hY, hX);
@@ -292,20 +295,18 @@ KJUR.crypto.DSA = function() {
      */
     this.readPKCS8PrvKeyHex = function(h) {
 	var hP, hQ, hG, hX;
-	var _ASN1HEX = ASN1HEX;
-	var _getVbyList = _ASN1HEX.getVbyList;
 
-	if (_ASN1HEX.isASN1HEX(h) === false)
-	    throw "not ASN.1 hex string";
+	if (_isASN1HEX(h) === false)
+	    throw new Error("not ASN.1 hex string");
 
 	try {
-	    hP = _getVbyList(h, 0, [1, 1, 0], "02");
-	    hQ = _getVbyList(h, 0, [1, 1, 1], "02");
-	    hG = _getVbyList(h, 0, [1, 1, 2], "02");
-	    hX = _getVbyList(h, 0, [2, 0], "02");
+	    hP = _getVbyListEx(h, 0, [1, 1, 0], "02");
+	    hQ = _getVbyListEx(h, 0, [1, 1, 1], "02");
+	    hG = _getVbyListEx(h, 0, [1, 1, 2], "02");
+	    hX = _getVbyListEx(h, 0, [2, 0], "02");
 	} catch(ex) {
-	    console.log("EXCEPTION:" + ex);
-	    throw "malformed PKCS#8 plain DSA private key";
+	    //console.log("EXCEPTION:" + ex);
+	    throw new Error("malformed PKCS#8 plain DSA private key");
 	}
 
 	this.setPrivateHex(hP, hQ, hG, null, hX);
@@ -321,20 +322,18 @@ KJUR.crypto.DSA = function() {
      */
     this.readPKCS8PubKeyHex = function(h) {
 	var hP, hQ, hG, hY;
-	var _ASN1HEX = ASN1HEX;
-	var _getVbyList = _ASN1HEX.getVbyList;
 
-	if (_ASN1HEX.isASN1HEX(h) === false)
-	    throw "not ASN.1 hex string";
+	if (_isASN1HEX(h) === false)
+	    throw new Error("not ASN.1 hex string");
 
 	try {
-	    hP = _getVbyList(h, 0, [0, 1, 0], "02");
-	    hQ = _getVbyList(h, 0, [0, 1, 1], "02");
-	    hG = _getVbyList(h, 0, [0, 1, 2], "02");
-	    hY = _getVbyList(h, 0, [1, 0], "02");
+	    hP = _getVbyListEx(h, 0, [0, 1, 0], "02");
+	    hQ = _getVbyListEx(h, 0, [0, 1, 1], "02");
+	    hG = _getVbyListEx(h, 0, [0, 1, 2], "02");
+	    hY = _getVbyListEx(h, 0, [1, 0], "02");
 	} catch(ex) {
-	    console.log("EXCEPTION:" + ex);
-	    throw "malformed PKCS#8 DSA public key";
+	    //console.log("EXCEPTION:" + ex);
+	    throw new Error("malformed PKCS#8 DSA public key");
 	}
 
 	this.setPublicHex(hP, hQ, hG, hY);
@@ -346,26 +345,30 @@ KJUR.crypto.DSA = function() {
      * @memberOf KJUR.crypto.DSA#
      * @function
      * @param {String} h hexadecimal string of X.509 DSA public key certificate
-     * @param {Integer} nthPKI nth index of publicKeyInfo. (DEFAULT: 6 for X509v3)
+     * @param {Integer} nthPKI (DEPRECATED to use)
      * @since jsrsasign 7.1.0 dsa 2.1.0
+     * @description
+     * This method reads a hexadecimal string of X.509 DSA public key certificate
+     * and set public key parameter internally.
+     * @example
+     * dsa = new KJUR.crypto.DSA();
+     * dsa.readCertPubKeyHex("30...");
      */
     this.readCertPubKeyHex = function(h, nthPKI) {
-	if (nthPKI !== 5) nthPKI = 6;
+	//if (nthPKI !== 5) nthPKI = 6;
 	var hP, hQ, hG, hY;
-	var _ASN1HEX = ASN1HEX;
-	var _getVbyList = _ASN1HEX.getVbyList;
 
-	if (_ASN1HEX.isASN1HEX(h) === false)
-	    throw "not ASN.1 hex string";
+	if (_isASN1HEX(h) === false)
+	    throw new Error("not ASN.1 hex string");
 
 	try {
-	    hP = _getVbyList(h, 0, [0, nthPKI, 0, 1, 0], "02");
-	    hQ = _getVbyList(h, 0, [0, nthPKI, 0, 1, 1], "02");
-	    hG = _getVbyList(h, 0, [0, nthPKI, 0, 1, 2], "02");
-	    hY = _getVbyList(h, 0, [0, nthPKI, 1, 0], "02");
+	    hP = _getVbyListEx(h, 0, [0, 5, 0, 1, 0], "02");
+	    hQ = _getVbyListEx(h, 0, [0, 5, 0, 1, 1], "02");
+	    hG = _getVbyListEx(h, 0, [0, 5, 0, 1, 2], "02");
+	    hY = _getVbyListEx(h, 0, [0, 5, 1, 0], "02");
 	} catch(ex) {
-	    console.log("EXCEPTION:" + ex);
-	    throw "malformed X.509 certificate DSA public key";
+	    //console.log("EXCEPTION:" + ex);
+	    throw new Error("malformed X.509 certificate DSA public key");
 	}
 
 	this.setPublicHex(hP, hQ, hG, hY);

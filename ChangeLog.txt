@@ -1,6 +1,60 @@
 
 ChangeLog for jsrsasign
 
+Donation program started, more RSA-PSS support and add ASN1HEX.get{Idx,TLV,V}byListEx
+* Changes from 8.0.20 to 8.0.21 (2020-Aug-01)
+  - *donation program* have been started.
+    Please consider donation to sustain this project
+    https://github.com/kjur/jsrsasign#donations    
+  - RSA-PSS support in AlgorithmIdentifier, Signature, 
+    X509 and newCertPEM
+  - new method to access ASN.1 decendant object 
+    ASN1HEX.get{Idx,TLV,V}byListEx added
+    Its tutorial page will be provided by following URL near in future
+    https://github.com/kjur/jsrsasign/wiki/Tutorial-for-accessing-deep-inside-of-ASN.1-structure-by-using-new-ASN1HEX.getIdxbyListEx
+  - src/x509.js
+    - update getSignatureAlgorithmField to support
+      RSA-PSS(SHA{,256,384,512}withRSAandMGF1) algorithms
+    - update verifySignature to support
+      RSA-PSS(SHA{,256,384,512}withRSAandMGF1) algorithms
+  - src/crypto.js
+    - Signature class
+      - SHAwithRSAandMGF1 supported (the same as SHA1withRSAandMGF1)
+  - src/asn1hex.js
+    - ASN1HEX.getIdxbyList
+    - add get{Idx,TLV,V}byListEx for context specific tag
+    - add ASN1HEX.isContextTag to check context
+      specific tag
+    - get{Idx,TLV,V} will be deprecated near in the future version
+      Please consider to move get{Idx,TLV,V}byListEx.
+  - src/{asn1csr,dsa,rsapem,ecdsa-modified}.js
+    - replace to use get{Idx,TLV,V}byListEx
+  - test/qunit-do-asn1x509.html
+    - add Certificate class test for RSA-PSS
+    - add TBSCertificate class test for RSA-PSS
+    - add AlgorithmIdentifier class test for
+      SHA{,256,384,512}withRSAandMGF1
+  - test/qunit-do-crypto-pss.html
+    - add Signature class test for 
+      SHAwithRSAandMGF1.
+  - test/qunit-do-asn1x509-newcrt.html
+    - add newCertPEM test for RSA-PSS
+  - test/qunit-do-x509.html
+    - add getSignatureAlgorithmField test for
+      SHA{,256,384,512}withRSAandMGF1
+  - sample_node/asn1extract2
+    - bug fix for -v(--vonly) option
+
+asn1cades
+asn1cms
+asn1ocsp 一部
+asn1tsp
+keyutil
+x509
+
+  - test/qunit-do-asn1hex.html
+    - add test for ASN1HEX.isContextTag
+
 add CSR support for subjectAltName
 * Changes From 8.0.19 to 8.0.20
   - src/asn1csr.js

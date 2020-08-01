@@ -804,7 +804,7 @@ NOTE: X509v1 certificate is also supported since x509.js 1.1.9.</div>
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getSignatureAlgorithmField">getSignatureAlgorithmField</a></b>()
 								</div>
 								<div class="description">get signature algorithm name in basic field
-This method will get a name of signature algorithm field of certificate:</div>
+This method will get a name of signature algorithm field of certificate.</div>
 							</td>
 						</tr>
 					
@@ -2328,7 +2328,11 @@ var sn = x.getSerialNumberHex(); // return string like "01ad..."</pre>
 					</div>
 					<div class="description">
 						get signature algorithm name in basic field
-This method will get a name of signature algorithm field of certificate:
+This method will get a name of signature algorithm field of certificate.
+<br/>
+NOTE: From jsrsasign 8.0.21, RSA-PSS certificate is also supported.
+For supported RSA-PSS algorithm name and PSS parameters,
+see <a href="../symbols/X509.html#getSignatureAlgorithmField">X509#getSignatureAlgorithmField</a>.
 						
 						
 					</div>
@@ -2355,7 +2359,7 @@ algName = x.getSignatureAlgorithmField();</pre>
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{String}</span> signature algorithm name (ex. SHA1withRSA, SHA256withECDSA)</dd>
+								<dd><span class="light fixedFont">{String}</span> signature algorithm name (ex. SHA1withRSA, SHA256withECDSA, SHA512withRSAandMGF1)</dd>
 							
 							</dl>
 						
@@ -2931,6 +2935,10 @@ x.readCertPEM(sCertPEM); // read certificate</pre>
 						verifies signature value by public key<br/>
 This method verifies signature value of hexadecimal string of 
 X.509 certificate by specified public key object.
+The signature algorithm used to verify will refer
+signatureAlgorithm field. (See <a href="../symbols/X509.html#getSignatureAlgorithmField">X509#getSignatureAlgorithmField</a>)
+RSA-PSS signature algorithms (SHA{,256,384,512}withRSAandMGF1)
+are available.
 						
 						
 					</div>

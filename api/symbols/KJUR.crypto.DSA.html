@@ -510,7 +510,9 @@ CAUTION: Most of the case, you don't need to use this class.</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.DSA.html#readCertPubKeyHex">readCertPubKeyHex</a></b>(h, nthPKI)
 								</div>
-								<div class="description">read an ASN.1 hexadecimal string of X.509 DSA public key certificate<br/></div>
+								<div class="description">read an ASN.1 hexadecimal string of X.509 DSA public key certificate<br/>
+This method reads a hexadecimal string of X.509 DSA public key certificate
+and set public key parameter internally.</div>
 							</td>
 						</tr>
 					
@@ -717,9 +719,16 @@ in KJUR.crypto.Util class. Now all of LGPL codes are removed.
 					</div>
 					<div class="description">
 						read an ASN.1 hexadecimal string of X.509 DSA public key certificate<br/>
+This method reads a hexadecimal string of X.509 DSA public key certificate
+and set public key parameter internally.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">dsa = new KJUR.crypto.DSA();
+dsa.readCertPubKeyHex("30...");</pre>
 					
 					
 					
@@ -737,7 +746,7 @@ in KJUR.crypto.Util class. Now all of LGPL codes are removed.
 									<span class="light fixedFont">{Integer}</span> <b>nthPKI</b>
 									
 								</dt>
-								<dd>nth index of publicKeyInfo. (DEFAULT: 6 for X509v3)</dd>
+								<dd>(DEPRECATED to use)</dd>
 							
 							</dl>
 						

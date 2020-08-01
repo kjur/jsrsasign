@@ -41,7 +41,7 @@ function _getIdxFileName(file, idx) {
 };
 
 program
-  .version('1.0.1 (2016-Sep-11)')
+  .version('1.0.2 (2020-Jul-29)')
   .description('extract arbitrary part of ASN.1 DER data by a list of position')
   .usage('[options]')
   .option('-i, --in <file>', 'input DER file')
@@ -77,8 +77,16 @@ try {
 var idx = rs.ASN1HEX.getIdxbyList(hIn, 0, idxList);
 //console.log("idx = %j", idx);
 
-if (program.children == undefined) {
-  var hExtract = rs.ASN1HEX.getTLV(hIn, idx);
+if (program.children !== true) {
+  var hExtract;
+  if (program.vonly !== true) {
+    hExtract = rs.ASN1HEX.getTLV(hIn, idx);
+  } else {
+    hExtract = rs.ASN1HEX.getV(hIn, idx);
+    if (hIn.substr(idx, 2) == "03") {
+      hExtract = hExtract.substr(2); // bit string
+    }
+  }
   //console.log(hExtract);
   //console.log(rs.ASN1HEX.dump(hExtract));
   rsu.saveFileBinByHex(outFile, hExtract);
@@ -87,7 +95,15 @@ if (program.children == undefined) {
   //console.log(idxChildren.length);
   for (var i = 0; i < idxChildren.length; i++) {
     var outFileChild = _getIdxFileName(outFile, i + 1);
-    var hExtract = rs.ASN1HEX.getTLV(hIn, idxChildren[i]);
+    var hExtract;
+    if (program.vonly !== true) {
+      hExtract = rs.ASN1HEX.getTLV(hIn, idxChildren[i]);
+    } else {
+      hExtract = rs.ASN1HEX.getV(hIn, idxChildren[i]);
+      if (hIn.substr(idx, 2) == "03") {
+        hExtract = hExtract.substr(2); // bit string
+      }
+    }
     rsu.saveFileBinByHex(outFileChild, hExtract);
   } 
 }

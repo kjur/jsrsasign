@@ -486,6 +486,29 @@ The 'params' argument is an associative array and has following parameters:
 			
 				
 				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class KJUR.asn1.x509.AlgorithmIdentifier.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								KJUR.asn1.x509.AlgorithmIdentifier.<b><a href="../symbols/KJUR.asn1.x509.AlgorithmIdentifier.html#.PSSNAME2ASN1TLV">PSSNAME2ASN1TLV</a></b>
+								</div>
+								<div class="description">AlgorithmIdentifier ASN.1 TLV string associative array for RSA-PSS algorithm names</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
 				
 				
 				<dl class="inheritsList">
@@ -533,18 +556,46 @@ AlgorithmIdentifier will be ommitted otherwise
 it will be NULL by default.
 (OPTION, DEFAULT = false)</li>
 </ul>
+RSA-PSS algorithm names such as SHA{,256,384,512}withRSAandMGF1 are
+special names. They will set a suite of algorithm OID and multiple algorithm
+parameters. Its ASN.1 schema is defined in 
+<a href="https://tools.ietf.org/html/rfc3447#appendix-A.2.3">RFC 3447 PKCS#1 2.1
+section A.2.3</a>.
+<blockquote><pre>
+id-RSASSA-PSS  OBJECT IDENTIFIER ::= { pkcs-1 10 }
+RSASSA-PSS-params ::= SEQUENCE {
+  hashAlgorithm      [0] HashAlgorithm    DEFAULT sha1,
+  maskGenAlgorithm   [1] MaskGenAlgorithm DEFAULT mgf1SHA1,
+  saltLength         [2] INTEGER          DEFAULT 20,
+  trailerField       [3] TrailerField     DEFAULT trailerFieldBC }
+mgf1SHA1    MaskGenAlgorithm ::= {
+  algorithm   id-mgf1,
+  parameters  HashAlgorithm : sha1 }
+id-mgf1     OBJECT IDENTIFIER ::= { pkcs-1 8 }
+TrailerField ::= INTEGER { trailerFieldBC(1) }
+</pre></blockquote>
+Here is a table for PSS parameters:
+<table>
+<tr><th>Name</th><th>alg oid</th><th>pss hash</th><th>maskgen</th></th><th>pss saltlen</th><th>trailer</th></tr>
+<tr><td>SHAwithRSAandMGF1</td><td>1.2.840.113549.1.1.10(rsapss)</td><td>default(sha1)</td><td>default(mgf1sha1)</td><td>default(20)</td><td>default(1)</td></tr>
+<tr><td>SHA256withRSAandMGF1</td><td>1.2.840.113549.1.1.10(rsapss)</td><td>sha256</td><td>mgf1sha256</td><td>32</td><td>default(1)</td></tr>
+<tr><td>SHA384withRSAandMGF1</td><td>1.2.840.113549.1.1.10(rsapss)</td><td>sha384</td><td>mgf1sha384</td><td>48</td><td>default(1)</td></tr>
+<tr><td>SHA512withRSAandMGF1</td><td>1.2.840.113549.1.1.10(rsapss)</td><td>sha512</td><td>mgf1sha512</td><td>64</td><td>default(1)</td></tr>
+</table>
+Default value is omitted as defined in ASN.1 schema.
+These parameters are interoperable to OpenSSL or IAIK toolkit.
+<br/>
+NOTE: RSA-PSS algorihtm names are supported since jsrsasign 8.0.21.
 					
 				</div>
 				
 				
 				
-				<pre class="code">algId = new KJUR.asn1.x509.AlgorithmIdentifier({name: "sha1"});
-// set parameter to NULL authomatically if algorithm name is "*withRSA".
-algId = new KJUR.asn1.x509.AlgorithmIdentifier({name: "SHA256withRSA"});
-// set parameter to NULL authomatically if algorithm name is "rsaEncryption".
-algId = new KJUR.asn1.x509.AlgorithmIdentifier({name: "rsaEncryption"});
-// SHA256withRSA and set parameter empty by force
-algId = new KJUR.asn1.x509.AlgorithmIdentifier({name: "SHA256withRSA", paramempty: true});</pre>
+				<pre class="code">new KJUR.asn1.x509.AlgorithmIdentifier({name: "sha1"})
+new KJUR.asn1.x509.AlgorithmIdentifier({name: "SHA256withRSA"})
+new KJUR.asn1.x509.AlgorithmIdentifier({name: "SHA512withRSAandMGF1"}) // set parameters automatically
+new KJUR.asn1.x509.AlgorithmIdentifier({name: "SHA256withRSA", paramempty: true})
+new KJUR.asn1.x509.AlgorithmIdentifier({name: "rsaEncryption"})</pre>
 				
 				
 				
@@ -572,6 +623,33 @@ algId = new KJUR.asn1.x509.AlgorithmIdentifier({name: "SHA256withRSA", paramempt
 			
 
 <!-- ============================== field details ========================== -->		
+			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name=".PSSNAME2ASN1TLV"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.AlgorithmIdentifier.</span><b>PSSNAME2ASN1TLV</b>
+					
+					</div>
+					<div class="description">
+						AlgorithmIdentifier ASN.1 TLV string associative array for RSA-PSS algorithm names
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
 			
 
 <!-- ============================== method details ========================= -->		

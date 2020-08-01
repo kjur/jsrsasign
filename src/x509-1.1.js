@@ -1,4 +1,4 @@
-/* x509-1.1.21.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-1.1.22.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.19 x509 1.1.21 (2020-Jun-21)
+ * @version jsrsasign 8.0.19 x509 1.1.22 (2020-Jul-29)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -90,12 +90,15 @@ function X509() {
 	_getV = _ASN1HEX.getV,
 	_getTLV = _ASN1HEX.getTLV,
 	_getVbyList = _ASN1HEX.getVbyList,
+	_getVbyListEx = _ASN1HEX.getVbyListEx,
 	_getTLVbyList = _ASN1HEX.getTLVbyList,
+	_getTLVbyListEx = _ASN1HEX.getTLVbyListEx,
 	_getIdxbyList = _ASN1HEX.getIdxbyList,
 	_getVidx = _ASN1HEX.getVidx,
 	_oidname = _ASN1HEX.oidname,
 	_X509 = X509,
-	_pemtohex = pemtohex;
+	_pemtohex = pemtohex,
+	_PSSNAME2ASN1TLV = KJUR.asn1.x509.AlgorithmIdentifier.PSSNAME2ASN1TLV;
 
     this.hex = null;
     this.version = 0; // version (1: X509v1, 3: X509v3, others: unspecified)
@@ -159,17 +162,31 @@ function X509() {
      * @name getSignatureAlgorithmField
      * @memberOf X509#
      * @function
-     * @return {String} signature algorithm name (ex. SHA1withRSA, SHA256withECDSA)
+     * @return {String} signature algorithm name (ex. SHA1withRSA, SHA256withECDSA, SHA512withRSAandMGF1)
      * @since x509 1.1.8
      * @description
-     * This method will get a name of signature algorithm field of certificate:
+     * This method will get a name of signature algorithm field of certificate.
+     * <br/>
+     * NOTE: From jsrsasign 8.0.21, RSA-PSS certificate is also supported.
+     * For supported RSA-PSS algorithm name and PSS parameters,
+     * see {@link X509#getSignatureAlgorithmField}.
      * @example
      * var x = new X509();
      * x.readCertPEM(sCertPEM);
      * algName = x.getSignatureAlgorithmField();
      */
     this.getSignatureAlgorithmField = function() {
-	return _oidname(_getVbyList(this.hex, 0, [0, 2 + this.foffset, 0], "06"));
+	var pssName = null;
+	var hTLV = _getTLVbyListEx(this.hex, 0, [0, 1]);
+	
+	for (var key in _PSSNAME2ASN1TLV) {
+	    if (hTLV === _PSSNAME2ASN1TLV[key]) {
+		return key;
+	    }
+	}
+	
+	//return _oidname(_getVbyList(this.hex, 0, [0, 2 + this.foffset, 0], "06"));
+	return _oidname(_getVbyListEx(this.hex, 0, [0, 1, 0], "06"));
     };
 
     /**
@@ -384,6 +401,10 @@ function X509() {
      * @description
      * This method verifies signature value of hexadecimal string of 
      * X.509 certificate by specified public key object.
+     * The signature algorithm used to verify will refer
+     * signatureAlgorithm field. (See {@link X509#getSignatureAlgorithmField})
+     * RSA-PSS signature algorithms (SHA{,256,384,512}withRSAandMGF1)
+     * are available.
      * @example
      * pubKey = KEYUTIL.getKey(pemPublicKey); // or certificate
      * x = new X509();
@@ -391,7 +412,7 @@ function X509() {
      * x.verifySignature(pubKey) &rarr; true, false or raising exception
      */
     this.verifySignature = function(pubKey) {
-	var algName = this.getSignatureAlgorithmName();
+	var algName = this.getSignatureAlgorithmField();
 	var hSigVal = this.getSignatureValueHex();
 	var hTbsCert = _getTLVbyList(this.hex, 0, [0], "30");
 	
