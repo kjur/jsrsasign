@@ -44,14 +44,6 @@ Donation program started, more RSA-PSS support and add ASN1HEX.get{Idx,TLV,V}byL
       SHA{,256,384,512}withRSAandMGF1
   - sample_node/asn1extract2
     - bug fix for -v(--vonly) option
-
-asn1cades
-asn1cms
-asn1ocsp 一部
-asn1tsp
-keyutil
-x509
-
   - test/qunit-do-asn1hex.html
     - add test for ASN1HEX.isContextTag
 
