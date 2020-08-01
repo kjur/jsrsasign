@@ -24,7 +24,7 @@ HIGHLIGHTS
 - rich document and samples
 - no dependency to other library
 - no dependency to W3C Web Crypto API nor OpenSSL
-- very popular crypto library with 6M+ npm downloads/month
+- very popular crypto library with 0.6M+ npm downloads/month
 
 INSTALL
 -------
