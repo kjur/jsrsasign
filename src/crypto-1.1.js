@@ -1,9 +1,9 @@
-/* crypto-1.2.3.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* crypto-1.2.4.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
  *
- * Copyright (c) 2013-2012 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.2.3 (2020-May-28)
+ * @version 1.2.4 (2020-Jul-28)
  * @since jsrsasign 2.2
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -104,6 +104,7 @@ KJUR.crypto.Util = new function() {
 	'SHA256withDSA':	'cryptojs/jsrsa',
 
 	'MD5withRSAandMGF1':		'cryptojs/jsrsa',
+	'SHAwithRSAandMGF1':		'cryptojs/jsrsa',
 	'SHA1withRSAandMGF1':		'cryptojs/jsrsa',
 	'SHA224withRSAandMGF1':		'cryptojs/jsrsa',
 	'SHA256withRSAandMGF1':		'cryptojs/jsrsa',
@@ -976,6 +977,7 @@ KJUR.crypto.Mac = function(params) {
  * <li>SHA512withECDSA - cryptojs/jsrsa</li>
  * <li>RIPEMD160withECDSA - cryptojs/jsrsa</li>
  * <li>MD5withRSAandMGF1 - cryptojs/jsrsa</li>
+ * <li>SHAwithRSAandMGF1 - cryptojs/jsrsa</li>
  * <li>SHA1withRSAandMGF1 - cryptojs/jsrsa</li>
  * <li>SHA224withRSAandMGF1 - cryptojs/jsrsa</li>
  * <li>SHA256withRSAandMGF1 - cryptojs/jsrsa</li>
@@ -986,6 +988,10 @@ KJUR.crypto.Mac = function(params) {
  * <li>SHA224withDSA - cryptojs/jsrsa</li>
  * <li>SHA256withDSA - cryptojs/jsrsa</li>
  * </ul>
+ * As for RSA-PSS signature algorithm names and signing parameters 
+ * such as MGF function and salt length, please see
+ * {@link KJUR.asn1.x509.AlgorithmIdentifier} class.
+ *
  * Here are supported elliptic cryptographic curve names and their aliases for ECDSA:
  * <ul>
  * <li>secp256k1</li>
@@ -1044,6 +1050,10 @@ KJUR.crypto.Signature = function(params) {
 	if (matchResult) {
 	    this.mdAlgName = matchResult[1].toLowerCase();
 	    this.pubkeyAlgName = matchResult[2].toLowerCase();
+	    if (this.pubkeyAlgName == "rsaandmgf1" &&
+	        this.mdAlgName == "sha") {
+		this.mdAlgName = "sha1";
+	    }
 	}
     };
 
@@ -1070,14 +1080,14 @@ KJUR.crypto.Signature = function(params) {
     this.setAlgAndProvider = function(alg, prov) {
 	this._setAlgNames();
 	if (prov != 'cryptojs/jsrsa')
-	    throw "provider not supported: " + prov;
+	    throw new Error("provider not supported: " + prov);
 
 	if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(this.mdAlgName) != -1) {
 	    try {
 		this.md = new KJUR.crypto.MessageDigest({'alg':this.mdAlgName});
 	    } catch (ex) {
-		throw "setAlgAndProvider hash alg set fail alg=" +
-                    this.mdAlgName + "/" + ex;
+		throw new Error("setAlgAndProvider hash alg set fail alg=" +
+				this.mdAlgName + "/" + ex);
 	    }
 	    
 	    this.init = function(keyparam, pass) {

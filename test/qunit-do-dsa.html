@@ -114,7 +114,8 @@ test("signWithMessageHash test1", function() {
   var sHashHex = KJUR.crypto.Util.hashString("aaa", "sha1");
   var dsa = new KJUR.crypto.DSA();
   dsa.setPrivate(p, q, g, y, x);
-  equal(dsa.signWithMessageHash(sHashHex).substr(0, 8), "302c0214", "heading");
+  var result = dsa.signWithMessageHash(sHashHex).substr(0, 8);
+  equal(result == "302c0214" || result == "302d0214", true, "heading 302[cd]0214");
 });
 
 test("sign and verifyWithMessageHash test1", function() {
