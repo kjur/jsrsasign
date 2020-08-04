@@ -17,7 +17,7 @@ Your bugfix and pull request contribution are always welcomed :)
 
 NEWS
 ----
-- 2020-Aug-02: twitter account [@kjur](https://twitter.com/jsrsasign) started. please follow.
+- 2020-Aug-02: twitter account [@jsrsasign](https://twitter.com/jsrsasign) started. please follow.
 
 HIGHLIGHTS
 ----------

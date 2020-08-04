@@ -1,4 +1,4 @@
-/* asn1hex-1.2.1.js (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1hex-1.2.2.js (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.19 asn1hex 1.2.1 (2020-Jun-22)
+ * @version jsrsasign 8.0.19 asn1hex 1.2.2 (2020-Aug-06)
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -725,11 +725,17 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
     }
     if (hex.substr(idx, 2) == "02") {
 	var v = _getV(hex, idx);
-	return indent + "INTEGER " + _skipLongHex(v, skipLongHex) + "\n";
+        return indent + "INTEGER " + _skipLongHex(v, skipLongHex) + "\n";
     }
     if (hex.substr(idx, 2) == "03") {
 	var v = _getV(hex, idx);
-	return indent + "BITSTRING " + _skipLongHex(v, skipLongHex) + "\n";
+	if (_ASN1HEX.isASN1HEX(v.substr(2))) {
+  	    var s = indent + "BITSTRING, encapsulates\n";
+            s = s + _dump(v.substr(2), flags, 0, indent + "  ");
+            return s;
+	} else {
+            return indent + "BITSTRING " + _skipLongHex(v, skipLongHex) + "\n";
+	}
     }
     if (hex.substr(idx, 2) == "04") {
 	var v = _getV(hex, idx);

@@ -1,6 +1,10 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 8.0.21 to next version
+  - src/asn1hex.js
+    - dump method update for BitString encapsulated
+
 Donation program started, more RSA-PSS support and add ASN1HEX.get{Idx,TLV,V}byListEx
 * Changes from 8.0.20 to 8.0.21 (2020-Aug-01)
   - *donation program* have been started.
