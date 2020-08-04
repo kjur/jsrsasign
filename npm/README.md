@@ -14,6 +14,10 @@ Public page is https://kjur.github.io/jsrsasign .
 
 [github TOP](https://kjur.github.io/jsrsasign/)|[API doc](https://kjur.github.io/jsrsasign/api/)|[Wiki](https://github.com/kjur/jsrsasign/wiki)|[Node sample](https://github.com/kjur/jsrsasign/tree/master/sample_node)
 
+NEWS
+----
+- 2020-Aug-02: twitter account [@kjur](https://twitter.com/jsrsasign) started. please follow.
+
 HIGHLIGHTS
 ----------
 - Swiss Army Knife style all in one package crypto and PKI library
