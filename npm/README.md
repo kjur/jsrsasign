@@ -21,13 +21,13 @@ NEWS
 HIGHLIGHTS
 ----------
 - Swiss Army Knife style all in one package crypto and PKI library
-- available on Node and browsers
+- available on [Node.js](https://www.npmjs.com/package/jsrsasign) and browsers
 - very easy API to use
 - powerful various format key loader and ASN.1 API
 - rich document and samples
 - no dependency to other library
-- no dependency to W3C Web Crypto API nor OpenSSL
-- very popular crypto library with 0.6M+ npm downloads/month
+- no dependency to [W3C Web Cryptography API](https://www.w3.org/TR/WebCryptoAPI/) nor [OpenSSL](https://www.openssl.org/)
+- very popular crypto library with [0.6M+ npm downloads/month](https://npm-stat.com/charts.html?package=jsrsasign&from=2016-05-01&to=2020-08-03)
 
 INSTALL
 -------

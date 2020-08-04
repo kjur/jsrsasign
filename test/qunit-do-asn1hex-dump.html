@@ -136,7 +136,10 @@ var certGithubDump = (function() {/*SEQUENCE
       SEQUENCE
         ObjectIdentifier rsaEncryption (1 2 840 113549 1 1 1)
         NULL
-      BITSTRING 003082010a0282010100b1d4dc3caffd..(total 271bytes)..be9c24bf9fcab0c5c0678d0203010001
+      BITSTRING, encapsulates
+        SEQUENCE
+          INTEGER 00b1d4dc3caffdf34eedc167ade6cb22..(total 257bytes)..621fa1fa3abe9c24bf9fcab0c5c0678d
+          INTEGER 010001
     [3]
       SEQUENCE
         SEQUENCE

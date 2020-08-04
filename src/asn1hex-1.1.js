@@ -358,7 +358,7 @@ ASN1HEX.getIdxbyList = function(h, currentIndex, nthList, checkingTag) {
  * structured data or a context specific tag string (ex. "[1]").
  * Here is a sample deep structured ASN.1 data and
  * nthLists referring decendent objects.
- * <blockquote>
+ * <blockquote><pre>
  * SQUENCE               - referring nthList is below:
  *   SEQUENCE            - [0]
  *     IA5STRING "a1"    - [0, 0]
@@ -370,7 +370,7 @@ ASN1HEX.getIdxbyList = function(h, currentIndex, nthList, checkingTag) {
  *     [1] "b4"          - [1, "[1]"] // optional since context tag
  *     IA5STRING "b5"    - [1, 2] // context is skipped. next is 2
  *     UTF8STRING "b6"   - [1, 3]
- * </blockquote>
+ * </pre></blockquote>
  *
  * <br/>
  * This method can dig into ASN.1 object encapsulated by
