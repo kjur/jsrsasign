@@ -1,4 +1,4 @@
-/* x509-1.1.22.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-1.1.23.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.19 x509 1.1.22 (2020-Jul-29)
+ * @version jsrsasign 8.0.22 x509 1.1.23 (2020-Aug-05)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -98,7 +98,11 @@ function X509() {
 	_oidname = _ASN1HEX.oidname,
 	_X509 = X509,
 	_pemtohex = pemtohex,
+	_PSSNAME2ASN1TLV;
+
+    try {
 	_PSSNAME2ASN1TLV = KJUR.asn1.x509.AlgorithmIdentifier.PSSNAME2ASN1TLV;
+    } catch (ex) {};
 
     this.hex = null;
     this.version = 0; // version (1: X509v1, 3: X509v3, others: unspecified)
@@ -601,9 +605,10 @@ function X509() {
 	
 	var hKeyUsage = _getV(this.hex, info.vidx);
 	if (hKeyUsage.length % 2 != 0 || hKeyUsage.length <= 2)
-	    throw "malformed key usage value";
+	    throw new Error("malformed key usage value");
 	var unusedBits = parseInt(hKeyUsage.substr(0, 2));
 	var bKeyUsage = parseInt(hKeyUsage.substr(2), 16).toString(2);
+	bKeyUsage = ("0000000" + bKeyUsage).slice(-8);
 	return bKeyUsage.substr(0, bKeyUsage.length - unusedBits);
     };
 

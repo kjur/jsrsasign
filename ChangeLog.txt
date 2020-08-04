@@ -1,11 +1,17 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 8.0.21 to next version
+ASN1HEX and X509 class minior bug fix
+* Changes from 8.0.21 to 8.0.22 (2020-Aug-05)
   - src/asn1hex.js
     - dump method update for BitString encapsulated
+  - src/x509.js
+    - getKeyUsageBin bugfix for such keyCertSign and cRLSign only 
+    - fix to stop raising error when X509 constructor called and
+      asn1x509 doesn't loaded
+    - TODO: getKeyUsageBin still has bug when decipherOnly(8) bit exists
   - test
-    - qunit-do-{asn1hex-dump}.html to follow above updates
+    - qunit-do-{asn1hex-dump,x509-{ext,key}}.html to follow above updates
 
 Donation program started, more RSA-PSS support and add ASN1HEX.get{Idx,TLV,V}byListEx
 * Changes from 8.0.20 to 8.0.21 (2020-Aug-01)

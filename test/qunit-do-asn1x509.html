@@ -110,6 +110,51 @@ QP5UpXampx/ITzfIjvM=
 -----END CERTIFICATE-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+// 0cert_rsa/z4.prv.p5p.pem
+var Z4PRVPEM = (function() {/*
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEA33TqqLR3eeUmDtHS89qF3p4MP7Wfqt2Zjj3lZjLjjCGDvwr9
+cJNlNDiuKboODgUiT4ZdPWbOiMAfDcDzlOxA04DDnEFGAf+kDQiNSe2ZtqC7bnIc
+8+KSG/qOGQIVaay4Ucr6ovDkykO5Hxn7OU7sJp9TP9H0JH8zMQA6YzijYH9LsupT
+errY3U6zyihVEDXXOv08vBHk50BMFJbE9iwFwnxCsU5+UZUZYw87Uu0n4LPFS9BT
+8tUIvAfnRXIEWCha3KbFWmdZQZlyrFw0buUEf0YN3/Q0auBkdbDR/ES2PbgKTJdk
+jc/rEeM0TxvOUf7HuUNOhrtAVEN1D5uuxE1WSwIDAQABAoIBAA41OeJmLx6SAlx4
+3OfiYhaoh/DZFIDhvCy+JMLdw3gafWz9PuYUiR/L5s8CZHhhvS+/RFhuG/238YGH
+XjV+3BRWoJlj0Ra5cW3euFUWBWsGR0SbftnG8zFSOgy/BCuG7uVMeak4leOCcNfY
+aA/Zw8wk3z80k0hqyg94iz3Z0RGGiBg1cXIwb908eq6792dpYRxyoRB29EUYwE3I
+wFSlfTWYTGoyeJfaaidwOCEKwgZfebsel5taFz9Iumke/HI3IbAqXDF3T91jLLx4
+E5bGU9EWSxR675IjR5T4opeBtv3h5ML0//wq3GzukpiP8wrTJsqbhyanK/l2+xjy
+aGuuFqECgYEA8K33pX90XX6PZGiv26wZm7tfvqlqWFT03nUMvOAytqdxhO2HysiP
+n4W58OaJd1tY4372Qpiv6enmUeI4MidCie+s+d0/B6A0xfhU5EeeaDN0xDOOl8yN
++kaaVj9b4HDR3c91OAwKpDJQIeJVZtxoijxl+SRx3u7Vs/7meeSpOfECgYEA7a5K
+nUs1pTo72A+JquJvIz4Eu794Yh3ftTk/Et+83aE/FVc6Nk+EhfnwYSNpVmM6UKdr
+Aoy5gsCvZPxrq+eR9pEwU8M5UOlki03vWY/nqDBpJSIqwPvGHUB16zvggsPQUyQB
+fnN3N8XlDi12n88ltvWwEhn1LQOwMUALEfka9/sCgYAMH2ca4emVj/te/lrlQKzl
+iDGRY+0kV9shnVmv5ccIJjT0khZF44ZAbbbo6GPCLEq04r86qYAq0woz06Yq+IlE
+c1sOFtPG6Y3e7twvx1+2NelKvKIRCU+ZbJb3gyd4jZY0iu+HjCu5C4O3wTO2A6IM
+XHBydSB7LyJ6d3taZmcTsQKBgDvm0k1EODf1LkHs4JBd0w65wa2juu5XgxsEW34h
+P1NIIUL6oeQwNEEj1c5Vg2XPSlIrb4/L8bEfaNT1vRktGp9exiRGLnrS55EoSitz
+VjoQQV+ndcj/a1XR+iYYCCRMv4NErs+0wBYhXPIuyRfLuECdOQvG2QDITi6Lan7U
+HlTjAoGAInfGmkb2jNkPGuNiZ+mU0+ZrOgLza/fLL9ErZ35jUPhGFzdGxJNobklv
+sNoTd+E2GAU41YkJh24bncMLvJVYxHHA5iF7FBWx1SvpEyKVhhnIcuXGD7N5PbNZ
+zEdmr9C6I7cPVkWO+sUV7zfFukexIcANmsd/oBBGKRoYzP5Tti4=
+-----END RSA PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// 0cert_rsa/z4.pub.p8.pem
+var Z4PUBPEM = (function() {/*
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA33TqqLR3eeUmDtHS89qF
+3p4MP7Wfqt2Zjj3lZjLjjCGDvwr9cJNlNDiuKboODgUiT4ZdPWbOiMAfDcDzlOxA
+04DDnEFGAf+kDQiNSe2ZtqC7bnIc8+KSG/qOGQIVaay4Ucr6ovDkykO5Hxn7OU7s
+Jp9TP9H0JH8zMQA6YzijYH9LsupTerrY3U6zyihVEDXXOv08vBHk50BMFJbE9iwF
+wnxCsU5+UZUZYw87Uu0n4LPFS9BT8tUIvAfnRXIEWCha3KbFWmdZQZlyrFw0buUE
+f0YN3/Q0auBkdbDR/ES2PbgKTJdkjc/rEeM0TxvOUf7HuUNOhrtAVEN1D5uuxE1W
+SwIDAQAB
+-----END PUBLIC KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+
 test("Certificate class test", function() {
   var pubKey = new RSAKey();
   pubKey.setPublic('e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a', '10001');
@@ -130,7 +175,7 @@ test("Certificate class test", function() {
   var crt1 = new KJUR.asn1.x509.Certificate({tbscertobj: o,
                                              prvkeyobj:  prvKey});
   crt1.sign();					  
-  expect(3);
+
   // test3
   equal(crt1.asn1TBSCert.getEncodedHex(), "3081e5a003020102020104300d06092a864886f70d01010505003019310b3009060355040613025553310a3008060355040a0c0161301e170d3133303530343233353935395a170d3134303530343233353935395a3019310b3009060355040613025553310a300806035504030c01623057300d06092a864886f70d01010105000346003043023c00e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a0203010001a31d301b300c0603551d13040530030101ff300b0603551d0f0404030206c0", "constructor,sign,asn1TBSCert.getEncodedHex");
 
@@ -140,13 +185,39 @@ test("Certificate class test", function() {
 
   // test2
   equal(crt1.getPEMString(), "-----BEGIN CERTIFICATE-----\r\nMIIBOjCB5aADAgECAgEEMA0GCSqGSIb3DQEBBQUAMBkxCzAJBgNVBAYTAlVTMQow\r\nCAYDVQQKDAFhMB4XDTEzMDUwNDIzNTk1OVoXDTE0MDUwNDIzNTk1OVowGTELMAkG\r\nA1UEBhMCVVMxCjAIBgNVBAMMAWIwVzANBgkqhkiG9w0BAQEFAANGADBDAjwA6GZN\r\n0rQFKRIVaPOzm8l6Yue6PAm6vcTw3NjfkOt5C5u2RaK3DjESdHtNPEG1FCSJURX+\r\n+I951D6uWxoCAwEAAaMdMBswDAYDVR0TBAUwAwEB/zALBgNVHQ8EBAMCBsAwDQYJ\r\nKoZIhvcNAQEFBQADQQCI3KAwpdyue4Xwv8sfy6wYBl2fW/1xfHgHVEmoRH6H0MfL\r\nDP0rKtcUDEB1/US3QVAriaf3qZZ+IciuozCsEkvg\r\n-----END CERTIFICATE-----\r\n", "getPEMString");
+});
 
+test("Certificate class test (RSAPSS)", function() {
+var pubkey = KEYUTIL.getKey(Z4PUBPEM);
+var prvkey = KEYUTIL.getKey(Z4PRVPEM);
 
+var o = new KJUR.asn1.x509.TBSCertificate();
+o.setSerialNumberByParam({'int': 4});
+o.setSignatureAlgByParam({'name': 'SHA256withRSAandMGF1'});
+o.setIssuerByParam({'str': '/C=US/O=a'});
+o.setNotBeforeByParam({'str': '130504235959Z'});
+o.setNotAfterByParam({'str': '140504235959Z'});
+o.setSubjectByParam({'str': '/C=US/CN=b'});
+o.setSubjectPublicKey(pubkey);
+o.appendExtension(new KJUR.asn1.x509.BasicConstraints({'cA':true}));
+o.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));
+
+var crt1 = new KJUR.asn1.x509.Certificate({tbscertobj: o,
+                                           prvkeyobj:  prvkey});
+crt1.sign();					  
+
+// test1
+hCrt1 = crt1.getEncodedHex();
+
+equal(ASN1HEX.getTLVbyList(hCrt1, 0, [0]),
+      "308201e2a003020102020104303d06092a864886f70d01010a3030a00d300b0609608648016503040201a11a301806092a864886f70d010108300b0609608648016503040201a2030201203019310b3009060355040613025553310a3008060355040a0c0161301e170d3133303530343233353935395a170d3134303530343233353935395a3019310b3009060355040613025553310a300806035504030c016230820122300d06092a864886f70d01010105000382010f003082010a0282010100df74eaa8b47779e5260ed1d2f3da85de9e0c3fb59faadd998e3de56632e38c2183bf0afd7093653438ae29ba0e0e05224f865d3d66ce88c01f0dc0f394ec40d380c39c414601ffa40d088d49ed99b6a0bb6e721cf3e2921bfa8e19021569acb851cafaa2f0e4ca43b91f19fb394eec269f533fd1f4247f3331003a6338a3607f4bb2ea537abad8dd4eb3ca28551035d73afd3cbc11e4e7404c1496c4f62c05c27c42b14e7e519519630f3b52ed27e0b3c54bd053f2d508bc07e745720458285adca6c55a6759419972ac5c346ee5047f460ddff4346ae06475b0d1fc44b63db80a4c97648dcfeb11e3344f1bce51fec7b9434e86bb405443750f9baec44d564b0203010001a31d301b300c0603551d13040530030101ff300b0603551d0f0404030206c0",
+      "constructor,sign,getEncodedHex");
+equal(ASN1HEX.getTLVbyList(hCrt1, 0, [1]),
+      "303d06092a864886f70d01010a3030a00d300b0609608648016503040201a11a301806092a864886f70d010108300b0609608648016503040201a203020120",
+      "signatureAlgorithm of Certificate");
 });
 
 test("TBSCertificate class test", function() {
-  expect(1);
-
   var rsaKey = new RSAKey();
   rsaKey.setPublic('e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a', '10001');
 
@@ -162,6 +233,26 @@ test("TBSCertificate class test", function() {
   o.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));
 
   equal(o.getEncodedHex(), "3081e5a003020102020104300d06092a864886f70d01010505003019310b3009060355040613025553310a3008060355040a0c0161301e170d3133303530343233353935395a170d3134303530343233353935395a3019310b3009060355040613025553310a300806035504030c01623057300d06092a864886f70d01010105000346003043023c00e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a0203010001a31d301b300c0603551d13040530030101ff300b0603551d0f0404030206c0", "set/append test1");
+});
+
+test("TBSCertificate class test (RSAPSS)", function() {
+var pubkey = KEYUTIL.getKey(Z4PUBPEM);
+
+var o = new KJUR.asn1.x509.TBSCertificate();
+o.setSerialNumberByParam({'int': 4});
+o.setSignatureAlgByParam({'name': 'SHA256withRSAandMGF1'});
+o.setIssuerByParam({'str': '/C=US/O=a'});
+o.setNotBeforeByParam({'str': '130504235959Z'});
+o.setNotAfterByParam({'str': '140504235959Z'});
+o.setSubjectByParam({'str': '/C=US/CN=b'});
+o.setSubjectPublicKey(pubkey);
+o.appendExtension(new KJUR.asn1.x509.BasicConstraints({'cA':true}));
+o.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));
+
+equal(o.getEncodedHex(),
+      "308201e2a003020102020104303d06092a864886f70d01010a3030a00d300b0609608648016503040201a11a301806092a864886f70d010108300b0609608648016503040201a2030201203019310b3009060355040613025553310a3008060355040a0c0161301e170d3133303530343233353935395a170d3134303530343233353935395a3019310b3009060355040613025553310a300806035504030c016230820122300d06092a864886f70d01010105000382010f003082010a0282010100df74eaa8b47779e5260ed1d2f3da85de9e0c3fb59faadd998e3de56632e38c2183bf0afd7093653438ae29ba0e0e05224f865d3d66ce88c01f0dc0f394ec40d380c39c414601ffa40d088d49ed99b6a0bb6e721cf3e2921bfa8e19021569acb851cafaa2f0e4ca43b91f19fb394eec269f533fd1f4247f3331003a6338a3607f4bb2ea537abad8dd4eb3ca28551035d73afd3cbc11e4e7404c1496c4f62c05c27c42b14e7e519519630f3b52ed27e0b3c54bd053f2d508bc07e745720458285adca6c55a6759419972ac5c346ee5047f460ddff4346ae06475b0d1fc44b63db80a4c97648dcfeb11e3344f1bce51fec7b9434e86bb405443750f9baec44d564b0203010001a31d301b300c0603551d13040530030101ff300b0603551d0f0404030206c0",
+      "SHA256withRSAandMGF1 test");
+equal(o.asn1SignatureAlg.nameAlg, "SHA256withRSAandMGF1", "asn1SignatureAlg.nameAlg=SHA256withRSAandMGF1");
 });
 
 test("X500Name class test", function() {
@@ -268,26 +359,44 @@ test("Time class test", function() {
 });
 
 test("AlgorithmIdentifier class test", function() {
-  equal(new KJUR.asn1.x509.AlgorithmIdentifier({'name':'SHA1withRSA'}).getEncodedHex(),
-        "300d06092a864886f70d0101050500", "constructor name SHA1withRSA");
+var _AlgId = KJUR.asn1.x509.AlgorithmIdentifier;
+equal(new _AlgId({'name':'SHA1withRSA'}).getEncodedHex(),
+      "300d06092a864886f70d0101050500",
+      "constructor name SHA1withRSA");
+equal(new _AlgId({'name':'SHA256withRSA'}).getEncodedHex(),
+      "300d06092a864886f70d01010b0500",
+      "constructor name SHA256withRSA");
+equal(new _AlgId({'name':'SHA256withRSA', paramempty: true}).getEncodedHex(),
+      "300b06092a864886f70d01010b",
+      "constructor name SHA256withRSA, paramempty");
+equal(new _AlgId({'name':'SHA1withDSA'}).getEncodedHex(),
+      "300906072a8648ce380403",
+      "constructor name SHA1withDSA");
+equal(new _AlgId({'name':'SHA512withECDSA'}).getEncodedHex(),
+      "300a06082a8648ce3d040304",
+      "constructor name SHA512withECDSA");
+equal(new _AlgId({'name':'rsaEncryption'}).getEncodedHex(),
+        "300d06092a864886f70d0101010500",
+	"constructor name rsaEncryption");
+equal(new _AlgId({'name':'sha1'}).getEncodedHex(),
+        "300906052b0e03021a0500",
+	"constructor name sha1");
 
-  equal(new KJUR.asn1.x509.AlgorithmIdentifier({'name':'SHA256withRSA'}).getEncodedHex(),
-        "300d06092a864886f70d01010b0500", "constructor name SHA256withRSA");
+equal(new _AlgId({'name':'SHAwithRSAandMGF1'}).getEncodedHex(),
+        "300d06092a864886f70d01010a3000",
+	"constructor name SHAwithRSAandMGF1");
 
-  equal(new KJUR.asn1.x509.AlgorithmIdentifier({'name':'SHA256withRSA', paramempty: true}).getEncodedHex(),
-        "300b06092a864886f70d01010b", "constructor name SHA256withRSA, paramempty");
+equal(new _AlgId({'name':'SHA256withRSAandMGF1'}).getEncodedHex(),
+        "303d06092a864886f70d01010a3030a00d300b0609608648016503040201a11a301806092a864886f70d010108300b0609608648016503040201a203020120",
+	"constructor name SHA256withRSAandMGF1");
 
-  equal(new KJUR.asn1.x509.AlgorithmIdentifier({'name':'SHA1withDSA'}).getEncodedHex(),
-        "300906072a8648ce380403", "constructor name SHA1withDSA");
+equal(new _AlgId({'name':'SHA384withRSAandMGF1'}).getEncodedHex(),
+        "303d06092a864886f70d01010a3030a00d300b0609608648016503040202a11a301806092a864886f70d010108300b0609608648016503040202a203020130",
+	"constructor name SHA384withRSAandMGF1");
 
-  equal(new KJUR.asn1.x509.AlgorithmIdentifier({'name':'SHA512withECDSA'}).getEncodedHex(),
-        "300a06082a8648ce3d040304", "constructor name SHA512withECDSA");
-
-  equal(new KJUR.asn1.x509.AlgorithmIdentifier({'name':'rsaEncryption'}).getEncodedHex(),
-        "300d06092a864886f70d0101010500", "constructor name rsaEncryption");
-
-  equal(new KJUR.asn1.x509.AlgorithmIdentifier({'name':'sha1'}).getEncodedHex(),
-        "300906052b0e03021a0500", "constructor name sha1");
+equal(new _AlgId({'name':'SHA512withRSAandMGF1'}).getEncodedHex(),
+        "303d06092a864886f70d01010a3030a00d300b0609608648016503040203a11a301806092a864886f70d010108300b0609608648016503040203a203020140",
+	"constructor name SHA512withRSAandMGF1");
 });
 
 test("AlgorithmIdentifier SHA1withECDSA", function() {
