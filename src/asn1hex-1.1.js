@@ -1,4 +1,4 @@
-/* asn1hex-1.2.1.js (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1hex-1.2.2.js (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.19 asn1hex 1.2.1 (2020-Jun-22)
+ * @version jsrsasign 8.0.19 asn1hex 1.2.2 (2020-Aug-06)
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -358,7 +358,7 @@ ASN1HEX.getIdxbyList = function(h, currentIndex, nthList, checkingTag) {
  * structured data or a context specific tag string (ex. "[1]").
  * Here is a sample deep structured ASN.1 data and
  * nthLists referring decendent objects.
- * <blockquote>
+ * <blockquote><pre>
  * SQUENCE               - referring nthList is below:
  *   SEQUENCE            - [0]
  *     IA5STRING "a1"    - [0, 0]
@@ -370,7 +370,7 @@ ASN1HEX.getIdxbyList = function(h, currentIndex, nthList, checkingTag) {
  *     [1] "b4"          - [1, "[1]"] // optional since context tag
  *     IA5STRING "b5"    - [1, 2] // context is skipped. next is 2
  *     UTF8STRING "b6"   - [1, 3]
- * </blockquote>
+ * </pre></blockquote>
  *
  * <br/>
  * This method can dig into ASN.1 object encapsulated by
@@ -725,11 +725,17 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
     }
     if (hex.substr(idx, 2) == "02") {
 	var v = _getV(hex, idx);
-	return indent + "INTEGER " + _skipLongHex(v, skipLongHex) + "\n";
+        return indent + "INTEGER " + _skipLongHex(v, skipLongHex) + "\n";
     }
     if (hex.substr(idx, 2) == "03") {
 	var v = _getV(hex, idx);
-	return indent + "BITSTRING " + _skipLongHex(v, skipLongHex) + "\n";
+	if (_ASN1HEX.isASN1HEX(v.substr(2))) {
+  	    var s = indent + "BITSTRING, encapsulates\n";
+            s = s + _dump(v.substr(2), flags, 0, indent + "  ");
+            return s;
+	} else {
+            return indent + "BITSTRING " + _skipLongHex(v, skipLongHex) + "\n";
+	}
     }
     if (hex.substr(idx, 2) == "04") {
 	var v = _getV(hex, idx);
