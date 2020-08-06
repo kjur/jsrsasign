@@ -1,6 +1,21 @@
 
 ChangeLog for jsrsasign
 
+add CertificatePolicies BMPString and VisibleString support
+* Changes from 8.0.22 to 8.0.23 (2020-Aug-06)
+  - src/asn1x509.js
+    - CertificatePolicies class added
+    - update Estension.appendByNameToArray for
+      CertificatePolicies
+    - PolicyInformation, PolicyQualifierInfo, UserNotice,
+      NoticeReference and DisplayText class added
+  - src/asn1.js
+    - BMPString and VisibleString class added
+    - update ASN1Util.newObject for {BMP,Visible}String
+  - src/asn1hex.js
+    - update ASN1HEX.dump for {BMP,Visible}String
+  - test qunit-do-{asn1,asn1-newobj,asn1x509,asn1hex-dump}.html
+
 ASN1HEX and X509 class minior bug fix
 * Changes from 8.0.21 to 8.0.22 (2020-Aug-05)
   - src/asn1hex.js

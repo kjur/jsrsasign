@@ -1,4 +1,4 @@
-/* asn1x509-1.1.11.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-1.1.12.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.21 asn1x509 1.1.11 (2020-Jul-28)
+ * @version jsrsasign 8.0.23 asn1x509 1.1.12 (2020-Apr-06)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -70,16 +70,20 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * <li>{@link KJUR.asn1.x509.BasicConstraints}</li>
  * <li>{@link KJUR.asn1.x509.KeyUsage}</li>
  * <li>{@link KJUR.asn1.x509.CRLDistributionPoints}</li>
+ * <li>{@link KJUR.asn1.x509.CertificatePolicies}</li>
  * <li>{@link KJUR.asn1.x509.ExtKeyUsage}</li>
  * <li>{@link KJUR.asn1.x509.AuthorityKeyIdentifier}</li>
  * <li>{@link KJUR.asn1.x509.SubjectKeyIdentifier}</li>
  * <li>{@link KJUR.asn1.x509.AuthorityInfoAccess}</li>
  * <li>{@link KJUR.asn1.x509.SubjectAltName}</li>
  * <li>{@link KJUR.asn1.x509.IssuerAltName}</li>
+ * <li>{@link KJUR.asn1.x509.CertificatePolicies}</li>
  * </ul>
  * NOTE1: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.<br/>
- * NOTE2: SubjectAltName and IssuerAltName extension were supported since 
+ * NOTE2: SubjectAltName and IssuerAltName supported since 
  * jsrsasign 6.2.3 asn1x509 1.0.19.<br/>
+ * NOTE3: CeritifcatePolicies supported supported since
+ * jsrsasign 8.0.23 asn1x509 1.1.12<br/>
  * @name KJUR.asn1.x509
  * @namespace
  */
@@ -416,12 +420,14 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
      * <li>BasicConstraints - {@link KJUR.asn1.x509.BasicConstraints}</li>
      * <li>KeyUsage - {@link KJUR.asn1.x509.KeyUsage}</li>
      * <li>CRLDistributionPoints - {@link KJUR.asn1.x509.CRLDistributionPoints}</li>
+     * <li>CertificatePolicies - {@link KJUR.asn1.x509.CertificatePolicies}</li>
      * <li>ExtKeyUsage - {@link KJUR.asn1.x509.ExtKeyUsage}</li>
      * <li>AuthorityKeyIdentifier - {@link KJUR.asn1.x509.AuthorityKeyIdentifier}</li>
      * <li>SubjectKeyIdentifier - {@link KJUR.asn1.x509.SubjectKeyIdentifier}</li>
      * <li>AuthorityInfoAccess - {@link KJUR.asn1.x509.AuthorityInfoAccess}</li>
      * <li>SubjectAltName - {@link KJUR.asn1.x509.SubjectAltName}</li>
      * <li>IssuerAltName - {@link KJUR.asn1.x509.IssuerAltName}</li>
+     * <li>CertificatePolicies - {@link KJUR.asn1.x509.CertificatePolicies}</li>
      * </ul>
      * @example
      * var o = new KJUR.asn1.x509.TBSCertificate();
@@ -576,8 +582,11 @@ KJUR.asn1.x509.Extension.appendByNameToArray = function(name, extParams, a) {
     } else if (_lowname == "issueraltname") {
         var extObj = new _KJUR_asn1_x509.IssuerAltName(extParams);
         a.push(extObj);
+    } else if (_lowname == "certificatepolicies") {
+        var extObj = new _KJUR_asn1_x509.CertificatePolicies(extParams);
+        a.push(extObj);
     } else {
-        throw "unsupported extension name: " + name;
+        throw new Error("unsupported extension name: " + name);
     }
 };
 
@@ -743,6 +752,393 @@ KJUR.asn1.x509.CRLDistributionPoints = function(params) {
 };
 YAHOO.lang.extend(KJUR.asn1.x509.CRLDistributionPoints, KJUR.asn1.x509.Extension);
 
+/**
+ * CertificatePolicies ASN.1 structure class
+ * @name KJUR.asn1.x509.CertificatePolicies
+ * @class CertificatePolicies ASN.1 structure class
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.x509.Extension
+ * @since jsrsasign 8.0.23 asn1x509 1.1.12
+ * @description
+ * This class represents 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
+ * CertificatePolicies extension defined in RFC 5280 4.2.1.4</a>.
+ * <pre>
+ * id-ce-certificatePolicies OBJECT IDENTIFIER ::=  { id-ce 32 }
+ * CertificatePolicies ::= SEQUENCE SIZE (1..MAX) OF PolicyInformation
+ * </pre>
+ * Its constructor can have following parameters:
+ * <ul>
+ * <li>array - array of {@link KJUR.asn1.x509.PolicyInformation} parameter</li>
+ * <li>critical - boolean: critical flag
+ * </ul>
+ * @example
+ * e1 = new KJUR.asn1.x509.CertificatePolicies({
+ *   array: [
+ *     { policyoid: "1.2.3.4.5",
+ *       array: [
+ *         { cps: "https://example.com/repository" },
+ *         { unotice: {
+ *           noticeref: { // CA SHOULD NOT use this by RFC
+ *             org: {type: "ia5", str: "Sample Org"},
+ *             noticenum: [{int: 5}, {hex: "01af"}]
+ *           },
+ *           exptext: {type: "ia5", str: "Sample Policy"}
+ *         }}
+ *       ]
+ *     }
+ *   ],
+ *   critical: true
+ * });
+ */
+KJUR.asn1.x509.CertificatePolicies = function(params) {
+    KJUR.asn1.x509.CertificatePolicies.superclass.constructor.call(this, params);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_PolicyInformation = _KJUR_asn1_x509.PolicyInformation;
+
+    this.params = null;
+
+    this.getExtnValueHex = function() {
+	var aPI = [];
+	for (var i = 0; i < this.params.array.length; i++) {
+	    aPI.push(new _PolicyInformation(this.params.array[i]));
+	}
+	var seq = new _DERSequence({array: aPI});
+	this.asn1ExtnValue = seq;
+        return this.asn1ExtnValue.getEncodedHex();
+    };
+
+    this.oid = "2.5.29.32";
+    if (params !== undefined) {
+	this.params = params;
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.x509.CertificatePolicies, KJUR.asn1.x509.Extension);
+
+/**
+ * PolicyInformation ASN.1 structure class
+ * @name KJUR.asn1.x509.PolicyInformation
+ * @class PolicyInformation ASN.1 structure class
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.ASN1Object
+ * @since jsrsasign 8.0.23 asn1x509 1.1.12
+ * @description
+ * This class represents 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
+ * PolicyInformation defined in RFC 5280 4.2.1.4</a>.
+ * <pre>
+ * PolicyInformation ::= SEQUENCE {
+ *      policyIdentifier   CertPolicyId,
+ *      policyQualifiers   SEQUENCE SIZE (1..MAX) OF
+ *                         PolicyQualifierInfo OPTIONAL }
+ * CertPolicyId ::= OBJECT IDENTIFIER
+ * Its constructor can have following parameters:
+ * <ul>
+ * <li>{String}policyoid - policy OID (ex. "1.2.3.4.5")</li>
+ * <li>{Object}array - array of {@link KJUR.asn1.x509.PolicyQualifierInfo}
+ * parameters (OPTIONAL)</li>
+ * </ul>
+ * @example
+ * new KJUR.asn1.x509.PolicyInformation({
+ *   policyoid: "1.2.3.4.5",
+ *   array: [
+ *     { cps: "https://example.com/repository" },
+ *     { unotice: {
+ *       noticeref: { // CA SHOULD NOT use this by RFC
+ *         org: {type: "ia5", str: "Sample Org"},
+ *         noticenum: [{int: 5}, {hex: "01af"}]
+ *       },
+ *       exptext: {type: "ia5", str: "Sample Policy"}
+ *     }}
+ *   ]
+ * })
+ */
+KJUR.asn1.x509.PolicyInformation = function(params) {
+    KJUR.asn1.x509.PolicyInformation.superclass.constructor.call(this,
+								 params);
+    var _KJUR_asn1 = KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_DERObjectIdentifier = _KJUR_asn1.DERObjectIdentifier,
+	_PolicyQualifierInfo = _KJUR_asn1.x509.PolicyQualifierInfo;
+
+    this.params = null;
+
+    this.getEncodedHex = function() {
+	if (this.params.policyoid === undefined &&
+	    this.params.array === undefined)
+	    throw new Error("parameter oid and array missing");
+
+	// policy oid
+	var a = [new _DERObjectIdentifier({oid: this.params.policyoid})];
+
+	// array of ASN1Object of PolicyQualifierInfo
+	if (this.params.array !== undefined) {
+	    var aPQI = [];
+	    for (var i = 0; i < this.params.array.length; i++) {
+		aPQI.push(new _PolicyQualifierInfo(this.params.array[i]));
+	    }
+	    if (aPQI.length > 0) {
+		a.push(new _DERSequence({array: aPQI}));
+	    }
+	}
+
+	var seq = new _DERSequence({array: a});
+	return seq.getEncodedHex();
+    };
+
+    if (params !== undefined) {
+	this.params = params;
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.x509.PolicyInformation, KJUR.asn1.ASN1Object);
+
+/**
+ * PolicyQualifierInfo ASN.1 structure class
+ * @name KJUR.asn1.x509.PolicyQualifierInfo
+ * @class PolicyQualifierInfo ASN.1 structure class
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.ASN1Object
+ * @since jsrsasign 8.0.23 asn1x509 1.1.12
+ * @description
+ * This class represents 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
+ * PolicyQualifierInfo defined in RFC 5280 4.2.1.4</a>.
+ * <pre>
+ * PolicyQualifierInfo ::= SEQUENCE {
+ *      policyQualifierId  PolicyQualifierId,
+ *      qualifier          ANY DEFINED BY policyQualifierId }
+ * PolicyQualifierId ::= OBJECT IDENTIFIER ( id-qt-cps | id-qt-unotice )
+ * CPSuri ::= IA5String
+ * </pre>
+ * Its constructor can have one of following two parameters:
+ * <ul>
+ * <li>{String}cps - URI string for CPS</li>
+ * <li>{Object}unotice - {@link KJUR.asn1.x509.UserNotice} parameter</li>
+ * </ul>
+ * @example
+ * new PolicyQualifierInfo({
+ *   cps: "https://example.com/repository/cps"
+ * })
+ *
+ * new PolicyQualifierInfo({
+ *   unotice: {
+ *     noticeref: { // CA SHOULD NOT use this by RFC
+ *       org: {type: "bmp", str: "Sample Org"},
+ *       noticenum: [{int: 3}, {hex: "01af"}]
+ *     },
+ *     exptext: {type: "ia5", str: "Sample Policy"}
+ *   }
+ * })
+ */
+KJUR.asn1.x509.PolicyQualifierInfo = function(params) {
+    KJUR.asn1.x509.PolicyQualifierInfo.superclass.constructor.call(this,
+								   params);
+    var _KJUR_asn1 = KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_DERIA5String = _KJUR_asn1.DERIA5String,
+	_DERObjectIdentifier = _KJUR_asn1.DERObjectIdentifier,
+	_UserNotice = _KJUR_asn1.x509.UserNotice;
+
+    this.params = null;
+
+    this.getEncodedHex = function() {
+	if (this.params.cps !== undefined) {
+	    var seq = new _DERSequence({array: [
+		new _DERObjectIdentifier({oid: '1.3.6.1.5.5.7.2.1'}),
+		new _DERIA5String({str: this.params.cps})
+	    ]});
+	    return seq.getEncodedHex();
+	}
+	if (this.params.unotice != undefined) {
+	    var seq = new _DERSequence({array: [
+		new _DERObjectIdentifier({oid: '1.3.6.1.5.5.7.2.2'}),
+		new _UserNotice(this.params.unotice)
+	    ]});
+	    return seq.getEncodedHex();
+	}
+    };
+
+    if (params !== undefined) {
+	this.params = params;
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.x509.PolicyQualifierInfo, KJUR.asn1.ASN1Object);
+
+
+/**
+ * UserNotice ASN.1 structure class
+ * @name KJUR.asn1.x509.UserNotice
+ * @class UserNotice ASN.1 structure class
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.ASN1Object
+ * @since jsrsasign 8.0.23 asn1x509 1.1.12
+ * @description
+ * This class represents 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
+ * UserNotice defined in RFC 5280 4.2.1.4</a>.
+ * <pre>
+ * UserNotice ::= SEQUENCE {
+ *      noticeRef        NoticeReference OPTIONAL,
+ *      explicitText     DisplayText OPTIONAL }
+ * </pre>
+ * Its constructor can have following two parameters:
+ * <ul>
+ * <li>{Object}noticeref - {@link KJUR.asn1.x509.NoticeReference} parameter.
+ * This SHALL NOT be set for conforming CA by RFC 5280. (OPTIONAL)</li>
+ * <li>{Object}exptext - explicitText value
+ * by {@link KJUR.asn1.x509.DisplayText} parameter (OPTIONAL)</li>
+ * </ul>
+ * @example
+ * new UserNotice({
+ *   noticeref: {
+ *     org: {type: "bmp", str: "Sample Org"},
+ *     noticenum: [{int: 3}, {hex: "01af"}]
+ *   },
+ *   exptext: {type: "ia5", str: "Sample Policy"}
+ * })
+ */
+KJUR.asn1.x509.UserNotice = function(params) {
+    KJUR.asn1.x509.UserNotice.superclass.constructor.call(this, params);
+    var _DERSequence = KJUR.asn1.DERSequence,
+	_DERInteger = KJUR.asn1.DERInteger,
+	_DisplayText = KJUR.asn1.x509.DisplayText,
+	_NoticeReference = KJUR.asn1.x509.NoticeReference;
+
+    this.params = null;
+
+    this.getEncodedHex = function() {
+	var a = [];
+	if (this.params.noticeref !== undefined) {
+	    a.push(new _NoticeReference(this.params.noticeref));
+	}
+	if (this.params.exptext !== undefined) {
+	    a.push(new _DisplayText(this.params.exptext));
+	}
+	var seq = new _DERSequence({array: a});
+	return seq.getEncodedHex();
+    };
+
+    if (params !== undefined) {
+	this.params = params;
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.x509.UserNotice, KJUR.asn1.ASN1Object);
+
+/**
+ * NoticeReference ASN.1 structure class
+ * @name KJUR.asn1.x509.NoticeReference
+ * @class NoticeReference ASN.1 structure class
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.ASN1Object
+ * @since jsrsasign 8.0.23 asn1x509 1.1.12
+ * @description
+ * This class represents 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
+ * NoticeReference defined in RFC 5280 4.2.1.4</a>.
+ * <pre>
+ * NoticeReference ::= SEQUENCE {
+ *      organization     DisplayText,
+ *      noticeNumbers    SEQUENCE OF INTEGER }
+ * </pre>
+ * Its constructor can have following two parameters:
+ * <ul>
+ * <li>{Object}org - organization by {@link KJUR.asn1.x509.DisplayText}
+ * parameter.</li>
+ * <li>{Object}noticenum - noticeNumbers value by an array of
+ * {@link KJUR.asn1.DERInteger} parameter</li>
+ * </ul>
+ * @example
+ * new NoticeReference({
+ *   org: {type: "bmp", str: "Sample Org"},
+ *   noticenum: [{int: 3}, {hex: "01af"}]
+ * })
+ */
+KJUR.asn1.x509.NoticeReference = function(params) {
+    KJUR.asn1.x509.NoticeReference.superclass.constructor.call(this, params);
+    var _DERSequence = KJUR.asn1.DERSequence,
+	_DERInteger = KJUR.asn1.DERInteger,
+	_DisplayText = KJUR.asn1.x509.DisplayText;
+
+    this.params = null;
+
+    this.getEncodedHex = function() {
+	var a = [];
+	if (this.params.org !== undefined) {
+	    a.push(new _DisplayText(this.params.org));
+	}
+	if (this.params.noticenum !== undefined) {
+	    var aNoticeNum = [];
+	    var aNumParam = this.params.noticenum;
+	    for (var i = 0; i < aNumParam.length; i++) {
+		aNoticeNum.push(new _DERInteger(aNumParam[i]));
+	    }
+	    a.push(new _DERSequence({array: aNoticeNum}));
+	}
+	if (a.length == 0) throw new Error("parameter is empty");
+	var seq = new _DERSequence({array: a});
+	return seq.getEncodedHex();
+    }
+
+    if (params !== undefined) {
+	this.params = params;
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.x509.NoticeReference, KJUR.asn1.ASN1Object);
+
+/**
+ * DisplayText ASN.1 structure class
+ * @name KJUR.asn1.x509.DisplayText
+ * @class DisplayText ASN.1 structure class
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.DERAbstractString
+ * @since jsrsasign 8.0.23 asn1x509 1.1.12
+ * @description
+ * This class represents 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
+ * DisplayText defined in RFC 5280 4.2.1.4</a>.
+ * <pre>
+ * -- from RFC 5280 Appendix A
+ * DisplayText ::= CHOICE {
+ *      ia5String        IA5String      (SIZE (1..200)),
+ *      visibleString    VisibleString  (SIZE (1..200)),
+ *      bmpString        BMPString      (SIZE (1..200)),
+ *      utf8String       UTF8String     (SIZE (1..200)) }
+ * </pre>
+ * {@link KJUR.asn1.DERAbstractString} parameters and methods
+ * can be used.
+ * Its constructor can also have following parameter:
+ * <ul>
+ * <li>{String} type - DirectoryString type of DisplayText.
+ * "ia5" for IA5String, "vis" for VisibleString,
+ * "bmp" for BMPString and "utf8" for UTF8String.
+ * Default is "utf8". (OPTIONAL)</li>
+ * </ul>
+ * @example
+ * new DisplayText({type: "bmp", str: "Sample Org"})
+ * new DisplayText({type: "ia5", str: "Sample Org"})
+ * new DisplayText({str: "Sample Org"})
+ */
+KJUR.asn1.x509.DisplayText = function(params) {
+    KJUR.asn1.x509.DisplayText.superclass.constructor.call(this, params);
+
+    this.hT = "0c"; // DEFAULT "utf8"
+
+    if (params !== undefined) {
+	if (params.type === "ia5") {
+	    this.hT = "16";
+	} else if (params.type === "vis") {
+	    this.hT = "1a";
+	} else if (params.type === "bmp") {
+	    this.hT = "1e";
+	}
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.x509.DisplayText, KJUR.asn1.DERAbstractString);
+
+// =====================================================================
 /**
  * KeyUsage ASN.1 structure class
  * @name KJUR.asn1.x509.ExtKeyUsage
