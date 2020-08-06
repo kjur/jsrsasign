@@ -735,10 +735,174 @@ test("TBSCertList 2 class test", function() {
 });
 
 test("CRLEntry class test", function() {
-  expect(1);
   var e = new KJUR.asn1.x509.CRLEntry({'time':{'str':'130514235959Z'}, 'sn':{'int':3}});
   equal(e.getEncodedHex(), "3012020103170d3133303531343233353935395a", "constructor/1");
 });
+
+test("CertificatePolicies test", function() {
+var _CertificatePolicies = KJUR.asn1.x509.CertificatePolicies;
+
+equal(
+(new _CertificatePolicies({
+array: [
+  { policyoid: "1.2.3.4.5",
+    array: [
+      { cps: "https://example.com/repository" },
+      { unotice: {
+        noticeref: {
+          org: {type: "ia5", str: "Sample Org"},
+          noticenum: [{int: 5}, {hex: "01af"}]
+        },
+        exptext: {type: "ia5", str: "Sample Policy"}
+      }}
+    ]
+  },
+  { policyoid: "1.2.3.4.6",
+    array: [
+      { cps: "https://example2.org/repository" },
+      { unotice: {
+        noticeref: {
+          org: {type: "utf8", str: "Sample2 Org"},
+          noticenum: [{int: 5}]
+        },
+        exptext: {type: "utf8", str: "Sample2 Policy"}
+      }}
+    ]
+  }
+],
+critical: true
+})).getEncodedHex(),
+"3081e10603551d200101ff0481d63081d3306806042a0304053060302a06082b06010505070201161e68747470733a2f2f6578616d706c652e636f6d2f7265706f7369746f7279303206082b0601050507020230263015160a53616d706c65204f72673007020105020201af160d53616d706c6520506f6c696379306706042a030406305f302b06082b06010505070201161f68747470733a2f2f6578616d706c65322e6f72672f7265706f7369746f7279303006082b06010505070202302430120c0b53616d706c6532204f726730030201050c0e53616d706c653220506f6c696379",
+"two policies 1.2.3.4.{5,6}");
+
+equal(
+(new _CertificatePolicies({
+array: [
+  { policyoid: "2.23.140.1.2.1" },
+  { policyoid: "1.3.6.1.4.1.44947.1.1.1",
+    array: [
+      { cps: "https://cps.letsencrypt.org" },
+      { unotice: {
+        exptext: {type: "utf8", 
+	          str: "This Certificate may only be relied upon by Relying Parties and only in accordance with the Certificate Policy found at https://letsencrypt.org/repository/"}
+      }}
+    ]
+  }
+]
+})).getEncodedHex(),
+"3081ff0603551d200481f73081f43008060667810c0102013081e7060b2b0601040182df130101013081d7302706082b06010505070201161b68747470733a2f2f6370732e6c657473656e63727970742e6f72673081ab06082b0601050507020230819e0c819b54686973204365727469666963617465206d6179206f6e6c792062652072656c6965642075706f6e2062792052656c79696e67205061727469657320616e64206f6e6c7920696e206163636f7264616e636520776974682074686520436572746966696361746520506f6c69637920666f756e642061742068747470733a2f2f6c657473656e63727970742e6f72672f7265706f7369746f72792f",
+"lets encrypt");
+
+});
+
+test("PolicyInformation test", function() {
+var _PolicyInformation = KJUR.asn1.x509.PolicyInformation;
+
+equal(
+(new _PolicyInformation({
+  policyoid: "1.2.3.4.5",
+  array: [
+    { cps: "https://example.com/repository" },
+    { unotice: {
+      noticeref: {
+        org: {type: "ia5", str: "Sample Org"},
+        noticenum: [{int: 5}, {hex: "01af"}]
+      },
+      exptext: {type: "ia5", str: "Sample Policy"}
+    }}
+  ]
+})).getEncodedHex(),
+"306806042a0304053060302a06082b06010505070201161e68747470733a2f2f6578616d706c652e636f6d2f7265706f7369746f7279303206082b0601050507020230263015160a53616d706c65204f72673007020105020201af160d53616d706c6520506f6c696379",
+"policyinformation 1.2.3.4.5 full"
+);
+
+});
+
+test("PolicyQualifierInfo test", function() {
+var _PolicyQualifierInfo = KJUR.asn1.x509.PolicyQualifierInfo;
+
+equal(
+(new _PolicyQualifierInfo({
+  cps: "https://example.org/"
+})).getEncodedHex(),
+"302006082b06010505070201161468747470733a2f2f6578616d706c652e6f72672f",
+"cps");
+
+equal(
+(new _PolicyQualifierInfo({
+  unotice: {
+    noticeref: {
+      org: {type: "ia5", str: "Sample Org"},
+      noticenum: [{int: 5}, {hex: "01af"}]
+    },
+    exptext: {type: "ia5", str: "Sample Policy"}
+  }
+})).getEncodedHex(),
+"303206082b0601050507020230263015160a53616d706c65204f72673007020105020201af160d53616d706c6520506f6c696379",
+"unotice");
+
+});
+
+test("UserNotice test", function() {
+var _UserNotice = KJUR.asn1.x509.UserNotice;
+equal(
+(new _UserNotice({
+  noticeref: {
+    org: {type: "ia5", str: "Sample Org"},
+    noticenum: [{int: 5}, {hex: "01af"}]
+  },
+  exptext: {type: "ia5", str: "Sample Policy"}
+})).getEncodedHex(),
+"30263015160a53616d706c65204f72673007020105020201af160d53616d706c6520506f6c696379",
+"usernotice");
+});
+
+test("NoticeReference test", function() {
+var _NoticeReference = KJUR.asn1.x509.NoticeReference;
+
+equal(
+(new _NoticeReference({
+  org: {type: "bmp", str: "Sample Org"},
+  noticenum: [{int: 3}, {hex: "01af"}]
+})).getEncodedHex(),
+"30151e0a53616d706c65204f72673007020103020201af",
+"both");
+
+equal(
+(new _NoticeReference({
+  org: {type: "bmp", str: "Sample Org"}
+})).getEncodedHex(),
+"300c1e0a53616d706c65204f7267",
+"org only");
+
+equal(
+(new _NoticeReference({
+  noticenum: [{int: 3}, {hex: "01af"}]
+})).getEncodedHex(),
+"30093007020103020201af",
+"noticenum only");
+});
+
+test("DisplayText test", function() {
+var _DisplayText = KJUR.asn1.x509.DisplayText;
+equal((new _DisplayText({str: 'aaa'})).getEncodedHex(),
+      "0c03616161",
+      "aaa(utf8 default)=0c03616161");
+equal((new _DisplayText({type: 'utf8', str: 'aaa'})).getEncodedHex(),
+      "0c03616161",
+      "utf8,aaa=0c03616161");
+equal((new _DisplayText({type: 'ia5', str: 'aaa'})).getEncodedHex(),
+      "1603616161",
+      "ia5str,aaa=1603616161");
+equal((new _DisplayText({type: 'vis', str: 'aaa'})).getEncodedHex(),
+      "1a03616161",
+      "vis,aaa=1a03616161");
+equal((new _DisplayText({type: 'bmp', str: 'aaa'})).getEncodedHex(),
+      "1e03616161",
+      "bmp,aaa=1e03616161");
+});
+
+
 
 });
 -->

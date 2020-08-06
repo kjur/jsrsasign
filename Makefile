@@ -36,3 +36,9 @@ min/%.min.js: src/%.js
 
 ext/%-min.js: ext/%.js
 	yuicmp $^ -o $@
+
+gitadd-all-doc:
+	git add api/*.html api/symbols/*.html api/symbols/src/*.html
+
+gitadd-release:
+	git add ChangeLog.txt Makefile jsrsasign-*-min.js min/*.js src/*.js  src/*.js test/qunit-do-*.html lib/jsrsasign-*-all-min.js

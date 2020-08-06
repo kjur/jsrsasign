@@ -715,7 +715,9 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
     if (indent === undefined) indent = "";
     var skipLongHex = flags.ommit_long_octet;
 
-    if (hex.substr(idx, 2) == "01") {
+    var tag = hex.substr(idx, 2);
+
+    if (tag == "01") {
 	var v = _getV(hex, idx);
 	if (v == "00") {
 	    return indent + "BOOLEAN FALSE\n";
@@ -723,11 +725,11 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
 	    return indent + "BOOLEAN TRUE\n";
 	}
     }
-    if (hex.substr(idx, 2) == "02") {
+    if (tag == "02") {
 	var v = _getV(hex, idx);
         return indent + "INTEGER " + _skipLongHex(v, skipLongHex) + "\n";
     }
-    if (hex.substr(idx, 2) == "03") {
+    if (tag == "03") {
 	var v = _getV(hex, idx);
 	if (_ASN1HEX.isASN1HEX(v.substr(2))) {
   	    var s = indent + "BITSTRING, encapsulates\n";
@@ -737,7 +739,7 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
             return indent + "BITSTRING " + _skipLongHex(v, skipLongHex) + "\n";
 	}
     }
-    if (hex.substr(idx, 2) == "04") {
+    if (tag == "04") {
 	var v = _getV(hex, idx);
 	if (_ASN1HEX.isASN1HEX(v)) {
 	    var s = indent + "OCTETSTRING, encapsulates\n";
@@ -747,10 +749,10 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
 	    return indent + "OCTETSTRING " + _skipLongHex(v, skipLongHex) + "\n";
 	}
     }
-    if (hex.substr(idx, 2) == "05") {
+    if (tag == "05") {
 	return indent + "NULL\n";
     }
-    if (hex.substr(idx, 2) == "06") {
+    if (tag == "06") {
 	var hV = _getV(hex, idx);
         var oidDot = KJUR.asn1.ASN1Util.oidHexToInt(hV);
         var oidName = KJUR.asn1.x509.OID.oid2name(oidDot);
@@ -761,25 +763,31 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
   	    return indent + "ObjectIdentifier (" + oidSpc + ")\n";
 	}
     }
-    if (hex.substr(idx, 2) == "0c") {
+    if (tag == "0c") {
 	return indent + "UTF8String '" + hextoutf8(_getV(hex, idx)) + "'\n";
     }
-    if (hex.substr(idx, 2) == "13") {
+    if (tag == "13") {
 	return indent + "PrintableString '" + hextoutf8(_getV(hex, idx)) + "'\n";
     }
-    if (hex.substr(idx, 2) == "14") {
+    if (tag == "14") {
 	return indent + "TeletexString '" + hextoutf8(_getV(hex, idx)) + "'\n";
     }
-    if (hex.substr(idx, 2) == "16") {
+    if (tag == "16") {
 	return indent + "IA5String '" + hextoutf8(_getV(hex, idx)) + "'\n";
     }
-    if (hex.substr(idx, 2) == "17") {
+    if (tag == "17") {
 	return indent + "UTCTime " + hextoutf8(_getV(hex, idx)) + "\n";
     }
-    if (hex.substr(idx, 2) == "18") {
+    if (tag == "18") {
 	return indent + "GeneralizedTime " + hextoutf8(_getV(hex, idx)) + "\n";
     }
-    if (hex.substr(idx, 2) == "30") {
+    if (tag == "1a") {
+	return indent + "VisualString '" + hextoutf8(_getV(hex, idx)) + "'\n";
+    }
+    if (tag == "1e") {
+	return indent + "BMPString '" + hextoutf8(_getV(hex, idx)) + "'\n";
+    }
+    if (tag == "30") {
 	if (hex.substr(idx, 4) == "3000") {
 	    return indent + "SEQUENCE {}\n";
 	}
@@ -803,7 +811,7 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
 	}
 	return s;
     }
-    if (hex.substr(idx, 2) == "31") {
+    if (tag == "31") {
 	var s = indent + "SET\n";
 	var aIdx = _getChildIdx(hex, idx);
 	for (var i = 0; i < aIdx.length; i++) {
@@ -811,7 +819,7 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
 	}
 	return s;
     }
-    var tag = parseInt(hex.substr(idx, 2), 16);
+    var tag = parseInt(tag, 16);
     if ((tag & 128) != 0) { // context specific 
 	var tagNumber = tag & 31;
 	if ((tag & 32) != 0) { // structured tag
@@ -835,7 +843,7 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
 	    return s;
 	}
     }
-    return indent + "UNKNOWN(" + hex.substr(idx, 2) + ") " + 
+    return indent + "UNKNOWN(" + tag + ") " + 
 	   _getV(hex, idx) + "\n";
 };
 

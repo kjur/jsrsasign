@@ -1,9 +1,9 @@
-/* asn1-1.0.14.js (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1-1.0.15.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
  *
- * Copyright (c) 2013-2018 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.0.14 (2018-Apr-03)
+ * @version asn1 1.0.15 (2020-Aug-05)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -62,6 +62,8 @@ if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
  * <li>0x16 {@link KJUR.asn1.DERIA5String}</li>
  * <li>0x17 {@link KJUR.asn1.DERUTCTime}</li>
  * <li>0x18 {@link KJUR.asn1.DERGeneralizedTime}</li>
+ * <li>0x1a {@link KJUR.asn1.DERVisibleString}</li>
+ * <li>0x1e {@link KJUR.asn1.DERBMPString}</li>
  * <li>0x30 {@link KJUR.asn1.DERSequence}</li>
  * <li>0x31 {@link KJUR.asn1.DERSet}</li>
  * </ul>
@@ -184,6 +186,8 @@ KJUR.asn1.ASN1Util = new function() {
      * <li>'ia5str' - DERIA5String</li>
      * <li>'utctime' - DERUTCTime</li>
      * <li>'gentime' - DERGeneralizedTime</li>
+     * <li>'visstr' - DERVisibleString</li>
+     * <li>'bmpstr' - DERBMPString</li>
      * <li>'seq' - DERSequence</li>
      * <li>'set' - DERSet</li>
      * <li>'tag' - DERTaggedObject</li>
@@ -220,6 +224,8 @@ KJUR.asn1.ASN1Util = new function() {
 	    _DERIA5String = _KJUR_asn1.DERIA5String,
 	    _DERUTCTime = _KJUR_asn1.DERUTCTime,
 	    _DERGeneralizedTime = _KJUR_asn1.DERGeneralizedTime,
+	    _DERVisibleString = _KJUR_asn1.DERVisibleString,
+	    _DERBMPString = _KJUR_asn1.DERBMPString,
 	    _DERSequence = _KJUR_asn1.DERSequence,
 	    _DERSet = _KJUR_asn1.DERSet,
 	    _DERTaggedObject = _KJUR_asn1.DERTaggedObject,
@@ -230,8 +236,8 @@ KJUR.asn1.ASN1Util = new function() {
             throw "key of param shall be only one.";
         var key = keys[0];
 
-        if (":bool:int:bitstr:octstr:null:oid:enum:utf8str:numstr:prnstr:telstr:ia5str:utctime:gentime:seq:set:tag:".indexOf(":" + key + ":") == -1)
-            throw "undefined key: " + key;
+        if (":bool:int:bitstr:octstr:null:oid:enum:utf8str:numstr:prnstr:telstr:ia5str:utctime:gentime:visstr:bmpstr:seq:set:tag:".indexOf(":" + key + ":") == -1)
+            throw new Error("undefined key: " + key);
 
         if (key == "bool")    return new _DERBoolean(param[key]);
         if (key == "int")     return new _DERInteger(param[key]);
@@ -247,6 +253,8 @@ KJUR.asn1.ASN1Util = new function() {
         if (key == "ia5str")  return new _DERIA5String(param[key]);
         if (key == "utctime") return new _DERUTCTime(param[key]);
         if (key == "gentime") return new _DERGeneralizedTime(param[key]);
+        if (key == "visstr")  return new _DERVisibleString(param[key]);
+        if (key == "bmpstr")  return new _DERBMPString(param[key]);
 
         if (key == "seq") {
             var paramList = param[key];
@@ -1368,6 +1376,40 @@ KJUR.asn1.DERIA5String = function(params) {
     this.hT = "16";
 };
 YAHOO.lang.extend(KJUR.asn1.DERIA5String, KJUR.asn1.DERAbstractString);
+
+// ********************************************************************
+/**
+ * class for ASN.1 DER VisibleString
+ * @name KJUR.asn1.DERVisibleString
+ * @class class for ASN.1 DER VisibleString
+ * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
+ * @extends KJUR.asn1.DERAbstractString
+ * @since jsrsasign 8.0.23 asn1 1.0.15
+ * @description
+ * @see KJUR.asn1.DERAbstractString - superclass
+ */
+KJUR.asn1.DERVisibleString = function(params) {
+    KJUR.asn1.DERIA5String.superclass.constructor.call(this, params);
+    this.hT = "1a";
+};
+YAHOO.lang.extend(KJUR.asn1.DERVisibleString, KJUR.asn1.DERAbstractString);
+
+// ********************************************************************
+/**
+ * class for ASN.1 DER BMPString
+ * @name KJUR.asn1.DERBMPString
+ * @class class for ASN.1 DER BMPString
+ * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
+ * @extends KJUR.asn1.DERAbstractString
+ * @since jsrsasign 8.0.23 asn1 1.0.15
+ * @description
+ * @see KJUR.asn1.DERAbstractString - superclass
+ */
+KJUR.asn1.DERBMPString = function(params) {
+    KJUR.asn1.DERBMPString.superclass.constructor.call(this, params);
+    this.hT = "1e";
+};
+YAHOO.lang.extend(KJUR.asn1.DERBMPString, KJUR.asn1.DERAbstractString);
 
 // ********************************************************************
 /**

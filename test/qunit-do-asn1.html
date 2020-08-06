@@ -180,6 +180,22 @@ test("IA5String Test", function() {
   equal(d.getEncodedHex(), "1603e38182", "IA5String あ");
 });
 
+test("VisibleString Test", function() {
+  var d = new KJUR.asn1.DERVisibleString();
+  d.setString('aaa');
+  equal(d.getEncodedHex(), "1a03616161", "VisibleString aaa=1a03616161");
+  var d2 = new KJUR.asn1.DERVisibleString({str: 'bbb'});
+  equal(d2.getEncodedHex(), "1a03626262", "VisibleString bbb=1a03626262");
+});
+
+test("BMPString Test", function() {
+  var d = new KJUR.asn1.DERBMPString();
+  d.setString('aaa');
+  equal(d.getEncodedHex(), "1e03616161", "BMPString aaa=1a03616161");
+  var d2 = new KJUR.asn1.DERBMPString({str: 'bbb'});
+  equal(d2.getEncodedHex(), "1e03626262", "BMPString bbb=1a03626262");
+});
+
 test("UTCTime Test", function() {
   expect(5);
 
