@@ -2173,8 +2173,10 @@ KJUR.asn1.x509.X500Name = function(params) {
         // Get all the dnObject attributes and stuff them in the ASN.1 array.
         for (var x in dnObj) {
             if (dnObj.hasOwnProperty(x)) {
-                var newRDN = new KJUR.asn1.x509.RDN(
-                    {'str': x + '=' + dnObj[x]});
+                const str = x + '=' + dnObj[x];
+                var newRDN = new KJUR.asn1.x509.RDN();
+                // Avoid parsing multi-valued strings
+                newRDN.addByString(str)
                 // Initialize or push into the ANS1 array.
                 this.asn1Array ? this.asn1Array.push(newRDN)
                     : this.asn1Array = [newRDN];
@@ -2499,7 +2501,7 @@ KJUR.asn1.x509.AttributeTypeAndValue = function(params) {
 	_KJUR_asn1 = _KJUR.asn1;
 
     this.setByString = function(attrTypeAndValueStr) {
-        var matchResult = attrTypeAndValueStr.match(/^([^=]+)=(.+)$/);
+        var matchResult = attrTypeAndValueStr.match(/^([^=]+)=(.*)$/);
         if (matchResult) {
             this.setByAttrTypeAndValueStr(matchResult[1], matchResult[2]);
         } else {
