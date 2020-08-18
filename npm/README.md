@@ -16,7 +16,8 @@ Public page is https://kjur.github.io/jsrsasign .
 
 NEWS
 ----
-- 2020-Aug-02: twitter account [@kjur](https://twitter.com/jsrsasign) started. please follow.
+- 2020-Aug-18: 8.0.24 released for SigningCertificate ASN.1 encoding bugfix
+- 2020-Aug-02: twitter account [@jsrsasign](https://twitter.com/jsrsasign) started for announcement. please follow.
 
 HIGHLIGHTS
 ----------
@@ -27,7 +28,7 @@ HIGHLIGHTS
 - rich document and samples
 - no dependency to other library
 - no dependency to [W3C Web Cryptography API](https://www.w3.org/TR/WebCryptoAPI/) nor [OpenSSL](https://www.openssl.org/)
-- very popular crypto library with [0.6M+ npm downloads/month](https://npm-stat.com/charts.html?package=jsrsasign&from=2016-05-01&to=2020-08-03)
+- very popular crypto library with [0.6M+ npm downloads/month](https://npm-stat.com/charts.html?package=jsrsasign&from=2016-05-01&to=2020-08-16)
 
 INSTALL
 -------

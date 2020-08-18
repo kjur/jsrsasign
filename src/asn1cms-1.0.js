@@ -1,4 +1,4 @@
-/* asn1cms-1.0.6.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1cms-1.0.7.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1cms.js - ASN.1 DER encoder and verifier classes for Cryptographic Message Syntax(CMS)
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cms-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.17 asn1cms 1.0.6 (2020-Jun-19)
+ * @version jsrsasign 8.0.24 asn1cms 1.0.7 (2020-Aug-18)
  * @since jsrsasign 4.2.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -59,6 +59,7 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * <li>{@link KJUR.asn1.cms.ContentInfo}</li>
  * <li>{@link KJUR.asn1.cms.EncapsulatedContentInfo}</li>
  * <li>{@link KJUR.asn1.cms.IssuerAndSerialNumber}</li>
+ * <li>{@link KJUR.asn1.cms.IssuerSerial}</li>
  * <li>{@link KJUR.asn1.cms.CMSUtil}</li>
  * <li>{@link KJUR.asn1.cms.Attribute}</li>
  * <li>{@link KJUR.asn1.cms.ContentType}</li>
@@ -289,7 +290,7 @@ KJUR.asn1.cms.SigningCertificate = function(params) {
 		new _KJUR_asn1.DEROctetString({hex: certHashHex});
             dCertHash.getEncodedHex();
             var dIssuerSerial =
-                new _KJUR_asn1_cms.IssuerAndSerialNumber({cert: listPEM[i]});
+                new _KJUR_asn1_cms.IssuerSerial({cert: listPEM[i]});
             dIssuerSerial.getEncodedHex();
             var dESSCertID =
                 new _DERSequence({array: [dCertHash, dIssuerSerial]});
@@ -369,7 +370,7 @@ KJUR.asn1.cms.SigningCertificateV2 = function(params) {
             a.push(dCertHash);
 
             var dIssuerSerial =
-                new _KJUR_asn1_cms.IssuerAndSerialNumber({cert: listPEM[i]});
+                new _KJUR_asn1_cms.IssuerSerial({cert: listPEM[i]});
             dIssuerSerial.getEncodedHex();
             a.push(dIssuerSerial);
 
@@ -393,6 +394,97 @@ KJUR.asn1.cms.SigningCertificateV2 = function(params) {
     }
 };
 YAHOO.lang.extend(KJUR.asn1.cms.SigningCertificateV2, KJUR.asn1.cms.Attribute);
+
+/**
+ * class for IssuerSerial ASN.1 structure for CMS
+ * @name KJUR.asn1.cms.IssuerSerial
+ * @class class for CMS IssuerSerial ASN.1 structure for CMS
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.ASN1Object
+ * @since jsrsasign 8.0.24 asn1cms 1.0.8
+ * @see KJUR.asn1.cms.IssuerAndSerialNumber
+ * @see KJUR.asn1.cms.SigningCertificate
+ * @see KJUR.asn1.cms.SigningCertificateV2
+ * @see KJUR.asn1.x509.GeneralNames
+ * @see KJUR.asn1.x509.X500Name
+ * @description
+ * This class represents IssuerSerial ASN.1 structure
+ * defined in 
+ * <a href="https://tools.ietf.org/html/rfc5035#page-6>
+ * RFC 5034 section 4</a>.
+ * <pre>
+ * IssuerSerial ::= SEQUENCE {
+ *    issuer                   GeneralNames,
+ *    serialNumber             CertificateSerialNumber
+ * }
+ * CertificateSerialNumber ::= INTEGER
+ * </pre>
+ * @example
+ * // specify by X500Name parameter and DERInteger
+ * o = new KJUR.asn1.cms.IssuerSerial(
+ *      {issuer: {str: '/C=US/O=T1'}, serial {int: 3}});
+ * // specify by PEM certificate
+ * o = new KJUR.asn1.cms.IssuerSerial({cert: certPEM});
+ * o = new KJUR.asn1.cms.IssuerSerial(certPEM); // since 1.0.3
+ */
+KJUR.asn1.cms.IssuerSerial = function(params) {
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERInteger = _KJUR_asn1.DERInteger,
+	_KJUR_asn1_cms = _KJUR_asn1.cms,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_X500Name = _KJUR_asn1_x509.X500Name,
+	_GeneralNames = _KJUR_asn1_x509.GeneralNames,
+	_X509 = X509;
+
+    _KJUR_asn1_cms.IssuerSerial.superclass.constructor.call(this);
+    var dIssuer = null;
+    var dSerial = null;
+
+    /*
+     */
+    this.setByCertPEM = function(certPEM) {
+        var certHex = pemtohex(certPEM);
+        var x = new _X509();
+        x.hex = certHex;
+        var issuerTLVHex = x.getIssuerHex();
+        this.dIssuer = new _X500Name();
+        this.dIssuer.hTLV = issuerTLVHex;
+        var serialVHex = x.getSerialNumberHex();
+        this.dSerial = new _DERInteger({hex: serialVHex});
+    };
+
+    this.getEncodedHex = function() {
+	var gns = new _GeneralNames([{dn: this.dIssuer}]);
+        var seq = new _KJUR_asn1.DERSequence({"array": [gns,
+							this.dSerial]});
+        this.hTLV = seq.getEncodedHex();
+        return this.hTLV;
+    };
+
+    if (params !== undefined) {
+        if (typeof params == "string" &&
+            params.indexOf("-----BEGIN ") != -1) {
+            this.setByCertPEM(params);
+        }
+        if (params.issuer && params.serial) {
+            if (params.issuer instanceof _X500Name) {
+                this.dIssuer = params.issuer;
+            } else {
+                this.dIssuer = new _X500Name(params.issuer);
+            }
+            if (params.serial instanceof _DERInteger) {
+                this.dSerial = params.serial;
+            } else {
+                this.dSerial = new _DERInteger(params.serial);
+            }
+        }
+        if (typeof params.cert == "string") {
+            this.setByCertPEM(params.cert);
+        }
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.cms.IssuerSerial, KJUR.asn1.ASN1Object);
 
 /**
  * class for IssuerAndSerialNumber ASN.1 structure for CMS

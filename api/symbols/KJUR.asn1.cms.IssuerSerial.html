@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign JavaScript API Reference - KJUR.asn1.cades.OtherCertID</title>
+		<title>jsrsasign JavaScript API Reference - KJUR.asn1.cms.IssuerSerial</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -456,7 +456,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.cades.OtherCertID
+				Class KJUR.asn1.cms.IssuerSerial
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -466,16 +466,16 @@ ul.inheritsList
 					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
-				class for OtherCertID ASN.1 object
+				class for CMS IssuerSerial ASN.1 structure for CMS
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1cades-1.0.js.html">asn1cades-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1cms-1.0.js.html">asn1cms-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.cades.OtherCertID.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.cms.IssuerSerial.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -488,14 +488,13 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.cades.OtherCertID.html#constructor">KJUR.asn1.cades.OtherCertID</a></b>(params)
+								<b><a href="../symbols/KJUR.asn1.cms.IssuerSerial.html#constructor">KJUR.asn1.cms.IssuerSerial</a></b>(params)
 							</div>
-							<div class="description">class for OtherCertID ASN.1 object
-<pre>
-OtherCertID ::= SEQUENCE {
-   otherCertHash    OtherHash,
-   issuerSerial     IssuerSerial OPTIONAL }
-</pre></div>
+							<div class="description">class for IssuerSerial ASN.1 structure for CMS
+This class represents IssuerSerial ASN.1 structure
+defined in 
+<a href="https://tools.ietf.org/html/rfc5035#page-6>
+RFC 5034 section 4</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -518,29 +517,6 @@ OtherCertID ::= SEQUENCE {
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.cades.OtherCertID.">
-					<caption>Method Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.cades.OtherCertID.<b><a href="../symbols/KJUR.asn1.cades.OtherCertID.html#.setByCertPEM">setByCertPEM</a></b>(certPEM)
-								</div>
-								<div class="description">set value by PEM string of certificate
-This method will set value by a PEM string of a certificate.</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
 				
 				
 				<dl class="inheritsList">
@@ -559,23 +535,33 @@ This method will set value by a PEM string of a certificate.</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.cades.OtherCertID</b>(params)
+						<b>KJUR.asn1.cms.IssuerSerial</b>(params)
 				</div>
 				
 				<div class="description">
-					class for OtherCertID ASN.1 object
+					class for IssuerSerial ASN.1 structure for CMS
+This class represents IssuerSerial ASN.1 structure
+defined in 
+<a href="https://tools.ietf.org/html/rfc5035#page-6>
+RFC 5034 section 4</a>.
 <pre>
-OtherCertID ::= SEQUENCE {
-   otherCertHash    OtherHash,
-   issuerSerial     IssuerSerial OPTIONAL }
+IssuerSerial ::= SEQUENCE {
+   issuer                   GeneralNames,
+   serialNumber             CertificateSerialNumber
+}
+CertificateSerialNumber ::= INTEGER
 </pre>
 					
 				</div>
 				
 				
 				
-				<pre class="code">o = new KJUR.asn1.cades.OtherCertID(certPEM);
-o = new KJUR.asn1.cades.OtherCertID({cert:certPEM, hasis: false});</pre>
+				<pre class="code">// specify by X500Name parameter and DERInteger
+o = new KJUR.asn1.cms.IssuerSerial(
+     {issuer: {str: '/C=US/O=T1'}, serial {int: 3}});
+// specify by PEM certificate
+o = new KJUR.asn1.cms.IssuerSerial({cert: certPEM});
+o = new KJUR.asn1.cms.IssuerSerial(certPEM); // since 1.0.3</pre>
 				
 				
 				
@@ -596,12 +582,27 @@ o = new KJUR.asn1.cades.OtherCertID({cert:certPEM, hasis: false});</pre>
 					
 						<dl class="detailList">
 						<dt class="heading">Since:</dt>
-							<dd>jsrsasign 4.7.0 asn1cades 1.0.0</dd>
+							<dd>jsrsasign 8.0.24 asn1cms 1.0.8</dd>
 						</dl>
 					
 					
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.cms.IssuerAndSerialNumber.html">KJUR.asn1.cms.IssuerAndSerialNumber</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.cms.SigningCertificate.html">KJUR.asn1.cms.SigningCertificate</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.cms.SigningCertificateV2.html">KJUR.asn1.cms.SigningCertificateV2</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></dd>
+						
+						</dl>
 					
 
 			</div>
@@ -611,57 +612,6 @@ o = new KJUR.asn1.cades.OtherCertID({cert:certPEM, hasis: false});</pre>
 			
 
 <!-- ============================== method details ========================= -->		
-			
-				<div class="sectionTitle">
-					Method Detail
-				</div>
-				
-					<a name=".setByCertPEM"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.cades.OtherCertID.</span><b>setByCertPEM</b>(certPEM)
-					
-					</div>
-					<div class="description">
-						set value by PEM string of certificate
-This method will set value by a PEM string of a certificate.
-This will add IssuerAndSerialNumber by default 
-which depends on hasIssuerSerial flag.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>certPEM</b>
-									
-								</dt>
-								<dd>PEM string of certificate</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>unspecified</dd>
-							
-							</dl>
-						
-						
-						
-
-					
-				
 			
 			
 <!-- ============================== event details ========================= -->		

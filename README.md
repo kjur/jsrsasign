@@ -17,7 +17,8 @@ Your bugfix and pull request contribution are always welcomed :)
 
 NEWS
 ----
-- 2020-Aug-02: twitter account [@jsrsasign](https://twitter.com/jsrsasign) started. please follow.
+- 2020-Aug-18: 8.0.24 released for SigningCertificate ASN.1 encoding bugfix
+- 2020-Aug-02: twitter account [@jsrsasign](https://twitter.com/jsrsasign) started for announcement. please follow.
 
 HIGHLIGHTS
 ----------

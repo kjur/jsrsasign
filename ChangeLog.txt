@@ -1,6 +1,17 @@
 
 ChangeLog for jsrsasign
 
+fix SigningCertificate v1 v2 attribute ASN.1 encoding
+* Changes from 8.0.23 to 8.0.24 (2020-Aug-18)
+  - KJUR.asn1.cms.{SigningCertificate,SigningCertificateV2}
+    wrong ASN.1 encoding issue was fixed (#448)
+  - src/asn1cms.js
+    - KJUR.asn1.cms.{SigningCertificate,SigningCertificateV2}
+      ASN.1 encoding issue fixed (#448)
+    - added KJUR.asn1.cms.IssuerSerial
+  - test/qunit-do-asn1{cms,tsp}.html
+    - updated for above issue
+
 add CertificatePolicies BMPString and VisibleString support
 * Changes from 8.0.22 to 8.0.23 (2020-Aug-06)
   - src/asn1x509.js
