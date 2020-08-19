@@ -491,10 +491,10 @@ ul.inheritsList
 								<b><a href="../symbols/KJUR.asn1.csr.CertificationRequestInfo.html#constructor">KJUR.asn1.csr.CertificationRequestInfo</a></b>(params)
 							</div>
 							<div class="description">ASN.1 CertificationRequestInfo structure class
-<pre>
-// -- DEFINITION OF ASN.1 SYNTAX --
-// CertificationRequestInfo ::= SEQUENCE {
-//   version       INTEGER { v1(0) } (v1,.</div>
+This class provides CertificateRequestInfo ASN.1 structure
+defined in 
+<a href="https://tools.ietf.org/html/rfc2986#page-5">
+RFC 2986 4.1</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -516,49 +516,6 @@ ul.inheritsList
 <!-- ============================== methods summary ======================== -->
 			
 				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.csr.CertificationRequestInfo.">
-					<caption>Method Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.csr.CertificationRequestInfo.html#appendExtensionByName">appendExtensionByName</a></b>(name, extParams)
-								</div>
-								<div class="description">append X.509v3 extension to this object by name and parameters
-</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.csr.CertificationRequestInfo.html#setSubjectByParam">setSubjectByParam</a></b>(x500NameParam)
-								</div>
-								<div class="description">set subject name field by parameter
-</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.csr.CertificationRequestInfo.html#setSubjectPublicKeyByGetKey">setSubjectPublicKeyByGetKey</a></b>(keyParam)
-								</div>
-								<div class="description">set subject public key info by RSA/ECDSA/DSA key parameter
-</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
 				
 				
 				
@@ -583,23 +540,34 @@ ul.inheritsList
 				
 				<div class="description">
 					ASN.1 CertificationRequestInfo structure class
+This class provides CertificateRequestInfo ASN.1 structure
+defined in 
+<a href="https://tools.ietf.org/html/rfc2986#page-5">
+RFC 2986 4.1</a>.
 <pre>
-// -- DEFINITION OF ASN.1 SYNTAX --
-// CertificationRequestInfo ::= SEQUENCE {
-//   version       INTEGER { v1(0) } (v1,...),
-//   subject       Name,
-//   subjectPKInfo SubjectPublicKeyInfo{{ PKInfoAlgorithms }},
-//   attributes    [0] Attributes{{ CRIAttributes }} }
+CertificationRequestInfo ::= SEQUENCE {
+  version       INTEGER { v1(0) } (v1,...),
+  subject       Name,
+  subjectPKInfo SubjectPublicKeyInfo{{ PKInfoAlgorithms }},
+  attributes    [0] Attributes{{ CRIAttributes }} }
 </pre>
 <br/>
+<br/>
+CAUTION: 
+Argument "params" JSON value format have been changed without 
+backward compatibility since jsrsasign 9.0.0 asn1csr 2.0.0.
 					
 				</div>
 				
 				
 				
-				<pre class="code">csri = new KJUR.asn1.csr.CertificationRequestInfo();
-csri.setSubjectByParam({'str': '/C=US/O=Test/CN=example.com'});
-csri.setSubjectPublicKeyByGetKey(pubKeyObj);</pre>
+				<pre class="code">csri = new KJUR.asn1.csr.CertificationRequestInfo({
+  subject: {str: '/C=US/CN=b'},
+  sbjpubkey: <<PUBLIC KEY PEM>>,
+  extreq: [
+    {extname:"subjectAltName", array:[{dns:"example.com"}]}
+  ]});
+csri.getEncodedHex() &rarr; "30..."</pre>
 				
 				
 				
@@ -627,6 +595,13 @@ csri.setSubjectPublicKeyByGetKey(pubKeyObj);</pre>
 					
 					
 					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.csr.CertificationRequest.html">KJUR.asn1.csr.CertificationRequest</a></dd>
+						
+						</dl>
+					
 
 			</div>
 			
@@ -635,171 +610,6 @@ csri.setSubjectPublicKeyByGetKey(pubKeyObj);</pre>
 			
 
 <!-- ============================== method details ========================= -->		
-			
-				<div class="sectionTitle">
-					Method Detail
-				</div>
-				
-					<a name="appendExtensionByName"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>appendExtensionByName</b>(name, extParams)
-					
-					</div>
-					<div class="description">
-						append X.509v3 extension to this object by name and parameters
-
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">var o = new KJUR.asn1.csr.CertificationRequestInfo();
-o.appendExtensionByName('BasicConstraints', {'cA':true, 'critical': true});
-o.appendExtensionByName('KeyUsage', {'bin':'11'});
-o.appendExtensionByName('CRLDistributionPoints', {uri: 'http://aaa.com/a.crl'});
-o.appendExtensionByName('ExtKeyUsage', {array: [{name: 'clientAuth'}]});
-o.appendExtensionByName('AuthorityKeyIdentifier', {kid: '1234ab..'});
-o.appendExtensionByName('AuthorityInfoAccess', {array: [{accessMethod:{oid:...},accessLocation:{uri:...}}]});</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{name}</span> <b>name</b>
-									
-								</dt>
-								<dd>name of X.509v3 Extension object</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Array}</span> <b>extParams</b>
-									
-								</dt>
-								<dd>parameters as argument of Extension constructor.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-								<dd><a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a></dd>
-							
-							</dl>
-						
-
-					<hr />
-				
-					<a name="setSubjectByParam"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setSubjectByParam</b>(x500NameParam)
-					
-					</div>
-					<div class="description">
-						set subject name field by parameter
-
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">csri.setSubjectByParam({'str': '/C=US/CN=b'});</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Array}</span> <b>x500NameParam</b>
-									
-								</dt>
-								<dd>X500Name parameter</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-								<dd><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></dd>
-							
-							</dl>
-						
-
-					<hr />
-				
-					<a name="setSubjectPublicKeyByGetKey"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setSubjectPublicKeyByGetKey</b>(keyParam)
-					
-					</div>
-					<div class="description">
-						set subject public key info by RSA/ECDSA/DSA key parameter
-
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">csri.setSubjectPublicKeyByGetKeyParam(certPEMString); // or 
-csri.setSubjectPublicKeyByGetKeyParam(pkcs8PublicKeyPEMString); // or 
-csir.setSubjectPublicKeyByGetKeyParam(kjurCryptoECDSAKeyObject); // et.al.</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>keyParam</b>
-									
-								</dt>
-								<dd>public key parameter which passed to <a href="../symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> argument</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-								<dd><a href="../symbols/KJUR.asn1.x509.SubjectPublicKeyInfo.html">KJUR.asn1.x509.SubjectPublicKeyInfo</a></dd>
-							
-								<dd><a href="../symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a></dd>
-							
-							</dl>
-						
-
-					
-				
 			
 			
 <!-- ============================== event details ========================= -->		

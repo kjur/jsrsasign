@@ -462,6 +462,8 @@ ul.inheritsList
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
+				<br />Extends
+					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
 				DistributionPointName ASN.1 structure class
@@ -486,30 +488,12 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.x509.DistributionPointName.html#constructor">KJUR.asn1.x509.DistributionPointName</a></b>()
+								<b><a href="../symbols/KJUR.asn1.x509.DistributionPointName.html#constructor">KJUR.asn1.x509.DistributionPointName</a></b>(params)
 							</div>
 							<div class="description">DistributionPointName ASN.1 structure class<br/>
-<pre>
-DistributionPoint ::= SEQUENCE {
-     distributionPoint       [0]     DistributionPointName OPTIONAL,
-     reasons                 [1]     ReasonFlags OPTIONAL,
-     cRLIssuer               [2]     GeneralNames OPTIONAL }
-
-DistributionPointName ::= CHOICE {
-     fullName                [0]     GeneralNames,
-     nameRelativeToCRLIssuer [1]     RelativeDistinguishedName }
-
-ReasonFlags ::= BIT STRING {
-     unused                  (0),
-     keyCompromise           (1),
-     cACompromise            (2),
-     affiliationChanged      (3),
-     superseded              (4),
-     cessationOfOperation    (5),
-     certificateHold         (6),
-     privilegeWithdrawn      (7),
-     aACompromise            (8) }
-</pre></div>
+This class represents 
+<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.13">
+DistributionPointName defined in RFC 5280 4.2.1.13</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -518,8 +502,26 @@ ReasonFlags ::= BIT STRING {
 
 <!-- ============================== properties summary ===================== -->
 			
+				
+				
+				
+				
+				<dl class="inheritsList">
+				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
+				</dl>
+				
+			
 
 <!-- ============================== methods summary ======================== -->
+			
+				
+				
+				
+				
+				<dl class="inheritsList">
+				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a></dd>
+				</dl>
+				
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -532,48 +534,72 @@ ReasonFlags ::= BIT STRING {
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.x509.DistributionPointName</b>()
+						<b>KJUR.asn1.x509.DistributionPointName</b>(params)
 				</div>
 				
 				<div class="description">
 					DistributionPointName ASN.1 structure class<br/>
+This class represents 
+<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.13">
+DistributionPointName defined in RFC 5280 4.2.1.13</a>.
 <pre>
-DistributionPoint ::= SEQUENCE {
-     distributionPoint       [0]     DistributionPointName OPTIONAL,
-     reasons                 [1]     ReasonFlags OPTIONAL,
-     cRLIssuer               [2]     GeneralNames OPTIONAL }
-
 DistributionPointName ::= CHOICE {
      fullName                [0]     GeneralNames,
      nameRelativeToCRLIssuer [1]     RelativeDistinguishedName }
-
-ReasonFlags ::= BIT STRING {
-     unused                  (0),
-     keyCompromise           (1),
-     cACompromise            (2),
-     affiliationChanged      (3),
-     superseded              (4),
-     cessationOfOperation    (5),
-     certificateHold         (6),
-     privilegeWithdrawn      (7),
-     aACompromise            (8) }
 </pre>
+Constructor can have following parameter:
+<ul>
+<li>{String}full - JSON object parameter of <a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a> for 'fullName' field</li>
+<li>{GeneralNames} - <a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a> object for 'fullName'</li>
+</ul>
+NOTE1: 'full' parameter have been suppored since jsrsasign 9.0.0 asn1x509 2.0.0.
+<br>
+NOTE2: The 'nameRelativeToCRLIssuer' field is currently not supported.
 					
 				</div>
 				
 				
 				
-				<pre class="code"></pre>
+				<pre class="code">new KJUR.asn1.x509.DistributionPointName({full: <<GeneralNamesParameter>>})
+new KJUR.asn1.x509.DistributionPointName({full: [{uri: <<CDPURI>>}]})
+new KJUR.asn1.x509.DistributionPointName({full: [{dn: <<DN Parameter>>}]}
+new KJUR.asn1.x509.DistributionPointName({full: [{uri: "http://example.com/root.crl"}]})
+new KJUR.asn1.x509.DistributionPointName({full: [{dn {str: "/C=US/O=Test"}}]})
+new KJUR.asn1.x509.DistributionPointName(new GeneralNames(...))</pre>
 				
 				
 				
 				
 					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Array}</span>  <b>params</b>
+								
+							</dt>
+								<dd>JSON object of parameters or GeneralNames object</dd>
+						
+						</dl>
 					
 					
 					
 					
 					
+					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd></dd>
+						
+							<dd></dd>
+						
+							<dd></dd>
+						
+							<dd></dd>
+						
+						</dl>
 					
 
 			</div>

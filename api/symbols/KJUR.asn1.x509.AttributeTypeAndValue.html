@@ -491,7 +491,9 @@ ul.inheritsList
 								<b><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html#constructor">KJUR.asn1.x509.AttributeTypeAndValue</a></b>(params)
 							</div>
 							<div class="description">AttributeTypeAndValue ASN.1 structure class
-</div>
+This class generates AttributeTypeAndValue defined in
+<a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
+RFC 5280 4.1.2.4</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -537,13 +539,40 @@ ul.inheritsList
 				
 				<div class="description">
 					AttributeTypeAndValue ASN.1 structure class
-
+This class generates AttributeTypeAndValue defined in
+<a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
+RFC 5280 4.1.2.4</a>.
+<pre>
+AttributeTypeAndValue ::= SEQUENCE {
+  type     AttributeType,
+  value    AttributeValue }
+AttributeType ::= OBJECT IDENTIFIER
+AttributeValue ::= ANY -- DEFINED BY AttributeType
+</pre>
+The constructor argument can have following parameters:
+<ul>
+<li>{String}type - AttributeType name or OID(ex. C,O,CN)</li>
+<li>{String}value - raw string of ASN.1 value of AttributeValue</li>
+<li>{String}ds - DirectoryString type of AttributeValue</li>
+<li>{String}rule - DirectoryString type rule (ex. "prn" or "utf8")
+set DirectoryString type automatically when "ds" not specified.</li>
+<li>{String}str - AttributeTypeAndVale string (ex. "C=US").
+When type and value don't exists, 
+this "str" will be converted to "type" and "value".
+</li>
+</ul>
+<br
+NOTE: Parameters "type", "value,", "ds" and "rule" have
+been supported since jsrsasign 9.0.0 asn1x509 2.0.0.
 					
 				</div>
 				
 				
 				
-				<pre class="code"></pre>
+				<pre class="code">new KJUR.asn1.x509.AttributeTypeAndValue({type:'C',value:'US',ds:'prn'})
+new KJUR.asn1.x509.AttributeTypeAndValue({str:'O=T1'})
+new KJUR.asn1.x509.AttributeTypeAndValue({str:'O=T1',rule='prn'})
+new KJUR.asn1.x509.AttributeTypeAndValue({str:'O=T1',rule='utf8'})</pre>
 				
 				
 				
@@ -556,7 +585,7 @@ ul.inheritsList
 								<span class="light fixedFont">{Array}</span>  <b>params</b>
 								
 							</dt>
-								<dd>associative array of parameters (ex. {'str': 'C=US'})</dd>
+								<dd>JSON object for parameters (ex. {str: 'C=US'})</dd>
 						
 						</dl>
 					
@@ -574,6 +603,8 @@ ul.inheritsList
 							<dd><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></dd>
 						
 							<dd><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html">KJUR.asn1.x509.AttributeTypeAndValue</a></dd>
+						
+							<dd><a href="../symbols/X509.html#getAttrTypeAndValue">X509#getAttrTypeAndValue</a></dd>
 						
 						</dl>
 					

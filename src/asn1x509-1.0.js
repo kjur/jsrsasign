@@ -1,4 +1,4 @@
-/* asn1x509-1.1.12.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-2.0.0.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.23 asn1x509 1.1.12 (2020-Apr-06)
+ * @version jsrsasign 9.0.0 asn1x509 2.0.0 (2020-Aug-12)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -95,124 +95,164 @@ if (typeof KJUR.asn1.x509 == "undefined" || !KJUR.asn1.x509) KJUR.asn1.x509 = {}
  * X.509 Certificate class to sign and generate hex encoded certificate
  * @name KJUR.asn1.x509.Certificate
  * @class X.509 Certificate class to sign and generate hex encoded certificate
- * @param {Array} params associative array of parameters (ex. {'tbscertobj': obj, 'prvkeyobj': key})
+ * @param {Array} params JSON object for Certificate parameters
  * @extends KJUR.asn1.ASN1Object
  * @description
  * <br/>
- * As for argument 'params' for constructor, you can specify one of
- * following properties:
+ * This class provides Certificate ASN.1 class structure
+ * defined in 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.1">
+ * RFC 5280 4.1</a>.
+ * <pre>
+ * Certificate  ::=  SEQUENCE  {
+ *      tbsCertificate       TBSCertificate,
+ *      signatureAlgorithm   AlgorithmIdentifier,
+ *      signatureValue       BIT STRING  }
+ * </pre>
+ * Parameter "params" JSON object can be
+ * the samme as {@link KJUR.asn1.x509.TBSCertificate}. 
+ * Then they are used to generate TBSCertificate.
+ * Additionally just for Certificate, following parameters can be used:
  * <ul>
- * <li>tbscertobj - specify {@link KJUR.asn1.x509.TBSCertificate} object</li>
- * <li>prvkeyobj - specify {@link RSAKey}, {@link KJUR.crypto.ECDSA} or {@link KJUR.crypto.DSA} object for CA private key to sign the certificate</li>
+ * <li>{String}sighex - hexadecimal string for 
+ * signatureValue field.</li>
+ * <li>{Object}cakey - RSA/DSA/ECC private key object or 
+ * PEM file which can be passed to {@link KEYUTIL.getKey}.
+ * When "sighex" is not specified and "cakey" is specified,
+ * "sighex" will be automatically set by signing with
+ * "cakey" during getEncodedHex is called.</li>
+ * <li>{TBSCertfificate}tbsobj - 
+ * {@link KJUR.asn1.x509.TBSCertificate} object
+ * instead of specifying TBSCertificate parameters.</li>
  * </ul>
+ * CAUTION: APIs of this class have been totally updated without
+ * backward compatibility since jsrsasign 9.0.0.<br/>
  * NOTE1: 'params' can be omitted.<br/>
  * NOTE2: DSA/ECDSA is also supported for CA signging key from asn1x509 1.0.6.
  * @example
- * var caKey = KEYUTIL.getKey(caKeyPEM); // CA's private key
- * var cert = new KJUR.asn1x509.Certificate({'tbscertobj': tbs, 'prvkeyobj': caKey});
- * cert.sign(); // issue certificate by CA's private key
- * var certPEM = cert.getPEMString();
+ * var cert = new KJUR.asn1x509.Certificate({
+ *  version: 3,
+ *  serial: {hex: "1234..."},
+ *  sigalg: "SHA256withRSAandMGF1",
+ *  ...
+ *  sighex: "1d3f..." // sign() method won't be called
+ * });
  *
- * // Certificate  ::=  SEQUENCE  {
- * //     tbsCertificate       TBSCertificate,
- * //     signatureAlgorithm   AlgorithmIdentifier,
- * //     signature            BIT STRING  }
+ * // sighex will by calculated by signing with cakey
+ * var cert = new KJUR.asn1x509.Certificate({
+ *  version: 3,
+ *  serial: {hex: "2345..."},
+ *  sigalg: "SHA256withRSA",
+ *  ...
+ *  cakey: "-----BEGIN PRIVATE KEY..."
+ * });
+ *
+ * // use TBSCertificate object to sign
+ * var cert = new KJUR.asn1x509.Certificate({
+ *  tbsobj: <<OBJ>>,
+ *  sigalg: "SHA256withRSA",
+ *  cakey: "-----BEGIN PRIVATE KEY..."
+ * });
  */
 KJUR.asn1.x509.Certificate = function(params) {
     KJUR.asn1.x509.Certificate.superclass.constructor.call(this);
-    var asn1TBSCert = null,
-	asn1SignatureAlg = null,
-	asn1Sig = null,
-	hexSig = null,
-        prvKey = null,
-	_KJUR = KJUR,
-	_KJUR_crypto = _KJUR.crypto,
+    var _KJUR = KJUR,
 	_KJUR_asn1 = _KJUR.asn1,
+	_DERBitString = _KJUR_asn1.DERBitString,
 	_DERSequence = _KJUR_asn1.DERSequence,
-	_DERBitString = _KJUR_asn1.DERBitString;
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_TBSCertificate = _KJUR_asn1_x509.TBSCertificate,
+	_AlgorithmIdentifier = _KJUR_asn1_x509.AlgorithmIdentifier;
+
+    this.params = undefined;
 
     /**
-     * sign TBSCertificate and set signature value internally
+     * set parameter<br/>
+     * @name setByParam
+     * @memberOf KJUR.asn1.x509.Certificate#
+     * @function
+     * @param params {Array} JSON object of certificate parameters
+     * @since jsrsasign 9.0.0 asn1hex 2.0.0
+     * @description
+     * This method will set parameter to this object.
+     * @example
+     * cert = new KJUR.asn1.x509.Certificate();
+     * cert.setByParam({
+     *   version: 3,
+     *   serial: {hex: "1234..."},
+     *   ...
+     * });
+     */
+    this.setByParam = function(params) {
+	this.params = params;
+    };
+
+    /**
+     * sign certificate <br/>
      * @name sign
      * @memberOf KJUR.asn1.x509.Certificate#
      * @function
      * @description
+     * This method signs TBSCertificate with a specified 
+     * private key and algorithm by 
+     * this.params.cakey and this.params.sigalg parameter.
      * @example
-     * var cert = new KJUR.asn1.x509.Certificate({tbscertobj: tbs, prvkeyobj: prvKey});
-     * cert.sign();
+     * cert = new KJUR.asn1.x509.Certificate({...});
+     * cert.sign()
+     * "-----BEGIN CERTIFICATE-----\r\n..."
      */
     this.sign = function() {
-        this.asn1SignatureAlg = this.asn1TBSCert.asn1SignatureAlg;
-	
-        var sig = new KJUR.crypto.Signature({alg: this.asn1SignatureAlg.nameAlg});
-        sig.init(this.prvKey);
-        sig.updateHex(this.asn1TBSCert.getEncodedHex());
-        this.hexSig = sig.sign();
-
-        this.asn1Sig = new _DERBitString({'hex': '00' + this.hexSig});
-
-        var seq = new _DERSequence({'array': [this.asn1TBSCert,
-                                              this.asn1SignatureAlg,
-                                              this.asn1Sig]});
-        this.hTLV = seq.getEncodedHex();
-        this.isModified = false;
-    };
-
-    /**
-     * set signature value internally by hex string
-     * @name setSignatureHex
-     * @memberOf KJUR.asn1.x509.Certificate#
-     * @function
-     * @since asn1x509 1.0.8
-     * @description
-     * @example
-     * var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbs});
-     * cert.setSignatureHex('01020304');
-     */
-    this.setSignatureHex = function(sigHex) {
-        this.asn1SignatureAlg = this.asn1TBSCert.asn1SignatureAlg;
-        this.hexSig = sigHex;
-        this.asn1Sig = new _DERBitString({'hex': '00' + this.hexSig});
-
-        var seq = new _DERSequence({'array': [this.asn1TBSCert,
-                                              this.asn1SignatureAlg,
-                                              this.asn1Sig]});
-        this.hTLV = seq.getEncodedHex();
-        this.isModified = false;
-    };
-
-    this.getEncodedHex = function() {
-        if (this.isModified == false && this.hTLV != null) return this.hTLV;
-        throw "not signed yet";
+	var hTBSC = (new _TBSCertificate(this.params)).getEncodedHex();
+	var sig = new KJUR.crypto.Signature({alg: this.params.sigalg});
+	sig.init(this.params.cakey);
+	sig.updateHex(hTBSC);
+	var sighex = sig.sign();
+	this.params.sighex = sighex;
     };
 
     /**
      * get PEM formatted certificate string after signed
-     * @name getPEMString
+     * @name getPEM
      * @memberOf KJUR.asn1.x509.Certificate#
      * @function
      * @return PEM formatted string of certificate
+     * @since jsrsasign 9.0.0 asn1hex 2.0.0
      * @description
+     * This method returns a string of PEM formatted 
+     * certificate.
      * @example
-     * var cert = new KJUR.asn1.x509.Certificate({'tbscertobj': tbs, 'prvkeyobj': prvKey});
-     * cert.sign();
-     * var sPEM = cert.getPEMString();
+     * cert = new KJUR.asn1.x509.Certificate({...});
+     * cert.getPEM() &rarr;
+     * "-----BEGIN CERTIFICATE-----\r\n..."
      */
-    this.getPEMString = function() {
-	var pemBody = hextob64nl(this.getEncodedHex());
-        return "-----BEGIN CERTIFICATE-----\r\n" + 
-	    pemBody + 
-	    "\r\n-----END CERTIFICATE-----\r\n";
+    this.getPEM = function() {
+	return hextopem(this.getEncodedHex(), "CERTIFICATE");
     };
 
-    if (params !== undefined) {
-        if (params.tbscertobj !== undefined) {
-            this.asn1TBSCert = params.tbscertobj;
-        }
-        if (params.prvkeyobj !== undefined) {
-            this.prvKey = params.prvkeyobj;
-        }
-    }
+    this.getEncodedHex = function() {
+	var params = this.params;
+	
+	if (params.tbsobj == undefined) {
+	    params.tbsobj = new _TBSCertificate(params);
+	}
+
+	if (params.sighex == undefined && params.cakey != undefined) {
+	    this.sign();
+	}
+
+	if (params.sighex == undefined) {
+	    throw new Error("sighex or cakey parameter not defined");
+	}
+
+	var a = [];
+	a.push(params.tbsobj);
+	a.push(new _AlgorithmIdentifier({name: params.sigalg}));
+	a.push(new _DERBitString({hex: "00" + params.sighex}));
+	var seq = new _DERSequence({array: a});
+	return seq.getEncodedHex();
+    };
+
+    if (params != undefined) this.params = params;
 };
 YAHOO.lang.extend(KJUR.asn1.x509.Certificate, KJUR.asn1.ASN1Object);
 
@@ -220,263 +260,172 @@ YAHOO.lang.extend(KJUR.asn1.x509.Certificate, KJUR.asn1.ASN1Object);
  * ASN.1 TBSCertificate structure class
  * @name KJUR.asn1.x509.TBSCertificate
  * @class ASN.1 TBSCertificate structure class
- * @param {Array} params associative array of parameters (ex. {})
+ * @param {Array} params JSON object of TBSCertificate parameters
  * @extends KJUR.asn1.ASN1Object
+ *
  * @description
  * <br/>
- * <h4>EXAMPLE</h4>
+ * NOTE: TBSCertificate class is updated without backward 
+ * compatibility from jsrsasign 9.0.0 asn1x509 2.0.0.
+ * Most of methods are removed and parameters can be set
+ * by JSON object.
+ *
  * @example
- *  var o = new KJUR.asn1.x509.TBSCertificate();
- *  o.setSerialNumberByParam({'int': 4});
- *  o.setSignatureAlgByParam({'name': 'SHA1withRSA'});
- *  o.setIssuerByParam({'str': '/C=US/O=a'});
- *  o.setNotBeforeByParam({'str': '130504235959Z'});
- *  o.setNotAfterByParam({'str': '140504235959Z'});
- *  o.setSubjectByParam({'str': '/C=US/CN=b'});
- *  o.setSubjectPublicKey(rsaPubKey);
- *  o.appendExtension(new KJUR.asn1.x509.BasicConstraints({'cA':true}));
- *  o.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));
+ * new TBSCertificate({
+ *  version: 3, // this can be omitted, the default is 3.
+ *  serial: {hex: "1234..."}, // DERInteger parameter
+ *  sigalg: "SHA256withRSA",
+ *  issuer: {array:[[{type:'O',value:'Test',ds:'prn'}]]}, // X500Name parameter
+ *  notbefore: "151231235959Z", // string, passed to Time
+ *  notafter: "251231235959Z", // string, passed to Time
+ *  subject: {array:[[{type:'O',value:'Test',ds:'prn'}]]}, // X500Name parameter
+ *  sbjpubkey: "-----BEGIN...", // KEYUTIL.getKey pubkey parameter
+ *  // As for extension parameters, please see extension class
+ *  // All extension parameters need to have "extname" parameter additionaly.
+ *  ext:[{ 
+ *   extname:"keyUsage",critical:true,
+ *   names:["digitalSignature","keyEncipherment"]
+ *  },{
+ *   extname:"cRLDistributionPoints",
+ *   array:[{dpname:{full:[{uri:"http://example.com/a1.crl"}]}}]
+ *  }, ...]
+ * })
+ *
+ * var tbsc = new TBSCertificate();
+ * tbsc.setByParam({version:3,serial:{hex:'1234...'},...});
  */
 KJUR.asn1.x509.TBSCertificate = function(params) {
     KJUR.asn1.x509.TBSCertificate.superclass.constructor.call(this);
-
     var _KJUR = KJUR,
 	_KJUR_asn1 = _KJUR.asn1,
-	_DERSequence = _KJUR_asn1.DERSequence,
-	_DERInteger = _KJUR_asn1.DERInteger,
-	_DERTaggedObject = _KJUR_asn1.DERTaggedObject,
 	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_DERTaggedObject = _KJUR_asn1.DERTaggedObject,
+	_DERInteger = _KJUR_asn1.DERInteger,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_AlgorithmIdentifier = _KJUR_asn1_x509.AlgorithmIdentifier,
 	_Time = _KJUR_asn1_x509.Time,
 	_X500Name = _KJUR_asn1_x509.X500Name,
 	_SubjectPublicKeyInfo = _KJUR_asn1_x509.SubjectPublicKeyInfo;
 
-    this._initialize = function() {
-        this.asn1Array = new Array();
-
-        this.asn1Version =
-            new _DERTaggedObject({'obj': new _DERInteger({'int': 2})});
-        this.asn1SerialNumber = null;
-        this.asn1SignatureAlg = null;
-        this.asn1Issuer = null;
-        this.asn1NotBefore = null;
-        this.asn1NotAfter = null;
-        this.asn1Subject = null;
-        this.asn1SubjPKey = null;
-        this.extensionsArray = new Array();
-    };
+    this.params = null;
 
     /**
-     * set serial number field by parameter
-     * @name setSerialNumberByParam
+     * get array of ASN.1 object for extensions<br/>
+     * @name setByParam
      * @memberOf KJUR.asn1.x509.TBSCertificate#
      * @function
-     * @param {Array} intParam DERInteger param
-     * @description
+     * @param {Array} JSON object of TBSCertificate parameters
      * @example
-     * tbsc.setSerialNumberByParam({'int': 3});
+     * tbsc = new KJUR.asn1.x509.TBSCertificate();
+     * tbsc.setByParam({version:3, serial:{hex:'1234...'},...});
      */
-    this.setSerialNumberByParam = function(intParam) {
-        this.asn1SerialNumber = new _DERInteger(intParam);
+    this.setByParam = function(params) {
+	this.params = params;
     };
 
     /**
-     * set signature algorithm field by parameter
-     * @name setSignatureAlgByParam
+     * get ASN.1 object for extensions<br/>
+     * @name getExtDERSequence
      * @memberOf KJUR.asn1.x509.TBSCertificate#
      * @function
-     * @param {Array} algIdParam AlgorithmIdentifier parameter
-     * @see {@link KJUR.asn1.x509.AlgorithmIdentifier}
+     * @param {Array} aExt array of certificate extension parameters (OPTIONAL)
+     * @return {DERSequence} ASN.1 DERSequence of specified extensions
+     * @since jsrsasign 9.0.0 asn1x509 2.0.0
+     * @see KJUR.asn1.DERSequence
+     * @see KJUR.asn1.x509.TBSCertificate
+     * @see KJUR.asn1.x509.Certificate
+     * @see KJUR.asn1.csr.CertificationRequestInfo
      * @description
+     * This method returns DERSequence object of certificate 
+     * extensions. 
+     * <br/>
+     * When argument "aExt" is not specified,
+     * internal parameter "params.ext" of TBSCertificate 
+     * will be referred.
+     * Specifying "aExt" can be used for
+     * {@link KJUR.asn1.csr.CertificationRequestInfo}.
      * @example
-     * tbsc.setSignatureAlgByParam({'name': 'SHA1withRSA'});
+     * // get DERSequence of extensions from TBSCertificate object
+     * tbsc = new KJUR.asn1.x509.TBSCertificate({version:3,...,ext:[...]});
+     * tbsc.getExtDERSequence &rarr; DERSequence object of extensions
+     * 
+     * // get DERSequence of extensions by the argument
+     * tbsc = new KJUR.asn1.x509.TBSCertificate();
+     * tbsc.getExtDERSequence([{extname:"subjectAltName"...}...]) &rarr;
+     * DERSequence by specified array of extension parameters
      */
-    this.setSignatureAlgByParam = function(algIdParam) {
-        this.asn1SignatureAlg = new _KJUR_asn1_x509.AlgorithmIdentifier(algIdParam);
-    };
+    this.getExtDERSequence = function(aExt) {
+	if (aExt === undefined &&
+	    this.params !== null &&
+	    this.params.ext !== undefined) {
+	    aExt = this.params.ext;
+	}
+	var a = [];
+	for (var i = 0; i < aExt.length; i++) {
+	    var param = aExt[i];
+	    var extname = param.extname;
+	    var obj = null;
 
-    /**
-     * set issuer name field by parameter
-     * @name setIssuerByParam
-     * @memberOf KJUR.asn1.x509.TBSCertificate#
-     * @function
-     * @param {Array} x500NameParam X500Name parameter
-     * @description
-     * @example
-     * tbsc.setIssuerParam({'str': '/C=US/CN=b'});
-     * @see KJUR.asn1.x509.X500Name
-     */
-    this.setIssuerByParam = function(x500NameParam) {
-        this.asn1Issuer = new _X500Name(x500NameParam);
-    };
+	    if (extname == "subjectKeyIdentifier") {
+		obj = new _KJUR_asn1_x509.SubjectKeyIdentifier(param);
+	    } else if (extname == "keyUsage") {
+		obj = new _KJUR_asn1_x509.KeyUsage(param);
+	    } else if (extname == "subjectAltName") {
+		obj = new _KJUR_asn1_x509.SubjectAltName(param);
+	    } else if (extname == "issuerAltName") {
+		obj = new _KJUR_asn1_x509.IssuerAltName(param);
+	    } else if (extname == "basicConstraints") {
+		obj = new _KJUR_asn1_x509.BasicConstraints(param);
+	    } else if (extname == "cRLDistributionPoints") {
+		obj = new _KJUR_asn1_x509.CRLDistributionPoints(param);
+	    } else if (extname == "certificatePolicies") {
+		obj = new _KJUR_asn1_x509.CertificatePolicies(param);
+	    } else if (extname == "authorityKeyIdentifier") {
+		obj = new _KJUR_asn1_x509.AuthorityKeyIdentifier(param);
+	    } else if (extname == "extKeyUsage") {
+		obj = new _KJUR_asn1_x509.ExtKeyUsage(param);
+	    } else if (extname == "authorityInfoAccess") {
+		obj = new _KJUR_asn1_x509.AuthorityInfoAccess(param);
+	    } else {
+		throw new Error("extension not supported:"
+				+ JSON.stringify(param));
+	    }
+	    if (obj != null) a.push(obj);
+	}
 
-    /**
-     * set notBefore field by parameter
-     * @name setNotBeforeByParam
-     * @memberOf KJUR.asn1.x509.TBSCertificate#
-     * @function
-     * @param {Array} timeParam Time parameter
-     * @description
-     * @example
-     * tbsc.setNotBeforeByParam({'str': '130508235959Z'});
-     * @see KJUR.asn1.x509.Time
-     */
-    this.setNotBeforeByParam = function(timeParam) {
-        this.asn1NotBefore = new _Time(timeParam);
-    };
-
-    /**
-     * set notAfter field by parameter
-     * @name setNotAfterByParam
-     * @memberOf KJUR.asn1.x509.TBSCertificate#
-     * @function
-     * @param {Array} timeParam Time parameter
-     * @description
-     * @example
-     * tbsc.setNotAfterByParam({'str': '130508235959Z'});
-     * @see KJUR.asn1.x509.Time
-     */
-    this.setNotAfterByParam = function(timeParam) {
-        this.asn1NotAfter = new _Time(timeParam);
-    };
-
-    /**
-     * set subject name field by parameter
-     * @name setSubjectByParam
-     * @memberOf KJUR.asn1.x509.TBSCertificate#
-     * @function
-     * @param {Array} x500NameParam X500Name parameter
-     * @description
-     * @example
-     * tbsc.setSubjectParam({'str': '/C=US/CN=b'});
-     * @see KJUR.asn1.x509.X500Name
-     */
-    this.setSubjectByParam = function(x500NameParam) {
-        this.asn1Subject = new _X500Name(x500NameParam);
-    };
-
-    /**
-     * set subject public key info field by key object
-     * @name setSubjectPublicKey
-     * @memberOf KJUR.asn1.x509.TBSCertificate#
-     * @function
-     * @param {Array} param {@link KJUR.asn1.x509.SubjectPublicKeyInfo} class constructor parameter
-     * @description
-     * @example
-     * tbsc.setSubjectPublicKey(keyobj);
-     * @see KJUR.asn1.x509.SubjectPublicKeyInfo
-     */
-    this.setSubjectPublicKey = function(param) {
-        this.asn1SubjPKey = new _SubjectPublicKeyInfo(param);
-    };
-
-    /**
-     * set subject public key info by RSA/ECDSA/DSA key parameter
-     * @name setSubjectPublicKeyByGetKey
-     * @memberOf KJUR.asn1.x509.TBSCertificate
-     * @function
-     * @param {Object} keyParam public key parameter which passed to {@link KEYUTIL.getKey} argument
-     * @description
-     * @example
-     * tbsc.setSubjectPublicKeyByGetKeyParam(certPEMString); // or
-     * tbsc.setSubjectPublicKeyByGetKeyParam(pkcs8PublicKeyPEMString); // or
-     * tbsc.setSubjectPublicKeyByGetKeyParam(kjurCryptoECDSAKeyObject); // et.al.
-     * @see KJUR.asn1.x509.SubjectPublicKeyInfo
-     * @see KEYUTIL.getKey
-     * @since asn1x509 1.0.6
-     */
-    this.setSubjectPublicKeyByGetKey = function(keyParam) {
-        var keyObj = KEYUTIL.getKey(keyParam);
-        this.asn1SubjPKey = new _SubjectPublicKeyInfo(keyObj);
-    };
-
-    /**
-     * append X.509v3 extension to this object
-     * @name appendExtension
-     * @memberOf KJUR.asn1.x509.TBSCertificate#
-     * @function
-     * @param {Extension} extObj X.509v3 Extension object
-     * @description
-     * @example
-     * tbsc.appendExtension(new KJUR.asn1.x509.BasicConstraints({'cA':true, 'critical': true}));
-     * tbsc.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));
-     * @see KJUR.asn1.x509.Extension
-     */
-    this.appendExtension = function(extObj) {
-        this.extensionsArray.push(extObj);
-    };
-
-    /**
-     * append X.509v3 extension to this object by name and parameters
-     * @name appendExtensionByName
-     * @memberOf KJUR.asn1.x509.TBSCertificate#
-     * @function
-     * @param {name} name name of X.509v3 Extension object
-     * @param {Array} extParams parameters as argument of Extension constructor.
-     * @description
-     * This method adds a X.509v3 extension specified by name 
-     * and extParams to internal extension array of X.509v3 extension objects.
-     * Here is supported names of extension:
-     * <ul>
-     * <li>BasicConstraints - {@link KJUR.asn1.x509.BasicConstraints}</li>
-     * <li>KeyUsage - {@link KJUR.asn1.x509.KeyUsage}</li>
-     * <li>CRLDistributionPoints - {@link KJUR.asn1.x509.CRLDistributionPoints}</li>
-     * <li>CertificatePolicies - {@link KJUR.asn1.x509.CertificatePolicies}</li>
-     * <li>ExtKeyUsage - {@link KJUR.asn1.x509.ExtKeyUsage}</li>
-     * <li>AuthorityKeyIdentifier - {@link KJUR.asn1.x509.AuthorityKeyIdentifier}</li>
-     * <li>SubjectKeyIdentifier - {@link KJUR.asn1.x509.SubjectKeyIdentifier}</li>
-     * <li>AuthorityInfoAccess - {@link KJUR.asn1.x509.AuthorityInfoAccess}</li>
-     * <li>SubjectAltName - {@link KJUR.asn1.x509.SubjectAltName}</li>
-     * <li>IssuerAltName - {@link KJUR.asn1.x509.IssuerAltName}</li>
-     * <li>CertificatePolicies - {@link KJUR.asn1.x509.CertificatePolicies}</li>
-     * </ul>
-     * @example
-     * var o = new KJUR.asn1.x509.TBSCertificate();
-     * o.appendExtensionByName('BasicConstraints', {'cA':true, 'critical': true});
-     * o.appendExtensionByName('KeyUsage', {'bin':'11'});
-     * o.appendExtensionByName('CRLDistributionPoints', {uri: 'http://aaa.com/a.crl'});
-     * o.appendExtensionByName('ExtKeyUsage', {array: [{name: 'clientAuth'}]});
-     * o.appendExtensionByName('AuthorityKeyIdentifier', {kid: '1234ab..'});
-     * o.appendExtensionByName('SubjectKeyIdentifier', {kid: '1234ab..'});
-     * o.appendExtensionByName('AuthorityInfoAccess', {array: [{accessMethod:{oid:...},accessLocation:{uri:...}}]});
-     * @see KJUR.asn1.x509.Extension
-     */
-    this.appendExtensionByName = function(name, extParams) {
-	KJUR.asn1.x509.Extension.appendByNameToArray(name,
-						     extParams,
-						     this.extensionsArray);
+	return new _DERSequence({array: a});
     };
 
     this.getEncodedHex = function() {
-        if (this.asn1NotBefore == null || this.asn1NotAfter == null)
-            throw "notBefore and/or notAfter not set";
-        var asn1Validity =
-            new _DERSequence({'array':[this.asn1NotBefore, this.asn1NotAfter]});
+	var a = [];
+	var params = this.params;
 
-        this.asn1Array = new Array();
+	// X.509v3 default if params.version not defined
+	if (params.version != undefined || params.version != 1) {
+	    var version = 2; 
+	    if (params.version != undefined) version = params.version - 1;
+	    var obj = 
+		new _DERTaggedObject({obj: new _DERInteger({'int': version})}) 
+	    a.push(obj);
+	}
 
-        this.asn1Array.push(this.asn1Version);
-        this.asn1Array.push(this.asn1SerialNumber);
-        this.asn1Array.push(this.asn1SignatureAlg);
-        this.asn1Array.push(this.asn1Issuer);
-        this.asn1Array.push(asn1Validity);
-        this.asn1Array.push(this.asn1Subject);
-        this.asn1Array.push(this.asn1SubjPKey);
+	a.push(new _DERInteger(params.serial));
+	a.push(new _AlgorithmIdentifier({name: params.sigalg}));
+	a.push(new _X500Name(params.issuer));
+	a.push(new _DERSequence({array:[new _Time({str: params.notbefore}),
+					new _Time({str: params.notafter})]}));
+	a.push(new _X500Name(params.subject));
+	a.push(new _SubjectPublicKeyInfo(KEYUTIL.getKey(params.sbjpubkey)));
+	if (params.ext !== undefined && params.ext.length > 0) {
+	    a.push(new _DERTaggedObject({tag: "a3",
+					 obj: this.getExtDERSequence()}));
+	}
 
-        if (this.extensionsArray.length > 0) {
-            var extSeq = new _DERSequence({"array": this.extensionsArray});
-            var extTagObj = new _DERTaggedObject({'explicit': true,
-                                                  'tag': 'a3',
-                                                  'obj': extSeq});
-            this.asn1Array.push(extTagObj);
-        }
-
-        var o = new _DERSequence({"array": this.asn1Array});
-        this.hTLV = o.getEncodedHex();
-        this.isModified = false;
-        return this.hTLV;
+	var seq = new KJUR.asn1.DERSequence({array: a});
+	return seq.getEncodedHex();
     };
 
-    this._initialize();
+    if (params !== undefined) this.setByParam(params);
 };
 YAHOO.lang.extend(KJUR.asn1.x509.TBSCertificate, KJUR.asn1.ASN1Object);
 
@@ -491,11 +440,13 @@ YAHOO.lang.extend(KJUR.asn1.x509.TBSCertificate, KJUR.asn1.ASN1Object);
  * @param {Array} params associative array of parameters (ex. {'critical': true})
  * @extends KJUR.asn1.ASN1Object
  * @description
+ * <pre>
+ * Extension  ::=  SEQUENCE  {
+ *     extnID      OBJECT IDENTIFIER,
+ *     critical    BOOLEAN DEFAULT FALSE,
+ *     extnValue   OCTET STRING  }
+ * </pre>
  * @example
- * // Extension  ::=  SEQUENCE  {
- * //     extnID      OBJECT IDENTIFIER,
- * //     critical    BOOLEAN DEFAULT FALSE,
- * //     extnValue   OCTET STRING  }
  */
 KJUR.asn1.x509.Extension = function(params) {
     KJUR.asn1.x509.Extension.superclass.constructor.call(this);
@@ -530,65 +481,6 @@ KJUR.asn1.x509.Extension = function(params) {
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.Extension, KJUR.asn1.ASN1Object);
-
-/**
- * append X.509v3 extension to any specified array<br/>
- * @name appendByNameToArray
- * @memberOf KJUR.asn1.x509.Extension
- * @function
- * @param {String} name X.509v3 extension name
- * @param {Object} extParams associative array of extension parameters
- * @param {Array} a array to add specified extension
- * @see KJUR.asn1.x509.Extension
- * @since jsrsasign 6.2.3 asn1x509 1.0.19
- * @description
- * This static function add a X.509v3 extension specified by name and extParams to
- * array 'a' so that 'a' will be an array of X.509v3 extension objects.
- * See {@link KJUR.asn1.x509.TBSCertificate#appendExtensionByName}
- * for supported names of extensions.
- * @example
- * var a = new Array();
- * KJUR.asn1.x509.Extension.appendByNameToArray("BasicConstraints", {'cA':true, 'critical': true}, a);
- * KJUR.asn1.x509.Extension.appendByNameToArray("KeyUsage", {'bin':'11'}, a);
- */
-KJUR.asn1.x509.Extension.appendByNameToArray = function(name, extParams, a) {
-    var _lowname = name.toLowerCase(),
-	_KJUR_asn1_x509 = KJUR.asn1.x509;
-    
-    if (_lowname == "basicconstraints") {
-        var extObj = new _KJUR_asn1_x509.BasicConstraints(extParams);
-        a.push(extObj);
-    } else if (_lowname == "keyusage") {
-        var extObj = new _KJUR_asn1_x509.KeyUsage(extParams);
-        a.push(extObj);
-    } else if (_lowname == "crldistributionpoints") {
-        var extObj = new _KJUR_asn1_x509.CRLDistributionPoints(extParams);
-        a.push(extObj);
-    } else if (_lowname == "extkeyusage") {
-        var extObj = new _KJUR_asn1_x509.ExtKeyUsage(extParams);
-        a.push(extObj);
-    } else if (_lowname == "authoritykeyidentifier") {
-        var extObj = new _KJUR_asn1_x509.AuthorityKeyIdentifier(extParams);
-        a.push(extObj);
-    } else if (_lowname == "subjectkeyidentifier") {
-        var extObj = new _KJUR_asn1_x509.SubjectKeyIdentifier(extParams);
-        a.push(extObj);
-    } else if (_lowname == "authorityinfoaccess") {
-        var extObj = new _KJUR_asn1_x509.AuthorityInfoAccess(extParams);
-        a.push(extObj);
-    } else if (_lowname == "subjectaltname") {
-        var extObj = new _KJUR_asn1_x509.SubjectAltName(extParams);
-        a.push(extObj);
-    } else if (_lowname == "issueraltname") {
-        var extObj = new _KJUR_asn1_x509.IssuerAltName(extParams);
-        a.push(extObj);
-    } else if (_lowname == "certificatepolicies") {
-        var extObj = new _KJUR_asn1_x509.CertificatePolicies(extParams);
-        a.push(extObj);
-    } else {
-        throw new Error("unsupported extension name: " + name);
-    }
-};
 
 /**
  * KeyUsage ASN.1 structure class
@@ -652,22 +544,48 @@ YAHOO.lang.extend(KJUR.asn1.x509.KeyUsage, KJUR.asn1.x509.Extension);
  * BasicConstraints ASN.1 structure class
  * @name KJUR.asn1.x509.BasicConstraints
  * @class BasicConstraints ASN.1 structure class
- * @param {Array} params associative array of parameters (ex. {'cA': true, 'critical': true})
+ * @param {Array} params JSON object for parameters (ex. {cA:true,critical:true})
  * @extends KJUR.asn1.x509.Extension
+ * @see {@link X509#getExtBasicConstraints}
  * @description
+ * This class represents 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.9">
+ * BasicConstraints extension defined in RFC 5280 4.2.1.9</a>.
+ * <pre>
+ *  id-ce-basicConstraints OBJECT IDENTIFIER ::=  { id-ce 19 }
+ *  BasicConstraints ::= SEQUENCE {
+ *       cA                      BOOLEAN DEFAULT FALSE,
+ *       pathLenConstraint       INTEGER (0..MAX) OPTIONAL }
+ * </pre>
+ * Its constructor can have following parameters:
+ * <ul>
+ * <li>{Boolean}cA - cA flag</li>
+ * <li>{Integer}pathLen - pathLen field value</li>
+ * <li>{Boolean}critical - critical flag</li>
+ * </ul>
  * @example
+ * new KJUR.asn1.x509.BasicConstraints({
+ *   cA: true,
+ *   pathLen: 3,
+ *   critical: true
+ * })
  */
 KJUR.asn1.x509.BasicConstraints = function(params) {
     KJUR.asn1.x509.BasicConstraints.superclass.constructor.call(this, params);
+    var _KJUR_asn1 = KJUR.asn1,
+	_DERBoolean = _KJUR_asn1.DERBoolean,
+	_DERInteger = _KJUR_asn1.DERInteger,
+	_DERSequence = _KJUR_asn1.DERSequence;
+
     var cA = false;
     var pathLen = -1;
 
     this.getExtnValueHex = function() {
         var asn1Array = new Array();
-        if (this.cA) asn1Array.push(new KJUR.asn1.DERBoolean());
+        if (this.cA) asn1Array.push(new _DERBoolean());
         if (this.pathLen > -1)
-            asn1Array.push(new KJUR.asn1.DERInteger({'int': this.pathLen}));
-        var asn1Seq = new KJUR.asn1.DERSequence({'array': asn1Array});
+            asn1Array.push(new _DERInteger({'int': this.pathLen}));
+        var asn1Seq = new _DERSequence({'array': asn1Array});
         this.asn1ExtnValue = asn1Seq;
         return this.asn1ExtnValue.getEncodedHex();
     };
@@ -692,33 +610,34 @@ YAHOO.lang.extend(KJUR.asn1.x509.BasicConstraints, KJUR.asn1.x509.Extension);
  * @class CRLDistributionPoints ASN.1 structure class
  * @param {Array} params associative array of parameters (ex. {'uri': 'http://a.com/', 'critical': true})
  * @extends KJUR.asn1.x509.Extension
+ * @see {@link X509#getExtCRLDistributionPoints}
+ * @see {@link KJUR.asn1.x509.DistributionPoint}
+ * @see {@link KJUR.asn1.x509.GeneralNames}
  * @description
+ * This class represents 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.13">
+ * CRLDistributionPoints extension defined in RFC 5280 4.2.1.13</a>.
  * <pre>
  * id-ce-cRLDistributionPoints OBJECT IDENTIFIER ::=  { id-ce 31 }
- *
  * CRLDistributionPoints ::= SEQUENCE SIZE (1..MAX) OF DistributionPoint
- *
  * DistributionPoint ::= SEQUENCE {
  *      distributionPoint       [0]     DistributionPointName OPTIONAL,
  *      reasons                 [1]     ReasonFlags OPTIONAL,
  *      cRLIssuer               [2]     GeneralNames OPTIONAL }
- *
  * DistributionPointName ::= CHOICE {
  *      fullName                [0]     GeneralNames,
  *      nameRelativeToCRLIssuer [1]     RelativeDistinguishedName }
- * 
- * ReasonFlags ::= BIT STRING {
- *      unused                  (0),
- *      keyCompromise           (1),
- *      cACompromise            (2),
- *      affiliationChanged      (3),
- *      superseded              (4),
- *      cessationOfOperation    (5),
- *      certificateHold         (6),
- *      privilegeWithdrawn      (7),
- *      aACompromise            (8) }
  * </pre>
+ * Constructor can have following parameter:
+ * <ul>
+ * <li>{Array}array - array of {@link KJUR.asn1.x509.DistributionPoint} parameter</li>
+ * <li>{Boolean}critical - critical flag</li>
+ * </ul>
  * @example
+ * new KJUR.asn1.x509.CRLDistributionPoints({
+ *   array: [{fulluri: "http://aaa.com/"}, {fulluri: "ldap://aaa.com/"}],
+ *   critical: true
+ * })
  */
 KJUR.asn1.x509.CRLDistributionPoints = function(params) {
     KJUR.asn1.x509.CRLDistributionPoints.superclass.constructor.call(this, params);
@@ -731,13 +650,20 @@ KJUR.asn1.x509.CRLDistributionPoints = function(params) {
     };
 
     this.setByDPArray = function(dpArray) {
-        this.asn1ExtnValue = new _KJUR_asn1.DERSequence({'array': dpArray});
+	var asn1Array = [];
+	for (var i = 0; i < dpArray.length; i++) {
+	    if (dpArray[i] instanceof KJUR.asn1.ASN1Object) {
+		asn1Array.push(dpArray[i]);
+	    } else {
+		var dp = new _KJUR_asn1_x509.DistributionPoint(dpArray[i]);
+		asn1Array.push(dp);
+	    }
+	}
+        this.asn1ExtnValue = new _KJUR_asn1.DERSequence({'array': asn1Array});
     };
 
     this.setByOneURI = function(uri) {
-        var gn1 = new _KJUR_asn1_x509.GeneralNames([{'uri': uri}]);
-        var dpn1 = new _KJUR_asn1_x509.DistributionPointName(gn1);
-        var dp1 = new _KJUR_asn1_x509.DistributionPoint({'dpobj': dpn1});
+        var dp1 = new _KJUR_asn1_x509.DistributionPoint({fulluri: uri});
         this.setByDPArray([dp1]);
     };
 
@@ -751,6 +677,148 @@ KJUR.asn1.x509.CRLDistributionPoints = function(params) {
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.CRLDistributionPoints, KJUR.asn1.x509.Extension);
+
+/**
+ * DistributionPoint ASN.1 structure class<br/>
+ * @name KJUR.asn1.x509.DistributionPoint
+ * @class DistributionPoint ASN.1 structure class
+ * @param {Array} params JSON object of parameters (OPTIONAL)
+ * @extends KJUR.asn1.ASN1Object
+ * @see {@link KJUR.asn1.x509.CRLDistributionPoints}
+ * @see {@link KJUR.asn1.x509.DistributionPointName}
+ * @see {@link KJUR.asn1.x509.GeneralNames}
+ * @see {@link X509#getDistributionPoint}
+ * @description
+ * This class represents 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.13">
+ * DistributionPoint defined in RFC 5280 4.2.1.13</a>.
+ * <pre>
+ * DistributionPoint ::= SEQUENCE {
+ *      distributionPoint       [0]     DistributionPointName OPTIONAL,
+ *      reasons                 [1]     ReasonFlags OPTIONAL,
+ *      cRLIssuer               [2]     GeneralNames OPTIONAL }
+ * </pre>
+ * Constructor can have following parameter:
+ * <ul>
+ * <li>{String}fulluri - uri string for fullName uri. This has the same meaning for '{dpname: {full: [{uri: "..."]}}'.</li>
+ * <li>{Array}dpname - JSON object for {@link KJUR.asn1.x509.DistributionPointName} parameters</li>
+ * <li>{DistrubutionPoint}dpobj - {@link KJUR.asn1.x509.DistributionPointName} object (DEPRECATED)</li>
+ * </ul>
+ * <br/>
+ * NOTE1: Parameter "fulluri" and "dpname" supported 
+ * since jsrsasign 9.0.0 asn1x509 2.0.0.
+ * <br/>
+ * NOTE2: The "reasons" and "cRLIssuer" fields are currently
+ * not supported.
+ * @example
+ * new KJUR.asn1.x509.DistributionPoint(
+ *   {fulluri: "http://example.com/crl1.crl"})
+ * new KJUR.asn1.x509.DistributionPoint(
+ *   {dpname: {full: [{uri: "http://example.com/crl1.crl"}]}})
+ * new KJUR.asn1.x509.DistributionPoint(
+ *   {dpobj: new DistributionPoint(...)})
+ */
+KJUR.asn1.x509.DistributionPoint = function(params) {
+    KJUR.asn1.x509.DistributionPoint.superclass.constructor.call(this);
+    var asn1DP = null,
+	_KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DistributionPointName = _KJUR_asn1.x509.DistributionPointName;
+
+    this.getEncodedHex = function() {
+        var seq = new _KJUR_asn1.DERSequence();
+        if (this.asn1DP != null) {
+            var o1 = new _KJUR_asn1.DERTaggedObject({'explicit': true,
+                                                     'tag': 'a0',
+                                                     'obj': this.asn1DP});
+            seq.appendASN1Object(o1);
+        }
+        this.hTLV = seq.getEncodedHex();
+        return this.hTLV;
+    };
+
+    if (params !== undefined) {
+        if (params.dpobj !== undefined) {
+            this.asn1DP = params.dpobj;
+        } else if (params.dpname !== undefined) {
+            this.asn1DP = new _DistributionPointName(params.dpname);
+	} else if (params.fulluri !== undefined) {
+            this.asn1DP = new _DistributionPointName({full: [{uri: params.fulluri}]});
+	}
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.x509.DistributionPoint, KJUR.asn1.ASN1Object);
+
+/**
+ * DistributionPointName ASN.1 structure class<br/>
+ * @name KJUR.asn1.x509.DistributionPointName
+ * @class DistributionPointName ASN.1 structure class
+ * @param {Array} params JSON object of parameters or GeneralNames object
+ * @extends KJUR.asn1.ASN1Object
+ * @see {@link KJUR.asn1.x509.CRLDistributionPoints}
+ * @see {@link KJUR.asn1.x509.DistributionPoint}
+ * @see {@link KJUR.asn1.x509.GeneralNames}
+ * @see {@link X509#getDistributionPointName}
+ * @description
+ * This class represents 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.13">
+ * DistributionPointName defined in RFC 5280 4.2.1.13</a>.
+ * <pre>
+ * DistributionPointName ::= CHOICE {
+ *      fullName                [0]     GeneralNames,
+ *      nameRelativeToCRLIssuer [1]     RelativeDistinguishedName }
+ * </pre>
+ * Constructor can have following parameter:
+ * <ul>
+ * <li>{String}full - JSON object parameter of {@link KJUR.asn1.x509.GeneralNames} for 'fullName' field</li>
+ * <li>{GeneralNames} - {@link KJUR.asn1.x509.GeneralNames} object for 'fullName'</li>
+ * </ul>
+ * NOTE1: 'full' parameter have been suppored since jsrsasign 9.0.0 asn1x509 2.0.0.
+ * <br>
+ * NOTE2: The 'nameRelativeToCRLIssuer' field is currently not supported.
+ * @example
+ * new KJUR.asn1.x509.DistributionPointName({full: <<GeneralNamesParameter>>})
+ * new KJUR.asn1.x509.DistributionPointName({full: [{uri: <<CDPURI>>}]})
+ * new KJUR.asn1.x509.DistributionPointName({full: [{dn: <<DN Parameter>>}]}
+ * new KJUR.asn1.x509.DistributionPointName({full: [{uri: "http://example.com/root.crl"}]})
+ * new KJUR.asn1.x509.DistributionPointName({full: [{dn {str: "/C=US/O=Test"}}]})
+ * new KJUR.asn1.x509.DistributionPointName(new GeneralNames(...))
+ */
+KJUR.asn1.x509.DistributionPointName = function(params) {
+    KJUR.asn1.x509.DistributionPointName.superclass.constructor.call(this);
+    var asn1Obj = null,
+	type = null,
+	tag = null,
+	asn1V = null,
+	_KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERTaggedObject = _KJUR_asn1.DERTaggedObject;
+
+    this.getEncodedHex = function() {
+        if (this.type != "full")
+            throw new Error("currently type shall be 'full': " + this.type);
+        this.asn1Obj = new _DERTaggedObject({'explicit': false,
+                                             'tag': this.tag,
+                                             'obj': this.asn1V});
+        this.hTLV = this.asn1Obj.getEncodedHex();
+        return this.hTLV;
+    };
+
+    if (params !== undefined) {
+        if (_KJUR_asn1.x509.GeneralNames.prototype.isPrototypeOf(params)) {
+            this.type = "full";
+            this.tag = "a0";
+            this.asn1V = params;
+	} else if (params.full !== undefined) {
+            this.type = "full";
+            this.tag = "a0";
+            this.asn1V = new _KJUR_asn1.x509.GeneralNames(params.full);
+        } else {
+            throw new Error("This class supports GeneralNames only as argument");
+        }
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.x509.DistributionPointName, KJUR.asn1.ASN1Object);
 
 /**
  * CertificatePolicies ASN.1 structure class
@@ -770,8 +838,10 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRLDistributionPoints, KJUR.asn1.x509.Extension
  * Its constructor can have following parameters:
  * <ul>
  * <li>array - array of {@link KJUR.asn1.x509.PolicyInformation} parameter</li>
- * <li>critical - boolean: critical flag
+ * <li>critical - boolean: critical flag</li>
  * </ul>
+ * NOTE: Returned JSON value format have been changed without 
+ * backward compatibility since jsrsasign 9.0.0 asn1x509 2.0.0.
  * @example
  * e1 = new KJUR.asn1.x509.CertificatePolicies({
  *   array: [
@@ -818,11 +888,12 @@ KJUR.asn1.x509.CertificatePolicies = function(params) {
 };
 YAHOO.lang.extend(KJUR.asn1.x509.CertificatePolicies, KJUR.asn1.x509.Extension);
 
+// ===== BEGIN CertificatePolicies related classes =====
 /**
  * PolicyInformation ASN.1 structure class
  * @name KJUR.asn1.x509.PolicyInformation
  * @class PolicyInformation ASN.1 structure class
- * @param {Array} params associative array of parameters
+ * @param {Array} params JSON object of parameters
  * @extends KJUR.asn1.ASN1Object
  * @since jsrsasign 8.0.23 asn1x509 1.1.12
  * @description
@@ -1137,6 +1208,7 @@ KJUR.asn1.x509.DisplayText = function(params) {
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.DisplayText, KJUR.asn1.DERAbstractString);
+// ===== END CertificatePolicies related classes =====
 
 // =====================================================================
 /**
@@ -1151,7 +1223,9 @@ YAHOO.lang.extend(KJUR.asn1.x509.DisplayText, KJUR.asn1.DERAbstractString);
  *   critical: true,
  *   array: [
  *     {oid: '2.5.29.37.0'},  // anyExtendedKeyUsage
- *     {name: 'clientAuth'}
+ *     {name: 'clientAuth'},
+ *     "1.2.3.4",
+ *     "serverAuth"
  *   ]
  * });
  * // id-ce-extKeyUsage OBJECT IDENTIFIER ::= { id-ce 37 }
@@ -1554,10 +1628,14 @@ YAHOO.lang.extend(KJUR.asn1.x509.SubjectKeyIdentifier, KJUR.asn1.x509.Extension)
  * AuthorityInfoAccess ASN.1 structure class
  * @name KJUR.asn1.x509.AuthorityInfoAccess
  * @class AuthorityInfoAccess ASN.1 structure class
- * @param {Array} params associative array of parameters
+ * @param {Array} params JSON object of AuthorityInfoAccess parameters
  * @extends KJUR.asn1.x509.Extension
  * @since asn1x509 1.0.8
+ * @see {@link X509#getExtAuthorityInfoAccess}
  * @description
+ * This class represents 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.2.1">
+ * AuthorityInfoAccess extension defined in RFC 5280 4.2.2.1</a>.
  * <pre>
  * id-pe OBJECT IDENTIFIER  ::=  { id-pkix 1 }
  * id-pe-authorityInfoAccess OBJECT IDENTIFIER ::= { id-pe 1 }
@@ -1570,30 +1648,50 @@ YAHOO.lang.extend(KJUR.asn1.x509.SubjectKeyIdentifier, KJUR.asn1.x509.Extension)
  * id-ad-caIssuers OBJECT IDENTIFIER ::= { id-ad 2 }
  * id-ad-ocsp OBJECT IDENTIFIER ::= { id-ad 1 }
  * </pre>
+ * NOTE: Acceptable parameters have been changed since
+ * from jsrsasign 9.0.0 asn1x509 2.0.0.
+ * Parameter generated by {@link X509#getAuthorityInfoAccess}
+ * can be accepted as a argument of this constructor.
  * @example
  * e1 = new KJUR.asn1.x509.AuthorityInfoAccess({
- *   array: [{
- *     accessMethod:{'oid': '1.3.6.1.5.5.7.48.1'},
- *     accessLocation:{'uri': 'http://ocsp.cacert.org'}
- *   }]
+ *   array: [
+ *     {ocsp: 'http://ocsp.example.org'},
+ *     {caissuer: 'https://repository.example.org/aaa.crt'}
+ *   ]
  * });
  */
 KJUR.asn1.x509.AuthorityInfoAccess = function(params) {
     KJUR.asn1.x509.AuthorityInfoAccess.superclass.constructor.call(this, params);
 
-    this.setAccessDescriptionArray = function(accessDescriptionArray) {
-        var array = new Array(),
+    this.setAccessDescriptionArray = function(aParam) {
+        var aASN1 = new Array(),
 	    _KJUR = KJUR,
 	    _KJUR_asn1 = _KJUR.asn1,
-	    _DERSequence = _KJUR_asn1.DERSequence;
+	    _DERSequence = _KJUR_asn1.DERSequence,
+	    _DERObjectIdentifier = _KJUR_asn1.DERObjectIdentifier,
+	    _GeneralName = _KJUR_asn1.x509.GeneralName;
 
-        for (var i = 0; i < accessDescriptionArray.length; i++) {
-            var o = new _KJUR_asn1.DERObjectIdentifier(accessDescriptionArray[i].accessMethod);
-            var gn = new _KJUR_asn1.x509.GeneralName(accessDescriptionArray[i].accessLocation);
-            var accessDescription = new _DERSequence({'array':[o, gn]});
-            array.push(accessDescription);
+        for (var i = 0; i < aParam.length; i++) {
+	    var adseq;
+	    var adparam = aParam[i];
+
+	    if (adparam.ocsp !== undefined) {
+		adseq = new _DERSequence({array: [
+		    new _DERObjectIdentifier({oid: "1.3.6.1.5.5.7.48.1"}),
+		    new _GeneralName({uri: adparam.ocsp})
+		]});
+	    } else if (adparam.caissuer !== undefined) {
+		adseq = new _DERSequence({array: [
+		    new _DERObjectIdentifier({oid: "1.3.6.1.5.5.7.48.2"}),
+		    new _GeneralName({uri: adparam.caissuer})
+		]});
+	    } else {
+		throw new Error("unknown AccessMethod parameter: " +
+				JSON.stringify(adparam));
+	    }
+	    aASN1.push(adseq);
         }
-        this.asn1ExtnValue = new _DERSequence({'array':array});
+        this.asn1ExtnValue = new _DERSequence({'array':aASN1});
     };
 
     this.getExtnValueHex = function() {
@@ -2054,17 +2152,15 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRLEntry, KJUR.asn1.ASN1Object);
  * @see KJUR.asn1.x509.X500Name
  * @see KJUR.asn1.x509.RDN
  * @see KJUR.asn1.x509.AttributeTypeAndValue
+ * @see X509#getX500Name
  * @description
  * This class provides DistinguishedName ASN.1 class structure
  * defined in <a href="https://tools.ietf.org/html/rfc2253#section-2">RFC 2253 section 2</a>.
  * <blockquote><pre>
  * DistinguishedName ::= RDNSequence
- *
  * RDNSequence ::= SEQUENCE OF RelativeDistinguishedName
- *
  * RelativeDistinguishedName ::= SET SIZE (1..MAX) OF
  *   AttributeTypeAndValue
- *
  * AttributeTypeAndValue ::= SEQUENCE {
  *   type  AttributeType,
  *   value AttributeValue }
@@ -2072,35 +2168,50 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRLEntry, KJUR.asn1.ASN1Object);
  * <br/>
  * Argument for the constructor can be one of following parameters:
  * <ul>
- * <li>str - string for distingish name in OpenSSL One line foramt (ex: /C=US/O=test/CN=test) See <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">this</a> in detail.</li>
- * <li>ldapstr - string for distinguish name in LDAP format (ex: CN=test,O=test,C=US)</li>
- * <li>hex - hexadecimal string for ASN.1 distinguish name structure</li>
- * <li>certissuer - issuer name in the specified PEM certificate</li>
- * <li>certsubject - subject name in the specified PEM certificate</li>
+ * <li>{Array}array - array of {@link KJUR.asn1.x509.RDN} parameter</li>
+ * <li>`String}str - string for distingish name in OpenSSL One line foramt (ex: /C=US/O=test/CN=test) See <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">this</a> in detail.</li>
+ * <li>{String}ldapstr - string for distinguish name in LDAP format (ex: CN=test,O=test,C=US)</li>
+ * <li>{String}hex - hexadecimal string for ASN.1 distinguish name structure</li>
+ * <li>{String}certissuer - issuer name in the specified PEM certificate</li>
+ * <li>{String}certsubject - subject name in the specified PEM certificate</li>
+ * <li>{String}rule - DirectoryString rule (ex. "prn" or "utf8")</li>
  * </ul>
  * <br/>
- * NOTE: Multi-valued RDN is supported since jsrsasign 6.2.1 asn1x509 1.0.17.
+ * NOTE1: The "array" and "rule" parameters have been supported
+ * since jsrsasign 9.0.0 asn1x509 2.0.0.
+ * <br/>
+ * NOTE2: Multi-valued RDN in "str" parameter have been
+ * supported since jsrsasign 6.2.1 asn1x509 1.0.17.
  * @example
- * // 1. construct with string
- * o = new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa/OU=bbb/CN=foo@example.com"});
- * o = new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa+CN=contact@example.com"}); // multi valued
- * // 2. construct by LDAP string
- * o = new KJUR.asn1.x509.X500Name({ldapstr: "CN=foo@example.com,OU=bbb,C=US"});
- * // 3. construct by ASN.1 hex string
- * o = new KJUR.asn1.x509.X500Name({hex: "304c3120..."});
- * // 4. construct by issuer of PEM certificate
- * o = new KJUR.asn1.x509.X500Name({certsubject: "-----BEGIN CERT..."});
- * // 5. construct by subject of PEM certificate
- * o = new KJUR.asn1.x509.X500Name({certissuer: "-----BEGIN CERT..."});
- * // 6. construct by object
- * o = new KJUR.asn1.x509.X500Name({C: "US", O: "aaa", CN: "http://example.com/"});
+ * // 1. construct with array
+ * new KJUR.asn1.x509.X500Name({array:[
+ *   [{type:'C',value:'JP',ds:'prn'}],
+ *   [{type:'O',value:'aaa',ds:'utf8'}, // multi-valued RDN
+ *    {type:'CN',value:'bob@example.com',ds:'ia5'}]
+ * ]})
+: "/C=US/O=aaa+CN=contact@example.com"}); // multi valued
+ * // 2. construct with string
+ * new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa+CN=contact@example.com"}); // multi valued
+ * // 3. construct by LDAP string
+ * new KJUR.asn1.x509.X500Name({ldapstr: "CN=foo@example.com,OU=bbb,C=US"});
+ * // 4. construct by ASN.1 hex string
+ * new KJUR.asn1.x509.X500Name({hex: "304c3120..."});
+ * // 5. construct by issuer of PEM certificate
+ * new KJUR.asn1.x509.X500Name({certsubject: "-----BEGIN CERT..."});
+ * // 6. construct by subject of PEM certificate
+ * new KJUR.asn1.x509.X500Name({certissuer: "-----BEGIN CERT..."});
+ * // 7. construct by object (DEPRECATED)
+ * new KJUR.asn1.x509.X500Name({C:"US",O:"aaa",CN:"http://example.com/"});
  */
 KJUR.asn1.x509.X500Name = function(params) {
     KJUR.asn1.x509.X500Name.superclass.constructor.call(this);
-    this.asn1Array = new Array();
+    this.asn1Array = [];
+    this.paramArray = [];
+    this.sRule = "utf8";
     var _KJUR = KJUR,
 	_KJUR_asn1 = _KJUR.asn1,
 	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_RDN = _KJUR_asn1_x509.RDN,
 	_pemtohex = pemtohex;
 
     /**
@@ -2120,7 +2231,8 @@ KJUR.asn1.x509.X500Name = function(params) {
      * // no need to escape slash in an attribute value
      * name.setByString("/C=US/O=aaa/CN=1980/12/31");
      */
-    this.setByString = function(dnStr) {
+    this.setByString = function(dnStr, sRule) {
+	if (sRule !== undefined) this.sRule = sRule;
         var a = dnStr.split('/');
         a.shift();
 
@@ -2135,7 +2247,7 @@ KJUR.asn1.x509.X500Name = function(params) {
 	}
 
         for (var i = 0; i < a1.length; i++) {
-            this.asn1Array.push(new _KJUR_asn1_x509.RDN({'str':a1[i]}));
+            this.asn1Array.push(new _RDN({'str':a1[i], rule:this.sRule}));
         }
     };
 
@@ -2152,9 +2264,10 @@ KJUR.asn1.x509.X500Name = function(params) {
      * name = new KJUR.asn1.x509.X500Name();
      * name.setByLdapString("CN=foo@example.com,OU=bbb,O=aaa,C=US");
      */
-    this.setByLdapString = function(dnStr) {
+    this.setByLdapString = function(dnStr, sRule) {
+	if (sRule !== undefined) this.sRule = sRule;
 	var compat = _KJUR_asn1_x509.X500Name.ldapToCompat(dnStr);
-	this.setByString(compat);
+	this.setByString(compat, sRule);
     };
 
     /**
@@ -2169,12 +2282,13 @@ KJUR.asn1.x509.X500Name = function(params) {
      * name = new KJUR.asn1.x509.X500Name();
      * name.setByObject({C: "US", O: "aaa", CN="http://example.com/"1});
      */
-    this.setByObject = function(dnObj) {
+    this.setByObject = function(dnObj, sRule) {
+	if (sRule !== undefined) this.sRule = sRule;
+
         // Get all the dnObject attributes and stuff them in the ASN.1 array.
         for (var x in dnObj) {
             if (dnObj.hasOwnProperty(x)) {
-                var newRDN = new KJUR.asn1.x509.RDN(
-                    {'str': x + '=' + dnObj[x]});
+                var newRDN = new _RDN({str: x + '=' + dnObj[x], rule: this.sRule});
                 // Initialize or push into the ANS1 array.
                 this.asn1Array ? this.asn1Array.push(newRDN)
                     : this.asn1Array = [newRDN];
@@ -2182,37 +2296,56 @@ KJUR.asn1.x509.X500Name = function(params) {
         }
     };
 
+    this.setByParam = function(params) {
+	if (params.rule !== undefined) this.sRule = params.rule;
+
+	if (params.array !== undefined) {
+	    this.paramArray = params.array;
+	} else {
+            if (params.str !== undefined) {
+		this.setByString(params.str);
+            } else if (params.ldapstr !== undefined) {
+		this.setByLdapString(params.ldapstr);
+	    } else if (params.hex !== undefined) {
+		this.hTLV = params.hex;
+            } else if (params.certissuer !== undefined) {
+		var x = new X509();
+		x.readCertPEM(params.certissuer);
+		this.hTLV = x.getIssuerHex();
+            } else if (params.certsubject !== undefined) {
+		var x = new X509();
+		x.readCertPEM(params.certsubject);
+		this.hTLV = x.getSubjectHex();
+		// If params is an object, then set the ASN1 array
+		// just using the object attributes. 
+		// This is nice for fields that have lots of special
+		// characters (i.e. CN: 'https://www.github.com/kjur//').
+            } else if (typeof params === "object" &&
+		       params.certsubject === undefined &&
+		       params.certissuer === undefined) {
+		this.setByObject(params);
+            }
+	}
+    }
+
     this.getEncodedHex = function() {
         if (typeof this.hTLV == "string") return this.hTLV;
+
+	if (this.asn1Array.length == 0 && this.paramArray.length > 0) {
+	    for (var i = 0; i < this.paramArray.length; i++) {
+		var param = {array: this.paramArray[i]};
+		if (this.sRule != "utf8") param.rule = this.sRule;
+		var asn1RDN = new _RDN(param);
+		this.asn1Array.push(asn1RDN);
+	    }
+	}
+
         var o = new _KJUR_asn1.DERSequence({"array": this.asn1Array});
         this.hTLV = o.getEncodedHex();
         return this.hTLV;
     };
 
-    if (params !== undefined) {
-        if (params.str !== undefined) {
-            this.setByString(params.str);
-        } else if (params.ldapstr !== undefined) {
-	    this.setByLdapString(params.ldapstr);
-	} else if (params.hex !== undefined) {
-	    this.hTLV = params.hex;
-        } else if (params.certissuer !== undefined) {
-            var x = new X509();
-            x.readCertPEM(params.certissuer);
-            this.hTLV = x.getIssuerHex();
-        } else if (params.certsubject !== undefined) {
-            var x = new X509();
-            x.readCertPEM(params.certsubject);
-            this.hTLV = x.getSubjectHex();
-        // If params is an object, then set the ASN1 array just using the object
-        // attributes. This is nice for fields that have lots of special
-        // characters (i.e. CN: 'https://www.github.com/kjur//').
-        } else if (typeof params === "object" &&
-		   params.certsubject === undefined &&
-		   params.certissuer === undefined) {
-            this.setByObject(params);
-        }
-    }
+    if (params !== undefined) this.setByParam(params);
 };
 YAHOO.lang.extend(KJUR.asn1.x509.X500Name, KJUR.asn1.ASN1Object);
 
@@ -2344,16 +2477,35 @@ KJUR.asn1.x509.X500Name.ldapToOneline = function(s) {
  *   value AttributeValue }
  * </pre></blockquote>
  * <br/>
- * NOTE: Multi-valued RDN is supported since jsrsasign 6.2.1 asn1x509 1.0.17.
+ * NOTE1: The "array" and "rule" parameters have been supported
+ * since jsrsasign 9.0.0 asn1x509 2.0.0.
+ * <br/>
+ * NOTE2: Multi-valued RDN in "str" parameter have been
+ * supported since jsrsasign 6.2.1 asn1x509 1.0.17.
  * @example
- * rdn = new KJUR.asn1.x509.RDN({str: "CN=test"});
- * rdn = new KJUR.asn1.x509.RDN({str: "O=a+O=bb+O=c"}); // multi-valued
- * rdn = new KJUR.asn1.x509.RDN({str: "O=a+O=b\\+b+O=c"}); // plus escaped
- * rdn = new KJUR.asn1.x509.RDN({str: "O=a+O=\"b+b\"+O=c"}); // double quoted
+ * new KJUR.asn1.x509.RDN({array: [ // multi-valued
+ *    {type:"CN",value:"Bob",ds:"prn"},
+ *    {type:"CN",value:"bob@example.com", ds:"ia5"}
+ * ]});
+ * new KJUR.asn1.x509.RDN({str: "CN=test"});
+ * new KJUR.asn1.x509.RDN({str: "O=a+O=bb+O=c"}); // multi-valued
+ * new KJUR.asn1.x509.RDN({str: "O=a+O=b\\+b+O=c"}); // plus escaped
+ * new KJUR.asn1.x509.RDN({str: "O=a+O=\"b+b\"+O=c"}); // double quoted
  */
 KJUR.asn1.x509.RDN = function(params) {
     KJUR.asn1.x509.RDN.superclass.constructor.call(this);
-    this.asn1Array = new Array();
+    this.asn1Array = [];
+    this.paramArray = [];
+    this.sRule = "utf8"; // DEFAULT "utf8"
+    var _AttributeTypeAndValue = KJUR.asn1.x509.AttributeTypeAndValue;
+
+    this.setByParam = function(params) {
+	if (params.rule !== undefined) this.sRule = params.rule;
+        if (params.str !== undefined) {
+            this.addByMultiValuedString(params.str);
+        }
+	if (params.array !== undefined) this.paramArray = params.array;
+    };
 
     /**
      * add one AttributeTypeAndValue by string<br/>
@@ -2370,7 +2522,7 @@ KJUR.asn1.x509.RDN = function(params) {
      * rdn.addByString("serialNumber=1234"); // for multi-valued RDN
      */
     this.addByString = function(s) {
-        this.asn1Array.push(new KJUR.asn1.x509.AttributeTypeAndValue({'str': s}));
+        this.asn1Array.push(new KJUR.asn1.x509.AttributeTypeAndValue({'str': s, rule: this.sRule}));
     };
 
     /**
@@ -2397,15 +2549,25 @@ KJUR.asn1.x509.RDN = function(params) {
     };
 
     this.getEncodedHex = function() {
+	if (this.asn1Array.length == 0 && this.paramArray.length > 0) {
+	    for (var i = 0; i < this.paramArray.length; i++) {
+		var param = this.paramArray[i];
+		if (param.rule !== undefined &&
+		    this.sRule != "utf8") {
+		    param.rule = this.sRule;
+		}
+		//alert(JSON.stringify(param));
+		var asn1ATV = new _AttributeTypeAndValue(param);
+		this.asn1Array.push(asn1ATV);
+	    }
+	}
         var o = new KJUR.asn1.DERSet({"array": this.asn1Array});
         this.TLV = o.getEncodedHex();
         return this.TLV;
     };
 
     if (params !== undefined) {
-        if (params.str !== undefined) {
-            this.addByMultiValuedString(params.str);
-        }
+	this.setByParam(params);
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.RDN, KJUR.asn1.ASN1Object);
@@ -2474,7 +2636,6 @@ KJUR.asn1.x509.RDN.parseString = function(s) {
 	    beginQuote = true;
 	}
     }
-
     return a3;
 };
 
@@ -2482,56 +2643,144 @@ KJUR.asn1.x509.RDN.parseString = function(s) {
  * AttributeTypeAndValue ASN.1 structure class
  * @name KJUR.asn1.x509.AttributeTypeAndValue
  * @class AttributeTypeAndValue ASN.1 structure class
- * @param {Array} params associative array of parameters (ex. {'str': 'C=US'})
+ * @param {Array} params JSON object for parameters (ex. {str: 'C=US'})
  * @extends KJUR.asn1.ASN1Object
- * @description
  * @see KJUR.asn1.x509.X500Name
  * @see KJUR.asn1.x509.RDN
  * @see KJUR.asn1.x509.AttributeTypeAndValue
+ * @see X509#getAttrTypeAndValue
+ * @description
+ * This class generates AttributeTypeAndValue defined in
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
+ * RFC 5280 4.1.2.4</a>.
+ * <pre>
+ * AttributeTypeAndValue ::= SEQUENCE {
+ *   type     AttributeType,
+ *   value    AttributeValue }
+ * AttributeType ::= OBJECT IDENTIFIER
+ * AttributeValue ::= ANY -- DEFINED BY AttributeType
+ * </pre>
+ * The constructor argument can have following parameters:
+ * <ul>
+ * <li>{String}type - AttributeType name or OID(ex. C,O,CN)</li>
+ * <li>{String}value - raw string of ASN.1 value of AttributeValue</li>
+ * <li>{String}ds - DirectoryString type of AttributeValue</li>
+ * <li>{String}rule - DirectoryString type rule (ex. "prn" or "utf8")
+ * set DirectoryString type automatically when "ds" not specified.</li>
+ * <li>{String}str - AttributeTypeAndVale string (ex. "C=US").
+ * When type and value don't exists, 
+ * this "str" will be converted to "type" and "value".
+ * </li>
+ * </ul>
+ * <br
+ * NOTE: Parameters "type", "value,", "ds" and "rule" have
+ * been supported since jsrsasign 9.0.0 asn1x509 2.0.0.
  * @example
+ * new KJUR.asn1.x509.AttributeTypeAndValue({type:'C',value:'US',ds:'prn'})
+ * new KJUR.asn1.x509.AttributeTypeAndValue({str:'O=T1'})
+ * new KJUR.asn1.x509.AttributeTypeAndValue({str:'O=T1',rule='prn'})
+ * new KJUR.asn1.x509.AttributeTypeAndValue({str:'O=T1',rule='utf8'})
  */
 KJUR.asn1.x509.AttributeTypeAndValue = function(params) {
     KJUR.asn1.x509.AttributeTypeAndValue.superclass.constructor.call(this);
-    var typeObj = null,
-	valueObj = null,
-	defaultDSType = "utf8",
-	_KJUR = KJUR,
-	_KJUR_asn1 = _KJUR.asn1;
+    this.sRule = "utf8";
+    this.sType = null;
+    this.sValue = null;
+    this.dsType = null;
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_DERUTF8String = _KJUR_asn1.DERUTF8String,
+	_DERPrintableString = _KJUR_asn1.DERPrintableString,
+	_DERTeletexString = _KJUR_asn1.DERTeletexString,
+	_DERIA5String = _KJUR_asn1.DERIA5String,
+	_DERVisibleString = _KJUR_asn1.DERVisibleString,
+	_DERBMPString = _KJUR_asn1.DERBMPString,
+	_isMail = _KJUR.lang.String.isMail,
+	_isPrintable = _KJUR.lang.String.isPrintable;
 
-    this.setByString = function(attrTypeAndValueStr) {
-        var matchResult = attrTypeAndValueStr.match(/^([^=]+)=(.+)$/);
+    this.setByParam = function(params) {
+	if (params.rule !== undefined) this.sRule = params.rule;
+	if (params.ds !== undefined)   this.dsType = params.ds;
+
+        if (params.value === undefined &&
+	    params.str !== undefined) {
+	    var str = params.str;
+            var matchResult = str.match(/^([^=]+)=(.+)$/);
+            if (matchResult) {
+		this.sType = matchResult[1];
+		this.sValue = matchResult[2];
+            } else {
+		throw new Error("malformed attrTypeAndValueStr: " +
+				attrTypeAndValueStr);
+            }
+	    
+	    //this.setByString(params.str);
+        } else {
+	    this.sType = params.type;
+	    this.sValue = params.value;
+	}
+    };
+
+    /*
+     * @deprecated
+     */
+    this.setByString = function(sTypeValue, sRule) {
+	if (sRule !== undefined) this.sRule = sRule;
+        var matchResult = sTypeValue.match(/^([^=]+)=(.+)$/);
         if (matchResult) {
             this.setByAttrTypeAndValueStr(matchResult[1], matchResult[2]);
         } else {
-            throw "malformed attrTypeAndValueStr: " + attrTypeAndValueStr;
+            throw new Error("malformed attrTypeAndValueStr: " +
+			    attrTypeAndValueStr);
         }
     };
 
-    this.setByAttrTypeAndValueStr = function(shortAttrType, valueStr) {
-        this.typeObj = KJUR.asn1.x509.OID.atype2obj(shortAttrType);
-        var dsType = defaultDSType;
-        if (shortAttrType == "C") dsType = "prn";
-        this.valueObj = this.getValueObj(dsType, valueStr);
+    this._getDsType = function() {
+	var sType = this.sType;
+	var sValue = this.sValue;
+	var sRule = this.sRule;
+
+	if (sRule === "prn") {
+	    if (sType == "CN" && _isMail(sValue)) return "ia5";
+	    if (_isPrintable(sValue)) return "prn";
+	    return "utf8";
+	} else if (sRule === "utf8") {
+	    if (sType == "CN" && _isMail(sValue)) return "ia5";
+	    if (sType == "C") return "prn";
+	    return "utf8";
+	}
+	return "utf8"; // default
+    };
+
+    this.setByAttrTypeAndValueStr = function(sType, sValue, sRule) {
+	if (sRule !== undefined) this.sRule = sRule;
+	this.sType = sType;
+	this.sValue = sValue;
     };
 
     this.getValueObj = function(dsType, valueStr) {
-        if (dsType == "utf8")   return new _KJUR_asn1.DERUTF8String({"str": valueStr});
-        if (dsType == "prn")    return new _KJUR_asn1.DERPrintableString({"str": valueStr});
-        if (dsType == "tel")    return new _KJUR_asn1.DERTeletexString({"str": valueStr});
-        if (dsType == "ia5")    return new _KJUR_asn1.DERIA5String({"str": valueStr});
-        throw "unsupported directory string type: type=" + dsType + " value=" + valueStr;
+        if (dsType == "utf8") return new _DERUTF8String({"str": valueStr});
+        if (dsType == "prn")  return new _DERPrintableString({"str": valueStr});
+        if (dsType == "tel")  return new _DERTeletexString({"str": valueStr});
+        if (dsType == "ia5")  return new _DERIA5String({"str": valueStr});
+        if (dsType == "vis")  return new _DERVisibleString({"str": valueStr});
+        if (dsType == "bmp")  return new _DERBMPString({"str": valueStr});
+        throw new Error("unsupported directory string type: type=" +
+			dsType + " value=" + valueStr);
     };
 
     this.getEncodedHex = function() {
-        var o = new _KJUR_asn1.DERSequence({"array": [this.typeObj, this.valueObj]});
+	if (this.dsType == null) this.dsType = this._getDsType();
+	var asn1Type = KJUR.asn1.x509.OID.atype2obj(this.sType);
+	var asn1Value = this.getValueObj(this.dsType, this.sValue);
+        var o = new _DERSequence({"array": [asn1Type, asn1Value]});
         this.TLV = o.getEncodedHex();
         return this.TLV;
     };
 
     if (params !== undefined) {
-        if (params.str !== undefined) {
-            this.setByString(params.str);
-        }
+	this.setByParam(params);
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.AttributeTypeAndValue, KJUR.asn1.ASN1Object);
@@ -2830,7 +3079,12 @@ KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
     if (this.asn1Params === null &&
 	this.paramEmpty === false &&
 	this.nameAlg !== null) {
+
+	if (this.nameAlg.name !== undefined) {
+	    this.nameAlg = this.nameAlg.name;
+	}
 	var lcNameAlg = this.nameAlg.toLowerCase();
+
 	if (lcNameAlg.substr(-7, 7) !== "withdsa" &&
 	    lcNameAlg.substr(-9, 9) !== "withecdsa") {
             this.asn1Params = new _KJUR_asn1.DERNull();
@@ -3098,120 +3352,6 @@ KJUR.asn1.x509.GeneralNames = function(paramsArray) {
 YAHOO.lang.extend(KJUR.asn1.x509.GeneralNames, KJUR.asn1.ASN1Object);
 
 /**
- * DistributionPointName ASN.1 structure class<br/>
- * @name KJUR.asn1.x509.DistributionPointName
- * @class DistributionPointName ASN.1 structure class
- * @description
- * <pre>
- * DistributionPoint ::= SEQUENCE {
- *      distributionPoint       [0]     DistributionPointName OPTIONAL,
- *      reasons                 [1]     ReasonFlags OPTIONAL,
- *      cRLIssuer               [2]     GeneralNames OPTIONAL }
- *
- * DistributionPointName ::= CHOICE {
- *      fullName                [0]     GeneralNames,
- *      nameRelativeToCRLIssuer [1]     RelativeDistinguishedName }
- * 
- * ReasonFlags ::= BIT STRING {
- *      unused                  (0),
- *      keyCompromise           (1),
- *      cACompromise            (2),
- *      affiliationChanged      (3),
- *      superseded              (4),
- *      cessationOfOperation    (5),
- *      certificateHold         (6),
- *      privilegeWithdrawn      (7),
- *      aACompromise            (8) }
- * </pre>
- * @example
- */
-KJUR.asn1.x509.DistributionPointName = function(gnOrRdn) {
-    KJUR.asn1.x509.DistributionPointName.superclass.constructor.call(this);
-    var asn1Obj = null,
-	type = null,
-	tag = null,
-	asn1V = null,
-	_KJUR = KJUR,
-	_KJUR_asn1 = _KJUR.asn1,
-	_DERTaggedObject = _KJUR_asn1.DERTaggedObject;
-
-    this.getEncodedHex = function() {
-        if (this.type != "full")
-            throw "currently type shall be 'full': " + this.type;
-        this.asn1Obj = new _DERTaggedObject({'explicit': false,
-                                             'tag': this.tag,
-                                             'obj': this.asn1V});
-        this.hTLV = this.asn1Obj.getEncodedHex();
-        return this.hTLV;
-    };
-
-    if (gnOrRdn !== undefined) {
-        if (_KJUR_asn1.x509.GeneralNames.prototype.isPrototypeOf(gnOrRdn)) {
-            this.type = "full";
-            this.tag = "a0";
-            this.asn1V = gnOrRdn;
-        } else {
-            throw "This class supports GeneralNames only as argument";
-        }
-    }
-};
-YAHOO.lang.extend(KJUR.asn1.x509.DistributionPointName, KJUR.asn1.ASN1Object);
-
-/**
- * DistributionPoint ASN.1 structure class<br/>
- * @name KJUR.asn1.x509.DistributionPoint
- * @class DistributionPoint ASN.1 structure class
- * @description
- * <pre>
- * DistributionPoint ::= SEQUENCE {
- *      distributionPoint       [0]     DistributionPointName OPTIONAL,
- *      reasons                 [1]     ReasonFlags OPTIONAL,
- *      cRLIssuer               [2]     GeneralNames OPTIONAL }
- *
- * DistributionPointName ::= CHOICE {
- *      fullName                [0]     GeneralNames,
- *      nameRelativeToCRLIssuer [1]     RelativeDistinguishedName }
- * 
- * ReasonFlags ::= BIT STRING {
- *      unused                  (0),
- *      keyCompromise           (1),
- *      cACompromise            (2),
- *      affiliationChanged      (3),
- *      superseded              (4),
- *      cessationOfOperation    (5),
- *      certificateHold         (6),
- *      privilegeWithdrawn      (7),
- *      aACompromise            (8) }
- * </pre>
- * @example
- */
-KJUR.asn1.x509.DistributionPoint = function(params) {
-    KJUR.asn1.x509.DistributionPoint.superclass.constructor.call(this);
-    var asn1DP = null,
-	_KJUR = KJUR,
-	_KJUR_asn1 = _KJUR.asn1;
-
-    this.getEncodedHex = function() {
-        var seq = new _KJUR_asn1.DERSequence();
-        if (this.asn1DP != null) {
-            var o1 = new _KJUR_asn1.DERTaggedObject({'explicit': true,
-                                                     'tag': 'a0',
-                                                     'obj': this.asn1DP});
-            seq.appendASN1Object(o1);
-        }
-        this.hTLV = seq.getEncodedHex();
-        return this.hTLV;
-    };
-
-    if (params !== undefined) {
-        if (params.dpobj !== undefined) {
-            this.asn1DP = params.dpobj;
-        }
-    }
-};
-YAHOO.lang.extend(KJUR.asn1.x509.DistributionPoint, KJUR.asn1.ASN1Object);
-
-/**
  * static object for OID
  * @name KJUR.asn1.x509.OID
  * @class static object for OID
@@ -3287,6 +3427,8 @@ KJUR.asn1.x509.OID = new function(params) {
         'MD4withRSA':           '1.2.840.113549.1.1.3',
         'MD5withRSA':           '1.2.840.113549.1.1.4',
         'SHA1withRSA':          '1.2.840.113549.1.1.5',
+	'pkcs1-MGF':		'1.2.840.113549.1.1.8',
+	'rsaPSS':		'1.2.840.113549.1.1.10',
         'SHA224withRSA':        '1.2.840.113549.1.1.14',
         'SHA256withRSA':        '1.2.840.113549.1.1.11',
         'SHA384withRSA':        '1.2.840.113549.1.1.12',
@@ -3338,6 +3480,7 @@ KJUR.asn1.x509.OID = new function(params) {
         'nameConstraints':      '2.5.29.30',
         'cRLDistributionPoints':'2.5.29.31',
         'certificatePolicies':  '2.5.29.32',
+        'anyPolicy':  		'2.5.29.32.0',
         'authorityKeyIdentifier':'2.5.29.35',
         'policyConstraints':    '2.5.29.36',
         'extKeyUsage':          '2.5.29.37',
@@ -3494,18 +3637,19 @@ KJUR.asn1.x509.OID.name2oid = function(name) {
 KJUR.asn1.x509.X509Util = {};
 
 /**
- * issue a certificate in PEM format
+ * issue a certificate in PEM format (DEPRECATED)
  * @name newCertPEM
  * @memberOf KJUR.asn1.x509.X509Util
  * @function
- * @param {Array} param parameter to issue a certificate
+ * @param {Array} param JSON object of parameter to issue a certificate
  * @since asn1x509 1.0.6
+ * @deprecated since jsrsasign 9.0.0 asn1x509 2.0.0. please move to {@link KJUR.asn1.x509.Certificate} constructor
  * @description
  * This method can issue a certificate by a simple
  * JSON object.
  * Signature value will be provided by signing with
  * private key using 'cakey' parameter or
- * hexa decimal signature value by 'sighex' parameter.
+ * hexadecimal signature value by 'sighex' parameter.
  * <br/>
  * NOTE: Algorithm parameter of AlgorithmIdentifier will
  * be set automatically by default. 
@@ -3576,73 +3720,7 @@ KJUR.asn1.x509.X509Util.newCertPEM = function(param) {
     var _KJUR_asn1_x509 = KJUR.asn1.x509,
 	_TBSCertificate = _KJUR_asn1_x509.TBSCertificate,
 	_Certificate = _KJUR_asn1_x509.Certificate;
-    var o = new _TBSCertificate();
-
-    if (param.serial !== undefined)
-        o.setSerialNumberByParam(param.serial);
-    else
-        throw "serial number undefined.";
-
-    if (typeof param.sigalg.name === 'string')
-        o.setSignatureAlgByParam(param.sigalg);
-    else
-        throw "unproper signature algorithm name";
-
-    if (param.issuer !== undefined)
-        o.setIssuerByParam(param.issuer);
-    else
-        throw "issuer name undefined.";
-
-    if (param.notbefore !== undefined)
-        o.setNotBeforeByParam(param.notbefore);
-    else
-        throw "notbefore undefined.";
-
-    if (param.notafter !== undefined)
-        o.setNotAfterByParam(param.notafter);
-    else
-        throw "notafter undefined.";
-
-    if (param.subject !== undefined)
-        o.setSubjectByParam(param.subject);
-    else
-        throw "subject name undefined.";
-
-    if (param.sbjpubkey !== undefined)
-        o.setSubjectPublicKeyByGetKey(param.sbjpubkey);
-    else
-        throw "subject public key undefined.";
-
-    if (param.ext !== undefined && param.ext.length !== undefined) {
-        for (var i = 0; i < param.ext.length; i++) {
-            for (key in param.ext[i]) {
-                o.appendExtensionByName(key, param.ext[i][key]);
-            }
-        }
-    }
-
-    // set signature
-    if (param.cakey === undefined && param.sighex === undefined)
-        throw "param cakey and sighex undefined.";
-
-    var caKey = null;
-    var cert = null;
-
-    if (param.cakey) {
-	if (param.cakey.isPrivate === true) {
-	    caKey = param.cakey;
-	} else {
-            caKey = KEYUTIL.getKey.apply(null, param.cakey);
-	}
-        cert = new _Certificate({'tbscertobj': o, 'prvkeyobj': caKey});
-        cert.sign();
-    }
-
-    if (param.sighex) {
-        cert = new _Certificate({'tbscertobj': o});
-        cert.setSignatureHex(param.sighex);
-    }
-
-    return cert.getPEMString();
+    var cert = new _Certificate(param);
+    return cert.getPEM();
 };
 

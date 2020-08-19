@@ -547,6 +547,15 @@ Input string can conclude new lines or space characters.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.lang.String.<b><a href="../symbols/KJUR.lang.String.html#.isIA5">isIA5</a></b>(s)
+								</div>
+								<div class="description">check whether a string consists of IAString characters<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.lang.String.<b><a href="../symbols/KJUR.lang.String.html#.isInteger">isInteger</a></b>(s)
 								</div>
 								<div class="description">check whether a string is an integer string or not<br/></div>
@@ -560,6 +569,24 @@ Input string can conclude new lines or space characters.</div>
 								</div>
 								<div class="description">check whether a string is a string of integer array or not<br/>
 Input string can conclude new lines or space characters.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.lang.String.<b><a href="../symbols/KJUR.lang.String.html#.isMail">isMail</a></b>(s)
+								</div>
+								<div class="description">check whether a string is RFC 822 mail address<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.lang.String.<b><a href="../symbols/KJUR.lang.String.html#.isPrintable">isPrintable</a></b>(s)
+								</div>
+								<div class="description">check whether a string consists of PrintableString characters<br/></div>
 							</td>
 						</tr>
 					
@@ -597,6 +624,9 @@ This class provides static methods for string utility.
 <li><a href="../symbols/KJUR.lang.String.html#.isBase64">KJUR.lang.String.isBase64</a> - check whether argument is a Base64 encoded string</li>
 <li><a href="../symbols/KJUR.lang.String.html#.isBase64URL">KJUR.lang.String.isBase64URL</a> - check whether argument is a Base64URL encoded string</li>
 <li><a href="../symbols/KJUR.lang.String.html#.isIntegerArray">KJUR.lang.String.isIntegerArray</a> - check whether argument is an array of integers</li>
+<li><a href="../symbols/KJUR.lang.String.html#.isPrintable">KJUR.lang.String.isPrintable</a> - check whether argument is PrintableString accepted characters</li>
+<li><a href="../symbols/KJUR.lang.String.html#.isIA5">KJUR.lang.String.isIA5</a> - check whether argument is IA5String accepted characters</li>
+<li><a href="../symbols/KJUR.lang.String.html#.isMail">KJUR.lang.String.isMail</a> - check whether argument is RFC 822 e-mail address format</li>
 </ul>
 </dl>
 					<br /><i>Author: </i>Kenji Urushima.
@@ -799,6 +829,67 @@ KJUR.lang.String.isHex("121") &rarr; false -- odd length</pre>
 
 					<hr />
 				
+					<a name=".isIA5"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<span class="light">KJUR.lang.String.</span><b>isIA5</b>(s)
+					
+					</div>
+					<div class="description">
+						check whether a string consists of IAString characters<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.lang.String.isIA5("abc") &rarr; true
+KJUR.lang.String.isIA5('"abc"') &rarr; false
+KJUR.lang.String.isIA5("あいう") &rarr; false</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>input string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 9.0.0 base64x 1.1.16
+A IA5String consists of following characters
+<pre>
+%x00-21/%x23-7F (i.e. ASCII characters excludes double quote(%x22)
+</pre>
+This method returns false when other characters than above.
+Otherwise it returns true.</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if a string "s" consists of IA5String characters</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".isInteger"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -901,6 +992,123 @@ KJUR.lang.String.isIntegerArray("[a,2]") &rarr; false</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Boolean}</span> true if a string "s" is a string of integer array otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".isMail"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<span class="light">KJUR.lang.String.</span><b>isMail</b>(s)
+					
+					</div>
+					<div class="description">
+						check whether a string is RFC 822 mail address<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.lang.String.isMail("abc") &rarr; false
+KJUR.lang.String.isMail("abc@example") &rarr; false
+KJUR.lang.String.isMail("abc@example.com") &rarr; true</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>input string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 9.0.0 base64x 1.1.16
+This static method will check string s is RFC 822 compliant mail address.</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if a string "s" RFC 822 mail address</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".isPrintable"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<span class="light">KJUR.lang.String.</span><b>isPrintable</b>(s)
+					
+					</div>
+					<div class="description">
+						check whether a string consists of PrintableString characters<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.lang.String.isPrintable("abc") &rarr; true
+KJUR.lang.String.isPrintable("abc@") &rarr; false
+KJUR.lang.String.isPrintable("あいう") &rarr; false</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>input string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 9.0.0 base64x 1.1.16
+A PrintableString consists of following characters
+<pre>
+0-9A-Za-z '()+,-./:=?
+</pre>
+This method returns false when other characters than above.
+Otherwise it returns true.</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if a string "s" consists of PrintableString characters</dd>
 							
 							</dl>
 						

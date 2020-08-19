@@ -627,12 +627,9 @@ This class provides DistinguishedName ASN.1 class structure
 defined in <a href="https://tools.ietf.org/html/rfc2253#section-2">RFC 2253 section 2</a>.
 <blockquote><pre>
 DistinguishedName ::= RDNSequence
-
 RDNSequence ::= SEQUENCE OF RelativeDistinguishedName
-
 RelativeDistinguishedName ::= SET SIZE (1..MAX) OF
   AttributeTypeAndValue
-
 AttributeTypeAndValue ::= SEQUENCE {
   type  AttributeType,
   value AttributeValue }
@@ -640,32 +637,44 @@ AttributeTypeAndValue ::= SEQUENCE {
 <br/>
 Argument for the constructor can be one of following parameters:
 <ul>
-<li>str - string for distingish name in OpenSSL One line foramt (ex: /C=US/O=test/CN=test) See <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">this</a> in detail.</li>
-<li>ldapstr - string for distinguish name in LDAP format (ex: CN=test,O=test,C=US)</li>
-<li>hex - hexadecimal string for ASN.1 distinguish name structure</li>
-<li>certissuer - issuer name in the specified PEM certificate</li>
-<li>certsubject - subject name in the specified PEM certificate</li>
+<li>{Array}array - array of <a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a> parameter</li>
+<li>`String}str - string for distingish name in OpenSSL One line foramt (ex: /C=US/O=test/CN=test) See <a href="https://github.com/kjur/jsrsasign/wiki/NOTE-distinguished-name-representation-in-jsrsasign">this</a> in detail.</li>
+<li>{String}ldapstr - string for distinguish name in LDAP format (ex: CN=test,O=test,C=US)</li>
+<li>{String}hex - hexadecimal string for ASN.1 distinguish name structure</li>
+<li>{String}certissuer - issuer name in the specified PEM certificate</li>
+<li>{String}certsubject - subject name in the specified PEM certificate</li>
+<li>{String}rule - DirectoryString rule (ex. "prn" or "utf8")</li>
 </ul>
 <br/>
-NOTE: Multi-valued RDN is supported since jsrsasign 6.2.1 asn1x509 1.0.17.
+NOTE1: The "array" and "rule" parameters have been supported
+since jsrsasign 9.0.0 asn1x509 2.0.0.
+<br/>
+NOTE2: Multi-valued RDN in "str" parameter have been
+supported since jsrsasign 6.2.1 asn1x509 1.0.17.
 					
 				</div>
 				
 				
 				
-				<pre class="code">// 1. construct with string
-o = new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa/OU=bbb/CN=foo@example.com"});
-o = new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa+CN=contact@example.com"}); // multi valued
-// 2. construct by LDAP string
-o = new KJUR.asn1.x509.X500Name({ldapstr: "CN=foo@example.com,OU=bbb,C=US"});
-// 3. construct by ASN.1 hex string
-o = new KJUR.asn1.x509.X500Name({hex: "304c3120..."});
-// 4. construct by issuer of PEM certificate
-o = new KJUR.asn1.x509.X500Name({certsubject: "-----BEGIN CERT..."});
-// 5. construct by subject of PEM certificate
-o = new KJUR.asn1.x509.X500Name({certissuer: "-----BEGIN CERT..."});
-// 6. construct by object
-o = new KJUR.asn1.x509.X500Name({C: "US", O: "aaa", CN: "http://example.com/"});</pre>
+				<pre class="code">// 1. construct with array
+new KJUR.asn1.x509.X500Name({array:[
+  [{type:'C',value:'JP',ds:'prn'}],
+  [{type:'O',value:'aaa',ds:'utf8'}, // multi-valued RDN
+   {type:'CN',value:'bob@example.com',ds:'ia5'}]
+]})
+: "/C=US/O=aaa+CN=contact@example.com"}); // multi valued
+// 2. construct with string
+new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa+CN=contact@example.com"}); // multi valued
+// 3. construct by LDAP string
+new KJUR.asn1.x509.X500Name({ldapstr: "CN=foo@example.com,OU=bbb,C=US"});
+// 4. construct by ASN.1 hex string
+new KJUR.asn1.x509.X500Name({hex: "304c3120..."});
+// 5. construct by issuer of PEM certificate
+new KJUR.asn1.x509.X500Name({certsubject: "-----BEGIN CERT..."});
+// 6. construct by subject of PEM certificate
+new KJUR.asn1.x509.X500Name({certissuer: "-----BEGIN CERT..."});
+// 7. construct by object (DEPRECATED)
+new KJUR.asn1.x509.X500Name({C:"US",O:"aaa",CN:"http://example.com/"});</pre>
 				
 				
 				
@@ -696,6 +705,8 @@ o = new KJUR.asn1.x509.X500Name({C: "US", O: "aaa", CN: "http://example.com/"});
 							<dd><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></dd>
 						
 							<dd><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html">KJUR.asn1.x509.AttributeTypeAndValue</a></dd>
+						
+							<dd><a href="../symbols/X509.html#getX500Name">X509#getX500Name</a></dd>
 						
 						</dl>
 					

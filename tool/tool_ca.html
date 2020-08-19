@@ -16,29 +16,28 @@ function doIssue() {
 
   f1.newcert1.value = "issuing ...";
 
-  // 1. generate TBSCertificate
-  var tbsc = new KJUR.asn1.x509.TBSCertificate();
-  tbsc.setSerialNumberByParam({'int': parseInt(f1.serial1.value)});
-  tbsc.setSignatureAlgByParam({'name': 'SHA256withRSA'});
-  tbsc.setIssuerByParam({'str': f1.issuer1.value});  
-  tbsc.setNotBeforeByParam({'str': f1.notbefore1.value});
-  tbsc.setNotAfterByParam({'str': f1.notafter1.value});
-  tbsc.setSubjectByParam({'str': f1.subject1.value});  
-  tbsc.setSubjectPublicKeyByGetKey(f1.pubkey1.value);
+  var params = {ext:[]};
+
+  params.serial = {int: parseInt(f1.serial1.value)};
+  params.sigalg = "SHA256withRSA";
+  params.issuer = {str: f1.issuer1.value};
+  params.notbefore = f1.notbefore1.value;
+  params.notafter = f1.notafter1.value;
+  params.sbjpubkey = f1.pubkey1.value;
 
   if (f1.bc_exists.checked) {
-    var param = {};
-    param['critical'] = (f1.bc_critical.checked)? true : false;
-    param['cA'] = (f1.bc_ca.checked)? true : false;
+    var param = {extname:'basicConstraints'};
+    param.critical = (f1.bc_critical.checked)? true : false;
+    param.cA = (f1.bc_ca.checked)? true : false;
     if (f1.bc_pathlen.value != '') {
-      param['pathLen'] = parseInt(f1.bc_pathlen.value);
+      param.pathLen = parseInt(f1.bc_pathlen.value);
     }
-    tbsc.appendExtension(new KJUR.asn1.x509.BasicConstraints(param));
+    params.ext.push(param);
   }
 
   if (f1.ku_exists.checked) {
-    var param = {};
-    param['critical'] = (f1.ku_critical.checked)? true : false;
+    var param = {extname:'keyUsage'};
+    param.critical = (f1.ku_critical.checked)? true : false;
     var sBin = '';
     sBin += (f1.ku_0dsig.checked) ? "1" : "0";
     sBin += (f1.ku_1nonrep.checked) ? "1" : "0";
@@ -49,29 +48,27 @@ function doIssue() {
     sBin += (f1.ku_6crlsign.checked) ? "1" : "0";
     sBin += (f1.ku_7enconly.checked) ? "1" : "0";
     sBin += (f1.ku_8deconly.checked) ? "1" : "0";
-    param['bin'] = sBin;
-    tbsc.appendExtension(new KJUR.asn1.x509.KeyUsage(param));
+    param.bin = sBin;
+    params.ext.push(param);
   }
 
   if (f1.eku_exists.checked) {
-    var param = {};
-    var a = [];
+    var param = {extname:"extKeyUsage",array:[]};
+    var a = param.array;
     param.critical = (f1.eku_critical.checked) ? true : false;
-    if (f1.eku_srv.checked)   a.push({name: 'serverAuth'});
-    if (f1.eku_cli.checked)   a.push({name: 'clientAuth'});
-    if (f1.eku_code.checked)  a.push({name: 'codeSigning'});
-    if (f1.eku_email.checked) a.push({name: 'emailProtection'});
-    if (f1.eku_time.checked)  a.push({name: 'timeStamping'});
-    param.array = a;
-    var ext = new KJUR.asn1.x509.ExtKeyUsage(param);
-    tbsc.appendExtension(ext);
+    if (f1.eku_srv.checked)   a.push('serverAuth');
+    if (f1.eku_cli.checked)   a.push('clientAuth');
+    if (f1.eku_code.checked)  a.push('codeSigning');
+    if (f1.eku_email.checked) a.push('emailProtection');
+    if (f1.eku_time.checked)  a.push('timeStamping');
+    params.ext.push(param);
   }
 
   if (f1.cdp_exists.checked && f1.cdp_uri.value != '') {
-    var param = {};
-    param['critical'] = (f1.cdp_critical.checked)? true : false;
-    param['uri'] = f1.cdp_uri.value;
-    tbsc.appendExtension(new KJUR.asn1.x509.CRLDistributionPoints(param));
+    var param = {extname:"cRLDistributionPoints", array:[]};
+    param.critical = (f1.cdp_critical.checked)? true : false;
+    param.array.push({fulluri: f1.cdp_uri.value});
+    params.ext.push(param);
   }
 
   // SAN
@@ -91,19 +88,28 @@ function doIssue() {
     san[f1.san3_type.value] = f1.san3_val.value;
     aSAN.push(san);
   }
-  if (aSAN.length !== 0) {
-    var param = {};
+  if (aSAN.length > 0) {
+    var param = {extname:"subjectAltName"};
     param.critical = (f1.san_critical.checked) ? true : false;
     param.array = aSAN;
-    tbsc.appendExtensionByName("SubjectAltName", param);
+    params.ext.push(param);
   }
 
   // generate and sign certificate
-  var caKey = KEYUTIL.getKey.apply(null, [f1.cakey1.value, f1.cakeypass1.value]);
-  var cert = new KJUR.asn1.x509.Certificate({tbscertobj: tbsc,
-                                             prvkeyobj: caKey});
-  cert.sign();
-  f1.newcert1.value = cert.getPEMString();
+  params.cakey = KEYUTIL.getKey.apply(null, [f1.cakey1.value, f1.cakeypass1.value]);
+  var cert,certpem,certdump;
+
+  try {
+    cert = new KJUR.asn1.x509.Certificate(params);
+    certpem = cert.getPEM();
+    f1.newcert1.value = certpem;
+  } catch (ex) { alert("ISSUE ERROR: " + ex); }
+
+  try {
+    certdump = ASN1HEX.dump(pemtohex(certpem));
+    f1.newcert1dump.value = certdump;
+  } catch (ex) { alert("DUMP ERROR: " + ex); }
+
 }
 </script>
   </head>
@@ -238,7 +244,7 @@ critical<input type="checkbox" name="san_critical" value="0"/>
 <option value="dn">DN
 <option value="ip">IPAddress
 </select>
-<input type="text" name="san1_val" size="80"><br/>
+<input type="text" name="san1_val" size="80" value="example.com"><br/>
 
 <select name="san2_type">
 <option value="dns">DNS
@@ -266,8 +272,12 @@ critical<input type="checkbox" name="san_critical" value="0"/>
 
 <h2>Issued Certificate</h2>
 <textarea name="newcert1" cols="80" rows="8"></textarea>
-
+<br/>
+<textarea name="newcert1dump" cols="80" rows="8"></textarea>
 </form>
+
+Another version of CA is also available 
+<a href="tool_ca2.html">here</a>.
 
 <!-- now editing -->
 
@@ -280,7 +290,7 @@ critical<input type="checkbox" name="san_critical" value="0"/>
         <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
         <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
 <div align="center" style="color: white">
-Copyright &copy; 2010-2018 Kenji Urushima. All rights reserved.
+Copyright &copy; 2010-2020 Kenji Urushima. All rights reserved.
 </div>
       </footer>
     </div>

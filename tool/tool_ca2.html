@@ -39,7 +39,16 @@ function doIssue() {
     certparam.cakey = prvkey;
   }
 
-  f1.newcert1.value = KJUR.asn1.x509.X509Util.newCertPEM(certparam);
+  var certpem = null;
+  try {
+    certpem = (new KJUR.asn1.x509.Certificate(certparam)).getPEM();
+    f1.newcert1.value = certpem;
+  } catch (ex) { alert("PEM ERROR: " + ex); }
+  try {
+    var certdump = ASN1HEX.dump(pemtohex(certpem));
+    f1.newcert1dump.value = certdump;
+  } catch (ex) { alert("DUMP ERROR: " + ex); }
+
 }
 </script>
   </head>
@@ -116,23 +125,24 @@ sQIDAQAB
 <textarea name="certparam1" cols="120" rows="26">
 {
   "serial": {"int": 4},
-  "sigalg": {"name": "SHA256withRSA"},
+  "sigalg": "SHA256withRSA",
   "issuer": {"str": "/C=US/O=a"},
-  "notbefore": {"str": "150504235959Z"},
-  "notafter": {"str": "200504235959Z"},
+  "notbefore": "150504235959Z",
+  "notafter": "200504235959Z",
   "subject": {"str": "/C=US/O=b"},
   "sbjpubkey": "%PUBKEY%",
   "ext": [
-    {"basicConstraints": {"cA": false, "critical": true}},
-    {"keyUsage": {"bin": "11"}},
-    {"cRLDistributionPoints": {"uri": "http://rep.example.com/aaa.crl"}},
-    {"extKeyUsage": {"array": [{"name": "clientAuth"}]}},
-    {"subjectAltName": {"array": [
+    {"extname":"basicConstraints", "cA": false, "critical": true},
+    {"extname":"keyUsage", "names":["digitalSignature","nonRepudiation"]},
+    {"extname":"cRLDistributionPoints",
+     "array":[{"fulluri": "http://rep.example.com/aaa.crl"}]},
+    {"extname":"extKeyUsage", "array":["clientAuth"]},
+    {"extname":"subjectAltName", "array":[
       {"uri": "http://example.com/"},
       {"rfc822": "user1@example.com"},
       {"dn": "/C=US/O=example/CN=user1"},
       {"ip": "2601:db1::4:3"}
-    ]}}
+    ]}
   ],
   "cakey": "%PRVKEY%"
 }
@@ -147,8 +157,12 @@ by keys specified above.<br/>
 
 <h2>Issued Certificate</h2>
 <textarea name="newcert1" cols="80" rows="8"></textarea>
-
+<br/>
+<textarea name="newcert1dump" cols="80" rows="8"></textarea>
 </form>
+
+Another version of CA is also available 
+<a href="tool_ca.html">here</a>.
 
 <!-- now editing -->
 
@@ -161,7 +175,7 @@ by keys specified above.<br/>
         <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
         <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
 <div align="center" style="color: white">
-Copyright &copy; 2018 Kenji Urushima. All rights reserved.
+Copyright &copy; 2018-2020 Kenji Urushima. All rights reserved.
 </div>
       </footer>
     </div>

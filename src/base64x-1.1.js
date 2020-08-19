@@ -1,9 +1,7 @@
-/* base64x-1.1.15 (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* base64x-1.1.16 (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
- *
- * version: 1.1.15 (2020-Apr-11)
  *
  * Copyright (c) 2012-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
@@ -18,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.12 base64x 1.1.15 (2020-Apr-11)
+ * @version jsrsasign 9.0.0 base64x 1.1.16 (2020-Aug-13)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -46,6 +44,9 @@ if (typeof KJUR.lang == "undefined" || !KJUR.lang) KJUR.lang = {};
  * <li>{@link KJUR.lang.String.isBase64} - check whether argument is a Base64 encoded string</li>
  * <li>{@link KJUR.lang.String.isBase64URL} - check whether argument is a Base64URL encoded string</li>
  * <li>{@link KJUR.lang.String.isIntegerArray} - check whether argument is an array of integers</li>
+ * <li>{@link KJUR.lang.String.isPrintable} - check whether argument is PrintableString accepted characters</li>
+ * <li>{@link KJUR.lang.String.isIA5} - check whether argument is IA5String accepted characters</li>
+ * <li>{@link KJUR.lang.String.isMail} - check whether argument is RFC 822 e-mail address format</li>
  * </ul>
  * </dl>
  */
@@ -1082,6 +1083,76 @@ KJUR.lang.String.isIntegerArray = function(s) {
     } else {
 	return false;
     }
+};
+
+/**
+ * check whether a string consists of PrintableString characters<br/>
+ * @name isPrintable
+ * @memberOf KJUR.lang.String
+ * @function
+ * @static
+ * @param {String} s input string
+ * @return {Boolean} true if a string "s" consists of PrintableString characters
+ * @since jsrsasign 9.0.0 base64x 1.1.16
+ * A PrintableString consists of following characters
+ * <pre>
+ * 0-9A-Za-z '()+,-./:=?
+ * </pre>
+ * This method returns false when other characters than above.
+ * Otherwise it returns true.
+ * @example
+ * KJUR.lang.String.isPrintable("abc") &rarr; true
+ * KJUR.lang.String.isPrintable("abc@") &rarr; false
+ * KJUR.lang.String.isPrintable("あいう") &rarr; false
+ */
+KJUR.lang.String.isPrintable = function(s) {
+    if (s.match(/^[0-9A-Za-z '()+,-./:=?]*$/) !== null) return true;
+    return false;
+};
+
+/**
+ * check whether a string consists of IAString characters<br/>
+ * @name isIA5
+ * @memberOf KJUR.lang.String
+ * @function
+ * @static
+ * @param {String} s input string
+ * @return {Boolean} true if a string "s" consists of IA5String characters
+ * @since jsrsasign 9.0.0 base64x 1.1.16
+ * A IA5String consists of following characters
+ * <pre>
+ * %x00-21/%x23-7F (i.e. ASCII characters excludes double quote(%x22)
+ * </pre>
+ * This method returns false when other characters than above.
+ * Otherwise it returns true.
+ * @example
+ * KJUR.lang.String.isIA5("abc") &rarr; true
+ * KJUR.lang.String.isIA5('"abc"') &rarr; false
+ * KJUR.lang.String.isIA5("あいう") &rarr; false
+ */
+KJUR.lang.String.isIA5 = function(s) {
+    if (s.match(/^[\x20-\x21\x23-\x7f]*$/) !== null) return true;
+    return false;
+};
+
+/**
+ * check whether a string is RFC 822 mail address<br/>
+ * @name isMail
+ * @memberOf KJUR.lang.String
+ * @function
+ * @static
+ * @param {String} s input string
+ * @return {Boolean} true if a string "s" RFC 822 mail address
+ * @since jsrsasign 9.0.0 base64x 1.1.16
+ * This static method will check string s is RFC 822 compliant mail address.
+ * @example
+ * KJUR.lang.String.isMail("abc") &rarr; false
+ * KJUR.lang.String.isMail("abc@example") &rarr; false
+ * KJUR.lang.String.isMail("abc@example.com") &rarr; true
+ */
+KJUR.lang.String.isMail = function(s) {
+    if (s.match(/^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/) !== null) return true;
+    return false;
 };
 
 // ==== others ================================

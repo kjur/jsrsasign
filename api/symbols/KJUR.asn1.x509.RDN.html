@@ -593,16 +593,24 @@ AttributeTypeAndValue ::= SEQUENCE {
   value AttributeValue }
 </pre></blockquote>
 <br/>
-NOTE: Multi-valued RDN is supported since jsrsasign 6.2.1 asn1x509 1.0.17.
+NOTE1: The "array" and "rule" parameters have been supported
+since jsrsasign 9.0.0 asn1x509 2.0.0.
+<br/>
+NOTE2: Multi-valued RDN in "str" parameter have been
+supported since jsrsasign 6.2.1 asn1x509 1.0.17.
 					
 				</div>
 				
 				
 				
-				<pre class="code">rdn = new KJUR.asn1.x509.RDN({str: "CN=test"});
-rdn = new KJUR.asn1.x509.RDN({str: "O=a+O=bb+O=c"}); // multi-valued
-rdn = new KJUR.asn1.x509.RDN({str: "O=a+O=b\\+b+O=c"}); // plus escaped
-rdn = new KJUR.asn1.x509.RDN({str: "O=a+O=\"b+b\"+O=c"}); // double quoted</pre>
+				<pre class="code">new KJUR.asn1.x509.RDN({array: [ // multi-valued
+   {type:"CN",value:"Bob",ds:"prn"},
+   {type:"CN",value:"bob@example.com", ds:"ia5"}
+]});
+new KJUR.asn1.x509.RDN({str: "CN=test"});
+new KJUR.asn1.x509.RDN({str: "O=a+O=bb+O=c"}); // multi-valued
+new KJUR.asn1.x509.RDN({str: "O=a+O=b\\+b+O=c"}); // plus escaped
+new KJUR.asn1.x509.RDN({str: "O=a+O=\"b+b\"+O=c"}); // double quoted</pre>
 				
 				
 				

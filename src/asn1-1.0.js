@@ -1,4 +1,4 @@
-/* asn1-1.0.15.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1-1.0.16.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.0.15 (2020-Aug-05)
+ * @version jsrsasign 9.0.0 asn1 1.0.16 (2020-Aug-12)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -192,9 +192,14 @@ KJUR.asn1.ASN1Util = new function() {
      * <li>'set' - DERSet</li>
      * <li>'tag' - DERTaggedObject</li>
      * </ul>
+     * <br/>
+     * NOTE: Structured object such as SEQUENCE or SET can conclude
+     * ASN1Object as well as JSON parameters since jsrsasign 9.0.0.
+     *
      * @example
      * newObject({'prnstr': 'aaa'});
      * newObject({'seq': [{'int': 3}, {'prnstr': 'aaa'}]})
+     * newObject({seq: [{int: 3}, new DERInteger({int: 3})]}) // mixed
      * // ASN.1 Tagged Object
      * newObject({'tag': {'tag': 'a1', 
      *                    'explicit': true,
@@ -231,9 +236,11 @@ KJUR.asn1.ASN1Util = new function() {
 	    _DERTaggedObject = _KJUR_asn1.DERTaggedObject,
 	    _newObject = _KJUR_asn1.ASN1Util.newObject;
 
+	if (param instanceof _KJUR_asn1.ASN1Object) return param;
+
         var keys = Object.keys(param);
         if (keys.length != 1)
-            throw "key of param shall be only one.";
+            throw new Error("key of param shall be only one.");
         var key = keys[0];
 
         if (":bool:int:bitstr:octstr:null:oid:enum:utf8str:numstr:prnstr:telstr:ia5str:utctime:gentime:visstr:bmpstr:seq:set:tag:".indexOf(":" + key + ":") == -1)
@@ -1092,7 +1099,7 @@ YAHOO.lang.extend(KJUR.asn1.DERNull, KJUR.asn1.ASN1Object);
  * class for ASN.1 DER ObjectIdentifier
  * @name KJUR.asn1.DERObjectIdentifier
  * @class class for ASN.1 DER ObjectIdentifier
- * @param {Array} params associative array of parameters (ex. {'oid': '2.5.4.5'})
+ * @param {Object} JSON object or string of parameters (ex. {'oid': '2.5.4.5'})
  * @extends KJUR.asn1.ASN1Object
  * @description
  * <br/>
@@ -1103,6 +1110,12 @@ YAHOO.lang.extend(KJUR.asn1.DERNull, KJUR.asn1.ASN1Object);
  * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
  * </ul>
  * NOTE: 'params' can be omitted.
+ * @example
+ * new DERObjectIdentifier({"name": "sha1"})
+ * new DERObjectIdentifier({"oid": "1.2.3.4"})
+ * new DERObjectIdentifier({"hex": "2d..."})
+ * new DERObjectIdentifier("1.2.3.4")
+ * new DERObjectIdentifier("SHA1withRSA")
  */
 KJUR.asn1.DERObjectIdentifier = function(params) {
     var itox = function(i) {
@@ -1156,7 +1169,7 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
      */
     this.setValueOidString = function(oidString) {
         if (! oidString.match(/^[0-9.]+$/)) {
-            throw "malformed oid string: " + oidString;
+            throw new Error("malformed oid string: " + oidString);
         }
         var h = '';
         var a = oidString.split('.');
@@ -1191,7 +1204,7 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
 	if (oid !== '') {
             this.setValueOidString(oid);
         } else {
-            throw "DERObjectIdentifier oidName undefined: " + oidName;
+            throw new Error("DERObjectIdentifier oidName undefined: " + oidName);
         }
     };
 
