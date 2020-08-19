@@ -517,7 +517,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont">KJUR.asn1.x509.X509Util.<b><a href="../symbols/KJUR.asn1.x509.X509Util.html#.newCertPEM">newCertPEM</a></b>(param)
 								</div>
-								<div class="description">issue a certificate in PEM format
+								<div class="description">issue a certificate in PEM format (DEPRECATED)
 This method can issue a certificate by a simple
 JSON object.</div>
 							</td>
@@ -579,12 +579,12 @@ JSON object.</div>
 					
 					</div>
 					<div class="description">
-						issue a certificate in PEM format
+						issue a certificate in PEM format (DEPRECATED)
 This method can issue a certificate by a simple
 JSON object.
 Signature value will be provided by signing with
 private key using 'cakey' parameter or
-hexa decimal signature value by 'sighex' parameter.
+hexadecimal signature value by 'sighex' parameter.
 <br/>
 NOTE: Algorithm parameter of AlgorithmIdentifier will
 be set automatically by default. 
@@ -665,10 +665,17 @@ var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
 									<span class="light fixedFont">{Array}</span> <b>param</b>
 									
 								</dt>
-								<dd>parameter to issue a certificate</dd>
+								<dd>JSON object of parameter to issue a certificate</dd>
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 9.0.0 asn1x509 2.0.0. please move to <a href="../symbols/KJUR.asn1.x509.Certificate.html">KJUR.asn1.x509.Certificate</a> constructor
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">

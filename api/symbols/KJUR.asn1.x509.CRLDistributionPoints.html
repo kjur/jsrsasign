@@ -491,10 +491,9 @@ ul.inheritsList
 								<b><a href="../symbols/KJUR.asn1.x509.CRLDistributionPoints.html#constructor">KJUR.asn1.x509.CRLDistributionPoints</a></b>(params)
 							</div>
 							<div class="description">CRLDistributionPoints ASN.1 structure class
-<pre>
-id-ce-cRLDistributionPoints OBJECT IDENTIFIER ::=  { id-ce 31 }
-
-CRLDistributionPoints ::= SEQUENCE SIZE (1.</div>
+This class represents 
+<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.13">
+CRLDistributionPoints extension defined in RFC 5280 4.2.1.13</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -540,37 +539,34 @@ CRLDistributionPoints ::= SEQUENCE SIZE (1.</div>
 				
 				<div class="description">
 					CRLDistributionPoints ASN.1 structure class
+This class represents 
+<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.13">
+CRLDistributionPoints extension defined in RFC 5280 4.2.1.13</a>.
 <pre>
 id-ce-cRLDistributionPoints OBJECT IDENTIFIER ::=  { id-ce 31 }
-
 CRLDistributionPoints ::= SEQUENCE SIZE (1..MAX) OF DistributionPoint
-
 DistributionPoint ::= SEQUENCE {
      distributionPoint       [0]     DistributionPointName OPTIONAL,
      reasons                 [1]     ReasonFlags OPTIONAL,
      cRLIssuer               [2]     GeneralNames OPTIONAL }
-
 DistributionPointName ::= CHOICE {
      fullName                [0]     GeneralNames,
      nameRelativeToCRLIssuer [1]     RelativeDistinguishedName }
-
-ReasonFlags ::= BIT STRING {
-     unused                  (0),
-     keyCompromise           (1),
-     cACompromise            (2),
-     affiliationChanged      (3),
-     superseded              (4),
-     cessationOfOperation    (5),
-     certificateHold         (6),
-     privilegeWithdrawn      (7),
-     aACompromise            (8) }
 </pre>
+Constructor can have following parameter:
+<ul>
+<li>{Array}array - array of <a href="../symbols/KJUR.asn1.x509.DistributionPoint.html">KJUR.asn1.x509.DistributionPoint</a> parameter</li>
+<li>{Boolean}critical - critical flag</li>
+</ul>
 					
 				</div>
 				
 				
 				
-				<pre class="code"></pre>
+				<pre class="code">new KJUR.asn1.x509.CRLDistributionPoints({
+  array: [{fulluri: "http://aaa.com/"}, {fulluri: "ldap://aaa.com/"}],
+  critical: true
+})</pre>
 				
 				
 				
@@ -592,6 +588,17 @@ ReasonFlags ::= BIT STRING {
 					
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd></dd>
+						
+							<dd></dd>
+						
+							<dd></dd>
+						
+						</dl>
 					
 
 			</div>

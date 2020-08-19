@@ -135,12 +135,12 @@ RSAKey.prototype.readPKCS5PubKeyHex = function(h) {
     var _getV = _ASN1HEX.getV;
 
     if (_ASN1HEX.isASN1HEX(h) === false)
-	throw "keyHex is not ASN.1 hex string";
+	throw new Error("keyHex is not ASN.1 hex string");
     var aIdx = _ASN1HEX.getChildIdx(h, 0);
     if (aIdx.length !== 2 ||
 	h.substr(aIdx[0], 2) !== "02" ||
 	h.substr(aIdx[1], 2) !== "02")
-	throw "wrong hex for PKCS#5 public key";
+	throw new Error("wrong hex for PKCS#5 public key");
     var hN = _getV(h, aIdx[0]);
     var hE = _getV(h, aIdx[1]);
     this.setPublic(hN, hE);

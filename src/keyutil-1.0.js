@@ -1616,7 +1616,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         }
     }
 
-    throw "unsupported object nor format";
+    throw new Error("unsupported object nor format");
 };
 
 // -- PUBLIC METHODS FOR CSR --------------------------------------------------

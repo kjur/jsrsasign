@@ -1,6 +1,73 @@
 
 ChangeLog for jsrsasign
 
+Certificate and CSR geenrator and parser API major updates
+* Changes from 8.0.24 to 9.0.0 (2020-Aug-19)
+  - Please see migration notes in wiki:
+    https://github.com/kjur/jsrsasign/wiki/NOTE-jsrsasign-8.0.x-to-9.0.0-Certificate-and-CSR-API-migration-guide
+  - CAUTION: some certificate and CSR APIs are missing
+    backward compatibility so you may need to change your code
+    to upgrade jsrsasign 9.0.0.
+  - src/asn1x509.js
+    - JSON argument format of Certificate and all certificate
+      extension class were changed without backward compatibility.
+      - They can accept JSON objects from ASN.1 parser methods 
+        in X509 class as an parameter arguments.
+      - Certificate class constructor can automatically 
+        generate TBSCertificate and sign by params argument.
+        So no need to call sign method or TBSCertificate 
+        constructor.
+      - JSON argument format are aligned to the same manner
+        among all certificate extension class.
+      - For CRLDistributionPoints class, JSON argument format
+        of DistributionPoint and DistributionPointName
+        was changed.
+    - Extension.appendByNameToArray method was removed.
+    - "array" key was added to X500Name class constructor
+      JSON argument.
+      - AttributeTypeAndValue constructor argument also
+        extended to support {type:"CN",value:"Test",ds:"prn"}
+        style JSON object.
+    - X509Util.newCertPEM argument format is updated to
+      align Certificate class and is *deprecated*.
+  - src/x509.js
+    - returned JSON object format by all "get*" parser method 
+      was changed to accept by related class defined in asn1x509.js
+      without backward compatibility.
+    - all certificate extension parsing methods are
+      changed to have "hExtV" and "critical" as arguments.
+    - following methods are added:
+      getAlgorithmIdentifierName, getIssuer, getSubject,
+      getGeneralNames, getGeneralName, getDistributionPoint,
+      getDistributionPointName, getExtAuthorityInfoAccess,
+      getPolicyInformation, getPolicyQualifierInfo,
+      getUserNotice, getDisplayText, getX500NameRule,
+      getX500Name, getRDN, getAttrTypeAndValue, getParam,
+      getExtParamArray
+    - following methods are *deprecated*:
+      getExtSubjectAltName2, getExtAIAInfo, 
+      getExtCRLDistributionPointsURI.
+    - X509Util.newCertPEM bugfix. 
+      Got error when cakey is PKCS#5 plain PEM key string
+  - src/asn1csr.js
+    - JSON argument format was changed in CertificationRequest, 
+      CertificationRequestInfo, CSRUtil.netCSRPEM without
+      backward compatibility.
+    - CSRUtil.getInfo was renamed to CSRUtil.getParam
+    - CSRUtil.netCSRPEM is now *deprecated*
+  - src/asn1.js
+    - ASN1Util.newObject can also conclude ASN1Object
+      as well as JSON parameter.
+  - tool/tool_{ca,ca2}.html
+    - changed to follow above updates.
+  - test/*.html
+    - following test pages are updated to follow above:
+      qunit-do-{asn1csr,asn1tsp,asn1x509-newcrt,asn1x509,base64x,
+      ecdsmod-s,keyutil-getpem,package-jwths,x509-ext,
+      x509-key,x509-kid,x509}.html
+    - following test pages are added:
+      qunit-do-{asn1x509-tbscert,x509-param}.html
+
 fix SigningCertificate v1 v2 attribute ASN.1 encoding
 * Changes from 8.0.23 to 8.0.24 (2020-Aug-18)
   - KJUR.asn1.cms.{SigningCertificate,SigningCertificateV2}
@@ -9,6 +76,8 @@ fix SigningCertificate v1 v2 attribute ASN.1 encoding
     - KJUR.asn1.cms.{SigningCertificate,SigningCertificateV2}
       ASN.1 encoding issue fixed (#448)
     - added KJUR.asn1.cms.IssuerSerial
+  - src/base64x.js
+    - String.{isPritable,isIA5,isMail} methods added
   - test/qunit-do-asn1{cms,tsp}.html
     - updated for above issue
 

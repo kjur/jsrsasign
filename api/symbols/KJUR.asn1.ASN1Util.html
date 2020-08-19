@@ -770,6 +770,9 @@ Generally 'param' can be described as follows:
 <li>'set' - DERSet</li>
 <li>'tag' - DERTaggedObject</li>
 </ul>
+<br/>
+NOTE: Structured object such as SEQUENCE or SET can conclude
+ASN1Object as well as JSON parameters since jsrsasign 9.0.0.
 						
 						
 					</div>
@@ -778,6 +781,7 @@ Generally 'param' can be described as follows:
 					
 					<pre class="code">newObject({'prnstr': 'aaa'});
 newObject({'seq': [{'int': 3}, {'prnstr': 'aaa'}]})
+newObject({seq: [{int: 3}, new DERInteger({int: 3})]}) // mixed
 // ASN.1 Tagged Object
 newObject({'tag': {'tag': 'a1', 
                    'explicit': true,

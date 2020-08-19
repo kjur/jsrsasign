@@ -16,6 +16,7 @@ Public page is https://kjur.github.io/jsrsasign .
 
 NEWS
 ----
+- 2020-Aug-19: 9.0.0 released for major update of certificate and CSR generation and parsing without backward compatibility. Please see [migration guide](https://github.com/kjur/jsrsasign/wiki/NOTE-jsrsasign-8.0.x-to-9.0.0-Certificate-and-CSR-API-migration-guide) in detail.
 - 2020-Aug-18: 8.0.24 released for SigningCertificate ASN.1 encoding bugfix
 - 2020-Aug-02: twitter account [@jsrsasign](https://twitter.com/jsrsasign) started for announcement. please follow.
 

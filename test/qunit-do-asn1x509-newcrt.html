@@ -42,13 +42,11 @@
 <script src="../src/keyutil-1.0.js"></script>
 <script src="../src/rsasign-1.2.js"></script>
 
-<script language="JavaScript" type="text/javascript" src="../ext/prng4.js"></script>
-<script language="JavaScript" type="text/javascript" src="../ext/rng.js"></script>
-<script language="JavaScript" type="text/javascript" src="../ext/ec.js"></script>
-<script language="JavaScript" type="text/javascript" src="../ext/ec-patch.js"></script>
-<script language="JavaScript" type="text/javascript" src="../src/ecdsa-modified-1.0.js"></script>
-<script language="JavaScript" type="text/javascript" src="../src/ecparam-1.0.js"></script>
-<script language="JavaScript" type="text/javascript" src="../src/dsa-2.0.js"></script>
+<script src="../ext/ec.js"></script>
+<script src="../ext/ec-patch.js"></script>
+<script src="../src/ecdsa-modified-1.0.js"></script>
+<script src="../src/ecparam-1.0.js"></script>
+<script src="../src/dsa-2.0.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -75,6 +73,19 @@ var z1PrvP5EPEM = "" +
 "YwMhHJbaVCzwYduxdyK2JBYEosDZiDfnOP4DqPhJYpg=\n" +
 "-----END RSA PRIVATE KEY-----\n";
 var z1PrvP5EPass = "hoge";
+
+// _test/0cert_rsa/z1.prv.p5p.pem
+var z1PrvP5PPEM = (function() {/*
+-----BEGIN RSA PRIVATE KEY-----
+MIIBOgIBAAJBAOhmTdK0BSkSFWjzs5vJemLnujwJur3E8NzY35DreQubtkWitw4x
+EnR7TTxBtRQkiVEV/viPedQ+rlsaTjUY/VkCAwEAAQJAeLvFTGRnlemmI8sPkSx/
+n2hhcRVg5Xut4h3tL32Vefhicvq55xqycoLCdgxATa5qyKOrhSz2vNVi+a/4JHom
+TQIhAP6b1FCGazJVYU/el2p2rAsdWDDdpk9TWblG2FErwSOfAiEA6atoD18F27D0
+MRsOb0No9IdKEjiXnYvGAMNcbyBwfAcCIQDVSctpjcF9T+MOWoTzrehgAzwe639n
+0oZGXJ/YF9RbNwIgGEm0u0RJO5idCS2ixnXfRut5C4POXpXUsuebiAF7L6kCIH0m
+GpYlbUmwIMsdWH7N4Sfgk6TSs0zb/xcfNBJbWFep
+-----END RSA PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
 
 var z1CertPEM = "" +
 "-----BEGIN CERTIFICATE-----\r\n" +
@@ -213,22 +224,45 @@ equal(obj.getEncodedHex(), "308201b73082012b06072a8648ce3804013082011e028181009e
 
 // newCertPEM Test
 
-test("newCertPEM z1(RSA)", function() {
+
+test("newCertPEM z1(RSA) signed by PKCS#5 encrypted RSA key", function() {
+var prvkey = KEYUTIL.getKey(z1PrvP5EPEM, z1PrvP5EPass);
 var pem = KJUR.asn1.x509.X509Util.newCertPEM(
  { serial: {int: 4},
-   sigalg: {name: 'SHA1withRSA'},
+   sigalg: "SHA1withRSA",
    issuer: {str: '/C=US/O=a'},
-   notbefore: {'str': '130504235959Z'},
-   notafter: {'str': '140504235959Z'},
+   notbefore: '130504235959Z',
+   notafter:  '140504235959Z',
    subject: {str: '/C=US/O=b'},
    sbjpubkey: z1PubP8PEM,
    ext: [
-     {basicConstraints: {cA: true, critical: true}},
-     {keyUsage: {bin: '11'}},
-     {cRLDistributionPoints: {uri: 'http://aaa.com/a.crl'}},
-     {extKeyUsage: {array: [{name: 'clientAuth'}]}},
+     {extname: "basicConstraints", cA: true, critical: true},
+     {extname: "keyUsage", names:["digitalSignature", "nonRepudiation"]},
+     {extname: "cRLDistributionPoints",
+      array: [{fulluri: 'http://aaa.com/a.crl'}]},
+     {extname: "extKeyUsage", array: ['clientAuth']}
    ],
-   cakey: [z1PrvP5EPEM, z1PrvP5EPass]});
+   cakey: prvkey});
+equal(pem, z1CertPEM, "bbb");
+});
+
+test("newCertPEM z1(RSA) signed by PKCS#5 plain RSA key", function() {
+var pem = KJUR.asn1.x509.X509Util.newCertPEM(
+ { serial: {int: 4},
+   sigalg: "SHA1withRSA",
+   issuer: {str: '/C=US/O=a'},
+   notbefore: '130504235959Z',
+   notafter:  '140504235959Z',
+   subject: {str: '/C=US/O=b'},
+   sbjpubkey: z1PubP8PEM,
+   ext: [
+     {extname: "basicConstraints", cA: true, critical: true},
+     {extname: "keyUsage", names:["digitalSignature", "nonRepudiation"]},
+     {extname: "cRLDistributionPoints",
+      array: [{fulluri: 'http://aaa.com/a.crl'}]},
+     {extname: "extKeyUsage", array: ['clientAuth']}
+   ],
+   cakey: z1PrvP5PPEM});
 equal(pem, z1CertPEM, "bbb");
 });
 
@@ -237,17 +271,18 @@ var pub = KEYUTIL.getKey(P1PUBPEM);
 var prv = KEYUTIL.getKey(P1PRVPEM);
 var pem = KJUR.asn1.x509.X509Util.newCertPEM(
  { serial: {int: 4},
-   sigalg: {name: 'SHA512withRSAandMGF1'},
+   sigalg: "SHA512withRSAandMGF1",
    issuer: {str: '/C=US/O=a'},
-   notbefore: {'str': '130504235959Z'},
-   notafter: {'str': '140504235959Z'},
+   notbefore: '130504235959Z',
+   notafter:  '140504235959Z',
    subject: {str: '/C=US/O=b'},
    sbjpubkey: pub,
    ext: [
-     {basicConstraints: {cA: true, critical: true}},
-     {keyUsage: {bin: '11'}},
-     {cRLDistributionPoints: {uri: 'http://aaa.com/a.crl'}},
-     {extKeyUsage: {array: [{name: 'clientAuth'}]}},
+     {extname: "basicConstraints", cA: true, critical: true},
+     {extname: "keyUsage", names:["digitalSignature", "nonRepudiation"]},
+     {extname: "cRLDistributionPoints",
+      array: [{fulluri: 'http://aaa.com/a.crl'}]},
+     {extname: "extKeyUsage", array: ['clientAuth']}
    ],
    cakey: prv});
 var hCert = pemtohex(pem);
@@ -261,42 +296,45 @@ equal(x.verifySignature(pub), true, "verifySignature=true");
 });
 
 test("newCertPEM z1(RSA) {subject,issuer}AltName", function() {
+var prvkey = KEYUTIL.getKey(z1PrvP5EPEM, z1PrvP5EPass);
 var pem = KJUR.asn1.x509.X509Util.newCertPEM(
  { serial: {int: 4},
-   sigalg: {name: 'SHA1withRSA'},
+   sigalg: "SHA1withRSA",
    issuer: {str: '/C=US/O=a'},
-   notbefore: {'str': '130504235959Z'},
-   notafter: {'str': '140504235959Z'},
+   notbefore: '130504235959Z',
+   notafter:  '140504235959Z',
    subject: {str: '/C=US/O=b'},
    sbjpubkey: z1PubP8PEM,
    ext: [
-     {basicConstraints: {cA: true, critical: true}},
-     {keyUsage: {bin: '11'}},
-     {cRLDistributionPoints: {uri: 'http://aaa.com/a.crl'}},
-     {extKeyUsage: {array: [{name: 'clientAuth'}]}},
-     {issuerAltName: {array: [{dns: 'aaa.com'}]}},
-     {subjectAltName: {array: [{dns: 'aaa.com'}]}},
+     {extname: "basicConstraints", cA: true, critical: true},
+     {extname: "keyUsage", names:["digitalSignature", "nonRepudiation"]},
+     {extname: "cRLDistributionPoints",
+      array: [{fulluri: 'http://aaa.com/a.crl'}]},
+     {extname: "extKeyUsage", array: ['clientAuth']},
+     {extname: "issuerAltName", array: [{dns: 'aaa.com'}]},
+     {extname: "subjectAltName", array: [{dns: 'aaa.com'}]}
    ],
-   cakey: [z1PrvP5EPEM, z1PrvP5EPass]});
+   cakey: prvkey});
 equal(pem, z1CertIANSANPEM, "z1CertIANSANPEM + san/ian");
 });
 
 test("newCertPEM k1(ECDSA secp256r1)", function() {
 var pem = KJUR.asn1.x509.X509Util.newCertPEM(
  { serial: {int: 4},
-   sigalg: {name: 'SHA256withECDSA'},
+   sigalg: "SHA256withECDSA",
    issuer: {str: '/C=US/O=a'},
-   notbefore: {'str': '130504235959Z'},
-   notafter: {'str': '140504235959Z'},
+   notbefore: '130504235959Z',
+   notafter:  '140504235959Z',
    subject: {str: '/C=US/O=b'},
    sbjpubkey: k1PubP8PEM,
    ext: [
-     {basicConstraints: {cA: true, critical: true}},
-     {keyUsage: {bin: '11'}},
-     {cRLDistributionPoints: {uri: 'http://aaa.com/a.crl'}},
-     {extKeyUsage: {array: [{name: 'clientAuth'}]}},
+     {extname: "basicConstraints", cA: true, critical: true},
+     {extname: "keyUsage", names:["digitalSignature", "nonRepudiation"]},
+     {extname: "cRLDistributionPoints",
+      array: [{fulluri: 'http://aaa.com/a.crl'}]},
+     {extname: "extKeyUsage", array: ['clientAuth']}
    ],
-   cakey: [k1PrvP8PPEM]});
+   cakey: k1PrvP8PPEM});
 var hex = pemtohex(pem, "CERTIFICATE");
 var tbsHex = ASN1HEX.getTLVbyList(hex, 0, [0]);
 equal(tbsHex, "30820123a003020102020104300a06082a8648ce3d0403023019310b3009060355040613025553310a3008060355040a0c0161301e170d3133303530343233353935395a170d3134303530343233353935395a3019310b3009060355040613025553310a3008060355040a0c01623059301306072a8648ce3d020106082a8648ce3d03010703420004a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425a35c305a300f0603551d130101ff040530030101ff300b0603551d0f0404030206c030250603551d1f041e301c301aa018a0168614687474703a2f2f6161612e636f6d2f612e63726c30130603551d25040c300a06082b06010505070302", "expected tbsCert");
@@ -304,21 +342,23 @@ equal(tbsHex, "30820123a003020102020104300a06082a8648ce3d0403023019310b300906035
 
 //   sigalg: {name: 'SHA1withDSA', paramempty: true},
 test("newCertPEM d1(DSA)", function() {
+var prvkey = KEYUTIL.getKey(d1PrvP5EPEM, d1PrvP5EPass);
 var pem = KJUR.asn1.x509.X509Util.newCertPEM({
    serial: {int: 4},
-   sigalg: {name: 'SHA1withDSA'},
+   sigalg: "SHA1withDSA",
    issuer: {str: '/C=US/O=a'},
-   notbefore: {str: '130504235959Z'},
-   notafter: {str: '140504235959Z'},
+   notbefore: '130504235959Z',
+   notafter:  '140504235959Z',
    subject: {str: '/C=US/O=b'},
    sbjpubkey: d1PubP8PEM,
    ext: [
-     {basicConstraints: {cA: true, critical: true}},
-     {keyUsage: {bin: '11'}},
-     {cRLDistributionPoints: {uri: 'http://aaa.com/a.crl'}},
-     {extKeyUsage: {array: [{name: 'clientAuth'}]}},
+     {extname: "basicConstraints", cA: true, critical: true},
+     {extname: "keyUsage", names:["digitalSignature", "nonRepudiation"]},
+     {extname: "cRLDistributionPoints",
+      array: [{fulluri: 'http://aaa.com/a.crl'}]},
+     {extname: "extKeyUsage", array: ['clientAuth']}
    ],
-   cakey: [d1PrvP5EPEM, d1PrvP5EPass]
+   cakey: prvkey
 });
 var hex = pemtohex(pem, "CERTIFICATE");
 var tbsHex = ASN1HEX.getTLVbyList(hex, 0, [0]);
@@ -328,45 +368,19 @@ equal(tbsHex, "30820282a003020102020104300906072a8648ce3804033019310b30090603550
 test("newCertPEM by sighex(RSA)", function() {
 var pem = KJUR.asn1.x509.X509Util.newCertPEM(
  { serial: {int: 1},
-   sigalg: {name: 'SHA1withRSA'},
+   sigalg: "SHA1withRSA",
    issuer: {str: '/C=US/O=r1'},
-   notbefore: {'str': '130504235959Z'},
-   notafter: {'str': '140504235959Z'},
+   notbefore: '130504235959Z',
+   notafter:  '140504235959Z',
    subject: {str: '/C=US/O=r1'},
    sbjpubkey: z1PubP8PEM,
    sighex: '0102030405060708'});
 var hex = pemtohex(pem, "CERTIFICATE");
 var tbsHex = ASN1HEX.getTLVbyList(hex, 0, [0]);
-//alert(pem);
-expect(2);
 
 equal(tbsHex, "3081cda003020102020101300d06092a864886f70d0101050500301a310b3009060355040613025553310b3009060355040a0c027231301e170d3133303530343233353935395a170d3134303530343233353935395a301a310b3009060355040613025553310b3009060355040a0c027231305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001", "expected tbsCert");
 
 equal(hex, "3081ea3081cda003020102020101300d06092a864886f70d0101050500301a310b3009060355040613025553310b3009060355040a0c027231301e170d3133303530343233353935395a170d3134303530343233353935395a301a310b3009060355040613025553310b3009060355040a0c027231305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001300d06092a864886f70d01010505000309000102030405060708", "fake cert");
-
-});
-
-//   sigalg: {name: 'SHA1withRSA', paramempty: true},
-test("newCertPEM by issues object, sighex(RSA)", function() {
-var pem = KJUR.asn1.x509.X509Util.newCertPEM(
- { serial: {int: 1},
-   sigalg: {name: 'SHA1withRSA'},
-   issuer: {
-     C: 'US',
-     O: 'r1',
-     CN: 'https://www.github.com/kjur//'
-   },
-   notbefore: {str: '130504235959Z'},
-   notafter: {str: '140504235959Z'},
-   subject: {str: '/C=US/O=r1'},
-   sbjpubkey: z1PubP8PEM,
-   sighex: '0102030405060708'});
-var hex = pemtohex(pem, "CERTIFICATE");
-var tbsHex = ASN1HEX.getTLVbyList(hex, 0, [0]);
-
-equal(tbsHex, "3081f5a003020102020101300d06092a864886f70d01010505003042310b3009060355040613025553310b3009060355040a0c0272313126302406035504030c1d68747470733a2f2f7777772e6769746875622e636f6d2f6b6a75722f2f301e170d3133303530343233353935395a170d3134303530343233353935395a301a310b3009060355040613025553310b3009060355040a0c027231305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001", "expected tbsCert");
-
-equal(hex, "308201123081f5a003020102020101300d06092a864886f70d01010505003042310b3009060355040613025553310b3009060355040a0c0272313126302406035504030c1d68747470733a2f2f7777772e6769746875622e636f6d2f6b6a75722f2f301e170d3133303530343233353935395a170d3134303530343233353935395a301a310b3009060355040613025553310b3009060355040a0c027231305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001300d06092a864886f70d01010505000309000102030405060708", "fake cert");
 });
 
 });

@@ -538,7 +538,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.<b>getPEMString</b>()
+								<div class="fixedFont">KJUR.asn1.x509.<b>setByParam</b>(params)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -547,16 +547,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.<b>setByString</b>(dnStr)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.<b>setIssuerByParam</b>(x500NameParam)
+								<div class="fixedFont">KJUR.asn1.x509.<b>setByString</b>(dnStr, sRule)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -575,15 +566,6 @@ ul.inheritsList
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">KJUR.asn1.x509.<b>setNameArray</b>(paramsArray)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.<b>setSignatureAlgByParam</b>(algIdParam)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -741,11 +723,11 @@ jsrsasign 8.0.23 asn1x509 1.1.12<br/>
 
 					<hr />
 				
-					<a name=".getPEMString"> </a>
+					<a name=".setByParam"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">KJUR.asn1.x509.</span><b>getPEMString</b>()
+					<span class="light">KJUR.asn1.x509.</span><b>setByParam</b>(params)
 					
 					</div>
 					<div class="description">
@@ -756,6 +738,17 @@ jsrsasign 8.0.23 asn1x509 1.1.12<br/>
 					
 					
 					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>params</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
@@ -770,7 +763,7 @@ jsrsasign 8.0.23 asn1x509 1.1.12<br/>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">KJUR.asn1.x509.</span><b>setByString</b>(dnStr)
+					<span class="light">KJUR.asn1.x509.</span><b>setByString</b>(dnStr, sRule)
 					
 					</div>
 					<div class="description">
@@ -791,38 +784,8 @@ jsrsasign 8.0.23 asn1x509 1.1.12<br/>
 								</dt>
 								<dd></dd>
 							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".setIssuerByParam"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.x509.</span><b>setIssuerByParam</b>(x500NameParam)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
 								<dt>
-									<b>x500NameParam</b>
+									<b>sRule</b>
 									
 								</dt>
 								<dd></dd>
@@ -895,42 +858,6 @@ jsrsasign 8.0.23 asn1x509 1.1.12<br/>
 							
 								<dt>
 									<b>paramsArray</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".setSignatureAlgByParam"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.x509.</span><b>setSignatureAlgByParam</b>(algIdParam)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>algIdParam</b>
 									
 								</dt>
 								<dd></dd>

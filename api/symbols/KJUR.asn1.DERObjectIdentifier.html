@@ -488,7 +488,7 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.DERObjectIdentifier.html#constructor">KJUR.asn1.DERObjectIdentifier</a></b>(params)
+								<b><a href="../symbols/KJUR.asn1.DERObjectIdentifier.html#constructor">KJUR.asn1.DERObjectIdentifier</a></b>(JSON)
 							</div>
 							<div class="description">class for ASN.1 DER ObjectIdentifier
 <br/>
@@ -577,7 +577,7 @@ OID name shall be defined in 'KJUR.asn1.x509.OID.name2oidList'.</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.DERObjectIdentifier</b>(params)
+						<b>KJUR.asn1.DERObjectIdentifier</b>(JSON)
 				</div>
 				
 				<div class="description">
@@ -595,16 +595,24 @@ NOTE: 'params' can be omitted.
 				
 				
 				
+				<pre class="code">new DERObjectIdentifier({"name": "sha1"})
+new DERObjectIdentifier({"oid": "1.2.3.4"})
+new DERObjectIdentifier({"hex": "2d..."})
+new DERObjectIdentifier("1.2.3.4")
+new DERObjectIdentifier("SHA1withRSA")</pre>
+				
+				
+				
 				
 					
 						<dl class="detailList">
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								<span class="light fixedFont">{Array}</span>  <b>params</b>
+								<span class="light fixedFont">{Object}</span>  <b>JSON</b>
 								
 							</dt>
-								<dd>associative array of parameters (ex. {'oid': '2.5.4.5'})</dd>
+								<dd>object or string of parameters (ex. {'oid': '2.5.4.5'})</dd>
 						
 						</dl>
 					

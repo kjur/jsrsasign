@@ -491,7 +491,12 @@ ul.inheritsList
 								<b><a href="../symbols/KJUR.asn1.x509.Extension.html#constructor">KJUR.asn1.x509.Extension</a></b>(params)
 							</div>
 							<div class="description">base Extension ASN.1 structure class
-</div>
+<pre>
+Extension  ::=  SEQUENCE  {
+    extnID      OBJECT IDENTIFIER,
+    critical    BOOLEAN DEFAULT FALSE,
+    extnValue   OCTET STRING  }
+</pre></div>
 						</td>
 					</tr>
 				</tbody>
@@ -513,30 +518,6 @@ ul.inheritsList
 <!-- ============================== methods summary ======================== -->
 			
 				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.x509.Extension.">
-					<caption>Method Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.x509.Extension.<b><a href="../symbols/KJUR.asn1.x509.Extension.html#.appendByNameToArray">appendByNameToArray</a></b>(name, extParams, a)
-								</div>
-								<div class="description">append X.509v3 extension to any specified array<br/>
-This static function add a X.509v3 extension specified by name and extParams to
-array 'a' so that 'a' will be an array of X.509v3 extension objects.</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
 				
 				
 				
@@ -561,16 +542,18 @@ array 'a' so that 'a' will be an array of X.509v3 extension objects.</div>
 				
 				<div class="description">
 					base Extension ASN.1 structure class
-
+<pre>
+Extension  ::=  SEQUENCE  {
+    extnID      OBJECT IDENTIFIER,
+    critical    BOOLEAN DEFAULT FALSE,
+    extnValue   OCTET STRING  }
+</pre>
 					
 				</div>
 				
 				
 				
-				<pre class="code">// Extension  ::=  SEQUENCE  {
-//     extnID      OBJECT IDENTIFIER,
-//     critical    BOOLEAN DEFAULT FALSE,
-//     extnValue   OCTET STRING  }</pre>
+				<pre class="code"></pre>
 				
 				
 				
@@ -601,82 +584,6 @@ array 'a' so that 'a' will be an array of X.509v3 extension objects.</div>
 			
 
 <!-- ============================== method details ========================= -->		
-			
-				<div class="sectionTitle">
-					Method Detail
-				</div>
-				
-					<a name=".appendByNameToArray"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.x509.Extension.</span><b>appendByNameToArray</b>(name, extParams, a)
-					
-					</div>
-					<div class="description">
-						append X.509v3 extension to any specified array<br/>
-This static function add a X.509v3 extension specified by name and extParams to
-array 'a' so that 'a' will be an array of X.509v3 extension objects.
-See <a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#appendExtensionByName">KJUR.asn1.x509.TBSCertificate#appendExtensionByName</a>
-for supported names of extensions.
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">var a = new Array();
-KJUR.asn1.x509.Extension.appendByNameToArray("BasicConstraints", {'cA':true, 'critical': true}, a);
-KJUR.asn1.x509.Extension.appendByNameToArray("KeyUsage", {'bin':'11'}, a);</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>name</b>
-									
-								</dt>
-								<dd>X.509v3 extension name</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>extParams</b>
-									
-								</dt>
-								<dd>associative array of extension parameters</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Array}</span> <b>a</b>
-									
-								</dt>
-								<dd>array to add specified extension</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>jsrsasign 6.2.3 asn1x509 1.0.19</dd>
-							</dl>
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-								<dd><a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a></dd>
-							
-							</dl>
-						
-
-					
-				
 			
 			
 <!-- ============================== event details ========================= -->		

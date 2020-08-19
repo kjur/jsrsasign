@@ -237,7 +237,7 @@ X509v3 Extensions:
     ocsp: http://ocsp.int-x3.letsencrypt.org/
     caissuer: http://cert.int-x3.letsencrypt.org/
   subjectAltName :
-    DNS,https.cio.gov,DNS,pulse.cio.gov,DNS,staging.pulse.cio.gov
+    dns:https.cio.gov,dns:pulse.cio.gov,dns:staging.pulse.cio.gov
   certificatePolicies :
     policy oid: 2.23.140.1.2.1
     policy oid: 1.3.6.1.4.1.44947.1.1.1
@@ -264,13 +264,14 @@ X509v3 Extensions:
   subjectKeyIdentifier :
     6a43907d3b98147252953aaa280a43f8517ed3a6
   subjectAltName :
-    DNS,github.com,DNS,www.github.com
+    dns:github.com,dns:www.github.com
   keyUsage CRITICAL:
     digitalSignature,keyEncipherment
   extKeyUsage :
     serverAuth, clientAuth
   cRLDistributionPoints :
-    http://crl3.digicert.com/sha2-ev-server-g1.crl,http://crl4.digicert.com/sha2-ev-server-g1.crl
+    http://crl3.digicert.com/sha2-ev-server-g1.crl
+    http://crl4.digicert.com/sha2-ev-server-g1.crl
   certificatePolicies :
     policy oid: 2.16.840.1.114412.2.1
     cps: https://www.digicert.com/CPS
@@ -305,7 +306,7 @@ X509v3 Extensions:
     policy oid: 1.2.208.169.1.1.1.3.4
     cps: http://www.trust2408.com/repository
   subjectAltName :
-    MAIL,apotekerforeningen@apotekerforeningen.dk
+    rfc822:apotekerforeningen@apotekerforeningen.dk
   cRLDistributionPoints :
     http://crl.ica02.trust2408.com/ica02.crl
   authorityKeyIdentifier :
@@ -338,9 +339,11 @@ test("X509.getInfo() github.com SSL cert", function() {
 });
 
 test("X509.getInfo() danmarks user cert", function() {
-  var c = new X509();
-  c.readCertPEM(danmarksUser1PEM);
-  equal(c.getInfo(), danmarksUser1OUT, danmarksUser1OUT);
+var x = new X509();
+x.readCertPEM(danmarksUser1PEM);
+//deepEqual(x.getExtCertificatePolicies(),{},"cp");
+//deepEqual(x.getExtCRLDistributionPoints(),{},"cdp");
+equal(x.getInfo(), danmarksUser1OUT, "danmarksUser1");
 });
 
 });
