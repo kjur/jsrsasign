@@ -15,6 +15,7 @@ function doIt() {
   var f1 = document.form1;
 
   var aReq = null;
+  var tstHex = null;
   try {
     // get request hex
     var req1hex = b64nltohex(f1.req1.value);
@@ -68,7 +69,7 @@ function doIt() {
 
     var dTST = KJUR.asn1.tsp.TSPUtil.newTimeStampToken(aTST);
 
-    var tstHex = dTST.getContentInfoEncodedHex();
+    tstHex = dTST.getContentInfoEncodedHex();
     f1.newtst1.value = hextob64nl(tstHex);
 
     var dRes = new KJUR.asn1.tsp.TimeStampResp({tst: dTST,
@@ -77,6 +78,9 @@ function doIt() {
   } catch (ex) {
     alert("error: " + ex);
   }
+  try {
+    f1.newtstdump1.value = ASN1HEX.dump(tstHex);
+  } catch (ex) {}
 }
 </script>
 </head>
@@ -232,6 +236,8 @@ Generated TimeStampToken(Base64):<br/>
 <textarea name="newtst1" cols="65" rows="3"></textarea><br/>
 Generated TimeStampResponse(Base64):<br/>
 <textarea name="newres1" cols="65" rows="3"></textarea><br/>
+ASN.1 Dump of Generated TimeStampToken:<br/>
+<textarea name="newtstdump1" cols="65" rows="3"></textarea><br/>
 
 </form>
 

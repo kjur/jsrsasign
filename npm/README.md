@@ -29,6 +29,7 @@ HIGHLIGHTS
 - rich document and samples
 - no dependency to other library
 - no dependency to [W3C Web Cryptography API](https://www.w3.org/TR/WebCryptoAPI/) nor [OpenSSL](https://www.openssl.org/)
+- no dependency on newer ECMAScirpt function. So old browsers also supported.
 - very popular crypto library with [0.6M+ npm downloads/month](https://npm-stat.com/charts.html?package=jsrsasign&from=2016-05-01&to=2020-08-16)
 
 INSTALL
