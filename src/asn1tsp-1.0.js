@@ -1,4 +1,4 @@
-/* asn1tsp-1.0.3.js (c) 2014-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1tsp-1.0.4.js (c) 2014-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1tsp.js - ASN.1 DER encoder classes for RFC 3161 Time Stamp Protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1tsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.1 asn1tsp 1.0.3 (2017-Jun-03)
+ * @version jsrsasign 9.0.1 asn1tsp 1.0.4 (2020-Aug-20)
  * @since jsrsasign 4.5.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -790,6 +790,7 @@ KJUR.asn1.tsp.TSPUtil.newTimeStampToken = function(param) {
     si.setSignerIdentifier(param.signerCert);
     si.setForContentAndHash({sdObj: sd,
                              eciObj: sd.dEncapContentInfo,
+			     contentType: 'tstinfo',
                              hashAlg: param.hashAlg});
     var signingCertificate = 
         new _KJUR_asn1_cms.SigningCertificate({array: [param.signerCert]});

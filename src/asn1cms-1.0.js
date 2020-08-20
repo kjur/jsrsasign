@@ -1,4 +1,4 @@
-/* asn1cms-1.0.7.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1cms-1.0.8.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1cms.js - ASN.1 DER encoder and verifier classes for Cryptographic Message Syntax(CMS)
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cms-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.24 asn1cms 1.0.7 (2020-Aug-18)
+ * @version jsrsasign 9.0.1 asn1cms 1.0.8 (2020-Aug-20)
  * @since jsrsasign 4.2.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -708,21 +708,30 @@ KJUR.asn1.cms.SignerInfo = function(params) {
      * </ul>
      * Argument 'params' is an associative array having following elements:
      * <ul>
-     * <li>eciObj - {@link KJUR.asn1.cms.EncapsulatedContentInfo} object</li>
-     * <li>sdObj - {@link KJUR.asn1.cms.SignedData} object (Option) to set DigestAlgorithms</li>
-     * <li>hashAlg - string of hash algorithm name which is used for MessageDigest attribute</li>
+     * <li>{Object}eciObj - {@link KJUR.asn1.cms.EncapsulatedContentInfo} object</li>
+     * <li>{Object}sdObj - {@link KJUR.asn1.cms.SignedData} object (Option) to set DigestAlgorithms</li>
+     * <li>{String}contentType - oid name or oid of content type (OPITION). Default is content type "data" (i.e. "1.2.840.113549.1.7.1")</li>
+     * <li>{String}hashAlg - string of hash algorithm name which is used for MessageDigest attribute</li>
      * </ul>
      * some of elements can be omited.
+     * <br>
+     * NOTE: "contentType" parameter have been introduced since
+     * jsrsasign 9.0.1 asn1cms 1.0.8.
      * @example
      * sd = new KJUR.asn1.cms.SignedData();
      * signerInfo.setForContentAndHash({sdObj: sd,
      *                                  eciObj: sd.dEncapContentInfo,
+     *                                  contentType: nameOrOid,
      *                                  hashAlg: 'sha256'});
      */
     this.setForContentAndHash = function(params) {
+	var contentTypeValue = "data"; // default
+	if (params.contentType !== undefined) {
+	    contentTypeValue = params.contentType;
+	}
         if (params !== undefined) {
             if (params.eciObj instanceof _EncapsulatedContentInfo) {
-                this.dSignedAttrs.add(new _ContentType({oid: '1.2.840.113549.1.7.1'}));
+                this.dSignedAttrs.add(new _ContentType(contentTypeValue));
                 this.dSignedAttrs.add(new _MessageDigest({eciObj: params.eciObj,
                                                           hashAlg: params.hashAlg}));
             }
