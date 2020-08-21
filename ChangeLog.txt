@@ -1,6 +1,22 @@
 
 ChangeLog for jsrsasign
 
+TimeStampToken contentType attribute bug fix
+* Changes from 9.0.0 to 9.0.1 (2020-Aug-21)
+  - BUGFIX: KJUR.asn1.tsp.TimeStampToken class generates have 
+    generated with wrong contentType attribute
+    with value "data". (#448)
+  - src/asn1tsp.js
+    - TimeStampToken class constructor will add
+      contentType attribute with "tstinfo" for bugfix. (#448).
+  - src/asn1cms.js
+    - SignerInfo.setForContentAndHash class constructor
+      parameter can have "contentType" property additionaly
+      to set "tstinfo" as above.
+  - src/asn1x509.js
+    - some attribute type oids for CMS signedData are
+      added to OID.name2oidList.
+
 Certificate and CSR generator and parser API major updates
 * Changes from 8.0.24 to 9.0.0 (2020-Aug-19)
   - Please see migration notes in wiki:

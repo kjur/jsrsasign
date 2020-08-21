@@ -725,9 +725,13 @@ KJUR.asn1.cms.SignerInfo = function(params) {
      *                                  hashAlg: 'sha256'});
      */
     this.setForContentAndHash = function(params) {
+	var contentTypeValue = "data"; // default
+	if (params.contentType !== undefined) {
+	    contentTypeValue = params.contentType;
+	}
         if (params !== undefined) {
             if (params.eciObj instanceof _EncapsulatedContentInfo) {
-                this.dSignedAttrs.add(new _ContentType({oid: '1.2.840.113549.1.7.1'}));
+                this.dSignedAttrs.add(new _ContentType(contentTypeValue));
                 this.dSignedAttrs.add(new _MessageDigest({eciObj: params.eciObj,
                                                           hashAlg: params.hashAlg}));
             }

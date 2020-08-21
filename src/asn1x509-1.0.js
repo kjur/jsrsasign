@@ -1,4 +1,4 @@
-/* asn1x509-2.0.0.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-2.0.1.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.0.0 asn1x509 2.0.0 (2020-Aug-12)
+ * @version jsrsasign 9.0.0 asn1x509 2.0.1 (2020-Aug-20)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -3513,7 +3513,18 @@ KJUR.asn1.x509.OID = new function(params) {
         'encrypted-data':       '1.2.840.113549.1.7.6', // CMS encrypted-data
         'authenticated-data':   '1.2.840.113549.1.9.16.1.2', // CMS authenticated-data
         'tstinfo':              '1.2.840.113549.1.9.16.1.4', // RFC3161 TSTInfo
+	'signingCertificate':	'1.2.840.113549.1.9.16.2.12',// SMIME
+	'timeStampToken':	'1.2.840.113549.1.9.16.2.14',// sigTS
+	'etsArchiveTimeStamp':	'1.2.840.113549.1.9.16.2.27',// SMIME
+	'signingCertificateV2':	'1.2.840.113549.1.9.16.2.47',// SMIME
+	'etsArchiveTimeStampV2':'1.2.840.113549.1.9.16.2.48',// SMIME
         'extensionRequest':     '1.2.840.113549.1.9.14',// CSR extensionRequest
+	'contentType':		'1.2.840.113549.1.9.3',//PKCS#9
+	'messageDigest':	'1.2.840.113549.1.9.4',//PKCS#9
+	'signingTime':		'1.2.840.113549.1.9.5',//PKCS#9
+	'counterSignature':	'1.2.840.113549.1.9.6',//PKCS#9
+	'archiveTimeStampV3':	'0.4.0.1733.2.4',//ETSI EN29319122/TS101733
+	'pdfRevocationInfoArchival':'1.2.840.113583.1.1.8'//Adobe
     };
 
     this.objCache = {};

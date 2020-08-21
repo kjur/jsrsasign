@@ -537,11 +537,9 @@ This method will specify following fields by a parameters:
 </ul>
 Argument 'params' is an associative array having following elements:
 <ul>
-<li>eciObj - <a href="../symbols/KJUR.asn1.cms.EncapsulatedContentInfo.html">KJUR.asn1.cms.EncapsulatedContentInfo</a> object</li>
-<li>sdObj - <a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a> object (Option) to set DigestAlgorithms</li>
-<li>hashAlg - string of hash algorithm name which is used for MessageDigest attribute</li>
-</ul>
-some of elements can be omited.</div>
+<li>{Object}eciObj - <a href="../symbols/KJUR.asn1.cms.EncapsulatedContentInfo.html">KJUR.asn1.cms.EncapsulatedContentInfo</a> object</li>
+<li>{Object}sdObj - <a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a> object (Option) to set DigestAlgorithms</li>
+<li>{String}contentType - oid name or oid of content type (OPITION).</div>
 							</td>
 						</tr>
 					
@@ -659,11 +657,15 @@ This method will specify following fields by a parameters:
 </ul>
 Argument 'params' is an associative array having following elements:
 <ul>
-<li>eciObj - <a href="../symbols/KJUR.asn1.cms.EncapsulatedContentInfo.html">KJUR.asn1.cms.EncapsulatedContentInfo</a> object</li>
-<li>sdObj - <a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a> object (Option) to set DigestAlgorithms</li>
-<li>hashAlg - string of hash algorithm name which is used for MessageDigest attribute</li>
+<li>{Object}eciObj - <a href="../symbols/KJUR.asn1.cms.EncapsulatedContentInfo.html">KJUR.asn1.cms.EncapsulatedContentInfo</a> object</li>
+<li>{Object}sdObj - <a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a> object (Option) to set DigestAlgorithms</li>
+<li>{String}contentType - oid name or oid of content type (OPITION). Default is content type "data" (i.e. "1.2.840.113549.1.7.1")</li>
+<li>{String}hashAlg - string of hash algorithm name which is used for MessageDigest attribute</li>
 </ul>
 some of elements can be omited.
+<br>
+NOTE: "contentType" parameter have been introduced since
+jsrsasign 9.0.1 asn1cms 1.0.8.
 						
 						
 					</div>
@@ -673,6 +675,7 @@ some of elements can be omited.
 					<pre class="code">sd = new KJUR.asn1.cms.SignedData();
 signerInfo.setForContentAndHash({sdObj: sd,
                                  eciObj: sd.dEncapContentInfo,
+                                 contentType: nameOrOid,
                                  hashAlg: 'sha256'});</pre>
 					
 					
