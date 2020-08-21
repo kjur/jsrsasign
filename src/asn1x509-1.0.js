@@ -1269,7 +1269,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.ExtKeyUsage, KJUR.asn1.x509.Extension);
  * This class represents ASN.1 structure for <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.1">AuthorityKeyIdentifier in RFC 5280</a>.
  * Constructor of this class may have following parameters.: 
  * <ul>
- * <li>kid - When key object (RSA, KJUR.crypto.ECDSA/DSA) or PEM string of authority public key or authcertificate is specified, key identifier will be automatically calculated by the method specified in RFC 5280. When a hexadecimal string is specifed, kid will be set explicitly by it.</li>
+ * <li>kid - When key object (RSA, KJUR.crypto.ECDSA/DSA) or PEM string of issuing authority public key or issuer certificate is specified, key identifier will be automatically calculated by the method specified in RFC 5280. When a hexadecimal string is specifed, kid will be set explicitly by it.</li>
  * <li>isscert - When PEM string of authority certificate is specified, both authorityCertIssuer and authorityCertSerialNumber will be set by the certificate.</li>
  * <li>issuer - {@link KJUR.asn1.x509.X500Name} parameter to specify issuer name explicitly.</li>
  * <li>sn - hexadecimal string to specify serial number explicitly.</li>
@@ -1522,7 +1522,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.AuthorityKeyIdentifier, KJUR.asn1.x509.Extensio
  * This class represents ASN.1 structure for <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2">SubjectKeyIdentifier in RFC 5280</a>.
  * Constructor of this class may have following parameters:
  * <ul>
- * <li>kid - When key object (RSA, KJUR.crypto.ECDSA/DSA) or PEM string of authority public key or authcertificate is specified, key identifier will be automatically calculated by the method specified in RFC 5280. When a hexadecimal string is specifed, kid will be set explicitly by it.</li>
+ * <li>kid - When key object (RSA, KJUR.crypto.ECDSA/DSA) or PEM string of subject public key or certificate is specified, key identifier will be automatically calculated by the method specified in RFC 5280. When a hexadecimal string is specifed, kid will be set explicitly by it.</li>
  * <li>critical - boolean to specify criticality of this extension
  * however conforming CA must mark this extension as non-critical in RFC 5280.</li>
  * </ul>

@@ -583,7 +583,7 @@ This method will set keyIdentifier by param.</div>
 This class represents ASN.1 structure for <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.1">AuthorityKeyIdentifier in RFC 5280</a>.
 Constructor of this class may have following parameters.: 
 <ul>
-<li>kid - When key object (RSA, KJUR.crypto.ECDSA/DSA) or PEM string of authority public key or authcertificate is specified, key identifier will be automatically calculated by the method specified in RFC 5280. When a hexadecimal string is specifed, kid will be set explicitly by it.</li>
+<li>kid - When key object (RSA, KJUR.crypto.ECDSA/DSA) or PEM string of issuing authority public key or issuer certificate is specified, key identifier will be automatically calculated by the method specified in RFC 5280. When a hexadecimal string is specifed, kid will be set explicitly by it.</li>
 <li>isscert - When PEM string of authority certificate is specified, both authorityCertIssuer and authorityCertSerialNumber will be set by the certificate.</li>
 <li>issuer - <a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a> parameter to specify issuer name explicitly.</li>
 <li>sn - hexadecimal string to specify serial number explicitly.</li>
