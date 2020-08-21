@@ -876,6 +876,18 @@ equal(
 "policyinformation 1.2.3.4.5 full"
 );
 
+var param2 = {
+  policyoid: "anyPolicy"
+};
+equal(
+(new _PolicyInformation(param2)).getEncodedHex(),
+"30060604551d2000",
+"anyPolicy hex");
+equal(
+ASN1HEX.dump((new _PolicyInformation(param2)).getEncodedHex()),
+ASN1HEX.dump("30060604551d2000"),
+"anyPolicy dump=" + ASN1HEX.dump("30060604551d2000"));
+
 });
 
 test("PolicyQualifierInfo test", function() {

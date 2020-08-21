@@ -43,3 +43,6 @@ gitadd-all-doc:
 
 gitadd-release:
 	git add ChangeLog.txt Makefile bower.json jsrsasign-*-min.js min/*.js src/*.js npm/package.json npm/lib/jsrsasign*.js src/*.js test/qunit-do-*.html
+
+gitadd: gitadd-all-doc gitadd-release
+	@echo done

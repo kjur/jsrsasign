@@ -1,6 +1,16 @@
 
 ChangeLog for jsrsasign
 
+PolicyInformation named policy OID bug fix
+* Changes from 9.0.1 to 9.0.2 (2020-Aug-22)
+  - BUGFIX: KJUR.asn1.tsp.PolicyInformation class constructor
+    have not been accepted named policy OID such as "anyPolicy".
+    The issue was fixed.
+  - src/asn1x509.js
+    - PolicyInformation bugfix for above.
+  - test/qunit-do-asn1x509.html
+    - updated to follow above.
+
 TimeStampToken contentType attribute bug fix
 * Changes from 9.0.0 to 9.0.1 (2020-Aug-21)
   - BUGFIX: KJUR.asn1.tsp.TimeStampToken class generates have 
