@@ -42,3 +42,6 @@ gitadd-all-doc:
 
 gitadd-release:
 	git add Makefile jsrsasign-*-min.js min/*.js src/*.js  src/*.js test/qunit-do-*.html lib/jsrsasign-*-all-min.js
+
+gitadd: gitadd-all-doc gitadd-release
+	@echo done

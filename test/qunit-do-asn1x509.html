@@ -154,173 +154,166 @@ SwIDAQAB
 -----END PUBLIC KEY-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
-
-test("Certificate class test", function() {
-  var pubKey = new RSAKey();
-  pubKey.setPublic('e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a', '10001');
-
-  var o = new KJUR.asn1.x509.TBSCertificate();
-  o.setSerialNumberByParam({'int': 4});
-  o.setSignatureAlgByParam({'name': 'SHA1withRSA'});
-  o.setIssuerByParam({'str': '/C=US/O=a'});
-  o.setNotBeforeByParam({'str': '130504235959Z'});
-  o.setNotAfterByParam({'str': '140504235959Z'});
-  o.setSubjectByParam({'str': '/C=US/CN=b'});
-  o.setSubjectPublicKey(pubKey);
-  o.appendExtension(new KJUR.asn1.x509.BasicConstraints({'cA':true}));
-  o.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));
-
-  var prvKey = new RSAKey();
-  prvKey.readPKCS5PrvKeyHex("3082013a020100024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001024078bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d022100fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f022100e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07022100d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b3702201849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa902207d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9");
-  var crt1 = new KJUR.asn1.x509.Certificate({tbscertobj: o,
-                                             prvkeyobj:  prvKey});
-  crt1.sign();					  
-
-  // test3
-  equal(crt1.asn1TBSCert.getEncodedHex(), "3081e5a003020102020104300d06092a864886f70d01010505003019310b3009060355040613025553310a3008060355040a0c0161301e170d3133303530343233353935395a170d3134303530343233353935395a3019310b3009060355040613025553310a300806035504030c01623057300d06092a864886f70d01010105000346003043023c00e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a0203010001a31d301b300c0603551d13040530030101ff300b0603551d0f0404030206c0", "constructor,sign,asn1TBSCert.getEncodedHex");
-
-  // test1
-  hCrt1 = crt1.getEncodedHex()
-  equal(hCrt1, "3082013a3081e5a003020102020104300d06092a864886f70d01010505003019310b3009060355040613025553310a3008060355040a0c0161301e170d3133303530343233353935395a170d3134303530343233353935395a3019310b3009060355040613025553310a300806035504030c01623057300d06092a864886f70d01010105000346003043023c00e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a0203010001a31d301b300c0603551d13040530030101ff300b0603551d0f0404030206c0300d06092a864886f70d010105050003410088dca030a5dcae7b85f0bfcb1fcbac18065d9f5bfd717c78075449a8447e87d0c7cb0cfd2b2ad7140c4075fd44b741502b89a7f7a9967e21c8aea330ac124be0", "constructor,sign,getEncodedHex");
-
-  // test2
-  equal(crt1.getPEMString(), "-----BEGIN CERTIFICATE-----\r\nMIIBOjCB5aADAgECAgEEMA0GCSqGSIb3DQEBBQUAMBkxCzAJBgNVBAYTAlVTMQow\r\nCAYDVQQKDAFhMB4XDTEzMDUwNDIzNTk1OVoXDTE0MDUwNDIzNTk1OVowGTELMAkG\r\nA1UEBhMCVVMxCjAIBgNVBAMMAWIwVzANBgkqhkiG9w0BAQEFAANGADBDAjwA6GZN\r\n0rQFKRIVaPOzm8l6Yue6PAm6vcTw3NjfkOt5C5u2RaK3DjESdHtNPEG1FCSJURX+\r\n+I951D6uWxoCAwEAAaMdMBswDAYDVR0TBAUwAwEB/zALBgNVHQ8EBAMCBsAwDQYJ\r\nKoZIhvcNAQEFBQADQQCI3KAwpdyue4Xwv8sfy6wYBl2fW/1xfHgHVEmoRH6H0MfL\r\nDP0rKtcUDEB1/US3QVAriaf3qZZ+IciuozCsEkvg\r\n-----END CERTIFICATE-----\r\n", "getPEMString");
-});
-
-test("Certificate class test (RSAPSS)", function() {
-var pubkey = KEYUTIL.getKey(Z4PUBPEM);
-var prvkey = KEYUTIL.getKey(Z4PRVPEM);
-
-var o = new KJUR.asn1.x509.TBSCertificate();
-o.setSerialNumberByParam({'int': 4});
-o.setSignatureAlgByParam({'name': 'SHA256withRSAandMGF1'});
-o.setIssuerByParam({'str': '/C=US/O=a'});
-o.setNotBeforeByParam({'str': '130504235959Z'});
-o.setNotAfterByParam({'str': '140504235959Z'});
-o.setSubjectByParam({'str': '/C=US/CN=b'});
-o.setSubjectPublicKey(pubkey);
-o.appendExtension(new KJUR.asn1.x509.BasicConstraints({'cA':true}));
-o.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));
-
-var crt1 = new KJUR.asn1.x509.Certificate({tbscertobj: o,
-                                           prvkeyobj:  prvkey});
-crt1.sign();					  
-
-// test1
-hCrt1 = crt1.getEncodedHex();
-
-equal(ASN1HEX.getTLVbyList(hCrt1, 0, [0]),
-      "308201e2a003020102020104303d06092a864886f70d01010a3030a00d300b0609608648016503040201a11a301806092a864886f70d010108300b0609608648016503040201a2030201203019310b3009060355040613025553310a3008060355040a0c0161301e170d3133303530343233353935395a170d3134303530343233353935395a3019310b3009060355040613025553310a300806035504030c016230820122300d06092a864886f70d01010105000382010f003082010a0282010100df74eaa8b47779e5260ed1d2f3da85de9e0c3fb59faadd998e3de56632e38c2183bf0afd7093653438ae29ba0e0e05224f865d3d66ce88c01f0dc0f394ec40d380c39c414601ffa40d088d49ed99b6a0bb6e721cf3e2921bfa8e19021569acb851cafaa2f0e4ca43b91f19fb394eec269f533fd1f4247f3331003a6338a3607f4bb2ea537abad8dd4eb3ca28551035d73afd3cbc11e4e7404c1496c4f62c05c27c42b14e7e519519630f3b52ed27e0b3c54bd053f2d508bc07e745720458285adca6c55a6759419972ac5c346ee5047f460ddff4346ae06475b0d1fc44b63db80a4c97648dcfeb11e3344f1bce51fec7b9434e86bb405443750f9baec44d564b0203010001a31d301b300c0603551d13040530030101ff300b0603551d0f0404030206c0",
-      "constructor,sign,getEncodedHex");
-equal(ASN1HEX.getTLVbyList(hCrt1, 0, [1]),
-      "303d06092a864886f70d01010a3030a00d300b0609608648016503040201a11a301806092a864886f70d010108300b0609608648016503040201a203020120",
-      "signatureAlgorithm of Certificate");
-});
-
-test("TBSCertificate class test", function() {
-  var rsaKey = new RSAKey();
-  rsaKey.setPublic('e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a', '10001');
-
-  var o = new KJUR.asn1.x509.TBSCertificate();
-  o.setSerialNumberByParam({'int': 4});
-  o.setSignatureAlgByParam({'name': 'SHA1withRSA'});
-  o.setIssuerByParam({'str': '/C=US/O=a'});
-  o.setNotBeforeByParam({'str': '130504235959Z'});
-  o.setNotAfterByParam({'str': '140504235959Z'});
-  o.setSubjectByParam({'str': '/C=US/CN=b'});
-  o.setSubjectPublicKey(rsaKey);
-  o.appendExtension(new KJUR.asn1.x509.BasicConstraints({'cA':true}));
-  o.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));
-
-  equal(o.getEncodedHex(), "3081e5a003020102020104300d06092a864886f70d01010505003019310b3009060355040613025553310a3008060355040a0c0161301e170d3133303530343233353935395a170d3134303530343233353935395a3019310b3009060355040613025553310a300806035504030c01623057300d06092a864886f70d01010105000346003043023c00e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a0203010001a31d301b300c0603551d13040530030101ff300b0603551d0f0404030206c0", "set/append test1");
-});
-
-test("TBSCertificate class test (RSAPSS)", function() {
-var pubkey = KEYUTIL.getKey(Z4PUBPEM);
-
-var o = new KJUR.asn1.x509.TBSCertificate();
-o.setSerialNumberByParam({'int': 4});
-o.setSignatureAlgByParam({'name': 'SHA256withRSAandMGF1'});
-o.setIssuerByParam({'str': '/C=US/O=a'});
-o.setNotBeforeByParam({'str': '130504235959Z'});
-o.setNotAfterByParam({'str': '140504235959Z'});
-o.setSubjectByParam({'str': '/C=US/CN=b'});
-o.setSubjectPublicKey(pubkey);
-o.appendExtension(new KJUR.asn1.x509.BasicConstraints({'cA':true}));
-o.appendExtension(new KJUR.asn1.x509.KeyUsage({'bin':'11'}));
-
-equal(o.getEncodedHex(),
-      "308201e2a003020102020104303d06092a864886f70d01010a3030a00d300b0609608648016503040201a11a301806092a864886f70d010108300b0609608648016503040201a2030201203019310b3009060355040613025553310a3008060355040a0c0161301e170d3133303530343233353935395a170d3134303530343233353935395a3019310b3009060355040613025553310a300806035504030c016230820122300d06092a864886f70d01010105000382010f003082010a0282010100df74eaa8b47779e5260ed1d2f3da85de9e0c3fb59faadd998e3de56632e38c2183bf0afd7093653438ae29ba0e0e05224f865d3d66ce88c01f0dc0f394ec40d380c39c414601ffa40d088d49ed99b6a0bb6e721cf3e2921bfa8e19021569acb851cafaa2f0e4ca43b91f19fb394eec269f533fd1f4247f3331003a6338a3607f4bb2ea537abad8dd4eb3ca28551035d73afd3cbc11e4e7404c1496c4f62c05c27c42b14e7e519519630f3b52ed27e0b3c54bd053f2d508bc07e745720458285adca6c55a6759419972ac5c346ee5047f460ddff4346ae06475b0d1fc44b63db80a4c97648dcfeb11e3344f1bce51fec7b9434e86bb405443750f9baec44d564b0203010001a31d301b300c0603551d13040530030101ff300b0603551d0f0404030206c0",
-      "SHA256withRSAandMGF1 test");
-equal(o.asn1SignatureAlg.nameAlg, "SHA256withRSAandMGF1", "asn1SignatureAlg.nameAlg=SHA256withRSAandMGF1");
-});
-
+// ===== X500Name class test =========================================
 test("X500Name class test", function() {
-  var o = null;
+var _X500Name = KJUR.asn1.x509.X500Name;
+var o = null;
 
-  o = new KJUR.asn1.x509.X500Name();
-  o.setByString("/C=US/O=aaa");
-  equal(o.getEncodedHex(), 
-         "301b310b3009060355040613025553310c300a060355040a0c03616161",
-         "setByString(/C=US/O=aaa)");
+equal((new _X500Name({array: [
+[{type:"C",value:"US",ds:"prn"}],
+[{type:"O",value:"aaa",ds:"utf8"}]
+]})).getEncodedHex(),
+"301b310b3009060355040613025553310c300a060355040a0c03616161",
+"(1) new {array:[[C,US,prn][O,aaa,utf8]]}");
 
-  o = new KJUR.asn1.x509.X500Name();
-  o.setByString("/C=US/O=あ");
-  equal(o.getEncodedHex(), 
-         "301b310b3009060355040613025553310c300a060355040a0c03e38182",
-         "setByString(/C=US/O=あ)");
+equal((new _X500Name({array: [
+[{type:"C",value:"US",ds:"prn"}],
+[{type:"O",value:"aaa",ds:"utf8"}]
+],
+str: "/C=JP/O=bbb"})).getEncodedHex(),
+"301b310b3009060355040613025553310c300a060355040a0c03616161",
+"(2) new {array:[[C,US,prn][O,aaa,utf8]]} str=/JP/bbb ignored");
 
-  o = new KJUR.asn1.x509.X500Name();
-  o.setByObject({C: "US", O: "aaa"});
-  equal(o.getEncodedHex(), 
-         "301b310b3009060355040613025553310c300a060355040a0c03616161",
-         "setByObject({C: 'US', O: 'aaa'})");
+o = new KJUR.asn1.x509.X500Name();
+o.setByString("/C=US/O=aaa");
+equal(o.getEncodedHex(), 
+"301b310b3009060355040613025553310c300a060355040a0c03616161",
+"setByString(/C=US/O=aaa)");
 
-  o = new KJUR.asn1.x509.X500Name({'str':'/C=US/O=aaa'});
-  equal(o.getEncodedHex(),
-         "301b310b3009060355040613025553310c300a060355040a0c03616161",
-         "constructor str /C=US/O=aaa");
+o = new KJUR.asn1.x509.X500Name();
+o.setByString("/C=US/O=あ");
+equal(o.getEncodedHex(), 
+"301b310b3009060355040613025553310c300a060355040a0c03e38182",
+"setByString(/C=US/O=あ)");
 
-  o = new KJUR.asn1.x509.X500Name({'C': 'US', 'O': 'aaa'});
-  equal(o.getEncodedHex(),
-         "301b310b3009060355040613025553310c300a060355040a0c03616161",
-         "constructor obj C:US, O:aaa");
+o = new KJUR.asn1.x509.X500Name();
+o.setByObject({C: "US", O: "aaa"});
+equal(o.getEncodedHex(), 
+"301b310b3009060355040613025553310c300a060355040a0c03616161",
+"setByObject({C: 'US', O: 'aaa'})");
 
-  o = new KJUR.asn1.x509.X500Name({'C': 'US', 'O': 'aa/'});
-  equal(o.getEncodedHex(),
-         "301b310b3009060355040613025553310c300a060355040a0c0361612f",
-         "constructor obj C:US, O:aa/");
+o = new KJUR.asn1.x509.X500Name({'str':'/C=US/O=aaa'});
+equal(o.getEncodedHex(),
+"301b310b3009060355040613025553310c300a060355040a0c03616161",
+"constructor str /C=US/O=aaa");
 
-  o = new KJUR.asn1.x509.X500Name({'str': '/O=a/O=b/b/O=c/c/c'});
-  equal(o.getEncodedHex(),
-         "302a310a3008060355040a0c0161310c300a060355040a0c03622f62310e300c060355040a0c05632f632f63",
-         "constructor str /O=a/O=b/b/O=c/c/c");
+o = new KJUR.asn1.x509.X500Name({'C': 'US', 'O': 'aaa'});
+equal(o.getEncodedHex(),
+"301b310b3009060355040613025553310c300a060355040a0c03616161",
+"constructor obj C:US, O:aaa");
+
+o = new KJUR.asn1.x509.X500Name({'C': 'US', 'O': 'aa/'});
+equal(o.getEncodedHex(),
+"301b310b3009060355040613025553310c300a060355040a0c0361612f",
+"constructor obj C:US, O:aa/");
+
+o = new KJUR.asn1.x509.X500Name({'str': '/O=a/O=b/b/O=c/c/c'});
+equal(o.getEncodedHex(),
+"302a310a3008060355040a0c0161310c300a060355040a0c03622f62310e300c060355040a0c05632f632f63",
+"constructor str /O=a/O=b/b/O=c/c/c");
+
+o = new KJUR.asn1.x509.X500Name({str:'/O=a/O=b',rule:'prn'});
+equal(o.getEncodedHex(),
+"3018310a3008060355040a130161310a3008060355040a130162",
+"constructor /O=a/O=b rule=prn");
+
+o = new KJUR.asn1.x509.X500Name({str:'/C=JP/O=b/CN=a@a.jp',rule:'prn'});
+equal(o.getEncodedHex(),
+"302a310b3009060355040613024a50310a3008060355040a130162310f300d060355040316066140612e6a70",
+"constructor /C=JP/O=b/CN=a@a.jp rule=prn");
+
+o = new KJUR.asn1.x509.X500Name({str:'/C=JP/O=b/CN=a@a.jp'});
+equal(o.getEncodedHex(),
+"302a310b3009060355040613024a50310a3008060355040a0c0162310f300d060355040316066140612e6a70",
+"constructor /C=JP/O=b/CN=a@a.jp rule=default");
+
 });
 
+// ==== RDN class TEST ===================================
 test("RDN class test", function() {
-  expect(2);
-  var o2 = new KJUR.asn1.x509.RDN();
-  o2.addByString("O=aaa");
-  equal(o2.getEncodedHex(), "310c300a060355040a0c03616161", "addByString(O=aaa)");
+var _RDN = KJUR.asn1.x509.RDN;
 
-  var o3 = new KJUR.asn1.x509.RDN({'str':'O=aaa'});
-  equal(o3.getEncodedHex(), "310c300a060355040a0c03616161", "constructor str O=aaa");
+equal((new _RDN({array: [{type:'O',value:'aaa',ds:'utf8'}]})).getEncodedHex(),
+"310c300a060355040a0c03616161",
+"(1) new {array: [{type:'O',value:'aaa',ds:'utf8'}]} rule=utf8(default)");
+
+equal((new _RDN({array: [{type:'O',value:'aaa'}],rule:'prn'})).getEncodedHex(),
+"310c300a060355040a1303616161",
+"(2) new {array: [{type:'O',value:'aaa'}],rule:'prn'} ***KNOWN ISSUE FIXED IN THE FUTURE***");
+
+equal((new _RDN({array: [{type:'O',value:'aaa',ds:'utf8'},{type:'CN',value:'bob@example.com',ds:'ia5'}]})).getEncodedHex(),
+"3124300a060355040a0c0361616130160603550403160f626f62406578616d706c652e636f6d",
+"(3) new {array: [{type:'O',value:'aaa',ds:'utf8'},{type:'CN',value:'bob@example.com',ds:'ia5'}]} rule=utf8(default) multi-valued-rdn");
+
+equal((new _RDN({str:'O=aaa'})).getEncodedHex(),
+"310c300a060355040a0c03616161",
+"new {str:'O=aaa'} rule=utf8(default)");
+
+equal((new _RDN({str:'O=aaa',rule:'prn'})).getEncodedHex(),
+"310c300a060355040a1303616161",
+"new {str:'O=aaa',rule:'prn'}");
+
+equal((new _RDN({str:'O=aaa+CN=a@a.jp',rule:'prn'})).getEncodedHex(),
+"311b300a060355040a1303616161300d060355040316066140612e6a70",
+"new {str:'O=aaa+CN=a@a.jp',rule:'prn'}");
+
+var o2 = new _RDN();
+o2.addByString("O=aaa");
+equal(o2.getEncodedHex(), "310c300a060355040a0c03616161", "addByString(O=aaa)");
 });
 
+// ==== AttributeTypeAndValue TEST ===================================
 test("AttributeTypeAndValue class test", function() {
-  var o1 = new KJUR.asn1.x509.AttributeTypeAndValue();
-  o1.setByAttrTypeAndValueStr("O", "aaa");
-  equal(o1.getEncodedHex(), "300a060355040a0c03616161", "setByAttrTypeAndValueStr O aaa");
+var _AttributeTypeAndValue = KJUR.asn1.x509.AttributeTypeAndValue;
 
-  var o2 = new KJUR.asn1.x509.AttributeTypeAndValue();
-  o2.setByString("O=aaa");
-  equal(o2.getEncodedHex(), "300a060355040a0c03616161", "setByString(O=aaa)");
+equal(
+(new _AttributeTypeAndValue({type:"O",value:"aaa",ds:"utf8"})).getEncodedHex(),
+"300a060355040a0c03616161", "new ({type:O,value:aaa,ds:utf8})");
 
-  var o3 = new KJUR.asn1.x509.AttributeTypeAndValue({'str':'O=aaa'});
-  equal(o3.getEncodedHex(), "300a060355040a0c03616161", "constructor str O=aaa");
+equal(
+(new _AttributeTypeAndValue({type:"O",value:"aaa",ds:"prn"})).getEncodedHex(),
+"300a060355040a1303616161", "new ({type:O,value:aaa,ds:prn})");
 
-  var o4 = new KJUR.asn1.x509.AttributeTypeAndValue({'str':'O=あ'});
-  equal(o4.getEncodedHex(), "300a060355040a0c03e38182", "constructor str O=あ");
+equal(
+(new _AttributeTypeAndValue({'str':'O=aaa'})).getEncodedHex(),
+"300a060355040a0c03616161", "new {'str':'O=aaa'} utf8");
+
+
+equal(
+(new _AttributeTypeAndValue({'str':'O=あ'})).getEncodedHex(),
+"300a060355040a0c03e38182", "new {'str':'O=あ'} utf8");
+
+var o0 = new _AttributeTypeAndValue();
+o0.setByParam({type:"O",value:"aaa",ds:"utf8"});
+equal(o0.getEncodedHex(), "300a060355040a0c03616161", "setByParam");
+
+var o1 = new _AttributeTypeAndValue();
+o1.setByAttrTypeAndValueStr("O", "aaa");
+equal(o1.getEncodedHex(), "300a060355040a0c03616161", "setByAttrTypeAndValueStr O aaa");
+
+var o2 = new _AttributeTypeAndValue();
+o2.setByString("O=aaa");
+equal(o2.getEncodedHex(), "300a060355040a0c03616161", "setByString(O=aaa)");
+
+var o5 = new _AttributeTypeAndValue({str:'C=JP'});
+equal(o5.getEncodedHex(), "3009060355040613024a50", "o5 C=JP(prn)");
+equal(o5.sType, "C", "o5 sType=C");
+equal(o5.sValue, "JP", "o5 sValue=JP");
+equal(o5.dsType, "prn", "o5 dsType=prn");
+equal(o5._getDsType(), "prn", "o5 getDsType=prn");
+equal(o5.sRule, "utf8", "o5 sRule=utf8");
+
+var o6 = new _AttributeTypeAndValue({'str':'CN=aa@aa.jp'});
+equal(o6.getEncodedHex(), "300f0603550403160861614061612e6a70", "constructor CN=aa@aa.jp(ia5) rule=default");
+
+var o7 = new _AttributeTypeAndValue({str:'O=aaa',rule:'prn'});
+equal(o7.getEncodedHex(), "300a060355040a1303616161", "constructor str O=aaa(prn)");
+equal(o7.sRule, "prn", "o7 sRule=prn");
+
+var o8 = new _AttributeTypeAndValue({str:'CN=aa@aa.jp',rule:'prn'});
+equal(o8.getEncodedHex(), "300f0603550403160861614061612e6a70", "constructor CN=aa@aa.jp(ia5) rule=prn");
+equal(o8.sRule, "prn", "o8 sRule=prn");
+
 });
 
 // === BEGIN Other ASN1 structure class  ======================================
@@ -476,18 +469,44 @@ test("GeneralNames class test", function() {
 });
 
 test("DistributionPointName class test", function() {
-  expect(1);
-  var o1a = new KJUR.asn1.x509.GeneralNames([{'uri':'http://aaa.com/'}]);
-  var o1 = new KJUR.asn1.x509.DistributionPointName(o1a);
-  equal(o1.getEncodedHex(), "a011860f687474703a2f2f6161612e636f6d2f", "constructor uri http://aaa.com/");
+var _GeneralNames = KJUR.asn1.x509.GeneralNames;
+var _DistributionPointName = KJUR.asn1.x509.DistributionPointName;
+var o1a = new _GeneralNames([{'uri':'http://aaa.com/'}]);
+var o1 = new _DistributionPointName(o1a);
+equal(
+o1.getEncodedHex(),
+"a011860f687474703a2f2f6161612e636f6d2f",
+"constructor by GeneralNames object");
+
+equal(
+(new _DistributionPointName({full: [{'uri':'http://aaa.com/'}]})).getEncodedHex(),
+"a011860f687474703a2f2f6161612e636f6d2f",
+"constructor by JSON parameter");
 });
 
 test("DistributionPoint class test", function() {
-  expect(1);
-  var o1aa = new KJUR.asn1.x509.GeneralNames([{'uri':'http://aaa.com/'}]);
-  var o1a = new KJUR.asn1.x509.DistributionPointName(o1aa);
-  var o1 = new KJUR.asn1.x509.DistributionPoint({'dpobj': o1a});
-  equal(o1.getEncodedHex(), "3015a013a011860f687474703a2f2f6161612e636f6d2f", "constructor dpobj http://aaa.com/");
+var _GeneralNames = KJUR.asn1.x509.GeneralNames;
+var _DistributionPointName = KJUR.asn1.x509.DistributionPointName;
+var _DistributionPoint = KJUR.asn1.x509.DistributionPoint;
+
+var o1aa = new _GeneralNames([{'uri':'http://aaa.com/'}]);
+var o1a = new _DistributionPointName(o1aa);
+var o1 = new _DistributionPoint({'dpobj': o1a});
+equal(
+o1.getEncodedHex(),
+"3015a013a011860f687474703a2f2f6161612e636f6d2f",
+"constructor by dpobj parameter http://aaa.com/");
+
+equal(
+(new _DistributionPoint({dpname: {full: [{uri: "http://aaa.com/"}]}})).getEncodedHex(),
+"3015a013a011860f687474703a2f2f6161612e636f6d2f",
+"constructor by dpname parameter http://aaa.com/");
+
+equal(
+(new _DistributionPoint({fulluri: "http://aaa.com/"})).getEncodedHex(),
+"3015a013a011860f687474703a2f2f6161612e636f6d2f",
+"constructor by fulluri parameter http://aaa.com/");
+
 });
 
 test("OID class test", function() {
@@ -539,16 +558,45 @@ test("KeyUsage class test", function() {
 
 // CRLDP
 test("CRLDistributionPoints class test", function() {
-  expect(2);
+var _GeneralNames = KJUR.asn1.x509.GeneralNames;
+var _DistributionPointName = KJUR.asn1.x509.DistributionPointName;
+var _DistributionPoint = KJUR.asn1.x509.DistributionPoint;
+var _CRLDistributionPoints = KJUR.asn1.x509.CRLDistributionPoints;
 
-  var gn1 = new KJUR.asn1.x509.GeneralNames([{'uri':'http://aaa.com/'}]);
-  var dpn1 = new KJUR.asn1.x509.DistributionPointName(gn1);
-  var dp1 = new KJUR.asn1.x509.DistributionPoint({'dpobj': dpn1});
-  var cdp1 = new KJUR.asn1.x509.CRLDistributionPoints({'array': [dp1]});
-  equal(cdp1.getEncodedHex(), "30200603551d1f041930173015a013a011860f687474703a2f2f6161612e636f6d2f", "constructor array http://aaa.com/");
+var gn1 = new _GeneralNames([{'uri':'http://aaa.com/'}]);
+var dpn1 = new _DistributionPointName(gn1);
+var dp1 = new _DistributionPoint({'dpobj': dpn1});
+equal(
+(new _CRLDistributionPoints({'array': [dp1]})).getEncodedHex(),
+"30200603551d1f041930173015a013a011860f687474703a2f2f6161612e636f6d2f",
+"constructor array [dp] param http://aaa.com/");
 
-  var cdp2 = new KJUR.asn1.x509.CRLDistributionPoints({'uri': 'http://aaa.com/'});
-  equal(cdp2.getEncodedHex(), "30200603551d1f041930173015a013a011860f687474703a2f2f6161612e636f6d2f", "constructor uri http://aaa.com/");
+equal(
+(new _CRLDistributionPoints({'uri': 'http://aaa.com/'})).getEncodedHex(),
+"30200603551d1f041930173015a013a011860f687474703a2f2f6161612e636f6d2f",
+"constructor by uri param http://aaa.com/");
+
+equal(
+(new _CRLDistributionPoints({
+  array: [{fulluri: "http://aaa.com/"}]
+})).getEncodedHex(),
+"30200603551d1f041930173015a013a011860f687474703a2f2f6161612e636f6d2f",
+"constructor by array fulluri param http://aaa.com/");
+
+equal(
+(new _CRLDistributionPoints({
+  array: [{dpname: {full: [{uri: "http://aaa.com/"}]}}]
+})).getEncodedHex(),
+"30200603551d1f041930173015a013a011860f687474703a2f2f6161612e636f6d2f",
+"constructor by uarray dpname full uri param http://aaa.com/");
+
+equal(
+(new _CRLDistributionPoints({
+  array: [{fulluri: "http://aaa.com/"}, {fulluri: "ldap://aaa.com/"}]
+})).getEncodedHex(),
+"30370603551d1f0430302e3015a013a011860f687474703a2f2f6161612e636f6d2f3015a013a011860f6c6461703a2f2f6161612e636f6d2f",
+"constructor by array fulluri param two dp {http,ldap}://aaa.com/");
+
 });
 
 // ExtKeyUsage
@@ -564,82 +612,94 @@ test("ExtKeyUsage class test", function() {
 
 // AuthorityKeyIdentifier
 test("AuthorityKeyIdentifier class test (kid=hex)", function() {
-  expect(2);
-  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'kid': {'hex': '89ab'}});
-  equal(o1.getExtnValueHex(), "3004800289ab", "kid value");
-  equal(o1.getEncodedHex(), "300d0603551d2304063004800289ab", "ext hex");
+var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'kid': {'hex': '89ab'}});
+equal(o1.getExtnValueHex(), "3004800289ab", "kid value");
+equal(o1.getEncodedHex(), "300d0603551d2304063004800289ab", "ext hex");
 });
 
 // aaa3.sbj.cer.pem
 test("AuthorityKeyIdentifier class test (kid=CERTPEM)", function() {
-  expect(2);
-  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'kid': CERTEE1});
-  equal(o1.getExtnValueHex(), "3016801481c33bde1624640e5be7d9a545c44bd488bce204", "extnValue=" + o1.getExtnValueHex());
-  equal(o1.getEncodedHex(), "301f0603551d2304183016801481c33bde1624640e5be7d9a545c44bd488bce204", "hTLV=" + o1.getEncodedHex());
+var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'kid': CERTEE1});
+equal(o1.getExtnValueHex(), "3016801481c33bde1624640e5be7d9a545c44bd488bce204", "extnValue=" + o1.getExtnValueHex());
+equal(o1.getEncodedHex(), "301f0603551d2304183016801481c33bde1624640e5be7d9a545c44bd488bce204", "hTLV=" + o1.getEncodedHex());
 });
 
 test("AuthorityKeyIdentifier class test (kid=PUBKEYOBJ)", function() {
-  var pub = KEYUTIL.getKey(PUBKEYRSA1);
-  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'kid': pub});
-  equal(o1.getExtnValueHex(), "30168014ae6c05a39313e2a2e7e2d71cd6c7f07fc86753a0", "extnValue=" + o1.getExtnValueHex());
-  equal(o1.getEncodedHex(), "301f0603551d23041830168014ae6c05a39313e2a2e7e2d71cd6c7f07fc86753a0", "hTLV=" + o1.getEncodedHex());
+var pub = KEYUTIL.getKey(PUBKEYRSA1);
+var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'kid': pub});
+equal(o1.getExtnValueHex(), "30168014ae6c05a39313e2a2e7e2d71cd6c7f07fc86753a0", "extnValue=" + o1.getExtnValueHex());
+equal(o1.getEncodedHex(), "301f0603551d23041830168014ae6c05a39313e2a2e7e2d71cd6c7f07fc86753a0", "hTLV=" + o1.getEncodedHex());
 });
 
 test("AuthorityKeyIdentifier class test (issuer=str)", function() {
-  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'issuer': {'str': '/C=US/CN=a'}});
-  equal(o1.getExtnValueHex(), "301fa11da41b3019310b3009060355040613025553310a300806035504030c0161", "issuer name");
-  equal(o1.getEncodedHex(), "30280603551d230421301fa11da41b3019310b3009060355040613025553310a300806035504030c0161", "ext hex");
+var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'issuer': {'str': '/C=US/CN=a'}});
+equal(o1.getExtnValueHex(), "301fa11da41b3019310b3009060355040613025553310a300806035504030c0161", "issuer name");
+equal(o1.getEncodedHex(), "30280603551d230421301fa11da41b3019310b3009060355040613025553310a300806035504030c0161", "ext hex");
 });
 
 // aaa3.sbj.cer.pem
 test("AuthorityKeyIdentifier class test (issuer=PEM)", function() {
-  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({issuer: CERTEE1});
-  equal(o1.getExtnValueHex(), "3021a11fa41d301b310b3009060355040613025553310c300a060355040a0c03434131", "extnValue=" + o1.getExtnValueHex());
-  equal(o1.getEncodedHex(), "302a0603551d2304233021a11fa41d301b310b3009060355040613025553310c300a060355040a0c03434131", "hTLV=" + o1.getEncodedHex());
+var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({issuer: CERTEE1});
+equal(o1.getExtnValueHex(), "3021a11fa41d301b310b3009060355040613025553310c300a060355040a0c03434131", "extnValue=" + o1.getExtnValueHex());
+equal(o1.getEncodedHex(), "302a0603551d2304233021a11fa41d301b310b3009060355040613025553310c300a060355040a0c03434131", "hTLV=" + o1.getEncodedHex());
 });
 
 test("AuthorityKeyIdentifier class test (sn=hex)", function() {
-  expect(2);
-  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'sn': {'hex': '1234'}});
-  equal(o1.getExtnValueHex(), "300482021234", "cert SN");
-  equal(o1.getEncodedHex(), "300d0603551d230406300482021234", "ext hex");
+var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'sn': {'hex': '1234'}});
+equal(o1.getExtnValueHex(), "300482021234", "cert SN");
+equal(o1.getEncodedHex(), "300d0603551d230406300482021234", "ext hex");
 });
 
 // aaa3.sbj.cer.pem
 test("AuthorityKeyIdentifier class test (sn=PEM)", function() {
-  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({sn: CERTEE1});
-  equal(o1.getExtnValueHex(), "3003820107", "extnValue=" + o1.getExtnValueHex());
-  equal(o1.getEncodedHex(), "300c0603551d2304053003820107", "hTLV=" + o1.getEncodedHex());
+var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({sn: CERTEE1});
+equal(o1.getExtnValueHex(), "3003820107", "extnValue=" + o1.getExtnValueHex());
+equal(o1.getEncodedHex(), "300c0603551d2304053003820107", "hTLV=" + o1.getEncodedHex());
 });
 
 test("AuthorityKeyIdentifier class test (kid=hex,issuer=str,sn=hex)", function() {
-  expect(2);
-  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'kid': {'hex': '89ab'},
-                                                      'issuer': {'str': '/C=US/CN=a'},
-                                                      'sn': {'hex': '1234'}});
-  equal(o1.getExtnValueHex(), "3027800289aba11da41b3019310b3009060355040613025553310a300806035504030c016182021234", "all");
-  equal(o1.getEncodedHex(), "30300603551d2304293027800289aba11da41b3019310b3009060355040613025553310a300806035504030c016182021234", "ext hex");
+var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'kid': {'hex': '89ab'},
+                                                    'issuer': {'str': '/C=US/CN=a'},
+                                                    'sn': {'hex': '1234'}});
+equal(o1.getExtnValueHex(), "3027800289aba11da41b3019310b3009060355040613025553310a300806035504030c016182021234", "all");
+equal(o1.getEncodedHex(), "30300603551d2304293027800289aba11da41b3019310b3009060355040613025553310a300806035504030c016182021234", "ext hex");
 });
 
 test("AuthorityKeyIdentifier class test (issuer=str,sn=hex)", function() {
-  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({
-    issuer: {str: '/C=JP/O=T1'},
-    sn: {hex: '01'}});
-  equal(o1.getEncodedHex(), "302c0603551d2304253023a11ea41c301a310b3009060355040613024a50310b3009060355040a0c025431820101", "hTLV=" + o1.getEncodedHex());
+var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({
+  issuer: {str: '/C=JP/O=T1'},
+  sn: {hex: '01'}
+});
+equal(o1.getEncodedHex(), "302c0603551d2304253023a11ea41c301a310b3009060355040613024a50310b3009060355040a0c025431820101", "hTLV=" + o1.getEncodedHex());
 });
 
 // aaa3.sbj.cer.pem
 test("AuthorityKeyIdentifier class test (issuersn=PEM)", function() {
-  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({issuersn: CERTEE1});
-  equal(o1.getExtnValueHex(), "3024a11fa41d301b310b3009060355040613025553310c300a060355040a0c03434131820107", "extnValue=" + o1.getExtnValueHex());
-  equal(o1.getEncodedHex(), "302d0603551d2304263024a11fa41d301b310b3009060355040613025553310c300a060355040a0c03434131820107", "hTLV=" + o1.getEncodedHex());
+var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({issuersn: CERTEE1});
+equal(o1.getExtnValueHex(), "3024a11fa41d301b310b3009060355040613025553310c300a060355040a0c03434131820107", "extnValue=" + o1.getExtnValueHex());
+equal(o1.getEncodedHex(), "302d0603551d2304263024a11fa41d301b310b3009060355040613025553310c300a060355040a0c03434131820107", "hTLV=" + o1.getEncodedHex());
 });
 
-test("AuthorityKeyIdentifier class test (kid=hex,critical)", function() {
-  expect(2);
-  var o1 = new KJUR.asn1.x509.AuthorityKeyIdentifier({'kid': {'hex': '89ab'}, 'critical': true});
-  equal(o1.getExtnValueHex(), "3004800289ab", "kid critical");
-  equal(o1.getEncodedHex(), "30100603551d230101ff04063004800289ab", "ext hex");
+test("AuthorityKeyIdentifier class", function() {
+var _AuthorityKeyIdentifier = KJUR.asn1.x509.AuthorityKeyIdentifier;
+
+var o1 = new _AuthorityKeyIdentifier({kid: {hex: '89ab'}, critical: true});
+equal(o1.getExtnValueHex(),
+      "3004800289ab",
+      "constructor kid,critical extnhex");
+equal(o1.getEncodedHex(),
+      "30100603551d230101ff04063004800289ab",
+      "constructor kid,critical enchex");
+
+equal(
+(new _AuthorityKeyIdentifier({
+  kid: {hex: "27e00502504b088259f76ece524799e2246e30eb"},
+  issuer: {hex: "301a310b3009060355040613024a50310b3009060355040a0c025431"},
+  sn: {hex: "01"},
+  critical:true
+})).getEncodedHex(),
+"30450603551d230101ff043b3039801427e00502504b088259f76ece524799e2246e30eba11ea41c301a310b3009060355040613024a50310b3009060355040a0c025431820101",
+"constructor with kid,issuer,sn,critical");
 });
 
 // SubjectKeyIdentifier
@@ -816,6 +876,18 @@ equal(
 "policyinformation 1.2.3.4.5 full"
 );
 
+var param2 = {
+  policyoid: "anyPolicy"
+};
+equal(
+(new _PolicyInformation(param2)).getEncodedHex(),
+"30060604551d2000",
+"anyPolicy hex");
+equal(
+ASN1HEX.dump((new _PolicyInformation(param2)).getEncodedHex()),
+ASN1HEX.dump("30060604551d2000"),
+"anyPolicy dump=" + ASN1HEX.dump("30060604551d2000"));
+
 });
 
 test("PolicyQualifierInfo test", function() {
@@ -902,6 +974,51 @@ equal((new _DisplayText({type: 'bmp', str: 'aaa'})).getEncodedHex(),
       "bmp,aaa=1e03616161");
 });
 
+test("AuthorityInfoAccess class test", function() {
+equal(
+(new KJUR.asn1.x509.AuthorityInfoAccess({
+  array: [
+    {ocsp: "http://ocsp.example.com"},
+    {caissuer: "http://ocsp.example.com"}
+  ]
+})).getEncodedHex(),
+"305806082b06010505070101044c304a302306082b060105050730018617687474703a2f2f6f6373702e6578616d706c652e636f6d302306082b060105050730028617687474703a2f2f6f6373702e6578616d706c652e636f6d",
+"ocsp,caissuer"
+);
+
+equal(
+(new KJUR.asn1.x509.AuthorityInfoAccess({
+  array: [
+    {ocsp: "http://ocsp.example.com"},
+    {caissuer: "http://ocsp.example.com"}
+  ],
+  critical: true
+})).getEncodedHex(),
+"305b06082b060105050701010101ff044c304a302306082b060105050730018617687474703a2f2f6f6373702e6578616d706c652e636f6d302306082b060105050730028617687474703a2f2f6f6373702e6578616d706c652e636f6d",
+"ocsp,caissuer,critical=true"
+);
+
+equal(
+(new KJUR.asn1.x509.AuthorityInfoAccess({
+  array: [
+    {caissuer: "http://ocsp.example.com"},
+    {ocsp: "http://ocsp.example.com"}
+  ]
+})).getEncodedHex(),
+"305806082b06010505070101044c304a302306082b060105050730028617687474703a2f2f6f6373702e6578616d706c652e636f6d302306082b060105050730018617687474703a2f2f6f6373702e6578616d706c652e636f6d",
+"caissuer,ocsp"
+);
+
+equal(
+(new KJUR.asn1.x509.AuthorityInfoAccess({
+  array: [
+    {ocsp: "http://ocsp.example.com"}
+  ]
+})).getEncodedHex(),
+"303306082b0601050507010104273025302306082b060105050730018617687474703a2f2f6f6373702e6578616d706c652e636f6d",
+"ocsp"
+);
+});
 
 
 });
@@ -913,10 +1030,12 @@ equal((new _DisplayText({type: 'bmp', str: 'aaa'})).getEncodedHex(),
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
 <a href="index.html">TEST INDEX</a> |
+<a href="qunit-do-x509-ext.html">x509-ext</a> |
 <a href="qunit-do-x509-hex2dn.html">x509-hex2dn</a> |
 <a href="qunit-do-asn1x509.html">asn1x509</a> |
 <a href="qunit-do-asn1x509-newcrt.html">asn1x509-newcrt</a> |
 <a href="qunit-do-asn1x509-multirdn.html">asn1x509-multirdn</a> |
+<a href="qunit-do-asn1x509-tbscert.html">asn1x509-tbscert</a> |
 <a href="qunit-do-asn1csr.html">asn1csr</a> |
 </body>
 </html>

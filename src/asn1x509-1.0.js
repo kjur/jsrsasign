@@ -1,4 +1,4 @@
-/* asn1x509-2.0.1.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-2.0.2.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.0.0 asn1x509 2.0.1 (2020-Aug-20)
+ * @version jsrsasign 9.0.2 asn1x509 2.0.2 (2020-Aug-22)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -943,7 +943,7 @@ KJUR.asn1.x509.PolicyInformation = function(params) {
 	    throw new Error("parameter oid and array missing");
 
 	// policy oid
-	var a = [new _DERObjectIdentifier({oid: this.params.policyoid})];
+	var a = [new _DERObjectIdentifier(this.params.policyoid)];
 
 	// array of ASN1Object of PolicyQualifierInfo
 	if (this.params.array !== undefined) {

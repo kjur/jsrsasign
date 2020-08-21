@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1x509-2.0.1.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1x509-2.0.2.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name asn1x509-1.0.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign 9.0.0 asn1x509 2.0.1 (2020-Aug-20)
+<span class='line'> 19</span>  * @version jsrsasign 9.0.2 asn1x509 2.0.2 (2020-Aug-22)
 <span class='line'> 20</span>  * @since jsrsasign 2.1
 <span class='line'> 21</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -950,7 +950,7 @@
 <span class='line'>943</span> </span><span class="WHIT">	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"parameter oid and array missing"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>944</span> 
 <span class='line'>945</span> </span><span class="WHIT">	</span><span class="COMM">// policy oid</span><span class="WHIT">
-<span class='line'>946</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_DERObjectIdentifier</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">oid</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.params.policyoid</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>946</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_DERObjectIdentifier</span><span class="PUNC">(</span><span class="NAME">this.params.policyoid</span><span class="PUNC">)</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>947</span> 
 <span class='line'>948</span> </span><span class="WHIT">	</span><span class="COMM">// array of ASN1Object of PolicyQualifierInfo</span><span class="WHIT">
 <span class='line'>949</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.params.array</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
