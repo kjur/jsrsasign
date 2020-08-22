@@ -1,6 +1,15 @@
 
 ChangeLog for jsrsasign
 
+TimeStampToken ASN.1 encoding error fix
+* Changes from 9.0.2 to 9.0.3 (2020-Aug-22)
+  - BUGFIX: tsa field of TSTInfo was not encoded properly. (#450)
+  - BUGFIX: CMSSignedData version of TimestampToken was not 3. (#448)
+  - src/asn1tsp.js
+    - TSTInfo tsa field fix
+    - TSTUtil.newTimeStampToken method to set
+      CMSVersion 3.
+
 PolicyInformation named policy OID bug fix
 * Changes from 9.0.1 to 9.0.2 (2020-Aug-22)
   - BUGFIX: KJUR.asn1.tsp.PolicyInformation class constructor
