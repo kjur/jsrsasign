@@ -1,4 +1,4 @@
-/* asn1tsp-1.0.4.js (c) 2014-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1tsp-1.0.5.js (c) 2014-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1tsp.js - ASN.1 DER encoder classes for RFC 3161 Time Stamp Protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1tsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.0.1 asn1tsp 1.0.4 (2020-Aug-20)
+ * @version jsrsasign 9.0.2 asn1tsp 1.0.5 (2020-Aug-22)
  * @since jsrsasign 4.5.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -258,10 +258,13 @@ YAHOO.lang.extend(KJUR.asn1.tsp.TimeStampReq, KJUR.asn1.ASN1Object);
  * class for TSP TSTInfo ASN.1 object
  * @name KJUR.asn1.tsp.TSTInfo
  * @class class for TSP TSTInfo ASN.1 object
- * @param {Array} params associative array of parameters
+ * @param {Array} params JSON object for TSTInfo parameters
  * @extends KJUR.asn1.ASN1Object
  * @since jsrsasign 4.6.0 asn1tsp 1.0.0
+ * @see KJUR.asn1.x509.X500Name
+ * @see KJUR.asn1.x509.GeneralName
  * @description
+ * This class represents TSTInfo ASN.1 structure.
  * <pre>
  * TSTInfo ::= SEQUENCE  {
  *    version         INTEGER  { v1(1) },
@@ -275,6 +278,11 @@ YAHOO.lang.extend(KJUR.asn1.tsp.TimeStampReq, KJUR.asn1.ASN1Object);
  *    tsa             [0] GeneralName          OPTIONAL,
  *    extensions      [1] IMPLICIT Extensions  OPTIONAL   }
  * </pre>
+ * For "params" arguent, following properties are accepted:
+ * <ul>
+ * <li>{Array}tsa - {@link KJUR.asn1.x509.X500Name} parameter for
+ * tsa field even though tsa field is GeneralName.</li>
+ * </ul>
  * @example
  * o = new KJUR.asn1.tsp.TSTInfo({
  *     policy:    '1.2.3.4.5',
@@ -294,10 +302,13 @@ KJUR.asn1.tsp.TSTInfo = function(params) {
 	_DERBoolean = _KJUR_asn1.DERBoolean,
 	_DERGeneralizedTime = _KJUR_asn1.DERGeneralizedTime,
 	_DERObjectIdentifier = _KJUR_asn1.DERObjectIdentifier,
+	_DERTaggedObject = _KJUR_asn1.DERTaggedObject,
 	_KJUR_asn1_tsp = _KJUR_asn1.tsp,
 	_MessageImprint = _KJUR_asn1_tsp.MessageImprint,
 	_Accuracy = _KJUR_asn1_tsp.Accuracy,
-        _X500Name = _KJUR_asn1.x509.X500Name;
+        _X500Name = _KJUR_asn1.x509.X500Name,
+        _GeneralName = _KJUR_asn1.x509.GeneralName;
+	
 
     _KJUR_asn1_tsp.TSTInfo.superclass.constructor.call(this);
 
@@ -365,7 +376,11 @@ KJUR.asn1.tsp.TSTInfo = function(params) {
             this.dNonce = new _DERInteger(params.nonce);
         }
         if (params.tsa !== undefined) {
-            this.dTsa = new _X500Name(params.tsa);
+            this.dTsa = new _DERTaggedObject({
+		tag: "a0",
+		explicit: true,
+		obj: new _GeneralName({dn: params.tsa})
+	    });
         }
     }
 };
@@ -769,6 +784,7 @@ KJUR.asn1.tsp.TSPUtil = new function() {
 KJUR.asn1.tsp.TSPUtil.newTimeStampToken = function(param) {
     var _KJUR = KJUR,
 	_KJUR_asn1 = _KJUR.asn1,
+	_DERInteger = _KJUR.asn1.DERInteger,
 	_KJUR_asn1_cms = _KJUR_asn1.cms,
 	_KJUR_asn1_tsp = _KJUR_asn1.tsp,
 	_TSTInfo = _KJUR_asn1.tsp.TSTInfo;
@@ -777,6 +793,7 @@ KJUR.asn1.tsp.TSPUtil.newTimeStampToken = function(param) {
 
     var dTSTInfo = new _TSTInfo(param.tstInfo);
     var tstInfoHex = dTSTInfo.getEncodedHex();
+    sd.dCMSVersion = new _DERInteger({'int': 3});
     sd.dEncapContentInfo.setContentValue({hex: tstInfoHex});
     sd.dEncapContentInfo.setContentType('tstinfo');
 

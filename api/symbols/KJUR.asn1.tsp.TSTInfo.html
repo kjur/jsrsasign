@@ -491,19 +491,7 @@ ul.inheritsList
 								<b><a href="../symbols/KJUR.asn1.tsp.TSTInfo.html#constructor">KJUR.asn1.tsp.TSTInfo</a></b>(params)
 							</div>
 							<div class="description">class for TSP TSTInfo ASN.1 object
-<pre>
-TSTInfo ::= SEQUENCE  {
-   version         INTEGER  { v1(1) },
-   policy          TSAPolicyId,
-   messageImprint  MessageImprint,
-   serialNumber    INTEGER, -- up to 160bit
-   genTime         GeneralizedTime,
-   accuracy        Accuracy                 OPTIONAL,
-   ordering        BOOLEAN                  DEFAULT FALSE,
-   nonce           INTEGER                  OPTIONAL,
-   tsa             [0] GeneralName          OPTIONAL,
-   extensions      [1] IMPLICIT Extensions  OPTIONAL   }
-</pre></div>
+This class represents TSTInfo ASN.1 structure.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -549,6 +537,7 @@ TSTInfo ::= SEQUENCE  {
 				
 				<div class="description">
 					class for TSP TSTInfo ASN.1 object
+This class represents TSTInfo ASN.1 structure.
 <pre>
 TSTInfo ::= SEQUENCE  {
    version         INTEGER  { v1(1) },
@@ -562,6 +551,11 @@ TSTInfo ::= SEQUENCE  {
    tsa             [0] GeneralName          OPTIONAL,
    extensions      [1] IMPLICIT Extensions  OPTIONAL   }
 </pre>
+For "params" arguent, following properties are accepted:
+<ul>
+<li>{Array}tsa - <a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a> parameter for
+tsa field even though tsa field is GeneralName.</li>
+</ul>
 					
 				</div>
 				
@@ -588,7 +582,7 @@ TSTInfo ::= SEQUENCE  {
 								<span class="light fixedFont">{Array}</span>  <b>params</b>
 								
 							</dt>
-								<dd>associative array of parameters</dd>
+								<dd>JSON object for TSTInfo parameters</dd>
 						
 						</dl>
 					
@@ -602,6 +596,15 @@ TSTInfo ::= SEQUENCE  {
 					
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a></dd>
+						
+						</dl>
 					
 
 			</div>
