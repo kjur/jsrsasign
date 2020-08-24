@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1cms-1.0.8.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1cms-1.0.9.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * asn1cms.js - ASN.1 DER encoder and verifier classes for Cryptographic Message Syntax(CMS)
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name asn1cms-1.0.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign 9.0.1 asn1cms 1.0.8 (2020-Aug-20)
+<span class='line'> 19</span>  * @version jsrsasign 9.1.0 asn1cms 1.0.9 (2020-Aug-23)
 <span class='line'> 20</span>  * @since jsrsasign 4.2.4
 <span class='line'> 21</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -305,7 +305,7 @@
 <span class='line'>298</span> </span><span class="WHIT">            </span><span class="NAME">list.push</span><span class="PUNC">(</span><span class="NAME">dESSCertID</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>299</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>300</span> 
-<span class='line'>301</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_DERSequence</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">array</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">list</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>301</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_DERSequence</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">array</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_DERSequence</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">array</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">list</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">]</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>302</span> </span><span class="WHIT">        </span><span class="NAME">dValue.getEncodedHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>303</span> </span><span class="WHIT">        </span><span class="NAME">this.valueList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">dValue</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>304</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
@@ -386,7 +386,7 @@
 <span class='line'>379</span> </span><span class="WHIT">            </span><span class="NAME">list.push</span><span class="PUNC">(</span><span class="NAME">dESSCertIDv2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>380</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>381</span> 
-<span class='line'>382</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_DERSequence</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">array</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">list</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>382</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_DERSequence</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">array</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_DERSequence</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">array</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">list</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">]</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>383</span> </span><span class="WHIT">        </span><span class="NAME">dValue.getEncodedHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>384</span> </span><span class="WHIT">        </span><span class="NAME">this.valueList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">dValue</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>385</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">

@@ -367,6 +367,10 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.CRLEntry.html">KJUR.asn1.x509.CRLEntry</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.CRLNumber.html">KJUR.asn1.x509.CRLNumber</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.CRLReason.html">KJUR.asn1.x509.CRLReason</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.DisplayText.html">KJUR.asn1.x509.DisplayText</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.DistributionPoint.html">KJUR.asn1.x509.DistributionPoint</a></li>
@@ -374,6 +378,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.x509.DistributionPointName.html">KJUR.asn1.x509.DistributionPointName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.Extensions.html">KJUR.asn1.x509.Extensions</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.ExtKeyUsage.html">KJUR.asn1.x509.ExtKeyUsage</a></li>
 	
@@ -490,8 +496,8 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/KJUR.asn1.x509.CRLEntry.html#constructor">KJUR.asn1.x509.CRLEntry</a></b>(params)
 							</div>
-							<div class="description">ASN.1 CRLEntry structure class for CRL
-</div>
+							<div class="description">ASN.1 CRLEntry structure class for CRL (DEPRECATED)<br/>
+This class is to represent revokedCertificate in TBSCertList.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -569,20 +575,24 @@ ul.inheritsList
 				</div>
 				
 				<div class="description">
-					ASN.1 CRLEntry structure class for CRL
-
+					ASN.1 CRLEntry structure class for CRL (DEPRECATED)<br/>
+This class is to represent revokedCertificate in TBSCertList.
+However this is no more used by TBSCertList since
+jsrsasign 9.1.0. So this class have been deprecated in 
+jsrsasign 9.1.0.
+<pre>
+revokedCertificates     SEQUENCE OF SEQUENCE  {
+    userCertificate         CertificateSerialNumber,
+    revocationDate          Time,
+    crlEntryExtensions      Extensions OPTIONAL
+                            -- if present, version MUST be v2 }
+</pre>
 					
 				</div>
 				
 				
 				
-				<pre class="code">var e = new KJUR.asn1.x509.CRLEntry({'time': {'str': '130514235959Z'}, 'sn': {'int': 234}});
-
-// revokedCertificates     SEQUENCE OF SEQUENCE  {
-//     userCertificate         CertificateSerialNumber,
-//     revocationDate          Time,
-//     crlEntryExtensions      Extensions OPTIONAL
-//                             -- if present, version MUST be v2 }</pre>
+				<pre class="code">var e = new KJUR.asn1.x509.CRLEntry({'time': {'str': '130514235959Z'}, 'sn': {'int': 234}});</pre>
 				
 				
 				
@@ -595,10 +605,17 @@ ul.inheritsList
 								<span class="light fixedFont">{Array}</span>  <b>params</b>
 								
 							</dt>
-								<dd>associative array of parameters (ex. {})</dd>
+								<dd>JSON object for CRL entry parameter</dd>
 						
 						</dl>
 					
+					
+						<dl class="detailList">
+						<dt class="heading">Deprecated:</dt>
+						<dt>
+							since jsrsasign 9.1.0 asn1x509 2.1.0
+						</dt>
+						</dl>
 					
 					
 						<dl class="detailList">
@@ -609,6 +626,13 @@ ul.inheritsList
 					
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.TBSCertList.html">KJUR.asn1.x509.TBSCertList</a></dd>
+						
+						</dl>
 					
 
 			</div>

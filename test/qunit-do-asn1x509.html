@@ -154,7 +154,131 @@ SwIDAQAB
 -----END PUBLIC KEY-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
-// ===== X500Name class test =========================================
+
+
+// === BEGIN Other ASN1 structure class  ======================================
+
+test("AlgorithmIdentifier class test", function() {
+var _AlgId = KJUR.asn1.x509.AlgorithmIdentifier;
+equal(new _AlgId({'name':'SHA1withRSA'}).getEncodedHex(),
+      "300d06092a864886f70d0101050500",
+      "constructor name SHA1withRSA");
+equal(new _AlgId({'name':'SHA256withRSA'}).getEncodedHex(),
+      "300d06092a864886f70d01010b0500",
+      "constructor name SHA256withRSA");
+equal(new _AlgId({'name':'SHA256withRSA', paramempty: true}).getEncodedHex(),
+      "300b06092a864886f70d01010b",
+      "constructor name SHA256withRSA, paramempty");
+equal(new _AlgId({'name':'SHA1withDSA'}).getEncodedHex(),
+      "300906072a8648ce380403",
+      "constructor name SHA1withDSA");
+equal(new _AlgId({'name':'SHA512withECDSA'}).getEncodedHex(),
+      "300a06082a8648ce3d040304",
+      "constructor name SHA512withECDSA");
+equal(new _AlgId({'name':'rsaEncryption'}).getEncodedHex(),
+        "300d06092a864886f70d0101010500",
+	"constructor name rsaEncryption");
+equal(new _AlgId({'name':'sha1'}).getEncodedHex(),
+        "300906052b0e03021a0500",
+	"constructor name sha1");
+
+equal(new _AlgId({'name':'SHAwithRSAandMGF1'}).getEncodedHex(),
+        "300d06092a864886f70d01010a3000",
+	"constructor name SHAwithRSAandMGF1");
+
+equal(new _AlgId({'name':'SHA256withRSAandMGF1'}).getEncodedHex(),
+        "303d06092a864886f70d01010a3030a00d300b0609608648016503040201a11a301806092a864886f70d010108300b0609608648016503040201a203020120",
+	"constructor name SHA256withRSAandMGF1");
+
+equal(new _AlgId({'name':'SHA384withRSAandMGF1'}).getEncodedHex(),
+        "303d06092a864886f70d01010a3030a00d300b0609608648016503040202a11a301806092a864886f70d010108300b0609608648016503040202a203020130",
+	"constructor name SHA384withRSAandMGF1");
+
+equal(new _AlgId({'name':'SHA512withRSAandMGF1'}).getEncodedHex(),
+        "303d06092a864886f70d01010a3030a00d300b0609608648016503040203a11a301806092a864886f70d010108300b0609608648016503040203a203020140",
+	"constructor name SHA512withRSAandMGF1");
+});
+
+test("AlgorithmIdentifier SHA1withECDSA", function() {
+var o = new KJUR.asn1.x509.AlgorithmIdentifier({name: 'SHA1withECDSA', paramempty: true});
+equal(o.getEncodedHex(), "300906072a8648ce3d0401", "aaa");
+});
+
+test("AlgorithmIdentifier SHA256withECDSA", function() {
+var o = new KJUR.asn1.x509.AlgorithmIdentifier({name: 'SHA256withECDSA', paramempty: true});
+equal(o.getEncodedHex(), "300a06082a8648ce3d040302", "aaa");
+});
+
+test("AlgorithmIdentifier SHA1withDSA", function() {
+var o = new KJUR.asn1.x509.AlgorithmIdentifier({name: 'SHA1withDSA', paramempty: true});
+equal(o.getEncodedHex(), "300906072a8648ce380403", "aaa");
+});
+
+test("AlgorithmIdentifier SHA256withDSA", function() {
+var o = new KJUR.asn1.x509.AlgorithmIdentifier({name: 'SHA256withDSA', paramempty: true});
+equal(o.getEncodedHex(), "300b0609608648016503040302", "aaa");
+});
+
+// ===== BEGIN Name related class test ==============
+
+test("GeneralNames class test", function() {
+  var o = new KJUR.asn1.x509.GeneralNames([{'uri':'http://aaa.com/'}]);
+  equal(o.getEncodedHex(), "3011860f687474703a2f2f6161612e636f6d2f", "constructor uri http://aaa.com/");
+
+  var o = new KJUR.asn1.x509.GeneralNames([{uri:'http://aaa.com/'}, {dn: {certsubject: CERTEE1}}]);
+  equal(o.getEncodedHex(), "3030860f687474703a2f2f6161612e636f6d2fa41d301b310b3009060355040613025553310c300a060355040a0c03454531", "constructor uri http://aaa.com/, dn certsubject EE out=" + o.getEncodedHex());
+});
+
+test("GeneralName class test", function() {
+  var o;
+  o = new KJUR.asn1.x509.GeneralName({'rfc822':'u1@foo.com'});
+  equal(o.getEncodedHex(), "810a753140666f6f2e636f6d", "constructor rfc822 u1@foo.com");
+
+  o = new KJUR.asn1.x509.GeneralName({'dns':'foo.com'});
+  equal(o.getEncodedHex(), "8207666f6f2e636f6d", "constructor dns foo.com");
+
+  o = new KJUR.asn1.x509.GeneralName({'uri':'http://aaa.com/'});
+  equal(o.getEncodedHex(), "860f687474703a2f2f6161612e636f6d2f", "constructor uri http://aaa.com/");
+
+  o = new KJUR.asn1.x509.GeneralName({certissuer: z4TSACERT});
+  equal(o.getEncodedHex(), "a41d301b310b3009060355040613025553310c300a060355040a0c03434131", "constructor certissuer cert1");
+
+  o = new KJUR.asn1.x509.GeneralName({certsubj: z4TSACERT});
+  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b06035504030c0454534131", "constructor certsubj cert1");
+
+  o = new KJUR.asn1.x509.GeneralName({dn: '/C=US/O=Test'});
+  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "dn /C=US/O=Test out=" + o.getEncodedHex());
+
+  o = new KJUR.asn1.x509.GeneralName({dn: {str: '/C=US/O=Test'}});
+  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "dn str /C=US/O=Test");
+
+  o = new KJUR.asn1.x509.GeneralName({dn: {ldapstr: 'O=Test,C=US'}});
+  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "dn ldapstr O=Test,C=US");
+
+  o = new KJUR.asn1.x509.GeneralName({dn: {certsubject: CERTEE1}});
+  equal(o.getEncodedHex(), "a41d301b310b3009060355040613025553310c300a060355040a0c03454531", "dn certsubject=EE1 out=" + o.getEncodedHex());
+
+  o = new KJUR.asn1.x509.GeneralName({dn: {certissuer: CERTEE1}});
+  equal(o.getEncodedHex(), "a41d301b310b3009060355040613025553310c300a060355040a0c03434131", "dn certissuer=CA1 out=" + o.getEncodedHex());
+
+  o = new KJUR.asn1.x509.GeneralName({ldapdn: 'O=Test,C=US'});
+  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "ldapdn O=Test,C=US");
+
+  o = new KJUR.asn1.x509.GeneralName({ip: '192.168.1.1'});
+  equal(o.getEncodedHex(), "8704c0a80101", "ip: 192.168.1.1");
+
+  o = new KJUR.asn1.x509.GeneralName({ip: '2001:db8::4'});
+  equal(o.getEncodedHex(), "871020010db8000000000000000000000004", "ip: 2001:db8::4");
+
+  o = new KJUR.asn1.x509.GeneralName({ip: '2606:4700:4700::1111'});
+  equal(o.getEncodedHex(), "871026064700470000000000000000001111", "ip: 2606:4700:4700::1111");
+
+  o = new KJUR.asn1.x509.GeneralName({ip: 'c0a80101'});
+  equal(o.getEncodedHex(), "8704c0a80101", "ip: c0a80101");
+});
+
+// == X500Name class test 
+
 test("X500Name class test", function() {
 var _X500Name = KJUR.asn1.x509.X500Name;
 var o = null;
@@ -229,7 +353,7 @@ equal(o.getEncodedHex(),
 
 });
 
-// ==== RDN class TEST ===================================
+// == RDN class TEST 
 test("RDN class test", function() {
 var _RDN = KJUR.asn1.x509.RDN;
 
@@ -262,7 +386,7 @@ o2.addByString("O=aaa");
 equal(o2.getEncodedHex(), "310c300a060355040a0c03616161", "addByString(O=aaa)");
 });
 
-// ==== AttributeTypeAndValue TEST ===================================
+// == AttributeTypeAndValue TEST
 test("AttributeTypeAndValue class test", function() {
 var _AttributeTypeAndValue = KJUR.asn1.x509.AttributeTypeAndValue;
 
@@ -277,7 +401,6 @@ equal(
 equal(
 (new _AttributeTypeAndValue({'str':'O=aaa'})).getEncodedHex(),
 "300a060355040a0c03616161", "new {'str':'O=aaa'} utf8");
-
 
 equal(
 (new _AttributeTypeAndValue({'str':'O=あ'})).getEncodedHex(),
@@ -316,7 +439,24 @@ equal(o8.sRule, "prn", "o8 sRule=prn");
 
 });
 
-// === BEGIN Other ASN1 structure class  ======================================
+
+// ===== END Name related class test ==============
+
+test("Time class test", function() {
+  expect(4);
+
+  var o1 = new KJUR.asn1.x509.Time({'str':'130430235959Z'}); // UTC
+  equal(o1.getEncodedHex(), "170d3133303433303233353935395a", "constructor default timestr");
+
+  var o2 = new KJUR.asn1.x509.Time({'str':'20130430235959Z', 'type': 'gen'}); // Gen
+  equal(o2.getEncodedHex(), "180f32303133303433303233353935395a", "constructor default timestr");
+
+  var o3 = new KJUR.asn1.x509.Time({'str':'20130430235959Z'}); // Gen
+  equal(o3.getEncodedHex(), "180f32303133303433303233353935395a", "constructor default timestr (auto gen)");
+
+  var o4 = new KJUR.asn1.x509.Time(); // auto UTC
+  equal(o4.getEncodedHex().substr(0, 4), "170d", "constructor default timestr (empty)=170d...");
+});
 
 test("SubjectPublicKeyInfo class test", function() {
   var rsaKey = new RSAKey();
@@ -335,190 +475,7 @@ test("SubjectPublicKeyInfo class test", function() {
   equal(o2.getEncodedHex(), "305c300d06092a864886f70d0101010500034b003048024100eb6918789b2fc51ef8c5cf3ee7e472b3444b8d2b093e4b44853d3234d9f3fee8c06e5b02c88503d5f1877b992b54f9400eb88cd2556e9da88c702d37258fbb0b0203010001", "pubpem2");
 });
 
-test("Time class test", function() {
-  expect(4);
-
-  var o1 = new KJUR.asn1.x509.Time({'str':'130430235959Z'}); // UTC
-  equal(o1.getEncodedHex(), "170d3133303433303233353935395a", "constructor default timestr");
-
-  var o2 = new KJUR.asn1.x509.Time({'str':'20130430235959Z', 'type': 'gen'}); // Gen
-  equal(o2.getEncodedHex(), "180f32303133303433303233353935395a", "constructor default timestr");
-
-  var o3 = new KJUR.asn1.x509.Time({'str':'20130430235959Z'}); // Gen
-  equal(o3.getEncodedHex(), "180f32303133303433303233353935395a", "constructor default timestr (auto gen)");
-
-  var o4 = new KJUR.asn1.x509.Time(); // auto UTC
-  equal(o4.getEncodedHex().substr(0, 4), "170d", "constructor default timestr (empty)=170d...");
-});
-
-test("AlgorithmIdentifier class test", function() {
-var _AlgId = KJUR.asn1.x509.AlgorithmIdentifier;
-equal(new _AlgId({'name':'SHA1withRSA'}).getEncodedHex(),
-      "300d06092a864886f70d0101050500",
-      "constructor name SHA1withRSA");
-equal(new _AlgId({'name':'SHA256withRSA'}).getEncodedHex(),
-      "300d06092a864886f70d01010b0500",
-      "constructor name SHA256withRSA");
-equal(new _AlgId({'name':'SHA256withRSA', paramempty: true}).getEncodedHex(),
-      "300b06092a864886f70d01010b",
-      "constructor name SHA256withRSA, paramempty");
-equal(new _AlgId({'name':'SHA1withDSA'}).getEncodedHex(),
-      "300906072a8648ce380403",
-      "constructor name SHA1withDSA");
-equal(new _AlgId({'name':'SHA512withECDSA'}).getEncodedHex(),
-      "300a06082a8648ce3d040304",
-      "constructor name SHA512withECDSA");
-equal(new _AlgId({'name':'rsaEncryption'}).getEncodedHex(),
-        "300d06092a864886f70d0101010500",
-	"constructor name rsaEncryption");
-equal(new _AlgId({'name':'sha1'}).getEncodedHex(),
-        "300906052b0e03021a0500",
-	"constructor name sha1");
-
-equal(new _AlgId({'name':'SHAwithRSAandMGF1'}).getEncodedHex(),
-        "300d06092a864886f70d01010a3000",
-	"constructor name SHAwithRSAandMGF1");
-
-equal(new _AlgId({'name':'SHA256withRSAandMGF1'}).getEncodedHex(),
-        "303d06092a864886f70d01010a3030a00d300b0609608648016503040201a11a301806092a864886f70d010108300b0609608648016503040201a203020120",
-	"constructor name SHA256withRSAandMGF1");
-
-equal(new _AlgId({'name':'SHA384withRSAandMGF1'}).getEncodedHex(),
-        "303d06092a864886f70d01010a3030a00d300b0609608648016503040202a11a301806092a864886f70d010108300b0609608648016503040202a203020130",
-	"constructor name SHA384withRSAandMGF1");
-
-equal(new _AlgId({'name':'SHA512withRSAandMGF1'}).getEncodedHex(),
-        "303d06092a864886f70d01010a3030a00d300b0609608648016503040203a11a301806092a864886f70d010108300b0609608648016503040203a203020140",
-	"constructor name SHA512withRSAandMGF1");
-});
-
-test("AlgorithmIdentifier SHA1withECDSA", function() {
-var o = new KJUR.asn1.x509.AlgorithmIdentifier({name: 'SHA1withECDSA', paramempty: true});
-equal(o.getEncodedHex(), "300906072a8648ce3d0401", "aaa");
-});
-
-test("AlgorithmIdentifier SHA256withECDSA", function() {
-var o = new KJUR.asn1.x509.AlgorithmIdentifier({name: 'SHA256withECDSA', paramempty: true});
-equal(o.getEncodedHex(), "300a06082a8648ce3d040302", "aaa");
-});
-
-test("AlgorithmIdentifier SHA1withDSA", function() {
-var o = new KJUR.asn1.x509.AlgorithmIdentifier({name: 'SHA1withDSA', paramempty: true});
-equal(o.getEncodedHex(), "300906072a8648ce380403", "aaa");
-});
-
-test("AlgorithmIdentifier SHA256withDSA", function() {
-var o = new KJUR.asn1.x509.AlgorithmIdentifier({name: 'SHA256withDSA', paramempty: true});
-equal(o.getEncodedHex(), "300b0609608648016503040302", "aaa");
-});
-
-test("GeneralName class test", function() {
-  var o;
-  o = new KJUR.asn1.x509.GeneralName({'rfc822':'u1@foo.com'});
-  equal(o.getEncodedHex(), "810a753140666f6f2e636f6d", "constructor rfc822 u1@foo.com");
-
-  o = new KJUR.asn1.x509.GeneralName({'dns':'foo.com'});
-  equal(o.getEncodedHex(), "8207666f6f2e636f6d", "constructor dns foo.com");
-
-  o = new KJUR.asn1.x509.GeneralName({'uri':'http://aaa.com/'});
-  equal(o.getEncodedHex(), "860f687474703a2f2f6161612e636f6d2f", "constructor uri http://aaa.com/");
-
-  o = new KJUR.asn1.x509.GeneralName({certissuer: z4TSACERT});
-  equal(o.getEncodedHex(), "a41d301b310b3009060355040613025553310c300a060355040a0c03434131", "constructor certissuer cert1");
-
-  o = new KJUR.asn1.x509.GeneralName({certsubj: z4TSACERT});
-  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b06035504030c0454534131", "constructor certsubj cert1");
-
-  o = new KJUR.asn1.x509.GeneralName({dn: '/C=US/O=Test'});
-  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "dn /C=US/O=Test out=" + o.getEncodedHex());
-
-  o = new KJUR.asn1.x509.GeneralName({dn: {str: '/C=US/O=Test'}});
-  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "dn str /C=US/O=Test");
-
-  o = new KJUR.asn1.x509.GeneralName({dn: {ldapstr: 'O=Test,C=US'}});
-  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "dn ldapstr O=Test,C=US");
-
-  o = new KJUR.asn1.x509.GeneralName({dn: {certsubject: CERTEE1}});
-  equal(o.getEncodedHex(), "a41d301b310b3009060355040613025553310c300a060355040a0c03454531", "dn certsubject=EE1 out=" + o.getEncodedHex());
-
-  o = new KJUR.asn1.x509.GeneralName({dn: {certissuer: CERTEE1}});
-  equal(o.getEncodedHex(), "a41d301b310b3009060355040613025553310c300a060355040a0c03434131", "dn certissuer=CA1 out=" + o.getEncodedHex());
-
-  o = new KJUR.asn1.x509.GeneralName({ldapdn: 'O=Test,C=US'});
-  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "ldapdn O=Test,C=US");
-
-  o = new KJUR.asn1.x509.GeneralName({ip: '192.168.1.1'});
-  equal(o.getEncodedHex(), "8704c0a80101", "ip: 192.168.1.1");
-
-  o = new KJUR.asn1.x509.GeneralName({ip: '2001:db8::4'});
-  equal(o.getEncodedHex(), "871020010db8000000000000000000000004", "ip: 2001:db8::4");
-
-  o = new KJUR.asn1.x509.GeneralName({ip: '2606:4700:4700::1111'});
-  equal(o.getEncodedHex(), "871026064700470000000000000000001111", "ip: 2606:4700:4700::1111");
-
-  o = new KJUR.asn1.x509.GeneralName({ip: 'c0a80101'});
-  equal(o.getEncodedHex(), "8704c0a80101", "ip: c0a80101");
-});
-
-test("GeneralNames class test", function() {
-  var o = new KJUR.asn1.x509.GeneralNames([{'uri':'http://aaa.com/'}]);
-  equal(o.getEncodedHex(), "3011860f687474703a2f2f6161612e636f6d2f", "constructor uri http://aaa.com/");
-
-  var o = new KJUR.asn1.x509.GeneralNames([{uri:'http://aaa.com/'}, {dn: {certsubject: CERTEE1}}]);
-  equal(o.getEncodedHex(), "3030860f687474703a2f2f6161612e636f6d2fa41d301b310b3009060355040613025553310c300a060355040a0c03454531", "constructor uri http://aaa.com/, dn certsubject EE out=" + o.getEncodedHex());
-});
-
-test("DistributionPointName class test", function() {
-var _GeneralNames = KJUR.asn1.x509.GeneralNames;
-var _DistributionPointName = KJUR.asn1.x509.DistributionPointName;
-var o1a = new _GeneralNames([{'uri':'http://aaa.com/'}]);
-var o1 = new _DistributionPointName(o1a);
-equal(
-o1.getEncodedHex(),
-"a011860f687474703a2f2f6161612e636f6d2f",
-"constructor by GeneralNames object");
-
-equal(
-(new _DistributionPointName({full: [{'uri':'http://aaa.com/'}]})).getEncodedHex(),
-"a011860f687474703a2f2f6161612e636f6d2f",
-"constructor by JSON parameter");
-});
-
-test("DistributionPoint class test", function() {
-var _GeneralNames = KJUR.asn1.x509.GeneralNames;
-var _DistributionPointName = KJUR.asn1.x509.DistributionPointName;
-var _DistributionPoint = KJUR.asn1.x509.DistributionPoint;
-
-var o1aa = new _GeneralNames([{'uri':'http://aaa.com/'}]);
-var o1a = new _DistributionPointName(o1aa);
-var o1 = new _DistributionPoint({'dpobj': o1a});
-equal(
-o1.getEncodedHex(),
-"3015a013a011860f687474703a2f2f6161612e636f6d2f",
-"constructor by dpobj parameter http://aaa.com/");
-
-equal(
-(new _DistributionPoint({dpname: {full: [{uri: "http://aaa.com/"}]}})).getEncodedHex(),
-"3015a013a011860f687474703a2f2f6161612e636f6d2f",
-"constructor by dpname parameter http://aaa.com/");
-
-equal(
-(new _DistributionPoint({fulluri: "http://aaa.com/"})).getEncodedHex(),
-"3015a013a011860f687474703a2f2f6161612e636f6d2f",
-"constructor by fulluri parameter http://aaa.com/");
-
-});
-
-test("OID class test", function() {
-  var o = KJUR.asn1.x509.OID;
-  equal(o.atype2obj('C').getEncodedHex(), "0603550406", "C");
-  equal(o.name2obj('SHA1withRSA').getEncodedHex(), 
-         "06092a864886f70d010105", "name2obj SHA1withRSA");
-  equal(o.name2oid('basicConstraints'), '2.5.29.19', "name2oid basicConstraints");
-  equal(o.name2oid('UNKNOWNOIDNAME'), '', "name2oid unknown name");
-  equal(o.oid2name('2.5.29.19'), 'basicConstraints', "oid2name basicConstraints");
-  equal(o.oid2name('0.0.0.0'), '', "oid2name unknown oid");
-});
+// ===== END Basic Field related class test ==============
 
 // BasicConstraints
 test("BasicConstraints class test", function() {
@@ -597,6 +554,47 @@ equal(
 "30370603551d1f0430302e3015a013a011860f687474703a2f2f6161612e636f6d2f3015a013a011860f6c6461703a2f2f6161612e636f6d2f",
 "constructor by array fulluri param two dp {http,ldap}://aaa.com/");
 
+});
+
+test("DistributionPoint class test", function() {
+var _GeneralNames = KJUR.asn1.x509.GeneralNames;
+var _DistributionPointName = KJUR.asn1.x509.DistributionPointName;
+var _DistributionPoint = KJUR.asn1.x509.DistributionPoint;
+
+var o1aa = new _GeneralNames([{'uri':'http://aaa.com/'}]);
+var o1a = new _DistributionPointName(o1aa);
+var o1 = new _DistributionPoint({'dpobj': o1a});
+equal(
+o1.getEncodedHex(),
+"3015a013a011860f687474703a2f2f6161612e636f6d2f",
+"constructor by dpobj parameter http://aaa.com/");
+
+equal(
+(new _DistributionPoint({dpname: {full: [{uri: "http://aaa.com/"}]}})).getEncodedHex(),
+"3015a013a011860f687474703a2f2f6161612e636f6d2f",
+"constructor by dpname parameter http://aaa.com/");
+
+equal(
+(new _DistributionPoint({fulluri: "http://aaa.com/"})).getEncodedHex(),
+"3015a013a011860f687474703a2f2f6161612e636f6d2f",
+"constructor by fulluri parameter http://aaa.com/");
+
+});
+
+test("DistributionPointName class test", function() {
+var _GeneralNames = KJUR.asn1.x509.GeneralNames;
+var _DistributionPointName = KJUR.asn1.x509.DistributionPointName;
+var o1a = new _GeneralNames([{'uri':'http://aaa.com/'}]);
+var o1 = new _DistributionPointName(o1a);
+equal(
+o1.getEncodedHex(),
+"a011860f687474703a2f2f6161612e636f6d2f",
+"constructor by GeneralNames object");
+
+equal(
+(new _DistributionPointName({full: [{'uri':'http://aaa.com/'}]})).getEncodedHex(),
+"a011860f687474703a2f2f6161612e636f6d2f",
+"constructor by JSON parameter");
 });
 
 // ExtKeyUsage
@@ -732,7 +730,6 @@ test("SubjectKeyIdentifier class test (kid=CERTPEM)", function() {
   equal(o1.getEncodedHex(), "301d0603551d0e0416041481c33bde1624640e5be7d9a545c44bd488bce204", "hTLV=" + o1.getEncodedHex());
 });
 
-
 // SubjectAltName
 test("SubjectAltName", function() {
   var o1 = new KJUR.asn1.x509.SubjectAltName({
@@ -753,51 +750,6 @@ test("IssuerAltName", function() {
 });
 
 // ==== END OF X.509V3 EXTENSION TEST ===================
-test("CRL class test", function() {
-  expect(1);
-
-  // TBS
-  var o = new KJUR.asn1.x509.TBSCertList();
-  o.setSignatureAlgByParam({'name': 'SHA1withRSA'});
-  o.setIssuerByParam({'str': '/C=US/O=a'});
-  o.setThisUpdateByParam({'str': '130504235959Z'});
-  o.setNextUpdateByParam({'str': '130604235959Z'});
-
-  var prvKey = new RSAKey();
-  prvKey.readPKCS5PrvKeyHex("3082013a020100024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001024078bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d022100fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f022100e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07022100d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b3702201849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa902207d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9");
-
-  var crl1 = new KJUR.asn1.x509.CRL({'tbsobj': o,'prvkeyobj': prvKey});
-  crl1.sign();
-  equal(crl1.getEncodedHex(), "30819c3048300d06092a864886f70d01010505003019310b3009060355040613025553310a3008060355040a0c0161170d3133303530343233353935395a170d3133303630343233353935395a300d06092a864886f70d0101050500034100161f6e8b3cbe992aa4eece8894516a65d530543c6f23e83860cc391ae8289504cbe91f118fd20e2b96966182f695f9dce27b3e76f7d84beeab293cc3c9649740", "crl sign");
-});
-
-test("TBSCertList class test", function() {
-  expect(1);
-  var o = new KJUR.asn1.x509.TBSCertList();
-  o.setSignatureAlgByParam({'name': 'SHA1withRSA'});
-  o.setIssuerByParam({'str': '/C=US/O=a'});
-  o.setThisUpdateByParam({'str': '130504235959Z'});
-  o.setNextUpdateByParam({'str': '130604235959Z'});
-
-  equal(o.getEncodedHex(), "3048300d06092a864886f70d01010505003019310b3009060355040613025553310a3008060355040a0c0161170d3133303530343233353935395a170d3133303630343233353935395a", "constructor");
-});
-
-test("TBSCertList 2 class test", function() {
-  expect(1);
-  var o = new KJUR.asn1.x509.TBSCertList();
-  o.setSignatureAlgByParam({'name': 'SHA1withRSA'});
-  o.setIssuerByParam({'str': '/C=US/O=a'});
-  o.setThisUpdateByParam({'str': '130504235959Z'});
-  o.setNextUpdateByParam({'str': '130604235959Z'});
-  o.addRevokedCert({'int': 4}, {'str':'130514235959Z'});
-
-  equal(o.getEncodedHex(), "305e300d06092a864886f70d01010505003019310b3009060355040613025553310a3008060355040a0c0161170d3133303530343233353935395a170d3133303630343233353935395a30143012020104170d3133303531343233353935395a", "constructor with revoked cert");
-});
-
-test("CRLEntry class test", function() {
-  var e = new KJUR.asn1.x509.CRLEntry({'time':{'str':'130514235959Z'}, 'sn':{'int':3}});
-  equal(e.getEncodedHex(), "3012020103170d3133303531343233353935395a", "constructor/1");
-});
 
 test("CertificatePolicies test", function() {
 var _CertificatePolicies = KJUR.asn1.x509.CertificatePolicies;
@@ -1020,6 +972,108 @@ equal(
 );
 });
 
+// ===== CRL related test ====================
+
+test("CRL class test (by cakey)", function() {
+var _CRL = KJUR.asn1.x509.CRL;
+var hExpect = "30819c3048300d06092a864886f70d01010505003019310b3009060355040613025553310a3008060355040a0c0161170d3133303530343233353935395a170d3133303630343233353935395a300d06092a864886f70d0101050500034100161f6e8b3cbe992aa4eece8894516a65d530543c6f23e83860cc391ae8289504cbe91f118fd20e2b96966182f695f9dce27b3e76f7d84beeab293cc3c9649740";
+var prvKey = new RSAKey();
+prvKey.readPKCS5PrvKeyHex("3082013a020100024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001024078bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d022100fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f022100e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07022100d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b3702201849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa902207d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9");
+var params = {
+ sigalg: 'SHA1withRSA',
+ issuer: {str: '/C=US/O=a'},
+ thisupdate: '130504235959Z',
+ nextupdate: '130604235959Z',
+ cakey: prvKey
+};
+
+var crl1 = new _CRL(params);
+equal(crl1.getEncodedHex(), hExpect, "hex");
+equal(
+ASN1HEX.dump(crl1.getEncodedHex()),
+ASN1HEX.dump(hExpect),
+"dump");
+});
+
+test("CRL class test 2 (by sighex)", function() {
+var _CRL = KJUR.asn1.x509.CRL;
+var hExpect = "3063304b020101300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0161170d3133303530343233353935395a170d3133303630343233353935395a300d06092a864886f70d01010b05000305001234abcd";
+var params = {
+ version: 2,
+ sigalg: 'SHA256withRSA',
+ issuer: {str: '/C=US/O=a'},
+ thisupdate: '130504235959Z',
+ nextupdate: '130604235959Z',
+ sighex: "1234abcd"
+};
+var crl1 = new _CRL(params);
+equal(crl1.getEncodedHex(), hExpect, "hex");
+equal(
+ASN1HEX.dump(crl1.getEncodedHex()),
+ASN1HEX.dump(hExpect),
+"dump");
+});
+
+test("TBSCertList class test", function() {
+var _TBSCertList = KJUR.asn1.x509.TBSCertList;
+var hExpect = "3081b3020101300d06092a864886f70d01010b0500301a310b3009060355040613024a50310b3009060355040a13025431170d3230303832313233353935395a170d3230303832383233353935395a30463021020212ab170d3230303430313233353935395a300c300a0603551d1504030a01013021020212bc170d3230303430353233353935395a300c300a0603551d1504030a0102a01d301b300a0603551d140403020108300d0603551d2304063004800212ab";
+var params = {
+ version: 2, // OPTION
+ sigalg: "SHA256withRSA",
+ issuer: {array: [[{type:'C',value:'JP',ds:'prn'}],
+                  [{type:'O',value:'T1',ds:'prn'}]]},
+ thisupdate: "200821235959Z",
+ nextupdate: "200828235959Z", // OPTION
+ revcert: [
+  {sn: {hex: "12ab"}, date: "200401235959Z", ext: [{extname: "cRLReason", code:1}]},
+  {sn: {hex: "12bc"}, date: "200405235959Z", ext: [{extname: "cRLReason", code:2}]}
+ ],
+ ext: [
+  {extname: "cRLNumber", num: {'int': 8}},
+  {extname: "authorityKeyIdentifier", "kid": {hex: "12ab"}}
+ ]
+};
+equal(
+(new _TBSCertList(params)).getEncodedHex(),
+hExpect,
+"hex");
+equal(
+ASN1HEX.dump((new _TBSCertList(params)).getEncodedHex()),
+ASN1HEX.dump(hExpect),
+"dump");
+});
+
+test("CRLNumber extension test", function() {
+var hExpect = "300a0603551d140403020107";
+var _CRLNumber = KJUR.asn1.x509.CRLNumber;
+equal((new _CRLNumber({num: {'int': 7}})).getEncodedHex(), hExpect, "hex");
+equal(
+ASN1HEX.dump((new _CRLNumber({num: {'int': 7}})).getEncodedHex()),
+ASN1HEX.dump(hExpect),
+"dump");
+});
+
+test("CRLReason extension test", function() {
+var hExpect = "300a0603551d1504030a0102";
+var param = {code: 2};
+var _CRLReason = KJUR.asn1.x509.CRLReason;
+equal((new _CRLReason(param)).getEncodedHex(), hExpect, "hex");
+equal(
+ASN1HEX.dump((new _CRLReason(param)).getEncodedHex()),
+ASN1HEX.dump(hExpect),
+"dump");
+});
+
+test("OID class test", function() {
+  var o = KJUR.asn1.x509.OID;
+  equal(o.atype2obj('C').getEncodedHex(), "0603550406", "C");
+  equal(o.name2obj('SHA1withRSA').getEncodedHex(), 
+         "06092a864886f70d010105", "name2obj SHA1withRSA");
+  equal(o.name2oid('basicConstraints'), '2.5.29.19', "name2oid basicConstraints");
+  equal(o.name2oid('UNKNOWNOIDNAME'), '', "name2oid unknown name");
+  equal(o.oid2name('2.5.29.19'), 'basicConstraints', "oid2name basicConstraints");
+  equal(o.oid2name('0.0.0.0'), '', "oid2name unknown oid");
+});
 
 });
 -->

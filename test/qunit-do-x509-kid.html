@@ -31,14 +31,11 @@
 <script src="../ext/rsa.js"></script>
 <script src="../ext/rsa2.js"></script>
 <script src="../ext/base64.js"></script>
-
-<script src="../src/crypto-1.1.js"></script>
-<script src="../src/asn1hex-1.1.js"></script>
-<script src="../src/rsapem-1.1.js"></script>
-<script src="../src/rsasign-1.2.js"></script>
-<script src="../src/x509-1.1.js"></script>
 <script src="../src/base64x-1.1.js"></script>
-<script src="../src/keyutil-1.0.js"></script>
+
+<script src="../src/asn1hex-1.1.js"></script>
+<script src="../src/x509-1.1.js"></script>
+<script src="../src/crypto-1.1.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -88,11 +85,11 @@ var ossca1PEM = "-----BEGIN CERTIFICATE-----\r\n" +
 "-----END CERTIFICATE-----\r\n";
 
 test("kid test1", function() {
-  var info = X509.getPublicKeyInfoPropOfCertPEM(ossca1PEM);
-  var pubKeyHex = info.keyhex;
-  var kid = KJUR.crypto.Util.hashHex(pubKeyHex, "sha1");
-  equal(pubKeyHex, "30818902818100b4e861b0eb5ac552ec2d280f904a875fd4a2136aad0ff5c11ac58fc8f0c54b264836c8c1431efb20ca2c2bfd27de0e7181a8c6dab88c6b95681400ad832ba9a5f6e4e3f2445d0255715f4b5b14a0ff5492ab50bde48ce036965747b2021c50a6b069f515e4fb070c38a67cd1282fad4ac613f2ff826a6306abd82b9f05faba910203010001", "pubkey");
-  equal(kid, "f92ec4550b5f7674150053b4cf526502c3105eb9", "skid");
+var info = X509.getPublicKeyInfoPropOfCertPEM(ossca1PEM);
+var pubKeyHex = info.keyhex;
+var kid = KJUR.crypto.Util.hashHex(pubKeyHex, "sha1");
+equal(pubKeyHex, "30818902818100b4e861b0eb5ac552ec2d280f904a875fd4a2136aad0ff5c11ac58fc8f0c54b264836c8c1431efb20ca2c2bfd27de0e7181a8c6dab88c6b95681400ad832ba9a5f6e4e3f2445d0255715f4b5b14a0ff5492ab50bde48ce036965747b2021c50a6b069f515e4fb070c38a67cd1282fad4ac613f2ff826a6306abd82b9f05faba910203010001", "pubkey");
+equal(kid, "f92ec4550b5f7674150053b4cf526502c3105eb9", "skid");
 });
 
 });

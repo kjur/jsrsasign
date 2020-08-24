@@ -1,4 +1,4 @@
-/* asn1cms-1.0.8.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1cms-1.0.9.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1cms.js - ASN.1 DER encoder and verifier classes for Cryptographic Message Syntax(CMS)
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cms-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.0.1 asn1cms 1.0.8 (2020-Aug-20)
+ * @version jsrsasign 9.1.0 asn1cms 1.0.9 (2020-Aug-23)
  * @since jsrsasign 4.2.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -298,7 +298,7 @@ KJUR.asn1.cms.SigningCertificate = function(params) {
             list.push(dESSCertID);
         }
 
-        var dValue = new _DERSequence({array: list});
+        var dValue = new _DERSequence({array: [new _DERSequence({array: list})]});
         dValue.getEncodedHex();
         this.valueList = [dValue];
     };
@@ -379,7 +379,7 @@ KJUR.asn1.cms.SigningCertificateV2 = function(params) {
             list.push(dESSCertIDv2);
         }
 
-        var dValue = new _DERSequence({array: list});
+        var dValue = new _DERSequence({array: [new _DERSequence({array: list})]});
         dValue.getEncodedHex();
         this.valueList = [dValue];
     };
