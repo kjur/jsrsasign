@@ -367,6 +367,10 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.CRLEntry.html">KJUR.asn1.x509.CRLEntry</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.CRLNumber.html">KJUR.asn1.x509.CRLNumber</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.CRLReason.html">KJUR.asn1.x509.CRLReason</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.DisplayText.html">KJUR.asn1.x509.DisplayText</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.DistributionPoint.html">KJUR.asn1.x509.DistributionPoint</a></li>
@@ -374,6 +378,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.x509.DistributionPointName.html">KJUR.asn1.x509.DistributionPointName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.Extensions.html">KJUR.asn1.x509.Extensions</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.ExtKeyUsage.html">KJUR.asn1.x509.ExtKeyUsage</a></li>
 	
@@ -506,6 +512,29 @@ RFC 5280 4.1</a>.</div>
 			
 				
 				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class KJUR.asn1.x509.Certificate.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.x509.Certificate.html#params">params</a></b>
+								</div>
+								<div class="description">JSON object of parameters</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
 				
 				
 				<dl class="inheritsList">
@@ -545,7 +574,9 @@ certificate.</div>
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.Certificate.html#setByParam">setByParam</a></b>(params)
 								</div>
 								<div class="description">set parameter<br/>
-This method will set parameter to this object.</div>
+This method will set parameter 
+<a href="../symbols/KJUR.asn1.x509.Certificate.html#params">KJUR.asn1.x509.Certificate#params</a>
+to this object.</div>
 							</td>
 						</tr>
 					
@@ -554,7 +585,7 @@ This method will set parameter to this object.</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.Certificate.html#sign">sign</a></b>()
 								</div>
-								<div class="description">sign certificate <br/>
+								<div class="description">sign certificate<br/>
 This method signs TBSCertificate with a specified 
 private key and algorithm by 
 this.params.cakey and this.params.sigalg parameter.</div>
@@ -599,20 +630,27 @@ Certificate  ::=  SEQUENCE  {
      signatureValue       BIT STRING  }
 </pre>
 Parameter "params" JSON object can be
-the samme as <a href="../symbols/KJUR.asn1.x509.TBSCertificate.html">KJUR.asn1.x509.TBSCertificate</a>. 
+the same as <a href="../symbols/KJUR.asn1.x509.TBSCertificate.html">KJUR.asn1.x509.TBSCertificate</a>. 
 Then they are used to generate TBSCertificate.
 Additionally just for Certificate, following parameters can be used:
 <ul>
-<li>{String}sighex - hexadecimal string for 
-signatureValue field.</li>
-<li>{Object}cakey - RSA/DSA/ECC private key object or 
-PEM file which can be passed to <a href="../symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a>.
-When "sighex" is not specified and "cakey" is specified,
-"sighex" will be automatically set by signing with
-"cakey" during getEncodedHex is called.</li>
 <li>{TBSCertfificate}tbsobj - 
-<a href="../symbols/KJUR.asn1.x509.TBSCertificate.html">KJUR.asn1.x509.TBSCertificate</a> object
-instead of specifying TBSCertificate parameters.</li>
+specifies <a href="../symbols/KJUR.asn1.x509.TBSCertificate.html">KJUR.asn1.x509.TBSCertificate</a> 
+object to be signed if needed. 
+When this isn't specified, 
+this will be set from other parametes of TBSCertificate.</li>
+<li>{Object}cakey (OPTION) - specifies certificate signing private key.
+Parameter "cakey" or "sighex" shall be specified. Following
+values can be specified:
+  <ul>
+  <li>PKCS#1/5 or PKCS#8 PEM string of private key</li>
+  <li>RSAKey/DSA/ECDSA key object. <a href="../symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> is useful
+  to generate a key object.</li>
+  </ul>
+</li>
+<li>{String}sighex (OPTION) - hexadecimal string of signature value
+(i.e. ASN.1 value(V) of signatureValue BIT STRING without
+unused bits)</li>
 </ul>
 CAUTION: APIs of this class have been totally updated without
 backward compatibility since jsrsasign 9.0.0.<br/>
@@ -673,6 +711,33 @@ var cert = new KJUR.asn1x509.Certificate({
 			
 
 <!-- ============================== field details ========================== -->		
+			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="params"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>params</b>
+					
+					</div>
+					<div class="description">
+						JSON object of parameters
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
 			
 
 <!-- ============================== method details ========================= -->		
@@ -736,7 +801,9 @@ cert.getPEM() &rarr;
 					</div>
 					<div class="description">
 						set parameter<br/>
-This method will set parameter to this object.
+This method will set parameter 
+<a href="../symbols/KJUR.asn1.x509.Certificate.html#params">KJUR.asn1.x509.Certificate#params</a>
+to this object.
 						
 						
 					</div>
@@ -787,7 +854,7 @@ cert.setByParam({
 					
 					</div>
 					<div class="description">
-						sign certificate <br/>
+						sign certificate<br/>
 This method signs TBSCertificate with a specified 
 private key and algorithm by 
 this.params.cakey and this.params.sigalg parameter.
@@ -798,8 +865,7 @@ this.params.cakey and this.params.sigalg parameter.
 					
 					
 					<pre class="code">cert = new KJUR.asn1.x509.Certificate({...});
-cert.sign()
-"-----BEGIN CERTIFICATE-----\r\n..."</pre>
+cert.sign()</pre>
 					
 					
 					

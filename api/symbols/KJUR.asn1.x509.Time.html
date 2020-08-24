@@ -367,6 +367,10 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.CRLEntry.html">KJUR.asn1.x509.CRLEntry</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.CRLNumber.html">KJUR.asn1.x509.CRLNumber</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.CRLReason.html">KJUR.asn1.x509.CRLReason</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.DisplayText.html">KJUR.asn1.x509.DisplayText</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.DistributionPoint.html">KJUR.asn1.x509.DistributionPoint</a></li>
@@ -374,6 +378,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.x509.DistributionPointName.html">KJUR.asn1.x509.DistributionPointName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.Extensions.html">KJUR.asn1.x509.Extensions</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.ExtKeyUsage.html">KJUR.asn1.x509.ExtKeyUsage</a></li>
 	
@@ -490,9 +496,14 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/KJUR.asn1.x509.Time.html#constructor">KJUR.asn1.x509.Time</a></b>(params)
 							</div>
-							<div class="description">Time ASN.1 structure class
-<br/>
-<h4>EXAMPLES</h4></div>
+							<div class="description">Time ASN.1 structure class<br/>
+This class represents Time ASN.1 structure defined in 
+<a href="https://tools.ietf.org/html/rfc5280">RFC 5280</a>
+<pre>
+Time ::= CHOICE {
+     utcTime        UTCTime,
+     generalTime    GeneralizedTime }
+</pre></div>
 						</td>
 					</tr>
 				</tbody>
@@ -537,9 +548,14 @@ ul.inheritsList
 				</div>
 				
 				<div class="description">
-					Time ASN.1 structure class
-<br/>
-<h4>EXAMPLES</h4>
+					Time ASN.1 structure class<br/>
+This class represents Time ASN.1 structure defined in 
+<a href="https://tools.ietf.org/html/rfc5280">RFC 5280</a>
+<pre>
+Time ::= CHOICE {
+     utcTime        UTCTime,
+     generalTime    GeneralizedTime }
+</pre>
 					
 				</div>
 				
@@ -568,6 +584,15 @@ var t2 = new KJUR.asn1.x509.Time{'type': 'gen',  'str': '20130508235959Z'} // Ge
 					
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.DERUTCTime.html">KJUR.asn1.DERUTCTime</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.DERGeneralizedTime.html">KJUR.asn1.DERGeneralizedTime</a></dd>
+						
+						</dl>
 					
 
 			</div>

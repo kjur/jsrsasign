@@ -367,6 +367,10 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.CRLEntry.html">KJUR.asn1.x509.CRLEntry</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.CRLNumber.html">KJUR.asn1.x509.CRLNumber</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.CRLReason.html">KJUR.asn1.x509.CRLReason</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.DisplayText.html">KJUR.asn1.x509.DisplayText</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.DistributionPoint.html">KJUR.asn1.x509.DistributionPoint</a></li>
@@ -374,6 +378,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.x509.DistributionPointName.html">KJUR.asn1.x509.DistributionPointName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.Extensions.html">KJUR.asn1.x509.Extensions</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.ExtKeyUsage.html">KJUR.asn1.x509.ExtKeyUsage</a></li>
 	
@@ -490,15 +496,18 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/KJUR.asn1.x509.CRL.html#constructor">KJUR.asn1.x509.CRL</a></b>(params)
 							</div>
-							<div class="description">X.509 CRL class to sign and generate hex encoded CRL
-<br/>
-As for argument 'params' for constructor, you can specify one of
-following properties:
-<ul>
-<li>tbsobj - specify <a href="../symbols/KJUR.asn1.x509.TBSCertList.html">KJUR.asn1.x509.TBSCertList</a> object to be signed</li>
-<li>rsaprvkey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object CA private key</li>
-</ul>
-NOTE: 'params' can be omitted.</div>
+							<div class="description">X.509 CRL class to sign and generate hex encoded CRL<br/>
+This class represents CertificateList ASN.1 structur of X.509 CRL
+defined in <a href="https://tools.ietf.org/html/rfc5280#section-5.1">
+RFC 5280 5.1</a>
+<pre>
+CertificateList  ::=  SEQUENCE  {
+    tbsCertList          TBSCertList,
+    signatureAlgorithm   AlgorithmIdentifier,
+    signatureValue       BIT STRING  }
+</pre>
+NOTE: CRL class is updated without backward 
+compatibility from jsrsasign 9.1.0 asn1x509 2.1.0.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -508,6 +517,29 @@ NOTE: 'params' can be omitted.</div>
 <!-- ============================== properties summary ===================== -->
 			
 				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class KJUR.asn1.x509.CRL.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.x509.CRL.html#params">params</a></b>
+								</div>
+								<div class="description">JSON object of parameters</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
 				
 				
 				
@@ -534,10 +566,11 @@ NOTE: 'params' can be omitted.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.CRL.html#getPEMString">getPEMString</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.CRL.html#getPEM">getPEM</a></b>()
 								</div>
-								<div class="description">get PEM formatted CRL string after signed
-</div>
+								<div class="description">get PEM formatted CRL string after signed<br/>
+This method returns a string of PEM formatted 
+CRL.</div>
 							</td>
 						</tr>
 					
@@ -546,8 +579,10 @@ NOTE: 'params' can be omitted.</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.CRL.html#sign">sign</a></b>()
 								</div>
-								<div class="description">sign TBSCertList and set signature value internally
-</div>
+								<div class="description">sign CRL<br/>
+This method signs TBSCertList with a specified 
+private key and algorithm by 
+this.params.cakey and this.params.sigalg parameter.</div>
 							</td>
 						</tr>
 					
@@ -576,30 +611,62 @@ NOTE: 'params' can be omitted.</div>
 				</div>
 				
 				<div class="description">
-					X.509 CRL class to sign and generate hex encoded CRL
+					X.509 CRL class to sign and generate hex encoded CRL<br/>
+This class represents CertificateList ASN.1 structur of X.509 CRL
+defined in <a href="https://tools.ietf.org/html/rfc5280#section-5.1">
+RFC 5280 5.1</a>
+<pre>
+CertificateList  ::=  SEQUENCE  {
+    tbsCertList          TBSCertList,
+    signatureAlgorithm   AlgorithmIdentifier,
+    signatureValue       BIT STRING  }
+</pre>
+NOTE: CRL class is updated without backward 
+compatibility from jsrsasign 9.1.0 asn1x509 2.1.0.
+Most of methods are removed and parameters can be set
+by JSON object.
 <br/>
-As for argument 'params' for constructor, you can specify one of
-following properties:
+Constructor of this class can accept all
+parameters of <a href="../symbols/KJUR.asn1.x509.TBSCertList.html">KJUR.asn1.x509.TBSCertList</a>.
+It also accept following parameters additionally:
 <ul>
-<li>tbsobj - specify <a href="../symbols/KJUR.asn1.x509.TBSCertList.html">KJUR.asn1.x509.TBSCertList</a> object to be signed</li>
-<li>rsaprvkey - specify <a href="../symbols/RSAKey.html">RSAKey</a> object CA private key</li>
+<li>{TBSCertList}tbsobj (OPTION) - 
+specifies <a href="../symbols/KJUR.asn1.x509.TBSCertList.html">KJUR.asn1.x509.TBSCertList</a> 
+object to be signed if needed. 
+When this isn't specified, 
+this will be set from other parametes of TBSCertList.</li>
+<li>{Object}cakey (OPTION) - specifies CRL signing private key.
+Parameter "cakey" or "sighex" shall be specified. Following
+values can be specified:
+  <ul>
+  <li>PKCS#1/5 or PKCS#8 PEM string of private key</li>
+  <li>RSAKey/DSA/ECDSA key object. <a href="../symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> is useful
+  to generate a key object.</li>
+  </ul>
+</li>
+<li>{String}sighex (OPTION) - hexadecimal string of signature value
+(i.e. ASN.1 value(V) of signatureValue BIT STRING without
+unused bits)</li>
 </ul>
-NOTE: 'params' can be omitted.
-<h4>EXAMPLE</h4>
 					
 				</div>
 				
 				
 				
-				<pre class="code">var prvKey = KEYUTIL.getKEY("-----BEGIN PRIVATE..."); // CA's private key
-var crl = new KJUR.asn1x509.CRL({'tbsobj': tbs, 'prvkeyobj': prvKey});
-crl.sign(); // issue CRL by CA's private key
-var hCRL = crl.getEncodedHex();
-
-// CertificateList  ::=  SEQUENCE  {
-//     tbsCertList          TBSCertList,
-//     signatureAlgorithm   AlgorithmIdentifier,
-//     signatureValue       BIT STRING  }</pre>
+				<pre class="code">var crl = new KJUR.asn1x509.CRL({
+ sigalg: "SHA256withRSA",
+ issuer: {str:'/C=JP/O=Test1'},
+ thisupdate: "200821235959Z",
+ nextupdate: "200828235959Z", // OPTION
+ revcert: [{sn: {hex: "12ab"}, date: "200401235959Z"}],
+ ext: [
+  {extname: "cRLNumber", num: {'int': 8}},
+  {extname: "authorityKeyIdentifier", "kid": {hex: "12ab"}}
+ ],
+ cakey: prvkey
+});
+crl.getEncodedHex() &rarr; "30..."
+crl.getPEM() &rarr; "-----BEGIN X509 CRL..."</pre>
 				
 				
 				
@@ -612,7 +679,7 @@ var hCRL = crl.getEncodedHex();
 								<span class="light fixedFont">{Array}</span>  <b>params</b>
 								
 							</dt>
-								<dd>associative array of parameters (ex. {'tbsobj': obj, 'rsaprvkey': key})</dd>
+								<dd>JSON object of CRL parameters</dd>
 						
 						</dl>
 					
@@ -627,11 +694,45 @@ var hCRL = crl.getEncodedHex();
 					
 					
 					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.TBSCertList.html">KJUR.asn1.x509.TBSCertList</a></dd>
+						
+						</dl>
+					
 
 			</div>
 			
 
 <!-- ============================== field details ========================== -->		
+			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="params"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>params</b>
+					
+					</div>
+					<div class="description">
+						JSON object of parameters
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
 			
 
 <!-- ============================== method details ========================= -->		
@@ -640,37 +741,44 @@ var hCRL = crl.getEncodedHex();
 					Method Detail
 				</div>
 				
-					<a name="getPEMString"> </a>
+					<a name="getPEM"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>getPEMString</b>()
+					<b>getPEM</b>()
 					
 					</div>
 					<div class="description">
-						get PEM formatted CRL string after signed
-
+						get PEM formatted CRL string after signed<br/>
+This method returns a string of PEM formatted 
+CRL.
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">var cert = new KJUR.asn1.x509.CRL({'tbsobj': tbs, 'rsaprvkey': prvKey});
-cert.sign();
-var sPEM =  cert.getPEMString();</pre>
+					<pre class="code">crl = new KJUR.asn1.x509.CRL({...});
+crl.getPEM() &rarr;
+"-----BEGIN X509 CRL-----\r\n..."</pre>
 					
 					
 					
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 9.1.0 asn1hex 2.1.0</dd>
+							</dl>
+							</dl>
 						
 						
 						
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>PEM formatted string of certificate</dd>
+								<dd>PEM formatted string of CRL</dd>
 							
 							</dl>
 						
@@ -687,16 +795,18 @@ var sPEM =  cert.getPEMString();</pre>
 					
 					</div>
 					<div class="description">
-						sign TBSCertList and set signature value internally
-
+						sign CRL<br/>
+This method signs TBSCertList with a specified 
+private key and algorithm by 
+this.params.cakey and this.params.sigalg parameter.
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">var cert = new KJUR.asn1.x509.CRL({'tbsobj': tbs, 'prvkeyobj': prvKey});
-cert.sign();</pre>
+					<pre class="code">crl = new KJUR.asn1.x509.CRL({..., cakey:prvkey});
+crl.sign()</pre>
 					
 					
 					

@@ -265,16 +265,17 @@ equal(ASN1HEX.dump(cert.getEncodedHex()), "Moge", "moge");
 });
  */
 
-test("TBSCertificate.getExtDERSequence test", function() {
-var tbsc = new KJUR.asn1.x509.TBSCertificate();
-var seq = tbsc.getExtDERSequence([{
+test("Extensions class test", function() {
+var hExpect = "301830160603551d11040f300d820b6578616d706c652e636f6d";
+var seq = new KJUR.asn1.x509.Extensions([{
 extname:"subjectAltName",
 array:[{dns:"example.com"}]
 }]);
-equal(seq.getEncodedHex(), 
-"301830160603551d11040f300d820b6578616d706c652e636f6d",
-"hex");
-//equal(ASN1HEX.dump(seq.getEncodedHex()), null, "IGNORE check dump");
+equal(seq.getEncodedHex(), hExpect, "hex");
+equal(
+ASN1HEX.dump(seq.getEncodedHex()), 
+ASN1HEX.dump(hExpect),
+"dump");
 });
 
 });

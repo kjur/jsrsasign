@@ -367,6 +367,10 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.CRLEntry.html">KJUR.asn1.x509.CRLEntry</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.CRLNumber.html">KJUR.asn1.x509.CRLNumber</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.CRLReason.html">KJUR.asn1.x509.CRLReason</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.DisplayText.html">KJUR.asn1.x509.DisplayText</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.DistributionPoint.html">KJUR.asn1.x509.DistributionPoint</a></li>
@@ -374,6 +378,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.x509.DistributionPointName.html">KJUR.asn1.x509.DistributionPointName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.Extensions.html">KJUR.asn1.x509.Extensions</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.ExtKeyUsage.html">KJUR.asn1.x509.ExtKeyUsage</a></li>
 	
@@ -490,7 +496,7 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#constructor">KJUR.asn1.x509.TBSCertificate</a></b>(params)
 							</div>
-							<div class="description">ASN.1 TBSCertificate structure class
+							<div class="description">ASN.1 TBSCertificate structure class<br/>
 <br/>
 NOTE: TBSCertificate class is updated without backward 
 compatibility from jsrsasign 9.0.0 asn1x509 2.0.0.</div>
@@ -503,6 +509,29 @@ compatibility from jsrsasign 9.0.0 asn1x509 2.0.0.</div>
 <!-- ============================== properties summary ===================== -->
 			
 				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class KJUR.asn1.x509.TBSCertificate.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#params">params</a></b>
+								</div>
+								<div class="description">JSON object of parameters</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
 				
 				
 				
@@ -525,17 +554,6 @@ compatibility from jsrsasign 9.0.0 asn1x509 2.0.0.</div>
 						</tr>
 					</thead>
 					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html#getExtDERSequence">getExtDERSequence</a></b>(aExt)
-								</div>
-								<div class="description">get ASN.1 object for extensions<br/>
-This method returns DERSequence object of certificate 
-extensions.</div>
-							</td>
-						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
@@ -571,7 +589,7 @@ extensions.</div>
 				</div>
 				
 				<div class="description">
-					ASN.1 TBSCertificate structure class
+					ASN.1 TBSCertificate structure class<br/>
 <br/>
 NOTE: TBSCertificate class is updated without backward 
 compatibility from jsrsasign 9.0.0 asn1x509 2.0.0.
@@ -626,11 +644,45 @@ tbsc.setByParam({version:3,serial:{hex:'1234...'},...});</pre>
 					
 					
 					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.Certificate.html">KJUR.asn1.x509.Certificate</a></dd>
+						
+						</dl>
+					
 
 			</div>
 			
 
 <!-- ============================== field details ========================== -->		
+			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="params"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>params</b>
+					
+					</div>
+					<div class="description">
+						JSON object of parameters
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
 			
 
 <!-- ============================== method details ========================= -->		
@@ -638,87 +690,6 @@ tbsc.setByParam({version:3,serial:{hex:'1234...'},...});</pre>
 				<div class="sectionTitle">
 					Method Detail
 				</div>
-				
-					<a name="getExtDERSequence"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{DERSequence}</span>
-					<b>getExtDERSequence</b>(aExt)
-					
-					</div>
-					<div class="description">
-						get ASN.1 object for extensions<br/>
-This method returns DERSequence object of certificate 
-extensions. 
-<br/>
-When argument "aExt" is not specified,
-internal parameter "params.ext" of TBSCertificate 
-will be referred.
-Specifying "aExt" can be used for
-<a href="../symbols/KJUR.asn1.csr.CertificationRequestInfo.html">KJUR.asn1.csr.CertificationRequestInfo</a>.
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">// get DERSequence of extensions from TBSCertificate object
-tbsc = new KJUR.asn1.x509.TBSCertificate({version:3,...,ext:[...]});
-tbsc.getExtDERSequence &rarr; DERSequence object of extensions
-
-// get DERSequence of extensions by the argument
-tbsc = new KJUR.asn1.x509.TBSCertificate();
-tbsc.getExtDERSequence([{extname:"subjectAltName"...}...]) &rarr;
-DERSequence by specified array of extension parameters</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Array}</span> <b>aExt</b>
-									
-								</dt>
-								<dd>array of certificate extension parameters (OPTIONAL)</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>jsrsasign 9.0.0 asn1x509 2.0.0</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{DERSequence}</span> ASN.1 DERSequence of specified extensions</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-								<dd><a href="../symbols/KJUR.asn1.DERSequence.html">KJUR.asn1.DERSequence</a></dd>
-							
-								<dd><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html">KJUR.asn1.x509.TBSCertificate</a></dd>
-							
-								<dd><a href="../symbols/KJUR.asn1.x509.Certificate.html">KJUR.asn1.x509.Certificate</a></dd>
-							
-								<dd><a href="../symbols/KJUR.asn1.csr.CertificationRequestInfo.html">KJUR.asn1.csr.CertificationRequestInfo</a></dd>
-							
-							</dl>
-						
-
-					<hr />
 				
 					<a name="setByParam"> </a>
 					<div class="fixedFont">

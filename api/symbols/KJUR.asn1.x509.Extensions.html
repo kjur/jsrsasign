@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign JavaScript API Reference - KJUR.asn1.x509.SubjectKeyIdentifier</title>
+		<title>jsrsasign JavaScript API Reference - KJUR.asn1.x509.Extensions</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -462,17 +462,17 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.x509.SubjectKeyIdentifier
+				Class KJUR.asn1.x509.Extensions
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
 				<br />Extends
-					<a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a>.<br />
+					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
-				SubjectKeyIdentifier ASN.1 structure class
+				Extensions ASN.1 structure class
 				
 				
 					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
@@ -481,7 +481,7 @@ ul.inheritsList
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.SubjectKeyIdentifier.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.Extensions.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -494,12 +494,14 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.x509.SubjectKeyIdentifier.html#constructor">KJUR.asn1.x509.SubjectKeyIdentifier</a></b>(params)
+								<b><a href="../symbols/KJUR.asn1.x509.Extensions.html#constructor">KJUR.asn1.x509.Extensions</a></b>(aParam)
 							</div>
-							<div class="description">SubjectKeyIdentifier extension ASN.1 structure class
-This class represents ASN.1 structure for 
-<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2">
-SubjectKeyIdentifier in RFC 5280</a>.</div>
+							<div class="description">Extensions ASN.1 structure class<br/>
+This class represents
+<a href="https://tools.ietf.org/html/rfc5280#section-4.1">
+Extensions defined in RFC 5280 4.1</a> and
+<a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.9">
+4.1.2.9</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -522,31 +524,6 @@ SubjectKeyIdentifier in RFC 5280</a>.</div>
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.x509.SubjectKeyIdentifier.">
-					<caption>Method Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.x509.SubjectKeyIdentifier.html#setKIDByParam">setKIDByParam</a></b>(param)
-								</div>
-								<div class="description">set keyIdentifier value by DEROctetString parameter, key object or PEM file
-<ul>
-<li>{str: "123"} - by raw string</li>
-<li>{hex: "01af.</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
 				
 				
 				<dl class="inheritsList">
@@ -565,37 +542,29 @@ SubjectKeyIdentifier in RFC 5280</a>.</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.x509.SubjectKeyIdentifier</b>(params)
+						<b>KJUR.asn1.x509.Extensions</b>(aParam)
 				</div>
 				
 				<div class="description">
-					SubjectKeyIdentifier extension ASN.1 structure class
-This class represents ASN.1 structure for 
-<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2">
-SubjectKeyIdentifier in RFC 5280</a>.
-Constructor of this class may have following parameters:
-<ul>
-<li>kid - When key object (RSA, KJUR.crypto.ECDSA/DSA) or PEM string of subject public key or certificate is specified, key identifier will be automatically calculated by the method specified in RFC 5280. When a hexadecimal string is specifed, kid will be set explicitly by it.</li>
-<li>critical - boolean to specify criticality of this extension
-however conforming CA must mark this extension as non-critical in RFC 5280.</li>
-</ul>
+					Extensions ASN.1 structure class<br/>
+This class represents
+<a href="https://tools.ietf.org/html/rfc5280#section-4.1">
+Extensions defined in RFC 5280 4.1</a> and
+<a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.9">
+4.1.2.9</a>.
 <pre>
-d-ce-subjectKeyIdentifier OBJECT IDENTIFIER ::=  { id-ce 14 }
-SubjectKeyIdentifier ::= KeyIdentifier
-KeyIdentifier ::= OCTET STRING
+Extensions  ::=  SEQUENCE SIZE (1..MAX) OF Extension
 </pre>
 					
 				</div>
 				
 				
 				
-				<pre class="code">// set by hexadecimal string
-e = new KJUR.asn1.x509.SubjectKeyIdentifier({kid: {hex: '89ab'}});
-// set by PEM public key or certificate string
-e = new KJUR.asn1.x509.SubjectKeyIdentifier({kid: "-----BEGIN CERTIFICATE..."});
-// set by public key object
-pubkey = KEYUTIL.getKey("-----BEGIN CERTIFICATE...");
-e = new KJUR.asn1.x509.SubjectKeyIdentifier({kid: pubkey});</pre>
+				<pre class="code">o = new KJUR.asn1.x509.Extensions([
+  {extname:"keyUsage",critical:true,names:["digitalSignature"]},
+  {extname:"subjectAltName",array:[{dns:"example.com"}]}
+]);
+o.getEncodedHex() &rarr; "30..."</pre>
 				
 				
 				
@@ -605,10 +574,10 @@ e = new KJUR.asn1.x509.SubjectKeyIdentifier({kid: pubkey});</pre>
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								<span class="light fixedFont">{Array}</span>  <b>params</b>
+								<span class="light fixedFont">{Array}</span>  <b>aParam</b>
 								
 							</dt>
-								<dd>associative array of parameters (ex. {kid: {hex: '89ab...'}, critical: true})</dd>
+								<dd>array of JSON extension parameter</dd>
 						
 						</dl>
 					
@@ -616,12 +585,23 @@ e = new KJUR.asn1.x509.SubjectKeyIdentifier({kid: pubkey});</pre>
 					
 						<dl class="detailList">
 						<dt class="heading">Since:</dt>
-							<dd>asn1x509 1.1.7 jsrsasign 8.0.14</dd>
+							<dd>jsrsasign 9.1.0 asn1x509 2.1.0</dd>
 						</dl>
 					
 					
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.TBSCertificate.html">KJUR.asn1.x509.TBSCertificate</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.TBSCertList.html">KJUR.asn1.x509.TBSCertList</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.csr.CertificationRequestInfo.html">KJUR.asn1.csr.CertificationRequestInfo</a></dd>
+						
+						</dl>
 					
 
 			</div>
@@ -631,92 +611,6 @@ e = new KJUR.asn1.x509.SubjectKeyIdentifier({kid: pubkey});</pre>
 			
 
 <!-- ============================== method details ========================= -->		
-			
-				<div class="sectionTitle">
-					Method Detail
-				</div>
-				
-					<a name="setKIDByParam"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setKIDByParam</b>(param)
-					
-					</div>
-					<div class="description">
-						set keyIdentifier value by DEROctetString parameter, key object or PEM file
-<ul>
-<li>{str: "123"} - by raw string</li>
-<li>{hex: "01af..."} - by hexadecimal value</li>
-<li>RSAKey/DSA/ECDSA - by RSAKey, KJUR.crypto.{DSA/ECDSA} public key object.
-key identifier value will be calculated by the method described in
-<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2">RFC 5280 4.2.1.2 (1)</a>.
-</li>
-<li>certificate PEM string - extract subjectPublicKeyInfo from specified PEM
-certificate and
-key identifier value will be calculated by the method described in
-<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2">RFC 5280 4.2.1.2 (1)</a>.
-<li>PKCS#1/#8 public key PEM string - pem will be converted to a key object and
-to PKCS#8 ASN.1 structure then calculate 
-a key identifier value will be calculated by the method described in
-<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2">RFC 5280 4.2.1.2 (1)</a>.
-</ul>
-
-NOTE1: Automatic key identifier calculation is supported
-since jsrsasign 8.0.16.
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">o = new KJUR.asn1.x509.SubjectKeyIdentifier();
-// set by hexadecimal string
-o.setKIDByParam({hex: '1ad9...'});
-// set by SubjectPublicKeyInfo of PEM certificate string
-o.setKIDByParam("-----BEGIN CERTIFICATE...");
-// set by PKCS#8 PEM public key string
-o.setKIDByParam("-----BEGIN PUBLIC KEY...");
-// set by public key object
-pubkey = KEYUTIL.getKey("-----BEGIN CERTIFICATE...");
-o.setKIDByParam(pubkey);</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Array}</span> <b>param</b>
-									
-								</dt>
-								<dd>array of <a href="../symbols/KJUR.asn1.DERInteger.html">KJUR.asn1.DERInteger</a> parameter</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>asn1x509 1.1.7 jsrsasign 8.0.14</dd>
-							</dl>
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-								<dd><a href="../symbols/KEYUTIL.html#.getKeyID">KEYUTIL.getKeyID</a></dd>
-							
-							</dl>
-						
-
-					
-				
 			
 			
 <!-- ============================== event details ========================= -->		

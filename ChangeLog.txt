@@ -1,6 +1,36 @@
 
 ChangeLog for jsrsasign
 
+new CRL APIs and other updates
+* Changes from 9.0.3 to 9.1.0 (2020-Aug-24)
+  - CRL constructor update to align Certificate
+    class without backward compatibility.
+  - BUGFIX: SigningCertificate{,V2} encoding bugifx
+  - src/asn1cms.js
+    - BUGFIX: SigningCertificate{,V2} encoding have been
+      missign SEQUENCE. (#448)
+  - src/asn1csr.js
+    - CertificationRequestInfo class updated to
+      new KJUR.asn1.x509.Extension class.
+  - src/asn1x509.js
+    - CRL and TBSCertList class constructor have 
+      been updated to align Certificate and
+      CertificationRequestInfo style in 9.0.0
+      without backward compatibility.
+      - this update makes more extension and
+        entry extension support in the future.
+      - CRLEntry class is *deprecated* since
+        no more used in updated TBSCertList.
+    - new CRLNumber extension class added
+    - new CRLReason entry extension class added
+    - OID class updated to support 
+      cRLNumber and cRLReason oids
+    - TBSCertificate.getExtDERSequence method
+      was moved to new Extensions class.
+    - ASN1HEX.dump updated to support ENUMERATED
+  - test/qunit-do-{asn1cms,asn1tsp,asn1x509-tbscert,
+    asn1x509} updated to follow above updates.
+
 TimeStampToken ASN.1 encoding error fix
 * Changes from 9.0.2 to 9.0.3 (2020-Aug-22)
   - BUGFIX: tsa field of TSTInfo was not encoded properly. (#450)

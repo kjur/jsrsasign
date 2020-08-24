@@ -1,4 +1,4 @@
-/* asn1csr-2.0.0.js (c) 2015-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1csr-2.0.1.js (c) 2015-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1csr-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.0.0 asn1csr 2.0.0 (2020-Aug-17)
+ * @version jsrsasign 9.1.0 asn1csr 2.0.1 (2020-Aug-23)
  * @since jsrsasign 4.9.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -257,8 +257,8 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
 	_KJUR_asn1_csr = _KJUR_asn1.csr,
 	_KJUR_asn1_x509 = _KJUR_asn1.x509,
 	_X500Name = _KJUR_asn1_x509.X500Name,
-	_SubjectPublicKeyInfo = _KJUR_asn1_x509.SubjectPublicKeyInfo,
-	_TBSCertificate = _KJUR_asn1_x509.TBSCertificate;
+	_Extensions = _KJUR_asn1_x509.Extensions,
+	_SubjectPublicKeyInfo = _KJUR_asn1_x509.SubjectPublicKeyInfo;
     
     _KJUR_asn1_csr.CertificationRequestInfo.superclass.constructor.call(this);
 
@@ -275,8 +275,7 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
 	a.push(new _X500Name(params.subject));
 	a.push(new _SubjectPublicKeyInfo(KEYUTIL.getKey(params.sbjpubkey)));
 	if (params.extreq != undefined) {
-	    var tbsc = new _TBSCertificate();
-	    var extseq = tbsc.getExtDERSequence(params.extreq);
+	    var extseq = new _Extensions(params.extreq);
 	    var tagobj = _newObject({
 		tag: {
 		    tag:'a0',
