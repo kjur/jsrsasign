@@ -19,8 +19,9 @@ FILES_MIN = \
 	min/rsasign-1.2.min.js \
 	min/x509-1.1.min.js \
 	min/jws-3.3.min.js \
-	min/jwsjs-2.0.min.js
-
+	min/jwsjs-2.0.min.js \
+	min/x509crl.min.js
+ 
 FILES_EXT_MIN = \
 	ext/ec-min.js \
 	ext/rsa-min.js \

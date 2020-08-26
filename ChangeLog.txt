@@ -1,6 +1,30 @@
 
 ChangeLog for jsrsasign
 
+new CRL parser and private extension encoder support
+* Changes from 9.1.0 to 9.1.1 (2020-Aug-27)
+  - add new X509CRL class for CRL parser
+  - add Certificate, CSR and CRL private extension support
+  - src/x509crl.js (new)
+    - X509CRL class
+  - src/x509.js
+    - new X509.getExtCRLNumber method for extension parser
+    - new X509.getExtCRLReason method for extension parser
+    - new X509.getExtParam method for parsing one extension 
+      - NOTE: not yet support for private extension
+  - src/asn1x509.js
+    - Extensions class: add support for private extension
+    - PrivateExtension class added
+    - OID.name2oid: add support OID (ex. "1.2.3.4") as argument
+  - src/asn1csr.js
+    - CSRUtil.getParam update to support X509.getExtParamArray and
+      not using X509.parseExt
+  - src/asn1.js
+    - getLengthHexFromValue small update for exception
+  - test/qunit-do-{asn1x509,asn1x509-tbscert,x509}.html
+    - update to follow above updates
+  - test/x509csr.html (new)
+
 new CRL APIs and other updates
 * Changes from 9.0.3 to 9.1.0 (2020-Aug-24)
   - CRL constructor update to align Certificate

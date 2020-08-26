@@ -305,6 +305,38 @@ cbtqMCqhg0GKH4OmbrS+Zu99iox+I7Mbsu9+F4rZjinez1looQ5hfJ+6FAtxE1HI
 -----END CERTIFICATE REQUEST-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+// ======================================================================
+
+test("X509.getExtParam test", function() {
+var x = new X509();
+deepEqual(
+x.getExtParam("300e0603551d0f0101ff0404030204b0"),
+{ extname: "keyUsage",
+  critical: true,
+  names: ["digitalSignature","keyEncipherment","dataEncipherment"]
+},
+"param ku");
+deepEqual(
+x.getExtParam("30290603551d250422302006082b0601050507030206082b06010505070304060a2b0601040182370a0304"), 
+{ extname: "extKeyUsage",
+  array: ["clientAuth", "emailProtection", "1.3.6.1.4.1.311.10.3.4"]
+},
+"param eku");
+});
+
+test("X509.getExtParamArray test", function() {
+var x = new X509();
+deepEqual(
+x.getExtParamArray("302d300a0603551d140403020124301f0603551d230418301680148ff04b7fa82e4524ae4d50fa639a8bdee2dd1bbc"),
+[{ extname: "cRLNumber",
+   num: {hex: "24"}
+},{
+   extname: "authorityKeyIdentifier",
+   kid: {hex: "8ff04b7fa82e4524ae4d50fa639a8bdee2dd1bbc"}
+}],
+"param array");
+});
+
 test("getParam test github.com", function() {
 var j2 = 
 {version:3,

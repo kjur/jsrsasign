@@ -1,4 +1,4 @@
-/* x509-2.0.0.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.0.1.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.0.0 x509 2.0.0 (2020-Aug-12)
+ * @version jsrsasign 9.1.1 x509 2.0.1 (2020-Aug-26)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -26,6 +26,7 @@
  * @class hexadecimal X.509 certificate ASN.1 parser class
  * @property {String} hex hexacedimal string for X.509 certificate.
  * @property {Number} version format version (1: X509v1, 3: X509v3, otherwise: unknown) since jsrsasign 7.1.4
+ * @property {Array} aExtInfo (DEPRECATED) array of parameters for extensions
  * @author Kenji Urushima
  * @version 1.0.1 (08 May 2012)
  * @see <a href="https://kjur.github.io/jsrsasigns/">'jsrsasign'(RSA Sign JavaScript Library) home page https://kjur.github.io/jsrsasign/</a>
@@ -76,6 +77,8 @@
  *   <li>cRLDistributionPoints - {@link X509#getExtCRLDistributionPointsURI} (DEPRECATED)</li>
  *   <li>authorityInfoAccess - {@link X509#getExtAuthorityInfoAccess}</li>
  *   <li>authorityInfoAccess - {@link X509#getExtAIAInfo} (DEPRECATED)</li>
+ *   <li>cRLNumber - {@link X509#getExtCRLNumber}</li>
+ *   <li>cRLReason - {@link X509#getExtCRLReason}</li>
  *   </ul>
  * </li>
  * <li><b>UTILITIES</b>
@@ -102,6 +105,7 @@ function X509() {
 	_getIdxbyListEx = _ASN1HEX.getIdxbyListEx,
 	_getVidx = _ASN1HEX.getVidx,
 	_oidname = _ASN1HEX.oidname,
+	_hextooidstr = _ASN1HEX.hextooidstr,
 	_X509 = X509,
 	_pemtohex = pemtohex,
 	_PSSNAME2ASN1TLV;
@@ -447,14 +451,16 @@ function X509() {
     };
 
     /**
-     * get signature value in hexadecimal string<br/>
+     * get signature value as hexadecimal string<br/>
      * @name getSignatureValueHex
      * @memberOf X509#
      * @function
      * @return {String} signature value hexadecimal string without BitString unused bits
      * @since jsrsasign 7.2.0 x509 1.1.14
+     *
      * @description
      * This method will get signature value of certificate:
+     *
      * @example
      * var x = new X509();
      * x.readCertPEM(sCertPEM);
@@ -472,6 +478,7 @@ function X509() {
      * @param {Object} pubKey public key object
      * @return {Boolean} true if signature value is valid otherwise false
      * @since jsrsasign 7.2.0 x509 1.1.14
+     *
      * @description
      * This method verifies signature value of hexadecimal string of 
      * X.509 certificate by specified public key object.
@@ -479,6 +486,7 @@ function X509() {
      * signatureAlgorithm field. (See {@link X509#getSignatureAlgorithmField})
      * RSA-PSS signature algorithms (SHA{,256,384,512}withRSAandMGF1)
      * are available.
+     *
      * @example
      * pubKey = KEYUTIL.getKey(pemPublicKey); // or certificate
      * x = new X509();
@@ -498,12 +506,13 @@ function X509() {
 
     // ===== parse extension ======================================
     /**
-     * set array of X.509v3 and CSR extesion information such as extension OID, criticality and value index.<br/>
+     * set array of X.509v3 and CSR extesion information such as extension OID, criticality and value index. (DEPRECATED)<br/>
      * @name parseExt
      * @memberOf X509#
      * @function
      * @param {String} hCSR - PEM string of certificate signing requrest(CSR) (OPTION)
      * @since jsrsasign 7.2.0 x509 1.1.14
+     * @deprecated jsrsasign 9.1.1 x509 2.0.1
      *
      * @description
      * This method will set an array of X.509v3 extension information having 
@@ -517,6 +526,11 @@ function X509() {
      * argument 'hCSR' shall be specified.
      * <br/>
      * NOTE: CSR is supported from jsrsasign 8.0.20 x509 1.1.22.
+     * <br/>
+     * This method and X509.aExtInfo property
+     * have been *deprecated* since jsrsasign 9.1.1.
+     * All extension parser method such as X509.getExt* shall be
+     * call with argument "hExtV" and "critical" explicitly.
      *
      * @example
      * x = new X509();
@@ -659,7 +673,7 @@ function X509() {
 	    result.pathLen = pathLen;
 	    return result;
 	}
-	throw new Error("basicConstraints parse error: " + hExtV);
+	throw new Error("hExtV parse error: " + hExtV);
     };
 
     /**
@@ -1758,6 +1772,95 @@ function X509() {
 	return result;
     };
 
+    /**
+     * parse cRLNumber CRL extension as JSON object<br/>
+     * @name getExtCRLNumber
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value
+     * @param {Boolean} critical flag
+     * @since jsrsasign 9.1.1 x509 2.0.1
+     * @see {@link KJUR.asn1.x509.CRLNumber}
+     * @see {@link X509#getExtParamArray}
+     * @description
+     * This method parses
+     * CRLNumber CRL extension value defined in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-5.2.3">
+     * RFC 5280 5.2.3</a> as JSON object.
+     * <pre>
+     * id-ce-cRLNumber OBJECT IDENTIFIER ::= { id-ce 20 }
+     * CRLNumber ::= INTEGER (0..MAX)
+     * </pre>
+     * <br/>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.CRLNumber} constructor.
+     * @example
+     * crl = X509CRL("-----BEGIN X509 CRL...");
+     * ... get hExtV and critical flag ...
+     * crl.getExtCRLNumber("02...", false) &rarr;
+     * {extname: "cRLNumber", num: {hex: "12af"}}
+     */
+    this.getExtCRLNumber = function(hExtV, critical) {
+	var result = {extname:"cRLNumber"};
+	if (critical) result.critical = true;
+
+	if (hExtV.substr(0, 2) == "02") {
+	    result.num = {hex: _getV(hExtV, 0)};
+	    return result;
+	}
+	throw new Error("hExtV parse error: " + hExtV);
+    };
+
+    /**
+     * parse cRLReason CRL entry extension as JSON object<br/>
+     * @name getExtCRLReason
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value
+     * @param {Boolean} critical flag
+     * @since jsrsasign 9.1.1 x509 2.0.1
+     * @see {@link KJUR.asn1.x509.CRLReason}
+     * @see {@link X509#getExtParamArray}
+     * @description
+     * This method parses
+     * CRLReason CRL entry extension value defined in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-5.3.1">
+     * RFC 5280 5.3.1</a> as JSON object.
+     * <pre>
+     * id-ce-cRLReasons OBJECT IDENTIFIER ::= { id-ce 21 }
+     * -- reasonCode ::= { CRLReason }
+     * CRLReason ::= ENUMERATED {
+     *      unspecified             (0),
+     *      keyCompromise           (1),
+     *      cACompromise            (2),
+     *      affiliationChanged      (3),
+     *      superseded              (4),
+     *      cessationOfOperation    (5),
+     *      certificateHold         (6),
+     *      removeFromCRL           (8),
+     *      privilegeWithdrawn      (9),
+     *      aACompromise           (10) }
+     * </pre>
+     * <br/>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.CRLReason} constructor.
+     * @example
+     * crl = X509CRL("-----BEGIN X509 CRL...");
+     * ... get hExtV and critical flag ...
+     * crl.getExtCRLReason("02...", false) &rarr;
+     * {extname: "cRLReason", code: 3}
+     */
+    this.getExtCRLReason = function(hExtV, critical) {
+	var result = {extname:"cRLReason"};
+	if (critical) result.critical = true;
+
+	if (hExtV.substr(0, 2) == "0a") {
+	    result.code = parseInt(_getV(hExtV, 0), 16);
+	    return result;
+	}
+	throw new Error("hExtV parse error: " + hExtV);
+    };
+
     // ===== BEGIN X500Name related =====================================
 
     this.getX500NameRule = function(aDN) {
@@ -2043,13 +2146,21 @@ function X509() {
      * @name getExtParamArray
      * @memberOf X509#
      * @function
+     * @param {String} hExtSeq hexadecimal string of SEQUENCE of Extension
      * @return {Array} array of certificate extension parameter JSON object
      * @since jsrsasign 9.0.0 x509 2.0.0
      * @see KJUR.asn1.x509.X509Util.newCertPEM
      * @see X509#getParam
+     * @see X509#getExtParam
+     * @see X509CRL#getParam
+     * @see KJUR.asn1.csr.CSRUtil.getParam
+     *
      * @description
      * This method returns an array of certificate extension
      * parameters. 
+     * <br/>
+     * NOTE: Argument "hExtSeq" have been supported since jsrsasign 9.1.1.
+     *
      * @example
      * x = new X509();
      * x.readCertPEM("-----BEGIN CERTIFICATE...");
@@ -2061,38 +2172,93 @@ function X509() {
      *   {extname:"authorityInfoAccess",array:[{ocsp:"http://ocsp.example.com/"}]},
      *   {extname:"certificatePolicies",array:[{policyoid:"2.23.140.1.2.1"}]}]
      */
-    this.getExtParamArray = function() {
-	var result = [];
-	var a = this.aExtInfo;
-	for (var i = 0; i < a.length; i++) {
-	    var item = a[i];
-	    var oid = item.oid;
-	    //alert(item.oid);
-	    var extParam = undefined;
-	    if (oid == "2.5.29.14") {
-		extParam = this.getExtSubjectKeyIdentifier();
-	    } else if (oid == "2.5.29.15") {
-		extParam = this.getExtKeyUsage();
-	    } else if (oid == "2.5.29.17") {
-		extParam = this.getExtSubjectAltName();
-	    } else if (oid == "2.5.29.18") {
-		extParam = this.getExtIssuerAltName();
-	    } else if (oid == "2.5.29.19") {
-		extParam = this.getExtBasicConstraints();
-	    } else if (oid == "2.5.29.31") {
-		extParam = this.getExtCRLDistributionPoints();
-	    } else if (oid == "2.5.29.32") {
-		extParam = this.getExtCertificatePolicies();
-	    } else if (oid == "2.5.29.35") {
-		extParam = this.getExtAuthorityKeyIdentifier();
-	    } else if (oid == "2.5.29.37") {
-		extParam = this.getExtExtKeyUsage();
-	    } else if (oid == "1.3.6.1.5.5.7.1.1") {
-		extParam = this.getExtAuthorityInfoAccess();
+    this.getExtParamArray = function(hExtSeq) {
+	if (hExtSeq == undefined) {
+	    // for X.509v3 certificate
+	    var idx1 = _getIdxbyListEx(this.hex, 0, [0, "[3]"]);
+	    if (idx1 != -1) {
+		hExtSeq = _getTLVbyListEx(this.hex, 0, [0, "[3]", 0], "30");
 	    }
-	    if (extParam != undefined) result.push(extParam);
 	}
+	var result = [];
+	var aIdx = _getChildIdx(hExtSeq, 0);
+
+	for (var i = 0; i < aIdx.length; i++) {
+	    var hExt = _getTLV(hExtSeq, aIdx[i]);
+	    var extParam = this.getExtParam(hExt);
+	    if (extParam != null) result.push(extParam);
+	}
+
 	return result;
+    };
+
+    /** 
+     * get a extension parameter JSON object<br/>
+     * @name getExtParam
+     * @memberOf X509#
+     * @function
+     * @param {String} hExt hexadecimal string of Extension
+     * @return {Array} Extension parameter JSON object
+     * @since jsrsasign 9.1.1 x509 2.0.1
+     * @see KJUR.asn1.x509.X509Util.newCertPEM
+     * @see X509#getParam
+     * @see X509#getExtParamArray
+     * @see X509CRL#getParam
+     * @see KJUR.asn1.csr.CSRUtil.getParam
+     *
+     * @description
+     * This method returns a extension parameters as JSON object. 
+     *
+     * @example
+     * x = new X509();
+     * ...
+     * x.getExtParam("30...") &rarr;
+     * {extname:"keyUsage",critical:true,names:["digitalSignature"]}
+     */
+    this.getExtParam = function(hExt) {
+	var result = {};
+	var aIdx = _getChildIdx(hExt, 0);
+	var aIdxLen = aIdx.length;
+	if (aIdxLen != 2 && aIdxLen != 3)
+	    throw new Error("wrong number elements in Extension: " + 
+			    aIdxLen + " " + hExt);
+
+	var oid = _hextooidstr(_getVbyList(hExt, 0, [0], "06"));
+
+	var critical = false;
+	if (aIdxLen == 3 && _getTLVbyList(hExt, 0, [1]) == "0101ff")
+	    critical = true;
+
+	var hExtV = _getTLVbyList(hExt, 0, [aIdxLen - 1, 0]);
+
+	var extParam = undefined;
+	if (oid == "2.5.29.14") {
+	    extParam = this.getExtSubjectKeyIdentifier(hExtV, critical);
+	} else if (oid == "2.5.29.15") {
+	    extParam = this.getExtKeyUsage(hExtV, critical);
+	} else if (oid == "2.5.29.17") {
+	    extParam = this.getExtSubjectAltName(hExtV, critical);
+	} else if (oid == "2.5.29.18") {
+	    extParam = this.getExtIssuerAltName(hExtV, critical);
+	} else if (oid == "2.5.29.19") {
+	    extParam = this.getExtBasicConstraints(hExtV, critical);
+	} else if (oid == "2.5.29.31") {
+	    extParam = this.getExtCRLDistributionPoints(hExtV, critical);
+	} else if (oid == "2.5.29.32") {
+	    extParam = this.getExtCertificatePolicies(hExtV, critical);
+	} else if (oid == "2.5.29.35") {
+	    extParam = this.getExtAuthorityKeyIdentifier(hExtV, critical);
+	} else if (oid == "2.5.29.37") {
+	    extParam = this.getExtExtKeyUsage(hExtV, critical);
+	} else if (oid == "1.3.6.1.5.5.7.1.1") {
+	    extParam = this.getExtAuthorityInfoAccess(hExtV, critical);
+	} else if (oid == "2.5.29.20") {
+	    extParam = this.getExtCRLNumber(hExtV, critical);
+	} else if (oid == "2.5.29.21") {
+	    extParam = this.getExtCRLReason(hExtV, critical);
+	}
+	if (extParam != undefined) return extParam;
+	return null;
     };
 
     /**

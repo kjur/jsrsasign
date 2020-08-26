@@ -1,4 +1,4 @@
-/* asn1x509-2.1.0.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-2.1.1.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.1.0 asn1x509 2.1.0 (2020-Aug-25)
+ * @version jsrsasign 9.1.1 asn1x509 2.1.1 (2020-Aug-26)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -386,6 +386,8 @@ YAHOO.lang.extend(KJUR.asn1.x509.TBSCertificate, KJUR.asn1.ASN1Object);
  * @see KJUR.asn1.x509.TBSCertificate
  * @see KJUR.asn1.x509.TBSCertList
  * @see KJUR.asn1.csr.CertificationRequestInfo
+ * @see KJUR.asn1.x509.PrivateExtension
+ *
  * @description
  * This class represents
  * <a href="https://tools.ietf.org/html/rfc5280#section-4.1">
@@ -395,10 +397,15 @@ YAHOO.lang.extend(KJUR.asn1.x509.TBSCertificate, KJUR.asn1.ASN1Object);
  * <pre>
  * Extensions  ::=  SEQUENCE SIZE (1..MAX) OF Extension
  * </pre>
+ * NOTE: From jsrsasign 9.1.1, private extension or
+ * undefined extension have been supported by
+ * {@link KJUR.asn1.x509.PrivateExtension}.
+ *
  * @example
  * o = new KJUR.asn1.x509.Extensions([
  *   {extname:"keyUsage",critical:true,names:["digitalSignature"]},
- *   {extname:"subjectAltName",array:[{dns:"example.com"}]}
+ *   {extname:"subjectAltName",array:[{dns:"example.com"}]},
+ *   {extname:"1.2.3.4",extn:{prnstr:"aa"}} // private extension
  * ]);
  * o.getEncodedHex() &rarr; "30..."
  */
@@ -419,7 +426,9 @@ KJUR.asn1.x509.Extensions = function(aParam) {
 	    var extname = param.extname;
 	    var obj = null;
 
-	    if (extname == "subjectKeyIdentifier") {
+	    if (param.extn != undefined) {
+		obj = new _KJUR_asn1_x509.PrivateExtension(param);
+	    } else if (extname == "subjectKeyIdentifier") {
 		obj = new _KJUR_asn1_x509.SubjectKeyIdentifier(param);
 	    } else if (extname == "keyUsage") {
 		obj = new _KJUR_asn1_x509.KeyUsage(param);
@@ -1854,6 +1863,87 @@ KJUR.asn1.x509.IssuerAltName = function(params) {
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.IssuerAltName, KJUR.asn1.x509.Extension);
+
+/**
+ * priavte extension ASN.1 structure class<br/>
+ * @name KJUR.asn1.x509.PrivateExtension
+ * @class private extension ASN.1 structure class
+ * @param {Array} params JSON object of private extension
+ * @extends KJUR.asn1.x509.Extension
+ * @since jsrsasign 9.1.1 asn1x509 
+ * @see KJUR.asn1.ASN1Util.newObject
+ *
+ * @description
+ * This class is to represent private extension or 
+ * unsupported extension. 
+ * <pre>
+ * Extension  ::=  SEQUENCE  {
+ *      extnID      OBJECT IDENTIFIER,
+ *      critical    BOOLEAN DEFAULT FALSE,
+ *      extnValue   OCTET STRING }
+ * </pre>
+ * Following properties can be set for JSON parameter:
+ * <ul>
+ * <li>{String}extname - string of OID or predefined extension name</li>
+ * <li>{Boolean}critical - critical flag</li>
+ * <li>{Object}extn - hexadecimal string or 
+ * of {@link KJUR.asn1.ASN1Util.newObject} 
+ * JSON parameter for extnValue field</li>
+ * </li>
+ * </ul>
+ *
+ * @example
+ * // extn by hexadecimal
+ * new KJUR.asn1.x509.PrivateExtension({
+ *   extname: "1.2.3.4",
+ *   critical: true,
+ *   extn: "13026161" // means PrintableString "aa"
+ * });
+ *
+ * // extn by JSON parameter
+ * new KJUR.asn1.x509.PrivateExtension({
+ *   extname: "1.2.3.5",
+ *   extn: {seq: [{prnstr:"abc"},{utf8str:"def"}]}
+ * });
+ */
+KJUR.asn1.x509.PrivateExtension = function(params) {
+    KJUR.asn1.x509.PrivateExtension.superclass.constructor.call(this, params)
+
+    var _KJUR = KJUR,
+	_isHex = _KJUR.lang.String.isHex,
+	_KJUR_asn1 = _KJUR.asn1,
+	_name2oid = _KJUR_asn1.x509.OID.name2oid,
+	_newObject = _KJUR_asn1.ASN1Util.newObject;
+
+    this.params = null;
+
+    this.setByParam = function(params) {
+	this.oid = _name2oid(params.extname);
+	this.params = params;
+    };
+
+    this.getExtnValueHex = function() {
+	if (this.params.extname == undefined ||
+	    this.params.extn == undefined) {
+	    throw new Error("extname or extnhex not specified");
+	}
+
+	var extn = this.params.extn;
+	if (typeof extn == "string" && _isHex(extn)) {
+	    return extn;
+	} else if (typeof extn == "object") {
+	    try {
+		return _newObject(extn).getEncodedHex();
+	    } catch(ex) {}
+	}
+	throw new Error("unsupported extn value");
+    };
+
+    if (params != undefined) {
+	this.setByParam(params);
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.x509.PrivateExtension, KJUR.asn1.x509.Extension);
 
 // === END   X.509v3 Extensions Related =======================================
 
@@ -3833,16 +3923,19 @@ KJUR.asn1.x509.OID.oid2atype = function(oid) {
  * @name name2oid
  * @memberOf KJUR.asn1.x509.OID
  * @function
- * @param {String} OID name
+ * @param {String} name OID name or OID (ex. "sha1" or "1.2.3.4")
  * @return {String} dot noted Object Identifer string (ex. 1.2.3.4)
  * @since asn1x509 1.0.11
  * @description
  * This static method converts from OID name to OID string.
  * If OID is undefined then it returns empty string (i.e. '').
  * @example
- * KJUR.asn1.x509.OID.name2oid("authorityInfoAccess") &rarr; 1.3.6.1.5.5.7.1.1
+ * KJUR.asn1.x509.OID.name2oid("authorityInfoAccess") &rarr; "1.3.6.1.5.5.7.1.1"
+ * KJUR.asn1.x509.OID.name2oid("1.2.3.4") &rarr; "1.2.3.4"
+ * KJUR.asn1.x509.OID.name2oid("UNKNOWN NAME") &rarr; ""
  */
 KJUR.asn1.x509.OID.name2oid = function(name) {
+    if (name.match(/^[0-9.]+$/)) return name;
     var list = KJUR.asn1.x509.OID.name2oidList;
     if (list[name] === undefined) return '';
     return list[name];

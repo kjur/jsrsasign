@@ -1,4 +1,4 @@
-/* asn1csr-2.0.1.js (c) 2015-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1csr-2.0.2.js (c) 2015-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1csr-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.1.0 asn1csr 2.0.1 (2020-Aug-23)
+ * @version jsrsasign 9.1.1 asn1csr 2.0.2 (2020-Aug-26)
  * @since jsrsasign 4.9.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -419,8 +419,25 @@ KJUR.asn1.csr.CSRUtil.newCSRPEM = function(param) {
  */
 KJUR.asn1.csr.CSRUtil.getParam = function(sPEM) {
     var _ASN1HEX = ASN1HEX,
+	_getV = _ASN1HEX.getV;
+	_getIdxbyList = _ASN1HEX.getIdxbyList;
+	_getTLVbyList = _ASN1HEX.getTLVbyList,
 	_getTLVbyListEx = _ASN1HEX.getTLVbyListEx,
 	_getVbyListEx = _ASN1HEX.getVbyListEx;
+
+    /*
+     * get a hexadecimal string of sequence of extension request attribute value
+     * @param {String} h hexadecimal string of whole CSR
+     * @return {String} hexadecimal string of SEQUENCE of extension request attribute value
+     */
+    var _getExtReqSeqHex = function(h) {
+	var idx1 = _getIdxbyList(h, 0, [0, 3, 0, 0], "06"); // extreq attr OID idx
+	if (_getV(h, idx1) != "2a864886f70d01090e") {
+	    return null;
+	}
+
+	return _getTLVbyList(h, 0, [0, 3, 0, 1, 0], "30"); // ext seq idx
+    };
 
     var result = {};
 
@@ -441,11 +458,11 @@ KJUR.asn1.csr.CSRUtil.getParam = function(sPEM) {
     var pubkeyobj = KEYUTIL.getKey(hPubKey, null, "pkcs8pub");
     result.sbjpubkey = KEYUTIL.getPEM(pubkeyobj, "PKCS8PUB");
 
-    try {
-	var x = new X509();
-	x.parseExt(sPEM);
-	result.extreq = x.getExtParamArray();
-    } catch (ex) {};
+    var hExtReqSeq = _getExtReqSeqHex(hex);
+    var x = new X509();
+    if (hExtReqSeq != null) {
+	result.extreq = x.getExtParamArray(hExtReqSeq);
+    }
 
     try {
 	var hSigAlg = _getTLVbyListEx(hex, 0, [1], "30");
