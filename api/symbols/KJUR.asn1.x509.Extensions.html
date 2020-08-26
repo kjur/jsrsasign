@@ -399,6 +399,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.PolicyQualifierInfo.html">KJUR.asn1.x509.PolicyQualifierInfo</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.PrivateExtension.html">KJUR.asn1.x509.PrivateExtension</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></li>
@@ -452,6 +454,8 @@ ul.inheritsList
 	<li><a href="../symbols/RSAKey.html">RSAKey</a></li>
 	
 	<li><a href="../symbols/X509.html">X509</a></li>
+	
+	<li><a href="../symbols/X509CRL.html">X509CRL</a></li>
 	
 </ul>
 <hr />
@@ -555,6 +559,9 @@ Extensions defined in RFC 5280 4.1</a> and
 <pre>
 Extensions  ::=  SEQUENCE SIZE (1..MAX) OF Extension
 </pre>
+NOTE: From jsrsasign 9.1.1, private extension or
+undefined extension have been supported by
+<a href="../symbols/KJUR.asn1.x509.PrivateExtension.html">KJUR.asn1.x509.PrivateExtension</a>.
 					
 				</div>
 				
@@ -562,7 +569,8 @@ Extensions  ::=  SEQUENCE SIZE (1..MAX) OF Extension
 				
 				<pre class="code">o = new KJUR.asn1.x509.Extensions([
   {extname:"keyUsage",critical:true,names:["digitalSignature"]},
-  {extname:"subjectAltName",array:[{dns:"example.com"}]}
+  {extname:"subjectAltName",array:[{dns:"example.com"}]},
+  {extname:"1.2.3.4",extn:{prnstr:"aa"}} // private extension
 ]);
 o.getEncodedHex() &rarr; "30..."</pre>
 				
@@ -600,6 +608,8 @@ o.getEncodedHex() &rarr; "30..."</pre>
 							<dd><a href="../symbols/KJUR.asn1.x509.TBSCertList.html">KJUR.asn1.x509.TBSCertList</a></dd>
 						
 							<dd><a href="../symbols/KJUR.asn1.csr.CertificationRequestInfo.html">KJUR.asn1.csr.CertificationRequestInfo</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.PrivateExtension.html">KJUR.asn1.x509.PrivateExtension</a></dd>
 						
 						</dl>
 					

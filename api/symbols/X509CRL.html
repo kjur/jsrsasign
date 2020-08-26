@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign JavaScript API Reference - KJUR.crypto</title>
+		<title>jsrsasign JavaScript API Reference - X509CRL</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -466,25 +466,27 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Namespace KJUR.crypto
+				Class X509CRL
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
+				<br />Version
+					1.0.0 (2020-Aug-26).<br />
 				
 				
 			
+				hexadecimal X.509 CRL ASN.1 parser class
 				
 				
-				
-					<br /><i>Defined in: </i> <a href="../symbols/src/crypto-1.1.js.html">crypto-1.1.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/x509crl.js.html">x509crl.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.crypto.">
-				<caption>Namespace Summary</caption>
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class X509CRL.">
+				<caption>Class Summary</caption>
 				<thead>
 					<tr>
 						<th scope="col">Constructor Attributes</th>
@@ -496,11 +498,9 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.crypto.html#constructor">KJUR.crypto</a></b>
+								<b><a href="../symbols/X509CRL.html#constructor">X509CRL</a></b>(params)
 							</div>
-							<div class="description">kjur's cryptographic algorithm provider library name space
-<p>
-This namespace privides following crytpgrahic classes.</div>
+							<div class="description">hexadecimal X.509 CRL ASN.1 parser class.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -509,12 +509,60 @@ This namespace privides following crytpgrahic classes.</div>
 
 <!-- ============================== properties summary ===================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class X509CRL.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/X509CRL.html#hex">hex</a></b>
+								</div>
+								<div class="description">hexadecimal string of X.509 CRL ASN.1 data</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/X509CRL.html#posRevCert">posRevCert</a></b>
+								</div>
+								<div class="description">index of revokedCertificates field in TBSCertList depends on CRL version and nextUpdate field</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/X509CRL.html#posSigAlg">posSigAlg</a></b>
+								</div>
+								<div class="description">index of SignatureAlgorithm field in TBSCertList position depends on CRL version field</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
 
 <!-- ============================== methods summary ======================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.crypto.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class X509CRL.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -525,146 +573,109 @@ This namespace privides following crytpgrahic classes.</div>
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>digest</b>()
+								<div class="fixedFont"><b><a href="../symbols/X509CRL.html#getIssuer">getIssuer</a></b>()
 								</div>
-								<div class="description"></div>
+								<div class="description">get JSON object of issuer field<br/>
+This method returns parsed issuer field value as
+JSON object.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>digestHex</b>(hex)
+								<div class="fixedFont"><b><a href="../symbols/X509CRL.html#getNextUpdate">getNextUpdate</a></b>()
 								</div>
-								<div class="description"></div>
+								<div class="description">get JSON object of nextUpdate field<br/>
+This method returns parsed nextUpdate field value as
+string.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>digestString</b>(str)
+								<div class="fixedFont"><b><a href="../symbols/X509CRL.html#getParam">getParam</a></b>()
 								</div>
-								<div class="description"></div>
+								<div class="description">get JSON object for CRL parameters<br/>
+This method returns a JSON object of the CRL
+parameters.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>doFinal</b>()
+								<div class="fixedFont"><b><a href="../symbols/X509CRL.html#getRevCert">getRevCert</a></b>()
 								</div>
-								<div class="description"></div>
+								<div class="description">get revokedCertificate JSON parameter<br/>
+This method returns parsed revokedCertificate parameter
+as JSON object.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>doFinalHex</b>(hex)
+								<div class="fixedFont"><b><a href="../symbols/X509CRL.html#getRevCertArray">getRevCertArray</a></b>()
 								</div>
-								<div class="description"></div>
+								<div class="description">get array for revokedCertificates field<br/>
+This method returns parsed revokedCertificates field value as
+array of revokedCertificate parameter.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>doFinalString</b>(str)
+								<div class="fixedFont"><b><a href="../symbols/X509CRL.html#getSignatureAlgorithmField">getSignatureAlgorithmField</a></b>()
 								</div>
-								<div class="description"></div>
+								<div class="description">get signature algorithm name in basic field
+This method will get a name of signature algorithm in CRL.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>init</b>(keyparam, pass)
+								<div class="fixedFont"><b><a href="../symbols/X509CRL.html#getSignatureValueHex">getSignatureValueHex</a></b>()
 								</div>
-								<div class="description"></div>
+								<div class="description">get signature value as hexadecimal string<br/>
+This method will get signature value of CRL.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b><a href="../symbols/KJUR.crypto.html#.parseSig">parseSig</a></b>(sig)
+								<div class="fixedFont"><b><a href="../symbols/X509CRL.html#getThisUpdate">getThisUpdate</a></b>()
 								</div>
-								<div class="description">Parses a byte array containing a DER-encoded signature.</div>
+								<div class="description">get JSON object of thisUpdate field<br/>
+This method returns parsed thisUpdate field value as
+string.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b><a href="../symbols/KJUR.crypto.html#.serializeSig">serializeSig</a></b>(r, s)
+								<div class="fixedFont"><b><a href="../symbols/X509CRL.html#getVersion">getVersion</a></b>()
 								</div>
-								<div class="description">Serialize a signature into DER format.</div>
+								<div class="description">get X.509 CRL format version<br/>
+This method returns a version field value TBSCertList.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>setAlgAndProvider</b>(alg, prov)
+								<div class="fixedFont"><b><a href="../symbols/X509CRL.html#verifySignature">verifySignature</a></b>(pubKey)
 								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>sign</b>()
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>signHex</b>(hex)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>signString</b>(str)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>updateHex</b>(hex)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>updateString</b>(str)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.<b>verify</b>(hSigVal)
-								</div>
-								<div class="description"></div>
+								<div class="description">verifies signature value by public key<br/>
+This method verifies signature value of hexadecimal string of 
+X.509 CRL by specified public key.</div>
 							</td>
 						</tr>
 					
@@ -681,43 +692,141 @@ This namespace privides following crytpgrahic classes.</div>
 			
 			<div class="details"><a name="constructor"> </a>
 				<div class="sectionTitle">
-					Namespace Detail
+					Class Detail
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.crypto</b>
+						<b>X509CRL</b>(params)
 				</div>
 				
 				<div class="description">
-					kjur's cryptographic algorithm provider library name space
-<p>
-This namespace privides following crytpgrahic classes.
+					hexadecimal X.509 CRL ASN.1 parser class.<br/>
+This class parses X.509 CRL. Following methods are provided to
+get field value:<br/>
+<b>BASIC FIELD</b><br/>
 <ul>
-<li><a href="../symbols/KJUR.crypto.MessageDigest.html">KJUR.crypto.MessageDigest</a> - Java JCE(cryptograhic extension) style MessageDigest class</li>
-<li><a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a> - Java JCE(cryptograhic extension) style Signature class</li>
-<li><a href="../symbols/KJUR.crypto.Cipher.html">KJUR.crypto.Cipher</a> - class for encrypting and decrypting data</li>
-<li><a href="../symbols/KJUR.crypto.Util.html">KJUR.crypto.Util</a> - cryptographic utility functions and properties</li>
+<li>version - <a href="../symbols/X509CRL.html#getVersion">X509CRL#getVersion</a></li>
+<li>signatureAlgorithm - <a href="../symbols/X509CRL.html#getSignatureAlgorithmField">X509CRL#getSignatureAlgorithmField</a></li>
+<li>issuer - <a href="../symbols/X509CRL.html#getIssuer">X509CRL#getIssuer</a></li>
+<li>thisUpdate - <a href="../symbols/X509CRL.html#getThisUpdate">X509CRL#getThisUpdate</a></li>
+<li>nextUpdate - <a href="../symbols/X509CRL.html#getNextUpdate">X509CRL#getNextUpdate</a></li>
+<li>revokedCertificates - <a href="../symbols/X509CRL.html#getRevCertArray">X509CRL#getRevCertArray</a></li>
+<li>revokedCertificate - <a href="../symbols/X509CRL.html#getRevCert">X509CRL#getRevCert</a></li>
+<li>signature - <a href="../symbols/X509CRL.html#getSignatureValueHex">X509CRL#getSignatureValueHex</a></li>
 </ul>
-NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
-</p>
-					
+<b>UTILITIES</b><br/>
+<ul>
+<li><a href="../symbols/X509CRL.html#getParam">X509CRL#getParam</a> - get all parameters</li>
+</ul>
+					<br /><i>Author: </i>Kenji Urushima.
 				</div>
 				
 				
 				
 				
 					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>params</b>
+								
+							</dt>
+								<dd>X.509 CRL PEM string or hexadecimal string</dd>
+						
+						</dl>
 					
 					
 					
 					
 					
+					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/X509.html">X509</a></dd>
+						
+							<dd><a href="https://kjur.github.io/jsrsasigns/">jsrsasign home page https://kjur.github.io/jsrsasign/</a></dd>
+						
+						</dl>
 					
 
 			</div>
 			
 
 <!-- ============================== field details ========================== -->		
+			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="hex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>hex</b>
+					
+					</div>
+					<div class="description">
+						hexadecimal string of X.509 CRL ASN.1 data
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="posRevCert"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Integer}</span>
+					<b>posRevCert</b>
+					
+					</div>
+					<div class="description">
+						index of revokedCertificates field in TBSCertList depends on CRL version and nextUpdate field
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="posSigAlg"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Integer}</span>
+					<b>posSigAlg</b>
+					
+					</div>
+					<div class="description">
+						index of SignatureAlgorithm field in TBSCertList position depends on CRL version field
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
 			
 
 <!-- ============================== method details ========================= -->		
@@ -726,43 +835,460 @@ NOTE: Please ignore method summary and document of this namespace. This caused b
 					Method Detail
 				</div>
 				
-					<a name=".digest"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="getIssuer"> </a>
+					<div class="fixedFont">
 					
-					
-					<span class="light">KJUR.crypto.</span><b>digest</b>()
+					<span class="light">{Array}</span>
+					<b>getIssuer</b>()
 					
 					</div>
 					<div class="description">
-						
+						get JSON object of issuer field<br/>
+This method returns parsed issuer field value as
+JSON object.
 						
 						
 					</div>
 					
 					
 					
+					<pre class="code">crl = new X509CRL("-----BEGIN X509 CRL...");
+x.getIssuer() &rarr;
+{ array: [[{type:'C',value:'JP',ds:'prn'}],...] }</pre>
+					
+					
+					
 						
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> JSON object of issuer field</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509.html#getIssuer">X509#getIssuer</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getNextUpdate"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>getNextUpdate</b>()
+					
+					</div>
+					<div class="description">
+						get JSON object of nextUpdate field<br/>
+This method returns parsed nextUpdate field value as
+string. "nextUpdate" is OPTIONAL field so 
+when nextUpdate field doesn't exists, this returns null.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">crl = new X509CRL("-----BEGIN X509 CRL...");
+crl.getNextUpdate() &rarr; "200825235959Z"</pre>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> string of nextUpdate field or null</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509.html#getNotBefore">X509#getNotBefore</a></dd>
+							
+								<dd><a href="../symbols/X509CRL.html#getThisUpdate">X509CRL#getThisUpdate</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.Time.html">KJUR.asn1.x509.Time</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getParam"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getParam</b>()
+					
+					</div>
+					<div class="description">
+						get JSON object for CRL parameters<br/>
+This method returns a JSON object of the CRL
+parameters. 
+Return value can be passed to
+<a href="../symbols/KJUR.asn1.x509.CRL.html">KJUR.asn1.x509.CRL</a> constructor.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">crl = new X509CRL("-----BEGIN X509 CRL...");
+crl.getParam() &rarr;
+{version: 2,
+ sigalg: "SHA256withRSA",
+ issuer: {array:
+   [[{type:"C",value:"JP",ds:"prn"}],[{type:"O",value:"T1",ds:"prn"}]]},
+ thisupdate: "200820212434Z",
+ nextupdate: "200910212434Z",
+ revcert: [
+  {sn:{hex:"123d..."},
+   date:"061110000000Z",
+   ext:[{extname:"cRLReason",code:4}]}],
+ ext: [
+  {extname:"authorityKeyIdentifier",kid:{hex: "03de..."}},
+  {extname:"cRLNumber",num:{hex:"0211"}}],
+ sighex: "3c5e..."}</pre>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> JSON object for CRL parameters</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.CRL.html">KJUR.asn1.x509.CRL</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getRevCert"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getRevCert</b>()
+					
+					</div>
+					<div class="description">
+						get revokedCertificate JSON parameter<br/>
+This method returns parsed revokedCertificate parameter
+as JSON object.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">crl = new X509CRL();
+crl.getRevCertArray("30...") &rarr;
+{sn:"123a", date:"208025235959Z", ext: [{extname:"cRLReason",code:3}]}</pre>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> JSON object for revokedCertificate parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509CRL.html#getRevCertArray">X509CRL#getRevCertArray</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getRevCertArray"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getRevCertArray</b>()
+					
+					</div>
+					<div class="description">
+						get array for revokedCertificates field<br/>
+This method returns parsed revokedCertificates field value as
+array of revokedCertificate parameter.
+If the field doesn't exists, it returns null.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">crl = new X509CRL("-----BEGIN X509 CRL...");
+crl.getRevCertArray() &rarr;
+[{sn:"123a", date:"208025235959Z", ext: [{extname:"cRLReason",code:3}]},
+ {sn:"123b", date:"208026235959Z", ext: [{extname:"cRLReason",code:0}]}]</pre>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of revokedCertificate parameter or null</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509CRL.html#getRevCert">X509CRL#getRevCert</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getSignatureAlgorithmField"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>getSignatureAlgorithmField</b>()
+					
+					</div>
+					<div class="description">
+						get signature algorithm name in basic field
+This method will get a name of signature algorithm in CRL.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">crl = new X509CRL("-----BEGIN X509 CRL...");
+crl.getSignatureAlgorithmField() &rarr; "SHA256withRSAandMGF1"</pre>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> signature algorithm name (ex. SHA1withRSA, SHA256withECDSA, SHA512withRSAandMGF1)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509.html#getSignatureAlgorithmField">X509#getSignatureAlgorithmField</a></dd>
+							
+								<dd>KJUR.asn1.x509.AlgirithmIdentifier</dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getSignatureValueHex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>getSignatureValueHex</b>()
+					
+					</div>
+					<div class="description">
+						get signature value as hexadecimal string<br/>
+This method will get signature value of CRL.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">crl = new X509CRL("-----BEGIN X509 CRL...");
+crl.getSignatureValueHex() &rarr "8a4c47913..."</pre>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> signature value hexadecimal string without BitString unused bits</dd>
+							
+							</dl>
 						
 						
 						
 
 					<hr />
 				
-					<a name=".digestHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="getThisUpdate"> </a>
+					<div class="fixedFont">
 					
-					
-					<span class="light">KJUR.crypto.</span><b>digestHex</b>(hex)
+					<span class="light">{String}</span>
+					<b>getThisUpdate</b>()
 					
 					</div>
 					<div class="description">
-						
+						get JSON object of thisUpdate field<br/>
+This method returns parsed thisUpdate field value as
+string.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">crl = new X509CRL("-----BEGIN X509 CRL...");
+x.getThisUpdate() &rarr; "200825235959Z"</pre>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> string of thisUpdate field (ex. "YYMMDDHHmmSSZ")</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509.html#getNotBefore">X509#getNotBefore</a></dd>
+							
+								<dd><a href="../symbols/X509CRL.html#getNextUpdate">X509CRL#getNextUpdate</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.Time.html">KJUR.asn1.x509.Time</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getVersion"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Number}</span>
+					<b>getVersion</b>()
+					
+					</div>
+					<div class="description">
+						get X.509 CRL format version<br/>
+This method returns a version field value TBSCertList.
+This returns null if there is no such field.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">crl = new X509CRL("-----BEGIN X509 CRL...");
+crl.getVersion() &rarr; 2</pre>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Number}</span> version field value (generally 2) or null</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="verifySignature"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Boolean}</span>
+					<b>verifySignature</b>(pubKey)
+					
+					</div>
+					<div class="description">
+						verifies signature value by public key<br/>
+This method verifies signature value of hexadecimal string of 
+X.509 CRL by specified public key.
+The signature algorithm used to verify will refer
+signatureAlgorithm field. 
+(See <a href="../symbols/X509CRL.html#getSignatureAlgorithmField">X509CRL#getSignatureAlgorithmField</a>)
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">crl = new X509CRL("-----BEGIN X509 CRL...");
+x.verifySignature(pubKey) &rarr; true, false or raising exception</pre>
 					
 					
 					
@@ -771,533 +1297,34 @@ NOTE: Please ignore method summary and document of this namespace. This caused b
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>hex</b>
+									<span class="light fixedFont">{Object}</span> <b>pubKey</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>public key object, pubkey PEM or PEM issuer cert</dd>
 							
 							</dl>
 						
 						
 						
 						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".digestString"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.crypto.</span><b>digestString</b>(str)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
 						
 							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
+							<dt class="heading">Returns:</dt>
 							
-								<dt>
-									<b>str</b>
-									
-								</dt>
-								<dd></dd>
+								<dd><span class="light fixedFont">{Boolean}</span> true if signature value is valid otherwise false</dd>
 							
 							</dl>
 						
 						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".doFinal"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.crypto.</span><b>doFinal</b>()
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".doFinalHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.crypto.</span><b>doFinalHex</b>(hex)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
 						
 							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
+							<dt class="heading">See:</dt>
 							
-								<dt>
-									<b>hex</b>
-									
-								</dt>
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#verifySignature">X509#verifySignature</a></dd>
+							
+								<dd><a href="../symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a></dd>
 							
 							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".doFinalString"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.crypto.</span><b>doFinalString</b>(str)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>str</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".init"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.crypto.</span><b>init</b>(keyparam, pass)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>keyparam</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>pass</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".parseSig"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.crypto.</span><b>parseSig</b>(sig)
-					
-					</div>
-					<div class="description">
-						Parses a byte array containing a DER-encoded signature.
-
-This function will return an object of the form:
-
-{
-  r: BigInteger,
-  s: BigInteger
-}
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/ecdsa-modified-1.0.js.html">ecdsa-modified-1.0.js</a>.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>sig</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".serializeSig"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.crypto.</span><b>serializeSig</b>(r, s)
-					
-					</div>
-					<div class="description">
-						Serialize a signature into DER format.
-
-Takes two BigIntegers representing r and s and returns a byte array.
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/ecdsa-modified-1.0.js.html">ecdsa-modified-1.0.js</a>.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>r</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>s</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".setAlgAndProvider"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.crypto.</span><b>setAlgAndProvider</b>(alg, prov)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>alg</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>prov</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".sign"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.crypto.</span><b>sign</b>()
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".signHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.crypto.</span><b>signHex</b>(hex)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>hex</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".signString"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.crypto.</span><b>signString</b>(str)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>str</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".updateHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.crypto.</span><b>updateHex</b>(hex)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>hex</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".updateString"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.crypto.</span><b>updateString</b>(str)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>str</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".verify"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.crypto.</span><b>verify</b>(hSigVal)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>hSigVal</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
 						
 
 					

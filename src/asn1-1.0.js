@@ -1,4 +1,4 @@
-/* asn1-1.0.16.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1-1.0.17.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.0.0 asn1 1.0.16 (2020-Aug-12)
+ * @version jsrsasign 9.1.1 asn1 1.0.17 (2020-Aug-27)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -449,10 +449,11 @@ KJUR.asn1.ASN1Object = function() {
      */
     this.getLengthHexFromValue = function() {
         if (typeof this.hV == "undefined" || this.hV == null) {
-            throw "this.hV is null or undefined.";
+            throw new Error("this.hV is null or undefined");
         }
         if (this.hV.length % 2 == 1) {
-            throw "value hex must be even length: n=" + hV.length + ",v=" + this.hV;
+            throw new Error("value hex must be even length: n=" +
+			    hV.length + ",v=" + this.hV);
         }
         var n = this.hV.length / 2;
         var hN = n.toString(16);

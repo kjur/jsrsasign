@@ -399,6 +399,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.PolicyQualifierInfo.html">KJUR.asn1.x509.PolicyQualifierInfo</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.PrivateExtension.html">KJUR.asn1.x509.PrivateExtension</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.RDN.html">KJUR.asn1.x509.RDN</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></li>
@@ -452,6 +454,8 @@ ul.inheritsList
 	<li><a href="../symbols/RSAKey.html">RSAKey</a></li>
 	
 	<li><a href="../symbols/X509.html">X509</a></li>
+	
+	<li><a href="../symbols/X509CRL.html">X509CRL</a></li>
 	
 </ul>
 <hr />
@@ -516,6 +520,16 @@ ul.inheritsList
 						</tr>
 					</thead>
 					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/X509.html#aExtInfo">aExtInfo</a></b>
+								</div>
+								<div class="description">(DEPRECATED) array of parameters for extensions</div>
+							</td>
+						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
@@ -696,6 +710,32 @@ in the certificate as array of URI string.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtCRLNumber">getExtCRLNumber</a></b>(hExtV, critical)
+								</div>
+								<div class="description">parse cRLNumber CRL extension as JSON object<br/>
+This method parses
+CRLNumber CRL extension value defined in
+<a href="https://tools.ietf.org/html/rfc5280#section-5.2.3">
+RFC 5280 5.2.3</a> as JSON object.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtCRLReason">getExtCRLReason</a></b>(hExtV, critical)
+								</div>
+								<div class="description">parse cRLReason CRL entry extension as JSON object<br/>
+This method parses
+CRLReason CRL entry extension value defined in
+<a href="https://tools.ietf.org/html/rfc5280#section-5.3.1">
+RFC 5280 5.3.1</a> as JSON object.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtExtKeyUsage">getExtExtKeyUsage</a></b>(hExtV, critical)
 								</div>
 								<div class="description">get extKeyUsage value as JSON object
@@ -770,7 +810,17 @@ as comma separated string of usage names.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtParamArray">getExtParamArray</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtParam">getExtParam</a></b>(hExt)
+								</div>
+								<div class="description">get a extension parameter JSON object<br/>
+This method returns a extension parameters as JSON object.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtParamArray">getExtParamArray</a></b>(hExtSeq)
 								</div>
 								<div class="description">get array of certificate extension parameter JSON object<br/>
 This method returns an array of certificate extension
@@ -1045,7 +1095,7 @@ This method will get signature algorithm name of certificate:</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getSignatureValueHex">getSignatureValueHex</a></b>()
 								</div>
-								<div class="description">get signature value in hexadecimal string<br/>
+								<div class="description">get signature value as hexadecimal string<br/>
 This method will get signature value of certificate:</div>
 							</td>
 						</tr>
@@ -1254,6 +1304,8 @@ X509 class provides following functionality:
   <li>cRLDistributionPoints - <a href="../symbols/X509.html#getExtCRLDistributionPointsURI">X509#getExtCRLDistributionPointsURI</a> (DEPRECATED)</li>
   <li>authorityInfoAccess - <a href="../symbols/X509.html#getExtAuthorityInfoAccess">X509#getExtAuthorityInfoAccess</a></li>
   <li>authorityInfoAccess - <a href="../symbols/X509.html#getExtAIAInfo">X509#getExtAIAInfo</a> (DEPRECATED)</li>
+  <li>cRLNumber - <a href="../symbols/X509.html#getExtCRLNumber">X509#getExtCRLNumber</a></li>
+  <li>cRLReason - <a href="../symbols/X509.html#getExtCRLReason">X509#getExtCRLReason</a></li>
   </ul>
 </li>
 <li><b>UTILITIES</b>
@@ -1295,6 +1347,28 @@ X509 class provides following functionality:
 				<div class="sectionTitle">
 					Field Detail
 				</div>
+				
+					<a name="aExtInfo"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>aExtInfo</b>
+					
+					</div>
+					<div class="description">
+						(DEPRECATED) array of parameters for extensions
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
 				
 					<a name="hex"> </a>
 					<div class="fixedFont">
@@ -2254,6 +2328,167 @@ x.getExtCRLDistributionPointsURI() &rarr;
 
 					<hr />
 				
+					<a name="getExtCRLNumber"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getExtCRLNumber</b>(hExtV, critical)
+					
+					</div>
+					<div class="description">
+						parse cRLNumber CRL extension as JSON object<br/>
+This method parses
+CRLNumber CRL extension value defined in
+<a href="https://tools.ietf.org/html/rfc5280#section-5.2.3">
+RFC 5280 5.2.3</a> as JSON object.
+<pre>
+id-ce-cRLNumber OBJECT IDENTIFIER ::= { id-ce 20 }
+CRLNumber ::= INTEGER (0..MAX)
+</pre>
+<br/>
+Result of this method can be passed to 
+<a href="../symbols/KJUR.asn1.x509.CRLNumber.html">KJUR.asn1.x509.CRLNumber</a> constructor.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">crl = X509CRL("-----BEGIN X509 CRL...");
+... get hExtV and critical flag ...
+crl.getExtCRLNumber("02...", false) &rarr;
+{extname: "cRLNumber", num: {hex: "12af"}}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hExtV</b>
+									
+								</dt>
+								<dd>hexadecimal string of extension value</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span> <b>critical</b>
+									
+								</dt>
+								<dd>flag</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 9.1.1 x509 2.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd></dd>
+							
+								<dd></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getExtCRLReason"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getExtCRLReason</b>(hExtV, critical)
+					
+					</div>
+					<div class="description">
+						parse cRLReason CRL entry extension as JSON object<br/>
+This method parses
+CRLReason CRL entry extension value defined in
+<a href="https://tools.ietf.org/html/rfc5280#section-5.3.1">
+RFC 5280 5.3.1</a> as JSON object.
+<pre>
+id-ce-cRLReasons OBJECT IDENTIFIER ::= { id-ce 21 }
+-- reasonCode ::= { CRLReason }
+CRLReason ::= ENUMERATED {
+     unspecified             (0),
+     keyCompromise           (1),
+     cACompromise            (2),
+     affiliationChanged      (3),
+     superseded              (4),
+     cessationOfOperation    (5),
+     certificateHold         (6),
+     removeFromCRL           (8),
+     privilegeWithdrawn      (9),
+     aACompromise           (10) }
+</pre>
+<br/>
+Result of this method can be passed to 
+<a href="../symbols/KJUR.asn1.x509.CRLReason.html">KJUR.asn1.x509.CRLReason</a> constructor.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">crl = X509CRL("-----BEGIN X509 CRL...");
+... get hExtV and critical flag ...
+crl.getExtCRLReason("02...", false) &rarr;
+{extname: "cRLReason", code: 3}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hExtV</b>
+									
+								</dt>
+								<dd>hexadecimal string of extension value</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span> <b>critical</b>
+									
+								</dt>
+								<dd>flag</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 9.1.1 x509 2.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd></dd>
+							
+								<dd></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
 					<a name="getExtExtKeyUsage"> </a>
 					<div class="fixedFont">
 					
@@ -2779,17 +3014,91 @@ x.getExtKeyUsageString() &rarr; "digitalSignature,keyEncipherment"</pre>
 
 					<hr />
 				
+					<a name="getExtParam"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getExtParam</b>(hExt)
+					
+					</div>
+					<div class="description">
+						get a extension parameter JSON object<br/>
+This method returns a extension parameters as JSON object.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+...
+x.getExtParam("30...") &rarr;
+{extname:"keyUsage",critical:true,names:["digitalSignature"]}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hExt</b>
+									
+								</dt>
+								<dd>hexadecimal string of Extension</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 9.1.1 x509 2.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> Extension parameter JSON object</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.X509Util.html#.newCertPEM">KJUR.asn1.x509.X509Util.newCertPEM</a></dd>
+							
+								<dd><a href="../symbols/X509.html#getParam">X509#getParam</a></dd>
+							
+								<dd><a href="../symbols/X509.html#getExtParamArray">X509#getExtParamArray</a></dd>
+							
+								<dd><a href="../symbols/X509CRL.html#getParam">X509CRL#getParam</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.csr.CSRUtil.html#.getParam">KJUR.asn1.csr.CSRUtil.getParam</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
 					<a name="getExtParamArray"> </a>
 					<div class="fixedFont">
 					
 					<span class="light">{Array}</span>
-					<b>getExtParamArray</b>()
+					<b>getExtParamArray</b>(hExtSeq)
 					
 					</div>
 					<div class="description">
 						get array of certificate extension parameter JSON object<br/>
 This method returns an array of certificate extension
-parameters.
+parameters. 
+<br/>
+NOTE: Argument "hExtSeq" have been supported since jsrsasign 9.1.1.
 						
 						
 					</div>
@@ -2808,6 +3117,17 @@ x.getExtParamArray() &rarr;
 					
 					
 					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hExtSeq</b>
+									
+								</dt>
+								<dd>hexadecimal string of SEQUENCE of Extension</dd>
+							
+							</dl>
 						
 						
 						
@@ -2834,6 +3154,12 @@ x.getExtParamArray() &rarr;
 								<dd><a href="../symbols/KJUR.asn1.x509.X509Util.html#.newCertPEM">KJUR.asn1.x509.X509Util.newCertPEM</a></dd>
 							
 								<dd><a href="../symbols/X509.html#getParam">X509#getParam</a></dd>
+							
+								<dd><a href="../symbols/X509.html#getExtParam">X509#getExtParam</a></dd>
+							
+								<dd><a href="../symbols/X509CRL.html#getParam">X509CRL#getParam</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.csr.CSRUtil.html#.getParam">KJUR.asn1.csr.CSRUtil.getParam</a></dd>
 							
 							</dl>
 						
@@ -4289,7 +4615,7 @@ x.getSignatureAlgorithmName() &rarr; "SHA256withRSA"</pre>
 					
 					</div>
 					<div class="description">
-						get signature value in hexadecimal string<br/>
+						get signature value as hexadecimal string<br/>
 This method will get signature value of certificate:
 						
 						
@@ -4834,7 +5160,7 @@ X509.hex2rdn("31143008060355040a0c01613008060355040a0c0162") &rarr; O=a+O=b</pre
 					
 					</div>
 					<div class="description">
-						set array of X.509v3 and CSR extesion information such as extension OID, criticality and value index.<br/>
+						set array of X.509v3 and CSR extesion information such as extension OID, criticality and value index. (DEPRECATED)<br/>
 This method will set an array of X.509v3 extension information having 
 following parameters:
 <ul>
@@ -4846,6 +5172,11 @@ When you want to parse extensionRequest of CSR,
 argument 'hCSR' shall be specified.
 <br/>
 NOTE: CSR is supported from jsrsasign 8.0.20 x509 1.1.22.
+<br/>
+This method and X509.aExtInfo property
+have been *deprecated* since jsrsasign 9.1.1.
+All extension parser method such as X509.getExt* shall be
+call with argument "hExtV" and "critical" explicitly.
 						
 						
 					</div>
@@ -4878,6 +5209,13 @@ x.aExtInfo &rarr;
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								jsrsasign 9.1.1 x509 2.0.1
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">

@@ -972,6 +972,24 @@ equal(
 );
 });
 
+test("PrivateExtension class test", function() {
+var _PrivateExtension = KJUR.asn1.x509.PrivateExtension;
+hExpect = "300c06032a030404051303616161";
+
+var param1 = {extname: "1.2.3.4", extn: "1303616161"};
+equal(
+(new _PrivateExtension(param1)).getEncodedHex(),
+hExpect,
+"extn-hex");
+
+var param2 = {extname: "1.2.3.4", extn: {prnstr:'aaa'}};
+equal(
+(new _PrivateExtension(param1)).getEncodedHex(),
+hExpect,
+"extn-json");
+
+});
+
 // ===== CRL related test ====================
 
 test("CRL class test (by cakey)", function() {
