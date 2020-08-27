@@ -1,6 +1,11 @@
 
 ChangeLog for jsrsasign
 
+missed to export X509CRL in npm package
+* Changes from 9.1.2 to 9.1.3 (2020-Aug-28)
+  - npm/lib/footer.js
+    - export X509CRL
+
 add private extension support for Cert CRL and CSR
 * Changes from 9.1.1 to 9.1.2 (2020-Aug-27)
   - undefined extension regarded as private extesion

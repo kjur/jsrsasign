@@ -12,6 +12,7 @@ exports.Cipher = KJUR.crypto.Cipher;
 exports.KEYUTIL = KEYUTIL;
 exports.ASN1HEX = ASN1HEX;
 exports.X509 = X509;
+exports.X509CRL = X509CRL;
 exports.CryptoJS = CryptoJS;
 
 // ext/base64.js
