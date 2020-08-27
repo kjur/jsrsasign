@@ -1,6 +1,19 @@
 
 ChangeLog for jsrsasign
 
+add private extension support for Cert CRL and CSR
+* Changes from 9.1.1 to 9.1.2 (2020-Aug-27)
+  - undefined extension regarded as private extesion
+    in extension parser X509.getExtParam.
+    Thus certificate, CRL and CSR parser will
+    not raise error when undefined extension
+    is parsed.
+  - src/x509.js
+    - unknown extension is parsed as
+      private extension.
+  - test/qunit-do-{x509-param}.html
+    - add test case to follow above update
+
 new CRL parser and private extension encoder support
 * Changes from 9.1.0 to 9.1.1 (2020-Aug-27)
   - add new X509CRL class for CRL parser

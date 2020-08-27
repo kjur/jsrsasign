@@ -309,19 +309,28 @@ cbtqMCqhg0GKH4OmbrS+Zu99iox+I7Mbsu9+F4rZjinez1looQ5hfJ+6FAtxE1HI
 
 test("X509.getExtParam test", function() {
 var x = new X509();
+
 deepEqual(
 x.getExtParam("300e0603551d0f0101ff0404030204b0"),
 { extname: "keyUsage",
   critical: true,
   names: ["digitalSignature","keyEncipherment","dataEncipherment"]
 },
-"param ku");
+"keyUsage");
+
 deepEqual(
 x.getExtParam("30290603551d250422302006082b0601050507030206082b06010505070304060a2b0601040182370a0304"), 
 { extname: "extKeyUsage",
   array: ["clientAuth", "emailProtection", "1.3.6.1.4.1.311.10.3.4"]
 },
-"param eku");
+"extKeyUsage");
+
+deepEqual(
+x.getExtParam("300f06092b060105050730010504020500"),
+{ extname: "1.3.6.1.5.5.7.48.1.5",
+  extn: "0500" },
+"ocspNoCheck NULL as privateExtension(may fail if getExtOCSPNoCheck defined)");
+
 });
 
 test("X509.getExtParamArray test", function() {
