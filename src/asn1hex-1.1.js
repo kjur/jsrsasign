@@ -1,4 +1,4 @@
-/* asn1hex-1.2.3.js (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1hex-1.2.4.js (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.1.0 asn1hex 1.2.3 (2020-Aug-25)
+ * @version jsrsasign 9.1.4 asn1hex 1.2.4 (2020-Aug-28)
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -324,15 +324,14 @@ ASN1HEX.getIdxbyList = function(h, currentIndex, nthList, checkingTag) {
     var firstNth, a;
     if (nthList.length == 0) {
 	if (checkingTag !== undefined) {
-            if (h.substr(currentIndex, 2) !== checkingTag) {
-		throw Error("checking tag doesn't match: " + 
-			    h.substr(currentIndex, 2) + "!=" + checkingTag);
-            }
+            if (h.substr(currentIndex, 2) !== checkingTag) return -1;
 	}
         return currentIndex;
     }
     firstNth = nthList.shift();
     a = _ASN1HEX.getChildIdx(h, currentIndex);
+    if (firstNth >= a.length) return -1;
+
     return _ASN1HEX.getIdxbyList(h, a[firstNth], nthList, checkingTag);
 };
 
@@ -429,23 +428,22 @@ ASN1HEX.getIdxbyListEx = function(h, currentIndex, nthList, checkingTag) {
  * @param {Integer} currentIndex string index to start searching in hexadecimal string "h"
  * @param {Array} nthList array of nth list index
  * @param {String} checkingTag (OPTIONAL) string of expected ASN.1 tag for nthList 
+ * @return {String} referred hexadecimal string of ASN.1 TLV or null
  * @since jsrsasign 7.1.4 asn1hex 1.1.10
+ *
  * @description
  * This static method is to get a ASN.1 value which specified "nthList" position
  * with checking expected tag "checkingTag".
+ * <br/>
+ * When referring value can't be found, this returns null.
  */
 ASN1HEX.getTLVbyList = function(h, currentIndex, nthList, checkingTag) {
     var _ASN1HEX = ASN1HEX;
-    var idx = _ASN1HEX.getIdxbyList(h, currentIndex, nthList);
-    if (idx === undefined) {
-        throw new Error("can't find nthList object");
-    }
-    if (checkingTag !== undefined) {
-        if (h.substr(idx, 2) != checkingTag) {
-            throw new Error("checking tag doesn't match: " + 
-			    h.substr(idx,2) + "!=" + checkingTag);
-        }
-    }
+    var idx = _ASN1HEX.getIdxbyList(h, currentIndex, nthList, checkingTag);
+
+    if (idx == -1) return null;
+    if (idx >= h.length) return null;
+
     return _ASN1HEX.getTLV(h, idx);
 };
 
@@ -498,10 +496,17 @@ ASN1HEX.getTLVbyListEx = function(h, currentIndex, nthList, checkingTag) {
  * @param {Array} nthList array of nth list index
  * @param {String} checkingTag (OPTIONAL) string of expected ASN.1 tag for nthList 
  * @param {Boolean} removeUnusedbits (OPTIONAL) flag for remove first byte for value (DEFAULT false)
+ * @return {String} referred hexadecimal string of ASN.1 value(V) or null
  * @since asn1hex 1.1.4
+ * @see ASN1HEX.getIdxbyList
+ * @see ASN1HEX.getVbyListEx
+ *
  * @description
  * This static method is to get a ASN.1 value which specified "nthList" position
  * with checking expected tag "checkingTag".
+ * <br/>
+ * When referring value can't be found, this returns null.
+ * <br/>
  * NOTE: 'removeUnusedbits' flag has been supported since
  * jsrsasign 7.1.14 asn1hex 1.1.10.
  */
@@ -510,9 +515,8 @@ ASN1HEX.getVbyList = function(h, currentIndex, nthList, checkingTag, removeUnuse
     var idx, v;
     idx = _ASN1HEX.getIdxbyList(h, currentIndex, nthList, checkingTag);
     
-    if (idx === undefined) {
-        throw "can't find nthList object";
-    }
+    if (idx == -1) return null;
+    if (idx >= h.length) return null;
 
     v = _ASN1HEX.getV(h, idx);
     if (removeUnusedbits === true) v = v.substr(2);
@@ -533,11 +537,13 @@ ASN1HEX.getVbyList = function(h, currentIndex, nthList, checkingTag, removeUnuse
  * @since jsrsasign 8.0.21 asn1hex 1.2.2
  * @see <a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-accessing-deep-inside-of-ASN.1-structure-by-using-new-ASN1HEX.getIdxbyListEx">ASN1HEX.getIdxbyListEx tutorial wiki page</a>
  * @see {@link ASN1HEX.getIdxbyListEx}
+ *
  * @description
  * This static method is to get a ASN.1 value which specified "nthList" position
  * with checking expected tag "checkingTag".
  * This method can dig into ASN.1 object encapsulated by
  * OctetString or BitString with unused bits.
+ *
  * @example
  * 3014 seq idx=0
  *   3012 seq idx=4
