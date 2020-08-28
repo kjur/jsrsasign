@@ -1598,7 +1598,7 @@ getNextSiblingIdx("3006020103020104", 4) & rarr 10</pre>
 					<a name=".getTLVbyList"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					
+					<span class="light">{String}</span>
 					<span class="light">ASN1HEX.</span><b>getTLVbyList</b>(h, currentIndex, nthList, checkingTag)
 					
 					</div>
@@ -1606,6 +1606,8 @@ getNextSiblingIdx("3006020103020104", 4) & rarr 10</pre>
 						get ASN.1 TLV by nthList<br/>
 This static method is to get a ASN.1 value which specified "nthList" position
 with checking expected tag "checkingTag".
+<br/>
+When referring value can't be found, this returns null.
 						
 						
 					</div>
@@ -1651,6 +1653,13 @@ with checking expected tag "checkingTag".
 							</dl>
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> referred hexadecimal string of ASN.1 TLV or null</dd>
+							
+							</dl>
 						
 						
 						
@@ -1865,7 +1874,7 @@ ASN1HEX.getTLVbyList(h, 0, [0, 2], "0c") &rarr; null //not UTF8String(0c)</pre>
 					<a name=".getVbyList"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					
+					<span class="light">{String}</span>
 					<span class="light">ASN1HEX.</span><b>getVbyList</b>(h, currentIndex, nthList, checkingTag, removeUnusedbits)
 					
 					</div>
@@ -1873,6 +1882,9 @@ ASN1HEX.getTLVbyList(h, 0, [0, 2], "0c") &rarr; null //not UTF8String(0c)</pre>
 						get ASN.1 value by nthList<br/>
 This static method is to get a ASN.1 value which specified "nthList" position
 with checking expected tag "checkingTag".
+<br/>
+When referring value can't be found, this returns null.
+<br/>
 NOTE: 'removeUnusedbits' flag has been supported since
 jsrsasign 7.1.14 asn1hex 1.1.10.
 						
@@ -1927,7 +1939,23 @@ jsrsasign 7.1.14 asn1hex 1.1.10.
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> referred hexadecimal string of ASN.1 value(V) or null</dd>
+							
+							</dl>
 						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/ASN1HEX.html#.getIdxbyList">ASN1HEX.getIdxbyList</a></dd>
+							
+								<dd><a href="../symbols/ASN1HEX.html#.getVbyListEx">ASN1HEX.getVbyListEx</a></dd>
+							
+							</dl>
 						
 
 					<hr />

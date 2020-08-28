@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509crl.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.1.1 x509crl 1.0.0 (2020-Aug-26)
+ * @version jsrsasign 9.1.4 x509crl 1.0.1 (2020-Aug-26)
  * @since jsrsasign 9.1.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -66,7 +66,6 @@ var X509CRL = function(params) {
 	_getChildIdx = _ASN1HEX.getChildIdx,
 	_x509obj = new X509();
     
-
     this.hex = null;
     this.posSigAlg = null;
     this.posRevCert = null;
@@ -92,7 +91,15 @@ var X509CRL = function(params) {
 	var idx2 = _getIdxbyList(this.hex, 0, [0, this.posSigAlg + 3]);
 	var tag2 = this.hex.substr(idx2, 2);
 	if (tag2 == "17" || tag2 == "18") {
-	    this.posRevCert = this.posSigAlg + 4;
+	    var idx3, tag3;
+	    idx3 = _getIdxbyList(this.hex, 0, [0, this.posSigAlg + 4]);
+	    this.posRevCert = null;
+	    if (idx3 != -1) {
+		tag3 = this.hex.substr(idx3, 2);
+		if (tag3 == "30") {
+		    this.posRevCert = this.posSigAlg + 4;
+		}
+	    }
 	} else if (tag2 == "30") { // found revCert
 	    this.posRevCert = this.posSigAlg + 3;
 	} else if (tag2 == "a0") { // no nextUpdate and revCert
