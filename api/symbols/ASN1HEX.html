@@ -549,7 +549,7 @@ hexadecmal string of ASN.1 DER encoded data.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getChildIdx">getChildIdx</a></b>(h, pos)
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getChildIdx">getChildIdx</a></b>(h, idx)
 								</div>
 								<div class="description">get array of string indexes of child ASN.1 objects<br/>
 This method returns array of integers for a concatination of ASN.1 objects
@@ -601,7 +601,7 @@ nthList.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getNextSiblingIdx">getNextSiblingIdx</a></b>(s, idx)
 								</div>
-								<div class="description">get next sibling starting index for ASN.1 object string<br/></div>
+								<div class="description">get next sibling starting index for ASN.1 object string (DEPRECATED)<br/></div>
 							</td>
 						</tr>
 					
@@ -620,6 +620,17 @@ nthList.</div>
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getTLV">getTLV</a></b>(s, idx)
 								</div>
 								<div class="description">get hexadecimal string of ASN.1 TLV at<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getTLVblen">getTLVblen</a></b>(h, idx)
+								</div>
+								<div class="description">get byte length of ASN.1 TLV at specified string index<br/>
+This method returns a byte length of ASN.1 TLV at
+specified string index.</div>
 							</td>
 						</tr>
 					
@@ -766,6 +777,7 @@ Here are major methods of this class.
 <li><b>ACCESS BY POSITION</b>
   <ul>
   <li><a href="../symbols/ASN1HEX.html#.getTLV">ASN1HEX.getTLV</a> - get ASN.1 TLV at specified position</li>
+  <li><a href="../symbols/ASN1HEX.html#.getTLVblen">ASN1HEX.getTLVblen</a> - get byte length of ASN.1 TLV at specified position</li>
   <li><a href="../symbols/ASN1HEX.html#.getV">ASN1HEX.getV</a> - get ASN.1 V at specified position</li>
   <li><a href="../symbols/ASN1HEX.html#.getVblen">ASN1HEX.getVblen</a> - get integer ASN.1 L at specified position</li>
   <li><a href="../symbols/ASN1HEX.html#.getVidx">ASN1HEX.getVidx</a> - get ASN.1 V position from its ASN.1 TLV position</li>
@@ -775,9 +787,9 @@ Here are major methods of this class.
 </li>
 <li><b>ACCESS FOR CHILD ITEM</b>
   <ul>
-  <li>ASN1HEX.getNthChildIndex_AtObj - get nth child index at specified position</li>
-  <li>ASN1HEX.getPosArrayOfChildren_AtObj - get indexes of children</li>
-  <li>ASN1HEX.getPosOfNextSibling_AtObj - get position of next sibling</li>
+  <li><a href="../symbols/ASN1HEX.html#.getNthChildIdx">ASN1HEX.getNthChildIdx</a> - get nth child index at specified position</li>
+  <li><a href="../symbols/ASN1HEX.html#.getChildIdx">ASN1HEX.getChildIdx</a> - get indexes of children</li>
+  <li><a href="../symbols/ASN1HEX.html#.getNextSiblingIdx">ASN1HEX.getNextSiblingIdx</a> - get position of next sibling (DEPRECATED)</li>
   </ul>
 </li>
 <li><b>ACCESS NESTED ASN.1 STRUCTURE</b>
@@ -1038,7 +1050,7 @@ SEQUENCE
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{Array of Number}</span>
-					<span class="light">ASN1HEX.</span><b>getChildIdx</b>(h, pos)
+					<span class="light">ASN1HEX.</span><b>getChildIdx</b>(h, idx)
 					
 					</div>
 					<div class="description">
@@ -1072,7 +1084,7 @@ ASN1HEX.getChildIdx("3006020104020105", 0) &rArr; [4, 10] // SEQUENCE(INT4,INT5)
 								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
 							
 								<dt>
-									<span class="light fixedFont">{Number}</span> <b>pos</b>
+									<span class="light fixedFont">{Number}</span> <b>idx</b>
 									
 								</dt>
 								<dd>start string index of ASN.1 object</dd>
@@ -1419,12 +1431,12 @@ ASN1HEX.getLblen('02ffab...', 0) &rarr; -2 for malformed ASN.1 length</pre>
 					<a name=".getNextSiblingIdx"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					
+					<span class="light">{Number}</span>
 					<span class="light">ASN1HEX.</span><b>getNextSiblingIdx</b>(s, idx)
 					
 					</div>
 					<div class="description">
-						get next sibling starting index for ASN.1 object string<br/>
+						get next sibling starting index for ASN.1 object string (DEPRECATED)<br/>
 						
 						
 					</div>
@@ -1458,6 +1470,13 @@ getNextSiblingIdx("3006020103020104", 4) & rarr 10</pre>
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								jsrsasign 9.1.5 asn1hex 1.2.5 Please use <a href="../symbols/ASN1HEX.html#.getTLVblen">ASN1HEX.getTLVblen</a>
+							</dt>
+							</dl>
+						
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
@@ -1470,7 +1489,7 @@ getNextSiblingIdx("3006020103020104", 4) & rarr 10</pre>
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>next sibling starting index for ASN.1 object string</dd>
+								<dd><span class="light fixedFont">{Number}</span> next sibling starting index for ASN.1 object string</dd>
 							
 							</dl>
 						
@@ -1587,6 +1606,68 @@ getNextSiblingIdx("3006020103020104", 4) & rarr 10</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> hexadecimal string of ASN.1 TLV.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getTLVblen"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Number}</span>
+					<span class="light">ASN1HEX.</span><b>getTLVblen</b>(h, idx)
+					
+					</div>
+					<div class="description">
+						get byte length of ASN.1 TLV at specified string index<br/>
+This method returns a byte length of ASN.1 TLV at
+specified string index.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">                       v string indx=42
+ASN1HEX.getTLVblen("...1303616161...", 42) &rarr; 10 (PrintableString 'aaa')</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 DER encoded data</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>idx</b>
+									
+								</dt>
+								<dd>string index to get ASN.1 TLV byte length</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 9.1.5 asn1hex 1.1.11</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Number}</span> byte length of ASN.1 TLV</dd>
 							
 							</dl>
 						
@@ -1819,7 +1900,7 @@ ASN1HEX.getTLVbyList(h, 0, [0, 2], "0c") &rarr; null //not UTF8String(0c)</pre>
 					<a name=".getVblen"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					
+					<span class="light">{Number}</span>
 					<span class="light">ASN1HEX.</span><b>getVblen</b>(s, idx)
 					
 					</div>
@@ -1862,7 +1943,7 @@ ASN1HEX.getTLVbyList(h, 0, [0, 2], "0c") &rarr; null //not UTF8String(0c)</pre>
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>ASN.1 L(length) integer value</dd>
+								<dd><span class="light fixedFont">{Number}</span> ASN.1 L(length) integer value</dd>
 							
 							</dl>
 						

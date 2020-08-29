@@ -1,4 +1,4 @@
-/* asn1hex-1.2.4.js (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1hex-1.2.5.js (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.1.4 asn1hex 1.2.4 (2020-Aug-28)
+ * @version jsrsasign 9.1.5 asn1hex 1.2.5 (2020-Aug-29)
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -46,6 +46,7 @@
  * <li><b>ACCESS BY POSITION</b>
  *   <ul>
  *   <li>{@link ASN1HEX.getTLV} - get ASN.1 TLV at specified position</li>
+ *   <li>{@link ASN1HEX.getTLVblen} - get byte length of ASN.1 TLV at specified position</li>
  *   <li>{@link ASN1HEX.getV} - get ASN.1 V at specified position</li>
  *   <li>{@link ASN1HEX.getVblen} - get integer ASN.1 L at specified position</li>
  *   <li>{@link ASN1HEX.getVidx} - get ASN.1 V position from its ASN.1 TLV position</li>
@@ -55,9 +56,9 @@
  * </li>
  * <li><b>ACCESS FOR CHILD ITEM</b>
  *   <ul>
- *   <li>{@link ASN1HEX.getNthChildIndex_AtObj} - get nth child index at specified position</li>
- *   <li>{@link ASN1HEX.getPosArrayOfChildren_AtObj} - get indexes of children</li>
- *   <li>{@link ASN1HEX.getPosOfNextSibling_AtObj} - get position of next sibling</li>
+ *   <li>{@link ASN1HEX.getNthChildIdx} - get nth child index at specified position</li>
+ *   <li>{@link ASN1HEX.getChildIdx} - get indexes of children</li>
+ *   <li>{@link ASN1HEX.getNextSiblingIdx} - get position of next sibling (DEPRECATED)</li>
  *   </ul>
  * </li>
  * <li><b>ACCESS NESTED ASN.1 STRUCTURE</b>
@@ -136,7 +137,7 @@ ASN1HEX.getL = function(s, idx) {
  * @function
  * @param {String} s hexadecimal string of ASN.1 DER encoded data
  * @param {Number} idx string index
- * @return ASN.1 L(length) integer value
+ * @return {Number} ASN.1 L(length) integer value
  * @since jsrsasign 7.2.0 asn1hex 1.1.11
  */
 /*
@@ -204,17 +205,41 @@ ASN1HEX.getTLV = function(s, idx) {
     return s.substr(idx, 2) + ASN1HEX.getL(s, idx) + ASN1HEX.getV(s, idx);
 };
 
+/**
+ * get byte length of ASN.1 TLV at specified string index<br/>
+ * @name getTLVblen
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} h hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} idx string index to get ASN.1 TLV byte length
+ * @return {Number} byte length of ASN.1 TLV
+ * @since jsrsasign 9.1.5 asn1hex 1.1.11
+ *
+ * @description
+ * This method returns a byte length of ASN.1 TLV at
+ * specified string index.
+ *
+ * @example
+ *                        v string indx=42
+ * ASN1HEX.getTLVblen("...1303616161...", 42) &rarr; 10 (PrintableString 'aaa')
+ */
+ASN1HEX.getTLVblen = function(h, idx) {
+    return 2 + ASN1HEX.getLblen(h, idx) * 2 + ASN1HEX.getVblen(h, idx) * 2;
+};
+
 // ========== sibling methods ================================
 
 /**
- * get next sibling starting index for ASN.1 object string<br/>
+ * get next sibling starting index for ASN.1 object string (DEPRECATED)<br/>
  * @name getNextSiblingIdx
  * @memberOf ASN1HEX
  * @function
  * @param {String} s hexadecimal string of ASN.1 DER encoded data
  * @param {Number} idx string index
- * @return next sibling starting index for ASN.1 object string
+ * @return {Number} next sibling starting index for ASN.1 object string
  * @since jsrsasign 7.2.0 asn1hex 1.1.11
+ * @deprecated jsrsasign 9.1.5 asn1hex 1.2.5 Please use {@link ASN1HEX.getTLVblen}
+ *
  * @example
  * SEQUENCE { INTEGER 3, INTEGER 4 }
  * 3006
@@ -235,7 +260,7 @@ ASN1HEX.getNextSiblingIdx = function(s, idx) {
  * @memberOf ASN1HEX
  * @function
  * @param {String} h hexadecimal string of ASN.1 DER encoded data
- * @param {Number} pos start string index of ASN.1 object
+ * @param {Number} idx start string index of ASN.1 object
  * @return {Array of Number} array of indexes for childen of ASN.1 objects
  * @since jsrsasign 7.2.0 asn1hex 1.1.11
  * @description
@@ -250,30 +275,27 @@ ASN1HEX.getNextSiblingIdx = function(s, idx) {
  * ASN1HEX.getChildIdx("030300ffff", 0) &rArr; [6] // BITSTRING ffff (unusedbits=00a)
  * ASN1HEX.getChildIdx("3006020104020105", 0) &rArr; [4, 10] // SEQUENCE(INT4,INT5)
  */
-ASN1HEX.getChildIdx = function(h, pos) {
+ASN1HEX.getChildIdx = function(h, idx) {
     var _ASN1HEX = ASN1HEX;
-    var a = new Array();
-    var p0 = _ASN1HEX.getVidx(h, pos);
-    if (h.substr(pos, 2) == "03") {
-	a.push(p0 + 2); // BITSTRING value without unusedbits
-    } else {
-	a.push(p0);
+    var a = [];
+    var idxStart, totalChildBlen, currentChildBlen;
+
+    idxStart = _ASN1HEX.getVidx(h, idx);
+    totalChildBlen = _ASN1HEX.getVblen(h, idx) * 2;
+    if (h.substr(idx, 2) == "03") {  // BITSTRING without unusedbits
+	idxStart += 2;
+	totalChildBlen -= 2;
     }
 
-    var blen = _ASN1HEX.getVblen(h, pos);
-    var p = p0;
-    var k = 0;
-    while (1) {
-        var pNext = _ASN1HEX.getNextSiblingIdx(h, p);
-        if (pNext == null || (pNext - p0  >= (blen * 2))) break;
-        if (k >= 200) break;
-            
-        a.push(pNext);
-        p = pNext;
-            
-        k++;
+    currentChildBlen = 0;
+    var i = idxStart;
+    while (currentChildBlen <= totalChildBlen) {
+	var tlvBlen = _ASN1HEX.getTLVblen(h, i);
+	currentChildBlen += tlvBlen;
+	if (currentChildBlen <= totalChildBlen) a.push(i);
+	i += tlvBlen;
+	if (currentChildBlen >= totalChildBlen) break;
     }
-    
     return a;
 };
 
