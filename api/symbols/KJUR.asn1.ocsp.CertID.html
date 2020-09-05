@@ -307,13 +307,29 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.ocsp.html">KJUR.asn1.ocsp</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.ocsp.BasicOCSPResponse.html">KJUR.asn1.ocsp.BasicOCSPResponse</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.ocsp.CertID.html">KJUR.asn1.ocsp.CertID</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html">KJUR.asn1.ocsp.OCSPParser</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.ocsp.OCSPRequest.html">KJUR.asn1.ocsp.OCSPRequest</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.OCSPResponse.html">KJUR.asn1.ocsp.OCSPResponse</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.ocsp.OCSPUtil.html">KJUR.asn1.ocsp.OCSPUtil</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.ocsp.Request.html">KJUR.asn1.ocsp.Request</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.ResponderID.html">KJUR.asn1.ocsp.ResponderID</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.ResponseBytes.html">KJUR.asn1.ocsp.ResponseBytes</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.ResponseData.html">KJUR.asn1.ocsp.ResponseData</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.SingleResponse.html">KJUR.asn1.ocsp.SingleResponse</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.SingleResponseList.html">KJUR.asn1.ocsp.SingleResponseList</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.ocsp.TBSRequest.html">KJUR.asn1.ocsp.TBSRequest</a></li>
 	
@@ -392,6 +408,10 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.NoticeReference.html">KJUR.asn1.x509.NoticeReference</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.OCSPNoCheck.html">KJUR.asn1.x509.OCSPNoCheck</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.OCSPNonce.html">KJUR.asn1.x509.OCSPNonce</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a></li>
 	
@@ -588,19 +608,34 @@ CertID ::= SEQUENCE {
   issuerKeyHash   OCTET STRING, -- Hash of issuer's public key
   serialNumber    CertificateSerialNumber }
 </pre>
+Following properties are available in "params" of the constructor:
+<ul>
+<li>{String}alg (OPTION) - hash algorithm name. Default is "sha1" (ex, "sha1")</li>
+<li>{String}issname (OPTION) - hexadecimal string of issuerNameHash</li>
+<li>{String}isskey (OPTION) - hexadecimal string of issuerKeyHash</li>
+<li>{String}sbjsn (OPTION) - hexadecimal string of serial number of subject certificate</li>
+<li>{String}issuerCert (OPTION) - PEM string of issuer certificate.
+Property "issname" and "isskey" will be set by "issuerCert".</li>
+<li>{String}subjectCert (OPTION) - PEM string of issuer certificate.
+Property "sbjsn" will be set by "subjectCert".</li>
+</ul>
+<br/>
+NOTE: Properties "namehash", "keyhash" and "serial" are
+changed to "issname", "isskey", and "sbjsn" respectively
+since jsrsasign 9.1.6 asn1ocsp 1.1.0.
 					
 				</div>
 				
 				
 				
-				<pre class="code">// default constructor
-o = new KJUR.asn1.ocsp.CertID();
+				<pre class="code">// constructor with explicit values (changed since jsrsasign 9.1.6)
+new KJUR.asn1.ocsp.CertID({issname: "1a...", isskey: "ad...", sbjsn: "1234", alg: "sha256"});
+
 // constructor with certs (sha1 is used by default)
 o = new KJUR.asn1.ocsp.CertID({issuerCert: "-----BEGIN...", subjectCert: "-----BEGIN..."});
+
 // constructor with certs and sha256
-o = new KJUR.asn1.ocsp.CertID({issuerCert: "-----BEGIN...", subjectCert: "-----BEGIN...", alg: "sha256"});
-// constructor with values
-o = new KJUR.asn1.ocsp.CertID({namehash: "1a...", keyhash: "ad...", serial: "1234", alg: "sha256"});</pre>
+o = new KJUR.asn1.ocsp.CertID({issuerCert: "-----BEGIN...", subjectCert: "-----BEGIN...", alg: "sha256"});</pre>
 				
 				
 				
@@ -613,7 +648,7 @@ o = new KJUR.asn1.ocsp.CertID({namehash: "1a...", keyhash: "ad...", serial: "123
 								<span class="light fixedFont">{Array}</span>  <b>params</b>
 								
 							</dt>
-								<dd>associative array of parameters</dd>
+								<dd>JSON object of parameters</dd>
 						
 						</dl>
 					
@@ -627,6 +662,15 @@ o = new KJUR.asn1.ocsp.CertID({namehash: "1a...", keyhash: "ad...", serial: "123
 					
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.ocsp.SingleResponse.html">KJUR.asn1.ocsp.SingleResponse</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.AlgorithmIdentifier.html">KJUR.asn1.x509.AlgorithmIdentifier</a></dd>
+						
+						</dl>
 					
 
 			</div>

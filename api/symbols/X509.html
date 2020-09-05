@@ -307,13 +307,29 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.ocsp.html">KJUR.asn1.ocsp</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.ocsp.BasicOCSPResponse.html">KJUR.asn1.ocsp.BasicOCSPResponse</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.ocsp.CertID.html">KJUR.asn1.ocsp.CertID</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html">KJUR.asn1.ocsp.OCSPParser</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.ocsp.OCSPRequest.html">KJUR.asn1.ocsp.OCSPRequest</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.OCSPResponse.html">KJUR.asn1.ocsp.OCSPResponse</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.ocsp.OCSPUtil.html">KJUR.asn1.ocsp.OCSPUtil</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.ocsp.Request.html">KJUR.asn1.ocsp.Request</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.ResponderID.html">KJUR.asn1.ocsp.ResponderID</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.ResponseBytes.html">KJUR.asn1.ocsp.ResponseBytes</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.ResponseData.html">KJUR.asn1.ocsp.ResponseData</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.SingleResponse.html">KJUR.asn1.ocsp.SingleResponse</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.ocsp.SingleResponseList.html">KJUR.asn1.ocsp.SingleResponseList</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.ocsp.TBSRequest.html">KJUR.asn1.ocsp.TBSRequest</a></li>
 	
@@ -392,6 +408,10 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.NoticeReference.html">KJUR.asn1.x509.NoticeReference</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.OCSPNoCheck.html">KJUR.asn1.x509.OCSPNoCheck</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.OCSPNonce.html">KJUR.asn1.x509.OCSPNonce</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a></li>
 	
@@ -804,6 +824,32 @@ as binary string such like '101'.</div>
 								<div class="description">get KeyUsage extension value as names in the certificate<br/>
 This method will get key usage extension value
 as comma separated string of usage names.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtOCSPNoCheck">getExtOCSPNoCheck</a></b>(hExtV, critical)
+								</div>
+								<div class="description">parse OCSPNoCheck OCSP extension as JSON object<br/>
+This method parses
+OCSPNoCheck extension value defined in
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.2.2.1">
+RFC 6960 4.2.2.2.1</a> as JSON object.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtOCSPNonce">getExtOCSPNonce</a></b>(hExtV, critical)
+								</div>
+								<div class="description">parse OCSPNonce OCSP extension as JSON object<br/>
+This method parses
+Nonce OCSP extension value defined in
+<a href="https://tools.ietf.org/html/rfc6960#section-4.4.1">
+RFC 6960 4.4.1</a> as JSON object.</div>
 							</td>
 						</tr>
 					
@@ -1306,6 +1352,8 @@ X509 class provides following functionality:
   <li>authorityInfoAccess - <a href="../symbols/X509.html#getExtAIAInfo">X509#getExtAIAInfo</a> (DEPRECATED)</li>
   <li>cRLNumber - <a href="../symbols/X509.html#getExtCRLNumber">X509#getExtCRLNumber</a></li>
   <li>cRLReason - <a href="../symbols/X509.html#getExtCRLReason">X509#getExtCRLReason</a></li>
+  <li>ocspNonce - <a href="../symbols/X509.html#getExtOCSPNonce">X509#getExtOCSPNonce</a></li>
+  <li>ocspNoCheck - <a href="../symbols/X509.html#getExtOCSPNoCheck">X509#getExtOCSPNoCheck</a></li>
   </ul>
 </li>
 <li><b>UTILITIES</b>
@@ -3006,6 +3054,172 @@ x.getExtKeyUsageString() &rarr; "digitalSignature,keyEncipherment"</pre>
 						
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
+							
+								<dd></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getExtOCSPNoCheck"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getExtOCSPNoCheck</b>(hExtV, critical)
+					
+					</div>
+					<div class="description">
+						parse OCSPNoCheck OCSP extension as JSON object<br/>
+This method parses
+OCSPNoCheck extension value defined in
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.2.2.1">
+RFC 6960 4.2.2.2.1</a> as JSON object.
+<pre>
+id-pkix-ocsp-nocheck OBJECT IDENTIFIER ::= { id-pkix-ocsp 5 }
+</pre>
+<br/>
+Result of this method can be passed to 
+<a href="../symbols/KJUR.asn1.x509.OCSPNoCheck.html">KJUR.asn1.x509.OCSPNoCheck</a> constructor.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.getExtOCSPNoCheck(<<extn hex value >>) &rarr;
+{ extname: "ocspNoCheck" }</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hExtV</b>
+									
+								</dt>
+								<dd>hexadecimal string of extension value</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span> <b>critical</b>
+									
+								</dt>
+								<dd>flag</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 9.1.6 x509 2.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> JSON object of parsed OCSPNoCheck extension</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd></dd>
+							
+								<dd></dd>
+							
+								<dd></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getExtOCSPNonce"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getExtOCSPNonce</b>(hExtV, critical)
+					
+					</div>
+					<div class="description">
+						parse OCSPNonce OCSP extension as JSON object<br/>
+This method parses
+Nonce OCSP extension value defined in
+<a href="https://tools.ietf.org/html/rfc6960#section-4.4.1">
+RFC 6960 4.4.1</a> as JSON object.
+<pre>
+id-pkix-ocsp           OBJECT IDENTIFIER ::= { id-ad-ocsp }
+id-pkix-ocsp-nonce     OBJECT IDENTIFIER ::= { id-pkix-ocsp 2 }
+Nonce ::= OCTET STRING
+</pre>
+<br/>
+Result of this method can be passed to 
+<a href="../symbols/KJUR.asn1.x509.OCSPNonce.html">KJUR.asn1.x509.OCSPNonce</a> constructor.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.getExtOCSPNonce(<<extn hex value >>) &rarr;
+{ extname: "ocspNonce", hex: "1a2b..." }</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hExtV</b>
+									
+								</dt>
+								<dd>hexadecimal string of extension value</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span> <b>critical</b>
+									
+								</dt>
+								<dd>flag</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 9.1.6 x509 2.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> JSON object of parsed OCSPNonce extension</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd></dd>
+							
+								<dd></dd>
 							
 								<dd></dd>
 							

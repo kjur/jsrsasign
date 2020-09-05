@@ -1,4 +1,4 @@
-/* asn1x509-2.1.1.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-2.1.2.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.1.1 asn1x509 2.1.1 (2020-Aug-26)
+ * @version jsrsasign 9.1.6 asn1x509 2.1.2 (2020-Sep-04)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -219,12 +219,12 @@ KJUR.asn1.x509.Certificate = function(params) {
      * cert.sign()
      */
     this.sign = function() {
-	var hTBSC = (new _TBSCertificate(this.params)).getEncodedHex();
-	var sig = new KJUR.crypto.Signature({alg: this.params.sigalg});
-	sig.init(this.params.cakey);
-	sig.updateHex(hTBSC);
-	var sighex = sig.sign();
-	this.params.sighex = sighex;
+	var params = this.params;
+	var hTBS = params.tbsobj.getEncodedHex();
+	var sig = new KJUR.crypto.Signature({alg: params.sigalg});
+	sig.init(params.cakey);
+	sig.updateHex(hTBS);
+	params.sighex = sig.sign();
     };
 
     /**
@@ -249,7 +249,7 @@ KJUR.asn1.x509.Certificate = function(params) {
     this.getEncodedHex = function() {
 	var params = this.params;
 	
-	if (params.tbsobj == undefined) {
+	if (params.tbsobj == undefined || params.tbsobj == null) {
 	    params.tbsobj = new _TBSCertificate(params);
 	}
 
@@ -452,6 +452,10 @@ KJUR.asn1.x509.Extensions = function(aParam) {
 		obj = new _KJUR_asn1_x509.CRLNumber(param);
 	    } else if (extname == "cRLReason") {
 		obj = new _KJUR_asn1_x509.CRLReason(param);
+	    } else if (extname == "ocspNonce") {
+		obj = new _KJUR_asn1_x509.OCSPNonce(param);
+	    } else if (extname == "ocspNoCheck") {
+		obj = new _KJUR_asn1_x509.OCSPNoCheck(param);
 	    } else {
 		throw new Error("extension not supported:"
 				+ JSON.stringify(param));
@@ -2430,6 +2434,100 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRLReason, KJUR.asn1.x509.Extension);
 
 // === END   CRL Related ===================================================
 
+// === BEGIN OCSP Related ===================================================
+/**
+ * Nonce OCSP extension ASN.1 structure class<br/>
+ * @name KJUR.asn1.x509.OCSPNonce
+ * @class Nonce OCSP extension ASN.1 structure class
+ * @extends KJUR.asn1.x509.Extension
+ * @since jsrsasign 9.1.6 asn1x509 2.1.2
+ * @param {Array} params JSON object for Nonce extension
+ * @see KJUR.asn1.ocsp.ResponseData
+ * @see KJUR.asn1.x509.Extensions
+ * @see X509#getExtOCSPNonce
+ * @description
+ * This class represents
+ * Nonce OCSP extension value defined in
+ * <a href="https://tools.ietf.org/html/rfc6960#section-4.4.1">
+ * RFC 6960 4.4.1</a> as JSON object.
+ * <pre>
+ * id-pkix-ocsp           OBJECT IDENTIFIER ::= { id-ad-ocsp }
+ * id-pkix-ocsp-nonce     OBJECT IDENTIFIER ::= { id-pkix-ocsp 2 }
+ * Nonce ::= OCTET STRING
+ * </pre>
+ * Constructor of this class may have following parameters:
+ * <ul>
+ * <li>{String}extname - name "ocspNonce". It is ignored in this class but
+ * required to use with {@link KJUR.asn1.x509.Extensions} class. (OPTION)</li>
+ * <li>{String}hex - hexadecimal string of nonce value</li>
+ * <li>{Number}int - integer of nonce value. "hex" or "int" needs to be
+ * specified.</li>
+ * <li>{Boolean}critical - critical flag. Generally false and not specified
+ * in this class.(OPTION)</li>
+ * </ul>
+ *
+ * @example
+ * new KJUR.asn1.x509.OCSPNonce({extname:'ocspNonce',
+ *                               hex: '12ab...'})
+ */
+KJUR.asn1.x509.OCSPNonce = function(params) {
+    KJUR.asn1.x509.OCSPNonce.superclass.constructor.call(this, params);
+    this.params = undefined;
+
+    this.getExtnValueHex = function() {
+        this.asn1ExtnValue = new KJUR.asn1.DEROctetString(this.params);
+        return this.asn1ExtnValue.getEncodedHex();
+    };
+
+    this.oid = "1.3.6.1.5.5.7.48.1.2";
+    if (params != undefined) this.params = params;
+};
+YAHOO.lang.extend(KJUR.asn1.x509.OCSPNonce, KJUR.asn1.x509.Extension);
+
+/**
+ * OCSPNoCheck certificate ASN.1 structure class<br/>
+ * @name KJUR.asn1.x509.OCSPNoCheck
+ * @class OCSPNoCheck extension ASN.1 structure class
+ * @extends KJUR.asn1.x509.Extension
+ * @since jsrsasign 9.1.6 asn1x509 2.1.2
+ * @param {Array} params JSON object for OCSPNoCheck extension
+ * @see KJUR.asn1.x509.Extensions
+ * @see X509#getExtOCSPNoCheck
+ * @description
+ * This class represents
+ * OCSPNoCheck extension value defined in
+ * <a href="https://tools.ietf.org/html/rfc6960#section-4.2.2.2.1">
+ * RFC 6960 4.2.2.2.1</a> as JSON object.
+ * <pre>
+ * id-pkix-ocsp-nocheck OBJECT IDENTIFIER ::= { id-pkix-ocsp 5 }
+ * </pre>
+ * Constructor of this class may have following parameters:
+ * <ul>
+ * <li>{String}extname - name "ocspNoCheck". It is ignored in this class but
+ * required to use with {@link KJUR.asn1.x509.Extensions} class. (OPTION)</li>
+ * <li>{Boolean}critical - critical flag. Generally false and not specified
+ * in this class.(OPTION)</li>
+ * </ul>
+ *
+ * @example
+ * new KJUR.asn1.x509.OCSPNonce({extname:'ocspNoCheck'})
+ */
+KJUR.asn1.x509.OCSPNoCheck = function(params) {
+    KJUR.asn1.x509.OCSPNoCheck.superclass.constructor.call(this, params);
+    this.params = undefined;
+
+    this.getExtnValueHex = function() {
+        this.asn1ExtnValue = new KJUR.asn1.DERNull();
+        return this.asn1ExtnValue.getEncodedHex();
+    };
+
+    this.oid = "1.3.6.1.5.5.7.48.1.5";
+    if (params != undefined) this.params = params;
+};
+YAHOO.lang.extend(KJUR.asn1.x509.OCSPNoCheck, KJUR.asn1.x509.Extension);
+
+// === END   OCSP Related ===================================================
+
 // === BEGIN X500Name Related =================================================
 /**
  * X500Name ASN.1 structure class
@@ -3784,6 +3882,9 @@ KJUR.asn1.x509.OID = new function(params) {
         'extKeyUsage':          '2.5.29.37',
         'authorityInfoAccess':  '1.3.6.1.5.5.7.1.1',
         'ocsp':                 '1.3.6.1.5.5.7.48.1',
+        'ocspBasic':            '1.3.6.1.5.5.7.48.1.1',
+        'ocspNonce':            '1.3.6.1.5.5.7.48.1.2',
+        'ocspNoCheck':          '1.3.6.1.5.5.7.48.1.5',
         'caIssuers':            '1.3.6.1.5.5.7.48.2',
 
         'anyExtendedKeyUsage':  '2.5.29.37.0',
