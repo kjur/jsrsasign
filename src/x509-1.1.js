@@ -1,4 +1,4 @@
-/* x509-2.0.2.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.0.3.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.1.2 x509 2.0.2 (2020-Aug-27)
+ * @version jsrsasign 9.1.6 x509 2.0.3 (2020-Sep-04)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -79,6 +79,8 @@
  *   <li>authorityInfoAccess - {@link X509#getExtAIAInfo} (DEPRECATED)</li>
  *   <li>cRLNumber - {@link X509#getExtCRLNumber}</li>
  *   <li>cRLReason - {@link X509#getExtCRLReason}</li>
+ *   <li>ocspNonce - {@link X509#getExtOCSPNonce}</li>
+ *   <li>ocspNoCheck - {@link X509#getExtOCSPNoCheck}</li>
  *   </ul>
  * </li>
  * <li><b>UTILITIES</b>
@@ -1861,6 +1863,81 @@ function X509() {
 	throw new Error("hExtV parse error: " + hExtV);
     };
 
+    /**
+     * parse OCSPNonce OCSP extension as JSON object<br/>
+     * @name getExtOCSPNonce
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value
+     * @param {Boolean} critical flag
+     * @return {Array} JSON object of parsed OCSPNonce extension
+     * @since jsrsasign 9.1.6 x509 2.0.3
+     * @see {@link KJUR.asn1.x509.OCSPNonce}
+     * @see {@link X509#getExtParamArray}
+     * @see {@link X509#getExtParam}
+     * @description
+     * This method parses
+     * Nonce OCSP extension value defined in
+     * <a href="https://tools.ietf.org/html/rfc6960#section-4.4.1">
+     * RFC 6960 4.4.1</a> as JSON object.
+     * <pre>
+     * id-pkix-ocsp           OBJECT IDENTIFIER ::= { id-ad-ocsp }
+     * id-pkix-ocsp-nonce     OBJECT IDENTIFIER ::= { id-pkix-ocsp 2 }
+     * Nonce ::= OCTET STRING
+     * </pre>
+     * <br/>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.OCSPNonce} constructor.
+     * @example
+     * x = new X509();
+     * x.getExtOCSPNonce(<<extn hex value >>) &rarr;
+     * { extname: "ocspNonce", hex: "1a2b..." }
+     */
+    this.getExtOcspNonce = function(hExtV, critical) {
+	var result = {extname:"ocspNonce"};
+	if (critical) result.critical = true;
+
+	var hNonce = _getV(hExtV, 0);
+	result.hex = hNonce;
+
+	return result;
+    };
+
+    /**
+     * parse OCSPNoCheck OCSP extension as JSON object<br/>
+     * @name getExtOCSPNoCheck
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value
+     * @param {Boolean} critical flag
+     * @return {Array} JSON object of parsed OCSPNoCheck extension
+     * @since jsrsasign 9.1.6 x509 2.0.3
+     * @see {@link KJUR.asn1.x509.OCSPNoCheck}
+     * @see {@link X509#getExtParamArray}
+     * @see {@link X509#getExtParam}
+     * @description
+     * This method parses
+     * OCSPNoCheck extension value defined in
+     * <a href="https://tools.ietf.org/html/rfc6960#section-4.2.2.2.1">
+     * RFC 6960 4.2.2.2.1</a> as JSON object.
+     * <pre>
+     * id-pkix-ocsp-nocheck OBJECT IDENTIFIER ::= { id-pkix-ocsp 5 }
+     * </pre>
+     * <br/>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.OCSPNoCheck} constructor.
+     * @example
+     * x = new X509();
+     * x.getExtOCSPNoCheck(<<extn hex value >>) &rarr;
+     * { extname: "ocspNoCheck" }
+     */
+    this.getExtOcspNoCheck = function(hExtV, critical) {
+	var result = {extname:"ocspNoCheck"};
+	if (critical) result.critical = true;
+
+	return result;
+    };
+
     // ===== BEGIN X500Name related =====================================
 
     this.getX500NameRule = function(aDN) {
@@ -2256,6 +2333,10 @@ function X509() {
 	    extParam = this.getExtCRLNumber(hExtV, critical);
 	} else if (oid == "2.5.29.21") {
 	    extParam = this.getExtCRLReason(hExtV, critical);
+	} else if (oid == "1.3.6.1.5.5.7.48.1.2") {
+	    extParam = this.getExtOcspNonce(hExtV, critical);
+	} else if (oid == "1.3.6.1.5.5.7.48.1.5") {
+	    extParam = this.getExtOcspNoCheck(hExtV, critical);
 	}
 	if (extParam != undefined) return extParam;
 

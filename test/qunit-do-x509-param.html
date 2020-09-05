@@ -327,9 +327,8 @@ x.getExtParam("30290603551d250422302006082b0601050507030206082b06010505070304060
 
 deepEqual(
 x.getExtParam("300f06092b060105050730010504020500"),
-{ extname: "1.3.6.1.5.5.7.48.1.5",
-  extn: "0500" },
-"ocspNoCheck NULL as privateExtension(may fail if getExtOCSPNoCheck defined)");
+{ extname: "ocspNoCheck" },
+"ocspNoCheck");
 
 });
 

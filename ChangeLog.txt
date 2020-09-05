@@ -1,6 +1,37 @@
 
 ChangeLog for jsrsasign
 
+add OCSP response and request encoder
+* Changes from 9.1.5 to 9.1.6 (2020-Sep-05)
+  - src/asn1ocsp.js
+    - OCSPResponse class added
+    - ResponseBytes class added
+    - BasicOCSPResponse class added
+    - ResponseData class added
+    - ResponderID class added
+    - SingleResponseList class added
+    - SingleResponse class added
+    - CertID class updated
+      - changed properties to specify 
+        isserNameHash, issuerKeyHash and serialNumber
+        without backward compatibility
+    - CertStatus class added
+    - OCSPParser class added
+      - only OCSP request parser methods are available
+  - src/asn1x509.js
+    - OCSPNonce class OCSP extension added
+    - OCSPNoCheck class certificate extension added
+    - Extensios class supports OCSPNonce and OCSPNoCheck
+    - OID clas supports ocspNonce, ocspNoCheck and ocspBasic
+  - src/x509.js
+    - X509.getExtParam supports OCSPNonce and OCSPNoCheck
+    - X509.getExtOCSPNoCheck added
+    - X509.getExtOCSPNonce added
+  - src/asn1.js
+    - ASN1Object class: add tlv parameter support 
+  - src/asn1hex.js
+    - ASN1HEX.dump: enable to show tagged primitive
+
 ASN1HEX getChildIdx bug for too many children
 * Changes from 9.1.4 to 9.1.5 (2020-Aug-29)
   - src/asn1hex.js

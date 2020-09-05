@@ -749,8 +749,6 @@ test("IssuerAltName", function() {
   equal(o1.getEncodedHex(), "30280603551d120101ff041e301c860c687474703a2f2f612e636f6d860c687474703a2f2f622e636f6d", "ext hex");
 });
 
-// ==== END OF X.509V3 EXTENSION TEST ===================
-
 test("CertificatePolicies test", function() {
 var _CertificatePolicies = KJUR.asn1.x509.CertificatePolicies;
 
@@ -972,6 +970,27 @@ equal(
 );
 });
 
+test("OCSPNonce class test", function() {
+var _OCSPNonce = KJUR.asn1.x509.OCSPNonce;
+var hExpect = "301106092b06010505073001020404040212ab";
+var params = {hex: "12ab"};
+equal((new _OCSPNonce(params)).getEncodedHex(), hExpect, "hex");
+equal(
+ASN1HEX.dump((new _OCSPNonce(params)).getEncodedHex()), 
+ASN1HEX.dump(hExpect), 
+"dump");
+});
+
+test("OCSPNoCheck class test", function() {
+var _OCSPNoCheck = KJUR.asn1.x509.OCSPNoCheck;
+var hExpect = "300f06092b060105050730010504020500";
+equal((new _OCSPNoCheck()).getEncodedHex(), hExpect, "hex");
+equal(
+ASN1HEX.dump((new _OCSPNoCheck()).getEncodedHex()), 
+ASN1HEX.dump(hExpect), 
+"dump");
+});
+
 test("PrivateExtension class test", function() {
 var _PrivateExtension = KJUR.asn1.x509.PrivateExtension;
 hExpect = "300c06032a030404051303616161";
@@ -989,6 +1008,8 @@ hExpect,
 "extn-json");
 
 });
+
+// ==== END OF X.509V3 EXTENSION TEST ===================
 
 // ===== CRL related test ====================
 

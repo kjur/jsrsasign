@@ -1,4 +1,4 @@
-/* asn1-1.0.17.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1-1.0.18.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.1.1 asn1 1.0.17 (2020-Aug-27)
+ * @version jsrsasign 9.1.6 asn1 1.0.18 (2020-Sep-04)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -423,17 +423,23 @@ KJUR.asn1.ASN1Util.oidIntToHex = function(oidString) {
 // ********************************************************************
 
 /**
- * base class for ASN.1 DER encoder object
+ * base class for ASN.1 DER encoder object<br/>
  * @name KJUR.asn1.ASN1Object
  * @class base class for ASN.1 DER encoder object
+ * @param {Array} params JSON object parameter for constructor
  * @property {Boolean} isModified flag whether internal data was changed
  * @property {String} hTLV hexadecimal string of ASN.1 TLV
  * @property {String} hT hexadecimal string of ASN.1 TLV tag(T)
  * @property {String} hL hexadecimal string of ASN.1 TLV length(L)
  * @property {String} hV hexadecimal string of ASN.1 TLV value(V)
+ *
  * @description
+ * This class is ASN.1 DER object encode base class.
+ * 
+ * @example
+ * new KJUR.asn1.ASN1Object({tlv: "030101"})
  */
-KJUR.asn1.ASN1Object = function() {
+KJUR.asn1.ASN1Object = function(params) {
     var isModified = true;
     var hTLV = null;
     var hT = '00';
@@ -505,6 +511,13 @@ KJUR.asn1.ASN1Object = function() {
     this.getFreshValueHex = function() {
         return '';
     };
+
+    if (params != undefined) {
+	if (params.tlv != undefined) {
+	    this.hTLV = params.tlv;
+	    this.isModified = false;
+	}
+    }
 };
 
 // == BEGIN DERAbstractString ================================================
