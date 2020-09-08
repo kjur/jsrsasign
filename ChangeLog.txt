@@ -1,6 +1,13 @@
 
 ChangeLog for jsrsasign
 
+wrong encoding in byKey of OCSP ResponderID fixed
+* Changes from 9.1.7 to 9.1.8 (2020-Sep-08)
+  - src/asn1ocsp.js
+    - BUGFIX: wrong encoding in byKey of OCSP ResponderID fixed
+  - test/qunit-do-asn1ocsp.html
+    - follow to above update
+
 nextUpdate encoding bugfix in ocsp SingleResponse
 * Changes from 9.1.6 to 9.1.7 (2020-Sep-08)
   - src/asn1ocsp.js
