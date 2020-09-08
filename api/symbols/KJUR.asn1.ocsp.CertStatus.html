@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign JavaScript API Reference - KJUR.asn1.DERTaggedObject</title>
+		<title>jsrsasign JavaScript API Reference - KJUR.asn1.ocsp.CertStatus</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -488,7 +488,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.DERTaggedObject
+				Class KJUR.asn1.ocsp.CertStatus
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -498,16 +498,16 @@ ul.inheritsList
 					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
-				class for ASN.1 DER TaggedObject
+				CertStatus ASN.1 class encoder
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1-1.0.js.html">asn1-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1ocsp-1.0.js.html">asn1ocsp-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.DERTaggedObject.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.ocsp.CertStatus.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -520,11 +520,11 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.DERTaggedObject.html#constructor">KJUR.asn1.DERTaggedObject</a></b>()
+								<b><a href="../symbols/KJUR.asn1.ocsp.CertStatus.html#constructor">KJUR.asn1.ocsp.CertStatus</a></b>(params)
 							</div>
-							<div class="description">class for ASN.1 DER TaggedObject
-<br/>
-Parameter 'tagNoNex' is ASN.1 tag(T) value for this object.</div>
+							<div class="description">CertStatus ASN.1 class encoder<br/>
+ASN.1 class of SEQUENCE OF SingleResponse is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -547,28 +547,6 @@ Parameter 'tagNoNex' is ASN.1 tag(T) value for this object.</div>
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.DERTaggedObject.">
-					<caption>Method Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERTaggedObject.html#setString">setString</a></b>(isExplicitFlag, tagNoHex, asn1Object)
-								</div>
-								<div class="description">set value by an ASN1Object</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
 				
 				
 				<dl class="inheritsList">
@@ -587,42 +565,95 @@ Parameter 'tagNoNex' is ASN.1 tag(T) value for this object.</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.DERTaggedObject</b>()
+						<b>KJUR.asn1.ocsp.CertStatus</b>(params)
 				</div>
 				
 				<div class="description">
-					class for ASN.1 DER TaggedObject
-<br/>
-Parameter 'tagNoNex' is ASN.1 tag(T) value for this object.
-For example, if you find '[1]' tag in a ASN.1 dump, 
-'tagNoHex' will be 'a1'.
-<br/>
-As for optional argument 'params' for constructor, you can specify *ANY* of
-following properties:
+					CertStatus ASN.1 class encoder<br/>
+ASN.1 class of SEQUENCE OF SingleResponse is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>. 
+<pre>
+CertStatus ::= CHOICE {
+    good        [0]     IMPLICIT NULL,
+    revoked     [1]     IMPLICIT RevokedInfo,
+    unknown     [2]     IMPLICIT UnknownInfo }
+RevokedInfo ::= SEQUENCE {
+    revocationTime              GeneralizedTime,
+    revocationReason    [0]     EXPLICIT CRLReason OPTIONAL }
+UnknownInfo ::= NULL
+CRLReason ::= ENUMERATED {
+     unspecified             (0),
+     keyCompromise           (1),
+     cACompromise            (2),
+     affiliationChanged      (3),
+     superseded              (4),
+     cessationOfOperation    (5),
+     certificateHold         (6),
+          -- value 7 is not used
+     removeFromCRL           (8),
+     privilegeWithdrawn      (9),
+     aACompromise           (10) }
+</pre>
+Following properties are available:
 <ul>
-<li>explicit - specify true if this is explicit tag otherwise false 
-    (default is 'true').</li>
-<li>tag - specify tag (default is 'a0' which means [0])</li>
-<li>obj - specify ASN1Object which is tagged</li>
+<li>{String}status - "good", "revoked" or "unknown"</li>
+<li>{String}time (OPTION) - revocationTime YYYYMMDDHHmmSSZ (ex. "20200904235959Z")</li>
+<li>{Number}reason (OPTION) - revocationReason code number</li>
 </ul>
 					
 				</div>
 				
 				
 				
-				<pre class="code">d1 = new KJUR.asn1.DERUTF8String({'str':'a'});
-d2 = new KJUR.asn1.DERTaggedObject({'obj': d1});
-hex = d2.getEncodedHex();</pre>
+				<pre class="code">new KJUR.asn1.ocsp.CertStatus({status: "good"})
+new KJUR.asn1.ocsp.CertStatus({status: "revoked", time: "20200903235959Z"})
+new KJUR.asn1.ocsp.CertStatus({status: "revoked", time: "20200903235959Z", reason: 3})
+new KJUR.asn1.ocsp.CertStatus({status: "unknown"})</pre>
 				
 				
 				
 				
 					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Array}</span>  <b>params</b>
+								
+							</dt>
+								<dd>JSON object for CertStatus parameter</dd>
+						
+						</dl>
+					
+					
+					
+						<dl class="detailList">
+						<dt class="heading">Since:</dt>
+							<dd>jsrsasign 9.1.6 asn1ocsp 1.1.0</dd>
+						</dl>
 					
 					
 					
 					
 					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPResponse.html">KJUR.asn1.ocsp.OCSPResponse</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.ocsp.ResponseBytes.html">KJUR.asn1.ocsp.ResponseBytes</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.ocsp.BasicOCSPResponse.html">KJUR.asn1.ocsp.BasicOCSPResponse</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.ocsp.ResponseData.html">KJUR.asn1.ocsp.ResponseData</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.ocsp.SingleResponse.html">KJUR.asn1.ocsp.SingleResponse</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.ocsp.CertID.html">KJUR.asn1.ocsp.CertID</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.ocsp.CertStatus.html">KJUR.asn1.ocsp.CertStatus</a></dd>
+						
+						</dl>
 					
 
 			</div>
@@ -632,59 +663,6 @@ hex = d2.getEncodedHex();</pre>
 			
 
 <!-- ============================== method details ========================= -->		
-			
-				<div class="sectionTitle">
-					Method Detail
-				</div>
-				
-					<a name="setString"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setString</b>(isExplicitFlag, tagNoHex, asn1Object)
-					
-					</div>
-					<div class="description">
-						set value by an ASN1Object
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Boolean}</span> <b>isExplicitFlag</b>
-									
-								</dt>
-								<dd>flag for explicit/implicit tag</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Integer}</span> <b>tagNoHex</b>
-									
-								</dt>
-								<dd>hexadecimal string of ASN.1 tag</dd>
-							
-								<dt>
-									<span class="light fixedFont">{ASN1Object}</span> <b>asn1Object</b>
-									
-								</dt>
-								<dd>ASN.1 to encapsulate</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					
-				
 			
 			
 <!-- ============================== event details ========================= -->		

@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+nextUpdate encoding bugfix in ocsp SingleResponse
+* Changes from 9.1.6 to 9.1.7 (2020-Sep-08)
+  - src/asn1ocsp.js
+    - BUGFIX: nextUpdate encoding fix in SingleResponse
+    - CertStatus document fix
+  - test/qunit-do-asn1ocsp.html
+    - follow to above update
+
 add OCSP response and request encoder
 * Changes from 9.1.5 to 9.1.6 (2020-Sep-05)
   - src/asn1ocsp.js
