@@ -1,7 +1,7 @@
 
 ChangeLog for jsrsasign
 
-wrong encoding in CRLeason in OCSP CertStatus fixed
+wrong encoding in CRLReason in OCSP CertStatus fixed
 * Changes from 9.1.8 to 9.1.9 (2020-Sep-08)
   - src/asn1ocsp.js
     - BUGFIX: wrong encoding in CRLeason in OCSP CertStatus fixed
