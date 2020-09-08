@@ -1,4 +1,4 @@
-/* asn1ocsp-1.1.1.js (c) 2016-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1ocsp-1.1.2.js (c) 2016-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1ocsp.js - ASN.1 DER encoder classes for OCSP protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1ocsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.1.7 asn1ocsp 1.1.1 (2020-Sep-08)
+ * @version jsrsasign 9.1.8 asn1ocsp 1.1.2 (2020-Sep-08)
  * @since jsrsasign 6.1.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -513,7 +513,7 @@ KJUR.asn1.ocsp.ResponderID = function(params) {
     this.getEncodedHex = function() {
 	var params = this.params;
 	if (params.key != undefined) {
-	    var dTag = _newObject({tag: {tag:"82",
+	    var dTag = _newObject({tag: {tag:"a2",
 					 explicit:true,
 					 obj:{octstr:{hex:params.key}}}});
 	    return dTag.getEncodedHex();
