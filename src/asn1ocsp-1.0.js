@@ -1,4 +1,4 @@
-/* asn1ocsp-1.1.0.js (c) 2016-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1ocsp-1.1.1.js (c) 2016-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1ocsp.js - ASN.1 DER encoder classes for OCSP protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1ocsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.1.6 asn1ocsp 1.1.0 (2020-Sep-04)
+ * @version jsrsasign 9.1.7 asn1ocsp 1.1.1 (2020-Sep-08)
  * @since jsrsasign 6.1.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -33,26 +33,34 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  *
  * <h4>FEATURES</h4>
  * <ul>
- * <li>easily generate OCSP data</li>
+ * <li>easily generate OCSP data by JSON object</li>
  * </ul>
  * 
  * <h4>OCSP Response Encoder Classes</h4>
  * <ul>
- * <li>{@link KJUR.asn1.ocsp.OCSPResponse} for ASN.1 class as defined in 
- * <a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>. </li>
+ * <li>{@link KJUR.asn1.ocsp.OCSPResponse}</li>
+ * <li>{@link KJUR.asn1.ocsp.ResponseBytes}</li>
+ * <li>{@link KJUR.asn1.ocsp.BasicOCSPResponse}</li>
+ * <li>{@link KJUR.asn1.ocsp.ResponseData}</li>
+ * <li>{@link KJUR.asn1.ocsp.ResponderID}</li>
+ * <li>{@link KJUR.asn1.ocsp.SingleResponseList}</li>
+ * <li>{@link KJUR.asn1.ocsp.SingleResponse}</li>
+ * <li>{@link KJUR.asn1.ocsp.CertID}</li>
+ * <li>{@link KJUR.asn1.ocsp.CertStatus}</li>
  * </ul>
  *
- * <h4>PROVIDED CLASSES</h4>
+ * <h4>OCSP Request Encoder Classes</h4>
  * <ul>
- * <li>{@link KJUR.asn1.ocsp.CertID} for ASN.1 class as defined in 
- * <a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>. </li>
- * <li>{@link KJUR.asn1.ocsp.Request} for ASN.1 class as defined in
- * <a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>. </li>
- * <li>{@link KJUR.asn1.ocsp.TBSRequest} for ASN.1 class as defined in
- * <a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>. </li>
- * <li>{@link KJUR.asn1.ocsp.OCSPRequest} for ASN.1 class as defined in
- * <a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>. </li>
- * <li>{@link KJUR.asn1.ocsp.OCSPUtil} for static utility methods.</li>
+ * <li>{@link KJUR.asn1.ocsp.OCSPRequest}</li>
+ * <li>{@link KJUR.asn1.ocsp.TBSRequest}</li>
+ * <li>{@link KJUR.asn1.ocsp.Request}</li>
+ * <li>{@link KJUR.asn1.ocsp.CertID}</li>
+ * </ul>
+ *
+ * <h4>OCSP Utility classes</h4>
+ * <ul>
+ * <li>{@link KJUR.asn1.ocsp.OCSPUtil} - simple request parser</li>
+ * <li>{@link KJUR.asn1.ocsp.OCSPParser} - request parser</li>
  * </ul>
  * </p>
  * @name KJUR.asn1.ocsp
@@ -686,7 +694,7 @@ KJUR.asn1.ocsp.SingleResponse = function(params) {
 
 	if (params.nextupdate != undefined) {
 	    var dTime = new _DERGeneralizedTime(params.nextupdate);
-	    a.push(new _DERTaggedObject({tag:'80', explicit:true, obj:dTime}));
+	    a.push(new _DERTaggedObject({tag:'a0', explicit:true, obj:dTime}));
 	}
 
 	if (params.ext != undefined) {
@@ -867,10 +875,10 @@ KJUR.asn1.ocsp.CertID = function(params) {
 YAHOO.lang.extend(KJUR.asn1.ocsp.CertID, KJUR.asn1.ASN1Object);
 
 /**
- * SingleResponse ASN.1 class encoder<br/>
- * @name KJUR.asn1.ocsp.SingleResponse
- * @class SingleResponse ASN.1 class encoder
- * @param {Array} params JSON object for SingleResponse parameter
+ * CertStatus ASN.1 class encoder<br/>
+ * @name KJUR.asn1.ocsp.CertStatus
+ * @class CertStatus ASN.1 class encoder
+ * @param {Array} params JSON object for CertStatus parameter
  * @extends KJUR.asn1.ASN1Object
  * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
  * @see KJUR.asn1.ocsp.OCSPResponse
