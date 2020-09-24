@@ -219,6 +219,10 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cades.OtherHashAlgAndValue.html">KJUR.asn1.cades.OtherHashAlgAndValue</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cades.OtherHashValue.html">KJUR.asn1.cades.OtherHashValue</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.SignaturePolicyId.html">KJUR.asn1.cades.SignaturePolicyId</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cades.SignaturePolicyIdentifier.html">KJUR.asn1.cades.SignaturePolicyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cades.SignatureTimeStamp.html">KJUR.asn1.cades.SignatureTimeStamp</a></li>
@@ -229,6 +233,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cms.AttributeList.html">KJUR.asn1.cms.AttributeList</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.CertificateSet.html">KJUR.asn1.cms.CertificateSet</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.CMSUtil.html">KJUR.asn1.cms.CMSUtil</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.ContentInfo.html">KJUR.asn1.cms.ContentInfo</a></li>
@@ -237,13 +243,25 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cms.EncapsulatedContentInfo.html">KJUR.asn1.cms.EncapsulatedContentInfo</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.ESSCertID.html">KJUR.asn1.cms.ESSCertID</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.ESSCertIDv2.html">KJUR.asn1.cms.ESSCertIDv2</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.IssuerAndSerialNumber.html">KJUR.asn1.cms.IssuerAndSerialNumber</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.IssuerSerial.html">KJUR.asn1.cms.IssuerSerial</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.MessageDigest.html">KJUR.asn1.cms.MessageDigest</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.OtherRevocationFormat.html">KJUR.asn1.cms.OtherRevocationFormat</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.RevocationInfoChoice.html">KJUR.asn1.cms.RevocationInfoChoice</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.RevocationInfoChoices.html">KJUR.asn1.cms.RevocationInfoChoices</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.SignerIdentifier.html">KJUR.asn1.cms.SignerIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.SignerInfo.html">KJUR.asn1.cms.SignerInfo</a></li>
 	
@@ -252,6 +270,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.cms.SigningCertificateV2.html">KJUR.asn1.cms.SigningCertificateV2</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.SigningTime.html">KJUR.asn1.cms.SigningTime</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.SubjectKeyIdentifier.html">KJUR.asn1.cms.SubjectKeyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.csr.html">KJUR.asn1.csr</a></li>
 	
@@ -358,6 +378,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampReq.html">KJUR.asn1.tsp.TimeStampReq</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampResp.html">KJUR.asn1.tsp.TimeStampResp</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TSPUtil.html">KJUR.asn1.tsp.TSPUtil</a></li>
 	
@@ -522,17 +544,11 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/KJUR.asn1.cms.SignerInfo.html#constructor">KJUR.asn1.cms.SignerInfo</a></b>(params)
 							</div>
-							<div class="description">class for SignerInfo ASN.1 structure of CMS SignedData
-<pre>
-SignerInfo ::= SEQUENCE {
-   version CMSVersion,
-   sid SignerIdentifier,
-   digestAlgorithm DigestAlgorithmIdentifier,
-   signedAttrs [0] IMPLICIT SignedAttributes OPTIONAL,
-   signatureAlgorithm SignatureAlgorithmIdentifier,
-   signature SignatureValue,
-   unsignedAttrs [1] IMPLICIT UnsignedAttributes OPTIONAL }
-</pre></div>
+							<div class="description">class for SignerInfo ASN.1 structure of CMS SignedData<br/>
+This class is an ASN.1 encoder for SignerInfo structure
+defined in
+<a https://tools.ietf.org/html/rfc5652#section-5.3">
+RFC 5652 CMS section 5.3</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -543,45 +559,10 @@ SignerInfo ::= SEQUENCE {
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class KJUR.asn1.cms.SignerInfo.">
-					<caption>Field Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								KJUR.asn1.cms.SignerInfo.<b><a href="../symbols/KJUR.asn1.cms.SignerInfo.html#.setForContentAndHash">setForContentAndHash</a></b>
-								</div>
-								<div class="description">set ContentType/MessageDigest/DigestAlgorithms for SignerInfo/SignedData
-This method will specify following fields by a parameters:
-<ul>
-<li>add ContentType signed attribute by encapContentInfo</li>
-<li>add MessageDigest signed attribute by encapContentInfo and hashAlg</li>
-<li>add a hash algorithm used in MessageDigest to digestAlgorithms field of SignedData</li>
-<li>set a hash algorithm used in MessageDigest to digestAlgorithm field of SignerInfo</li>
-</ul>
-Argument 'params' is an associative array having following elements:
-<ul>
-<li>{Object}eciObj - <a href="../symbols/KJUR.asn1.cms.EncapsulatedContentInfo.html">KJUR.asn1.cms.EncapsulatedContentInfo</a> object</li>
-<li>{Object}sdObj - <a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a> object (Option) to set DigestAlgorithms</li>
-<li>{String}contentType - oid name or oid of content type (OPITION).</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
 				
 				
 				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
+				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#params">params</a></dd>
 				</dl>
 				
 			
@@ -589,6 +570,31 @@ Argument 'params' is an associative array having following elements:
 <!-- ============================== methods summary ======================== -->
 			
 				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.cms.SignerInfo.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.SignerInfo.html#sign">sign</a></b>()
+								</div>
+								<div class="description">sign SignerInfo<br/>
+This method signs SignerInfo with a specified 
+private key and algorithm by 
+"params.signkey" and "params.sigalg" parameter.</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
 				
 				
 				
@@ -612,7 +618,11 @@ Argument 'params' is an associative array having following elements:
 				</div>
 				
 				<div class="description">
-					class for SignerInfo ASN.1 structure of CMS SignedData
+					class for SignerInfo ASN.1 structure of CMS SignedData<br/>
+This class is an ASN.1 encoder for SignerInfo structure
+defined in
+<a https://tools.ietf.org/html/rfc5652#section-5.3">
+RFC 5652 CMS section 5.3</a>.
 <pre>
 SignerInfo ::= SEQUENCE {
    version CMSVersion,
@@ -623,17 +633,46 @@ SignerInfo ::= SEQUENCE {
    signature SignatureValue,
    unsignedAttrs [1] IMPLICIT UnsignedAttributes OPTIONAL }
 </pre>
+Constractor parameter can have following properties:
+<ul>
+<li>{Integer}version - version of SignerInfo. </li>
+<li>{Array}id - <a href="../symbols/KJUR.asn1.cms.SignerIdentifier.html">KJUR.asn1.cms.SignerIdentifier</a> parameter for sid</li>
+<li>{String}hashalg - digestAlgorithm name string (ex. "sha256")</li>
+<li>{Array}sattrs - <a href="../symbols/KJUR.asn1.cms.AttributeList.html">KJUR.asn1.cms.AttributeList</a> parameter for 
+signedAttributes</li>
+<li>{String}sigalg - string for signatureAlgorithm name</a>
+<li>{String}signkey (OPTION) - specifies signing private key.
+Parameter "signkey" or "sighex" shall be specified. Following
+values can be specified:
+  <ul>
+  <li>PKCS#1/5 or PKCS#8 PEM string of private key</li>
+  <li>RSAKey/DSA/ECDSA key object. <a href="../symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> is useful
+  to generate a key object.</li>
+  </ul>
+</li>
+<li>{String}sighex (OPTION) - hexadecimal string of signature value
+(i.e. ASN.1 value(V) of signatureValue BIT STRING without
+unused bits)</li>
+</ul>
 					
 				</div>
 				
 				
 				
-				<pre class="code">o = new KJUR.asn1.cms.SignerInfo();
-o.setSignerIdentifier(certPEMstring);
-o.dSignedAttrs.add(new KJUR.asn1.cms.ContentType({name: 'data'}));
-o.dSignedAttrs.add(new KJUR.asn1.cms.MessageDigest({hex: 'a1b2...'}));
-o.dSignedAttrs.add(new KJUR.asn1.cms.SigningTime());
-o.sign(privteKeyParam, "SHA1withRSA");</pre>
+				<pre class="code">new KJUR.asn1.cms.SignerInfo({
+  version: 1,
+  id: {type: 'isssn', issuer: {str: '/C=US/O=T1'}, serial: {int: 1}},
+  hashalg: "sha1",
+  sattrs: {array: [{
+    attr: "contentType",
+    type: '1.2.840.113549.1.7.1'
+  },{
+    attr: "messageDigest",
+    hex: 'a1a2a3a4a5a6a7a8a9a0a1a2a3a4a5a6a7a8a9a0'
+  }]},
+  sigalg: "SHA1withRSA",
+  sighex: 'b1b2b...'
+})</pre>
 				
 				
 				
@@ -661,57 +700,59 @@ o.sign(privteKeyParam, "SHA1withRSA");</pre>
 					
 					
 					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.cms.SignerIdentifier.html">KJUR.asn1.cms.SignerIdentifier</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.AlgorithmIdentifier.html">KJUR.asn1.x509.AlgorithmIdentifier</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.cms.AttributeList.html">KJUR.asn1.cms.AttributeList</a></dd>
+						
+						</dl>
+					
 
 			</div>
 			
 
 <!-- ============================== field details ========================== -->		
 			
+
+<!-- ============================== method details ========================= -->		
+			
 				<div class="sectionTitle">
-					Field Detail
+					Method Detail
 				</div>
 				
-					<a name=".setForContentAndHash"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="sign"> </a>
+					<div class="fixedFont">
 					
 					
-					<span class="light">KJUR.asn1.cms.SignerInfo.</span><b>setForContentAndHash</b>
+					<b>sign</b>()
 					
 					</div>
 					<div class="description">
-						set ContentType/MessageDigest/DigestAlgorithms for SignerInfo/SignedData
-This method will specify following fields by a parameters:
-<ul>
-<li>add ContentType signed attribute by encapContentInfo</li>
-<li>add MessageDigest signed attribute by encapContentInfo and hashAlg</li>
-<li>add a hash algorithm used in MessageDigest to digestAlgorithms field of SignedData</li>
-<li>set a hash algorithm used in MessageDigest to digestAlgorithm field of SignerInfo</li>
-</ul>
-Argument 'params' is an associative array having following elements:
-<ul>
-<li>{Object}eciObj - <a href="../symbols/KJUR.asn1.cms.EncapsulatedContentInfo.html">KJUR.asn1.cms.EncapsulatedContentInfo</a> object</li>
-<li>{Object}sdObj - <a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a> object (Option) to set DigestAlgorithms</li>
-<li>{String}contentType - oid name or oid of content type (OPITION). Default is content type "data" (i.e. "1.2.840.113549.1.7.1")</li>
-<li>{String}hashAlg - string of hash algorithm name which is used for MessageDigest attribute</li>
-</ul>
-some of elements can be omited.
-<br>
-NOTE: "contentType" parameter have been introduced since
-jsrsasign 9.0.1 asn1cms 1.0.8.
+						sign SignerInfo<br/>
+This method signs SignerInfo with a specified 
+private key and algorithm by 
+"params.signkey" and "params.sigalg" parameter.
+In general, you don't need to call this method.
+It will be called when getEncodedHex() method
+if necessary.
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">sd = new KJUR.asn1.cms.SignedData();
-signerInfo.setForContentAndHash({sdObj: sd,
-                                 eciObj: sd.dEncapContentInfo,
-                                 contentType: nameOrOid,
-                                 hashAlg: 'sha256'});</pre>
+					<pre class="code">si = new KJUR.asn1.cms.SignerInfo({...});
+si.sign()</pre>
 					
 					
-
+					
+						
+						
+						
 						
 						
 						
@@ -719,9 +760,6 @@ signerInfo.setForContentAndHash({sdObj: sd,
 
 					
 				
-			
-
-<!-- ============================== method details ========================= -->		
 			
 			
 <!-- ============================== event details ========================= -->		

@@ -1,6 +1,59 @@
 
 ChangeLog for jsrsasign
 
+Major update for CMS SigneData TimeStamp and CAdES
+* Changes from 9.1.9 to 10.0.0 (2020-Sep-24)
+  - major update for CMS SignedData related classes
+    to allow more simple ASN.1 generation
+  - src/asn1cms.js
+    - new architecture updates in
+      SignedData, Attribute
+      - all implemented Attributes such as
+        ContentType, SigningTime are also
+        updated.
+    - new class added
+      - ESSCertID
+      - ESSCertIDv2
+      - SignerIdentifier
+      - SubjectKeyIdentifier
+      - CertificateSet
+      - RevocationInfoChoices
+      - RevocationInfoChoice
+      - OtherRevocationFormat
+    - following class/methods are now *deprecated*
+      - CMSUtil.newSignedData
+  - src/asn1tsp.js
+    - aligned to new architecture:
+      - TSTInfo, Accuracy, PKIStatusInfo,
+        PKIStatus, PKIFreeText, PKIFailureInfo,
+    - new class added
+      - TimeStampToken
+    - following class/methods are now *deprecated*
+      - SimpleTSAAdapter, FixedTSAAdapter,
+        TSPUtil.newTimeStampToken
+  - src/asn1cades.js
+     - aligned to new architecture
+      - SignaturePolicyIdentifier, OtherHashAlgAndValue,
+        SignatureTimeStamp, CompleteCertificateRefs,
+        OtherCertID, OtherHash
+     - new class added
+      - SignaturePolicyId, OtherHashValue
+  - src/asn1.js
+    - DERTaggedObject add support for simple
+      argument for explicit "tage" and implicit "tagi"
+    - newObject add support for "asn1" property
+    - DERObjectIdentifier constructor argument
+      now accepts name and OID. method
+      setValueNameOrOid added.
+  - src/x509.js
+    - X509(certPemOrHex)
+      X509 class constructor add support for
+      PEM or hex string of certificate as 
+      argument.
+  - src/asn1x509.js
+    - OID class: signaturePolicyIdentifier attribute
+      OID added.
+
 wrong encoding in CRLReason in OCSP CertStatus fixed
 * Changes from 9.1.8 to 9.1.9 (2020-Sep-08)
   - src/asn1ocsp.js

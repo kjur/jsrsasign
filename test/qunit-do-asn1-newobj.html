@@ -23,6 +23,11 @@ $(document).ready(function(){
 
 // ======= TEST ===============================================================
 
+test("asn1 test", function() {
+  equal(KJUR.asn1.ASN1Util.newObject({'asn1': {'tlv': '030101'}}).getEncodedHex(), "030101", "asn1 tlv=030101");
+});
+
+
 test("boolean test", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'bool': {}}).getEncodedHex(), "0101ff", "boolean test1");
 });
@@ -126,6 +131,16 @@ test("tag test seq [int 3, int 4] explicit", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'tag': ['a1', true, {'seq': [{'int': 3}, {'int': 4}]}]}).getEncodedHex(), "a1083006020103020104", "test1");
 });
 
+test("tag test", function() {
+var _newObject = KJUR.asn1.ASN1Util.newObject;
+
+var params = {tag: {tage: "a3", obj: {seq: [{'int': 3}, {'int': 4}]}}};
+equal(_newObject(params).getEncodedHex(), "a3083006020103020104", "test1");
+
+var params = {tag: {tagi: "a4", obj: {seq: [{'int': 3}, {'int': 4}]}}};
+equal(_newObject(params).getEncodedHex(), "a406020103020104", "test1");
+});
+
 test("tag test RFC 3161 TSP Accuracy 500ms", function() {
   equal(KJUR.asn1.ASN1Util.newObject(
           {seq: [{tag: {tag: '80', explicit: false, obj: {int: 500}}}]}).getEncodedHex(),
@@ -145,5 +160,9 @@ equal(result, "3006020104020105", "seq int int");
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
+<a href="index.html">TEST INDEX</a> | 
+<a href="../api/index.html">API</a> | 
+<a href="qunit-do-asn1.html">asn1</a> |
+<a href="qunit-do-asn1-newobj.html">asn1-newobj</a> |
 </body>
 </html>

@@ -219,6 +219,10 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cades.OtherHashAlgAndValue.html">KJUR.asn1.cades.OtherHashAlgAndValue</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cades.OtherHashValue.html">KJUR.asn1.cades.OtherHashValue</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.SignaturePolicyId.html">KJUR.asn1.cades.SignaturePolicyId</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cades.SignaturePolicyIdentifier.html">KJUR.asn1.cades.SignaturePolicyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cades.SignatureTimeStamp.html">KJUR.asn1.cades.SignatureTimeStamp</a></li>
@@ -229,6 +233,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cms.AttributeList.html">KJUR.asn1.cms.AttributeList</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.CertificateSet.html">KJUR.asn1.cms.CertificateSet</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.CMSUtil.html">KJUR.asn1.cms.CMSUtil</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.ContentInfo.html">KJUR.asn1.cms.ContentInfo</a></li>
@@ -237,13 +243,25 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cms.EncapsulatedContentInfo.html">KJUR.asn1.cms.EncapsulatedContentInfo</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.ESSCertID.html">KJUR.asn1.cms.ESSCertID</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.ESSCertIDv2.html">KJUR.asn1.cms.ESSCertIDv2</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.IssuerAndSerialNumber.html">KJUR.asn1.cms.IssuerAndSerialNumber</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.IssuerSerial.html">KJUR.asn1.cms.IssuerSerial</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.MessageDigest.html">KJUR.asn1.cms.MessageDigest</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.OtherRevocationFormat.html">KJUR.asn1.cms.OtherRevocationFormat</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.RevocationInfoChoice.html">KJUR.asn1.cms.RevocationInfoChoice</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.RevocationInfoChoices.html">KJUR.asn1.cms.RevocationInfoChoices</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.SignerIdentifier.html">KJUR.asn1.cms.SignerIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.SignerInfo.html">KJUR.asn1.cms.SignerInfo</a></li>
 	
@@ -252,6 +270,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.cms.SigningCertificateV2.html">KJUR.asn1.cms.SigningCertificateV2</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.SigningTime.html">KJUR.asn1.cms.SigningTime</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.SubjectKeyIdentifier.html">KJUR.asn1.cms.SubjectKeyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.csr.html">KJUR.asn1.csr</a></li>
 	
@@ -358,6 +378,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampReq.html">KJUR.asn1.tsp.TimeStampReq</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampResp.html">KJUR.asn1.tsp.TimeStampResp</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TSPUtil.html">KJUR.asn1.tsp.TSPUtil</a></li>
 	
@@ -560,7 +582,7 @@ Cryptographic Message Syntax (CMS)</a> SignedData generator.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.cms.<b>setByCertPEM</b>(certPEM)
+								<div class="fixedFont">KJUR.asn1.cms.<b>getValueArray</b>()
 								</div>
 								<div class="description"></div>
 							</td>
@@ -569,16 +591,7 @@ Cryptographic Message Syntax (CMS)</a> SignedData generator.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.cms.<b>setCerts</b>(listPEM)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.cms.<b>setContentType</b>(nameOrOid)
+								<div class="fixedFont">KJUR.asn1.cms.<b>setByParam</b>(params)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -689,11 +702,11 @@ This caused by a bug of jsdoc2.
 
 					<hr />
 				
-					<a name=".setByCertPEM"> </a>
+					<a name=".getValueArray"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">KJUR.asn1.cms.</span><b>setByCertPEM</b>(certPEM)
+					<span class="light">KJUR.asn1.cms.</span><b>getValueArray</b>()
 					
 					</div>
 					<div class="description">
@@ -704,17 +717,6 @@ This caused by a bug of jsdoc2.
 					
 					
 					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>certPEM</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
 						
 						
 						
@@ -725,11 +727,11 @@ This caused by a bug of jsdoc2.
 
 					<hr />
 				
-					<a name=".setCerts"> </a>
+					<a name=".setByParam"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">KJUR.asn1.cms.</span><b>setCerts</b>(listPEM)
+					<span class="light">KJUR.asn1.cms.</span><b>setByParam</b>(params)
 					
 					</div>
 					<div class="description">
@@ -745,43 +747,7 @@ This caused by a bug of jsdoc2.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>listPEM</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".setContentType"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.cms.</span><b>setContentType</b>(nameOrOid)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>nameOrOid</b>
+									<b>params</b>
 									
 								</dt>
 								<dd></dd>

@@ -219,6 +219,10 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cades.OtherHashAlgAndValue.html">KJUR.asn1.cades.OtherHashAlgAndValue</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cades.OtherHashValue.html">KJUR.asn1.cades.OtherHashValue</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.SignaturePolicyId.html">KJUR.asn1.cades.SignaturePolicyId</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cades.SignaturePolicyIdentifier.html">KJUR.asn1.cades.SignaturePolicyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cades.SignatureTimeStamp.html">KJUR.asn1.cades.SignatureTimeStamp</a></li>
@@ -229,6 +233,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cms.AttributeList.html">KJUR.asn1.cms.AttributeList</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.CertificateSet.html">KJUR.asn1.cms.CertificateSet</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.CMSUtil.html">KJUR.asn1.cms.CMSUtil</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.ContentInfo.html">KJUR.asn1.cms.ContentInfo</a></li>
@@ -237,13 +243,25 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cms.EncapsulatedContentInfo.html">KJUR.asn1.cms.EncapsulatedContentInfo</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.ESSCertID.html">KJUR.asn1.cms.ESSCertID</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.ESSCertIDv2.html">KJUR.asn1.cms.ESSCertIDv2</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.IssuerAndSerialNumber.html">KJUR.asn1.cms.IssuerAndSerialNumber</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.IssuerSerial.html">KJUR.asn1.cms.IssuerSerial</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.MessageDigest.html">KJUR.asn1.cms.MessageDigest</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.OtherRevocationFormat.html">KJUR.asn1.cms.OtherRevocationFormat</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.RevocationInfoChoice.html">KJUR.asn1.cms.RevocationInfoChoice</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.RevocationInfoChoices.html">KJUR.asn1.cms.RevocationInfoChoices</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.SignerIdentifier.html">KJUR.asn1.cms.SignerIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.SignerInfo.html">KJUR.asn1.cms.SignerInfo</a></li>
 	
@@ -252,6 +270,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.cms.SigningCertificateV2.html">KJUR.asn1.cms.SigningCertificateV2</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.SigningTime.html">KJUR.asn1.cms.SigningTime</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.SubjectKeyIdentifier.html">KJUR.asn1.cms.SubjectKeyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.csr.html">KJUR.asn1.csr</a></li>
 	
@@ -358,6 +378,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampReq.html">KJUR.asn1.tsp.TimeStampReq</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampResp.html">KJUR.asn1.tsp.TimeStampResp</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TSPUtil.html">KJUR.asn1.tsp.TSPUtil</a></li>
 	
@@ -522,7 +544,7 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/KJUR.asn1.cades.SignatureTimeStamp.html#constructor">KJUR.asn1.cades.SignatureTimeStamp</a></b>(params)
 							</div>
-							<div class="description">class for RFC 5126 CAdES SignatureTimeStamp attribute
+							<div class="description">class for RFC 5126 CAdES SignatureTimeStamp attribute<br/>
 <pre>
 id-aa-signatureTimeStampToken OBJECT IDENTIFIER ::=
    1.2.840.113549.1.9.16.2.14
@@ -541,7 +563,7 @@ SignatureTimeStampToken ::= TimeStampToken
 				
 				
 				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
+				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.cms.Attribute.html">KJUR.asn1.cms.Attribute</a>: </dt><dd><a href="../symbols/KJUR.asn1.cms.Attribute.html#params">params</a>, <a href="../symbols/KJUR.asn1.cms.Attribute.html#typeOid">typeOid</a></dd><dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a></dd>
 				</dl>
 				
 			
@@ -553,7 +575,7 @@ SignatureTimeStampToken ::= TimeStampToken
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.cms.Attribute.html">KJUR.asn1.cms.Attribute</a>: </dt><dd><a href="../symbols/KJUR.asn1.cms.Attribute.html#getValueArray">getValueArray</a></dd><dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a></dd>
 				</dl>
 				
 			
@@ -572,7 +594,7 @@ SignatureTimeStampToken ::= TimeStampToken
 				</div>
 				
 				<div class="description">
-					class for RFC 5126 CAdES SignatureTimeStamp attribute
+					class for RFC 5126 CAdES SignatureTimeStamp attribute<br/>
 <pre>
 id-aa-signatureTimeStampToken OBJECT IDENTIFIER ::=
    1.2.840.113549.1.9.16.2.14
@@ -580,6 +602,28 @@ SignatureTimeStampToken ::= TimeStampToken
 </pre>
 					
 				</div>
+				
+				
+				
+				<pre class="code">// by TimeStampToken hex
+new KJUR.asn1.cades.SignatureTimeStamp({
+  attr: "timeStampToken",
+  tst: "3082..."})
+
+// by TimeStampToken or ASN1Object
+new KJUR.asn1.cades.SignatureTimeStamp({
+  attr: "timeStampToken",
+  tst: new TimeStampToken(...)})
+
+// by TimeStampResponse hex
+new KJUR.asn1.cades.SignatureTimeStamp({
+  attr: "timeStampToken",
+  res: "3082..."})
+
+// by TimeStampToken or ASN1Object
+new KJUR.asn1.cades.SignatureTimeStamp({
+  attr: "timeStampToken",
+  res: new TimeStampResponse(...)})</pre>
 				
 				
 				

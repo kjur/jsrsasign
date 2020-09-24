@@ -1,4 +1,4 @@
-/* x509-2.0.3.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.0.4.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.1.6 x509 2.0.3 (2020-Sep-04)
+ * @version jsrsasign 10.0.0 x509 2.0.4 (2020-Sep-22)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -94,7 +94,7 @@
  * </li>
  * </ul>
  */
-function X509() {
+function X509(params) {
     var _ASN1HEX = ASN1HEX,
 	_getChildIdx = _ASN1HEX.getChildIdx,
 	_getV = _ASN1HEX.getV,
@@ -2509,7 +2509,16 @@ function X509() {
 	s += "signature: " + this.getSignatureValueHex().substr(0, 16) + "...\n";
 	return s;
     };
+
+    if (typeof params == "string") {
+	if (params.indexOf("-----BEGIN") != -1) {
+	    this.readCertPEM(params);
+	} else if (KJUR.lang.String.isHex(params)) {
+	    this.readCertHex(params);
+	}
+    }
 };
+// ----- END of X509 class -----
 
 /**
  * get distinguished name string in OpenSSL online format from hexadecimal string of ASN.1 DER X.500 name<br/>
