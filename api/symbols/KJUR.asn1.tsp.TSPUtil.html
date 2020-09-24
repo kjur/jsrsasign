@@ -219,6 +219,10 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cades.OtherHashAlgAndValue.html">KJUR.asn1.cades.OtherHashAlgAndValue</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cades.OtherHashValue.html">KJUR.asn1.cades.OtherHashValue</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.SignaturePolicyId.html">KJUR.asn1.cades.SignaturePolicyId</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cades.SignaturePolicyIdentifier.html">KJUR.asn1.cades.SignaturePolicyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cades.SignatureTimeStamp.html">KJUR.asn1.cades.SignatureTimeStamp</a></li>
@@ -229,6 +233,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cms.AttributeList.html">KJUR.asn1.cms.AttributeList</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.CertificateSet.html">KJUR.asn1.cms.CertificateSet</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.CMSUtil.html">KJUR.asn1.cms.CMSUtil</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.ContentInfo.html">KJUR.asn1.cms.ContentInfo</a></li>
@@ -237,13 +243,25 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cms.EncapsulatedContentInfo.html">KJUR.asn1.cms.EncapsulatedContentInfo</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.ESSCertID.html">KJUR.asn1.cms.ESSCertID</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.ESSCertIDv2.html">KJUR.asn1.cms.ESSCertIDv2</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.IssuerAndSerialNumber.html">KJUR.asn1.cms.IssuerAndSerialNumber</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.IssuerSerial.html">KJUR.asn1.cms.IssuerSerial</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.MessageDigest.html">KJUR.asn1.cms.MessageDigest</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.OtherRevocationFormat.html">KJUR.asn1.cms.OtherRevocationFormat</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.RevocationInfoChoice.html">KJUR.asn1.cms.RevocationInfoChoice</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.RevocationInfoChoices.html">KJUR.asn1.cms.RevocationInfoChoices</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.SignerIdentifier.html">KJUR.asn1.cms.SignerIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.SignerInfo.html">KJUR.asn1.cms.SignerInfo</a></li>
 	
@@ -252,6 +270,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.cms.SigningCertificateV2.html">KJUR.asn1.cms.SigningCertificateV2</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.SigningTime.html">KJUR.asn1.cms.SigningTime</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.SubjectKeyIdentifier.html">KJUR.asn1.cms.SubjectKeyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.csr.html">KJUR.asn1.csr</a></li>
 	
@@ -358,6 +378,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampReq.html">KJUR.asn1.tsp.TimeStampReq</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampResp.html">KJUR.asn1.tsp.TimeStampResp</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TSPUtil.html">KJUR.asn1.tsp.TSPUtil</a></li>
 	
@@ -549,7 +571,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont">KJUR.asn1.tsp.TSPUtil.<b><a href="../symbols/KJUR.asn1.tsp.TSPUtil.html#.newTimeStampToken">newTimeStampToken</a></b>(param)
 								</div>
-								<div class="description">generate TimeStampToken ASN.1 object specified by JSON parameters
+								<div class="description">generate TimeStampToken ASN.1 object specified by JSON parameters (DEPRECATED)<br/>
 </div>
 							</td>
 						</tr>
@@ -632,7 +654,7 @@ and returns parsed their fields:</div>
 					
 					</div>
 					<div class="description">
-						generate TimeStampToken ASN.1 object specified by JSON parameters
+						generate TimeStampToken ASN.1 object specified by JSON parameters (DEPRECATED)<br/>
 
 						
 						
@@ -657,6 +679,13 @@ and returns parsed their fields:</div>
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 10.0.0 asn1tsp 2.0.0 use TimeStampToken class
+							</dt>
+							</dl>
+						
 						
 						
 						
@@ -668,6 +697,13 @@ and returns parsed their fields:</div>
 							</dl>
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a></dd>
+							
+							</dl>
 						
 
 					<hr />
@@ -743,8 +779,10 @@ and returns parsed their fields:
 					
 					<pre class="code">var json = KJUR.asn1.tsp.TSPUtil.parseTimeStampReq("302602...");
 // resulted DUMP of above 'json':
-{mi: {hashAlg: 'sha256',          // MessageImprint hashAlg
-      hashValue: 'a1a2a3a4...'},  // MessageImprint hashValue
+{
+ messageImprint: {
+      alg: 'sha256',          // MessageImprint hashAlg
+      hash: 'a1a2a3a4...'},   // MessageImprint hashValue
  policy: '1.2.3.4.5',             // tsaPolicy (OPTION)
  nonce: '9abcf318...',            // nonce (OPTION)
  certreq: true}                   // certReq (OPTION)</pre>

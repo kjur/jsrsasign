@@ -1,4 +1,4 @@
-/* asn1x509-2.1.2.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-2.1.3.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.1.6 asn1x509 2.1.2 (2020-Sep-04)
+ * @version jsrsasign 10.0.0 asn1x509 2.1.3 (2020-Sep-22)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -3914,6 +3914,7 @@ KJUR.asn1.x509.OID = new function(params) {
         'tstinfo':              '1.2.840.113549.1.9.16.1.4', // RFC3161 TSTInfo
 	'signingCertificate':	'1.2.840.113549.1.9.16.2.12',// SMIME
 	'timeStampToken':	'1.2.840.113549.1.9.16.2.14',// sigTS
+	'signaturePolicyIdentifier':	'1.2.840.113549.1.9.16.2.15',// cades
 	'etsArchiveTimeStamp':	'1.2.840.113549.1.9.16.2.27',// SMIME
 	'signingCertificateV2':	'1.2.840.113549.1.9.16.2.47',// SMIME
 	'etsArchiveTimeStampV2':'1.2.840.113549.1.9.16.2.48',// SMIME

@@ -219,6 +219,10 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cades.OtherHashAlgAndValue.html">KJUR.asn1.cades.OtherHashAlgAndValue</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cades.OtherHashValue.html">KJUR.asn1.cades.OtherHashValue</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cades.SignaturePolicyId.html">KJUR.asn1.cades.SignaturePolicyId</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cades.SignaturePolicyIdentifier.html">KJUR.asn1.cades.SignaturePolicyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cades.SignatureTimeStamp.html">KJUR.asn1.cades.SignatureTimeStamp</a></li>
@@ -229,6 +233,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cms.AttributeList.html">KJUR.asn1.cms.AttributeList</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.CertificateSet.html">KJUR.asn1.cms.CertificateSet</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.CMSUtil.html">KJUR.asn1.cms.CMSUtil</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.ContentInfo.html">KJUR.asn1.cms.ContentInfo</a></li>
@@ -237,13 +243,25 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cms.EncapsulatedContentInfo.html">KJUR.asn1.cms.EncapsulatedContentInfo</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.ESSCertID.html">KJUR.asn1.cms.ESSCertID</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.ESSCertIDv2.html">KJUR.asn1.cms.ESSCertIDv2</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.IssuerAndSerialNumber.html">KJUR.asn1.cms.IssuerAndSerialNumber</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.IssuerSerial.html">KJUR.asn1.cms.IssuerSerial</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.MessageDigest.html">KJUR.asn1.cms.MessageDigest</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.OtherRevocationFormat.html">KJUR.asn1.cms.OtherRevocationFormat</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.RevocationInfoChoice.html">KJUR.asn1.cms.RevocationInfoChoice</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.RevocationInfoChoices.html">KJUR.asn1.cms.RevocationInfoChoices</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.SignerIdentifier.html">KJUR.asn1.cms.SignerIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.SignerInfo.html">KJUR.asn1.cms.SignerInfo</a></li>
 	
@@ -252,6 +270,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.cms.SigningCertificateV2.html">KJUR.asn1.cms.SigningCertificateV2</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.SigningTime.html">KJUR.asn1.cms.SigningTime</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.cms.SubjectKeyIdentifier.html">KJUR.asn1.cms.SubjectKeyIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.csr.html">KJUR.asn1.csr</a></li>
 	
@@ -358,6 +378,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampReq.html">KJUR.asn1.tsp.TimeStampReq</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampResp.html">KJUR.asn1.tsp.TimeStampResp</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TSPUtil.html">KJUR.asn1.tsp.TSPUtil</a></li>
 	
@@ -547,11 +569,10 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.cms.CMSUtil.<b><a href="../symbols/KJUR.asn1.cms.CMSUtil.html#.newSignedData">newSignedData</a></b>(param)
+								<div class="fixedFont">KJUR.asn1.cms.CMSUtil.<b><a href="../symbols/KJUR.asn1.cms.CMSUtil.html#.newSignedData">newSignedData</a></b>(params)
 								</div>
-								<div class="description">generate SignedData object specified by JSON parameters
-This method provides more easy way to genereate
-CMS SignedData ASN.1 structure by JSON data.</div>
+								<div class="description">generate SignedData object specified by JSON parameters (DEPRECATED)<br/>
+This class generates <a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a> object.</div>
 							</td>
 						</tr>
 					
@@ -617,53 +638,19 @@ This method provides validation for CMS SignedData.</div>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{<a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a>}</span>
-					<span class="light">KJUR.asn1.cms.CMSUtil.</span><b>newSignedData</b>(param)
+					<span class="light">KJUR.asn1.cms.CMSUtil.</span><b>newSignedData</b>(params)
 					
 					</div>
 					<div class="description">
-						generate SignedData object specified by JSON parameters
-This method provides more easy way to genereate
-CMS SignedData ASN.1 structure by JSON data.
-<br>
-Here is major parameters:
-<ul>
-<li>content - to specify data to be signed in eContent field.</li>
-<li>certs - a list of certificate PEM strings to specify 
-certificate field</li>
-<li>detached - 'true' or 'false' to specify detached signature or not.
-The default is 'false'</li>
-<li>signerInfos - array of signerInfo parameters. 
-  SignerInfo parameters listed here:
-  <ul>
-  <li>hashAlg - string of messageDigest hash algorithm name</li>
-  <li>sAttr - list of signedAttribute parameters</li>
-  <li>signerCert - string of signer certificate PEM</li>
-  <li>sigAlg - string of signature algorithm name</li>
-  <li>signerPrvKey - string of PEM signer private key</li>
-  </ul>
-</li>
-</ul>
+						generate SignedData object specified by JSON parameters (DEPRECATED)<br/>
+This class generates <a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a> object.
+However this class is deprecated.
+Please use <a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a> class constructor
+instead. As for "params" parameter, 
+<a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a> parameters are available.
 						
 						
 					</div>
-					
-					
-					
-					<pre class="code">var sd = KJUR.asn1.cms.CMSUtil.newSignedData({
-  content: {str: "jsrsasign"},
-  certs: [certPEM],
-  detached: false,
-  signerInfos: [{
-    hashAlg: 'sha256',
-    sAttr: {
-      SigningTime: {}
-      SigningCertificateV2: {array: [certPEM]},
-    },
-    signerCert: certPEM,
-    sigAlg: 'SHA256withRSA',
-    signerPrvKey: prvPEM
-  }]
-});</pre>
 					
 					
 					
@@ -672,13 +659,20 @@ The default is 'false'</li>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{Array}</span> <b>param</b>
+									<span class="light fixedFont">{Array}</span> <b>params</b>
 									
 								</dt>
 								<dd>JSON parameter to generate CMS SignedData</dd>
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 10.0.0 asn1cms 2.0.0.
+							</dt>
+							</dl>
 						
 						
 						

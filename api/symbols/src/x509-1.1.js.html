@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* x509-2.0.3.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* x509-2.0.4.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * x509.js - X509 class to read subject public key from certificate.
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name x509-1.1.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign 9.1.6 x509 2.0.3 (2020-Sep-04)
+<span class='line'> 19</span>  * @version jsrsasign 10.0.0 x509 2.0.4 (2020-Sep-22)
 <span class='line'> 20</span>  * @since jsrsasign 1.x.x
 <span class='line'> 21</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -101,7 +101,7 @@
 <span class='line'> 94</span>  * &lt;/li>
 <span class='line'> 95</span>  * &lt;/ul>
 <span class='line'> 96</span>  */</span><span class="WHIT">
-<span class='line'> 97</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 97</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 98</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 99</span> </span><span class="WHIT">	</span><span class="NAME">_getChildIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getChildIdx</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>100</span> </span><span class="WHIT">	</span><span class="NAME">_getV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getV</span><span class="PUNC">,</span><span class="WHIT">
@@ -2516,192 +2516,201 @@
 <span class='line'>2509</span> </span><span class="WHIT">	</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"signature: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.getSignatureValueHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"...\n"</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>2510</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>2511</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2512</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2513</span> 
-<span class='line'>2514</span> </span><span class="COMM">/**
-<span class='line'>2515</span>  * get distinguished name string in OpenSSL online format from hexadecimal string of ASN.1 DER X.500 name&lt;br/>
-<span class='line'>2516</span>  * @name hex2dn
-<span class='line'>2517</span>  * @memberOf X509
-<span class='line'>2518</span>  * @function
-<span class='line'>2519</span>  * @param {String} hex hexadecimal string of ASN.1 DER distinguished name
-<span class='line'>2520</span>  * @param {Integer} idx index of hexadecimal string (DEFAULT=0)
-<span class='line'>2521</span>  * @return {String} OpenSSL online format distinguished name
-<span class='line'>2522</span>  * @description
-<span class='line'>2523</span>  * This static method converts from a hexadecimal string of 
-<span class='line'>2524</span>  * distinguished name (DN)
-<span class='line'>2525</span>  * specified by 'hex' and 'idx' to OpenSSL oneline string representation (ex. /C=US/O=a).
-<span class='line'>2526</span>  * @example
-<span class='line'>2527</span>  * X509.hex2dn("3031310b3...") &rarr; /C=US/O=a/CN=b2+OU=b1
-<span class='line'>2528</span>  */</span><span class="WHIT">
-<span class='line'>2529</span> </span><span class="NAME">X509.hex2dn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2530</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2531</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hex.substr</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"malformed DN"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2532</span> 
-<span class='line'>2533</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2534</span> 
-<span class='line'>2535</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getChildIdx</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2536</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">aIdx.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2537</span> </span><span class="WHIT">	</span><span class="NAME">a.push</span><span class="PUNC">(</span><span class="NAME">X509.hex2rdn</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2538</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>2539</span> 
-<span class='line'>2540</span> </span><span class="WHIT">    </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">a.map</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="STRN">"/"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"\\/"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2541</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"/"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">a.join</span><span class="PUNC">(</span><span class="STRN">"/"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2542</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2512</span> 
+<span class='line'>2513</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2514</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.indexOf</span><span class="PUNC">(</span><span class="STRN">"-----BEGIN"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2515</span> </span><span class="WHIT">	    </span><span class="NAME">this.readCertPEM</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2516</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">KJUR.lang.String.isHex</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2517</span> </span><span class="WHIT">	    </span><span class="NAME">this.readCertHex</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2518</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2519</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2520</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2521</span> </span><span class="COMM">// ----- END of X509 class -----</span><span class="WHIT">
+<span class='line'>2522</span> 
+<span class='line'>2523</span> </span><span class="COMM">/**
+<span class='line'>2524</span>  * get distinguished name string in OpenSSL online format from hexadecimal string of ASN.1 DER X.500 name&lt;br/>
+<span class='line'>2525</span>  * @name hex2dn
+<span class='line'>2526</span>  * @memberOf X509
+<span class='line'>2527</span>  * @function
+<span class='line'>2528</span>  * @param {String} hex hexadecimal string of ASN.1 DER distinguished name
+<span class='line'>2529</span>  * @param {Integer} idx index of hexadecimal string (DEFAULT=0)
+<span class='line'>2530</span>  * @return {String} OpenSSL online format distinguished name
+<span class='line'>2531</span>  * @description
+<span class='line'>2532</span>  * This static method converts from a hexadecimal string of 
+<span class='line'>2533</span>  * distinguished name (DN)
+<span class='line'>2534</span>  * specified by 'hex' and 'idx' to OpenSSL oneline string representation (ex. /C=US/O=a).
+<span class='line'>2535</span>  * @example
+<span class='line'>2536</span>  * X509.hex2dn("3031310b3...") &rarr; /C=US/O=a/CN=b2+OU=b1
+<span class='line'>2537</span>  */</span><span class="WHIT">
+<span class='line'>2538</span> </span><span class="NAME">X509.hex2dn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2539</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2540</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hex.substr</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"malformed DN"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2541</span> 
+<span class='line'>2542</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>2543</span> 
-<span class='line'>2544</span> </span><span class="COMM">/**
-<span class='line'>2545</span>  * get relative distinguished name string in OpenSSL online format from hexadecimal string of ASN.1 DER RDN&lt;br/>
-<span class='line'>2546</span>  * @name hex2rdn
-<span class='line'>2547</span>  * @memberOf X509
-<span class='line'>2548</span>  * @function
-<span class='line'>2549</span>  * @param {String} hex hexadecimal string of ASN.1 DER concludes relative distinguished name
-<span class='line'>2550</span>  * @param {Integer} idx index of hexadecimal string (DEFAULT=0)
-<span class='line'>2551</span>  * @return {String} OpenSSL online format relative distinguished name
-<span class='line'>2552</span>  * @description
-<span class='line'>2553</span>  * This static method converts from a hexadecimal string of 
-<span class='line'>2554</span>  * relative distinguished name (RDN)
-<span class='line'>2555</span>  * specified by 'hex' and 'idx' to LDAP string representation (ex. O=test+CN=test).&lt;br/>
-<span class='line'>2556</span>  * NOTE: Multi-valued RDN is supported since jsnrsasign 6.2.2 x509 1.1.10.
-<span class='line'>2557</span>  * @example
-<span class='line'>2558</span>  * X509.hex2rdn("310a3008060355040a0c0161") &rarr; O=a
-<span class='line'>2559</span>  * X509.hex2rdn("31143008060355040a0c01613008060355040a0c0162") &rarr; O=a+O=b
-<span class='line'>2560</span>  */</span><span class="WHIT">
-<span class='line'>2561</span> </span><span class="NAME">X509.hex2rdn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2562</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2563</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hex.substr</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="STRN">"31"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"malformed RDN"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2564</span> 
-<span class='line'>2565</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2566</span> 
-<span class='line'>2567</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getChildIdx</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2568</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">aIdx.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2569</span> </span><span class="WHIT">	</span><span class="NAME">a.push</span><span class="PUNC">(</span><span class="NAME">X509.hex2attrTypeValue</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2570</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>2571</span> 
-<span class='line'>2572</span> </span><span class="WHIT">    </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">a.map</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="STRN">"+"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"\\+"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2573</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">a.join</span><span class="PUNC">(</span><span class="STRN">"+"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2574</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2544</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getChildIdx</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2545</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">aIdx.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2546</span> </span><span class="WHIT">	</span><span class="NAME">a.push</span><span class="PUNC">(</span><span class="NAME">X509.hex2rdn</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2547</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2548</span> 
+<span class='line'>2549</span> </span><span class="WHIT">    </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">a.map</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="STRN">"/"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"\\/"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2550</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"/"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">a.join</span><span class="PUNC">(</span><span class="STRN">"/"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2551</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2552</span> 
+<span class='line'>2553</span> </span><span class="COMM">/**
+<span class='line'>2554</span>  * get relative distinguished name string in OpenSSL online format from hexadecimal string of ASN.1 DER RDN&lt;br/>
+<span class='line'>2555</span>  * @name hex2rdn
+<span class='line'>2556</span>  * @memberOf X509
+<span class='line'>2557</span>  * @function
+<span class='line'>2558</span>  * @param {String} hex hexadecimal string of ASN.1 DER concludes relative distinguished name
+<span class='line'>2559</span>  * @param {Integer} idx index of hexadecimal string (DEFAULT=0)
+<span class='line'>2560</span>  * @return {String} OpenSSL online format relative distinguished name
+<span class='line'>2561</span>  * @description
+<span class='line'>2562</span>  * This static method converts from a hexadecimal string of 
+<span class='line'>2563</span>  * relative distinguished name (RDN)
+<span class='line'>2564</span>  * specified by 'hex' and 'idx' to LDAP string representation (ex. O=test+CN=test).&lt;br/>
+<span class='line'>2565</span>  * NOTE: Multi-valued RDN is supported since jsnrsasign 6.2.2 x509 1.1.10.
+<span class='line'>2566</span>  * @example
+<span class='line'>2567</span>  * X509.hex2rdn("310a3008060355040a0c0161") &rarr; O=a
+<span class='line'>2568</span>  * X509.hex2rdn("31143008060355040a0c01613008060355040a0c0162") &rarr; O=a+O=b
+<span class='line'>2569</span>  */</span><span class="WHIT">
+<span class='line'>2570</span> </span><span class="NAME">X509.hex2rdn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2571</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2572</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hex.substr</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="STRN">"31"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"malformed RDN"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2573</span> 
+<span class='line'>2574</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>2575</span> 
-<span class='line'>2576</span> </span><span class="COMM">/**
-<span class='line'>2577</span>  * get string from hexadecimal string of ASN.1 DER AttributeTypeAndValue&lt;br/>
-<span class='line'>2578</span>  * @name hex2attrTypeValue
-<span class='line'>2579</span>  * @memberOf X509
-<span class='line'>2580</span>  * @function
-<span class='line'>2581</span>  * @param {String} hex hexadecimal string of ASN.1 DER concludes AttributeTypeAndValue
-<span class='line'>2582</span>  * @param {Integer} idx index of hexadecimal string (DEFAULT=0)
-<span class='line'>2583</span>  * @return {String} string representation of AttributeTypeAndValue (ex. C=US)
-<span class='line'>2584</span>  * @description
-<span class='line'>2585</span>  * This static method converts from a hexadecimal string of AttributeTypeAndValue
-<span class='line'>2586</span>  * specified by 'hex' and 'idx' to LDAP string representation (ex. C=US).
-<span class='line'>2587</span>  * @example
-<span class='line'>2588</span>  * X509.hex2attrTypeValue("3008060355040a0c0161") &rarr; O=a
-<span class='line'>2589</span>  * X509.hex2attrTypeValue("300806035504060c0161") &rarr; C=a
-<span class='line'>2590</span>  * X509.hex2attrTypeValue("...3008060355040a0c0161...", 128) &rarr; O=a
-<span class='line'>2591</span>  */</span><span class="WHIT">
-<span class='line'>2592</span> </span><span class="NAME">X509.hex2attrTypeValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2593</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2594</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getV</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2595</span> 
-<span class='line'>2596</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2597</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hex.substr</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="WHIT"> 
-<span class='line'>2598</span> 	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"malformed attribute type and value"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2599</span> 
-<span class='line'>2600</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getChildIdx</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2601</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">aIdx.length</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">hex.substr</span><span class="PUNC">(</span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="STRN">"06"</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>2602</span> </span><span class="WHIT">	</span><span class="STRN">"malformed attribute type and value"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2603</span> 
-<span class='line'>2604</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oidHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2605</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oidInt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.ASN1Util.oidHexToInt</span><span class="PUNC">(</span><span class="NAME">oidHex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2606</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">atype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509.OID.oid2atype</span><span class="PUNC">(</span><span class="NAME">oidInt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2607</span> 
-<span class='line'>2608</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2609</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rawV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hextorstr</span><span class="PUNC">(</span><span class="NAME">hV</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2610</span> 
-<span class='line'>2611</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">atype</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"="</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">rawV</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2612</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2613</span> 
-<span class='line'>2614</span> </span><span class="COMM">/**
-<span class='line'>2615</span>  * get RSA/DSA/ECDSA public key object from X.509 certificate hexadecimal string&lt;br/>
-<span class='line'>2616</span>  * @name getPublicKeyFromCertHex
-<span class='line'>2617</span>  * @memberOf X509
-<span class='line'>2618</span>  * @function
-<span class='line'>2619</span>  * @param {String} h hexadecimal string of X.509 certificate for RSA/ECDSA/DSA public key
-<span class='line'>2620</span>  * @return returns RSAKey/KJUR.crypto.{ECDSA,DSA} object of public key
-<span class='line'>2621</span>  * @since jsrasign 7.1.0 x509 1.1.11
-<span class='line'>2622</span>  */</span><span class="WHIT">
-<span class='line'>2623</span> </span><span class="NAME">X509.getPublicKeyFromCertHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2624</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2625</span> </span><span class="WHIT">    </span><span class="NAME">x.readCertHex</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2626</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">x.getPublicKey</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2627</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2628</span> 
-<span class='line'>2629</span> </span><span class="COMM">/**
-<span class='line'>2630</span>  * get RSA/DSA/ECDSA public key object from PEM certificate string
-<span class='line'>2631</span>  * @name getPublicKeyFromCertPEM
-<span class='line'>2632</span>  * @memberOf X509
-<span class='line'>2633</span>  * @function
-<span class='line'>2634</span>  * @param {String} sCertPEM PEM formatted RSA/ECDSA/DSA X.509 certificate
-<span class='line'>2635</span>  * @return returns RSAKey/KJUR.crypto.{ECDSA,DSA} object of public key
-<span class='line'>2636</span>  * @since x509 1.1.1
-<span class='line'>2637</span>  * @description
-<span class='line'>2638</span>  * NOTE: DSA is also supported since x509 1.1.2.
-<span class='line'>2639</span>  */</span><span class="WHIT">
-<span class='line'>2640</span> </span><span class="NAME">X509.getPublicKeyFromCertPEM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">sCertPEM</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2641</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2642</span> </span><span class="WHIT">    </span><span class="NAME">x.readCertPEM</span><span class="PUNC">(</span><span class="NAME">sCertPEM</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2643</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">x.getPublicKey</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2644</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2645</span> 
-<span class='line'>2646</span> </span><span class="COMM">/**
-<span class='line'>2647</span>  * get public key information from PEM certificate
-<span class='line'>2648</span>  * @name getPublicKeyInfoPropOfCertPEM
-<span class='line'>2649</span>  * @memberOf X509
-<span class='line'>2650</span>  * @function
-<span class='line'>2651</span>  * @param {String} sCertPEM string of PEM formatted certificate
-<span class='line'>2652</span>  * @return {Hash} hash of information for public key
-<span class='line'>2653</span>  * @since x509 1.1.1
-<span class='line'>2654</span>  * @description
-<span class='line'>2655</span>  * Resulted associative array has following properties:&lt;br/>
-<span class='line'>2656</span>  * &lt;ul>
-<span class='line'>2657</span>  * &lt;li>algoid - hexadecimal string of OID of asymmetric key algorithm&lt;/li>
-<span class='line'>2658</span>  * &lt;li>algparam - hexadecimal string of OID of ECC curve name or null&lt;/li>
-<span class='line'>2659</span>  * &lt;li>keyhex - hexadecimal string of key in the certificate&lt;/li>
-<span class='line'>2660</span>  * &lt;/ul>
-<span class='line'>2661</span>  * NOTE: X509v1 certificate is also supported since x509.js 1.1.9.
-<span class='line'>2662</span>  */</span><span class="WHIT">
-<span class='line'>2663</span> </span><span class="NAME">X509.getPublicKeyInfoPropOfCertPEM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">sCertPEM</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2664</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2665</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_getVbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getVbyList</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2666</span> 
-<span class='line'>2667</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2668</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">hSPKI</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pubkey</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2669</span> </span><span class="WHIT">    </span><span class="NAME">result.algparam</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2670</span> 
-<span class='line'>2671</span> </span><span class="WHIT">    </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2672</span> </span><span class="WHIT">    </span><span class="NAME">x.readCertPEM</span><span class="PUNC">(</span><span class="NAME">sCertPEM</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2673</span> 
-<span class='line'>2674</span> </span><span class="WHIT">    </span><span class="NAME">hSPKI</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x.getPublicKeyHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2675</span> </span><span class="WHIT">    </span><span class="NAME">result.keyhex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getVbyList</span><span class="PUNC">(</span><span class="NAME">hSPKI</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"03"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">substr</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2676</span> </span><span class="WHIT">    </span><span class="NAME">result.algoid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getVbyList</span><span class="PUNC">(</span><span class="NAME">hSPKI</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"06"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2677</span> 
-<span class='line'>2678</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">result.algoid</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"2a8648ce3d0201"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">// ecPublicKey</span><span class="WHIT">
-<span class='line'>2679</span> </span><span class="WHIT">	</span><span class="NAME">result.algparam</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getVbyList</span><span class="PUNC">(</span><span class="NAME">hSPKI</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"06"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2680</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2681</span> 
-<span class='line'>2682</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2683</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2684</span> 
-<span class='line'>2685</span> </span><span class="COMM">/* ======================================================================
-<span class='line'>2686</span>  *   Specific V3 Extensions
-<span class='line'>2687</span>  * ====================================================================== */</span><span class="WHIT">
-<span class='line'>2688</span> 
-<span class='line'>2689</span> </span><span class="NAME">X509.KEYUSAGE_NAME</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">
-<span class='line'>2690</span> </span><span class="WHIT">    </span><span class="STRN">"digitalSignature"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>2691</span> </span><span class="WHIT">    </span><span class="STRN">"nonRepudiation"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>2692</span> </span><span class="WHIT">    </span><span class="STRN">"keyEncipherment"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>2693</span> </span><span class="WHIT">    </span><span class="STRN">"dataEncipherment"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>2694</span> </span><span class="WHIT">    </span><span class="STRN">"keyAgreement"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>2695</span> </span><span class="WHIT">    </span><span class="STRN">"keyCertSign"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>2696</span> </span><span class="WHIT">    </span><span class="STRN">"cRLSign"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>2697</span> </span><span class="WHIT">    </span><span class="STRN">"encipherOnly"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>2698</span> </span><span class="WHIT">    </span><span class="STRN">"decipherOnly"</span><span class="WHIT">
-<span class='line'>2699</span> </span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2700</span> </span></pre></body></html>
+<span class='line'>2576</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX.getChildIdx</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2577</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">aIdx.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2578</span> </span><span class="WHIT">	</span><span class="NAME">a.push</span><span class="PUNC">(</span><span class="NAME">X509.hex2attrTypeValue</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2579</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2580</span> 
+<span class='line'>2581</span> </span><span class="WHIT">    </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">a.map</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s.replace</span><span class="PUNC">(</span><span class="STRN">"+"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"\\+"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2582</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">a.join</span><span class="PUNC">(</span><span class="STRN">"+"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2583</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2584</span> 
+<span class='line'>2585</span> </span><span class="COMM">/**
+<span class='line'>2586</span>  * get string from hexadecimal string of ASN.1 DER AttributeTypeAndValue&lt;br/>
+<span class='line'>2587</span>  * @name hex2attrTypeValue
+<span class='line'>2588</span>  * @memberOf X509
+<span class='line'>2589</span>  * @function
+<span class='line'>2590</span>  * @param {String} hex hexadecimal string of ASN.1 DER concludes AttributeTypeAndValue
+<span class='line'>2591</span>  * @param {Integer} idx index of hexadecimal string (DEFAULT=0)
+<span class='line'>2592</span>  * @return {String} string representation of AttributeTypeAndValue (ex. C=US)
+<span class='line'>2593</span>  * @description
+<span class='line'>2594</span>  * This static method converts from a hexadecimal string of AttributeTypeAndValue
+<span class='line'>2595</span>  * specified by 'hex' and 'idx' to LDAP string representation (ex. C=US).
+<span class='line'>2596</span>  * @example
+<span class='line'>2597</span>  * X509.hex2attrTypeValue("3008060355040a0c0161") &rarr; O=a
+<span class='line'>2598</span>  * X509.hex2attrTypeValue("300806035504060c0161") &rarr; C=a
+<span class='line'>2599</span>  * X509.hex2attrTypeValue("...3008060355040a0c0161...", 128) &rarr; O=a
+<span class='line'>2600</span>  */</span><span class="WHIT">
+<span class='line'>2601</span> </span><span class="NAME">X509.hex2attrTypeValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2602</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2603</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getV</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2604</span> 
+<span class='line'>2605</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2606</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hex.substr</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="WHIT"> 
+<span class='line'>2607</span> 	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"malformed attribute type and value"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2608</span> 
+<span class='line'>2609</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getChildIdx</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2610</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">aIdx.length</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">hex.substr</span><span class="PUNC">(</span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="STRN">"06"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>2611</span> </span><span class="WHIT">	</span><span class="STRN">"malformed attribute type and value"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2612</span> 
+<span class='line'>2613</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oidHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2614</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oidInt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.ASN1Util.oidHexToInt</span><span class="PUNC">(</span><span class="NAME">oidHex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2615</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">atype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509.OID.oid2atype</span><span class="PUNC">(</span><span class="NAME">oidInt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2616</span> 
+<span class='line'>2617</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2618</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rawV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hextorstr</span><span class="PUNC">(</span><span class="NAME">hV</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2619</span> 
+<span class='line'>2620</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">atype</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"="</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">rawV</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2621</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2622</span> 
+<span class='line'>2623</span> </span><span class="COMM">/**
+<span class='line'>2624</span>  * get RSA/DSA/ECDSA public key object from X.509 certificate hexadecimal string&lt;br/>
+<span class='line'>2625</span>  * @name getPublicKeyFromCertHex
+<span class='line'>2626</span>  * @memberOf X509
+<span class='line'>2627</span>  * @function
+<span class='line'>2628</span>  * @param {String} h hexadecimal string of X.509 certificate for RSA/ECDSA/DSA public key
+<span class='line'>2629</span>  * @return returns RSAKey/KJUR.crypto.{ECDSA,DSA} object of public key
+<span class='line'>2630</span>  * @since jsrasign 7.1.0 x509 1.1.11
+<span class='line'>2631</span>  */</span><span class="WHIT">
+<span class='line'>2632</span> </span><span class="NAME">X509.getPublicKeyFromCertHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2633</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2634</span> </span><span class="WHIT">    </span><span class="NAME">x.readCertHex</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2635</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">x.getPublicKey</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2636</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2637</span> 
+<span class='line'>2638</span> </span><span class="COMM">/**
+<span class='line'>2639</span>  * get RSA/DSA/ECDSA public key object from PEM certificate string
+<span class='line'>2640</span>  * @name getPublicKeyFromCertPEM
+<span class='line'>2641</span>  * @memberOf X509
+<span class='line'>2642</span>  * @function
+<span class='line'>2643</span>  * @param {String} sCertPEM PEM formatted RSA/ECDSA/DSA X.509 certificate
+<span class='line'>2644</span>  * @return returns RSAKey/KJUR.crypto.{ECDSA,DSA} object of public key
+<span class='line'>2645</span>  * @since x509 1.1.1
+<span class='line'>2646</span>  * @description
+<span class='line'>2647</span>  * NOTE: DSA is also supported since x509 1.1.2.
+<span class='line'>2648</span>  */</span><span class="WHIT">
+<span class='line'>2649</span> </span><span class="NAME">X509.getPublicKeyFromCertPEM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">sCertPEM</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2650</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2651</span> </span><span class="WHIT">    </span><span class="NAME">x.readCertPEM</span><span class="PUNC">(</span><span class="NAME">sCertPEM</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2652</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">x.getPublicKey</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2653</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2654</span> 
+<span class='line'>2655</span> </span><span class="COMM">/**
+<span class='line'>2656</span>  * get public key information from PEM certificate
+<span class='line'>2657</span>  * @name getPublicKeyInfoPropOfCertPEM
+<span class='line'>2658</span>  * @memberOf X509
+<span class='line'>2659</span>  * @function
+<span class='line'>2660</span>  * @param {String} sCertPEM string of PEM formatted certificate
+<span class='line'>2661</span>  * @return {Hash} hash of information for public key
+<span class='line'>2662</span>  * @since x509 1.1.1
+<span class='line'>2663</span>  * @description
+<span class='line'>2664</span>  * Resulted associative array has following properties:&lt;br/>
+<span class='line'>2665</span>  * &lt;ul>
+<span class='line'>2666</span>  * &lt;li>algoid - hexadecimal string of OID of asymmetric key algorithm&lt;/li>
+<span class='line'>2667</span>  * &lt;li>algparam - hexadecimal string of OID of ECC curve name or null&lt;/li>
+<span class='line'>2668</span>  * &lt;li>keyhex - hexadecimal string of key in the certificate&lt;/li>
+<span class='line'>2669</span>  * &lt;/ul>
+<span class='line'>2670</span>  * NOTE: X509v1 certificate is also supported since x509.js 1.1.9.
+<span class='line'>2671</span>  */</span><span class="WHIT">
+<span class='line'>2672</span> </span><span class="NAME">X509.getPublicKeyInfoPropOfCertPEM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">sCertPEM</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2673</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2674</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_getVbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getVbyList</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2675</span> 
+<span class='line'>2676</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2677</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">hSPKI</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pubkey</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2678</span> </span><span class="WHIT">    </span><span class="NAME">result.algparam</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2679</span> 
+<span class='line'>2680</span> </span><span class="WHIT">    </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2681</span> </span><span class="WHIT">    </span><span class="NAME">x.readCertPEM</span><span class="PUNC">(</span><span class="NAME">sCertPEM</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2682</span> 
+<span class='line'>2683</span> </span><span class="WHIT">    </span><span class="NAME">hSPKI</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x.getPublicKeyHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2684</span> </span><span class="WHIT">    </span><span class="NAME">result.keyhex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getVbyList</span><span class="PUNC">(</span><span class="NAME">hSPKI</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"03"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">substr</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2685</span> </span><span class="WHIT">    </span><span class="NAME">result.algoid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getVbyList</span><span class="PUNC">(</span><span class="NAME">hSPKI</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"06"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2686</span> 
+<span class='line'>2687</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">result.algoid</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"2a8648ce3d0201"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">// ecPublicKey</span><span class="WHIT">
+<span class='line'>2688</span> </span><span class="WHIT">	</span><span class="NAME">result.algparam</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getVbyList</span><span class="PUNC">(</span><span class="NAME">hSPKI</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"06"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2689</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2690</span> 
+<span class='line'>2691</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2692</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2693</span> 
+<span class='line'>2694</span> </span><span class="COMM">/* ======================================================================
+<span class='line'>2695</span>  *   Specific V3 Extensions
+<span class='line'>2696</span>  * ====================================================================== */</span><span class="WHIT">
+<span class='line'>2697</span> 
+<span class='line'>2698</span> </span><span class="NAME">X509.KEYUSAGE_NAME</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">
+<span class='line'>2699</span> </span><span class="WHIT">    </span><span class="STRN">"digitalSignature"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>2700</span> </span><span class="WHIT">    </span><span class="STRN">"nonRepudiation"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>2701</span> </span><span class="WHIT">    </span><span class="STRN">"keyEncipherment"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>2702</span> </span><span class="WHIT">    </span><span class="STRN">"dataEncipherment"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>2703</span> </span><span class="WHIT">    </span><span class="STRN">"keyAgreement"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>2704</span> </span><span class="WHIT">    </span><span class="STRN">"keyCertSign"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>2705</span> </span><span class="WHIT">    </span><span class="STRN">"cRLSign"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>2706</span> </span><span class="WHIT">    </span><span class="STRN">"encipherOnly"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>2707</span> </span><span class="WHIT">    </span><span class="STRN">"decipherOnly"</span><span class="WHIT">
+<span class='line'>2708</span> </span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2709</span> </span></pre></body></html>
