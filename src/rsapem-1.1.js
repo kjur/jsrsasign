@@ -1,9 +1,9 @@
-/* rsapem-1.3.0.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* rsapem-1.3.1.js (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * rsapem.js - Cryptographic Algorithm Provider class
  *
- * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name rsapem-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.0 rsapem 1.3.0 (2017-Jun-24)
+ * @version jsrsasign 8.0.21 rsapem 1.3.1 (2020-Jul-24)
  * @since jsrsasign 1.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -101,22 +101,22 @@ RSAKey.prototype.readPKCS5PrvKeyHex = function(h) {
 RSAKey.prototype.readPKCS8PrvKeyHex = function(h) {
     var hN, hE, hD, hP, hQ, hDP, hDQ, hCO;
     var _ASN1HEX = ASN1HEX;
-    var _getVbyList = _ASN1HEX.getVbyList;
+    var _getVbyListEx = _ASN1HEX.getVbyListEx;
 
     if (_ASN1HEX.isASN1HEX(h) === false)
-	throw "not ASN.1 hex string";
+	throw new Error("not ASN.1 hex string");
 
     try {
-	hN  = _getVbyList(h, 0, [2, 0, 1], "02");
-	hE  = _getVbyList(h, 0, [2, 0, 2], "02");
-	hD  = _getVbyList(h, 0, [2, 0, 3], "02");
-	hP  = _getVbyList(h, 0, [2, 0, 4], "02");
-	hQ  = _getVbyList(h, 0, [2, 0, 5], "02");
-	hDP = _getVbyList(h, 0, [2, 0, 6], "02");
-	hDQ = _getVbyList(h, 0, [2, 0, 7], "02");
-	hCO = _getVbyList(h, 0, [2, 0, 8], "02");
+	hN  = _getVbyListEx(h, 0, [2, 0, 1], "02");
+	hE  = _getVbyListEx(h, 0, [2, 0, 2], "02");
+	hD  = _getVbyListEx(h, 0, [2, 0, 3], "02");
+	hP  = _getVbyListEx(h, 0, [2, 0, 4], "02");
+	hQ  = _getVbyListEx(h, 0, [2, 0, 5], "02");
+	hDP = _getVbyListEx(h, 0, [2, 0, 6], "02");
+	hDQ = _getVbyListEx(h, 0, [2, 0, 7], "02");
+	hCO = _getVbyListEx(h, 0, [2, 0, 8], "02");
     } catch(ex) {
-	throw "malformed PKCS#8 plain RSA private key";
+	throw new Error("malformed PKCS#8 plain RSA private key");
     }
 
     this.setPrivateEx(hN, hE, hD, hP, hQ, hDP, hDQ, hCO);
@@ -135,12 +135,12 @@ RSAKey.prototype.readPKCS5PubKeyHex = function(h) {
     var _getV = _ASN1HEX.getV;
 
     if (_ASN1HEX.isASN1HEX(h) === false)
-	throw "keyHex is not ASN.1 hex string";
+	throw new Error("keyHex is not ASN.1 hex string");
     var aIdx = _ASN1HEX.getChildIdx(h, 0);
     if (aIdx.length !== 2 ||
 	h.substr(aIdx[0], 2) !== "02" ||
 	h.substr(aIdx[1], 2) !== "02")
-	throw "wrong hex for PKCS#5 public key";
+	throw new Error("wrong hex for PKCS#5 public key");
     var hN = _getV(h, aIdx[0]);
     var hE = _getV(h, aIdx[1]);
     this.setPublic(hN, hE);
@@ -157,13 +157,13 @@ RSAKey.prototype.readPKCS5PubKeyHex = function(h) {
 RSAKey.prototype.readPKCS8PubKeyHex = function(h) {
     var _ASN1HEX = ASN1HEX;
     if (_ASN1HEX.isASN1HEX(h) === false)
-	throw "not ASN.1 hex string";
+	throw new Error("not ASN.1 hex string");
 
     // 06092a864886f70d010101: OBJECT IDENTIFIER rsaEncryption (1 2 840 113549 1 1 1)
-    if (_ASN1HEX.getTLVbyList(h, 0, [0, 0]) !== "06092a864886f70d010101")
-	throw "not PKCS8 RSA public key";
+    if (_ASN1HEX.getTLVbyListEx(h, 0, [0, 0]) !== "06092a864886f70d010101")
+	throw new Error("not PKCS8 RSA public key");
 
-    var p5hex = _ASN1HEX.getTLVbyList(h, 0, [1, 0]);
+    var p5hex = _ASN1HEX.getTLVbyListEx(h, 0, [1, 0]);
     this.readPKCS5PubKeyHex(p5hex);
 };
 

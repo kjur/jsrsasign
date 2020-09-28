@@ -181,18 +181,16 @@ test("Util.ripemd160", function() {
 test("Util.getRandomHexOfNbytes", function() {
   equal(KJUR.crypto.Util.getRandomHexOfNbytes(1).length, 2, "1"); 
   equal(KJUR.crypto.Util.getRandomHexOfNbytes(16).length, 32, "16"); 
-  equal(KJUR.crypto.Util.getRandomHexOfNbytes(512).length, 1024, "16"); 
+  equal(KJUR.crypto.Util.getRandomHexOfNbytes(512).length, 1024, "512"); 
 });
 
 test("Util.getRandomBigIntegerOfNbytes", function() {
-  equal(KJUR.crypto.Util.getRandomBigIntegerOfNbytes(1).bitLength(), 8, "1"); 
-  equal(KJUR.crypto.Util.getRandomBigIntegerOfNbytes(512).bitLength(), 4096, "512"); 
+  equal(KJUR.crypto.Util.getRandomBigIntegerOfNbytes(1).bitLength() <= 8, true, "<=8"); 
+  equal(KJUR.crypto.Util.getRandomBigIntegerOfNbytes(512).bitLength() <= 4096, true, "<=4096"); 
 });
 
 test("Util.getRandomBigIntegerOfNbits", function() {
-  //equal(KJUR.crypto.Util.getRandomHexOfNbits(11), "11", "11"); 
-  //equal((new BigInteger(KJUR.crypto.Util.getRandomHexOfNbits(5), 16)).toString(2), "0", "3"); 
-  equal(KJUR.crypto.Util.getRandomBigIntegerOfNbits(5).bitLength(), 5, "5"); 
+  equal(KJUR.crypto.Util.getRandomBigIntegerOfNbits(5).bitLength() <= 5, true, "<=5"); 
 });
 
 test("Util.getRandomBigIntegerZeroToMax", function() {
@@ -419,7 +417,6 @@ ECC related QUnit test pages:
 <a href="qunit-do-ecdsamod.html">ecdsa-modified.js</a> | 
 <a href="qunit-do-ecparam.html">ecparam.js</a> | 
 </p>
-
 </body>
 </html>
 

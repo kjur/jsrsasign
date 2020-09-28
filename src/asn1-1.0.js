@@ -1,9 +1,9 @@
-/* asn1-1.0.14.js (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1-1.0.19.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
  *
- * Copyright (c) 2013-2018 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1 1.0.14 (2018-Apr-03)
+ * @version jsrsasign 10.0.0 asn1 1.0.19 (2020-Sep-22)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -62,6 +62,8 @@ if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
  * <li>0x16 {@link KJUR.asn1.DERIA5String}</li>
  * <li>0x17 {@link KJUR.asn1.DERUTCTime}</li>
  * <li>0x18 {@link KJUR.asn1.DERGeneralizedTime}</li>
+ * <li>0x1a {@link KJUR.asn1.DERVisibleString}</li>
+ * <li>0x1e {@link KJUR.asn1.DERBMPString}</li>
  * <li>0x30 {@link KJUR.asn1.DERSequence}</li>
  * <li>0x31 {@link KJUR.asn1.DERSet}</li>
  * </ul>
@@ -170,27 +172,35 @@ KJUR.asn1.ASN1Util = new function() {
      * </blockquote>
      * 'TYPE-OF-ASN1OBJ' can be one of following symbols:
      * <ul>
-     * <li>'bool' - DERBoolean</li>
-     * <li>'int' - DERInteger</li>
-     * <li>'bitstr' - DERBitString</li>
-     * <li>'octstr' - DEROctetString</li>
-     * <li>'null' - DERNull</li>
-     * <li>'oid' - DERObjectIdentifier</li>
-     * <li>'enum' - DEREnumerated</li>
-     * <li>'utf8str' - DERUTF8String</li>
-     * <li>'numstr' - DERNumericString</li>
-     * <li>'prnstr' - DERPrintableString</li>
-     * <li>'telstr' - DERTeletexString</li>
-     * <li>'ia5str' - DERIA5String</li>
-     * <li>'utctime' - DERUTCTime</li>
-     * <li>'gentime' - DERGeneralizedTime</li>
-     * <li>'seq' - DERSequence</li>
-     * <li>'set' - DERSet</li>
-     * <li>'tag' - DERTaggedObject</li>
+     * <li>'bool' - {@link KJUR.asn1.DERBoolean}</li>
+     * <li>'int' - {@link KJUR.asn1.DERInteger}</li>
+     * <li>'bitstr' - {@link KJUR.asn1.DERBitString}</li>
+     * <li>'octstr' - {@link KJUR.asn1.DEROctetString}</li>
+     * <li>'null' - {@link KJUR.asn1.DERNull}</li>
+     * <li>'oid' - {@link KJUR.asn1.DERObjectIdentifier}</li>
+     * <li>'enum' - {@link KJUR.asn1.DEREnumerated}</li>
+     * <li>'utf8str' - {@link KJUR.asn1.DERUTF8String}</li>
+     * <li>'numstr' - {@link KJUR.asn1.DERNumericString}</li>
+     * <li>'prnstr' - {@link KJUR.asn1.DERPrintableString}</li>
+     * <li>'telstr' - {@link KJUR.asn1.DERTeletexString}</li>
+     * <li>'ia5str' - {@link KJUR.asn1.DERIA5String}</li>
+     * <li>'utctime' - {@link KJUR.asn1.DERUTCTime}</li>
+     * <li>'gentime' - {@link KJUR.asn1.DERGeneralizedTime}</li>
+     * <li>'visstr' - {@link KJUR.asn1.DERVisibleString}</li>
+     * <li>'bmpstr' - {@link KJUR.asn1.DERBMPString}</li>
+     * <li>'seq' - {@link KJUR.asn1.DERSequence}</li>
+     * <li>'set' - {@link KJUR.asn1.DERSet}</li>
+     * <li>'tag' - {@link KJUR.asn1.DERTaggedObject}</li>
+     * <li>'asn1' - {@link KJUR.asn1.ASN1Object}</li>
      * </ul>
+     * <br/>
+     * NOTE: Structured object such as SEQUENCE or SET can conclude
+     * ASN1Object as well as JSON parameters since jsrsasign 9.0.0.
+     *
      * @example
      * newObject({'prnstr': 'aaa'});
      * newObject({'seq': [{'int': 3}, {'prnstr': 'aaa'}]})
+     * newObject({seq: [{int: 3}, new DERInteger({int: 3})]}) // mixed
      * // ASN.1 Tagged Object
      * newObject({'tag': {'tag': 'a1', 
      *                    'explicit': true,
@@ -206,6 +216,7 @@ KJUR.asn1.ASN1Util = new function() {
     this.newObject = function(param) {
 	var _KJUR = KJUR,
 	    _KJUR_asn1 = _KJUR.asn1,
+	    _ASN1Object = _KJUR_asn1.ASN1Object,
 	    _DERBoolean = _KJUR_asn1.DERBoolean,
 	    _DERInteger = _KJUR_asn1.DERInteger,
 	    _DERBitString = _KJUR_asn1.DERBitString,
@@ -220,18 +231,22 @@ KJUR.asn1.ASN1Util = new function() {
 	    _DERIA5String = _KJUR_asn1.DERIA5String,
 	    _DERUTCTime = _KJUR_asn1.DERUTCTime,
 	    _DERGeneralizedTime = _KJUR_asn1.DERGeneralizedTime,
+	    _DERVisibleString = _KJUR_asn1.DERVisibleString,
+	    _DERBMPString = _KJUR_asn1.DERBMPString,
 	    _DERSequence = _KJUR_asn1.DERSequence,
 	    _DERSet = _KJUR_asn1.DERSet,
 	    _DERTaggedObject = _KJUR_asn1.DERTaggedObject,
 	    _newObject = _KJUR_asn1.ASN1Util.newObject;
 
+	if (param instanceof _KJUR_asn1.ASN1Object) return param;
+
         var keys = Object.keys(param);
         if (keys.length != 1)
-            throw "key of param shall be only one.";
+            throw new Error("key of param shall be only one.");
         var key = keys[0];
 
-        if (":bool:int:bitstr:octstr:null:oid:enum:utf8str:numstr:prnstr:telstr:ia5str:utctime:gentime:seq:set:tag:".indexOf(":" + key + ":") == -1)
-            throw "undefined key: " + key;
+        if (":asn1:bool:int:bitstr:octstr:null:oid:enum:utf8str:numstr:prnstr:telstr:ia5str:utctime:gentime:visstr:bmpstr:seq:set:tag:".indexOf(":" + key + ":") == -1)
+            throw new Error("undefined key: " + key);
 
         if (key == "bool")    return new _DERBoolean(param[key]);
         if (key == "int")     return new _DERInteger(param[key]);
@@ -247,6 +262,9 @@ KJUR.asn1.ASN1Util = new function() {
         if (key == "ia5str")  return new _DERIA5String(param[key]);
         if (key == "utctime") return new _DERUTCTime(param[key]);
         if (key == "gentime") return new _DERGeneralizedTime(param[key]);
+        if (key == "visstr")  return new _DERVisibleString(param[key]);
+        if (key == "bmpstr")  return new _DERBMPString(param[key]);
+        if (key == "asn1")    return new _ASN1Object(param[key]);
 
         if (key == "seq") {
             var paramList = param[key];
@@ -277,6 +295,8 @@ KJUR.asn1.ASN1Util = new function() {
 					     explicit: tagParam[1],
 					     obj: obj});
             } else {
+		return new _DERTaggedObject(tagParam);
+/*
                 var newParam = {};
                 if (tagParam.explicit !== undefined)
                     newParam.explicit = tagParam.explicit;
@@ -286,6 +306,7 @@ KJUR.asn1.ASN1Util = new function() {
                     throw "obj shall be specified for 'tag'.";
                 newParam.obj = _newObject(tagParam.obj);
                 return new _DERTaggedObject(newParam);
+ */
             }
         }
     };
@@ -354,9 +375,11 @@ KJUR.asn1.ASN1Util.oidHexToInt = function(hex) {
  * @param {String} oidString dot noted string of object identifier
  * @return {String} hexadecimal value of object identifier
  * @since jsrsasign 4.8.3 asn1 1.0.7
+ * @see {@link ASN1HEX.hextooidstr}
  * @description
  * This static method converts from object identifier value string.
  * to hexadecimal string representation of it.
+ * {@link ASN1HEX.hextooidstr} is a reverse function of this.
  * @example
  * KJUR.asn1.ASN1Util.oidIntToHex("2.5.4.6") &rarr; "550406"
  */
@@ -406,25 +429,33 @@ KJUR.asn1.ASN1Util.oidIntToHex = function(oidString) {
 // ********************************************************************
 
 /**
- * base class for ASN.1 DER encoder object
+ * base class for ASN.1 DER encoder object<br/>
  * @name KJUR.asn1.ASN1Object
  * @class base class for ASN.1 DER encoder object
+ * @param {Array} params JSON object parameter for constructor
  * @property {Boolean} isModified flag whether internal data was changed
+ * @property {Array} params JSON object parameter for ASN.1 encode
  * @property {String} hTLV hexadecimal string of ASN.1 TLV
  * @property {String} hT hexadecimal string of ASN.1 TLV tag(T)
  * @property {String} hL hexadecimal string of ASN.1 TLV length(L)
  * @property {String} hV hexadecimal string of ASN.1 TLV value(V)
+ *
  * @description
+ * This class is ASN.1 DER object encode base class.
+ * 
+ * @example
+ * new KJUR.asn1.ASN1Object({tlv: "030101"})
  */
-KJUR.asn1.ASN1Object = function() {
+KJUR.asn1.ASN1Object = function(params) {
     var isModified = true;
     var hTLV = null;
     var hT = '00';
     var hL = '00';
     var hV = '';
+    this.params = null;
 
     /**
-     * get hexadecimal ASN.1 TLV length(L) bytes from TLV value(V)
+     * get hexadecimal ASN.1 TLV length(L) bytes from TLV value(V)<br/>
      * @name getLengthHexFromValue
      * @memberOf KJUR.asn1.ASN1Object#
      * @function
@@ -432,10 +463,11 @@ KJUR.asn1.ASN1Object = function() {
      */
     this.getLengthHexFromValue = function() {
         if (typeof this.hV == "undefined" || this.hV == null) {
-            throw "this.hV is null or undefined.";
+            throw new Error("this.hV is null or undefined");
         }
         if (this.hV.length % 2 == 1) {
-            throw "value hex must be even length: n=" + hV.length + ",v=" + this.hV;
+            throw new Error("value hex must be even length: n=" +
+			    hV.length + ",v=" + this.hV);
         }
         var n = this.hV.length / 2;
         var hN = n.toString(16);
@@ -487,6 +519,17 @@ KJUR.asn1.ASN1Object = function() {
     this.getFreshValueHex = function() {
         return '';
     };
+
+    this.setByParam = function(params) {
+	this.params = params;
+    };
+
+    if (params != undefined) {
+	if (params.tlv != undefined) {
+	    this.hTLV = params.tlv;
+	    this.isModified = false;
+	}
+    }
 };
 
 // == BEGIN DERAbstractString ================================================
@@ -1082,7 +1125,7 @@ YAHOO.lang.extend(KJUR.asn1.DERNull, KJUR.asn1.ASN1Object);
  * class for ASN.1 DER ObjectIdentifier
  * @name KJUR.asn1.DERObjectIdentifier
  * @class class for ASN.1 DER ObjectIdentifier
- * @param {Array} params associative array of parameters (ex. {'oid': '2.5.4.5'})
+ * @param {Object} JSON object or string of parameters (ex. {'oid': '2.5.4.5'})
  * @extends KJUR.asn1.ASN1Object
  * @description
  * <br/>
@@ -1093,6 +1136,12 @@ YAHOO.lang.extend(KJUR.asn1.DERNull, KJUR.asn1.ASN1Object);
  * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
  * </ul>
  * NOTE: 'params' can be omitted.
+ * @example
+ * new DERObjectIdentifier({"name": "sha1"})
+ * new DERObjectIdentifier({"oid": "1.2.3.4"})
+ * new DERObjectIdentifier({"hex": "2d..."})
+ * new DERObjectIdentifier("1.2.3.4")
+ * new DERObjectIdentifier("SHA1withRSA")
  */
 KJUR.asn1.DERObjectIdentifier = function(params) {
     var itox = function(i) {
@@ -1146,7 +1195,7 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
      */
     this.setValueOidString = function(oidString) {
         if (! oidString.match(/^[0-9.]+$/)) {
-            throw "malformed oid string: " + oidString;
+            throw new Error("malformed oid string: " + oidString);
         }
         var h = '';
         var a = oidString.split('.');
@@ -1181,29 +1230,35 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
 	if (oid !== '') {
             this.setValueOidString(oid);
         } else {
-            throw "DERObjectIdentifier oidName undefined: " + oidName;
+            throw new Error("DERObjectIdentifier oidName undefined: " + oidName);
         }
     };
+
+    this.setValueNameOrOid = function(nameOrOid) {
+	if (nameOrOid.match(/^[0-2].[0-9.]+$/)) {
+	    this.setValueOidString(nameOrOid);
+	} else {
+	    this.setValueName(nameOrOid);
+	}
+    }
 
     this.getFreshValueHex = function() {
         return this.hV;
     };
 
-    if (params !== undefined) {
+    this.setByParam = function(params) {
         if (typeof params === "string") {
-	    if (params.match(/^[0-2].[0-9.]+$/)) {
-		this.setValueOidString(params);
-	    } else {
-		this.setValueName(params);
-	    }
+	    this.setValueNameOrOid(params);
         } else if (params.oid !== undefined) {
-            this.setValueOidString(params.oid);
+	    this.setValueNameOrOid(params.oid);
+        } else if (params.name !== undefined) {
+            this.setValueNameOrOid(params.name);
         } else if (params.hex !== undefined) {
             this.setValueHex(params.hex);
-        } else if (params.name !== undefined) {
-            this.setValueName(params.name);
         }
-    }
+    };
+
+    if (params !== undefined) this.setByParam(params);
 };
 YAHOO.lang.extend(KJUR.asn1.DERObjectIdentifier, KJUR.asn1.ASN1Object);
 
@@ -1366,6 +1421,40 @@ KJUR.asn1.DERIA5String = function(params) {
     this.hT = "16";
 };
 YAHOO.lang.extend(KJUR.asn1.DERIA5String, KJUR.asn1.DERAbstractString);
+
+// ********************************************************************
+/**
+ * class for ASN.1 DER VisibleString
+ * @name KJUR.asn1.DERVisibleString
+ * @class class for ASN.1 DER VisibleString
+ * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
+ * @extends KJUR.asn1.DERAbstractString
+ * @since jsrsasign 8.0.23 asn1 1.0.15
+ * @description
+ * @see KJUR.asn1.DERAbstractString - superclass
+ */
+KJUR.asn1.DERVisibleString = function(params) {
+    KJUR.asn1.DERIA5String.superclass.constructor.call(this, params);
+    this.hT = "1a";
+};
+YAHOO.lang.extend(KJUR.asn1.DERVisibleString, KJUR.asn1.DERAbstractString);
+
+// ********************************************************************
+/**
+ * class for ASN.1 DER BMPString
+ * @name KJUR.asn1.DERBMPString
+ * @class class for ASN.1 DER BMPString
+ * @param {Array} params associative array of parameters (ex. {'str': 'aaa'})
+ * @extends KJUR.asn1.DERAbstractString
+ * @since jsrsasign 8.0.23 asn1 1.0.15
+ * @description
+ * @see KJUR.asn1.DERAbstractString - superclass
+ */
+KJUR.asn1.DERBMPString = function(params) {
+    KJUR.asn1.DERBMPString.superclass.constructor.call(this, params);
+    this.hT = "1e";
+};
+YAHOO.lang.extend(KJUR.asn1.DERBMPString, KJUR.asn1.DERAbstractString);
 
 // ********************************************************************
 /**
@@ -1587,6 +1676,7 @@ YAHOO.lang.extend(KJUR.asn1.DERSet, KJUR.asn1.DERAbstractStructured);
  * @name KJUR.asn1.DERTaggedObject
  * @class class for ASN.1 DER TaggedObject
  * @extends KJUR.asn1.ASN1Object
+ *
  * @description
  * <br/>
  * Parameter 'tagNoNex' is ASN.1 tag(T) value for this object.
@@ -1596,18 +1686,35 @@ YAHOO.lang.extend(KJUR.asn1.DERSet, KJUR.asn1.DERAbstractStructured);
  * As for optional argument 'params' for constructor, you can specify *ANY* of
  * following properties:
  * <ul>
+ * <li>tag - specify tag (default is 'a0' which means [0])</li>
  * <li>explicit - specify true if this is explicit tag otherwise false 
  *     (default is 'true').</li>
- * <li>tag - specify tag (default is 'a0' which means [0])</li>
  * <li>obj - specify ASN1Object which is tagged</li>
+ * <li>tage - specify tag with explicit</li>
+ * <li>tagi - specify tag with implicit</li>
  * </ul>
+ *
  * @example
- * d1 = new KJUR.asn1.DERUTF8String({'str':'a'});
+ * new KJUR.asn1.DERTaggedObject({
+ *  tage:'a0', obj: new KJUR.asn1.DERInteger({int: 3}) // explicit
+ * }) 
+ * new KJUR.asn1.DERTaggedObject({
+ *  tagi:'a0', obj: new KJUR.asn1.DERInteger({int: 3}) // implicit
+ * }) 
+ * new KJUR.asn1.DERTaggedObject({
+ *  tag:'a0', explicit: true, obj: new KJUR.asn1.DERInteger({int: 3}) // explicit
+ * }) 
+ *
+ * // to hexadecimal
+ * d1 = new KJUR.asn1.DERUTF8String({str':'a'})
  * d2 = new KJUR.asn1.DERTaggedObject({'obj': d1});
  * hex = d2.getEncodedHex();
  */
 KJUR.asn1.DERTaggedObject = function(params) {
     KJUR.asn1.DERTaggedObject.superclass.constructor.call(this);
+
+    var _KJUR_asn1 = KJUR.asn1;
+
     this.hT = "a0";
     this.hV = '';
     this.isExplicit = true;
@@ -1642,17 +1749,32 @@ KJUR.asn1.DERTaggedObject = function(params) {
         return this.hV;
     };
 
-    if (typeof params != "undefined") {
-        if (typeof params['tag'] != "undefined") {
-            this.hT = params['tag'];
+    this.setByParam = function(params) {
+        if (params.tag != undefined) {
+            this.hT = params.tag;
         }
-        if (typeof params['explicit'] != "undefined") {
-            this.isExplicit = params['explicit'];
+        if (params.explicit != undefined) {
+            this.isExplicit = params.explicit;
         }
-        if (typeof params['obj'] != "undefined") {
-            this.asn1Object = params['obj'];
-            this.setASN1Object(this.isExplicit, this.hT, this.asn1Object);
+	if (params.tage != undefined) {
+	    this.hT = params.tage;
+            this.isExplicit = true;
+	}
+	if (params.tagi != undefined) {
+	    this.hT = params.tagi;
+            this.isExplicit = false;
+	}
+        if (params.obj != undefined) {
+	    if (params.obj instanceof _KJUR_asn1.ASN1Object) {
+		this.asn1Object = params.obj;
+		this.setASN1Object(this.isExplicit, this.hT, this.asn1Object);
+	    } else if (typeof params.obj == "object") {
+		this.asn1Object = _KJUR_asn1.ASN1Util.newObject(params.obj);
+		this.setASN1Object(this.isExplicit, this.hT, this.asn1Object);
+	    }
         }
-    }
+    };
+
+    if (params != undefined) this.setByParam(params);
 };
 YAHOO.lang.extend(KJUR.asn1.DERTaggedObject, KJUR.asn1.ASN1Object);

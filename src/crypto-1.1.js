@@ -1,9 +1,9 @@
-/* crypto-1.2.1.js (c) 2013-2017 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* crypto-1.2.4.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
  *
- * Copyright (c) 2013-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.2.1 (2017-Sep-15)
+ * @version 1.2.4 (2020-Jul-28)
  * @since jsrsasign 2.2
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -104,6 +104,7 @@ KJUR.crypto.Util = new function() {
 	'SHA256withDSA':	'cryptojs/jsrsa',
 
 	'MD5withRSAandMGF1':		'cryptojs/jsrsa',
+	'SHAwithRSAandMGF1':		'cryptojs/jsrsa',
 	'SHA1withRSAandMGF1':		'cryptojs/jsrsa',
 	'SHA224withRSAandMGF1':		'cryptojs/jsrsa',
 	'SHA256withRSAandMGF1':		'cryptojs/jsrsa',
@@ -173,7 +174,7 @@ KJUR.crypto.Util = new function() {
      * @name hashString
      * @memberOf KJUR.crypto.Util
      * @function
-     * @param {String} s input string to be hashed
+     * @param {String} s raw input string to be hashed
      * @param {String} alg hash algorithm name
      * @return {String} hexadecimal string of hash value
      * @since 1.1.1
@@ -203,13 +204,12 @@ KJUR.crypto.Util = new function() {
      * @name sha1
      * @memberOf KJUR.crypto.Util
      * @function
-     * @param {String} s input string to be hashed
+     * @param {String} s raw input string to be hashed
      * @return {String} hexadecimal string of hash value
      * @since 1.0.3
      */
     this.sha1 = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'sha1', 'prov':'cryptojs'});
-        return md.digestString(s);
+	return this.hashString(s, 'sha1');
     };
 
     /**
@@ -217,18 +217,16 @@ KJUR.crypto.Util = new function() {
      * @name sha256
      * @memberOf KJUR.crypto.Util
      * @function
-     * @param {String} s input string to be hashed
+     * @param {String} s raw input string to be hashed
      * @return {String} hexadecimal string of hash value
      * @since 1.0.3
      */
     this.sha256 = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'sha256', 'prov':'cryptojs'});
-        return md.digestString(s);
+	return this.hashString(s, 'sha256');
     };
 
     this.sha256Hex = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'sha256', 'prov':'cryptojs'});
-        return md.digestHex(s);
+	return this.hashHex(s, 'sha256');
     };
 
     /**
@@ -236,20 +234,36 @@ KJUR.crypto.Util = new function() {
      * @name sha512
      * @memberOf KJUR.crypto.Util
      * @function
-     * @param {String} s input string to be hashed
+     * @param {String} s raw input string to be hashed
      * @return {String} hexadecimal string of hash value
      * @since 1.0.3
      */
     this.sha512 = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'sha512', 'prov':'cryptojs'});
-        return md.digestString(s);
+	return this.hashString(s, 'sha512');
     };
 
     this.sha512Hex = function(s) {
-        var md = new KJUR.crypto.MessageDigest({'alg':'sha512', 'prov':'cryptojs'});
-        return md.digestHex(s);
+	return this.hashHex(s, 'sha512');
     };
 
+    /**
+     * check if key object (RSA/DSA/ECDSA) or not
+     * @name isKey
+     * @memberOf KJUR.crypto.Util
+     * @function
+     * @param {Object} obj any type argument to be checked
+     * @return {Boolean} true if this is key object otherwise false
+     * @since 1.0.3
+     */
+    this.isKey = function(obj) {
+	if (obj instanceof RSAKey ||
+	    obj instanceof KJUR.crypto.DSA ||
+	    obj instanceof KJUR.crypto.ECDSA) {
+	    return true;
+	} else {
+	    return false;
+	}
+    };
 };
 
 /**
@@ -963,6 +977,7 @@ KJUR.crypto.Mac = function(params) {
  * <li>SHA512withECDSA - cryptojs/jsrsa</li>
  * <li>RIPEMD160withECDSA - cryptojs/jsrsa</li>
  * <li>MD5withRSAandMGF1 - cryptojs/jsrsa</li>
+ * <li>SHAwithRSAandMGF1 - cryptojs/jsrsa</li>
  * <li>SHA1withRSAandMGF1 - cryptojs/jsrsa</li>
  * <li>SHA224withRSAandMGF1 - cryptojs/jsrsa</li>
  * <li>SHA256withRSAandMGF1 - cryptojs/jsrsa</li>
@@ -973,6 +988,10 @@ KJUR.crypto.Mac = function(params) {
  * <li>SHA224withDSA - cryptojs/jsrsa</li>
  * <li>SHA256withDSA - cryptojs/jsrsa</li>
  * </ul>
+ * As for RSA-PSS signature algorithm names and signing parameters 
+ * such as MGF function and salt length, please see
+ * {@link KJUR.asn1.x509.AlgorithmIdentifier} class.
+ *
  * Here are supported elliptic cryptographic curve names and their aliases for ECDSA:
  * <ul>
  * <li>secp256k1</li>
@@ -1031,6 +1050,10 @@ KJUR.crypto.Signature = function(params) {
 	if (matchResult) {
 	    this.mdAlgName = matchResult[1].toLowerCase();
 	    this.pubkeyAlgName = matchResult[2].toLowerCase();
+	    if (this.pubkeyAlgName == "rsaandmgf1" &&
+	        this.mdAlgName == "sha") {
+		this.mdAlgName = "sha1";
+	    }
 	}
     };
 
@@ -1057,14 +1080,14 @@ KJUR.crypto.Signature = function(params) {
     this.setAlgAndProvider = function(alg, prov) {
 	this._setAlgNames();
 	if (prov != 'cryptojs/jsrsa')
-	    throw "provider not supported: " + prov;
+	    throw new Error("provider not supported: " + prov);
 
 	if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(this.mdAlgName) != -1) {
 	    try {
 		this.md = new KJUR.crypto.MessageDigest({'alg':this.mdAlgName});
 	    } catch (ex) {
-		throw "setAlgAndProvider hash alg set fail alg=" +
-                    this.mdAlgName + "/" + ex;
+		throw new Error("setAlgAndProvider hash alg set fail alg=" +
+				this.mdAlgName + "/" + ex);
 	    }
 	    
 	    this.init = function(keyparam, pass) {
@@ -1100,21 +1123,30 @@ KJUR.crypto.Signature = function(params) {
 
 	    this.sign = function() {
 		this.sHashHex = this.md.digest();
-		if (typeof this.ecprvhex != "undefined" &&
-		    typeof this.eccurvename != "undefined") {
-		    var ec = new KJUR.crypto.ECDSA({'curve': this.eccurvename});
-		    this.hSign = ec.signHex(this.sHashHex, this.ecprvhex);
-		} else if (this.prvKey instanceof RSAKey &&
-		           this.pubkeyAlgName === "rsaandmgf1") {
+		// hex parameter EC public key
+		if (this.prvKey === undefined &&
+		    this.ecprvhex !== undefined &&
+		    this.eccurvename !== undefined &&
+		    KJUR.crypto.ECDSA !== undefined) {
+		    this.prvKey = new KJUR.crypto.ECDSA({'curve': this.eccurvename,
+							 prv: this.ecprvhex});
+		}
+
+		// RSAPSS
+		if (this.prvKey instanceof RSAKey &&
+		    this.pubkeyAlgName === "rsaandmgf1") {
 		    this.hSign = this.prvKey.signWithMessageHashPSS(this.sHashHex,
 								    this.mdAlgName,
 								    this.pssSaltLen);
+		// RSA
 		} else if (this.prvKey instanceof RSAKey &&
 			   this.pubkeyAlgName === "rsa") {
 		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex,
 								 this.mdAlgName);
+		// ECDSA
 		} else if (this.prvKey instanceof KJUR.crypto.ECDSA) {
 		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex);
+		// DSA
 		} else if (this.prvKey instanceof KJUR.crypto.DSA) {
 		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex);
 		} else {
@@ -1132,21 +1164,30 @@ KJUR.crypto.Signature = function(params) {
 	    };
 	    this.verify = function(hSigVal) {
 	        this.sHashHex = this.md.digest();
-		if (typeof this.ecpubhex != "undefined" &&
-		    typeof this.eccurvename != "undefined") {
-		    var ec = new KJUR.crypto.ECDSA({curve: this.eccurvename});
-		    return ec.verifyHex(this.sHashHex, hSigVal, this.ecpubhex);
-		} else if (this.pubKey instanceof RSAKey &&
-			   this.pubkeyAlgName === "rsaandmgf1") {
+		// hex parameter EC public key
+		if (this.pubKey === undefined &&
+		    this.ecpubhex !== undefined &&
+		    this.eccurvename !== undefined &&
+		    KJUR.crypto.ECDSA !== undefined) {
+		    this.pubKey = new KJUR.crypto.ECDSA({curve: this.eccurvename,
+							 pub: this.ecpubhex});
+		}
+
+		// RSAPSS
+		if (this.pubKey instanceof RSAKey &&
+		    this.pubkeyAlgName === "rsaandmgf1") {
 		    return this.pubKey.verifyWithMessageHashPSS(this.sHashHex, hSigVal, 
 								this.mdAlgName,
 								this.pssSaltLen);
+		// RSA
 		} else if (this.pubKey instanceof RSAKey &&
 			   this.pubkeyAlgName === "rsa") {
 		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
+                // ECDSA
 		} else if (KJUR.crypto.ECDSA !== undefined &&
 			   this.pubKey instanceof KJUR.crypto.ECDSA) {
 		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
+                // DSA
 		} else if (KJUR.crypto.DSA !== undefined &&
 			   this.pubKey instanceof KJUR.crypto.DSA) {
 		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
@@ -1334,10 +1375,9 @@ KJUR.crypto.Signature = function(params) {
  * <li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
  * </ul>
  * NOTE: (*) is not supported in Java JCE.<br/>
- * Currently this class supports only RSA encryption and decryption. 
- * However it is planning to implement also symmetric ciphers near in the future.
- * @example
- */
+ * Currently this class supports only RSA encryption and decryption 
+ * based on RSAES-OAEP and RSAES-PKCS1-v1_5 scheme. 
+ * However it is planning to implement also symmetric ciphers near in the future */
 KJUR.crypto.Cipher = function(params) {
 };
 

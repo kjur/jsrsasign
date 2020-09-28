@@ -2,7 +2,7 @@
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>QUnit for X.509 Certificate 'x509.js'</title>
+<title>QUnit for X.509 Certificate Extensions in 'x509.js'</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="qunit.js"></script>
@@ -243,6 +243,31 @@ Ty4xiTJKapQKFNSsEI1z7DV4eH0YQv9BQlbmQuI=
 -----END CERTIFICATE-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+// _test/0cert_sites/globalsignr6root.cer keyUsage=keyCertSign,cRLSign
+var certGlobalSignRootR6PEM = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIDXzCCAkegAwIBAgILBAAAAAABIVhTCKIwDQYJKoZIhvcNAQELBQAwTDEgMB4G
+A1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNp
+Z24xEzARBgNVBAMTCkdsb2JhbFNpZ24wHhcNMDkwMzE4MTAwMDAwWhcNMjkwMzE4
+MTAwMDAwWjBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEG
+A1UEChMKR2xvYmFsU2lnbjETMBEGA1UEAxMKR2xvYmFsU2lnbjCCASIwDQYJKoZI
+hvcNAQEBBQADggEPADCCAQoCggEBAMwldpB5BngiFvXAg7aEyiie/QV2EcWtiHL8
+RgJDx7KKnQRfJMsuS+FggkbhUqsMgUdwbN1k0ev1LKMPgj0MK66X17YUhhB5uzsT
+gHeMCOFJ0mpiLx9e+pZo34knlTifBtc+ycsmWQ1z3rDI6SYOgxXG71uL0gRgykmm
+KPZpO/bLyCiR5Z2KYVc3rHQU3HTgOu5yLy6c+9C7v/U9AOEGM+iCK65TpjoWc4zd
+QQ4gOsC0p6Hpsk+QLjJg6VfLuQSSaGjlOCZgdbKfd/+RFO+uIEn8rUAVSNECMWEZ
+XriX7613t2Saer9fwRPvm2L7DWzgVGkWqQPabumDk3F2xmmFghcCAwEAAaNCMEAw
+DgYDVR0PAQH/BAQDAgEGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFI/wS3+o
+LkUkrk1Q+mOai97i3Ru8MA0GCSqGSIb3DQEBCwUAA4IBAQBLQNvAUKr+yAzv95ZU
+RUm7lgAJQayzE4aGKAczymvmdLm6AC2upArT9fHxD4q/c2dKg8dEe3jgr25sbwMp
+jjM5RcOO5LlXbKr8EpbsU8Yt5CRsuZRj+9xTaGdWPoO4zzUhw8lo/s7awlOqzJCK
+6fBdRoyV3XpYKBovHd7NADdBj+1EbddTKJd+82cEHhXXipa0095MJ6RMG3NzdvQX
+mcIfeg7jLQitChws/zyrVQ4PkX4268NXSb7hLi18YIvDQVETI53O9zJrlAGomecs
+Mx86OyXShkDOOyyGeMlhLxS67ttVb9+E7gUJTb0o2HLO02JQZR7rkpeDMdmztcpH
+WD9f
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
 // _gitpg/jsrsasign/test/eckey/k1.self.cer
 var k1CertPEM = "" +
 "-----BEGIN CERTIFICATE-----\n" +
@@ -259,6 +284,26 @@ var k1CertHex = pemtohex(k1CertPEM);
 
 // test/z1.der1-p3 basicConstraints={ca:true, pathlen:3}
 var z1P3CertHex = "3082017630820120a003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333134313832365a170d3236303431333134313832365a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a3533051301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e15300f0603551d13040830060101ff020103300d06092a864886f70d01010b0500034100862bf6d5f0c366dd1c71af10df93e2e9e0b7210b6912d1774e27107203f2dc257f9b132285bc1ce8d32d8ffc69470cd6c52ec76b7d68708eca3bbd49556f3005";
+
+// _data/0csrext/certbot1.csr.pem
+var csrcertbot1 = (function() {/*
+-----BEGIN CERTIFICATE REQUEST-----
+MIICeDCCAWACAQIwADCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMf6
+wBbRavWLUCZfLNF+C4uNO/T6N2YCxWgM/XI04hPLqQodfTudcIwsbWGGkRpJSwGG
+pDXQs3A1fH5xrfev7PlWaDYCkhC4jrrZ/1L8HGR/nUxrS3jFTbzZTGA84TbkW8FH
+fyugWWqnjrnoxOJW0XdiWe1Drsr5vaqVS0N4qEISH/ciLnaVeV//tLJc/V5g3sFu
+4AQZQykvkltGD7w8vBhM4a/KQGeV3hG+ctCAwV5+RhQxForDgUv3ZPt76yVt142x
+TJGsq8fsdEqBjg7xVQn+458Z3yMMQVMLCf/aEHFLYurc6PD2kEzJf+mRYXY3sNwy
+4l38Qf8velG6Ij+8eVkCAwEAAaAzMDEGCSqGSIb3DQEJDjEkMCIwIAYDVR0RBBkw
+F4IVbm9kZWpzLnJ6LWJzZC5teS5jb3JwMA0GCSqGSIb3DQEBCwUAA4IBAQB0isgR
+I57C2GCszZdLdouAjpIZXa8W1C3FjOHcd6RQ77Fd+h22fn63gEMBUQk3AFzq4t2b
+8JeOH1xjZ4gjTEXH4whOh95gR+LDvVmK3khIHBLMVCyJgUEUNTZJoaMu7adhpbJX
+taiHpny63sQvh3QtEh7arMx8EaDh8MKYBQ5iTylvN0SS/yQcUvaS4kFs5CJTE/YG
+FepaWdBWPlE4C5oJ956lnuZSRHlugKHUzWD/V/tSYLDJmQVJ7sPNJM1JaTd79cDq
+cbtqMCqhg0GKH4OmbrS+Zu99iox+I7Mbsu9+F4rZjinez1looQ5hfJ+6FAtxE1HI
+2/x4YDGRZtDqwcFe
+-----END CERTIFICATE REQUEST-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
 
 test("parseExt github.com", function() {
   var x = new X509();
@@ -306,95 +351,207 @@ test("getExtInfo github.com", function() {
 });
 
 test("getExtBasicConstraints", function() {
-  var x = new X509();
-  x.readCertPEM(certGithubPEM);
-  var bc = x.getExtBasicConstraints();
-  deepEqual(bc, {}, "{} for GitHub.com site");
+var x = new X509();
+x.readCertPEM(certGithubPEM);
+deepEqual(
+x.getExtBasicConstraints(),
+{extname:"basicConstraints",critical:true},
+"for GitHub.com site");
 
-  var x2 = new X509();
-  x2.readCertPEM(digiCertEvRootPEM);
-  var bc2 = x2.getExtBasicConstraints();
-  equal(bc2.cA, true, "cA=true for DigiCert EV root");
+var x2 = new X509();
+x2.readCertPEM(digiCertEvRootPEM);
+deepEqual(
+x2.getExtBasicConstraints(),
+{extname:"basicConstraints",critical:true,cA:true},
+"cA=true for DigiCert EV root");
 
-  var x3 = new X509();
-  x3.readCertHex(z1P3CertHex);
-  var bc3 = x3.getExtBasicConstraints();
-  equal(bc3.cA, true, "cA=true for z1p3");
-  equal(bc3.pathLen, 3, "pathLen=3 for z1p3");
+var x3 = new X509();
+x3.readCertHex(z1P3CertHex);
+deepEqual(
+x3.getExtBasicConstraints(),
+{extname:"basicConstraints",cA:true,pathLen:3},
+"cA:true,pathLen:3 for z1p3");
 });
 
 test("getExtKeyUsageBin()", function() {
-  var x = new X509();
-  x.readCertPEM(certGithubPEM);
-  equal(x.getExtKeyUsageBin(), "101", "101 for GitHub.com site");
+var x1 = new X509();
+x1.readCertPEM(certGithubPEM);
+equal(x1.getExtKeyUsageBin(), "101", "101 for GitHub.com site");
 
-  var x2 = new X509();
-  x2.readCertPEM(digiCertEvRootPEM);
-  equal(x2.getExtKeyUsageBin(), "1000011", "1000011 for DigiCert EV root");
-});
+var x2 = new X509();
+x2.readCertPEM(digiCertEvRootPEM);
+equal(x2.getExtKeyUsageBin(), "1000011", "1000011 for DigiCert EV root");
 
-test("getExtKeyUsageBin()", function() {
-  var x = new X509();
-  x.readCertPEM(certGithubPEM);
-  equal(x.getExtKeyUsageBin(), "101", "101 for GitHub.com site");
+var x3 = new X509();
+x3.readCertPEM(certGlobalSignRootR6PEM);
+equal(x3.getExtKeyUsageBin(), "0000011", "0000011 for GlobalSign R6 root");
 
-  var x2 = new X509();
-  x2.readCertPEM(digiCertEvRootPEM);
-  equal(x2.getExtKeyUsageBin(), "1000011", "1000011 for DigiCert EV root");
+var x = new X509();
+equal(x.getExtKeyUsageBin("0303070080"), "000000001", "decipherOnly");
 });
 
 test("getExtKeyUsageString()", function() {
-  var x = new X509();
-  x.readCertPEM(certGithubPEM);
-  equal(x.getExtKeyUsageString(), "digitalSignature,keyEncipherment", "digitalSignature,keyEncipherment for GitHub.com site");
+var x1 = new X509();
+x1.readCertPEM(certGithubPEM);
+equal(x1.getExtKeyUsageString(), "digitalSignature,keyEncipherment", "digitalSignature,keyEncipherment for GitHub.com site");
 
-  var x2 = new X509();
-  x2.readCertPEM(digiCertEvRootPEM);
-  equal(x2.getExtKeyUsageString(), "digitalSignature,keyCertSign,cRLSign", "digitalSignature,keyCertSign,cRLSign for DigiCert EV root");
+var x2 = new X509();
+x2.readCertPEM(digiCertEvRootPEM);
+equal(x2.getExtKeyUsageString(), "digitalSignature,keyCertSign,cRLSign", "digitalSignature,keyCertSign,cRLSign for DigiCert EV root");
+
+var x3 = new X509();
+x3.readCertPEM(certGlobalSignRootR6PEM);
+equal(x3.getExtKeyUsageString(), "keyCertSign,cRLSign", "keyCertSign,cRLSign for GlobalSign R6 root");
+
+var x = new X509();
+equal(x.getExtKeyUsageString("0303070080"), "decipherOnly", "decipherOnly");
+});
+
+test("getExtKeyUsage test", function() {
+var x1 = new X509();
+x1.readCertPEM(certGithubPEM);
+deepEqual(
+x1.getExtKeyUsage(), 
+{extname:"keyUsage",
+ names: ["digitalSignature", "keyEncipherment"], critical: true },
+"digitalSignature,keyEncipherment for GitHub.com site");
+
+var x2 = new X509();
+x2.readCertPEM(digiCertEvRootPEM);
+deepEqual(
+x2.getExtKeyUsage(),
+{extname:"keyUsage",
+ names: ["digitalSignature", "keyCertSign", "cRLSign"], critical: true },
+"digitalSignature,keyCertSign,cRLSign for DigiCert EV root");
+
+var x3 = new X509();
+x3.readCertPEM(certGlobalSignRootR6PEM);
+deepEqual(
+x3.getExtKeyUsage(),
+{extname:"keyUsage",
+ names: ["keyCertSign", "cRLSign"], critical: true },
+"keyCertSign,cRLSign for GlobalSign R6 root");
+
+var x = new X509();
+deepEqual(
+x.getExtKeyUsage("0303070080", true), 
+{extname:"keyUsage",
+ names: ["decipherOnly"], critical: true },
+"decipherOnly critical=true")
 });
 
 test("getExtSubjectKeyIdentifier()", function() {
-  var x = new X509();
-  x.readCertPEM(certGithubPEM);
-  equal(x.getExtSubjectKeyIdentifier(), "6a43907d3b98147252953aaa280a43f8517ed3a6", "for GitHub.com site");
+var x = new X509();
+x.readCertPEM(certGithubPEM);
+deepEqual(
+x.getExtSubjectKeyIdentifier(), 
+{extname:"subjectKeyIdentifier",
+ kid: {hex: "6a43907d3b98147252953aaa280a43f8517ed3a6"}},
+"for GitHub.com site");
 
-  var x2 = new X509();
-  x2.readCertPEM(digiCertEvRootPEM);
-  equal(x2.getExtSubjectKeyIdentifier(), "b13ec36903f8bf4701d498261a0802ef63642bc3", "for DigiCert EV root");
+var x2 = new X509();
+x2.readCertPEM(digiCertEvRootPEM);
+deepEqual(
+x2.getExtSubjectKeyIdentifier(), 
+{extname:"subjectKeyIdentifier",
+ kid: {hex: "b13ec36903f8bf4701d498261a0802ef63642bc3"}},
+"for DigiCert EV root");
 });
 
 test("getExtAuthorityKeyIdentifier()", function() {
-  var x = new X509();
-  x.readCertPEM(certGithubPEM);
-  var akid = x.getExtAuthorityKeyIdentifier()
-  equal(akid.kid, "3dd350a5d6a0adeef34a600a65d321d4f8f8d60f", "for GitHub.com site");
+var x = new X509();
+x.readCertPEM(certGithubPEM);
+deepEqual(
+x.getExtAuthorityKeyIdentifier(),
+{extname:"authorityKeyIdentifier",
+ kid: {hex: "3dd350a5d6a0adeef34a600a65d321d4f8f8d60f"}},
+"for GitHub.com site");
 
-  var x2 = new X509();
-  x2.readCertPEM(digiCertEvRootPEM);
-  var akid2 = x2.getExtAuthorityKeyIdentifier()
-  equal(akid2.kid, "b13ec36903f8bf4701d498261a0802ef63642bc3", "for DigiCert EV root");
+var x2 = new X509();
+x2.readCertPEM(digiCertEvRootPEM);
+deepEqual(
+x2.getExtAuthorityKeyIdentifier(),
+{extname:"authorityKeyIdentifier",
+ kid: {hex: "b13ec36903f8bf4701d498261a0802ef63642bc3"}},
+"for DigiCert EV root");
+
+var x = new X509();
+deepEqual(
+x.getExtAuthorityKeyIdentifier("3039801427e00502504b088259f76ece524799e2246e30eba11ea41c301a310b3009060355040613024a50310b3009060355040a0c025431820101", true),
+{extname:"authorityKeyIdentifier",
+ kid: {hex: "27e00502504b088259f76ece524799e2246e30eb"},
+ issuer: {hex: "301a310b3009060355040613024a50310b3009060355040a0c025431"},
+ sn: {hex: "01"},
+ critical:true},
+"hoge");
 });
 
-test("getExtExtKeyUsage", function() {
-  var x = new X509();
-  x.readCertPEM(certGithubPEM);
-  deepEqual(x.getExtExtKeyUsageName(), ["serverAuth", "clientAuth"], "for GitHub.com site");
+test("getExtExtKeyUsage test", function() {
+var x1 = new X509();
+x1.readCertPEM(certGithubPEM);
+deepEqual(
+x1.getExtExtKeyUsage(),
+{extname:"extKeyUsage",
+ array: ["serverAuth", "clientAuth"]},
+"for GitHub.com site");
+
+var x = new X509();
+deepEqual(
+x.getExtExtKeyUsage("302006082b0601050507030206082b06010505070304060a2b0601040182370a0304", true),
+{extname:"extKeyUsage",
+ array: ["clientAuth", "emailProtection", "1.3.6.1.4.1.311.10.3.4"], critical: true},
+"three EKU");
+});
+
+test("getExtExtKeyUsageName test (DEPRECATED)", function() {
+var x = new X509();
+x.readCertPEM(certGithubPEM);
+deepEqual(x.getExtExtKeyUsageName(), ["serverAuth", "clientAuth"], "for GitHub.com site");
 });
 
 test("getExtSubjectAltName github.com", function() {
-  var x = new X509();
-  x.readCertPEM(certGithubPEM);
-  deepEqual(x.getExtSubjectAltName(), ["github.com", "www.github.com"], "for GitHub.com site");
+var x = new X509();
+x.readCertPEM(certGithubPEM);
+deepEqual(
+x.getExtSubjectAltName(),
+{extname:"subjectAltName",
+ array: [{dns: "github.com"},{dns: "www.github.com"}]
+},
+"for GitHub.com site");
+
+deepEqual(
+x.getExtSubjectAltName("302481226a6f686e2e7468652e726970706572406161613131312e6578616d706c652e636f6d"),
+{extname:"subjectAltName",
+ array: [{rfc822: "john.the.ripper@aaa111.example.com"}] },
+"mail");
+
+var x2 = new X509();
+x2.readCertPEM(cfip1111PEM);
+deepEqual(
+x2.getExtSubjectAltName(),
+{ extname:"subjectAltName",
+  array: [
+    {dns: "*.cloudflare-dns.com"},
+    {ip: "1.1.1.1"},
+    {ip: "1.0.0.1"},
+    {dns: "cloudflare-dns.com"},
+    {ip: "2606:4700:4700::1111"},
+    {ip: "2606:4700:4700::1001"}
+  ]
+},
+"cloudflare 1.1.1.1 cert"
+);
+
 });
 
-test("getExtSubjectAltName ip1.1.1.1", function() {
+test("getExtSubjectAltName2 ip1.1.1.1 (DEPRECATED)", function() {
   var x = new X509();
   x.readCertPEM(cfip1111PEM);
   deepEqual(x.getExtSubjectAltName2(), [
     ["DNS", "*.cloudflare-dns.com"],
     ["IP", "1.1.1.1"], ["IP", "1.0.0.1"], 
     ["DNS", "cloudflare-dns.com"],
-    ["IP", "2606:4700:470:1111"], ["IP", "2606:4700:470:1001"]
+    ["IP", "2606:4700:4700::1111"], ["IP", "2606:4700:4700::1001"]
   ], "ip1.1.1.1 site");
 });
 
@@ -406,6 +563,29 @@ test("getExtSubjectAltName with DNSx2 IPx2", function () {
     ["IP", "192.168.56.101"], ["IP", "10.20.44.10"]
   ]
   deepEqual(x.getExtSubjectAltName2(), expected, "SAN with IPx2, DNSx2");
+});
+
+test("getExtCRLDistributionPoints test", function() {
+var x = new X509();
+deepEqual(
+x.getExtCRLDistributionPoints("302e3015a013a011860f687474703a2f2f6161612e636f6d2f3015a013a011860f6c6461703a2f2f6161612e636f6d2f"),
+{extname:"cRLDistributionPoints",
+ array: [
+  {dpname: {full: [{uri: "http://aaa.com/"}]}},
+  {dpname: {full: [{uri: "ldap://aaa.com/"}]}}
+]},
+"two dp {http,ldap}://aaa.com");
+
+var x2 = new X509();
+x2.readCertPEM(certGithubPEM);
+deepEqual(
+x2.getExtCRLDistributionPoints(),
+{extname:"cRLDistributionPoints",
+ array: [
+  {dpname: {full: [{uri: "http://crl3.digicert.com/sha2-ev-server-g1.crl"}]}},
+  {dpname: {full: [{uri: "http://crl4.digicert.com/sha2-ev-server-g1.crl"}]}}
+]},
+"for github.com site");
 });
 
 test("getExtCRLDistributionPointsURI github", function() {
@@ -425,7 +605,36 @@ test("getExtCRLDistributionPointsURI danmarks", function() {
              "for Danmarks Apotekerforening User cert");
 });
 
-test("getExtAIAInfo", function() {
+test("getExtAuthorityInfoAccess", function() {
+var x = new X509();
+
+deepEqual(
+x.getExtAuthorityInfoAccess("3062302f06082b060105050730028623687474703a2f2f636572742e696e742d78332e6c657473656e63727970742e6f72672f302f06082b060105050730018623687474703a2f2f6f6373702e696e742d78332e6c657473656e63727970742e6f72672f"),
+{extname:"authorityInfoAccess",
+ array: [{caissuer: "http://cert.int-x3.letsencrypt.org/"},
+         {ocsp: "http://ocsp.int-x3.letsencrypt.org/"}]},
+"lets encrypt by method argument");
+
+deepEqual(
+x.getExtAuthorityInfoAccess("3062302f06082b060105050730028623687474703a2f2f636572742e696e742d78332e6c657473656e63727970742e6f72672f302f06082b060105050730018623687474703a2f2f6f6373702e696e742d78332e6c657473656e63727970742e6f72672f", true),
+{extname:"authorityInfoAccess",
+ array: [{caissuer: "http://cert.int-x3.letsencrypt.org/"},
+         {ocsp: "http://ocsp.int-x3.letsencrypt.org/"}],
+ critical: true
+},
+"lets encrypt by method argument");
+
+x.readCertPEM(certGithubPEM);
+deepEqual(
+x.getExtAuthorityInfoAccess(),
+{extname:"authorityInfoAccess",
+ array: [{ocsp: "http://ocsp.digicert.com"},
+         {caissuer: "http://cacerts.digicert.com/DigiCertSHA2ExtendedValidationServerCA.crt"}]},
+"github digicert");
+
+});
+
+test("getExtAIAInfo test (DEPRECATED)", function() {
   var x = new X509();
   x.readCertPEM(certGithubPEM);
   deepEqual(x.getExtAIAInfo(),
@@ -436,26 +645,35 @@ test("getExtAIAInfo", function() {
 });
 
 test("getCertificatePolicies", function() {
-  var x = new X509();
-  x.readCertPEM(certGithubPEM);
-  deepEqual(x.getExtCertificatePolicies(),
-            [{
-              id: "2.16.840.1.114412.2.1",
-              cps: "https://www.digicert.com/CPS"
-            }],
-            "for GitHub.com site");
+var x = new X509();
+x.readCertPEM(certGithubPEM);
+deepEqual(
+x.getExtCertificatePolicies(),
+{ extname:"certificatePolicies",
+  array: [{
+    policyoid: "2.16.840.1.114412.2.1",
+    array: [{cps: "https://www.digicert.com/CPS"}]
+  }]
+},
+"for GitHub.com site"
+);  
 
-  var x1 = new X509();
-  x1.readCertPEM(pulseCioGovPEM);
-  deepEqual(x1.getExtCertificatePolicies(),
-            [{
-              id: "2.23.140.1.2.1"
-            },{
-              id: "1.3.6.1.4.1.44947.1.1.1",
-              cps: "http://cps.letsencrypt.org",
-              unotice: "This Certificate may only be relied upon by Relying Parties and only in accordance with the Certificate Policy found at https://letsencrypt.org/repository/"
-            }],
-            "for pulse.cio.gov site Let's Encrypt cert");
+var x1 = new X509();
+x1.readCertPEM(pulseCioGovPEM);
+deepEqual(
+x1.getExtCertificatePolicies(),
+{ extname:"certificatePolicies",
+  array: [{
+    policyoid: "2.23.140.1.2.1"
+  },{
+    policyoid: "1.3.6.1.4.1.44947.1.1.1",
+    array: [
+      {cps: "http://cps.letsencrypt.org"},
+      {unotice: {exptext: {type: "utf8", str: "This Certificate may only be relied upon by Relying Parties and only in accordance with the Certificate Policy found at https://letsencrypt.org/repository/"}}}
+    ]
+  }]
+},
+"for pulse.cio.gov site Let's Encrypt cert");
 
 });
 
@@ -541,15 +759,6 @@ test("getExtKeyUsageString", function() {
   equal(x.getExtKeyUsageString(), "digitalSignature,keyEncipherment", "digitalSignature,keyEncipherment");
 });
 
-test("getExtAIAInfo", function() {
-  var x = new X509();
-  x.readCertPEM(certGithubPEM);
-  var info = x.getExtAIAInfo();
-  equal(info.ocsp.length, 1, "number item of ocsp = 1");
-  equal(info.ocsp[0], "http://ocsp.digicert.com", "ocsp=http://ocsp.digicert.com");
-  equal(info.caissuer.length, 1, "number item of caIssuer = 1");
-  equal(info.caissuer[0], "http://cacerts.digicert.com/DigiCertSHA2ExtendedValidationServerCA.crt", "caIssuer=http://cacerts.digicert.com/DigiCertSHA2ExtendedValidationServerCA.crt");
-});
 
 test("getExtBasicConstraints k1 {cA:true}", function() {
   var x = new X509();
@@ -572,18 +781,123 @@ test("getExtBasicConstraints z1.der1-p3 {cA:true,pathLen:3}", function() {
 
 // test/z1.der2-no basicConstraints has empty value (for EE)
 test("getExtBasicConstraints z1.der2-emp {}", function() {
-  var x = new X509();
-  x.readCertHex("308201703082011aa003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333134313934345a170d3236303431333134313934345a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a34d304b301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e1530090603551d1304023000300d06092a864886f70d01010b050003410039de7f9c2975d1d309edd707609c3052c6adeda0b440c55e86410d303abd3363e4d66a1858c5c7f747fee590c38cf68a9ae39ce394175e36d12308490d3b94f2");
-  var r = x.getExtBasicConstraints();
-  deepEqual(r, {}, "der2-emp");
+var x = new X509();
+x.readCertHex("308201703082011aa003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333134313934345a170d3236303431333134313934345a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a34d304b301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e1530090603551d1304023000300d06092a864886f70d01010b050003410039de7f9c2975d1d309edd707609c3052c6adeda0b440c55e86410d303abd3363e4d66a1858c5c7f747fee590c38cf68a9ae39ce394175e36d12308490d3b94f2");
+
+deepEqual(
+x.getExtInfo("basicConstraints"), 
+{critical:false, oid:"2.5.29.19", vidx:576},
+"getExtInfo basicConstraints");
+
+var r = x.getExtBasicConstraints();
+deepEqual(r, {extname:"basicConstraints"}, "der2-emp");
 });
 
 // test/z1.der3-no (no basic constraints)
 test("getExtBasicConstraints z1.der3-no (no basic constraints)", function() {
+var x = new X509();
+x.readCertHex("308201653082010fa003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333135313332335a170d3236303431333135313332335a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a3423040301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e15300d06092a864886f70d01010b050003410016f823db6f65546958157ec08c20e736b0243fb6fa2fba6b74ac036f0115786c070d80d94b428f2f9d174169fb19e00fadfa5dbfbd19f27e2782adbd7bec644b");
+var r = x.getExtBasicConstraints();
+equal(r == undefined, true, "no basicConstraints returns undefined");
+});
+
+test("parseExt(CSR) test (csrcertbot1)", function() {
   var x = new X509();
-  x.readCertHex("308201653082010fa003020102020107300d06092a864886f70d01010b05003019310b3009060355040613025553310a3008060355040a0c0154301e170d3136303431333135313332335a170d3236303431333135313332335a3019310b3009060355040613025553310a3008060355040a0c0154305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a3423040301d0603551d0e04160414c5473ee200c8e7ad7003dff5420b8cddf4c20e15301f0603551d23041830168014c5473ee200c8e7ad7003dff5420b8cddf4c20e15300d06092a864886f70d01010b050003410016f823db6f65546958157ec08c20e736b0243fb6fa2fba6b74ac036f0115786c070d80d94b428f2f9d174169fb19e00fadfa5dbfbd19f27e2782adbd7bec644b");
-  var r = x.getExtBasicConstraints();
-  equal(r, null);
+  x.parseExt(csrcertbot1);
+  //equal(1, 1);
+  deepEqual(x.aExtInfo, [{"critical":false,"oid":"2.5.29.17","vidx":670}], "aExtInfo=" + JSON.stringify(x.aExtInfo));
+  deepEqual(x.getExtSubjectAltName2(), [["DNS", "nodejs.rz-bsd.my.corp"]], "info=" + JSON.stringify(x.getExtSubjectAltName2()));
+});
+
+test("getDistributionPoint test", function() {
+var x = new X509();
+deepEqual(
+x.getDistributionPoint("3015a013a011860f687474703a2f2f6161612e636f6d2f"),
+{dpname: {full: [{uri: "http://aaa.com/"}]}},
+"{dpname: {full: [{uri: http://aaa.com/}]}}");
+});
+
+test("getDistributionPointName test" , function() {
+var x = new X509();
+deepEqual(
+x.getDistributionPointName("a013a011860f687474703a2f2f6161612e636f6d2f"),
+{full: [{uri: "http://aaa.com/"}]},
+"{full: [{uri: http://aaa.com/}]}");
+});
+
+test("getGeneralNames test" , function() {
+var x = new X509();
+deepEqual(
+x.getGeneralNames("a011860f687474703a2f2f6161612e636f6d2f"),
+[{uri: "http://aaa.com/"}],
+"[{uri: http://aaa.com/}]");
+});
+
+test("getGeneralName test" , function() {
+var x = new X509();
+deepEqual(
+x.getGeneralName("860f687474703a2f2f6161612e636f6d2f"),
+{uri: "http://aaa.com/"},
+"{uri: http://aaa.com/}");
+});
+
+test("getX500NameRule test", function() {
+var x = new X509();
+
+equal(x.getX500NameRule([[{type:"C",value:"JP",ds:"prn"}],[{type:"O",value:"b",ds:"utf8"}],[{type:"CN",value:"a@a.jp",ds:"vis"}]]), "mixed", "mixed-1");
+equal(x.getX500NameRule([[{type:"C",value:"JP",ds:"prn"}],[{type:"O",value:"b",ds:"utf8"}],[{type:"CN",value:"a@a.jp",ds:"bmp"}]]), "mixed", "mixed-2");
+equal(x.getX500NameRule([[{type:"C",value:"JP",ds:"prn"}],[{type:"O",value:"b",ds:"utf8"}],[{type:"CN",value:"aaa",ds:"ia5"}]]), "mixed", "mixed-3");
+equal(x.getX500NameRule([[{type:"C",value:"JP",ds:"prn"}],[{type:"O",value:"b",ds:"utf8"}],[{type:"OU",value:"aaa",ds:"ia5"}]]), "mixed", "mixed-4");
+
+equal(x.getX500NameRule([[{type:"C",value:"JP",ds:"prn"}],[{type:"O",value:"b",ds:"utf8"}],[{type:"CN",value:"a@a.jp",ds:"ia5"}]]), "utf8", "utf8-1");
+equal(x.getX500NameRule([[{type:"C",value:"JP",ds:"prn"}],[{type:"O",value:"b",ds:"utf8"}],[{type:"CN",value:"a@a.jp",ds:"ia5"}],[{type:"CN",value:"aaa",ds:"utf8"}]]), "utf8", "utf8-1a");
+
+equal(x.getX500NameRule([[{type:"O",value:"JP",ds:"utf8"}],[{type:"O",value:"b",ds:"utf8"}],[{type:"CN",value:"c",ds:"utf8"}]]), "utf8", "utf8-2");
+equal(x.getX500NameRule([[{type:"C",value:"JP",ds:"prn"}],[{type:"O",value:"b",ds:"utf8"}],[{type:"CN",value:"c",ds:"utf8"}]]), "utf8", "utf8-3");
+equal(x.getX500NameRule([[{type:"C",value:"JP",ds:"prn"}],[{type:"O",value:"b",ds:"utf8"}],[{type:"CN",value:"a@a.jp",ds:"ia5"}]]), "utf8", "utf8-4");
+
+equal(x.getX500NameRule([[{type:"C",value:"JP",ds:"prn"}],[{type:"O",value:"b",ds:"prn"}],[{type:"CN",value:"a@a.jp",ds:"ia5"}],[{type:"CN",value:"aaa",ds:"prn"}]]), "prn", "prn-5");
+equal(x.getX500NameRule([[{type:"C",value:"JP",ds:"prn"}],[{type:"O",value:"b",ds:"prn"}],[{type:"CN",value:"a@a.jp",ds:"ia5"}],[{type:"CN",value:"aaa",ds:"utf8"}]]), "mixed", "6-mixed");
+
+
+});
+
+test("getX500Name test", function() {
+var x = new X509();
+deepEqual(
+x.getX500Name("302a310b3009060355040613024a50310a3008060355040a0c0162310f300d060355040316066140612e6a70"),
+[[{type:"C",value:"JP",ds:"prn"}],
+[{type:"O",value:"b",ds:"utf8"}],
+[{type:"CN",value:"a@a.jp",ds:"ia5"}]],
+"[CN a@a.jp ia5]");
+});
+
+test("getRDN test", function() {
+var x = new X509();
+deepEqual(
+x.getRDN("310f300d060355040316066140612e6a70"),
+[{type:"CN",value:"a@a.jp",ds:"ia5"}],
+"[CN a@a.jp ia5]");
+});
+
+test("getAttrTypeAndValue test", function() {
+var x = new X509();
+
+deepEqual(
+x.getAttrTypeAndValue("300d060355040316066140612e6a70"),
+{type:"CN",value:"a@a.jp",ds:"ia5"},
+"CN a@a.jp ia5");
+
+
+deepEqual(
+x.getAttrTypeAndValue("3008060355040a0c0162"),
+{type:"O",value:"b",ds:"utf8"},
+"O b utf8");
+
+deepEqual(
+x.getAttrTypeAndValue("3009060355040613024a50"),
+{type:"C",value:"JP",ds:"prn"},
+"C JP prn");
 });
 
 });
@@ -599,12 +913,14 @@ test("getExtBasicConstraints z1.der3-no (no basic constraints)", function() {
 <a href="index.html">TEST INDEX</a> | 
 <a href="qunit-do-x509.html">x509</a> | 
 <a href="qunit-do-x509-ext.html">x509-ext</a> | 
+<a href="qunit-do-x509-param.html">x509-param</a> | 
 <a href="qunit-do-x509-key.html">x509-key</a> | 
 <a href="qunit-do-x509-kid.html">x509-kid</a> | 
 <a href="qunit-do-x509-getinfo.html">x509-getinfo</a> | 
+<a href="qunit-do-asn1x509.html">asn1x509</a> | 
 </p>
 
 </body>
-<center><p>&copy; 2015-2017 Kenji Urushima</p></center>
+<center><p>&copy; 2015-2020 Kenji Urushima</p></center>
 </html>
 

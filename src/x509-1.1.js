@@ -1,9 +1,9 @@
-/* x509-1.1.20.js (c) 2012-2018 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.0.4.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
  *
- * Copyright (c) 2010-2018 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.10 x509 1.1.20 (2018-Apr-09)
+ * @version jsrsasign 10.0.0 x509 2.0.4 (2020-Sep-22)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -26,6 +26,7 @@
  * @class hexadecimal X.509 certificate ASN.1 parser class
  * @property {String} hex hexacedimal string for X.509 certificate.
  * @property {Number} version format version (1: X509v1, 3: X509v3, otherwise: unknown) since jsrsasign 7.1.4
+ * @property {Array} aExtInfo (DEPRECATED) array of parameters for extensions
  * @author Kenji Urushima
  * @version 1.0.1 (08 May 2012)
  * @see <a href="https://kjur.github.io/jsrsasigns/">'jsrsasign'(RSA Sign JavaScript Library) home page https://kjur.github.io/jsrsasign/</a>
@@ -60,17 +61,26 @@
  * </li>
  * <li><b>X509 METHODS TO GET EXTENSIONS</b>
  *   <ul>
- *   <li>basicConstraints - {@link X509#getExtBasicConstraints}</li>
+ *   <li>authorityKeyIdentifier - {@link X509#getExtAuthorityKeyIdentifier}</li>
+ *   <li>subjectKeyIdentifier - {@link X509#getExtSubjectKeyIdentifier}</li>
+ *   <li>keyUsage - {@link X509#getExtKeyUsage}</li>
  *   <li>keyUsage - {@link X509#getExtKeyUsageBin}</li>
  *   <li>keyUsage - {@link X509#getExtKeyUsageString}</li>
- *   <li>subjectKeyIdentifier - {@link X509#getExtSubjectKeyIdentifier}</li>
- *   <li>authorityKeyIdentifier - {@link X509#getExtAuthorityKeyIdentifier}</li>
- *   <li>extKeyUsage - {@link X509#getExtExtKeyUsageName}</li>
- *   <li>subjectAltName(DEPRECATED) - {@link X509#getExtSubjectAltName}</li>
- *   <li>subjectAltName2 - {@link X509#getExtSubjectAltName2}</li>
- *   <li>cRLDistributionPoints - {@link X509#getExtCRLDistributionPointsURI}</li>
- *   <li>authorityInfoAccess - {@link X509#getExtAIAInfo}</li>
  *   <li>certificatePolicies - {@link X509#getExtCertificatePolicies}</li>
+ *   <li>subjectAltName - {@link X509#getExtSubjectAltName}</li>
+ *   <li>subjectAltName2 - {@link X509#getExtSubjectAltName2} (DEPRECATED)</li>
+ *   <li>issuerAltName - {@link X509#getExtIssuerAltName}</li>
+ *   <li>basicConstraints - {@link X509#getExtBasicConstraints}</li>
+ *   <li>extKeyUsage - {@link X509#getExtExtKeyUsage}</li>
+ *   <li>extKeyUsage - {@link X509#getExtExtKeyUsageName} (DEPRECATED)</li>
+ *   <li>cRLDistributionPoints - {@link X509#getExtCRLDistributionPoints}</li>
+ *   <li>cRLDistributionPoints - {@link X509#getExtCRLDistributionPointsURI} (DEPRECATED)</li>
+ *   <li>authorityInfoAccess - {@link X509#getExtAuthorityInfoAccess}</li>
+ *   <li>authorityInfoAccess - {@link X509#getExtAIAInfo} (DEPRECATED)</li>
+ *   <li>cRLNumber - {@link X509#getExtCRLNumber}</li>
+ *   <li>cRLReason - {@link X509#getExtCRLReason}</li>
+ *   <li>ocspNonce - {@link X509#getExtOCSPNonce}</li>
+ *   <li>ocspNoCheck - {@link X509#getExtOCSPNoCheck}</li>
  *   </ul>
  * </li>
  * <li><b>UTILITIES</b>
@@ -84,18 +94,29 @@
  * </li>
  * </ul>
  */
-function X509() {
+function X509(params) {
     var _ASN1HEX = ASN1HEX,
 	_getChildIdx = _ASN1HEX.getChildIdx,
 	_getV = _ASN1HEX.getV,
 	_getTLV = _ASN1HEX.getTLV,
 	_getVbyList = _ASN1HEX.getVbyList,
+	_getVbyListEx = _ASN1HEX.getVbyListEx,
 	_getTLVbyList = _ASN1HEX.getTLVbyList,
+	_getTLVbyListEx = _ASN1HEX.getTLVbyListEx,
 	_getIdxbyList = _ASN1HEX.getIdxbyList,
+	_getIdxbyListEx = _ASN1HEX.getIdxbyListEx,
 	_getVidx = _ASN1HEX.getVidx,
 	_oidname = _ASN1HEX.oidname,
+	_hextooidstr = _ASN1HEX.hextooidstr,
 	_X509 = X509,
-	_pemtohex = pemtohex;
+	_pemtohex = pemtohex,
+	_PSSNAME2ASN1TLV;
+
+    try {
+	_PSSNAME2ASN1TLV = KJUR.asn1.x509.AlgorithmIdentifier.PSSNAME2ASN1TLV;
+    } catch (ex) {};
+    this.HEX2STAG = {"0c": "utf8", "13": "prn", "16": "ia5",
+		     "1a": "vis" , "1e": "bmp"};
 
     this.hex = null;
     this.version = 0; // version (1: X509v1, 3: X509v3, others: unspecified)
@@ -151,7 +172,7 @@ function X509() {
      * var sn = x.getSerialNumberHex(); // return string like "01ad..."
      */
     this.getSerialNumberHex = function() {
-	return _getVbyList(this.hex, 0, [0, 1 + this.foffset], "02");
+	return _getVbyListEx(this.hex, 0, [0, 0], "02");
     };
 
     /**
@@ -159,17 +180,70 @@ function X509() {
      * @name getSignatureAlgorithmField
      * @memberOf X509#
      * @function
-     * @return {String} signature algorithm name (ex. SHA1withRSA, SHA256withECDSA)
+     * @return {String} signature algorithm name (ex. SHA1withRSA, SHA256withECDSA, SHA512withRSAandMGF1)
      * @since x509 1.1.8
+     * @see X509#getAlgorithmIdentifierName
      * @description
-     * This method will get a name of signature algorithm field of certificate:
+     * This method will get a name of signature algorithm in 
+     * basic field of certificate.
+     * <br/>
+     * NOTE: From jsrsasign 8.0.21, RSA-PSS certificate is also supported.
+     * For supported RSA-PSS algorithm name and PSS parameters,
+     * see {@link X509#getSignatureAlgorithmField}.
      * @example
      * var x = new X509();
      * x.readCertPEM(sCertPEM);
      * algName = x.getSignatureAlgorithmField();
      */
     this.getSignatureAlgorithmField = function() {
-	return _oidname(_getVbyList(this.hex, 0, [0, 2 + this.foffset, 0], "06"));
+	var hTLV = _getTLVbyListEx(this.hex, 0, [0, 1]);
+	return this.getAlgorithmIdentifierName(hTLV);
+    };
+
+    /**
+     * get algorithm name name of AlgorithmIdentifier ASN.1 structure
+     * @name getAlgorithmIdentifierName
+     * @memberOf X509#
+     * @function
+     * @param {String} hTLV hexadecimal string of AlgorithmIdentifier
+     * @return {String} algorithm name (ex. SHA1withRSA, SHA256withECDSA, SHA512withRSAandMGF1, SHA1)
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @description
+     * This method will get a name of AlgorithmIdentifier.
+     * <br/>
+     * @example
+     * var x = new X509();
+     * algName = x.getAlgorithmIdentifierName("30...");
+     */
+    this.getAlgorithmIdentifierName = function(hTLV) {
+	for (var key in _PSSNAME2ASN1TLV) {
+	    if (hTLV === _PSSNAME2ASN1TLV[key]) {
+		return key;
+	    }
+	}
+	return _oidname(_getVbyListEx(hTLV, 0, [0], "06"));
+    };
+
+    /**
+     * get JSON object of issuer field<br/>
+     * @name getIssuer
+     * @memberOf X509#
+     * @function
+     * @return {Array} JSON object of issuer field
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @description
+     * @example
+     * var x = new X509();
+     * x.readCertPEM(sCertPEM);
+     * x.getIssuer() &rarr;
+     * { array: [[{type:'C',value:'JP',ds:'prn'}],...],
+     *   str: "30..." }
+     */
+    this.getIssuer = function() {
+	var result = {};
+	result.array = this.getX500Name(this.getIssuerHex());
+	result.str = this.getIssuerString();
+	return result;
     };
 
     /**
@@ -197,10 +271,32 @@ function X509() {
      * var x = new X509();
      * x.readCertPEM(sCertPEM);
      * var dn1 = x.getIssuerString(); // return string like "/C=US/O=TEST"
-     * var dn2 = KJUR.asn1.x509.X500Name.onelineToLDAP(dn1); // returns "O=TEST, C=US"
+     * var dn2 = KJUR.asn1.x509.X500Name.compatToLDAP(dn1); // returns "O=TEST, C=US"
      */
     this.getIssuerString = function() {
         return _X509.hex2dn(this.getIssuerHex());
+    };
+
+    /**
+     * get JSON object of subject field<br/>
+     * @name getSubject
+     * @memberOf X509#
+     * @function
+     * @return {Array} JSON object of subject field
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @description
+     * @example
+     * var x = new X509();
+     * x.readCertPEM(sCertPEM);
+     * x.getIssuer() &rarr;
+     * { array: [[{type:'C',value:'JP',ds:'prn'}],...],
+     *   str: "30..." }
+     */
+    this.getSubject = function() {
+	var result = {};
+	result.array = this.getX500Name(this.getSubjectHex());
+	result.str = this.getSubjectString();
+	return result;
     };
 
     /**
@@ -228,7 +324,7 @@ function X509() {
      * var x = new X509();
      * x.readCertPEM(sCertPEM);
      * var dn1 = x.getSubjectString(); // return string like "/C=US/O=TEST"
-     * var dn2 = KJUR.asn1.x509.X500Name.onelineToLDAP(dn1); // returns "O=TEST, C=US"
+     * var dn2 = KJUR.asn1.x509.X500Name.compatToLDAP(dn1); // returns "O=TEST, C=US"
      */
     this.getSubjectString = function() {
         return _X509.hex2dn(this.getSubjectHex());
@@ -341,9 +437,9 @@ function X509() {
      * @name getSignatureAlgorithmName
      * @memberOf X509#
      * @function
-     * @param {String} hCert hexadecimal string of X.509 certificate binary
      * @return {String} signature algorithm name (ex. SHA1withRSA, SHA256withECDSA)
      * @since jsrsasign 7.2.0 x509 1.1.14
+     * @see X509#getAlgorithmIdentifierName
      * @description
      * This method will get signature algorithm name of certificate:
      * @example
@@ -352,18 +448,21 @@ function X509() {
      * x.getSignatureAlgorithmName() &rarr; "SHA256withRSA"
      */
     this.getSignatureAlgorithmName = function() {
-	return _oidname(_getVbyList(this.hex, 0, [1, 0], "06"));
+	var hTLV = _getTLVbyList(this.hex, 0, [1], "30");
+	return this.getAlgorithmIdentifierName(hTLV);
     };
 
     /**
-     * get signature value in hexadecimal string<br/>
+     * get signature value as hexadecimal string<br/>
      * @name getSignatureValueHex
      * @memberOf X509#
      * @function
      * @return {String} signature value hexadecimal string without BitString unused bits
      * @since jsrsasign 7.2.0 x509 1.1.14
+     *
      * @description
      * This method will get signature value of certificate:
+     *
      * @example
      * var x = new X509();
      * x.readCertPEM(sCertPEM);
@@ -381,9 +480,15 @@ function X509() {
      * @param {Object} pubKey public key object
      * @return {Boolean} true if signature value is valid otherwise false
      * @since jsrsasign 7.2.0 x509 1.1.14
+     *
      * @description
      * This method verifies signature value of hexadecimal string of 
      * X.509 certificate by specified public key object.
+     * The signature algorithm used to verify will refer
+     * signatureAlgorithm field. (See {@link X509#getSignatureAlgorithmField})
+     * RSA-PSS signature algorithms (SHA{,256,384,512}withRSAandMGF1)
+     * are available.
+     *
      * @example
      * pubKey = KEYUTIL.getKey(pemPublicKey); // or certificate
      * x = new X509();
@@ -391,7 +496,7 @@ function X509() {
      * x.verifySignature(pubKey) &rarr; true, false or raising exception
      */
     this.verifySignature = function(pubKey) {
-	var algName = this.getSignatureAlgorithmName();
+	var algName = this.getSignatureAlgorithmField();
 	var hSigVal = this.getSignatureValueHex();
 	var hTbsCert = _getTLVbyList(this.hex, 0, [0], "30");
 	
@@ -403,11 +508,14 @@ function X509() {
 
     // ===== parse extension ======================================
     /**
-     * set array of X.509v3 extesion information such as extension OID, criticality and value index.<br/>
+     * set array of X.509v3 and CSR extesion information such as extension OID, criticality and value index. (DEPRECATED)<br/>
      * @name parseExt
      * @memberOf X509#
      * @function
+     * @param {String} hCSR - PEM string of certificate signing requrest(CSR) (OPTION)
      * @since jsrsasign 7.2.0 x509 1.1.14
+     * @deprecated jsrsasign 9.1.1 x509 2.0.1
+     *
      * @description
      * This method will set an array of X.509v3 extension information having 
      * following parameters:
@@ -415,23 +523,58 @@ function X509() {
      * <li>oid - extension OID (ex. 2.5.29.19)</li>
      * <li>critical - true or false</li>
      * <li>vidx - string index for extension value</li>
+     * <br/>
+     * When you want to parse extensionRequest of CSR,
+     * argument 'hCSR' shall be specified.
+     * <br/>
+     * NOTE: CSR is supported from jsrsasign 8.0.20 x509 1.1.22.
+     * <br/>
+     * This method and X509.aExtInfo property
+     * have been *deprecated* since jsrsasign 9.1.1.
+     * All extension parser method such as X509.getExt* shall be
+     * call with argument "hExtV" and "critical" explicitly.
+     *
      * @example
      * x = new X509();
      * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
      *
      * x.aExtInfo &rarr;
      * [ { oid: "2.5.29,19", critical: true, vidx: 2504 }, ... ]
+     *
+     * // to parse CSR
+     * X = new X509()
+     * x.parseExt("-----BEGIN CERTIFICATE REQUEST-----...");
+     * x.aExtInfo &rarr;
+     * [ { oid: "2.5.29,19", critical: true, vidx: 2504 }, ... ]
      */
-    this.parseExt = function() {
-	if (this.version !== 3) return -1;
-	var iExtSeq = _getIdxbyList(this.hex, 0, [0, 7, 0], "30");
-	var aExtIdx = _getChildIdx(this.hex, iExtSeq);
+    this.parseExt = function(hCSR) {
+	var iExtSeq, aExtIdx, h;
 
+	if (hCSR === undefined) {
+	    h = this.hex;
+	    if (this.version !== 3) return -1;
+	    iExtSeq = _getIdxbyList(h, 0, [0, 7, 0], "30");
+	    aExtIdx = _getChildIdx(h, iExtSeq);
+	} else {
+	    h = pemtohex(hCSR);
+	    var idx1 = _getIdxbyList(h, 0, [0, 3, 0, 0], "06");
+
+	    if (_getV(h, idx1) != "2a864886f70d01090e") {
+		this.aExtInfo = new Array();
+		return;
+	    }
+
+	    iExtSeq = _getIdxbyList(h, 0, [0, 3, 0, 1, 0], "30");
+	    aExtIdx = _getChildIdx(h, iExtSeq);
+
+	    this.hex = h;
+	}
+	    
 	this.aExtInfo = new Array();
 	for (var i = 0; i < aExtIdx.length; i++) {
 	    var item = {};
 	    item.critical = false;
-	    var a = _getChildIdx(this.hex, aExtIdx[i]);
+	    var a = _getChildIdx(h, aExtIdx[i]);
 	    var offset = 0;
 
 	    if (a.length === 3) {
@@ -439,9 +582,9 @@ function X509() {
 		offset = 1;
 	    }
 
-	    item.oid = _ASN1HEX.hextooidstr(_getVbyList(this.hex, aExtIdx[i], [0], "06"));
-	    var octidx = _getIdxbyList(this.hex, aExtIdx[i], [1 + offset]);
-	    item.vidx = _getVidx(this.hex, octidx);
+	    item.oid = _ASN1HEX.hextooidstr(_getVbyList(h, aExtIdx[i], [0], "06"));
+	    var octidx = _getIdxbyList(h, aExtIdx[i], [1 + offset]);
+	    item.vidx = _getVidx(h, octidx);
 	    this.aExtInfo.push(item);
 	}
     };
@@ -485,55 +628,134 @@ function X509() {
      * @name getExtBasicConstraints
      * @memberOf X509#
      * @function
-     * @return {Object} associative array which may have "cA" and "pathLen" parameters
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
+     * @param {Boolean} critical flag (OPTIONAL)
+     * @return {Array} JSON object of BasicConstraints parameter or undefined
      * @since jsrsasign 7.2.0 x509 1.1.14
+     * @see {@link KJUR.asn1.x509.BasicConstraints}
      * @description
      * This method will get basic constraints extension value as object with following paramters.
      * <ul>
-     * <li>cA - CA flag whether CA or not</li>
-     * <li>pathLen - maximum intermediate certificate length</li>
+     * <li>{Boolean}cA - CA flag whether CA or not</li>
+     * <li>{Integer}pathLen - maximum intermediate certificate length</li>
+     * <li>{Boolean}critical - critical flag</li>
      * </ul>
      * There are use cases for return values:
      * <ul>
-     * <li>{cA:true, pathLen:3} - cA flag is true and pathLen is 3</li>
-     * <li>{cA:true} - cA flag is true and no pathLen</li>
+     * <li>{cA:true,pathLen:3,critical:true} - cA flag is true and pathLen is 3</li>
+     * <li>{cA:true,critical:true} - cA flag is true and no pathLen</li>
      * <li>{} - basic constraints has no value in case of end entity certificate</li>
      * <li>undefined - there is no basic constraints extension</li>
      * </ul>
      * @example
      * x = new X509();
      * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
-     * x.getExtBasicConstraints() &rarr; { cA: true, pathLen: 3 };
+     * x.getExtBasicConstraints() &rarr; {cA:true,pathLen:3,critical:true}
      */
-    this.getExtBasicConstraints = function() {
-	var info = this.getExtInfo("basicConstraints");
-	if (info === undefined) return info;
-
-	var hBC = _getV(this.hex, info.vidx);
-	if (hBC === '') return {};
-	if (hBC === '0101ff') return { cA: true };
-	if (hBC.substr(0, 8) === '0101ff02') {
-	    var pathLexHex = _getV(hBC, 6);
-	    var pathLen = parseInt(pathLexHex, 16);
-	    return { cA: true, pathLen: pathLen };
+    this.getExtBasicConstraints = function(hExtV, critical) {
+	if (hExtV === undefined && critical === undefined) {
+	    var info = this.getExtInfo("basicConstraints");
+	    if (info === undefined) return undefined;
+	    hExtV = _getTLV(this.hex, info.vidx);
+	    critical = info.critical;
 	}
-	throw "basicConstraints parse error";
+
+	var result = {extname:"basicConstraints"};
+	if (critical) result.critical = true;
+
+	if (hExtV === '3000') return result;
+	if (hExtV === '30030101ff') {
+	    result.cA = true;
+	    return result;
+	}
+	if (hExtV.substr(0, 12) === '30060101ff02') {
+	    var pathLexHex = _getV(hExtV, 10);
+	    var pathLen = parseInt(pathLexHex, 16);
+	    result.cA = true;
+	    result.pathLen = pathLen;
+	    return result;
+	}
+	throw new Error("hExtV parse error: " + hExtV);
     };
 
+    /**
+     * get KeyUsage extension value as JSON object
+     * @memberOf X509#
+     * @function
+     * @name getExtKeyUsage
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
+     * @param {Boolean} critical flag (OPTIONAL)
+     * @return {Array} JSON object of KeyUsage parameter or undefined
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see {@link KJUR.asn1.x509.KeyUsage}
+     * @see {@link X509#getExtKeyUsageString}
+     * @description
+     * This method parse keyUsage extension. When arguments are
+     * not specified, its extension in X509 object will be parsed.
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.KeyUsage} constructor.
+     * <br>
+     * When hExtV and critical specified as arguments, return value
+     * will be generated from them.
+     * <pre>
+     * id-ce-keyUsage OBJECT IDENTIFIER ::=  { id-ce 15 }
+     * KeyUsage ::= BIT STRING {
+     *      digitalSignature        (0),
+     *      nonRepudiation          (1),
+     *      keyEncipherment         (2),
+     *      dataEncipherment        (3),
+     *      keyAgreement            (4),
+     *      keyCertSign             (5),
+     *      cRLSign                 (6),
+     *      encipherOnly            (7),
+     *      decipherOnly            (8) }     
+     * </pre>
+     * @example
+     * x = new X509();
+     * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+     * x.getExtKeyUsage() &rarr;
+     * {
+     *   critial: true,
+     *   names: ["digitalSignature", "decipherOnly"]
+     * }
+     *
+     * x = new X509();
+     * x.getExtKeyUsage("306230...") 
+     * x.getExtKeyUsage("306230...", true) 
+     */
+    this.getExtKeyUsage = function(hExtV, critical) {
+	if (hExtV === undefined && critical === undefined) {
+	    var info = this.getExtInfo("keyUsage");
+	    if (info === undefined) return undefined;
+	    hExtV = _getTLV(this.hex, info.vidx);
+	    critical = info.critical;
+	}
+
+	var result = {extname:"keyUsage"};
+	if (critical) result.critical = true;
+
+	result.names = this.getExtKeyUsageString(hExtV).split(",");
+
+	return result;
+    };
 
     /**
      * get KeyUsage extension value as binary string in the certificate<br/>
      * @name getExtKeyUsageBin
      * @memberOf X509#
      * @function
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
      * @return {String} binary string of key usage bits (ex. '101')
      * @since jsrsasign 7.2.0 x509 1.1.14
+     * @see {@link X509#getExtKeyUsage}
      * @description
      * This method will get key usage extension value
      * as binary string such like '101'.
      * Key usage bits definition is in the RFC 5280.
      * If there is no key usage extension in the certificate,
      * it returns empty string (i.e. '').
+     * <br/>
+     * NOTE: argument 'hExtV' supported since jsrsasign 9.0.0 x509 2.0.0.
      * @example
      * x = new X509();
      * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
@@ -542,16 +764,22 @@ function X509() {
      * // 0 - nonRepudiation
      * // 1 - keyEncipherment
      */
-    this.getExtKeyUsageBin = function() {
-	var info = this.getExtInfo("keyUsage");
-	if (info === undefined) return '';
+    this.getExtKeyUsageBin = function(hExtV) {
+	if (hExtV === undefined) {
+	    var info = this.getExtInfo("keyUsage");
+	    if (info === undefined) return '';
+	    hExtV = _getTLV(this.hex, info.vidx);
+	}
 	
-	var hKeyUsage = _getV(this.hex, info.vidx);
-	if (hKeyUsage.length % 2 != 0 || hKeyUsage.length <= 2)
-	    throw "malformed key usage value";
-	var unusedBits = parseInt(hKeyUsage.substr(0, 2));
-	var bKeyUsage = parseInt(hKeyUsage.substr(2), 16).toString(2);
-	return bKeyUsage.substr(0, bKeyUsage.length - unusedBits);
+	if (hExtV.length != 8 && hExtV.length != 10)
+	    throw new Error("malformed key usage value: " + hExtV);
+
+	var s = "000000000000000" + parseInt(hExtV.substr(6), 16).toString(2);
+	if (hExtV.length == 8) s = s.slice(-8);
+	if (hExtV.length == 10) s = s.slice(-16);
+	s = s.replace(/0+$/, '');
+	if (s == '') s = '0';
+	return s;
     };
 
     /**
@@ -559,20 +787,24 @@ function X509() {
      * @name getExtKeyUsageString
      * @memberOf X509#
      * @function
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
      * @return {String} comma separated string of key usage
      * @since jsrsasign 7.2.0 x509 1.1.14
+     * @see {@link X509#getExtKeyUsage}
      * @description
      * This method will get key usage extension value
      * as comma separated string of usage names.
      * If there is no key usage extension in the certificate,
      * it returns empty string (i.e. '').
+     * <br/>
+     * NOTE: argument 'hExtV' supported since jsrsasign 9.0.0 x509 2.0.0.
      * @example
      * x = new X509();
      * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
      * x.getExtKeyUsageString() &rarr; "digitalSignature,keyEncipherment"
      */
-    this.getExtKeyUsageString = function() {
-	var bKeyUsage = this.getExtKeyUsageBin();
+    this.getExtKeyUsageString = function(hExtV) {
+	var bKeyUsage = this.getExtKeyUsageBin(hExtV);
 	var a = new Array();
 	for (var i = 0; i < bKeyUsage.length; i++) {
 	    if (bKeyUsage.substr(i, 1) == "1") a.push(X509.KEYUSAGE_NAME[i]);
@@ -585,22 +817,51 @@ function X509() {
      * @name getExtSubjectKeyIdentifier
      * @memberOf X509#
      * @function
-     * @return {String} hexadecimal string of subject key identifier or null
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
+     * @param {Boolean} critical flag (OPTIONAL)
+     * @return {Array} JSON object of SubjectKeyIdentifier parameter or undefined
      * @since jsrsasign 7.2.0 x509 1.1.14
      * @description
-     * This method will get subject key identifier extension value
-     * as hexadecimal string.
-     * If there is this in the certificate, it returns undefined;
+     * This method will get 
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2">
+     * SubjectKeyIdentifier extension</a> value as JSON object.
+     * <br>
+     * When hExtV and critical specified as arguments, return value
+     * will be generated from them.
+     * If there is no such extension in the certificate, it returns undefined.
+     * <br>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.SubjectKeyIdentifier} constructor.
+     * <pre>
+     * id-ce-subjectKeyIdentifier OBJECT IDENTIFIER ::=  { id-ce 14 }
+     * SubjectKeyIdentifier ::= KeyIdentifier
+     * </pre>
+     * <br>
+     * CAUTION:
+     * Returned JSON value format have been changed without 
+     * backward compatibility since jsrsasign 9.0.0 x509 2.0.0.
+     *
      * @example
      * x = new X509();
      * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
-     * x.getExtSubjectKeyIdentifier() &rarr; "1b3347ab...";
+     * x.getExtSubjectKeyIdentifier() &rarr; 
+     * { kid: {hex: "1b3347ab..."}, critical: true };
      */
-    this.getExtSubjectKeyIdentifier = function() {
-	var info = this.getExtInfo("subjectKeyIdentifier");
-	if (info === undefined) return info;
+    this.getExtSubjectKeyIdentifier = function(hExtV, critical) {
+	if (hExtV === undefined && critical === undefined) {
+	    var info = this.getExtInfo("subjectKeyIdentifier");
+	    if (info === undefined) return undefined;
+	    hExtV = _getTLV(this.hex, info.vidx);
+	    critical = info.critical;
+	}
 
-	return _getV(this.hex, info.vidx);
+	var result = {extname:"subjectKeyIdentifier"};
+	if (critical) result.critical = true;
+
+	var hKID = _getV(hExtV, 0);
+	result.kid = {hex: hKID};
+
+	return result;
     };
 
     /**
@@ -608,42 +869,132 @@ function X509() {
      * @name getExtAuthorityKeyIdentifier
      * @memberOf X509#
      * @function
-     * @return {Object} JSON object of authority key identifier or null
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
+     * @param {Boolean} critical flag (OPTIONAL)
+     * @return {Array} JSON object of AuthorityKeyIdentifier parameter or undefined
      * @since jsrsasign 7.2.0 x509 1.1.14
+     * @see {@link KJUR.asn1.x509.AuthorityKeyIdentifier}
      * @description
-     * This method will get authority key identifier extension value
-     * as JSON object.
-     * If there is this in the certificate, it returns undefined;
+     * This method will get 
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.1">
+     * AuthorityKeyIdentifier extension</a> value as JSON object.
      * <br>
-     * NOTE: Currently this method only supports keyIdentifier so that
-     * authorityCertIssuer and authorityCertSerialNumber will not
-     * be return in the JSON object.
+     * When hExtV and critical specified as arguments, return value
+     * will be generated from them.
+     * If there is no such extension in the certificate, it returns undefined.
+     * <br/>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.AuthorityKeyIdentifier} constructor.
+     * <pre>
+     *    id-ce-authorityKeyIdentifier OBJECT IDENTIFIER ::=  { id-ce 35 }
+     *    AuthorityKeyIdentifier ::= SEQUENCE {
+     *       keyIdentifier             [0] KeyIdentifier           OPTIONAL,
+     *       authorityCertIssuer       [1] GeneralNames            OPTIONAL,
+     *       authorityCertSerialNumber [2] CertificateSerialNumber OPTIONAL  }
+     *    KeyIdentifier ::= OCTET STRING
+     * </pre>
+     * Constructor may have following parameters:
+     * <ul>
+     * <li>{Array}kid - JSON object of {@link KJUR.asn1.DEROctetString} parameters</li>
+     * <li>{Array}issuer - JSON object of {@link KJUR.asn1.x509.X500Name} parameters</li>
+     * <li>{Array}sn - JSON object of {@link KJUR.asn1.DERInteger} parameters</li>
+     * <li>{Boolean}critical - critical flag</li>
+     * </ul>
+     * <br>
+     * NOTE: The 'authorityCertIssuer' and 'authorityCertSerialNumber'
+     * supported since jsrsasign 9.0.0 x509 2.0.0.
      * @example
      * x = new X509();
      * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
-     * x.getExtAuthorityKeyIdentifier() &rarr; { kid: "1234abcd..." }
+     * x.getExtAuthorityKeyIdentifier() &rarr; 
+     * { kid: {hex: "1234abcd..."},
+     *   issuer: {hex: "30..."},
+     *   sn: {hex: "1234..."},
+     *   critical: true}
      */
-    this.getExtAuthorityKeyIdentifier = function() {
-	var info = this.getExtInfo("authorityKeyIdentifier");
-	if (info === undefined) return info;
+    this.getExtAuthorityKeyIdentifier = function(hExtV, critical) {
+	if (hExtV === undefined && critical === undefined) {
+	    var info = this.getExtInfo("authorityKeyIdentifier");
+	    if (info === undefined) return undefined;
+	    hExtV = _getTLV(this.hex, info.vidx);
+	    critical = info.critical;
+	}
 
-	var result = {};
-	var hAKID = _getTLV(this.hex, info.vidx);
-	var a = _getChildIdx(hAKID, 0);
+	var result = {extname:"authorityKeyIdentifier"};
+	if (critical) result.critical = true;
+
+	var a = _getChildIdx(hExtV, 0);
 	for (var i = 0; i < a.length; i++) {
-	    if (hAKID.substr(a[i], 2) === "80")
-		result.kid = _getV(hAKID, a[i]);
+	    var tag = hExtV.substr(a[i], 2);
+	    if (tag === "80") {
+		result.kid = {hex: _getV(hExtV, a[i])};
+	    }
+	    if (tag === "a1") {
+		var hGNS = _getTLV(hExtV, a[i]);
+		var gnsParam = this.getGeneralNames(hGNS);
+		result.issuer = gnsParam[0]["dn"];
+	    }
+	    if (tag === "82") {
+		result.sn = {hex: _getV(hExtV, a[i])};
+	    }
 	}
 	return result;
     };
 
     /**
-     * get extKeyUsage value as array of name string in the certificate<br/>
+     * get extKeyUsage value as JSON object
+     * @name getExtExtKeyUsage
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
+     * @param {Boolean} critical flag (OPTIONAL)
+     * @return {Array} JSON object of ExtKeyUsage parameter or undefined
+     * @return {Object} JSONarray of extended key usage ID name or oid
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see {@link KJUR.asn1.x509.ExtKeyUsage}
+     * @description
+     * This method parse extKeyUsage extension. When arguments are
+     * not specified, its extension in X509 object will be parsed.
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.ExtKeyUsage} constructor.
+     * <br>
+     * When hExtV and critical specified as arguments, return value
+     * will be generated from them.
+     * @example
+     * x = new X509();
+     * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+     * x.getExtExtKeyUsage() &rarr;
+     * { array: ["clientAuth", "emailProtection", "1.3.6.1.4.1.311.10.3.4"], 
+     *   critical: true},
+     */
+    this.getExtExtKeyUsage = function(hExtV, critical) {
+	if (hExtV === undefined && critical === undefined) {
+	    var info = this.getExtInfo("extKeyUsage");
+	    if (info === undefined) return undefined;
+	    hExtV = _getTLV(this.hex, info.vidx);
+	    critical = info.critical;
+	}
+
+	var result = {extname:"extKeyUsage",array:[]};
+	if (critical) result.critical = true;
+
+	var a = _getChildIdx(hExtV, 0);
+
+	for (var i = 0; i < a.length; i++) {
+	    result.array.push(_oidname(_getV(hExtV, a[i])));
+	}
+
+	return result;
+    };
+
+    /**
+     * get extKeyUsage value as array of name string in the certificate(DEPRECATED)<br/>
      * @name getExtExtKeyUsageName
      * @memberOf X509#
      * @function
      * @return {Object} array of extended key usage ID name or oid
      * @since jsrsasign 7.2.0 x509 1.1.14
+     * @deprecated since jsrsasign 9.0.0 x509 2.0.0
      * @description
      * This method will get extended key usage extension value
      * as array of name or OID string.
@@ -674,42 +1025,202 @@ function X509() {
     };
 
     /**
-     * (DEPRECATED) get subjectAltName value as array of string in the certificate
+     * get subjectAltName value as array of string in the certificate
      * @name getExtSubjectAltName
      * @memberOf X509#
      * @function
-     * @return {Object} array of alt names
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
+     * @param {Boolean} critical flag (OPTIONAL)
+     * @return {Array} JSON object of SubjectAltName parameters or undefined
      * @since jsrsasign 7.2.0 x509 1.1.14
-     * @deprecated since jsrsasign 8.0.1 x509 1.1.17. Please move to {@link X509#getExtSubjectAltName2}
+     * @see {@link KJUR.asn1.x509.SubjectAltName}
+     * @see {@link X509#IssuerAltName}
      * @description
-     * This method will get subject alt name extension value
-     * as array of name.
-     * If there is this in the certificate, it returns undefined;
+     * This method will get subjectAltName value
+     * as an array of JSON object which has properties defined
+     * in {@link KJUR.asn1.x509.SubjectAltName}.
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.SubjectAltName} constructor.
+     * If there is no this extension in the certificate,
+     * it returns undefined.
      * <br>
-     * NOTE: Currently this method supports only dNSName so that
-     * other name type such like iPAddress or generalName will not be returned.
+     * When hExtV and critical specified as arguments, return value
+     * will be generated from them.
+     * <br>
+     * CAUTION: return value of JSON object format have been changed
+     * from jsrsasign 9.0.0 x509 2.0.0 without backword compatibility.
      * @example
      * x = new X509();
      * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
-     * x.getExtSubjectAltName() &rarr; ["example.com", "example.org"]
+     * x.getExtSubjectAltName() &rarr; 
+     * { array: [
+     *     {uri: "http://example.com/"},
+     *     {rfc822: "user1@example.com"},
+     *     {dns: "example.com"}
+     *   ],
+     *   critical: true
+     * }
+     *
+     * x.getExtSubjectAltName("3026...") &rarr;
+     * { array: [{ip: "192.168.1.1"}] }
      */
-    this.getExtSubjectAltName = function() {
-	var a = this.getExtSubjectAltName2();
-	var result = new Array();
+    this.getExtSubjectAltName = function(hExtV, critical) {
+	if (hExtV === undefined && critical === undefined) {
+	    var info = this.getExtInfo("subjectAltName");
+	    if (info === undefined) return undefined;
+	    hExtV = _getTLV(this.hex, info.vidx);
+	    critical = info.critical;
+	}
 
-	for (var i = 0; i < a.length; i++) {
-	    if (a[i][0] === "DNS") result.push(a[i][1]);
+	var result = {extname:"subjectAltName",array:[]};
+	if (critical) result.critical = true;
+
+	result.array = this.getGeneralNames(hExtV);
+
+	return result;
+    };
+
+    /**
+     * get issuerAltName value as array of string in the certificate
+     * @name getExtIssuerAltName
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
+     * @param {Boolean} critical flag (OPTIONAL)
+     * @return {Array} JSON object of IssuerAltName parameters
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see {@link KJUR.asn1.x509.IssuerAltName}
+     * @see {@link X509#SubjectAltName}
+     * @description
+     * This method will get issuerAltName value
+     * as an array of JSON object which has properties defined
+     * in {@link KJUR.asn1.x509.IssuerAltName}.
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.IssuerAltName} constructor.
+     * If there is no this extension in the certificate,
+     * it returns undefined.
+     * <br>
+     * When hExtV and critical specified as arguments, return value
+     * will be generated from them.
+     * @example
+     * x = new X509();
+     * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+     * x.getExtIssuerAltName() &rarr; 
+     * { array: [
+     *     {uri: "http://example.com/"},
+     *     {rfc822: "user1@example.com"},
+     *     {dns: "example.com"}
+     *   ],
+     *   critical: true
+     * }
+     *
+     * x.getExtIssuerAltName("3026...") &rarr;
+     * { array: [{ip: "192.168.1.1"}] }
+     */
+    this.getExtIssuerAltName = function(hExtV, critical) {
+	if (hExtV === undefined && critical === undefined) {
+	    var info = this.getExtInfo("issuerAltName");
+	    if (info === undefined) return undefined;
+	    hExtV = _getTLV(this.hex, info.vidx);
+	    critical = info.critical;
+	}
+
+	var result = {extname:"issuerAltName",array:[]};
+	if (critical) result.critical = true;
+
+	result.array = this.getGeneralNames(hExtV);
+
+	return result;
+    };
+
+    /**
+     * get GeneralNames ASN.1 structure parameter as JSON object
+     * @name getGeneralNames
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of GeneralNames
+     * @return {Array} array of GeneralNames parameters
+     * @see {@link KJUR.asn1.x509.GeneralNames}
+     * @see {@link KJUR.asn1.x509.GeneralName}
+     * @see {@link X509#getGeneralNames}
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @description
+     * This method will get GeneralNames parameters defined in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.6">
+     * RFC 5280 4.2.1.6</a>.
+     * <pre>
+     * GeneralNames ::= SEQUENCE SIZE (1..MAX) OF GeneralName
+     * </pre>
+     * Result of this method can be passed to
+     * {@link KJUR.asn1.x509.GeneralNames} constructor.
+     * @example
+     * x = new X509();
+     * x.getGeneralNames("3011860f687474703a2f2f6161612e636f6d2f")
+     * &rarr; [{uri: "http://aaa.com/"}]
+     */
+    this.getGeneralNames = function(h) {
+	var aIdx = _getChildIdx(h, 0);
+	var result = [];
+	for (var i = 0; i < aIdx.length; i++) {
+	    var gnParam = this.getGeneralName(_getTLV(h, aIdx[i]));
+	    if (gnParam !== undefined) result.push(gnParam);
 	}
 	return result;
     };
 
     /**
-     * get subjectAltName value as array of string in the certificate
+     * get GeneralName ASN.1 structure parameter as JSON object
+     * @name getGeneralName
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of GeneralName
+     * @return {Array} JSON object of GeneralName parameters or undefined
+     * @see {@link KJUR.asn1.x509.GeneralNames}
+     * @see {@link X509#getGeneralName}
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @description
+     * This method will get GeneralName parameters defined in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.6">
+     * RFC 5280 4.2.1.6</a>.
+     * <pre>
+     * GeneralName ::= CHOICE {
+     *      otherName                       [0]     OtherName,
+     *      rfc822Name                      [1]     IA5String,
+     *      dNSName                         [2]     IA5String,
+     *      x400Address                     [3]     ORAddress,
+     *      directoryName                   [4]     Name,
+     *      ediPartyName                    [5]     EDIPartyName,
+     *      uniformResourceIdentifier       [6]     IA5String,
+     *      iPAddress                       [7]     OCTET STRING,
+     *      registeredID                    [8]     OBJECT IDENTIFIER }
+     * </pre>
+     * Result of this method can be passed to
+     * {@link KJUR.asn1.x509.GeneralName} constructor.
+     * @example
+     * x = new X509();
+     * x.getGeneralName("860f687474703a2f2f6161612e636f6d2f") 
+     * &rarr; {uri: "http://aaa.com/"}
+     */
+    this.getGeneralName = function(h) {
+	var tag = h.substr(0, 2);
+	var hValue = _getV(h, 0);
+	var sValue = hextorstr(hValue);
+	if (tag == "81") return {rfc822: sValue};
+	if (tag == "82") return {dns: sValue};
+	if (tag == "a4") return {dn: {hex: hValue}};
+	if (tag == "86") return {uri: sValue};
+	if (tag == "87") return {ip: hextoip(hValue)};
+	return undefined;
+    };
+
+    /**
+     * get subjectAltName value as array of string in the certificate (DEPRECATED)
      * @name getExtSubjectAltName2
      * @memberOf X509#
      * @function
      * @return {Object} array of alt name array
      * @since jsrsasign 8.0.1 x509 1.1.17
+     * @deprecated jsrsasign 9.0.0 x509 2.0.0
      * @description
      * This method will get subject alt name extension value
      * as array of type and name.
@@ -771,7 +1282,131 @@ function X509() {
     };
 
     /**
-     * get array of string for fullName URIs in cRLDistributionPoints(CDP) in the certificate
+     * get CRLDistributionPoints extension value as JSON object
+     * @name getExtCRLDistributionPoints
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
+     * @param {Boolean} critical flag (OPTIONAL)
+     * @return {Object} JSON object of CRLDistributionPoints parameters or undefined
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see {@link KJUR.asn1.x509.CRLDistributionPoints}
+     * @see {@link X509#getDistributionPoint}
+     * @see {@link X509#getDistributionPointName}
+     * @see {@link X509#getGeneralNames}
+     * @see {@link X509#getGeneralName}
+     * @description
+     * This method will get certificate policies value
+     * as an array of JSON object which has properties defined
+     * in {@link KJUR.asn1.x509.CRLDistributionPoints}.
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.CRLDistributionPoints} constructor.
+     * If there is no this extension in the certificate,
+     * it returns undefined.
+     * @example
+     * x = new X509();
+     * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+     * x.getExtCRLDistributionPoints() &rarr; 
+     * {array: [
+     *   {dpname: {full: [{uri: "http://example.com/"}]}},
+     *   {dpname: {full: [{uri: "ldap://example.com/"}]}}
+     *  ],
+     *  critical: true}
+     */
+    this.getExtCRLDistributionPoints = function(hExtV, critical) {
+	if (hExtV === undefined && critical === undefined) {
+	    var info = this.getExtInfo("cRLDistributionPoints");
+	    if (info === undefined) return undefined;
+	    hExtV = _getTLV(this.hex, info.vidx);
+	    critical = info.critical;
+	}
+
+	var result = {extname:"cRLDistributionPoints",array:[]};
+	if (critical) result.critical = true;
+
+	var a = _getChildIdx(hExtV, 0);
+	for (var i = 0; i < a.length; i++) {
+	    var hTLV = _getTLV(hExtV, a[i]);
+	    result.array.push(this.getDistributionPoint(hTLV));
+	}
+
+	return result;
+    };
+
+    /**
+     * get DistributionPoint ASN.1 structure parameter as JSON object
+     * @name getDistributionPoint
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of DistributionPoint
+     * @return {Object} JSON object of DistributionPoint parameters
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see {@link X509#getExtCRLDistributionPoints}
+     * @see {@link X509#getDistributionPointName}
+     * @see {@link X509#getGeneralNames}
+     * @see {@link X509#getGeneralName}
+     * @description
+     * This method will get DistributionPoint parameters.
+     * Result of this method can be passed to
+     * {@link KJUR.asn1.x509.DistributionPoint} constructor.
+     * <br/>
+     * NOTE: reasons[1] and CRLIssuer[2] field not supported
+     * @example
+     * x = new X509();
+     * x.getDistributionPoint("30...") &rarr;
+     * {dpname: {full: [{uri: "http://aaa.com/"}]}}
+     */
+    this.getDistributionPoint = function(h) {
+	var result = {};
+	var a = _getChildIdx(h, 0);
+	for (var i = 0; i < a.length; i++) {
+	    var tag = h.substr(a[i], 2);
+	    var hTLV = _getTLV(h, a[i]);
+	    if (tag == "a0") {
+		result.dpname = this.getDistributionPointName(hTLV);
+	    }
+	}
+	return result;
+    };
+
+    /**
+     * get DistributionPointName ASN.1 structure parameter as JSON object
+     * @name getDistributionPointName
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of DistributionPointName
+     * @return {Object} JSON object of DistributionPointName parameters
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see {@link X509#getExtCRLDistributionPoints}
+     * @see {@link X509#getDistributionPoint}
+     * @see {@link X509#getGeneralNames}
+     * @see {@link X509#getGeneralName}
+     * @description
+     * This method will get DistributionPointName parameters.
+     * Result of this method can be passed to
+     * {@link KJUR.asn1.x509.DistributionPointName} constructor.
+     * <br/>
+     * NOTE: nameRelativeToCRLIssuer[1] not supported
+     * @example
+     * x = new X509();
+     * x.getDistributionPointName("a0...") &rarr;
+     * {full: [{uri: "http://aaa.com/"}]}
+     */
+    this.getDistributionPointName = function(h) {
+	var result = {};
+	var a = _getChildIdx(h, 0);
+	for (var i = 0; i < a.length; i++) {
+	    var tag = h.substr(a[i], 2);
+	    var hTLV = _getTLV(h, a[i]);
+	    if (tag == "a0") {
+		result.full = this.getGeneralNames(hTLV);
+	    }
+	}
+	return result;
+    };
+
+    /**
+     * get array of string for fullName URIs in cRLDistributionPoints(CDP) in the certificate (DEPRECATED)
      * @name getExtCRLDistributionPointsURI
      * @memberOf X509#
      * @function
@@ -850,66 +1485,648 @@ function X509() {
     };
 
     /**
-     * get CertificatePolicies extension value in the certificate as array
-     * @name getExtCertificatePolicies
+     * get AuthorityInfoAccess extension value as JSON object
+     * @name getExtAuthorityInfoAccess
      * @memberOf X509#
      * @function
-     * @return {Object} array of PolicyInformation JSON object
-     * @since jsrsasign 7.2.0 x509 1.1.14
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
+     * @param {Boolean} critical flag (OPTIONAL)
+     * @return {Array} JSON object of AuthorityInfoAccess parameters or undefined
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see {@link KJUR.asn1.x509.AuthorityInfoAccess}
      * @description
-     * This method will get certificate policies value
-     * as an array of JSON object which has following properties:
-     * <ul>
-     * <li>id - </li>
-     * <li>cps - URI of certification practice statement</li>
-     * <li>unotice - string of UserNotice explicitText</li>
-     * </ul>
-     * If there is this extension in the certificate,
-     * it returns undefined;
+     * This method parse authorityInfoAccess extension. When arguments are
+     * not specified, its extension in X509 object will be parsed.
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.AuthorityInfoAccess} constructor.
+     * <br>
+     * When hExtV and critical specified as arguments, return value
+     * will be generated from them.
      * @example
      * x = new X509();
      * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
-     * x.getExtCertificatePolicies &rarr; 
-     * [{ id: 1.2.3.4,
-     *    cps: "http://example.com/cps",
-     *    unotice: "explicit text" }]
+     * x.getExtAuthorityInfoAccess() &rarr;
+     * {
+     *   critial: true, // 
+     *   array: [{ocsp: http://ocsp.example.com/},
+     *           {caissuer: https://repository.example.com/}]
+     * }
+     *
+     * x = new X509();
+     * x.getExtAuthorityInfoAccesss("306230...") 
+     * x.getExtAuthorityInfoAccesss("306230...", true) 
      */
-    this.getExtCertificatePolicies = function() {
-	var info = this.getExtInfo("certificatePolicies");
-	if (info === undefined) return info;
-	
-	var hExt = _getTLV(this.hex, info.vidx);
-	var result = [];
+    this.getExtAuthorityInfoAccess = function(hExtV, critical) {
+	if (hExtV === undefined && critical === undefined) {
+	    var info = this.getExtInfo("authorityInfoAccess");
+	    if (info === undefined) return undefined;
+	    hExtV = _getTLV(this.hex, info.vidx);
+	    critical = info.critical;
+	}
 
-	var a = _getChildIdx(hExt, 0);
+	var result = {extname:"authorityInfoAccess",array:[]};
+	if (critical) result.critical = true;
+
+	var a = _getChildIdx(hExtV, 0);
 	for (var i = 0; i < a.length; i++) {
-	    var policyInfo = {};
-	    var a1 = _getChildIdx(hExt, a[i]);
-
-	    policyInfo.id = _oidname(_getV(hExt, a1[0]));
-
-	    if (a1.length === 2) {
-		var a2 = _getChildIdx(hExt, a1[1]);
-
-		for (var j = 0; j < a2.length; j++) {
-		    var hQualifierId = _getVbyList(hExt, a2[j], [0], "06");
-
-		    if (hQualifierId === "2b06010505070201") { // cps
-			policyInfo.cps = hextoutf8(_getVbyList(hExt, a2[j], [1]));
-		    } else if (hQualifierId === "2b06010505070202") { // unotice
-			policyInfo.unotice =
-			    hextoutf8(_getVbyList(hExt, a2[j], [1, 0]));
-		    }
-		}
+	    var hMethod = _getVbyListEx(hExtV, a[i], [0], "06");
+	    var hLoc = _getVbyList(hExtV, a[i], [1], "86");
+	    var sLoc = hextoutf8(hLoc);
+	    if (hMethod == "2b06010505073001") {
+		result.array.push({ocsp: sLoc});
+	    } else if (hMethod == "2b06010505073002") {
+		result.array.push({caissuer: sLoc});
+	    } else {
+		throw new Error("unknown method: " + hMethod);
 	    }
-
-	    result.push(policyInfo);
 	}
 
 	return result;
     }
 
-    // ===== read certificate =====================================
+    /**
+     * get CertificatePolicies extension value as JSON object
+     * @name getExtCertificatePolicies
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
+     * @param {Boolean} critical flag (OPTIONAL)
+     * @return {Object} JSON object of CertificatePolicies parameters or undefined
+     * @since jsrsasign 7.2.0 x509 1.1.14
+     * @description
+     * This method will get certificate policies value
+     * as an array of JSON object which has properties defined
+     * in {@link KJUR.asn1.x509.CertificatePolicies}.
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.CertificatePolicies} constructor.
+     * If there is no this extension in the certificate,
+     * it returns undefined.
+     * <br>
+     * CAUTION: return value of JSON object format have been changed
+     * from jsrsasign 9.0.0 without backword compatibility.
+     * <br>
+     * When hExtV and critical specified as arguments, return value
+     * will be generated from them.
+     * @example
+     * x = new X509();
+     * x.readCertPEM(sCertPEM); // parseExt() will also be called internally.
+     * x.getExtCertificatePolicies() &rarr; 
+     * { array: [
+     *   { policyoid: "1.2.3.4" }
+     *   { policyoid: "1.2.3.5",
+     *     array: [
+     *       { cps: "https://example.com/" },
+     *       { unotice: { exptext: { type: "bmp", str: "sample text" } } }
+     *     ] 
+     *   }
+     * ]}
+     */
+    this.getExtCertificatePolicies = function(hExtV, critical) {
+	if (hExtV === undefined && critical === undefined) {
+	    var info = this.getExtInfo("certificatePolicies");
+	    if (info === undefined) return undefined;
+	    hExtV = _getTLV(this.hex, info.vidx);
+	    critical = info.critical;
+	}
+	var result = {extname:"certificatePolicies",array:[]};
+	if (critical) result.critical = true;
+
+	var aIdxPI = _getChildIdx(hExtV, 0); // PolicyInformation list index
+	for (var i = 0; i < aIdxPI.length; i++) {
+	    var hPolicyInformation = _getTLV(hExtV, aIdxPI[i]);
+	    var polinfo = this.getPolicyInformation(hPolicyInformation);
+	    result.array.push(polinfo);
+	}
+	return result;
+    }
+
+    /**
+     * get PolicyInformation ASN.1 structure parameter as JSON object
+     * @name getPolicyInformation
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of PolicyInformation
+     * @return {Object} JSON object of PolicyInformation parameters
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @description
+     * This method will get PolicyInformation parameters defined in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
+     * RFC 5280 4.2.1.4</a>.
+     * <pre>
+     * PolicyInformation ::= SEQUENCE {
+     *      policyIdentifier   CertPolicyId,
+     *      policyQualifiers   SEQUENCE SIZE (1..MAX) OF
+     *                              PolicyQualifierInfo OPTIONAL }
+     * </pre>
+     * Result of this method can be passed to
+     * {@link KJUR.asn1.x509.PolicyInformation} constructor.
+     * @example
+     * x = new X509();
+     * x.getPolicyInformation("30...") &rarr;
+     * {
+     *     policyoid: "2.16.840.1.114412.2.1",
+     *     array: [{cps: "https://www.digicert.com/CPS"}]
+     * }
+     */
+    this.getPolicyInformation = function(h) {
+	var result = {};
+
+	var hPOLICYOID = _getVbyList(h, 0, [0], "06");
+	result.policyoid = _oidname(hPOLICYOID);
+	
+	var idxPQSEQ = _getIdxbyListEx(h, 0, [1], "30");
+	if (idxPQSEQ != -1) {
+	    result.array = [];
+	    var aIdx = _getChildIdx(h, idxPQSEQ);
+	    for (var j = 0; j < aIdx.length; j++) {
+		var hPQI = _getTLV(h, aIdx[j]);
+		var pqinfo = this.getPolicyQualifierInfo(hPQI);
+		result.array.push(pqinfo);
+	    }
+	}
+
+	return result;
+    };
+
+    /**
+     * get PolicyQualifierInfo ASN.1 structure parameter as JSON object
+     * @name getPolicyQualifierInfo
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of PolicyQualifierInfo
+     * @return {Object} JSON object of PolicyQualifierInfo parameters
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see {@link X509#getExtCertificatePolicies}
+     * @see {@link X509#getPolicyInformation}
+     * @description
+     * This method will get 
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
+     * PolicyQualifierInfo</a> parameters.
+     * <pre>
+     * PolicyQualifierInfo ::= SEQUENCE {
+     *      policyQualifierId  PolicyQualifierId,
+     *      qualifier          ANY DEFINED BY policyQualifierId }
+     * id-qt          OBJECT IDENTIFIER ::=  { id-pkix 2 }
+     * id-qt-cps      OBJECT IDENTIFIER ::=  { id-qt 1 }
+     * id-qt-unotice  OBJECT IDENTIFIER ::=  { id-qt 2 }
+     * PolicyQualifierId ::= OBJECT IDENTIFIER ( id-qt-cps | id-qt-unotice )
+     * Qualifier ::= CHOICE {
+     *      cPSuri           CPSuri,
+     *      userNotice       UserNotice }
+     * CPSuri ::= IA5String
+     * </pre>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.PolicyQualifierInfo} constructor.
+     * @example
+     * x = new X509();
+     * x.getPolicyQualifierInfo("30...") 
+     * &rarr; {unotice: {exptext: {type: 'utf8', str: 'aaa'}}}
+     * x.getPolicyQualifierInfo("30...") 
+     * &rarr; {cps: "https://repository.example.com/"}
+     */
+    this.getPolicyQualifierInfo = function(h) {
+	var result = {};
+	var hPQOID = _getVbyList(h, 0, [0], "06");
+	if (hPQOID === "2b06010505070201") { // cps
+	    var hCPSURI = _getVbyListEx(h, 0, [1], "16");
+	    result.cps = hextorstr(hCPSURI);
+	} else if (hPQOID === "2b06010505070202") { // unotice
+	    var hUserNotice = _getTLVbyList(h, 0, [1], "30");
+	    result.unotice = this.getUserNotice(hUserNotice);
+	}
+	return result;
+    };
+
+    /**
+     * get UserNotice ASN.1 structure parameter as JSON object
+     * @name getUserNotice
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of UserNotice
+     * @return {Object} JSON object of UserNotice parameters
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see {@link X509#getExtCertificatePolicies}
+     * @see {@link X509#getPolicyInformation}
+     * @see {@link X509#getPolicyQualifierInfo}
+     * @description
+     * This method will get 
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
+     * UserNotice</a> parameters.
+     * <pre>
+     * UserNotice ::= SEQUENCE {
+     *      noticeRef        NoticeReference OPTIONAL,
+     *      explicitText     DisplayText OPTIONAL }
+     * </pre>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.NoticeReference} constructor.
+     * <br/>
+     * NOTE: NoticeReference parsing is currently not supported and
+     * it will be ignored.
+     * @example
+     * x = new X509();
+     * x.getUserNotice("30...") &rarr; {exptext: {type: 'utf8', str: 'aaa'}}
+     */
+    this.getUserNotice = function(h) {
+	var result = {};
+	var a = _getChildIdx(h, 0);
+	for (var i = 0; i < a.length; i++) {
+	    var hItem = _getTLV(h, a[i]);
+	    if (hItem.substr(0, 2) != "30") {
+		result.exptext = this.getDisplayText(hItem);
+	    }
+	}
+	return result;
+    };
+
+    /**
+     * get DisplayText ASN.1 structure parameter as JSON object
+     * @name getDisplayText
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of DisplayText
+     * @return {Object} JSON object of DisplayText parameters
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see {@link X509#getExtCertificatePolicies}
+     * @see {@link X509#getPolicyInformation}
+     * @description
+     * This method will get 
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
+     * DisplayText</a> parameters.
+     * <pre>
+     * DisplayText ::= CHOICE {
+     *      ia5String        IA5String      (SIZE (1..200)),
+     *      visibleString    VisibleString  (SIZE (1..200)),
+     *      bmpString        BMPString      (SIZE (1..200)),
+     *      utf8String       UTF8String     (SIZE (1..200)) }     
+     * </pre>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.DisplayText} constructor.
+     * @example
+     * x = new X509();
+     * x.getDisplayText("0c03616161") &rarr {type: 'utf8', str: 'aaa'}
+     * x.getDisplayText("1e03616161") &rarr {type: 'bmp',  str: 'aaa'}
+     */
+    this.getDisplayText = function(h) {
+	var _DISPLAYTEXTTAG = {"0c": "utf8", "16": "ia5", "1a": "vis" , "1e": "bmp"};
+	var result = {};
+	result.type = _DISPLAYTEXTTAG[h.substr(0, 2)];
+	result.str = hextorstr(_getV(h, 0));
+	return result;
+    };
+
+    /**
+     * parse cRLNumber CRL extension as JSON object<br/>
+     * @name getExtCRLNumber
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value
+     * @param {Boolean} critical flag
+     * @since jsrsasign 9.1.1 x509 2.0.1
+     * @see {@link KJUR.asn1.x509.CRLNumber}
+     * @see {@link X509#getExtParamArray}
+     * @description
+     * This method parses
+     * CRLNumber CRL extension value defined in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-5.2.3">
+     * RFC 5280 5.2.3</a> as JSON object.
+     * <pre>
+     * id-ce-cRLNumber OBJECT IDENTIFIER ::= { id-ce 20 }
+     * CRLNumber ::= INTEGER (0..MAX)
+     * </pre>
+     * <br/>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.CRLNumber} constructor.
+     * @example
+     * crl = X509CRL("-----BEGIN X509 CRL...");
+     * ... get hExtV and critical flag ...
+     * crl.getExtCRLNumber("02...", false) &rarr;
+     * {extname: "cRLNumber", num: {hex: "12af"}}
+     */
+    this.getExtCRLNumber = function(hExtV, critical) {
+	var result = {extname:"cRLNumber"};
+	if (critical) result.critical = true;
+
+	if (hExtV.substr(0, 2) == "02") {
+	    result.num = {hex: _getV(hExtV, 0)};
+	    return result;
+	}
+	throw new Error("hExtV parse error: " + hExtV);
+    };
+
+    /**
+     * parse cRLReason CRL entry extension as JSON object<br/>
+     * @name getExtCRLReason
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value
+     * @param {Boolean} critical flag
+     * @since jsrsasign 9.1.1 x509 2.0.1
+     * @see {@link KJUR.asn1.x509.CRLReason}
+     * @see {@link X509#getExtParamArray}
+     * @description
+     * This method parses
+     * CRLReason CRL entry extension value defined in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-5.3.1">
+     * RFC 5280 5.3.1</a> as JSON object.
+     * <pre>
+     * id-ce-cRLReasons OBJECT IDENTIFIER ::= { id-ce 21 }
+     * -- reasonCode ::= { CRLReason }
+     * CRLReason ::= ENUMERATED {
+     *      unspecified             (0),
+     *      keyCompromise           (1),
+     *      cACompromise            (2),
+     *      affiliationChanged      (3),
+     *      superseded              (4),
+     *      cessationOfOperation    (5),
+     *      certificateHold         (6),
+     *      removeFromCRL           (8),
+     *      privilegeWithdrawn      (9),
+     *      aACompromise           (10) }
+     * </pre>
+     * <br/>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.CRLReason} constructor.
+     * @example
+     * crl = X509CRL("-----BEGIN X509 CRL...");
+     * ... get hExtV and critical flag ...
+     * crl.getExtCRLReason("02...", false) &rarr;
+     * {extname: "cRLReason", code: 3}
+     */
+    this.getExtCRLReason = function(hExtV, critical) {
+	var result = {extname:"cRLReason"};
+	if (critical) result.critical = true;
+
+	if (hExtV.substr(0, 2) == "0a") {
+	    result.code = parseInt(_getV(hExtV, 0), 16);
+	    return result;
+	}
+	throw new Error("hExtV parse error: " + hExtV);
+    };
+
+    /**
+     * parse OCSPNonce OCSP extension as JSON object<br/>
+     * @name getExtOCSPNonce
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value
+     * @param {Boolean} critical flag
+     * @return {Array} JSON object of parsed OCSPNonce extension
+     * @since jsrsasign 9.1.6 x509 2.0.3
+     * @see {@link KJUR.asn1.x509.OCSPNonce}
+     * @see {@link X509#getExtParamArray}
+     * @see {@link X509#getExtParam}
+     * @description
+     * This method parses
+     * Nonce OCSP extension value defined in
+     * <a href="https://tools.ietf.org/html/rfc6960#section-4.4.1">
+     * RFC 6960 4.4.1</a> as JSON object.
+     * <pre>
+     * id-pkix-ocsp           OBJECT IDENTIFIER ::= { id-ad-ocsp }
+     * id-pkix-ocsp-nonce     OBJECT IDENTIFIER ::= { id-pkix-ocsp 2 }
+     * Nonce ::= OCTET STRING
+     * </pre>
+     * <br/>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.OCSPNonce} constructor.
+     * @example
+     * x = new X509();
+     * x.getExtOCSPNonce(<<extn hex value >>) &rarr;
+     * { extname: "ocspNonce", hex: "1a2b..." }
+     */
+    this.getExtOcspNonce = function(hExtV, critical) {
+	var result = {extname:"ocspNonce"};
+	if (critical) result.critical = true;
+
+	var hNonce = _getV(hExtV, 0);
+	result.hex = hNonce;
+
+	return result;
+    };
+
+    /**
+     * parse OCSPNoCheck OCSP extension as JSON object<br/>
+     * @name getExtOCSPNoCheck
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value
+     * @param {Boolean} critical flag
+     * @return {Array} JSON object of parsed OCSPNoCheck extension
+     * @since jsrsasign 9.1.6 x509 2.0.3
+     * @see {@link KJUR.asn1.x509.OCSPNoCheck}
+     * @see {@link X509#getExtParamArray}
+     * @see {@link X509#getExtParam}
+     * @description
+     * This method parses
+     * OCSPNoCheck extension value defined in
+     * <a href="https://tools.ietf.org/html/rfc6960#section-4.2.2.2.1">
+     * RFC 6960 4.2.2.2.1</a> as JSON object.
+     * <pre>
+     * id-pkix-ocsp-nocheck OBJECT IDENTIFIER ::= { id-pkix-ocsp 5 }
+     * </pre>
+     * <br/>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.OCSPNoCheck} constructor.
+     * @example
+     * x = new X509();
+     * x.getExtOCSPNoCheck(<<extn hex value >>) &rarr;
+     * { extname: "ocspNoCheck" }
+     */
+    this.getExtOcspNoCheck = function(hExtV, critical) {
+	var result = {extname:"ocspNoCheck"};
+	if (critical) result.critical = true;
+
+	return result;
+    };
+
+    // ===== BEGIN X500Name related =====================================
+
+    this.getX500NameRule = function(aDN) {
+	var isPRNRule = true;
+	var isUTF8Rule = true;
+	var isMixedRule = false;
+	var logfull = "";
+	var logcheck = "";
+	var lasttag = null;
+
+	var a = [];
+	for (var i = 0; i < aDN.length; i++) {
+	    var aRDN = aDN[i];
+	    for (var j = 0; j < aRDN.length; j++) {
+		a.push(aRDN[j]);
+	    }
+	}
+
+	for (var i = 0; i < a.length; i++) {
+	    var item = a[i];
+	    var tag = item.ds;
+	    var value = item.value;
+	    var type = item.type;
+	    logfull += ":" + tag;
+	    
+	    if (tag != "prn" && tag != "utf8" && tag != "ia5") {
+		return "mixed";
+	    }
+	    if (tag == "ia5") {
+		if (type != "CN") {
+		    return "mixed";
+		} else {
+		    if (! KJUR.lang.String.isMail(value)) {
+			return "mixed";
+		    } else {
+			continue;
+		    }
+		}
+	    }
+	    if (type == "C") {
+		if (tag == "prn") {
+		    continue;
+		} else {
+		    return "mixed";
+		}
+	    }
+	    logcheck += ":" + tag;
+	    if (lasttag == null) {
+		lasttag = tag;
+	    } else {
+		if (lasttag !== tag) return "mixed";
+	    }
+	}
+	if (lasttag == null) {
+	    return "prn";
+	} else {
+	    return lasttag;
+	}
+    };
+
+    /**
+     * get Name ASN.1 structure parameter array<br/>
+     * @name getX500Name
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of Name
+     * @return {Array} array of RDN parameter array
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see {@link X509#getX500Name}
+     * @see {@link X509#getRDN}
+     * @see {@link X509#getAttrTypeAndValue}
+     * @description
+     * This method will get Name parameter defined in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
+     * RFC 5280 4.1.2.4</a>.
+     * <pre>
+     * Name ::= CHOICE { -- only one possibility for now --
+     *   rdnSequence  RDNSequence }
+     * RDNSequence ::= SEQUENCE OF RelativeDistinguishedName
+     * </pre>
+     * @example
+     * x = new X509();
+     * x.getX500Name("30...") &rarr;
+     * [[{type:"C",value:"US",ds:"prn"}],
+     *  [{type:"O",value:"Sample Corp.",ds:"utf8"}],
+     *  [{type:"CN",value:"john.smith@example.com",ds:"ia5"}]]
+     */
+    this.getX500Name = function(h) {
+	var result = [];
+	var a = _getChildIdx(h, 0);
+	for (var i = 0; i < a.length; i++) {
+	    result.push(this.getRDN(_getTLV(h, a[i])));
+	}
+	return result;
+    };
+    
+    /**
+     * get RelativeDistinguishedName ASN.1 structure parameter array<br/>
+     * @name getRDN
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of RDN
+     * @return {Array} array of AttrTypeAndValue parameters
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see {@link X509#getX500Name}
+     * @see {@link X509#getRDN}
+     * @see {@link X509#getAttrTypeAndValue}
+     * @description
+     * This method will get RelativeDistinguishedName parameters defined in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
+     * RFC 5280 4.1.2.4</a>.
+     * <pre>
+     * RelativeDistinguishedName ::=
+     *   SET SIZE (1..MAX) OF AttributeTypeAndValue
+     * </pre>
+     * @example
+     * x = new X509();
+     * x.getRDN("31...") &rarr;
+     * [{type:"C",value:"US",ds:"prn"}] or
+     * [{type:"O",value:"Sample Corp.",ds:"prn"}] or
+     * [{type:"CN",value:"john.smith@example.com",ds:"ia5"}]
+     */
+    this.getRDN = function(h) {
+	var result = [];
+	var a = _getChildIdx(h, 0);
+	for (var i = 0; i < a.length; i++) {
+	    result.push(this.getAttrTypeAndValue(_getTLV(h, a[i])));
+	}
+	return result;
+    };
+
+    /**
+     * get AttributeTypeAndValue ASN.1 structure parameter as JSON object<br/>
+     * @name getAttrTypeAndValue
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of AttributeTypeAndValue
+     * @return {Object} JSON object of AttributeTypeAndValue parameters
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see {@link X509#getX500Name}
+     * @see {@link X509#getRDN}
+     * @description
+     * This method will get AttributeTypeAndValue parameters defined in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
+     * RFC 5280 4.1.2.4</a>.
+     * <pre>
+     * AttributeTypeAndValue ::= SEQUENCE {
+     *   type     AttributeType,
+     *   value    AttributeValue }
+     * AttributeType ::= OBJECT IDENTIFIER
+     * AttributeValue ::= ANY -- DEFINED BY AttributeType
+     * </pre>
+     * <ul>
+     * <li>{String}type - AttributeType name or OID(ex. C,O,CN)</li>
+     * <li>{String}value - raw string of ASN.1 value of AttributeValue</li>
+     * <li>{String}ds - DirectoryString type of AttributeValue</li>
+     * </ul>
+     * "ds" has one of following value:
+     * <ul>
+     * <li>utf8 - (0x0c) UTF8String</li>
+     * <li>prn  - (0x13) PrintableString</li>
+     * <li>ia5  - (0x16) IA5String</li>
+     * <li>vis  - (0x1a) VisibleString</li>
+     * <li>bmp  - (0x1e) BMPString</li>
+     * </ul>
+     * @example
+     * x = new X509();
+     * x.getAttrTypeAndValue("30...") &rarr;
+     * {type:"CN",value:"john.smith@example.com",ds:"ia5"} or
+     * {type:"O",value:"Sample Corp.",ds:"prn"}
+     */
+    // tel  - (0x14) TeletexString ... for future
+    // num  - (0x12) NumericString ... for future
+    // unv  - (0x1c??) UniversalString ... for future
+    this.getAttrTypeAndValue = function(h) {
+	var result = {type: null, value: null, ds: null};
+	var a = _getChildIdx(h, 0);
+	var hOID = _getVbyList(h, a[0], [], "06");
+	var hValue = _getVbyList(h, a[1], []);
+	var oid = KJUR.asn1.ASN1Util.oidHexToInt(hOID);
+	result.type = KJUR.asn1.x509.OID.oid2atype(oid);
+	result.value = hextorstr(hValue);
+	result.ds = this.HEX2STAG[h.substr(a[1], 2)];
+	return result;
+    };
+
+    // ===== END X500Name related =====================================
+
+    // ===== BEGIN read certificate =====================================
     /**
      * read PEM formatted X.509 certificate from string.<br/>
      * @name readCertPEM
@@ -945,6 +2162,187 @@ function X509() {
 	    _getIdxbyList(this.hex, 0, [0, 7], "a3"); // has [3] v3ext
 	    this.parseExt();
 	} catch(ex) {};
+    };
+
+    // ===== END read certificate =====================================
+
+    /**
+     * get JSON object of certificate parameters<br/>
+     * @name getParam
+     * @memberOf X509#
+     * @function
+     * @return {Array} JSON object of certificate parameters
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see KJUR.asn1.x509.X509Util.newCertPEM
+     * @description
+     * This method returns a JSON object of the certificate
+     * parameters. Return value can be passed to
+     * {@link KJUR.asn1.x509.X509Util.newCertPEM}.
+     * @example
+     * x = new X509();
+     * x.readCertPEM("-----BEGIN CERTIFICATE...");
+     * x.getParam() &rarr;
+     * {version:3,
+     *  serial:{hex:"12ab"},
+     *  sigalg:"SHA256withRSA",
+     *  issuer: {array:[[{type:'CN',value:'CA1',ds:'prn'}]],str:"/O=CA1"},
+     *  notbefore:"160403023700Z",
+     *  notafter:"160702023700Z",
+     *  subject: {array:[[{type:'CN',value:'Test1',ds:'prn'}]],str:"/CN=Test1"},
+     *  sbjpubkey:"-----BEGIN PUBLIC KEY...",
+     *  ext:[
+     *   {extname:"keyUsage",critical:true,names:["digitalSignature"]},
+     *   {extname:"basicConstraints",critical:true},
+     *   {extname:"subjectKeyIdentifier",kid:{hex:"f2eb..."}},
+     *   {extname:"authorityKeyIdentifier",kid:{hex:"12ab..."}},
+     *   {extname:"authorityInfoAccess",array:[{ocsp:"http://ocsp.example.com/"}]},
+     *   {extname:"certificatePolicies",array:[{policyoid:"2.23.140.1.2.1"}]}
+     *  }],
+     *  sighex:"0b76...8"
+     * };
+     */
+    this.getParam = function() {
+	var result = {};
+	result.version = this.getVersion();
+	result.serial = {hex: this.getSerialNumberHex()};
+	result.sigalg = this.getSignatureAlgorithmField();
+	result.issuer = this.getIssuer();
+	result.notbefore = this.getNotBefore();
+	result.notafter = this.getNotAfter();
+	result.subject = this.getSubject();
+	result.sbjpubkey = hextopem(this.getPublicKeyHex(), "PUBLIC KEY");
+	if (this.aExtInfo.length > 0) {
+	    result.ext = this.getExtParamArray();
+	}
+	result.sighex = this.getSignatureValueHex();
+	return result;
+    };
+
+    /** 
+     * get array of certificate extension parameter JSON object<br/>
+     * @name getExtParamArray
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtSeq hexadecimal string of SEQUENCE of Extension
+     * @return {Array} array of certificate extension parameter JSON object
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see KJUR.asn1.x509.X509Util.newCertPEM
+     * @see X509#getParam
+     * @see X509#getExtParam
+     * @see X509CRL#getParam
+     * @see KJUR.asn1.csr.CSRUtil.getParam
+     *
+     * @description
+     * This method returns an array of certificate extension
+     * parameters. 
+     * <br/>
+     * NOTE: Argument "hExtSeq" have been supported since jsrsasign 9.1.1.
+     *
+     * @example
+     * x = new X509();
+     * x.readCertPEM("-----BEGIN CERTIFICATE...");
+     * x.getExtParamArray() &rarr;
+     * [ {extname:"keyUsage",critical:true,names:["digitalSignature"]},
+     *   {extname:"basicConstraints",critical:true},
+     *   {extname:"subjectKeyIdentifier",kid:{hex:"f2eb..."}},
+     *   {extname:"authorityKeyIdentifier",kid:{hex:"12ab..."}},
+     *   {extname:"authorityInfoAccess",array:[{ocsp:"http://ocsp.example.com/"}]},
+     *   {extname:"certificatePolicies",array:[{policyoid:"2.23.140.1.2.1"}]}]
+     */
+    this.getExtParamArray = function(hExtSeq) {
+	if (hExtSeq == undefined) {
+	    // for X.509v3 certificate
+	    var idx1 = _getIdxbyListEx(this.hex, 0, [0, "[3]"]);
+	    if (idx1 != -1) {
+		hExtSeq = _getTLVbyListEx(this.hex, 0, [0, "[3]", 0], "30");
+	    }
+	}
+	var result = [];
+	var aIdx = _getChildIdx(hExtSeq, 0);
+
+	for (var i = 0; i < aIdx.length; i++) {
+	    var hExt = _getTLV(hExtSeq, aIdx[i]);
+	    var extParam = this.getExtParam(hExt);
+	    if (extParam != null) result.push(extParam);
+	}
+
+	return result;
+    };
+
+    /** 
+     * get a extension parameter JSON object<br/>
+     * @name getExtParam
+     * @memberOf X509#
+     * @function
+     * @param {String} hExt hexadecimal string of Extension
+     * @return {Array} Extension parameter JSON object
+     * @since jsrsasign 9.1.1 x509 2.0.1
+     * @see KJUR.asn1.x509.X509Util.newCertPEM
+     * @see X509#getParam
+     * @see X509#getExtParamArray
+     * @see X509CRL#getParam
+     * @see KJUR.asn1.csr.CSRUtil.getParam
+     *
+     * @description
+     * This method returns a extension parameters as JSON object. 
+     *
+     * @example
+     * x = new X509();
+     * ...
+     * x.getExtParam("30...") &rarr;
+     * {extname:"keyUsage",critical:true,names:["digitalSignature"]}
+     */
+    this.getExtParam = function(hExt) {
+	var result = {};
+	var aIdx = _getChildIdx(hExt, 0);
+	var aIdxLen = aIdx.length;
+	if (aIdxLen != 2 && aIdxLen != 3)
+	    throw new Error("wrong number elements in Extension: " + 
+			    aIdxLen + " " + hExt);
+
+	var oid = _hextooidstr(_getVbyList(hExt, 0, [0], "06"));
+
+	var critical = false;
+	if (aIdxLen == 3 && _getTLVbyList(hExt, 0, [1]) == "0101ff")
+	    critical = true;
+
+	var hExtV = _getTLVbyList(hExt, 0, [aIdxLen - 1, 0]);
+
+	var extParam = undefined;
+	if (oid == "2.5.29.14") {
+	    extParam = this.getExtSubjectKeyIdentifier(hExtV, critical);
+	} else if (oid == "2.5.29.15") {
+	    extParam = this.getExtKeyUsage(hExtV, critical);
+	} else if (oid == "2.5.29.17") {
+	    extParam = this.getExtSubjectAltName(hExtV, critical);
+	} else if (oid == "2.5.29.18") {
+	    extParam = this.getExtIssuerAltName(hExtV, critical);
+	} else if (oid == "2.5.29.19") {
+	    extParam = this.getExtBasicConstraints(hExtV, critical);
+	} else if (oid == "2.5.29.31") {
+	    extParam = this.getExtCRLDistributionPoints(hExtV, critical);
+	} else if (oid == "2.5.29.32") {
+	    extParam = this.getExtCertificatePolicies(hExtV, critical);
+	} else if (oid == "2.5.29.35") {
+	    extParam = this.getExtAuthorityKeyIdentifier(hExtV, critical);
+	} else if (oid == "2.5.29.37") {
+	    extParam = this.getExtExtKeyUsage(hExtV, critical);
+	} else if (oid == "1.3.6.1.5.5.7.1.1") {
+	    extParam = this.getExtAuthorityInfoAccess(hExtV, critical);
+	} else if (oid == "2.5.29.20") {
+	    extParam = this.getExtCRLNumber(hExtV, critical);
+	} else if (oid == "2.5.29.21") {
+	    extParam = this.getExtCRLReason(hExtV, critical);
+	} else if (oid == "1.3.6.1.5.5.7.48.1.2") {
+	    extParam = this.getExtOcspNonce(hExtV, critical);
+	} else if (oid == "1.3.6.1.5.5.7.48.1.5") {
+	    extParam = this.getExtOcspNoCheck(hExtV, critical);
+	}
+	if (extParam != undefined) return extParam;
+
+	var privateParam = { extname: oid, extn: hExtV };
+	if (critical) privateParam.critical = true;
+	return privateParam;
     };
 
     /**
@@ -983,6 +2381,55 @@ function X509() {
      * signature: 1c1a0697dcd79c9f...
      */
     this.getInfo = function() {
+	var _getSubjectAltNameStr = function(params) {
+	    var s = JSON.stringify(params.array).replace(/[\[\]\{\}\"]/g, '');
+	    return s;
+	};
+	var _getCertificatePoliciesStr = function(params) {
+	    var s = "";
+	    var a = params.array;
+	    for (var i = 0; i < a.length; i++) {
+		var pi = a[i];
+		s += "    policy oid: " + pi.policyoid + "\n";
+		if (pi.array === undefined) continue;
+		for (var j = 0; j < pi.array.length; j++) {
+		    var pqi = pi.array[j];
+		    if (pqi.cps !== undefined) {
+			s += "    cps: " + pqi.cps + "\n";
+		    }
+		}
+	    }
+	    return s;
+	};
+	var _getCRLDistributionPointsStr = function(params) {
+	    var s = "";
+	    var a = params.array;
+	    for (var i = 0; i < a.length; i++) {
+		var dp = a[i];
+		try {
+		    if (dp.dpname.full[0].uri !== undefined)
+			s += "    " + dp.dpname.full[0].uri + "\n";
+		} catch(ex) {};
+		try {
+		    if (dp.dname.full[0].dn.hex !== undefined)
+			s += "    " + X509.hex2dn(dp.dpname.full[0].dn.hex) + "\n";
+		} catch(ex) {};
+	    }
+	    return s;
+	}
+	var _getAuthorityInfoAccessStr = function(params) {
+	    var s = "";
+	    var a = params.array;
+	    for (var i = 0; i < a.length; i++) {
+		var ad = a[i];
+
+		if (ad.caissuer !== undefined)
+		    s += "    caissuer: " + ad.caissuer + "\n";
+		if (ad.ocsp !== undefined)
+		    s += "    ocsp: " + ad.ocsp + "\n";
+	    }
+	    return s;
+	};
 	var _X509 = X509;
 	var s, pubkey, aExt;
 	s  = "Basic Fields\n";
@@ -1035,34 +2482,25 @@ function X509() {
 		} else if (extName === "keyUsage") {
 		    s += "    " + this.getExtKeyUsageString() + "\n";
 		} else if (extName === "subjectKeyIdentifier") {
-		    s += "    " + this.getExtSubjectKeyIdentifier() + "\n";
+		    s += "    " + this.getExtSubjectKeyIdentifier().kid.hex + "\n";
 		} else if (extName === "authorityKeyIdentifier") {
 		    var akid = this.getExtAuthorityKeyIdentifier();
 		    if (akid.kid !== undefined)
-			s += "    kid=" + akid.kid + "\n";
+			s += "    kid=" + akid.kid.hex + "\n";
 		} else if (extName === "extKeyUsage") {
-		    var eku = this.getExtExtKeyUsageName();
+		    var eku = this.getExtExtKeyUsage().array;
 		    s += "    " + eku.join(", ") + "\n";
 		} else if (extName === "subjectAltName") {
-		    var san = this.getExtSubjectAltName2();
+		    var san = _getSubjectAltNameStr(this.getExtSubjectAltName());
 		    s += "    " + san + "\n";
 		} else if (extName === "cRLDistributionPoints") {
-		    var cdp = this.getExtCRLDistributionPointsURI();
-		    s += "    " + cdp + "\n";
+		    var cdp = this.getExtCRLDistributionPoints();
+		    s += _getCRLDistributionPointsStr(cdp);
 		} else if (extName === "authorityInfoAccess") {
-		    var aia = this.getExtAIAInfo();
-		    if (aia.ocsp !== undefined)
-			s += "    ocsp: " + aia.ocsp.join(",") + "\n";
-		    if (aia.caissuer !== undefined)
-			s += "    caissuer: " + aia.caissuer.join(",") + "\n";
+		    var aia = this.getExtAuthorityInfoAccess();
+		    s += _getAuthorityInfoAccessStr(aia);
 		} else if (extName === "certificatePolicies") {
-		    var aCP = this.getExtCertificatePolicies();
-		    for (var j = 0; j < aCP.length; j++) {
-			if (aCP[j].id !== undefined)
-			    s += "    policy oid: " + aCP[j].id + "\n";
-			if (aCP[j].cps !== undefined)
-			    s += "    cps: " + aCP[j].cps + "\n";
-		    }
+		    s += _getCertificatePoliciesStr(this.getExtCertificatePolicies());
 		}
 	    }
         }
@@ -1071,7 +2509,16 @@ function X509() {
 	s += "signature: " + this.getSignatureValueHex().substr(0, 16) + "...\n";
 	return s;
     };
+
+    if (typeof params == "string") {
+	if (params.indexOf("-----BEGIN") != -1) {
+	    this.readCertPEM(params);
+	} else if (KJUR.lang.String.isHex(params)) {
+	    this.readCertHex(params);
+	}
+    }
 };
+// ----- END of X509 class -----
 
 /**
  * get distinguished name string in OpenSSL online format from hexadecimal string of ASN.1 DER X.500 name<br/>
@@ -1090,7 +2537,7 @@ function X509() {
  */
 X509.hex2dn = function(hex, idx) {
     if (idx === undefined) idx = 0;
-    if (hex.substr(idx, 2) !== "30") throw "malformed DN";
+    if (hex.substr(idx, 2) !== "30") throw new Error("malformed DN");
 
     var a = new Array();
 
@@ -1122,7 +2569,7 @@ X509.hex2dn = function(hex, idx) {
  */
 X509.hex2rdn = function(hex, idx) {
     if (idx === undefined) idx = 0;
-    if (hex.substr(idx, 2) !== "31") throw "malformed RDN";
+    if (hex.substr(idx, 2) !== "31") throw new Error("malformed RDN");
 
     var a = new Array();
 
@@ -1156,7 +2603,8 @@ X509.hex2attrTypeValue = function(hex, idx) {
     var _getV = _ASN1HEX.getV;
 
     if (idx === undefined) idx = 0;
-    if (hex.substr(idx, 2) !== "30") throw "malformed attribute type and value";
+    if (hex.substr(idx, 2) !== "30") 
+	throw new Error("malformed attribute type and value");
 
     var aIdx = _ASN1HEX.getChildIdx(hex, idx);
     if (aIdx.length !== 2 || hex.substr(aIdx[0], 2) !== "06")

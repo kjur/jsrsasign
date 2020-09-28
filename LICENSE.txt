@@ -1,7 +1,7 @@
 
 The 'jsrsasign'(RSA-Sign JavaScript Library) License
 
-Copyright (c) 2010-2018 Kenji Urushima
+Copyright (c) 2010-2020 Kenji Urushima
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

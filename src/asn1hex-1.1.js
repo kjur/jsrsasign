@@ -1,9 +1,9 @@
-/* asn1hex-1.2.0.js (c) 2012-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1hex-1.2.6.js (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
  *
- * Copyright (c) 2010-2017 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license/
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version asn1hex 1.2.0 (2017-Jun-24)
+ * @version jsrsasign 9.1.6 asn1hex 1.2.6 (2020-Sep-04)
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -46,8 +46,9 @@
  * <li><b>ACCESS BY POSITION</b>
  *   <ul>
  *   <li>{@link ASN1HEX.getTLV} - get ASN.1 TLV at specified position</li>
+ *   <li>{@link ASN1HEX.getTLVblen} - get byte length of ASN.1 TLV at specified position</li>
  *   <li>{@link ASN1HEX.getV} - get ASN.1 V at specified position</li>
- *   <li>{@link ASN1HEX.getVlen} - get integer ASN.1 L at specified position</li>
+ *   <li>{@link ASN1HEX.getVblen} - get integer ASN.1 L at specified position</li>
  *   <li>{@link ASN1HEX.getVidx} - get ASN.1 V position from its ASN.1 TLV position</li>
  *   <li>{@link ASN1HEX.getL} - get hexadecimal ASN.1 L at specified position</li>
  *   <li>{@link ASN1HEX.getLblen} - get byte length for ASN.1 L(length) bytes</li>
@@ -55,9 +56,9 @@
  * </li>
  * <li><b>ACCESS FOR CHILD ITEM</b>
  *   <ul>
- *   <li>{@link ASN1HEX.getNthChildIndex_AtObj} - get nth child index at specified position</li>
- *   <li>{@link ASN1HEX.getPosArrayOfChildren_AtObj} - get indexes of children</li>
- *   <li>{@link ASN1HEX.getPosOfNextSibling_AtObj} - get position of next sibling</li>
+ *   <li>{@link ASN1HEX.getNthChildIdx} - get nth child index at specified position</li>
+ *   <li>{@link ASN1HEX.getChildIdx} - get indexes of children</li>
+ *   <li>{@link ASN1HEX.getNextSiblingIdx} - get position of next sibling (DEPRECATED)</li>
  *   </ul>
  * </li>
  * <li><b>ACCESS NESTED ASN.1 STRUCTURE</b>
@@ -67,10 +68,19 @@
  *   <li>{@link ASN1HEX.getIdxbyList} - get index at specified list index</li>
  *   </ul>
  * </li>
+ * <li><b>(NEW)ACCESS NESTED ASN.1 STRUCTURE</b>
+ *   <ul>
+ *   <li>{@link ASN1HEX.getTLVbyListEx} - get ASN.1 TLV at specified list index</li>
+ *   <li>{@link ASN1HEX.getVbyListEx} - get ASN.1 V at specified nth list index with checking expected tag</li>
+ *   <li>{@link ASN1HEX.getIdxbyListEx} - get index at specified list index</li>
+ *   </ul>
+ * </li>
  * <li><b>UTILITIES</b>
  *   <ul>
  *   <li>{@link ASN1HEX.dump} - dump ASN.1 structure</li>
- *   <li>{@link ASN1HEX.isASN1HEX} - check whether ASN.1 hexadecimal string or not</li>
+ *   <li>{@link ASN1HEX.isContextTag} - check if a hexadecimal tag is a specified ASN.1 context specific tag</li>
+ *   <li>{@link ASN1HEX.isASN1HEX} - simple ASN.1 DER hexadecimal string checker</li>
+ *   <li>{@link ASN1HEX.checkStrictDER} - strict ASN.1 DER hexadecimal string checker</li>
  *   <li>{@link ASN1HEX.hextooidstr} - convert hexadecimal string of OID to dotted integer list</li>
  *   </ul>
  * </li>
@@ -127,7 +137,7 @@ ASN1HEX.getL = function(s, idx) {
  * @function
  * @param {String} s hexadecimal string of ASN.1 DER encoded data
  * @param {Number} idx string index
- * @return ASN.1 L(length) integer value
+ * @return {Number} ASN.1 L(length) integer value
  * @since jsrsasign 7.2.0 asn1hex 1.1.11
  */
 /*
@@ -195,17 +205,41 @@ ASN1HEX.getTLV = function(s, idx) {
     return s.substr(idx, 2) + ASN1HEX.getL(s, idx) + ASN1HEX.getV(s, idx);
 };
 
+/**
+ * get byte length of ASN.1 TLV at specified string index<br/>
+ * @name getTLVblen
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} h hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} idx string index to get ASN.1 TLV byte length
+ * @return {Number} byte length of ASN.1 TLV
+ * @since jsrsasign 9.1.5 asn1hex 1.1.11
+ *
+ * @description
+ * This method returns a byte length of ASN.1 TLV at
+ * specified string index.
+ *
+ * @example
+ *                        v string indx=42
+ * ASN1HEX.getTLVblen("...1303616161...", 42) &rarr; 10 (PrintableString 'aaa')
+ */
+ASN1HEX.getTLVblen = function(h, idx) {
+    return 2 + ASN1HEX.getLblen(h, idx) * 2 + ASN1HEX.getVblen(h, idx) * 2;
+};
+
 // ========== sibling methods ================================
 
 /**
- * get next sibling starting index for ASN.1 object string<br/>
+ * get next sibling starting index for ASN.1 object string (DEPRECATED)<br/>
  * @name getNextSiblingIdx
  * @memberOf ASN1HEX
  * @function
  * @param {String} s hexadecimal string of ASN.1 DER encoded data
  * @param {Number} idx string index
- * @return next sibling starting index for ASN.1 object string
+ * @return {Number} next sibling starting index for ASN.1 object string
  * @since jsrsasign 7.2.0 asn1hex 1.1.11
+ * @deprecated jsrsasign 9.1.5 asn1hex 1.2.5 Please use {@link ASN1HEX.getTLVblen}
+ *
  * @example
  * SEQUENCE { INTEGER 3, INTEGER 4 }
  * 3006
@@ -226,7 +260,7 @@ ASN1HEX.getNextSiblingIdx = function(s, idx) {
  * @memberOf ASN1HEX
  * @function
  * @param {String} h hexadecimal string of ASN.1 DER encoded data
- * @param {Number} pos start string index of ASN.1 object
+ * @param {Number} idx start string index of ASN.1 object
  * @return {Array of Number} array of indexes for childen of ASN.1 objects
  * @since jsrsasign 7.2.0 asn1hex 1.1.11
  * @description
@@ -241,30 +275,27 @@ ASN1HEX.getNextSiblingIdx = function(s, idx) {
  * ASN1HEX.getChildIdx("030300ffff", 0) &rArr; [6] // BITSTRING ffff (unusedbits=00a)
  * ASN1HEX.getChildIdx("3006020104020105", 0) &rArr; [4, 10] // SEQUENCE(INT4,INT5)
  */
-ASN1HEX.getChildIdx = function(h, pos) {
+ASN1HEX.getChildIdx = function(h, idx) {
     var _ASN1HEX = ASN1HEX;
-    var a = new Array();
-    var p0 = _ASN1HEX.getVidx(h, pos);
-    if (h.substr(pos, 2) == "03") {
-	a.push(p0 + 2); // BITSTRING value without unusedbits
-    } else {
-	a.push(p0);
+    var a = [];
+    var idxStart, totalChildBlen, currentChildBlen;
+
+    idxStart = _ASN1HEX.getVidx(h, idx);
+    totalChildBlen = _ASN1HEX.getVblen(h, idx) * 2;
+    if (h.substr(idx, 2) == "03") {  // BITSTRING without unusedbits
+	idxStart += 2;
+	totalChildBlen -= 2;
     }
 
-    var blen = _ASN1HEX.getVblen(h, pos);
-    var p = p0;
-    var k = 0;
-    while (1) {
-        var pNext = _ASN1HEX.getNextSiblingIdx(h, p);
-        if (pNext == null || (pNext - p0  >= (blen * 2))) break;
-        if (k >= 200) break;
-            
-        a.push(pNext);
-        p = pNext;
-            
-        k++;
+    currentChildBlen = 0;
+    var i = idxStart;
+    while (currentChildBlen <= totalChildBlen) {
+	var tlvBlen = _ASN1HEX.getTLVblen(h, i);
+	currentChildBlen += tlvBlen;
+	if (currentChildBlen <= totalChildBlen) a.push(i);
+	i += tlvBlen;
+	if (currentChildBlen >= totalChildBlen) break;
     }
-    
     return a;
 };
 
@@ -315,16 +346,99 @@ ASN1HEX.getIdxbyList = function(h, currentIndex, nthList, checkingTag) {
     var firstNth, a;
     if (nthList.length == 0) {
 	if (checkingTag !== undefined) {
+            if (h.substr(currentIndex, 2) !== checkingTag) return -1;
+	}
+        return currentIndex;
+    }
+    firstNth = nthList.shift();
+    a = _ASN1HEX.getChildIdx(h, currentIndex);
+    if (firstNth >= a.length) return -1;
+
+    return _ASN1HEX.getIdxbyList(h, a[firstNth], nthList, checkingTag);
+};
+
+/**
+ * get string index of nth child object of ASN.1 object refered by h, idx<br/>
+ * @name getIdxbyListEx
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} h hexadecimal string of ASN.1 DER encoded data
+ * @param {Number} currentIndex start string index of ASN.1 object
+ * @param {Array of Object} nthList array list of nth index value or context specific tag string (ex. "[0]")
+ * @param {String} checkingTag (OPTIONAL) string of expected ASN.1 tag for nthList 
+ * @return {Number} string index refered by nthList. return -1 if not found
+ * @since jsrsasign 8.0.21 asn1hex 1.2.2
+ * @see <a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-accessing-deep-inside-of-ASN.1-structure-by-using-new-ASN1HEX.getIdxbyListEx">ASN1HEX.getIdxbyListEx tutorial wiki page</a>
+ *
+ * @description
+ * This method returns the string index in h specified by currentIndex and
+ * nthList. This is useful to dig into a deep structured ASN.1 object
+ * by indexes called nthList. 
+ * <br/>
+ * A nthList consists of a position number in children of ASN.1
+ * structured data or a context specific tag string (ex. "[1]").
+ * Here is a sample deep structured ASN.1 data and
+ * nthLists referring decendent objects.
+ * <blockquote><pre>
+ * SQUENCE               - referring nthList is below:
+ *   SEQUENCE            - [0]
+ *     IA5STRING "a1"    - [0, 0]
+ *     UTF8STRING "a2"   - [0, 1]
+ *   SET                 - [1]
+ *     IA5STRING "b1"    - [1, 0]
+ *     UTF8STRING "b2"   - [1, 1]
+ *     [0] "b3"          - [1, "[0]"] // optional since context tag
+ *     [1] "b4"          - [1, "[1]"] // optional since context tag
+ *     IA5STRING "b5"    - [1, 2] // context is skipped. next is 2
+ *     UTF8STRING "b6"   - [1, 3]
+ * </pre></blockquote>
+ *
+ * <br/>
+ * This method can dig into ASN.1 object encapsulated by
+ * OctetString or BitString with unused bits.
+ *
+ * @example
+ * 3014 seq idx=0
+ *   3012 seq idx=4
+ *     020101 int:1 idx=8
+ *     020102 int:2 idx=14
+ *     800103 [0]:3 idx=20
+ *     810104 [1]:4 idx=26
+ *     020105 int:5 idx=32
+ *     020106 int:6 idx=38
+ * h = "30140412020101020102800103810104020105020106";
+ * ASN1HEX.getIdxbyListEx(h, 0, [0, "[0]"]) &rarr; 16
+ * ASN1HEX.getIdxbyListEx(h, 0, [0, 2]) &rarr; 28
+ * ASN1HEX.getIdxbyListEx(h, 0, [0, 2], "0c") &rarr; -1 //not UTF8String(0c)
+ */
+ASN1HEX.getIdxbyListEx = function(h, currentIndex, nthList, checkingTag) {
+    var _ASN1HEX = ASN1HEX;
+    var firstNth, a;
+    if (nthList.length == 0) {
+	if (checkingTag !== undefined) {
             if (h.substr(currentIndex, 2) !== checkingTag) {
-		throw "checking tag doesn't match: " + 
-                    h.substr(currentIndex, 2) + "!=" + checkingTag;
+		return -1;
             }
 	}
         return currentIndex;
     }
     firstNth = nthList.shift();
     a = _ASN1HEX.getChildIdx(h, currentIndex);
-    return _ASN1HEX.getIdxbyList(h, a[firstNth], nthList, checkingTag);
+
+    var count = 0;
+    for (var i = 0; i < a.length; i++) {
+	var childTag = h.substr(a[i], 2);
+
+	if ((typeof firstNth == "number" &&
+	     (! _ASN1HEX.isContextTag(childTag)) &&
+	     count == firstNth) ||
+	    (typeof firstNth == "string" &&
+	     _ASN1HEX.isContextTag(childTag, firstNth))) {
+	    return _ASN1HEX.getIdxbyListEx(h, a[i], nthList, checkingTag);
+	}
+	if (! _ASN1HEX.isContextTag(childTag)) count++;
+    }
+    return -1;
 };
 
 /**
@@ -336,23 +450,61 @@ ASN1HEX.getIdxbyList = function(h, currentIndex, nthList, checkingTag) {
  * @param {Integer} currentIndex string index to start searching in hexadecimal string "h"
  * @param {Array} nthList array of nth list index
  * @param {String} checkingTag (OPTIONAL) string of expected ASN.1 tag for nthList 
+ * @return {String} referred hexadecimal string of ASN.1 TLV or null
  * @since jsrsasign 7.1.4 asn1hex 1.1.10
+ *
  * @description
  * This static method is to get a ASN.1 value which specified "nthList" position
  * with checking expected tag "checkingTag".
+ * <br/>
+ * When referring value can't be found, this returns null.
  */
 ASN1HEX.getTLVbyList = function(h, currentIndex, nthList, checkingTag) {
     var _ASN1HEX = ASN1HEX;
-    var idx = _ASN1HEX.getIdxbyList(h, currentIndex, nthList);
-    if (idx === undefined) {
-        throw "can't find nthList object";
-    }
-    if (checkingTag !== undefined) {
-        if (h.substr(idx, 2) != checkingTag) {
-            throw "checking tag doesn't match: " + 
-                h.substr(idx,2) + "!=" + checkingTag;
-        }
-    }
+    var idx = _ASN1HEX.getIdxbyList(h, currentIndex, nthList, checkingTag);
+
+    if (idx == -1) return null;
+    if (idx >= h.length) return null;
+
+    return _ASN1HEX.getTLV(h, idx);
+};
+
+/**
+ * get ASN.1 TLV by nthList<br/>
+ * @name getTLVbyListEx
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} h hexadecimal string of ASN.1 structure
+ * @param {Integer} currentIndex string index to start searching in hexadecimal string "h"
+ * @param {Array of Object} nthList array list of nth index value or context specific tag string (ex. "[0]")
+ * @param {String} checkingTag (OPTIONAL) string of expected ASN.1 tag for nthList 
+ * @return {String} hexadecimal ASN.1 TLV string refered by nthList. return null if not found
+ * @since jsrsasign 8.0.21 asn1hex 1.2.2
+ * @see <a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-accessing-deep-inside-of-ASN.1-structure-by-using-new-ASN1HEX.getIdxbyListEx">ASN1HEX.getIdxbyListEx tutorial wiki page</a>
+ * @see {@link ASN1HEX.getIdxbyListEx}
+ * @description
+ * This static method is to get a ASN.1 value which specified "nthList" position
+ * with checking expected tag "checkingTag".
+ * This method can dig into ASN.1 object encapsulated by
+ * OctetString or BitString with unused bits.
+ * @example
+ * 3014 seq idx=0
+ *   0312 seq idx=4
+ *     020101 int:1 idx=8
+ *     020102 int:2 idx=14
+ *     800103 [0]:3 idx=20
+ *     810104 [1]:4 idx=26
+ *     020105 int:5 idx=32
+ *     020106 int:6 idx=38
+ * h = "30140412020101020102800103810104020105020106";
+ * ASN1HEX.getTLVbyList(h, 0, [0, "[0]"]) &rarr; 800103
+ * ASN1HEX.getTLVbyList(h, 0, [0, 2]) &rarr; 020105
+ * ASN1HEX.getTLVbyList(h, 0, [0, 2], "0c") &rarr; null //not UTF8String(0c)
+ */
+ASN1HEX.getTLVbyListEx = function(h, currentIndex, nthList, checkingTag) {
+    var _ASN1HEX = ASN1HEX;
+    var idx = _ASN1HEX.getIdxbyListEx(h, currentIndex, nthList, checkingTag);
+    if (idx == -1) return null;
     return _ASN1HEX.getTLV(h, idx);
 };
 
@@ -366,10 +518,17 @@ ASN1HEX.getTLVbyList = function(h, currentIndex, nthList, checkingTag) {
  * @param {Array} nthList array of nth list index
  * @param {String} checkingTag (OPTIONAL) string of expected ASN.1 tag for nthList 
  * @param {Boolean} removeUnusedbits (OPTIONAL) flag for remove first byte for value (DEFAULT false)
+ * @return {String} referred hexadecimal string of ASN.1 value(V) or null
  * @since asn1hex 1.1.4
+ * @see ASN1HEX.getIdxbyList
+ * @see ASN1HEX.getVbyListEx
+ *
  * @description
  * This static method is to get a ASN.1 value which specified "nthList" position
  * with checking expected tag "checkingTag".
+ * <br/>
+ * When referring value can't be found, this returns null.
+ * <br/>
  * NOTE: 'removeUnusedbits' flag has been supported since
  * jsrsasign 7.1.14 asn1hex 1.1.10.
  */
@@ -378,12 +537,56 @@ ASN1HEX.getVbyList = function(h, currentIndex, nthList, checkingTag, removeUnuse
     var idx, v;
     idx = _ASN1HEX.getIdxbyList(h, currentIndex, nthList, checkingTag);
     
-    if (idx === undefined) {
-        throw "can't find nthList object";
-    }
+    if (idx == -1) return null;
+    if (idx >= h.length) return null;
 
     v = _ASN1HEX.getV(h, idx);
     if (removeUnusedbits === true) v = v.substr(2);
+    return v;
+};
+
+/**
+ * get ASN.1 V by nthList<br/>
+ * @name getVbyListEx
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} h hexadecimal string of ASN.1 structure
+ * @param {Integer} currentIndex string index to start searching in hexadecimal string "h"
+ * @param {Array of Object} nthList array list of nth index value or context specific tag string (ex. "[0]")
+ * @param {String} checkingTag (OPTIONAL) string of expected ASN.1 tag for nthList (default is undefined)
+ * @param {Boolean} removeUnusedbits (OPTIONAL) flag for trim unused bit from result value (default is undefined)
+ * @return {String} hexadecimal ASN.1 V string refered by nthList. return null if not found
+ * @since jsrsasign 8.0.21 asn1hex 1.2.2
+ * @see <a href="https://github.com/kjur/jsrsasign/wiki/Tutorial-for-accessing-deep-inside-of-ASN.1-structure-by-using-new-ASN1HEX.getIdxbyListEx">ASN1HEX.getIdxbyListEx tutorial wiki page</a>
+ * @see {@link ASN1HEX.getIdxbyListEx}
+ *
+ * @description
+ * This static method is to get a ASN.1 value which specified "nthList" position
+ * with checking expected tag "checkingTag".
+ * This method can dig into ASN.1 object encapsulated by
+ * OctetString or BitString with unused bits.
+ *
+ * @example
+ * 3014 seq idx=0
+ *   3012 seq idx=4
+ *     020101 int:1 idx=8
+ *     020102 int:2 idx=14
+ *     800103 [0]:3 idx=20
+ *     810104 [1]:4 idx=26
+ *     020105 int:5 idx=32
+ *     020106 int:6 idx=38
+ * h = "30140412020101020102800103810104020105020106";
+ * ASN1HEX.getTLVbyList(h, 0, [0, "[0]"]) &rarr; 03
+ * ASN1HEX.getTLVbyList(h, 0, [0, 2]) &rarr; 05
+ * ASN1HEX.getTLVbyList(h, 0, [0, 2], "0c") &rarr; null //not UTF8String(0c)
+ */
+ASN1HEX.getVbyListEx = function(h, currentIndex, nthList, checkingTag, removeUnusedbits) {
+    var _ASN1HEX = ASN1HEX;
+    var idx, tlv, v;
+    idx = _ASN1HEX.getIdxbyListEx(h, currentIndex, nthList, checkingTag);
+    if (idx == -1) return null;
+    v = _ASN1HEX.getV(h, idx);
+    if (h.substr(idx, 2) == "03" && removeUnusedbits !== false) v = v.substr(2);
     return v;
 };
 
@@ -395,6 +598,13 @@ ASN1HEX.getVbyList = function(h, currentIndex, nthList, checkingTag, removeUnuse
  * @param {String} hex hexadecmal string of ASN.1 DER encoded OID value
  * @return {String} OID string (ex. '1.2.3.4.567')
  * @since asn1hex 1.1.5
+ * @see {@link KJUR.asn1.ASN1Util.oidIntToHex}
+ * @description
+ * This static method converts from ASN.1 DER encoded 
+ * hexadecimal object identifier value to dot concatinated OID value.
+ * {@link KJUR.asn1.ASN1Util.oidIntToHex} is a reverse function of this.
+ * @example
+ * ASN1HEX.hextooidstr("550406") &rarr; "2.5.4.6"
  */
 ASN1HEX.hextooidstr = function(hex) {
     var zeroPadding = function(s, len) {
@@ -533,7 +743,9 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
     if (indent === undefined) indent = "";
     var skipLongHex = flags.ommit_long_octet;
 
-    if (hex.substr(idx, 2) == "01") {
+    var tag = hex.substr(idx, 2);
+
+    if (tag == "01") {
 	var v = _getV(hex, idx);
 	if (v == "00") {
 	    return indent + "BOOLEAN FALSE\n";
@@ -541,15 +753,21 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
 	    return indent + "BOOLEAN TRUE\n";
 	}
     }
-    if (hex.substr(idx, 2) == "02") {
+    if (tag == "02") {
 	var v = _getV(hex, idx);
-	return indent + "INTEGER " + _skipLongHex(v, skipLongHex) + "\n";
+        return indent + "INTEGER " + _skipLongHex(v, skipLongHex) + "\n";
     }
-    if (hex.substr(idx, 2) == "03") {
+    if (tag == "03") {
 	var v = _getV(hex, idx);
-	return indent + "BITSTRING " + _skipLongHex(v, skipLongHex) + "\n";
+	if (_ASN1HEX.isASN1HEX(v.substr(2))) {
+  	    var s = indent + "BITSTRING, encapsulates\n";
+            s = s + _dump(v.substr(2), flags, 0, indent + "  ");
+            return s;
+	} else {
+            return indent + "BITSTRING " + _skipLongHex(v, skipLongHex) + "\n";
+	}
     }
-    if (hex.substr(idx, 2) == "04") {
+    if (tag == "04") {
 	var v = _getV(hex, idx);
 	if (_ASN1HEX.isASN1HEX(v)) {
 	    var s = indent + "OCTETSTRING, encapsulates\n";
@@ -559,10 +777,10 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
 	    return indent + "OCTETSTRING " + _skipLongHex(v, skipLongHex) + "\n";
 	}
     }
-    if (hex.substr(idx, 2) == "05") {
+    if (tag == "05") {
 	return indent + "NULL\n";
     }
-    if (hex.substr(idx, 2) == "06") {
+    if (tag == "06") {
 	var hV = _getV(hex, idx);
         var oidDot = KJUR.asn1.ASN1Util.oidHexToInt(hV);
         var oidName = KJUR.asn1.x509.OID.oid2name(oidDot);
@@ -573,25 +791,34 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
   	    return indent + "ObjectIdentifier (" + oidSpc + ")\n";
 	}
     }
-    if (hex.substr(idx, 2) == "0c") {
+    if (tag == "0a") {
+	return indent + "ENUMERATED " + parseInt(_getV(hex, idx)) + "\n";
+    }
+    if (tag == "0c") {
 	return indent + "UTF8String '" + hextoutf8(_getV(hex, idx)) + "'\n";
     }
-    if (hex.substr(idx, 2) == "13") {
+    if (tag == "13") {
 	return indent + "PrintableString '" + hextoutf8(_getV(hex, idx)) + "'\n";
     }
-    if (hex.substr(idx, 2) == "14") {
+    if (tag == "14") {
 	return indent + "TeletexString '" + hextoutf8(_getV(hex, idx)) + "'\n";
     }
-    if (hex.substr(idx, 2) == "16") {
+    if (tag == "16") {
 	return indent + "IA5String '" + hextoutf8(_getV(hex, idx)) + "'\n";
     }
-    if (hex.substr(idx, 2) == "17") {
+    if (tag == "17") {
 	return indent + "UTCTime " + hextoutf8(_getV(hex, idx)) + "\n";
     }
-    if (hex.substr(idx, 2) == "18") {
+    if (tag == "18") {
 	return indent + "GeneralizedTime " + hextoutf8(_getV(hex, idx)) + "\n";
     }
-    if (hex.substr(idx, 2) == "30") {
+    if (tag == "1a") {
+	return indent + "VisualString '" + hextoutf8(_getV(hex, idx)) + "'\n";
+    }
+    if (tag == "1e") {
+	return indent + "BMPString '" + hextoutf8(_getV(hex, idx)) + "'\n";
+    }
+    if (tag == "30") {
 	if (hex.substr(idx, 4) == "3000") {
 	    return indent + "SEQUENCE {}\n";
 	}
@@ -615,7 +842,7 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
 	}
 	return s;
     }
-    if (hex.substr(idx, 2) == "31") {
+    if (tag == "31") {
 	var s = indent + "SET\n";
 	var aIdx = _getChildIdx(hex, idx);
 	for (var i = 0; i < aIdx.length; i++) {
@@ -623,7 +850,7 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
 	}
 	return s;
     }
-    var tag = parseInt(hex.substr(idx, 2), 16);
+    var tag = parseInt(tag, 16);
     if ((tag & 128) != 0) { // context specific 
 	var tagNumber = tag & 31;
 	if ((tag & 32) != 0) { // structured tag
@@ -635,24 +862,92 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
 	    return s;
 	} else { // primitive tag
 	    var v = _getV(hex, idx);
-	    if (v.substr(0, 8) == "68747470") { // http
+	    if (ASN1HEX.isASN1HEX(v)) {
+		var s = indent + "[" + tagNumber + "]\n";
+		s = s + _dump(v, flags, 0, indent + "  ");
+		return s;
+	    } else if (v.substr(0, 8) == "68747470") { // http
+		v = hextoutf8(v);
+	    } else if (flags.x509ExtName === "subjectAltName" &&
+		       tagNumber == 2) {
 		v = hextoutf8(v);
 	    }
-	    if (flags.x509ExtName === "subjectAltName" &&
-		tagNumber == 2) {
-		v = hextoutf8(v);
-	    }
-	    
+	    // else if (ASN1HEX.isASN1HEX(v))
+
 	    var s = indent + "[" + tagNumber + "] " + v + "\n";
 	    return s;
 	}
     }
-    return indent + "UNKNOWN(" + hex.substr(idx, 2) + ") " + 
+    return indent + "UNKNOWN(" + tag + ") " + 
 	   _getV(hex, idx) + "\n";
 };
 
 /**
- * check wheather the string is ASN.1 hexadecimal string or not
+ * check if a hexadecimal tag is a specified ASN.1 context specific tag
+ * @name isContextTag
+ * @memberOf ASN1HEX
+ * @function
+ * @param {hTag} hex string of a hexadecimal ASN.1 tag consists by two characters (e.x. "a0")
+ * @param {sTag} context specific tag in string represention (OPTION) (e.x. "[0]")
+ * @return {Boolean} true if hTag is a ASN.1 context specific tag specified by sTag value.
+ * @since jsrsasign 8.0.21 asn1hex 1.2.2
+ * @description
+ * This method checks if a hexadecimal tag is a specified ASN.1 context specific tag.
+ * Structured and non-structured type of tag have the same string representation
+ * of context specific tag. For example tag "a0" and "80" have the same string
+ * representation "[0]".
+ * The sTag has a range from from "[0]" to "[31]".
+ * @example
+ * ASN1HEX.isContextTag('a0', '[0]') &rarr; true // structured
+ * ASN1HEX.isContextTag('a1', '[1]') &rarr; true // structured
+ * ASN1HEX.isContextTag('a2', '[2]') &rarr; true // structured
+ * ASN1HEX.isContextTag('80', '[0]') &rarr; true // non structured
+ * ASN1HEX.isContextTag('81', '[1]') &rarr; true // non structured
+ * ASN1HEX.isContextTag('82', '[2]') &rarr; true // non structured
+ * ASN1HEX.isContextTag('a0', '[3]') &rarr; false
+ * ASN1HEX.isContextTag('80', '[15]') &rarr; false
+ *
+ * ASN.1 tag bits
+ * 12345679
+ * ++        tag class(universal:00, context specific:10)
+ *   +       structured:1, primitive:0
+ *    +++++  tag number (0 - 31)
+ */
+ASN1HEX.isContextTag = function(hTag, sTag) {
+    hTag = hTag.toLowerCase();
+    var ihtag, istag;
+
+    try {
+	ihtag = parseInt(hTag, 16);
+    } catch (ex) {
+	return -1;
+    }
+	
+    if (sTag === undefined) {
+	if ((ihtag & 192) == 128) {
+	    return true;
+	} else {
+	    return false;
+	}
+    }
+
+    try {
+	var result = sTag.match(/^\[[0-9]+\]$/);
+	if (result == null) return false;
+	istag = parseInt(sTag.substr(1,sTag.length - 1), 10);
+	if (istag > 31) return false;
+	if (((ihtag & 192) == 128) &&   // ihtag & b11000000 == b10000000
+	    ((ihtag & 31) == istag)) {  // ihtag & b00011111 == istag (0-31)
+	    return true;
+	}
+	return false;
+    } catch (ex) {
+	return false;
+    }
+};
+
+/**
+ * simple ASN.1 DER hexadecimal string checker
  * @name isASN1HEX
  * @memberOf ASN1HEX
  * @function
@@ -673,12 +968,110 @@ ASN1HEX.isASN1HEX = function(hex) {
     if (hex.length % 2 == 1) return false;
 
     var intL = _ASN1HEX.getVblen(hex, 0);
-    var tV = hex.substr(0, 2);
-    var lV = _ASN1HEX.getL(hex, 0);
-    var hVLength = hex.length - tV.length - lV.length;
+    var hT = hex.substr(0, 2);
+    var hL = _ASN1HEX.getL(hex, 0);
+    var hVLength = hex.length - hT.length - hL.length;
     if (hVLength == intL * 2) return true;
 
     return false;
+};
+
+/**
+ * strict ASN.1 DER hexadecimal string checker
+ * @name checkStrictDER
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} hex string to check whether it is hexadecmal string for ASN.1 DER or not
+ * @return unspecified
+ * @since jsrsasign 8.0.19 asn1hex 1.2.1
+ * @throws Error when malformed ASN.1 DER hexadecimal string
+ * @description
+ * This method checks wheather the argument 'hex' is a hexadecimal string of
+ * ASN.1 data or not. If the argument is not DER string, this 
+ * raise an exception.
+ * @example
+ * ASN1HEX.checkStrictDER('0203012345') &rarr; NO EXCEPTION FOR PROPER ASN.1 INTEGER
+ * ASN1HEX.checkStrictDER('0203012345ff') &rarr; RAISE EXCEPTION FOR TOO LONG VALUE
+ * ASN1HEX.checkStrictDER('02030123') &rarr; false RAISE EXCEPITON FOR TOO SHORT VALUE
+ * ASN1HEX.checkStrictDER('fa3bcd') &rarr; false RAISE EXCEPTION FOR WRONG ASN.1
+ */
+ASN1HEX.checkStrictDER = function(h, idx, maxHexLen, maxByteLen, maxLbyteLen) {
+    var _ASN1HEX = ASN1HEX;
+
+    if (maxHexLen === undefined) {
+	// 1. hex string check
+	if (typeof h != "string") throw new Error("not hex string");
+	h = h.toLowerCase();
+	if (! KJUR.lang.String.isHex(h)) throw new Error("not hex string");
+
+	// 2. set max if needed
+	// max length of hexadecimal string
+	maxHexLen = h.length;
+	// max length of octets
+	maxByteLen = h.length / 2;
+	// max length of L octets of TLV
+	if (maxByteLen < 0x80) {
+	    maxLbyteLen = 1;
+	} else {
+	    maxLbyteLen = Math.ceil(maxByteLen.toString(16)) + 1;
+	}
+    }
+    //console.log(maxHexLen + ":" + maxByteLen + ":" + maxLbyteLen);
+
+    // 3. check if L(length) string not exceeds maxLbyteLen
+    var hL = _ASN1HEX.getL(h, idx);
+    if (hL.length > maxLbyteLen * 2)
+	throw new Error("L of TLV too long: idx=" + idx);
+
+    // 4. check if V(value) octet length (i.e. L(length) value) 
+    //    not exceeds maxByteLen
+    var vblen = _ASN1HEX.getVblen(h, idx);
+    if (vblen > maxByteLen) 
+	throw new Error("value of L too long than hex: idx=" + idx);
+
+    // 5. check V string length and L's value are the same
+    var hTLV = _ASN1HEX.getTLV(h, idx);
+    var hVLength = 
+	hTLV.length - 2 - _ASN1HEX.getL(h, idx).length;
+    if (hVLength !== (vblen * 2))
+	throw new Error("V string length and L's value not the same:" +
+		        hVLength + "/" + (vblen * 2));
+
+    // 6. check appending garbled string
+    if (idx === 0) {
+	if (h.length != hTLV.length)
+	    throw new Error("total length and TLV length unmatch:" +
+			    h.length + "!=" + hTLV.length);
+    }
+
+    // 7. check if there isn't prepending zeros in DER INTEGER value
+    var hT = h.substr(idx, 2);
+    if (hT === '02') {
+	var vidx = _ASN1HEX.getVidx(h, idx);
+	// check if DER INTEGER VALUE have least leading zeros 
+	// for two's complement
+	// GOOD - 3fabde... 008fad...
+	// BAD  - 000012... 007fad...
+	if (h.substr(vidx, 2) == "00" && h.charCodeAt(vidx + 2) < 56) // '8'=56
+	    throw new Error("not least zeros for DER INTEGER");
+    }
+
+    // 8. check if all of elements in a structured item are conformed to
+    //    strict DER encoding rules.
+    if (parseInt(hT, 16) & 32) { // structured tag?
+	var intL = _ASN1HEX.getVblen(h, idx);
+	var sum = 0;
+	var aIdx = _ASN1HEX.getChildIdx(h, idx);
+	for (var i = 0; i < aIdx.length; i++) {
+	    var tlv = _ASN1HEX.getTLV(h, aIdx[i]);
+	    sum += tlv.length;
+	    _ASN1HEX.checkStrictDER(h, aIdx[i], 
+				   maxHexLen, maxByteLen, maxLbyteLen);
+	}
+	if ((intL * 2) != sum)
+	    throw new Error("sum of children's TLV length and L unmatch: " +
+			    (intL * 2) + "!=" + sum);
+    }
 };
 
 /**

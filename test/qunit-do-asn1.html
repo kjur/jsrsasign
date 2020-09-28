@@ -38,6 +38,10 @@ $(document).ready(function(){
 
   var hCer1 = "308201a830820152a0030201020209009e775e7d9f43abc9300d06092a864886f70d0101050500301a310b3009060355040613024a50310b3009060355040a13027a32301e170d3130303533313036313735365a170d3230303532383036313735365a301a310b3009060355040613024a50310b3009060355040a13027a32305c300d06092a864886f70d0101010500034b003048024100b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b0203010001a37b3079301d0603551d0e04160414bb30852881898321fd833aa39cc1808a09bdc68c304a0603551d23044330418014bb30852881898321fd833aa39cc1808a09bdc68ca11ea41c301a310b3009060355040613024a50310b3009060355040a13027a328209009e775e7d9f43abc9300c0603551d13040530030101ff300d06092a864886f70d01010505000341005859f3cabb652ed31c470f27ca2043eefc9f20270cdec5d45b0ba7b8c4f68337918425e8a632d29c1c87a59deb2a56f3aa5e978245384afe2e75463836a8c451";
 
+test("ASN1Object test", function() {
+equal((new KJUR.asn1.ASN1Object({tlv: "030101"})).getEncodedHex(), "030101", "{tlv: 030101}");
+});
+
 test("Boolean Test", function() {
   var d = new KJUR.asn1.DERBoolean();
   expect(1);
@@ -180,6 +184,22 @@ test("IA5String Test", function() {
   equal(d.getEncodedHex(), "1603e38182", "IA5String あ");
 });
 
+test("VisibleString Test", function() {
+  var d = new KJUR.asn1.DERVisibleString();
+  d.setString('aaa');
+  equal(d.getEncodedHex(), "1a03616161", "VisibleString aaa=1a03616161");
+  var d2 = new KJUR.asn1.DERVisibleString({str: 'bbb'});
+  equal(d2.getEncodedHex(), "1a03626262", "VisibleString bbb=1a03626262");
+});
+
+test("BMPString Test", function() {
+  var d = new KJUR.asn1.DERBMPString();
+  d.setString('aaa');
+  equal(d.getEncodedHex(), "1e03616161", "BMPString aaa=1a03616161");
+  var d2 = new KJUR.asn1.DERBMPString({str: 'bbb'});
+  equal(d2.getEncodedHex(), "1e03626262", "BMPString bbb=1a03626262");
+});
+
 test("UTCTime Test", function() {
   expect(5);
 
@@ -271,36 +291,66 @@ test("Set Test", function() {
   equal(d2.getEncodedHex(), "31060c01610c0162", "constructor array");
 });
 
+// ----- TaggedObject ------------------------------
+
 test("TaggedObject Test", function() {
-  expect(4);
+var _DERTaggedObject = KJUR.asn1.DERTaggedObject;
+var _DERInteger = KJUR.asn1.DERInteger;
 
-  var d1a = new KJUR.asn1.DERUTF8String();
-  d1a.setString('a'); // 0c0161
-  var d1 = new KJUR.asn1.DERTaggedObject();
-  d1.setASN1Object(true, "a0", d1a);
-  equal(d1.getEncodedHex(), "a0030c0161", "setASN1Object");
+var d1a = new KJUR.asn1.DERUTF8String();
+d1a.setString('a'); // 0c0161
+var d1 = new KJUR.asn1.DERTaggedObject();
+d1.setASN1Object(true, "a0", d1a);
+equal(d1.getEncodedHex(), "a0030c0161", "setASN1Object");
 
-  var d2a = new KJUR.asn1.DERUTF8String({'str':'a'});
-  var d2 = new KJUR.asn1.DERTaggedObject({'explicit':true,'tag':'a1','obj':d2a});
-  equal(d2.getEncodedHex(), "a1030c0161", "constructor with params");
+var d2a = new KJUR.asn1.DERUTF8String({'str':'a'});
+var d2 = new KJUR.asn1.DERTaggedObject({'explicit':true,'tag':'a1','obj':d2a});
+equal(d2.getEncodedHex(), "a1030c0161", "constructor with params");
 
-  var d3a = new KJUR.asn1.DERUTF8String({'str':'a'});
-  var d3 = new KJUR.asn1.DERTaggedObject({'explicit':false,'tag':'a1','obj':d2a});
-  equal(d3.getEncodedHex(), "a10161", "constructor with params implicit");
+var d3a = new KJUR.asn1.DERUTF8String({'str':'a'});
+var d3 = new KJUR.asn1.DERTaggedObject({'explicit':false,'tag':'a1','obj':d2a});
+equal(d3.getEncodedHex(), "a10161", "constructor with params implicit");
 
-  var d4a = new KJUR.asn1.DERUTF8String({'str':'a'});
-  var d4 = new KJUR.asn1.DERTaggedObject({'obj':d2a});
-  equal(d4.getEncodedHex(), "a0030c0161", "constructor with defaults");
+var d4a = new KJUR.asn1.DERUTF8String({'str':'a'});
+var d4 = new KJUR.asn1.DERTaggedObject({'obj':d2a});
+equal(d4.getEncodedHex(), "a0030c0161", "constructor with defaults");
+
+var d5 = new _DERTaggedObject({
+  tage: "a2",
+  obj: new _DERInteger({int: 7})
+});
+equal(d5.getEncodedHex(), "a203020107", "tage a2 DERInteger(7)");
+
+var d6 = new _DERTaggedObject({
+  tage: "a2",
+  obj: {'int': {'int': 7}}
+});
+equal(d6.getEncodedHex(), "a203020107", "tage a2 {int: {int: 7}}");
+
+var d7 = new _DERTaggedObject({
+  tagi: "82",
+  obj: {'int': {'int': 7}}
+});
+equal(d7.getEncodedHex(), "820107", "tagi 82 {int: {int: 7}}");
+
+var d8 = new _DERTaggedObject({
+  tage: "a2",
+  obj: {'asn1': {'tlv': '020107'}}
+});
+equal(d8.getEncodedHex(), "a203020107", "tage a2 {asn1: {tlv: ''020107'}}");
+
 });
 
+// ----- ASN1Util.getPEMStringFromHex --------------
+
 test("ASN1Util.getPEMStringFromHex", function() {
-  var s = "" +
+var s = "" +
 "-----BEGIN HOGE HOGE-----\r\n" +
 "YWFh\r\n" +
 "-----END HOGE HOGE-----\r\n";
 
-  equal(KJUR.asn1.ASN1Util.getPEMStringFromHex("616161", "HOGE HOGE"), s, "aaa");
-  equal(KJUR.asn1.ASN1Util.getPEMStringFromHex(hCer1, "CERTIFICATE"), sCer1PEM, "z2 cer1 pem");
+equal(KJUR.asn1.ASN1Util.getPEMStringFromHex("616161", "HOGE HOGE"), s, "aaa");
+equal(KJUR.asn1.ASN1Util.getPEMStringFromHex(hCer1, "CERTIFICATE"), sCer1PEM, "z2 cer1 pem");
 });
 
 });
@@ -313,6 +363,7 @@ test("ASN1Util.getPEMStringFromHex", function() {
 <div id="qunit-fixture">test markup</div>
 <a href="index.html">TEST INDEX</a> | 
 <a href="../api/index.html">API</a> | 
+<a href="qunit-do-asn1-newobj.html">asn1-newobj</a> |
 <a href="qunit-do-x509-hex2dn.html">x509-hex2dn</a> |
 <a href="qunit-do-asn1x509.html">asn1x509</a> |
 <a href="qunit-do-asn1x509-multirdn.html">asn1x509-multirdn</a> |

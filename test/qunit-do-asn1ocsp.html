@@ -55,6 +55,37 @@
 
 <script type="text/javascript">
 <!--
+// _test/0cert_rsa/z6.prv.p5p.pem RSA 2048bit
+var z6PrvPEM = (function() {/*
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpgIBAAKCAQEAu2TRqUOXPzaxUkmrRWoTbd8K+KFDucLErV41lNtqwhMHGnOO
+EWywNg4VORpFRNP8Z3rIwfqWtpHjCuO97r/M5tKi1lerD+2Y46eBHqFMtf8C4xey
+Sf4cdfvmjRToMq8q3SOAIKJ8PtUWUdtIurMUaA/bYzHsZq/piJoZw0jC1Xx3bZk7
+SiMSGi7TljrVdcPzgPMkE//D+zDLclgAknANcJqHt/CI2Z89R0IaEHAsJsqrN34h
+4jcL1od4Cc2vXfpyQkolobfomTkIzKZ9V34lI8GvLSOtZNdbq4gERm1zxnkHZ9j9
+kWsDZiiB+eCY2XokBIt09DUFgam4oTv3QkWOtwIDAQABAoIBAQChXLpRR3uIml7s
+nbUWi7X5STOYTr0Ty0wygUogSSRPw7S9KT3vcSj3Ev9hcWauUuAodwlCR7bZtRvN
+d7hISu504HIJoeoSSCT7+3Pq3ThCCzoANJp4rpDxY5zuZU9gvYdqbrRY5bGZJUIX
+8HxbD/OFfAoNC6Ml9VpiH1gJ2bCzxQWXCtvcoVHz0s50UXhp0omdo5RR+Jiwu0F5
+tan3+mAbHnGKAXU3Qk1cn2EPsbk7eLCkp6PW8SS0mVmoO7s4jj08OeCvBHULHG/L
+X4N6BJv/Gy5gczKm07xrJSZsf6a9ksckuXdNijdfb6pM5jOZcH8WU389sX6bOJoS
+ik8NfO9ZAoGBANxLQfLMvlCe8oIetcx5R9cFXv3RY3gg/Gk+FXUnArbs68P8w+H2
+Snf7uGsOyUKMce0yBjoQp3qzCughzRjfmhxZ8R7rgc27vrRPrTElmuXPI7rrKjYB
+J0/tseIMbLdScCslF3vGSMtBNx/ON+EAW5i96X838LQSaLeYWDrgO/yNAoGBANnE
+bDysyLYwk9GU/PfqJisGhZMHxkABpyp/dVuV3h7Qlun6yadxVt0Y/97jJ7MsxFEb
+Q6dRbn1NZKUzqGdVGjx72MUz6JQRwv09ykPyA/RVEeDhTVx4d4o5hH2JL0A16n2k
+zm98GC0dDKqSnSTG0uJluglKb/ctEnbaLCkcdqFTAoGBAK6tRge+bZID1wtySnlu
+GZbX/XCJnbPdhAf3YJBadH6T8oafYLtFzdrB0IOjX9bTAmswZVuZZROX8KgMVVLJ
+yqt8bgM0fuKhYiAbpZr41JAw5YYLfpb/5yorsgcqDvJ1/ddYO/y7R3FTruAbZpeU
+7wx4WjO0Kbq/diVOOXfF4grpAoGBAMHW9gGMS5zg4LNNy19iLVdfFscpxG51Cjfp
+/KzpWi5TvgHIGnfRi2CDQD9GM7BpyNXpTu9ArPkcStpCgUR5nED6fJoM+pnStZ51
+wfV5F8wFbUSfSB1nngCL8kNMOaMOWww8BwV1kI+XrA6pMvfpgw3DPzXF7KQ4mpbw
+3R47F93BAoGBAL2y5/x9/vxQavdowHgtRUn8bFqbPyDIRG6WSdqvBYGrZmBDWU0C
+E3/jwBB8VJEvP7i9g4HdqLcASNc7YHByqthkBoRGropp1ht7uTtkhmCy6lAKBpdF
+Uhj87GwKsfvkIdoo3fSix3QXVk9/qZXQbYwE+9yuafWYZjOIRPDsC2+D
+-----END RSA PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
 var certCA1 = (function() {/*
 -----BEGIN CERTIFICATE-----
 MIIGCDCCA/CgAwIBAgIQKy5u6tl1NmwUim7bo3yMBzANBgkqhkiG9w0BAQwFADCB
@@ -145,6 +176,214 @@ $(document).ready(function(){
 
 // ======= TEST ===============================================================
 
+test("OCSPResponse with status success test", function() {
+var _OCSPResponse = KJUR.asn1.ocsp.OCSPResponse;
+var hExpect = "30819a0a0100a0819430819106092b06010505073001010481833081803060a204040212ab180f32303230303930333233353935395a302e302c3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395aa1173015301306092b0601050507300102040604041234abcd300d06092a864886f70d01010b050003030012aba0083006030101030101";
+var params = {
+  resstatus: "successful",
+  restype: "ocspBasic",
+  respid: {key: "12ab"},
+  prodat: "20200903235959Z",
+  array: [{
+    certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+    status: {status: "good"},
+    thisupdate: "20200903235959Z"
+  }],
+  ext: [
+    {extname: "ocspNonce", hex: "1234abcd"}
+  ],
+  sigalg: "SHA256withRSA",
+  sighex: "12ab",
+  certs: ["030101", "030101"]
+};
+equal((new _OCSPResponse(params)).getEncodedHex(), hExpect, "hex with sighex");
+equal(
+ASN1HEX.dump((new _OCSPResponse(params)).getEncodedHex()),
+ASN1HEX.dump(hExpect),
+"dump with sighex");
+});
+
+test("OCSPResponse with status error test", function() {
+var _OCSPResponse = KJUR.asn1.ocsp.OCSPResponse;
+equal((new _OCSPResponse({resstatus: 1})).getEncodedHex(), "30030a0101", "status=1");
+equal((new _OCSPResponse({resstatus: "internalError"})).getEncodedHex(), "30030a0102", "status=internalError(2)");
+});
+
+test("ResponseBytes test", function() {
+var _ResponseBytes = KJUR.asn1.ocsp.ResponseBytes;
+
+var hExpect = "30819106092b06010505073001010481833081803060a204040212ab180f32303230303930333233353935395a302e302c3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395aa1173015301306092b0601050507300102040604041234abcd300d06092a864886f70d01010b050003030012aba0083006030101030101";
+//"30819106092b060105050730010104818330818030608204040212ab180f32303230303930333233353935395a302e302c3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395aa1173015301306092b0601050507300102040604041234abcd300d06092a864886f70d01010b050003030012aba0083006030101030101";
+var params = {
+  restype: "ocspBasic",
+  respid: {key: "12ab"},
+  prodat: "20200903235959Z",
+  array: [{
+    certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+    status: {status: "good"},
+    thisupdate: "20200903235959Z"
+  }],
+  ext: [
+    {extname: "ocspNonce", hex: "1234abcd"}
+  ],
+  sigalg: "SHA256withRSA",
+  sighex: "12ab",
+  certs: ["030101", "030101"]
+};
+equal((new _ResponseBytes(params)).getEncodedHex(), hExpect, "hex with sighex");
+equal(
+ASN1HEX.dump((new _ResponseBytes(params)).getEncodedHex()),
+ASN1HEX.dump(hExpect),
+"dump with sighex");
+
+});
+
+
+test("BasicOCSPResponse test", function() {
+var _BasicOCSPResponse = KJUR.asn1.ocsp.BasicOCSPResponse;
+
+var hExpect = "3081803060a204040212ab180f32303230303930333233353935395a302e302c3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395aa1173015301306092b0601050507300102040604041234abcd300d06092a864886f70d01010b050003030012aba0083006030101030101";
+var params = {
+  respid: {key: "12ab"},
+  prodat: "20200903235959Z",
+  array: [{
+    certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+    status: {status: "good"},
+    thisupdate: "20200903235959Z"
+  }],
+  ext: [
+    {extname: "ocspNonce", hex: "1234abcd"}
+  ],
+  sigalg: "SHA256withRSA",
+  sighex: "12ab",
+  certs: ["030101", "030101"]
+};
+equal((new _BasicOCSPResponse(params)).getEncodedHex(), hExpect, "hex with sighex");
+equal(
+ASN1HEX.dump((new _BasicOCSPResponse(params)).getEncodedHex()),
+ASN1HEX.dump(hExpect),
+"dump with sighex");
+
+var hExpect2 = "308208053081daa2160414295a1ffe023d12ecf198eeecc3924b42f191ea97180f32303230303930343132353235335a3081893081863044300906052b0e03021a05000414f59c687f2418d62a790f7592330756ea85e9470704148ff04b7fa82e4524ae4d50fa639a8bdee2dd1bbc020b04000000000136e982395da116180f32303230303731313136303030305aa0030a0105180f32303230303930343132353235335aa011180f32303230303930383132353235335aa1023000a1233021301f06092b06010505073001020412041084eb2a38e8e20c9ae8f52140aee80560300d06092a864886f70d01010b050003820101005ba579d3f7cddc75288bfbc560dedf9b59bbcf750efa1c71d6e35537555f246a469d73d328d7a21803ed2e7f0b945abc1c0ad75ce3a7f38c800d43435c2351e5187f1df142fcf572b257439c9d2248965f170c34bc928c4d2db68a3fd59c21aa42c60a12936b39216134ee16c1b67c92406aa68cc583eac5b2127324ed9e8e32daef824929d1490a3946c15f0f3af717b1a4733de5a31360df72ee041b829024d3340410cb860b15407c83fdcf5e8a49fa22171201df4224c764372e5c6c96e7acc825624766d7a59a59b45625a29be89df2bd037cc2a3a8d6f33795e647c2902b4e6053eeff78ebdde8766358d163b915eac96c5cbb9e52178e153813d24c30a08206103082060c30820608308203f0a00302010202102b2e6eead975366c148a6edba37c8c07300d06092a864886f70d01010c0500308185310b3009060355040613024742311b30190603550408131247726561746572204d616e636865737465723110300e0603550407130753616c666f7264311a3018060355040a1311434f4d4f444f204341204c696d69746564312b302906035504031322434f4d4f444f205253412043657274696669636174696f6e20417574686f72697479301e170d3134303231323030303030305a170d3239303231313233353935395a308190310b3009060355040613024742311b30190603550408131247726561746572204d616e636865737465723110300e0603550407130753616c666f7264311a3018060355040a1311434f4d4f444f204341204c696d69746564313630340603550403132d434f4d4f444f2052534120446f6d61696e2056616c69646174696f6e205365637572652053657276657220434130820122300d06092a864886f70d01010105000382010f003082010a02820101008ec20219e1a059a4eb38358d2cfd01d0d349c064c70b620545163aa8a0c00c027f1dccdbc4a16d7703a30f86f9e3069c3e0b818a9b491bad03befa4bdb8c20edd5ce5e658e3e0daf4cc2b0b7455e522f34de482464b441ae0097f7be67de9ed07aa753803b7cadf596556f97470a7c858b22978db384e09657d0701860968fee2d07939da1bacad1cd7be9c42a9a2821914d6f924f25a5f27a35dd26dc46a5d0ac59358cff4e9143503f59931e6c5121ee5814abfe7550783e4cb01c8613fa6b98bce03b941e8552dc039324186ecb275145e670de2543a40de14aa5edb67ec8cd6dee2e1d27735ddc453080aae3b2410bafbd4487dab9e51b9d7faee58582a50203010001a382016530820161301f0603551d23041830168014bbaf7e023dfaa6f13c848eadee3898ecd93232d4301d0603551d0e0416041490af6a3a945a0bd890ea125673df43b43a28dae7300e0603551d0f0101ff04040302018630120603551d130101ff040830060101ff020100301d0603551d250416301406082b0601050507030106082b06010505070302301b0603551d200414301230060604551d20003008060667810c010201304c0603551d1f044530433041a03fa03d863b687474703a2f2f63726c2e636f6d6f646f63612e636f6d2f434f4d4f444f52534143657274696669636174696f6e417574686f726974792e63726c307106082b0601050507010104653063303b06082b06010505073002862f687474703a2f2f6372742e636f6d6f646f63612e636f6d2f434f4d4f444f525341416464547275737443412e637274302406082b060105050730018618687474703a2f2f6f6373702e636f6d6f646f63612e636f6d300d06092a864886f70d01010c050003820201004e2b764f921c623689ba77c12705f41cd6449da99a3eaad56666013eea49e6a235bcfaf6dd958e9935980e361875b1dddd50727caedc7788ce0ff79020caa3672e1f567f7be144ea4295c45d0d01504615f28189596c8add8cf112a18d3a428a98f84b347b273b08b46f243b729d6374583c1a6c3f4fc7119ac8a8f5b537ef1045c66cd9e05e9526b3ebada3b9ee7f0c9a66357332604ee5dd8a612c6e5211776896d318755115001b7488dde1c738044328e916fdd905d45d472760d6fb383b6c72a294f8421adfed6f068c45c20600aae4e8dcd9b5e17378ecf623dcd1dd6c8e1a8fa5ea547c96b7c3fe558e8d495efc64bbcf3ebd96eb69cdbfe048f1628210e50c4657f233dad0c863edc61f9405964a1a91d1f7ebcf8f52ae0d08d93ea8a051e9c18774d5c9f774ab2e53fbbb7afb97e2f81f268fb3d2a0e0375b283b31e50e572d5ab8ad79ac5e20661aa5b9a6b539c1f59843ffeef9a7a7fdeeca243d8016c4178f8ac160a10cae5b4347914bd59a175ff9d487c1c28cb7e7e20f30193786ace0dc4203e694a89daefd0f245194ce9208d1fc50f003407b8859ed0eddacd2778234dc069502d890f92dea37d51a60d06720d7d8420b45af8268dedd66243790299419461925b880d7cbd486286a4470262362a99f866fbfba9070d256778578efea25a917ce50728c003aaae3db63349ff8067101e28220d4fe6fbdb1";
+var params2 = {
+  respid: {key: "295a1ffe023d12ecf198eeecc3924b42f191ea97"},
+  prodat: "20200904125253Z",
+  array: [{
+    certid: {
+      alg:"sha1",
+      issname:"f59c687f2418d62a790f7592330756ea85e94707",
+      isskey:"8ff04b7fa82e4524ae4d50fa639a8bdee2dd1bbc",
+      sbjsn:"04000000000136e982395d"
+    },
+    status: {status:"revoked",time:"20200711160000Z",reason:5},
+    thisupdate: "20200904125253Z",
+    nextupdate: "20200908125253Z",
+    ext: []
+  }],
+  ext: [
+    {extname: "ocspNonce", hex: "84eb2a38e8e20c9ae8f52140aee80560"}
+  ],
+  sigalg: "SHA256withRSA",
+  reskey: z6PrvPEM,
+  certs: [certCA1]
+};
+equal((new _BasicOCSPResponse(params2)).getEncodedHex(), hExpect2, "hex with reskey");
+equal(
+ASN1HEX.dump((new _BasicOCSPResponse(params2)).getEncodedHex()),
+ASN1HEX.dump(hExpect2),
+"dump with reskey");
+
+});
+
+test("ResponseData test", function() {
+var _ResponseData = KJUR.asn1.ocsp.ResponseData;
+var hExpect = "3060a204040212ab180f32303230303930333233353935395a302e302c3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395aa1173015301306092b0601050507300102040604041234abcd";
+var params = {
+  respid: {key: "12ab"},
+  prodat: "20200903235959Z",
+  array: [{
+    certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+    status: {status: "good"},
+    thisupdate: "20200903235959Z"
+  }],
+  ext: [
+    {extname: "ocspNonce", hex: "1234abcd"}
+  ]
+};
+equal((new _ResponseData(params)).getEncodedHex(), hExpect, "hex");
+equal(
+ASN1HEX.dump((new _ResponseData(params)).getEncodedHex()),
+ASN1HEX.dump(hExpect),
+"dump");
+});
+
+test("ResponderID test", function() {
+var _ResponderID = KJUR.asn1.ocsp.ResponderID;
+
+var hExpect = "a204040212ab";
+var params = {key: "12ab"};
+equal((new _ResponderID(params)).getEncodedHex(), hExpect, "hex by key");
+equal(
+ASN1HEX.dump((new _ResponderID(params)).getEncodedHex()),
+ASN1HEX.dump(hExpect),
+"dump by key");
+
+var hExpect2 = "a11c301a310b3009060355040613024a50310b3009060355040a0c024f31";
+var params2 = {name: {str: "/C=JP/O=O1"}};
+equal((new _ResponderID(params2)).getEncodedHex(), hExpect2, "hex by name");
+equal(
+ASN1HEX.dump((new _ResponderID(params2)).getEncodedHex()),
+ASN1HEX.dump(hExpect2),
+"dump by name");
+
+});
+
+test("SingleResponseList test", function() {
+var _SingleResponseList = KJUR.asn1.ocsp.SingleResponseList;
+var hExpect = "302e302c3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395a";
+var params = [{
+certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+status: {status: "good"},
+thisupdate: "20200903235959Z"
+}];
+equal((new _SingleResponseList(params)).getEncodedHex(), hExpect, "hex");
+equal(
+ASN1HEX.dump((new _SingleResponseList(params)).getEncodedHex()),
+ASN1HEX.dump(hExpect),
+"dump");
+});
+
+test("SingleResponse test", function() {
+var _SingleResponse = KJUR.asn1.ocsp.SingleResponse;
+
+var hExpect = "302c3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395a";
+var params = {
+certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+status: {status: "good"},
+thisupdate: "20200903235959Z"
+};
+equal((new _SingleResponse(params)).getEncodedHex(), hExpect, "hex");
+equal(
+ASN1HEX.dump((new _SingleResponse(params)).getEncodedHex()),
+ASN1HEX.dump(hExpect),
+"dump");
+
+var hExpect2 = "304f3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395aa011180f32303230303931333233353935395aa10e300c300a06032a03040403030101";
+var params2 = {
+certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+status: {status: "good"},
+thisupdate: "20200903235959Z",
+nextupdate: "20200913235959Z",
+ext: [{extname:"1.2.3.4",extn:"030101"}]
+};
+equal((new _SingleResponse(params2)).getEncodedHex(), hExpect2, "hex with nextupdate and ext");
+equal(
+ASN1HEX.dump((new _SingleResponse(params2)).getEncodedHex()),
+ASN1HEX.dump(hExpect2),
+"dump with nextupdate and ext");
+
+});
+
 test("CertID.setByValue", function() {
 var o1 = new KJUR.asn1.ocsp.CertID();
 o1.setByValue("01020304", "05060708", "123456", "sha1");
@@ -168,9 +407,9 @@ equal(o1.getEncodedHex(), "304a300906052b0e03021a050004147ae13ee8a0c42a2cb428cbe
 });
 
 test("CertID constructor by value", function() {
-var o1 = new KJUR.asn1.ocsp.CertID({namehash: "01020304",
-                                    keyhash: "05060708",
-                                    serial: "123456",
+var o1 = new KJUR.asn1.ocsp.CertID({issname: "01020304",
+                                    isskey: "05060708",
+                                    sbjsn: "123456",
                                     alg: "sha1"});
 equal(o1.getEncodedHex(), "301c300906052b0e03021a05000404010203040404050607080203123456", "all");
 });
@@ -181,6 +420,46 @@ var o1 = new KJUR.asn1.ocsp.CertID({alg: "sha1",
                                     subjectCert: certEE1});
 equal(o1.getEncodedHex(), "304a300906052b0e03021a050004147ae13ee8a0c42a2cb428cbe7a605461940e2a1e9041490af6a3a945a0bd890ea125673df43b43a28dae7021100d09282634303a97fadf55568a48ca87e", "all");
 });
+
+test("CertStatus test", function() {
+var _CertStatus = KJUR.asn1.ocsp.CertStatus;
+
+equal(
+(new _CertStatus({status: "good"})).getEncodedHex(),
+"8000",
+"good 8000");
+
+equal(
+(new _CertStatus({status: "unknown"})).getEncodedHex(),
+"8200",
+"unknown 8200");
+
+var hRev1 = "a111180f32303230303930333233353935395a";
+var revParam1 = {status: "revoked", time: "20200903235959Z"};
+equal(
+(new _CertStatus(revParam1)).getEncodedHex(),
+hRev1,
+"revoked hex");
+equal(
+ASN1HEX.dump((new _CertStatus(revParam1)).getEncodedHex()),
+ASN1HEX.dump(hRev1),
+"revoked dump");
+
+var hRev2 = "a116180f32303230303930333233353935395aa0030a0103";
+//"a114180f32303230303930333233353935395a0a0103";
+var revParam2 = {status: "revoked", time: "20200903235959Z", reason: 3};
+equal(
+(new _CertStatus(revParam2)).getEncodedHex(),
+hRev2,
+"revoked2 hex with reason3");
+equal(
+ASN1HEX.dump((new _CertStatus(revParam2)).getEncodedHex()),
+ASN1HEX.dump(hRev2),
+"revoked2 dump with reason3");
+
+});
+
+// == BEGIN Request related ================================================
 
 test("Request constructor by cert", function() {
 var o1 = new KJUR.asn1.ocsp.Request({alg: "sha1",
@@ -282,6 +561,106 @@ equal(ASN1HEX.getTLVbyList(hOCSPRES_wikipedia_revoked, 0, [1,0,1,0,0,2,0,2]),
       "180f32303136313030323032353332375a", "o t1");
 equal(ASN1HEX.getTLVbyList(hOCSPRES_wikipedia_revoked, 0, [1,0,1,0,0,2,0,3,0]),
       "180f32303136313030363032353332375a", "o t2");
+});
+
+// getocsp/digicertcom-ev-unauthorized
+test("OCSPParser.getOCSPRequest test", function() {
+var obj = new KJUR.asn1.ocsp.OCSPParser();
+var h = "3051304f304d304b3049300906052b0e03021a05000414105fa67a80089db5279f35ce830b43889ea3c70d04140f80611c823161d52f28e78d4638b42ce1c6d9e202100fef62075d715dc5e1d8bd03775c96860";
+var param = {array: [{
+  "alg": "sha1",
+  "issname": "105fa67a80089db5279f35ce830b43889ea3c70d",
+  "isskey": "0f80611c823161d52f28e78d4638b42ce1c6d9e2",
+  "sbjsn": "0fef62075d715dc5e1d8bd03775c9686"
+}]};
+deepEqual(
+obj.getOCSPRequest(h),
+param,
+"digicert ev");
+});
+
+// getocsp/digicertcom-ev-unauthorized
+test("OCSPParser.getTBSRequest test", function() {
+var obj = new KJUR.asn1.ocsp.OCSPParser();
+var h = "304f304d304b3049300906052b0e03021a05000414105fa67a80089db5279f35ce830b43889ea3c70d04140f80611c823161d52f28e78d4638b42ce1c6d9e202100fef62075d715dc5e1d8bd03775c9686";
+var param = {array: [{
+  "alg": "sha1",
+  "issname": "105fa67a80089db5279f35ce830b43889ea3c70d",
+  "isskey": "0f80611c823161d52f28e78d4638b42ce1c6d9e2",
+  "sbjsn": "0fef62075d715dc5e1d8bd03775c9686"
+}]};
+deepEqual(
+obj.getTBSRequest(h),
+param,
+"digicert ev");
+
+// getocsp/data/twitter.com.req.*
+var h2 = "3074304d304b3049300906052b0e03021a05000414cf26f518fac97e8f8cb342e01c2f6a109e8e5f0a04145168ff90af0207753cccd9656462a212b859723b02100b5897d85529ec36e528bebe1ae34765a2233021301f06092b060105050730010204120410b1b94016d523b57b34ae7f5710a40b02";
+var param2 = {
+  array: [{
+    "alg": "sha1",
+    "issname": "cf26f518fac97e8f8cb342e01c2f6a109e8e5f0a",
+    "isskey": "5168ff90af0207753cccd9656462a212b859723b",
+    "sbjsn": "0b5897d85529ec36e528bebe1ae34765"
+  }],
+  ext: [{
+    "extname": "ocspNonce",
+    "hex": "b1b94016d523b57b34ae7f5710a40b02"
+  }]
+};
+deepEqual(
+obj.getTBSRequest(h2),
+param2,
+"twitter with ocspNonce ext");
+
+});
+
+// getocsp/digicertcom-ev-unauthorized
+test("OCSPParser.getRequestList test", function() {
+var obj = new KJUR.asn1.ocsp.OCSPParser();
+var h = "304d304b3049300906052b0e03021a05000414105fa67a80089db5279f35ce830b43889ea3c70d04140f80611c823161d52f28e78d4638b42ce1c6d9e202100fef62075d715dc5e1d8bd03775c9686";
+var param = [{
+  "alg": "sha1",
+  "issname": "105fa67a80089db5279f35ce830b43889ea3c70d",
+  "isskey": "0f80611c823161d52f28e78d4638b42ce1c6d9e2",
+  "sbjsn": "0fef62075d715dc5e1d8bd03775c9686"
+}];
+deepEqual(
+obj.getRequestList(h),
+param,
+"digicert ev");
+});
+
+// getocsp/digicertcom-ev-unauthorized
+test("OCSPParser.getRequest test", function() {
+var obj = new KJUR.asn1.ocsp.OCSPParser();
+var h = "304b3049300906052b0e03021a05000414105fa67a80089db5279f35ce830b43889ea3c70d04140f80611c823161d52f28e78d4638b42ce1c6d9e202100fef62075d715dc5e1d8bd03775c9686";
+var param = {
+  "alg": "sha1",
+  "issname": "105fa67a80089db5279f35ce830b43889ea3c70d",
+  "isskey": "0f80611c823161d52f28e78d4638b42ce1c6d9e2",
+  "sbjsn": "0fef62075d715dc5e1d8bd03775c9686"
+};
+deepEqual(
+obj.getRequest(h),
+param,
+"digicert ev");
+});
+
+// getocsp/digicertcom-ev-unauthorized
+test("OCSPParser.getCertID test", function() {
+var obj = new KJUR.asn1.ocsp.OCSPParser();
+var h = "3049300906052b0e03021a05000414105fa67a80089db5279f35ce830b43889ea3c70d04140f80611c823161d52f28e78d4638b42ce1c6d9e202100fef62075d715dc5e1d8bd03775c9686";
+var param = {
+  "alg": "sha1",
+  "issname": "105fa67a80089db5279f35ce830b43889ea3c70d",
+  "isskey": "0f80611c823161d52f28e78d4638b42ce1c6d9e2",
+  "sbjsn": "0fef62075d715dc5e1d8bd03775c9686"
+};
+deepEqual(
+obj.getCertID(h),
+param,
+"digicert ev");
 });
 
 });

@@ -1,20 +1,52 @@
 <!DOCTYPE html>
 <html>
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : The 'jsrsasign' (RSA-Sign JavaScript Library) is a open source free pure JavaScript implementation of PKCS#1 v2.1 RSASSA-PKCS1-v1_5 RSA signing and validation algorithm." />
 
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="jsrsasign : The 'jsrsasign' (RSA-Sign JavaScript Library) is a open source free pure JavaScript implementation of PKCS#1 v2.1 RSASSA-PKCS1-v1_5 RSA signing and validation algorithm." />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
-    <title>Time Stamp Generator</title>
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<title>Time Stamp Generator</title>
 <!-- for pkcs5pkey -->
 <script language="JavaScript" type="text/javascript" src="../jsrsasign-all-min.js"></script>
 <script language="JavaScript" type="text/javascript">
+var params = {
+  statusinfo: 'granted',
+  version: 1,
+  hashalgs: ["sha256"],
+  econtent: {
+    type: "tstinfo",
+    content: {
+      policy: '1.2.3.4.5',
+      messageImprint: { alg: 'sha1', hash: 'a1a2a3a4' },
+      serialNumber: {'int': 3},
+      genTime: {str: '20131231235959.123Z', millis: true},
+      accuracy: { millis: 500 },
+      ordering: true,
+      nonce: {'int': 3},
+    }
+  },
+  sinfos: [{
+    version: 1,
+    id: {type:'isssn', cert: null},
+    hashalg: "sha256",
+    sattrs: {array: [{
+      attr: "contentType",
+      type: "data"
+    },{
+      attr: "messageDigest",
+      hex: 'ffff'
+    }]},
+    sigalg: "SHA256withRSA",
+    signkey: null
+  }]
+};
+
 function doIt() {
   var f1 = document.form1;
 
   var aReq = null;
+  var tstHex = null;
   try {
     // get request hex
     var req1hex = b64nltohex(f1.req1.value);
@@ -27,56 +59,52 @@ function doIt() {
   }
 
   try {
-    // aTSTInfo parameters
-    var aTSTInfo = {};
-    aTSTInfo.policy = aReq.policy;
-    aTSTInfo.messageImprint = aReq.mi;
-    aTSTInfo.serialNumber = {hex: f1.serial1.value};
-    aTSTInfo.genTime = {};
+    var tstInfo = params.econtent.content;
+    tstInfo.policy = aReq.policy;
+    tstInfo.messageImprint = aReq.messageImprint;
+    tstInfo.serialNumber = {hex: f1.serial1.value};
+    tstInfo.genTime = {};
     if (f1.gentimemilli1.checked)
-      aTSTInfo.genTime = {millis: true};
+      tstInfo.genTime = {millis: true};
     if (f1.accu_second1.value != "" ||
         f1.accu_milli1.value != "" ||
         f1.accu_micro1.value != "") {
-      aTSTInfo.accuracy = {};
+      tstInfo.accuracy = {};
       if (f1.accu_second1.value != "") 
-        aTSTInfo.accuracy.seconds = parseInt(f1.accu_second1.value, 10);
+        tstInfo.accuracy.seconds = parseInt(f1.accu_second1.value, 10);
       if (f1.accu_milli1.value != "") 
-        aTSTInfo.accuracy.millis = parseInt(f1.accu_milli1.value, 10);
+        tstInfo.accuracy.millis = parseInt(f1.accu_milli1.value, 10);
       if (f1.accu_micro1.value != "") 
-        aTSTInfo.accuracy.micross = parseInt(f1.accu_micro1.value, 10);
+        tstInfo.accuracy.micros = parseInt(f1.accu_micro1.value, 10);
     }
-    if (f1.ordering1.checked) aTSTInfo.ordering = true;
+    if (f1.ordering1.checked) tstInfo.ordering = true;
     if (f1.nonce1.checked &&
         typeof aReq.nonce == "string") {
-      aTSTInfo.nonce = {hex: aReq.nonce};
+      tstInfo.nonce = {hex: aReq.nonce};
     }
     if (f1.tsa1.checked) {
-      aTSTInfo.tsa = {certsubject: f1.cert1.value};
+      tstInfo.tsa = {certsubject: f1.cert1.value};
     }
+    params.sinfos[0].id.cert = f1.cert1.value;
+    params.sinfos[0].signkey = f1.prvkey1.value;
 
-    var aTST = {
-      tstInfo: aTSTInfo,
-      signerCert: f1.cert1.value,
-      hashAlg: 'sha256',
-      signerPrvKey: f1.prvkey1.value,
-      sigAlg: 'SHA256withRSA'
-    };
-    if (aReq.certreq === true) aTST.certs = [f1.cert1.value];
-    aTST.hashAlg = f1.mdalg1.value;
-    aTST.sigAlg = f1.sigalg1.value;
+    if (aReq.certreq === true) params.certs = [f1.cert1.value];
+    params.certs = [f1.cert1.value];
+    params.sinfos[0].hashalg = f1.mdalg1.value;
+    params.sinfos[0].sigalg = f1.sigalg1.value;
 
-    var dTST = KJUR.asn1.tsp.TSPUtil.newTimeStampToken(aTST);
-
-    var tstHex = dTST.getContentInfoEncodedHex();
-    f1.newtst1.value = hextob64nl(tstHex);
-
-    var dRes = new KJUR.asn1.tsp.TimeStampResp({tst: dTST,
-                                                status: {status: {name: 'granted'}}});
-    f1.newres1.value = hextob64nl(dRes.getEncodedHex());
+    var dRes = new KJUR.asn1.tsp.TimeStampResp(params);
+    var hRes = dRes.getEncodedHex();
+    f1.newres1.value = hextob64nl(hRes);
+    var hTST = ASN1HEX.getTLVbyList(hRes, 0, [1]);
+    f1.newtst1.value = hextob64nl(hTST);
   } catch (ex) {
-    alert("error: " + ex);
+    //alert("error: " + ex);
+    throw ex;
   }
+  try {
+    f1.newtstdump1.value = ASN1HEX.dump(hRes);
+  } catch (ex) {}
 }
 </script>
 </head>
@@ -105,13 +133,13 @@ function doIt() {
 <h4>(Step1) Fill Fields</h4>
 <table>
 <tr><td colspan="2">Time Stamp Requst (Base64):<br/>
-<textarea name="req1" cols="65" rows="2">MEwCAQEwMTANBglghkgBZQMEAgEFAAQgmDSHbc+wXLFnpcJJU+uljErImxrfV/KP
+<textarea name="req1" cols="82" rows="2">MEwCAQEwMTANBglghkgBZQMEAgEFAAQgmDSHbc+wXLFnpcJJU+uljErImxrfV/KP
 L50JrxB+6PAGBCoDBAUCCxobHB4fKissLS4vAQH/</textarea>
 <br/>
 NOTE: You can generate request <a href="tool_tsreq.html">here</a>.
 </td></tr>
 <tr><td colspan="2">TSA Private Key (PEM):<br/>
-<textarea name="prvkey1" cols="65" rows="3">-----BEGIN PRIVATE KEY-----
+<textarea name="prvkey1" cols="82" rows="3">-----BEGIN PRIVATE KEY-----
 MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDfdOqotHd55SYO
 0dLz2oXengw/tZ+q3ZmOPeVmMuOMIYO/Cv1wk2U0OK4pug4OBSJPhl09Zs6IwB8N
 wPOU7EDTgMOcQUYB/6QNCI1J7Zm2oLtuchzz4pIb+o4ZAhVprLhRyvqi8OTKQ7kf
@@ -141,7 +169,7 @@ wA2ax3+gEEYpGhjM/lO2Lg==
 -----END PRIVATE KEY-----</textarea>
 </td></tr>
 <tr><td colspan="2">TSA Certificate (PEM):<br/>
-<textarea name="cert1" cols="65" rows="3">-----BEGIN CERTIFICATE-----
+<textarea name="cert1" cols="82" rows="3">-----BEGIN CERTIFICATE-----
 MIIDETCCAfmgAwIBAgIBTTANBgkqhkiG9w0BAQUFADAbMQswCQYDVQQGEwJVUzEM
 MAoGA1UECgwDQ0ExMB4XDTEzMDUwMTIzNTk1OVoXDTIzMDUwMTIzNTk1OVowHDEL
 MAkGA1UEBhMCVVMxDTALBgNVBAMMBFRTQTEwggEiMA0GCSqGSIb3DQEBAQUAA4IB
@@ -229,9 +257,11 @@ NOTE: for SignerInfo Signature algorithm.
 
 <h2>Generated TimeStampToken/Response</h2>
 Generated TimeStampToken(Base64):<br/>
-<textarea name="newtst1" cols="65" rows="3"></textarea><br/>
+<textarea name="newtst1" cols="82" rows="3"></textarea><br/>
 Generated TimeStampResponse(Base64):<br/>
-<textarea name="newres1" cols="65" rows="3"></textarea><br/>
+<textarea name="newres1" cols="82" rows="3"></textarea><br/>
+ASN.1 Dump of Generated TimeStampResponse:<br/>
+<textarea name="newtstdump1" cols="82" rows="20"></textarea><br/>
 
 </form>
 
@@ -246,7 +276,7 @@ Generated TimeStampResponse(Base64):<br/>
         <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
         <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
 <div align="center" style="color: white">
-Copyright &copy; 2010-2014 Kenji Urushima. All rights reserved.
+Copyright &copy; 2010-2020 Kenji Urushima. All rights reserved.
 </div>
       </footer>
     </div>

@@ -8,19 +8,41 @@
 <script type="text/javascript" src="qunit.js"></script>
 <link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
 
-<script language="JavaScript" type="text/javascript" src="../ext/yahoo.js"></script>
-<script language="JavaScript" type="text/javascript" src="../ext/jsbn.js"></script>
-<script language="JavaScript" type="text/javascript" src="../ext/jsbn2.js"></script>
-<script language="JavaScript" type="text/javascript" src="../ext/rsa.js"></script>
-<script language="JavaScript" type="text/javascript" src="../ext/rsa2.js"></script>
-<script language="JavaScript" type="text/javascript" src="../ext/base64.js"></script>
-<script language="JavaScript" type="text/javascript" src="../src/base64x-1.1.js"></script>
-<script language="JavaScript" type="text/javascript" src="../src/asn1hex-1.1.js"></script>
-<script language="JavaScript" type="text/javascript" src="../src/asn1-1.0.js"></script>
-<script language="JavaScript" type="text/javascript" src="../src/asn1x509-1.0.js"></script>
+<script src="../ext/yahoo.js"></script>
+<script src="../ext/jsbn.js"></script>
+<script src="../ext/jsbn2.js"></script>
+<script src="../ext/rsa.js"></script>
+<script src="../ext/rsa2.js"></script>
+<script src="../ext/base64.js"></script>
+<script src="../src/base64x-1.1.js"></script>
+<script src="../src/asn1hex-1.1.js"></script>
+<script src="../src/asn1-1.0.js"></script>
+<script src="../src/asn1x509-1.0.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+var sZ4_CERPEM = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIC/zCCAeegAwIBAgIBATANBgkqhkiG9w0BAQUFADAaMQswCQYDVQQGEwJVUzEL
+MAkGA1UECgwCWjQwHhcNMTMwODI4MTgyODM0WhcNMjMwODI4MTgyODM0WjAaMQsw
+CQYDVQQGEwJVUzELMAkGA1UECgwCWjQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw
+ggEKAoIBAQDfdOqotHd55SYO0dLz2oXengw/tZ+q3ZmOPeVmMuOMIYO/Cv1wk2U0
+OK4pug4OBSJPhl09Zs6IwB8NwPOU7EDTgMOcQUYB/6QNCI1J7Zm2oLtuchzz4pIb
++o4ZAhVprLhRyvqi8OTKQ7kfGfs5Tuwmn1M/0fQkfzMxADpjOKNgf0uy6lN6utjd
+TrPKKFUQNdc6/Ty8EeTnQEwUlsT2LAXCfEKxTn5RlRljDztS7Sfgs8VL0FPy1Qi8
+B+dFcgRYKFrcpsVaZ1lBmXKsXDRu5QR/Rg3f9DRq4GR1sNH8RLY9uApMl2SNz+sR
+4zRPG85R/se5Q06Gu0BUQ3UPm67ETVZLAgMBAAGjUDBOMB0GA1UdDgQWBBQHZPTE
+yQVu/0I/3QWhlTyW7WoTzTAfBgNVHSMEGDAWgBQHZPTEyQVu/0I/3QWhlTyW7WoT
+zTAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQDHxqJ9y8alTH7agVMW
+Zfic/RbrdvHwyq+IOrgDToqyo0w+IZ6BCn9vjv5iuhqu4ForOWDAFpQKZW0DLBJE
+Qy/7/0+9pk2DPhK1XzdOovlSrkRt+GcEpGnUXnzACXDBbO0+Wrk+hcjEkQRRK1bW
+2rknARIEJG9GS+pShP9Bq/0BmNsMepdNcBa0z3a5B0fzFyCQoUlX6RTqxRw1h1Qt
+5F00pfsp7SjXVIvYcewHaNASbto1n5hrSz1VY9hLba11ivL1N4WoWbmzAL6BWabs
+C2D/MenST2/X6hTKyGXpg3Eg2h3iLvUtwcNny0hRKstc73Jl9xR3qXfXKJH0ThTl
+q0gq
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
 
 test("ASN1HEX.getLblen", function() {
   equal(ASN1HEX.getLblen('020100', 0), 1, "checking L.len of 020100 is 1.");
@@ -124,6 +146,77 @@ test("ASN1HEX.getIdxbyList", function() {
   equal(ASN1HEX.getTLV(h, 36), "02012b", "02012b");
 });
 
+test("ASN1HEX.getIdxbyListEx same test as getIdxbyList", function() { 
+  var h = "3016300902011a02011b02011c300902012a02012b02012c";
+  equal(ASN1HEX.getChildIdx(h, 0).join("/"), "4/26", "array level 1");
+  equal(ASN1HEX.getChildIdx(h, 4).join("/"), "8/14/20", "array level 2-1");
+  equal(ASN1HEX.getChildIdx(h, 26).join("/"), "30/36/42", "array level 2-2");
+  equal(ASN1HEX.getIdxbyListEx(h, 0, [0]), 4, "(0)=4");
+  equal(ASN1HEX.getIdxbyListEx(h, 0, [1]), 26, "(1)=26");
+  equal(ASN1HEX.getIdxbyListEx(h, 0, [0, 0]), 8, "(0,0)=8");
+  equal(ASN1HEX.getIdxbyListEx(h, 0, [0, 1]), 14, "(0,1)=14");
+  equal(ASN1HEX.getIdxbyListEx(h, 0, [0, 2]), 20, "(0,2)=20");
+  equal(ASN1HEX.getIdxbyListEx(h, 0, [1, 0]), 30, "(1,0)=30");
+  equal(ASN1HEX.getIdxbyListEx(h, 0, [1, 1]), 36, "(1,1)=36");
+  equal(ASN1HEX.getIdxbyListEx(h, 0, [1, 2]), 42, "(1,2)=42");
+  equal(ASN1HEX.getTLV(h, 36), "02012b", "02012b");
+});
+
+/*
+3012 seq idx=0
+  020101 int:1 idx=4
+  020102 int:2 idx=10
+  800103 [0]:3 idx=16
+  810104 [1]:4 idx=22
+  020105 int:5 idx=28
+  020106 int:6 idx=34
+ */
+test("ASN1HEX.getIdxbyListEx context specific test1(skip count)", function() { 
+var h = "3012020101020102800103810104020105020106";
+equal(ASN1HEX.getIdxbyListEx(h, 0, [1]), 10, "[1]=10");
+equal(ASN1HEX.getIdxbyListEx(h, 0, ["[0]"]), 16, "[[0]]=16"); // context tag
+equal(ASN1HEX.getIdxbyListEx(h, 0, ["[1]"]), 22, "[[1]]=22"); // context tag
+equal(ASN1HEX.getIdxbyListEx(h, 0, [2]), 28, "[2]=28"); // skip context tag
+equal(ASN1HEX.getIdxbyListEx(h, 0, [3]), 34, "[3]=34"); // skip context tag
+});
+
+/*
+3014 seq idx=0
+  0412 octstr idx=4
+    020101 int:1 idx=8
+    020102 int:2 idx=14
+    800103 [0]:3 idx=20
+    810104 [1]:4 idx=26
+    020105 int:5 idx=32
+    020106 int:6 idx=38
+ */
+test("ASN1HEX.getIdxbyListEx context specific test2(dig into OctetString)", function() { 
+var h = "30140412020101020102800103810104020105020106";
+equal(ASN1HEX.getIdxbyListEx(h, 0, [0,1]), 14, "[0,1]=14");
+equal(ASN1HEX.getIdxbyListEx(h, 0, [0,"[0]"]), 20, "[0,[0]]=20"); // context tag
+equal(ASN1HEX.getIdxbyListEx(h, 0, [0,"[1]"]), 26, "[0,[1]]=26"); // context tag
+equal(ASN1HEX.getIdxbyListEx(h, 0, [0,2]), 32, "[0,2]=32"); // skip context tag
+equal(ASN1HEX.getIdxbyListEx(h, 0, [0,3]), 38, "[0,3]=38"); // skip context tag
+});
+
+/*
+3015 seq idx=0
+  031300 bitstr idx=4
+    020101 int:1 idx=10
+    020102 int:2 idx=16
+    800103 [0]:3 idx=22
+    810104 [1]:4 idx=28
+    020105 int:5 idx=34
+    020106 int:6 idx=40
+ */
+test("ASN1HEX.getIdxbyListEx context specific test3(dig into BitString)", function() { 
+var h = "3015031300020101020102800103810104020105020106";
+equal(ASN1HEX.getIdxbyListEx(h, 0, [0,1]), 16, "[0,1]=16");
+equal(ASN1HEX.getIdxbyListEx(h, 0, [0,"[0]"]), 22, "[0,[0]]=22"); // context tag
+equal(ASN1HEX.getIdxbyListEx(h, 0, [0,"[1]"]), 28, "[0,[1]]=28"); // context tag
+equal(ASN1HEX.getIdxbyListEx(h, 0, [0,2]), 34, "[0,2]=34"); // skip context tag
+equal(ASN1HEX.getIdxbyListEx(h, 0, [0,3]), 40, "[0,3]=40"); // skip context tag
+});
 
 test("ASN1HEX.getTLVbyList", function() { 
   var h = "3016300902011a02011b02011c300902012a02012b02012c";
@@ -135,34 +228,67 @@ test("ASN1HEX.getTLVbyList", function() {
   equal(ASN1HEX.getTLVbyList(h2, 0, [0, 5]), h3, "subject");
 });
 
+/*
+3014 seq idx=0
+  0412 octstr idx=4
+    020101 int:1 idx=8
+    020102 int:2 idx=14
+    800103 [0]:3 idx=20
+    810104 [1]:4 idx=26
+    020105 int:5 idx=32
+    020106 int:6 idx=38
+ */
+test("ASN1HEX.getTLVbyListEx", function() { 
+var h = "30140412020101020102800103810104020105020106";
+equal(ASN1HEX.getTLVbyListEx(h, 0, [0,1]), "020102", "[0,1]=020102");
+equal(ASN1HEX.getTLVbyListEx(h, 0, [0,"[0]"]), "800103", "[0,[0]]=800103"); // context tag
+equal(ASN1HEX.getTLVbyListEx(h, 0, [0,"[1]"]), "810104", "[0,[1]]=810104"); // context tag
+equal(ASN1HEX.getTLVbyListEx(h, 0, [0,2]), "020105", "[0,2]=020105"); // skip context tag
+equal(ASN1HEX.getTLVbyListEx(h, 0, [0,3]), "020106", "[0,3]=020106"); // skip context tag
+})
+
 test("getVbyList exception1 tag-unmatch", function() {
-  throws(function() {
-    ASN1HEX.getVbyList("3006020104020105", 0, [0, 0], "33");
-  },
-  /check/,
-  "throw tag unmatch");
+equal(ASN1HEX.getVbyList("3006020104020105", 0, [0, 0], "33"), 
+  null,
+  "null when tag unmatch");
 });
 
 test("getVbyList exception1 tag-unmatch2", function() {
-  throws(function() {
-    ASN1HEX.getVbyList("3006020104020105", 0, [300], "30");
-  },
-  /can't find/,
-  "throw tag unmatch");
+equal(ASN1HEX.getVbyList("3006020104020105", 0, [300], "30"),
+  null,
+  "null when tag unmatch");
 });
 
 test("getVbyList int values", function() {
-  expect(2);
   equal(ASN1HEX.getVbyList("3006020104020105", 0, [0], "02"), "04", "4");
   equal(ASN1HEX.getVbyList("3006020104020105", 0, [1], "02"), "05", "5");
 });
 
 test("getVbyList DSA signature int values", function() {
   var s = "302c02146e41015afd8597894f42f466dde2190ebba6f15e0214787f9380a3a33011c88bf877df7ac3b8a62b854c";
-  expect(2);
   equal(ASN1HEX.getVbyList(s, 0, [0], "02"), "6e41015afd8597894f42f466dde2190ebba6f15e", "4");
   equal(ASN1HEX.getVbyList(s, 0, [1], "02"), "787f9380a3a33011c88bf877df7ac3b8a62b854c", "5");
 });
+
+/*
+3015 seq idx=0
+  3013 seq idx=4
+    020101 int:1 idx=8
+    020102 int:2 idx=14
+    800103 [0]:3 idx=20
+    810104 [1]:4 idx=26
+    020105 int:5 idx=32
+    03020006 int:6 idx=38
+ */
+test("ASN1HEX.getVbyListEx", function() { 
+var h = "3015301302010102010280010381010402010503020006";
+equal(ASN1HEX.getVbyListEx(h, 0, [0,1]), "02", "[0,1]=02");
+equal(ASN1HEX.getVbyListEx(h, 0, [0,"[0]"]), "03", "[0,[0]]=03"); // context tag
+equal(ASN1HEX.getVbyListEx(h, 0, [0,"[1]"]), "04", "[0,[1]]=04"); // context tag
+equal(ASN1HEX.getVbyListEx(h, 0, [0,2]), "05", "[0,2]=05"); // skip context tag
+equal(ASN1HEX.getVbyListEx(h, 0, [0,3]), "06", "[0,3]=06"); // skip context tag
+equal(ASN1HEX.getVbyListEx(h, 0, [0,3], "03", false), "0006", "[0,3]=0006"); // don't remove unusedbits
+})
 
 /*
 test("oidstrtohex", function() {
@@ -209,6 +335,18 @@ test("getDecendantIndexByNthList", function() {
   equal(ASN1HEX.getIdxbyList(h, 0, [1, 0, 1]), 40, "bitstr seq int6") 
 });
 
+/*
+h = 
+SEQUENCE
+  SEQUENCE
+    INTEGER 1a
+    INTEGER 1b
+    INTEGER 1c
+  SEQUENCE
+    INTEGER 2a
+    INTEGER 2b
+    INTEGER 2c
+ */
 test("getIdxbyList", function() { 
   var h = "3016300902011a02011b02011c300902012a02012b02012c";
   equal(ASN1HEX.getChildIdx(h, 0).join("/"), "4/26", "array level 1");
@@ -223,23 +361,39 @@ test("getIdxbyList", function() {
   equal(ASN1HEX.getIdxbyList(h, 0, [1, 0]), 30, "(1,0)=30");
   equal(ASN1HEX.getIdxbyList(h, 0, [1, 1]), 36, "(1,1)=36");
   equal(ASN1HEX.getIdxbyList(h, 0, [1, 2]), 42, "(1,2)=42");
+  equal(ASN1HEX.getIdxbyList(h, 0, [1, 5]), -1, "no [1,5]");
   equal(ASN1HEX.getTLV(h, 36), "02012b", "02012b");
-
-});
-
-test("getIdxbyList exception1 tag-unmatch", function() {
-  var h = "3016300902011a02011b02011c300902012a02012b02012c";
-  throws(function() {
-    ASN1HEX.getIdxbyList(h, 0, [0], "31");
-  },
-  /check/,
-  "(0)=4 with checkTag=31 shall fail");
+  equal(ASN1HEX.getIdxbyList(h, 0, [0], "31"), -1, "(0)=4 with checkTag=31 shall fail");
 });
 
 test("oidname", function() {
   equal(ASN1HEX.oidname("2.5.29.37"), "extKeyUsage", "2.5.29.37 > extKeyUsage");
   equal(ASN1HEX.oidname("551d25"), "extKeyUsage", "551d25 > extKeyUsage");
   equal(ASN1HEX.oidname("0.1.2.3"), "0.1.2.3", "0.1.2.3 > 0.1.2.3");
+});
+
+test("ASN1HEX.isASN1HEX test", function() {
+equal(ASN1HEX.isASN1HEX("030101"), true, "030101 > true");
+equal(ASN1HEX.isASN1HEX("3003020101"), true, "3003020101 > true");
+equal(ASN1HEX.isASN1HEX("010203"), false, "010203 > false");
+equal(ASN1HEX.isASN1HEX(sZ4_CERPEM), false, "sZ4_CERPEM > false");
+});
+
+test("isContextTag without sTag test", function() {
+equal(ASN1HEX.isContextTag("a0"), true, "a0=true");
+equal(ASN1HEX.isContextTag("80"), true, "80=true");
+equal(ASN1HEX.isContextTag("30"), false, "30=false");
+equal(ASN1HEX.isContextTag("06"), false, "06=false");
+});
+
+test("isContextTag with sTag test", function() {
+equal(ASN1HEX.isContextTag("a0", "[0]"), true, "a0=[0] true");
+equal(ASN1HEX.isContextTag("a1", "[1]"), true, "a1=[1] true");
+equal(ASN1HEX.isContextTag("bf", "[31]"), true, "bf=[31] true");
+equal(ASN1HEX.isContextTag("80", "[0]"), true, "80=[0] true");
+equal(ASN1HEX.isContextTag("81", "[1]"), true, "81=[1] true");
+equal(ASN1HEX.isContextTag("81", "abcd"), false, "81=abcd false");
+equal(ASN1HEX.isContextTag("a0", "[3]"), false, "a0=[3] false");
 });
 
 });

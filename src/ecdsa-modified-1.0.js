@@ -1,4 +1,4 @@
-/* ecdsa-modified-1.1.2.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
+/* ecdsa-modified-1.1.4.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
  */
 /*
  * ecdsa-modified.js - modified Bitcoin.ECDSA class
@@ -13,7 +13,7 @@
  * @fileOverview
  * @name ecdsa-modified-1.0.js
  * @author Stefan Thomas (github.com/justmoon) and Kenji Urushima (kenji.urushima@gmail.com)
- * @version jsrsasign 8.0.15 ecdsa-modified 1.1.2 (2020-Apr-12)
+ * @version jsrsasign 8.0.21 ecdsa-modified 1.1.4 (2020-Jul-24)
  * @since jsrsasign 4.0
  * @license <a href="https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE">MIT License</a>
  */
@@ -47,10 +47,15 @@ KJUR.crypto.ECDSA = function(params) {
     var ecparams = null;
     var prvKeyHex = null;
     var pubKeyHex = null;
-    var _BigInteger = BigInteger,
+    var _Error = Error,
+	_BigInteger = BigInteger,
 	_ECPointFp = ECPointFp,
 	_KJUR_crypto_ECDSA = KJUR.crypto.ECDSA,
-	_KJUR_crypto_ECParameterDB = KJUR.crypto.ECParameterDB;
+	_KJUR_crypto_ECParameterDB = KJUR.crypto.ECParameterDB,
+	_getName = _KJUR_crypto_ECDSA.getName,
+	_ASN1HEX = ASN1HEX,
+	_getVbyListEx = _ASN1HEX.getVbyListEx,
+	_isASN1HEX = _ASN1HEX.isASN1HEX;
 
     var rng = new SecureRandom();
 
@@ -262,18 +267,22 @@ KJUR.crypto.ECDSA = function(params) {
      * var result = ec.verifyHex(msgHashHex, sigHex, pubkeyHex);
      */
     this.verifyHex = function(hashHex, sigHex, pubkeyHex) {
-	var r,s;
+	try {
+	    var r,s;
 
-	var obj = _KJUR_crypto_ECDSA.parseSigHex(sigHex);
-	r = obj.r;
-	s = obj.s;
+	    var obj = _KJUR_crypto_ECDSA.parseSigHex(sigHex);
+	    r = obj.r;
+	    s = obj.s;
+	    
+	    var Q = _ECPointFp.decodeFromHex(this.ecparams['curve'], pubkeyHex);
 
-	var Q = _ECPointFp.decodeFromHex(this.ecparams['curve'], pubkeyHex);
+	    // message hash is truncated with curve key length (FIPS 186-4 6.4)
+            var e = new _BigInteger(hashHex.substring(0, this.ecparams.keylen / 4), 16);
 
-	// message hash is truncated with curve key length (FIPS 186-4 6.4)
-        var e = new _BigInteger(hashHex.substring(0, this.ecparams.keylen / 4), 16);
-
-	return this.verifyRaw(e, r, s, Q);
+	    return this.verifyRaw(e, r, s, Q);
+	} catch (ex) {
+	    return false;
+	}
     };
 
     this.verify = function (hash, sig, pubkey) {
@@ -417,22 +426,18 @@ KJUR.crypto.ECDSA = function(params) {
      * @since jsrsasign 7.1.0 ecdsa-modified 1.1.0
      */
     this.readPKCS5PrvKeyHex = function(h) {
-	var _ASN1HEX = ASN1HEX,
-	    _getName = _KJUR_crypto_ECDSA.getName,
-	    _getVbyList = _ASN1HEX.getVbyList;
-
-	if (_ASN1HEX.isASN1HEX(h) === false)
-	    throw "not ASN.1 hex string";
+	if (_isASN1HEX(h) === false)
+	    throw new Error("not ASN.1 hex string");
 
 	var hCurve, hPrv, hPub;
 	try {
-	    hCurve = _getVbyList(h, 0, [2, 0], "06");
-	    hPrv   = _getVbyList(h, 0, [1], "04");
+	    hCurve = _getVbyListEx(h, 0, ["[0]", 0], "06");
+	    hPrv   = _getVbyListEx(h, 0, [1], "04");
 	    try {
-		hPub = _getVbyList(h, 0, [3, 0], "03").substr(2);
+		hPub = _getVbyListEx(h, 0, ["[1]", 0], "03");
 	    } catch(ex) {};
 	} catch(ex) {
-	    throw "malformed PKCS#1/5 plain ECC private key";
+	    throw new Error("malformed PKCS#1/5 plain ECC private key");
 	}
 
 	this.curveName = _getName(hCurve);
@@ -453,27 +458,24 @@ KJUR.crypto.ECDSA = function(params) {
      * @since jsrsasign 7.1.0 ecdsa-modified 1.1.0
      */
     this.readPKCS8PrvKeyHex = function(h) {
-	var _ASN1HEX = ASN1HEX;
-	var _getName = KJUR.crypto.ECDSA.getName;
-	var _getVbyList = _ASN1HEX.getVbyList;
-
-	if (_ASN1HEX.isASN1HEX(h) === false)
-	    throw "not ASN.1 hex string";
+	if (_isASN1HEX(h) === false)
+	    throw new _Error("not ASN.1 hex string");
 
 	var hECOID, hCurve, hPrv, hPub;
 	try {
-	    hECOID = _getVbyList(h, 0, [1, 0], "06");
-	    hCurve = _getVbyList(h, 0, [1, 1], "06");
-	    hPrv   = _getVbyList(h, 0, [2, 0, 1], "04");
+	    hECOID = _getVbyListEx(h, 0, [1, 0], "06");
+	    hCurve = _getVbyListEx(h, 0, [1, 1], "06");
+	    hPrv   = _getVbyListEx(h, 0, [2, 0, 1], "04");
 	    try {
-		hPub = _getVbyList(h, 0, [2, 0, 2, 0], "03").substr(2);
+		hPub = _getVbyListEx(h, 0, [2, 0, "[1]", 0], "03"); //.substr(2);
 	    } catch(ex) {};
 	} catch(ex) {
-	    throw "malformed PKCS#8 plain ECC private key";
+	    throw new _Error("malformed PKCS#8 plain ECC private key");
 	}
 
 	this.curveName = _getName(hCurve);
-	if (this.curveName === undefined) throw "unsupported curve name";
+	if (this.curveName === undefined)
+	    throw new _Error("unsupported curve name");
 
 	this.setNamedCurve(this.curveName);
 	this.setPublicKeyHex(hPub);
@@ -490,24 +492,21 @@ KJUR.crypto.ECDSA = function(params) {
      * @since jsrsasign 7.1.0 ecdsa-modified 1.1.0
      */
     this.readPKCS8PubKeyHex = function(h) {
-	var _ASN1HEX = ASN1HEX;
-	var _getName = KJUR.crypto.ECDSA.getName;
-	var _getVbyList = _ASN1HEX.getVbyList;
-
-	if (_ASN1HEX.isASN1HEX(h) === false)
-	    throw "not ASN.1 hex string";
+	if (_isASN1HEX(h) === false)
+	    throw new _Error("not ASN.1 hex string");
 
 	var hECOID, hCurve, hPub;
 	try {
-	    hECOID = _getVbyList(h, 0, [0, 0], "06");
-	    hCurve = _getVbyList(h, 0, [0, 1], "06");
-	    hPub = _getVbyList(h, 0, [1], "03").substr(2);
+	    hECOID = _getVbyListEx(h, 0, [0, 0], "06");
+	    hCurve = _getVbyListEx(h, 0, [0, 1], "06");
+	    hPub = _getVbyListEx(h, 0, [1], "03"); //.substr(2); 
 	} catch(ex) {
-	    throw "malformed PKCS#8 ECC public key";
+	    throw new _Error("malformed PKCS#8 ECC public key");
 	}
 
 	this.curveName = _getName(hCurve);
-	if (this.curveName === null) throw "unsupported curve name";
+	if (this.curveName === null)
+	    throw new _Error("unsupported curve name");
 
 	this.setNamedCurve(this.curveName);
 	this.setPublicKeyHex(hPub);
@@ -523,24 +522,20 @@ KJUR.crypto.ECDSA = function(params) {
      * @since jsrsasign 7.1.0 ecdsa-modified 1.1.0
      */
     this.readCertPubKeyHex = function(h, nthPKI) {
-	if (nthPKI !== 5) nthPKI = 6;
-	var _ASN1HEX = ASN1HEX;
-	var _getName = _KJUR_crypto_ECDSA.getName;
-	var _getVbyList = _ASN1HEX.getVbyList;
-
-	if (_ASN1HEX.isASN1HEX(h) === false)
-	    throw "not ASN.1 hex string";
+	if (_isASN1HEX(h) === false)
+	    throw new _Error("not ASN.1 hex string");
 
 	var hCurve, hPub;
 	try {
-	    hCurve = _getVbyList(h, 0, [0, nthPKI, 0, 1], "06");
-	    hPub = _getVbyList(h, 0, [0, nthPKI, 1], "03").substr(2);
+	    hCurve = _getVbyListEx(h, 0, [0, 5, 0, 1], "06");
+	    hPub = _getVbyListEx(h, 0, [0, 5, 1], "03");
 	} catch(ex) {
-	    throw "malformed X.509 certificate ECC public key";
+	    throw new _Error("malformed X.509 certificate ECC public key");
 	}
 
 	this.curveName = _getName(hCurve);
-	if (this.curveName === null) throw "unsupported curve name";
+	if (this.curveName === null)
+	    throw new _Error("unsupported curve name");
 
 	this.setNamedCurve(this.curveName);
 	this.setPublicKeyHex(hPub);
@@ -663,6 +658,9 @@ KJUR.crypto.ECDSA = function(params) {
  * @param {String} sigHex hexadecimal string of ECDSA signature value
  * @return {Array} associative array of signature field r and s of BigInteger
  * @since ecdsa-modified 1.0.1
+ * @see {@link KJUR.crypto.ECDSA.parseSigHexInHexRS}
+ * @see {@link ASN1HEX.checkStrictDER}
+ * @throws Error when signature value is malformed.
  * @example
  * var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
  * var sig = ec.parseSigHex('30...');
@@ -686,6 +684,9 @@ KJUR.crypto.ECDSA.parseSigHex = function(sigHex) {
  * @param {String} sigHex hexadecimal string of ECDSA signature value
  * @return {Array} associative array of signature field r and s in hexadecimal
  * @since ecdsa-modified 1.0.3
+ * @see {@link KJUR.crypto.ECDSA.parseSigHex}
+ * @see {@link ASN1HEX.checkStrictDER}
+ * @throws Error when signature value is malformed.
  * @example
  * var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
  * var sig = ec.parseSigHexInHexRS('30...');
@@ -697,27 +698,31 @@ KJUR.crypto.ECDSA.parseSigHexInHexRS = function(sigHex) {
 	_getChildIdx = _ASN1HEX.getChildIdx,
 	_getV = _ASN1HEX.getV;
 
-    // 1. ASN.1 Sequence Check
+    // 1. strict DER check
+    _ASN1HEX.checkStrictDER(sigHex, 0);
+
+    // 2. ASN.1 Sequence Check
     if (sigHex.substr(0, 2) != "30")
-	throw "signature is not a ASN.1 sequence";
+	throw new Error("signature is not a ASN.1 sequence");
 
     // 2. Items of ASN.1 Sequence Check
     var a = _getChildIdx(sigHex, 0);
     if (a.length != 2)
-	throw "number of signature ASN.1 sequence elements seem wrong";
-    
-    // 3. Integer check
+	throw new Error("signature shall have two elements");
+
+    // 3. Integer tag check
     var iTLV1 = a[0];
     var iTLV2 = a[1];
-    if (sigHex.substr(iTLV1, 2) != "02")
-	throw "1st item of sequene of signature is not ASN.1 integer";
-    if (sigHex.substr(iTLV2, 2) != "02")
-	throw "2nd item of sequene of signature is not ASN.1 integer";
 
-    // 4. getting value
+    if (sigHex.substr(iTLV1, 2) != "02")
+	throw new Error("1st item not ASN.1 integer");
+    if (sigHex.substr(iTLV2, 2) != "02")
+	throw new Error("2nd item not ASN.1 integer");
+
+    // 4. getting value and least zero check for DER
     var hR = _getV(sigHex, iTLV1);
     var hS = _getV(sigHex, iTLV2);
-    
+
     return {'r': hR, 's': hS};
 };
 

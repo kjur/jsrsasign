@@ -101,6 +101,33 @@ test("KJUR.lang.String.isIntegerArray", function() {
   equal(KJUR.lang.String.isIntegerArray("[a,3,4]"), false, "[a,3,4]");
 });
 
+test("KJUR.lang.String.isPrintable test", function() {
+var _isPrintable = KJUR.lang.String.isPrintable;
+equal(_isPrintable("abc"), true, "abc > true");
+equal(_isPrintable("abc@"), false, "abc@ > false");
+equal(_isPrintable("あいう"), false, "あいう > false");
+equal(_isPrintable("abc_"), false, "abc_ > false");
+});
+
+test("KJUR.lang.String.isIA5 test", function() {
+var _isIA5 = KJUR.lang.String.isIA5;
+equal(_isIA5("abc"), true, "abc > true");
+equal(_isIA5("abc@"), true, "abc@ > true");
+equal(_isIA5('"abc"'), false, '"abc" > false');
+equal(_isIA5("あいう"), false, "あいう > false");
+});
+
+test("KJUR.lang.String.isMail test", function() {
+var _isMail = KJUR.lang.String.isMail;
+equal(_isMail("abc"), false, "abc > false");
+equal(_isMail("abc@"), false, "abc@ > false");
+equal(_isMail("abc@example"), false, "abc@example > false");
+equal(_isMail("abc@example.com"), true, "abc@example.com > true");
+equal(_isMail("abc-1@example.com"), true, "abc-1@example.com > true");
+equal(_isMail("abc_2@example.com"), true, "abc_2@example.com > true");
+equal(_isMail("あいう"), false, "あいう > false");
+});
+
 test("hextoArrayBuffer", function() {
   var a = new Uint8Array(hextoArrayBuffer("00010203ff"));
   equal(a[0], 0, "00010203ff 0");

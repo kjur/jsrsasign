@@ -23,6 +23,11 @@ $(document).ready(function(){
 
 // ======= TEST ===============================================================
 
+test("asn1 test", function() {
+  equal(KJUR.asn1.ASN1Util.newObject({'asn1': {'tlv': '030101'}}).getEncodedHex(), "030101", "asn1 tlv=030101");
+});
+
+
 test("boolean test", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'bool': {}}).getEncodedHex(), "0101ff", "boolean test1");
 });
@@ -43,105 +48,75 @@ test("bitstr test unused:0 1a2b", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'bitstr': '001a2b'}).getEncodedHex(), "0303001a2b", "test1");
 });
 
-test("octstr test 1a2b", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'octstr': {'hex': '1a2b'}}).getEncodedHex(), "04021a2b", "test1");
+test("octstr test", function() {
+  equal(KJUR.asn1.ASN1Util.newObject({'octstr': {'hex': '1a2b'}}).getEncodedHex(), "04021a2b", "test1 04021a2b");
+  equal(KJUR.asn1.ASN1Util.newObject({'octstr': 'abc'}).getEncodedHex(), "0403616263", "test1 abc=0403616263");
 });
-
-test("octstr test abc", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'octstr': 'abc'}).getEncodedHex(), "0403616263", "test1");
-});
-
 
 test("null test", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'null': {}}).getEncodedHex(), "0500", "test1");
 });
 
-test("oid test 2.5.4.5", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'oid': {'oid': '2.5.4.5'}}).getEncodedHex(), "0603550405", "test1");
+test("oid test", function() {
+  equal(KJUR.asn1.ASN1Util.newObject({'oid': {'oid': '2.5.4.5'}}).getEncodedHex(), "0603550405", "{oid: {oid: 2.5.4.5}}");
+  equal(KJUR.asn1.ASN1Util.newObject({'oid': '2.5.4.5'}).getEncodedHex(), "0603550405", "{oid: 2.5.4.5}");
+  equal(KJUR.asn1.ASN1Util.newObject({'oid': 'keyUsage'}).getEncodedHex(), "0603551d0f", "keyUsage");
+  equal(KJUR.asn1.ASN1Util.newObject({'oid': 'countryName'}).getEncodedHex(), "0603550406", "countryName");
 });
 
-test("oid test 2.5.4.5", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'oid': '2.5.4.5'}).getEncodedHex(), "0603550405", "test1");
-});
-
-test("oid test keyUsage", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'oid': 'keyUsage'}).getEncodedHex(), "0603551d0f", "test1");
-});
-
-test("oid test countryName", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'oid': 'countryName'}).getEncodedHex(), "0603550406", "test1");
-});
-
-test("utf8str test aaa", function() {
+test("utf8str test", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'utf8str': {'str': 'aaa'}}).getEncodedHex(), "0c03616161", "test1");
-});
-
-test("utf8str test aaa", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'utf8str': 'aaa'}).getEncodedHex(), "0c03616161", "test1");
 });
 
-test("numstr test 123", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'numstr': {'str': '123'}}).getEncodedHex(), "1203313233", "test1");
-});
-
-test("numstr test 123", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'numstr': '123'}).getEncodedHex(), "1203313233", "test1");
+test("numstr test", function() {
+  equal(KJUR.asn1.ASN1Util.newObject({'numstr': {'str': '123'}}).getEncodedHex(), "1203313233", "{str: 123}");
+  equal(KJUR.asn1.ASN1Util.newObject({'numstr': '123'}).getEncodedHex(), "1203313233", "123");
 });
 
 test("prnstr test aaa", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'prnstr': {'str': 'aaa'}}).getEncodedHex(), "1303616161", "test1");
+  equal(KJUR.asn1.ASN1Util.newObject({'prnstr': {'str': 'aaa'}}).getEncodedHex(), "1303616161", "{str: aaa}");
+  equal(KJUR.asn1.ASN1Util.newObject({'prnstr': 'aaa'}).getEncodedHex(), "1303616161", "aaa");
 });
 
-test("prnstr test aaa", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'prnstr': 'aaa'}).getEncodedHex(), "1303616161", "test1");
+test("telstr test", function() {
+  equal(KJUR.asn1.ASN1Util.newObject({'telstr': {'str': 'aaa'}}).getEncodedHex(), "1403616161", "{str: aaa}");
+  equal(KJUR.asn1.ASN1Util.newObject({'telstr': 'aaa'}).getEncodedHex(), "1403616161", "aaa");
 });
 
-test("telstr test aaa", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'telstr': {'str': 'aaa'}}).getEncodedHex(), "1403616161", "test1");
-});
-
-test("telstr test aaa", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'telstr': 'aaa'}).getEncodedHex(), "1403616161", "test1");
-});
-
-test("ia5str test aaa", function() {
+test("ia5str test", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'ia5str': {'str': 'aaa'}}).getEncodedHex(), "1603616161", "test1");
-});
-
-test("ia5str test aaa", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'ia5str': 'aaa'}).getEncodedHex(), "1603616161", "test1");
 });
 
-test("utctime test 491231235959Z", function() {
+test("utctime test", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'utctime': {'str': '491231235959Z'}}).getEncodedHex(), "170d3439313233313233353935395a", "test1");
-});
-
-test("utctime test 491231235959Z", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'utctime': '491231235959Z'}).getEncodedHex(), "170d3439313233313233353935395a", "test1");
 });
 
-test("gentime test 20131231235959Z", function() {
+test("gentime test", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'gentime': {'str': '20131231235959Z'}}).getEncodedHex(), "180f32303133313233313233353935395a", "test1");
-});
-
-test("gentime test 20131231235959Z", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'gentime': '20131231235959Z'}).getEncodedHex(), "180f32303133313233313233353935395a", "test1");
 });
 
-test("seq test [int 3]", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'seq': [{'int': 3}]}).getEncodedHex(), "3003020103", "test1");
+test("visstr test", function() {
+  equal(KJUR.asn1.ASN1Util.newObject({'visstr': {'str': 'aaa'}}).getEncodedHex(), "1a03616161", "{str: aaa}");
+  equal(KJUR.asn1.ASN1Util.newObject({'visstr': 'aaa'}).getEncodedHex(), "1a03616161", "aaa");
 });
 
-test("seq test [int 3, int 4]", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'seq': [{'int': 3}, {'int': 4}]}).getEncodedHex(), "3006020103020104", "test1");
+test("bmpstr test", function() {
+  equal(KJUR.asn1.ASN1Util.newObject({'bmpstr': {'str': 'aaa'}}).getEncodedHex(), "1e03616161", "{str: aaa}");
+  equal(KJUR.asn1.ASN1Util.newObject({'bmpstr': 'aaa'}).getEncodedHex(), "1e03616161", "aaa");
 });
 
-test("set test [int 3]", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'set': [{'int': 3}]}).getEncodedHex(), "3103020103", "test1");
+test("seq test", function() {
+  equal(KJUR.asn1.ASN1Util.newObject({'seq': [{'int': 3}]}).getEncodedHex(), "3003020103", "[int 3]");
+  equal(KJUR.asn1.ASN1Util.newObject({'seq': [{'int': 3}, {'int': 4}]}).getEncodedHex(), "3006020103020104", "[int 3, int 4]");
 });
 
-test("set test [int 3, int 4]", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'set': [{'int': 3}, {'int': 4}]}).getEncodedHex(), "3106020103020104", "test1");
+test("set test", function() {
+  equal(KJUR.asn1.ASN1Util.newObject({'set': [{'int': 3}]}).getEncodedHex(), "3103020103", "[int 3]");
+  equal(KJUR.asn1.ASN1Util.newObject({'set': [{'int': 3}, {'int': 4}]}).getEncodedHex(), "3106020103020104", "[int 3, int 4]");
 });
 
 test("tag test seq [int 3, int 4] implicit", function() {
@@ -154,6 +129,16 @@ test("tag test seq [int 3, int 4] explicit", function() {
 
 test("tag test seq [int 3, int 4] explicit", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'tag': ['a1', true, {'seq': [{'int': 3}, {'int': 4}]}]}).getEncodedHex(), "a1083006020103020104", "test1");
+});
+
+test("tag test", function() {
+var _newObject = KJUR.asn1.ASN1Util.newObject;
+
+var params = {tag: {tage: "a3", obj: {seq: [{'int': 3}, {'int': 4}]}}};
+equal(_newObject(params).getEncodedHex(), "a3083006020103020104", "test1");
+
+var params = {tag: {tagi: "a4", obj: {seq: [{'int': 3}, {'int': 4}]}}};
+equal(_newObject(params).getEncodedHex(), "a406020103020104", "test1");
 });
 
 test("tag test RFC 3161 TSP Accuracy 500ms", function() {
@@ -175,5 +160,9 @@ equal(result, "3006020104020105", "seq int int");
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
+<a href="index.html">TEST INDEX</a> | 
+<a href="../api/index.html">API</a> | 
+<a href="qunit-do-asn1.html">asn1</a> |
+<a href="qunit-do-asn1-newobj.html">asn1-newobj</a> |
 </body>
 </html>

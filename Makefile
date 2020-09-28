@@ -19,8 +19,9 @@ FILES_MIN = \
 	min/rsasign-1.2.min.js \
 	min/x509-1.1.min.js \
 	min/jws-3.3.min.js \
-	min/jwsjs-2.0.min.js
-
+	min/jwsjs-2.0.min.js \
+	min/x509crl.min.js
+ 
 FILES_EXT_MIN = \
 	ext/ec-min.js \
 	ext/rsa-min.js \
@@ -37,3 +38,12 @@ min/%.min.js: src/%.js
 
 ext/%-min.js: ext/%.js
 	yuicmp $^ -o $@
+
+gitadd-all-doc:
+	git add api/*.html api/symbols/*.html api/symbols/src/*.html
+
+gitadd-release:
+	git add ChangeLog.txt Makefile bower.json jsrsasign-*-min.js min/*.js src/*.js npm/package.json npm/lib/jsrsasign*.js npm/lib/{header,footer,lib}.js src/*.js test/qunit-do-*.html README.md npm/README.md tool/*.html
+
+gitadd: gitadd-all-doc gitadd-release
+	@echo done

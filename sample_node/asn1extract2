@@ -1,0 +1,113 @@
+#!/usr/bin/env node
+
+/*
+ * asn1extract2 - extract data at any position from ASN.1 structured data
+ *
+ * Copyright (c) 2020 Kenji Urushima (kenji.urushima@gmail.com)
+ *
+ * This software is licensed under the terms of the MIT License.
+ * https://kjur.github.io/jsrsasign/license
+ *
+ * The above copyright and license notice shall be 
+ * included in all copies or substantial portions of the Software.
+ * 
+ * Please use '-h' option for this script usage.
+ * ---------------------------------------------------------
+ * DESCRIPTION
+ *   This script extracts descendant ASN.1 structure data from ASN.1 
+ *   DER data file by specifying index list in the ASN.1 nested
+ *   structures.
+ *
+ * USAGE
+ *   extract ASN.1 structure specified 0,0,0,1 position
+ *   % asn1extract2 -i in.der -out out.der -l 0,0,0,1
+ *   extract children at the position specified 0,1,0
+ *   % asn1extract2 -i in.der -out out.der -l 0,1,0
+ *     > out.1.der, out.2.der ...
+ */
+
+var program = require('commander');
+var rs = require('jsrsasign');
+var rsu = require('jsrsasign-util');
+var path = require('path');
+
+function _getIdxFileName(file, idx) {
+  var result = file;
+  var a = file.match(/^(.+)[.]([^.]+)$/);
+  if (a != undefined) {
+    result = a[1] + "." + idx + "." + a[2];
+  }
+  return result;
+};
+
+program
+  .version('1.0.2 (2020-Jul-29)')
+  .description('extract arbitrary part of ASN.1 DER data by a list of position')
+  .usage('[options]')
+  .option('-i, --in <file>', 'input DER file')
+  .option('-o, --out <file>', 'extracted output DER file')
+  .option('-l, --list <list of positions n1,n2,n3...>', 'list of ASN.1 structure positions to extract')
+  .option('-c, --children', 'extract children for specified position')
+  .option('-v, --vonly', 'extract ASN.1 V value only')
+  .parse(process.argv);
+
+//console.log("in=" + program.in);
+//console.log("out=" + program.out);
+//console.log("list=" + program.list);
+if (program.in == undefined ||
+    program.out == undefined ||
+    program.list == undefined) {
+  throw "wrong arguments: in, out and list shall be specified";
+}
+
+var outFile = program.out;
+var inFile = program.in;
+var idxListStr = program.list.split(",");
+var idxList = idxListStr.map(function (i) {return  parseInt(i, 10);});
+
+var hIn;
+try {
+  hIn = rsu.readFileHexByBin(inFile);
+} catch(ex) {
+  throw "can't read file: " + inFile;
+}
+
+//console.log(idxList);
+
+var idx = rs.ASN1HEX.getIdxbyList(hIn, 0, idxList);
+//console.log("idx = %j", idx);
+
+if (program.children !== true) {
+  var hExtract;
+  if (program.vonly !== true) {
+    hExtract = rs.ASN1HEX.getTLV(hIn, idx);
+  } else {
+    hExtract = rs.ASN1HEX.getV(hIn, idx);
+    if (hIn.substr(idx, 2) == "03") {
+      hExtract = hExtract.substr(2); // bit string
+    }
+  }
+  //console.log(hExtract);
+  //console.log(rs.ASN1HEX.dump(hExtract));
+  rsu.saveFileBinByHex(outFile, hExtract);
+} else {
+  var idxChildren = rs.ASN1HEX.getChildIdx(hIn, idx);
+  //console.log(idxChildren.length);
+  for (var i = 0; i < idxChildren.length; i++) {
+    var outFileChild = _getIdxFileName(outFile, i + 1);
+    var hExtract;
+    if (program.vonly !== true) {
+      hExtract = rs.ASN1HEX.getTLV(hIn, idxChildren[i]);
+    } else {
+      hExtract = rs.ASN1HEX.getV(hIn, idxChildren[i]);
+      if (hIn.substr(idx, 2) == "03") {
+        hExtract = hExtract.substr(2); // bit string
+      }
+    }
+    rsu.saveFileBinByHex(outFileChild, hExtract);
+  } 
+}
+
+
+
+

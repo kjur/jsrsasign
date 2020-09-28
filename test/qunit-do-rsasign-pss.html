@@ -44,34 +44,35 @@
 $(document).ready(function(){
 
 // _work_pss/kp1.prv.pem
-var sKp1PrvPEM = "" + 
-"-----BEGIN RSA PRIVATE KEY-----\n" +
-"MIIEpQIBAAKCAQEArwrxcCYEd97QIzTK6NJukvJjL2TsJMM0TGtznkM60/LxiWpA\n" +
-"LrG6nyVUE3hlZviSeQz59x8Wg7rELKNVckBj4nOMUUfdJCGJHVPRShL+4gK7R1Zs\n" +
-"ctgzqOCrEvmbMZxs+Lql29L9UoKHJPOaLLHJHJGnGB2uXmZ5cYvg2c5JMhAgzocb\n" +
-"HzBW9M24D5ZtDGPabub+pLptieS/Cpb39kFL2IF4o+nLPgGvNtw0NKzG4deljZYJ\n" +
-"q7FFDC0lvxOIG2Jhr3F+2oU7o7zr0vn3lrbKYK8Ppo+9mKTf5r+l+nwCWm14hNpa\n" +
-"PZM5M8UKCfPWSsMH01OZ5x/4/KdWkteyyUwYtwIDAQABAoIBAQCt/C2RcGhekXzG\n" +
-"kbHiC0/XBdAqiqDhxZlVIDSyqVZu13rXQGH9R7EcgKj6FWCNIiPM6GYJCMCDPP/C\n" +
-"8rJ6tp/RtVJSdCDNyfuUx/wuKYVpNpfZx4BSAq4OfQnt+WYVwMrbzAIR5rze51jX\n" +
-"FL85D5m7qNaydMYdlLO/de6P76f3dkTBkg6aloyCcQ3G5q6PnAWS5U8rBEKfNqYK\n" +
-"cNj9t6TGVgVW88/aemygfvpmNHo9Gq8i2URKoWpGnHhGMYx4r3FYLitZWGJrZbEj\n" +
-"E+ChTzrt8uTnjsO/+aFHNpEDFUXJbQKYx+gd47Fx5n6KGQZoXvyAtjgcQxh0Hhdg\n" +
-"NMrGc0dJAoGBAOHaQALrV1G/g8s+yMoma5O87DprJyrWx+7tNwnIKmcK7t4zsrpn\n" +
-"lvofMfEpl7G4CbEB4C3gHJ7VCOi4GZlUG/B4QX5H5OWnMo5wWamXkxqEYCQrtmn/\n" +
-"fujKMo8x3a2gOYUid9nNidhp37rO5VT7yH2t2xTWPccEd+kIzT+5b78LAoGBAMZo\n" +
-"cIPwb9rX7lA+QxGhiRn5Do2xG0Ppgnm4/CTHxWKLnAdOOHYvgOM151BZbhgPsb7H\n" +
-"N0VVhsnsNeBbU0HwWunFlDGi0JSpdxIUqf8+cH8i8xfw//Xm1nUuOoUoRaMBSNSU\n" +
-"D6Wyu3pBmREmrX8fNXAmqaMHorhQQsfoLYg2QIiFAoGBAJPFuRwv33IdXJ4e9kFN\n" +
-"4hVIB0gx0+6zmR07GEfOL/A7tw6rxMUyAhalUof4LsiZIb4u+/8II7HIsYuS6Szp\n" +
-"W157UF7Pq3SXcPzBhejww88VzdHcx/2SrfaiVXJbri9sJjZ11vUrBoYSv8/6jxKL\n" +
-"qyKQHkgD5WfSBKL0n1aSfgsBAoGAUa0+3GHHejy4A1qOO5zXFtUbc6L8CWoAZ2GK\n" +
-"kw2WKSo10iAWSDjoAyD2l3IpS0hysInMLAO4WDmgODsAPD3Y/zFx/zj6Sqi0tsHA\n" +
-"9a1bnErj7fAtPqqHkHe2aYiZmi/2LmTBSEIawYptm8zjUVikpAWWgeGrz9pik272\n" +
-"B4Pl7w0CgYEAih9HO13AC4AShIrEKds9/gKPVGMrLj5roi5nWub1dIqSRpKItWnH\n" +
-"2VjwBLOvVP+1DbWo7EKrl+zZcxy2H356i9BTvoYyzfDNrmJdEyN9D5fJSQEMgF9N\n" +
-"Utf20Qd+GSbiGUtPMQUQCqsLLHuVQ9M/CRTZqZfiEAcsIewil+aU+BA=\n" +
-"-----END RSA PRIVATE KEY-----\n";
+var sKp1PrvPEM = (function() {/*
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpQIBAAKCAQEArwrxcCYEd97QIzTK6NJukvJjL2TsJMM0TGtznkM60/LxiWpA
+LrG6nyVUE3hlZviSeQz59x8Wg7rELKNVckBj4nOMUUfdJCGJHVPRShL+4gK7R1Zs
+ctgzqOCrEvmbMZxs+Lql29L9UoKHJPOaLLHJHJGnGB2uXmZ5cYvg2c5JMhAgzocb
+HzBW9M24D5ZtDGPabub+pLptieS/Cpb39kFL2IF4o+nLPgGvNtw0NKzG4deljZYJ
+q7FFDC0lvxOIG2Jhr3F+2oU7o7zr0vn3lrbKYK8Ppo+9mKTf5r+l+nwCWm14hNpa
+PZM5M8UKCfPWSsMH01OZ5x/4/KdWkteyyUwYtwIDAQABAoIBAQCt/C2RcGhekXzG
+kbHiC0/XBdAqiqDhxZlVIDSyqVZu13rXQGH9R7EcgKj6FWCNIiPM6GYJCMCDPP/C
+8rJ6tp/RtVJSdCDNyfuUx/wuKYVpNpfZx4BSAq4OfQnt+WYVwMrbzAIR5rze51jX
+FL85D5m7qNaydMYdlLO/de6P76f3dkTBkg6aloyCcQ3G5q6PnAWS5U8rBEKfNqYK
+cNj9t6TGVgVW88/aemygfvpmNHo9Gq8i2URKoWpGnHhGMYx4r3FYLitZWGJrZbEj
+E+ChTzrt8uTnjsO/+aFHNpEDFUXJbQKYx+gd47Fx5n6KGQZoXvyAtjgcQxh0Hhdg
+NMrGc0dJAoGBAOHaQALrV1G/g8s+yMoma5O87DprJyrWx+7tNwnIKmcK7t4zsrpn
+lvofMfEpl7G4CbEB4C3gHJ7VCOi4GZlUG/B4QX5H5OWnMo5wWamXkxqEYCQrtmn/
+fujKMo8x3a2gOYUid9nNidhp37rO5VT7yH2t2xTWPccEd+kIzT+5b78LAoGBAMZo
+cIPwb9rX7lA+QxGhiRn5Do2xG0Ppgnm4/CTHxWKLnAdOOHYvgOM151BZbhgPsb7H
+N0VVhsnsNeBbU0HwWunFlDGi0JSpdxIUqf8+cH8i8xfw//Xm1nUuOoUoRaMBSNSU
+D6Wyu3pBmREmrX8fNXAmqaMHorhQQsfoLYg2QIiFAoGBAJPFuRwv33IdXJ4e9kFN
+4hVIB0gx0+6zmR07GEfOL/A7tw6rxMUyAhalUof4LsiZIb4u+/8II7HIsYuS6Szp
+W157UF7Pq3SXcPzBhejww88VzdHcx/2SrfaiVXJbri9sJjZ11vUrBoYSv8/6jxKL
+qyKQHkgD5WfSBKL0n1aSfgsBAoGAUa0+3GHHejy4A1qOO5zXFtUbc6L8CWoAZ2GK
+kw2WKSo10iAWSDjoAyD2l3IpS0hysInMLAO4WDmgODsAPD3Y/zFx/zj6Sqi0tsHA
+9a1bnErj7fAtPqqHkHe2aYiZmi/2LmTBSEIawYptm8zjUVikpAWWgeGrz9pik272
+B4Pl7w0CgYEAih9HO13AC4AShIrEKds9/gKPVGMrLj5roi5nWub1dIqSRpKItWnH
+2VjwBLOvVP+1DbWo7EKrl+zZcxy2H356i9BTvoYyzfDNrmJdEyN9D5fJSQEMgF9N
+Utf20Qd+GSbiGUtPMQUQCqsLLHuVQ9M/CRTZqZfiEAcsIewil+aU+BA=
+-----END RSA PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
 
 // _work_pss/kp1.pub.pem
 var sKp1PubPEM = "" + 
@@ -104,6 +105,16 @@ test("RSAPSS kp1.sig.aaa.-1.1 verify test", function() {
   var pubKey = KEYUTIL.getKey(sKp1PubPEM);
   var result = pubKey.verifyPSS("aaa", sKp1SigAAA1, "sha1", -1);
   equal(result, true, 'kp1.sig');
+});
+
+test("RSAPSS kp1.sig.aaa.-1.1 verify maleability test", function() {
+  var pubKey = KEYUTIL.getKey(sKp1PubPEM);
+
+  var result = pubKey.verifyPSS("aaa", "0000" + sKp1SigAAA1, "sha1", -1);
+  equal(result, false, '0000 + kp1.sig > false');
+
+  var result2 = pubKey.verifyPSS("aaa", sKp1SigAAA1 + "0000", "sha1", -1);
+  equal(result2, false, 'kp1.sig + 0000 > false');
 });
 
 test("RSAPSS kp1.sig.aaa.-1.2 verify test", function() {
@@ -141,8 +152,11 @@ test("RSAPSS kp1 sign and verify", function() {
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
+
+<p>
+<a href="../">TOP</a> | 
+<a href="index.html">TEST INDEX</a> | 
+</p>
+
 </body>
 </html>
-
-
-
