@@ -16,6 +16,7 @@ Public page is https://kjur.github.io/jsrsasign .
 
 NEWS
 ----
+- 2020-Oct-05: jsrsasign won [Google Open Source Peer Bonus Award](https://opensource.googleblog.com/2020/10/announcing-latest-google-open-source.html). Thank you Google.
 - 2020-Sep-23: 10.0.0 released for CMS SignedData related class including timestamp and CAdES architecture update
 - 2020-Aug-24: 9.1.0 released to new CRL APIs align with certificate
 - 2020-Aug-19: 9.0.0 released for major update of certificate and CSR generation and parsing without backward compatibility. Please see [migration guide](https://github.com/kjur/jsrsasign/wiki/NOTE-jsrsasign-8.0.x-to-9.0.0-Certificate-and-CSR-API-migration-guide) in detail.
@@ -31,7 +32,7 @@ HIGHLIGHTS
 - no dependency to other library
 - no dependency to [W3C Web Cryptography API](https://www.w3.org/TR/WebCryptoAPI/) nor [OpenSSL](https://www.openssl.org/)
 - no dependency on newer ECMAScirpt function. So old browsers also supported.
-- very popular crypto library with [0.6M+ npm downloads/month](https://npm-stat.com/charts.html?package=jsrsasign&from=2016-05-01&to=2020-09-02)
+- very popular crypto library with [0.6M+ npm downloads/month](https://npm-stat.com/charts.html?package=jsrsasign&from=2016-05-01&to=2020-10-11)
 
 INSTALL
 -------

@@ -1,4 +1,4 @@
-/* asn1x509-2.1.3.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-2.1.4.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.0.0 asn1x509 2.1.3 (2020-Sep-22)
+ * @version jsrsasign 10.0.1 asn1x509 2.1.4 (2020-Oct-12)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -456,6 +456,8 @@ KJUR.asn1.x509.Extensions = function(aParam) {
 		obj = new _KJUR_asn1_x509.OCSPNonce(param);
 	    } else if (extname == "ocspNoCheck") {
 		obj = new _KJUR_asn1_x509.OCSPNoCheck(param);
+	    } else if (extname == "adobeTimeStamp") {
+		obj = new _KJUR_asn1_x509.AdobeTimeStamp(param);
 	    } else {
 		throw new Error("extension not supported:"
 				+ JSON.stringify(param));
@@ -2528,6 +2530,73 @@ YAHOO.lang.extend(KJUR.asn1.x509.OCSPNoCheck, KJUR.asn1.x509.Extension);
 
 // === END   OCSP Related ===================================================
 
+// === BEGIN Other X.509v3 Extensions========================================
+
+/**
+ * AdobeTimeStamp X.509v3 extension ASN.1 encoder class<br/>
+ * @name KJUR.asn1.x509.AdobeTimeStamp
+ * @class AdobeTimeStamp X.509v3 extension ASN.1 encoder class
+ * @extends KJUR.asn1.x509.Extension
+ * @since jsrsasign 10.0.1 asn1x509 2.1.4
+ * @param {Array} params JSON object for AdobeTimeStamp extension parameter
+ * @see KJUR.asn1.x509.Extensions
+ * @see X509#getExtAdobeTimeStamp
+ * @description
+ * This class represents
+ * AdobeTimeStamp X.509v3 extension value defined in
+ * <a href="https://www.adobe.com/devnet-docs/acrobatetk/tools/DigSigDC/oids.html">
+ * Adobe site</a> as JSON object.
+ * <pre>
+ * adbe- OBJECT IDENTIFIER ::=  { adbe(1.2.840.113583) acrobat(1) security(1) x509Ext(9) 1 }
+ *  ::= SEQUENCE {
+ *     version INTEGER  { v1(1) }, -- extension version
+ *     location GeneralName (In v1 GeneralName can be only uniformResourceIdentifier)
+ *     requiresAuth        boolean (default false), OPTIONAL }
+ * </pre>
+ * Constructor of this class may have following parameters:
+ * <ul>
+ * <li>{String}uri - RFC 3161 time stamp service URL</li>
+ * <li>{Boolean}reqauth - authentication required or not</li>
+ * </ul>
+ * </pre>
+ * @example
+ * new KJUR.asn1.x509.AdobeTimesStamp({
+ *   uri: "http://tsa.example.com/",
+ *   reqauth: true
+ * }
+ */
+KJUR.asn1.x509.AdobeTimeStamp = function(params) {
+    KJUR.asn1.x509.AdobeTimeStamp.superclass.constructor.call(this, params);
+
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERInteger = _KJUR_asn1.DERInteger,
+	_DERBoolean = _KJUR_asn1.DERBoolean,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_GeneralName = _KJUR_asn1.x509.GeneralName;
+
+    this.params = null;
+
+    this.getExtnValueHex = function() {
+	var params = this.params;
+	var a = [new _DERInteger(1)];
+	a.push(new _GeneralName({uri: params.uri}));
+	if (params.reqauth != undefined) {
+	    a.push(new _DERBoolean(params.reqauth));
+	}
+
+        this.asn1ExtnValue = new _DERSequence({array: a});
+        return this.asn1ExtnValue.getEncodedHex();
+    };
+
+    this.oid = "1.2.840.113583.1.1.9.1";
+    if (params !== undefined) this.setByParam(params);
+};
+YAHOO.lang.extend(KJUR.asn1.x509.AdobeTimeStamp, KJUR.asn1.x509.Extension);
+ 
+// === END   Other X.509v3 Extensions========================================
+
+
 // === BEGIN X500Name Related =================================================
 /**
  * X500Name ASN.1 structure class
@@ -3924,7 +3993,8 @@ KJUR.asn1.x509.OID = new function(params) {
 	'signingTime':		'1.2.840.113549.1.9.5',//PKCS#9
 	'counterSignature':	'1.2.840.113549.1.9.6',//PKCS#9
 	'archiveTimeStampV3':	'0.4.0.1733.2.4',//ETSI EN29319122/TS101733
-	'pdfRevocationInfoArchival':'1.2.840.113583.1.1.8'//Adobe
+	'pdfRevocationInfoArchival':'1.2.840.113583.1.1.8', //Adobe
+	'adobeTimeStamp':	'1.2.840.113583.1.1.9.1' // Adobe
     };
 
     this.objCache = {};

@@ -43,9 +43,8 @@ equal((new KJUR.asn1.ASN1Object({tlv: "030101"})).getEncodedHex(), "030101", "{t
 });
 
 test("Boolean Test", function() {
-  var d = new KJUR.asn1.DERBoolean();
-  expect(1);
-  equal(d.getEncodedHex(), "0101ff", "Boolean TRUE");
+  equal(new KJUR.asn1.DERBoolean(true).getEncodedHex(), "0101ff", "Boolean TRUE");
+  equal(new KJUR.asn1.DERBoolean(false).getEncodedHex(), "010100", "Boolean TRUE");
 });
 
 test("Integer Test", function() {

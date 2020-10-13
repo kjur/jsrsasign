@@ -1,4 +1,4 @@
-/* x509-2.0.4.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.0.5.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.0.0 x509 2.0.4 (2020-Sep-22)
+ * @version jsrsasign 10.0.1 x509 2.0.5 (2020-Oct-11)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1938,6 +1938,66 @@ function X509(params) {
 	return result;
     };
 
+    /**
+     * parse AdobeTimeStamp extension as JSON object<br/>
+     * @name getExtAdobeTimeStamp
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value
+     * @param {Boolean} critical flag
+     * @return {Array} JSON object of parsed AdobeTimeStamp extension
+     * @since jsrsasign 10.0.1 x509 2.0.5
+     * @see {@link KJUR.asn1.x509.AdobeTimeStamp}
+     * @see {@link X509#getExtParamArray}
+     * @see {@link X509#getExtParam}
+     * @description
+     * This method parses
+     * X.509v3 AdobeTimeStamp private extension value defined in the
+     * <a href="https://www.adobe.com/devnet-docs/acrobatetk/tools/DigSigDC/oids.html">
+     * Adobe site</a> as JSON object.
+     * This extension provides the URL location for time stamp service.
+     * <pre>
+     * adbe- OBJECT IDENTIFIER ::=  { adbe(1.2.840.113583) acrobat(1) security(1) x509Ext(9) 1 }
+     *  ::= SEQUENCE {
+     *     version INTEGER  { v1(1) }, -- extension version
+     *     location GeneralName (In v1 GeneralName can be only uniformResourceIdentifier)
+     *     requiresAuth        boolean (default false), OPTIONAL }
+     * </pre>
+     * <br/>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.AdobeTimeStamp} constructor.
+     * @example
+     * x.getExtAdobeTimeStamp(<<extn hex value >>) &rarr;
+     * { extname: "adobeTimeStamp", uri: "http://tsa.example.com/" reqauth: true }
+     */
+    this.getExtAdobeTimeStamp = function(hExtV, critical) {
+	if (hExtV === undefined && critical === undefined) {
+	    var info = this.getExtInfo("adobeTimeStamp");
+	    if (info === undefined) return undefined;
+	    hExtV = _getTLV(this.hex, info.vidx);
+	    critical = info.critical;
+	}
+
+	var result = {extname:"adobeTimeStamp"};
+	if (critical) result.critical = true;
+
+	var a = _getChildIdx(hExtV, 0);
+	if (a.length > 1) {
+	    var hGN = _getTLV(hExtV, a[1])
+	    var gnParam = this.getGeneraName(hGN);
+	    if (gnParam.uri != undefined) {
+		result.uri = gnParam.uri;
+	    }
+	}
+	if (a.length > 2) {
+	    var hBool = _getTLV(hExtV, a[2]);
+	    if (hBool == "0101ff") result.reqauth = true;
+	    if (hBool == "010100") result.reqauth = false;
+	}
+
+	return result;
+    };
+
     // ===== BEGIN X500Name related =====================================
 
     this.getX500NameRule = function(aDN) {
@@ -2337,6 +2397,8 @@ function X509(params) {
 	    extParam = this.getExtOcspNonce(hExtV, critical);
 	} else if (oid == "1.3.6.1.5.5.7.48.1.5") {
 	    extParam = this.getExtOcspNoCheck(hExtV, critical);
+	} else if (oid == "1.2.840.113583.1.1.9.1") {
+	    extParam = this.getExtAdobeTimeStamp(hExtV, critical);
 	}
 	if (extParam != undefined) return extParam;
 

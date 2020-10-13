@@ -991,6 +991,46 @@ ASN1HEX.dump(hExpect),
 "dump");
 });
 
+test("AdobeTimeStamp class test", function() {
+var _AdobeTimeStamp = KJUR.asn1.x509.AdobeTimeStamp;
+
+var hExpect = "302b060a2a864886f72f01010901041d301b0201018613687474703a2f2f6578616d706c652e636f6d2f0101ff";
+var param = {
+  uri: "http://example.com/",
+  reqauth: true
+};
+var o = new _AdobeTimeStamp(param);
+equal(o.getEncodedHex(), hExpect, "hex");
+equal(
+ASN1HEX.dump(o.getEncodedHex()), 
+ASN1HEX.dump(hExpect), 
+"dump");
+
+var hExpect2 = "302b060a2a864886f72f01010901041d301b0201018613687474703a2f2f6578616d706c652e636f6d2f010100";
+var param2 = {
+  uri: "http://example.com/",
+  reqauth: false
+};
+var o2 = new _AdobeTimeStamp(param2);
+equal(o2.getEncodedHex(), hExpect2, "hex");
+equal(
+ASN1HEX.dump(o2.getEncodedHex()), 
+ASN1HEX.dump(hExpect2), 
+"dump");
+
+var hExpect3 = "3028060a2a864886f72f01010901041a30180201018613687474703a2f2f6578616d706c652e636f6d2f";
+var param3 = {
+  uri: "http://example.com/"
+};
+var o3 = new _AdobeTimeStamp(param3);
+equal(o3.getEncodedHex(), hExpect3, "hex");
+equal(
+ASN1HEX.dump(o3.getEncodedHex()), 
+ASN1HEX.dump(hExpect3),
+"dump");
+
+});
+
 test("PrivateExtension class test", function() {
 var _PrivateExtension = KJUR.asn1.x509.PrivateExtension;
 hExpect = "300c06032a030404051303616161";
