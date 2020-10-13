@@ -366,7 +366,7 @@ test("readCertPEM", function() {
 test("readCertPEM - X509v3 without ext adfs-signing.crt", function() {
   var c = new X509();
   c.readCertPEM(ADFS_CER);
-  equal(c.aExtInfo, null, "aExtInfo == null");
+  deepEqual(c.aExtInfo, [], "aExtInfo == []");
 });
 
 test("getPublicKey(), RSAKey.verify() integration test", function() {

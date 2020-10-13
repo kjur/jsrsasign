@@ -387,6 +387,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.html">KJUR.asn1.x509</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.AdobeTimeStamp.html">KJUR.asn1.x509.AdobeTimeStamp</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.AlgorithmIdentifier.html">KJUR.asn1.x509.AlgorithmIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html">KJUR.asn1.x509.AttributeTypeAndValue</a></li>
@@ -545,7 +547,7 @@ ul.inheritsList
 								<b><a href="../symbols/KJUR.asn1.DERBoolean.html#constructor">KJUR.asn1.DERBoolean</a></b>()
 							</div>
 							<div class="description">class for ASN.1 DER Boolean
-</div>
+In ASN.1 DER, DER Boolean "false" shall be omitted.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -591,9 +593,15 @@ ul.inheritsList
 				
 				<div class="description">
 					class for ASN.1 DER Boolean
-
+In ASN.1 DER, DER Boolean "false" shall be omitted.
+However this supports boolean false for future BER support.
 					
 				</div>
+				
+				
+				
+				<pre class="code">new KJUR.asn1.DERBoolean(true)
+new KJUR.asn1.DERBoolean(false)</pre>
 				
 				
 				

@@ -387,6 +387,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.html">KJUR.asn1.x509</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.AdobeTimeStamp.html">KJUR.asn1.x509.AdobeTimeStamp</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.AlgorithmIdentifier.html">KJUR.asn1.x509.AlgorithmIdentifier</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.AttributeTypeAndValue.html">KJUR.asn1.x509.AttributeTypeAndValue</a></li>
@@ -667,6 +669,19 @@ This method will get DistributionPoint parameters.</div>
 								</div>
 								<div class="description">get DistributionPointName ASN.1 structure parameter as JSON object
 This method will get DistributionPointName parameters.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtAdobeTimeStamp">getExtAdobeTimeStamp</a></b>(hExtV, critical)
+								</div>
+								<div class="description">parse AdobeTimeStamp extension as JSON object<br/>
+This method parses
+X.509v3 AdobeTimeStamp private extension value defined in the
+<a href="https://www.adobe.com/devnet-docs/acrobatetk/tools/DigSigDC/oids.html">
+Adobe site</a> as JSON object.</div>
 							</td>
 						</tr>
 					
@@ -1859,6 +1874,92 @@ x.getDistributionPointName("a0...") &rarr;
 							<dt class="heading">See:</dt>
 							
 								<dd></dd>
+							
+								<dd></dd>
+							
+								<dd></dd>
+							
+								<dd></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getExtAdobeTimeStamp"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getExtAdobeTimeStamp</b>(hExtV, critical)
+					
+					</div>
+					<div class="description">
+						parse AdobeTimeStamp extension as JSON object<br/>
+This method parses
+X.509v3 AdobeTimeStamp private extension value defined in the
+<a href="https://www.adobe.com/devnet-docs/acrobatetk/tools/DigSigDC/oids.html">
+Adobe site</a> as JSON object.
+This extension provides the URL location for time stamp service.
+<pre>
+adbe- OBJECT IDENTIFIER ::=  { adbe(1.2.840.113583) acrobat(1) security(1) x509Ext(9) 1 }
+ ::= SEQUENCE {
+    version INTEGER  { v1(1) }, -- extension version
+    location GeneralName (In v1 GeneralName can be only uniformResourceIdentifier)
+    requiresAuth        boolean (default false), OPTIONAL }
+</pre>
+<br/>
+Result of this method can be passed to 
+<a href="../symbols/KJUR.asn1.x509.AdobeTimeStamp.html">KJUR.asn1.x509.AdobeTimeStamp</a> constructor.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x.getExtAdobeTimeStamp(<<extn hex value >>) &rarr;
+{ extname: "adobeTimeStamp", uri: "http://tsa.example.com/" reqauth: true }</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hExtV</b>
+									
+								</dt>
+								<dd>hexadecimal string of extension value</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span> <b>critical</b>
+									
+								</dt>
+								<dd>flag</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.0.1 x509 2.0.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> JSON object of parsed AdobeTimeStamp extension</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
 							
 								<dd></dd>
 							

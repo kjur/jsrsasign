@@ -1,4 +1,4 @@
-/* asn1-1.0.19.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1-1.0.20.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.0.0 asn1 1.0.19 (2020-Sep-22)
+ * @version jsrsasign 10.0.1 asn1 1.0.20 (2020-Oct-11)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -790,13 +790,21 @@ YAHOO.lang.extend(KJUR.asn1.DERAbstractStructured, KJUR.asn1.ASN1Object);
  * @name KJUR.asn1.DERBoolean
  * @class class for ASN.1 DER Boolean
  * @extends KJUR.asn1.ASN1Object
- * @description
  * @see KJUR.asn1.ASN1Object - superclass
+ * @description
+ * In ASN.1 DER, DER Boolean "false" shall be omitted.
+ * However this supports boolean false for future BER support.
+ * @example
+ * new KJUR.asn1.DERBoolean(true)
+ * new KJUR.asn1.DERBoolean(false)
  */
-KJUR.asn1.DERBoolean = function() {
+KJUR.asn1.DERBoolean = function(params) {
     KJUR.asn1.DERBoolean.superclass.constructor.call(this);
     this.hT = "01";
-    this.hTLV = "0101ff";
+    if (params == false)
+	this.hTLV = "010100";
+    else 
+	this.hTLV = "0101ff";
 };
 YAHOO.lang.extend(KJUR.asn1.DERBoolean, KJUR.asn1.ASN1Object);
 
