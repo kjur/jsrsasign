@@ -1207,6 +1207,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
  * @static
  * @param {String} alg 'RSA' or 'EC'
  * @param {Object} keylenOrCurve key length for RSA or curve name for EC
+ * @param {String} rsaPubExponent public exponent for RSA (default '10001')
  * @return {Array} associative array of keypair which has prvKeyObj and pubKeyObj parameters
  * @since keyutil 1.0.1
  * @description
@@ -1217,21 +1218,19 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
  * <li>prvKeyObj - RSAKey or ECDSA object of private key</li>
  * <li>pubKeyObj - RSAKey or ECDSA object of public key</li>
  * </ul>
- * NOTE1: As for RSA algoirthm, public exponent has fixed
- * value '0x10001'.
- * NOTE2: As for EC algorithm, supported names of curve are
+ * NOTE1: As for EC algorithm, supported names of curve are
  * secp256r1, secp256k1 and secp384r1.
- * NOTE3: DSA is not supported yet.
+ * NOTE2: DSA is not supported yet.
  * @example
  * var rsaKeypair = KEYUTIL.generateKeypair("RSA", 1024);
  * var ecKeypair = KEYUTIL.generateKeypair("EC", "secp256r1");
  *
  */
-KEYUTIL.generateKeypair = function(alg, keylenOrCurve) {
+KEYUTIL.generateKeypair = function(alg, keylenOrCurve, rsaPubExponent = "10001") {
     if (alg == "RSA") {
         var keylen = keylenOrCurve;
         var prvKey = new RSAKey();
-        prvKey.generate(keylen, '10001');
+        prvKey.generate(keylen, rsaPubExponent);
         prvKey.isPrivate = true;
         prvKey.isPublic = true;
         
