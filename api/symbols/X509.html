@@ -1393,6 +1393,7 @@ X509 class provides following functionality:
   <li>cRLReason - <a href="../symbols/X509.html#getExtCRLReason">X509#getExtCRLReason</a></li>
   <li>ocspNonce - <a href="../symbols/X509.html#getExtOCSPNonce">X509#getExtOCSPNonce</a></li>
   <li>ocspNoCheck - <a href="../symbols/X509.html#getExtOCSPNoCheck">X509#getExtOCSPNoCheck</a></li>
+  <li>adobeTimeStamp - <a href="../symbols/X509.html#getExtAdobeTimeStamp">X509#getExtAdobeTimeStamp</a></li>
   </ul>
 </li>
 <li><b>UTILITIES</b>
@@ -1655,9 +1656,9 @@ x.getAttrTypeAndValue("30...") &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getX500Name">X509#getX500Name</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getRDN">X509#getRDN</a></dd>
 							
 							</dl>
 						
@@ -1731,9 +1732,9 @@ x.getDisplayText("1e03616161") &rarr {type: 'bmp',  str: 'aaa'}</pre>
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtCertificatePolicies">X509#getExtCertificatePolicies</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getPolicyInformation">X509#getPolicyInformation</a></dd>
 							
 							</dl>
 						
@@ -1800,13 +1801,13 @@ x.getDistributionPoint("30...") &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtCRLDistributionPoints">X509#getExtCRLDistributionPoints</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getDistributionPointName">X509#getDistributionPointName</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getGeneralNames">X509#getGeneralNames</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getGeneralName">X509#getGeneralName</a></dd>
 							
 							</dl>
 						
@@ -1873,13 +1874,13 @@ x.getDistributionPointName("a0...") &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtCRLDistributionPoints">X509#getExtCRLDistributionPoints</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getDistributionPoint">X509#getDistributionPoint</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getGeneralNames">X509#getGeneralNames</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getGeneralName">X509#getGeneralName</a></dd>
 							
 							</dl>
 						
@@ -1910,6 +1911,8 @@ adbe- OBJECT IDENTIFIER ::=  { adbe(1.2.840.113583) acrobat(1) security(1) x509E
 <br/>
 Result of this method can be passed to 
 <a href="../symbols/KJUR.asn1.x509.AdobeTimeStamp.html">KJUR.asn1.x509.AdobeTimeStamp</a> constructor.
+<br/>
+NOTE: This extesion doesn't seem to have official name. This may be called as "pdfTimeStamp".
 						
 						
 					</div>
@@ -1961,11 +1964,11 @@ Result of this method can be passed to
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.AdobeTimeStamp.html">KJUR.asn1.x509.AdobeTimeStamp</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtParamArray">X509#getExtParamArray</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtParam">X509#getExtParam</a></dd>
 							
 							</dl>
 						
@@ -2102,7 +2105,7 @@ x.getExtAuthorityInfoAccesss("306230...", true)</pre>
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.AuthorityInfoAccess.html">KJUR.asn1.x509.AuthorityInfoAccess</a></dd>
 							
 							</dl>
 						
@@ -2202,7 +2205,7 @@ x.getExtAuthorityKeyIdentifier() &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html">KJUR.asn1.x509.AuthorityKeyIdentifier</a></dd>
 							
 							</dl>
 						
@@ -2283,7 +2286,7 @@ x.getExtBasicConstraints() &rarr; {cA:true,pathLen:3,critical:true}</pre>
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.BasicConstraints.html">KJUR.asn1.x509.BasicConstraints</a></dd>
 							
 							</dl>
 						
@@ -2446,15 +2449,15 @@ x.getExtCRLDistributionPoints() &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.CRLDistributionPoints.html">KJUR.asn1.x509.CRLDistributionPoints</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getDistributionPoint">X509#getDistributionPoint</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getDistributionPointName">X509#getDistributionPointName</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getGeneralNames">X509#getGeneralNames</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getGeneralName">X509#getGeneralName</a></dd>
 							
 							</dl>
 						
@@ -2578,9 +2581,9 @@ crl.getExtCRLNumber("02...", false) &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.CRLNumber.html">KJUR.asn1.x509.CRLNumber</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtParamArray">X509#getExtParamArray</a></dd>
 							
 							</dl>
 						
@@ -2664,9 +2667,9 @@ crl.getExtCRLReason("02...", false) &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.CRLReason.html">KJUR.asn1.x509.CRLReason</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtParamArray">X509#getExtParamArray</a></dd>
 							
 							</dl>
 						
@@ -2745,7 +2748,7 @@ x.getExtExtKeyUsage() &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.ExtKeyUsage.html">KJUR.asn1.x509.ExtKeyUsage</a></dd>
 							
 							</dl>
 						
@@ -2951,9 +2954,9 @@ x.getExtIssuerAltName("3026...") &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtSubjectAltName">X509#getExtSubjectAltName</a></dd>
 							
 							</dl>
 						
@@ -3049,9 +3052,9 @@ x.getExtKeyUsage("306230...", true)</pre>
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtKeyUsageString">X509#getExtKeyUsageString</a></dd>
 							
 							</dl>
 						
@@ -3123,7 +3126,7 @@ x.getExtKeyUsageBin() &rarr; '101'
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtKeyUsage">X509#getExtKeyUsage</a></dd>
 							
 							</dl>
 						
@@ -3191,7 +3194,7 @@ x.getExtKeyUsageString() &rarr; "digitalSignature,keyEncipherment"</pre>
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtKeyUsage">X509#getExtKeyUsage</a></dd>
 							
 							</dl>
 						
@@ -3269,11 +3272,11 @@ x.getExtOCSPNoCheck(<<extn hex value >>) &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.OCSPNoCheck.html">KJUR.asn1.x509.OCSPNoCheck</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtParamArray">X509#getExtParamArray</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtParam">X509#getExtParam</a></dd>
 							
 							</dl>
 						
@@ -3353,11 +3356,11 @@ x.getExtOCSPNonce(<<extn hex value >>) &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.OCSPNonce.html">KJUR.asn1.x509.OCSPNonce</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtParamArray">X509#getExtParamArray</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtParam">X509#getExtParam</a></dd>
 							
 							</dl>
 						
@@ -3600,9 +3603,9 @@ x.getExtSubjectAltName("3026...") &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtIssuerAltName">X509#getExtIssuerAltName</a></dd>
 							
 							</dl>
 						
@@ -3829,9 +3832,9 @@ x.getGeneralName("860f687474703a2f2f6161612e636f6d2f")
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getGeneralName">X509#getGeneralName</a></dd>
 							
 							</dl>
 						
@@ -3901,11 +3904,11 @@ x.getGeneralNames("3011860f687474703a2f2f6161612e636f6d2f")
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getGeneralNames">X509#getGeneralNames</a></dd>
 							
 							</dl>
 						
@@ -4395,9 +4398,9 @@ x.getPolicyQualifierInfo("30...")
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtCertificatePolicies">X509#getExtCertificatePolicies</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getPolicyInformation">X509#getPolicyInformation</a></dd>
 							
 							</dl>
 						
@@ -4799,11 +4802,11 @@ x.getRDN("31...") &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getX500Name">X509#getX500Name</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getRDN">X509#getRDN</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getAttrTypeAndValue">X509#getAttrTypeAndValue</a></dd>
 							
 							</dl>
 						
@@ -5193,11 +5196,11 @@ x.getUserNotice("30...") &rarr; {exptext: {type: 'utf8', str: 'aaa'}}</pre>
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getExtCertificatePolicies">X509#getExtCertificatePolicies</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getPolicyInformation">X509#getPolicyInformation</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getPolicyQualifierInfo">X509#getPolicyQualifierInfo</a></dd>
 							
 							</dl>
 						
@@ -5320,11 +5323,11 @@ x.getX500Name("30...") &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getX500Name">X509#getX500Name</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getRDN">X509#getRDN</a></dd>
 							
-								<dd></dd>
+								<dd><a href="../symbols/X509.html#getAttrTypeAndValue">X509#getAttrTypeAndValue</a></dd>
 							
 							</dl>
 						

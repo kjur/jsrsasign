@@ -86,6 +86,9 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * <li>{@link KJUR.asn1.x509.CertificatePolicies}</li>
  * <li>{@link KJUR.asn1.x509.CRLNumber}</li>
  * <li>{@link KJUR.asn1.x509.CRLReason}</li>
+ * <li>{@link KJUR.asn1.x509.OCSPNonce</li>
+ * <li>{@link KJUR.asn1.x509.OCSPNoCheck</li>
+ * <li>{@link KJUR.asn1.x509.AdobeTimeStamp}</li>
  * </ul>
  * NOTE1: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.<br/>
  * NOTE2: SubjectAltName and IssuerAltName supported since 
@@ -2559,6 +2562,8 @@ YAHOO.lang.extend(KJUR.asn1.x509.OCSPNoCheck, KJUR.asn1.x509.Extension);
  * <li>{Boolean}reqauth - authentication required or not</li>
  * </ul>
  * </pre>
+ * <br/>
+ * NOTE: This extesion doesn't seem to have official name. This may be called as "pdfTimeStamp".
  * @example
  * new KJUR.asn1.x509.AdobeTimesStamp({
  *   uri: "http://tsa.example.com/",

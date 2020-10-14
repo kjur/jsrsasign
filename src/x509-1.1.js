@@ -81,6 +81,7 @@
  *   <li>cRLReason - {@link X509#getExtCRLReason}</li>
  *   <li>ocspNonce - {@link X509#getExtOCSPNonce}</li>
  *   <li>ocspNoCheck - {@link X509#getExtOCSPNoCheck}</li>
+ *   <li>adobeTimeStamp - {@link X509#getExtAdobeTimeStamp}</li>
  *   </ul>
  * </li>
  * <li><b>UTILITIES</b>
@@ -632,7 +633,7 @@ function X509(params) {
      * @param {Boolean} critical flag (OPTIONAL)
      * @return {Array} JSON object of BasicConstraints parameter or undefined
      * @since jsrsasign 7.2.0 x509 1.1.14
-     * @see {@link KJUR.asn1.x509.BasicConstraints}
+     * @see KJUR.asn1.x509.BasicConstraints
      * @description
      * This method will get basic constraints extension value as object with following paramters.
      * <ul>
@@ -687,8 +688,8 @@ function X509(params) {
      * @param {Boolean} critical flag (OPTIONAL)
      * @return {Array} JSON object of KeyUsage parameter or undefined
      * @since jsrsasign 9.0.0 x509 2.0.0
-     * @see {@link KJUR.asn1.x509.KeyUsage}
-     * @see {@link X509#getExtKeyUsageString}
+     * @see KJUR.asn1.x509.KeyUsage
+     * @see X509#getExtKeyUsageString
      * @description
      * This method parse keyUsage extension. When arguments are
      * not specified, its extension in X509 object will be parsed.
@@ -747,7 +748,7 @@ function X509(params) {
      * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
      * @return {String} binary string of key usage bits (ex. '101')
      * @since jsrsasign 7.2.0 x509 1.1.14
-     * @see {@link X509#getExtKeyUsage}
+     * @see X509#getExtKeyUsage
      * @description
      * This method will get key usage extension value
      * as binary string such like '101'.
@@ -790,7 +791,7 @@ function X509(params) {
      * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
      * @return {String} comma separated string of key usage
      * @since jsrsasign 7.2.0 x509 1.1.14
-     * @see {@link X509#getExtKeyUsage}
+     * @see X509#getExtKeyUsage
      * @description
      * This method will get key usage extension value
      * as comma separated string of usage names.
@@ -873,7 +874,7 @@ function X509(params) {
      * @param {Boolean} critical flag (OPTIONAL)
      * @return {Array} JSON object of AuthorityKeyIdentifier parameter or undefined
      * @since jsrsasign 7.2.0 x509 1.1.14
-     * @see {@link KJUR.asn1.x509.AuthorityKeyIdentifier}
+     * @see KJUR.asn1.x509.AuthorityKeyIdentifier
      * @description
      * This method will get 
      * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.1">
@@ -951,7 +952,7 @@ function X509(params) {
      * @return {Array} JSON object of ExtKeyUsage parameter or undefined
      * @return {Object} JSONarray of extended key usage ID name or oid
      * @since jsrsasign 9.0.0 x509 2.0.0
-     * @see {@link KJUR.asn1.x509.ExtKeyUsage}
+     * @see KJUR.asn1.x509.ExtKeyUsage
      * @description
      * This method parse extKeyUsage extension. When arguments are
      * not specified, its extension in X509 object will be parsed.
@@ -1033,8 +1034,8 @@ function X509(params) {
      * @param {Boolean} critical flag (OPTIONAL)
      * @return {Array} JSON object of SubjectAltName parameters or undefined
      * @since jsrsasign 7.2.0 x509 1.1.14
-     * @see {@link KJUR.asn1.x509.SubjectAltName}
-     * @see {@link X509#IssuerAltName}
+     * @see KJUR.asn1.x509.SubjectAltName
+     * @see X509#getExtIssuerAltName
      * @description
      * This method will get subjectAltName value
      * as an array of JSON object which has properties defined
@@ -1089,8 +1090,8 @@ function X509(params) {
      * @param {Boolean} critical flag (OPTIONAL)
      * @return {Array} JSON object of IssuerAltName parameters
      * @since jsrsasign 9.0.0 x509 2.0.0
-     * @see {@link KJUR.asn1.x509.IssuerAltName}
-     * @see {@link X509#SubjectAltName}
+     * @see KJUR.asn1.x509.IssuerAltName
+     * @see X509#getExtSubjectAltName
      * @description
      * This method will get issuerAltName value
      * as an array of JSON object which has properties defined
@@ -1140,9 +1141,9 @@ function X509(params) {
      * @function
      * @param {String} h hexadecimal string of GeneralNames
      * @return {Array} array of GeneralNames parameters
-     * @see {@link KJUR.asn1.x509.GeneralNames}
-     * @see {@link KJUR.asn1.x509.GeneralName}
-     * @see {@link X509#getGeneralNames}
+     * @see KJUR.asn1.x509.GeneralNames
+     * @see KJUR.asn1.x509.GeneralName
+     * @see X509#getGeneralNames
      * @since jsrsasign 9.0.0 x509 2.0.0
      * @description
      * This method will get GeneralNames parameters defined in
@@ -1175,8 +1176,8 @@ function X509(params) {
      * @function
      * @param {String} h hexadecimal string of GeneralName
      * @return {Array} JSON object of GeneralName parameters or undefined
-     * @see {@link KJUR.asn1.x509.GeneralNames}
-     * @see {@link X509#getGeneralName}
+     * @see KJUR.asn1.x509.GeneralNames
+     * @see X509#getGeneralName
      * @since jsrsasign 9.0.0 x509 2.0.0
      * @description
      * This method will get GeneralName parameters defined in
@@ -1290,11 +1291,11 @@ function X509(params) {
      * @param {Boolean} critical flag (OPTIONAL)
      * @return {Object} JSON object of CRLDistributionPoints parameters or undefined
      * @since jsrsasign 9.0.0 x509 2.0.0
-     * @see {@link KJUR.asn1.x509.CRLDistributionPoints}
-     * @see {@link X509#getDistributionPoint}
-     * @see {@link X509#getDistributionPointName}
-     * @see {@link X509#getGeneralNames}
-     * @see {@link X509#getGeneralName}
+     * @see KJUR.asn1.x509.CRLDistributionPoints
+     * @see X509#getDistributionPoint
+     * @see X509#getDistributionPointName
+     * @see X509#getGeneralNames
+     * @see X509#getGeneralName
      * @description
      * This method will get certificate policies value
      * as an array of JSON object which has properties defined
@@ -1341,10 +1342,10 @@ function X509(params) {
      * @param {String} h hexadecimal string of DistributionPoint
      * @return {Object} JSON object of DistributionPoint parameters
      * @since jsrsasign 9.0.0 x509 2.0.0
-     * @see {@link X509#getExtCRLDistributionPoints}
-     * @see {@link X509#getDistributionPointName}
-     * @see {@link X509#getGeneralNames}
-     * @see {@link X509#getGeneralName}
+     * @see X509#getExtCRLDistributionPoints
+     * @see X509#getDistributionPointName
+     * @see X509#getGeneralNames
+     * @see X509#getGeneralName
      * @description
      * This method will get DistributionPoint parameters.
      * Result of this method can be passed to
@@ -1377,10 +1378,10 @@ function X509(params) {
      * @param {String} h hexadecimal string of DistributionPointName
      * @return {Object} JSON object of DistributionPointName parameters
      * @since jsrsasign 9.0.0 x509 2.0.0
-     * @see {@link X509#getExtCRLDistributionPoints}
-     * @see {@link X509#getDistributionPoint}
-     * @see {@link X509#getGeneralNames}
-     * @see {@link X509#getGeneralName}
+     * @see X509#getExtCRLDistributionPoints
+     * @see X509#getDistributionPoint
+     * @see X509#getGeneralNames
+     * @see X509#getGeneralName
      * @description
      * This method will get DistributionPointName parameters.
      * Result of this method can be passed to
@@ -1493,7 +1494,7 @@ function X509(params) {
      * @param {Boolean} critical flag (OPTIONAL)
      * @return {Array} JSON object of AuthorityInfoAccess parameters or undefined
      * @since jsrsasign 9.0.0 x509 2.0.0
-     * @see {@link KJUR.asn1.x509.AuthorityInfoAccess}
+     * @see KJUR.asn1.x509.AuthorityInfoAccess
      * @description
      * This method parse authorityInfoAccess extension. When arguments are
      * not specified, its extension in X509 object will be parsed.
@@ -1656,8 +1657,8 @@ function X509(params) {
      * @param {String} h hexadecimal string of PolicyQualifierInfo
      * @return {Object} JSON object of PolicyQualifierInfo parameters
      * @since jsrsasign 9.0.0 x509 2.0.0
-     * @see {@link X509#getExtCertificatePolicies}
-     * @see {@link X509#getPolicyInformation}
+     * @see X509#getExtCertificatePolicies
+     * @see X509#getPolicyInformation
      * @description
      * This method will get 
      * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
@@ -1705,9 +1706,9 @@ function X509(params) {
      * @param {String} h hexadecimal string of UserNotice
      * @return {Object} JSON object of UserNotice parameters
      * @since jsrsasign 9.0.0 x509 2.0.0
-     * @see {@link X509#getExtCertificatePolicies}
-     * @see {@link X509#getPolicyInformation}
-     * @see {@link X509#getPolicyQualifierInfo}
+     * @see X509#getExtCertificatePolicies
+     * @see X509#getPolicyInformation
+     * @see X509#getPolicyQualifierInfo
      * @description
      * This method will get 
      * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
@@ -1746,8 +1747,8 @@ function X509(params) {
      * @param {String} h hexadecimal string of DisplayText
      * @return {Object} JSON object of DisplayText parameters
      * @since jsrsasign 9.0.0 x509 2.0.0
-     * @see {@link X509#getExtCertificatePolicies}
-     * @see {@link X509#getPolicyInformation}
+     * @see X509#getExtCertificatePolicies
+     * @see X509#getPolicyInformation
      * @description
      * This method will get 
      * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
@@ -1782,8 +1783,8 @@ function X509(params) {
      * @param {String} hExtV hexadecimal string of extension value
      * @param {Boolean} critical flag
      * @since jsrsasign 9.1.1 x509 2.0.1
-     * @see {@link KJUR.asn1.x509.CRLNumber}
-     * @see {@link X509#getExtParamArray}
+     * @see KJUR.asn1.x509.CRLNumber
+     * @see X509#getExtParamArray
      * @description
      * This method parses
      * CRLNumber CRL extension value defined in
@@ -1821,8 +1822,8 @@ function X509(params) {
      * @param {String} hExtV hexadecimal string of extension value
      * @param {Boolean} critical flag
      * @since jsrsasign 9.1.1 x509 2.0.1
-     * @see {@link KJUR.asn1.x509.CRLReason}
-     * @see {@link X509#getExtParamArray}
+     * @see KJUR.asn1.x509.CRLReason
+     * @see X509#getExtParamArray
      * @description
      * This method parses
      * CRLReason CRL entry extension value defined in
@@ -1872,9 +1873,9 @@ function X509(params) {
      * @param {Boolean} critical flag
      * @return {Array} JSON object of parsed OCSPNonce extension
      * @since jsrsasign 9.1.6 x509 2.0.3
-     * @see {@link KJUR.asn1.x509.OCSPNonce}
-     * @see {@link X509#getExtParamArray}
-     * @see {@link X509#getExtParam}
+     * @see KJUR.asn1.x509.OCSPNonce
+     * @see X509#getExtParamArray
+     * @see X509#getExtParam
      * @description
      * This method parses
      * Nonce OCSP extension value defined in
@@ -1912,9 +1913,9 @@ function X509(params) {
      * @param {Boolean} critical flag
      * @return {Array} JSON object of parsed OCSPNoCheck extension
      * @since jsrsasign 9.1.6 x509 2.0.3
-     * @see {@link KJUR.asn1.x509.OCSPNoCheck}
-     * @see {@link X509#getExtParamArray}
-     * @see {@link X509#getExtParam}
+     * @see KJUR.asn1.x509.OCSPNoCheck
+     * @see X509#getExtParamArray
+     * @see X509#getExtParam
      * @description
      * This method parses
      * OCSPNoCheck extension value defined in
@@ -1947,9 +1948,9 @@ function X509(params) {
      * @param {Boolean} critical flag
      * @return {Array} JSON object of parsed AdobeTimeStamp extension
      * @since jsrsasign 10.0.1 x509 2.0.5
-     * @see {@link KJUR.asn1.x509.AdobeTimeStamp}
-     * @see {@link X509#getExtParamArray}
-     * @see {@link X509#getExtParam}
+     * @see KJUR.asn1.x509.AdobeTimeStamp
+     * @see X509#getExtParamArray
+     * @see X509#getExtParam
      * @description
      * This method parses
      * X.509v3 AdobeTimeStamp private extension value defined in the
@@ -1966,6 +1967,8 @@ function X509(params) {
      * <br/>
      * Result of this method can be passed to 
      * {@link KJUR.asn1.x509.AdobeTimeStamp} constructor.
+     * <br/>
+     * NOTE: This extesion doesn't seem to have official name. This may be called as "pdfTimeStamp".
      * @example
      * x.getExtAdobeTimeStamp(<<extn hex value >>) &rarr;
      * { extname: "adobeTimeStamp", uri: "http://tsa.example.com/" reqauth: true }
@@ -2066,9 +2069,9 @@ function X509(params) {
      * @param {String} h hexadecimal string of Name
      * @return {Array} array of RDN parameter array
      * @since jsrsasign 9.0.0 x509 2.0.0
-     * @see {@link X509#getX500Name}
-     * @see {@link X509#getRDN}
-     * @see {@link X509#getAttrTypeAndValue}
+     * @see X509#getX500Name
+     * @see X509#getRDN
+     * @see X509#getAttrTypeAndValue
      * @description
      * This method will get Name parameter defined in
      * <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
@@ -2102,9 +2105,9 @@ function X509(params) {
      * @param {String} h hexadecimal string of RDN
      * @return {Array} array of AttrTypeAndValue parameters
      * @since jsrsasign 9.0.0 x509 2.0.0
-     * @see {@link X509#getX500Name}
-     * @see {@link X509#getRDN}
-     * @see {@link X509#getAttrTypeAndValue}
+     * @see X509#getX500Name
+     * @see X509#getRDN
+     * @see X509#getAttrTypeAndValue
      * @description
      * This method will get RelativeDistinguishedName parameters defined in
      * <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
@@ -2137,8 +2140,8 @@ function X509(params) {
      * @param {String} h hexadecimal string of AttributeTypeAndValue
      * @return {Object} JSON object of AttributeTypeAndValue parameters
      * @since jsrsasign 9.0.0 x509 2.0.0
-     * @see {@link X509#getX500Name}
-     * @see {@link X509#getRDN}
+     * @see X509#getX500Name
+     * @see X509#getRDN
      * @description
      * This method will get AttributeTypeAndValue parameters defined in
      * <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
