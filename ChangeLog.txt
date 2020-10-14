@@ -1,6 +1,11 @@
 
 ChangeLog for jsrsasign
 
+AdobeTimeStamp X.509v3 extension parser bugfix
+* Changes from 10.0.1 to 10.0.2 (2020-Oct-14)
+  - src/x509.js
+    - X509.getExtAdobeTimeStamp method bugfix
+
 AdobeTimeStamp X.509v3 certificate extension added
 * Changes from 10.0.0 to 10.0.1 (2020-Oct-13)
   - src/asn1x509.js
