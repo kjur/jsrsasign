@@ -1713,7 +1713,7 @@ KEYUTIL.parseCSRHex = function(csrHex) {
  * pubkeyobj = KEYUTIL.getKey(...);
  * KEYTUTIL.getKey(pubkeyobj) &rarr; "a612..."
  */
-KEYUTIL.getKeyID = function(obj) {
+KEYUTIL.getKeyID = function(obj, hash = "sha1") {
     var _KEYUTIL = KEYUTIL;
     var _ASN1HEX = ASN1HEX;
 
@@ -1724,7 +1724,7 @@ KEYUTIL.getKeyID = function(obj) {
     var p8hex = pemtohex(_KEYUTIL.getPEM(obj));
     var idx = _ASN1HEX.getIdxbyList(p8hex, 0, [1]); // BITSTRING
     var hV = _ASN1HEX.getV(p8hex, idx).substring(2); // value without unused bit
-    return KJUR.crypto.Util.hashHex(hV, "sha1");
+    return KJUR.crypto.Util.hashHex(hV, hash);
 }
 
 /**
