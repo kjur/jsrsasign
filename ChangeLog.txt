@@ -1,6 +1,13 @@
 
 ChangeLog for jsrsasign
 
+add findExt method in X509 class
+* Changes from 10.0.2 to 10.0.3 (2020-Oct-21)
+  - src/x509.js
+    - add X509.findExt method
+  - test/qunit-do-x509-param.html
+    - updated to follow above
+
 AdobeTimeStamp X.509v3 extension parser bugfix
 * Changes from 10.0.1 to 10.0.2 (2020-Oct-14)
   - src/x509.js

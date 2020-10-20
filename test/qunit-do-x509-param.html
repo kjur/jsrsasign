@@ -556,6 +556,40 @@ var j = x.getParam();
 deepEqual(j, j2, "digicert ha ev root");
 });
 
+test("findParam test", function() {
+var x = new X509();
+var aExt = [{
+  extname:"keyUsage",
+  critical:true,
+  names:["digitalSignature","keyCertSign","cRLSign"]
+},{
+ extname:"basicConstraints",
+ critical:true,
+ cA:true
+},{
+  extname:"subjectKeyIdentifier",
+  kid:{hex:"b13ec36903f8bf4701d498261a0802ef63642bc3"}
+}];
+var aExtExpect = [{
+  extname:"keyUsage",
+  names:["keyCertSign","cRLSign"]
+},{
+ extname:"basicConstraints"
+},{
+  extname:"subjectKeyIdentifier",
+  kid:{hex:"1234"}
+}];
+var pKU = x.findExt(aExt, "keyUsage");
+delete pKU["critical"];
+pKU.names = ["keyCertSign","cRLSign"];
+var pBC = x.findExt(aExt, "basicConstraints");
+delete pBC["critical"];
+delete pBC["cA"];
+var pSKID = x.findExt(aExt, "subjectKeyIdentifier");
+pSKID.kid = {hex: "1234"};
+deepEqual(aExt, aExtExpect, "findExt");
+});
+
 });
 </script>
   
