@@ -621,6 +621,17 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#findExt">findExt</a></b>(aExt, extname)
+								</div>
+								<div class="description">find extension parameter in array<br/>
+This method returns an extension parameter for
+specified extension name in the array.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getAlgorithmIdentifierName">getAlgorithmIdentifierName</a></b>(hTLV)
 								</div>
 								<div class="description">get algorithm name name of AlgorithmIdentifier ASN.1 structure
@@ -1520,6 +1531,98 @@ X509 class provides following functionality:
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name="findExt"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>findExt</b>(aExt, extname)
+					
+					</div>
+					<div class="description">
+						find extension parameter in array<br/>
+This method returns an extension parameter for
+specified extension name in the array.
+This method is useful to update extension parameter value.
+When there is no such extension with the extname,
+this returns "null".
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">// (1) 
+x = new X509(CERTPEM);
+params = x.getParam();
+pSKID = x.findExt(params.ext, "subjectKeyIdentifier");
+pSKID.kid = "1234abced..."; // skid in the params is updated.
+  // then params was updated
+
+// (2) another example
+aExt = [
+  {extname:"keyUsage",critical:true,names:["digitalSignature"]},
+  {extname:"basicConstraints",critical:true},
+  {extname:"subjectKeyIdentifier",kid:{hex:"f2eb..."}},
+  {extname:"authorityKeyIdentifier",kid:{hex:"12ab..."}},
+  {extname:"authorityInfoAccess",array:[{ocsp:"http://ocsp.example.com/"}]},
+  {extname:"certificatePolicies",array:[{policyoid:"2.23.140.1.2.1"}]}
+];
+var x = new X509();
+x.findExt(aExt, "authorityKeyInfoAccess").array[0].ocsp = "http://aaa.com";
+pKU = x.findExt(aExt, "keyUsage");
+delete pKU["critical"]; // clear criticla flag
+pKU.names = ["keyCertSign", "cRLSign"];
+  // then aExt was updated</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>aExt</b>
+									
+								</dt>
+								<dd>array of extension parameters</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>extname</b>
+									
+								</dt>
+								<dd>extension name</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.0.3 x509 2.0.7</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> extension parameter in the array or null</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509.html#getParam">X509#getParam</a></dd>
+							
+							</dl>
+						
+
+					<hr />
 				
 					<a name="getAlgorithmIdentifierName"> </a>
 					<div class="fixedFont">
@@ -4218,7 +4321,7 @@ x.getParam() &rarr;
   {extname:"authorityKeyIdentifier",kid:{hex:"12ab..."}},
   {extname:"authorityInfoAccess",array:[{ocsp:"http://ocsp.example.com/"}]},
   {extname:"certificatePolicies",array:[{policyoid:"2.23.140.1.2.1"}]}
- }],
+ ],
  sighex:"0b76...8"
 };</pre>
 					

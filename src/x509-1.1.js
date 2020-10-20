@@ -1,4 +1,4 @@
-/* x509-2.0.6.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.0.7.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.0.1 x509 2.0.6 (2020-Oct-14)
+ * @version jsrsasign 10.0.3 x509 2.0.7 (2020-Oct-21)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -2260,7 +2260,7 @@ function X509(params) {
      *   {extname:"authorityKeyIdentifier",kid:{hex:"12ab..."}},
      *   {extname:"authorityInfoAccess",array:[{ocsp:"http://ocsp.example.com/"}]},
      *   {extname:"certificatePolicies",array:[{policyoid:"2.23.140.1.2.1"}]}
-     *  }],
+     *  ],
      *  sighex:"0b76...8"
      * };
      */
@@ -2408,6 +2408,55 @@ function X509(params) {
 	var privateParam = { extname: oid, extn: hExtV };
 	if (critical) privateParam.critical = true;
 	return privateParam;
+    };
+
+    /**
+     * find extension parameter in array<br/>
+     * @name findExt
+     * @memberOf X509#
+     * @function
+     * @param {Array} aExt array of extension parameters
+     * @param {String} extname extension name
+     * @return {Array} extension parameter in the array or null
+     * @since jsrsasign 10.0.3 x509 2.0.7
+     * @see X509#getParam
+     *
+     * @description
+     * This method returns an extension parameter for
+     * specified extension name in the array.
+     * This method is useful to update extension parameter value.
+     * When there is no such extension with the extname,
+     * this returns "null".
+     *
+     * @example
+     * // (1) 
+     * x = new X509(CERTPEM);
+     * params = x.getParam();
+     * pSKID = x.findExt(params.ext, "subjectKeyIdentifier");
+     * pSKID.kid = "1234abced..."; // skid in the params is updated.
+     *   // then params was updated
+     *
+     * // (2) another example
+     * aExt = [
+     *   {extname:"keyUsage",critical:true,names:["digitalSignature"]},
+     *   {extname:"basicConstraints",critical:true},
+     *   {extname:"subjectKeyIdentifier",kid:{hex:"f2eb..."}},
+     *   {extname:"authorityKeyIdentifier",kid:{hex:"12ab..."}},
+     *   {extname:"authorityInfoAccess",array:[{ocsp:"http://ocsp.example.com/"}]},
+     *   {extname:"certificatePolicies",array:[{policyoid:"2.23.140.1.2.1"}]}
+     * ];
+     * var x = new X509();
+     * x.findExt(aExt, "authorityKeyInfoAccess").array[0].ocsp = "http://aaa.com";
+     * pKU = x.findExt(aExt, "keyUsage");
+     * delete pKU["critical"]; // clear criticla flag
+     * pKU.names = ["keyCertSign", "cRLSign"];
+     *   // then aExt was updated
+     */
+    this.findExt = function(aExt, extname) {
+	for (var i = 0; i < aExt.length; i++) {
+	    if (aExt[i].extname == extname) return aExt[i];
+	}
+	return null;
     };
 
     /**
