@@ -835,6 +835,16 @@ from PEM format data.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#printJSON">printJSON</a></b>(json, prefix)
+								</div>
+								<div class="description">output JSON object to console
+This method writes JSON object to console.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#readFile">readFile</a></b>(binFile)
 								</div>
 								<div class="description">read file and return file contents
@@ -865,6 +875,26 @@ This function only works in Node.js.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#readJSON">readJSON</a></b>(JSON)
+								</div>
+								<div class="description">read JSON file and return its JSON object
+This function only works in Node.js.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#readJSONC">readJSONC</a></b>(JSONC)
+								</div>
+								<div class="description">read JSONC file and return its JSON object
+This method read JSONC (i.e.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#rstrtohex">rstrtohex</a></b>(s)
 								</div>
 								<div class="description">convert a raw string including non printable characters to hexadecimal encoded string.</div>
@@ -888,6 +918,16 @@ This function only works in Node.js.</div>
 								</div>
 								<div class="description">save data represented by hexadecimal string to file
 This function only works in Node.js.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#saveFileJSON">saveFileJSON</a></b>(jsonFile, json)
+								</div>
+								<div class="description">save JSON object as file
+This method saves JSON object as a file.</div>
 							</td>
 						</tr>
 					
@@ -2677,6 +2717,69 @@ pemtohex("-----BEGIN EC PARAMETERS...----BEGIN EC PRIVATE KEY...." &rarr; "3082.
 
 					<hr />
 				
+					<a name="printJSON"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>printJSON</b>(json, prefix)
+					
+					</div>
+					<div class="description">
+						output JSON object to console
+This method writes JSON object to console.
+This function only works in Node.js.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/nodeutil-1.0.js.html">nodeutil-1.0.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var rsu = require("jsrsasign-util");
+var obj = {aaa: "bbb", "ccc": 123};
+rsu.printJSON(obj, "obj = ") &rarr;
+obj = {
+  "aaa": "bbb",
+  "ccc": 123
+}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>json</b>
+									
+								</dt>
+								<dd>JSON object to print out</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>prefix</b>
+									
+								</dt>
+								<dd>prefix string (OPTION)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign-util 1.0.1 nodeutil 1.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="readFile"> </a>
 					<div class="fixedFont">
 					
@@ -2810,6 +2913,124 @@ This function only works in Node.js.
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> utf-8 string of file contents</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="readJSON"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>readJSON</b>(JSON)
+					
+					</div>
+					<div class="description">
+						read JSON file and return its JSON object
+This function only works in Node.js.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/nodeutil-1.0.js.html">nodeutil-1.0.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var rsu = require("jsrsasign-util");
+rsu.readJSON("aaa.json") &rarr; JSON object</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>JSON</b>
+									
+								</dt>
+								<dd>file name to be read</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign-util 1.0.1 nodeutil 1.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> JSON object or array of file contents</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="readJSONC"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>readJSONC</b>(JSONC)
+					
+					</div>
+					<div class="description">
+						read JSONC file and return its JSON object
+This method read JSONC (i.e. JSON with comments) file
+and returns JSON object.
+This function only works in Node.js.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/nodeutil-1.0.js.html">nodeutil-1.0.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var rsu = require("jsrsasign-util");
+rsu.readJSONC("aaa.jsonc") &rarr; JSON object</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>JSONC</b>
+									
+								</dt>
+								<dd>file name to be read</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign-util 1.0.1 nodeutil 1.0.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> JSON object or array of file contents</dd>
 							
 							</dl>
 						
@@ -2958,6 +3179,64 @@ This function only works in Node.js.
 							</dl>
 						
 						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="saveFileJSON"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>saveFileJSON</b>(jsonFile, json)
+					
+					</div>
+					<div class="description">
+						save JSON object as file
+This method saves JSON object as a file.
+This function only works in Node.js.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/nodeutil-1.0.js.html">nodeutil-1.0.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var rsu = require("jsrsasign-util");
+rsu.saveJSONC("aaa.jsonc", json);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>jsonFile</b>
+									
+								</dt>
+								<dd>output JSON file name</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>json</b>
+									
+								</dt>
+								<dd>JSON object to save</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign-util 1.0.1 nodeutil 1.0.1</dd>
+							</dl>
+							</dl>
 						
 						
 						

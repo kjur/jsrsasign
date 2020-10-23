@@ -1,11 +1,9 @@
-/* nodeutil-1.0.0 (c) 2015 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* nodeutil-1.0.1 (c) 2015-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * nodeutil.js - Utilities for Node
  *
- * version: 1.0.0 (2015 Nov 11)
- *
- * Copyright (c) 2015 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2015-2020 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license/
@@ -18,10 +16,13 @@
  * @fileOverview
  * @name nodeutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.0 (2015-Nov-11)
+ * @version jsrsasign-util 1.0.1 nodeutil 1.0.1 (2020-Oct-23)
  * @since jsrsasign 5.0.2
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
+var fs = require("fs");
+var JSONC = require("jsonc-parser");
+var rs = require("jsrsasign");
 
 /**
  * read file and return file contents as utf-8 string
@@ -42,8 +43,6 @@ function readFileUTF8(utf8File) {
  * This function only works in Node.js.
  */
 function readFileHexByBin(binFile) {
-    var rs = require('jsrsasign');
-    var fs = require('fs');
     return rs.rstrtohex(fs.readFileSync(binFile, 'binary'));
 }
 
@@ -55,7 +54,6 @@ function readFileHexByBin(binFile) {
  * This function only works in Node.js.
  */
 function readFile(binFile) {
-    var fs = require('fs');
     return fs.readFileSync(binFile, 'binary');
 }
 
@@ -79,8 +77,90 @@ function saveFile(binFile, rawString) {
  * This function only works in Node.js.
  */
 function saveFileBinByHex(binFile, hexString) {
-    var fs = require('fs');
-    var rs = require('jsrsasign');
     var rawString = rs.hextorstr(hexString);
     fs.writeFileSync(binFile, rawString, 'binary');
 }
+
+/**
+ * read JSON file and return its JSON object
+ * @param {String} JSON file name to be read
+ * @return {Object} JSON object or array of file contents
+ * @since jsrsasign-util 1.0.1 nodeutil 1.0.1
+ *
+ * @description
+ * This function only works in Node.js.
+ * @example
+ * var rsu = require("jsrsasign-util");
+ * rsu.readJSON("aaa.json") &rarr; JSON object
+ */
+function readJSON(jsonFile) {
+    var jsonStr = fs.readFileSync(jsonFile, "utf8");
+    var json = JSON.parse(jsonStr);
+    return json;
+}
+
+/**
+ * read JSONC file and return its JSON object
+ * @param {String} JSONC file name to be read
+ * @return {Object} JSON object or array of file contents
+ * @since jsrsasign-util 1.0.1 nodeutil 1.0.1
+ *
+ * @description
+ * This method read JSONC (i.e. JSON with comments) file
+ * and returns JSON object.
+ * This function only works in Node.js.
+ * 
+ * @example
+ * var rsu = require("jsrsasign-util");
+ * rsu.readJSONC("aaa.jsonc") &rarr; JSON object
+ */
+function readJSONC(jsonFile) {
+    var jsonStr = fs.readFileSync(jsonFile, "utf8");
+    var json = JSONC.parse(jsonStr);
+    return json;
+}
+
+/**
+ * save JSON object as file
+ * @param {Object} jsonFile output JSON file name
+ * @param {Object} json JSON object to save
+ * @since jsrsasign-util 1.0.1 nodeutil 1.0.1
+ *
+ * @description
+ * This method saves JSON object as a file.
+ * This function only works in Node.js.
+ * 
+ * @example
+ * var rsu = require("jsrsasign-util");
+ * rsu.saveJSONC("aaa.jsonc", json);
+ */
+function saveFileJSON(jsonFile, json) {
+    var s = JSON.stringify(json, null, "  ");
+    saveFile(jsonFile, s);
+}
+
+/**
+ * output JSON object to console
+ * @param {Object} json JSON object to print out
+ * @param {Object} prefix prefix string (OPTION)
+ * @since jsrsasign-util 1.0.1 nodeutil 1.0.1
+ *
+ * @description
+ * This method writes JSON object to console.
+ * This function only works in Node.js.
+ * 
+ * @example
+ * var rsu = require("jsrsasign-util");
+ * var obj = {aaa: "bbb", "ccc": 123};
+ * rsu.printJSON(obj, "obj = ") &rarr;
+ * obj = {
+ *   "aaa": "bbb",
+ *   "ccc": 123
+ * }
+ */
+function printJSON(json, prefix) {
+    var s = "";
+    if (prefix != undefined) s = prefix;
+    console.log(s + JSON.stringify(json, null, "  "));
+}
+

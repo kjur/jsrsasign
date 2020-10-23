@@ -1,4 +1,4 @@
-/* x509-2.0.7.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.0.8.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.0.3 x509 2.0.7 (2020-Oct-21)
+ * @version jsrsasign 10.0.4 x509 2.0.8 (2020-Oct-23)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -2457,6 +2457,124 @@ function X509(params) {
 	    if (aExt[i].extname == extname) return aExt[i];
 	}
 	return null;
+
+    };
+
+    /**
+     * update CRLDistributionPoints Full URI in parameter<br/>
+     * @name updateCDPFullURI
+     * @memberOf X509#
+     * @function
+     * @param {Array} aExt array of extension parameters
+     * @param {String} newURI string of new uri
+     * @since jsrsasign 10.0.4 x509 2.0.8
+     * @see X509#findExt
+     * @see KJUR.asn1.x509.CRLDistributionPoints
+     *
+     * @description
+     * This method updates Full URI of CRLDistributionPoints extension
+     * in the extension parameter array if it exists.
+     *
+     * @example
+     * aExt = [
+     *   {extname:"authorityKeyIdentifier",kid:{hex:"12ab..."}},
+     *   {extname:"cRLDistributionPoints",
+          array:[{dpname:{full:[{uri:"http://example.com/a.crl"}]}}]},
+     * ];
+     * x = new X509();
+     * x.updateCDPFullURI(aExt, "http://crl2.example.new/b.crl");
+     */
+    this.updateExtCDPFullURI = function(aExt, newURI) {
+	var pExt = this.findExt(aExt, "cRLDistributionPoints");
+	if (pExt == null) return;
+	if (pExt.array == undefined) return;
+	var aDP = pExt.array;
+	for (var i = 0; i < aDP.length; i++) {
+	    if (aDP[i].dpname == undefined) continue;
+	    if (aDP[i].dpname.full == undefined) continue;
+	    var aURI = aDP[i].dpname.full;
+	    for (var j = 0; j < aURI.length; j++) {
+		var pURI = aURI[i];
+		if (pURI.uri == undefined) continue;
+		pURI.uri = newURI;
+	    }
+	}
+    };
+
+    /**
+     * update authorityInfoAccess ocsp in parameter<br/>
+     * @name updateAIAOCSP
+     * @memberOf X509#
+     * @function
+     * @param {Array} aExt array of extension parameters
+     * @param {String} newURI string of new uri
+     * @since jsrsasign 10.0.4 x509 2.0.8
+     * @see X509#findExt
+     * @see KJUR.asn1.x509.AuthorityInfoAccess
+     *
+     * @description
+     * This method updates "ocsp" accessMethod URI of 
+     * AuthorityInfoAccess extension
+     * in the extension parameter array if it exists.
+     *
+     * @example
+     * aExt = [
+     *   {extname:"authorityKeyIdentifier",kid:{hex:"12ab..."}},
+     *   {extname:"authoriyInfoAccess",
+     *    array:[
+     *      {ocsp: "http://ocsp1.example.com"},
+     *      {caissuer: "http://example.com/a.crt"}
+     *    ]}
+     * ];
+     * x = new X509();
+     * x.updateAIAOCSP(aExt, "http://ocsp2.example.net");
+     */
+    this.updateExtAIAOCSP = function(aExt, newURI) {
+	var pExt = this.findExt(aExt, "authorityInfoAccess");
+	if (pExt == null) return;
+	if (pExt.array == undefined) return;
+	var a = pExt.array;
+	for (var i = 0; i < a.length; i++) {
+	    if (a[i].ocsp != undefined) a[i].ocsp = newURI;
+	}
+    };
+
+    /**
+     * update authorityInfoAccess caIssuer in parameter<br/>
+     * @name updateAIACAIssuer
+     * @memberOf X509#
+     * @function
+     * @param {Array} aExt array of extension parameters
+     * @param {String} newURI string of new uri
+     * @since jsrsasign 10.0.4 x509 2.0.8
+     * @see X509#findExt
+     * @see KJUR.asn1.x509.AuthorityInfoAccess
+     *
+     * @description
+     * This method updates "caIssuer" accessMethod URI of 
+     * AuthorityInfoAccess extension
+     * in the extension parameter array if it exists.
+     *
+     * @example
+     * aExt = [
+     *   {extname:"authorityKeyIdentifier",kid:{hex:"12ab..."}},
+     *   {extname:"authoriyInfoAccess",
+     *    array:[
+     *      {ocsp: "http://ocsp1.example.com"},
+     *      {caissuer: "http://example.com/a.crt"}
+     *    ]}
+     * ];
+     * x = new X509();
+     * x.updateAIACAIssuer(aExt, "http://example.net/b.crt");
+     */
+    this.updateExtAIACAIssuer = function(aExt, newURI) {
+	var pExt = this.findExt(aExt, "authorityInfoAccess");
+	if (pExt == null) return;
+	if (pExt.array == undefined) return;
+	var a = pExt.array;
+	for (var i = 0; i < a.length; i++) {
+	    if (a[i].caissuer != undefined) a[i].caissuer = newURI;
+	}
     };
 
     /**

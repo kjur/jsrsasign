@@ -1324,6 +1324,41 @@ NOTE: <a href="../symbols/X509.html#parseExt">X509#parseExt</a> will called inte
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#updateAIACAIssuer">updateAIACAIssuer</a></b>(aExt, newURI)
+								</div>
+								<div class="description">update authorityInfoAccess caIssuer in parameter<br/>
+This method updates "caIssuer" accessMethod URI of 
+AuthorityInfoAccess extension
+in the extension parameter array if it exists.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#updateAIAOCSP">updateAIAOCSP</a></b>(aExt, newURI)
+								</div>
+								<div class="description">update authorityInfoAccess ocsp in parameter<br/>
+This method updates "ocsp" accessMethod URI of 
+AuthorityInfoAccess extension
+in the extension parameter array if it exists.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#updateCDPFullURI">updateCDPFullURI</a></b>(aExt, newURI)
+								</div>
+								<div class="description">update CRLDistributionPoints Full URI in parameter<br/>
+This method updates Full URI of CRLDistributionPoints extension
+in the extension parameter array if it exists.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#verifySignature">verifySignature</a></b>(pubKey)
 								</div>
 								<div class="description">verifies signature value by public key<br/>
@@ -5772,6 +5807,221 @@ x.readCertPEM(sCertPEM); // read certificate</pre>
 						
 						
 						
+						
+
+					<hr />
+				
+					<a name="updateAIACAIssuer"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>updateAIACAIssuer</b>(aExt, newURI)
+					
+					</div>
+					<div class="description">
+						update authorityInfoAccess caIssuer in parameter<br/>
+This method updates "caIssuer" accessMethod URI of 
+AuthorityInfoAccess extension
+in the extension parameter array if it exists.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">aExt = [
+  {extname:"authorityKeyIdentifier",kid:{hex:"12ab..."}},
+  {extname:"authoriyInfoAccess",
+   array:[
+     {ocsp: "http://ocsp1.example.com"},
+     {caissuer: "http://example.com/a.crt"}
+   ]}
+];
+x = new X509();
+x.updateAIACAIssuer(aExt, "http://example.net/b.crt");</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>aExt</b>
+									
+								</dt>
+								<dd>array of extension parameters</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>newURI</b>
+									
+								</dt>
+								<dd>string of new uri</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.0.4 x509 2.0.8</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509.html#findExt">X509#findExt</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.AuthorityInfoAccess.html">KJUR.asn1.x509.AuthorityInfoAccess</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="updateAIAOCSP"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>updateAIAOCSP</b>(aExt, newURI)
+					
+					</div>
+					<div class="description">
+						update authorityInfoAccess ocsp in parameter<br/>
+This method updates "ocsp" accessMethod URI of 
+AuthorityInfoAccess extension
+in the extension parameter array if it exists.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">aExt = [
+  {extname:"authorityKeyIdentifier",kid:{hex:"12ab..."}},
+  {extname:"authoriyInfoAccess",
+   array:[
+     {ocsp: "http://ocsp1.example.com"},
+     {caissuer: "http://example.com/a.crt"}
+   ]}
+];
+x = new X509();
+x.updateAIAOCSP(aExt, "http://ocsp2.example.net");</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>aExt</b>
+									
+								</dt>
+								<dd>array of extension parameters</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>newURI</b>
+									
+								</dt>
+								<dd>string of new uri</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.0.4 x509 2.0.8</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509.html#findExt">X509#findExt</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.AuthorityInfoAccess.html">KJUR.asn1.x509.AuthorityInfoAccess</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="updateCDPFullURI"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>updateCDPFullURI</b>(aExt, newURI)
+					
+					</div>
+					<div class="description">
+						update CRLDistributionPoints Full URI in parameter<br/>
+This method updates Full URI of CRLDistributionPoints extension
+in the extension parameter array if it exists.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">aExt = [
+  {extname:"authorityKeyIdentifier",kid:{hex:"12ab..."}},
+  {extname:"cRLDistributionPoints",
+          array:[{dpname:{full:[{uri:"http://example.com/a.crl"}]}}]},
+];
+x = new X509();
+x.updateCDPFullURI(aExt, "http://crl2.example.new/b.crl");</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>aExt</b>
+									
+								</dt>
+								<dd>array of extension parameters</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>newURI</b>
+									
+								</dt>
+								<dd>string of new uri</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.0.4 x509 2.0.8</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509.html#findExt">X509#findExt</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.CRLDistributionPoints.html">KJUR.asn1.x509.CRLDistributionPoints</a></dd>
+							
+							</dl>
 						
 
 					<hr />

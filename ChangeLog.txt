@@ -1,6 +1,16 @@
 
 ChangeLog for jsrsasign
 
+add methods to modify some extenstion parameters
+* Changes from 10.0.3 to 10.0.4 (2020-Oct-23)
+  - src/x509.js
+    - add X509.updateExt{CDPFullURI,AIAOCSP,AIACAIssuer} method
+  - src/nodeutil.js
+    - add read{JSON,JSONC},saveJSON,printJSON method added
+    - jrsasign-util npm package updated
+  - test/qunit-do-x509-param.html
+    - updated to follow above
+
 add findExt method in X509 class
 * Changes from 10.0.2 to 10.0.3 (2020-Oct-21)
   - src/x509.js

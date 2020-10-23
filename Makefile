@@ -20,7 +20,8 @@ FILES_MIN = \
 	min/x509-1.1.min.js \
 	min/jws-3.3.min.js \
 	min/jwsjs-2.0.min.js \
-	min/x509crl.min.js
+	min/x509crl.min.js \
+	min/nodeutil-1.0.min.js
  
 FILES_EXT_MIN = \
 	ext/ec-min.js \
@@ -43,7 +44,7 @@ gitadd-all-doc:
 	git add api/*.html api/symbols/*.html api/symbols/src/*.html
 
 gitadd-release:
-	git add ChangeLog.txt Makefile bower.json jsrsasign-*-min.js min/*.js src/*.js npm/package.json npm/lib/jsrsasign*.js npm/lib/{header,footer,lib}.js src/*.js test/qunit-do-*.html README.md npm/README.md tool/*.html
+	git add ChangeLog.txt Makefile bower.json jsrsasign-*-min.js min/*.js src/*.js npm/package.json npm/lib/jsrsasign*.js npm/lib/{header,footer,lib}.js src/*.js test/qunit-do-*.html README.md npm/README.md tool/*.html npm_util/*.* npm_util/lib/*.*
 
 gitadd: gitadd-all-doc gitadd-release
 	@echo done

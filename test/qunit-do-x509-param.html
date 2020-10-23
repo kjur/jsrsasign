@@ -590,6 +590,97 @@ pSKID.kid = {hex: "1234"};
 deepEqual(aExt, aExtExpect, "findExt");
 });
 
+// **** updateExtCDPFullURI
+test("updateExtCDPFullURI test", function() {
+var aParam = [{
+ "extname": "subjectAltName",
+ "array": [{"rfc822": "jcan-secretariat@jipdec.or.jp"}]
+},{
+ "extname": "cRLDistributionPoints",
+ "array": [{
+   "dpname": {"full": [{"uri": "http://example.com/a.crl"}]}
+ }]
+},{
+ "extname": "basicConstraints"
+}];
+var aExpect = [{
+ "extname": "subjectAltName",
+ "array": [{"rfc822": "jcan-secretariat@jipdec.or.jp"}]
+},{
+ "extname": "cRLDistributionPoints",
+ "array": [{
+   "dpname": {"full": [{"uri": "http://foo.com/b.crl"}]}
+ }]
+},{
+ "extname": "basicConstraints"
+}];
+var x = new X509();
+x.updateExtCDPFullURI(aParam,"http://foo.com/b.crl");
+deepEqual(aParam, aExpect);
+});
+
+// **** updateExtAIAOCSP;
+test("updateExtAIAOCSP test", function() {
+var aParam = [{
+ "extname": "subjectAltName",
+ "array": [{"rfc822": "jcan-secretariat@jipdec.or.jp"}]
+},{
+ "extname": "authorityInfoAccess",
+ "array": [
+   {"caissuer": "http://example.com/a.crt"},
+   {"ocsp": "http://ocsp.example.com"}
+ ]
+},{
+ "extname": "basicConstraints"
+}];
+var aExpect = [{
+ "extname": "subjectAltName",
+ "array": [{"rfc822": "jcan-secretariat@jipdec.or.jp"}]
+},{
+ "extname": "authorityInfoAccess",
+ "array": [
+   {"caissuer": "http://example.com/a.crt"},
+   {"ocsp": "http://ocsp.foo.net"}
+ ]
+},{
+ "extname": "basicConstraints"
+}];
+var x = new X509();
+x.updateExtAIAOCSP(aParam,"http://ocsp.foo.net");
+deepEqual(aParam, aExpect);
+});
+
+// **** updateExtAIACAIssuer;
+test("updateExtAIACAIssuer test", function() {
+var aParam = [{
+ "extname": "subjectAltName",
+ "array": [{"rfc822": "jcan-secretariat@jipdec.or.jp"}]
+},{
+ "extname": "authorityInfoAccess",
+ "array": [
+   {"caissuer": "http://example.com/a.crt"},
+   {"ocsp": "http://ocsp.example.com"}
+ ]
+},{
+ "extname": "basicConstraints"
+}];
+var aExpect = [{
+ "extname": "subjectAltName",
+ "array": [{"rfc822": "jcan-secretariat@jipdec.or.jp"}]
+},{
+ "extname": "authorityInfoAccess",
+ "array": [
+   {"caissuer": "http://example.foo.net/b.crt"},
+   {"ocsp": "http://ocsp.example.com"}
+ ]
+},{
+ "extname": "basicConstraints"
+}];
+var x = new X509();
+x.updateExtAIACAIssuer(aParam,"http://example.foo.net/b.crt");
+deepEqual(aParam, aExpect);
+});
+
 });
 </script>
   
