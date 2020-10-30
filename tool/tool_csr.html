@@ -44,6 +44,9 @@ function _doIt() {
     });
     f1.out_csr.value = pem;
     f1.out_prv.value = KEYUTIL.getPEM(kp.prvKeyObj, "PKCS8PRV");
+    try {
+      f1.out_dump.value = ASN1HEX.dump(pemtohex(pem));
+    } catch(ex) {}
     alert("Keypair and CSR successfully generated");
   } catch (ex) {
     alert("Failed: " + ex);
@@ -92,6 +95,9 @@ function _doIt() {
 <b>PKCS#8 plain PRIVATE KEY</b><br/>
 <textarea name="out_prv" cols="82" rows="5"></textarea>
 <br/>
+<b>ASN.1 dump of generated CSR</b><br/>
+<textarea name="out_dump" cols="82" rows="5"></textarea>
+<br/>
 
 </form>
 <h4>NOTE</h4>
@@ -116,7 +122,7 @@ CSR can be verify its self-signed signature by following OpenSSL command:
         <p class="copyright">This demo is powered by by <a href="https://kjur.github.io/jsrsasign/">jsrsasign</a>.</p>
         <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
 <div align="center" style="color: white">
-Copyright &copy; 2015 Kenji Urushima <a href="https://twitter.com/kjur">@kjur</a>. All rights reserved.
+Copyright &copy; 2015-2020 Kenji Urushima <a href="https://twitter.com/jsrsasign">@jsrsasign</a>. All rights reserved.
 </div>
       </footer>
     </div>

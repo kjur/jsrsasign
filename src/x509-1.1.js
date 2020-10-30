@@ -2479,7 +2479,7 @@ function X509(params) {
      * aExt = [
      *   {extname:"authorityKeyIdentifier",kid:{hex:"12ab..."}},
      *   {extname:"cRLDistributionPoints",
-          array:[{dpname:{full:[{uri:"http://example.com/a.crl"}]}}]},
+     *    array:[{dpname:{full:[{uri:"http://example.com/a.crl"}]}}]},
      * ];
      * x = new X509();
      * x.updateCDPFullURI(aExt, "http://crl2.example.new/b.crl");

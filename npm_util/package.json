@@ -1,6 +1,6 @@
 {
     "name": "jsrsasign-util",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "utilities for jsrsasign (kjur.github.io/jsrsasign) such like file utilities",
     "main": "lib/jsrsasign-util.js",
     "scripts": {
@@ -24,7 +24,7 @@
 	"url": "https://github.com/kjur/jsrsasign/issues"
     },
     "dependencies": {
-	"jsrsasign": "^1.0.0",
+	"jsrsasign": "^4.8.2",
 	"jsonc-parser": "^0.0.1"
     }
 }

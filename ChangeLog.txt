@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 10.0.4 to next release
+  - src/x509.js
+    - document fix
+  - tool/tool_csr.html
+    - update to show ASN.1 dump of CSR
+
 add methods to modify some extenstion parameters
 * Changes from 10.0.3 to 10.0.4 (2020-Oct-23)
   - src/x509.js
