@@ -62,6 +62,16 @@ test("b64utohex", function() {
     "123");
 });
 
+test("utf8tob64u", function() {
+equal(utf8tob64u("あ"), "44GC", "あ");
+equal(utf8tob64u("aaa"), "YWFh", "aaa");
+});
+
+test("b64utoutf8", function() {
+equal(b64utoutf8("44GC"), "あ", "あ");
+equal(b64utoutf8("YWFh"), "aaa", "aaa");
+});
+
 test("KJUR.lang.String.isInteger", function() {
   equal(KJUR.lang.String.isInteger("123"), true, "123");
   equal(KJUR.lang.String.isInteger("-123"), true, "-123");

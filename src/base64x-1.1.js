@@ -1,4 +1,4 @@
-/* base64x-1.1.16 (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* base64x-1.1.17 (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.0.0 base64x 1.1.16 (2020-Aug-13)
+ * @version jsrsasign 10.0.5 base64x 1.1.17 (2020-Nov-04)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -250,6 +250,9 @@ function b64utohex(s) {
  * @param {String} s UTF-8 encoded string
  * @return {String} Base64URL encoded string
  * @since 1.1
+ * @example
+ * utf8tob64u("あ") &rarr; "44GC"
+ * utf8tob64u("aaa") &rarr; "YWFh"
  */
 
 /**
@@ -259,17 +262,20 @@ function b64utohex(s) {
  * @param {String} s Base64URL encoded string
  * @return {String} UTF-8 encoded string
  * @since 1.1
+ * @example
+ * b64utoutf8("44GC") &rarr; "あ"
+ * b64utoutf8("YWFh") &rarr; "aaa"
  */
 
 var utf8tob64u, b64utoutf8;
 
 if (typeof Buffer === 'function') {
   utf8tob64u = function (s) {
-    return b64tob64u(new Buffer(s, 'utf8').toString('base64'));
+    return b64tob64u(Buffer.from(s, 'utf8').toString('base64'));
   };
 
   b64utoutf8 = function (s) {
-    return new Buffer(b64utob64(s), 'base64').toString('utf8');
+    return Buffer.from(b64utob64(s), 'base64').toString('utf8');
   };
 } else {
   utf8tob64u = function (s) {

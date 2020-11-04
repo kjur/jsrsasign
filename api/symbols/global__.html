@@ -1453,6 +1453,11 @@ NOTE: This can't be used for Base64URL encoded non ASCII characters.
 					
 					
 					
+					<pre class="code">b64utoutf8("44GC") &rarr; "あ"
+b64utoutf8("YWFh") &rarr; "aaa"</pre>
+					
+					
+					
 						
 							<dl class="detailList">
 							<dt class="heading">Parameters:</dt>
@@ -3616,6 +3621,11 @@ strdiffidx("abcdefgh", "abcdef") -> 6</pre>
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">utf8tob64u("あ") &rarr; "44GC"
+utf8tob64u("aaa") &rarr; "YWFh"</pre>
 					
 					
 					

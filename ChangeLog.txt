@@ -1,13 +1,22 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 10.0.4 to next release
+small issue fixes and updates
+* Changes from 10.0.4 to 10.0.5 release
+  - src/base64x.js
+    - utf8tob64u, b64utoutf8 
+      replace new Buffer() to Buffer.from() for 
+      Node.JS deprecation (issue #460)
+  - src/asn1x509.js
+    - P-256 oid added in OID class (PR #461 #333)
   - src/x509.js
     - document fix
   - tool/tool_csr.html
     - update to show ASN.1 dump of CSR
+  - test/qunit-do-base64x.html, npm/test/t_base64x.js
+    - update test code to follow above
 
-add methods to modify some extenstion parameters
+add methods to modify some extension parameters
 * Changes from 10.0.3 to 10.0.4 (2020-Oct-23)
   - src/x509.js
     - add X509.updateExt{CDPFullURI,AIAOCSP,AIACAIssuer} method
