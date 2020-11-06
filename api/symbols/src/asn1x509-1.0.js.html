@@ -156,7 +156,7 @@
 <span class='line'>149</span>  * NOTE1: 'params' can be omitted.&lt;br/>
 <span class='line'>150</span>  * NOTE2: DSA/ECDSA is also supported for CA signging key from asn1x509 1.0.6.
 <span class='line'>151</span>  * @example
-<span class='line'>152</span>  * var cert = new KJUR.asn1x509.Certificate({
+<span class='line'>152</span>  * var cert = new KJUR.asn1.x509.Certificate({
 <span class='line'>153</span>  *  version: 3,
 <span class='line'>154</span>  *  serial: {hex: "1234..."},
 <span class='line'>155</span>  *  sigalg: "SHA256withRSAandMGF1",
@@ -165,7 +165,7 @@
 <span class='line'>158</span>  * });
 <span class='line'>159</span>  *
 <span class='line'>160</span>  * // sighex will by calculated by signing with cakey
-<span class='line'>161</span>  * var cert = new KJUR.asn1x509.Certificate({
+<span class='line'>161</span>  * var cert = new KJUR.asn1.x509.Certificate({
 <span class='line'>162</span>  *  version: 3,
 <span class='line'>163</span>  *  serial: {hex: "2345..."},
 <span class='line'>164</span>  *  sigalg: "SHA256withRSA",
@@ -174,7 +174,7 @@
 <span class='line'>167</span>  * });
 <span class='line'>168</span>  *
 <span class='line'>169</span>  * // use TBSCertificate object to sign
-<span class='line'>170</span>  * var cert = new KJUR.asn1x509.Certificate({
+<span class='line'>170</span>  * var cert = new KJUR.asn1.x509.Certificate({
 <span class='line'>171</span>  *  tbsobj: &lt;&lt;OBJ>>,
 <span class='line'>172</span>  *  sigalg: "SHA256withRSA",
 <span class='line'>173</span>  *  cakey: "-----BEGIN PRIVATE KEY..."
@@ -2013,7 +2013,7 @@
 <span class='line'>2006</span>  * &lt;/ul>
 <span class='line'>2007</span>  *
 <span class='line'>2008</span>  * @example
-<span class='line'>2009</span>  * var crl = new KJUR.asn1x509.CRL({
+<span class='line'>2009</span>  * var crl = new KJUR.asn1.x509.CRL({
 <span class='line'>2010</span>  *  sigalg: "SHA256withRSA",
 <span class='line'>2011</span>  *  issuer: {str:'/C=JP/O=Test1'},
 <span class='line'>2012</span>  *  thisupdate: "200821235959Z",

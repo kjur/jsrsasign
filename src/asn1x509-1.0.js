@@ -149,7 +149,7 @@ if (typeof KJUR.asn1.x509 == "undefined" || !KJUR.asn1.x509) KJUR.asn1.x509 = {}
  * NOTE1: 'params' can be omitted.<br/>
  * NOTE2: DSA/ECDSA is also supported for CA signging key from asn1x509 1.0.6.
  * @example
- * var cert = new KJUR.asn1x509.Certificate({
+ * var cert = new KJUR.asn1.x509.Certificate({
  *  version: 3,
  *  serial: {hex: "1234..."},
  *  sigalg: "SHA256withRSAandMGF1",
@@ -158,7 +158,7 @@ if (typeof KJUR.asn1.x509 == "undefined" || !KJUR.asn1.x509) KJUR.asn1.x509 = {}
  * });
  *
  * // sighex will by calculated by signing with cakey
- * var cert = new KJUR.asn1x509.Certificate({
+ * var cert = new KJUR.asn1.x509.Certificate({
  *  version: 3,
  *  serial: {hex: "2345..."},
  *  sigalg: "SHA256withRSA",
@@ -167,7 +167,7 @@ if (typeof KJUR.asn1.x509 == "undefined" || !KJUR.asn1.x509) KJUR.asn1.x509 = {}
  * });
  *
  * // use TBSCertificate object to sign
- * var cert = new KJUR.asn1x509.Certificate({
+ * var cert = new KJUR.asn1.x509.Certificate({
  *  tbsobj: <<OBJ>>,
  *  sigalg: "SHA256withRSA",
  *  cakey: "-----BEGIN PRIVATE KEY..."
@@ -2006,7 +2006,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.PrivateExtension, KJUR.asn1.x509.Extension);
  * </ul>
  *
  * @example
- * var crl = new KJUR.asn1x509.CRL({
+ * var crl = new KJUR.asn1.x509.CRL({
  *  sigalg: "SHA256withRSA",
  *  issuer: {str:'/C=JP/O=Test1'},
  *  thisupdate: "200821235959Z",
