@@ -292,6 +292,27 @@ test("iptohex", function() {
         '2001:db8::abcd:ef12');
 });
 
+test("oidtohex", function() {
+equal(oidtohex("2.16.840.1.101.3.4.2.1"), "608648016503040201", "sha256");
+equal(oidtohex("1.2.840.113549.1.1.5"), "2a864886f70d010105", "SHA1withRSA");
+equal(oidtohex("2.5.4.6"), "550406", "2.5.4.6=550406");
+equal(oidtohex("2.5.12345"), "55e039", "2.5.12345=55e039");
+equal(oidtohex("2.5.b30="), null, "2.5.b30==null");
+});
+
+test("hextooid", function() {
+equal(hextooid("608648016503040201"), "2.16.840.1.101.3.4.2.1", "sha256");
+equal(hextooid("2a864886f70d010105"), "1.2.840.113549.1.1.5", "SHA1withRSA");
+equal(hextooid("=-=-"), null, "=-=- > null");
+});
+
+test("strpad", function() {
+equal(strpad("1234", 10, "0"), "0000001234", "1234 10 0");
+equal(strpad("1234", 10, " "), "      1234", "1234 10 _");
+equal(strpad("1234", 10), "0000001234", "1234 10");
+equal(strpad("1234", 3), "1234", "1234 3");
+});
+
 });
 </script>
   

@@ -1,9 +1,47 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 10.0.5 to next release
+add new CMSSignedData and TimeStamp parser and X500Name update
+* Changes from 10.0.5 to 10.1.0 release
+  - add new CMSSignedData and TimeStamp parser
+  - X500.get{X500Name,GeneralName,GeneralNames} result change
+  - src/asn1cms.js
+    - new CMSParser class for CMS SignedData
+      - get{CMSSignedData,SignedData,HashAlgArray,
+        EContent,SignerInfos,SignerInfo,SignerIdentifier,
+	IssuerAndSerialNumber,AttributeArray,
+	Attribute,ESSCertID,IssuerSerial,CertificateSet}
+      - set{ContentType,SigningTime,MessageDigest,
+        SigningCertificate}
+  - src/asn1tsp.js
+      - new TSPParser class to parser RFC 3161 TSP protocol
+      - get{Response,Token,TSTInfo,Accuracy,MessageImprint,
+        PKIStatusInfo}
+      - setTSTInfo
+  - src/asn1.js
+    - DERObjectIdentifier class update to use new oidtohex
+  - src/asn1hex.js
+    - add ASN1HEX.{getInt,getOID,getOIDName}
+  - src/asn1csr.js
+    - CSRUtil.getParam result "subject" parameter result is changed
+      because of X509.getX500Name update.
   - src/asn1x509.js
+    - small update for Time class
+    - small update for Certificate.sign method
     - document fix (issue #463)
+  - src/base64x.js
+    - function "oidtohex" and "hextooid" added.
+    - function "ishex" added
+    - KJUR.lang.String.isHex now *DEPRECATED*. Please use "ishex".
+  - src/x509.js
+    - X509.getX500Name update
+      - X509.get{Issuer,Subject,GeneralNames,GeneralName}
+    - add X509.{getX500NameArray,dnarraytostr}
+  - src/x509crl.js
+    - X509CRL.getIssuer update for X509.getX500Name update
+  - test/qunit-do-{asn1tsp,asn1cms,asn1hex,asn1x509-newcert-veri,
+    base64x,x509-ext,x509crl}.html
+    - updated to follow above
 
 small issue fixes and updates
 * Changes from 10.0.4 to 10.0.5 release

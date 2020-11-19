@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign JavaScript API Reference - RSAKey</title>
+		<title>jsrsasign JavaScript API Reference - KJUR.asn1.cms.CMSParser</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -516,7 +516,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class RSAKey
+				Class KJUR.asn1.cms.CMSParser
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -524,16 +524,16 @@ ul.inheritsList
 				
 				
 			
-				key of RSA public key algorithm
+				CMS SignedData parser class
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/rsasign-1.2.js.html">rsasign-1.2.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1cms-1.0.js.html">asn1cms-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class RSAKey.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.cms.CMSParser.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -546,9 +546,12 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/RSAKey.html#constructor">RSAKey</a></b>()
+								<b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#constructor">KJUR.asn1.cms.CMSParser</a></b>()
 							</div>
-							<div class="description">Tom Wu's RSA Key class and extension</div>
+							<div class="description">class for parsing CMS SignedData<br/>
+This is an ASN.1 parser for CMS SignedData defined in
+<a href="https://tools.ietf.org/html/rfc5652">RFC 5652
+Cryptographic Message Syntax (CMS)</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -562,7 +565,7 @@ ul.inheritsList
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class RSAKey.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.cms.CMSParser.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -573,146 +576,221 @@ ul.inheritsList
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.getHexValueArrayOfChildrenFromHex">getHexValueArrayOfChildrenFromHex</a></b>(sPEMPrivateKey)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttribute">getAttribute</a></b>(h)
 								</div>
-								<div class="description">static method to get array of hex field values from hexadecimal PKCS#5 RSA private key.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.getPosArrayOfChildrenFromHex">getPosArrayOfChildrenFromHex</a></b>(sPEMPrivateKey)
-								</div>
-								<div class="description">static method to get array of field positions from hexadecimal PKCS#5 RSA private key.</div>
+								<div class="description">parse ASN.1 Attributes<br/>
+This method parses ASN.1 Attribute defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#readCertPubKeyHex">readCertPubKeyHex</a></b>(h, nthPKI)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttributeArray">getAttributeArray</a></b>(h)
 								</div>
-								<div class="description">read an ASN.1 hexadecimal string of X.509 RSA public key certificate<br/></div>
+								<div class="description">parse ASN.1 SET OF Attributes<br/>
+This method parses ASN.1 SET OF Attribute defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#readPKCS5PrvKeyHex">readPKCS5PrvKeyHex</a></b>(h)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getCertificateSet">getCertificateSet</a></b>(h)
 								</div>
-								<div class="description">read an ASN.1 hexadecimal string of PKCS#1/5 plain RSA private key<br/></div>
+								<div class="description">parse ASN.1 CertificateSet<br/>
+This method parses ASN.1 IssuerSerial defined in 
+<a href="https://tools.ietf.org/html/rfc5652#section-10.2.3">
+RFC 5652 CMS section 10.2.3</a> and 
+<a href="https://tools.ietf.org/html/rfc5652#section-10.2.2">
+section 10.2.2</a>.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#readPKCS5PubKeyHex">readPKCS5PubKeyHex</a></b>(h)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getCMSSignedData">getCMSSignedData</a></b>(h)
 								</div>
-								<div class="description">read an ASN.1 hexadecimal string of PKCS#5 RSA public key<br/></div>
+								<div class="description">parse ASN.1 ContentInfo with SignedData<br/>
+This method parses ASN.1 ContentInfo with SignedData defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-3">section 3</a>
+and 
+<a href="https://tools.ietf.org/html/rfc5652#section-5">section 5</a>.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#readPKCS8PrvKeyHex">readPKCS8PrvKeyHex</a></b>(h)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getEContent">getEContent</a></b>(h)
 								</div>
-								<div class="description">read an ASN.1 hexadecimal string of PKCS#8 plain RSA private key<br/></div>
+								<div class="description">parse ASN.1 EncapsulatedContentInfo<br/>
+This method parses ASN.1 SignedData defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#readPKCS8PubKeyHex">readPKCS8PubKeyHex</a></b>(h)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getESSCertID">getESSCertID</a></b>(h)
 								</div>
-								<div class="description">read an ASN.1 hexadecimal string of PKCS#8 RSA public key<br/></div>
+								<div class="description">parse ASN.1 ESSCertID<br/>
+This method parses ASN.1 ESSCertID defined in 
+<a href="https://tools.ietf.org/html/rfc5035#section-6">
+RFC 5035 section 6</a>.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#readPrivateKeyFromPEMString">readPrivateKeyFromPEMString</a></b>(keyPEM)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getHashAlgArray">getHashAlgArray</a></b>(h)
 								</div>
-								<div class="description">read PKCS#1 private key from a string<br/></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.sign">sign</a></b>(s, hashAlg)
-								</div>
-								<div class="description">sign for a message string with RSA private key.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.signPSS">signPSS</a></b>(s, hashAlg, sLen)
-								</div>
-								<div class="description">sign for a message string with RSA private key by PKCS#1 PSS signing.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.signWithMessageHash">signWithMessageHash</a></b>(sHashHex, hashAlg)
-								</div>
-								<div class="description">sign hash value of message to be signed with RSA private key.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.signWithMessageHashPSS">signWithMessageHashPSS</a></b>(hHash, hashAlg, sLen)
-								</div>
-								<div class="description">sign hash value of message with RSA private key by PKCS#1 PSS signing.</div>
+								<div class="description">parse ASN.1 DigestAlgorithmIdentifiers<br/>
+This method parses ASN.1 SignedData defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5.1</a>.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/RSAKey.html#verify">verify</a></b>(sMsg, hSig)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getIssuerAndSerialNumber">getIssuerAndSerialNumber</a></b>(h)
 								</div>
-								<div class="description">verifies a sigature for a message string with RSA public key.</div>
+								<div class="description">parse ASN.1 IssuerAndSerialNumber<br/>
+This method parses ASN.1 IssuerAndSerialNumber defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.verifyPSS">verifyPSS</a></b>(sMsg, hSig, hashAlg, sLen)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getIssuerSerial">getIssuerSerial</a></b>(h)
 								</div>
-								<div class="description">verifies a sigature for a message string with RSA public key by PKCS#1 PSS sign.</div>
+								<div class="description">parse ASN.1 IssuerSerial<br/>
+This method parses ASN.1 IssuerSerial defined in 
+<a href="https://tools.ietf.org/html/rfc5035#section-6">
+RFC 5035 section 6</a>.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.verifyWithMessageHash">verifyWithMessageHash</a></b>(sHashHex, hSig)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getSignedData">getSignedData</a></b>(h)
 								</div>
-								<div class="description">verifies a sigature for a message string with RSA public key.</div>
+								<div class="description">parse ASN.1 SignedData<br/>
+This method parses ASN.1 SignedData defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5">section 5</a>.</div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">RSAKey.<b><a href="../symbols/RSAKey.html#.verifyWithMessageHashPSS">verifyWithMessageHashPSS</a></b>(hHash, hSig, hashAlg, sLen)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getSignerIdentifier">getSignerIdentifier</a></b>(h)
 								</div>
-								<div class="description">verifies a sigature for a hash value of message string with RSA public key by PKCS#1 PSS sign.</div>
+								<div class="description">parse ASN.1 SignerIdentifier<br/>
+This method parses ASN.1 SignerIdentifier defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getSignerInfo">getSignerInfo</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 SignerInfo<br/>
+This method parses ASN.1 SignerInfos defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getSignerInfos">getSignerInfos</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 SignerInfos<br/>
+This method parses ASN.1 SignerInfos defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#setContentType">setContentType</a></b>(pAttr)
+								</div>
+								<div class="description">set ContentType attribute<br/>
+This sets an attribute as ContentType defined in
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#setMessageDigest">setMessageDigest</a></b>(pAttr)
+								</div>
+								<div class="description">set MessageDigest attribute<br/>
+This sets an attribute as SigningTime defined in
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#setSigningCertificate">setSigningCertificate</a></b>(pAttr)
+								</div>
+								<div class="description">set SigningCertificate attribute<br/>
+This sets an attribute as SigningCertificate defined in
+<a href="https://tools.ietf.org/html/rfc5035#section-5">
+RFC 5035 section 5</a>.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#setSigningTime">setSigningTime</a></b>(pAttr)
+								</div>
+								<div class="description">set SigningTime attribute<br/>
+This sets an attribute as SigningTime defined in
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.</div>
 							</td>
 						</tr>
 					
@@ -733,11 +811,32 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>RSAKey</b>()
+						<b>KJUR.asn1.cms.CMSParser</b>()
 				</div>
 				
 				<div class="description">
-					Tom Wu's RSA Key class and extension
+					class for parsing CMS SignedData<br/>
+This is an ASN.1 parser for CMS SignedData defined in
+<a href="https://tools.ietf.org/html/rfc5652">RFC 5652
+Cryptographic Message Syntax (CMS)</a>.
+<pre>
+ContentInfo ::= SEQUENCE {
+   contentType ContentType,
+   content [0] EXPLICIT ANY DEFINED BY contentType }
+ContentType ::= OBJECT IDENTIFIER
+SignedData ::= SEQUENCE {
+   version CMSVersion,
+   digestAlgorithms DigestAlgorithmIdentifiers,
+   encapContentInfo EncapsulatedContentInfo,
+   certificates [0] IMPLICIT CertificateSet OPTIONAL,
+   crls [1] IMPLICIT RevocationInfoChoices OPTIONAL,
+   signerInfos SignerInfos }
+SignerInfos ::= SET OF SignerInfo
+CertificateSet ::= SET OF CertificateChoices
+DigestAlgorithmIdentifiers ::= SET OF DigestAlgorithmIdentifier
+CertificateSet ::= SET OF CertificateChoices
+RevocationInfoChoices ::= SET OF RevocationInfoChoice
+</pre>
 					
 				</div>
 				
@@ -746,6 +845,11 @@ ul.inheritsList
 				
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">Since:</dt>
+							<dd>jsrsasign 10.1.0 asn1cms 2.0.1</dd>
+						</dl>
 					
 					
 					
@@ -764,121 +868,36 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name=".getHexValueArrayOfChildrenFromHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{Array}</span>
-					<span class="light">RSAKey.</span><b>getHexValueArrayOfChildrenFromHex</b>(sPEMPrivateKey)
-					
-					</div>
-					<div class="description">
-						static method to get array of hex field values from hexadecimal PKCS#5 RSA private key.<br/>
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsapem-1.1.js.html">rsapem-1.1.js</a>.
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">RSAKey.getHexValueArrayOfChildrenFromHex("3082...") &rarr; ["00", "3b42...", ...]</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sPEMPrivateKey</b>
-									
-								</dt>
-								<dd>PEM PKCS#1/5 s private key string</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Array}</span> array of field hex value</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getPosArrayOfChildrenFromHex"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{Array}</span>
-					<span class="light">RSAKey.</span><b>getPosArrayOfChildrenFromHex</b>(sPEMPrivateKey)
-					
-					</div>
-					<div class="description">
-						static method to get array of field positions from hexadecimal PKCS#5 RSA private key.<br/>
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsapem-1.1.js.html">rsapem-1.1.js</a>.
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">RSAKey.getPosArrayOfChildrenFromHex("3082...") &rarr; [8, 32, ...]</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sPEMPrivateKey</b>
-									
-								</dt>
-								<dd>PEM PKCS#1/5 s private key string</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Array}</span> array of field positions</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="readCertPubKeyHex"> </a>
+					<a name="getAttribute"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>readCertPubKeyHex</b>(h, nthPKI)
+					<span class="light">{Array}</span>
+					<b>getAttribute</b>(h)
 					
 					</div>
 					<div class="description">
-						read an ASN.1 hexadecimal string of X.509 RSA public key certificate<br/>
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsapem-1.1.js.html">rsapem-1.1.js</a>.
+						parse ASN.1 Attributes<br/>
+This method parses ASN.1 Attribute defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.
+Following attribute type are supported in the
+latest version:
+<ul>
+<li>contentType</li>
+<li>messageDigest</li>
+<li>signingTime</li>
+<li>signingCertificate</li>
+</ul>
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+parser.getAttribute("30...") &rarr;
+{attr: "contentType", type: "tstinfo"}</pre>
 					
 					
 					
@@ -890,46 +909,59 @@ ul.inheritsList
 									<span class="light fixedFont">{String}</span> <b>h</b>
 									
 								</dt>
-								<dd>hexadecimal string of X.509 RSA public key certificate</dd>
+								<dd>hexadecimal string of ASN.1 Attribute</dd>
 							
-								<dt>
-									<span class="light fixedFont">{Integer}</span> <b>nthPKI</b>
-									
-								</dt>
-								<dd>nth index of publicKeyInfo. (DEFAULT: 6 for X509v3)</dd>
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of JSON object of Attribute parameter</dd>
 							
 							</dl>
 						
 						
 						
 							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>jsrsasign 7.1.0 rsapem 1.2.0</dd>
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.SignerInfo.html">KJUR.asn1.cms.SignerInfo</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttributeArray">KJUR.asn1.cms.CMSParser#getAttributeArray</a></dd>
+							
 							</dl>
-							</dl>
-						
-						
-						
-						
 						
 
 					<hr />
 				
-					<a name="readPKCS5PrvKeyHex"> </a>
+					<a name="getAttributeArray"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>readPKCS5PrvKeyHex</b>(h)
+					<span class="light">{Array}</span>
+					<b>getAttributeArray</b>(h)
 					
 					</div>
 					<div class="description">
-						read an ASN.1 hexadecimal string of PKCS#1/5 plain RSA private key<br/>
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsapem-1.1.js.html">rsapem-1.1.js</a>.
+						parse ASN.1 SET OF Attributes<br/>
+This method parses ASN.1 SET OF Attribute defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.
+This can be used for SignedAttributes and UnsignedAttributes.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+parser.getAttributeArray("30...") &rarr;
+[{attr: "contentType", type: "tstinfo"},
+ {attr: "messageDigest", hex: "1234abcd..."}]</pre>
 					
 					
 					
@@ -941,17 +973,869 @@ ul.inheritsList
 									<span class="light fixedFont">{String}</span> <b>h</b>
 									
 								</dt>
-								<dd>hexadecimal string of PKCS#1/5 plain RSA private key</dd>
+								<dd>hexadecimal string of ASN.1 SET OF Attribute</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of JSON object of Attribute parameter</dd>
 							
 							</dl>
 						
 						
 						
 							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>jsrsasign 7.1.0 rsapem 1.2.0</dd>
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.SignerInfo.html">KJUR.asn1.cms.SignerInfo</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttribute">KJUR.asn1.cms.CMSParser#getAttribute</a></dd>
+							
 							</dl>
+						
+
+					<hr />
+				
+					<a name="getCertificateSet"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getCertificateSet</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 CertificateSet<br/>
+This method parses ASN.1 IssuerSerial defined in 
+<a href="https://tools.ietf.org/html/rfc5652#section-10.2.3">
+RFC 5652 CMS section 10.2.3</a> and 
+<a href="https://tools.ietf.org/html/rfc5652#section-10.2.2">
+section 10.2.2</a>.
+<pre>
+CertificateSet ::= SET OF CertificateChoices
+CertificateChoices ::= CHOICE {
+  certificate Certificate,
+  extendedCertificate [0] IMPLICIT ExtendedCertificate, -- Obsolete
+  v1AttrCert [1] IMPLICIT AttributeCertificateV1,       -- Obsolete
+  v2AttrCert [2] IMPLICIT AttributeCertificateV2,
+  other [3] IMPLICIT OtherCertificateFormat }
+OtherCertificateFormat ::= SEQUENCE {
+  otherCertFormat OBJECT IDENTIFIER,
+  otherCert ANY DEFINED BY otherCertFormat }
+</pre>
+Currently only "certificate" is supported in
+CertificateChoices.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+parser.getCertificateSet("a0...") &rarr;
+[ "-----BEGIN CERTIFICATE...", ... ]</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 CertificateSet</dd>
+							
 							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of JSON object of CertificateSet parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CertificateSet.html">KJUR.asn1.cms.CertificateSet</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getCMSSignedData"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getCMSSignedData</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 ContentInfo with SignedData<br/>
+This method parses ASN.1 ContentInfo with SignedData defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-3">section 3</a>
+and 
+<a href="https://tools.ietf.org/html/rfc5652#section-5">section 5</a>.
+The result parameter can be passed to
+<a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a> constructor.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+parser.getCMSSignedData("30...") &rarr;
+{
+  version: 1,
+  hashalgs: ["sha1"],
+  econtent: {
+    type: "data",
+    content: {hex:"616161"}
+  },
+  certs: [PEM1,...],
+  sinfos: [{
+    version: 1,
+    id: {type:'isssn',issuer:{str:'/C=US/O=T1'},serial:{int: 1}},
+    hashalg: "sha1",
+    sattrs: {array: [{
+      attr: "contentType",
+      type: '1.2.840.113549.1.7.1'
+    },{
+      attr: "messageDigest",
+      hex: 'abcd'
+    }]},
+    sigalg: "SHA1withRSA",
+    sighex: "1234abcd..."
+  }]
+}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 ContentInfo with SignedData</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of JSON object of SignedData parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getSignedData">KJUR.asn1.cms.CMSParser#getSignedData</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getEContent"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getEContent</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 EncapsulatedContentInfo<br/>
+This method parses ASN.1 SignedData defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.
+The result parameter can be passed to
+<a href="../symbols/KJUR.asn1.cms.EncapsulatedContentInfo.html">KJUR.asn1.cms.EncapsulatedContentInfo</a> constructor.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+parser.getEContent("30...") &rarr;
+{type: "tstinfo", content: {hex: "30..."}}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 EncapsulatedContentInfo</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of JSON object of EncapsulatedContentInfo parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.EncapsulatedContentInfo.html">KJUR.asn1.cms.EncapsulatedContentInfo</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getSignedData">KJUR.asn1.cms.CMSParser#getSignedData</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getESSCertID"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getESSCertID</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 ESSCertID<br/>
+This method parses ASN.1 ESSCertID defined in 
+<a href="https://tools.ietf.org/html/rfc5035#section-6">
+RFC 5035 section 6</a>.
+<pre>
+ESSCertID ::= SEQUENCE {
+   certHash Hash,
+   issuerSerial IssuerSerial OPTIONAL }
+IssuerSerial ::= SEQUENCE {
+   issuer GeneralNames,
+   serialNumber CertificateSerialNumber }
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+parser.getESSCertID("30...") &rarr;
+{ hash: "12ab...",
+  issuer: {
+    array: [[{type:"C",value:"JP",ds:"prn"}],...],
+    str: "/C=JP/O=T1"
+  },
+  serial: {hex: "12ab..."} }</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 ESSCertID</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of JSON object of ESSCertID parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.ESSCertID.html">KJUR.asn1.cms.ESSCertID</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getHashAlgArray"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getHashAlgArray</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 DigestAlgorithmIdentifiers<br/>
+This method parses ASN.1 SignedData defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5.1</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+parser.getHashAlgArray("30...") &rarr; ["sha256"]</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 DigestAlgorithmIdentifiers</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of JSON object of digest algorithm names</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getSignedData">KJUR.asn1.cms.CMSParser#getSignedData</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getIssuerAndSerialNumber"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getIssuerAndSerialNumber</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 IssuerAndSerialNumber<br/>
+This method parses ASN.1 IssuerAndSerialNumber defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+parser.getIssuerAndSerialNumber("30...") &rarr;
+{ type: "isssn",
+  issuer: {
+    array: [[{type:"C",value:"JP",ds:"prn"},...]]
+    str: '/C=US/O=T1'
+  },
+  serial: {int: 1} }</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 IssuerAndSerialNumber</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of JSON object of IssuerAndSerialNumber parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.SignerInfo.html">KJUR.asn1.cms.SignerInfo</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getSignedData">KJUR.asn1.cms.CMSParser#getSignedData</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getIssuerSerial"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getIssuerSerial</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 IssuerSerial<br/>
+This method parses ASN.1 IssuerSerial defined in 
+<a href="https://tools.ietf.org/html/rfc5035#section-6">
+RFC 5035 section 6</a>.
+<pre>
+IssuerSerial ::= SEQUENCE {
+   issuer GeneralNames,
+   serialNumber CertificateSerialNumber }
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+parser.getIssuerSerial("30...") &rarr;
+{ issuer: {
+    array: [[{type:"C",value:"JP",ds:"prn"}],...],
+    str: "/C=JP/O=T1",
+  },
+  serial: {hex: "12ab..."} }</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 IssuerSerial</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of JSON object of IssuerSerial parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.IssuerSerial.html">KJUR.asn1.cms.IssuerSerial</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getSignedData"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getSignedData</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 SignedData<br/>
+This method parses ASN.1 SignedData defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5">section 5</a>.
+The result parameter can be passed to
+<a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a> constructor.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+parser.getSignedData("30...")</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 SignedData</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of JSON object of SignedData parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getSignedData">KJUR.asn1.cms.CMSParser#getSignedData</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getSignerIdentifier"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getSignerIdentifier</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 SignerIdentifier<br/>
+This method parses ASN.1 SignerIdentifier defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+parser.getSignerIdentifier("30...") &rarr;
+{ type: "isssn",
+  issuer: {
+    array: [[{type:"C",value:"JP",ds:"prn"},...]]
+    str: '/C=US/O=T1'
+  },
+  serial: {int: 1} }</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 SignerIdentifier</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of JSON object of SignerIdentifier parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.SignerInfo.html">KJUR.asn1.cms.SignerInfo</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.SignerIdentifier.html">KJUR.asn1.cms.SignerIdentifier</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getSignedData">KJUR.asn1.cms.CMSParser#getSignedData</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getSignerInfo"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getSignerInfo</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 SignerInfo<br/>
+This method parses ASN.1 SignerInfos defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.
+<pre>
+SignerInfo ::= SEQUENCE {
+   version CMSVersion,
+   sid SignerIdentifier,
+   digestAlgorithm DigestAlgorithmIdentifier,
+   signedAttrs [0] IMPLICIT SignedAttributes OPTIONAL,
+   signatureAlgorithm SignatureAlgorithmIdentifier,
+   signature SignatureValue,
+   unsignedAttrs [1] IMPLICIT UnsignedAttributes OPTIONAL }
+</pre>
+The result parameter can be passed to
+<a href="../symbols/KJUR.asn1.cms.SignerInfo.html">KJUR.asn1.cms.SignerInfo</a> constructor.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+parser.getSignerInfos("30...") &rarr;
+[{
+  version: 1,
+  id: {type: 'isssn', issuer: {str: '/C=US/O=T1'}, serial: {int: 1}},
+  hashalg: "sha1",
+  sattrs: {array: [{
+    attr: "contentType",
+    type: '1.2.840.113549.1.7.1'
+  },{
+    attr: "messageDigest",
+    hex: 'a1a2a3a4a5a6a7a8a9a0a1a2a3a4a5a6a7a8a9a0'
+  }]},
+  sigalg: "SHA1withRSA",
+  sighex: 'b1b2b...'
+}]</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 SignerInfo</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of JSON object of SignerInfo parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.SignerInfo.html">KJUR.asn1.cms.SignerInfo</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getSignedData">KJUR.asn1.cms.CMSParser#getSignedData</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getSignerInfos"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getSignerInfos</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 SignerInfos<br/>
+This method parses ASN.1 SignerInfos defined in 
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+parser.getSignerInfos("30...") &rarr;
+[{
+  version: 1,
+  id: {type: 'isssn', issuer: {str: '/C=US/O=T1'}, serial: {int: 1}},
+  hashalg: "sha1",
+  sattrs: {array: [{
+    attr: "contentType",
+    type: '1.2.840.113549.1.7.1'
+  },{
+    attr: "messageDigest",
+    hex: 'a1a2a3a4a5a6a7a8a9a0a1a2a3a4a5a6a7a8a9a0'
+  }]},
+  sigalg: "SHA1withRSA",
+  sighex: 'b1b2b...'
+}]</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 SignerInfos</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of JSON object of SignerInfos parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>KJUR.asn1.cms.SignerInfos</dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getSignedData">KJUR.asn1.cms.CMSParser#getSignedData</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="setContentType"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setContentType</b>(pAttr)
+					
+					</div>
+					<div class="description">
+						set ContentType attribute<br/>
+This sets an attribute as ContentType defined in
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+pAttr = {
+  attr: "contentType"
+  valhex: '060b2a864886f70d0109100104'
+};
+parser.setContentInfo(pAttr);
+pAttr &rarr; {
+  attr: "contentType"
+  type: "tstinfo"
+}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>pAttr</b>
+									
+								</dt>
+								<dd>JSON object of attribute parameter</dd>
+							
+							</dl>
+						
+						
 						
 						
 						
@@ -960,28 +1844,42 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd>former method</dd>
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttribute">KJUR.asn1.cms.CMSParser#getAttribute</a></dd>
 							
 							</dl>
 						
 
 					<hr />
 				
-					<a name="readPKCS5PubKeyHex"> </a>
+					<a name="setMessageDigest"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>readPKCS5PubKeyHex</b>(h)
+					<b>setMessageDigest</b>(pAttr)
 					
 					</div>
 					<div class="description">
-						read an ASN.1 hexadecimal string of PKCS#5 RSA public key<br/>
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsapem-1.1.js.html">rsapem-1.1.js</a>.
+						set MessageDigest attribute<br/>
+This sets an attribute as SigningTime defined in
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+pAttr = {
+  attr: "messageDigest"
+  valhex: '0403123456'
+};
+parser.setMessageDigest(pAttr);
+pAttr &rarr; {
+  attr: "messageDigest",
+  hex: "123456"
+}</pre>
 					
 					
 					
@@ -990,43 +1888,64 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>h</b>
+									<span class="light fixedFont">{Array}</span> <b>pAttr</b>
 									
 								</dt>
-								<dd>hexadecimal string of PKCS#5 public key</dd>
+								<dd>JSON object of attribute parameter</dd>
 							
 							</dl>
 						
 						
 						
+						
+						
+						
+						
 							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>jsrsasign 7.1.0 rsapem 1.2.0</dd>
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttribute">KJUR.asn1.cms.CMSParser#getAttribute</a></dd>
+							
 							</dl>
-							</dl>
-						
-						
-						
-						
 						
 
 					<hr />
 				
-					<a name="readPKCS8PrvKeyHex"> </a>
+					<a name="setSigningCertificate"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>readPKCS8PrvKeyHex</b>(h)
+					<b>setSigningCertificate</b>(pAttr)
 					
 					</div>
 					<div class="description">
-						read an ASN.1 hexadecimal string of PKCS#8 plain RSA private key<br/>
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsapem-1.1.js.html">rsapem-1.1.js</a>.
+						set SigningCertificate attribute<br/>
+This sets an attribute as SigningCertificate defined in
+<a href="https://tools.ietf.org/html/rfc5035#section-5">
+RFC 5035 section 5</a>.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+pAttr = {
+  attr: "signingCertificate"
+  valhex: '...'
+};
+parser.setSigningCertificate(pAttr);
+pAttr &rarr; {
+  attr: "signingCertificate",
+  array: [{
+    hash: "123456...",
+    issuer: {
+      array: [[{type:"C",value:"JP",ds:"prn"},...]],
+      str: "/C=JP/O=T1"
+    },
+    serial: {hex: "123456..."}
+  }]
+}</pre>
 					
 					
 					
@@ -1035,43 +1954,58 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>h</b>
+									<span class="light fixedFont">{Array}</span> <b>pAttr</b>
 									
 								</dt>
-								<dd>hexadecimal string of PKCS#8 plain RSA private key</dd>
+								<dd>JSON object of attribute parameter</dd>
 							
 							</dl>
 						
 						
 						
+						
+						
+						
+						
 							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>jsrsasign 7.1.0 rsapem 1.2.0</dd>
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttribute">KJUR.asn1.cms.CMSParser#getAttribute</a></dd>
+							
 							</dl>
-							</dl>
-						
-						
-						
-						
 						
 
 					<hr />
 				
-					<a name="readPKCS8PubKeyHex"> </a>
+					<a name="setSigningTime"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>readPKCS8PubKeyHex</b>(h)
+					<b>setSigningTime</b>(pAttr)
 					
 					</div>
 					<div class="description">
-						read an ASN.1 hexadecimal string of PKCS#8 RSA public key<br/>
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsapem-1.1.js.html">rsapem-1.1.js</a>.
+						set SigningTime attribute<br/>
+This sets an attribute as SigningTime defined in
+RFC 5652 
+<a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+section 5</a>.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+pAttr = {
+  attr: "signingTime"
+  valhex: '170d3230313233313233353935395a'
+};
+parser.setSigningTime(pAttr);
+pAttr &rarr; {
+  attr: "signingTime",
+  str: "2012315959Z"
+}</pre>
 					
 					
 					
@@ -1080,545 +2014,25 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>h</b>
+									<span class="light fixedFont">{Array}</span> <b>pAttr</b>
 									
 								</dt>
-								<dd>hexadecimal string of PKCS#8 public key</dd>
+								<dd>JSON object of attribute parameter</dd>
 							
 							</dl>
 						
 						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>jsrsasign 7.1.0 rsapem 1.2.0</dd>
-							</dl>
-							</dl>
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="readPrivateKeyFromPEMString"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>readPrivateKeyFromPEMString</b>(keyPEM)
-					
-					</div>
-					<div class="description">
-						read PKCS#1 private key from a string<br/>
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/rsapem-1.1.js.html">rsapem-1.1.js</a>.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>keyPEM</b>
-									
-								</dt>
-								<dd>string of PKCS#1 private key.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".sign"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">RSAKey.</span><b>sign</b>(s, hashAlg)
-					
-					</div>
-					<div class="description">
-						sign for a message string with RSA private key.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>s</b>
-									
-								</dt>
-								<dd>message string to be signed.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hashAlg</b>
-									
-								</dt>
-								<dd>hash algorithm name for signing.<br/></dd>
-							
-							</dl>
 						
 						
 						
 						
 						
 							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
+							<dt class="heading">See:</dt>
 							
-								<dd>returns hexadecimal string of signature value.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".signPSS"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">RSAKey.</span><b>signPSS</b>(s, hashAlg, sLen)
-					
-					</div>
-					<div class="description">
-						sign for a message string with RSA private key by PKCS#1 PSS signing.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>s</b>
-									
-								</dt>
-								<dd>message string to be signed.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hashAlg</b>
-									
-								</dt>
-								<dd>hash algorithm name for signing.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Integer}</span> <b>sLen</b>
-									
-								</dt>
-								<dd>salt byte length from 0 to (keybytelen - hashbytelen - 2).
-       There are two special values:
-       <ul>
-       <li>-1: sets the salt length to the digest length</li>
-       <li>-2: sets the salt length to maximum permissible value
-          (i.e. keybytelen - hashbytelen - 2)</li>
-       </ul>
-       DEFAULT is -1. (NOTE: OpenSSL's default is -2.)</dd>
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttribute">KJUR.asn1.cms.CMSParser#getAttribute</a></dd>
 							
 							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>returns hexadecimal string of signature value.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".signWithMessageHash"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">RSAKey.</span><b>signWithMessageHash</b>(sHashHex, hashAlg)
-					
-					</div>
-					<div class="description">
-						sign hash value of message to be signed with RSA private key.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sHashHex</b>
-									
-								</dt>
-								<dd>hexadecimal string of hash value of message to be signed.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hashAlg</b>
-									
-								</dt>
-								<dd>hash algorithm name for signing.<br/></dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>rsasign 1.2.6</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>returns hexadecimal string of signature value.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".signWithMessageHashPSS"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">RSAKey.</span><b>signWithMessageHashPSS</b>(hHash, hashAlg, sLen)
-					
-					</div>
-					<div class="description">
-						sign hash value of message with RSA private key by PKCS#1 PSS signing.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hHash</b>
-									
-								</dt>
-								<dd>hexadecimal hash value of message to be signed.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hashAlg</b>
-									
-								</dt>
-								<dd>hash algorithm name for signing.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Integer}</span> <b>sLen</b>
-									
-								</dt>
-								<dd>salt byte length from 0 to (keybytelen - hashbytelen - 2).
-       There are two special values:
-       <ul>
-       <li>-1: sets the salt length to the digest length</li>
-       <li>-2: sets the salt length to maximum permissible value
-          (i.e. keybytelen - hashbytelen - 2)</li>
-       </ul>
-       DEFAULT is -1. (NOTE: OpenSSL's default is -2.)</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>rsasign 1.2.6</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>returns hexadecimal string of signature value.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="verify"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>verify</b>(sMsg, hSig)
-					
-					</div>
-					<div class="description">
-						verifies a sigature for a message string with RSA public key.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sMsg</b>
-									
-								</dt>
-								<dd>message string to be verified.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hSig</b>
-									
-								</dt>
-								<dd>hexadecimal string of siganture.<br/>
-                non-hexadecimal charactors including new lines will be ignored.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>returns 1 if valid, otherwise 0</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".verifyPSS"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">RSAKey.</span><b>verifyPSS</b>(sMsg, hSig, hashAlg, sLen)
-					
-					</div>
-					<div class="description">
-						verifies a sigature for a message string with RSA public key by PKCS#1 PSS sign.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sMsg</b>
-									
-								</dt>
-								<dd>message string to be verified.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hSig</b>
-									
-								</dt>
-								<dd>hexadecimal string of signature value</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hashAlg</b>
-									
-								</dt>
-								<dd>hash algorithm name</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Integer}</span> <b>sLen</b>
-									
-								</dt>
-								<dd>salt byte length from 0 to (keybytelen - hashbytelen - 2).
-       There are two special values:
-       <ul>
-       <li>-1: sets the salt length to the digest length</li>
-       <li>-2: sets the salt length to maximum permissible value
-          (i.e. keybytelen - hashbytelen - 2)</li>
-       </ul>
-       DEFAULT is -1. (NOTE: OpenSSL's default is -2.)</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>returns true if valid, otherwise false</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".verifyWithMessageHash"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">RSAKey.</span><b>verifyWithMessageHash</b>(sHashHex, hSig)
-					
-					</div>
-					<div class="description">
-						verifies a sigature for a message string with RSA public key.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>sHashHex</b>
-									
-								</dt>
-								<dd>hexadecimal hash value of message to be verified.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hSig</b>
-									
-								</dt>
-								<dd>hexadecimal string of siganture.<br/>
-                non-hexadecimal charactors including new lines will be ignored.</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>rsasign 1.2.6</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>returns 1 if valid, otherwise 0</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".verifyWithMessageHashPSS"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">RSAKey.</span><b>verifyWithMessageHashPSS</b>(hHash, hSig, hashAlg, sLen)
-					
-					</div>
-					<div class="description">
-						verifies a sigature for a hash value of message string with RSA public key by PKCS#1 PSS sign.<br/>
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hHash</b>
-									
-								</dt>
-								<dd>hexadecimal hash value of message string to be verified.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hSig</b>
-									
-								</dt>
-								<dd>hexadecimal string of signature value</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hashAlg</b>
-									
-								</dt>
-								<dd>hash algorithm name</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Integer}</span> <b>sLen</b>
-									
-								</dt>
-								<dd>salt byte length from 0 to (keybytelen - hashbytelen - 2).
-       There are two special values:
-       <ul>
-       <li>-1: sets the salt length to the digest length</li>
-       <li>-2: sets the salt length to maximum permissible value
-          (i.e. keybytelen - hashbytelen - 2)</li>
-       </ul>
-       DEFAULT is -1 (NOTE: OpenSSL's default is -2.)</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>rsasign 1.2.6</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>returns true if valid, otherwise false</dd>
-							
-							</dl>
-						
-						
 						
 
 					

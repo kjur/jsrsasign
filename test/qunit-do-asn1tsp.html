@@ -561,6 +561,91 @@ equal(tsa.getTSTHex('626262', 'sha256').substr(0, 2), '30', 'bbb 1');
 equal(tsa.getTSTHex('626262', 'sha256').substr(0, 2), '30', 'bbb 2');
 });
 
+test("TSPParser test", function() {
+var hTSR = "3082024130030201003082023806092a864886f70d010702a082022930820225020103310f300d060960864801650304020105003053060b2a864886f70d0109100104a0440442304002010106042a0304053011300906052b0e03021a05000404a1a2a3a4020103181332303133313233313233353935392e3132335a3004800201f40101ff020103318201b8308201b40201013020301b310b3009060355040613025553310c300a060355040a0c0343413102014d300d06096086480165030402010500a06b301a06092a864886f70d010903310d060b2a864886f70d0109100104301c06092a864886f70d010905310f170d3133313233313233353935395a302f06092a864886f70d0109043122042024e488bbec64ebd7696c0e1aeff2743c697950f50d82404a4fb620d29f430259300d06092a864886f70d01010b0500048201003c2ef00801d245023bd1e519c7188e1585675550822de111b25db4cf6f3a400caec35758a5ceb08fb4a689eeb1541001f0c3ed5e1c2390cb9165bcde64cc6ed9e53752bfb8833784920be7f3838959180a46a6ade9b5cd901c4d845c95182cbedd37df79afc3096dc276d2e0c4b0ea514807e40d6bdac2c8fc83869f550968ccc0405b9f4e455ddb5683cc06bdc125afee75c898d29d1069a644721f12a51689508a1b09695978b828ff9025e877fd4b31ecde81ca1647be347dc47e8f2c85dc7d34e051382fa8ca5e834f8de224418f469d1eb78a631fa04f910a3de86c7badc273e212dba2b60791b0aec251046521fe9c2bd2d84f717f520035baa9a4577e";
+
+var parser = new KJUR.asn1.tsp.TSPParser();
+
+deepEqual(parser.getPKIStatusInfo("3003030100"), {status: "granted"}, "PKIStatusInfo granted");
+
+var pExpect1 = {
+  statusinfo: {status: "granted"},
+  version: 3,
+  hashalgs: ["sha256"],
+  econtent: {
+    type: "tstinfo",
+    content: {
+      policy: "1.2.3.4.5",
+      messageImprint: {
+        "alg": "sha1",
+        "hash": "a1a2a3a4"
+      },
+      genTime: {str: "20131231235959.123Z"},
+      serial: {hex: "03"},
+      accuracy: {millis: 500},
+      ordering: true,
+      nonce: {hex: "03"}
+    }
+  },
+  sinfos: [{
+    version: 1,
+    hashalg: "sha256",
+    id: {
+      type: "isssn",
+      issuer: {
+        array: [
+          [{type:"C",value:"US",ds:"prn"}],
+          [{type:"O",value:"CA1",ds:"utf8"}]
+        ],
+        str: "/C=US/O=CA1"
+      },
+      serial: {hex: "4d"}
+    },
+    sattrs: [{
+      attr: "contentType",
+      type: "tstinfo"
+    },{
+      attr: "signingTime",
+      str: "131231235959Z"
+    },{
+      attr: "messageDigest",
+      hex: "24e488bbec64ebd7696c0e1aeff2743c697950f50d82404a4fb620d29f430259"
+    }],
+    sigalg: "SHA256withRSA",
+    sighex: "048201003c2ef00801d245023bd1e519c7188e1585675550822de111b25db4cf6f3a400caec35758a5ceb08fb4a689eeb1541001f0c3ed5e1c2390cb9165bcde64cc6ed9e53752bfb8833784920be7f3838959180a46a6ade9b5cd901c4d845c95182cbedd37df79afc3096dc276d2e0c4b0ea514807e40d6bdac2c8fc83869f550968ccc0405b9f4e455ddb5683cc06bdc125afee75c898d29d1069a644721f12a51689508a1b09695978b828ff9025e877fd4b31ecde81ca1647be347dc47e8f2c85dc7d34e051382fa8ca5e834f8de224418f469d1eb78a631fa04f910a3de86c7badc273e212dba2b60791b0aec251046521fe9c2bd2d84f717f520035baa9a4577e"
+  }],
+};
+deepEqual(parser.getResponse(hTSR), pExpect1, "TimeStampResp");
+
+var hIn2 = "3009020107800107810107";
+var pExpect2 = {seconds: 7, millis: 7, micros: 7};
+deepEqual(parser.getAccuracy(hIn2), pExpect2, "accuracy=7,7,7");
+
+var hIn3 = "3004800201f4";
+var pExpect3 = {millis: 500};
+deepEqual(parser.getAccuracy(hIn3), pExpect3, "accuracy=-,500,-");
+
+var hIn4 = "306202010106042a0304053011300906052b0e03021a05000404a1a2a3a4020103181332303133313233313233353935392e3132335a3004800201f40101ff020103a020a41e301c310b3009060355040613025553310d300b060355040a0c0454535031";
+var pExpect4 = {
+  policy: "1.2.3.4.5",
+  messageImprint: {alg: "sha1", hash: "a1a2a3a4"},
+  serial: {hex: "03"},
+  genTime: {str: "20131231235959.123Z"},
+  accuracy: {millis: 500},
+  ordering: true,
+  nonce: {hex: "03"},
+  tsa: {
+    array: [
+      [{type:"C",value:"US",ds:"prn"}],
+      [{type:"O",value:"TSP1",ds:"utf8"}]
+    ],
+    str: "/C=US/O=TSP1"
+  }
+};
+deepEqual(parser.getTSTInfo(hIn4), pExpect4, "tstinfo");
+
+});
+
 });
 -->
 </script>

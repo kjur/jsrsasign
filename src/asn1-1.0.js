@@ -1,4 +1,4 @@
-/* asn1-1.0.20.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1-1.0.21.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.0.1 asn1 1.0.20 (2020-Oct-11)
+ * @version jsrsasign 10.1.0 asn1 1.0.21 (2020-Nov-18)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -368,7 +368,7 @@ KJUR.asn1.ASN1Util.oidHexToInt = function(hex) {
 };
 
 /**
- * get hexadecimal value of object identifier from dot noted oid value
+ * get hexadecimal value of object identifier from dot noted oid value (DEPRECATED)
  * @name oidIntToHex
  * @memberOf KJUR.asn1.ASN1Util
  * @function
@@ -376,6 +376,8 @@ KJUR.asn1.ASN1Util.oidHexToInt = function(hex) {
  * @return {String} hexadecimal value of object identifier
  * @since jsrsasign 4.8.3 asn1 1.0.7
  * @see {@link ASN1HEX.hextooidstr}
+ * @deprecated from jsrsasign 10.0.6. please use {@link oidtohex}
+ *
  * @description
  * This static method converts from object identifier value string.
  * to hexadecimal string representation of it.
@@ -1135,6 +1137,8 @@ YAHOO.lang.extend(KJUR.asn1.DERNull, KJUR.asn1.ASN1Object);
  * @class class for ASN.1 DER ObjectIdentifier
  * @param {Object} JSON object or string of parameters (ex. {'oid': '2.5.4.5'})
  * @extends KJUR.asn1.ASN1Object
+ * @see oidtohex
+ * 
  * @description
  * <br/>
  * As for argument 'params' for constructor, you can specify one of
@@ -1152,28 +1156,6 @@ YAHOO.lang.extend(KJUR.asn1.DERNull, KJUR.asn1.ASN1Object);
  * new DERObjectIdentifier("SHA1withRSA")
  */
 KJUR.asn1.DERObjectIdentifier = function(params) {
-    var itox = function(i) {
-        var h = i.toString(16);
-        if (h.length == 1) h = '0' + h;
-        return h;
-    };
-    var roidtox = function(roid) {
-        var h = '';
-        var bi = new BigInteger(roid, 10);
-        var b = bi.toString(2);
-        var padLen = 7 - b.length % 7;
-        if (padLen == 7) padLen = 0;
-        var bPad = '';
-        for (var i = 0; i < padLen; i++) bPad += '0';
-        b = bPad + b;
-        for (var i = 0; i < b.length - 1; i += 7) {
-            var b8 = b.substr(i, 7);
-            if (i != b.length - 7) b8 = '1' + b8;
-            h += itox(parseInt(b8, 2));
-        }
-        return h;
-    }
-
     KJUR.asn1.DERObjectIdentifier.superclass.constructor.call(this);
     this.hT = "06";
 
@@ -1202,17 +1184,9 @@ KJUR.asn1.DERObjectIdentifier = function(params) {
      * o.setValueOidString("2.5.4.13");
      */
     this.setValueOidString = function(oidString) {
-        if (! oidString.match(/^[0-9.]+$/)) {
+	var h = oidtohex(oidString);
+	if (h == null)
             throw new Error("malformed oid string: " + oidString);
-        }
-        var h = '';
-        var a = oidString.split('.');
-        var i0 = parseInt(a[0]) * 40 + parseInt(a[1]);
-        h += itox(i0);
-        a.splice(0, 2);
-        for (var i = 0; i < a.length; i++) {
-            h += roidtox(a[i]);
-        }
         this.hTLV = null;
         this.isModified = true;
         this.s = null;

@@ -235,6 +235,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cms.CertificateSet.html">KJUR.asn1.cms.CertificateSet</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.CMSParser.html">KJUR.asn1.cms.CMSParser</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.CMSUtil.html">KJUR.asn1.cms.CMSUtil</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.ContentInfo.html">KJUR.asn1.cms.ContentInfo</a></li>
@@ -380,6 +382,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampResp.html">KJUR.asn1.tsp.TimeStampResp</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.TSPParser.html">KJUR.asn1.tsp.TSPParser</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TSPUtil.html">KJUR.asn1.tsp.TSPUtil</a></li>
 	
@@ -617,6 +621,17 @@ ul.inheritsList
 						</tr>
 					</thead>
 					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#dnarraytostr">dnarraytostr</a></b>(aDN)
+								</div>
+								<div class="description">convert array for X500 distinguish name to distinguish name string<br/>
+This method converts from an array representation of 
+X.500 distinguished name to X.500 name string.</div>
+							</td>
+						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
@@ -1259,6 +1274,18 @@ RFC 5280 4.1.2.4</a>.</div>
 						</tr>
 					
 						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getX500NameArray">getX500NameArray</a></b>(h)
+								</div>
+								<div class="description">get X.500 Name ASN.1 structure parameter array<br/>
+This method will get Name parameter defined in
+<a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
+RFC 5280 4.1.2.4</a>.</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">X509.<b><a href="../symbols/X509.html#.hex2attrTypeValue">hex2attrTypeValue</a></b>(hex, idx)
@@ -1566,6 +1593,80 @@ X509 class provides following functionality:
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name="dnarraytostr"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>dnarraytostr</b>(aDN)
+					
+					</div>
+					<div class="description">
+						convert array for X500 distinguish name to distinguish name string<br/>
+This method converts from an array representation of 
+X.500 distinguished name to X.500 name string.
+This supports multi-valued RDN.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var x = new X509();
+x.dnarraytostr(
+  [[{type:"C",value:"JP",ds:"prn"}],
+  [{type:"O",value:"T1",ds:"prn"}]]) &rarr; "/C=JP/O=T1"
+x.dnarraytostr(
+  [[{type:"C",value:"JP",ds:"prn"}],
+  [{type:"O",value:"T1",ds:"prn"}
+   {type:"CN",value:"Bob",ds:"prn"}]]) &rarr; "/C=JP/O=T1+CN=Bob"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>aDN</b>
+									
+								</dt>
+								<dd>array for X500 distinguish name</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.0.6 x509 2.0.8</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> distinguish name</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509.html#getX500Name">X509#getX500Name</a></dd>
+							
+								<dd><a href="../symbols/X509.html#getX500NameArray">X509#getX500NameArray</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></dd>
+							
+							</dl>
+						
+
+					<hr />
 				
 					<a name="findExt"> </a>
 					<div class="fixedFont">
@@ -3932,7 +4033,14 @@ Result of this method can be passed to
 					
 					<pre class="code">x = new X509();
 x.getGeneralName("860f687474703a2f2f6161612e636f6d2f") 
-&rarr; {uri: "http://aaa.com/"}</pre>
+&rarr; {uri: "http://aaa.com/"}
+x.getGeneralName("a41c30...") &rarr;
+{ dn: {
+    array: [
+      [{type:"C", value:"JP", ds:"prn"}],
+      [{type:"O", value:"T1", ds:"utf8"}]
+    ],
+    str: "/C=JP/O=T1" } }</pre>
 					
 					
 					
@@ -4004,7 +4112,15 @@ Result of this method can be passed to
 					
 					<pre class="code">x = new X509();
 x.getGeneralNames("3011860f687474703a2f2f6161612e636f6d2f")
-&rarr; [{uri: "http://aaa.com/"}]</pre>
+&rarr; [{uri: "http://aaa.com/"}]
+
+x.getGeneralNames("301ea41c30...") &rarr;
+[{ dn: {
+    array: [
+      [{type:"C", value:"JP", ds:"prn"}],
+      [{type:"O", value:"T1", ds:"utf8"}]
+    ],
+    str: "/C=JP/O=T1" } }]</pre>
 					
 					
 					
@@ -4136,11 +4252,10 @@ signature: 1c1a0697dcd79c9f...</pre>
 					
 					
 					
-					<pre class="code">var x = new X509();
-x.readCertPEM(sCertPEM);
+					<pre class="code">var x = new X509(sCertPEM);
 x.getIssuer() &rarr;
 { array: [[{type:'C',value:'JP',ds:'prn'}],...],
-  str: "30..." }</pre>
+  str: "/C=JP/..." }</pre>
 					
 					
 					
@@ -4163,6 +4278,13 @@ x.getIssuer() &rarr;
 							</dl>
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509.html#getX500Name">X509#getX500Name</a></dd>
+							
+							</dl>
 						
 
 					<hr />
@@ -5159,11 +5281,10 @@ x.getSignatureValueHex() &rarr "8a4c47913..."</pre>
 					
 					
 					
-					<pre class="code">var x = new X509();
-x.readCertPEM(sCertPEM);
-x.getIssuer() &rarr;
+					<pre class="code">var x = new X509(sCertPEM);
+x.getSubject() &rarr;
 { array: [[{type:'C',value:'JP',ds:'prn'}],...],
-  str: "30..." }</pre>
+  str: "/C=JP/..." }</pre>
 					
 					
 					
@@ -5186,6 +5307,13 @@ x.getIssuer() &rarr;
 							</dl>
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509.html#getX500Name">X509#getX500Name</a></dd>
+							
+							</dl>
 						
 
 					<hr />
@@ -5421,6 +5549,93 @@ RDNSequence ::= SEQUENCE OF RelativeDistinguishedName
 					
 					<pre class="code">x = new X509();
 x.getX500Name("30...") &rarr;
+{ array: [
+    [{type:"C",value:"US",ds:"prn"}],
+    [{type:"O",value:"Sample Corp.",ds:"utf8"}],
+    [{type:"CN",value:"john.smith@example.com",ds:"ia5"}]
+  ],
+  str: "/C=US/O=Sample Corp./CN=john.smith@example.com",
+  hex: "30..."
+}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of Name</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 9.0.0 x509 2.0.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of RDN parameter array</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509.html#getX500NameArray">X509#getX500NameArray</a></dd>
+							
+								<dd><a href="../symbols/X509.html#getRDN">X509#getRDN</a></dd>
+							
+								<dd><a href="../symbols/X509.html#getAttrTypeAndValue">X509#getAttrTypeAndValue</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getX500NameArray"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getX500NameArray</b>(h)
+					
+					</div>
+					<div class="description">
+						get X.500 Name ASN.1 structure parameter array<br/>
+This method will get Name parameter defined in
+<a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
+RFC 5280 4.1.2.4</a>.
+<pre>
+Name ::= CHOICE { -- only one possibility for now --
+  rdnSequence  RDNSequence }
+RDNSequence ::= SEQUENCE OF RelativeDistinguishedName
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.getX500NameArray("30...") &rarr;
 [[{type:"C",value:"US",ds:"prn"}],
  [{type:"O",value:"Sample Corp.",ds:"utf8"}],
  [{type:"CN",value:"john.smith@example.com",ds:"ia5"}]]</pre>
@@ -5443,7 +5658,7 @@ x.getX500Name("30...") &rarr;
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
-								<dd>jsrsasign 9.0.0 x509 2.0.0</dd>
+								<dd>jsrsasign 10.0.6 x509 2.0.9</dd>
 							</dl>
 							</dl>
 						

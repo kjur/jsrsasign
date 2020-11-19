@@ -1,4 +1,4 @@
-/* asn1x509-2.1.5.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-2.1.6.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.0.5 asn1x509 2.1.5 (2020-Nov-04)
+ * @version jsrsasign 10.1.0 asn1x509 2.1.6 (2020-Nov-18)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -223,8 +223,13 @@ KJUR.asn1.x509.Certificate = function(params) {
      */
     this.sign = function() {
 	var params = this.params;
+
+	var sigalg = params.sigalg;
+	if (params.sigalg.name != undefined) 
+	    sigalg = params.sigalg.name;
+
 	var hTBS = params.tbsobj.getEncodedHex();
-	var sig = new KJUR.crypto.Signature({alg: params.sigalg});
+	var sig = new KJUR.crypto.Signature({alg: sigalg});
 	sig.init(params.cakey);
 	sig.updateHex(hTBS);
 	params.sighex = sig.sign();
@@ -362,8 +367,8 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
 	a.push(new _DERInteger(params.serial));
 	a.push(new _AlgorithmIdentifier({name: params.sigalg}));
 	a.push(new _X500Name(params.issuer));
-	a.push(new _DERSequence({array:[new _Time({str: params.notbefore}),
-					new _Time({str: params.notafter})]}));
+	a.push(new _DERSequence({array:[new _Time(params.notbefore),
+					new _Time(params.notafter)]}));
 	a.push(new _X500Name(params.subject));
 	a.push(new _SubjectPublicKeyInfo(KEYUTIL.getKey(params.sbjpubkey)));
 	if (params.ext !== undefined && params.ext.length > 0) {

@@ -16,8 +16,8 @@
  * @fileOverview
  * @name x509crl.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.1.4 x509crl 1.0.1 (2020-Aug-26)
- * @since jsrsasign 9.1.1
+ * @version jsrsasign 10.1.0 x509crl 1.0.2 (2020-Nov-18)
+ * @since jsrsasign 10.1.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -155,6 +155,7 @@ var X509CRL = function(params) {
      * @function
      * @return {Array} JSON object of issuer field
      * @see X509#getIssuer
+     * @see X509#getX500Name
      * @see KJUR.asn1.x509.X500Name
      *
      * @description
@@ -164,13 +165,12 @@ var X509CRL = function(params) {
      * @example
      * crl = new X509CRL("-----BEGIN X509 CRL...");
      * x.getIssuer() &rarr;
-     * { array: [[{type:'C',value:'JP',ds:'prn'}],...] }
+     * { array: [[{type:'C',value:'JP',ds:'prn'}],...],
+     *   str: "/C=JP/..." }
      */
     this.getIssuer = function() {
 	var hIssuer = _getTLVbyList(this.hex, 0, [0, this.posSigAlg + 1], "30");
-	var result = {};
-	result.array = _x509obj.getX500Name(hIssuer);
-	return result;
+	return _x509obj.getX500Name(hIssuer);
     };
 
     /**

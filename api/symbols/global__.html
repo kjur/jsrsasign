@@ -235,6 +235,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cms.CertificateSet.html">KJUR.asn1.cms.CertificateSet</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.CMSParser.html">KJUR.asn1.cms.CMSParser</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.CMSUtil.html">KJUR.asn1.cms.CMSUtil</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.ContentInfo.html">KJUR.asn1.cms.ContentInfo</a></li>
@@ -380,6 +382,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampResp.html">KJUR.asn1.tsp.TimeStampResp</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.TSPParser.html">KJUR.asn1.tsp.TSPParser</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TSPUtil.html">KJUR.asn1.tsp.TSPUtil</a></li>
 	
@@ -724,6 +728,17 @@ canonicalized IPv6 address string.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#hextooid">hextooid</a></b>(h)
+								</div>
+								<div class="description">get oid string from hexadecimal value of object identifier<br/>
+This static method converts from hexadecimal object identifier value 
+to dot noted OID value (ex.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#hextopem">hextopem</a></b>(dataHex, pemHeader)
 								</div>
 								<div class="description">get PEM string from hexadecimal data and header string
@@ -802,6 +817,15 @@ to a 16 byte hexadecimal string of address.</div>
 						</tr>
 					
 						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#.ishex">ishex</a></b>(s)
+								</div>
+								<div class="description">check whether a string is an hexadecimal string or not<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#newline_toDos">newline_toDos</a></b>(s)
@@ -818,6 +842,16 @@ a String "s".</div>
 								</div>
 								<div class="description">convert all DOS new line("\r\n") to UNIX new line("\n") in 
 a String "s".</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#oidtohex">oidtohex</a></b>(oidString)
+								</div>
+								<div class="description">get hexadecimal value of object identifier from dot noted oid value
+This static method converts from object identifier value string.</div>
 							</td>
 						</tr>
 					
@@ -928,6 +962,15 @@ This function only works in Node.js.</div>
 								</div>
 								<div class="description">save JSON object as file
 This method saves JSON object as a file.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#spad">spad</a></b>(s, len, padchar)
+								</div>
+								<div class="description">string padding<br/></div>
 							</td>
 						</tr>
 					
@@ -2074,6 +2117,76 @@ hextoip("xyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyz") &rarr raise exception</pre>
 
 					<hr />
 				
+					<a name="hextooid"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>hextooid</b>(h)
+					
+					</div>
+					<div class="description">
+						get oid string from hexadecimal value of object identifier<br/>
+This static method converts from hexadecimal object identifier value 
+to dot noted OID value (ex. "1.2.3.4").
+<a href="../symbols/global__.html#oidtohex">oidtohex</a> is a reverse function of this.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">hextooid("550406") &rarr; "2.5.4.6"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal value of object identifier</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.1.0 base64x 1.1.18</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> dot noted string of object identifier (ex. "1.2.3.4")</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/global__.html#oidtohex">oidtohex</a></dd>
+							
+								<dd><a href="../symbols/ASN1HEX.html#.hextooidstr">ASN1HEX.hextooidstr</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.ASN1Util.html#.oidIntToHex">KJUR.asn1.ASN1Util.oidIntToHex</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
 					<a name="hextopem"> </a>
 					<div class="fixedFont">
 					
@@ -2553,6 +2666,66 @@ to a 16 byte hexadecimal string of address.
 
 					<hr />
 				
+					<a name=".ishex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<b>ishex</b>(s)
+					
+					</div>
+					<div class="description">
+						check whether a string is an hexadecimal string or not<br/>
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">ishex("1234") &rarr; true
+ishex("12ab") &rarr; true
+ishex("12AB") &rarr; true
+ishex("12ZY") &rarr; false
+ishex("121") &rarr; false -- odd length</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>input string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>base64x 1.1.7 jsrsasign 5.0.13</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if a string "s" is an hexadecimal string otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="newline_toDos"> </a>
 					<div class="fixedFont">
 					
@@ -2643,6 +2816,76 @@ a String "s".
 							</dl>
 						
 						
+						
+
+					<hr />
+				
+					<a name="oidtohex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>oidtohex</b>(oidString)
+					
+					</div>
+					<div class="description">
+						get hexadecimal value of object identifier from dot noted oid value
+This static method converts from object identifier value string.
+to hexadecimal string representation of it.
+<a href="../symbols/global__.html#hextooid">hextooid</a> is a reverse function of this.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">oidtohex("2.5.4.6") &rarr; "550406"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>oidString</b>
+									
+								</dt>
+								<dd>dot noted string of object identifier</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.1.0 base64x 1.1.18</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal value of object identifier</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/global__.html#hextooid">hextooid</a></dd>
+							
+								<dd><a href="../symbols/ASN1HEX.html#.hextooidstr">ASN1HEX.hextooidstr</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.ASN1Util.html#.oidIntToHex">KJUR.asn1.ASN1Util.oidIntToHex</a></dd>
+							
+							</dl>
 						
 
 					<hr />
@@ -3244,6 +3487,76 @@ rsu.saveJSONC("aaa.jsonc", json);</pre>
 							</dl>
 						
 						
+						
+						
+						
+
+					<hr />
+				
+					<a name="spad"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>spad</b>(s, len, padchar)
+					
+					</div>
+					<div class="description">
+						string padding<br/>
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">strpad("1234", 10, "0") &rarr; "0000001234"
+strpad("1234", 10, " ") &rarr; "      1234"
+strpad("1234", 10)      &rarr; "0000001234"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>input string</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>len</b>
+									
+								</dt>
+								<dd>output string length</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>padchar</b>
+									
+								</dt>
+								<dd>padding character (default is "0")</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.1.0 base64x 1.1.18</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> padded string</dd>
+							
+							</dl>
 						
 						
 						
