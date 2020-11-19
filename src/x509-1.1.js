@@ -1,4 +1,4 @@
-/* x509-2.0.8.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.0.9.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.0.4 x509 2.0.8 (2020-Oct-23)
+ * @version jsrsasign 10.1.0 x509 2.0.9 (2020-Nov-18)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -232,19 +232,16 @@ function X509(params) {
      * @function
      * @return {Array} JSON object of issuer field
      * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see X509#getX500Name
      * @description
      * @example
-     * var x = new X509();
-     * x.readCertPEM(sCertPEM);
+     * var x = new X509(sCertPEM);
      * x.getIssuer() &rarr;
      * { array: [[{type:'C',value:'JP',ds:'prn'}],...],
-     *   str: "30..." }
+     *   str: "/C=JP/..." }
      */
     this.getIssuer = function() {
-	var result = {};
-	result.array = this.getX500Name(this.getIssuerHex());
-	result.str = this.getIssuerString();
-	return result;
+	return this.getX500Name(this.getIssuerHex())
     };
 
     /**
@@ -285,19 +282,16 @@ function X509(params) {
      * @function
      * @return {Array} JSON object of subject field
      * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see X509#getX500Name
      * @description
      * @example
-     * var x = new X509();
-     * x.readCertPEM(sCertPEM);
-     * x.getIssuer() &rarr;
+     * var x = new X509(sCertPEM);
+     * x.getSubject() &rarr;
      * { array: [[{type:'C',value:'JP',ds:'prn'}],...],
-     *   str: "30..." }
+     *   str: "/C=JP/..." }
      */
     this.getSubject = function() {
-	var result = {};
-	result.array = this.getX500Name(this.getSubjectHex());
-	result.str = this.getSubjectString();
-	return result;
+	return this.getX500Name(this.getSubjectHex());
     };
 
     /**
@@ -1158,6 +1152,14 @@ function X509(params) {
      * x = new X509();
      * x.getGeneralNames("3011860f687474703a2f2f6161612e636f6d2f")
      * &rarr; [{uri: "http://aaa.com/"}]
+     *
+     * x.getGeneralNames("301ea41c30...") &rarr;
+     * [{ dn: {
+     *     array: [
+     *       [{type:"C", value:"JP", ds:"prn"}],
+     *       [{type:"O", value:"T1", ds:"utf8"}]
+     *     ],
+     *     str: "/C=JP/O=T1" } }]
      */
     this.getGeneralNames = function(h) {
 	var aIdx = _getChildIdx(h, 0);
@@ -1201,6 +1203,13 @@ function X509(params) {
      * x = new X509();
      * x.getGeneralName("860f687474703a2f2f6161612e636f6d2f") 
      * &rarr; {uri: "http://aaa.com/"}
+     * x.getGeneralName("a41c30...") &rarr;
+     * { dn: {
+     *     array: [
+     *       [{type:"C", value:"JP", ds:"prn"}],
+     *       [{type:"O", value:"T1", ds:"utf8"}]
+     *     ],
+     *     str: "/C=JP/O=T1" } }
      */
     this.getGeneralName = function(h) {
 	var tag = h.substr(0, 2);
@@ -1208,9 +1217,9 @@ function X509(params) {
 	var sValue = hextorstr(hValue);
 	if (tag == "81") return {rfc822: sValue};
 	if (tag == "82") return {dns: sValue};
-	if (tag == "a4") return {dn: {hex: hValue}};
 	if (tag == "86") return {uri: sValue};
 	if (tag == "87") return {ip: hextoip(hValue)};
+	if (tag == "a4") return {dn: this.getX500Name(hValue)};
 	return undefined;
     };
 
@@ -2069,6 +2078,47 @@ function X509(params) {
      * @param {String} h hexadecimal string of Name
      * @return {Array} array of RDN parameter array
      * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see X509#getX500NameArray
+     * @see X509#getRDN
+     * @see X509#getAttrTypeAndValue
+     * @see KJUR.asn1.x509.X500Name
+     * @see KJUR.asn1.x509.GeneralName
+     * @see KJUR.asn1.x509.GeneralNames
+     * @description
+     * This method will get Name parameter defined in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
+     * RFC 5280 4.1.2.4</a>.
+     * <pre>
+     * Name ::= CHOICE { -- only one possibility for now --
+     *   rdnSequence  RDNSequence }
+     * RDNSequence ::= SEQUENCE OF RelativeDistinguishedName
+     * </pre>
+     * @example
+     * x = new X509();
+     * x.getX500Name("30...") &rarr;
+     * { array: [
+     *     [{type:"C",value:"US",ds:"prn"}],
+     *     [{type:"O",value:"Sample Corp.",ds:"utf8"}],
+     *     [{type:"CN",value:"john.smith@example.com",ds:"ia5"}]
+     *   ],
+     *   str: "/C=US/O=Sample Corp./CN=john.smith@example.com",
+     *   hex: "30..."
+     * }
+     */
+    this.getX500Name = function(h) {
+	var a = this.getX500NameArray(h);
+	var s = this.dnarraytostr(a);
+	return { array: a, str: s };
+    };
+
+    /**
+     * get X.500 Name ASN.1 structure parameter array<br/>
+     * @name getX500NameArray
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of Name
+     * @return {Array} array of RDN parameter array
+     * @since jsrsasign 10.0.6 x509 2.0.9
      * @see X509#getX500Name
      * @see X509#getRDN
      * @see X509#getAttrTypeAndValue
@@ -2083,12 +2133,12 @@ function X509(params) {
      * </pre>
      * @example
      * x = new X509();
-     * x.getX500Name("30...") &rarr;
+     * x.getX500NameArray("30...") &rarr;
      * [[{type:"C",value:"US",ds:"prn"}],
      *  [{type:"O",value:"Sample Corp.",ds:"utf8"}],
      *  [{type:"CN",value:"john.smith@example.com",ds:"ia5"}]]
      */
-    this.getX500Name = function(h) {
+    this.getX500NameArray = function(h) {
 	var result = [];
 	var a = _getChildIdx(h, 0);
 	for (var i = 0; i < a.length; i++) {
@@ -2575,6 +2625,45 @@ function X509(params) {
 	for (var i = 0; i < a.length; i++) {
 	    if (a[i].caissuer != undefined) a[i].caissuer = newURI;
 	}
+    };
+
+    /**
+     * convert array for X500 distinguish name to distinguish name string<br/>
+     * @name dnarraytostr
+     * @memberOf X509#
+     * @function
+     * @param {Array} aDN array for X500 distinguish name
+     * @return {String} distinguish name
+     * @since jsrsasign 10.0.6 x509 2.0.8
+     * @see X509#getX500Name
+     * @see X509#getX500NameArray
+     * @see KJUR.asn1.x509.X500Name
+     *
+     * @description
+     * This method converts from an array representation of 
+     * X.500 distinguished name to X.500 name string.
+     * This supports multi-valued RDN.
+     * 
+     * @example
+     * var x = new X509();
+     * x.dnarraytostr(
+     *   [[{type:"C",value:"JP",ds:"prn"}],
+     *   [{type:"O",value:"T1",ds:"prn"}]]) &rarr; "/C=JP/O=T1"
+     * x.dnarraytostr(
+     *   [[{type:"C",value:"JP",ds:"prn"}],
+     *   [{type:"O",value:"T1",ds:"prn"}
+     *    {type:"CN",value:"Bob",ds:"prn"}]]) &rarr; "/C=JP/O=T1+CN=Bob"
+     */
+    this.dnarraytostr = function(aDN) {
+	function rdnarraytostr(aRDN) {
+	    return aRDN.map(function(x){return atvtostr(x);}).join("+");
+	};
+
+	function atvtostr(pATV) {
+	    return pATV.type + "=" + pATV.value;
+	};
+
+	return "/" + aDN.map(function(x){return rdnarraytostr(x);}).join("/");
     };
 
     /**

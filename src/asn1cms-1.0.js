@@ -1,4 +1,4 @@
-/* asn1cms-2.0.0.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1cms-2.0.1.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1cms.js - ASN.1 DER encoder and verifier classes for Cryptographic Message Syntax(CMS)
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cms-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.0.0 asn1cms 2.0.0 (2020-Sep-22)
+ * @version jsrsasign 10.1.0 asn1cms 2.0.1 (2020-Nov-18)
  * @since jsrsasign 4.2.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -860,7 +860,7 @@ YAHOO.lang.extend(KJUR.asn1.cms.SignerIdentifier, KJUR.asn1.ASN1Object);
  * @example
  * // specify by X500Name and DERInteger
  * o = new KJUR.asn1.cms.IssuerAndSerialNumber(
- *      {issuer: {str: '/C=US/O=T1'}, serial {int: 3}});
+ *      {issuer: {str: '/C=US/O=T1'}, serial: {int: 3}});
  * // specify by PEM certificate
  * o = new KJUR.asn1.cms.IssuerAndSerialNumber({cert: certPEM});
  * o = new KJUR.asn1.cms.IssuerAndSerialNumber(certPEM); // since 1.0.3
@@ -2238,4 +2238,818 @@ KJUR.asn1.cms.CMSUtil.verifySignedData = function(param) {
     _verify(hCMS, result);
     
     return result;
+};
+
+/**
+ * class for parsing CMS SignedData<br/>
+ * @name KJUR.asn1.cms.CMSParser
+ * @class CMS SignedData parser class
+ * @since jsrsasign 10.1.0 asn1cms 2.0.1
+ *
+ * @description
+ * This is an ASN.1 parser for CMS SignedData defined in
+ * <a href="https://tools.ietf.org/html/rfc5652">RFC 5652
+ * Cryptographic Message Syntax (CMS)</a>.
+ * <pre>
+ * ContentInfo ::= SEQUENCE {
+ *    contentType ContentType,
+ *    content [0] EXPLICIT ANY DEFINED BY contentType }
+ * ContentType ::= OBJECT IDENTIFIER
+ * SignedData ::= SEQUENCE {
+ *    version CMSVersion,
+ *    digestAlgorithms DigestAlgorithmIdentifiers,
+ *    encapContentInfo EncapsulatedContentInfo,
+ *    certificates [0] IMPLICIT CertificateSet OPTIONAL,
+ *    crls [1] IMPLICIT RevocationInfoChoices OPTIONAL,
+ *    signerInfos SignerInfos }
+ * SignerInfos ::= SET OF SignerInfo
+ * CertificateSet ::= SET OF CertificateChoices
+ * DigestAlgorithmIdentifiers ::= SET OF DigestAlgorithmIdentifier
+ * CertificateSet ::= SET OF CertificateChoices
+ * RevocationInfoChoices ::= SET OF RevocationInfoChoice
+ * </pre>
+ */
+KJUR.asn1.cms.CMSParser = function() {
+    var _Error = Error,
+	_X509 = X509,
+	_x509obj = new _X509(),
+	_ASN1HEX = ASN1HEX,
+	_getV = _ASN1HEX.getV,
+	_getTLV = _ASN1HEX.getTLV,
+	_getIdxbyList = _ASN1HEX.getIdxbyList,
+	_getTLVbyList = _ASN1HEX.getTLVbyList,
+	_getTLVbyListEx = _ASN1HEX.getTLVbyListEx,
+	_getVbyList = _ASN1HEX.getVbyList,
+	_getChildIdx = _ASN1HEX.getChildIdx;
+
+    /**
+     * parse ASN.1 ContentInfo with SignedData<br/>
+     * @name getCMSSignedData
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 ContentInfo with SignedData
+     * @return {Array} array of JSON object of SignedData parameter
+     * @see KJUR.asn1.cms.SignedData
+     * @see KJUR.asn1.cms.CMSParser#getSignedData
+     *
+     * @description
+     * This method parses ASN.1 ContentInfo with SignedData defined in 
+     * RFC 5652 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-3">section 3</a>
+     * and 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-5">section 5</a>.
+     * The result parameter can be passed to
+     * {@link KJUR.asn1.cms.SignedData} constructor.
+     * 
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * parser.getCMSSignedData("30...") &rarr;
+     * {
+     *   version: 1,
+     *   hashalgs: ["sha1"],
+     *   econtent: {
+     *     type: "data",
+     *     content: {hex:"616161"}
+     *   },
+     *   certs: [PEM1,...],
+     *   sinfos: [{
+     *     version: 1,
+     *     id: {type:'isssn',issuer:{str:'/C=US/O=T1'},serial:{int: 1}},
+     *     hashalg: "sha1",
+     *     sattrs: {array: [{
+     *       attr: "contentType",
+     *       type: '1.2.840.113549.1.7.1'
+     *     },{
+     *       attr: "messageDigest",
+     *       hex: 'abcd'
+     *     }]},
+     *     sigalg: "SHA1withRSA",
+     *     sighex: "1234abcd..."
+     *   }]
+     * }
+     */
+    this.getCMSSignedData = function(h) {
+	var hSignedData = _getTLVbyList(h, 0, [1, 0]);
+	var pResult = this.getSignedData(hSignedData);
+	return pResult;
+    };
+
+    /**
+     * parse ASN.1 SignedData<br/>
+     * @name getSignedData
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 SignedData
+     * @return {Array} array of JSON object of SignedData parameter
+     * @see KJUR.asn1.cms.SignedData
+     * @see KJUR.asn1.cms.CMSParser#getSignedData
+     *
+     * @description
+     * This method parses ASN.1 SignedData defined in 
+     * RFC 5652 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-5">section 5</a>.
+     * The result parameter can be passed to
+     * {@link KJUR.asn1.cms.SignedData} constructor.
+     * 
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * parser.getSignedData("30...")
+     */
+    this.getSignedData = function(h) {
+	var aIdx = _getChildIdx(h, 0);
+	var pResult = {};
+
+	var hVersion = _getV(h, aIdx[0]);
+	var iVersion = parseInt(hVersion, 16);
+	pResult.version = iVersion;
+	
+	var hHashAlgs = _getTLV(h, aIdx[1]);
+	pResult.hashalgs = this.getHashAlgArray(hHashAlgs);
+
+	var hEContent = _getTLV(h, aIdx[2]);
+	pResult.econtent = this.getEContent(hEContent);
+
+	var hCerts = _getTLVbyListEx(h, 0, ["[0]"]);
+	if (hCerts != null) {
+	    pResult.certs = this.getCertificateSet(hCerts);
+	}
+
+	// RevocationInfoChoices not supported yet
+	var hRevInfos = _getTLVbyListEx(h, 0, ["[1]"]);
+	if (hRevInfos != null) {
+	}
+
+	var hSignerInfos = _getTLVbyListEx(h, 0, [3]);
+	pResult.sinfos = this.getSignerInfos(hSignerInfos);
+
+	return pResult;
+    };
+
+    /**
+     * parse ASN.1 DigestAlgorithmIdentifiers<br/>
+     * @name getHashAlgArray
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 DigestAlgorithmIdentifiers
+     * @return {Array} array of JSON object of digest algorithm names
+     * @see KJUR.asn1.cms.SignedData
+     * @see KJUR.asn1.cms.CMSParser#getSignedData
+     *
+     * @description
+     * This method parses ASN.1 SignedData defined in 
+     * RFC 5652 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+     * section 5.1</a>.
+     * 
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * parser.getHashAlgArray("30...") &rarr; ["sha256"]
+     */
+    this.getHashAlgArray = function(h) {
+	var aIdx = _getChildIdx(h, 0);
+	var x = new _X509();
+	var a = [];
+	for (var i = 0; i < aIdx.length; i++) {
+	    var hAlg = _getTLV(h, aIdx[i]);
+	    var sAlg = x.getAlgorithmIdentifierName(hAlg);
+	    a.push(sAlg);
+	}
+	return a;
+    };
+
+    /**
+     * parse ASN.1 EncapsulatedContentInfo<br/>
+     * @name getEContent
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 EncapsulatedContentInfo
+     * @return {Array} array of JSON object of EncapsulatedContentInfo parameter
+     * @see KJUR.asn1.cms.EncapsulatedContentInfo
+     * @see KJUR.asn1.cms.CMSParser#getSignedData
+     *
+     * @description
+     * This method parses ASN.1 SignedData defined in 
+     * RFC 5652 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+     * section 5</a>.
+     * The result parameter can be passed to
+     * {@link KJUR.asn1.cms.EncapsulatedContentInfo} constructor.
+     * 
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * parser.getEContent("30...") &rarr;
+     * {type: "tstinfo", content: {hex: "30..."}}
+     */
+    this.getEContent = function(h) {
+	var pResult = {};
+	var hType = _getVbyList(h, 0, [0]);
+	var hContent = _getVbyList(h, 0, [1, 0]);
+	pResult.type = KJUR.asn1.x509.OID.oid2name(ASN1HEX.hextooidstr(hType));
+	pResult.content = {hex: hContent};
+	return pResult;
+    };
+
+    /**
+     * parse ASN.1 SignerInfos<br/>
+     * @name getSignerInfos
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 SignerInfos
+     * @return {Array} array of JSON object of SignerInfos parameter
+     * @see KJUR.asn1.cms.SignerInfos
+     * @see KJUR.asn1.cms.CMSParser#getSignedData
+     *
+     * @description
+     * This method parses ASN.1 SignerInfos defined in 
+     * RFC 5652 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+     * section 5</a>.
+     * 
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * parser.getSignerInfos("30...") &rarr;
+     * [{
+     *   version: 1,
+     *   id: {type: 'isssn', issuer: {str: '/C=US/O=T1'}, serial: {int: 1}},
+     *   hashalg: "sha1",
+     *   sattrs: {array: [{
+     *     attr: "contentType",
+     *     type: '1.2.840.113549.1.7.1'
+     *   },{
+     *     attr: "messageDigest",
+     *     hex: 'a1a2a3a4a5a6a7a8a9a0a1a2a3a4a5a6a7a8a9a0'
+     *   }]},
+     *   sigalg: "SHA1withRSA",
+     *   sighex: 'b1b2b...'
+     * }]
+     */
+    this.getSignerInfos = function(h) {
+	var aResult = [];
+
+	var aIdx = _getChildIdx(h, 0);
+	for (var i = 0; i < aIdx.length; i++) {
+	    var hSignerInfo = _getTLV(h, aIdx[i]);
+	    var pSignerInfo = this.getSignerInfo(hSignerInfo);
+	    aResult.push(pSignerInfo);
+	}
+
+	return aResult;
+    };
+
+    /**
+     * parse ASN.1 SignerInfo<br/>
+     * @name getSignerInfo
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 SignerInfo
+     * @return {Array} array of JSON object of SignerInfo parameter
+     * @see KJUR.asn1.cms.SignerInfo
+     * @see KJUR.asn1.cms.CMSParser#getSignedData
+     *
+     * @description
+     * This method parses ASN.1 SignerInfos defined in 
+     * RFC 5652 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+     * section 5</a>.
+     * <pre>
+     * SignerInfo ::= SEQUENCE {
+     *    version CMSVersion,
+     *    sid SignerIdentifier,
+     *    digestAlgorithm DigestAlgorithmIdentifier,
+     *    signedAttrs [0] IMPLICIT SignedAttributes OPTIONAL,
+     *    signatureAlgorithm SignatureAlgorithmIdentifier,
+     *    signature SignatureValue,
+     *    unsignedAttrs [1] IMPLICIT UnsignedAttributes OPTIONAL }
+     * </pre>
+     * The result parameter can be passed to
+     * {@link KJUR.asn1.cms.SignerInfo} constructor.
+     * 
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * parser.getSignerInfos("30...") &rarr;
+     * [{
+     *   version: 1,
+     *   id: {type: 'isssn', issuer: {str: '/C=US/O=T1'}, serial: {int: 1}},
+     *   hashalg: "sha1",
+     *   sattrs: {array: [{
+     *     attr: "contentType",
+     *     type: '1.2.840.113549.1.7.1'
+     *   },{
+     *     attr: "messageDigest",
+     *     hex: 'a1a2a3a4a5a6a7a8a9a0a1a2a3a4a5a6a7a8a9a0'
+     *   }]},
+     *   sigalg: "SHA1withRSA",
+     *   sighex: 'b1b2b...'
+     * }]
+     */
+    this.getSignerInfo = function(h) {
+	var pResult = {};
+	var aIdx = _getChildIdx(h, 0);
+
+	var iVersion = _ASN1HEX.getInt(h, aIdx[0], -1);
+	if (iVersion != -1) pResult.version = iVersion;
+
+	var hSI = _getTLV(h, aIdx[1]);
+	var pSI = this.getIssuerAndSerialNumber(hSI);
+	pResult.id = pSI;
+
+	var hAlg = _getTLV(h, aIdx[2]);
+	//alert(hAlg);
+	var sAlg = _x509obj.getAlgorithmIdentifierName(hAlg);
+	pResult.hashalg = sAlg;
+
+	var hSattrs = _getTLVbyListEx(h, 0, ["[0]"]);
+	if (hSattrs != null) {
+	    var aSattrs = this.getAttributeArray(hSattrs);
+	    pResult.sattrs = aSattrs;
+	}
+
+	var hSigAlg = _getTLVbyListEx(h, 0, [3]);
+	var sSigAlg = _x509obj.getAlgorithmIdentifierName(hSigAlg);
+	pResult.sigalg = sSigAlg;
+
+	var hSigHex = _getTLVbyListEx(h, 0, [4]);
+	pResult.sighex = hSigHex;
+
+	var hUattrs = _getTLVbyListEx(h, 0, ["[1]"]);
+	if (hUattrs != null) {
+	    var aUattrs = this.getAttributeArray(hUattrs);
+	    pResult.uattrs = aUattrs;
+	}
+
+	return pResult;
+    };
+
+    /**
+     * parse ASN.1 SignerIdentifier<br/>
+     * @name getSignerIdentifier
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 SignerIdentifier
+     * @return {Array} array of JSON object of SignerIdentifier parameter
+     * @see KJUR.asn1.cms.SignerInfo
+     * @see KJUR.asn1.cms.SignerIdentifier
+     * @see KJUR.asn1.cms.CMSParser#getSignedData
+     *
+     * @description
+     * This method parses ASN.1 SignerIdentifier defined in 
+     * RFC 5652 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+     * section 5</a>.
+     * 
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * parser.getSignerIdentifier("30...") &rarr;
+     * { type: "isssn",
+     *   issuer: {
+     *     array: [[{type:"C",value:"JP",ds:"prn"},...]]
+     *     str: '/C=US/O=T1'
+     *   },
+     *   serial: {int: 1} }
+     */
+    this.getSignerIdentifier = function(h) {
+	if (h.substr(0, 2) == "30") {
+	    return this.getIssuerAndSerialNumber(h);
+	} else {
+	    throw new Error("SKID of signerIdentifier not supported");
+	}
+    };
+
+    /**
+     * parse ASN.1 IssuerAndSerialNumber<br/>
+     * @name getIssuerAndSerialNumber
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 IssuerAndSerialNumber
+     * @return {Array} array of JSON object of IssuerAndSerialNumber parameter
+     * @see KJUR.asn1.cms.SignerInfo
+     * @see KJUR.asn1.cms.CMSParser#getSignedData
+     *
+     * @description
+     * This method parses ASN.1 IssuerAndSerialNumber defined in 
+     * RFC 5652 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+     * section 5</a>.
+     * 
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * parser.getIssuerAndSerialNumber("30...") &rarr;
+     * { type: "isssn",
+     *   issuer: {
+     *     array: [[{type:"C",value:"JP",ds:"prn"},...]]
+     *     str: '/C=US/O=T1'
+     *   },
+     *   serial: {int: 1} }
+     */
+    this.getIssuerAndSerialNumber = function(h) {
+	var pResult = {type: "isssn"};
+
+	var aIdx = _getChildIdx(h, 0);
+
+	var hName = _getTLV(h, aIdx[0]);
+	pResult.issuer = _x509obj.getX500Name(hName);
+
+	var hSerial = _getV(h, aIdx[1]);
+	pResult.serial = {hex: hSerial};
+
+	return pResult;
+    };
+
+    /**
+     * parse ASN.1 SET OF Attributes<br/>
+     * @name getAttributeArray
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 SET OF Attribute
+     * @return {Array} array of JSON object of Attribute parameter
+     * @see KJUR.asn1.cms.SignerInfo
+     * @see KJUR.asn1.cms.CMSParser#getAttribute
+     *
+     * @description
+     * This method parses ASN.1 SET OF Attribute defined in 
+     * RFC 5652 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+     * section 5</a>.
+     * This can be used for SignedAttributes and UnsignedAttributes.
+     * 
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * parser.getAttributeArray("30...") &rarr;
+     * [{attr: "contentType", type: "tstinfo"},
+     *  {attr: "messageDigest", hex: "1234abcd..."}]
+     */
+    this.getAttributeArray = function(h) {
+	var aResult = [];
+
+	var aIdx = _getChildIdx(h, 0);
+	for (var i = 0; i < aIdx.length; i++) {
+	    var hAttr = _getTLV(h, aIdx[i]);
+	    var pAttr = this.getAttribute(hAttr);
+	    aResult.push(pAttr);
+	}
+
+	return aResult;
+    };
+
+    /**
+     * parse ASN.1 Attributes<br/>
+     * @name getAttribute
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 Attribute
+     * @return {Array} array of JSON object of Attribute parameter
+     * @see KJUR.asn1.cms.SignerInfo
+     * @see KJUR.asn1.cms.CMSParser#getAttributeArray
+     *
+     * @description
+     * This method parses ASN.1 Attribute defined in 
+     * RFC 5652 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+     * section 5</a>.
+     * Following attribute type are supported in the
+     * latest version:
+     * <ul>
+     * <li>contentType</li>
+     * <li>messageDigest</li>
+     * <li>signingTime</li>
+     * <li>signingCertificate</li>
+     * </ul>
+     * 
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * parser.getAttribute("30...") &rarr;
+     * {attr: "contentType", type: "tstinfo"}
+     */
+    this.getAttribute = function(h) {
+	var pResult = {};
+	var aIdx = _getChildIdx(h, 0);
+
+	var attrTypeOID = _ASN1HEX.getOID(h, aIdx[0]);
+	var attrType = KJUR.asn1.x509.OID.oid2name(attrTypeOID);
+	pResult.attr = attrType;
+
+	var hSet = _getTLV(h, aIdx[1]);
+	var aSetIdx = _getChildIdx(hSet, 0);
+	if (aSetIdx.length == 1) {
+	    pResult.valhex = _getTLV(hSet, aSetIdx[0]);
+	} else {
+	    var a = [];
+	    for (var i = 0; i < aSetIdx.length; i++) {
+		a.push(_getTLV(hSet, aSetIdx[i]));
+	    }
+	    pResult.valhex = a;
+	}
+
+	if (attrType == "contentType") {
+	    this.setContentType(pResult);
+	} else if (attrType == "messageDigest") {
+	    this.setMessageDigest(pResult);
+	} else if (attrType == "signingTime") {
+	    this.setSigningTime(pResult);
+	} else if (attrType == "signingCertificate") {
+	    this.setSigningCertificate(pResult);
+	}
+
+	return pResult;
+    };
+
+    /**
+     * set ContentType attribute<br/>
+     * @name setContentType
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {Array} pAttr JSON object of attribute parameter
+     * @see KJUR.asn1.cms.CMSParser#getAttribute
+     *
+     * @description
+     * This sets an attribute as ContentType defined in
+     * RFC 5652 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+     * section 5</a>.
+     *
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * pAttr = {
+     *   attr: "contentType"
+     *   valhex: '060b2a864886f70d0109100104'
+     * };
+     * parser.setContentInfo(pAttr);
+     * pAttr &rarr; {
+     *   attr: "contentType"
+     *   type: "tstinfo"
+     * }
+     */
+    this.setContentType = function(pAttr) {
+	var contentType = _ASN1HEX.getOIDName(pAttr.valhex, 0, null);
+	if (contentType != null) {
+	    pAttr.type = contentType;
+	    delete pAttr.valhex;
+	}
+    };
+
+    /**
+     * set SigningTime attribute<br/>
+     * @name setSigningTime
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {Array} pAttr JSON object of attribute parameter
+     * @see KJUR.asn1.cms.CMSParser#getAttribute
+     *
+     * @description
+     * This sets an attribute as SigningTime defined in
+     * RFC 5652 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+     * section 5</a>.
+     *
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * pAttr = {
+     *   attr: "signingTime"
+     *   valhex: '170d3230313233313233353935395a'
+     * };
+     * parser.setSigningTime(pAttr);
+     * pAttr &rarr; {
+     *   attr: "signingTime",
+     *   str: "2012315959Z"
+     * }
+     */
+    this.setSigningTime = function(pAttr) {
+	var hSigningTime = _getV(pAttr.valhex, 0);
+	var signingTime = hextoutf8(hSigningTime);
+	pAttr.str = signingTime;
+	delete pAttr.valhex;
+    };
+
+    /**
+     * set MessageDigest attribute<br/>
+     * @name setMessageDigest
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {Array} pAttr JSON object of attribute parameter
+     * @see KJUR.asn1.cms.CMSParser#getAttribute
+     *
+     * @description
+     * This sets an attribute as SigningTime defined in
+     * RFC 5652 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-5.1">
+     * section 5</a>.
+     *
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * pAttr = {
+     *   attr: "messageDigest"
+     *   valhex: '0403123456'
+     * };
+     * parser.setMessageDigest(pAttr);
+     * pAttr &rarr; {
+     *   attr: "messageDigest",
+     *   hex: "123456"
+     * }
+     */
+    this.setMessageDigest = function(pAttr) {
+	var hMD = _getV(pAttr.valhex, 0);
+	pAttr.hex = hMD;
+	delete pAttr.valhex;
+    };
+
+    /**
+     * set SigningCertificate attribute<br/>
+     * @name setSigningCertificate
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {Array} pAttr JSON object of attribute parameter
+     * @see KJUR.asn1.cms.CMSParser#getAttribute
+     *
+     * @description
+     * This sets an attribute as SigningCertificate defined in
+     * <a href="https://tools.ietf.org/html/rfc5035#section-5">
+     * RFC 5035 section 5</a>.
+     *
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * pAttr = {
+     *   attr: "signingCertificate"
+     *   valhex: '...'
+     * };
+     * parser.setSigningCertificate(pAttr);
+     * pAttr &rarr; {
+     *   attr: "signingCertificate",
+     *   array: [{
+     *     hash: "123456...",
+     *     issuer: {
+     *       array: [[{type:"C",value:"JP",ds:"prn"},...]],
+     *       str: "/C=JP/O=T1"
+     *     },
+     *     serial: {hex: "123456..."}
+     *   }]
+     * }
+     */
+    this.setSigningCertificate = function(pAttr) {
+	var aIdx = _getChildIdx(pAttr.valhex, 0);
+	if (aIdx.length > 0) {
+	    var hCerts = _getTLV(pAttr.valhex, aIdx[0]);
+	    var aCertIdx = _getChildIdx(hCerts, 0);
+	    var a = [];
+	    for (var i = 0; i < aCertIdx.length; i++) {
+		var hESSCertID = _getTLV(hCerts, aCertIdx[i]);
+		var pESSCertID = this.getESSCertID(hESSCertID);
+		a.push(pESSCertID);
+	    }
+	    pAttr.array = a;
+	}
+
+	if (aIdx.length > 1) {
+	    var hPolicies = _getTLV(pAttr.valhex, aIdx[1]);
+	    pAttr.polhex = hPolicies;
+	}
+	delete pAttr.valhex;
+    };
+
+    /**
+     * parse ASN.1 ESSCertID<br/>
+     * @name getESSCertID
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 ESSCertID
+     * @return {Array} array of JSON object of ESSCertID parameter
+     * @see KJUR.asn1.cms.ESSCertID
+     *
+     * @description
+     * This method parses ASN.1 ESSCertID defined in 
+     * <a href="https://tools.ietf.org/html/rfc5035#section-6">
+     * RFC 5035 section 6</a>.
+     * <pre>
+     * ESSCertID ::= SEQUENCE {
+     *    certHash Hash,
+     *    issuerSerial IssuerSerial OPTIONAL }
+     * IssuerSerial ::= SEQUENCE {
+     *    issuer GeneralNames,
+     *    serialNumber CertificateSerialNumber }
+     * </pre>
+     * 
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * parser.getESSCertID("30...") &rarr;
+     * { hash: "12ab...",
+     *   issuer: {
+     *     array: [[{type:"C",value:"JP",ds:"prn"}],...],
+     *     str: "/C=JP/O=T1"
+     *   },
+     *   serial: {hex: "12ab..."} }
+     */
+    this.getESSCertID = function(h) {
+	var pResult = {};
+	var aIdx = _getChildIdx(h, 0);
+
+	if (aIdx.length > 0) {
+	    var hCertHash = _getV(h, aIdx[0]);
+	    pResult.hash = hCertHash;
+	}
+
+	if (aIdx.length > 1) {
+	    var hIssuerSerial = _getTLV(h, aIdx[1]);
+	    var pIssuerSerial = 
+		this.getIssuerSerial(hIssuerSerial);
+
+	    if (pIssuerSerial.serial != undefined)
+		pResult.serial = pIssuerSerial.serial;
+
+	    if (pIssuerSerial.issuer != undefined)
+		pResult.issuer = pIssuerSerial.issuer;
+	}
+
+	return pResult;
+    };
+
+    /**
+     * parse ASN.1 IssuerSerial<br/>
+     * @name getIssuerSerial
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 IssuerSerial
+     * @return {Array} array of JSON object of IssuerSerial parameter
+     * @see KJUR.asn1.cms.IssuerSerial
+     * @see KJUR.asn1.x509.X500Name
+     *
+     * @description
+     * This method parses ASN.1 IssuerSerial defined in 
+     * <a href="https://tools.ietf.org/html/rfc5035#section-6">
+     * RFC 5035 section 6</a>.
+     * <pre>
+     * IssuerSerial ::= SEQUENCE {
+     *    issuer GeneralNames,
+     *    serialNumber CertificateSerialNumber }
+     * </pre>
+     * 
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * parser.getIssuerSerial("30...") &rarr;
+     * { issuer: {
+     *     array: [[{type:"C",value:"JP",ds:"prn"}],...],
+     *     str: "/C=JP/O=T1",
+     *   },
+     *   serial: {hex: "12ab..."} }
+     */
+    this.getIssuerSerial = function(h) {
+	var pResult = {};
+	var aIdx = _getChildIdx(h, 0);
+
+	var hIssuer = _getTLV(h, aIdx[0]);
+	var pIssuerGN = _x509obj.getGeneralNames(hIssuer);
+	var pIssuerName = pIssuerGN[0].dn;
+	pResult.issuer = pIssuerName;
+
+	var hSerial = _getV(h, aIdx[1]);
+	pResult.serial = {hex: hSerial};
+
+	return pResult;
+    };
+
+    /**
+     * parse ASN.1 CertificateSet<br/>
+     * @name getCertificateSet
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 CertificateSet
+     * @return {Array} array of JSON object of CertificateSet parameter
+     * @see KJUR.asn1.cms.CertificateSet
+     *
+     * @description
+     * This method parses ASN.1 IssuerSerial defined in 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-10.2.3">
+     * RFC 5652 CMS section 10.2.3</a> and 
+     * <a href="https://tools.ietf.org/html/rfc5652#section-10.2.2">
+     * section 10.2.2</a>.
+     * <pre>
+     * CertificateSet ::= SET OF CertificateChoices
+     * CertificateChoices ::= CHOICE {
+     *   certificate Certificate,
+     *   extendedCertificate [0] IMPLICIT ExtendedCertificate, -- Obsolete
+     *   v1AttrCert [1] IMPLICIT AttributeCertificateV1,       -- Obsolete
+     *   v2AttrCert [2] IMPLICIT AttributeCertificateV2,
+     *   other [3] IMPLICIT OtherCertificateFormat }
+     * OtherCertificateFormat ::= SEQUENCE {
+     *   otherCertFormat OBJECT IDENTIFIER,
+     *   otherCert ANY DEFINED BY otherCertFormat }
+     * </pre>
+     * Currently only "certificate" is supported in
+     * CertificateChoices.
+     * 
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * parser.getCertificateSet("a0...") &rarr;
+     * [ "-----BEGIN CERTIFICATE...", ... ]
+     */
+    this.getCertificateSet = function(h) {
+	var aIdx = _getChildIdx(h, 0);
+	var  a = [];
+	for (var i = 0; i < aIdx.length; i++) {
+	    var hCert = _getTLV(h, aIdx[i]);
+	    if (hCert.substr(0, 2) == "30") {
+		var pem = hextopem(hCert, "CERTIFICATE");
+		a.push(pem);
+	    }
+	}
+	return a;
+    };
 };

@@ -58,10 +58,10 @@ var certTmpl = {
    subject: {str: '/C=US/O=b'},
    sbjpubkey: null,
    ext: [
-     {basicConstraints: {cA: true, critical: true}},
-     {keyUsage: {bin: '11'}},
-     {cRLDistributionPoints: {uri: 'http://aaa.com/a.crl'}},
-     {extKeyUsage: {array: [{name: 'clientAuth'}]}},
+     {extname: "basicConstraints", cA: true, critical: true},
+     {extname: "keyUsage", bin: '11'},
+     {extname: "cRLDistributionPoints", uri: 'http://aaa.com/a.crl'},
+     {extname: "extKeyUsage", array: [{name: 'clientAuth'}]},
    ],
    cakey: null
 };

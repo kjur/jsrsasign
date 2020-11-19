@@ -235,6 +235,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cms.CertificateSet.html">KJUR.asn1.cms.CertificateSet</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.CMSParser.html">KJUR.asn1.cms.CMSParser</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.CMSUtil.html">KJUR.asn1.cms.CMSUtil</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.ContentInfo.html">KJUR.asn1.cms.ContentInfo</a></li>
@@ -380,6 +382,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampResp.html">KJUR.asn1.tsp.TimeStampResp</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.TSPParser.html">KJUR.asn1.tsp.TSPParser</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TSPUtil.html">KJUR.asn1.tsp.TSPUtil</a></li>
 	
@@ -627,6 +631,15 @@ nthList.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getInt">getInt</a></b>(h, idx, errorReturn)
+								</div>
+								<div class="description">get integer value from ASN.1 V(value)<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getL">getL</a></b>(s, idx)
 								</div>
 								<div class="description">get hexadecimal string for ASN.1 L(length) bytes<br/></div>
@@ -657,6 +670,26 @@ nthList.</div>
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getNthChildIdx">getNthChildIdx</a></b>(h, idx, nth)
 								</div>
 								<div class="description">get string index of nth child object of ASN.1 object refered by h, idx<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getOID">getOID</a></b>(h, idx, errorReturn)
+								</div>
+								<div class="description">get object identifier string from ASN.1 V(value)<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getOIDName">getOIDName</a></b>(h, idx, errorReturn)
+								</div>
+								<div class="description">get object identifier name from ASN.1 V(value)<br/>
+This static method returns object identifier name such as "sha256"
+if registered.</div>
 							</td>
 						</tr>
 					
@@ -1355,6 +1388,71 @@ ASN1HEX.getIdxbyListEx(h, 0, [0, 2], "0c") &rarr; -1 //not UTF8String(0c)</pre>
 
 					<hr />
 				
+					<a name=".getInt"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Number}</span>
+					<span class="light">ASN1HEX.</span><b>getInt</b>(h, idx, errorReturn)
+					
+					</div>
+					<div class="description">
+						get integer value from ASN.1 V(value)<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">ASN1HEX.getInt("xxxx020103xxxxxx", 4) &rarr 3</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>idx</b>
+									
+								</dt>
+								<dd>string index in h to get ASN.1 DER Integer</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>errorReturn</b>
+									
+								</dt>
+								<dd>(OPTION) error return value (DEFAULT: -1)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.1.0 asn1hex 1.2.7</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Number}</span> DER Integer value</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".getL"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1597,6 +1695,140 @@ getNextSiblingIdx("3006020103020104", 4) & rarr 10</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Number}</span> string index of nth child.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getOID"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">ASN1HEX.</span><b>getOID</b>(h, idx, errorReturn)
+					
+					</div>
+					<div class="description">
+						get object identifier string from ASN.1 V(value)<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">ASN1HEX.getInt("xxxx06032a0304xxxxxx", 4) &rarr "1.2.3.4"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>idx</b>
+									
+								</dt>
+								<dd>string index in h to get ASN.1 DER ObjectIdentifier</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>errorReturn</b>
+									
+								</dt>
+								<dd>(OPTION) error return value (DEFAULT: null)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.1.0 asn1hex 1.2.7</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> object identifier string (ex. "1.2.3.4")</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getOIDName"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">ASN1HEX.</span><b>getOIDName</b>(h, idx, errorReturn)
+					
+					</div>
+					<div class="description">
+						get object identifier name from ASN.1 V(value)<br/>
+This static method returns object identifier name such as "sha256"
+if registered. If not registered, it returns OID string. 
+(ex. "1.2.3.4")
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">ASN1HEX.getOIDName("xxxx0609608648016503040201xxxxxx", 4) &rarr "sha256"
+ASN1HEX.getOIDName("xxxx06032a0304xxxxxx", 4) &rarr "1.2.3.4"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>idx</b>
+									
+								</dt>
+								<dd>string index in h to get ASN.1 DER ObjectIdentifier</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>errorReturn</b>
+									
+								</dt>
+								<dd>(OPTION) error return value (DEFAULT: null)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.1.0 asn1hex 1.2.7</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> object identifier name (ex. "sha256") oir OID string</dd>
 							
 							</dl>
 						

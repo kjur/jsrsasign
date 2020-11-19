@@ -42,7 +42,7 @@ gitadd-all-doc:
 	git add api/*.html api/symbols/*.html api/symbols/src/*.html
 
 gitadd-release:
-	git add Makefile jsrsasign-*-min.js min/*.js src/*.js  src/*.js test/qunit-do-*.html lib/jsrsasign-*-all-min.js tool/tool_*.html
+	git add Makefile jsrsasign-*-min.js min/*.js src/*.js  src/*.js test/qunit-do-*.html test/x509crl.html lib/jsrsasign-*-all-min.js tool/tool_*.html
 
 gitadd: gitadd-all-doc gitadd-release
 	@echo done

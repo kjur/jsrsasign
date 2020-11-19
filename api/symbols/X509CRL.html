@@ -235,6 +235,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.cms.CertificateSet.html">KJUR.asn1.cms.CertificateSet</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.cms.CMSParser.html">KJUR.asn1.cms.CMSParser</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.cms.CMSUtil.html">KJUR.asn1.cms.CMSUtil</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.cms.ContentInfo.html">KJUR.asn1.cms.ContentInfo</a></li>
@@ -380,6 +382,8 @@ ul.inheritsList
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampResp.html">KJUR.asn1.tsp.TimeStampResp</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.tsp.TSPParser.html">KJUR.asn1.tsp.TSPParser</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.tsp.TSPUtil.html">KJUR.asn1.tsp.TSPUtil</a></li>
 	
@@ -900,7 +904,8 @@ JSON object.
 					
 					<pre class="code">crl = new X509CRL("-----BEGIN X509 CRL...");
 x.getIssuer() &rarr;
-{ array: [[{type:'C',value:'JP',ds:'prn'}],...] }</pre>
+{ array: [[{type:'C',value:'JP',ds:'prn'}],...],
+  str: "/C=JP/..." }</pre>
 					
 					
 					
@@ -922,6 +927,8 @@ x.getIssuer() &rarr;
 							<dt class="heading">See:</dt>
 							
 								<dd><a href="../symbols/X509.html#getIssuer">X509#getIssuer</a></dd>
+							
+								<dd><a href="../symbols/X509.html#getX500Name">X509#getX500Name</a></dd>
 							
 								<dd><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></dd>
 							

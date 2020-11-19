@@ -23,8 +23,8 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name x509crl.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign 9.1.4 x509crl 1.0.1 (2020-Aug-26)
-<span class='line'> 20</span>  * @since jsrsasign 9.1.1
+<span class='line'> 19</span>  * @version jsrsasign 10.1.0 x509crl 1.0.2 (2020-Nov-18)
+<span class='line'> 20</span>  * @since jsrsasign 10.1.0
 <span class='line'> 21</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
 <span class='line'> 23</span> 
@@ -162,22 +162,22 @@
 <span class='line'>155</span>      * @function
 <span class='line'>156</span>      * @return {Array} JSON object of issuer field
 <span class='line'>157</span>      * @see X509#getIssuer
-<span class='line'>158</span>      * @see KJUR.asn1.x509.X500Name
-<span class='line'>159</span>      *
-<span class='line'>160</span>      * @description
-<span class='line'>161</span>      * This method returns parsed issuer field value as
-<span class='line'>162</span>      * JSON object.
-<span class='line'>163</span>      *
-<span class='line'>164</span>      * @example
-<span class='line'>165</span>      * crl = new X509CRL("-----BEGIN X509 CRL...");
-<span class='line'>166</span>      * x.getIssuer() &rarr;
-<span class='line'>167</span>      * { array: [[{type:'C',value:'JP',ds:'prn'}],...] }
-<span class='line'>168</span>      */</span><span class="WHIT">
-<span class='line'>169</span> </span><span class="WHIT">    </span><span class="NAME">this.getIssuer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>170</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hIssuer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyList</span><span class="PUNC">(</span><span class="NAME">this.hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.posSigAlg</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>171</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>172</span> </span><span class="WHIT">	</span><span class="NAME">result.array</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_x509obj.getX500Name</span><span class="PUNC">(</span><span class="NAME">hIssuer</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>173</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>158</span>      * @see X509#getX500Name
+<span class='line'>159</span>      * @see KJUR.asn1.x509.X500Name
+<span class='line'>160</span>      *
+<span class='line'>161</span>      * @description
+<span class='line'>162</span>      * This method returns parsed issuer field value as
+<span class='line'>163</span>      * JSON object.
+<span class='line'>164</span>      *
+<span class='line'>165</span>      * @example
+<span class='line'>166</span>      * crl = new X509CRL("-----BEGIN X509 CRL...");
+<span class='line'>167</span>      * x.getIssuer() &rarr;
+<span class='line'>168</span>      * { array: [[{type:'C',value:'JP',ds:'prn'}],...],
+<span class='line'>169</span>      *   str: "/C=JP/..." }
+<span class='line'>170</span>      */</span><span class="WHIT">
+<span class='line'>171</span> </span><span class="WHIT">    </span><span class="NAME">this.getIssuer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hIssuer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyList</span><span class="PUNC">(</span><span class="NAME">this.hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.posSigAlg</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_x509obj.getX500Name</span><span class="PUNC">(</span><span class="NAME">hIssuer</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>174</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>175</span> 
 <span class='line'>176</span> </span><span class="WHIT">    </span><span class="COMM">/**

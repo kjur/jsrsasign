@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign JavaScript API Reference - KJUR.asn1.ocsp.SingleResponse</title>
+		<title>jsrsasign JavaScript API Reference - KJUR.asn1.tsp.TSPParser</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -516,26 +516,24 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.ocsp.SingleResponse
+				Class KJUR.asn1.tsp.TSPParser
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
-				<br />Extends
-					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
-				SingleResponse ASN.1 class encoder
+				RFC 3161 TimeStamp protocol parser class
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1ocsp-1.0.js.html">asn1ocsp-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1tsp-1.0.js.html">asn1tsp-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.ocsp.SingleResponse.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.tsp.TSPParser.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -548,11 +546,11 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.ocsp.SingleResponse.html#constructor">KJUR.asn1.ocsp.SingleResponse</a></b>(params)
+								<b><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#constructor">KJUR.asn1.tsp.TSPParser</a></b>()
 							</div>
-							<div class="description">SingleResponse ASN.1 class encoder<br/>
-ASN.1 class of SEQUENCE OF SingleResponse is defined in 
-<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>.</div>
+							<div class="description">class for parsing RFC 3161 TimeStamp protocol data<br/>
+This is an ASN.1 parser for 
+<a href="https://tools.ietf.org/html/rfc3161">RFC 3161</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -561,25 +559,96 @@ ASN.1 class of SEQUENCE OF SingleResponse is defined in
 
 <!-- ============================== properties summary ===================== -->
 			
-				
-				
-				
-				
-				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#params">params</a></dd>
-				</dl>
-				
-			
 
 <!-- ============================== methods summary ======================== -->
 			
 				
 				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.tsp.TSPParser.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#getAccuracy">getAccuracy</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 Accuracy<br/>
+This method parses ASN.1 Accuracy defined in RFC 3161.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#getMessageImprint">getMessageImprint</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 MessageImprint<br/>
+This method parses ASN.1 MessageImprint defined in RFC 3161.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#getPKIStatusInfo">getPKIStatusInfo</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 PKIStatusInfo<br/>
+This method parses ASN.1 PKIStatusInfo defined in RFC 3161.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#getResponse">getResponse</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 TimeStampResp<br/>
+This method parses ASN.1 TimeStampRsp defined in RFC 3161.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#getToken">getToken</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 TimeStampToken<br/>
+This method parses ASN.1 TimeStampRsp defined in RFC 3161.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#getTSTInfo">getTSTInfo</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 TSTInfo<br/>
+This method parses ASN.1 TSTInfo defined in RFC 3161.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#setTSTInfo">setTSTInfo</a></b>(pCMSSignedData)
+								</div>
+								<div class="description">set ASN.1 TSTInfo parameter to CMS SignedData parameter<br/>
+This method modifies "econtent.content" of CMS SignedData parameter
+to parsed TSTInfo.</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
 				
 				
-				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a></dd>
-				</dl>
 				
 			
 <!-- ============================== events summary ======================== -->
@@ -593,90 +662,30 @@ ASN.1 class of SEQUENCE OF SingleResponse is defined in
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.ocsp.SingleResponse</b>(params)
+						<b>KJUR.asn1.tsp.TSPParser</b>()
 				</div>
 				
 				<div class="description">
-					SingleResponse ASN.1 class encoder<br/>
-ASN.1 class of SEQUENCE OF SingleResponse is defined in 
-<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>. 
-<pre>
-SingleResponse ::= SEQUENCE {
-   certID                       CertID,
-   certStatus                   CertStatus,
-   thisUpdate                   GeneralizedTime,
-   nextUpdate         [0]       EXPLICIT GeneralizedTime OPTIONAL,
-   singleExtensions   [1]       EXPLICIT Extensions OPTIONAL }
-</pre>
-Following properties are available:
-<ul>
-<li>{Array}certid - JSON object of <a href="../symbols/KJUR.asn1.ocsp.CertID.html">KJUR.asn1.ocsp.CertID</a> parameter</li>
-<li>{Array}status - JSON object of <a href="../symbols/KJUR.asn1.ocsp.CertStatus.html">KJUR.asn1.ocsp.CertStatus</a> parameter</li>
-<li>{Object}thisupdate - <a href="../symbols/KJUR.asn1.DERGeneralizedTime.html">KJUR.asn1.DERGeneralizedTime</a> parameter
-for "thisUpdate"</li>
-<li>{Object}nextupdate (OPTION) - <a href="../symbols/KJUR.asn1.DERGeneralizedTime.html">KJUR.asn1.DERGeneralizedTime</a> parameter
-for "nextUpdate"</li>
-<li>{Array}ext (OPTION) - array of JSON object 
-<a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a> sub class parameter for
-"singleExtensions"</li>
-</ul>
+					class for parsing RFC 3161 TimeStamp protocol data<br/>
+This is an ASN.1 parser for 
+<a href="https://tools.ietf.org/html/rfc3161">RFC 3161</a>.
 					
 				</div>
 				
 				
 				
-				<pre class="code">new KJUR.asn1.ocsp.SingleResponse({
-  certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
-  status: {status: "good"},
-  thisupdate: "20200903235959Z",
-  nextupdate: "20200913235959Z",
-  ext: [<<Extension parameters>>...]
-})</pre>
 				
-				
-				
-				
-					
-						<dl class="detailList">
-						<dt class="heading">Parameters:</dt>
-						
-							<dt>
-								<span class="light fixedFont">{Array}</span>  <b>params</b>
-								
-							</dt>
-								<dd>JSON object for SingleResponse parameter</dd>
-						
-						</dl>
 					
 					
 					
 						<dl class="detailList">
 						<dt class="heading">Since:</dt>
-							<dd>jsrsasign 9.1.6 asn1ocsp 1.1.0</dd>
+							<dd>jsrsasign 10.1.0 asn1tsp 2.0.1</dd>
 						</dl>
 					
 					
 					
 					
-					
-						<dl class="detailList">
-						<dt class="heading">See:</dt>
-						
-							<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPResponse.html">KJUR.asn1.ocsp.OCSPResponse</a></dd>
-						
-							<dd><a href="../symbols/KJUR.asn1.ocsp.ResponseBytes.html">KJUR.asn1.ocsp.ResponseBytes</a></dd>
-						
-							<dd><a href="../symbols/KJUR.asn1.ocsp.BasicOCSPResponse.html">KJUR.asn1.ocsp.BasicOCSPResponse</a></dd>
-						
-							<dd><a href="../symbols/KJUR.asn1.ocsp.ResponseData.html">KJUR.asn1.ocsp.ResponseData</a></dd>
-						
-							<dd><a href="../symbols/KJUR.asn1.ocsp.SingleResponse.html">KJUR.asn1.ocsp.SingleResponse</a></dd>
-						
-							<dd><a href="../symbols/KJUR.asn1.ocsp.CertID.html">KJUR.asn1.ocsp.CertID</a></dd>
-						
-							<dd><a href="../symbols/KJUR.asn1.ocsp.CertStatus.html">KJUR.asn1.ocsp.CertStatus</a></dd>
-						
-						</dl>
 					
 
 			</div>
@@ -686,6 +695,506 @@ for "nextUpdate"</li>
 			
 
 <!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name="getAccuracy"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getAccuracy</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 Accuracy<br/>
+This method parses ASN.1 Accuracy defined in RFC 3161.
+<pre>
+Accuracy ::= SEQUENCE {
+   seconds        INTEGER              OPTIONAL,
+   millis     [0] INTEGER  (1..999)    OPTIONAL,
+   micros     [1] INTEGER  (1..999)    OPTIONAL  }
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.tsp.TSPParser();
+parser.getAccuracy("30...") &rarr; {millis: 500}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 Accuracy</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> JSON object of Accuracy parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.Accuracy.html">KJUR.asn1.tsp.Accuracy</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getMessageImprint"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getMessageImprint</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 MessageImprint<br/>
+This method parses ASN.1 MessageImprint defined in RFC 3161.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.tsp.TSPParser();
+parser.getMessageImprint("30...") &rarr; 
+{ alg: "sha256", hash: "12ab..." }</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 MessageImprint</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> JSON object of MessageImprint parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.MessageImprint.html">KJUR.asn1.tsp.MessageImprint</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getPKIStatusInfo"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getPKIStatusInfo</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 PKIStatusInfo<br/>
+This method parses ASN.1 PKIStatusInfo defined in RFC 3161.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.tsp.TSPParser();
+parser.getPKIStatusInfo("30...") &rarr; 
+{ status: "granted" }</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 PKIStatusInfo</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> JSON object of PKIStatusInfo parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.PKIStatusInfo.html">KJUR.asn1.tsp.PKIStatusInfo</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getResponse"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getResponse</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 TimeStampResp<br/>
+This method parses ASN.1 TimeStampRsp defined in RFC 3161.
+<pre>
+TimeStampResp ::= SEQUENCE {
+  status          PKIStatusInfo,
+  timeStampToken  TimeStampToken  OPTIONAL }
+</pre>
+When "h" is a TSP error response,
+returned parameter contains "statusinfo" only.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.tsp.TSPParser();
+parser.getResponse("30...") &rarr;
+{ 
+  statusinfo: 'granted',
+  ... // almost the same as CMS SignedData parameters
+  econtent: {
+    type: "tstinfo",
+    content: { // TSTInfo parameter
+      policy: '1.2.3.4.5',
+      messageImprint: {alg: 'sha256', hash: 'a1a2a3a4...'},
+      serialNumber: {'int': 3},
+      genTime: {str: '20131231235959.123Z'},
+      accuracy: {millis: 500},
+      ordering: true,
+      nonce: {int: 3}
+    }
+  },
+  ...
+}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 TimeStampResp</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> JSON object of TimeStampResp parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.TimeStampResp.html">KJUR.asn1.tsp.TimeStampResp</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getCMSSignedData">KJUR.asn1.cms.CMSParser#getCMSSignedData</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getToken"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getToken</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 TimeStampToken<br/>
+This method parses ASN.1 TimeStampRsp defined in RFC 3161.
+This method will parse "h" as CMS SigneData by
+<a href="../symbols/KJUR.asn1.cms.CMSParser.html#getCMSSignedData">KJUR.asn1.cms.CMSParser#getCMSSignedData</a>, then
+parse and modify "econtent.content" parameter by
+<a href="../symbols/KJUR.asn1.tsp.TSPParser.html#setTSTInfo">KJUR.asn1.tsp.TSPParser#setTSTInfo</a> method.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.tsp.TSPParser();
+parser.getToken("30...") &rarr;
+{ 
+  ... // almost the same as CMS SignedData parameters
+  econtent: {
+    type: "tstinfo",
+    content: { // TSTInfo parameter
+      policy: '1.2.3.4.5',
+      messageImprint: {alg: 'sha256', hash: 'a1a2a3a4...'},
+      serialNumber: {'int': 3},
+      genTime: {str: '20131231235959.123Z'},
+      accuracy: {millis: 500},
+      ordering: true,
+      nonce: {int: 3}
+    }
+  },
+  ...
+}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 TimeStampToken</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> JSON object of TimeStampToken parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getCMSSignedData">KJUR.asn1.cms.CMSParser#getCMSSignedData</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#setTSTInfo">KJUR.asn1.tsp.TSPParser#setTSTInfo</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getTSTInfo"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getTSTInfo</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 TSTInfo<br/>
+This method parses ASN.1 TSTInfo defined in RFC 3161.
+<pre>
+TSTInfo ::= SEQUENCE  {
+   version          INTEGER  { v1(1) },
+   policy           TSAPolicyId,
+   messageImprint   MessageImprint,
+   serialNumber     INTEGER,
+   genTime          GeneralizedTime,
+   accuracy         Accuracy                 OPTIONAL,
+   ordering         BOOLEAN             DEFAULT FALSE,
+   nonce            INTEGER                  OPTIONAL,
+   tsa              [0] GeneralName          OPTIONAL,
+   extensions       [1] IMPLICIT Extensions  OPTIONAL }
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.tsp.TSPParser();
+parser.getTSTInfo("30...") &rarr;
+{
+  policy: '1.2.3.4.5',
+  messageImprint: {alg: 'sha256', hash: 'a1a2a3a4...'},
+  serialNumber: {'int': 3},
+  genTime: {str: '20131231235959.123Z'},
+  accuracy: {millis: 500},
+  ordering: true,
+  nonce: {int: 3}
+}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 TSTInfo</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> JSON object of TSTInfo parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.TSTInfo.html">KJUR.asn1.tsp.TSTInfo</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="setTSTInfo"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setTSTInfo</b>(pCMSSignedData)
+					
+					</div>
+					<div class="description">
+						set ASN.1 TSTInfo parameter to CMS SignedData parameter<br/>
+This method modifies "econtent.content" of CMS SignedData parameter
+to parsed TSTInfo.
+<pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.tsp.TSPParser();
+pCMSSignedData = { 
+  ... // almost the same as CMS SignedData parameters
+  econtent: {
+    type: "tstinfo",
+    content: { hex: "30..." }
+  },
+  ...
+};
+parser.setTSTInfo(pCMSSignedData);
+pCMSSignedData &rarr; { 
+  ... // almost the same as CMS SignedData parameters
+  econtent: {
+    type: "tstinfo",
+    content: { // TSTInfo parameter
+      policy: '1.2.3.4.5',
+      messageImprint: {alg: 'sha256', hash: 'a1a2a3a4...'},
+      serialNumber: {int: 3},
+      genTime: {str: '20131231235959.123Z'},
+      accuracy: {millis: 500},
+      ordering: true,
+      nonce: {int: 3}
+    }
+  },
+  ...
+};</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>pCMSSignedData</b>
+									
+								</dt>
+								<dd>JSON object of CMS SignedData parameter</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getCMSSignedData">KJUR.asn1.cms.CMSParser#getCMSSignedData</a></dd>
+							
+							</dl>
+						
+
+					
+				
 			
 			
 <!-- ============================== event details ========================= -->		

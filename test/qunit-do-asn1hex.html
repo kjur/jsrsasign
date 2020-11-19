@@ -302,7 +302,6 @@ test("oidstrtohex", function() {
  */
 
 test("hextooidstr", function() {
-  expect(3);
   equal(ASN1HEX.hextooidstr("2a"), "1.2", "2a->1.2");
   equal(ASN1HEX.hextooidstr("608648016503040201"),  // SHA256
         "2.16.840.1.101.3.4.2.1", "sha256");

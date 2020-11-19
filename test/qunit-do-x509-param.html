@@ -556,6 +556,131 @@ var j = x.getParam();
 deepEqual(j, j2, "digicert ha ev root");
 });
 
+test("findParam test", function() {
+var x = new X509();
+var aExt = [{
+  extname:"keyUsage",
+  critical:true,
+  names:["digitalSignature","keyCertSign","cRLSign"]
+},{
+ extname:"basicConstraints",
+ critical:true,
+ cA:true
+},{
+  extname:"subjectKeyIdentifier",
+  kid:{hex:"b13ec36903f8bf4701d498261a0802ef63642bc3"}
+}];
+var aExtExpect = [{
+  extname:"keyUsage",
+  names:["keyCertSign","cRLSign"]
+},{
+ extname:"basicConstraints"
+},{
+  extname:"subjectKeyIdentifier",
+  kid:{hex:"1234"}
+}];
+var pKU = x.findExt(aExt, "keyUsage");
+delete pKU["critical"];
+pKU.names = ["keyCertSign","cRLSign"];
+var pBC = x.findExt(aExt, "basicConstraints");
+delete pBC["critical"];
+delete pBC["cA"];
+var pSKID = x.findExt(aExt, "subjectKeyIdentifier");
+pSKID.kid = {hex: "1234"};
+deepEqual(aExt, aExtExpect, "findExt");
+});
+
+// **** updateExtCDPFullURI
+test("updateExtCDPFullURI test", function() {
+var aParam = [{
+ "extname": "subjectAltName",
+ "array": [{"rfc822": "jcan-secretariat@jipdec.or.jp"}]
+},{
+ "extname": "cRLDistributionPoints",
+ "array": [{
+   "dpname": {"full": [{"uri": "http://example.com/a.crl"}]}
+ }]
+},{
+ "extname": "basicConstraints"
+}];
+var aExpect = [{
+ "extname": "subjectAltName",
+ "array": [{"rfc822": "jcan-secretariat@jipdec.or.jp"}]
+},{
+ "extname": "cRLDistributionPoints",
+ "array": [{
+   "dpname": {"full": [{"uri": "http://foo.com/b.crl"}]}
+ }]
+},{
+ "extname": "basicConstraints"
+}];
+var x = new X509();
+x.updateExtCDPFullURI(aParam,"http://foo.com/b.crl");
+deepEqual(aParam, aExpect);
+});
+
+// **** updateExtAIAOCSP;
+test("updateExtAIAOCSP test", function() {
+var aParam = [{
+ "extname": "subjectAltName",
+ "array": [{"rfc822": "jcan-secretariat@jipdec.or.jp"}]
+},{
+ "extname": "authorityInfoAccess",
+ "array": [
+   {"caissuer": "http://example.com/a.crt"},
+   {"ocsp": "http://ocsp.example.com"}
+ ]
+},{
+ "extname": "basicConstraints"
+}];
+var aExpect = [{
+ "extname": "subjectAltName",
+ "array": [{"rfc822": "jcan-secretariat@jipdec.or.jp"}]
+},{
+ "extname": "authorityInfoAccess",
+ "array": [
+   {"caissuer": "http://example.com/a.crt"},
+   {"ocsp": "http://ocsp.foo.net"}
+ ]
+},{
+ "extname": "basicConstraints"
+}];
+var x = new X509();
+x.updateExtAIAOCSP(aParam,"http://ocsp.foo.net");
+deepEqual(aParam, aExpect);
+});
+
+// **** updateExtAIACAIssuer;
+test("updateExtAIACAIssuer test", function() {
+var aParam = [{
+ "extname": "subjectAltName",
+ "array": [{"rfc822": "jcan-secretariat@jipdec.or.jp"}]
+},{
+ "extname": "authorityInfoAccess",
+ "array": [
+   {"caissuer": "http://example.com/a.crt"},
+   {"ocsp": "http://ocsp.example.com"}
+ ]
+},{
+ "extname": "basicConstraints"
+}];
+var aExpect = [{
+ "extname": "subjectAltName",
+ "array": [{"rfc822": "jcan-secretariat@jipdec.or.jp"}]
+},{
+ "extname": "authorityInfoAccess",
+ "array": [
+   {"caissuer": "http://example.foo.net/b.crt"},
+   {"ocsp": "http://ocsp.example.com"}
+ ]
+},{
+ "extname": "basicConstraints"
+}];
+var x = new X509();
+x.updateExtAIACAIssuer(aParam,"http://example.foo.net/b.crt");
+deepEqual(aParam, aExpect);
+});
+
 });
 </script>
   

@@ -1,4 +1,4 @@
-/* base64x-1.1.17 (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* base64x-1.1.18 (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.0.5 base64x 1.1.17 (2020-Nov-04)
+ * @version jsrsasign 10.1.0 base64x 1.1.18 (2020-Nov-18)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -998,7 +998,7 @@ KJUR.lang.String.isInteger = function(s) {
 };
 
 /**
- * check whether a string is an hexadecimal string or not<br/>
+ * check whether a string is an hexadecimal string or not (DEPRECATED)<br/>
  * @name isHex
  * @memberOf KJUR.lang.String
  * @function
@@ -1006,6 +1006,8 @@ KJUR.lang.String.isInteger = function(s) {
  * @param {String} s input string
  * @return {Boolean} true if a string "s" is an hexadecimal string otherwise false
  * @since base64x 1.1.7 jsrsasign 5.0.13
+ * @deprecated from 10.0.6. please use {@link ishex}
+ * @see ishex
  * @example
  * KJUR.lang.String.isHex("1234") &rarr; true
  * KJUR.lang.String.isHex("12ab") &rarr; true
@@ -1014,6 +1016,25 @@ KJUR.lang.String.isInteger = function(s) {
  * KJUR.lang.String.isHex("121") &rarr; false -- odd length
  */
 KJUR.lang.String.isHex = function(s) {
+    return ishex(s);
+};
+
+/**
+ * check whether a string is an hexadecimal string or not<br/>
+ * @name ishex
+ * @function
+ * @static
+ * @param {String} s input string
+ * @return {Boolean} true if a string "s" is an hexadecimal string otherwise false
+ * @since base64x 1.1.7 jsrsasign 5.0.13
+ * @example
+ * ishex("1234") &rarr; true
+ * ishex("12ab") &rarr; true
+ * ishex("12AB") &rarr; true
+ * ishex("12ZY") &rarr; false
+ * ishex("121") &rarr; false -- odd length
+ */
+function ishex(s) {
     if (s.length % 2 == 0 &&
 	(s.match(/^[0-9a-f]+$/) || s.match(/^[0-9A-F]+$/))) {
 	return true;
@@ -1248,6 +1269,139 @@ var strdiffidx = function(s1, s2) {
     }
     if (s1.length != s2.length) return n;
     return -1; // same
+};
+
+/**
+ * get hexadecimal value of object identifier from dot noted oid value
+ * @name oidtohex
+ * @function
+ * @param {String} oidString dot noted string of object identifier
+ * @return {String} hexadecimal value of object identifier
+ * @since jsrsasign 10.1.0 base64x 1.1.18
+ * @see hextooid
+ * @see ASN1HEX.hextooidstr
+ * @see KJUR.asn1.ASN1Util.oidIntToHex
+ * @description
+ * This static method converts from object identifier value string.
+ * to hexadecimal string representation of it.
+ * {@link hextooid} is a reverse function of this.
+ * @example
+ * oidtohex("2.5.4.6") &rarr; "550406"
+ */
+function oidtohex(oidString) {
+    var itox = function(i) {
+        var h = i.toString(16);
+        if (h.length == 1) h = '0' + h;
+        return h;
+    };
+
+    var roidtox = function(roid) {
+        var h = '';
+        var bi = parseInt(roid, 10);
+        var b = bi.toString(2);
+
+        var padLen = 7 - b.length % 7;
+        if (padLen == 7) padLen = 0;
+        var bPad = '';
+        for (var i = 0; i < padLen; i++) bPad += '0';
+        b = bPad + b;
+        for (var i = 0; i < b.length - 1; i += 7) {
+            var b8 = b.substr(i, 7);
+            if (i != b.length - 7) b8 = '1' + b8;
+            h += itox(parseInt(b8, 2));
+        }
+        return h;
+    };
+    
+    try {
+	if (! oidString.match(/^[0-9.]+$/)) return null;
+    
+	var h = '';
+	var a = oidString.split('.');
+	var i0 = parseInt(a[0], 10) * 40 + parseInt(a[1], 10);
+	h += itox(i0);
+	a.splice(0, 2);
+	for (var i = 0; i < a.length; i++) {
+            h += roidtox(a[i]);
+	}
+	return h;
+    } catch(ex) {
+	return null;
+    }
+};
+
+/**
+ * get oid string from hexadecimal value of object identifier<br/>
+ * @name hextooid
+ * @function
+ * @param {String} h hexadecimal value of object identifier
+ * @return {String} dot noted string of object identifier (ex. "1.2.3.4")
+ * @since jsrsasign 10.1.0 base64x 1.1.18
+ * @see oidtohex
+ * @see ASN1HEX.hextooidstr
+ * @see KJUR.asn1.ASN1Util.oidIntToHex
+ * @description
+ * This static method converts from hexadecimal object identifier value 
+ * to dot noted OID value (ex. "1.2.3.4").
+ * {@link oidtohex} is a reverse function of this.
+ * @example
+ * hextooid("550406") &rarr; "2.5.4.6"
+ */
+function hextooid(h) {
+    if (! ishex(h)) return null;
+    try {
+	var a = [];
+
+	// a[0], a[1]
+	var hex0 = h.substr(0, 2);
+	var i0 = parseInt(hex0, 16);
+	a[0] = new String(Math.floor(i0 / 40));
+	a[1] = new String(i0 % 40);
+
+	// a[2]..a[n]
+	var hex1 = h.substr(2);
+	var b = [];
+	for (var i = 0; i < hex1.length / 2; i++) {
+	    b.push(parseInt(hex1.substr(i * 2, 2), 16));
+	}
+	var c = [];
+	var cbin = "";
+	for (var i = 0; i < b.length; i++) {
+            if (b[i] & 0x80) {
+		cbin = cbin + strpad((b[i] & 0x7f).toString(2), 7);
+            } else {
+		cbin = cbin + strpad((b[i] & 0x7f).toString(2), 7);
+		c.push(new String(parseInt(cbin, 2)));
+		cbin = "";
+            }
+	}
+
+	var s = a.join(".");
+	if (c.length > 0) s = s + "." + c.join(".");
+	return s;
+    } catch(ex) {
+	return null;
+    }
+};
+
+/**
+ * string padding<br/>
+ * @name spad
+ * @function
+ * @param {String} s input string
+ * @param {Number} len output string length
+ * @param {String} padchar padding character (default is "0")
+ * @return {String} padded string
+ * @since jsrsasign 10.1.0 base64x 1.1.18
+ * @example
+ * strpad("1234", 10, "0") &rarr; "0000001234"
+ * strpad("1234", 10, " ") &rarr; "      1234"
+ * strpad("1234", 10)      &rarr; "0000001234"
+ */
+var strpad = function(s, len, padchar) {
+    if (padchar == undefined) padchar = "0";
+    if (s.length >= len) return s;
+    return new Array(len - s.length + 1).join(padchar) + s;
 };
 
 

@@ -476,13 +476,25 @@ x2.getExtAuthorityKeyIdentifier(),
 "for DigiCert EV root");
 
 var x = new X509();
-deepEqual(
-x.getExtAuthorityKeyIdentifier("3039801427e00502504b088259f76ece524799e2246e30eba11ea41c301a310b3009060355040613024a50310b3009060355040a0c025431820101", true),
-{extname:"authorityKeyIdentifier",
+var hIn3 = "3039801427e00502504b088259f76ece524799e2246e30eba11ea41c301a310b3009060355040613024a50310b3009060355040a0c025431820101";
+var pExp3 = {
+ extname:"authorityKeyIdentifier",
  kid: {hex: "27e00502504b088259f76ece524799e2246e30eb"},
- issuer: {hex: "301a310b3009060355040613024a50310b3009060355040a0c025431"},
+ issuer: {
+  array: [
+   [{type:"C",value:"JP",ds:"prn"}],
+   [{type:"O",value:"T1",ds:"utf8"}]
+  ],
+  str: "/C=JP/O=T1"
+ },
  sn: {hex: "01"},
- critical:true},
+ critical:true
+};
+
+
+deepEqual(
+x.getExtAuthorityKeyIdentifier(hIn3, true),
+pExp3,
 "hoge");
 });
 
@@ -827,18 +839,44 @@ x.getDistributionPointName("a013a011860f687474703a2f2f6161612e636f6d2f"),
 
 test("getGeneralNames test" , function() {
 var x = new X509();
-deepEqual(
-x.getGeneralNames("a011860f687474703a2f2f6161612e636f6d2f"),
-[{uri: "http://aaa.com/"}],
-"[{uri: http://aaa.com/}]");
+
+var hIn1 = "a011860f687474703a2f2f6161612e636f6d2f";
+var pExpect1 = [{uri: "http://aaa.com/"}];
+deepEqual(x.getGeneralNames(hIn1), pExpect1, "[{uri}]");
+
+var hIn2 = "301ea41c301a310b3009060355040613024a50310b3009060355040a0c025431";
+var pExpect2 = [{
+  dn: {
+    array: [
+      [{type:"C", value:"JP", ds:"prn"}],
+      [{type:"O", value:"T1", ds:"utf8"}]
+    ],
+    str: "/C=JP/O=T1"
+  }
+}];
+deepEqual(x.getGeneralNames(hIn2), pExpect2, "[{dn}]");
+
 });
 
 test("getGeneralName test" , function() {
 var x = new X509();
-deepEqual(
-x.getGeneralName("860f687474703a2f2f6161612e636f6d2f"),
-{uri: "http://aaa.com/"},
-"{uri: http://aaa.com/}");
+
+var hIn1 = "860f687474703a2f2f6161612e636f6d2f";
+var pExpect1 = {uri: "http://aaa.com/"};
+deepEqual(x.getGeneralName(hIn1), pExpect1, "uri");
+
+var hIn2 = "a41c301a310b3009060355040613024a50310b3009060355040a0c025431";
+var pExpect2 = {
+  dn: {
+    array: [
+      [{type:"C", value:"JP", ds:"prn"}],
+      [{type:"O", value:"T1", ds:"utf8"}]
+    ],
+    str: "/C=JP/O=T1"
+  }
+};
+deepEqual(x.getGeneralName(hIn2), pExpect2, "dn");
+
 });
 
 test("getX500NameRule test", function() {
@@ -864,12 +902,18 @@ equal(x.getX500NameRule([[{type:"C",value:"JP",ds:"prn"}],[{type:"O",value:"b",d
 
 test("getX500Name test", function() {
 var x = new X509();
-deepEqual(
-x.getX500Name("302a310b3009060355040613024a50310a3008060355040a0c0162310f300d060355040316066140612e6a70"),
-[[{type:"C",value:"JP",ds:"prn"}],
-[{type:"O",value:"b",ds:"utf8"}],
-[{type:"CN",value:"a@a.jp",ds:"ia5"}]],
-"[CN a@a.jp ia5]");
+
+var hIn1 = "302a310b3009060355040613024a50310a3008060355040a0c0162310f300d060355040316066140612e6a70";
+var pExpect = {
+  array: [
+    [{type:"C",value:"JP",ds:"prn"}],
+    [{type:"O",value:"b",ds:"utf8"}],
+    [{type:"CN",value:"a@a.jp",ds:"ia5"}]
+  ],
+  str: "/C=JP/O=b/CN=a@a.jp"
+};
+
+deepEqual(x.getX500Name(hIn1), pExpect, "/C=JP/O=b/CN=a@a.jp")
 });
 
 test("getRDN test", function() {
@@ -899,6 +943,22 @@ x.getAttrTypeAndValue("3009060355040613024a50"),
 {type:"C",value:"JP",ds:"prn"},
 "C JP prn");
 });
+
+test("X509.dnarraytostr", function() {
+var x = new X509();
+
+var a1 = [[{type:"C",value:"JP",ds:"prn"}],[{type:"O",value:"T1",ds:"prn"}]];
+var s1 = "/C=JP/O=T1";
+equal(x.dnarraytostr(a1), s1, s1);
+
+var a2 = [
+  [{type:"C",value:"JP",ds:"prn"}],
+  [{type:"O",value:"T1",ds:"prn"},{type:"CN",value:"Bob",ds:"prn"}]
+];
+var s2 = "/C=JP/O=T1+CN=Bob";
+equal(x.dnarraytostr(a2), s2, s2);
+});
+
 
 });
 </script>
