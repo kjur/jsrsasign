@@ -1,6 +1,19 @@
 
 ChangeLog for jsrsasign
 
+add SigningCertificateV2 for CMSParser and issue fix
+* Changes from 10.1.1 to 10.1.2 release (2020-11-21)
+  - src/asn1cms.js
+    - CMSParser
+      - getAttribute updated to support
+        SigningCertificateV2
+      - add setSigningCertificateV2 method
+      - add getESSCertIDv2 method
+      - change sortflag of result parameter to true in 
+        CMSParser.getCertificateSet 
+  - test/qunit-do-asn1cms.html
+    - updated to follow above
+
 CMSSignedData and TimeStamp parser bugfix
 * Changes from 10.1.0 to 10.1.1 release (2020-11-20)
   - src/asn1tsp.js

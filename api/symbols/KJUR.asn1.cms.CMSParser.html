@@ -657,6 +657,18 @@ RFC 5035 section 6</a>.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getESSCertIDv2">getESSCertIDv2</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 ESSCertIDv2<br/>
+This method parses ASN.1 ESSCertIDv2 defined in 
+<a href="https://tools.ietf.org/html/rfc5035#section-4">
+RFC 5035 section 4</a>.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getHashAlgArray">getHashAlgArray</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 DigestAlgorithmIdentifiers<br/>
@@ -784,6 +796,18 @@ RFC 5035 section 5</a>.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#setSigningCertificateV2">setSigningCertificateV2</a></b>(pAttr)
+								</div>
+								<div class="description">set SigningCertificateV2 attribute<br/>
+This sets an attribute as SigningCertificateV2 defined in
+<a href="https://tools.ietf.org/html/rfc5035#section-3">
+RFC 5035 section 3</a>.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#setSigningTime">setSigningTime</a></b>(pAttr)
 								</div>
 								<div class="description">set SigningTime attribute<br/>
@@ -884,10 +908,11 @@ section 5</a>.
 Following attribute type are supported in the
 latest version:
 <ul>
-<li>contentType</li>
-<li>messageDigest</li>
-<li>signingTime</li>
-<li>signingCertificate</li>
+<li>contentType - KJUR.asn1.cms.CMSParser.setContentType</li>
+<li>messageDigest - KJUR.asn1.cms.CMSParser.setMessageDigest</li>
+<li>signingTime - KJUR.asn1.cms.CMSParser.setSigningTime</li>
+<li>signingCertificate - KJUR.asn1.cms.CMSParser.setSigningCertificate</li>
+<li>signingCertificateV2 - KJUR.asn1.cms.CMSParser.setSigningCertificateV2</li>
 </ul>
 						
 						
@@ -1294,6 +1319,89 @@ parser.getESSCertID("30...") &rarr;
 							<dt class="heading">See:</dt>
 							
 								<dd><a href="../symbols/KJUR.asn1.cms.ESSCertID.html">KJUR.asn1.cms.ESSCertID</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getESSCertIDv2"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getESSCertIDv2</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 ESSCertIDv2<br/>
+This method parses ASN.1 ESSCertIDv2 defined in 
+<a href="https://tools.ietf.org/html/rfc5035#section-4">
+RFC 5035 section 4</a>.
+<pre>
+ESSCertIDv2 ::=  SEQUENCE {
+   hashAlgorithm           AlgorithmIdentifier
+                           DEFAULT {algorithm id-sha256},
+   certHash                Hash,
+   issuerSerial            IssuerSerial OPTIONAL }
+Hash ::= OCTET STRING
+IssuerSerial ::= SEQUENCE {
+   issuer                  GeneralNames,
+   serialNumber            CertificateSerialNumber }
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+parser.getESSCertID("30...") &rarr;
+{
+  hash: "3f2d...",
+  alg: "sha512",
+  issuer: {str: "/C=JP/O=T1"},
+  serial: {hex: "12ab..."}
+}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 ESSCertIDv2</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.1.2 asn1cms 2.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of JSON object of ESSCertIDv2 parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.ESSCertIDv2.html">KJUR.asn1.cms.ESSCertIDv2</a></dd>
+							
+								<dd>KJUR.asn1.cms.CMSParser.getESSCertID</dd>
 							
 							</dl>
 						
@@ -1971,6 +2079,85 @@ pAttr &rarr; {
 							<dt class="heading">See:</dt>
 							
 								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttribute">KJUR.asn1.cms.CMSParser#getAttribute</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="setSigningCertificateV2"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setSigningCertificateV2</b>(pAttr)
+					
+					</div>
+					<div class="description">
+						set SigningCertificateV2 attribute<br/>
+This sets an attribute as SigningCertificateV2 defined in
+<a href="https://tools.ietf.org/html/rfc5035#section-3">
+RFC 5035 section 3</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+pAttr = {
+  attr: "signingCertificateV2"
+  valhex: '...'
+};
+parser.setSigningCertificateV2(pAttr);
+pAttr &rarr; {
+  attr: "signingCertificateV2",
+  array: [{
+    hash: "123456...",
+    alg: "sha256",
+    issuer: {
+      array: [[{type:"C",value:"JP",ds:"prn"},...]],
+      str: "/C=JP/O=T1"
+    },
+    serial: {hex: "123456..."}
+  }]
+}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>pAttr</b>
+									
+								</dt>
+								<dd>JSON object of attribute parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.1.2 asn1cms 2.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttribute">KJUR.asn1.cms.CMSParser#getAttribute</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getESSCertIDv2">KJUR.asn1.cms.CMSParser#getESSCertIDv2</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.SigningCertificateV2.html">KJUR.asn1.cms.SigningCertificateV2</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.ESSCertIDv2.html">KJUR.asn1.cms.ESSCertIDv2</a></dd>
 							
 							</dl>
 						
