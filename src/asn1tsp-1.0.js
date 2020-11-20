@@ -1,4 +1,4 @@
-/* asn1tsp-2.0.1.js (c) 2014-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1tsp-2.0.2.js (c) 2014-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1tsp.js - ASN.1 DER encoder classes for RFC 3161 Time Stamp Protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1tsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.0 asn1tsp 2.0.1 (2020-Nov-18)
+ * @version jsrsasign 10.1.1 asn1tsp 2.0.2 (2020-Nov-20)
  * @since jsrsasign 4.5.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -99,7 +99,7 @@ if (typeof KJUR.asn1.tsp == "undefined" || !KJUR.asn1.tsp) KJUR.asn1.tsp = {};
  *     content: {
  *       policy: '1.2.3.4.5',
  *       messageImprint: { hashAlg: 'sha1', hashValue: 'a1a2a3a4' },
- *       serialNumber: {'int': 3},
+ *       serial: {'int': 3},
  *       genTime: {str: '20131231235959.123Z', millis: true},
  *       accuracy: { millis: 500 },
  *       ordering: true,
@@ -177,6 +177,7 @@ YAHOO.lang.extend(KJUR.asn1.tsp.TimeStampToken, KJUR.asn1.cms.SignedData);
  * o = new KJUR.asn1.tsp.TSTInfo({
  *     policy:    '1.2.3.4.5',
  *     messageImprint: {alg: 'sha256', hash: '1abc...'},
+ *     serial:    {int: 3},
  *     genTime:   {millis: true},         // OPTION
  *     accuracy:  {micros: 500},          // OPTION
  *     ordering:  true,                   // OPITON
@@ -185,7 +186,8 @@ YAHOO.lang.extend(KJUR.asn1.tsp.TimeStampToken, KJUR.asn1.cms.SignedData);
  * });
  */
 KJUR.asn1.tsp.TSTInfo = function(params) {
-    var _KJUR = KJUR,
+    var _Error = Error,
+	_KJUR = KJUR,
 	_KJUR_asn1 = _KJUR.asn1,
 	_DERSequence = _KJUR_asn1.DERSequence,
 	_DERInteger = _KJUR_asn1.DERInteger,
@@ -205,7 +207,7 @@ KJUR.asn1.tsp.TSTInfo = function(params) {
     this.dVersion = new _DERInteger({'int': 1});
     this.dPolicy = null;
     this.dMessageImprint = null;
-    this.dSerialNumber = null;
+    this.dSerial = null;
     this.dGenTime = null;
     this.dAccuracy = null;
     this.dOrdering = null;
@@ -215,19 +217,19 @@ KJUR.asn1.tsp.TSTInfo = function(params) {
     this.getEncodedHex = function() {
         var a = [this.dVersion];
 
-        if (this.dPolicy == null) throw "policy shall be specified.";
+        if (this.dPolicy == null) throw new Error("policy shall be specified.");
         a.push(this.dPolicy);
 
         if (this.dMessageImprint == null)
-            throw "messageImprint shall be specified.";
+            throw new Error("messageImprint shall be specified.");
         a.push(this.dMessageImprint);
 
-        if (this.dSerialNumber == null)
-            throw "serialNumber shall be specified.";
-        a.push(this.dSerialNumber);
+        if (this.dSerial == null)
+            throw new Error("serialNumber shall be specified.");
+        a.push(this.dSerial);
 
         if (this.dGenTime == null)
-            throw "genTime shall be specified.";
+            throw new Error("genTime shall be specified.");
         a.push(this.dGenTime);
 
         if (this.dAccuracy != null) a.push(this.dAccuracy);
@@ -249,8 +251,8 @@ KJUR.asn1.tsp.TSTInfo = function(params) {
         if (params.messageImprint !== undefined) {
             this.dMessageImprint = new _MessageImprint(params.messageImprint);
         }
-        if (params.serialNumber !== undefined) {
-            this.dSerialNumber = new _DERInteger(params.serialNumber);
+        if (params.serial !== undefined) {
+            this.dSerial = new _DERInteger(params.serial);
         }
         if (params.genTime !== undefined) {
             this.dGenTime = new _DERGeneralizedTime(params.genTime);
@@ -806,7 +808,7 @@ KJUR.asn1.tsp.SimpleTSAAdapter = function(params) {
             {alg: hashAlg, hash: hashHex};
 
         // serial
-        this.params.econtent.content.serialNumber =
+        this.params.econtent.content.serial =
 	    {'int': this.serial++};
 
         // nonce
@@ -1048,7 +1050,7 @@ KJUR.asn1.tsp.TSPParser = function() {
      *     content: { // TSTInfo parameter
      *       policy: '1.2.3.4.5',
      *       messageImprint: {alg: 'sha256', hash: 'a1a2a3a4...'},
-     *       serialNumber: {'int': 3},
+     *       serial: {'int': 3},
      *       genTime: {str: '20131231235959.123Z'},
      *       accuracy: {millis: 500},
      *       ordering: true,
@@ -1100,7 +1102,7 @@ KJUR.asn1.tsp.TSPParser = function() {
      *     content: { // TSTInfo parameter
      *       policy: '1.2.3.4.5',
      *       messageImprint: {alg: 'sha256', hash: 'a1a2a3a4...'},
-     *       serialNumber: {'int': 3},
+     *       serial: {'int': 3},
      *       genTime: {str: '20131231235959.123Z'},
      *       accuracy: {millis: 500},
      *       ordering: true,
@@ -1149,7 +1151,7 @@ KJUR.asn1.tsp.TSPParser = function() {
      *     content: { // TSTInfo parameter
      *       policy: '1.2.3.4.5',
      *       messageImprint: {alg: 'sha256', hash: 'a1a2a3a4...'},
-     *       serialNumber: {int: 3},
+     *       serial: {int: 3},
      *       genTime: {str: '20131231235959.123Z'},
      *       accuracy: {millis: 500},
      *       ordering: true,
@@ -1200,7 +1202,7 @@ KJUR.asn1.tsp.TSPParser = function() {
      * {
      *   policy: '1.2.3.4.5',
      *   messageImprint: {alg: 'sha256', hash: 'a1a2a3a4...'},
-     *   serialNumber: {'int': 3},
+     *   serial: {'int': 3},
      *   genTime: {str: '20131231235959.123Z'},
      *   accuracy: {millis: 500},
      *   ordering: true,

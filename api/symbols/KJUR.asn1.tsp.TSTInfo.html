@@ -624,6 +624,7 @@ tsa field even though tsa field is GeneralName.</li>
 				<pre class="code">o = new KJUR.asn1.tsp.TSTInfo({
     policy:    '1.2.3.4.5',
     messageImprint: {alg: 'sha256', hash: '1abc...'},
+    serial:    {int: 3},
     genTime:   {millis: true},         // OPTION
     accuracy:  {micros: 500},          // OPTION
     ordering:  true,                   // OPITON

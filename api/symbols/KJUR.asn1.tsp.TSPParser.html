@@ -909,7 +909,7 @@ parser.getResponse("30...") &rarr;
     content: { // TSTInfo parameter
       policy: '1.2.3.4.5',
       messageImprint: {alg: 'sha256', hash: 'a1a2a3a4...'},
-      serialNumber: {'int': 3},
+      serial: {'int': 3},
       genTime: {str: '20131231235959.123Z'},
       accuracy: {millis: 500},
       ordering: true,
@@ -989,7 +989,7 @@ parser.getToken("30...") &rarr;
     content: { // TSTInfo parameter
       policy: '1.2.3.4.5',
       messageImprint: {alg: 'sha256', hash: 'a1a2a3a4...'},
-      serialNumber: {'int': 3},
+      serial: {'int': 3},
       genTime: {str: '20131231235959.123Z'},
       accuracy: {millis: 500},
       ordering: true,
@@ -1074,7 +1074,7 @@ parser.getTSTInfo("30...") &rarr;
 {
   policy: '1.2.3.4.5',
   messageImprint: {alg: 'sha256', hash: 'a1a2a3a4...'},
-  serialNumber: {'int': 3},
+  serial: {'int': 3},
   genTime: {str: '20131231235959.123Z'},
   accuracy: {millis: 500},
   ordering: true,
@@ -1153,7 +1153,7 @@ pCMSSignedData &rarr; {
     content: { // TSTInfo parameter
       policy: '1.2.3.4.5',
       messageImprint: {alg: 'sha256', hash: 'a1a2a3a4...'},
-      serialNumber: {int: 3},
+      serial: {int: 3},
       genTime: {str: '20131231235959.123Z'},
       accuracy: {millis: 500},
       ordering: true,

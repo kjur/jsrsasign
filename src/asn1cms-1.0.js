@@ -1,4 +1,4 @@
-/* asn1cms-2.0.1.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1cms-2.0.2.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1cms.js - ASN.1 DER encoder and verifier classes for Cryptographic Message Syntax(CMS)
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cms-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.0 asn1cms 2.0.1 (2020-Nov-18)
+ * @version jsrsasign 10.1.1 asn1cms 2.0.2 (2020-Nov-20)
  * @since jsrsasign 4.2.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1124,7 +1124,8 @@ YAHOO.lang.extend(KJUR.asn1.cms.AttributeList, KJUR.asn1.ASN1Object);
  * })
  */
 KJUR.asn1.cms.SignerInfo = function(params) {
-    var _KJUR = KJUR,
+    var _Error = Error,
+	_KJUR = KJUR,
 	_KJUR_asn1 = _KJUR.asn1,
 	_DERInteger = _KJUR_asn1.DERInteger,
 	_DEROctetString = _KJUR_asn1.DEROctetString,
@@ -1191,7 +1192,7 @@ KJUR.asn1.cms.SignerInfo = function(params) {
 					     explicit: false,
 					     obj: dList}));
 	    } catch(ex) {
-		throw new Error("si sattr error: " + ex);
+		throw new _Error("si sattr error: " + ex);
 	    }
 	}
 
@@ -1412,7 +1413,8 @@ YAHOO.lang.extend(KJUR.asn1.cms.ContentInfo, KJUR.asn1.ASN1Object);
  * hex = sd.getContentInfoEncodedHex();
  */
 KJUR.asn1.cms.SignedData = function(params) {
-    var _KJUR = KJUR,
+    var _Error = Error,
+	_KJUR = KJUR,
 	_KJUR_asn1 = _KJUR.asn1,
 	_ASN1Object = _KJUR_asn1.ASN1Object,
 	_DERInteger = _KJUR_asn1.DERInteger,
@@ -2280,6 +2282,7 @@ KJUR.asn1.cms.CMSParser = function() {
 	_getTLVbyList = _ASN1HEX.getTLVbyList,
 	_getTLVbyListEx = _ASN1HEX.getTLVbyListEx,
 	_getVbyList = _ASN1HEX.getVbyList,
+	_getVbyListEx = _ASN1HEX.getVbyListEx,
 	_getChildIdx = _ASN1HEX.getChildIdx;
 
     /**
@@ -2560,7 +2563,7 @@ KJUR.asn1.cms.CMSParser = function() {
 
 	var hSattrs = _getTLVbyListEx(h, 0, ["[0]"]);
 	if (hSattrs != null) {
-	    var aSattrs = this.getAttributeArray(hSattrs);
+	    var aSattrs = this.getAttributeList(hSattrs);
 	    pResult.sattrs = aSattrs;
 	}
 
@@ -2568,12 +2571,12 @@ KJUR.asn1.cms.CMSParser = function() {
 	var sSigAlg = _x509obj.getAlgorithmIdentifierName(hSigAlg);
 	pResult.sigalg = sSigAlg;
 
-	var hSigHex = _getTLVbyListEx(h, 0, [4]);
+	var hSigHex = _getVbyListEx(h, 0, [4]);
 	pResult.sighex = hSigHex;
 
 	var hUattrs = _getTLVbyListEx(h, 0, ["[1]"]);
 	if (hUattrs != null) {
-	    var aUattrs = this.getAttributeArray(hUattrs);
+	    var aUattrs = this.getAttributeList(hUattrs);
 	    pResult.uattrs = aUattrs;
 	}
 
@@ -2657,7 +2660,7 @@ KJUR.asn1.cms.CMSParser = function() {
 
     /**
      * parse ASN.1 SET OF Attributes<br/>
-     * @name getAttributeArray
+     * @name getAttributeList
      * @memberOf KJUR.asn1.cms.CMSParser#
      * @function
      * @param {String} h hexadecimal string of ASN.1 SET OF Attribute
@@ -2674,21 +2677,21 @@ KJUR.asn1.cms.CMSParser = function() {
      * 
      * @example
      * parser = new KJUR.asn1.cms.CMSParser();
-     * parser.getAttributeArray("30...") &rarr;
+     * parser.getAttributeList("30...") &rarr;
      * [{attr: "contentType", type: "tstinfo"},
      *  {attr: "messageDigest", hex: "1234abcd..."}]
      */
-    this.getAttributeArray = function(h) {
-	var aResult = [];
+    this.getAttributeList = function(h) {
+	var a = [];
 
 	var aIdx = _getChildIdx(h, 0);
 	for (var i = 0; i < aIdx.length; i++) {
 	    var hAttr = _getTLV(h, aIdx[i]);
 	    var pAttr = this.getAttribute(hAttr);
-	    aResult.push(pAttr);
+	    a.push(pAttr);
 	}
 
-	return aResult;
+	return {array: a};
     };
 
     /**
@@ -2699,7 +2702,7 @@ KJUR.asn1.cms.CMSParser = function() {
      * @param {String} h hexadecimal string of ASN.1 Attribute
      * @return {Array} array of JSON object of Attribute parameter
      * @see KJUR.asn1.cms.SignerInfo
-     * @see KJUR.asn1.cms.CMSParser#getAttributeArray
+     * @see KJUR.asn1.cms.CMSParser#getAttributeList
      *
      * @description
      * This method parses ASN.1 Attribute defined in 
