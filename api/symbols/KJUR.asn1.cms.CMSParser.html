@@ -591,7 +591,7 @@ section 5</a>.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttributeArray">getAttributeArray</a></b>(h)
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttributeList">getAttributeList</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 SET OF Attributes<br/>
 This method parses ASN.1 SET OF Attribute defined in 
@@ -931,18 +931,18 @@ parser.getAttribute("30...") &rarr;
 							
 								<dd><a href="../symbols/KJUR.asn1.cms.SignerInfo.html">KJUR.asn1.cms.SignerInfo</a></dd>
 							
-								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttributeArray">KJUR.asn1.cms.CMSParser#getAttributeArray</a></dd>
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttributeList">KJUR.asn1.cms.CMSParser#getAttributeList</a></dd>
 							
 							</dl>
 						
 
 					<hr />
 				
-					<a name="getAttributeArray"> </a>
+					<a name="getAttributeList"> </a>
 					<div class="fixedFont">
 					
 					<span class="light">{Array}</span>
-					<b>getAttributeArray</b>(h)
+					<b>getAttributeList</b>(h)
 					
 					</div>
 					<div class="description">
@@ -959,7 +959,7 @@ This can be used for SignedAttributes and UnsignedAttributes.
 					
 					
 					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
-parser.getAttributeArray("30...") &rarr;
+parser.getAttributeList("30...") &rarr;
 [{attr: "contentType", type: "tstinfo"},
  {attr: "messageDigest", hex: "1234abcd..."}]</pre>
 					

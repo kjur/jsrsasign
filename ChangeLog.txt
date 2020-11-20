@@ -1,8 +1,25 @@
 
 ChangeLog for jsrsasign
 
+CMSSignedData and TimeStamp parser bugfix
+* Changes from 10.1.0 to 10.1.1 release (2020-11-20)
+  - src/asn1tsp.js
+    - "serialNumber" parameter was changed to
+      "serial" in TSTInfo class and TSPParser.getTSTInfo
+      method.
+  - src/asn1cms.js
+    - change method name CMSParser.getAttributeArray to 
+      CMSParser.getAttributeList to align to the name
+      AttributeList class.
+    - getAttributeList returns JSON parameter which
+      can be accepted by AttributeList constructor.
+    - wrong sighex value for signature value
+      by getSignerInfo method was fixed.
+  - test/qunit-do-asn1tsp.html
+    - updated to follow above
+
 add new CMSSignedData and TimeStamp parser and X500Name update
-* Changes from 10.0.5 to 10.1.0 release
+* Changes from 10.0.5 to 10.1.0 release (2020-11-19)
   - add new CMSSignedData and TimeStamp parser
   - X500.get{X500Name,GeneralName,GeneralNames} result change
   - src/asn1cms.js

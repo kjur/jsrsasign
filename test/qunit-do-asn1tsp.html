@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+s<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
           "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -116,7 +116,7 @@ var params = {
     content: {
       policy: '1.2.3.4.5',
       messageImprint: { alg: 'sha1', hash: 'a1a2a3a4' },
-      serialNumber: {'int': 3},
+      serial: {'int': 3},
       genTime: {str: '20131231235959.123Z', millis: true},
       accuracy: { millis: 500 },
       ordering: true,
@@ -156,7 +156,7 @@ var params = {
     content: {
       policy: '1.2.3.4.5',
       messageImprint: { alg: 'sha1', hash: 'a1a2a3a4' },
-      serialNumber: {'int': 3},
+      serial: {'int': 3},
       genTime: {str: '20131231235959.123Z', millis: true},
       accuracy: { millis: 500 },
       ordering: true,
@@ -224,7 +224,7 @@ var params = {
     content: {
       policy: '1.2.3.4.5',
       messageImprint: { alg: 'sha1', hash: 'a1a2a3a4' },
-      serialNumber: {'int': 3},
+      serial: {'int': 3},
       genTime: {str: '20131231235959.123Z', millis: true},
       //genTime: {},
       accuracy: { millis: 500 },
@@ -286,7 +286,7 @@ var hExpect = "306202010106042a0304053011300906052b0e03021a05000404a1a2a3a402010
 var o = new KJUR.asn1.tsp.TSTInfo({
   policy: '1.2.3.4.5',
   messageImprint: { alg: 'sha1', hash: 'a1a2a3a4' },
-  serialNumber: {'int': 3},
+  serial: {'int': 3},
   genTime: {str: '20131231235959.123Z', millis: true},
   //genTime: {},
   accuracy: { millis: 500 },
@@ -348,7 +348,7 @@ var params = {
     content: {
       policy: '1.2.3.4.5',
       messageImprint: { alg: 'sha1', hash: 'a1a2a3a4' },
-      serialNumber: {'int': 3},
+      serial: {'int': 3},
       genTime: {str: '20131231235959.123Z', millis: true},
       accuracy: { millis: 500 },
       ordering: true,
@@ -473,7 +473,7 @@ var params = {
     content: {
       policy: '1.2.3.4.5',
       messageImprint: { alg: 'sha1', hash: 'a1a2a3a4' },
-      serialNumber: {'int': 3},
+      serial: {'int': 3},
       genTime: {str: '20131231235959.123Z', millis: true},
       accuracy: { millis: 500 },
       ordering: true,
@@ -527,7 +527,7 @@ var params = {
     content: {
       policy: '1.2.3.4.5',
       messageImprint: { alg: 'sha1', hash: 'a1a2a3a4' },
-      serialNumber: {'int': 3},
+      serial: {'int': 3},
       genTime: {str: '20131231235959.123Z', millis: true},
       accuracy: { millis: 500 },
       ordering: true,
@@ -601,18 +601,20 @@ var pExpect1 = {
       },
       serial: {hex: "4d"}
     },
-    sattrs: [{
-      attr: "contentType",
-      type: "tstinfo"
-    },{
-      attr: "signingTime",
-      str: "131231235959Z"
-    },{
-      attr: "messageDigest",
-      hex: "24e488bbec64ebd7696c0e1aeff2743c697950f50d82404a4fb620d29f430259"
-    }],
+    sattrs: {
+      array: [{
+        attr: "contentType",
+        type: "tstinfo"
+      },{
+        attr: "signingTime",
+        str: "131231235959Z"
+      },{
+        attr: "messageDigest",
+        hex: "24e488bbec64ebd7696c0e1aeff2743c697950f50d82404a4fb620d29f430259"
+      }]
+    },
     sigalg: "SHA256withRSA",
-    sighex: "048201003c2ef00801d245023bd1e519c7188e1585675550822de111b25db4cf6f3a400caec35758a5ceb08fb4a689eeb1541001f0c3ed5e1c2390cb9165bcde64cc6ed9e53752bfb8833784920be7f3838959180a46a6ade9b5cd901c4d845c95182cbedd37df79afc3096dc276d2e0c4b0ea514807e40d6bdac2c8fc83869f550968ccc0405b9f4e455ddb5683cc06bdc125afee75c898d29d1069a644721f12a51689508a1b09695978b828ff9025e877fd4b31ecde81ca1647be347dc47e8f2c85dc7d34e051382fa8ca5e834f8de224418f469d1eb78a631fa04f910a3de86c7badc273e212dba2b60791b0aec251046521fe9c2bd2d84f717f520035baa9a4577e"
+    sighex: "3c2ef00801d245023bd1e519c7188e1585675550822de111b25db4cf6f3a400caec35758a5ceb08fb4a689eeb1541001f0c3ed5e1c2390cb9165bcde64cc6ed9e53752bfb8833784920be7f3838959180a46a6ade9b5cd901c4d845c95182cbedd37df79afc3096dc276d2e0c4b0ea514807e40d6bdac2c8fc83869f550968ccc0405b9f4e455ddb5683cc06bdc125afee75c898d29d1069a644721f12a51689508a1b09695978b828ff9025e877fd4b31ecde81ca1647be347dc47e8f2c85dc7d34e051382fa8ca5e834f8de224418f469d1eb78a631fa04f910a3de86c7badc273e212dba2b60791b0aec251046521fe9c2bd2d84f717f520035baa9a4577e"
   }],
 };
 deepEqual(parser.getResponse(hTSR), pExpect1, "TimeStampResp");

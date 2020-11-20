@@ -68,6 +68,9 @@ exports.newline_toDos = newline_toDos;
 exports.hextoposhex = hextoposhex;
 exports.intarystrtohex = intarystrtohex;
 exports.strdiffidx = strdiffidx;
+exports.oidtohex = oidtohex;
+exports.hextooid = hextooid;
+exports.strpad = strpad;
 
 // name spaces
 exports.KJUR = KJUR;
