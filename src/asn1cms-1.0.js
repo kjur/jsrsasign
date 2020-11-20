@@ -1,4 +1,4 @@
-/* asn1cms-2.0.2.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1cms-2.0.3.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1cms.js - ASN.1 DER encoder and verifier classes for Cryptographic Message Syntax(CMS)
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cms-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.1 asn1cms 2.0.2 (2020-Nov-20)
+ * @version jsrsasign 10.1.2 asn1cms 2.0.3 (2020-Nov-21)
  * @since jsrsasign 4.2.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -2712,10 +2712,11 @@ KJUR.asn1.cms.CMSParser = function() {
      * Following attribute type are supported in the
      * latest version:
      * <ul>
-     * <li>contentType</li>
-     * <li>messageDigest</li>
-     * <li>signingTime</li>
-     * <li>signingCertificate</li>
+     * <li>contentType - {@link KJUR.asn1.cms.CMSParser.setContentType}</li>
+     * <li>messageDigest - {@link KJUR.asn1.cms.CMSParser.setMessageDigest}</li>
+     * <li>signingTime - {@link KJUR.asn1.cms.CMSParser.setSigningTime}</li>
+     * <li>signingCertificate - {@link KJUR.asn1.cms.CMSParser.setSigningCertificate}</li>
+     * <li>signingCertificateV2 - {@link KJUR.asn1.cms.CMSParser.setSigningCertificateV2}</li>
      * </ul>
      * 
      * @example
@@ -2751,6 +2752,9 @@ KJUR.asn1.cms.CMSParser = function() {
 	    this.setSigningTime(pResult);
 	} else if (attrType == "signingCertificate") {
 	    this.setSigningCertificate(pResult);
+	} else if (attrType == "signingCertificateV2") {
+	    //alert(pResult.valhex);
+	    this.setSigningCertificateV2(pResult);
 	}
 
 	return pResult;
@@ -2909,6 +2913,64 @@ KJUR.asn1.cms.CMSParser = function() {
     };
 
     /**
+     * set SigningCertificateV2 attribute<br/>
+     * @name setSigningCertificateV2
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {Array} pAttr JSON object of attribute parameter
+     * @since jsrsasign 10.1.2 asn1cms 2.0.3
+     * @see KJUR.asn1.cms.CMSParser#getAttribute
+     * @see KJUR.asn1.cms.CMSParser#getESSCertIDv2
+     * @see KJUR.asn1.cms.SigningCertificateV2
+     * @see KJUR.asn1.cms.ESSCertIDv2
+     *
+     * @description
+     * This sets an attribute as SigningCertificateV2 defined in
+     * <a href="https://tools.ietf.org/html/rfc5035#section-3">
+     * RFC 5035 section 3</a>.
+     *
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * pAttr = {
+     *   attr: "signingCertificateV2"
+     *   valhex: '...'
+     * };
+     * parser.setSigningCertificateV2(pAttr);
+     * pAttr &rarr; {
+     *   attr: "signingCertificateV2",
+     *   array: [{
+     *     hash: "123456...",
+     *     alg: "sha256",
+     *     issuer: {
+     *       array: [[{type:"C",value:"JP",ds:"prn"},...]],
+     *       str: "/C=JP/O=T1"
+     *     },
+     *     serial: {hex: "123456..."}
+     *   }]
+     * }
+     */
+    this.setSigningCertificateV2 = function(pAttr) {
+	var aIdx = _getChildIdx(pAttr.valhex, 0);
+	if (aIdx.length > 0) {
+	    var hCerts = _getTLV(pAttr.valhex, aIdx[0]);
+	    var aCertIdx = _getChildIdx(hCerts, 0);
+	    var a = [];
+	    for (var i = 0; i < aCertIdx.length; i++) {
+		var hESSCertIDv2 = _getTLV(hCerts, aCertIdx[i]);
+		var pESSCertIDv2 = this.getESSCertIDv2(hESSCertIDv2);
+		a.push(pESSCertIDv2);
+	    }
+	    pAttr.array = a;
+	}
+
+	if (aIdx.length > 1) {
+	    var hPolicies = _getTLV(pAttr.valhex, aIdx[1]);
+	    pAttr.polhex = hPolicies;
+	}
+	delete pAttr.valhex;
+    };
+
+    /**
      * parse ASN.1 ESSCertID<br/>
      * @name getESSCertID
      * @memberOf KJUR.asn1.cms.CMSParser#
@@ -2962,6 +3024,74 @@ KJUR.asn1.cms.CMSParser = function() {
 	}
 
 	return pResult;
+    };
+
+    /**
+     * parse ASN.1 ESSCertIDv2<br/>
+     * @name getESSCertIDv2
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 ESSCertIDv2
+     * @return {Array} array of JSON object of ESSCertIDv2 parameter
+     * @since jsrsasign 10.1.2 asn1cms 2.0.3
+     * @see KJUR.asn1.cms.ESSCertIDv2
+     * @see KJUR.asn1.cms.CMSParser.getESSCertID
+     *
+     * @description
+     * This method parses ASN.1 ESSCertIDv2 defined in 
+     * <a href="https://tools.ietf.org/html/rfc5035#section-4">
+     * RFC 5035 section 4</a>.
+     * <pre>
+     * ESSCertIDv2 ::=  SEQUENCE {
+     *    hashAlgorithm           AlgorithmIdentifier
+     *                            DEFAULT {algorithm id-sha256},
+     *    certHash                Hash,
+     *    issuerSerial            IssuerSerial OPTIONAL }
+     * Hash ::= OCTET STRING
+     * IssuerSerial ::= SEQUENCE {
+     *    issuer                  GeneralNames,
+     *    serialNumber            CertificateSerialNumber }
+     * </pre>
+     * 
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * parser.getESSCertID("30...") &rarr;
+     * {
+     *   hash: "3f2d...",
+     *   alg: "sha512",
+     *   issuer: {str: "/C=JP/O=T1"},
+     *   serial: {hex: "12ab..."}
+     * }
+     */
+    this.getESSCertIDv2 = function(h) {
+	var aResult = {};
+	var aIdx = _getChildIdx(h, 0); 
+
+	if (aIdx.length < 1 || 3 < aIdx.length)
+	    throw new _Error("wrong number of elements");
+
+	var offset = 0;
+	if (h.substr(aIdx[0], 2) == "30") {
+	    var hHashAlg = _getTLV(h, aIdx[0]);
+	    aResult.alg = 
+		_x509obj.getAlgorithmIdentifierName(hHashAlg);
+	    offset++;
+	} else {
+	    aResult.alg = "sha256";
+	}
+
+	var hHash = _getV(h, aIdx[offset]);
+	aResult.hash = hHash;
+
+	if (aIdx.length > offset + 1) {
+	    var hIssuerSerial = _getTLV(h, aIdx[offset + 1]);
+	    var pIssuerSerial = 
+		this.getIssuerSerial(hIssuerSerial);
+	    aResult.issuer = pIssuerSerial.issuer;
+	    aResult.serial = pIssuerSerial.serial;
+	}
+
+	return aResult;
     };
 
     /**
@@ -3053,6 +3183,6 @@ KJUR.asn1.cms.CMSParser = function() {
 		a.push(pem);
 	    }
 	}
-	return a;
+	return {array: a, sortflag: false};
     };
 };
