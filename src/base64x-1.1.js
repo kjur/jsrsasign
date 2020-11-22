@@ -1,4 +1,4 @@
-/* base64x-1.1.18 (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* base64x-1.1.19 (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.0 base64x 1.1.18 (2020-Nov-18)
+ * @version jsrsasign 10.1.3 base64x 1.1.19 (2020-Nov-22)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1271,6 +1271,8 @@ var strdiffidx = function(s1, s2) {
     return -1; // same
 };
 
+// ==== hex / oid =================================
+
 /**
  * get hexadecimal value of object identifier from dot noted oid value
  * @name oidtohex
@@ -1386,7 +1388,7 @@ function hextooid(h) {
 
 /**
  * string padding<br/>
- * @name spad
+ * @name strpad
  * @function
  * @param {String} s input string
  * @param {Number} len output string length
@@ -1404,4 +1406,74 @@ var strpad = function(s, len, padchar) {
     return new Array(len - s.length + 1).join(padchar) + s;
 };
 
+// ==== bitstr hex / int =================================
 
+/**
+ * convert from hexadecimal string of ASN.1 BitString value with unused bit to integer value<br/>
+ * @name bitstrtoint
+ * @function
+ * @param {String} h hexadecimal string of ASN.1 BitString value with unused bit
+ * @return {Number} positive integer value of the BitString
+ * @since jsrsasign 10.1.3 base64x 1.1.19
+ * @see inttobitstr
+ * @see KJUR.asn1.DERBitString
+ * @see ASN1HEX.getInt
+ * 
+ * @description
+ * This function converts from hexadecimal string of ASN.1 BitString
+ * value with unused bit to its integer value.
+ * 
+ * @example
+ * // "03c8" &rarr; 0xc8 unusedbit=03 &rarr; 11001000b unusedbit=03 &rarr; 11001b &rarr; 25
+ * bitstrtoint("03c8") &rarr; 25
+ * // "02fff8" &rarr; 0xfff8 unusedbit=02 &rarr; 1111111111111000b unusedbit=02
+ * //   11111111111110b &rarr; 16382
+ * bitstrtoint("02fff8") &rarr; 16382
+ */
+function bitstrtoint(h) {
+    try {
+	var hUnusedbit = h.substr(0, 2);
+	if (hUnusedbit == "00")
+	    return parseInt(h.substr(2), 16);
+	var iUnusedbit = parseInt(hUnusedbit, 16);
+	var hValue = h.substr(2);
+	var bValue = parseInt(hValue, 16).toString(2);
+	if (bValue == "0") bValue = "00000000";
+	bValue = bValue.slice(0, 0 - iUnusedbit);
+	return parseInt(bValue, 2);
+    } catch(ex) {
+	return -1;
+    }
+};
+
+
+/**
+ * convert from integer value to hexadecimal string of ASN.1 BitString value with unused bit<br/>
+ * @name inttobitstr
+ * @function
+ * @param {Number} n integer value of ASN.1 BitString
+ * @return {String} hexadecimal string of ASN.1 BitString value with unused bit
+ * @since jsrsasign 10.1.3 base64x 1.1.19
+ * @see bitstrtoint
+ * @see KJUR.asn1.DERBitString
+ * @see ASN1HEX.getInt
+ * 
+ * @description
+ * This function converts from an integer value to 
+ * hexadecimal string of ASN.1 BitString value
+ * with unused bit.
+ * 
+ * @example
+ * // 25 &rarr; 11001b &rarr; 11001000b unusedbit=03 &rarr; 0xc8 unusedbit=03 &rarr; "03c8"
+ * inttobitstr(25) &rarr; "03c8"
+ */
+function inttobitstr(n) {
+    var bValue = Number(n).toString(2);
+    var iUnusedbit = 8 - bValue.length % 8;
+    if (iUnusedbit == 8) iUnusedbit = 0;
+    bValue = bValue + strpad("", iUnusedbit, "0");
+    var hValue = parseInt(bValue, 2).toString(16);
+    if (hValue.length % 2 == 1) hValue = "0" + hValue;
+    var hUnusedbit = "0" + iUnusedbit;
+    return hUnusedbit + hValue;
+};

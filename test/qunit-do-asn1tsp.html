@@ -566,8 +566,6 @@ var hTSR = "3082024130030201003082023806092a864886f70d010702a0820229308202250201
 
 var parser = new KJUR.asn1.tsp.TSPParser();
 
-deepEqual(parser.getPKIStatusInfo("3003030100"), {status: "granted"}, "PKIStatusInfo granted");
-
 var pExpect1 = {
   statusinfo: {status: "granted"},
   version: 3,
@@ -645,6 +643,38 @@ var pExpect4 = {
   }
 };
 deepEqual(parser.getTSTInfo(hIn4), pExpect4, "tstinfo");
+
+});
+
+test("TSPParser.getPKIStatusInfo test", function() {
+var parser = new KJUR.asn1.tsp.TSPParser();
+
+deepEqual(parser.getPKIStatusInfo("3003020100"), {status: "granted"}, "granted");
+
+deepEqual(
+parser.getPKIStatusInfo("3028020100300f0c036161610c036161610c03616161"),
+{status: "granted", statusString: ["aaa", "aaa", "aaa"]},
+"granted [aaa,aaa,aaa]");
+
+deepEqual(
+parser.getPKIStatusInfo("300702010203020700"),
+{status: "rejection", failInfo: "badAlg"},
+"reject badAlg");
+
+});
+
+test("TSPParser.getPKIFreeText test", function() {
+var parser = new KJUR.asn1.tsp.TSPParser();
+var hIn = "300f0c036161610c036161610c03616161";
+var aExp = ["aaa", "aaa", "aaa"];
+deepEqual(parser.getPKIFreeText(hIn), aExp, "[aaa,aaa,aaa]");
+
+test("TSPParser.getPKIFailureInfo test", function() {
+var parser = new KJUR.asn1.tsp.TSPParser();
+equal(parser.getPKIFailureInfo("030203c8"), "systemFailure", "03c8=systemFailure");
+equal(parser.getPKIFailureInfo("03020700"), "badAlg", "0700=badAlg");
+equal(parser.getPKIFailureInfo("03020780"), 1, "0780=1");
+});
 
 });
 

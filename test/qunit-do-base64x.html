@@ -306,12 +306,36 @@ equal(hextooid("2a864886f70d010105"), "1.2.840.113549.1.1.5", "SHA1withRSA");
 equal(hextooid("=-=-"), null, "=-=- > null");
 });
 
-test("strpad", function() {
+test("strpad test", function() {
 equal(strpad("1234", 10, "0"), "0000001234", "1234 10 0");
 equal(strpad("1234", 10, " "), "      1234", "1234 10 _");
 equal(strpad("1234", 10), "0000001234", "1234 10");
 equal(strpad("1234", 3), "1234", "1234 3");
 });
+
+test("bitstrtoint test", function() {
+equal(bitstrtoint("0700"), 0, "0700 > 0");
+equal(bitstrtoint("0780"), 1, "0780 > 1");
+equal(bitstrtoint("0680"), 2, "0680 > 2");
+equal(bitstrtoint("06c0"), 3, "06c0 > 3");
+equal(bitstrtoint("04b0"), 11, "04b0 > 11");
+equal(bitstrtoint("03c8"), 25, "03c8 > 25");
+equal(bitstrtoint("02fff8"), 16382, "02ff8 > 16382");
+equal(bitstrtoint("02fffc"), 16383, "02ffc > 16383");
+});
+
+test("inttobitstr test", function() {
+equal(inttobitstr(0), "0700", "0 > 0700");
+equal(inttobitstr(1), "0780", "1 > 0780");
+equal(inttobitstr(2), "0680", "2 > 0680");
+equal(inttobitstr(3), "06c0", "3 > 06c0");
+equal(inttobitstr(11), "04b0", "11 > 04b0");
+equal(inttobitstr(25), "03c8", "25 > 03c8");
+equal(inttobitstr(16382), "02fff8", "16382 > 02fff8");
+equal(inttobitstr(16383), "02fffc", "16383 > 02fffc");
+});
+
+
 
 });
 </script>

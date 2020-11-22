@@ -1,6 +1,23 @@
 
 ChangeLog for jsrsasign
 
+TSPParser.getPKIStatusInfo update
+* Changes from 10.1.2 to 10.1.3 release (2020-11-22)
+  - asn1tsp.js
+    - TSPParser class
+      - getPKIStatusInfo updated to
+        supports PKIFreeText and PKIFailureInfo
+      - getPKIFreeText added
+      - getPKIFailureInfo added
+  - asn1hex.js
+    - ASN1HEX class
+      - getString added
+      - getInt method updated to supports ASN.1 BitString
+  - base64x.js
+    - function bitstrtoint, inttobitstr added
+  - test/qunit-do-{asn1hex,asn1tsp,base64x}.html
+    - updated to follow above
+
 add SigningCertificateV2 for CMSParser and issue fix
 * Changes from 10.1.1 to 10.1.2 release (2020-11-21)
   - src/asn1cms.js

@@ -633,7 +633,7 @@ nthList.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getInt">getInt</a></b>(h, idx, errorReturn)
 								</div>
-								<div class="description">get integer value from ASN.1 V(value)<br/></div>
+								<div class="description">get integer value from ASN.1 V(value) of Integer or BitString<br/></div>
 							</td>
 						</tr>
 					
@@ -690,6 +690,17 @@ nthList.</div>
 								<div class="description">get object identifier name from ASN.1 V(value)<br/>
 This static method returns object identifier name such as "sha256"
 if registered.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ASN1HEX.<b><a href="../symbols/ASN1HEX.html#.getString">getString</a></b>(h, idx, errorReturn)
+								</div>
+								<div class="description">get raw string from ASN.1 V(value)<br/>
+This static method returns a raw string from
+any ASN.1 DER primitives.</div>
 							</td>
 						</tr>
 					
@@ -1396,14 +1407,16 @@ ASN1HEX.getIdxbyListEx(h, 0, [0, 2], "0c") &rarr; -1 //not UTF8String(0c)</pre>
 					
 					</div>
 					<div class="description">
-						get integer value from ASN.1 V(value)<br/>
+						get integer value from ASN.1 V(value) of Integer or BitString<br/>
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">ASN1HEX.getInt("xxxx020103xxxxxx", 4) &rarr 3</pre>
+					<pre class="code">ASN1HEX.getInt("xxxx020103xxxxxx", 4) &rarr 3 // DER Integer
+ASN1HEX.getInt("xxxx03020780xxxxxx", 4) &rarr 1 // DER BitStringx
+ASN1HEX.getInt("xxxx030203c8xxxxxx", 4) &rarr 25 // DER BitStringx</pre>
 					
 					
 					
@@ -1421,7 +1434,7 @@ ASN1HEX.getIdxbyListEx(h, 0, [0, 2], "0c") &rarr; -1 //not UTF8String(0c)</pre>
 									<span class="light fixedFont">{Number}</span> <b>idx</b>
 									
 								</dt>
-								<dd>string index in h to get ASN.1 DER Integer</dd>
+								<dd>string index in h to get ASN.1 DER Integer or BitString</dd>
 							
 								<dt>
 									<span class="light fixedFont">{Object}</span> <b>errorReturn</b>
@@ -1444,11 +1457,18 @@ ASN1HEX.getIdxbyListEx(h, 0, [0, 2], "0c") &rarr; -1 //not UTF8String(0c)</pre>
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{Number}</span> DER Integer value</dd>
+								<dd><span class="light fixedFont">{Number}</span> ASN.1 DER Integer or BitString value</dd>
 							
 							</dl>
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/global__.html#bitstrtoint">bitstrtoint</a></dd>
+							
+							</dl>
 						
 
 					<hr />
@@ -1829,6 +1849,74 @@ ASN1HEX.getOIDName("xxxx06032a0304xxxxxx", 4) &rarr "1.2.3.4"</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> object identifier name (ex. "sha256") oir OID string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".getString"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{String}</span>
+					<span class="light">ASN1HEX.</span><b>getString</b>(h, idx, errorReturn)
+					
+					</div>
+					<div class="description">
+						get raw string from ASN.1 V(value)<br/>
+This static method returns a raw string from
+any ASN.1 DER primitives.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">ASN1HEX.getString("xxxx1303616161xxxxxx", 4) &rarr "aaa"
+ASN1HEX.getString("xxxx0c03616161xxxxxx", 4) &rarr "aaa"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>idx</b>
+									
+								</dt>
+								<dd>string index in h to get any ASN.1 DER String</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>errorReturn</b>
+									
+								</dt>
+								<dd>(OPTION) error return value (DEFAULT: null)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.1.3 asn1hex 1.2.8</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> raw string</dd>
 							
 							</dl>
 						

@@ -71,6 +71,8 @@ exports.strdiffidx = strdiffidx;
 exports.oidtohex = oidtohex;
 exports.hextooid = hextooid;
 exports.strpad = strpad;
+exports.bitstrtoint = bitstrtoint;
+exports.inttobitstr = inttobitstr;
 
 // name spaces
 exports.KJUR = KJUR;

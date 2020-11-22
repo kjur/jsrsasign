@@ -1,4 +1,4 @@
-/* asn1tsp-2.0.2.js (c) 2014-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1tsp-2.0.3.js (c) 2014-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1tsp.js - ASN.1 DER encoder classes for RFC 3161 Time Stamp Protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1tsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.1 asn1tsp 2.0.2 (2020-Nov-20)
+ * @version jsrsasign 10.1.3 asn1tsp 2.0.3 (2020-Nov-22)
  * @since jsrsasign 4.5.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -516,7 +516,16 @@ YAHOO.lang.extend(KJUR.asn1.tsp.TimeStampResp, KJUR.asn1.ASN1Object);
  * @param {Array} params associative array of parameters
  * @extends KJUR.asn1.ASN1Object
  * @since jsrsasign 4.6.0 asn1tsp 1.0.0
+ * @see KJUR.asn1.tsp.PKIStatus
+ * @see KJUR.asn1.tsp.PKIFreeText
+ * @see KJUR.asn1.tsp.PKIFailureInfo
+ * @see KJUR.asn1.tsp.TSPParser#getPKIStatusInfo
+ *
  * @description
+ * This class provides ASN.1 PKIStatusInfo encoder
+ * defined in 
+ * <a href="https://tools.ietf.org/html/rfc3161#section-2.4.2">
+ * RFC 3161 section 2.4.2</a>.
  * <pre>
  * PKIStatusInfo ::= SEQUENCE {
  *    status                  PKIStatus,
@@ -1017,6 +1026,12 @@ KJUR.asn1.tsp.TSPParser = function() {
     var _aSTATUSSTR = [
 	"granted", "grantedWithMods", "rejection", "waiting",
 	"revocationWarning", "revocationNotification" ];
+    var _pFAILUREINFO = {
+	0: "badAlg", 2: "badRequest", 5: "badDataFormat",
+	14: "timeNotAvailable", 15: "unacceptedPolicy",
+	16: "unacceptedExtension", 17: "addInfoNotAvailable",
+	25: "systemFailure"
+    };
     
     /**
      * parse ASN.1 TimeStampResp<br/>
@@ -1371,12 +1386,83 @@ KJUR.asn1.tsp.TSPParser = function() {
     this.getPKIStatusInfo = function(h) {
 	var pResult = {};
 	var aIdx = _getChildIdx(h, 0);
+	var offset = 0;
+
 	try {
 	    var hStatus = _getV(h, aIdx[0]);
 	    var iStatus = parseInt(hStatus, 16);
 	    pResult.status = _aSTATUSSTR[iStatus];
 	} catch(ex) {};
-	
+
+	if (aIdx.length > 1 && h.substr(aIdx[1], 2) == "30") {
+	    var hPKIFreeText = _getTLV(h, aIdx[1]);
+	    pResult.statusString = 
+		this.getPKIFreeText(hPKIFreeText);
+	    offset++;
+	}
+
+	if (aIdx.length > offset &&
+	    h.substr(aIdx[1 + offset], 2) == "03") {
+	    var hPKIFailureInfo = _getTLV(h, aIdx[1 + offset]);
+	    pResult.failInfo = 
+		this.getPKIFailureInfo(hPKIFailureInfo);
+	}
+
 	return pResult;
+    };
+
+    /**
+     * parse ASN.1 PKIFreeText<br/>
+     * @name getPKIFreeText
+     * @memberOf KJUR.asn1.tsp.TSPParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 PKIFreeText
+     * @return {Array} array of string
+     * @since jsrsasign 10.1.3 asn1tsp 2.0.3
+     * @see KJUR.asn1.tsp.PKIFreeText
+     *
+     * @description
+     * This method parses ASN.1 PKIFreeText defined in RFC 3161.
+     *
+     * @example
+     * parser = new KJUR.asn1.tsp.TSPParser();
+     * parser.getPKIFreeText("300a0c036161610c03616161") &rarr; 
+     * ["aaa", "aaa"]
+     */
+    this.getPKIFreeText = function(h) {
+	var aResult = [];
+	var aIdx = _getChildIdx(h, 0);
+	for (var i = 0; i < aIdx.length; i++) {
+	    aResult.push(_ASN1HEX.getString(h, aIdx[i]));
+	}
+	return aResult;
+    };
+
+    /**
+     * parse ASN.1 PKIFailureInfo<br/>
+     * @name getPKIFailureInfo
+     * @memberOf KJUR.asn1.tsp.TSPParser#
+     * @function
+     * @param {String} h hexadecimal string of ASN.1 PKIFailureInfo
+     * @return {Object} failureInfo string or number
+     * @since jsrsasign 10.1.3 asn1tsp 2.0.3
+     * @see KJUR.asn1.tsp.PKIFailureInfo
+     *
+     * @description
+     * This method parses ASN.1 PKIFailureInfo defined in RFC 3161.
+     *
+     * @example
+     * parser = new KJUR.asn1.tsp.TSPParser();
+     * parser.getPKIFailureInfo("03020700") &rarr; "badAlg"
+     * parser.getPKIFailureInfo("03020780") &rarr; 1
+     * parser.getPKIFailureInfo("030203c8") &rarr; "systemFailure"
+     */
+    this.getPKIFailureInfo = function(h) {
+	var n = _ASN1HEX.getInt(h, 0);
+	if (_pFAILUREINFO[n] != undefined) {
+	    return _pFAILUREINFO[n];
+	} else {
+	    return n;
+	}
     };
 };
