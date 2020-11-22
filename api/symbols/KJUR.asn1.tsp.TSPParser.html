@@ -597,6 +597,26 @@ This method parses ASN.1 MessageImprint defined in RFC 3161.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#getPKIFailureInfo">getPKIFailureInfo</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 PKIFailureInfo<br/>
+This method parses ASN.1 PKIFailureInfo defined in RFC 3161.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#getPKIFreeText">getPKIFreeText</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 PKIFreeText<br/>
+This method parses ASN.1 PKIFreeText defined in RFC 3161.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#getPKIStatusInfo">getPKIStatusInfo</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 PKIStatusInfo<br/>
@@ -813,6 +833,133 @@ parser.getMessageImprint("30...") &rarr;
 							<dt class="heading">See:</dt>
 							
 								<dd><a href="../symbols/KJUR.asn1.tsp.MessageImprint.html">KJUR.asn1.tsp.MessageImprint</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getPKIFailureInfo"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getPKIFailureInfo</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 PKIFailureInfo<br/>
+This method parses ASN.1 PKIFailureInfo defined in RFC 3161.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.tsp.TSPParser();
+parser.getPKIFailureInfo("03020700") &rarr; "badAlg"
+parser.getPKIFailureInfo("03020780") &rarr; 1
+parser.getPKIFailureInfo("030203c8") &rarr; "systemFailure"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 PKIFailureInfo</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.1.3 asn1tsp 2.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> failureInfo string or number</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.PKIFailureInfo.html">KJUR.asn1.tsp.PKIFailureInfo</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getPKIFreeText"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getPKIFreeText</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 PKIFreeText<br/>
+This method parses ASN.1 PKIFreeText defined in RFC 3161.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.tsp.TSPParser();
+parser.getPKIFreeText("300a0c036161610c03616161") &rarr; 
+["aaa", "aaa"]</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 PKIFreeText</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.1.3 asn1tsp 2.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> array of string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.PKIFreeText.html">KJUR.asn1.tsp.PKIFreeText</a></dd>
 							
 							</dl>
 						

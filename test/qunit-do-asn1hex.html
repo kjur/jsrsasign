@@ -290,6 +290,13 @@ equal(ASN1HEX.getVbyListEx(h, 0, [0,3]), "06", "[0,3]=06"); // skip context tag
 equal(ASN1HEX.getVbyListEx(h, 0, [0,3], "03", false), "0006", "[0,3]=0006"); // don't remove unusedbits
 })
 
+test("ASN1HEX.getInt test", function() {
+var _getInt = ASN1HEX.getInt;
+equal(_getInt("xxxx020103xxxxxx", 4), 3, "int 3");
+equal(_getInt("xxxx03020780xxxxxx", 4), 1, "bitstr 0780 = 1");
+equal(_getInt("xxxx030203c8xxxxxx", 4), 25, "bitstr 03c8 = 25");
+});
+
 /*
 test("oidstrtohex", function() {
   expect(3);
@@ -409,4 +416,3 @@ equal(ASN1HEX.isContextTag("a0", "[3]"), false, "a0=[3] false");
 </p>
 </body>
 </html>
-
