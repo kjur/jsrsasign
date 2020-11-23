@@ -1,4 +1,4 @@
-/* asn1tsp-2.0.3.js (c) 2014-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1tsp-2.0.4.js (c) 2014-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1tsp.js - ASN.1 DER encoder classes for RFC 3161 Time Stamp Protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1tsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.3 asn1tsp 2.0.3 (2020-Nov-22)
+ * @version jsrsasign 10.1.4 asn1tsp 2.0.4 (2020-Nov-22)
  * @since jsrsasign 4.5.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -538,8 +538,8 @@ YAHOO.lang.extend(KJUR.asn1.tsp.TimeStampResp, KJUR.asn1.ASN1Object);
  * new KJUR.asn1.tsp.PKIStatusInfo({status: "granted"})
  * new KJUR.asn1.tsp.PKIStatusInfo({
  *   status: 2, // rejection
- *   statusString: ["unsupported algorithm"], // OPTION
- *   failInfo: 'badAlg' // OPTION
+ *   statusstr: ["unsupported algorithm"], // OPTION
+ *   failinfo: 'badAlg' // OPTION
  * })
  */
 KJUR.asn1.tsp.PKIStatusInfo = function(params) {
@@ -1381,7 +1381,9 @@ KJUR.asn1.tsp.TSPParser = function() {
      * @example
      * parser = new KJUR.asn1.tsp.TSPParser();
      * parser.getPKIStatusInfo("30...") &rarr; 
-     * { status: "granted" }
+     * { status: "rejection",
+     *   statusstr: ["unsupported algorithm"],
+     *   failinfo: "badAlg" }
      */
     this.getPKIStatusInfo = function(h) {
 	var pResult = {};
@@ -1396,7 +1398,7 @@ KJUR.asn1.tsp.TSPParser = function() {
 
 	if (aIdx.length > 1 && h.substr(aIdx[1], 2) == "30") {
 	    var hPKIFreeText = _getTLV(h, aIdx[1]);
-	    pResult.statusString = 
+	    pResult.statusstr = 
 		this.getPKIFreeText(hPKIFreeText);
 	    offset++;
 	}
@@ -1404,7 +1406,7 @@ KJUR.asn1.tsp.TSPParser = function() {
 	if (aIdx.length > offset &&
 	    h.substr(aIdx[1 + offset], 2) == "03") {
 	    var hPKIFailureInfo = _getTLV(h, aIdx[1 + offset]);
-	    pResult.failInfo = 
+	    pResult.failinfo = 
 		this.getPKIFailureInfo(hPKIFailureInfo);
 	}
 
