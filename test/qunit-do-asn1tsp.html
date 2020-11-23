@@ -653,12 +653,12 @@ deepEqual(parser.getPKIStatusInfo("3003020100"), {status: "granted"}, "granted")
 
 deepEqual(
 parser.getPKIStatusInfo("3028020100300f0c036161610c036161610c03616161"),
-{status: "granted", statusString: ["aaa", "aaa", "aaa"]},
+{status: "granted", statusstr: ["aaa", "aaa", "aaa"]},
 "granted [aaa,aaa,aaa]");
 
 deepEqual(
 parser.getPKIStatusInfo("300702010203020700"),
-{status: "rejection", failInfo: "badAlg"},
+{status: "rejection", failinfo: "badAlg"},
 "reject badAlg");
 
 });

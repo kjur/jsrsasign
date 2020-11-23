@@ -984,7 +984,9 @@ This method parses ASN.1 PKIStatusInfo defined in RFC 3161.
 					
 					<pre class="code">parser = new KJUR.asn1.tsp.TSPParser();
 parser.getPKIStatusInfo("30...") &rarr; 
-{ status: "granted" }</pre>
+{ status: "rejection",
+  statusstr: ["unsupported algorithm"],
+  failinfo: "badAlg" }</pre>
 					
 					
 					

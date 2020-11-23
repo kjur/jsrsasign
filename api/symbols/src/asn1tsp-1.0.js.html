@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1tsp-2.0.3.js (c) 2014-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1tsp-2.0.4.js (c) 2014-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * asn1tsp.js - ASN.1 DER encoder classes for RFC 3161 Time Stamp Protocol
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name asn1tsp-1.0.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign 10.1.3 asn1tsp 2.0.3 (2020-Nov-22)
+<span class='line'> 19</span>  * @version jsrsasign 10.1.4 asn1tsp 2.0.4 (2020-Nov-22)
 <span class='line'> 20</span>  * @since jsrsasign 4.5.1
 <span class='line'> 21</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -545,8 +545,8 @@
 <span class='line'>538</span>  * new KJUR.asn1.tsp.PKIStatusInfo({status: "granted"})
 <span class='line'>539</span>  * new KJUR.asn1.tsp.PKIStatusInfo({
 <span class='line'>540</span>  *   status: 2, // rejection
-<span class='line'>541</span>  *   statusString: ["unsupported algorithm"], // OPTION
-<span class='line'>542</span>  *   failInfo: 'badAlg' // OPTION
+<span class='line'>541</span>  *   statusstr: ["unsupported algorithm"], // OPTION
+<span class='line'>542</span>  *   failinfo: 'badAlg' // OPTION
 <span class='line'>543</span>  * })
 <span class='line'>544</span>  */</span><span class="WHIT">
 <span class='line'>545</span> </span><span class="NAME">KJUR.asn1.tsp.PKIStatusInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
@@ -1388,89 +1388,91 @@
 <span class='line'>1381</span>      * @example
 <span class='line'>1382</span>      * parser = new KJUR.asn1.tsp.TSPParser();
 <span class='line'>1383</span>      * parser.getPKIStatusInfo("30...") &rarr; 
-<span class='line'>1384</span>      * { status: "granted" }
-<span class='line'>1385</span>      */</span><span class="WHIT">
-<span class='line'>1386</span> </span><span class="WHIT">    </span><span class="NAME">this.getPKIStatusInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1387</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pResult</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1388</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1389</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">offset</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1390</span> 
-<span class='line'>1391</span> </span><span class="WHIT">	</span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1392</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1393</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">hStatus</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1394</span> </span><span class="WHIT">	    </span><span class="NAME">pResult.status</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_aSTATUSSTR</span><span class="PUNC">[</span><span class="NAME">iStatus</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1395</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1396</span> 
-<span class='line'>1397</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">aIdx.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1398</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hPKIFreeText</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1399</span> </span><span class="WHIT">	    </span><span class="NAME">pResult.statusString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> 
-<span class='line'>1400</span> 		</span><span class="NAME">this.getPKIFreeText</span><span class="PUNC">(</span><span class="NAME">hPKIFreeText</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1401</span> </span><span class="WHIT">	    </span><span class="NAME">offset</span><span class="PUNC">++</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1402</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1403</span> 
-<span class='line'>1404</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">aIdx.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">offset</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
-<span class='line'>1405</span> </span><span class="WHIT">	    </span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">offset</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"03"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1406</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hPKIFailureInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">offset</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1407</span> </span><span class="WHIT">	    </span><span class="NAME">pResult.failInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> 
-<span class='line'>1408</span> 		</span><span class="NAME">this.getPKIFailureInfo</span><span class="PUNC">(</span><span class="NAME">hPKIFailureInfo</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1409</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1410</span> 
-<span class='line'>1411</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">pResult</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1412</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1413</span> 
-<span class='line'>1414</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>1415</span>      * parse ASN.1 PKIFreeText&lt;br/>
-<span class='line'>1416</span>      * @name getPKIFreeText
-<span class='line'>1417</span>      * @memberOf KJUR.asn1.tsp.TSPParser#
-<span class='line'>1418</span>      * @function
-<span class='line'>1419</span>      * @param {String} h hexadecimal string of ASN.1 PKIFreeText
-<span class='line'>1420</span>      * @return {Array} array of string
-<span class='line'>1421</span>      * @since jsrsasign 10.1.3 asn1tsp 2.0.3
-<span class='line'>1422</span>      * @see KJUR.asn1.tsp.PKIFreeText
-<span class='line'>1423</span>      *
-<span class='line'>1424</span>      * @description
-<span class='line'>1425</span>      * This method parses ASN.1 PKIFreeText defined in RFC 3161.
-<span class='line'>1426</span>      *
-<span class='line'>1427</span>      * @example
-<span class='line'>1428</span>      * parser = new KJUR.asn1.tsp.TSPParser();
-<span class='line'>1429</span>      * parser.getPKIFreeText("300a0c036161610c03616161") &rarr; 
-<span class='line'>1430</span>      * ["aaa", "aaa"]
-<span class='line'>1431</span>      */</span><span class="WHIT">
-<span class='line'>1432</span> </span><span class="WHIT">    </span><span class="NAME">this.getPKIFreeText</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1433</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aResult</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1434</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1435</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">aIdx.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1436</span> </span><span class="WHIT">	    </span><span class="NAME">aResult.push</span><span class="PUNC">(</span><span class="NAME">_ASN1HEX.getString</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1437</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1438</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">aResult</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1439</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1440</span> 
-<span class='line'>1441</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>1442</span>      * parse ASN.1 PKIFailureInfo&lt;br/>
-<span class='line'>1443</span>      * @name getPKIFailureInfo
-<span class='line'>1444</span>      * @memberOf KJUR.asn1.tsp.TSPParser#
-<span class='line'>1445</span>      * @function
-<span class='line'>1446</span>      * @param {String} h hexadecimal string of ASN.1 PKIFailureInfo
-<span class='line'>1447</span>      * @return {Object} failureInfo string or number
-<span class='line'>1448</span>      * @since jsrsasign 10.1.3 asn1tsp 2.0.3
-<span class='line'>1449</span>      * @see KJUR.asn1.tsp.PKIFailureInfo
-<span class='line'>1450</span>      *
-<span class='line'>1451</span>      * @description
-<span class='line'>1452</span>      * This method parses ASN.1 PKIFailureInfo defined in RFC 3161.
-<span class='line'>1453</span>      *
-<span class='line'>1454</span>      * @example
-<span class='line'>1455</span>      * parser = new KJUR.asn1.tsp.TSPParser();
-<span class='line'>1456</span>      * parser.getPKIFailureInfo("03020700") &rarr; "badAlg"
-<span class='line'>1457</span>      * parser.getPKIFailureInfo("03020780") &rarr; 1
-<span class='line'>1458</span>      * parser.getPKIFailureInfo("030203c8") &rarr; "systemFailure"
-<span class='line'>1459</span>      */</span><span class="WHIT">
-<span class='line'>1460</span> </span><span class="WHIT">    </span><span class="NAME">this.getPKIFailureInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1461</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getInt</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1462</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_pFAILUREINFO</span><span class="PUNC">[</span><span class="NAME">n</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1463</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_pFAILUREINFO</span><span class="PUNC">[</span><span class="NAME">n</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1464</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1465</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">n</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1466</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1467</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1468</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1469</span> </span></pre></body></html>
+<span class='line'>1384</span>      * { status: "rejection",
+<span class='line'>1385</span>      *   statusstr: ["unsupported algorithm"],
+<span class='line'>1386</span>      *   failinfo: "badAlg" }
+<span class='line'>1387</span>      */</span><span class="WHIT">
+<span class='line'>1388</span> </span><span class="WHIT">    </span><span class="NAME">this.getPKIStatusInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1389</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pResult</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1390</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1391</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">offset</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1392</span> 
+<span class='line'>1393</span> </span><span class="WHIT">	</span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1394</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1395</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">hStatus</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1396</span> </span><span class="WHIT">	    </span><span class="NAME">pResult.status</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_aSTATUSSTR</span><span class="PUNC">[</span><span class="NAME">iStatus</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1397</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1398</span> 
+<span class='line'>1399</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">aIdx.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1400</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hPKIFreeText</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1401</span> </span><span class="WHIT">	    </span><span class="NAME">pResult.statusstr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> 
+<span class='line'>1402</span> 		</span><span class="NAME">this.getPKIFreeText</span><span class="PUNC">(</span><span class="NAME">hPKIFreeText</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1403</span> </span><span class="WHIT">	    </span><span class="NAME">offset</span><span class="PUNC">++</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1404</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1405</span> 
+<span class='line'>1406</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">aIdx.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">offset</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>1407</span> </span><span class="WHIT">	    </span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">offset</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"03"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1408</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hPKIFailureInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">offset</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1409</span> </span><span class="WHIT">	    </span><span class="NAME">pResult.failinfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> 
+<span class='line'>1410</span> 		</span><span class="NAME">this.getPKIFailureInfo</span><span class="PUNC">(</span><span class="NAME">hPKIFailureInfo</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1411</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1412</span> 
+<span class='line'>1413</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">pResult</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1414</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1415</span> 
+<span class='line'>1416</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1417</span>      * parse ASN.1 PKIFreeText&lt;br/>
+<span class='line'>1418</span>      * @name getPKIFreeText
+<span class='line'>1419</span>      * @memberOf KJUR.asn1.tsp.TSPParser#
+<span class='line'>1420</span>      * @function
+<span class='line'>1421</span>      * @param {String} h hexadecimal string of ASN.1 PKIFreeText
+<span class='line'>1422</span>      * @return {Array} array of string
+<span class='line'>1423</span>      * @since jsrsasign 10.1.3 asn1tsp 2.0.3
+<span class='line'>1424</span>      * @see KJUR.asn1.tsp.PKIFreeText
+<span class='line'>1425</span>      *
+<span class='line'>1426</span>      * @description
+<span class='line'>1427</span>      * This method parses ASN.1 PKIFreeText defined in RFC 3161.
+<span class='line'>1428</span>      *
+<span class='line'>1429</span>      * @example
+<span class='line'>1430</span>      * parser = new KJUR.asn1.tsp.TSPParser();
+<span class='line'>1431</span>      * parser.getPKIFreeText("300a0c036161610c03616161") &rarr; 
+<span class='line'>1432</span>      * ["aaa", "aaa"]
+<span class='line'>1433</span>      */</span><span class="WHIT">
+<span class='line'>1434</span> </span><span class="WHIT">    </span><span class="NAME">this.getPKIFreeText</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1435</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aResult</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1436</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1437</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">aIdx.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1438</span> </span><span class="WHIT">	    </span><span class="NAME">aResult.push</span><span class="PUNC">(</span><span class="NAME">_ASN1HEX.getString</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aIdx</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1439</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1440</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">aResult</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1441</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1442</span> 
+<span class='line'>1443</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1444</span>      * parse ASN.1 PKIFailureInfo&lt;br/>
+<span class='line'>1445</span>      * @name getPKIFailureInfo
+<span class='line'>1446</span>      * @memberOf KJUR.asn1.tsp.TSPParser#
+<span class='line'>1447</span>      * @function
+<span class='line'>1448</span>      * @param {String} h hexadecimal string of ASN.1 PKIFailureInfo
+<span class='line'>1449</span>      * @return {Object} failureInfo string or number
+<span class='line'>1450</span>      * @since jsrsasign 10.1.3 asn1tsp 2.0.3
+<span class='line'>1451</span>      * @see KJUR.asn1.tsp.PKIFailureInfo
+<span class='line'>1452</span>      *
+<span class='line'>1453</span>      * @description
+<span class='line'>1454</span>      * This method parses ASN.1 PKIFailureInfo defined in RFC 3161.
+<span class='line'>1455</span>      *
+<span class='line'>1456</span>      * @example
+<span class='line'>1457</span>      * parser = new KJUR.asn1.tsp.TSPParser();
+<span class='line'>1458</span>      * parser.getPKIFailureInfo("03020700") &rarr; "badAlg"
+<span class='line'>1459</span>      * parser.getPKIFailureInfo("03020780") &rarr; 1
+<span class='line'>1460</span>      * parser.getPKIFailureInfo("030203c8") &rarr; "systemFailure"
+<span class='line'>1461</span>      */</span><span class="WHIT">
+<span class='line'>1462</span> </span><span class="WHIT">    </span><span class="NAME">this.getPKIFailureInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1463</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getInt</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1464</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_pFAILUREINFO</span><span class="PUNC">[</span><span class="NAME">n</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1465</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_pFAILUREINFO</span><span class="PUNC">[</span><span class="NAME">n</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1466</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1467</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">n</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1468</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1469</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1470</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1471</span> </span></pre></body></html>

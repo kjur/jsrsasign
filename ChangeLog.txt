@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+getPKIStatusInfo bugfix
+* Changes from 10.1.3 to 10.1.4 release (2020-11-23)
+  - asn1tsp.js
+    - TSPParser class
+      - getPKIStatusInfo out parameter name bugfix
+  - test/qunit-do-asn1hex.html
+    - updated to follow above
+
 TSPParser.getPKIStatusInfo update
 * Changes from 10.1.2 to 10.1.3 release (2020-11-22)
   - asn1tsp.js
