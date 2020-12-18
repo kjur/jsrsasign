@@ -720,9 +720,9 @@ KJUR.crypto.MessageDigest.HASHLENGTH = {
  * Please see {@link KJUR.crypto.Mac.setPassword}, how to provide password
  * in various ways in detail.
  * @example
- * var mac = new KJUR.crypto.Mac({alg: "HmacSHA1", "pass": "pass"});
+ * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": "pass"});
  * mac.updateString('aaa')
- * var macHex = mac.doFinal()
+ * mac.doFinal() &rarr; "5737da..."
  *
  * // other password representation 
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"hex":  "6161"}});
@@ -785,77 +785,92 @@ KJUR.crypto.Mac = function(params) {
     };
 
     /**
-     * update digest by specified string
+     * update digest by specified string<br/>
      * @name updateString
      * @memberOf KJUR.crypto.Mac#
      * @function
      * @param {String} str string to update
+     *
      * @description
      * @example
-     * mac.updateString('New York');
+     * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": "pass"});
+     * mac.updateString('aaa')
+     * mac.doFinal() &rarr; "5737da..."
      */
     this.updateString = function(str) {
 	throw "updateString(str) not supported for this alg/prov: " + this.algProv;
     };
 
     /**
-     * update digest by specified hexadecimal string
+     * update digest by specified hexadecimal string<br/>
      * @name updateHex
      * @memberOf KJUR.crypto.Mac#
      * @function
      * @param {String} hex hexadecimal string to update
+     *
      * @description
      * @example
-     * mac.updateHex('0afe36');
+     * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": "pass"});
+     * mac.updateHex('616161')
+     * mac.doFinal() &rarr; "5737da..."
      */
     this.updateHex = function(hex) {
 	throw "updateHex(hex) not supported for this alg/prov: " + this.algProv;
     };
 
     /**
-     * completes hash calculation and returns hash result
+     * completes hash calculation and returns hash result<br/>
      * @name doFinal
      * @memberOf KJUR.crypto.Mac#
      * @function
+     * @returns hexadecimal string of Mac result value
+     *
      * @description
      * @example
-     * mac.digest()
+     * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": "pass"});
+     * mac.updateString('aaa')
+     * mac.doFinal() &rarr; "5737da..."
      */
     this.doFinal = function() {
 	throw "digest() not supported for this alg/prov: " + this.algProv;
     };
 
     /**
-     * performs final update on the digest using string, then completes the digest computation
+     * performs final update on the digest using string, then completes the digest computation<br/>
      * @name doFinalString
      * @memberOf KJUR.crypto.Mac#
      * @function
-     * @param {String} str string to final update
+     * @param {String} str raw string to final update
+     * @returns hexadecimal string of Mac result value
+     *
      * @description
      * @example
-     * mac.digestString('aaa')
+     * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": "pass"});
+     * mac.doFinalString("aaa") &rarr; "5737da..."
      */
     this.doFinalString = function(str) {
 	throw "digestString(str) not supported for this alg/prov: " + this.algProv;
     };
 
     /**
-     * performs final update on the digest using hexadecimal string, 
-     * then completes the digest computation
+     * performs final update on the digest using hexadecimal string, then completes the digest computation<br/>
      * @name doFinalHex
      * @memberOf KJUR.crypto.Mac#
      * @function
      * @param {String} hex hexadecimal string to final update
+     * @returns hexadecimal string of Mac result value
+     *
      * @description
      * @example
-     * mac.digestHex('0f2abd')
+     * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": "pass"});
+     * mac.doFinalHex("616161") &rarr; "5737da..."
      */
     this.doFinalHex = function(hex) {
 	throw "digestHex(hex) not supported for this alg/prov: " + this.algProv;
     };
 
     /**
-     * set password for Mac
+     * set password for Mac<br/>
      * @name setPassword
      * @memberOf KJUR.crypto.Mac#
      * @function
@@ -945,7 +960,7 @@ KJUR.crypto.Mac = function(params) {
     }
 };
 
-// ====== Signature class =========================================================
+// ====== Signature class ====================================================
 /**
  * Signature class which is very similar to java.security.Signature class
  * @name KJUR.crypto.Signature

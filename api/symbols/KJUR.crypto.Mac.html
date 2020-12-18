@@ -588,7 +588,7 @@ NOTE: HmacSHA224 and HmacSHA384 issue was fixed since jsrsasign 4.1.4.</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Mac.html#doFinal">doFinal</a></b>()
 								</div>
-								<div class="description">completes hash calculation and returns hash result
+								<div class="description">completes hash calculation and returns hash result<br/>
 </div>
 							</td>
 						</tr>
@@ -598,8 +598,7 @@ NOTE: HmacSHA224 and HmacSHA384 issue was fixed since jsrsasign 4.1.4.</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Mac.html#doFinalHex">doFinalHex</a></b>(hex)
 								</div>
-								<div class="description">performs final update on the digest using hexadecimal string, 
-then completes the digest computation
+								<div class="description">performs final update on the digest using hexadecimal string, then completes the digest computation<br/>
 </div>
 							</td>
 						</tr>
@@ -609,7 +608,7 @@ then completes the digest computation
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Mac.html#doFinalString">doFinalString</a></b>(str)
 								</div>
-								<div class="description">performs final update on the digest using string, then completes the digest computation
+								<div class="description">performs final update on the digest using string, then completes the digest computation<br/>
 </div>
 							</td>
 						</tr>
@@ -619,7 +618,7 @@ then completes the digest computation
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Mac.html#setPassword">setPassword</a></b>(pass)
 								</div>
-								<div class="description">set password for Mac
+								<div class="description">set password for Mac<br/>
 This method will set password for (H)Mac internally.</div>
 							</td>
 						</tr>
@@ -629,7 +628,7 @@ This method will set password for (H)Mac internally.</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Mac.html#updateHex">updateHex</a></b>(hex)
 								</div>
-								<div class="description">update digest by specified hexadecimal string
+								<div class="description">update digest by specified hexadecimal string<br/>
 </div>
 							</td>
 						</tr>
@@ -639,7 +638,7 @@ This method will set password for (H)Mac internally.</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Mac.html#updateString">updateString</a></b>(str)
 								</div>
-								<div class="description">update digest by specified string
+								<div class="description">update digest by specified string<br/>
 </div>
 							</td>
 						</tr>
@@ -690,9 +689,9 @@ in various ways in detail.
 				
 				
 				
-				<pre class="code">var mac = new KJUR.crypto.Mac({alg: "HmacSHA1", "pass": "pass"});
+				<pre class="code">var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": "pass"});
 mac.updateString('aaa')
-var macHex = mac.doFinal()
+mac.doFinal() &rarr; "5737da..."
 
 // other password representation 
 var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"hex":  "6161"}});
@@ -743,7 +742,7 @@ var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"b64u": "Mi02_-...a"}
 					
 					</div>
 					<div class="description">
-						completes hash calculation and returns hash result
+						completes hash calculation and returns hash result<br/>
 
 						
 						
@@ -751,7 +750,9 @@ var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"b64u": "Mi02_-...a"}
 					
 					
 					
-					<pre class="code">mac.digest()</pre>
+					<pre class="code">var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": "pass"});
+mac.updateString('aaa')
+mac.doFinal() &rarr; "5737da..."</pre>
 					
 					
 					
@@ -759,6 +760,13 @@ var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"b64u": "Mi02_-...a"}
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>hexadecimal string of Mac result value</dd>
+							
+							</dl>
 						
 						
 						
@@ -773,8 +781,7 @@ var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"b64u": "Mi02_-...a"}
 					
 					</div>
 					<div class="description">
-						performs final update on the digest using hexadecimal string, 
-then completes the digest computation
+						performs final update on the digest using hexadecimal string, then completes the digest computation<br/>
 
 						
 						
@@ -782,7 +789,8 @@ then completes the digest computation
 					
 					
 					
-					<pre class="code">mac.digestHex('0f2abd')</pre>
+					<pre class="code">var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": "pass"});
+mac.doFinalHex("616161") &rarr; "5737da..."</pre>
 					
 					
 					
@@ -802,6 +810,13 @@ then completes the digest computation
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>hexadecimal string of Mac result value</dd>
+							
+							</dl>
+						
 						
 						
 
@@ -815,7 +830,7 @@ then completes the digest computation
 					
 					</div>
 					<div class="description">
-						performs final update on the digest using string, then completes the digest computation
+						performs final update on the digest using string, then completes the digest computation<br/>
 
 						
 						
@@ -823,7 +838,8 @@ then completes the digest computation
 					
 					
 					
-					<pre class="code">mac.digestString('aaa')</pre>
+					<pre class="code">var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": "pass"});
+mac.doFinalString("aaa") &rarr; "5737da..."</pre>
 					
 					
 					
@@ -835,13 +851,20 @@ then completes the digest computation
 									<span class="light fixedFont">{String}</span> <b>str</b>
 									
 								</dt>
-								<dd>string to final update</dd>
+								<dd>raw string to final update</dd>
 							
 							</dl>
 						
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>hexadecimal string of Mac result value</dd>
+							
+							</dl>
 						
 						
 						
@@ -856,7 +879,7 @@ then completes the digest computation
 					
 					</div>
 					<div class="description">
-						set password for Mac
+						set password for Mac<br/>
 This method will set password for (H)Mac internally.
 Argument 'pass' can be specified as following:
 <ul>
@@ -932,7 +955,7 @@ mac.setPassword({"b64u": "Mb-c3f_"});</pre>
 					
 					</div>
 					<div class="description">
-						update digest by specified hexadecimal string
+						update digest by specified hexadecimal string<br/>
 
 						
 						
@@ -940,7 +963,9 @@ mac.setPassword({"b64u": "Mb-c3f_"});</pre>
 					
 					
 					
-					<pre class="code">mac.updateHex('0afe36');</pre>
+					<pre class="code">var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": "pass"});
+mac.updateHex('616161')
+mac.doFinal() &rarr; "5737da..."</pre>
 					
 					
 					
@@ -973,7 +998,7 @@ mac.setPassword({"b64u": "Mb-c3f_"});</pre>
 					
 					</div>
 					<div class="description">
-						update digest by specified string
+						update digest by specified string<br/>
 
 						
 						
@@ -981,7 +1006,9 @@ mac.setPassword({"b64u": "Mb-c3f_"});</pre>
 					
 					
 					
-					<pre class="code">mac.updateString('New York');</pre>
+					<pre class="code">var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": "pass"});
+mac.updateString('aaa')
+mac.doFinal() &rarr; "5737da..."</pre>
 					
 					
 					
