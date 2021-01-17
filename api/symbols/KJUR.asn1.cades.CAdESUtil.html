@@ -589,7 +589,7 @@ to unsigned attributes field in a signerInfo field.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">KJUR.asn1.cades.CAdESUtil.<b><a href="../symbols/KJUR.asn1.cades.CAdESUtil.html#.parseSignerInfoForAddingUnsigned">parseSignerInfoForAddingUnsigned</a></b>(hex)
 								</div>
-								<div class="description">parse SignerInfo to add unsigned attributes
+								<div class="description">parse SignerInfo to add unsigned attributes (DEPRECATED)
 This method will parse a hexadecimal string of 
 SignerInfo to add a attribute
 to unsigned attributes field in a signerInfo field.</div>
@@ -661,25 +661,27 @@ to unsigned attributes field in a signerInfo field.</div>
 This method will parse a hexadecimal string of 
 ContentInfo with CMS SignedData to add a attribute
 to unsigned attributes field in a signerInfo field.
-Parsed result will be an associative array which has
-following properties:
-<ul>
-<li>version - hex of CMSVersion ASN.1 TLV</li>
-<li>algs - hex of DigestAlgorithms ASN.1 TLV</li>
-<li>encapcontent - hex of EncapContentInfo ASN.1 TLV</li>
-<li>certs - hex of Certificates ASN.1 TLV</li>
-<li>revs - hex of RevocationInfoChoices ASN.1 TLV</li>
-<li>si[] - array of SignerInfo properties</li>
-<li>obj - parsed KJUR.asn1.cms.SignedData object</li>
-</ul>
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">info = KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned(beshex);
-sd = info.obj;</pre>
+					<pre class="code">param = KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned(beshex);
+&rarr;
+{
+  version: 1,
+  hashalgs: ["sha256"],
+  econtent: ...,
+  sinfos: [{
+    version: 1
+    id: ...
+    hashalg: "sha256",
+    sattrs: {array: [...]},
+    sigalg: "SHA256withRSA",
+    sighex: ...
+  }]
+}</pre>
 					
 					
 					
@@ -708,6 +710,15 @@ sd = info.obj;</pre>
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getCMSSignedData">KJUR.asn1.cms.CMSParser#getCMSSignedData</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a></dd>
+							
+							</dl>
+						
 
 					<hr />
 				
@@ -719,7 +730,7 @@ sd = info.obj;</pre>
 					
 					</div>
 					<div class="description">
-						parse SignerInfo to add unsigned attributes
+						parse SignerInfo to add unsigned attributes (DEPRECATED)
 This method will parse a hexadecimal string of 
 SignerInfo to add a attribute
 to unsigned attributes field in a signerInfo field.
@@ -756,6 +767,13 @@ for CAdES-T and not for CAdES-C.
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 10.1.5 no more necessary becase parseSignedDataForAddingUnsigned don't call this
+							</dt>
+							</dl>
 						
 						
 						

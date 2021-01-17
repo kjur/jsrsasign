@@ -41,7 +41,7 @@ ext/%-min.js: ext/%.js
 	yuicmp $^ -o $@
 
 gitadd-all-doc:
-	git add api/*.html api/symbols/*.html api/symbols/src/*.html
+	git add api/*.html api/symbols/*.html api/symbols/src/*.html LICENSE.txt
 
 gitadd-release:
 	git add ChangeLog.txt Makefile bower.json jsrsasign-*-min.js min/*.js src/*.js npm/package.json npm/lib/jsrsasign*.js npm/lib/{header,footer,lib}.js src/*.js test/qunit-do-*.html test/x509crl.html README.md npm/README.md tool/*.html npm_util/*.* npm_util/lib/*.* npm/test/t_*.js

@@ -1,4 +1,4 @@
-/* asn1cms-2.0.3.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1cms-2.0.4.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1cms.js - ASN.1 DER encoder and verifier classes for Cryptographic Message Syntax(CMS)
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cms-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.2 asn1cms 2.0.3 (2020-Nov-21)
+ * @version jsrsasign 10.1.5 asn1cms 2.0.4 (2021-Jan-17)
  * @since jsrsasign 4.2.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1000,7 +1000,8 @@ YAHOO.lang.extend(KJUR.asn1.cms.SubjectKeyIdentifier, KJUR.asn1.ASN1Object);
  *   array: [{
  *     attr: "contentType",
  *     type: "data"
- *   }]
+ *   }],
+ *   sortflag: false
  * })
  */
 KJUR.asn1.cms.AttributeList = function(params) {
@@ -1045,6 +1046,9 @@ KJUR.asn1.cms.AttributeList = function(params) {
 		a.push(new _KJUR_asn1_cms.SigningCertificateV2(pAttr));
 	    } else if (attrName == "signaturePolicyIdentifier") {
 		a.push(new KJUR.asn1.cades.SignaturePolicyIdentifier(pAttr));
+	    } else if (attrName == "signatureTimeStamp" ||
+		       attrName == "timeStampToken") {
+		a.push(new KJUR.asn1.cades.SignatureTimeStamp(pAttr));
 	    } else {
 		throw new _Error("unknown attr: " + attrName);
 	    }
@@ -1206,8 +1210,18 @@ KJUR.asn1.cms.SignerInfo = function(params) {
 	    params.signkey != undefined) {
 	    this.sign();
 	}
-
 	a.push(new _DEROctetString({hex: params.sighex}));
+
+	if (params.uattrs != undefined) {
+	    var dList = new _AttributeList(params.uattrs);
+	    try {
+		a.push(new _DERTaggedObject({tag: "a1", 
+					     explicit: false,
+					     obj: dList}));
+	    } catch(ex) {
+		throw new _Error("si uattr error: " + ex);
+	    }
+	}
 
 	var seq = new _DERSequence({array: a});
 	return seq.getEncodedHex();
@@ -2753,8 +2767,9 @@ KJUR.asn1.cms.CMSParser = function() {
 	} else if (attrType == "signingCertificate") {
 	    this.setSigningCertificate(pResult);
 	} else if (attrType == "signingCertificateV2") {
-	    //alert(pResult.valhex);
 	    this.setSigningCertificateV2(pResult);
+	} else if (attrType == "signaturePolicyIdentifier") {
+	    this.setSignaturePolicyIdentifier(pResult);
 	}
 
 	return pResult;
@@ -2908,6 +2923,54 @@ KJUR.asn1.cms.CMSParser = function() {
 	if (aIdx.length > 1) {
 	    var hPolicies = _getTLV(pAttr.valhex, aIdx[1]);
 	    pAttr.polhex = hPolicies;
+	}
+	delete pAttr.valhex;
+    };
+
+    /**
+     * set SignaturePolicyIdentifier attribute<br/>
+     * @name setSignaturePolicyIdentifier
+     * @memberOf KJUR.asn1.cms.CMSParser#
+     * @function
+     * @param {Array} pAttr JSON object of attribute parameter
+     * @since jsrsasign 10.1.5 asn1cms 2.0.4
+     * @see KJUR.asn1.cms.CMSParser#getAttribute
+     * @see KJUR.asn1.cades.SignaturePolicyIdentifier
+     *
+     * @description
+     * This sets an attribute as SignaturePolicyIdentifier defined in
+     * <a href="https://tools.ietf.org/html/rfc5126#section-5.8.1">
+     * RFC 5126 CAdES section 5.8.1</a>.
+     *
+     * @example
+     * parser = new KJUR.asn1.cms.CMSParser();
+     * pAttr = {
+     *   attr: "signaturePolicyIdentifier"
+     *   valhex: '...'
+     * };
+     * parser.setSignaturePolicyIdentifier(pAttr);
+     * pAttr &rarr; {
+     *   attr: "signaturePolicyIdentifier",
+     *   oid: "1.2.3.4.5",
+     *   alg: "sha1",
+     *   hash: "1a2b..."
+     * }
+     */
+    this.setSignaturePolicyIdentifier = function(pAttr) {
+	var aIdx = _getChildIdx(pAttr.valhex, 0);
+	if (aIdx.length > 0) {
+	    var oid = _ASN1HEX.getOID(pAttr.valhex, aIdx[0]);
+	    pAttr.oid = oid;
+	}
+	if (aIdx.length > 1) {
+	    var x = new _X509();
+	    var a2Idx = _getChildIdx(pAttr.valhex, aIdx[1]);
+	    var hAlg = _getTLV(pAttr.valhex, a2Idx[0]);
+	    var sAlg = x.getAlgorithmIdentifierName(hAlg);
+	    pAttr.alg = sAlg;
+
+	    var hHash = _getV(pAttr.valhex, a2Idx[1]);
+	    pAttr.hash = hHash;
 	}
 	delete pAttr.valhex;
     };

@@ -1,9 +1,9 @@
-/* asn1cades-2.0.0.js (c) 2014-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1cades-2.0.1.js (c) 2014-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1cades.js - ASN.1 DER encoder classes for RFC 5126 CAdES long term signature
  *
- * Copyright (c) 2014-2020 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2014-2021 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cades-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.0.0 asn1cades 2.0.0 (2020-Sep-22)
+ * @version jsrsasign 10.0.5 asn1cades 2.0.1 (2021-Jan-17)
  * @since jsrsasign 4.7.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -197,6 +197,7 @@ if (typeof KJUR.asn1.cades == "undefined" || !KJUR.asn1.cades) KJUR.asn1.cades =
  * @extends KJUR.asn1.cms.Attribute
  * @since jsrsasign 4.7.0 asn1cades 1.0.0
  * @see KJUR.asn1.cms.AttributeList
+ * @see KJUR.asn1.cms.CMSParser#setSignaturePolicyIdentifier
  * @see KJUR.asn1.cades.SignaturePolicyId
  * @see KJUR.asn1.cades.OtherHashAlgAndValue
  *
@@ -797,11 +798,7 @@ YAHOO.lang.extend(KJUR.asn1.cades.OtherHash, KJUR.asn1.ASN1Object);
  */
 KJUR.asn1.cades.CAdESUtil = new function() {
 };
-/*
- *
- */
-KJUR.asn1.cades.CAdESUtil.addSigTS = function(dCMS, siIdx, sigTSHex) {
-};
+
 /**
  * parse CMS SignedData to add unsigned attributes
  * @name parseSignedDataForAddingUnsigned
@@ -809,131 +806,46 @@ KJUR.asn1.cades.CAdESUtil.addSigTS = function(dCMS, siIdx, sigTSHex) {
  * @function
  * @param {String} hex hexadecimal string of ContentInfo of CMS SignedData
  * @return {Object} associative array of parsed data
+ * @see KJUR.asn1.cms.CMSParser#getCMSSignedData
+ * @see KJUR.asn1.cms.SignedData
+ *
  * @description
  * This method will parse a hexadecimal string of 
  * ContentInfo with CMS SignedData to add a attribute
  * to unsigned attributes field in a signerInfo field.
- * Parsed result will be an associative array which has
- * following properties:
- * <ul>
- * <li>version - hex of CMSVersion ASN.1 TLV</li>
- * <li>algs - hex of DigestAlgorithms ASN.1 TLV</li>
- * <li>encapcontent - hex of EncapContentInfo ASN.1 TLV</li>
- * <li>certs - hex of Certificates ASN.1 TLV</li>
- * <li>revs - hex of RevocationInfoChoices ASN.1 TLV</li>
- * <li>si[] - array of SignerInfo properties</li>
- * <li>obj - parsed KJUR.asn1.cms.SignedData object</li>
- * </ul>
+ *
  * @example
- * info = KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned(beshex);
- * sd = info.obj;
+ * param = KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned(beshex);
+ * &rarr;
+ * {
+ *   version: 1,
+ *   hashalgs: ["sha256"],
+ *   econtent: ...,
+ *   sinfos: [{
+ *     version: 1
+ *     id: ...
+ *     hashalg: "sha256",
+ *     sattrs: {array: [...]},
+ *     sigalg: "SHA256withRSA",
+ *     sighex: ...
+ *   }]
+ * }
  */
 KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned = function(hex) {
-    var _ASN1HEX = ASN1HEX,
-	_getChildIdx = _ASN1HEX.getChildIdx,
-	_getTLV = _ASN1HEX.getTLV,
-	_getTLVbyList = _ASN1HEX.getTLVbyList,
-	_getTLVbyListEx = _ASN1HEX.getTLVbyListEx,
-	_getIdxbyList = _ASN1HEX.getIdxbyList,
-	_getIdxbyListEx = _ASN1HEX.getIdxbyListEx,
-	_KJUR = KJUR,
-	_KJUR_asn1 = _KJUR.asn1,
-	_ASN1Object = _KJUR_asn1.ASN1Object,
-	_KJUR_asn1_cms = _KJUR_asn1.cms,
-	_SignedData = _KJUR_asn1_cms.SignedData,
-	_KJUR_asn1_cades = _KJUR_asn1.cades,
-	_CAdESUtil = _KJUR_asn1_cades.CAdESUtil;
-    
-    var r = {};
-
-    // 1. not oid signed-data then error
-    if (_getTLVbyList(hex, 0, [0]) != "06092a864886f70d010702")
-        throw "hex is not CMS SignedData";
-
-    var iSD = _getIdxbyList(hex, 0, [1, 0]);
-    var aSDChildIdx = _getChildIdx(hex, iSD);
-    if (aSDChildIdx.length < 4)
-        throw "num of SignedData elem shall be 4 at least";
-
-    // 2. HEXs of SignedData children
-    // 2.1. SignedData.CMSVersion
-    var iVersion = aSDChildIdx.shift();
-    r.version = _getTLV(hex, iVersion);
-
-    // 2.2. SignedData.DigestAlgorithms
-    var iAlgs = aSDChildIdx.shift();
-    r.algs = _getTLV(hex, iAlgs);
-
-    // 2.3. SignedData.EncapContentInfo
-    var iEncapContent = aSDChildIdx.shift();
-    r.encapcontent = _getTLV(hex, iEncapContent);
-
-    // 2.4. [0]Certs 
-    r.certs = null;
-    r.revs = null;
-    r.si = [];
-
-    var iNext = aSDChildIdx.shift();
-    if (hex.substr(iNext, 2) == "a0") {
-        r.certs = _getTLV(hex, iNext);
-        iNext = aSDChildIdx.shift();
-    }
-
-    // 2.5. [1]Revs
-    if (hex.substr(iNext, 2) == "a1") {
-        r.revs = _getTLV(hex, iNext);
-        iNext = aSDChildIdx.shift();
-    }
-
-    // 2.6. SignerInfos
-    var iSignerInfos = iNext;
-    if (hex.substr(iSignerInfos, 2) != "31")
-        throw "Can't find signerInfos";
-
-    var aSIIndex = _getChildIdx(hex, iSignerInfos);
-    //alert(aSIIndex.join("-"));
-
-    for (var i = 0; i < aSIIndex.length; i++) {
-        var iSI = aSIIndex[i];
-        var pSI = _CAdESUtil.parseSignerInfoForAddingUnsigned(hex, iSI, i);
-        r.si[i] = pSI;
-    }
-
-    // x. obj(SignedData)
-    var tmp = null;
-    r.obj = new _SignedData();
-
-    tmp = new _ASN1Object();
-    tmp.hTLV = r.version;
-    r.obj.dCMSVersion = tmp;
-
-    tmp = new _ASN1Object();
-    tmp.hTLV = r.algs;
-    r.obj.dDigestAlgs = tmp;
-
-    tmp = new _ASN1Object();
-    tmp.hTLV = r.encapcontent;
-    r.obj.dEncapContentInfo = tmp;
-
-    tmp = new _ASN1Object();
-    tmp.hTLV = r.certs;
-    r.obj.dCerts = tmp;
-
-    r.obj.signerInfoList = [];
-    for (var i = 0; i < r.si.length; i++) {
-        r.obj.signerInfoList.push(r.si[i].obj);
-    }
-
-    return r;
+    var parser = new KJUR.asn1.cms.CMSParser();
+    var param = parser.getCMSSignedData(hex);
+    return param;
 };
 
 /**
- * parse SignerInfo to add unsigned attributes
+ * parse SignerInfo to add unsigned attributes (DEPRECATED)
  * @name parseSignerInfoForAddingUnsigned
  * @memberOf KJUR.asn1.cades.CAdESUtil
  * @function
  * @param {String} hex hexadecimal string of SignerInfo
  * @return {Object} associative array of parsed data
+ * @deprecated since jsrsasign 10.1.5 no more necessary becase parseSignedDataForAddingUnsigned don't call this
+ *
  * @description
  * This method will parse a hexadecimal string of 
  * SignerInfo to add a attribute

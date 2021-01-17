@@ -1,8 +1,26 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 10.1.4 to next release
-  - crypto.js
+CAdES-T support update and fix
+* Changes from 10.1.4 to 10.1.5 release (2021-01-17)
+  - tool/tool_cades.html fix (#465)
+    - now works fine again for CAdES-T demo
+  - src/asn1cms.js
+    - SignerInfo class
+      - unsigned attribute support again
+    - Attribute class 
+      - add signaturePolicyIdentifier support
+      - add signatureTimeStamp support
+    - CMSParser class
+      - add signaturePolicyIdentifier support
+      - add setSignaturePolicyIdentifier method
+  - src/asn1cades.js
+    - CAdESUtil class
+      - parseSignedDataForAddingUnsigned modified to use CMSParser
+      - addSigTS removed since it was empty method
+      - parseSignerInfoForAddingUnsigned is deprecated since
+        parseSignedDataForAddingUnsigned will not call it.
+  - src/crypto.js
     - Mac API document fix (#466)
 
 getPKIStatusInfo bugfix
