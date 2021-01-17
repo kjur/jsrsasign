@@ -784,6 +784,18 @@ section 5</a>.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#setSignaturePolicyIdentifier">setSignaturePolicyIdentifier</a></b>(pAttr)
+								</div>
+								<div class="description">set SignaturePolicyIdentifier attribute<br/>
+This sets an attribute as SignaturePolicyIdentifier defined in
+<a href="https://tools.ietf.org/html/rfc5126#section-5.8.1">
+RFC 5126 CAdES section 5.8.1</a>.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.cms.CMSParser.html#setSigningCertificate">setSigningCertificate</a></b>(pAttr)
 								</div>
 								<div class="description">set SigningCertificate attribute<br/>
@@ -2013,6 +2025,75 @@ pAttr &rarr; {
 							<dt class="heading">See:</dt>
 							
 								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttribute">KJUR.asn1.cms.CMSParser#getAttribute</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="setSignaturePolicyIdentifier"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setSignaturePolicyIdentifier</b>(pAttr)
+					
+					</div>
+					<div class="description">
+						set SignaturePolicyIdentifier attribute<br/>
+This sets an attribute as SignaturePolicyIdentifier defined in
+<a href="https://tools.ietf.org/html/rfc5126#section-5.8.1">
+RFC 5126 CAdES section 5.8.1</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">parser = new KJUR.asn1.cms.CMSParser();
+pAttr = {
+  attr: "signaturePolicyIdentifier"
+  valhex: '...'
+};
+parser.setSignaturePolicyIdentifier(pAttr);
+pAttr &rarr; {
+  attr: "signaturePolicyIdentifier",
+  oid: "1.2.3.4.5",
+  alg: "sha1",
+  hash: "1a2b..."
+}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Array}</span> <b>pAttr</b>
+									
+								</dt>
+								<dd>JSON object of attribute parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.1.5 asn1cms 2.0.4</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getAttribute">KJUR.asn1.cms.CMSParser#getAttribute</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.cades.SignaturePolicyIdentifier.html">KJUR.asn1.cades.SignaturePolicyIdentifier</a></dd>
 							
 							</dl>
 						

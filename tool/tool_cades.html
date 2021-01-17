@@ -10,54 +10,78 @@
 <title>CAdES Generator</title>
 <script language="JavaScript" type="text/javascript" src="../jsrsasign-all-min.js"></script>
 <script language="JavaScript" type="text/javascript">
-var param = {
-    content: {str: ""},
-    signerInfos: [{
-      hashAlg: 'sha256',
-      sAttr: {
-      },
-      sigAlg: 'SHA256withRSA'
-    }]
+var paramOrg = {
+  version: 1,
+  hashalgs: ["sha256"],
+  econtent: {
+    type: "data",
+    content: {
+      hex: "616161"
+    }
+  },
+  sinfos: [{
+    version: 1,
+    id: {type:'isssn', cert: ''},
+    hashalg: "sha256",
+    sattrs: {array: [{
+      attr: "contentType",
+      type: 'data'
+    },{
+      attr: "messageDigest",
+      hex: 'abcd'
+    }]},
+    sigalg: "SHA256withRSA",
+    signkey: ''
+  }]
 };
 
 var parsedInfo = null;
+var param = null;
 
 function doIt() {
   var f1 = document.form1;
+  var param = JSON.parse(JSON.stringify(paramOrg)); // deepCopy
 
   f1.newcms1.value = "signing ...";
 
   var prvKeyPEM = f1.prvkey1.value;
   var certPEM = f1.cert1.value;
 
-  param.signerInfos[0].signerCert = certPEM;
-  param.signerInfos[0].signerPrvKey = prvKeyPEM;
+  param.sinfos[0].id = {type: 'isssn', cert: certPEM};
+  param.sinfos[0].signkey = prvKeyPEM;
   param.certs = [certPEM];
 
-  param.content.str = f1.content1.value;
+  param.econtent.content = {str: f1.content1.value};
+  //alert(param.sinfos[0].sattrs.array);
+  var sattrs = param.sinfos[0].sattrs.array;
   if (f1.attr_sigtime.checked)
-    param.signerInfos[0].sAttr.SigningTime = {};
+    sattrs.push({attr: "signingTime"});
   if (f1.attr_sigcertv1.checked)
-    param.signerInfos[0].sAttr.SigningCertificate = {array: [certPEM]};
+    sattrs.push({attr: "signingCertificate", array:[certPEM]});
   if (f1.attr_sigcertv2.checked)
-    param.signerInfos[0].sAttr.SigningCertificateV2 = {array: [certPEM]};
+    sattrs.push({attr: "signingCertificateV2", array:[certPEM]});
   if (f1.attr_sigpol_flag.checked) {
-    param.signerInfos[0].sAttr.SignaturePolicyIdentifier = {
+    sattrs.push({
+      attr: "signaturePolicyIdentifier",
       oid: f1.attr_sigpol_oid.value,
-      hash: {
-        alg: f1.attr_sigpol_hashalg.value,
-        hash: f1.attr_sigpol_hash.value
-      }      
-    };
+      alg: f1.attr_sigpol_hashalg.value,
+      hash: f1.attr_sigpol_hash.value
+    });
   }
 
+  var hCmsSignedData;
   try {
-    var sd = KJUR.asn1.cms.CMSUtil.newSignedData(param);
-    //f1.newcms1.value = sd.getPEM();
-    f1.newcms1.value = sd.getContentInfoEncodedHex();
+    //alert(JSON.stringify(param, '  ', null));
+    var sd = new KJUR.asn1.cms.SignedData(param);
+    hCmsSignedData = sd.getContentInfoEncodedHex();
+    f1.newcms1.value = hCmsSignedData;
   } catch (ex) {
     f1.newcms1.value = "Error: " + ex;
   }
+
+  try {
+    f1.newcms1dmp.value = ASN1HEX.dump(hCmsSignedData);
+  } catch(ex) {}
 }
 
 function doIt2() {
@@ -66,7 +90,7 @@ function doIt2() {
     var cms = f1.newcms1.value;
     parsedInfo = 
       KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned(cms);
-    f1.si_sigval1.value = parsedInfo.si[0].sigval;
+    f1.si_sigval1.value = parsedInfo.sinfos[0].sighex;
   } catch (ex) {
     f1.si_sigval1.value = "Error: " + ex;
   }
@@ -125,33 +149,59 @@ var sTSACERT =
 "qx1hJTY3L1hahBcMTALQyTEiFv1S\n" + 
 "-----END CERTIFICATE-----\n";
 
-var tsa = new KJUR.asn1.tsp.SimpleTSAAdapter({
-  tstInfo: {
-    policy: '1.2.3.4.5',
-    messageImprint: {},
-    serialNumber: {'int': 3},
-    genTime: {millis: true},
-    accuracy: {millis: 500},
-    ordering: true,
-    nonce: {'int': 3}
+var tstParam = {
+  statusinfo: 'granted',
+  version: 1,
+  hashalgs: ["sha256"],
+  econtent: {
+    type: "tstinfo",
+    content: {
+      policy: '1.2.3.4.5',
+      messageImprint: { alg: 'sha256', hash: 'a1a2a3a4' },
+      serial: {'int': 3},
+      genTime: {millis: true},
+      accuracy: { seconds: 1 },
+      ordering: true
+    }
   },
   certs: [sTSACERT],
-  signerCert: sTSACERT,
-  hashAlg: 'sha256',
-  signerPrvKey: sTSAKEY,
-  sigAlg: 'SHA256withRSA'
-});
+  sinfos: [{
+    version: 1,
+    id: {type:'isssn', cert: sTSACERT},
+    hashalg: "sha256",
+    sattrs: {array: [{
+      attr: "contentType",
+      type: "tstinfo"
+    },{
+      attr: "messageDigest",
+      hex: 'ffff'
+    },{
+      attr: "signingCertificate",
+      array: [sTSACERT]
+    }]},
+    sigalg: "SHA256withRSA",
+    signkey: sTSAKEY
+  }]
+};
+
+var tsa = new KJUR.asn1.tsp.SimpleTSAAdapter(tstParam);
 
 function doIt3() {
   var f1 = document.form1;
   var sigval = f1.si_sigval1.value;
+  var hTST = "";
   f1.si_sigtst1.value = "getting TST from Demo TSA...";  
+
   try {
-    var tst = tsa.getTSTHex(sigval, 'sha256');
-    f1.si_sigtst1.value = tst;
+    var hTST = tsa.getTSTHex(sigval, 'sha256');
+    f1.si_sigtst1.value = hTST;
   } catch (ex) {
     f1.si_sigtst1.value = "Error: " + ex;
   }
+
+  try {
+    f1.si_sigtst1dmp.value = ASN1HEX.dump(hTST);
+  } catch(ex) {}
 }
 
 function doIt4() {
@@ -159,14 +209,19 @@ function doIt4() {
   var tst = f1.si_sigtst1.value;
   f1.cades_t_1.value = "generating CAdES-T by adding SigTS...";
   try {
-    var sd = parsedInfo.obj;
-    var si = sd.signerInfoList[0];
-    sd.hTLV = null;
-    si.addUnsigned(new KJUR.asn1.cades.SignatureTimeStamp({tst: tst}));
-    f1.cades_t_1.value = sd.getContentInfoEncodedHex();
+    var pBES = parsedInfo;
+    var si = pBES.sinfos[0];
+    si.uattrs = {array:[{attr:"signatureTimeStamp", tst: tst}]};
+    var oEST = new KJUR.asn1.cms.SignedData(pBES);
+    var hEST = oEST.getContentInfoEncodedHex();
+    f1.cades_t_1.value = hEST;
   } catch (ex) {
     f1.cades_t_1.value = "Error: " + ex;
   }
+
+  try {
+    f1.cades_t_1dmp.value = ASN1HEX.dump(hEST);
+  } catch(ex) {}
 }
 
 </script>
@@ -298,6 +353,8 @@ hash value:
 
 <h6>RESULT:</h6>
 <textarea name="newcms1" cols="65" rows="4"></textarea>
+<br/>
+<textarea name="newcms1dmp" cols="65" rows="4"></textarea>
 
 <h4>(Step2)Parse CAdES-BES/EPES for adding SigTS</h4>
 Parse above CAdES-BES/EPES signature and
@@ -317,7 +374,8 @@ use sample TSA using jsrsasign.
 <input type="button" value="Get TimeStampToken for the signature from Demo TSA" onClick="doIt3();"/>
 <br/>
 <h6>TimeStampToken for the signature value in SignerInfo</h6>
-<textarea name="si_sigtst1" cols="65" rows="3"></textarea>
+<textarea name="si_sigtst1" cols="65" rows="3"></textarea><br/>
+<textarea name="si_sigtst1dmp" cols="65" rows="3"></textarea><br/>
 
 <h4>(Step4)Convert CAdES-BES/EPES to CAdES-T</h4>
 
@@ -328,6 +386,7 @@ by adding SignatureTimeStamp attribute with the above signature time stamp.
 <br/>
 <h6>CAdES-T signature as the result</h6>
 <textarea name="cades_t_1" cols="65" rows="3"></textarea><br/>
+<textarea name="cades_t_1dmp" cols="65" rows="3"></textarea><br/>
 
 </form>
 
