@@ -82,42 +82,57 @@ var z1PrvP8ePem = "" +
 // _test/z1.prv.p8p.hex
 var z1PrvP8pHex = "30820154020100300d06092a864886f70d01010105000482013e3082013a020100024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001024078bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d022100fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f022100e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07022100d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b3702201849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa902207d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9";
 
+// github issue 454 ec private key with keyUsage extension
+var hP8PECEx = "3081a2020100301306072a8648ce3d020106082a8648ce3d0301070479307702010104204e1578f2b98424cc0e86e28ce2350f02e810454c7cc683d4ed442926537a9515a00a06082a8648ce3d030107a1440342000467df2be8010970b07d40d95bd921e6dd8f2c7ec5cd308ad73cd0917b87d5edf0d28894b124c4734c5f714280c3dc8d63d1003eb292bbdb0348672ff88a3f85eaa00d300b0603551d0f310403020080";
+
 test("getKeyFromEncryptedPKCS8PEM z1(RSA)", function() {
-  var key = KEYUTIL.getKeyFromEncryptedPKCS8PEM(z1PrvP8ePem, "passwd");
-  expect(9);
-  equal(key.type, "RSA", "type");
-  equal(key.n.compareTo(new BigInteger("00e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd59", 16)), 0, "n");
-  equal(key.e, 65537, "e(65537)");
-  equal(key.d.compareTo(new BigInteger("78bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d", 16)), 0, "d");
-  equal(key.p.compareTo(new BigInteger("00fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f", 16)), 0, "p");
-  equal(key.q.compareTo(new BigInteger("00e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07", 16)), 0, "q");
-  equal(key.dmp1.compareTo(new BigInteger("00d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b37", 16)), 0, "dp");
-  equal(key.dmq1.compareTo(new BigInteger("1849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa9", 16)), 0, "dq");
-  equal(key.coeff.compareTo(new BigInteger("7d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9", 16)), 0, "co");
+var key = KEYUTIL.getKeyFromEncryptedPKCS8PEM(z1PrvP8ePem, "passwd");
+equal(key.type, "RSA", "type");
+equal(key.n.compareTo(new BigInteger("00e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd59", 16)), 0, "n");
+equal(key.e, 65537, "e(65537)");
+equal(key.d.compareTo(new BigInteger("78bbc54c646795e9a623cb0f912c7f9f6861711560e57bade21ded2f7d9579f86272fab9e71ab27282c2760c404dae6ac8a3ab852cf6bcd562f9aff8247a264d", 16)), 0, "d");
+equal(key.p.compareTo(new BigInteger("00fe9bd450866b3255614fde976a76ac0b1d5830dda64f5359b946d8512bc1239f", 16)), 0, "p");
+equal(key.q.compareTo(new BigInteger("00e9ab680f5f05dbb0f4311b0e6f4368f4874a1238979d8bc600c35c6f20707c07", 16)), 0, "q");
+equal(key.dmp1.compareTo(new BigInteger("00d549cb698dc17d4fe30e5a84f3ade860033c1eeb7f67d286465c9fd817d45b37", 16)), 0, "dp");
+equal(key.dmq1.compareTo(new BigInteger("1849b4bb44493b989d092da2c675df46eb790b83ce5e95d4b2e79b88017b2fa9", 16)), 0, "dq");
+equal(key.coeff.compareTo(new BigInteger("7d261a96256d49b020cb1d587ecde127e093a4d2b34cdbff171f34125b5857a9", 16)), 0, "co");
 });
 
 test("getKeyFromEncryptedPKCS8PEM k1(ECC)", function() {
-  var key = KEYUTIL.getKeyFromEncryptedPKCS8PEM(k1PrvP8ePem, "passwd");
-  expect(3);
-  equal(key.type, "EC", "type");
-  equal(key.curveName, "secp256r1", "curveName");
-  equal(key.prvKeyHex, "11b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3", "prvKeyHex");
+var key = KEYUTIL.getKeyFromEncryptedPKCS8PEM(k1PrvP8ePem, "passwd");
+equal(key.type, "EC", "type");
+equal(key.curveName, "secp256r1", "curveName");
+equal(key.prvKeyHex, "11b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3", "prvKeyHex");
 });
 
 test("parsePlainPrivatePKCS8Hex z1(RSA)", function() {
-  var r = KEYUTIL.parsePlainPrivatePKCS8Hex(z1PrvP8pHex);
-  expect(3);
-  equal(r.algoid, "2a864886f70d010101", "algoid");
-  equal(r.algparam, null, "algparam");
-  equal(r.keyidx, 52, "keyidx");
+var r = KEYUTIL.parsePlainPrivatePKCS8Hex(z1PrvP8pHex);
+var pExpect = {
+  algoid: "2a864886f70d010101",
+  algparam: null,
+  keyidx: 52
+};
+deepEqual(r, pExpect, "z1 RSA");
 });
 
 test("parsePlainPrivatePKCS8Hex k1(EC)", function() {
-  var r = KEYUTIL.parsePlainPrivatePKCS8Hex(k1PrvP8pHex);
-  expect(3);
-  equal(r.algoid, "2a8648ce3d0201", "algoid");
-  equal(r.algparam, "2a8648ce3d030107", "algparam");
-  equal(r.keyidx, 58, "keyidx");
+var r = KEYUTIL.parsePlainPrivatePKCS8Hex(k1PrvP8pHex);
+var pExpect = {
+  algoid: "2a8648ce3d0201",
+  algparam: "2a8648ce3d030107",
+  keyidx: 58
+};
+deepEqual(r, pExpect, "k1 EC");
+});
+
+test("parsePlainPrivatePKCS8Hex Plain EC private key with extension", function() {
+var r = KEYUTIL.parsePlainPrivatePKCS8Hex(hP8PECEx);
+var pExpect = {
+  algoid: "2a8648ce3d0201",
+  algparam: "2a8648ce3d030107",
+  keyidx: 58
+};
+deepEqual(r, pExpect, "EC with Ext");
 });
 
 test("getKey(k1PrvP8pHex) parsePrivateRawECKeyHexAtObj k1(EC)", function() {
@@ -158,10 +173,13 @@ test("RSAKey/KJUR.crypto.ECDSA instanceof operator test", function() {
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
-QUnit for 
+<div>
+<a href="index.html">TEST INDEX</a> |
+<a href="../api/index.html">APIDOCS</a> | 
 <a href="qunit-do-keyutil.html">keyutil</a> | 
 <a href="qunit-do-keyutil-eprv.html">keyutil-eprv</a> | 
 <a href="qunit-do-keyutil-pub.html">keyutil-pub</a> | 
+</div>
 </body>
 </html>
 

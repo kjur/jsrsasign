@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+KEYUTIL supports PKCS8 private key with extension
+* Changes from 10.1.5 to 10.1.6 release (2021-02-08)
+  - src/keyutil.js
+    - KEYUTIL.parsePlainPrivatePKCS8Hex now supports
+      private key extsion
+  - test/qunit-do-keyutil-eprv.html
+    - updated to follow above
+
 CAdES-T support update and fix
 * Changes from 10.1.4 to 10.1.5 release (2021-01-17)
   - tool/tool_cades.html fix (#465)
