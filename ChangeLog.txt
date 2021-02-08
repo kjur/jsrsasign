@@ -5,7 +5,7 @@ KEYUTIL supports PKCS8 private key with extension
 * Changes from 10.1.5 to 10.1.8 release (2021-02-08)
   - src/keyutil.js
     - KEYUTIL.parsePlainPrivatePKCS8Hex now supports
-      private key extsion
+      private key extsion and and issue #454 fixed.
   - test/qunit-do-keyutil-eprv.html
     - updated to follow above
 
