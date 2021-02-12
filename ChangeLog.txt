@@ -1,6 +1,20 @@
 
 ChangeLog for jsrsasign
 
+Add SubjectDirectoryAttributes extension support
+* Changes from 10.1.8 to 10.1.9 release (2021-02-12)
+  - src/asn1x509.js
+    - SubjectDirectoryAttributes class added
+    - Extensions class updated to support
+      SubjectDirectoryAttributes
+    - OID class update to support OIDs
+      such as gender, placeOfBirth et.al. for
+      SubjectDirectoryAttributes.
+    - SubjectDirectoryAttributes parser is
+      needed to be implemented in X509.js future.
+  - test/qunit-do-asn1x509.html
+    - updated to follow above
+
 KEYUTIL supports PKCS8 private key with extension
 * Changes from 10.1.5 to 10.1.8 release (2021-02-08)
   - src/keyutil.js
