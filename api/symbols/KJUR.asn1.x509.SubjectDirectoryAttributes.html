@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign JavaScript API Reference - KJUR.asn1.x509.Extension</title>
+		<title>jsrsasign JavaScript API Reference - KJUR.asn1.x509.SubjectDirectoryAttributes</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -518,17 +518,17 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.x509.Extension
+				Class KJUR.asn1.x509.SubjectDirectoryAttributes
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
 				<br />Extends
-					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
+					<a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a>.<br />
 				
 			
-				base Extension ASN.1 structure class
+				SubjectDirectoryAttributes ASN.1 structure class
 				
 				
 					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
@@ -537,7 +537,7 @@ ul.inheritsList
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.Extension.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.SubjectDirectoryAttributes.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -550,15 +550,12 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.x509.Extension.html#constructor">KJUR.asn1.x509.Extension</a></b>(params)
+								<b><a href="../symbols/KJUR.asn1.x509.SubjectDirectoryAttributes.html#constructor">KJUR.asn1.x509.SubjectDirectoryAttributes</a></b>(params)
 							</div>
-							<div class="description">base Extension ASN.1 structure class
-<pre>
-Extension  ::=  SEQUENCE  {
-    extnID      OBJECT IDENTIFIER,
-    critical    BOOLEAN DEFAULT FALSE,
-    extnValue   OCTET STRING  }
-</pre></div>
+							<div class="description">SubjectDirectoryAttributes ASN.1 structure class<br/>
+This class provides X.509v3 SubjectDirectoryAttributes extension
+defined in <a href="https://tools.ietf.org/html/rfc3739#section-3.3.2">
+RFC 3739 Qualified Certificate Profile section 3.3.2</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -599,23 +596,38 @@ Extension  ::=  SEQUENCE  {
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.x509.Extension</b>(params)
+						<b>KJUR.asn1.x509.SubjectDirectoryAttributes</b>(params)
 				</div>
 				
 				<div class="description">
-					base Extension ASN.1 structure class
+					SubjectDirectoryAttributes ASN.1 structure class<br/>
+This class provides X.509v3 SubjectDirectoryAttributes extension
+defined in <a href="https://tools.ietf.org/html/rfc3739#section-3.3.2">
+RFC 3739 Qualified Certificate Profile section 3.3.2</a>.
 <pre>
-Extension  ::=  SEQUENCE  {
-    extnID      OBJECT IDENTIFIER,
-    critical    BOOLEAN DEFAULT FALSE,
-    extnValue   OCTET STRING  }
+SubjectDirectoryAttributes ::= Attributes
+Attributes ::= SEQUENCE SIZE (1..MAX) OF Attribute
+Attribute ::= SEQUENCE {
+  type AttributeType 
+  values SET OF AttributeValue }
+AttributeType ::= OBJECT IDENTIFIER
+AttributeValue ::= ANY DEFINED BY AttributeType
 </pre>
 					
 				</div>
 				
 				
 				
-				<pre class="code"></pre>
+				<pre class="code">e1 = new KJUR.asn1.x509.SubjectDirectoryAttributes({
+  extname: "subjectDirectoryAttributes",
+  array: [
+    { attr: "dateOfBirth", str: "19701231230000Z" },
+    { attr: "placeOfBirth", str: "Tokyo" },
+    { attr: "gender", str: "F" },
+    { attr: "countryOfCitizenship", str: "JP" },
+    { attr: "countryOfResidence", str: "JP" }
+  ]
+});</pre>
 				
 				
 				
@@ -628,11 +640,16 @@ Extension  ::=  SEQUENCE  {
 								<span class="light fixedFont">{Array}</span>  <b>params</b>
 								
 							</dt>
-								<dd>associative array of parameters (ex. {'critical': true})</dd>
+								<dd>associative array of parameters</dd>
 						
 						</dl>
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">Since:</dt>
+							<dd>jsrsasign 10.1.9 asn1x509 2.1.7</dd>
+						</dl>
 					
 					
 					

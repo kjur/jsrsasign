@@ -1143,6 +1143,26 @@ ASN1HEX.dump(hExpect),
 "dump");
 });
 
+test("SubjectDirectoryAttributes test", function() {
+var _SDA = KJUR.asn1.x509.SubjectDirectoryAttributes;
+var hExpect = "30720603551d09046b3069301d06082b060105050709013111180f31393730313233313233303030305a301306082b0601050507090231070c05546f6b796f300f06082b060105050709033103130146301006082b06010505070904310413024a50301006082b06010505070905310413024a50";
+var param = {
+  extname: "subjectDirectoryAttributes",
+  array: [
+    { attr: "dateOfBirth", str: "19701231230000Z" },
+    { attr: "placeOfBirth", str: "Tokyo" },
+    { attr: "gender", str: "F" },
+    { attr: "countryOfCitizenship", str: "JP" },
+    { attr: "countryOfResidence", str: "JP" }
+  ]
+};
+equal((new _SDA(param)).getEncodedHex(), hExpect, "hex");
+equal(
+ASN1HEX.dump((new _SDA(param)).getEncodedHex()),
+ASN1HEX.dump(hExpect),
+"dump");
+});
+
 test("OID class test", function() {
   var o = KJUR.asn1.x509.OID;
   equal(o.atype2obj('C').getEncodedHex(), "0603550406", "C");

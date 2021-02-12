@@ -1,9 +1,9 @@
-/* asn1x509-2.1.6.js (c) 2013-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-2.1.7.js (c) 2013-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
  *
- * Copyright (c) 2013-2020 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2021 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.0 asn1x509 2.1.6 (2020-Nov-18)
+ * @version jsrsasign 10.1.9 asn1x509 2.1.7 (2021-Feb-12)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -466,6 +466,8 @@ KJUR.asn1.x509.Extensions = function(aParam) {
 		obj = new _KJUR_asn1_x509.OCSPNoCheck(param);
 	    } else if (extname == "adobeTimeStamp") {
 		obj = new _KJUR_asn1_x509.AdobeTimeStamp(param);
+	    } else if (extname == "subjectDirectoryAttributes") {
+		obj = new _KJUR_asn1_x509.SubjectDirectoryAttributes(param);
 	    } else {
 		throw new Error("extension not supported:"
 				+ JSON.stringify(param));
@@ -1877,6 +1879,92 @@ KJUR.asn1.x509.IssuerAltName = function(params) {
     }
 };
 YAHOO.lang.extend(KJUR.asn1.x509.IssuerAltName, KJUR.asn1.x509.Extension);
+
+/**
+ * SubjectDirectoryAttributes ASN.1 structure class<br/>
+ * @name KJUR.asn1.x509.SubjectDirectoryAttributes
+ * @class SubjectDirectoryAttributes ASN.1 structure class
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.x509.Extension
+ * @since jsrsasign 10.1.9 asn1x509 2.1.7
+ * @description
+ * This class provides X.509v3 SubjectDirectoryAttributes extension
+ * defined in <a href="https://tools.ietf.org/html/rfc3739#section-3.3.2">
+ * RFC 3739 Qualified Certificate Profile section 3.3.2</a>.
+ * <pre>
+ * SubjectDirectoryAttributes ::= Attributes
+ * Attributes ::= SEQUENCE SIZE (1..MAX) OF Attribute
+ * Attribute ::= SEQUENCE {
+ *   type AttributeType 
+ *   values SET OF AttributeValue }
+ * AttributeType ::= OBJECT IDENTIFIER
+ * AttributeValue ::= ANY DEFINED BY AttributeType
+ * </pre>
+ * @example
+ * e1 = new KJUR.asn1.x509.SubjectDirectoryAttributes({
+ *   extname: "subjectDirectoryAttributes",
+ *   array: [
+ *     { attr: "dateOfBirth", str: "19701231230000Z" },
+ *     { attr: "placeOfBirth", str: "Tokyo" },
+ *     { attr: "gender", str: "F" },
+ *     { attr: "countryOfCitizenship", str: "JP" },
+ *     { attr: "countryOfResidence", str: "JP" }
+ *   ]
+ * });
+ */
+KJUR.asn1.x509.SubjectDirectoryAttributes = function(params) {
+    KJUR.asn1.x509.SubjectDirectoryAttributes.superclass.constructor.call(this, params);
+    var _KJUR_asn1 = KJUR.asn1,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_newObject = _KJUR_asn1.ASN1Util.newObject,
+	_name2oid = _KJUR_asn1.x509.OID.name2oid;
+
+    this.params = null;
+
+    this.getExtnValueHex = function() {
+	var a = [];
+	for (var i = 0; i < this.params.array.length; i++) {
+	    var pAttr = this.params.array[i];
+
+	    var newparam = {
+		"seq": [
+		    {"oid": "1.2.3.4"},
+		    {"set": [{"utf8str": "DE"}]}
+		]
+	    };
+
+	    if (pAttr.attr == "dateOfBirth") {
+		newparam.seq[0].oid = _name2oid(pAttr.attr);
+		newparam.seq[1].set[0] = {"gentime": pAttr.str};
+	    } else if (pAttr.attr == "placeOfBirth") {
+		newparam.seq[0].oid = _name2oid(pAttr.attr);
+		newparam.seq[1].set[0] = {"utf8str": pAttr.str};
+	    } else if (pAttr.attr == "gender") {
+		newparam.seq[0].oid = _name2oid(pAttr.attr);
+		newparam.seq[1].set[0] = {"prnstr": pAttr.str};
+	    } else if (pAttr.attr == "countryOfCitizenship") {
+		newparam.seq[0].oid = _name2oid(pAttr.attr);
+		newparam.seq[1].set[0] = {"prnstr": pAttr.str};
+	    } else if (pAttr.attr == "countryOfResidence") {
+		newparam.seq[0].oid = _name2oid(pAttr.attr);
+		newparam.seq[1].set[0] = {"prnstr": pAttr.str};
+	    } else {
+		throw new Error("unsupported attribute: " + pAttr.attr);
+	    }
+	    a.push(new _newObject(newparam));
+	}
+	var seq = new _DERSequence({array: a});
+	this.asn1ExtnValue = seq;
+        return this.asn1ExtnValue.getEncodedHex();
+    };
+
+    this.oid = "2.5.29.9";
+    if (params !== undefined) {
+	this.params = params;
+    }
+};
+YAHOO.lang.extend(KJUR.asn1.x509.SubjectDirectoryAttributes, KJUR.asn1.x509.Extension);
+
 
 /**
  * priavte extension ASN.1 structure class<br/>
@@ -3945,6 +4033,7 @@ KJUR.asn1.x509.OID = new function(params) {
 	'jurisdictionOfIncorporationSP':'1.3.6.1.4.1.311.60.2.1.2',
 	'jurisdictionOfIncorporationC':	'1.3.6.1.4.1.311.60.2.1.3',
 
+        'subjectDirectoryAttributes': '2.5.29.9',
         'subjectKeyIdentifier': '2.5.29.14',
         'keyUsage':             '2.5.29.15',
         'subjectAltName':       '2.5.29.17',
@@ -3973,6 +4062,12 @@ KJUR.asn1.x509.OID = new function(params) {
         'emailProtection':      '1.3.6.1.5.5.7.3.4',
         'timeStamping':         '1.3.6.1.5.5.7.3.8',
         'ocspSigning':          '1.3.6.1.5.5.7.3.9',
+
+        'dateOfBirth':          '1.3.6.1.5.5.7.9.1',
+        'placeOfBirth':         '1.3.6.1.5.5.7.9.2',
+        'gender':               '1.3.6.1.5.5.7.9.3',
+        'countryOfCitizenship': '1.3.6.1.5.5.7.9.4',
+        'countryOfResidence':   '1.3.6.1.5.5.7.9.5',
 
         'ecPublicKey':          '1.2.840.10045.2.1',
         'P-256':                '1.2.840.10045.3.1.7',
