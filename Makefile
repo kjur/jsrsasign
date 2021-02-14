@@ -26,6 +26,10 @@ FILES_EXT_MIN = \
 	ext/rsa-min.js \
 	ext/rsa2-min.js
 
+jsdoc:
+	rm -rf api
+	cp -r ../../_git/jsrsasign/api api
+
 all-min: $(FILES_MIN)
 	@echo "all min converted."
 

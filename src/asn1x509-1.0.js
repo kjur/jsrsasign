@@ -1,4 +1,4 @@
-/* asn1x509-2.1.7.js (c) 2013-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-2.1.8.js (c) 2013-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.9 asn1x509 2.1.7 (2021-Feb-12)
+ * @version jsrsasign 10.1.10 asn1x509 2.1.8 (2021-Feb-14)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -86,9 +86,11 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * <li>{@link KJUR.asn1.x509.CertificatePolicies}</li>
  * <li>{@link KJUR.asn1.x509.CRLNumber}</li>
  * <li>{@link KJUR.asn1.x509.CRLReason}</li>
- * <li>{@link KJUR.asn1.x509.OCSPNonce</li>
- * <li>{@link KJUR.asn1.x509.OCSPNoCheck</li>
+ * <li>{@link KJUR.asn1.x509.OCSPNonce}</li>
+ * <li>{@link KJUR.asn1.x509.OCSPNoCheck}</li>
  * <li>{@link KJUR.asn1.x509.AdobeTimeStamp}</li>
+ * <li>{@link KJUR.asn1.x509.SubjectDirectoryAttributes}</li>
+ * <li>{@link KJUR.asn1.x509.PrivateExtension}</li>
  * </ul>
  * NOTE1: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.<br/>
  * NOTE2: SubjectAltName and IssuerAltName supported since 
@@ -2742,8 +2744,9 @@ YAHOO.lang.extend(KJUR.asn1.x509.AdobeTimeStamp, KJUR.asn1.x509.Extension);
  *   [{type:'O',value:'aaa',ds:'utf8'}, // multi-valued RDN
  *    {type:'CN',value:'bob@example.com',ds:'ia5'}]
  * ]})
-: "/C=US/O=aaa+CN=contact@example.com"}); // multi valued
  * // 2. construct with string
+ * new KJUR.asn1.x509.X500Name({str: "/C=US/ST=NY/L=Ballston Spa/STREET=915 Stillwater Ave"});
+ * new KJUR.asn1.x509.X500Name({str: "/CN=AAA/2.5.4.42=John/surname=Ray"});
  * new KJUR.asn1.x509.X500Name({str: "/C=US/O=aaa+CN=contact@example.com"}); // multi valued
  * // 3. construct by LDAP string
  * new KJUR.asn1.x509.X500Name({ldapstr: "CN=foo@example.com,OU=bbb,C=US"});
@@ -3230,7 +3233,10 @@ KJUR.asn1.x509.RDN.parseString = function(s) {
  * been supported since jsrsasign 9.0.0 asn1x509 2.0.0.
  * @example
  * new KJUR.asn1.x509.AttributeTypeAndValue({type:'C',value:'US',ds:'prn'})
+ * new KJUR.asn1.x509.AttributeTypeAndValue({type:'givenName',value:'John',ds:'prn'})
+ * new KJUR.asn1.x509.AttributeTypeAndValue({type:'2.5.4.9',value:'71 Bowman St',ds:'prn'})
  * new KJUR.asn1.x509.AttributeTypeAndValue({str:'O=T1'})
+ * new KJUR.asn1.x509.AttributeTypeAndValue({str:'streetAddress=71 Bowman St'})
  * new KJUR.asn1.x509.AttributeTypeAndValue({str:'O=T1',rule='prn'})
  * new KJUR.asn1.x509.AttributeTypeAndValue({str:'O=T1',rule='utf8'})
  */
@@ -4020,6 +4026,7 @@ KJUR.asn1.x509.OID = new function(params) {
         'userId':			'0.9.2342.19200300.100.1.1',
 	// other AttributeType name string
 	'surname':			'2.5.4.4',
+        'givenName':                    '2.5.4.42',
         'title':			'2.5.4.12',
 	'distinguishedName':		'2.5.4.49',
 	'emailAddress':			'1.2.840.113549.1.9.1',
@@ -4131,18 +4138,30 @@ KJUR.asn1.x509.OID = new function(params) {
      * @name atype2obj
      * @memberOf KJUR.asn1.x509.OID
      * @function
-     * @param {String} atype short attribute type name such like 'C' or 'CN'
+     * @param {String} atype short attribute type name such like 'C', 'CN' or OID
+     * @return {@link KJUR.asn1.DERObjectIdentifier} instance
      * @description
      * @example
-     * KJUR.asn1.x509.OID.atype2obj('CN') &rarr; 2.5.4.3
-     * KJUR.asn1.x509.OID.atype2obj('OU') &rarr; 2.5.4.11
+     * KJUR.asn1.x509.OID.atype2obj('CN') &rarr; DERObjectIdentifier of 2.5.4.3
+     * KJUR.asn1.x509.OID.atype2obj('OU') &rarr; DERObjectIdentifier of 2.5.4.11
+     * KJUR.asn1.x509.OID.atype2obj('streetAddress') &rarr; DERObjectIdentifier of 2.5.4.9
+     * KJUR.asn1.x509.OID.atype2obj('2.5.4.9') &rarr; DERObjectIdentifier of 2.5.4.9
      */
     this.atype2obj = function(atype) {
-        if (typeof this.objCache[atype] != "undefined")
+        if (this.objCache[atype] !== undefined)
             return this.objCache[atype];
-        if (typeof this.atype2oidList[atype] == "undefined")
+
+	var oid;
+
+	if (atype.match(/^\d+\.\d+\.[0-9.]+$/)) {
+	    oid = atype;
+	} else if (this.atype2oidList[atype] !== undefined) {
+	    oid = this.atype2oidList[atype];
+	} else if (this.name2oidList[atype] !== undefined) {
+	    oid = this.name2oidList[atype];
+    	} else {
             throw "AttributeType name undefined: " + atype;
-        var oid = this.atype2oidList[atype];
+	}
         var obj = new KJUR.asn1.DERObjectIdentifier({'oid': oid});
         this.objCache[atype] = obj;
         return obj;
