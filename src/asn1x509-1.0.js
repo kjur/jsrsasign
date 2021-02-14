@@ -90,6 +90,7 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * <li>{@link KJUR.asn1.x509.OCSPNoCheck}</li>
  * <li>{@link KJUR.asn1.x509.AdobeTimeStamp}</li>
  * <li>{@link KJUR.asn1.x509.SubjectDirectoryAttributes}</li>
+ * <li>{@link KJUR.asn1.x509.PrivateExtension}</li>
  * </ul>
  * NOTE1: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.<br/>
  * NOTE2: SubjectAltName and IssuerAltName supported since 
