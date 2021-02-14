@@ -1,6 +1,18 @@
 
 ChangeLog for jsrsasign
 
+extend support for distinguished name
+* Changes from 10.1.9 to 10.1.10 release (2021-02-14)
+  - src/asn1x509.js
+    - AttributeTypeAndValue
+      - add support for OID and oid name constructor 
+        AttributeTypeAndValue({str: "/streetAddress=foo"})
+        AttributeTypeAndValue({str: "/2.5.4.9=foo"})
+    - OID.name2oidList
+      - add givenName
+  - test/qunit-do-asn1x509.html
+    - updated to follow above
+
 Add SubjectDirectoryAttributes extension support
 * Changes from 10.1.8 to 10.1.9 release (2021-02-12)
   - src/asn1x509.js

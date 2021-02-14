@@ -321,6 +321,16 @@ equal(o.getEncodedHex(),
 "301b310b3009060355040613025553310c300a060355040a0c03616161",
 "constructor str /C=US/O=aaa");
 
+o = new KJUR.asn1.x509.X500Name({'str':'/C=US/streetAddress=aaa'});
+equal(o.getEncodedHex(),
+"301b310b3009060355040613025553310c300a06035504090c03616161",
+"constructor str /C=US/streetAddress=aaa");
+
+o = new KJUR.asn1.x509.X500Name({'str':'/C=US/2.5.4.9=aaa'});
+equal(o.getEncodedHex(),
+"301b310b3009060355040613025553310c300a06035504090c03616161",
+"constructor str /C=US/2.5.4.9=aaa streetAddress");
+
 o = new KJUR.asn1.x509.X500Name({'C': 'US', 'O': 'aaa'});
 equal(o.getEncodedHex(),
 "301b310b3009060355040613025553310c300a060355040a0c03616161",
@@ -399,12 +409,28 @@ equal(
 "300a060355040a1303616161", "new ({type:O,value:aaa,ds:prn})");
 
 equal(
+(new _AttributeTypeAndValue({type:"streetAddress",value:"aaa",ds:"prn"})).getEncodedHex(),
+"300a06035504091303616161", "new ({type:streetAddress,value:aaa,ds:prn})");
+
+equal(
+(new _AttributeTypeAndValue({type:"2.5.4.9",value:"aaa",ds:"prn"})).getEncodedHex(),
+"300a06035504091303616161", "new ({type:2.5.4.9,value:aaa,ds:prn}) streetAddress");
+
+equal(
 (new _AttributeTypeAndValue({'str':'O=aaa'})).getEncodedHex(),
 "300a060355040a0c03616161", "new {'str':'O=aaa'} utf8");
 
 equal(
 (new _AttributeTypeAndValue({'str':'O=あ'})).getEncodedHex(),
 "300a060355040a0c03e38182", "new {'str':'O=あ'} utf8");
+
+equal(
+(new _AttributeTypeAndValue({'str':'streetAddress=aaa'})).getEncodedHex(),
+"300a06035504090c03616161", "new {'str':'streetAddress=aaa'} utf8");
+
+equal(
+(new _AttributeTypeAndValue({'str':'2.5.4.9=aaa'})).getEncodedHex(),
+"300a06035504090c03616161", "new {'str':'2.5.4.9=aaa'} utf8");
 
 var o0 = new _AttributeTypeAndValue();
 o0.setByParam({type:"O",value:"aaa",ds:"utf8"});
