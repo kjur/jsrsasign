@@ -1,9 +1,9 @@
-/* nodeutil-1.0.1 (c) 2015-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* nodeutil-1.0.2 (c) 2015-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * nodeutil.js - Utilities for Node
  *
- * Copyright (c) 2015-2020 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2015-2021 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license/
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name nodeutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign-util 1.0.1 nodeutil 1.0.1 (2020-Oct-23)
+ * @version jsrsasign-util 1.0.3 nodeutil 1.0.2 (2021-Feb-15)
  * @since jsrsasign 5.0.2
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -67,6 +67,18 @@ function readFile(binFile) {
 function saveFile(binFile, rawString) {
     var fs = require('fs');
     fs.writeFileSync(binFile, rawString, 'binary');
+}
+
+/**
+ * save UTF-8 string to file
+ * @param {String} binFile file name to save contents.
+ * @param {String} utf8String string contents to be saved.
+ * @description
+ * This function only works in Node.js.
+ */
+function saveFileUTF8(binFile, utf8String) {
+    var fs = require('fs');
+    fs.writeFileSync(binFile, utf8String, 'utf8');
 }
 
 /**
@@ -132,11 +144,11 @@ function readJSONC(jsonFile) {
  * 
  * @example
  * var rsu = require("jsrsasign-util");
- * rsu.saveJSONC("aaa.jsonc", json);
+ * rsu.saveFileJSON("aaa.jsonc", json);
  */
 function saveFileJSON(jsonFile, json) {
     var s = JSON.stringify(json, null, "  ");
-    saveFile(jsonFile, s);
+    saveFileUTF8(jsonFile, s);
 }
 
 /**

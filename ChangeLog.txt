@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+TBD
+* Changes from 10.1.10 to next release (2021-xx-xx)
+  - src/nodeutil.js
+    - add saveFileUTF8
+    - saveFileJSON API document fix
+
 extend support for distinguished name
 * Changes from 10.1.9 to 10.1.10 release (2021-02-14)
   - src/asn1x509.js
