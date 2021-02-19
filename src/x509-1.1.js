@@ -107,6 +107,7 @@ function X509(params) {
 	_getIdxbyList = _ASN1HEX.getIdxbyList,
 	_getIdxbyListEx = _ASN1HEX.getIdxbyListEx,
 	_getVidx = _ASN1HEX.getVidx,
+	_getInt = _ASN1HEX.getInt,
 	_oidname = _ASN1HEX.oidname,
 	_hextooidstr = _ASN1HEX.hextooidstr,
 	_X509 = X509,
@@ -150,15 +151,20 @@ function X509(params) {
 	if (this.hex === null || this.version !== 0) return this.version;
 
 	// check if the first item of tbsCertificate "[0] { INTEGER 2 }"
-	if (_getTLVbyList(this.hex, 0, [0, 0]) !==
-	    "a003020102") {
+	var hFirstObj = _getTLVbyList(this.hex, 0, [0, 0]);
+	if (hFirstObj.substr(0, 2) == "a0") {
+	    var hVersionTLV = _getTLVbyList(hFirstObj, 0, [0]);
+	    var iVersion = _getInt(hVersionTLV, 0);
+	    if (iVersion < 0 || 2 < iVersion) {
+		throw new Error("malformed version field");
+	    }
+	    this.version = iVersion + 1;
+	    return this.version;
+	} else {
 	    this.version = 1;
 	    this.foffset = -1;
 	    return 1;
 	}
-
-	this.version = 3;
-	return 3;
     };
 
     /**
