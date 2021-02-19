@@ -993,6 +993,16 @@ This method saves JSON object as a file.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#saveFileUTF8">saveFileUTF8</a></b>(binFile, utf8String)
+								</div>
+								<div class="description">save UTF-8 string to file
+This function only works in Node.js.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#stob64">stob64</a></b>(s)
 								</div>
 								<div class="description">convert a ASCII string to a Base64 encoded string.</div>
@@ -3625,7 +3635,7 @@ This function only works in Node.js.
 					
 					
 					<pre class="code">var rsu = require("jsrsasign-util");
-rsu.saveJSONC("aaa.jsonc", json);</pre>
+rsu.saveFileJSON("aaa.jsonc", json);</pre>
 					
 					
 					
@@ -3654,6 +3664,52 @@ rsu.saveJSONC("aaa.jsonc", json);</pre>
 								<dd>jsrsasign-util 1.0.1 nodeutil 1.0.1</dd>
 							</dl>
 							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="saveFileUTF8"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>saveFileUTF8</b>(binFile, utf8String)
+					
+					</div>
+					<div class="description">
+						save UTF-8 string to file
+This function only works in Node.js.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/nodeutil-1.0.js.html">nodeutil-1.0.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>binFile</b>
+									
+								</dt>
+								<dd>file name to save contents.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>utf8String</b>
+									
+								</dt>
+								<dd>string contents to be saved.</dd>
+							
+							</dl>
+						
+						
 						
 						
 						

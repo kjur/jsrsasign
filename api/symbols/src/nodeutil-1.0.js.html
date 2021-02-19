@@ -5,12 +5,12 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* nodeutil-1.0.1 (c) 2015-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* nodeutil-1.0.2 (c) 2015-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * nodeutil.js - Utilities for Node
 <span class='line'>  5</span>  *
-<span class='line'>  6</span>  * Copyright (c) 2015-2020 Kenji Urushima (kenji.urushima@gmail.com)
+<span class='line'>  6</span>  * Copyright (c) 2015-2021 Kenji Urushima (kenji.urushima@gmail.com)
 <span class='line'>  7</span>  *
 <span class='line'>  8</span>  * This software is licensed under the terms of the MIT License.
 <span class='line'>  9</span>  * https://kjur.github.io/jsrsasign/license/
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name nodeutil-1.0.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign-util 1.0.1 nodeutil 1.0.1 (2020-Oct-23)
+<span class='line'> 19</span>  * @version jsrsasign-util 1.0.3 nodeutil 1.0.2 (2021-Feb-15)
 <span class='line'> 20</span>  * @since jsrsasign 5.0.2
 <span class='line'> 21</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -77,98 +77,110 @@
 <span class='line'> 70</span> </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 71</span> 
 <span class='line'> 72</span> </span><span class="COMM">/**
-<span class='line'> 73</span>  * save data represented by hexadecimal string to file
+<span class='line'> 73</span>  * save UTF-8 string to file
 <span class='line'> 74</span>  * @param {String} binFile file name to save contents.
-<span class='line'> 75</span>  * @param {String} hexString hexadecimal string to be saved.
+<span class='line'> 75</span>  * @param {String} utf8String string contents to be saved.
 <span class='line'> 76</span>  * @description
 <span class='line'> 77</span>  * This function only works in Node.js.
 <span class='line'> 78</span>  */</span><span class="WHIT">
-<span class='line'> 79</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">saveFileBinByHex</span><span class="PUNC">(</span><span class="NAME">binFile</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">hexString</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 80</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rawString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">rs.hextorstr</span><span class="PUNC">(</span><span class="NAME">hexString</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 81</span> </span><span class="WHIT">    </span><span class="NAME">fs.writeFileSync</span><span class="PUNC">(</span><span class="NAME">binFile</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">rawString</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'binary'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 79</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">saveFileUTF8</span><span class="PUNC">(</span><span class="NAME">binFile</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">utf8String</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 80</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">fs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'fs'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 81</span> </span><span class="WHIT">    </span><span class="NAME">fs.writeFileSync</span><span class="PUNC">(</span><span class="NAME">binFile</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">utf8String</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'utf8'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 82</span> </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 83</span> 
 <span class='line'> 84</span> </span><span class="COMM">/**
-<span class='line'> 85</span>  * read JSON file and return its JSON object
-<span class='line'> 86</span>  * @param {String} JSON file name to be read
-<span class='line'> 87</span>  * @return {Object} JSON object or array of file contents
-<span class='line'> 88</span>  * @since jsrsasign-util 1.0.1 nodeutil 1.0.1
-<span class='line'> 89</span>  *
-<span class='line'> 90</span>  * @description
-<span class='line'> 91</span>  * This function only works in Node.js.
-<span class='line'> 92</span>  * @example
-<span class='line'> 93</span>  * var rsu = require("jsrsasign-util");
-<span class='line'> 94</span>  * rsu.readJSON("aaa.json") &rarr; JSON object
-<span class='line'> 95</span>  */</span><span class="WHIT">
-<span class='line'> 96</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">readJSON</span><span class="PUNC">(</span><span class="NAME">jsonFile</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 97</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">jsonStr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">fs.readFileSync</span><span class="PUNC">(</span><span class="NAME">jsonFile</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"utf8"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 98</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">json</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSON.parse</span><span class="PUNC">(</span><span class="NAME">jsonStr</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 99</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">json</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>100</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>101</span> 
-<span class='line'>102</span> </span><span class="COMM">/**
-<span class='line'>103</span>  * read JSONC file and return its JSON object
-<span class='line'>104</span>  * @param {String} JSONC file name to be read
-<span class='line'>105</span>  * @return {Object} JSON object or array of file contents
-<span class='line'>106</span>  * @since jsrsasign-util 1.0.1 nodeutil 1.0.1
-<span class='line'>107</span>  *
-<span class='line'>108</span>  * @description
-<span class='line'>109</span>  * This method read JSONC (i.e. JSON with comments) file
-<span class='line'>110</span>  * and returns JSON object.
-<span class='line'>111</span>  * This function only works in Node.js.
-<span class='line'>112</span>  * 
-<span class='line'>113</span>  * @example
-<span class='line'>114</span>  * var rsu = require("jsrsasign-util");
-<span class='line'>115</span>  * rsu.readJSONC("aaa.jsonc") &rarr; JSON object
-<span class='line'>116</span>  */</span><span class="WHIT">
-<span class='line'>117</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">readJSONC</span><span class="PUNC">(</span><span class="NAME">jsonFile</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>118</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">jsonStr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">fs.readFileSync</span><span class="PUNC">(</span><span class="NAME">jsonFile</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"utf8"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>119</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">json</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSONC.parse</span><span class="PUNC">(</span><span class="NAME">jsonStr</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>120</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">json</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>121</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>122</span> 
-<span class='line'>123</span> </span><span class="COMM">/**
-<span class='line'>124</span>  * save JSON object as file
-<span class='line'>125</span>  * @param {Object} jsonFile output JSON file name
-<span class='line'>126</span>  * @param {Object} json JSON object to save
-<span class='line'>127</span>  * @since jsrsasign-util 1.0.1 nodeutil 1.0.1
-<span class='line'>128</span>  *
-<span class='line'>129</span>  * @description
-<span class='line'>130</span>  * This method saves JSON object as a file.
-<span class='line'>131</span>  * This function only works in Node.js.
-<span class='line'>132</span>  * 
-<span class='line'>133</span>  * @example
-<span class='line'>134</span>  * var rsu = require("jsrsasign-util");
-<span class='line'>135</span>  * rsu.saveJSONC("aaa.jsonc", json);
-<span class='line'>136</span>  */</span><span class="WHIT">
-<span class='line'>137</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">saveFileJSON</span><span class="PUNC">(</span><span class="NAME">jsonFile</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">json</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>138</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSON.stringify</span><span class="PUNC">(</span><span class="NAME">json</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"  "</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>139</span> </span><span class="WHIT">    </span><span class="NAME">saveFile</span><span class="PUNC">(</span><span class="NAME">jsonFile</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>140</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>141</span> 
-<span class='line'>142</span> </span><span class="COMM">/**
-<span class='line'>143</span>  * output JSON object to console
-<span class='line'>144</span>  * @param {Object} json JSON object to print out
-<span class='line'>145</span>  * @param {Object} prefix prefix string (OPTION)
-<span class='line'>146</span>  * @since jsrsasign-util 1.0.1 nodeutil 1.0.1
-<span class='line'>147</span>  *
-<span class='line'>148</span>  * @description
-<span class='line'>149</span>  * This method writes JSON object to console.
-<span class='line'>150</span>  * This function only works in Node.js.
-<span class='line'>151</span>  * 
-<span class='line'>152</span>  * @example
-<span class='line'>153</span>  * var rsu = require("jsrsasign-util");
-<span class='line'>154</span>  * var obj = {aaa: "bbb", "ccc": 123};
-<span class='line'>155</span>  * rsu.printJSON(obj, "obj = ") &rarr;
-<span class='line'>156</span>  * obj = {
-<span class='line'>157</span>  *   "aaa": "bbb",
-<span class='line'>158</span>  *   "ccc": 123
-<span class='line'>159</span>  * }
-<span class='line'>160</span>  */</span><span class="WHIT">
-<span class='line'>161</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">printJSON</span><span class="PUNC">(</span><span class="NAME">json</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">prefix</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>162</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>163</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">prefix</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">prefix</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>164</span> </span><span class="WHIT">    </span><span class="NAME">console.log</span><span class="PUNC">(</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">JSON.stringify</span><span class="PUNC">(</span><span class="NAME">json</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"  "</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>165</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>166</span> 
-<span class='line'>167</span> </span></pre></body></html>
+<span class='line'> 85</span>  * save data represented by hexadecimal string to file
+<span class='line'> 86</span>  * @param {String} binFile file name to save contents.
+<span class='line'> 87</span>  * @param {String} hexString hexadecimal string to be saved.
+<span class='line'> 88</span>  * @description
+<span class='line'> 89</span>  * This function only works in Node.js.
+<span class='line'> 90</span>  */</span><span class="WHIT">
+<span class='line'> 91</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">saveFileBinByHex</span><span class="PUNC">(</span><span class="NAME">binFile</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">hexString</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 92</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rawString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">rs.hextorstr</span><span class="PUNC">(</span><span class="NAME">hexString</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="WHIT">    </span><span class="NAME">fs.writeFileSync</span><span class="PUNC">(</span><span class="NAME">binFile</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">rawString</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'binary'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 94</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 95</span> 
+<span class='line'> 96</span> </span><span class="COMM">/**
+<span class='line'> 97</span>  * read JSON file and return its JSON object
+<span class='line'> 98</span>  * @param {String} JSON file name to be read
+<span class='line'> 99</span>  * @return {Object} JSON object or array of file contents
+<span class='line'>100</span>  * @since jsrsasign-util 1.0.1 nodeutil 1.0.1
+<span class='line'>101</span>  *
+<span class='line'>102</span>  * @description
+<span class='line'>103</span>  * This function only works in Node.js.
+<span class='line'>104</span>  * @example
+<span class='line'>105</span>  * var rsu = require("jsrsasign-util");
+<span class='line'>106</span>  * rsu.readJSON("aaa.json") &rarr; JSON object
+<span class='line'>107</span>  */</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">readJSON</span><span class="PUNC">(</span><span class="NAME">jsonFile</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>109</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">jsonStr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">fs.readFileSync</span><span class="PUNC">(</span><span class="NAME">jsonFile</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"utf8"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">json</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSON.parse</span><span class="PUNC">(</span><span class="NAME">jsonStr</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">json</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>112</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>113</span> 
+<span class='line'>114</span> </span><span class="COMM">/**
+<span class='line'>115</span>  * read JSONC file and return its JSON object
+<span class='line'>116</span>  * @param {String} JSONC file name to be read
+<span class='line'>117</span>  * @return {Object} JSON object or array of file contents
+<span class='line'>118</span>  * @since jsrsasign-util 1.0.1 nodeutil 1.0.1
+<span class='line'>119</span>  *
+<span class='line'>120</span>  * @description
+<span class='line'>121</span>  * This method read JSONC (i.e. JSON with comments) file
+<span class='line'>122</span>  * and returns JSON object.
+<span class='line'>123</span>  * This function only works in Node.js.
+<span class='line'>124</span>  * 
+<span class='line'>125</span>  * @example
+<span class='line'>126</span>  * var rsu = require("jsrsasign-util");
+<span class='line'>127</span>  * rsu.readJSONC("aaa.jsonc") &rarr; JSON object
+<span class='line'>128</span>  */</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">readJSONC</span><span class="PUNC">(</span><span class="NAME">jsonFile</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">jsonStr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">fs.readFileSync</span><span class="PUNC">(</span><span class="NAME">jsonFile</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"utf8"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">json</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSONC.parse</span><span class="PUNC">(</span><span class="NAME">jsonStr</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>132</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">json</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>133</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>134</span> 
+<span class='line'>135</span> </span><span class="COMM">/**
+<span class='line'>136</span>  * save JSON object as file
+<span class='line'>137</span>  * @param {Object} jsonFile output JSON file name
+<span class='line'>138</span>  * @param {Object} json JSON object to save
+<span class='line'>139</span>  * @since jsrsasign-util 1.0.1 nodeutil 1.0.1
+<span class='line'>140</span>  *
+<span class='line'>141</span>  * @description
+<span class='line'>142</span>  * This method saves JSON object as a file.
+<span class='line'>143</span>  * This function only works in Node.js.
+<span class='line'>144</span>  * 
+<span class='line'>145</span>  * @example
+<span class='line'>146</span>  * var rsu = require("jsrsasign-util");
+<span class='line'>147</span>  * rsu.saveFileJSON("aaa.jsonc", json);
+<span class='line'>148</span>  */</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">saveFileJSON</span><span class="PUNC">(</span><span class="NAME">jsonFile</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">json</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>150</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">JSON.stringify</span><span class="PUNC">(</span><span class="NAME">json</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"  "</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="WHIT">    </span><span class="NAME">saveFileUTF8</span><span class="PUNC">(</span><span class="NAME">jsonFile</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>153</span> 
+<span class='line'>154</span> </span><span class="COMM">/**
+<span class='line'>155</span>  * output JSON object to console
+<span class='line'>156</span>  * @param {Object} json JSON object to print out
+<span class='line'>157</span>  * @param {Object} prefix prefix string (OPTION)
+<span class='line'>158</span>  * @since jsrsasign-util 1.0.1 nodeutil 1.0.1
+<span class='line'>159</span>  *
+<span class='line'>160</span>  * @description
+<span class='line'>161</span>  * This method writes JSON object to console.
+<span class='line'>162</span>  * This function only works in Node.js.
+<span class='line'>163</span>  * 
+<span class='line'>164</span>  * @example
+<span class='line'>165</span>  * var rsu = require("jsrsasign-util");
+<span class='line'>166</span>  * var obj = {aaa: "bbb", "ccc": 123};
+<span class='line'>167</span>  * rsu.printJSON(obj, "obj = ") &rarr;
+<span class='line'>168</span>  * obj = {
+<span class='line'>169</span>  *   "aaa": "bbb",
+<span class='line'>170</span>  *   "ccc": 123
+<span class='line'>171</span>  * }
+<span class='line'>172</span>  */</span><span class="WHIT">
+<span class='line'>173</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">printJSON</span><span class="PUNC">(</span><span class="NAME">json</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">prefix</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>174</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">prefix</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">prefix</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>176</span> </span><span class="WHIT">    </span><span class="NAME">console.log</span><span class="PUNC">(</span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">JSON.stringify</span><span class="PUNC">(</span><span class="NAME">json</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"  "</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>177</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>178</span> 
+<span class='line'>179</span> </span></pre></body></html>
