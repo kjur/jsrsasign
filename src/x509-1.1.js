@@ -1,9 +1,9 @@
-/* x509-2.0.9.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.0.10.js (c) 2012-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
  *
- * Copyright (c) 2010-2020 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2021 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.0 x509 2.0.9 (2020-Nov-18)
+ * @version jsrsasign 10.1.12 x509 2.0.10 (2021-Feb-25)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -271,6 +271,7 @@ function X509(params) {
      * @memberOf X509#
      * @function
      * @return {String} issuer DN string
+     * @see X509#getIssuer
      * @example
      * var x = new X509();
      * x.readCertPEM(sCertPEM);
@@ -278,7 +279,8 @@ function X509(params) {
      * var dn2 = KJUR.asn1.x509.X500Name.compatToLDAP(dn1); // returns "O=TEST, C=US"
      */
     this.getIssuerString = function() {
-        return _X509.hex2dn(this.getIssuerHex());
+	var pIssuer = this.getIssuer();
+	return pIssuer.str;
     };
 
     /**
@@ -321,6 +323,7 @@ function X509(params) {
      * @memberOf X509#
      * @function
      * @return {String} subject DN string
+     * @see X509#getSubject
      * @example
      * var x = new X509();
      * x.readCertPEM(sCertPEM);
@@ -328,7 +331,8 @@ function X509(params) {
      * var dn2 = KJUR.asn1.x509.X500Name.compatToLDAP(dn1); // returns "O=TEST, C=US"
      */
     this.getSubjectString = function() {
-        return _X509.hex2dn(this.getSubjectHex());
+	var pSubject = this.getSubject();
+	return pSubject.str;
     };
 
     /**
@@ -2238,7 +2242,7 @@ function X509(params) {
 	var hValue = _getVbyList(h, a[1], []);
 	var oid = KJUR.asn1.ASN1Util.oidHexToInt(hOID);
 	result.type = KJUR.asn1.x509.OID.oid2atype(oid);
-	result.value = hextorstr(hValue);
+	result.value = hextoutf8(hValue);
 	result.ds = this.HEX2STAG[h.substr(a[1], 2)];
 	return result;
     };
@@ -2662,14 +2666,14 @@ function X509(params) {
      */
     this.dnarraytostr = function(aDN) {
 	function rdnarraytostr(aRDN) {
-	    return aRDN.map(function(x){return atvtostr(x);}).join("+");
+	    return aRDN.map(function(x){return atvtostr(x).replace(/\+/,"\\+");}).join("+");
 	};
 
 	function atvtostr(pATV) {
 	    return pATV.type + "=" + pATV.value;
 	};
 
-	return "/" + aDN.map(function(x){return rdnarraytostr(x);}).join("/");
+	return "/" + aDN.map(function(x){return rdnarraytostr(x).replace(/\//, "\\/");}).join("/");
     };
 
     /**
@@ -2864,17 +2868,10 @@ function X509(params) {
  */
 X509.hex2dn = function(hex, idx) {
     if (idx === undefined) idx = 0;
-    if (hex.substr(idx, 2) !== "30") throw new Error("malformed DN");
-
-    var a = new Array();
-
-    var aIdx = ASN1HEX.getChildIdx(hex, idx);
-    for (var i = 0; i < aIdx.length; i++) {
-	a.push(X509.hex2rdn(hex, aIdx[i]));
-    }
-
-    a = a.map(function(s) { return s.replace("/", "\\/"); });
-    return "/" + a.join("/");
+    var x = new X509();
+    var hDN = ASN1HEX.getTLV(hex, idx);
+    var pDN = x.getX500Name(hex);
+    return pDN.str;
 };
 
 /**

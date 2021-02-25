@@ -1,5 +1,5 @@
 /*
- * jsrsasign(jwths) 10.1.11 (2021-02-19) (c) 2010-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
+ * jsrsasign(jwths) 10.1.12 (2021-02-25) (c) 2010-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 
 /*!

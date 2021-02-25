@@ -1,6 +1,18 @@
 
 ChangeLog for jsrsasign
 
+fix for wrong UTF-8 encoding in distinguished name parser
+* Changes from 10.1.11 to 10.1.12 (2021-02-25)
+  - src/x509.js
+    - fix X509.getAttrTypeValue (#473)
+      - attribute value is converted by hextoutf8 not hextorstr
+    - X509.getIssuerString update to use getIssuer
+    - X509.getSubjectString update to use getSubject
+    - X509.dnarraytostr fix to escape "+" and "/"
+    - X509.hex2dn update to use getX500Name
+  - test/qunit-do-x509-ext.html
+    - updated to follow above
+
 update X509.getVersion and add jsrsasign-util saveFileJSON
 * Changes from 10.1.10 to 10.1.11 (2021-02-19)
   - src/x509.js

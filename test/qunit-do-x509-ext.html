@@ -912,8 +912,16 @@ var pExpect = {
   ],
   str: "/C=JP/O=b/CN=a@a.jp"
 };
-
 deepEqual(x.getX500Name(hIn1), pExpect, "/C=JP/O=b/CN=a@a.jp")
+
+var hIn2 = "30123110300e06035504030c0743c3a06e617279";
+var pExpect2 = {
+  array: [
+    [{type:"CN",value:"Cànary",ds:"utf8"}]
+  ],
+  str: "/CN=Cànary"
+};
+deepEqual(x.getX500Name(hIn2), pExpect2, "/CN=Cànary")
 });
 
 test("getRDN test", function() {
