@@ -1,4 +1,4 @@
-/* x509-2.0.10.js (c) 2012-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.0.11.js (c) 2012-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.12 x509 2.0.10 (2021-Feb-25)
+ * @version jsrsasign 10.1.13 x509 2.0.11 (2021-Mar-07)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -2242,8 +2242,12 @@ function X509(params) {
 	var hValue = _getVbyList(h, a[1], []);
 	var oid = KJUR.asn1.ASN1Util.oidHexToInt(hOID);
 	result.type = KJUR.asn1.x509.OID.oid2atype(oid);
-	result.value = hextoutf8(hValue);
 	result.ds = this.HEX2STAG[h.substr(a[1], 2)];
+	if (result.ds != "bmp") {
+	    result.value = hextoutf8(hValue);
+	} else {
+	    result.value = ucs2hextoutf8(hValue);
+	}
 	return result;
     };
 
