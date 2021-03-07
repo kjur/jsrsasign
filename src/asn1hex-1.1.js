@@ -1,9 +1,9 @@
-/* asn1hex-1.2.8.js (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1hex-1.2.9.js (c) 2012-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
  *
- * Copyright (c) 2010-2020 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2021 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license/
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.3 asn1hex 1.2.8 (2020-Nov-22)
+ * @version jsrsasign 10.1.13 asn1hex 1.2.9 (2021-Mar-07)
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -936,7 +936,7 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
 	return indent + "VisualString '" + hextoutf8(_getV(hex, idx)) + "'\n";
     }
     if (tag == "1e") {
-	return indent + "BMPString '" + hextoutf8(_getV(hex, idx)) + "'\n";
+	return indent + "BMPString '" + ucs2hextoutf8(_getV(hex, idx)) + "'\n";
     }
     if (tag == "30") {
 	if (hex.substr(idx, 4) == "3000") {

@@ -1,6 +1,17 @@
 
 ChangeLog for jsrsasign
 
+add non-ascii BMPString support
+* Changes from 10.1.12 to 10.1.13 (2021-03-08)
+  - src/base64x.js
+    - add ucs2hextoutf8 function
+  - src/x509.js
+    - X509.getAttrTypeAndValue supports non-ascii BMPString (#474)
+  - src/asn1hex.js
+    - ASN1HEX.dump supports non-ascii BMPString
+  - test/qunit-do-{asn1hex-dump,x509-ext,base64x}.html
+    - updated to follow above
+
 fix for wrong UTF-8 encoding in distinguished name parser
 * Changes from 10.1.11 to 10.1.12 (2021-02-25)
   - src/x509.js

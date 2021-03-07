@@ -214,31 +214,33 @@ var certGithubDump = (function() {/*SEQUENCE
 $(document).ready(function(){
 
 test("ASN1HEX.dump", function() {
-  equal(ASN1HEX.dump('0101ff'), "BOOLEAN TRUE\n", "BOOLEAN TRUE");
-  equal(ASN1HEX.dump('010100'), "BOOLEAN FALSE\n", "BOOLEAN FALSE");
-  equal(ASN1HEX.dump('0203012345'), "INTEGER 012345\n", "INTEGER 012345");
-  equal(ASN1HEX.dump('0303001234'), "BITSTRING 001234\n", "BITSTRING 001234");
-  equal(ASN1HEX.dump('0403ababab'), "OCTETSTRING ababab\n", "OCTETSTRING ababab");
-  equal(ASN1HEX.dump('0500'), "NULL\n", "NULL");
-  equal(ASN1HEX.dump('0603550406'), "ObjectIdentifier countryName (2 5 4 6)\n", "OID CN");
-  equal(ASN1HEX.dump('06052b0e03021a'), "ObjectIdentifier sha1 (1 3 14 3 2 26)\n", "OID sha1");
-  equal(ASN1HEX.dump('06092a864886f70d010702'), "ObjectIdentifier signed-data (1 2 840 113549 1 7 2)\n", "OID signed-data");
-  equal(ASN1HEX.dump('0c025553'), "UTF8String 'US'\n", "UTF8String US");
-  equal(ASN1HEX.dump('13025553'), "PrintableString 'US'\n", "PrintableString US");
-  equal(ASN1HEX.dump('14025553'), "TeletexString 'US'\n", "TeletexString US");
-  equal(ASN1HEX.dump('16025553'), "IA5String 'US'\n", "IA5String US");
-  equal(ASN1HEX.dump('170d3233303530313233353935395a'),
+var _dump = ASN1HEX.dump;
+equal(_dump('0101ff'), "BOOLEAN TRUE\n", "BOOLEAN TRUE");
+equal(_dump('010100'), "BOOLEAN FALSE\n", "BOOLEAN FALSE");
+equal(_dump('0203012345'), "INTEGER 012345\n", "INTEGER 012345");
+equal(_dump('0303001234'), "BITSTRING 001234\n", "BITSTRING 001234");
+equal(_dump('0403ababab'), "OCTETSTRING ababab\n", "OCTETSTRING ababab");
+equal(_dump('0500'), "NULL\n", "NULL");
+equal(_dump('0603550406'), "ObjectIdentifier countryName (2 5 4 6)\n", "OID CN");
+equal(_dump('06052b0e03021a'), "ObjectIdentifier sha1 (1 3 14 3 2 26)\n", "OID sha1");
+equal(_dump('06092a864886f70d010702'), "ObjectIdentifier signed-data (1 2 840 113549 1 7 2)\n", "OID signed-data");
+equal(_dump('0c025553'), "UTF8String 'US'\n", "UTF8String US");
+equal(_dump('13025553'), "PrintableString 'US'\n", "PrintableString US");
+equal(_dump('14025553'), "TeletexString 'US'\n", "TeletexString US");
+equal(_dump('16025553'), "IA5String 'US'\n", "IA5String US");
+equal(_dump('170d3233303530313233353935395a'),
                      "UTCTime 230501235959Z\n", "UTCTime 2023");
-  equal(ASN1HEX.dump('180f32303233303530313233353935395a'),
+equal(_dump('180f32303233303530313233353935395a'),
                      "GeneralizedTime 20230501235959Z\n", "GenTime 2023");
-  equal(ASN1HEX.dump('1a025553'), "VisualString 'US'\n", "VisualString US");
-  equal(ASN1HEX.dump('1e025553'), "BMPString 'US'\n", "BMPString US");
+equal(_dump('1a025553'), "VisualString 'US'\n", "VisualString US");
+equal(_dump('1e0400550053'), "BMPString 'US'\n", "BMPString US 00550053");
+equal(_dump("1e06006600fc0072"), "BMPString 'für'\n", "BMPString für non-ascii");
   var aIdx = ASN1HEX.getChildIdx("3006020101020102", 0);
-  equal(aIdx.length, 2, "aIdx.length");
-  equal(aIdx[0], 4, "aIdx[0]");
-  equal(aIdx[1], 10, "aIdx[1]");
-  equal(ASN1HEX.dump('3006020101020102'), "SEQUENCE\n  INTEGER 01\n  INTEGER 02\n", "SEQ INT 1 INT 2");
-  equal(ASN1HEX.dump('3106020101020102'), "SET\n  INTEGER 01\n  INTEGER 02\n", "SET INT 1 INT 2");
+equal(aIdx.length, 2, "aIdx.length");
+equal(aIdx[0], 4, "aIdx[0]");
+equal(aIdx[1], 10, "aIdx[1]");
+equal(_dump('3006020101020102'), "SEQUENCE\n  INTEGER 01\n  INTEGER 02\n", "SEQ INT 1 INT 2");
+equal(_dump('3106020101020102'), "SET\n  INTEGER 01\n  INTEGER 02\n", "SET INT 1 INT 2");
 });
 
 test("ASN1HEX.dump longint", function() {

@@ -1057,6 +1057,17 @@ This function only works in Node.js.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#ucs2hextoutf8">ucs2hextoutf8</a></b>(s)
+								</div>
+								<div class="description">convert UCS-2 hexadecimal stirng to UTF-8 string<br/>
+This function converts hexadecimal value of UCS-2 string to 
+UTF-8 string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#uricmptohex">uricmptohex</a></b>(s)
 								</div>
 								<div class="description">convert a URLComponent string such like "%67%68" to a hexadecimal string.</div>
@@ -4032,6 +4043,64 @@ strpad("1234", 10)      &rarr; "0000001234"</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> padded string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="ucs2hextoutf8"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>ucs2hextoutf8</b>(s)
+					
+					</div>
+					<div class="description">
+						convert UCS-2 hexadecimal stirng to UTF-8 string<br/>
+This function converts hexadecimal value of UCS-2 string to 
+UTF-8 string.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">ucs2hextoutf8("006600fc0072") &rarr "für"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>hexadecimal string of UCS-2 string (ex. "0066")</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.1.13 base64x 1.1.20</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> UTF-8 string</dd>
 							
 							</dl>
 						

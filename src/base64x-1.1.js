@@ -1,9 +1,9 @@
-/* base64x-1.1.19 (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* base64x-1.1.20 (c) 2012-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * Copyright (c) 2012-2020 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2012-2021 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.3 base64x 1.1.19 (2020-Nov-22)
+ * @version jsrsasign 10.1.13 base64x 1.1.20 (2021-Mar-07)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -915,6 +915,52 @@ function iptohex(s) {
   } else {
     throw malformedMsg;
   }
+}
+
+// ==== ucs2hex / utf8 ==============================
+
+/**
+ * convert UCS-2 hexadecimal stirng to UTF-8 string<br/>
+ * @name ucs2hextoutf8
+ * @function
+ * @param {String} s hexadecimal string of UCS-2 string (ex. "0066")
+ * @return {String} UTF-8 string
+ * @since jsrsasign 10.1.13 base64x 1.1.20
+ * @description
+ * This function converts hexadecimal value of UCS-2 string to 
+ * UTF-8 string.
+ * @example
+ * ucs2hextoutf8("006600fc0072") &rarr "für"
+ */
+/*
+See: http://nomenclator.la.coocan.jp/unicode/ucs_utf.htm
+UCS-2 to UTF-8
+UCS-2 code point | UCS-2 bytes       | UTF-8 bytes
+U+0000 .. U+007F | 00000000-0xxxxxxx | 0xxxxxxx (1 byte)
+U+0080 .. U+07FF | 00000xxx-xxyyyyyy | 110xxxxx 10yyyyyy (2 byte)
+U+0800 .. U+FFFF | xxxxyyyy-yyzzzzzz | 1110xxxx 10yyyyyy 10zzzzzz (3 byte)
+ */
+function ucs2hextoutf8(s) {
+    function _conv(s) {
+	var i1 = parseInt(s.substr(0, 2), 16);
+	var i2 = parseInt(s.substr(2), 16);
+	if (i1 == 0 & i2 < 0x80) { // 1 byte
+	    return String.fromCharCode(i2);
+	}
+	if (i1 < 8) { // 2 bytes
+	    var u1 = 0xc0 | ((i1 & 0x07) << 3) | ((i2 & 0xc0) >> 6);
+	    var u2 = 0x80 | (i2 & 0x3f);
+	    return hextoutf8(u1.toString(16) + u2.toString(16));
+	}
+	// 3 bytes
+	var u1 = 0xe0 | ((i1 & 0xf0) >> 4);
+	var u2 = 0x80 | ((i1 & 0x0f) << 2) | ((i2 & 0xc0) >> 6);
+	var u3 = 0x80 | (i2 & 0x3f);
+	return hextoutf8(u1.toString(16) + u2.toString(16) + u3.toString(16));
+    }
+    var a = s.match(/.{4}/g);
+    var a2 = a.map(_conv);
+    return a2.join("");
 }
 
 // ==== URIComponent ================================

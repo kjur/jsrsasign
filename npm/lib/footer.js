@@ -62,6 +62,7 @@ exports.ipv6tohex = ipv6tohex;
 exports.hextoipv6 = hextoipv6;
 exports.hextoip = hextoip;
 exports.iptohex = iptohex;
+exports.ucs2hextoutf8 = ucs2hextoutf8;
 exports.encodeURIComponentAll = encodeURIComponentAll;
 exports.newline_toUnix = newline_toUnix;
 exports.newline_toDos = newline_toDos;

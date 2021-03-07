@@ -292,6 +292,10 @@ test("iptohex", function() {
         '2001:db8::abcd:ef12');
 });
 
+test("ucs2hextoutf8", function() {
+  equal(ucs2hextoutf8('006600fc0072'), 'für', 'für');
+});
+
 test("oidtohex", function() {
 equal(oidtohex("2.16.840.1.101.3.4.2.1"), "608648016503040201", "sha256");
 equal(oidtohex("1.2.840.113549.1.1.5"), "2a864886f70d010105", "SHA1withRSA");
