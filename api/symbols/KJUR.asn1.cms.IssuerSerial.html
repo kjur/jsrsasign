@@ -552,10 +552,11 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/KJUR.asn1.cms.IssuerSerial.html#constructor">KJUR.asn1.cms.IssuerSerial</a></b>(params)
 							</div>
-							<div class="description">class for IssuerSerial ASN.1 structure for CMS
+							<div class="description">class for IssuerSerial ASN.1 structure for CMS<br/>
 This class represents IssuerSerial ASN.1 structure
+used by ESSCertID/v2 of SigningCertificate/V2 attribute
 defined in 
-<a href="https://tools.ietf.org/html/rfc5035#page-6>
+<a href="https://tools.ietf.org/html/rfc5035#page-6">
 RFC 5034 section 4</a>.</div>
 						</td>
 					</tr>
@@ -601,16 +602,16 @@ RFC 5034 section 4</a>.</div>
 				</div>
 				
 				<div class="description">
-					class for IssuerSerial ASN.1 structure for CMS
+					class for IssuerSerial ASN.1 structure for CMS<br/>
 This class represents IssuerSerial ASN.1 structure
+used by ESSCertID/v2 of SigningCertificate/V2 attribute
 defined in 
-<a href="https://tools.ietf.org/html/rfc5035#page-6>
+<a href="https://tools.ietf.org/html/rfc5035#page-6">
 RFC 5034 section 4</a>.
 <pre>
 IssuerSerial ::= SEQUENCE {
-   issuer                   GeneralNames,
-   serialNumber             CertificateSerialNumber
-}
+   issuer          GeneralNames,
+   serialNumber    CertificateSerialNumber }
 CertificateSerialNumber ::= INTEGER
 </pre>
 					
