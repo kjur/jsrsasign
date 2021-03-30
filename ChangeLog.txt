@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 10.1.13 to next release
+  - src/asn1cms.js
+    - IssuerSerial, IsseruAndSerialNumber API document update
+  - sample_node/asn1extract2
+    - change to "/usr/bin/env node"
+
 add non-ascii BMPString support
 * Changes from 10.1.12 to 10.1.13 (2021-03-08)
   - src/base64x.js

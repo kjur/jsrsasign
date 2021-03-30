@@ -36,6 +36,8 @@ function _getIdxFileName(file, idx) {
   var a = file.match(/^(.+)[.]([^.]+)$/);
   if (a != undefined) {
     result = a[1] + "." + idx + "." + a[2];
+  } else {
+    result = file + "." + idx;
   }
   return result;
 };
@@ -46,7 +48,7 @@ program
   .usage('[options]')
   .option('-i, --in <file>', 'input DER file')
   .option('-o, --out <file>', 'extracted output DER file')
-  .option('-l, --list <list of positions n1,n2,n3...>', 'list of ASN.1 structure positions to extract')
+  .option('-l, --list <positions>', 'list of ASN.1 structure positions to extract (ex. 1,0,0)')
   .option('-c, --children', 'extract children for specified position')
   .option('-v, --vonly', 'extract ASN.1 V value only')
   .parse(process.argv);
@@ -77,6 +79,7 @@ try {
 var idx = rs.ASN1HEX.getIdxbyList(hIn, 0, idxList);
 //console.log("idx = %j", idx);
 
+console.log("program.children=" + JSON.stringify(program.children));
 if (program.children !== true) {
   var hExtract;
   if (program.vonly !== true) {
@@ -92,7 +95,7 @@ if (program.children !== true) {
   rsu.saveFileBinByHex(outFile, hExtract);
 } else {
   var idxChildren = rs.ASN1HEX.getChildIdx(hIn, idx);
-  //console.log(idxChildren.length);
+  console.log("idxChildren.length=" + idxChildren.length);
   for (var i = 0; i < idxChildren.length; i++) {
     var outFileChild = _getIdxFileName(outFile, i + 1);
     var hExtract;
@@ -104,6 +107,7 @@ if (program.children !== true) {
         hExtract = hExtract.substr(2); // bit string
       }
     }
+    console.log("saving " + outFileChild + " ...");
     rsu.saveFileBinByHex(outFileChild, hExtract);
   } 
 }

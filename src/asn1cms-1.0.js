@@ -651,7 +651,7 @@ KJUR.asn1.cms.ESSCertIDv2 = function(params) {
 YAHOO.lang.extend(KJUR.asn1.cms.ESSCertIDv2, KJUR.asn1.cms.ESSCertID);
 
 /**
- * class for IssuerSerial ASN.1 structure for CMS
+ * class for IssuerSerial ASN.1 structure for CMS<br/>
  * @name KJUR.asn1.cms.IssuerSerial
  * @class class for CMS IssuerSerial ASN.1 structure for CMS
  * @param {Array} params associative array of parameters
@@ -667,14 +667,14 @@ YAHOO.lang.extend(KJUR.asn1.cms.ESSCertIDv2, KJUR.asn1.cms.ESSCertID);
  *
  * @description
  * This class represents IssuerSerial ASN.1 structure
+ * used by ESSCertID/v2 of SigningCertificate/V2 attribute
  * defined in 
- * <a href="https://tools.ietf.org/html/rfc5035#page-6>
+ * <a href="https://tools.ietf.org/html/rfc5035#page-6">
  * RFC 5034 section 4</a>.
  * <pre>
  * IssuerSerial ::= SEQUENCE {
- *    issuer                   GeneralNames,
- *    serialNumber             CertificateSerialNumber
- * }
+ *    issuer          GeneralNames,
+ *    serialNumber    CertificateSerialNumber }
  * CertificateSerialNumber ::= INTEGER
  * </pre>
  *
@@ -839,6 +839,7 @@ YAHOO.lang.extend(KJUR.asn1.cms.SignerIdentifier, KJUR.asn1.ASN1Object);
  * @param {Array} params associative array of parameters
  * @extends KJUR.asn1.ASN1Object
  * @since jsrsasign 4.2.4 asn1cms 1.0.0
+ * @see KJUR.asn1.cms.IssuerSerial
  *
  * @description
  * This class encodes IssuerAndSerialNumber ASN.1 structure defined in
@@ -846,8 +847,8 @@ YAHOO.lang.extend(KJUR.asn1.cms.SignerIdentifier, KJUR.asn1.ASN1Object);
  * RFC 5662 CMS 10.2.4</a>. 
  * <pre>
  * IssuerAndSerialNumber ::= SEQUENCE {
- *    issuer Name,
- *    serialNumber CertificateSerialNumber }
+ *    issuer           Name,
+ *    serialNumber     CertificateSerialNumber }
  * CertificateSerialNumber ::= INTEGER
  * </pre>
  * Constructor of this class can have following parameters:
