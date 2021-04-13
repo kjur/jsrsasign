@@ -1,6 +1,6 @@
 {
   "name": "kjur-jsrsasign",
-  "version": "10.1.13",
+  "version": "10.2.0",
   "main": "jsrsasign-all-min.js",
   "description": "The 'jsrsasign' (RSA-Sign JavaScript Library) is an opensource free cryptography library supporting RSA/RSAPSS/ECDSA/DSA signing/validation, ASN.1, PKCS#1/5/8 private/public key, X.509 certificate, CRL, OCSP, CMS SignedData, TimeStamp, CAdES, JWS and JWT in pure JavaScript.",
   "license": "MIT",

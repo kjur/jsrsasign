@@ -1,7 +1,10 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 10.1.13 to next release
+CVE-2021-30246 RSAKey.verify issue fix
+* Changes from 10.1.13 to 10.2.0 (2021-04-14)
+  - src/rsasign.js
+    - CVE-2021-30246 RSAKey.verify issue was fixed (#478)
   - src/asn1cms.js
     - IssuerSerial, IsseruAndSerialNumber API document update
   - sample_node/asn1extract2
