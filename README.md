@@ -72,6 +72,7 @@ MORE TUTORIALS AND SAMPLES
 
 |published|fixed version|title/advisory|CVE|CVSS|
 |:---|:---|:---|:---|:---|
+|2021Apr14|10.2.0|[RSA signature validation vulnerability on maleable encoded message](https://github.com/kjur/jsrsasign/security/advisories/GHSA-27fj-mc8w-j9wg)|CVE-2021-30246|-|
 |2020Jun22|8.0.19|[ECDSA signature validation vulnerability by accepting wrong ASN.1 encoding](https://github.com/kjur/jsrsasign/security/advisories/GHSA-p8c3-7rj8-q963)|CVE-2020-14966|5.5|
 |2020Jun22|8.0.18|[RSA RSAES-PKCS1-v1_5 and RSA-OAEP decryption vulnerability with prepending zeros](https://github.com/kjur/jsrsasign/security/advisories/GHSA-xxxq-chmp-67g4)|CVE-2020-14967|4.8|
 |2020Jun22|8.0.17|[RSA-PSS signature validation vulnerability by prepending zeros](https://github.com/kjur/jsrsasign/security/advisories/GHSA-q3gh-5r98-j4h3)|CVE-2020-14968|4.2|
