@@ -17,6 +17,7 @@ Your bugfix and pull request contribution are always welcomed :)
 
 NEWS
 ----
+- 2021-Apr-14: [Security advisory](https://github.com/kjur/jsrsasign/security/advisories/GHSA-27fj-mc8w-j9wg) and [update](https://github.com/kjur/jsrsasign/releases/tag/10.2.0) for CVE-2021-30246 RSA signature validation vulnerability published
 - 2020-Oct-05: jsrsasign won [Google Open Source Peer Bonus Award](https://opensource.googleblog.com/2020/10/announcing-latest-google-open-source.html). Thank you Google.
 - 2020-Sep-23: 10.0.0 released for CMS SignedData related class including timestamp and CAdES architecture update
 - 2020-Aug-24: 9.1.0 released to new CRL APIs align with certificate
@@ -33,7 +34,7 @@ HIGHLIGHTS
 - no dependency to other library
 - no dependency to [W3C Web Cryptography API](https://www.w3.org/TR/WebCryptoAPI/) nor [OpenSSL](https://www.openssl.org/)
 - no dependency on newer ECMAScirpt function. So old browsers also supported. 
-- very popular crypto library with [0.6M+ npm downloads/month](https://npm-stat.com/charts.html?package=jsrsasign&from=2016-05-01&to=2021-02-12)
+- very popular crypto library with [0.6M+ npm downloads/month](https://npm-stat.com/charts.html?package=jsrsasign&from=2016-05-01&to=2021-04-12)
 
 INSTALL
 -------
@@ -72,7 +73,7 @@ MORE TUTORIALS AND SAMPLES
 
 |published|fixed version|title/advisory|CVE|CVSS|
 |:---|:---|:---|:---|:---|
-|2021Apr14|10.2.0|[RSA signature validation vulnerability on maleable encoded message](https://github.com/kjur/jsrsasign/security/advisories/GHSA-27fj-mc8w-j9wg)|CVE-2021-30246|-|
+|2021Apr14|10.2.0|[RSA signature validation vulnerability on maleable encoded message](https://github.com/kjur/jsrsasign/security/advisories/GHSA-27fj-mc8w-j9wg)|CVE-2021-30246|9.1|
 |2020Jun22|8.0.19|[ECDSA signature validation vulnerability by accepting wrong ASN.1 encoding](https://github.com/kjur/jsrsasign/security/advisories/GHSA-p8c3-7rj8-q963)|CVE-2020-14966|5.5|
 |2020Jun22|8.0.18|[RSA RSAES-PKCS1-v1_5 and RSA-OAEP decryption vulnerability with prepending zeros](https://github.com/kjur/jsrsasign/security/advisories/GHSA-xxxq-chmp-67g4)|CVE-2020-14967|4.8|
 |2020Jun22|8.0.17|[RSA-PSS signature validation vulnerability by prepending zeros](https://github.com/kjur/jsrsasign/security/advisories/GHSA-q3gh-5r98-j4h3)|CVE-2020-14968|4.2|
