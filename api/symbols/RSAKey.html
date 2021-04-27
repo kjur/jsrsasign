@@ -1386,9 +1386,17 @@ ul.inheritsList
 					</div>
 					<div class="description">
 						verifies a sigature for a message string with RSA public key.<br/>
+This method verifies RSA signature with raw message string and
+hexadecimal signature value.
 						
 						
 					</div>
+					
+					
+					
+					<pre class="code">pubkey = new RSAKey();
+pubkey.setPublic("1abd...", "10001");
+pubkey.verify("hello world", "3da1...") &rarr; true or false</pre>
 					
 					
 					
@@ -1400,7 +1408,7 @@ ul.inheritsList
 									<span class="light fixedFont">{String}</span> <b>sMsg</b>
 									
 								</dt>
-								<dd>message string to be verified.</dd>
+								<dd>raw message string to be verified.</dd>
 							
 								<dt>
 									<span class="light fixedFont">{String}</span> <b>hSig</b>
@@ -1418,7 +1426,7 @@ ul.inheritsList
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd>returns 1 if valid, otherwise 0</dd>
+								<dd>returns true if valid, otherwise false</dd>
 							
 							</dl>
 						

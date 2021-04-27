@@ -1,9 +1,9 @@
-/* rsasign-1.3.3.js (c) 2010-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* rsasign-1.3.4.js (c) 2010-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * rsa-sign.js - adding signing functions to RSAKey class.
  *
- * Copyright (c) 2010-2020 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2021 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license/
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name rsasign-1.2.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.18 rsasign 1.3.3 (2020-Jun-21)
+ * @version jsrsasign 10.2.0 rsasign 1.3.4 (2021-Apr-13)
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -225,19 +225,32 @@ function _rsasign_getAlgNameAndHashFromHexDisgestInfo(hDigestInfo) {
  * @name verify
  * @memberOf RSAKey#
  * @function
- * @param {String} sMsg message string to be verified.
+ * @param {String} sMsg raw message string to be verified.
  * @param {String} hSig hexadecimal string of siganture.<br/>
  *                 non-hexadecimal charactors including new lines will be ignored.
- * @return returns 1 if valid, otherwise 0
+ * @return returns true if valid, otherwise false
+ *
+ * @description
+ * This method verifies RSA signature with raw message string and
+ * hexadecimal signature value.
+ *
+ * @example
+ * pubkey = new RSAKey();
+ * pubkey.setPublic("1abd...", "10001");
+ * pubkey.verify("hello world", "3da1...") &rarr; true or false
  */
 RSAKey.prototype.verify = function(sMsg, hSig) {
-    hSig = hSig.replace(_RE_HEXDECONLY, '');
-    hSig = hSig.replace(/[ \n]+/g, "");
+    hSig = hSig.toLowerCase();
+    if (hSig.match(/^[0-9a-f]+$/) == null) return false;
     var biSig = parseBigInt(hSig, 16);
-    if (biSig.bitLength() > this.n.bitLength()) return 0;
+    var keySize = this.n.bitLength();
+    if (biSig.bitLength() > keySize) return false;
     var biDecryptedSig = this.doPublic(biSig);
-    var hDigestInfo = biDecryptedSig.toString(16).replace(/^1f+00/, '');
-    var digestInfoAry = _rsasign_getAlgNameAndHashFromHexDisgestInfo(hDigestInfo);
+    var hDecryptedSig = biDecryptedSig.toString(16);
+    if (hDecryptedSig.length + 3 != keySize / 4) return false;
+    var hDigestInfo = hDecryptedSig.replace(/^1f+00/, '');
+    var digestInfoAry = 
+	_rsasign_getAlgNameAndHashFromHexDisgestInfo(hDigestInfo);
   
     if (digestInfoAry.length == 0) return false;
     var algName = digestInfoAry[0];
