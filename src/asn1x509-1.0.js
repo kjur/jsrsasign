@@ -427,7 +427,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.TBSCertificate, KJUR.asn1.ASN1Object);
  * <li>{@link KJUR.asn1.x509.CRLReason}</li>
  * <li>{@link KJUR.asn1.x509.OCSPNonce}</li>
  * <li>{@link KJUR.asn1.x509.OCSPNoCheck}</li>
- * <li>{@link KJUR.asn1.x509.AdobeeTimeStamp}</li>
+ * <li>{@link KJUR.asn1.x509.AdobeTimeStamp}</li>
  * <li>{@link KJUR.asn1.x509.SubjectDirectoryAttributes}</li>
  * <li>{@link KJUR.asn1.x509.PrivateExtension}</li>
  * </ul>
