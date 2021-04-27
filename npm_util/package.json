@@ -1,30 +1,32 @@
 {
     "name": "jsrsasign-util",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "utilities for jsrsasign (kjur.github.io/jsrsasign) such like file utilities",
     "main": "lib/jsrsasign-util.js",
     "scripts": {
-	"test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
-	"type": "git",
-	"url": "https://github.com/kjur/jsrsasign.git"
+        "type": "git",
+        "url": "https://github.com/kjur/jsrsasign.git"
     },
     "keywords": [
-	"jsrsasign", "utilities", "file"
+        "jsrsasign",
+        "utilities",
+        "file"
     ],
     "author": "Kenji Urushima",
     "licenses": [
-	{
-	    "type": "MIT",
-	    "url": "https://raw.github.com/kjur/jsrsasign/master/LICENSE.txt"
-	}
+        {
+            "type": "MIT",
+            "url": "https://raw.github.com/kjur/jsrsasign/master/LICENSE.txt"
+        }
     ],
     "bugs": {
-	"url": "https://github.com/kjur/jsrsasign/issues"
+        "url": "https://github.com/kjur/jsrsasign/issues"
     },
     "dependencies": {
-	"jsrsasign": "^4.8.2",
-	"jsonc-parser": "^0.0.1"
+        "jsonc-parser": ">= 0.0.1",
+        "jsrsasign": ">= 4.8.2"
     }
 }

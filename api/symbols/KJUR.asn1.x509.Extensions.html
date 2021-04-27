@@ -611,9 +611,30 @@ Extensions defined in RFC 5280 4.1</a> and
 <pre>
 Extensions  ::=  SEQUENCE SIZE (1..MAX) OF Extension
 </pre>
-NOTE: From jsrsasign 9.1.1, private extension or
+<p>NOTE: From jsrsasign 9.1.1, private extension or
 undefined extension have been supported by
-<a href="../symbols/KJUR.asn1.x509.PrivateExtension.html">KJUR.asn1.x509.PrivateExtension</a>.
+<a href="../symbols/KJUR.asn1.x509.PrivateExtension.html">KJUR.asn1.x509.PrivateExtension</a>.</p>
+
+Here is a list of available extensions:
+<ul>
+<li><a href="../symbols/KJUR.asn1.x509.BasicConstraints.html">KJUR.asn1.x509.BasicConstraints</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.SubjectKeyIdentifier.html">KJUR.asn1.x509.SubjectKeyIdentifier</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html">KJUR.asn1.x509.AuthorityKeyIdentifier</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.CRLDistributionPoints.html">KJUR.asn1.x509.CRLDistributionPoints</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.CertificatePolicies.html">KJUR.asn1.x509.CertificatePolicies</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.CRLNumber.html">KJUR.asn1.x509.CRLNumber</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.CRLReason.html">KJUR.asn1.x509.CRLReason</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.OCSPNonce.html">KJUR.asn1.x509.OCSPNonce</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.OCSPNoCheck.html">KJUR.asn1.x509.OCSPNoCheck</a></li>
+<li>KJUR.asn1.x509.AdobeeTimeStamp</li>
+<li><a href="../symbols/KJUR.asn1.x509.SubjectDirectoryAttributes.html">KJUR.asn1.x509.SubjectDirectoryAttributes</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.PrivateExtension.html">KJUR.asn1.x509.PrivateExtension</a></li>
+</ul>
+You can also use <a href="../symbols/KJUR.asn1.x509.PrivateExtension.html">KJUR.asn1.x509.PrivateExtension</a> object
+to specify a unsupported extension.
 					
 				</div>
 				
@@ -662,6 +683,10 @@ o.getEncodedHex() &rarr; "30..."</pre>
 							<dd><a href="../symbols/KJUR.asn1.csr.CertificationRequestInfo.html">KJUR.asn1.csr.CertificationRequestInfo</a></dd>
 						
 							<dd><a href="../symbols/KJUR.asn1.x509.PrivateExtension.html">KJUR.asn1.x509.PrivateExtension</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.ocsp.ResponseData.html">KJUR.asn1.ocsp.ResponseData</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.ocsp.BasicOCSPResponse.html">KJUR.asn1.ocsp.BasicOCSPResponse</a></dd>
 						
 						</dl>
 					

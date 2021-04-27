@@ -397,6 +397,8 @@ YAHOO.lang.extend(KJUR.asn1.x509.TBSCertificate, KJUR.asn1.ASN1Object);
  * @see KJUR.asn1.x509.TBSCertList
  * @see KJUR.asn1.csr.CertificationRequestInfo
  * @see KJUR.asn1.x509.PrivateExtension
+ * @see KJUR.asn1.ocsp.ResponseData
+ * @see KJUR.asn1.ocsp.BasicOCSPResponse 
  *
  * @description
  * This class represents
@@ -407,9 +409,30 @@ YAHOO.lang.extend(KJUR.asn1.x509.TBSCertificate, KJUR.asn1.ASN1Object);
  * <pre>
  * Extensions  ::=  SEQUENCE SIZE (1..MAX) OF Extension
  * </pre>
- * NOTE: From jsrsasign 9.1.1, private extension or
+ * <p>NOTE: From jsrsasign 9.1.1, private extension or
  * undefined extension have been supported by
- * {@link KJUR.asn1.x509.PrivateExtension}.
+ * {@link KJUR.asn1.x509.PrivateExtension}.</p>
+ * 
+ * Here is a list of available extensions:
+ * <ul>
+ * <li>{@link KJUR.asn1.x509.BasicConstraints}</li>
+ * <li>{@link KJUR.asn1.x509.KeyUsage}</li>
+ * <li>{@link KJUR.asn1.x509.SubjectKeyIdentifier}</li>
+ * <li>{@link KJUR.asn1.x509.AuthorityKeyIdentifier}</li>
+ * <li>{@link KJUR.asn1.x509.SubjectAltName}</li>
+ * <li>{@link KJUR.asn1.x509.IssuerAltName}</li>
+ * <li>{@link KJUR.asn1.x509.CRLDistributionPoints}</li>
+ * <li>{@link KJUR.asn1.x509.CertificatePolicies}</li>
+ * <li>{@link KJUR.asn1.x509.CRLNumber}</li>
+ * <li>{@link KJUR.asn1.x509.CRLReason}</li>
+ * <li>{@link KJUR.asn1.x509.OCSPNonce}</li>
+ * <li>{@link KJUR.asn1.x509.OCSPNoCheck}</li>
+ * <li>{@link KJUR.asn1.x509.AdobeeTimeStamp}</li>
+ * <li>{@link KJUR.asn1.x509.SubjectDirectoryAttributes}</li>
+ * <li>{@link KJUR.asn1.x509.PrivateExtension}</li>
+ * </ul>
+ * You can also use {@link KJUR.asn1.x509.PrivateExtension} object
+ * to specify a unsupported extension.
  *
  * @example
  * o = new KJUR.asn1.x509.Extensions([

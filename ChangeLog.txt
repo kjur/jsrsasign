@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 10.2.0 to next release
+  - src/asn1x509.js
+    - API document update for Extesions class
+  - npm_util/package.json
+    - fix dependencies (#482)
+
 CVE-2021-30246 RSAKey.verify issue fix
 * Changes from 10.1.13 to 10.2.0 (2021-04-14)
   - src/rsasign.js
