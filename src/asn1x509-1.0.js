@@ -2539,7 +2539,7 @@ YAHOO.lang.extend(KJUR.asn1.x509.CRLNumber, KJUR.asn1.x509.Extension);
  * </ul>
  *
  * @example
- * new KJUR.asn1.x509.CRLReason({extname:'cRLNumber',code:4})
+ * new KJUR.asn1.x509.CRLReason({extname:'cRLReason',code:4})
  */
 KJUR.asn1.x509.CRLReason = function(params) {
     KJUR.asn1.x509.CRLReason.superclass.constructor.call(this, params);

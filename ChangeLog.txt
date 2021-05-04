@@ -3,7 +3,7 @@ ChangeLog for jsrsasign
 
 * Changes from 10.2.0 to next release
   - src/asn1x509.js
-    - API document update for Extesions class
+    - API document update for Extesions and CRLReason class
   - npm_util/package.json
     - fix dependencies (#482)
 
