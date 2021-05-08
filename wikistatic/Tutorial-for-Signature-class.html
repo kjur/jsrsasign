@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for Signature class</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for Signature class</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="http://kjur.github.io/jsrsasign/">TOP</a> | <a href="https://github.com/kjur/jsrsasign/tags/">DOWNLOADS</a> | <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | <a href="http://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | <a href="http://kjur.github.io/jsrsasign/index.html#demo">DEMOS</a></p>
+<hr>
+<p>The <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Signature.html">KJUR.crypto.Signature</a> class is a very similar to Java JCE [java.security.Signature] (<a href="http://docs.oracle.com/javase/7/docs/api/index.html?java/security/Signature.html">http://docs.oracle.com/javase/7/docs/api/index.html?java/security/Signature.html</a>) class for digital signature algorithm calculation. So it&#39;s easy to learn.</p>
+<h3 id="getting-started">Getting Started</h3>
+<p>Here is a basic example for &#39;SHA1withRSA&#39; signature calculation.</p>
+<pre><code>// initialize
+var sig = new KJUR.crypto.Signature({&quot;alg&quot;: &quot;SHA1withRSA&quot;});
+// initialize for signature generation
+sig.init(rsaPrivateKey);   // rsaPrivateKey of RSAKey object
+// update data
+sig.updateString(&#39;aaa&#39;)
+// calculate signature
+var sigValueHex = sig.sign()
+</code></pre>
+<p>Here is a example for signature validation.</p>
+<pre><code>// initialize
+var sig = new KJUR.crypto.Signature({&quot;alg&quot;: &quot;SHA1withRSA&quot;});
+// initialize for signature validation
+sig.init(&quot;-----BEGIN CERTIFICATE-----(snip)&quot;); // signer&#39;s certificate
+// update data
+sig.updateString(&#39;aaa&#39;)
+// verify signature
+var isValid = sig.verify(sigValueHex)
+</code></pre>
+<h3 id="for-hexadecimal-input">for hexadecimal input</h3>
+<p>You can also update a hexadecimal string as hash input.</p>
+<pre><code>var sig = new KJUR.crypto.Signature({&quot;alg&quot;: &quot;SHA1withRSA&quot;});
+sig.init(rsaPrivateKey);
+sig.updateHex(&#39;5f6de0&#39;);
+var sigValueHex = sig.sign()
+</code></pre>
+<h3 id="progressive-signing">progressive signing</h3>
+<p>The &#39;updateHex&#39; and &#39;updateString&#39; method can be called one or more times.</p>
+<pre><code>var sig = new KJUR.crypto.Signature({&quot;alg&quot;: &quot;SHA1withRSA&quot;});
+sig.init(rsaPrivateKey);
+sig.updateHex(&#39;5f6de0&#39;);
+sig.updateHex(&#39;9a3bcd345793173&#39;);
+sig.updateHex(&#39;5f6de0&#39;);
+sig.updateString(&#39;abcdefg&#39;);
+sig.updateHex(&#39;01341571fg56ab&#39;);
+sig.updateString(&#39;apple&#39;);
+var sigValueHex = sig.sign()
+</code></pre>
+<h3 id="in-short">in short</h3>
+<p>To update and digest in a one method you can use &#39;signHex&#39; or &#39;signString&#39; method.</p>
+<pre><code>var sig = new KJUR.crypto.Signature({&quot;alg&quot;: &quot;SHA1withRSA&quot;});
+sig.init(rsaPrivateKey);
+var sigValueHex = sig.signString(&#39;aaa&#39;)
+
+var sig = new KJUR.crypto.Signature({&quot;alg&quot;: &quot;SHA1withRSA&quot;});
+sig.init(rsaPrivateKey);
+var sigValueHex = sig.signHex(&#39;1bdeff&#39;)
+</code></pre>
+<h3 id="supported-cryptographic-providers-and-signature-algorithms">supported cryptographic providers and signature algorithms</h3>
+<p>Here is a list of supported cryptographic providers and signature algorithms.</p>
+<ul>
+<li>cryptojs/jsrsa - MD5withRSA</li>
+<li>cryptojs/jsrsa - SHA1withRSA</li>
+<li>cryptojs/jsrsa - SHA224withRSA</li>
+<li>cryptojs/jsrsa - SHA256withRSA</li>
+<li>cryptojs/jsrsa - SHA384withRSA</li>
+<li>cryptojs/jsrsa - SHA512withRSA</li>
+<li>cryptojs/jsrsa - RIPEMD160withRSA</li>
+</ul>
+<h3 id="required-javascript-sources">required JavaScript sources</h3>
+<p>To use Signature class following codes will be required.</p>
+<pre><code>&lt;script src=&quot;http://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<h3 id="reference">Reference</h3>
+<ul>
+<li><a href="https://code.google.com/p/crypto-js/">CryptoJS Library</a> - progressive hashing supported crypto library</li>
+</ul>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

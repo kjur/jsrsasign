@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Sample Node Tool List</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Sample Node Tool List</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="http://kjur.github.io/jsrsasign/">TOP</a> | <a href="https://github.com/kjur/jsrsasign">GITHUB</a> | <a href="https://github.com/kjur/jsrsasign/releases">DOWNLOADS</a> | <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | <a href="http://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | <a href="http://kjur.github.io/jsrsasign/index.html#demo">DEMOS</a> | <a href="Sample-Node-Tool-List.html">NODE TOOL</a></p>
+<hr>
+<p>To see github folder of sample node tools, visit <a href="https://github.com/kjur/jsrsasign/tree/master/sample_node">here</a>. You may find some tools not listed here. Also you can find some tool usage description in its source code.</p>
+<h1 id="jws-jwt-tools">JWS, JWT tools</h1>
+<ul>
+<li><a href="Sample-Node-Tool---jwtverify.html">jwtverify</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/jwtverify">(src)</a> - JWT(JSON Web Token) verifier using <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.jws.JWS.html">JWS class</a></li>
+<li><a href="Sample-Node-Tool---jwssign.html">jwssign</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/jwssign">(src)</a> - JWS(JSON Web Signatures) signer using <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.jws.JWS.html">JWS class</a></li>
+<li><a href="Sample-Node-Tool---jwsview.html">jwsview</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/jwsview">(src)</a> - JWS(JSON Web Signatures) viewer</li>
+</ul>
+<h1 id="crypto-tools">Crypto tools</h1>
+<ul>
+<li><a href="Sample-Node-Tool---dataencrypt.html">dataencrypt</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/dataencrypt">(src)</a> - RSA/RSAOAEP encryptor using <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Cipher.html#encrypt">Cipher.encrypt method</a></li>
+<li><a href="Sample-Node-Tool---datadecrypt.html">datadecrypt</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/datadecrypt">(src)</a> - RSA/RSAOAEP decryptor using <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Cipher.html#decrypt">Cipher.decrypt method</a></li>
+<li><a href="Sample-Node-Tool---datasign.html">datasign</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/datasign">(src)</a> - sign data with private key using <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Signature.html#sign">Signature.sign method</a></li>
+<li><a href="Sample-Node-Tool---dataverify.html">dataverify</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/dataverify">(src)</a> - verify signature with public key using <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Signature.html#verify">Signature.verify method</a></li>
+</ul>
+<h1 id="pki-tools">PKI tools</h1>
+<ul>
+<li><a href="Sample-Node-Tool---genkey.html">genkey</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/genkey">(src)</a> - keypair generation tool <code>NEW</code></li>
+<li><a href="Sample-Node-Tool---gencsr.html">gencsr</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/gencsr">(src)</a> - RSA/ECDSA keypair and CSR(certificate signing request) generator using <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.csr.CSRUtil.html#newCSRPEM">CSRUtil.newCSRPEM method</a></li>
+<li><a href="Sample-Node-Tool---pemtobin.html">pemtobin</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/pemtobin">(src)</a> - convert from any PEM format file to binary file using <a href="https://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html#getHexFromPEM">KEYUTIL.getHexFromPEM method</a></li>
+<li><a href="Sample-Node-Tool---showcert.html">showcert</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/showcert">(src)</a> - PEM or DER binary X.509 certificate file viewer</li>
+<li><a href="Sample-Node-Tool---tsr2certs.html">tsr2certs</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/tsr2certs">(src)</a> - extract certificate files from RFC 3161 timestamp response or token <code>NEW</code></li>
+<li><a href="Sample-Node-Tool---eckey2hex.html">eckey2hex</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/eckey2hex">(src)</a> - show EC private key and public key in hexadecimal string <code>NEW</code></li>
+</ul>
+<h1 id="key-tools">Key tools</h1>
+<ul>
+<li><a href="Sample-Node-Tool---jwktopkcs8.html">jwktopkcs8</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/jwktopkcs8">(src)</a> - convert from JWK(JSON Web Key) format public or private key to PKCS#8 using <a href="https://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html">KEYUTIL class</a></li>
+<li><a href="Sample-Node-Tool---pemtojwk.html">pemtojwk</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/pemtojwk">(src)</a> - convert from PEM formatted RSA/DSA/ECDSA private/public PKCS#1/#5/#8 key to JWK(JSON Web Key) file using <a href="https://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html">KEYUTIL class</a></li>
+</ul>
+<h1 id="asn1-tools">ASN.1 tools</h1>
+<ul>
+<li><a href="Sample-Node-Tool---asn1dump.html">asn1dump</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/asn1dump">(src)</a> - ASN.1 data dumper using <a href="https://kjur.github.io/jsrsasign/api/symbols/ASN1HEX.html#dump">ASN1HEX.dump method</a></li>
+<li><a href="Sample-Node-Tool---asn1extract.html">asn1extract</a> <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/asn1extract">(src)</a> - extract specified position (i.e. nested indexes) of ASN.1 data using <a href="https://kjur.github.io/jsrsasign/api/symbols/ASN1HEX.html#.getTLVbyList">ASN1HEX.getTLVbyList method</a></li>
+</ul>
+<h1 id="required-npms">REQUIRED NPMS</h1>
+<p>To execute above scripts some npm packages are reuiqred:</p>
+<pre><code>% npm install -g commander
+% npm install -g jsrsasign
+% npm install -g jsrsasign-util
+</code></pre>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for interoperability with OpenSSL in ECDSA signing and verification</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for interoperability with OpenSSL in ECDSA signing and verification</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="https://kjur.github.io/jsrsasign/">TOP</a> | <a href="https://github.com/kjur/jsrsasign/tags/">DOWNLOADS</a> | <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | <a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | <a href="http://kjur.github.io/jsrsasign/index.html#demo">DEMOS</a></p>
+<hr>
+<p>This tutorial shows ECDSA signing and verification interoperability between jsrsasign and OpenSSL.
+<a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/datasign">datasign</a> and <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/dataverify">dataverify</a> are sample Node.js script of <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.Signature.html">Signature</a> class.</p>
+<h2 id="ec-key-generation-with-openssl">EC key generation with OpenSSL</h2>
+<p>Generate private key and public key for secp256r1 elliptic curve by openssl command.</p>
+<p>Generate PKCS#5 PEM private key file for EC secp256r1 curve:</p>
+<pre><code>% openssl ecparam -genkey -name secp256r1 -out private.key
+</code></pre>
+<p>Export PKCS#8 PEM public key of private.key</p>
+<pre><code>% openssl ec -in private.key -pubout -out public.key
+</code></pre>
+<p>Then private key file &quot;private.key&quot; and public key file &quot;public.key&quot; have been generated. They can be used by OpenSSL and jsrsasign.</p>
+<h2 id="sign-with-datasign-and-verify-with-openssl">Sign with datasign and verify with openssl</h2>
+<p>Please prepare any data file to be signed. I&#39;ll use &quot;aaa.txt&quot; file. Sign &quot;aaa.txt&quot; file with EC private key and a signature file &quot;sig1&quot; will be created:</p>
+<pre><code>% datasign aaa.txt private.key sig1 SHA256withECDSA
+successfully signed
+</code></pre>
+<p>Then verify it with openssl command and it will be verified successfully:</p>
+<pre><code>% openssl dgst -sha256 -verify public.key -signature sig1 aaa.txt
+Verified OK
+</code></pre>
+<h2 id="sign-with-openssl-and-verify-with-jsrsasign">Sign with openssl and verify with jsrsasign</h2>
+<p>Sign &quot;aaa.txt&quot; by the private key with openssl and a signature file &quot;sig2&quot; will be created:</p>
+<pre><code>% openssl dgst -sha256 -sign private.key -out sig2 aaa.txt
+</code></pre>
+<p>Then verify it with dataverify tool of jsrsasign and it will be verified successfully:</p>
+<pre><code>% dataverify aaa.txt public.key sig2 SHA256withECDSA
+signature is valid
+</code></pre>
+<p>Now you can sign and verify a ECDSA signature both OpenSSL and jsrsasign each other.</p>
+<h2 id="ec-signature-data-format-for-openssl-and-jsrsasign">EC signature data format for OpenSSL and jsrsasign</h2>
+<p>A EC signature data format for OpenSSL and jsrsasign is a ASN.1 binary data of two integers R and S of sequence like here:</p>
+<pre><code>SEQUENCE {
+  INTEGER
+    4B 5F CF E8 A7 BD 6A C2 1D 25 0D F8 DE 9C EF DC
+    C4 DF 33 F3 AF 2F 3D 5B 83 2C 1F BD 98 C8 61 34
+  INTEGER
+    7E F9 E9 60 B1 E6 7F 59 9E 2C 38 22 39 B2 C4 B1
+    71 3E FA AE 24 A4 B7 D2 03 5A 60 8D F3 34 3D E8
+  }
+</code></pre>
+<p>Some other implementation may use other signature data format such as just a concatenation of hexadecimal R and S value. Jsrsasign provides some converter static methods in ECDSA class:</p>
+<ul>
+<li><a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.ECDSA.html#.asn1SigToConcatSig">asn1SigToConcatSig</a> - convert from a hexadecimal ASN.1 EC signature to a hexadecimal concatenated EC signature</li>
+<li><a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.ECDSA.html#.concatSigToASN1Sig">concatSigToASN1Sig</a> - convert from a hexadecimal concatenated EC signature to a hexadecimal ASN.1 EC signature</li>
+<li><a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.ECDSA.html#.parseSigHex">parseSigHex</a> - parse a hexadecimal ASN.1 EC signature and returns an associative array of BigInteger such as {r: BigInteger, s: BigInteger}</li>
+<li><a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.ECDSA.html#.parseSigHexInHexRS">parseSigHexInHexRS</a> - parse a hexadecimal ASN.1 EC signature and returns an associative array of hexadecimal string such as {r: hex string, s: hex string}</li>
+</ul>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

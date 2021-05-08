@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for JWS generation</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for JWS generation</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="http://kjur.github.io/jsrsasign/">TOP(jsrsasign)</a> | <a href="https://github.com/kjur/jsrsasign/wiki/">WIKI</a> | <a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | <a href="http://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | <a href="http://kjur.github.io/jsrsasign/index.html#demo">DEMOS</a></p>
+<hr>
+<p>To use jsrsasign including jsjws on your browser, just include &#39;jsrsasign-latest-all-min.js&#39; script as following: </p>
+<pre><code>&lt;script language=&quot;JavaScript&quot; type=&quot;text/javascript&quot;
+        src=&quot;http://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js&quot;&gt;
+&lt;/script&gt;
+</code></pre>
+<p>To generate a <a href="https://tools.ietf.org/html/rfc7515">RFC 7515 JSON Web Signature(JWS)</a>, first you may prepare &#39;Header&#39; and &#39;Payload&#39;. The header will be an JSON object which has signed properties such like &#39;alg&#39; for signature algorithm. As for payload, any string can be used.</p>
+<pre><code>var oHeader = {alg: &quot;HS256&quot;};
+var sHeader = JSON.stringify(oHeader);
+var sPayload = &quot;aaa&quot;;
+</code></pre>
+<p>Then you should prepare HMAC shared key or private key for public key cryptography. For example, to generate HS256 HMAC JWS signature, you should prepare HMAC key in hexadecimal string. In this example, the key is &#39;616161&#39; which is &#39;aaa&#39; string. Then you can sign JWS.</p>
+<pre><code>var sJWS = KJUR.jws.JWS.sign(&quot;HS256&quot;, sHeader, sPayload, &quot;616161&quot;);
+</code></pre>
+<p>In order to use RSA algorithm or RSA-PSS algorithm for signing, you may prepare RSAKey object of private key. <a href="http://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> method can be used to load PKCS#1 or PKCS#8 PEM formatted encrypted or plain RSA/DSA/ECC private key. Here is an example for RSA key:</p>
+<pre><code>var prvKey = KEYUTIL.getKey(sRSAPRV_PKCS8PEM, &quot;password&quot;);
+var sJWS = KJUR.jws.JWS.sign(&quot;RS256&quot;, JSON.stringify({alg: &quot;RS256&quot;}),
+                             sPayload, prvKey);
+</code></pre>
+<p>As for RSA-PSS, the same as well:</p>
+<pre><code>var sJWS = KJUR.jws.JWS.sign(&quot;PS256&quot;, JSON.stringify({alg: &quot;PS256&quot;}),
+                             sPayload, prvKey);
+</code></pre>
+<p>As for ECC ECDSA, code will be following:</p>
+<pre><code>var prvKey = KEYUTIL.getKey(sECCPRV_PKCS8PEM, &quot;password&quot;);
+var sJWS = KJUR.jws.JWS.sign(&quot;ES256&quot;, JSON.stringify({alg: &quot;ES256&quot;}),
+                             sPayload, prvKey);
+</code></pre>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

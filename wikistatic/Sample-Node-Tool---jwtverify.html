@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Sample Node Tool   jwtverify</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Sample Node Tool   jwtverify</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="https://kjur.github.io/jsrsasign/">TOP</a> | <a href="Home]]-|-<a-href="https://github.com/kjur/jsrsasign/releases">DOWNLOADS</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a>-|-<a-href="https://kjur.github.io/jsrsasign/api/">API-REFERENCE</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Online-Tools">Online-Tool</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo">DEMO</a>-|-[[NODE-TOOL|Sample-Node-Tool-List.html">Wiki</a></p>
+<hr>
+<h2 id="code">CODE</h2>
+<p>Script source code is <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/jwtverify">here</a>.</p>
+<h2 id="description">DESCRIPTION</h2>
+<p>This script is to verify JWT(JSON Web Token) or JWS(JSON Web Signature) file or string using <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.jws.JWS.html#.verifyJWT">KJUR.jws.JWS.verifyJWT()</a> method. It has following features:</p>
+<ul>
+<li>HS256/384/512,RS256/384/512,PS256/384/512,ES256/384 signature algorithm support</li>
+<li>string, hexadecimal and Base64URL passcode support for HS* signatures</li>
+<li>JWS and JWT validation</li>
+<li>JWT/JWS signature can be provided by a file or a string argument.</li>
+<li>Verbose mode for validation in detail.</li>
+</ul>
+<h2 id="usage">USAGE</h2>
+<h3 id="basic-jws-validation">Basic JWS validation</h3>
+<p>To verify JWS(JSON Web Signature) or signature of JWT(JSON Web Token), you need to specify public key or HMAC password. For RS*, PS* and ES* signatures, you can specify public key by &#39;-k&#39; option as following:</p>
+<pre><code>% jwtverify -k rsa1.pem aaa.jws
+This JWT/JWS is valid.
+</code></pre>
+<p>For an invalid signature, following message will be shown.</p>
+<pre><code>% jwtverify -k rsa2.pem aaa.jws
+This JWT/JWS is *NOT* valid.
+</code></pre>
+<p>To verify HS* hmac JWS signature, there are four ways to specify hmac password using password type &#39;-t&#39; and password &#39;-p&#39; option.</p>
+<ul>
+<li>-t utf8 -p aaa (specify password &#39;aaa&#39; by UTF-8 string)</li>
+<li>-t hex -p 616161 (specify password &#39;616161&#39; (i.e. aaa) by hexadecimal string</li>
+<li>-t b64 -p YWFh (specify password &#39;YWFh&#39; (i.e. aaa) by Base64 encoded string</li>
+<li>-t b64u -p YWFh (specify password &#39;YWFh&#39; (i.e. aaa) by Base64URL encoded string</li>
+</ul>
+<p>For example, to verify HS256 JWS signature with password &#39;616161&#39; in hexadecimal string, command will be following:</p>
+<pre><code>% jwtverify -t hex -p 616161 aaa.jws
+</code></pre>
+<p>Password type &quot;-t utf8&quot; and password &quot;-p passwd&quot; is default. When the password is &quot;passwd&quot; for JWS, you can omit options:</p>
+<pre><code>% jwtverify aaa.jws (when password is string &quot;passwd&quot;)
+This JWT/JWS is valid.
+</code></pre>
+<p>When HMAC password is string &quot;test&quot;, then you can omit &quot;-t utf8&quot; option:</p>
+<pre><code>% jwtverify -p test aaa.jws
+</code></pre>
+<h3 id="jwt-validation">JWT validation</h3>
+<p>For JWT validation, this script will do extra check about following payload properties:</p>
+<ul>
+<li>--verify_at: time relation among validation time, &#39;nbf&#39;, &#39;exp&#39; and &#39;iat&#39; properties</li>
+<li>--accept_iss: acceptable &#39;iss&#39; property</li>
+<li>--accept_sub: acceptable &#39;sub&#39; property</li>
+</ul>
+<p>The &#39;-v&#39; (verbose) option can be specified to see JSON header, JSON payload and what kind of check is done.</p>
+<pre><code>% jwtverify -v \
+    --accept_iss https://jwt-idp.example.com \
+    --accept_sub mailto:mike@example.com,mailto:joe@example.com \
+    --verify_at 20050101000000Z -p passwd aaa.jwt
+*** HEADER ***
+{
+  &quot;alg&quot;: &quot;HS256&quot;,
+  &quot;typ&quot;: &quot;JWT&quot;
+}
+*** PAYLOAD ***
+{
+  &quot;iss&quot;: &quot;https://jwt-idp.example.com&quot;,
+  &quot;sub&quot;: &quot;mailto:mike@example.com&quot;,
+  &quot;nbf&quot;: 946684800,
+  &quot;exp&quot;: 1262304000,
+  &quot;iat&quot;: 946684800,
+  &quot;jti&quot;: &quot;id123456&quot;,
+  &quot;typ&quot;: &quot;https://example.com/register&quot;,
+  &quot;aud&quot;: &quot;http://foo1.com&quot;
+}
+*** JWT/JWS VALIDATION RESULT ***
+  - on: JWS signature validation
+  - on: check acceptable signature algorithm
+  - on: verify at &quot;20050101000000Z&quot;
+  - on: check iss in &quot;https://jwt-idp.example.com&quot;
+  - on: check sub in &quot;mailto:mike@example.com,mailto:joe@example.com&quot;
+This JWT/JWS is valid.
+</code></pre>
+<h2 id="command-line-help">COMMAND LINE HELP</h2>
+<p>Script supports &#39;-h&#39; or &#39;--help&#39; option for help:</p>
+<pre><code>% jwtverify -h
+
+Usage: jwtverify [options] &lt;JWT/JWS file or string to verify&gt;
+
+verify JWT/jWS file or string
+
+Options:
+
+  -h, --help                          output usage information
+  -V, --version                       output the version number
+  -t, --passtype &lt;utf8|hex|b64|b64u&gt;  Hmac(HS*) pass type
+  -p, --pass &lt;pass&gt;                   Hmac(HS*) password in specfied type
+  -k, --pubkey &lt;file&gt;                 public key file (ex. PKCS#8 PEM or JWK)
+  -v, --verbose                       show header and payload
+  --accept_iss &lt;iss1,...&gt;             check iss is in the iss list (ex. a@a.com,b@b.com)
+  --accept_sub &lt;sub1,...&gt;             check sub is in the sub list (ex. a@a.com,b@b.com)
+  --verify_at &lt;YYYYMMDDHHmmSSZ&gt;       verify at specified UTC time(ex. 20151123235959Z)
+</code></pre>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

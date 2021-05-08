@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: NOTE jsrsasign subset package</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: NOTE jsrsasign subset package</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p>Some users said that jsrsasign-latest-all-min.js package is too large with 290kb size to work on browsers. So I will start to provide subsets of package after jsrsasign 7.1.0 release.</p>
+<h2 id="full-package-250kb-jsurl">full package (250kb) <a href="https://kjur.github.io/jsrsasign/jsrsasign-all-min.js">JSURL</a></h2>
+<p>This is full package of jsrsasign with backword compatibility and deprecated codes.</p>
+<h2 id="jwths-subset-package-62kb-jsurl">jwths subset package (62kb) <a href="https://kjur.github.io/jsrsasign/jsrsasign-jwths-min.js">JSURL</a></h2>
+<p>This package is to sign and verify JSON Web Signatures(JWS) and JSON Web Token(JWT) with HS* signature algorithm. Please see <a href="https://kjur.github.io/jsrsasign/test/qunit-do-package-jwths.html">this test code</a>.</p>
+<h2 id="rsa-subset-package-97kb-jsurl">rsa subset package (97kb) <a href="https://kjur.github.io/jsrsasign/jsrsasign-rsa-min.js">JSURL</a></h2>
+<p>This package is to sign and verify with RSA algorithm. It can load RSA private and public key. Please see <a href="https://kjur.github.io/jsrsasign/test/qunit-do-package-rsa.html">this test code</a>.</p>
+<p><img src="https://docs.google.com/spreadsheets/d/1wBOK8pwkJurilK9x97RgYXMUJO8Sr8i-1-rFoJqIQXk/pubchart?oid=531274246&format=image" alt="graph of jsrsasign-all-min.js file size"></p>
+<p>In jsrsasign 8.0.0, most of deprecated methods, classes and files are removed so that &quot;jsrsasign-all-min.js&quot; get smaller than before.</p>
+<h2 id="in-npm-package">in npm package</h2>
+<p>In the npm package of jsrsasign, you can also find </p>
+<ul>
+<li>jsrsasign-jwths-min.js</li>
+<li>jsrsasign-rsa-min.js
+in the &#39;lib&#39; directory.</li>
+</ul>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

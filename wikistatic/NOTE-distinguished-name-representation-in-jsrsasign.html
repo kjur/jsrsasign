@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: NOTE distinguished name representation in jsrsasign</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: NOTE distinguished name representation in jsrsasign</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="https://kjur.github.io/jsrsasign/">TOP</a> | <a href="Home]]-|-<a-href="https://github.com/kjur/jsrsasign/releases">DOWNLOADS</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a>-|-<a-href="https://kjur.github.io/jsrsasign/api/">API-REFERENCE</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Online-Tools">Online-Tool</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo">DEMO</a>-|-[[NODE-TOOL|Sample-Node-Tool-List.html">Wiki</a></p>
+<hr>
+<p>The &#39;jsrsasign&#39; uses &quot;<a href="https://www.openssl.org/docs/man1.0.2/man1/openssl-x509.html#NAME-OPTIONS">OpenSSL compat</a>&quot; format (ex. /C=US/O=Test) for X.500 directory name string representation which is used in subject or issuer name of certificate, server name of OCSP or TSA.</p>
+<p><em>(21-Jun-2020) I&#39;ve misunderstood that DN like &quot;/C=US/O=Test&quot; is oneline format however it is &#39;compat&#39; format</em></p>
+<p>There are two major representation for it:</p>
+<h3 id="standard-formldap-rfc-1779-2253-or-4514">standard form(LDAP, RFC 1779, <a href="https://tools.ietf.org/html/rfc2253">2253</a> or <a href="https://tools.ietf.org/html/rfc4514">4514</a>)</h3>
+<ul>
+<li><p>ex. CN=example.com,O=TEST,C=US</p>
+</li>
+<li><p>RDN(relative distinguished name) is separated by &#39;,&#39;</p>
+</li>
+<li><p>RDNs are shown in reverse order.</p>
+</li>
+</ul>
+<h3 id="openssl-compat-form"><a href="https://www.openssl.org/docs/man1.0.2/man1/openssl-x509.html#NAME-OPTIONS">OpenSSL compat</a> form</h3>
+<ul>
+<li><p>ex. /C=US/O=TEST/CN=example.com</p>
+</li>
+<li><p>RDN(relative distinguished name) is separated by &#39;/&#39;</p>
+</li>
+<li><p>RDNs are shown in non-reverse order.</p>
+</li>
+<li><p>Used by OpenSSL and OpenSSL based web servers like Apache, nginx.</p>
+</li>
+</ul>
+<p>LDAP string representation for distinguished name is fully supported since jsrsasign 6.2.2.</p>
+<h2 id="generators">GENERATORS</h2>
+<pre><code>dn = new KJUR.asn1.x509.X500Name({str: &quot;/C=JP/O=Test/CN=john+E=john@example.com&quot;}); // OpenSSL compat format(default)
+dn = new KJUR.asn1.x509.X500Name({ldapstr: &quot;CN=john+E=john@example.com,O=Test,C=JP&quot;}); // LDAP(RFC 2253) format
+</code></pre>
+<h2 id="converters">CONVERTERS</h2>
+<p>To convert from LDAP to OpenSSL compat representation, <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.X500Name.html#.ldapToOneline">X500Name.ldapToOneline</a> static method can be used.</p>
+<pre><code>KJUR.asn1.x509.X500Name.ldapToOneline(&quot;O=test,C=US&quot;) =&gt; /C=US/O=test
+</code></pre>
+<p>To convert from OpenSSL online to LDAP representation, <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.X500Name.html#.onelineToLdapldap">X500Name.onelineToLdap</a> static method can be used.</p>
+<pre><code>KJUR.asn1.x509.X500Name.onelineToLdap(&quot;/C=US/O=test&quot;) =&gt; O=test,C=US
+</code></pre>
+<h2 id="references">REFERENCES</h2>
+<ul>
+<li><a href="http://alvinalexander.com/java/jwarehouse/openjdk-8/jdk/src/share/classes/sun/security/x509/X500Name.java.shtml">Java example source code file (X500Name.java)</a></li>
+<li><a href="https://www.openssl.org/docs/man1.0.1/apps/x509.html">OpenSSL X509 command manual</a>;</li>
+<li><a href="http://stackoverflow.com/questions/33769978/why-does-nginx-provide-the-client-ssl-dn-in-reverse-order">stackoverflow: Why does Nginx Provide the Client SSL DN in reverse order?</a></li>
+<li><a href="http://www.lshift.net/blog/2007/10/30/whats-in-a-distinguished-name/">LShift: What&#39;s in a Distinguished Name?</a></li>
+<li><a href="https://tools.ietf.org/html/rfc2253">IETF RFC 2253 Lightweight Directory Access Protocol (v3): UTF-8 String Representation of Distinguished Names</a></li>
+</ul>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

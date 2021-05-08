@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for PKCS5 and PKCS8 PEM private key formats differences</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for PKCS5 and PKCS8 PEM private key formats differences</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p>This section show the difference between following private key formats with samples:</p>
+<ul>
+<li>PKCS#5 plain private key</li>
+<li>PKCS#8 plain private key</li>
+<li>PKCS#5 encrypted private key</li>
+<li>PKCS#8 encrypted private key</li>
+</ul>
+<h3 id="pkcs5-plain-private-key">PKCS#5 plain private key</h3>
+<pre><code>-----BEGIN RSA PRIVATE KEY-----
+MIIBOwIBAAJBANxtmQ1Kccdp7HBNt8zgTai48Vv617bj4SnhkcMN99sCQ2Naj/sp
+... (snip) ...
+NiCYNLiCawBbpZnYw/ztPVACK4EwOpUy+u19cMB0JA==
+-----END RSA PRIVATE KEY-----
+</code></pre>
+<h3 id="pkcs8-plain-private-key">PKCS#8 plain private key</h3>
+<pre><code>-----BEGIN PRIVATE KEY-----
+MIIBVAIBADANBgkqhkiG9w0BAQEFAASCAT4wggE6AgEAAkEA6GZN0rQFKRIVaPOz
+... (snip) ...
+LaLGdd9G63kLg85eldSy55uIAXsvqQIgfSYaliVtSbAgyx1Yfs3hJ+CTpNKzTNv/
+Fx80EltYV6k=
+-----END PRIVATE KEY-----
+</code></pre>
+<h3 id="pkcs5-encrypted-private-key">PKCS#5 encrypted private key</h3>
+<pre><code>-----BEGIN RSA PRIVATE KEY-----
+Proc-Type: 4,ENCRYPTED
+DEK-Info: DES-EDE3-CBC,E83B4019057F55E9
+
+iIPs59nQn4RSd7ppch9/vNE7PfRSHLoQFmaAjaF0DxjV9oucznUjJq2gphAB2E2H
+... (snip) ...
+y5IT1MZPgN3LNkVSsLPWKo08uFZQdfu0JTKcn7NPyRc=
+-----END RSA PRIVATE KEY-----
+</code></pre>
+<h3 id="pkcs8-encrypted-private-key">PKCS#8 encrypted private key</h3>
+<pre><code>-----BEGIN ENCRYPTED PRIVATE KEY-----
+MIIBpjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQIU9Y9p2EfWucCAggA
+... (snip) ...
+IjsZNp6zmlqf/RXnETsJjGd0TXRWaEdu+XOOyVyPskX2177X9DUJoD31
+-----END ENCRYPTED PRIVATE KEY-----
+</code></pre>
+<p>To convert from PKCS#5 private key to encrypted PKCS#8 private key:</p>
+<pre><code>% openssl pkcs8 -in p5plain.pem -topk8 -v2 des3 -out p8enc.pem -passout pass:passwd
+</code></pre>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

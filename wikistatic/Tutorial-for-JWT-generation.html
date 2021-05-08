@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for JWT generation</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for JWT generation</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="http://kjur.github.io/jsrsasign/">TOP(jsrsasign)</a> | <a href="https://github.com/kjur/jsrsasign/wiki/">WIKI</a> | <a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | <a href="http://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | <a href="http://kjur.github.io/jsrsasign/index.html#demo">DEMOS</a></p>
+<hr>
+<p>To use jsrsasign including jsjws on your browser, just include &#39;jsrsasign-latest-all-min.js&#39; script as following: </p>
+<pre><code>&lt;script language=&quot;JavaScript&quot; type=&quot;text/javascript&quot;
+        src=&quot;https://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js&quot;&gt;
+&lt;/script&gt;
+</code></pre>
+<p>JSON Web Token(JWT) generation is very similar to JSON Web Signature(JWS) generation since those difference is just payload. JWS generation is to create header and payload JSON object with necessary claims and then sign it.</p>
+<p>Time in JWS/JWT, integer value for UNIX origin time since 1970 Jan 1 will be used. To specify time value <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.jws.IntDate.html#.get">KJUR.jws.IntData.get</a> method is very useful.</p>
+<p>Here is a sample for a JWT generation with HS256 signature algorithm:</p>
+<pre><code>// Header
+var oHeader = {alg: &#39;HS256&#39;, typ: &#39;JWT&#39;};
+// Payload
+var oPayload = {};
+var tNow = KJUR.jws.IntDate.get(&#39;now&#39;);
+var tEnd = KJUR.jws.IntDate.get(&#39;now + 1day&#39;);
+oPayload.iss = &quot;http://foo.com&quot;;
+oPayload.sub = &quot;mailto:mike@foo.com&quot;;
+oPayload.nbf = tNow;
+oPayload.iat = tNow;
+oPayload.exp = tEnd;
+oPayload.jti = &quot;id123456&quot;;
+oPayload.aud = &quot;http://foo.com/employee&quot;;
+// Sign JWT, password=616161
+var sHeader = JSON.stringify(oHeader);
+var sPayload = JSON.stringify(oPayload);
+var sJWT = KJUR.jws.JWS.sign(&quot;HS256&quot;, sHeader, sPayload, &quot;616161&quot;);
+</code></pre>
+<p>When you want to sign JWT by your private key of public key cryptography, <a href="http://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> method can be used to load PKCS#1 or PKCS#8 PEM formatted encrypted or plain private key. Here is an example:</p>
+<pre><code>var prvKey = KEYUTIL.getKey(sPKCS8PEM, &quot;password&quot;);
+var sJWT = KJUR.jws.JWS.sign(&quot;RS256&quot;, sHeader, sPayload, prvKey);
+</code></pre>
+<p>Please also see <a href="https://kjur.github.io/jsrsasign/tool_jwt.html">Online JWT generation/verification</a> tool.</p>
+<h3 id="jwtio-site-interoperability">jwt.io site interoperability</h3>
+<p><a href="https://jwt.io">jwt.io site</a> can generate and verify HS256/384/512 JWT online and it uses old version of jsrsasign.
+However difference of way to specify password between jwt.io and jsrsasign may make some confusion.</p>
+<p>jwt.io</p>
+<ul>
+<li>default password is an ascii string of &quot;secret&quot;.</li>
+<li>it can accept password ascii string or Base64URL encoded data.</li>
+</ul>
+<p>jsrsasign</p>
+<ul>
+<li>Password encoding is detected automatically by default. If is hexadecimal string, then decode it as hexadecimal.</li>
+<li>It supports many way of password encoding: raw string, utf8 string, hexadecimal string, base64 string, base64url string.</li>
+</ul>
+<p>In order to verify jsrsasign generated HS* JWT by jwt.io site, specify password as one of follows:</p>
+<pre><code>var sJWT = KJUR.jws.JWS.sign(&quot;HS256&quot;, sHeader, sPayload, {rstr: &quot;secret&quot;});
+var sJWT = KJUR.jws.JWS.sign(&quot;HS256&quot;, sHeader, sPayload, {utf8: &quot;secret&quot;});
+var sJWT = KJUR.jws.JWS.sign(&quot;HS256&quot;, sHeader, sPayload, {b64u: &quot;c2VjcmV0&quot;});
+var sJWT = KJUR.jws.JWS.sign(&quot;HS256&quot;, sHeader, sPayload, {b64: &quot;c2VjcmV0&quot;});
+var sJWT = KJUR.jws.JWS.sign(&quot;HS256&quot;, sHeader, sPayload, {hex: &quot;736563726574&quot;});
+var sJWT = KJUR.jws.JWS.sign(&quot;HS256&quot;, sHeader, sPayload, &quot;736563726574&quot;);
+</code></pre>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

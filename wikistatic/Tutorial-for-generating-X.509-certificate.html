@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for generating X.509 certificate</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for generating X.509 certificate</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p>Here is a Node.JS sample code to generate a PEM string of X.509 certificate using <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.Certificate.html#getPEM">getPEM method</a> of <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.Certificate.html">Certificate class</a>:</p>
+<pre><code class="language-JavaScript">var rs = require(&quot;jsrsasign&quot;);
+
+// STEP1. generate a key pair
+var kp = rs.KEYUTIL.generateKeypair(&quot;EC&quot;, &quot;secp256r1&quot;);
+var prv = kp.prvKeyObj;
+var pub = kp.pubKeyObj;
+var prvpem = rs.KEYUTIL.getPEM(prv, &quot;PKCS8PRV&quot;);
+var pubpem = rs.KEYUTIL.getPEM(pub, &quot;PKCS8PUB&quot;);
+
+// STEP2. specify certificate parameters
+var x = new rs.KJUR.asn1.x509.Certificate({
+  version: 3,
+  serial: {int: 4},
+  issuer: {str: &quot;/CN=UserCA&quot;},
+  notbefore: &quot;201231235959Z&quot;,
+  notafter:  &quot;221231235959Z&quot;,
+  subject: {str: &quot;/CN=User1&quot;},
+  sbjpubkey: pub, // can specify public key object or PEM string
+  ext: [
+    {extname: &quot;basicConstraints&quot;, cA: false},
+    {extname: &quot;keyUsage&quot;, critical: true, names:[&quot;digitalSignature&quot;]},
+    {extname: &quot;cRLDistributionPoints&quot;,
+     array: [{fulluri: &#39;http://example.com/a.crl&#39;}]}
+  ],
+  sigalg: &quot;SHA256withECDSA&quot;,
+  cakey: prv // can specify private key object or PEM string
+});
+
+// you can modify any fields until the certificate is signed.
+x.params.subject = {str: &quot;/CN=User2&quot;};
+
+// STEP3. show PEM strings of keys and a certificate
+console.log(prvpem);
+console.log(pubpem);
+console.log(x.getPEM()); // certificate object is signed automatically with &quot;cakey&quot; value.
+</code></pre>
+<p>As for available extensions specified by &quot;ext&quot; member, you may find the list of extensions in <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.Extensions.html">Extensions class API document</a>. You can find another tutorial for extensions(<a href="Tutorial-for-extensions-when-generating-certificate.html">Tutorial for extensions when generating certificate</a>).</p>
+<p>If you want to use existing CA private key and subject public key you can modify STEP1 as following:</p>
+<pre><code class="language-JavaScript">var pubpem = &quot;...PEM STRING OF PUBLIC KEY...&quot;;
+var prvpem = &quot;...PEM STRING OF PRIVATE KEY...&quot;;
+</code></pre>
+<p>Then specify &quot;sbjpubkey&quot; and &quot;cakey&quot; member value to &quot;pubpem&quot; and &quot;prvpem&quot; respectively.</p>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

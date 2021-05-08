@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for JWT verification</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for JWT verification</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="http://kjur.github.io/jsrsasign/">TOP</a> | <a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | <a href="http://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | <a href="http://kjur.github.io/jsrsasign/index.html#demo">DEMOS</a></p>
+<hr>
+<p>To use jsrsasign including jsjws on your browser, just include &#39;jsrsasign-latest-all-min.js&#39; script as following: </p>
+<pre><code class="language-html">&lt;script language=&quot;JavaScript&quot; type=&quot;text/javascript&quot;
+  src=&quot;https://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js&quot;&gt;
+&lt;/script&gt;
+</code></pre>
+<p>The &#39;jsrsasign&#39; 4.8.0 or later supports validation for JSON Web Token(JWT) by <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.jws.JWS.html#.verifyJWT">KJUR.jws.JWS.verifyJWT</a> method. To verify it, you need key for signature of JWT and some parameters.</p>
+<p>If HMAC is used for JWT signing, you can specify shared key by a hexadecimal string of key. Otherwise, you may need to specify public key. Easiest way is to provide PEM text formatted X.509 public key certificate for JWT signer.</p>
+<p>For example, certificate will be shown as following text.</p>
+<pre><code>----- BEGIN CERTIFICATE -----
+MIIDET....
+... snip ... (Base64 encoded certificate)
+----- END CERTIFICATE -----
+</code></pre>
+<p>When you have a string for PEM certificate, you can load public key object by following method.</p>
+<pre><code class="language-javascript">var pubkey = KEYUTIL.getKey(certStr);
+</code></pre>
+<p>You can use the same method to load public key PEM file.</p>
+<p>Following code is for simplest HS256 JWT validation and to verify signature, time(i.e. ordering current time with &#39;exp&#39;, &#39;nbf&#39; and &#39;iat&#39; claims) existence of &#39;jti&#39; claim and acceptable algorithm:</p>
+<pre><code class="language-javascript">var isValid = KJUR.jws.JWS.verifyJWT(&quot;eyT...&quot;, &quot;616161&quot;, {alg: [&#39;HS256&#39;]});
+</code></pre>
+<p>If you want to verify JWT at specified time, you can use &#39;verifyAt&#39; property:</p>
+<pre><code class="language-javascript">// verify JWT at 1 Jun 2015. HMAC shared key is &quot;616161&quot; (i.e. string &quot;aaa&quot;)
+var IntDate = KJUR.jws.IntDate;
+var isValid = KJUR.jws.JWS.verifyJWT(&quot;eyT...&quot;, &quot;616161&quot;, 
+                                     {alg: [&#39;HS256&#39;],
+                                      verifyAt: IntDate.get(&#39;20150601000000Z&#39;)});
+</code></pre>
+<p>As for other acceptable claims like &#39;iss&#39;, &#39;sub&#39; and &#39;aud&#39;, sample fill be following:</p>
+<pre><code class="language-javascript">var IntDate = KJUR.jws.IntDate;
+var isValid = KJUR.jws.JWS.verifyJWT(&quot;eyT...&quot;, &quot;616161&quot;, 
+                                     {alg: [&#39;HS256&#39;],
+                                      verifyAt: IntDate.get(&#39;20150601000000Z&#39;),
+                                      iss: [&#39;http://foo.com&#39;, http://us.foo.com],
+                                      sub: [&#39;mailto:mike@foo.com&#39;,
+                                            &#39;mailto:kate@foo.com&#39;],
+                                      aud: [&#39;http://foo.com/employee&#39;,
+                                            &#39;http://foo.com/partner&#39;]});
+</code></pre>
+<p>Finally, to get JSON object of header and payload in the token, there are many ways but here is one:</p>
+<pre><code class="language-javascript">var sJWT = &quot;eyT...&quot;;
+var headerObj = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(sJWT.split(&quot;.&quot;)[0]));
+var payloadObj = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(sJWT.split(&quot;.&quot;)[1]));
+</code></pre>
+<p>Please also see <a href="https://kjur.github.io/jsrsasign/tool/tool_jwtveri.html">Online JWT verification</a> tool.</p>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

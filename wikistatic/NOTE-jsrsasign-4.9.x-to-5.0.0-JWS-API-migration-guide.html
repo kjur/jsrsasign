@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: NOTE jsrsasign 4.9.x to 5.0.0 JWS API migration guide</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: NOTE jsrsasign 4.9.x to 5.0.0 JWS API migration guide</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p>While jsrsasign version update from 4.9.2 to 5.0.0 or later, some deprecated JWS class APIs are removed.</p>
+<p>This page will show you how to migrate your code for jsrsasign 5.0.0.</p>
+<p>From JWS.verifyJWSByNE</p>
+<pre><code class="language-JavaScript">var jws = new KJUR.jws.JWS();
+var isValid = jws.verifyJWSByNE(sJWS, hN, hE);
+// will be modified to
+var pubkey = KEYUTIL.getKey({n: hN, e: hE});
+var isValid = KJUR.jws.JWS.verify(sJWS, pubkey);
+</code></pre>
+<p>From JWS.verifyJWSByKey</p>
+<pre><code class="language-JavaScript">var jws = new KJUR.jws.JWS();
+var isValid = jws.verifyJWSByKey(sJWS, key);
+// will be modified to    
+var isValid = KJUR.jws.JWS.verify(sJWS, key);
+</code></pre>
+<p>From JWS.verifyByPemX509Cert</p>
+<pre><code class="language-JavaScript">var jws = new KJUR.jws.JWS();
+var isValid = jws.verifyJWSByPemX509Cert(sJWS, sPemX509Cert);
+// will be modified to 
+var pubkey = KEYUTIL.getKey(sPemX509Cert);
+var isValid = KJUR.jws.JWS.verify(sJWS, pubkey);
+</code></pre>
+<p>From JWS.generateJWSByNED</p>
+<pre><code class="language-JavaScript">var jws = new KJUR.jws.JWS();
+var hJWS = jws.generateJWSByNED(sHead, sPayload, hN, hE, hD);
+// will be modified to
+var prvkey = KEYUTIL.getKey({n: hN, e: hE, d: hD});
+var hJWS = KJUR.jws.JWS.sign(null, sHead, sPayload, prvkey);
+</code></pre>
+<p>From JWS.generateJWSByKey</p>
+<pre><code class="language-JavaScript">var jws = new KJUR.jws.JWS();
+var hJWS = jws.generateJWSByKey(sHead, sPayload, prvKey);
+// will be modified to
+var hJWS = KJUR.jws.JWS.sign(null, sHead, sPayload, prvkey);
+</code></pre>
+<p>From JWS.generateJWSByP1PrvKey</p>
+<pre><code class="language-JavaScript">var jws = new KJUR.jws.JWS();
+var hJWS = jws.generateJWSByP1PrvKey(sHead, sPayload, sPemPrvKey);
+// will be modified to
+var prvkey = KEYUTIL.getKey(sPemPrvKey);
+var hJWS = KJUR.jws.JWS.sign(null, sHead, sPayload, prvkey);
+</code></pre>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

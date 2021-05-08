@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Sample Node Tool   jwssign</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Sample Node Tool   jwssign</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="https://kjur.github.io/jsrsasign/">TOP</a> | <a href="Home]]-|-<a-href="https://github.com/kjur/jsrsasign/releases">DOWNLOADS</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a>-|-<a-href="https://kjur.github.io/jsrsasign/api/">API-REFERENCE</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Online-Tools">Online-Tool</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo">DEMO</a>-|-[[NODE-TOOL|Sample-Node-Tool-List.html">Wiki</a></p>
+<hr>
+<h1 id="code">CODE</h1>
+<p>Script source code is <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/jwssign">here</a>.</p>
+<h1 id="description">DESCRIPTION</h1>
+<p>This script signs JWS(JSON Web Signature) by specified header and payload file or string. This can be also sign JWT(JSON Web Token) by specifying proper header and payload.</p>
+<h1 id="usage">USAGE</h1>
+<p>To generate JWS file &#39;aaa.jws&#39; with specified PKCS#8 RSA private key &#39;rsa1.prv&#39;, header and payload, type following at the command line:</p>
+<pre><code>% jwssign -k rsa1.prv &#39;{&quot;typ&quot;:&quot;jws&quot;,&quot;alg&quot;:&quot;RS256&quot;}&#39; \
+                      &#39;{&quot;product&quot;:&quot;orange&quot;,&quot;quantity&quot;:100}&#39; aaa.jws
+</code></pre>
+<p>Generated file will be following:
+    eyJ0eXAiOiJqd3MiLCJhbGciOiJSUzI1NiJ9.eyJuYW1lIjoib...</p>
+<p>You can also specify header and payload by files respectively:</p>
+<pre><code>% jwssign -k rsa1.prv header.txt payload.txt aaa.jws
+</code></pre>
+<p>To output JWS signature to standard output not to a file, you can specify &quot;-&quot; as output:</p>
+<pre><code>% jwssign -k rsa1.prv header.txt payload.txt -
+eyJ0eXAiOiJqd3MiLCJhbGciOiJSUzI1NiJ9.eyJuYW1lIjoib...
+</code></pre>
+<p>To force specifying signature algorithm as though whatever algorithm specified in a header, use &quot;-f&quot; option:</p>
+<pre><code>% jwssign -k rsa1.prv -f PS384 &#39;{&quot;typ&quot;:&quot;jws&quot;,&quot;alg&quot;:&quot;RS256&quot;}&#39; payload.txt aaa.jws
+</code></pre>
+<p>For RSA private key, you can specify RS* and PS* signature algorithms.</p>
+<p>To generate ES256 signature with ECC private key, type following:</p>
+<pre><code>% jwssign -k ec1.prv &#39;{&quot;typ&quot;:&quot;jws&quot;,&quot;alg&quot;:&quot;ES256&quot;}&#39; payload.txt aaa.jws
+</code></pre>
+<p>To generate HS* hmac JWS signature, there are four ways to specify hmac password using password type &#39;-t&#39; and password &#39;-p&#39; option.</p>
+<ul>
+<li>-t utf8 -p aaa (specify password &#39;aaa&#39; by UTF-8 string)</li>
+<li>-t hex -p 616161 (specify password &#39;616161&#39; (i.e. aaa) by hexadecimal string</li>
+<li>-t b64 -p YWFh (specify password &#39;YWFh&#39; (i.e. aaa) by Base64 encoded string</li>
+<li>-t b64u -p YWFh (specify password &#39;YWFh&#39; (i.e. aaa) by Base64URL encoded string</li>
+</ul>
+<p>For example, to generate HS256 JWS signature with password &#39;passwd&#39;, command will be following:</p>
+<pre><code>% jwssign -t utf8 -p passwd &#39;{&quot;typ&quot;:&quot;jws&quot;,&quot;alg&quot;:&quot;HS256&quot;}&#39; payload.txt&#39; aaa.jws
+</code></pre>
+<h1 id="command-line-help">COMMAND LINE HELP</h1>
+<p>With &#39;-h&#39; or &#39;--help&#39; option, script shows command line help:</p>
+<pre><code>% jwssign -h
+
+Usage: jwssign [options] &lt;JWS Header file/string&gt; \
+                         &lt;JWS payload file/string&gt; &lt;output JWS file&gt;
+
+sign JWS by header/payload file or string
+
+Options:
+
+  -h, --help                          output usage information
+  -V, --version                       output the version number
+  -t, --passtype &lt;utf8|hex|b64|b64u&gt;  Hmac(HS*) pass type
+  -p, --pass &lt;pass&gt;                   Hmac(HS*) password in specfied type
+  -k, --prvkey &lt;file&gt;                 private key file (ex. PKCS#8 PEM)
+  -f, --forcealg &lt;sigalg&gt;             overwrite alg in header (ex. HS512)
+</code></pre>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for parsing X.509 certificate</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for parsing X.509 certificate</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="http://kjur.github.io/jsrsasign/">TOP</a> | <a href="https://github.com/kjur/jsrsasign/tags/">DOWNLOADS</a> | <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | <a href="http://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | <a href="http://kjur.github.io/jsrsasign/index.html#demo">DEMOS</a></p>
+<p><a href="http://kjur.github.io/jsrsasign/api/symbols/X509.html">X509</a> class provides following features:</p>
+<ul>
+<li>read and parse PEM formatted X.509 certificate</li>
+<li>get basic fields</li>
+<li>get subject public key as RSAKey object</li>
+</ul>
+<h3 id="getting-started">Getting Started</h3>
+<p>PEM formatted X.509 certificate is a plain text such as:</p>
+<pre><code>-----BEGIN CERTIFICATE-----
+MIIBdTCCAR+gAwIBAgIBBTANBgkqhkiG9w0BAQUFADAaMQswCQYDVQQGEwJVUzEL
+MAkGA1UECgwCYTEwHhcNMTMwNTA0MDM0MTQxWhcNMjMwNTA0MDM0MTQxWjAaMQsw
+(snip)
+CJLP08fOfNBZy+KAIy0GsrNU/3uRViqbuGqAnH9kFFwHQjOAFrAe8XQ=
+-----END CERTIFICATE-----
+</code></pre>
+<p>To get basic fields of the certificate:</p>
+<pre><code>var c = new X509();
+c.readCertPEM(&quot;-----BEGIN CERTIFICATE(snip)...&quot;);
+var hSerial    = c.getSerialNumberHex(); // &#39;009e755e&quot; hexadecimal string
+var sIssuer    = c.getIssuerString();    // &#39;/C=US/O=z2&#39;
+var sSubject   = c.getSubjectString();   // &#39;/C=US/O=z2&#39;
+var sNotBefore = c.getNotBefore();       // &#39;100513235959Z&#39;
+var sNotAfter  = c.getNotAfter();        // &#39;200513235959Z&#39;
+</code></pre>
+<p>To get subject public key as RSAKey object:</p>
+<pre><code>var c = new X509();
+c.readCertPEM(&quot;-----BEGIN CERTIFICATE(snip)...&quot;);
+var pubKey = c.subjectPublicKeyRSA;  // public key as RSAKey object
+</code></pre>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

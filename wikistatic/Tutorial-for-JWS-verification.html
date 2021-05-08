@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for JWS verification</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for JWS verification</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="http://kjur.github.io/jsrsasign/">TOP(jsrsasign)</a> | <a href="https://github.com/kjur/jsrsasign/wiki/">WIKI</a> | <a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | <a href="http://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | <a href="http://kjur.github.io/jsrsasign/index.html#demo">DEMOS</a></p>
+<hr>
+<p>To use jsrsasign including jsjws on your browser, just include &#39;jsrsasign-latest-all-min.js&#39; script as following: </p>
+<pre><code>&lt;script language=&quot;JavaScript&quot; type=&quot;text/javascript&quot;
+        src=&quot;http://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js&quot;&gt;
+&lt;/script&gt;
+</code></pre>
+<p>When you verify JSON Web Signature, you should prepare a JWS signature string, key to verify and acceptable signature algorithms which is used to mitigate signature replace attacks.</p>
+<p>Example for HS256 signature verification which was signed HMAC-SHA256 with shared secret key &#39;616161&#39; in hexadecimal is following:</p>
+<pre><code>var isValid = KJUR.jws.JWS.verify(&quot;eyJh...&quot;, &quot;616161&quot;, [&quot;HS256&quot;]);
+</code></pre>
+<p>Example for RS256 signature verification is following. RSA public key is loaded from PEM PKCS#1 RSA public key string:</p>
+<pre><code>var pubKey = KEYUTIL.getKey(sRSAPUBKEY_X509CERT_PEM);
+var isValid = KJUR.jws.JWS.verify(&quot;eyJh...&quot;, pubKey, [&quot;RS256&quot;]);
+</code></pre>
+<p>For PS256 RSA-PSS signature, almost the same as following:</p>
+<pre><code>var pubKey = KEYUTIL.getKey(sRSAPUBKEY_X509CERT_PEM);
+var isValid = KJUR.jws.JWS.verify(&quot;eyJh...&quot;, pubKey, [&quot;PS256&quot;]);
+</code></pre>
+<p>For ES256 ECDSA signature, public key will be loaded from public key certificate:</p>
+<pre><code>var pubKey = KEYUTIL.getKey(sECCPUBKEY_X509CERT_PEM);
+var isValid = KJUR.jws.JWS.verify(&quot;eyJh...&quot;, pubKey, [&quot;ES256&quot;]);
+</code></pre>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

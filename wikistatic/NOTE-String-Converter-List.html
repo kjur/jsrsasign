@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: NOTE String Converter List</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: NOTE String Converter List</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p>under construction</p>
+<table>
+<thead>
+<tr>
+<th>FROM</th>
+<th>sample</th>
+<th>TO</th>
+<th>sample</th>
+<th>FUNCTION</th>
+<th>REVERSE FUNCTION</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OID int</td>
+<td>1.3.6.1.5.5.7.1.1</td>
+<td>OID name</td>
+<td>authorityInfoAccess</td>
+<td><a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.OID.html#.oid2name">oid2name</a></td>
+<td><a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.OID.html#.name2oid">name2oid</a></td>
+</tr>
+<tr>
+<td>OID ASN.1 V hex</td>
+<td>550403</td>
+<td>OID int</td>
+<td>2.5.4.3</td>
+<td>KJUR.asn1.ASN1Util.oidIntToHex</td>
+<td>KJUR.asn1.ASN1Util.oidHexToInt</td>
+</tr>
+<tr>
+<td>OID int</td>
+<td>2.5.4.3</td>
+<td>DN attr type short name</td>
+<td>CN</td>
+<td>KJUR.asn1.x509.OID.oid2atype</td>
+<td>-</td>
+</tr>
+<tr>
+<td>OID name</td>
+<td>SHA1withRSA</td>
+<td>DERObjectIdentifier</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>DN attr type short name</td>
+<td>CN</td>
+<td>DERObjectIdentifier</td>
+<td>-</td>
+<td>KJUR.asn1.x509.OID.atype2obj</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

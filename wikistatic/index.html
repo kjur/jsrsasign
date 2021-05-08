@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: index</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: index</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p>Welcome to the jsrsasign wiki! Project top page is <a href="http://kjur.github.io/jsrsasign/">here</a>.</p>
+<h2 id="installation">INSTALLATION</h2>
+<p>The &#39;jsrsasign&#39; provides bower package and can be installed as following:</p>
+<pre><code>% bower install jsrsasign
+</code></pre>
+<p>It also provides npm packages for Node.js and can be installed as following (&#39;-g&#39; for global installation):</p>
+<pre><code>% npm install -g jsrsasign
+</code></pre>
+<p>Off course, you can also clone it by git:</p>
+<pre><code>% git clone https://github.com/kjur/jsrsasign.git
+</code></pre>
+<h2 id="programming-tutorial">PROGRAMMING TUTORIAL</h2>
+<ul>
+<li><a href="Tutorial-for-MessageDigest-class.html">Tutorial for MessageDigest class</a></li>
+<li><a href="Tutorial-for-Signature-class.html">Tutorial for Signature class</a></li>
+<li><a href="Tutorial-for-ASN1-DER-Primitive-Encoder.html">Tutorial for ASN1 DER Primitive Encoder</a></li>
+<li><a href="Tutorial-for-generating-X.509-certificate.html">Tutorial for generating X.509 certificate</a> <img src="https://img.shields.io/static/v1?label=%3C&message=new&color=brightgreen" alt="new page" title="new page"></li>
+<li><a href="Tutorial-for-extensions-when-generating-certificate.html">Tutorial for extensions when generating certificate</a> <img src="https://img.shields.io/static/v1?label=%3C&message=new&color=brightgreen" alt="new page" title="new page"></li>
+<li><a href="Tutorial-for-parsing-X.509-certificate.html">Tutorial for parsing X.509 certificate</a></li>
+<li><a href="Tutorial-for-interoperability-with-java-signing.html">Tutorial for interoperability with java signing</a></li>
+<li><a href="Tutorial-for-interoperability-with-OpenSSL-in-ECDSA-signing-and-verification.html">Tutorial for interoperability with OpenSSL in ECDSA signing and verification</a> <img src="https://img.shields.io/static/v1?label=%3C&message=new&color=brightgreen" alt="new page" title="new page"></li>
+<li><a href="Tutorial-for-accessing-deep-inside-of-ASN.1-structure-by-using-new-ASN1HEX.getIdxbyListEx.html">Tutorial for accessing deep inside of ASN.1 structure by using new ASN1HEX.getIdxbyListEx</a> <img src="https://img.shields.io/static/v1?label=%3C&message=new&color=brightgreen" alt="new page" title="new page"></li>
+<li><a href="Tutorial-for-JWS-generation.html">Tutorial for JWS generation</a></li>
+<li><a href="Tutorial-for-JWS-verification.html">Tutorial for JWS verification</a></li>
+<li><a href="Tutorial-for-JWT-generation.html">Tutorial for JWT generation</a></li>
+<li><a href="Tutorial-for-JWT-verification.html">Tutorial for JWT verification</a></li>
+</ul>
+<p>You can also find more sample codes in <a href="https://github.com/kjur/jsrsasign/tree/master/sample_node">Node.js sample codes</a>, <a href="https://github.com/kjur/jsrsasign/tree/master/tool">tool web pages</a>, <a href="https://github.com/kjur/jsrsasign/tree/master/test">test codes</a> and <a href="https://kjur.github.io/jsrsasign/api/">API documents</a>.</p>
+<h2 id="obsoleted-or-deprecated-tutorial">OBSOLETED OR DEPRECATED TUTORIAL</h2>
+<ul>
+<li><a href="Tutorial-for-ASN.1-structure-classes-of-X.509-certificate-OBSOLETED.html">Tutorial for ASN.1 structure classes of X.509 certificate OBSOLETED</a></li>
+<li><a href="Tutorial-for-signing-and-verification-with-extended-RSAKey-class.html">Tutorial for signing and verification with extended RSAKey class</a> (DEPRECATED)</li>
+<li><a href="Tutorial-for-reading-PKCS5-RSA-private-key-with-password.html">Tutorial for reading PKCS5 RSA private key with password</a> (class DELETED)</li>
+</ul>
+<h2 id="version-migration-guide">VERSION MIGRATION GUIDE</h2>
+<ul>
+<li><a href="NOTE-jsrsasign-4.9.x-to-5.0.0-JWS-API-migration-guide.html">jsrsasign 4.9.x to 5.0.0 JWS API migration guide</a></li>
+<li><a href="NOTE-jsrsasign-8.0.x-to-9.0.0-Certificate-and-CSR-API-migration-guide.html">jsrsasign 8.0.x to 9.0.0 Certificate and CSR API migration guide</a> <img src="https://img.shields.io/static/v1?label=%3C&message=new&color=brightgreen" alt="new page" title="new page"></li>
+</ul>
+<h2 id="notes">NOTES</h2>
+<ul>
+<li><a href="NOTE-distinguished-name-representation-in-jsrsasign.html">DN(distinguished name) representation in jsrsasign (06-Nov-2016)</a></li>
+<li><a href="NOTE-jsrsasign-subset-package.html">jsrsasign subset package</a></li>
+<li><a href="NOTE-PKCS5-private-key-ASN.1-structure.html">PKCS5 private key ASN.1 structure</a></li>
+<li><a href="NOTE-string-converter-list.html">string converter list</a> <img src="https://img.shields.io/static/v1?label=!&message=under-construction&color=yellow" alt="under construction" title="under construction"></li>
+<li><a href="NOTE-Commercial-Product-List-Using-jsrsasign.html">Commercial Product List Using jsrsasign</a> <img src="https://img.shields.io/static/v1?label=%3C&message=new&color=brightgreen" alt="new page" title="new page"></li>
+</ul>
+<h2 id="sample-node-script-tools">Sample Node script tools</h2>
+<p>NOTE: Before using there tools, please install &quot;jsrsasign&quot;, &quot;jsrsasign-util&quot; and &quot;commander&quot; npm packages since &quot;jsrsasign 6.0.0&quot;.</p>
+<ul>
+<li><a href="Sample-Node-Tool---jwssign.html">jwssign - sign JWS(JSON Web Signature)</a></li>
+<li><a href="Sample-Node-Tool---jwtverify.html">jwtverify - verify JWT/JWS signature</a></li>
+<li><a href="Sample-Node-Tool-List.html">more sample tools in Node.JS</a></li>
+</ul>
+<h1 id="wiki-page-list">Wiki Page List</h1>
+<ul>
+<li><a href="Home.html">Home</a></li>
+<li><a href="jsrsasign-Demo.html">jsrsasign Demo</a></li>
+<li><a href="jsrsasign-Online-Tools.html">jsrsasign Online Tools</a></li>
+<li><a href="NOTE-Commercial-Product-List-Using-jsrsasign.html">NOTE Commercial Product List Using jsrsasign</a></li>
+<li><a href="NOTE-distinguished-name-representation-in-jsrsasign.html">NOTE distinguished name representation in jsrsasign</a></li>
+<li><a href="NOTE-jsrsasign-4.9.x-to-5.0.0-JWS-API-migration-guide.html">NOTE jsrsasign 4.9.x to 5.0.0 JWS API migration guide</a></li>
+<li><a href="NOTE-jsrsasign-8.0.x-to-9.0.0-Certificate-and-CSR-API-migration-guide.html">NOTE jsrsasign 8.0.x to 9.0.0 Certificate and CSR API migration guide</a></li>
+<li><a href="NOTE-jsrsasign-subset-package.html">NOTE jsrsasign subset package</a></li>
+<li><a href="NOTE-PKCS5-private-key-ASN.1-structure.html">NOTE PKCS5 private key ASN.1 structure</a></li>
+<li><a href="NOTE-String-Converter-List.html">NOTE String Converter List</a></li>
+<li><a href="Sample-Node-Tool---jwssign.html">Sample Node Tool   jwssign</a></li>
+<li><a href="Sample-Node-Tool---jwtverify.html">Sample Node Tool   jwtverify</a></li>
+<li><a href="Sample-Node-Tool-List.html">Sample Node Tool List</a></li>
+<li><a href="Tutorial-for-accessing-deep-inside-of-ASN.1-structure-by-using-new-ASN1HEX.getIdxbyListEx.html">Tutorial for accessing deep inside of ASN.1 structure by using new ASN1HEX.getIdxbyListEx</a></li>
+<li><a href="Tutorial-for-ASN.1-structure-classes-of-X.509-certificate-OBSOLETED.html">Tutorial for ASN.1 structure classes of X.509 certificate OBSOLETED</a></li>
+<li><a href="Tutorial-for-ASN1-DER-Primitive-Encoder.html">Tutorial for ASN1 DER Primitive Encoder</a></li>
+<li><a href="Tutorial-for-extensions-when-generating-certificate.html">Tutorial for extensions when generating certificate</a></li>
+<li><a href="Tutorial-for-generating-X.509-certificate.html">Tutorial for generating X.509 certificate</a></li>
+<li><a href="Tutorial-for-interoperability-with-java-signing.html">Tutorial for interoperability with java signing</a></li>
+<li><a href="Tutorial-for-interoperability-with-OpenSSL-in-ECDSA-signing-and-verification.html">Tutorial for interoperability with OpenSSL in ECDSA signing and verification</a></li>
+<li><a href="Tutorial-for-JWS-generation.html">Tutorial for JWS generation</a></li>
+<li><a href="Tutorial-for-JWS-verification.html">Tutorial for JWS verification</a></li>
+<li><a href="Tutorial-for-JWT-generation.html">Tutorial for JWT generation</a></li>
+<li><a href="Tutorial-for-JWT-verification.html">Tutorial for JWT verification</a></li>
+<li><a href="Tutorial-for-MessageDigest-class.html">Tutorial for MessageDigest class</a></li>
+<li><a href="Tutorial-for-parsing-X.509-certificate.html">Tutorial for parsing X.509 certificate</a></li>
+<li><a href="Tutorial-for-PKCS5-and-PKCS8-PEM-private-key-formats-differences.html">Tutorial for PKCS5 and PKCS8 PEM private key formats differences</a></li>
+<li><a href="Tutorial-for-reading-PKCS5-RSA-private-key-with-password.html">Tutorial for reading PKCS5 RSA private key with password</a></li>
+<li><a href="Tutorial-for-Signature-class.html">Tutorial for Signature class</a></li>
+<li><a href="Tutorial-for-signing-and-verification-with-extended-RSAKey-class.html">Tutorial for signing and verification with extended RSAKey class</a></li>
+<li><a href="wiki-list.html">wiki list</a></li>
+</ul>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

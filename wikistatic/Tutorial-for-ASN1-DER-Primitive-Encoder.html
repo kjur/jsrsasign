@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for ASN1 DER Primitive Encoder</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for ASN1 DER Primitive Encoder</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="https://kjur.github.io/jsrsasign/">TOP</a> | <a href="Home]]-|-<a-href="https://github.com/kjur/jsrsasign/releases">DOWNLOADS</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a>-|-<a-href="https://kjur.github.io/jsrsasign/api/">API-REFERENCE</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Online-Tools">Online-Tool</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo">DEMO</a>-|-[[NODE-TOOL|Sample-Node-Tool-List.html">Wiki</a></p>
+<hr>
+<p>ITU-T X.690 ASN.1 DER format is used for network protocol, digital certificate or signature format. The <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.html">KJUR.asn1.DER* classes</a> are used for hexadecimal encode of such ASN.1 DER objects.</p>
+<p>KJUR.asn1 ASN.1 DER classes are very similar to <a href="http://www.bouncycastle.org/docs/docs1.6/index.html?org/bouncycastle/asn1/package-summary.html">ASN.1 classes of BouncyCastle JCE Library</a>. If you know it you can learn KJUR.asn1 classes easily.</p>
+<h3 id="getting-started">Getting Started</h3>
+<p>When you want to generate this data structure:</p>
+<pre><code>SEQUENCE {
+    INTEGER 3
+    UTF8String &#39;apple&#39;
+    OBJECT IDENTIFIER serialNumber (2 5 4 5) }
+</code></pre>
+<p>you can get its hexadecimal encoded data by following code:</p>
+<pre><code>var seq =
+    new KJUR.asn1.DERSequence({&#39;array&#39;: 
+                               [new KJUR.asn1.DERInteger({&#39;int&#39;:3}),
+                                new KJUR.asn1.DERUTF8String({&#39;str&#39;:&#39;apple&#39;}),
+                                new KJUR.asn1.DERObjectIdentifier({&#39;oid&#39;:&#39;2.5.4.5&#39;})]});
+var hDATA = seq.getEncodedHex(); // result will be 300f0201030c056170706c650603550405
+</code></pre>
+<p>ASN.1 primitive classes constructor may have a argument as initial parameters such like {&#39;int&#39;: 3}. Superclass of the ASN.1 primitive class is KJUR.asn1.ASN1Object and it has getEncodedHex() method. It returns a hexadecimal encoded string of the ASN1Object.</p>
+<h3 id="asn1-tlv-structure">ASN.1 TLV structure</h3>
+<p>ASN.1 has tag(T), length(L) and value(V) structure. For example, above hexadecimal data has following TLV structure.</p>
+<pre><code>[30][0f] - SEQUENCE len=0f
+    [02][01][03]         - INTEGER len=1 Val=3
+    [0c][05][6170706c65] - UTF8STRING len=5 Val=apple
+    [06][03][550405]     - OID len=3 Val=2.5.4.5
+</code></pre>
+<h3 id="supported-asn1-der-primitive-classes">Supported ASN.1 DER Primitive Classes</h3>
+<p>Here is the list of tag value and ASN.1 DER primitive class API documents. See API documents for what parameters can specified for each class.</p>
+<ul>
+<li>0x01 <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DERBoolean.html">KJUR.asn1.DERBoolean</a></li>
+<li>0x02 <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DERInteger.html">KJUR.asn1.DERInteger</a></li>
+<li>0x03 <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DERBitString.html">KJUR.asn1.DERBitString</a></li>
+<li>0x04 <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DEROctetString.html">KJUR.asn1.DEROctetString</a></li>
+<li>0x05 <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DERNull.html">KJUR.asn1.DERNull</a></li>
+<li>0x06 <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DERObjectIdentifer.html">KJUR.asn1.DERObjectIdentifier</a></li>
+<li>0x0c <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DERUTF8String.html">KJUR.asn1.DERUTF8String</a></li>
+<li>0x12 <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DERNumericString.html">KJUR.asn1.DERNumericString</a></li>
+<li>0x13 <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DERPrintableString.html">KJUR.asn1.DERPrintableString</a></li>
+<li>0x14 <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DERTeletexString.html">KJUR.asn1.DERTeletexString</a></li>
+<li>0x16 <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DERIA5String.html">KJUR.asn1.DERIA5String</a></li>
+<li>0x17 <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DERUTCTime.html">KJUR.asn1.DERUTCTime</a></li>
+<li>0x18 <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DERGeneralizedStringn.html">KJUR.asn1.DERGeneralizedString</a></li>
+<li>0x30 <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DERSequence.html">KJUR.asn1.DERSequence</a></li>
+<li>0x31 <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DERSet.html">KJUR.asn1.DERSet</a></li>
+</ul>
+<h3 id="context-specific-tagged-object">Context Specific Tagged Object</h3>
+<p>When you find tag such like &#39;[0]&#39; or &#39;[3]&#39; it is called as &#39;Context Specific Tag&#39;. A ASN.1 tag will differ if it is implicit or explicit and structured or simple. Here is examples.</p>
+<pre><code>IMPLICIT [4] INTEGER 3               -&gt; 860103 (value part is 03 and integer type can be found implicitly) 
+  new DERTaggedObject({&#39;explicit&#39;:false,&#39;tag&#39;:&#39;84&#39;,&#39;obj&#39;:new DERInteger({&#39;int&#39;:3})});
+EXPILCIT [4] INTEGER 3               -&gt; 8603020103 (value part is INTEGER 3 explicitly-&gt;020103)
+  new DERTaggedObject({&#39;explicit&#39;:true,&#39;tag&#39;:&#39;84&#39;,&#39;obj&#39;:new DERInteger({&#39;int&#39;:3})});
+IMPLICIT [4] SEQUENCE { INTEGER 3 }  -&gt; a403020103
+  var seq = new DERSequence({&#39;array&#39;:[new DERInteger({&#39;int&#39;:3})]});
+  new DERTaggedObject({&#39;explicit&#39;:false,&#39;tag&#39;:&#39;a4&#39;,&#39;obj&#39;:seq});
+EXPLICIT [4] SEQUENCE { INTEGER 3 }  -&gt; a4053003020103
+  var seq = new DERSequence({&#39;array&#39;:[new DERInteger({&#39;int&#39;:3})]});
+  new DERTaggedObject({&#39;explicit&#39;:true,&#39;tag&#39;:&#39;a4&#39;,&#39;obj&#39;:seq});
+</code></pre>
+<p>Tag will be &#39;a?&#39; if value is structured. And tag will be &#39;8?&#39; if value is not structured type.</p>
+<hr>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

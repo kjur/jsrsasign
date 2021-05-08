@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for ASN.1 structure classes of X.509 certificate OBSOLETED</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for ASN.1 structure classes of X.509 certificate OBSOLETED</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="https://kjur.github.io/jsrsasign/">TOP</a> | <a href="Home]]-|-<a-href="https://github.com/kjur/jsrsasign/releases">DOWNLOADS</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a>-|-<a-href="https://kjur.github.io/jsrsasign/api/">API-REFERENCE</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Online-Tools">Online-Tool</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo">DEMO</a>-|-[[NODE-TOOL|Sample-Node-Tool-List.html">Wiki</a></p>
+<hr>
+<h1 id="caution-this-tutorial-is-obsoleted">CAUTION: THIS TUTORIAL IS OBSOLETED</h1>
+<p>The name space <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.html">KJUR.asn1.x509</a> concludes some classes of ASN.1 structures for X.509 certificate. Class names and methods are very similar to BouncyCastle JCE library. So if you know it it&#39;s easy to learn.</p>
+<h3 id="getting-started">Getting Started</h3>
+<p>When you generate X.509 certificate by CA private key you&#39;ll take following procedures:</p>
+<ul>
+<li>generate TBSCertificate object</li>
+<li>add Basic Fields to TBSCertificate object</li>
+<li>add Extensions to TBSCertificate object</li>
+<li>sign certificate and get a PEM formatted string of the certificate</li>
+</ul>
+<hr>
+<pre><code> // generate TBSCertificate
+ var tbsc = new KJUR.asn1.x509.TBSCertificate();
+
+ // add basic fields
+tbsc.setSerialNumberByParam({&#39;int&#39;: 1234});
+tbsc.setSignatureAlgByParam({&#39;name&#39;: &#39;SHA1withRSA&#39;});
+tbsc.setIssuerByParam({&#39;str&#39;: &quot;/C=US/O=Test/CN=CA&quot;});  
+tbsc.setNotBeforeByParam({&#39;str&#39;: &quot;130511235959Z&quot;});
+tbsc.setNotAfterByParam({&#39;str&#39;: &quot;150511235959Z&quot;});
+tbsc.setSubjectByParam({&#39;str&#39;: &quot;/C=US/O=Test/CN=User1&quot;});  
+tbsc.setSubjectPublicKeyByParam({&#39;rsapem&#39;: &quot;----BEGIN PUBLIC KEY(snip)&quot;});
+
+// add extensions
+tbsc.appendExtension(new KJUR.asn1.x509.BasicConstraints({&#39;cA&#39;: false}));
+tbsc.appendExtension(new KJUR.asn1.x509.KeyUsage({&#39;bin&#39;:&#39;11&#39;}));
+tbsc.appendExtension(new KJUR.asn1.x509.CRLDistributionPoints({&#39;uri&#39;:&#39;http://a.com/a.crl&#39;}));
+
+// sign and get PEM certificate with CA private key
+var cert = new KJUR.asn1.x509.Certificate({&#39;tbscertobj&#39;: tbsc,
+                                           &#39;rsaprvpem&#39;: &#39;----BEGIN RSA PRIVATE KEY(snip)&#39;,
+                                           &#39;rsaprvpas&#39;: &#39;password&#39;});
+cert.sign();
+var certPEM = cert.getPEMString();
+</code></pre>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for interoperability with java signing</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for interoperability with java signing</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="https://kjur.github.io/jsrsasign/">TOP</a> | <a href="https://github.com/kjur/jsrsasign/tags/">DOWNLOADS</a> | <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | <a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | <a href="http://kjur.github.io/jsrsasign/index.html#demo">DEMOS</a></p>
+<hr>
+<p>This tutorial shows you how to verify a Java generated signature by jsrsasign.</p>
+<p>Here is a sample Java code which loads PKCS#8 DER binary RSA private key, sign a string &quot;aaa&quot; by the private key with &quot;SHA1withRSA&quot; algorithm, then write a resulted signature value to a file as binary.</p>
+<pre><code class="language-Java">/*
+ * TSign.java
+ */
+import java.lang.*;
+import java.io.*;
+import java.security.*;
+import java.security.spec.*;
+
+public class TSign {
+    public TSign() {
+    try {
+        byte[] prvKeyBytes = loadBytes(&quot;z1.prv.p8p.der&quot;); // PKCS#8 private key
+
+        KeyFactory kf = KeyFactory.getInstance(&quot;RSA&quot;);
+        KeySpec keySpec = new PKCS8EncodedKeySpec(prvKeyBytes);
+        PrivateKey prvKey = kf.generatePrivate(keySpec);
+
+        Signature sig = Signature.getInstance(&quot;SHA1withRSA&quot;);
+        sig.initSign(prvKey);
+        sig.update(&quot;aaa&quot;.getBytes());
+        byte[] sigBytes = sig.sign();
+        System.out.println(sigBytes);
+
+        saveBytes(sigBytes, &quot;TSign.sig.bin&quot;);
+        
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+    }
+
+    private static byte[] loadBytes(String fileName) {
+    try {
+        FileInputStream fis = new FileInputStream(fileName);
+        byte[] data = new byte[fis.available()];
+        fis.read(data);
+        fis.close();
+        return data;
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+    return null;
+    }
+
+    private static void saveBytes(byte[] data, String fileName) {
+    try {
+        FileOutputStream fos = new FileOutputStream(fileName);
+        fos.write(data);
+        fos.close();
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+    }
+
+    public static void main(String[] args) {
+    TSign t = new TSign();
+    }
+}
+</code></pre>
+<p>Here is another sample jsrsasign JavaScript program to verify signature.
+This script loads PKCS#8 PEM RSA public key and a binary signature value file, then
+verifies the signature value.</p>
+<pre><code class="language-JavaScript">#!/usr/bin/env node
+var rs = require(&quot;jsrsasign&quot;);
+var rsu = require(&quot;jsrsasign-util&quot;);
+
+var hSig = rsu.readFileHexByBin(&quot;TSign.sig.bin&quot;);
+var pubpem = rsu.readFile(&quot;z1.pub.p8.pem&quot;);
+var pubkey = rs.KEYUTIL.getKey(pubpem);
+
+var sig = new rs.KJUR.crypto.Signature({alg: &quot;SHA1withRSA&quot;});
+sig.init(pubkey);
+sig.updateString(&quot;aaa&quot;);
+var result = sig.verify(hSig);
+
+console.log(result);
+</code></pre>
+<p>You&#39;ll see how easy to verify a signature with jsrsasign.
+<a href="https://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> method provides very easy way to load a key. This program can load PKCS#8 public key as well as a PKCS#5 public key or a X.509 certificate by the same code.</p>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

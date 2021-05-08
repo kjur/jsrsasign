@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for accessing deep inside of ASN.1 structure by using new ASN1HEX.getIdxbyListEx</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for accessing deep inside of ASN.1 structure by using new ASN1HEX.getIdxbyListEx</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p>ASN.1 DER encoded data parsing by <a href="https://kjur.github.io/jsrsasign/api/symbols/ASN1HEX.html">ASN1HEX</a> class is one of the most powerful feature in jsrsasign library. Most of other ASN.1 libraries require to parse whole ASN.1 structured data to access deep inside of the structure such as SEQUENCE or SET. However it&#39;s not necessary for jsrsasign. Jsrsasign can easily point a ASN.1 object by a list of object index. From jsrsasign 8.0.21, more flexible methods <a href="https://kjur.github.io/jsrsasign/api/symbols/ASN1HEX.html#.getIdxbyListEx">getIdxbyListEx</a>, <a href="https://kjur.github.io/jsrsasign/api/symbols/ASN1HEX.html#.getTLVbyListEx">getTLVbyListEx</a> and <a href="https://kjur.github.io/jsrsasign/api/symbols/ASN1HEX.html#.getVbyListEx">getVbyListEx</a> have been provided.</p>
+<h2 id="what-is-asn1">What is ASN.1?</h2>
+<p>ASN.1 is a structured binary data representation defined in <a href="https://www.itu.int/rec/T-REC-X.680/en">ITU-T X.680</a> standard. Here is features of ASN.1</p>
+<ul>
+<li>can represent number, string, time, array and group.</li>
+<li>can represent very long length of data exceeds such as 64 bit integer limitation</li>
+<li>one data is represented by TAG(data type), LENGTH(value length), and VALUE</li>
+<li>used in communication and security protocol or formats such as X.509 digital certificate, S/MIME secure mail, private/public key formats, LDAP, Radius, SNMP or Kerberos</li>
+</ul>
+<p><img src="https://kjur.github.io/jsrsasign/images/wiki/asn1-1.png" alt="asn1-1" title="ASN.1"></p>
+<p><img src="https://kjur.github.io/jsrsasign/images/wiki/asn1-2.png" alt="asn1-2" title="ASN.1 structure"></p>
+<p>If you are new in ASN.1, you may see introduction <a href="https://www.youtube.com/watch?v=EccHushRhWs">video</a> or <a href="https://en.wikipedia.org/wiki/ASN.1">page</a>.</p>
+<h2 id="what-is-asn1hex">What is ASN1HEX?</h2>
+<p><a href="https://kjur.github.io/jsrsasign/api/symbols/ASN1HEX.html">ASN1HEX class</a> is a simple ASN.1 parser. A hexadecimal string of ASN.1 DER data will be parsed and a string index, length bytes, value or TLV bytes will be returned by it.</p>
+<p><img src="https://kjur.github.io/jsrsasign/images/wiki/asn1hex-1.png" alt="asn1hex-1" title="ASN1HEX"></p>
+<p><img src="https://kjur.github.io/jsrsasign/images/wiki/asn1hex-2.png" alt="asn1hex-2" title="ASN1HEX children"></p>
+<h2 id="what-is-asn1-context-specific-tag">What is ASN.1 context specific tag?</h2>
+<p>Here is a ASN.1 schema of Certificate, TBSCertificate and Validity in <a href="https://tools.ietf.org/html/rfc5280#section-4.1">RFC 5280</a>.</p>
+<pre><code>Certificate  ::=  SEQUENCE  {
+     tbsCertificate       TBSCertificate,
+     signatureAlgorithm   AlgorithmIdentifier,
+     signatureValue       BIT STRING  }
+
+TBSCertificate  ::=  SEQUENCE  {
+     version         [0]  EXPLICIT Version DEFAULT v1,
+     serialNumber         CertificateSerialNumber,
+     signature            AlgorithmIdentifier,
+     issuer               Name,
+     validity             Validity,
+     subject              Name,
+     subjectPublicKeyInfo SubjectPublicKeyInfo,
+     issuerUniqueID  [1]  IMPLICIT UniqueIdentifier OPTIONAL,
+                          -- If present, version MUST be v2 or v3
+     subjectUniqueID [2]  IMPLICIT UniqueIdentifier OPTIONAL,
+                          -- If present, version MUST be v2 or v3
+     extensions      [3]  EXPLICIT Extensions OPTIONAL
+                          -- If present, version MUST be v3 }
+
+Validity ::= SEQUENCE {
+     notBefore      Time,
+     notAfter       Time }
+</code></pre>
+<p>In above, &quot;[0]&quot;, &quot;[1]&quot;, &quot;[2]&quot; and &quot;[3]&quot; are called &quot;context-specific&quot; tag. In general, context-specific tag represents optional item. Pre-defined tag such as &quot;PrintableString&quot;, &quot;INTEGER&quot; or &quot;SEQUENCE&quot; is called &quot;universal tag&quot; which has a value from 0x00 to 0x1f. Context-specific simple tag has a value from 0x80 to 0x9f represented from &quot;[0]&quot; to &quot;[31]&quot; respectively. Context-specific structured tag has a value from 0xa0 to 0xbf also represented from &quot;[0]&quot; to &quot;[31]&quot; respectively.</p>
+<p>To learn &quot;context-specific&quot; tag further, please see <a href="http://luca.ntop.org/Teaching/Appunti/asn1.html">this guide</a>.</p>
+<h2 id="difference-between-getidxbylist-and-getidxbylistex">difference between getIdxbyList and getIdxbyListEx</h2>
+<p>In above ASN.1 schema definition, note the version field is OPTIONAL using a context specific tag [0]. So the position index of Validity will be 4 for X.509v3 certificate or 3 for X.509v1 certificate. To get netBefore value from entire hexadecimal ASN.1 string of certificate, you can use old <a href="https://kjur.github.io/jsrsasign/api/symbols/ASN1HEX.html#.getVbyList">getIdxbyList</a> as follows. It depends on X.509 v1 or v3:</p>
+<pre><code class="language-JavaScript">//For X.509v3
+ASN1HEX.getVbyList(&lt;&lt;CERTHEX&gt;&gt;, 0, [0, 4, 0])
+//Or for X.509v1
+ASN1HEX.getVbyList(&lt;&lt;CERTHEX&gt;&gt;, 0, [0, 3, 0])
+</code></pre>
+<p>When you use new <a href="https://kjur.github.io/jsrsasign/api/symbols/ASN1HEX.html#.getIdxbyListEx">getIdxbyListEx</a>, position index will be always 3 since all context specific tag will be treated as a optional item and skipped to count index:</p>
+<pre><code class="language-JavaScript">ASN1HEX.getVbyListEx(&lt;&lt;CERTHEX&gt;&gt;, 0, [0, 3, 0])
+</code></pre>
+<p>To access context specific tag in new <a href="https://kjur.github.io/jsrsasign/api/symbols/ASN1HEX.html#.getIdxbyListEx">getIdxbyListEx</a> use a tag string (ex. &quot;[3]&quot;) instead of index number. You can refer extension field as follows. You don&#39;t need to care about optional field such as version or issuerUniqueID:</p>
+<pre><code class="language-JavaScript">ASN1HEX.getIdxbyListEx(&lt;&lt;CERTHEX&gt;&gt;, 0, [0, &quot;[3]&quot;])
+</code></pre>
+<p>I hope you can handle context-specific tag more easily by new <a href="https://kjur.github.io/jsrsasign/api/symbols/ASN1HEX.html#.getIdxbyListEx">getIdxbyListEx</a>. You can also dig into &quot;OctetString Encapsulated&quot;, &quot;BitString Encapsulated&quot; or &quot;Explicit Context Specific Tag&quot; which has a ASN.1 TLV structure in its ASN.1 value(V) by the same way as above.</p>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

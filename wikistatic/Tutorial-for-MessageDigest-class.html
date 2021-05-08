@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for MessageDigest class</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for MessageDigest class</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="https://kjur.github.io/jsrsasign/">TOP</a> | <a href="Home]]-|-<a-href="https://github.com/kjur/jsrsasign/releases">DOWNLOADS</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a>-|-<a-href="https://kjur.github.io/jsrsasign/api/">API-REFERENCE</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Online-Tools">Online-Tool</a>-|-<a-href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo">DEMO</a>-|-[[NODE-TOOL|Sample-Node-Tool-List.html">Wiki</a></p>
+<hr>
+<p>The <a href="http://kjur.github.io/jsrsasign/api/symbols/KJUR.crypto.MessageDigest.html">KJUR.crypto.MessageDigest</a> class is a very similar to Java JCE [java.security.MessageDigest] (<a href="http://docs.oracle.com/javase/7/docs/api/index.html?java/security/MessageDigest.html">http://docs.oracle.com/javase/7/docs/api/index.html?java/security/MessageDigest.html</a>) class for cryptographic  hash algorithm calculation. So it&#39;s easy to learn.</p>
+<h3 id="getting-started">Getting Started</h3>
+<p>Here is a basic example for &#39;SHA1&#39; hash calculation.</p>
+<pre><code>// initialize
+var md = new KJUR.crypto.MessageDigest({&quot;alg&quot;: &quot;sha1&quot;, &quot;prov&quot;: &quot;cryptojs&quot;});
+// update data
+md.updateString(&#39;aaa&#39;)
+// SHA1 hash result of string aaa which will be 7e240de74fb1ed08fa08d38063f6a6a91462a815
+var hashValueHex = md.digest()
+</code></pre>
+<h3 id="for-hexadecimal-input">for hexadecimal input</h3>
+<p>You can also update a hexadecimal string as hash input.</p>
+<pre><code>var md = new KJUR.crypto.MessageDigest({&quot;alg&quot;: &quot;sha1&quot;, &quot;prov&quot;: &quot;cryptojs&quot;});
+md.updateHex(&#39;5f6de0&#39;);
+var hashValueHex = md.digest();
+</code></pre>
+<h3 id="progressive-hashing">progressive hashing</h3>
+<p>The &#39;updateHex&#39; and &#39;updateString&#39; method can be called one or more times.</p>
+<pre><code>var md = new KJUR.crypto.MessageDigest({&quot;alg&quot;: &quot;sha1&quot;, &quot;prov&quot;: &quot;cryptojs&quot;});
+md.updateHex(&#39;9a3bcd345793173&#39;);
+md.updateHex(&#39;5f6de0&#39;);
+md.updateString(&#39;abcdefg&#39;);
+md.updateHex(&#39;01341571fg56ab&#39;);
+md.updateString(&#39;apple&#39;);
+var hashValueHex = md.digest();
+</code></pre>
+<h3 id="in-short">in short</h3>
+<p>To update and digest in a one method you can use &#39;digestHex&#39; or &#39;digestString&#39; method.</p>
+<pre><code>var md = new KJUR.crypto.MessageDigest({&quot;alg&quot;: &quot;sha1&quot;, &quot;prov&quot;: &quot;cryptojs&quot;});
+var hashValueHex = md.digestHex(&#39;1afcdd&#39;);
+
+var md = new KJUR.crypto.MessageDigest({&quot;alg&quot;: &quot;sha1&quot;, &quot;prov&quot;: &quot;cryptojs&quot;});
+var hashValueHex = md.digestString(&#39;orange&#39;);
+</code></pre>
+<h3 id="supported-hash-algorithms-and-cryptographic-providers">supported hash algorithms and cryptographic providers</h3>
+<p>MessageDigest class supports combinations of following providers and hash algorithms.</p>
+<ul>
+<li>cryptojs - md5</li>
+<li>cryptojs - sha1</li>
+<li>cryptojs - sha224</li>
+<li>cryptojs - sha256</li>
+<li>cryptojs - sha384</li>
+<li>cryptojs - sha512</li>
+<li>cryptojs - ripemd160</li>
+<li>sjcl - sha256  (NEW since crypto 1.0.4, sjcl only supports sha256)</li>
+</ul>
+<h3 id="required-javascript-sources">required JavaScript sources</h3>
+<p>To use MessageDigest class following JavaScript codes are required with this order:</p>
+<pre><code>// core-min.js required in case cryptojs provider is used
+&lt;script src=&quot;http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core-min.js&quot;&gt;&lt;/script&gt;
+// x64-core.js required in case sha384 and sha512 algorithm of cryptojs is used
+&lt;script src=&quot;http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js&quot;&gt;&lt;/script&gt;
+// sha256.js is required if sha224 of cryptojs is used
+&lt;script src=&quot;http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha256.js&quot;&gt;&lt;/script&gt;
+// sha512.js is required if sha384 of cryptojs is used
+&lt;script src=&quot;http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha512.js&quot;&gt;&lt;/script&gt;
+// these depends on algorithm to be used
+&lt;script src=&quot;http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha224.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha384.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/ripemd160.js&quot;&gt;&lt;/script&gt;
+// for sha256 of sjcl provider
+&lt;script src=&quot;http://bitwiseshiftleft.github.io/sjcl/sjcl.js&quot;&gt;&lt;/script&gt;
+// for crypto-1.0.js
+&lt;script src=&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;http://kjur.github.io/jsrsasign/crypto-1.0.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<h3 id="reference">Reference</h3>
+<ul>
+<li><a href="https://code.google.com/p/crypto-js/">CryptoJS Library</a> - progressive hashing supported crypto library</li>
+<li><a href="http://crypto.stanford.edu/sjcl/">SJCL</a> - Stanford JavaScript Crypto Library which also supports progressive hashing</li>
+</ul>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

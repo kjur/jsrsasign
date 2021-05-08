@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for extensions when generating certificate</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for extensions when generating certificate</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p>Extensions can be specified as JSON object when generating a certificate.</p>
+<p>This document describes samples for extensions.</p>
+<h3 id="common-to-extensions">Common to extensions</h3>
+<p>&quot;extname&quot; member shall be specified. &quot;critical&quot; flag is OPTION.</p>
+<pre><code class="language-JavaScript">{ extname: &quot;NAME-OF-EXTENSION&quot;,
+  critical: true, // OPTION: critical flag can be specified
+  ... extension values ... }
+</code></pre>
+<h3 id="basic-constraints">Basic Constraints</h3>
+<pre><code class="language-JavaScript">{ extname: &quot;basicConstraints&quot;,
+  critical: true,
+  cA: true,     // OPTION. &quot;false&quot; can also be specified.
+  pathLen: 2 }  // OPTION
+</code></pre>
+<h3 id="key-usage">Key Usage</h3>
+<pre><code class="language-JavaScript">{ extname: &quot;keyUsage&quot;, names: [&quot;digitalSignature&quot;, &quot;nonRepudiation&quot;] } // don&#39;t need to care ordering
+</code></pre>
+<p>Key usage value can also be specified by <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DERBitString.html">DERBitString</a> parameters.</p>
+<pre><code class="language-JavaScript">{ extname: &quot;keyUsage&quot;, bit: &quot;11&quot; }
+{ extname: &quot;keyUsage&quot;, array: [true, true, false, true] }
+</code></pre>
+<h3 id="crl-distribution-points">CRL Distribution Points</h3>
+<pre><code class="language-JavaScript">{ extname: &quot;cRLDistributionPoints&quot;,
+  array: [
+    {fulluri: &quot;http://repository.example.com/CA1.crl&quot;}
+  ] }
+</code></pre>
+<h3 id="authority-info-access">Authority Info Access</h3>
+<pre><code class="language-JavaScript">{ extname: &quot;authorityInfoAccess&quot;,
+  array: [
+    {ocsp: &#39;http://ocsp.example.org&#39;},
+    {caissuer: &#39;https://repository.example.org/ca1.crt&#39;}  
+  ] }
+</code></pre>
+<h3 id="subject-key-identifier">Subject Key Identifier</h3>
+<p>You can specify &quot;kid&quot; by PEM string of certificate or public key or key object which can be accepted by <a href="https://kjur.github.io/jsrsasign/api/symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> method. Its key ID value will be calculated automatically by the method specified in <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.2">RFC 5280 section 4.2.1.2 (1)</a>.</p>
+<pre><code class="language-JavaScript">{ extname: &quot;subjectKeyIdentifier&quot;, kid: ...PEM-OF-CERT-OR-PUBKEY... }
+{ extname: &quot;subjectKeyIdentifier&quot;, kid: ...KEYOBJECT... }
+</code></pre>
+<p>Otherwise you can explicitly specify key identifier value by hexadecimal or raw string which can be accepted by <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.DEROctetString.html">DEROctetString class</a>.</p>
+<pre><code class="language-JavaScript">{ extname: &quot;subjectKeyIdentifier&quot;, hex: &quot;1abd23f...&quot; }
+{ extname: &quot;subjectKeyIdentifier&quot;, str: &quot;\x3f\xa1...&quot; }
+</code></pre>
+<h3 id="authority-key-identifier">Authority Key Identifier</h3>
+<p>AuthorityKeyIdentifier has three optional fields. </p>
+<pre><code>AuthorityKeyIdentifier ::= SEQUENCE {
+  keyIdentifier             [0] KeyIdentifier           OPTIONAL,
+  authorityCertIssuer       [1] GeneralNames            OPTIONAL,
+  authorityCertSerialNumber [2] CertificateSerialNumber OPTIONAL  }
+</code></pre>
+<p>As for &quot;keyIdentifier&quot;, the same members as &quot;SubjectKeyIdentifier&quot; are available.
+For &quot;authorityCertIssuer&quot; and &quot;authorityCertSerialNumber&quot;, you can specify them by &quot;isscert&quot; member with certificate PEM string.</p>
+<pre><code class="language-JavaScript">{ extname: &quot;authorityKeyIdentifier&quot;,
+  kid: &quot;-----BEGIN CERTIFICATE...&quot;,
+  isscert: &quot;-----BEGIN CERTIFICATE...&quot; }
+</code></pre>
+<p>Otherwise you can explicitly specify them by &quot;issuer&quot; and &quot;sn&quot; members as follows:</p>
+<pre><code class="language-JavaScript">{ extname: &quot;authorityKeyIdentifier&quot;,
+  kid: &quot;-----BEGIN CERTIFICATE...&quot;,
+  issuer: { ldapstr: &quot;CN=CA1,O=Test,C=JP&quot; },
+  sn: { hex: &quot;1fda3d...&quot; } }
+</code></pre>
+<h3 id="subject-alt-name-and-issuer-alt-name">Subject Alt Name and Issuer Alt Name</h3>
+<p>SubjectAltName and IssuerAltName have the same style of parameters.</p>
+<pre><code class="language-JavaScript">{ extname: &quot;subjectAltName&quot;, // for IssuerAltName, &quot;issuerAltName&quot; shall be specified
+  array: [
+    {rfc822: &quot;foo@example.com&quot;},    // [1] rfc822Name
+    {dns: &quot;example.org&quot;},           // [2] dNSName
+    {dn: &quot;/C=JP/O=Test&quot;},           // [4] Name (i.e. X.500 Name)
+    {dn: {str: &quot;/C=JP/O=Test&quot;}},    // [4] Name
+    {dn: {ldapstr: &quot;O=Test,C=JP&quot;}}, // [4] Name
+    {dn: {certissuer: &quot;-----BEGIN CERTIFICATE...&quot;}},  // [4] Name (issuer name of certificate)
+    {dn: {certsubject: &quot;-----BEGIN CERTIFICATE...&quot;}}, // [4] Name (subject name of certificate)
+    {uri: &quot;http://example.net/&quot;},   // [6] uniformResourceIdentifier
+    {ip: &quot;192.168.1.1&quot;},            // [8] iPAddress (IPv4 address)
+    {ip: &quot;2001:db4::4:1&quot;}           // [8] iPAddress (IPv6 address)
+  ] }
+</code></pre>
+<p>[0] otherName, [3] x400Address, [5] ediPartyName and [8] registeredID are not supported yet.</p>
+<h3 id="certificate-policies">Certificate Policies</h3>
+<pre><code class="language-JavaScript">{ extname: &quot;certificatePolicies&quot;,
+  array: [ // array of PolicyInformation
+    { policyoid: &quot;1.2.3.4.5&quot;,
+      array: [ // PolicyQualifiers
+        { cps: &quot;https://example.com/repository&quot; },
+        { unotice: {
+          noticeref: { // CA SHOULD NOT use this by RFC
+            org: {type: &quot;ia5&quot;, str: &quot;Sample Org&quot;},
+            noticenum: [{int: 5}, {hex: &quot;01af&quot;}]
+          },
+          exptext: {type: &quot;ia5&quot;, str: &quot;Sample Policy&quot;}
+        } }
+      ]
+    },
+    { policyoid: &quot;0.1.2.3.4&quot; }
+  ]
+}
+</code></pre>
+<h3 id="ocsp-no-check">OCSP No Check</h3>
+<p>OCSPNoCheck extension is generally used in OCSP responder certificate. It doesn&#39;t require any other parameters.</p>
+<pre><code class="language-JavaScript">{ extname: &quot;ocspNoCheck&quot; }
+</code></pre>
+<h3 id="adobe-time-stamp">Adobe Time Stamp</h3>
+<p>This extension is used in Adobe CDS certificate to specify timestamp service URL.</p>
+<pre><code class="language-JavaScript">{ extname: &quot;adobeTimeStamp&quot;,
+  uri: &quot;http://tsa.example.com/&quot;,
+  reqauth: true }
+</code></pre>
+<h3 id="subject-directory-attributes">Subject Directory Attributes</h3>
+<p>This extension is used in a qualified certificate. All of supported attributes are in this example.</p>
+<pre><code class="language-JavaScript">{ extname: &quot;subjectDirectoryAttributes&quot;,
+  array: [
+    { attr: &quot;dateOfBirth&quot;, str: &quot;19701231230000Z&quot; },
+    { attr: &quot;placeOfBirth&quot;, str: &quot;Tokyo&quot; },
+    { attr: &quot;gender&quot;, str: &quot;F&quot; },
+    { attr: &quot;countryOfCitizenship&quot;, str: &quot;JP&quot; },
+    { attr: &quot;countryOfResidence&quot;, str: &quot;JP&quot; }
+  ] }
+</code></pre>
+<h3 id="private-extension">Private Extension</h3>
+<p>If you want to specify a private extension PrivateExtension class can be used. The &quot;extn&quot; member shall have ASN1Util.newObject parameter to specify arbitrary ASN.1 object.</p>
+<pre><code class="language-JavaScript">{ extname: &quot;1.2.5.6&quot; // any extension OID
+  extn: {seq: [{prnstr:&quot;abc&quot;},{utf8str:&quot;def&quot;}]} }
+</code></pre>
+<h3 id="crl-number">CRL Number</h3>
+<p>This extension may be specified in a CRL extension.</p>
+<pre><code class="language-JavaScript">{ extname: &quot;cRLNumber&quot;, 
+  num: {&quot;int&quot;: 12345} }
+</code></pre>
+<h3 id="crl-reason">CRL Reason</h3>
+<p>This extension may be specified in CRL entry extension or single OCSP response.</p>
+<pre><code class="language-JavaScript">{ extname: &quot;cRLReason&quot;,
+  code: 2 } // (2) cACompromise
+</code></pre>
+<h3 id="ocsp-nonce">OCSP Nonce</h3>
+<p>This extension may be specified in OCSP response extension.</p>
+<pre><code class="language-JavaScript">{ extname: &quot;ocspNonce&quot;,
+  hex: &quot;12ab...&quot; }
+</code></pre>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

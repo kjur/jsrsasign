@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: Tutorial for signing and verification with extended RSAKey class</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: Tutorial for signing and verification with extended RSAKey class</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<p><a href="http://kjur.github.io/jsrsasign/">TOP</a> | <a href="https://github.com/kjur/jsrsasign/tags/">DOWNLOADS</a> | <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | <a href="http://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | <a href="http://kjur.github.io/jsrsasign/index.html#demo">DEMOS</a></p>
+<hr>
+<h3 id="deprecated">(DEPRECATED)</h3>
+<p>RSA signing and verifying by extended RSAKey is <strong><em>DEPRECATED</em></strong> and will not be supported near in the future. Please consider to move to Signature class. Thanks.</p>
+<p>Signature class has following advantages:</p>
+<ul>
+<li>RSAKey can sign a string only however Signature class can also sign a hexadecimal string.</li>
+<li>progressive signing for large sized data.</li>
+<li>class and methods are aligned to Java JCE Signature class</li>
+<li>easy to understand and learn</li>
+<li>good class architecture</li>
+<li>less global variables and functions</li>
+</ul>
+<h3 id="signing">Signing</h3>
+<p>Here is an example to sign a string &quot;aaa&quot; with &quot;SHA1withRSA&quot; algorithm by PEM formatted private key.</p>
+<pre><code>var rsa = new RSAKey();
+rsa.readPrivateKeyFromPEMString(_PEM_PRIVATE_KEY_STRING_);
+var hSig = rsa.signString(&quot;aaa&quot;, &quot;sha1&quot;); // sign a string &quot;aaa&quot; with key
+</code></pre>
+<h3 id="verifying-signature">Verifying Signature</h3>
+<p>Here is an example to verify a signture of string &quot;aaa&quot; with specified PEM formatted X.509 certificate.</p>
+<pre><code>var x509 = new X509();
+x509.readCertPEM(_PEM_X509CERT_STRING_);
+var result = x509.subjectPublicKeyRSA.verifyString(&quot;aaa&quot;, _HEX_SIGNATURE_);
+</code></pre>
+<h3 id="supported-signature-algorithms">Supported Signature Algorithms</h3>
+<p>The script &quot;rsa-sign.js&quot; currently supports following signature algorithms:</p>
+<ul>
+<li>SHA1withRSA</li>
+<li>SHA256withRSA</li>
+<li>SHA512withRSA</li>
+<li>MD5withRSA</li>
+<li>RIPEMD160withRSA</li>
+</ul>
+<p>However you can extend other signature algorithms such like MD2withRSA or SHA384withRSA by just specifying two variables in it.</p>
+<pre><code> _RSASIGN_DIHEAD[&#39;md2&#39;] = &quot;30...&quot;; // Hexadecimal DigestInfo prefix for MD5
+ _RSASIGN_HASHHEXFUNC[&#39;md2&#39;] = md2hex; // function which returns value in hex.
+</code></pre>
+<hr>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>

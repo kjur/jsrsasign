@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset='utf-8' />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+<meta name="description" content="jsrsasign : supported algorithm table" />
+<link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/stylesheet.css">
+<style>
+.inner {
+  position: relative;
+  max-width: 100%;
+  padding: 20px 10px;
+  margin: 0 auto;
+}
+th {
+  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 4px;
+  background: #373737;
+  color: #fff;
+ }
+td {
+  padding: 2px;
+  border: 1px solid #373737;
+ }
+</style>
+
+<title>jsrsasign - wiki static: NOTE jsrsasign 8.0.x to 9.0.0 Certificate and CSR API migration guide</title>
+</head>
+
+<body>
+<!-- HEADER -->
+<div id="header_wrap" class="outer">
+<header class="inner">
+<h1 id="project_title">Wiki: NOTE jsrsasign 8.0.x to 9.0.0 Certificate and CSR API migration guide</h1>
+<a href="https://kjur.github.io/jsrsasign/">TOP</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/">static wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki">wiki</a> | 
+<a href="https://github.com/kjur/jsrsasign/releases/">DOWNLOADS</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
+<a href="https://kjur.github.io/jsrsasign/api/">API REFERENCE</a> | 
+<a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMOS</a> | 
+</header>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main_content_wrap" class="outer">
+<section id="main_content" class="inner">
+
+<!-- now editing -->
+<blockquote>
+<p>You can also see API document or test cases to understand the 9.0.0 updates.</p>
+</blockquote>
+<h2 id="introduction-900-update-concept">INTRODUCTION: 9.0.0 update concept</h2>
+<p>Before 8.0.24 Certificate and CSR parser and generator have not worked together. Further more, they didn&#39;t have API consistency. In version 9.0.0, such issue will be solved.</p>
+<img src="https://raw.githubusercontent.com/kjur/jsrsasign/gh-pages/images/wiki/updatebefore8024.svg" width="640"/>
+
+<img src="https://raw.githubusercontent.com/kjur/jsrsasign/gh-pages/images/wiki/updateafter900.svg" width="640"/>
+
+<h2 id="general-migration-guide">general migration guide</h2>
+<ul>
+<li>When you codes don&#39;t use certificate and CSR parsing and generation, you can update to 9.0.0.</li>
+<li>When you codes use certificate, certificate extension and CSR APIs without backward compatibility, you need to modify your codes.</li>
+</ul>
+<h2 id="certificate-generation">certificate generation</h2>
+<p>In 8.0.24 or before, <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.X509Util.html#.newCertPEM">X509Util.newCertPEM</a> method may be used. In 9.0.0 or later you don&#39;t need to use it. Just you can use <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.Certificate.html">Certificate</a> class constructor as follows:</p>
+<pre><code class="language-JavaScript">var cert = new KJUR.asn1x509.Certificate({
+ version: 3,
+ serial: {hex: &quot;2345...&quot;},
+ sigalg: &quot;SHA256withRSA&quot;,
+ issuer: {str: &quot;/C=JP/O=CA1&quot;},
+ notbefore: &quot;011231235959Z&quot;,
+ notafter:  &quot;221231235959Z&quot;,
+ subject: {str: &quot;/CN=User1&quot;},
+ sbjpubkey: &quot;-----BEGIN PUBLIC KEY...&quot;,
+ ext: [
+  {extname: &quot;keyUsage&quot;, names:[&quot;digitalSignature&quot;], critical:true},
+  {extname: &quot;subjectAltName&quot;, array:[{&quot;rfc822&quot;: &quot;user1@example.com&quot;}]},
+  {extname: &quot;cRLDistributionPoints&quot;, array:[{fulluri:&quot;https://example.com/ca1.crl&quot;}]}
+ ],
+ cakey: &quot;-----BEGIN PRIVATE KEY...&quot;
+});
+var pem = cert.getPEM();
+</code></pre>
+<p>Note that no need to use TBSCertificate class. Argument parameter of Certificate class constructor is almost the same as TBSCertificate. The only difference is the &quot;cakey&quot; attribute.</p>
+<h2 id="certificate-parsing">certificate parsing</h2>
+<p>In 8.0.24 or before, there is no method to get entire certificate parameters. We need to develop such method by combining methods to get each fields. In 9.0.0 or later, we can use <a href="https://kjur.github.io/jsrsasign/api/symbols/X509.html#getParam">X509.getParam</a> method as follows:</p>
+<pre><code class="language-JavaScript">var x = new X509();
+x.readCertPEM(&quot;-----BEGIN CERTIFICATE...&quot;);
+console.log(x.getParam());
+{
+ version: 3,
+ serial: {hex: &quot;2345...&quot;},
+ sigalg: &quot;SHA256withRSA&quot;,
+ issuer: {str: &quot;/C=JP/O=CA1&quot;},
+ notbefore: &quot;011231235959Z&quot;,
+ notafter:  &quot;221231235959Z&quot;,
+ subject: {str: &quot;/CN=User1&quot;},
+ sbjpubkey: &quot;-----BEGIN PUBLIC KEY...&quot;,
+ ext: [
+  {extname: &quot;keyUsage&quot;, names:[&quot;digitalSignature&quot;], critical:true},
+  {extname: &quot;subjectAltName&quot;, array:[{&quot;rfc822&quot;: &quot;user1@example.com&quot;}]},
+  {extname: &quot;cRLDistributionPoints&quot;, array:[{fulluri:&quot;https://example.com/ca1.crl&quot;}]}
+ ],
+ sighex: &quot;1234abcd...&quot;
+}
+</code></pre>
+<p>As you see above, the result of getParam() method can be passed to Certificate class constructor described above.</p>
+<h2 id="csr-generation">CSR generation</h2>
+<p>In 8.0.24 or before, <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.csr.CSRUtil.html#.newCSRPEM">CSRUtil.newCSRPEM</a> is used to generate CSR(certificate signing request). In 9.0.0 or later, <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.csr.CertificationRequest.html">CertificationRequest</a> class constructor can be used instead:</p>
+<pre><code class="language-JavaScript">var kp = KEYUTIL.generateKeypair(&quot;RSA&quot;, 2048);
+var csr = new KJUR.asn1.csr.CertificationRequest({
+  subject: {str: &quot;/C=JP/O=Test/CN=user1@example.com&quot;},
+  sbjpubkey: kp.pubKeyObj,  // you can also set PEM public key string
+  extreq: [{extname:&quot;subjectAltName&quot;,array:[{rfc822:&quot;user1@example.com&quot;}]}],
+  sigalg: &quot;SHA256withRSA&quot;,  // you can also set PEM private key string
+  sbjprvkey: kp.prvKeyObj
+});
+var pem = csr.getPEM();
+</code></pre>
+<p>As for &quot;extensionRequest&quot; attribute, you can add any extension parameter in the &quot;extreq&quot; parameter. As though in 8.0.24 or before, only &quot;subjectAltName&quot; extension can be used.</p>
+<h2 id="csr-parsing">CSR parsing</h2>
+<p>In 8.0.24 or before, parsing CSR can be done by CSRUtil.getInfo class however its result JSON object can&#39;t be passed to  <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.csr.CSRUtil.html#.newCSRPEM">CSRUtil.newCSRPEM</a>. So you need to modify the result and pass to newCSRPEM. In 9.0.0 or later, we can use <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.csr.CSRUtil.html#.getParam">CSRUtil.getParam</a> method instead:</p>
+<pre><code class="language-JavaScript">var json = KJUR.asn1.csr.CSRUtil.getParam(&quot;-----BEGIN CERTIIFCATE REQUEST...&quot;);
+console.log(json);
+{
+  subject: {str: &quot;/C=JP/O=Test/CN=user1@example.com&quot;},
+  sbjpubkey: kp.pubKeyObj,  // you can also set PEM public key string
+  extreq: [{extname:&quot;subjectAltName&quot;,array:[{rfc822:&quot;user1@example.com&quot;}]},
+           {extname:&quot;extKeyUsage&quot;,array:[&quot;clientAuth&quot;]}],
+  sigalg: &quot;SHA256withRSA&quot;,  // you can also set PEM private key string
+  sighex: &quot;1234abcd...&quot;
+}
+</code></pre>
+<p>The result JSON object can be passed to CertificationRequest class constructor.</p>
+<h2 id="certificate-extension-json-parameter-format">certificate extension JSON parameter format</h2>
+<p>Certificate extension JSON parameter format have been changed in 9.0.0. In 8.0.24 or before, &quot;basicConstraints&quot; extension will be as following:</p>
+<pre><code class="language-JavaScript">{&quot;basicConstraints&quot;: {&quot;critical&quot;: true, &quot;cA&quot;: true, &quot;pathLen&quot;: 3}}
+</code></pre>
+<p>In 9.0.0 or later, it will be:</p>
+<pre><code class="language-JavaScript">{&quot;extname&quot;: &quot;basicConstraints&quot;, &quot;critical&quot;: true, &quot;cA&quot;: true, &quot;pathLen&quot;: 3}
+</code></pre>
+<p>Note that all extensions have &quot;extname&quot; property for extension name and JSON parameter stop to use nest.</p>
+<h2 id="array-of-certificate-extension-parameters">array of certificate extension parameters</h2>
+<p>New method to parse certificate or CSR extensions have been introduced in 9.0.0. That is <a href="https://kjur.github.io/jsrsasign/api/symbols/X509.html#getExtParamArray">X509.getExtParamArray method</a>. It can be used for both certificate and CSR.</p>
+<h2 id="add-new-x500name-parameter-representation">add new X500Name parameter representation</h2>
+<p>In 8.0.24 or before, <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.X500Name.html">X500Name</a> JSON parameter used in such as subject or issuer name or subjectAltName have been following</p>
+<pre><code class="language-JavaScript">// by OpenSSL compat format string
+{&quot;str&quot;: &quot;/C=JP/O=User1/CN=user1@example.com&quot;}
+// or by RFC 2253 LDAP format string
+{&quot;ldapstr&quot;: &quot;CN=user1@example.com,O=User1,C=JP&quot;}
+// or hexadecimal string of X500 name ASN.1 structure
+{&quot;hex&quot;: &quot;30...&quot;}
+</code></pre>
+<p>In &quot;str&quot; or &quot;ldapstr&quot; representation, DirectoryString type such as UTF8String or PrintableString defined automatically. So to specify DirectoryString type explicitly we have needed to use &quot;hex&quot; representation before.</p>
+<p>In 9.0.0 or later, new 3-tuple array representation have been introduced. Here is example:</p>
+<pre><code class="language-JavaScript">{&quot;array&quot;: [
+ [{type:&quot;C&quot;,value:&quot;JP&quot;,ds:&quot;prn&quot;}],
+ [{type:&quot;O&quot;,value:&quot;User1&quot;,ds:&quot;utf8&quot;}],
+ [{type:&quot;CN&quot;,value:&quot;user1@example.com&quot;,ds:&quot;ia5&quot;}]
+]}
+</code></pre>
+<p>3-tuple represents <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.AttributeTyeAndValue.html">AttributeTypeAndValue</a> ASN.1 structure and has &quot;type&quot;, &quot;value&quot; and &quot;ds&quot; property. <a href="https://kjur.github.io/jsrsasign/api/symbols/KJUR.asn1.x509.RDN.html">RDN</a> will be array of 3-tuple and it can also handle multi-valued RDN. X500Name will be 3-tuple array of array. Then it can specify Directory string type explicitly. When &quot;array&quot;, &quot;str&quot; and &quot;hex&quot; have been specified in the JSON parameter at one time, &quot;array&quot; have priority. </p>
+<h2 id="updated-apis-without-backward-compatibility">updated APIs without backward compatibility</h2>
+<ul>
+<li>return value format of X509.getExtAuthorityKeyIdentifier</li>
+<li>return value format of X509.getExtSubjectKeyIdentifier</li>
+<li>return value format of X509.getExtSubjectAltName</li>
+<li>KJUR.asn1.x509.CertificatePolicies constructor parameter</li>
+<li>KJUR.asn1.x509.AuthorityInfoAccess constructor parameter</li>
+</ul>
+<h2 id="updated-apis-with-backward-compatibility">updated APIs with backward compatibility</h2>
+<ul>
+<li>return value format of X509.getExtKeyUsageString (decipherOnly bugfix)</li>
+<li>return value format of X509.getExtKeyUsageBin (decipherOnly bugfix)</li>
+<li>return value format of X509.getBasicConstraints</li>
+<li>KJUR.asn1.x509.BasicConstraints constructor parameter</li>
+<li>KJUR.asn1.x509.DistributionPointName constructor parameter</li>
+<li>KJUR.asn1.x509.DistributionPoint constructor parameter</li>
+<li>KJUR.asn1.x509.CRLDistributionPoints constructor parameter</li>
+</ul>
+<h2 id="newly-added-apis">newly added APIs</h2>
+<ul>
+<li>X509.getExtKeyUsage</li>
+<li>X509.getExtCertificatePolicies</li>
+<li>X509.getExtCertificatePolicies</li>
+<li>X509.getPolicyInformation</li>
+<li>X509.getPolicyQualifierInfo</li>
+<li>X509.getUserNotice</li>
+<li>X509.getDisplayText</li>
+<li>X509.getIssuerAltName</li>
+<li>X509.getExtExtKeyUsage</li>
+<li>X509.getExtCRLDistributionPoints</li>
+<li>X509.getDistributionPoint</li>
+<li>X509.getDistributionPointName</li>
+<li>X509.getExtAuthorityInfoAccess</li>
+</ul>
+<h1 id="deprecated-apis">deprecated APIs</h1>
+<ul>
+<li>X509.getExtExtKeyUsageName</li>
+<li>X509.getExtAIAInfo</li>
+<li>X509.getExtSubjectAltName2</li>
+</ul>
+<!-- now editing -->
+
+</section>
+</div>
+
+<!-- FOOTER  -->
+<div id="footer_wrap" class="outer">
+<footer class="inner">
+<p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
+<p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<div align="center" style="color: white">
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
+</div>
+</footer>
+</div>
+
+</body>
+</html>
