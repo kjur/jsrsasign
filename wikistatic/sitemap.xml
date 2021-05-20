@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+<!--  created with free sitemap generation system www.sitemapxml.jp  --> 
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Tutorial-for-MessageDigest-class.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Tutorial-for-Signature-class.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Tutorial-for-ASN1-DER-Primitive-Encoder.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Tutorial-for-extensions-when-generating-certificate.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Tutorial-for-interoperability-with-java-signing.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Tutorial-for-interoperability-with-OpenSSL-in-ECDSA-signing-and-verification.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Tutorial-for-JWS-generation.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Tutorial-for-JWS-verification.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Tutorial-for-JWT-generation.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Tutorial-for-JWT-verification.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Tutorial-for-signing-and-verification-with-extended-RSAKey-class.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Tutorial-for-reading-PKCS5-RSA-private-key-with-password.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/NOTE-distinguished-name-representation-in-jsrsasign.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/NOTE-jsrsasign-subset-package.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/NOTE-string-converter-list.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/NOTE-Commercial-Product-List-Using-jsrsasign.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---jwssign.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---jwtverify.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool-List.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Home.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/jsrsasign-Demo.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/jsrsasign-Online-Tools.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/NOTE-String-Converter-List.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Tutorial-for-PKCS5-and-PKCS8-PEM-private-key-formats-differences.html</loc>
+  <lastmod>2021-05-20T18:34:14+09:00</lastmod>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---jwsview.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---dataencrypt.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---datadecrypt.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---datasign.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---dataverify.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---genkey.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---gencsr.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---pemtobin.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---showcert.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---tsr2certs.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---eckey2hex.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---jwktopkcs8.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---pemtojwk.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---asn1dump.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+<url>
+  <loc>https://kjur.github.io/jsrsasign/wikistatic/Sample-Node-Tool---asn1extract.html</loc>
+  <changefreq>daily</changefreq>
+</url>
+
+</urlset>
