@@ -28,6 +28,7 @@
 <a href="https://github.com/kjur/jsrsasign/releases" target="_blank">DOWNLOADS</a> | 
 <a href="https://github.com/kjur/jsrsasign/wiki#programming-tutorial">TUTORIALS</a> | 
 <a href="https://github.com/kjur/jsrsasign/wiki" target="_blank">Wiki</a> | 
+<a href="https://kjur.github.io/jsrsasign/wikistatic/" target="_blank">Wiki Static</a> | 
 <a href="https://kjur.github.io/jsrsasign/api/" target="_blank">API REFERENCE</a> | 
 <a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Online-Tools" target="_blank">Online Tool</a> |
 <a href="https://github.com/kjur/jsrsasign/wiki/jsrsasign-Demo" target="_blank">DEMO</a> | 
@@ -49,7 +50,11 @@
 <a href="https://libraries.io/bower/jsrsasign" target="_blank"><img class="img-no" src="https://img.shields.io/bower/v/jsrsasign.svg?maxAge=2592000" alt=""/></a>
 <a href="https://www.npmjs.com/package/jsrsasign" target="_blank"><img class="img-no" src="https://badge.fury.io/js/jsrsasign.svg?maxAge=2592000" alt=""/></a>
 <a href="https://cdnjs.com/libraries/jsrsasign" target="_blank"><img class="img-no" src="https://img.shields.io/cdnjs/v/jsrsasign.svg?maxAge=2592000" alt=""/></a>
+<a href="https://github.com/sponsors/kjur" target="_blank"><img class="img-no" src="https://img.shields.io/badge/github-donate-yellow.svg" alt="GitHub Sponsors donate button"/></a>
+<a href="#donation"><img class="img-no" src="https://img.shields.io/badge/crypto-donate-yellow.svg" alt="Cryptcurrency donate button"/></a>
 <br clear="all"/>
+
+<dev align="center">Love jsrsasign? Please consider <a href="#donation">donating</a> to sustaining this activity</dev>
 
 <h3>FEATURES</h3>
 The 'jsrsasign' library provides following features in pure JavaScript.
@@ -76,70 +81,15 @@ The 'jsrsasign' library provides following features in pure JavaScript.
 
 <h3>NEWS</h3>
 <dl>
+<dt><b>2021-Jul-21</b>:
+<dd><a href="#donation">Donation program</a> for jsrsasign have been started.
+Love jsrsasign? Please consider donation to sustain this project.
+
 <dt><b>2017-Jun-30</b>:
 <dd><a href="https://github.com/kjur/jsrsasign/releases/tag/8.0.0">
 Release 8.0.0</a> is now available.
 All deprecated methods, classes and files are removed and
 all-min.js file get smaller size.
-
-<dt><b>2017-May-21</b>:
-<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/7.2.0">
-Release 7.2.0</a> is now available.
-Major refactoring before major release update.
-Making Many long name methods deprecated and
-new short name methods are provided to reducing file size.
-
-<dt><b>2017-Mar-15</b>:
-<dd>
-NOTICE: 
-Some people complains that 'jsrsasign' is too huge to use in the web sites.
-The 'jsrsasign' is 'swiss army knife' style crypto library which 
-has a lot of functionality some users may think not necessary.
-So I'm planning to remove all of deprecated codes in the next 
-major release 3 month later (may be 8.0.0 in July) to 
-to shrink size. Until then please use 
-<a href="https://github.com/kjur/jsrsasign/wiki/NOTE-jsrsasign-subset-package">subset package</a>.
-Thanks.
-
-<dt><b>2016-Nov-03</b>:
-<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/6.2.0">
-Release 6.2.0</a> is now available.
-<a href="api/symbols/KJUR.crypto.Cipher.html">Cipher class</a> added.
-
-<dt><b>2016-Sep-24</b>:
-<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/6.1.0">
-Release 6.1.0</a> is now available.
-<a href="https://tools.ietf.org/html/rfc6960">RFC 6960</a>
-OCSP protocol support added.
-
-<dt><b>2016-Sep-11</b>:
-<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/6.0.0">
-Release 6.0.0</a> is now available.
-Now "jsrsasign" become "fs" safe so that it will be available 
-for CommonJS or Webpack.
-
-<dt><b>2016-Sep-03</b>:
-<dd><a href="slide_e/">Slides for jsrsasign introduction</a> is available.
-
-<dt><b>2016-Feb-28</b>:
-<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/5.0.6">
-Release 5.0.6</a> is now available.
-Now jsrsasign can be used in strict mode (--use_strict) of Node.JS.
-
-<dt><b>2015-Nov-23</b>:
-<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/5.0.3">
-Release 5.0.4</a> is now available.
-There is no library and npm update but 
-<a href="https://github.com/kjur/jsrsasign/tree/master/sample_node">sample Node scripts</a>
- are added. Especially I hope <a href="https://github.com/kjur/jsrsasign/blob/master/sample_node/jwtverify">jwtverify</a> tool is very useful for JOSE guys :).
-
-<dt><b>2015-Nov-11</b>:
-<dd><a href="https://github.com/kjur/jsrsasign/releases/tag/5.0.2">
-Release 5.0.2</a> is now available.
-<a href="api/symbols/KJUR.jws.JWS.html#.getJWKthumbprint">RFC 7638 JWK thumbprint</a>
-supported.
-<a href="api/symbols/global__.html">Some file read/save functions</a> added for Node.js
-in <a href="api/symbols/src/nodeutil-1.0.js.html">nodeutil.js</a>.
 
 </dl>
 Old news is <a href="index_oldnews.html">here</a>.
@@ -189,72 +139,21 @@ almost no restrictions.
 You can see the list of QUnit unit tests <a href="test/index.html">here</a> 
 and I hope they help you understand 'jsrsasign' library and APIs.
 
-<!-- **************************************************************************** -->
-<a name="projects"></a>
-<h3>PROJECTS THAT USE JSRSASIGN</h3>
-<dl>
-
-<dt>
-<a href="https://github.com/mozilla/jwcrypto" target="_blank">jwcrypto</a>
-<dd>
-JavaScript implementation of JWS, JWT and JWC. The jycrypto is also used by
-<a href="https://github.com/mozilla/browserid">Mozilla BrowserID/Persona</a>.
-<a href="https://github.com/mozilla/jwcrypto/tree/master/libs/external">(used here)</a>
-
-<dt>
-<a href="https://github.com/michaelrhanson/jwt-js" target="_blank">jwt-js</a>
-<dd>
- JSON Web Tokens implemented in pure JavaScript. 
-<a href="https://github.com/michaelrhanson/jwt-js/tree/master/lib/kurushima-jsrsa">(used here)</a>
-
-<dt>
-<a href="https://npmjs.org/package/node-bignumber" target="_blank">npm node-bignumber</a>
-<dd>
-A pure javascript implementation of BigIntegers and RSA crypto for Node.js
-<a href="https://github.com/JoeDoyle23/node-bignumber/blob/master/lib/rsa/rsa.js">(used here)</a>
-
-<dt>
-<a href="https://npmjs.org/package/bignumber-jt" target="_blank">npm bignumber-jt</a>
-<dd>
-A pure javascript implementation of BigIntegers and RSA crypto.
-<a href="https://github.com/Rcomian/node-bignumber/blob/master/lib/rsa/sign.js">(used here)</a>
-
-<dt>
-<a href="http://netlogic.cs.memphis.edu/script/ndn-js/">NDN.JS</a>
-<dd>
-a JavaScript client library for Named Data Networking of Univ. of Memphis.
-<a href="http://netlogic.cs.memphis.edu/script/ndn-js/js/securityLib/">(used here)</a>
-
-<dt>
-<a href="http://wwwtyro.github.io/cryptico/">cryptico</a>
-<dd>
-An easy-to-use encryption system utilizing RSA and AES for javascript.
-<a href="https://github.com/wwwtyro/cryptico/blob/master/rsa.js">(used here)</a>
-
-<dt>
-<a href="https://code.google.com/p/jspackcrx/" target="_blank">jspackcrx</a>
-<dd>
-Package Chrome extension files using pure JavaScript.
-<a href="https://code.google.com/p/jspackcrx/source/browse/#svn%2Ftrunk%2Flibs%253Fstate%253Dclosed">(used here)</a>
-
-<dt>
-<a href="https://github.com/duerig/xml-signer">xml-signer</a>
-<dd>
-xmldsig signatures in a browser
-<a href="https://github.com/duerig/xml-signer/tree/master/lib/jsrsasign">(used here)</a>
-
-</dl>
-
-<!-- **************************************************************************** -->
-<h3>DEPENDENCY</h3>
+<a name="donation"><h3>DONATIONS</h3></a>
 <p>
-<ul>
-<li><a href="http://www-cs-students.stanford.edu/~tjw/jsbn/" target="_blank">Tom Wu's jsbn library</a> - BigInteger, RSA and ECC</li>
-<li><a href="https://github.com/bitcoinjs/bitcoinjs-lib/" target="_blank">BitcoinJS library</a> - ECDSA signature algorithm</li>
-<li><a href="https://code.google.com/p/crypto-js/">CryptoJS</a> - symmetric key encryption algorithms, message digest, message authentication codes and PBKDF</li>
-<li><a href="http://yuilibrary.com/">Yahoo YUI library</a> - for class inheritance</a>
-</ul>
+If you like jsrsasign and my other project, you can support their development by donation through any of the platform/services below. Thank you as always.
+<h4>Github Sponsors</h4>
+You can sponsor jsrsasign with the 
+<a href="https://github.com/sponsors/kjur">GitHub Sponsors </a>program.
 </p>
+<h4>Cryptocurrency</h4>
+You can donate cryptocurrency to jsrsasign using the following addresses:
+<ul>
+<li>Bitcoin(BTC): <code>34vSRe7XHoMy78HKgps9YJ5BrBLYJLeM22</code></li>
+<li>Ethereum(ETH): <code>0x9c4cdbb531e5b84796ff5f91a9f652704761e64e</code></li>
+<li>Litecoin(LTC): <code>LPf3VDJVamwPcNJNjjVtrUQuJQ17ZyWzeU</code></li>
+<li>Bitcoin Cash(BCH): <code>bitcoincash:pq3hy08pc9vm57q6ddgsc06cqdffmfzwwqxd9yejyf</code></li>
+</ul>
 
 <p></p>
 
@@ -269,7 +168,7 @@ xmldsig signatures in a browser
         <p class="copyright">jsrsasign maintained by <a href="https://github.com/kjur">kjur</a></p>
         <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
 <div align="center" style="color: white">
-Copyright &copy; 2010-2016 Kenji Urushima. All rights reserved.
+Copyright &copy; 2010-2021 Kenji Urushima. All rights reserved.
 </div>
       </footer>
     </div>

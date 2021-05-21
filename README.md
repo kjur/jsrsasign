@@ -5,6 +5,7 @@ jsrsasign
 [![bower](https://img.shields.io/bower/v/jsrsasign.svg?maxAge=2592000)](https://libraries.io/bower/jsrsasign)
 [![npm version](https://badge.fury.io/js/jsrsasign.svg)](https://badge.fury.io/js/jsrsasign)
 [![npm downloads](https://img.shields.io/npm/dm/jsrsasign.svg)](https://www.npmjs.com/package/jsrsasign)
+[![jsdeliver downloads](https://data.jsdelivr.com/v1/package/npm/jsrsasign/badge)](https://www.jsdelivr.com/package/npm/jsrsasign)
 [![CDNJS](https://img.shields.io/cdnjs/v/jsrsasign.svg)](https://cdnjs.com/libraries/jsrsasign)
 [![githubsponsors](https://img.shields.io/badge/github-donate-yellow.svg)](https://github.com/sponsors/kjur)
 [![cryptocurrency](https://img.shields.io/badge/crypto-donate-yellow.svg)](https://github.com/kjur/jsrsasign#cryptocurrency)
