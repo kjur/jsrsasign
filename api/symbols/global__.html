@@ -677,6 +677,17 @@ This function converts from Date object to GeneralizedTime string (i.e.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#extendClass">extendClass</a></b>(subClass, superClass)
+								</div>
+								<div class="description">set class inheritance<br/>
+This function extends a class and set an inheritance
+for member variables and methods.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#hextoArrayBuffer">hextoArrayBuffer</a></b>(hex)
 								</div>
 								<div class="description">convert a hexadecimal string to an ArrayBuffer<br/>
@@ -1873,6 +1884,72 @@ all of characters into "%xx" format.
 								<dd><span class="light fixedFont">{String}</span> URIComponent string such like "%67%68"</dd>
 							
 							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="extendClass"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>extendClass</b>(subClass, superClass)
+					
+					</div>
+					<div class="description">
+						set class inheritance<br/>
+This function extends a class and set an inheritance
+for member variables and methods.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var Animal = function() {
+  this.hello = function(){console.log("Hello")};
+  this.name="Ani";
+};
+var Dog = function() {
+  Dog.superclass.constructor.call(this);
+  this.vow = function(){console.log("Vow wow")};
+  this.tail=true;
+};
+extendClass(Dog, Animal);</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Function}</span> <b>subClass</b>
+									
+								</dt>
+								<dd>sub class to set inheritance</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Function}</span> <b>superClass</b>
+									
+								</dt>
+								<dd>super class to inherit</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.3.0 base64x 1.1.21</dd>
+							</dl>
+							</dl>
+						
+						
 						
 						
 						

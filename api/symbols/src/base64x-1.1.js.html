@@ -1530,4 +1530,41 @@
 <span class='line'>1523</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hUnusedbit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">iUnusedbit</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>1524</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">hUnusedbit</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">hValue</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>1525</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1526</span> </span></pre></body></html>
+<span class='line'>1526</span> 
+<span class='line'>1527</span> </span><span class="COMM">/**
+<span class='line'>1528</span>  * set class inheritance&lt;br/>
+<span class='line'>1529</span>  * @name extendClass
+<span class='line'>1530</span>  * @function
+<span class='line'>1531</span>  * @param {Function} subClass sub class to set inheritance
+<span class='line'>1532</span>  * @param {Function} superClass super class to inherit
+<span class='line'>1533</span>  * @since jsrsasign 10.3.0 base64x 1.1.21
+<span class='line'>1534</span>  *
+<span class='line'>1535</span>  * @description
+<span class='line'>1536</span>  * This function extends a class and set an inheritance
+<span class='line'>1537</span>  * for member variables and methods.
+<span class='line'>1538</span>  *
+<span class='line'>1539</span>  * @example
+<span class='line'>1540</span>  * var Animal = function() {
+<span class='line'>1541</span>  *   this.hello = function(){console.log("Hello")};
+<span class='line'>1542</span>  *   this.name="Ani";
+<span class='line'>1543</span>  * };
+<span class='line'>1544</span>  * var Dog = function() {
+<span class='line'>1545</span>  *   Dog.superclass.constructor.call(this);
+<span class='line'>1546</span>  *   this.vow = function(){console.log("Vow wow")};
+<span class='line'>1547</span>  *   this.tail=true;
+<span class='line'>1548</span>  * };
+<span class='line'>1549</span>  * extendClass(Dog, Animal);
+<span class='line'>1550</span>  */</span><span class="WHIT">
+<span class='line'>1551</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">extendClass</span><span class="PUNC">(</span><span class="NAME">subClass</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">superClass</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1552</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">F</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1553</span> </span><span class="WHIT">    </span><span class="NAME">F.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">superClass.prototype</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1554</span> </span><span class="WHIT">    </span><span class="NAME">subClass.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">F</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1555</span> </span><span class="WHIT">    </span><span class="NAME">subClass.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">subClass</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1556</span> </span><span class="WHIT">    </span><span class="NAME">subClass.superclass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">superClass.prototype</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1557</span> </span><span class="WHIT">     
+<span class='line'>1558</span>     </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">superClass.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">Object.prototype.constructor</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1559</span> </span><span class="WHIT">        </span><span class="NAME">superClass.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">superClass</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1560</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1561</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1562</span> 
+<span class='line'>1563</span> </span></pre></body></html>

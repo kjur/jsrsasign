@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit for extendClass in 'base64x.js'</title>
+<meta charset='utf-8' />
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+<!-- tom wo's -->
+<script src="../ext/base64.js"></script>
+<script src="../ext/jsbn.js"></script>
+<!-- jsrsasign -->
+<script src="../src/base64x-1.1.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+test("extendClass", function() {
+var Animal = function() {
+    this.hello = function(who){return "Hello " + who;};
+    this.name="Ani";
+};
+var Dog = function() {
+    Dog.superclass.constructor.call(this);
+    this.vow = function(who){return "Vow wow " + who;};
+    this.tail=true;
+};
+extendClass(Dog, Animal);
+var a1 = new Animal();
+var d1 = new Dog();
+equal(a1.name, "Ani", "Animal.name");
+equal(a1.hello("Alice"), "Hello Alice", "Animal.hello(who)");
+equal(d1.name, "Ani", "Dog.name inherit");
+equal(d1.hello("Bob"), "Hello Bob", "Dog.hello(who) inherit");
+equal(d1.tail, true, "Dog.tail=true");
+equal(d1.vow("Cathy"), "Vow wow Cathy", "Dog.vow(who)");
+
+});
+
+});
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+
+<p>
+<a href="../">TOP</a> | 
+<a href="index.html">TEST INDEX</a> | 
+<a href="qunit-do-base64x.html">base64x</a> | 
+<a href="qunit-do-base64x-class.html">base64x-class</a> | 
+</p>
+
+</body>
+</html>

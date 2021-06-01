@@ -1,11 +1,25 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 10.2.0 to next release
+remove all YUI dependency
+* Changes from 10.2.0 to 10.3.0
+  - remove YUI library dependency
+  - LICENSE.txt
+    - remove YUI license
+  - src/base64x.js
+    - add extendClass function to replace YUI class extend
+  - src/*.js
+    - replace YAHOO.lang.extend to extendClass all
+  - src/keyutil.js
+    - change to raise exception in KEYUTIL class with Error class
   - src/asn1x509.js
     - API document update for Extesions and CRLReason class
   - npm_util/package.json
     - fix dependencies (#482)
+  - test/qunit-do-*.html
+    - updated to follow above
+  - test/qunit-do-base64x-class.html added
+    - test for extendClass function
 
 CVE-2021-30246 RSAKey.verify issue fix
 * Changes from 10.1.13 to 10.2.0 (2021-04-14)
