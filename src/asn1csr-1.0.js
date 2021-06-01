@@ -208,7 +208,7 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
 
     if (params !== undefined) this.setByParam(params);
 };
-YAHOO.lang.extend(KJUR.asn1.csr.CertificationRequest, KJUR.asn1.ASN1Object);
+extendClass(KJUR.asn1.csr.CertificationRequest, KJUR.asn1.ASN1Object);
 
 /**
  * ASN.1 CertificationRequestInfo structure class
@@ -297,7 +297,7 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
     if (params != undefined) this.setByParam(params);
 };
 
-YAHOO.lang.extend(KJUR.asn1.csr.CertificationRequestInfo, KJUR.asn1.ASN1Object);
+extendClass(KJUR.asn1.csr.CertificationRequestInfo, KJUR.asn1.ASN1Object);
 
 /**
  * Certification Request (CSR/PKCS#10) utilities class<br/>

@@ -1,4 +1,4 @@
-/* keyutil-1.2.3.js (c) 2013-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* keyutil-1.2.4.js (c) 2013-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.6 keyutil 1.2.3 (2021-Feb-08)
+ * @version jsrsasign 10.2.1 keyutil 1.2.4 (2021-May-22)
  * @since jsrsasign 4.1.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -357,11 +357,13 @@ var KEYUTIL = function() {
             var sPEM = "";
 
             // 1. set sharedKeyAlgName if undefined (default AES-256-CBC)
-            if (typeof sharedKeyAlgName == "undefined" || sharedKeyAlgName == null) {
+            if (typeof sharedKeyAlgName == "undefined" ||
+		sharedKeyAlgName == null) {
                 sharedKeyAlgName = "AES-256-CBC";
             }
             if (typeof ALGLIST[sharedKeyAlgName] == "undefined")
-                throw "KEYUTIL unsupported algorithm: " + sharedKeyAlgName;
+                throw new Error("KEYUTIL unsupported algorithm: " + 
+				sharedKeyAlgName);
 
             // 2. set ivsaltHex if undefined
             if (typeof ivsaltHex == "undefined" || ivsaltHex == null) {
@@ -427,7 +429,8 @@ var KEYUTIL = function() {
             
             var a0 = _getChildIdx(sHEX, 0);
             if (a0.length != 2)
-                throw "malformed format: SEQUENCE(0).items != 2: " + a0.length;
+                throw new Error("malformed format: SEQUENCE(0).items != 2: " +
+				a0.length);
 
             // 1. ciphertext
             info.ciphertext = _getV(sHEX, a0[1]);
@@ -435,21 +438,25 @@ var KEYUTIL = function() {
             // 2. pkcs5PBES2
             var a0_0 = _getChildIdx(sHEX, a0[0]); 
             if (a0_0.length != 2)
-                throw "malformed format: SEQUENCE(0.0).items != 2: " + a0_0.length;
+                throw new Error("malformed format: SEQUENCE(0.0).items != 2: "
+				+ a0_0.length);
 
             // 2.1 check if pkcs5PBES2(1 2 840 113549 1 5 13)
             if (_getV(sHEX, a0_0[0]) != "2a864886f70d01050d")
-                throw "this only supports pkcs5PBES2";
+                throw new Error("this only supports pkcs5PBES2");
 
             // 2.2 pkcs5PBES2 param
             var a0_0_1 = _getChildIdx(sHEX, a0_0[1]); 
             if (a0_0.length != 2)
-                throw "malformed format: SEQUENCE(0.0.1).items != 2: " + a0_0_1.length;
+                throw new Error("malformed format: SEQUENCE(0.0.1).items != 2: "
+				+ a0_0_1.length);
 
             // 2.2.1 encryptionScheme
             var a0_0_1_1 = _getChildIdx(sHEX, a0_0_1[1]); 
             if (a0_0_1_1.length != 2)
-                throw "malformed format: SEQUENCE(0.0.1.1).items != 2: " + a0_0_1_1.length;
+                throw new Error("malformed format: " + 
+				"SEQUENCE(0.0.1.1).items != 2: " +
+				a0_0_1_1.length);
             if (_getV(sHEX, a0_0_1_1[0]) != "2a864886f70d0307")
                 throw "this only supports TripleDES";
             info.encryptionSchemeAlg = "TripleDES";
@@ -460,14 +467,18 @@ var KEYUTIL = function() {
             // 2.2.2 keyDerivationFunc
             var a0_0_1_0 = _getChildIdx(sHEX, a0_0_1[0]); 
             if (a0_0_1_0.length != 2)
-                throw "malformed format: SEQUENCE(0.0.1.0).items != 2: " + a0_0_1_0.length;
+                throw new Error("malformed format: " +
+				"SEQUENCE(0.0.1.0).items != 2: "
+				+ a0_0_1_0.length);
             if (_getV(sHEX, a0_0_1_0[0]) != "2a864886f70d01050c")
-                throw "this only supports pkcs5PBKDF2";
+                throw new Error("this only supports pkcs5PBKDF2");
 
             // 2.2.2.1 pkcs5PBKDF2 param
             var a0_0_1_0_1 = _getChildIdx(sHEX, a0_0_1_0[1]); 
             if (a0_0_1_0_1.length < 2)
-                throw "malformed format: SEQUENCE(0.0.1.0.1).items < 2: " + a0_0_1_0_1.length;
+                throw new Error("malformed format: " +
+				"SEQUENCE(0.0.1.0.1).items < 2: " + 
+				a0_0_1_0_1.length);
 
             // 2.2.2.1.1 PBKDF2 salt
             info.pbkdf2Salt = _getV(sHEX, a0_0_1_0_1[0]);
@@ -477,7 +488,7 @@ var KEYUTIL = function() {
             try {
                 info.pbkdf2Iter = parseInt(iterNumHex, 16);
             } catch(ex) {
-                throw "malformed format pbkdf2Iter: " + iterNumHex;
+                throw new Error("malformed format pbkdf2Iter: " + iterNumHex);
             }
 
             return info;
@@ -671,7 +682,7 @@ var KEYUTIL = function() {
             } else if (p8.algoid == "2a8648ce3d0201") { // ECC
                 key = new KJUR.crypto.ECDSA();
             } else {
-                throw "unsupported private key algorithm";
+                throw new Error("unsupported private key algorithm");
             }
 
 	    key.readPKCS8PrvKeyHex(prvKeyHex);
@@ -700,7 +711,7 @@ var KEYUTIL = function() {
 	    } else if (hOID === "2a8648ce3d0201") { // oid=ECPUB
 		key = new KJUR.crypto.ECDSA();
 	    } else {
-		throw "unsupported PKCS#8 public key hex";
+		throw new Error("unsupported PKCS#8 public key hex");
 	    }
 	    key.readPKCS8PubKeyHex(h);
 	    return key;
@@ -729,21 +740,21 @@ var KEYUTIL = function() {
             
             // 1. Sequence
             if (pubRawRSAHex.substr(0, 2) != "30")
-                throw "malformed RSA key(code:001)"; // not sequence
+                throw new Error("malformed RSA key(code:001)"); // not sequence
             
             var a1 = _getChildIdx(pubRawRSAHex, 0);
             if (a1.length != 2)
-                throw "malformed RSA key(code:002)"; // not 2 items in seq
+                throw new Error("malformed RSA key(code:002)"); // not 2 items in seq
 
             // 2. public key "N"
             if (pubRawRSAHex.substr(a1[0], 2) != "02")
-                throw "malformed RSA key(code:003)"; // 1st item is not integer
+                throw new Error("malformed RSA key(code:003)"); // 1st item is not integer
 
             result.n = _getV(pubRawRSAHex, a1[0]);
 
             // 3. public key "E"
             if (pubRawRSAHex.substr(a1[1], 2) != "02")
-                throw "malformed RSA key(code:004)"; // 2nd item is not integer
+                throw new Error("malformed RSA key(code:004)"); // 2nd item is not integer
 
             result.e = _getV(pubRawRSAHex, a1[1]);
 
@@ -775,20 +786,20 @@ var KEYUTIL = function() {
             // 1. AlgID and Key bit string
             var a1 = _getChildIdx(pkcs8PubHex, 0);
             if (a1.length != 2)
-                throw "outer DERSequence shall have 2 elements: " + a1.length;
+                throw new Error("outer DERSequence shall have 2 elements: " + a1.length);
 
             // 2. AlgID
             var idxAlgIdTLV = a1[0];
             if (pkcs8PubHex.substr(idxAlgIdTLV, 2) != "30")
-                throw "malformed PKCS8 public key(code:001)"; // AlgId not sequence
+                throw new Error("malformed PKCS8 public key(code:001)"); // AlgId not sequence
 
             var a2 = _getChildIdx(pkcs8PubHex, idxAlgIdTLV);
             if (a2.length != 2)
-                throw "malformed PKCS8 public key(code:002)"; // AlgId not have two elements
+                throw new Error("malformed PKCS8 public key(code:002)"); // AlgId not have two elements
 
             // 2.1. AlgID OID
             if (pkcs8PubHex.substr(a2[0], 2) != "06")
-                throw "malformed PKCS8 public key(code:003)"; // AlgId.oid is not OID
+                throw new Error("malformed PKCS8 public key(code:003)"); // AlgId.oid is not OID
 
             result.algoid = _getV(pkcs8PubHex, a2[0]);
 
@@ -804,7 +815,7 @@ var KEYUTIL = function() {
 
             // 3. Key
             if (pkcs8PubHex.substr(a1[1], 2) != "03")
-                throw "malformed PKCS8 public key(code:004)"; // Key is not bit string
+                throw new Error("malformed PKCS8 public key(code:004)"); // Key is not bit string
 
             result.key = _getV(pkcs8PubHex, a1[1]).substr(2);
             
@@ -814,7 +825,7 @@ var KEYUTIL = function() {
     };
 }();
 
-// -- MAJOR PUBLIC METHODS -------------------------------------------------------
+// -- MAJOR PUBLIC METHODS ----------------------------------------------------
 /**
  * get private or public key object from any arguments
  * @name getKey
@@ -1074,7 +1085,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	    key = new _KJUR_crypto_ECDSA();
 	    key.readPKCS5PrvKeyHex(h);
 	} else {
-	    throw "unsupported PKCS#1/5 hexadecimal key";
+	    throw new Error("unsupported PKCS#1/5 hexadecimal key");
 	}
 
         return key;
@@ -1170,7 +1181,8 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
         if (KJUR.crypto.OID.oidhex2name[curveNameOidHex] !== undefined) {
             curveName = KJUR.crypto.OID.oidhex2name[curveNameOidHex];
         } else {
-            throw "undefined OID(hex) in KJUR.crypto.OID: " + curveNameOidHex;
+            throw new Error("undefined OID(hex) in KJUR.crypto.OID: " + 
+			    curveNameOidHex);
         }
 
         var ec = new _KJUR_crypto_ECDSA({'curve': curveName});
@@ -1273,7 +1285,7 @@ KEYUTIL.generateKeypair = function(alg, keylenOrCurve) {
         result.pubKeyObj = pubKey;
         return result;
     } else {
-        throw "unknown algorithm: " + alg;
+        throw new Error("unknown algorithm: " + alg);
     }
 };
 
@@ -1680,19 +1692,19 @@ KEYUTIL.parseCSRHex = function(csrHex) {
 
     // 1. sequence
     if (h.substr(0, 2) != "30")
-        throw "malformed CSR(code:001)"; // not sequence
+        throw new Error("malformed CSR(code:001)"); // not sequence
 
     var a1 = _getChildIdx(h, 0);
     if (a1.length < 1)
-        throw "malformed CSR(code:002)"; // short length
+        throw new Error("malformed CSR(code:002)"); // short length
 
     // 2. 2nd sequence
     if (h.substr(a1[0], 2) != "30")
-        throw "malformed CSR(code:003)"; // not sequence
+        throw new Error("malformed CSR(code:003)"); // not sequence
 
     var a2 = _getChildIdx(h, a1[0]);
     if (a2.length < 3)
-        throw "malformed CSR(code:004)"; // 2nd seq short elem
+        throw new Error("malformed CSR(code:004)"); // 2nd seq short elem
 
     result.p8pubkeyhex = _getTLV(h, a2[2]);
 
@@ -1778,7 +1790,7 @@ KEYUTIL.getJWKFromKey = function(keyObj) {
     } else if (keyObj instanceof KJUR.crypto.ECDSA && keyObj.isPrivate) {
 	var name = keyObj.getShortNISTPCurveName();
 	if (name !== "P-256" && name !== "P-384")
-	    throw "unsupported curve name for JWT: " + name;
+	    throw new Error("unsupported curve name for JWT: " + name);
 	var xy = keyObj.getPublicKeyXYHex();
 	jwk.kty = "EC";
 	jwk.crv =  name;
@@ -1789,7 +1801,7 @@ KEYUTIL.getJWKFromKey = function(keyObj) {
     } else if (keyObj instanceof KJUR.crypto.ECDSA && keyObj.isPublic) {
 	var name = keyObj.getShortNISTPCurveName();
 	if (name !== "P-256" && name !== "P-384")
-	    throw "unsupported curve name for JWT: " + name;
+	    throw new Error("unsupported curve name for JWT: " + name);
 	var xy = keyObj.getPublicKeyXYHex();
 	jwk.kty = "EC";
 	jwk.crv =  name;
@@ -1797,7 +1809,7 @@ KEYUTIL.getJWKFromKey = function(keyObj) {
 	jwk.y = hextob64u(xy.y);
 	return jwk;
     }
-    throw "not supported key object";
+    throw new Error("not supported key object");
 };
 
 

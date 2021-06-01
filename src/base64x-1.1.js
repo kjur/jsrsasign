@@ -1523,3 +1523,40 @@ function inttobitstr(n) {
     var hUnusedbit = "0" + iUnusedbit;
     return hUnusedbit + hValue;
 };
+
+/**
+ * set class inheritance<br/>
+ * @name extendClass
+ * @function
+ * @param {Function} subClass sub class to set inheritance
+ * @param {Function} superClass super class to inherit
+ * @since jsrsasign 10.3.0 base64x 1.1.21
+ *
+ * @description
+ * This function extends a class and set an inheritance
+ * for member variables and methods.
+ *
+ * @example
+ * var Animal = function() {
+ *   this.hello = function(){console.log("Hello")};
+ *   this.name="Ani";
+ * };
+ * var Dog = function() {
+ *   Dog.superclass.constructor.call(this);
+ *   this.vow = function(){console.log("Vow wow")};
+ *   this.tail=true;
+ * };
+ * extendClass(Dog, Animal);
+ */
+function extendClass(subClass, superClass) {
+    var F = function() {};
+    F.prototype = superClass.prototype;
+    subClass.prototype = new F();
+    subClass.prototype.constructor = subClass;
+    subClass.superclass = superClass.prototype;
+     
+    if (superClass.prototype.constructor == Object.prototype.constructor) {
+        superClass.prototype.constructor = superClass;
+    }
+};
+

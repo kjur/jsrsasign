@@ -159,7 +159,7 @@ KJUR.asn1.ocsp.OCSPResponse = function(params) {
 
     if (params !== undefined) this.setByParam(params);
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.OCSPResponse, KJUR.asn1.ASN1Object);
+extendClass(KJUR.asn1.ocsp.OCSPResponse, KJUR.asn1.ASN1Object);
 
 /**
  * ResponseBytes ASN.1 class encoder<br/>
@@ -228,7 +228,7 @@ KJUR.asn1.ocsp.ResponseBytes = function(params) {
 
     if (params !== undefined) this.setByParam(params);
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.ResponseBytes, KJUR.asn1.ASN1Object);
+extendClass(KJUR.asn1.ocsp.ResponseBytes, KJUR.asn1.ASN1Object);
 
 /**
  * BasicOCSPResponse ASN.1 class encoder<br/>
@@ -373,7 +373,7 @@ KJUR.asn1.ocsp.BasicOCSPResponse = function(params) {
 
     if (params !== undefined) this.setByParam(params);
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.BasicOCSPResponse, KJUR.asn1.ASN1Object);
+extendClass(KJUR.asn1.ocsp.BasicOCSPResponse, KJUR.asn1.ASN1Object);
 
 /**
  * ResponseData ASN.1 class encoder<br/>
@@ -466,7 +466,7 @@ KJUR.asn1.ocsp.ResponseData = function(params) {
 
     if (params !== undefined) this.setByParam(params);
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.ResponseData, KJUR.asn1.ASN1Object);
+extendClass(KJUR.asn1.ocsp.ResponseData, KJUR.asn1.ASN1Object);
 
 /**
  * ResponderID ASN.1 class encoder<br/>
@@ -532,7 +532,7 @@ KJUR.asn1.ocsp.ResponderID = function(params) {
 
     if (params !== undefined) this.setByParam(params);
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.ResponderID, KJUR.asn1.ASN1Object);
+extendClass(KJUR.asn1.ocsp.ResponderID, KJUR.asn1.ASN1Object);
 
 /**
  * ASN.1 class encoder for SEQUENCE OF SingleResponse<br/>
@@ -613,7 +613,7 @@ KJUR.asn1.ocsp.SingleResponseList = function(params) {
 
     if (params !== undefined) this.setByParam(params);
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.SingleResponseList, KJUR.asn1.ASN1Object);
+extendClass(KJUR.asn1.ocsp.SingleResponseList, KJUR.asn1.ASN1Object);
 
 /**
  * SingleResponse ASN.1 class encoder<br/>
@@ -712,7 +712,7 @@ KJUR.asn1.ocsp.SingleResponse = function(params) {
 
     if (params !== undefined) this.setByParam(params);
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.SingleResponse, KJUR.asn1.ASN1Object);
+extendClass(KJUR.asn1.ocsp.SingleResponse, KJUR.asn1.ASN1Object);
 
 /**
  * ASN.1 CertID class for OCSP<br/>
@@ -872,7 +872,7 @@ KJUR.asn1.ocsp.CertID = function(params) {
 	}
     }
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.CertID, KJUR.asn1.ASN1Object);
+extendClass(KJUR.asn1.ocsp.CertID, KJUR.asn1.ASN1Object);
 
 /**
  * CertStatus ASN.1 class encoder<br/>
@@ -955,7 +955,7 @@ KJUR.asn1.ocsp.CertStatus = function(params) {
 
     if (params !== undefined) this.setByParam(params);
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.CertStatus, KJUR.asn1.ASN1Object);
+extendClass(KJUR.asn1.ocsp.CertStatus, KJUR.asn1.ASN1Object);
 
 // ---- END OF Classes for OCSP response -----------------------------------
 
@@ -1016,7 +1016,7 @@ KJUR.asn1.ocsp.Request = function(params) {
 	this.dReqCert = o;
     }
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.Request, KJUR.asn1.ASN1Object);
+extendClass(KJUR.asn1.ocsp.Request, KJUR.asn1.ASN1Object);
 
 /**
  * ASN.1 TBSRequest class for OCSP<br/>
@@ -1110,7 +1110,7 @@ KJUR.asn1.ocsp.TBSRequest = function(params) {
 	    this.setRequestListByParam(params.reqList);
     }
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.TBSRequest, KJUR.asn1.ASN1Object);
+extendClass(KJUR.asn1.ocsp.TBSRequest, KJUR.asn1.ASN1Object);
 
 
 /**
@@ -1175,7 +1175,7 @@ KJUR.asn1.ocsp.OCSPRequest = function(params) {
 	}
     }
 };
-YAHOO.lang.extend(KJUR.asn1.ocsp.OCSPRequest, KJUR.asn1.ASN1Object);
+extendClass(KJUR.asn1.ocsp.OCSPRequest, KJUR.asn1.ASN1Object);
 
 /**
  * Utility class for OCSP<br/>

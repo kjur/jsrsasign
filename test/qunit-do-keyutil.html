@@ -27,7 +27,7 @@
 <script src="../ext/cj/hmac_min.js"></script>
 <script src="../ext/cj/pbkdf2_min.js"></script>
 
-<script src="../ext/yahoo.js"></script>
+
 <script src="../ext/jsbn.js"></script>
 <script src="../ext/jsbn2.js"></script>
 <script src="../ext/prng4.js"></script>
@@ -239,13 +239,16 @@ test("getEncryptedPKCS5PEMFromPrvKeyHex/3 without Alg and IV", function() {
 });
 
 test("getEncryptedPKCS5PEMFromPrvKeyHex/4-1 alg check", function() {
-  // 1. no such alg
-  throws(function() {
-      KEYUTIL.getEncryptedPKCS5PEMFromPrvKeyHex("RSA", "1234af", "password", "FOOALG", "012345");
+// 1. no such alg
+    throws(function() {
+	KEYUTIL.getEncryptedPKCS5PEMFromPrvKeyHex("RSA",
+						  "1234af",
+						  "password",
+						  "FOOALG",
+						  "012345");
     }, 
-    /^KEYUTIL unsupported algorithm:/,
-    "raise exception FOOALG"
-  );
+    "KEYUTIL unsupported algorithm: FOOALG",
+    "raise exception FOOALG");
 });
 
 test("getEncryptedPKCS5PEMFromPrvKeyHex/4-2 alg check", function() {
