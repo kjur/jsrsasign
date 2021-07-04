@@ -1,4 +1,4 @@
-/* asn1hex-1.2.9.js (c) 2012-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1hex-1.2.9.js (c) 2012-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library

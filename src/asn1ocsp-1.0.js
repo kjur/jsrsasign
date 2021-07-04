@@ -1,4 +1,4 @@
-/* asn1ocsp-1.1.3.js (c) 2016-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1ocsp-1.1.3.js (c) 2016-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1ocsp.js - ASN.1 DER encoder classes for OCSP protocol

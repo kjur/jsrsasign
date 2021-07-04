@@ -1,4 +1,4 @@
-/* ecparam-1.0.0.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* ecparam-1.0.0.js (c) 2013 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * ecparam.js - Elliptic Curve Cryptography Curve Parameter Definition class

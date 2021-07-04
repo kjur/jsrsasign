@@ -1,4 +1,4 @@
-/* nodeutil-1.0.2 (c) 2015-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* nodeutil-1.0.2 (c) 2015-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * nodeutil.js - Utilities for Node

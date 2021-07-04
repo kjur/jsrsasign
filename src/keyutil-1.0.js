@@ -1,4 +1,4 @@
-/* keyutil-1.2.4.js (c) 2013-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* keyutil-1.2.4.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object

@@ -1,6 +1,11 @@
 
 ChangeLog for jsrsasign
 
+document fix for deprecated kjur.github.com domain
+* Changes from 10.3.0 to 10.3.1
+  - kjur.github.com domain is deprecated after Apr 15, 2021. So all kjur.github.com domain shall be updated to kjur.github.io. (#490)
+  - There is no bundled library (-all-min.js) nor npm update on this. license URL will be fixed in next release.
+
 remove all YUI dependency
 * Changes from 10.2.0 to 10.3.0
   - remove YUI library dependency

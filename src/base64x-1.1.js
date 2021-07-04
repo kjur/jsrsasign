@@ -1,4 +1,4 @@
-/* base64x-1.1.20 (c) 2012-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* base64x-1.1.20 (c) 2012-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library

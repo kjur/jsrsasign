@@ -1,4 +1,4 @@
-/* jws-3.3.11 (c) 2013-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* jws-3.3.11 (c) 2013-2018 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * jws.js - JSON Web Signature(JWS) and JSON Web Token(JWT) Class

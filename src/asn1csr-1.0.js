@@ -1,4 +1,4 @@
-/* asn1csr-2.0.3.js (c) 2015-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1csr-2.0.3.js (c) 2015-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR

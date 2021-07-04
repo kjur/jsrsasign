@@ -1,4 +1,4 @@
-/* asn1x509-2.1.8.js (c) 2013-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1x509-2.1.8.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
