@@ -1,9 +1,9 @@
-/* asn1ocsp-1.1.3.js (c) 2016-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1ocsp-1.1.4.js (c) 2016-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1ocsp.js - ASN.1 DER encoder classes for OCSP protocol
  *
- * Copyright (c) 2016-2020 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2016-2021 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1ocsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 9.1.9 asn1ocsp 1.1.3 (2020-Sep-08)
+ * @version jsrsasign 10.3.2 asn1ocsp 1.1.4 (2021-Aug-15)
  * @since jsrsasign 6.1.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -830,7 +830,7 @@ KJUR.asn1.ocsp.CertID = function(params) {
 	xIss.readCertPEM(issuerCert);
 
 	var hISS_SPKI = xIss.getPublicKeyHex();
-	var issuerKeyHex = _ASN1HEX.getTLVbyList(hISS_SPKI, 0, [1, 0], "30");
+	var issuerKeyHex = _ASN1HEX.getVbyList(hISS_SPKI, 0, [1], "03", true);
 
 	var serialNumberHex = xSbj.getSerialNumberHex();
 	var issuerNameHashHex = _hashHex(xIss.getSubjectHex(), algName);
