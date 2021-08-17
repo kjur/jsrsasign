@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1ocsp-1.1.4.js (c) 2016-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1ocsp-1.1.5.js (c) 2016-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * asn1ocsp.js - ASN.1 DER encoder classes for OCSP protocol
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name asn1ocsp-1.0.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign 10.3.2 asn1ocsp 1.1.4 (2021-Aug-15)
+<span class='line'> 19</span>  * @version jsrsasign 10.4.0 asn1ocsp 1.1.5 (2021-Aug-17)
 <span class='line'> 20</span>  * @since jsrsasign 6.1.0
 <span class='line'> 21</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -1225,230 +1225,230 @@
 <span class='line'>1218</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>1219</span> 
 <span class='line'>1220</span> </span><span class="COMM">/**
-<span class='line'>1221</span>  * parse OCSPResponse&lt;br/>
+<span class='line'>1221</span>  * parse OCSPResponse (DEPRECATED)&lt;br/>
 <span class='line'>1222</span>  * @name getOCSPResponseInfo
 <span class='line'>1223</span>  * @memberOf KJUR.asn1.ocsp.OCSPUtil
 <span class='line'>1224</span>  * @function
 <span class='line'>1225</span>  * @param {String} h hexadecimal string of DER OCSPResponse
 <span class='line'>1226</span>  * @return {Object} JSON object of parsed OCSPResponse
 <span class='line'>1227</span>  * @since jsrsasign 6.1.0 asn1ocsp 1.0.1
-<span class='line'>1228</span>  * @description
-<span class='line'>1229</span>  * This static method parse a hexadecimal string of DER OCSPResponse and
-<span class='line'>1230</span>  * returns JSON object of its parsed result.
-<span class='line'>1231</span>  * Its result has following properties:
-<span class='line'>1232</span>  * &lt;ul>
-<span class='line'>1233</span>  * &lt;li>responseStatus - integer of responseStatus&lt;/li>
-<span class='line'>1234</span>  * &lt;li>certStatus - string of certStatus (ex. good, revoked or unknown)&lt;/li>
-<span class='line'>1235</span>  * &lt;li>thisUpdate - string of thisUpdate in Zulu(ex. 20151231235959Z)&lt;/li>
-<span class='line'>1236</span>  * &lt;li>nextUpdate - string of nextUpdate in Zulu(ex. 20151231235959Z)&lt;/li>
-<span class='line'>1237</span>  * &lt;/ul>
-<span class='line'>1238</span>  * @example
-<span class='line'>1239</span>  * info = KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo("3082...");
-<span class='line'>1240</span>  */</span><span class="WHIT">
-<span class='line'>1241</span> </span><span class="NAME">KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1242</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1243</span> </span><span class="WHIT">	</span><span class="NAME">_getVbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getVbyList</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1244</span> </span><span class="WHIT">	</span><span class="NAME">_getVbyListEx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getVbyListEx</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1245</span> </span><span class="WHIT">	</span><span class="NAME">_getIdxbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getIdxbyList</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1246</span> </span><span class="WHIT">	</span><span class="NAME">_getIdxbyListEx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getIdxbyListEx</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1247</span> </span><span class="WHIT">	</span><span class="NAME">_getV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getV</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1248</span> 
-<span class='line'>1249</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1250</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1251</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">v</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getVbyListEx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"0a"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1252</span> </span><span class="WHIT">	</span><span class="NAME">result.responseStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">v</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1253</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1254</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">result.responseStatus</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1255</span> 
-<span class='line'>1256</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1257</span> </span><span class="WHIT">	</span><span class="COMM">// certStatus</span><span class="WHIT">
-<span class='line'>1258</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">idxCertStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getIdxbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">2</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1259</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">idxCertStatus</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"80"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1260</span> </span><span class="WHIT">	    </span><span class="NAME">result.certStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"good"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1261</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">idxCertStatus</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"a1"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1262</span> </span><span class="WHIT">	    </span><span class="NAME">result.certStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"revoked"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1263</span> </span><span class="WHIT">	    </span><span class="NAME">result.revocationTime</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> 
-<span class='line'>1264</span> 		</span><span class="NAME">hextoutf8</span><span class="PUNC">(</span><span class="NAME">_getVbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idxCertStatus</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1265</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">idxCertStatus</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"82"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1266</span> </span><span class="WHIT">	    </span><span class="NAME">result.certStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"unknown"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1267</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1268</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1269</span> 
-<span class='line'>1270</span> </span><span class="WHIT">    </span><span class="COMM">// thisUpdate</span><span class="WHIT">
-<span class='line'>1271</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1272</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">idxThisUpdate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getIdxbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">2</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1273</span> </span><span class="WHIT">	</span><span class="NAME">result.thisUpdate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hextoutf8</span><span class="PUNC">(</span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idxThisUpdate</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1274</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1275</span> 
-<span class='line'>1276</span> </span><span class="WHIT">    </span><span class="COMM">// nextUpdate</span><span class="WHIT">
-<span class='line'>1277</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1278</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">idxEncapNextUpdate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getIdxbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">2</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">3</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1279</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">idxEncapNextUpdate</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"a0"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1280</span> </span><span class="WHIT">	    </span><span class="NAME">result.nextUpdate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> 
-<span class='line'>1281</span> 		</span><span class="NAME">hextoutf8</span><span class="PUNC">(</span><span class="NAME">_getVbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idxEncapNextUpdate</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1282</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1283</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1284</span> 
-<span class='line'>1285</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1286</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1287</span> 
-<span class='line'>1288</span> </span><span class="COMM">/**
-<span class='line'>1289</span>  * OCSP request and response parser&lt;br/>
-<span class='line'>1290</span>  * @name KJUR.asn1.ocsp.OCSPParser
-<span class='line'>1291</span>  * @class OCSP request and response parser
-<span class='line'>1292</span>  * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
-<span class='line'>1293</span>  *
-<span class='line'>1294</span>  * @description
-<span class='line'>1295</span>  * This class provides ASN.1 parser for
-<span class='line'>1296</span>  * OCSP related ASN.1 data.
-<span class='line'>1297</span>  * Currntly only OCSP request parsers are
-<span class='line'>1298</span>  * available.
-<span class='line'>1299</span>  */</span><span class="WHIT">
-<span class='line'>1300</span> </span><span class="NAME">KJUR.asn1.ocsp.OCSPParser</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1301</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_Error</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1302</span> </span><span class="WHIT">	</span><span class="NAME">_X509</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1303</span> </span><span class="WHIT">	</span><span class="NAME">_x509obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1304</span> </span><span class="WHIT">	</span><span class="NAME">_ASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1305</span> </span><span class="WHIT">	</span><span class="NAME">_getV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getV</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1306</span> </span><span class="WHIT">	</span><span class="NAME">_getTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getTLV</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1307</span> </span><span class="WHIT">	</span><span class="NAME">_getIdxbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getIdxbyList</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1308</span> </span><span class="WHIT">	</span><span class="NAME">_getTLVbyListEx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getTLVbyListEx</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1309</span> </span><span class="WHIT">	</span><span class="NAME">_getChildIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getChildIdx</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1310</span> 
-<span class='line'>1311</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>1312</span>      * parse ASN.1 OCSPRequest&lt;br/>
-<span class='line'>1313</span>      * @name getOCSPRequest
-<span class='line'>1314</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
-<span class='line'>1315</span>      * @function
-<span class='line'>1316</span>      * @param {String} h hexadecimal string of ASN.1 OCSPRequest
-<span class='line'>1317</span>      * @return {Array} array of JSON object of OCSPRequest parameter
-<span class='line'>1318</span>      * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
-<span class='line'>1319</span>      *
-<span class='line'>1320</span>      * @description
-<span class='line'>1321</span>      * &lt;pre>
-<span class='line'>1322</span>      * OCSPRequest ::= SEQUENCE {
-<span class='line'>1323</span>      *   tbsRequest              TBSRequest,
-<span class='line'>1324</span>      *   optionalSignature  [0]  EXPLICIT Signature OPTIONAL }
-<span class='line'>1325</span>      * TBSRequest  ::=  SEQUENCE {
-<span class='line'>1326</span>      *   version            [0]  EXPLICIT Version DEFAULT v1,
-<span class='line'>1327</span>      *   requestorName      [1]  EXPLICIT GeneralName OPTIONAL,
-<span class='line'>1328</span>      *   requestList             SEQUENCE OF Request,
-<span class='line'>1329</span>      *   requestExtensions  [2]  EXPLICIT Extensions OPTIONAL }
-<span class='line'>1330</span>      * &lt;/pre>
-<span class='line'>1331</span>      *
-<span class='line'>1332</span>      * @example
-<span class='line'>1333</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
-<span class='line'>1334</span>      * o.getOCSPRequest("30...") &rarr;
-<span class='line'>1335</span>      * { array: [{
-<span class='line'>1336</span>      *    "alg": "sha1",
-<span class='line'>1337</span>      *    "issname": "105fa67a80089db5279f35ce830b43889ea3c70d",
-<span class='line'>1338</span>      *    "isskey": "0f80611c823161d52f28e78d4638b42ce1c6d9e2",
-<span class='line'>1339</span>      *    "sbjsn": "0fef62075d715dc5e1d8bd03775c9686"
-<span class='line'>1340</span>      * }]}
-<span class='line'>1341</span>      */</span><span class="WHIT">
-<span class='line'>1342</span> </span><span class="WHIT">    </span><span class="NAME">this.getOCSPRequest</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1343</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1344</span> 
-<span class='line'>1345</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1346</span> </span><span class="WHIT">	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_Error</span><span class="PUNC">(</span><span class="STRN">"wrong number elements: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1347</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1348</span> 
-<span class='line'>1349</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getTBSRequest</span><span class="PUNC">(</span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1350</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1351</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1352</span> 
-<span class='line'>1353</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>1354</span>      * parse ASN.1 TBSRequest of OCSP&lt;br/>
-<span class='line'>1355</span>      * @name getTBSRequest
-<span class='line'>1356</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
-<span class='line'>1357</span>      * @function
-<span class='line'>1358</span>      * @param {String} h hexadecimal string of ASN.1 TBSRequest of OCSP
-<span class='line'>1359</span>      * @return {Array} array of JSON object of TBSRequest parameter
-<span class='line'>1360</span>      * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
-<span class='line'>1361</span>      *
-<span class='line'>1362</span>      * @description
-<span class='line'>1363</span>      * &lt;pre>
-<span class='line'>1364</span>      * TBSRequest  ::=  SEQUENCE {
-<span class='line'>1365</span>      *   version            [0]  EXPLICIT Version DEFAULT v1,
-<span class='line'>1366</span>      *   requestorName      [1]  EXPLICIT GeneralName OPTIONAL,
-<span class='line'>1367</span>      *   requestList             SEQUENCE OF Request,
-<span class='line'>1368</span>      *   requestExtensions  [2]  EXPLICIT Extensions OPTIONAL }
-<span class='line'>1369</span>      * &lt;/pre>
-<span class='line'>1370</span>      *
-<span class='line'>1371</span>      * @example
-<span class='line'>1372</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
-<span class='line'>1373</span>      * o.getTBSRequest("30...") &rarr;
-<span class='line'>1374</span>      * {array: [{
-<span class='line'>1375</span>      *   "alg": "sha1",
-<span class='line'>1376</span>      *   "issname": "105fa67a80089db5279f35ce830b43889ea3c70d",
-<span class='line'>1377</span>      *   "isskey": "0f80611c823161d52f28e78d4638b42ce1c6d9e2",
-<span class='line'>1378</span>      *   "sbjsn": "0fef62075d715dc5e1d8bd03775c9686"
-<span class='line'>1379</span>      * }]}
-<span class='line'>1380</span>      */</span><span class="WHIT">
-<span class='line'>1381</span> </span><span class="WHIT">    </span><span class="NAME">this.getTBSRequest</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1382</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1383</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hReqList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyListEx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1384</span> </span><span class="WHIT">	</span><span class="NAME">result.array</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getRequestList</span><span class="PUNC">(</span><span class="NAME">hReqList</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1385</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hExt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyListEx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="STRN">"[2]"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1386</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hExt</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1387</span> </span><span class="WHIT">	    </span><span class="NAME">result.ext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_x509obj.getExtParamArray</span><span class="PUNC">(</span><span class="NAME">hExt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1388</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1389</span> 
-<span class='line'>1390</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1391</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1392</span> 
-<span class='line'>1393</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>1394</span>      * parse ASN.1 SEQUENCE OF Request in OCSP&lt;br/>
-<span class='line'>1395</span>      * @name getRequestList
-<span class='line'>1396</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
-<span class='line'>1397</span>      * @function
-<span class='line'>1398</span>      * @param {String} h hexadecimal string of ASN.1 SEQUENCE OF Request in OCSP
-<span class='line'>1399</span>      * @return {Array} array of JSON object of Request parameter
-<span class='line'>1400</span>      * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
-<span class='line'>1401</span>      *
-<span class='line'>1402</span>      * @description
-<span class='line'>1403</span>      * &lt;pre>
-<span class='line'>1404</span>      * TBSRequest  ::=  SEQUENCE {
-<span class='line'>1405</span>      *   version            [0]  EXPLICIT Version DEFAULT v1,
-<span class='line'>1406</span>      *   requestorName      [1]  EXPLICIT GeneralName OPTIONAL,
-<span class='line'>1407</span>      *   requestList             SEQUENCE OF Request,
-<span class='line'>1408</span>      *   requestExtensions  [2]  EXPLICIT Extensions OPTIONAL }
-<span class='line'>1409</span>      * Request ::= SEQUENCE {
-<span class='line'>1410</span>      *   reqCert                  CertID,
-<span class='line'>1411</span>      *   singleRequestExtensions  [0] EXPLICIT Extensions OPTIONAL }      
-<span class='line'>1412</span>      * &lt;/pre>
-<span class='line'>1413</span>      *
-<span class='line'>1414</span>      * @example
-<span class='line'>1415</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
-<span class='line'>1416</span>      * o.getRequestList("30...") &rarr;
-<span class='line'>1417</span>      * [{ alg: "sha1"
-<span class='line'>1418</span>      *   issname: "...hex...",
-<span class='line'>1419</span>      *   isskey: "...hex...",
-<span class='line'>1420</span>      *   sbjsn: "...hex...",
-<span class='line'>1421</span>      *   ext: [&lt;&lt;singleRequestExtension parameters>>...]
-<span class='line'>1422</span>      * }]
-<span class='line'>1423</span>      */</span><span class="WHIT">
-<span class='line'>1424</span> </span><span class="WHIT">    </span><span class="NAME">this.getRequestList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1425</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1426</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1427</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1428</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">h</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1429</span> </span><span class="WHIT">	    </span><span class="NAME">result.push</span><span class="PUNC">(</span><span class="NAME">this.getRequest</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1430</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1431</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1432</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1433</span> 
-<span class='line'>1434</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>1435</span>      * parse ASN.1 Request of OCSP&lt;br/>
-<span class='line'>1436</span>      * @name getRequest
-<span class='line'>1437</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
-<span class='line'>1438</span>      * @function
-<span class='line'>1439</span>      * @param {String} h hexadecimal string of ASN.1 Request of OCSP
-<span class='line'>1440</span>      * @return JSON object of Request parameter
-<span class='line'>1441</span>      * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
-<span class='line'>1442</span>      *
-<span class='line'>1443</span>      * @description
-<span class='line'>1444</span>      * &lt;pre>
+<span class='line'>1228</span>  * @deprecated since jsrsasign 10.4.0 asn1ocsp 1.1.5 Please use OCSPParser.getOCSPRespnose
+<span class='line'>1229</span>  *
+<span class='line'>1230</span>  * @description
+<span class='line'>1231</span>  * This static method parse a hexadecimal string of DER OCSPResponse and
+<span class='line'>1232</span>  * returns JSON object of its parsed result.
+<span class='line'>1233</span>  * Its result has following properties:
+<span class='line'>1234</span>  * &lt;ul>
+<span class='line'>1235</span>  * &lt;li>responseStatus - integer of responseStatus&lt;/li>
+<span class='line'>1236</span>  * &lt;li>certStatus - string of certStatus (ex. good, revoked or unknown)&lt;/li>
+<span class='line'>1237</span>  * &lt;li>thisUpdate - string of thisUpdate in Zulu(ex. 20151231235959Z)&lt;/li>
+<span class='line'>1238</span>  * &lt;li>nextUpdate - string of nextUpdate in Zulu(ex. 20151231235959Z)&lt;/li>
+<span class='line'>1239</span>  * &lt;/ul>
+<span class='line'>1240</span>  * NOTE: This method may not work preperly. Please use 
+<span class='line'>1241</span>  * {@link KJUR.asn1.ocsp.OCSPParser#getOCSPResponse}.
+<span class='line'>1242</span>  *
+<span class='line'>1243</span>  * @example
+<span class='line'>1244</span>  * info = KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo("3082...");
+<span class='line'>1245</span>  */</span><span class="WHIT">
+<span class='line'>1246</span> </span><span class="NAME">KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1247</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1248</span> </span><span class="WHIT">	</span><span class="NAME">_getVbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getVbyList</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1249</span> </span><span class="WHIT">	</span><span class="NAME">_getVbyListEx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getVbyListEx</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1250</span> </span><span class="WHIT">	</span><span class="NAME">_getIdxbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getIdxbyList</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1251</span> </span><span class="WHIT">	</span><span class="NAME">_getIdxbyListEx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getIdxbyListEx</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1252</span> </span><span class="WHIT">	</span><span class="NAME">_getV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getV</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1253</span> 
+<span class='line'>1254</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1255</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1256</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">v</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getVbyListEx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"0a"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1257</span> </span><span class="WHIT">	</span><span class="NAME">result.responseStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">v</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1258</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1259</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">result.responseStatus</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1260</span> 
+<span class='line'>1261</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1262</span> </span><span class="WHIT">	</span><span class="COMM">// certStatus</span><span class="WHIT">
+<span class='line'>1263</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">idxCertStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getIdxbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">2</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1264</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">idxCertStatus</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"80"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1265</span> </span><span class="WHIT">	    </span><span class="NAME">result.certStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"good"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1266</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">idxCertStatus</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"a1"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1267</span> </span><span class="WHIT">	    </span><span class="NAME">result.certStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"revoked"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1268</span> </span><span class="WHIT">	    </span><span class="NAME">result.revocationTime</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> 
+<span class='line'>1269</span> 		</span><span class="NAME">hextoutf8</span><span class="PUNC">(</span><span class="NAME">_getVbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idxCertStatus</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1270</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">idxCertStatus</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"82"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1271</span> </span><span class="WHIT">	    </span><span class="NAME">result.certStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"unknown"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1272</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1273</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1274</span> 
+<span class='line'>1275</span> </span><span class="WHIT">    </span><span class="COMM">// thisUpdate</span><span class="WHIT">
+<span class='line'>1276</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1277</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">idxThisUpdate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getIdxbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">2</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1278</span> </span><span class="WHIT">	</span><span class="NAME">result.thisUpdate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hextoutf8</span><span class="PUNC">(</span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idxThisUpdate</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1279</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1280</span> 
+<span class='line'>1281</span> </span><span class="WHIT">    </span><span class="COMM">// nextUpdate</span><span class="WHIT">
+<span class='line'>1282</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1283</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">idxEncapNextUpdate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getIdxbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">2</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">3</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1284</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">idxEncapNextUpdate</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"a0"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1285</span> </span><span class="WHIT">	    </span><span class="NAME">result.nextUpdate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> 
+<span class='line'>1286</span> 		</span><span class="NAME">hextoutf8</span><span class="PUNC">(</span><span class="NAME">_getVbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idxEncapNextUpdate</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1287</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1288</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1289</span> 
+<span class='line'>1290</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1291</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1292</span> 
+<span class='line'>1293</span> </span><span class="COMM">/**
+<span class='line'>1294</span>  * OCSP request and response parser&lt;br/>
+<span class='line'>1295</span>  * @name KJUR.asn1.ocsp.OCSPParser
+<span class='line'>1296</span>  * @class OCSP request and response parser
+<span class='line'>1297</span>  * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
+<span class='line'>1298</span>  *
+<span class='line'>1299</span>  * @description
+<span class='line'>1300</span>  * This class provides ASN.1 parser for
+<span class='line'>1301</span>  * OCSP related ASN.1 data. &lt;br/>
+<span class='line'>1302</span>  * NOTE: OCSPResponse parser supported from jsrsasign 10.4.0.
+<span class='line'>1303</span>  * &lt;br/>
+<span class='line'>1304</span>  * This parser supports following OCSP ASN.1 classes:
+<span class='line'>1305</span>  * &lt;ul>
+<span class='line'>1306</span>  * &lt;li>OCSP REQUEST
+<span class='line'>1307</span>  * &lt;ul>
+<span class='line'>1308</span>  * &lt;li>OCSPRequest - {@link KJUR.asn1.ocsp.OCSPParser#getOCSPRequest}&lt;/li>
+<span class='line'>1309</span>  * &lt;li>TBSRequest - {@link KJUR.asn1.ocsp.OCSPParser#getTBSRequest}&lt;/li>
+<span class='line'>1310</span>  * &lt;li>SEQUENCE OF Request - {@link KJUR.asn1.ocsp.OCSPParser#getRequestList}&lt;/li>
+<span class='line'>1311</span>  * &lt;li>Request - {@link KJUR.asn1.ocsp.OCSPParser#getRequest}&lt;/li>
+<span class='line'>1312</span>  * &lt;/ul>
+<span class='line'>1313</span>  * &lt;/li>
+<span class='line'>1314</span>  * &lt;li>OCSP RESPONSE
+<span class='line'>1315</span>  * &lt;ul>
+<span class='line'>1316</span>  * &lt;li>OCSPResponse - {@link KJUR.asn1.ocsp.OCSPParser#getOCSPResponse}&lt;/li>
+<span class='line'>1317</span>  * &lt;li>ResponseBytes - {@link KJUR.asn1.ocsp.OCSPParser#getResponseBytes}&lt;/li>
+<span class='line'>1318</span>  * &lt;li>BasicOCSPResponse - {@link KJUR.asn1.ocsp.OCSPParser#getBasicOCSPResponse}&lt;/li>
+<span class='line'>1319</span>  * &lt;li>ResponseData - {@link KJUR.asn1.ocsp.OCSPParser#getResponseData}&lt;/li>
+<span class='line'>1320</span>  * &lt;li>ResponderID - {@link KJUR.asn1.ocsp.OCSPParser#getResponderID}&lt;/li>
+<span class='line'>1321</span>  * &lt;li>SEQUENCE OF SingleResponse - {@link KJUR.asn1.ocsp.OCSPParser#getSingleResponseList}&lt;/li>
+<span class='line'>1322</span>  * &lt;li>SingleResponse - {@link KJUR.asn1.ocsp.OCSPParser#getSingleResponse}&lt;/li>
+<span class='line'>1323</span>  * &lt;li>CertStatus - {@link KJUR.asn1.ocsp.OCSPParser#getCertStatus}&lt;/li>
+<span class='line'>1324</span>  * &lt;/ul>
+<span class='line'>1325</span>  * &lt;/li>
+<span class='line'>1326</span>  * &lt;li>common
+<span class='line'>1327</span>  * &lt;ul>
+<span class='line'>1328</span>  * &lt;li>CertID - {@link KJUR.asn1.ocsp.OCSPParser#getCertID}&lt;/li>
+<span class='line'>1329</span>  * &lt;/ul>
+<span class='line'>1330</span>  * &lt;/li>
+<span class='line'>1331</span>  * &lt;/ul>
+<span class='line'>1332</span>  */</span><span class="WHIT">
+<span class='line'>1333</span> </span><span class="NAME">KJUR.asn1.ocsp.OCSPParser</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1334</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_Error</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1335</span> </span><span class="WHIT">	</span><span class="NAME">_X509</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1336</span> </span><span class="WHIT">	</span><span class="NAME">_x509obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1337</span> </span><span class="WHIT">	</span><span class="NAME">_ASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1338</span> </span><span class="WHIT">	</span><span class="NAME">_getV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getV</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1339</span> </span><span class="WHIT">	</span><span class="NAME">_getTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getTLV</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1340</span> </span><span class="WHIT">	</span><span class="NAME">_getIdxbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getIdxbyList</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1341</span> </span><span class="WHIT">	</span><span class="NAME">_getVbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getVbyList</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1342</span> </span><span class="WHIT">	</span><span class="NAME">_getTLVbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getTLVbyList</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1343</span> </span><span class="WHIT">	</span><span class="NAME">_getVbyListEx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getVbyListEx</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1344</span> </span><span class="WHIT">	</span><span class="NAME">_getTLVbyListEx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getTLVbyListEx</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1345</span> </span><span class="WHIT">	</span><span class="NAME">_getChildIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getChildIdx</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1346</span> 
+<span class='line'>1347</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1348</span>      * parse ASN.1 OCSPRequest&lt;br/>
+<span class='line'>1349</span>      * @name getOCSPRequest
+<span class='line'>1350</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
+<span class='line'>1351</span>      * @function
+<span class='line'>1352</span>      * @param {String} h hexadecimal string of ASN.1 OCSPRequest
+<span class='line'>1353</span>      * @return {Array} array of JSON object of OCSPRequest parameter
+<span class='line'>1354</span>      * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
+<span class='line'>1355</span>      *
+<span class='line'>1356</span>      * @description
+<span class='line'>1357</span>      * &lt;pre>
+<span class='line'>1358</span>      * OCSPRequest ::= SEQUENCE {
+<span class='line'>1359</span>      *   tbsRequest              TBSRequest,
+<span class='line'>1360</span>      *   optionalSignature  [0]  EXPLICIT Signature OPTIONAL }
+<span class='line'>1361</span>      * TBSRequest  ::=  SEQUENCE {
+<span class='line'>1362</span>      *   version            [0]  EXPLICIT Version DEFAULT v1,
+<span class='line'>1363</span>      *   requestorName      [1]  EXPLICIT GeneralName OPTIONAL,
+<span class='line'>1364</span>      *   requestList             SEQUENCE OF Request,
+<span class='line'>1365</span>      *   requestExtensions  [2]  EXPLICIT Extensions OPTIONAL }
+<span class='line'>1366</span>      * &lt;/pre>
+<span class='line'>1367</span>      *
+<span class='line'>1368</span>      * @example
+<span class='line'>1369</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
+<span class='line'>1370</span>      * o.getOCSPRequest("30...") &rarr;
+<span class='line'>1371</span>      * { array: [{
+<span class='line'>1372</span>      *    "alg": "sha1",
+<span class='line'>1373</span>      *    "issname": "105fa67a80089db5279f35ce830b43889ea3c70d",
+<span class='line'>1374</span>      *    "isskey": "0f80611c823161d52f28e78d4638b42ce1c6d9e2",
+<span class='line'>1375</span>      *    "sbjsn": "0fef62075d715dc5e1d8bd03775c9686"
+<span class='line'>1376</span>      * }]}
+<span class='line'>1377</span>      */</span><span class="WHIT">
+<span class='line'>1378</span> </span><span class="WHIT">    </span><span class="NAME">this.getOCSPRequest</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1379</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1380</span> 
+<span class='line'>1381</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1382</span> </span><span class="WHIT">	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_Error</span><span class="PUNC">(</span><span class="STRN">"wrong number elements: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1383</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1384</span> 
+<span class='line'>1385</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getTBSRequest</span><span class="PUNC">(</span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1386</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1387</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1388</span> 
+<span class='line'>1389</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1390</span>      * parse ASN.1 TBSRequest of OCSP&lt;br/>
+<span class='line'>1391</span>      * @name getTBSRequest
+<span class='line'>1392</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
+<span class='line'>1393</span>      * @function
+<span class='line'>1394</span>      * @param {String} h hexadecimal string of ASN.1 TBSRequest of OCSP
+<span class='line'>1395</span>      * @return {Array} array of JSON object of TBSRequest parameter
+<span class='line'>1396</span>      * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
+<span class='line'>1397</span>      *
+<span class='line'>1398</span>      * @description
+<span class='line'>1399</span>      * &lt;pre>
+<span class='line'>1400</span>      * TBSRequest  ::=  SEQUENCE {
+<span class='line'>1401</span>      *   version            [0]  EXPLICIT Version DEFAULT v1,
+<span class='line'>1402</span>      *   requestorName      [1]  EXPLICIT GeneralName OPTIONAL,
+<span class='line'>1403</span>      *   requestList             SEQUENCE OF Request,
+<span class='line'>1404</span>      *   requestExtensions  [2]  EXPLICIT Extensions OPTIONAL }
+<span class='line'>1405</span>      * &lt;/pre>
+<span class='line'>1406</span>      *
+<span class='line'>1407</span>      * @example
+<span class='line'>1408</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
+<span class='line'>1409</span>      * o.getTBSRequest("30...") &rarr;
+<span class='line'>1410</span>      * {array: [{
+<span class='line'>1411</span>      *   "alg": "sha1",
+<span class='line'>1412</span>      *   "issname": "105fa67a80089db5279f35ce830b43889ea3c70d",
+<span class='line'>1413</span>      *   "isskey": "0f80611c823161d52f28e78d4638b42ce1c6d9e2",
+<span class='line'>1414</span>      *   "sbjsn": "0fef62075d715dc5e1d8bd03775c9686"
+<span class='line'>1415</span>      * }]}
+<span class='line'>1416</span>      */</span><span class="WHIT">
+<span class='line'>1417</span> </span><span class="WHIT">    </span><span class="NAME">this.getTBSRequest</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1418</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1419</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hReqList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyListEx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1420</span> </span><span class="WHIT">	</span><span class="NAME">result.array</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getRequestList</span><span class="PUNC">(</span><span class="NAME">hReqList</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1421</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hExt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyListEx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="STRN">"[2]"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1422</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hExt</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1423</span> </span><span class="WHIT">	    </span><span class="NAME">result.ext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_x509obj.getExtParamArray</span><span class="PUNC">(</span><span class="NAME">hExt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1424</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1425</span> 
+<span class='line'>1426</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1427</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1428</span> 
+<span class='line'>1429</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1430</span>      * parse ASN.1 SEQUENCE OF Request in OCSP&lt;br/>
+<span class='line'>1431</span>      * @name getRequestList
+<span class='line'>1432</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
+<span class='line'>1433</span>      * @function
+<span class='line'>1434</span>      * @param {String} h hexadecimal string of ASN.1 SEQUENCE OF Request in OCSP
+<span class='line'>1435</span>      * @return {Array} array of JSON object of Request parameter
+<span class='line'>1436</span>      * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
+<span class='line'>1437</span>      *
+<span class='line'>1438</span>      * @description
+<span class='line'>1439</span>      * &lt;pre>
+<span class='line'>1440</span>      * TBSRequest  ::=  SEQUENCE {
+<span class='line'>1441</span>      *   version            [0]  EXPLICIT Version DEFAULT v1,
+<span class='line'>1442</span>      *   requestorName      [1]  EXPLICIT GeneralName OPTIONAL,
+<span class='line'>1443</span>      *   requestList             SEQUENCE OF Request,
+<span class='line'>1444</span>      *   requestExtensions  [2]  EXPLICIT Extensions OPTIONAL }
 <span class='line'>1445</span>      * Request ::= SEQUENCE {
 <span class='line'>1446</span>      *   reqCert                  CertID,
 <span class='line'>1447</span>      *   singleRequestExtensions  [0] EXPLICIT Extensions OPTIONAL }      
@@ -1456,72 +1456,506 @@
 <span class='line'>1449</span>      *
 <span class='line'>1450</span>      * @example
 <span class='line'>1451</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
-<span class='line'>1452</span>      * o.getRequest("30...") &rarr;
-<span class='line'>1453</span>      * { alg: "sha1"
+<span class='line'>1452</span>      * o.getRequestList("30...") &rarr;
+<span class='line'>1453</span>      * [{ alg: "sha1"
 <span class='line'>1454</span>      *   issname: "...hex...",
 <span class='line'>1455</span>      *   isskey: "...hex...",
 <span class='line'>1456</span>      *   sbjsn: "...hex...",
 <span class='line'>1457</span>      *   ext: [&lt;&lt;singleRequestExtension parameters>>...]
-<span class='line'>1458</span>      * }
+<span class='line'>1458</span>      * }]
 <span class='line'>1459</span>      */</span><span class="WHIT">
-<span class='line'>1460</span> </span><span class="WHIT">    </span><span class="NAME">this.getRequest</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1461</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1462</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1463</span> </span><span class="WHIT">	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_Error</span><span class="PUNC">(</span><span class="STRN">"wrong number elements: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1464</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1465</span> </span><span class="WHIT">	
-<span class='line'>1466</span> 	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getCertID</span><span class="PUNC">(</span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1467</span> 
-<span class='line'>1468</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1469</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">idxExt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getIdxbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1470</span> </span><span class="WHIT">	    </span><span class="NAME">params.ext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_x509obj.getExtParamArray</span><span class="PUNC">(</span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idxExt</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1471</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1472</span> 
-<span class='line'>1473</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1474</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1475</span> 
-<span class='line'>1476</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>1477</span>      * parse ASN.1 CertID of OCSP&lt;br/>
-<span class='line'>1478</span>      * @name getCertID
-<span class='line'>1479</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
-<span class='line'>1480</span>      * @function
-<span class='line'>1481</span>      * @param {String} h hexadecimal string of CertID
-<span class='line'>1482</span>      * @return JSON object of CertID parameter
-<span class='line'>1483</span>      * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
-<span class='line'>1484</span>      * @see KJUR.asn1.ocsp.CertID
+<span class='line'>1460</span> </span><span class="WHIT">    </span><span class="NAME">this.getRequestList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1461</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1462</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1463</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1464</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">h</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1465</span> </span><span class="WHIT">	    </span><span class="NAME">result.push</span><span class="PUNC">(</span><span class="NAME">this.getRequest</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1466</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1467</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1468</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1469</span> 
+<span class='line'>1470</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1471</span>      * parse ASN.1 Request of OCSP&lt;br/>
+<span class='line'>1472</span>      * @name getRequest
+<span class='line'>1473</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
+<span class='line'>1474</span>      * @function
+<span class='line'>1475</span>      * @param {String} h hexadecimal string of ASN.1 Request of OCSP
+<span class='line'>1476</span>      * @return JSON object of Request parameter
+<span class='line'>1477</span>      * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
+<span class='line'>1478</span>      *
+<span class='line'>1479</span>      * @description
+<span class='line'>1480</span>      * &lt;pre>
+<span class='line'>1481</span>      * Request ::= SEQUENCE {
+<span class='line'>1482</span>      *   reqCert                  CertID,
+<span class='line'>1483</span>      *   singleRequestExtensions  [0] EXPLICIT Extensions OPTIONAL }      
+<span class='line'>1484</span>      * &lt;/pre>
 <span class='line'>1485</span>      *
-<span class='line'>1486</span>      * @description
-<span class='line'>1487</span>      * &lt;pre>
-<span class='line'>1488</span>      * CertID ::= SEQUENCE {
-<span class='line'>1489</span>      *   hashAlgorithm   AlgorithmIdentifier,
-<span class='line'>1490</span>      *   issuerNameHash  OCTET STRING, -- Hash of issuer's DN
-<span class='line'>1491</span>      *   issuerKeyHash   OCTET STRING, -- Hash of issuer's public key
-<span class='line'>1492</span>      *   serialNumber    CertificateSerialNumber }
-<span class='line'>1493</span>      * &lt;/pre>
-<span class='line'>1494</span>      *
-<span class='line'>1495</span>      * @example
-<span class='line'>1496</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
-<span class='line'>1497</span>      * o.getCertID("30...") &rarr;
-<span class='line'>1498</span>      * { alg: "sha1"
-<span class='line'>1499</span>      *   issname: "...hex...",
-<span class='line'>1500</span>      *   isskey: "...hex...",
-<span class='line'>1501</span>      *   sbjsn: "...hex..." }
-<span class='line'>1502</span>      */</span><span class="WHIT">
-<span class='line'>1503</span> </span><span class="WHIT">    </span><span class="NAME">this.getCertID</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1504</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1505</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">4</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1506</span> </span><span class="WHIT">	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_Error</span><span class="PUNC">(</span><span class="STRN">"wrong number elements: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1486</span>      * @example
+<span class='line'>1487</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
+<span class='line'>1488</span>      * o.getRequest("30...") &rarr;
+<span class='line'>1489</span>      * { alg: "sha1"
+<span class='line'>1490</span>      *   issname: "...hex...",
+<span class='line'>1491</span>      *   isskey: "...hex...",
+<span class='line'>1492</span>      *   sbjsn: "...hex...",
+<span class='line'>1493</span>      *   ext: [&lt;&lt;singleRequestExtension parameters>>...]
+<span class='line'>1494</span>      * }
+<span class='line'>1495</span>      */</span><span class="WHIT">
+<span class='line'>1496</span> </span><span class="WHIT">    </span><span class="NAME">this.getRequest</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1497</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1498</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1499</span> </span><span class="WHIT">	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_Error</span><span class="PUNC">(</span><span class="STRN">"wrong number elements: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1500</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1501</span> </span><span class="WHIT">	
+<span class='line'>1502</span> 	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getCertID</span><span class="PUNC">(</span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1503</span> 
+<span class='line'>1504</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1505</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">idxExt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getIdxbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1506</span> </span><span class="WHIT">	    </span><span class="NAME">params.ext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_x509obj.getExtParamArray</span><span class="PUNC">(</span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idxExt</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>1507</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1508</span> </span><span class="WHIT">	
-<span class='line'>1509</span> 	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1510</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1511</span> </span><span class="WHIT">	</span><span class="NAME">result.alg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x.getAlgorithmIdentifierName</span><span class="PUNC">(</span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1512</span> </span><span class="WHIT">	</span><span class="NAME">result.issname</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1513</span> </span><span class="WHIT">	</span><span class="NAME">result.isskey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1514</span> </span><span class="WHIT">	</span><span class="NAME">result.sbjsn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">3</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1515</span> </span><span class="WHIT">	
-<span class='line'>1516</span> 	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1517</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1518</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1519</span> 
-<span class='line'>1520</span> </span></pre></body></html>
+<span class='line'>1508</span> 
+<span class='line'>1509</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1510</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1511</span> 
+<span class='line'>1512</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1513</span>      * parse ASN.1 CertID of OCSP&lt;br/>
+<span class='line'>1514</span>      * @name getCertID
+<span class='line'>1515</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
+<span class='line'>1516</span>      * @function
+<span class='line'>1517</span>      * @param {String} h hexadecimal string of CertID
+<span class='line'>1518</span>      * @return JSON object of CertID parameter
+<span class='line'>1519</span>      * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
+<span class='line'>1520</span>      * @see KJUR.asn1.ocsp.CertID
+<span class='line'>1521</span>      *
+<span class='line'>1522</span>      * @description
+<span class='line'>1523</span>      * &lt;pre>
+<span class='line'>1524</span>      * CertID ::= SEQUENCE {
+<span class='line'>1525</span>      *   hashAlgorithm   AlgorithmIdentifier,
+<span class='line'>1526</span>      *   issuerNameHash  OCTET STRING, -- Hash of issuer's DN
+<span class='line'>1527</span>      *   issuerKeyHash   OCTET STRING, -- Hash of issuer's public key
+<span class='line'>1528</span>      *   serialNumber    CertificateSerialNumber }
+<span class='line'>1529</span>      * &lt;/pre>
+<span class='line'>1530</span>      *
+<span class='line'>1531</span>      * @example
+<span class='line'>1532</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
+<span class='line'>1533</span>      * o.getCertID("30...") &rarr;
+<span class='line'>1534</span>      * { alg: "sha1"
+<span class='line'>1535</span>      *   issname: "...hex...",
+<span class='line'>1536</span>      *   isskey: "...hex...",
+<span class='line'>1537</span>      *   sbjsn: "...hex..." }
+<span class='line'>1538</span>      */</span><span class="WHIT">
+<span class='line'>1539</span> </span><span class="WHIT">    </span><span class="NAME">this.getCertID</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1540</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1541</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">4</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1542</span> </span><span class="WHIT">	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_Error</span><span class="PUNC">(</span><span class="STRN">"wrong number elements: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1543</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1544</span> </span><span class="WHIT">	
+<span class='line'>1545</span> 	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1546</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1547</span> </span><span class="WHIT">	</span><span class="NAME">result.alg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x.getAlgorithmIdentifierName</span><span class="PUNC">(</span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1548</span> </span><span class="WHIT">	</span><span class="NAME">result.issname</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1549</span> </span><span class="WHIT">	</span><span class="NAME">result.isskey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1550</span> </span><span class="WHIT">	</span><span class="NAME">result.sbjsn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">3</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1551</span> </span><span class="WHIT">	
+<span class='line'>1552</span> 	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1553</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1554</span> 
+<span class='line'>1555</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1556</span>      * parse ASN.1 OCSPResponse of OCSP&lt;br/>
+<span class='line'>1557</span>      * @name getOCSPResponse
+<span class='line'>1558</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
+<span class='line'>1559</span>      * @function
+<span class='line'>1560</span>      * @param {String} h hexadecimal string of OCSPResponse
+<span class='line'>1561</span>      * @return JSON object of OCSResponse parameter
+<span class='line'>1562</span>      * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+<span class='line'>1563</span>      * @see KJUR.asn1.ocsp.OCSPResponse
+<span class='line'>1564</span>      *
+<span class='line'>1565</span>      * @description
+<span class='line'>1566</span>      * &lt;pre>
+<span class='line'>1567</span>      * OCSPResponse ::= SEQUENCE {
+<span class='line'>1568</span>      *    responseStatus         OCSPResponseStatus,
+<span class='line'>1569</span>      *    responseBytes          [0] EXPLICIT ResponseBytes OPTIONAL }
+<span class='line'>1570</span>      * OCSPResponseStatus ::= ENUMERATED {
+<span class='line'>1571</span>      *     successful            (0),  -- Response has valid confirmations
+<span class='line'>1572</span>      *     malformedRequest      (1),  -- Illegal confirmation request
+<span class='line'>1573</span>      *     internalError         (2),  -- Internal error in issuer
+<span class='line'>1574</span>      *     tryLater              (3),  -- Try again later
+<span class='line'>1575</span>      *                                 -- (4) is not used
+<span class='line'>1576</span>      *     sigRequired           (5),  -- Must sign the request
+<span class='line'>1577</span>      *     unauthorized          (6)   -- Request unauthorized }
+<span class='line'>1578</span>      * &lt;/pre>
+<span class='line'>1579</span>      *
+<span class='line'>1580</span>      * @example
+<span class='line'>1581</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
+<span class='line'>1582</span>      * o.getOCSPResponse("30..") &rarr;
+<span class='line'>1583</span>      * { resstatus: 0,
+<span class='line'>1584</span>      *   restype: "ocspBasic",
+<span class='line'>1585</span>      *   respid: {key: "12ab"},
+<span class='line'>1586</span>      *   prodat: "20200903235959Z",
+<span class='line'>1587</span>      *   array: [{
+<span class='line'>1588</span>      *     certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+<span class='line'>1589</span>      *     status: {status: "good"},
+<span class='line'>1590</span>      *     thisupdate: "20200903235959Z" }],
+<span class='line'>1591</span>      *   ext: [{extname: "ocspNonce", hex: "1234abcd"}],
+<span class='line'>1592</span>      *   alg: "SHA256withRSA",
+<span class='line'>1593</span>      *   sighex: "12ab",
+<span class='line'>1594</span>      *   certs: ["030101", "030101"] }
+<span class='line'>1595</span>      */</span><span class="WHIT">
+<span class='line'>1596</span> </span><span class="WHIT">    </span><span class="NAME">this.getOCSPResponse</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1597</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1598</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1599</span> 
+<span class='line'>1600</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hStatusV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1601</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iStatusV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">hStatusV</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1602</span> </span><span class="WHIT">	
+<span class='line'>1603</span> 	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">resstatus</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">iStatusV</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1604</span> 
+<span class='line'>1605</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hResponseBytes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1606</span> </span><span class="WHIT">	</span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getResponseBytes</span><span class="PUNC">(</span><span class="NAME">hResponseBytes</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1607</span> </span><span class="WHIT">	</span><span class="NAME">result.resstatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">iStatusV</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1608</span> </span><span class="WHIT">	
+<span class='line'>1609</span> 	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1610</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1611</span> 
+<span class='line'>1612</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1613</span>      * parse ASN.1 ResponseBytes of OCSP&lt;br/>
+<span class='line'>1614</span>      * @name getResponseBytes
+<span class='line'>1615</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
+<span class='line'>1616</span>      * @function
+<span class='line'>1617</span>      * @param {String} h hexadecimal string of ResponseBytes
+<span class='line'>1618</span>      * @return JSON object of ResponseBytes parameter
+<span class='line'>1619</span>      * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+<span class='line'>1620</span>      * @see KJUR.asn1.ocsp.ResponseBytes
+<span class='line'>1621</span>      *
+<span class='line'>1622</span>      * @description
+<span class='line'>1623</span>      * &lt;pre>
+<span class='line'>1624</span>      * ResponseBytes ::=       SEQUENCE {
+<span class='line'>1625</span>      *     responseType   OBJECT IDENTIFIER,
+<span class='line'>1626</span>      *     response       OCTET STRING }
+<span class='line'>1627</span>      * id-pkix-ocsp           OBJECT IDENTIFIER ::= { id-ad-ocsp }
+<span class='line'>1628</span>      * id-pkix-ocsp-basic     OBJECT IDENTIFIER ::= { id-pkix-ocsp 1 }
+<span class='line'>1629</span>      *
+<span class='line'>1630</span>      * BasicOCSPResponse       ::= SEQUENCE {
+<span class='line'>1631</span>      *    tbsResponseData      ResponseData,
+<span class='line'>1632</span>      *    signatureAlgorithm   AlgorithmIdentifier,
+<span class='line'>1633</span>      *    signature            BIT STRING,
+<span class='line'>1634</span>      *    certs            [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
+<span class='line'>1635</span>      * &lt;/pre>
+<span class='line'>1636</span>      *
+<span class='line'>1637</span>      * @example
+<span class='line'>1638</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
+<span class='line'>1639</span>      * o.getResponseBytes("30..") &rarr;
+<span class='line'>1640</span>      * { restype: "ocspBasic",
+<span class='line'>1641</span>      *   ...&lt;&lt;BasicOCSPResponse properties...>>...
+<span class='line'>1642</span>      */</span><span class="WHIT">
+<span class='line'>1643</span> </span><span class="WHIT">    </span><span class="NAME">this.getResponseBytes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1644</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1645</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1646</span> 
+<span class='line'>1647</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hBasicOCSPResponse</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1648</span> </span><span class="WHIT">	</span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getBasicOCSPResponse</span><span class="PUNC">(</span><span class="NAME">hBasicOCSPResponse</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1649</span> 
+<span class='line'>1650</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hResTypeV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1651</span> </span><span class="WHIT">	</span><span class="NAME">result.restype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509.OID.oid2name</span><span class="PUNC">(</span><span class="NAME">hextooid</span><span class="PUNC">(</span><span class="NAME">hResTypeV</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1652</span> </span><span class="WHIT">	
+<span class='line'>1653</span> 	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1654</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1655</span> 
+<span class='line'>1656</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1657</span>      * parse ASN.1 BasicOCSPResponse of OCSP&lt;br/>
+<span class='line'>1658</span>      * @name getBasicOCSPResponse
+<span class='line'>1659</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
+<span class='line'>1660</span>      * @function
+<span class='line'>1661</span>      * @param {String} h hexadecimal string of BasicOCSPResponse
+<span class='line'>1662</span>      * @return JSON object of BasicOCSPResponse parameter
+<span class='line'>1663</span>      * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+<span class='line'>1664</span>      * @see KJUR.asn1.ocsp.BasicOCSPResponse
+<span class='line'>1665</span>      *
+<span class='line'>1666</span>      * @description
+<span class='line'>1667</span>      * &lt;pre>
+<span class='line'>1668</span>      * BasicOCSPResponse       ::= SEQUENCE {
+<span class='line'>1669</span>      *    tbsResponseData      ResponseData,
+<span class='line'>1670</span>      *    signatureAlgorithm   AlgorithmIdentifier,
+<span class='line'>1671</span>      *    signature            BIT STRING,
+<span class='line'>1672</span>      *    certs            [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
+<span class='line'>1673</span>      * &lt;/pre>
+<span class='line'>1674</span>      *
+<span class='line'>1675</span>      * @example
+<span class='line'>1676</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
+<span class='line'>1677</span>      * o.getBasicOCSPResponse("30..") &rarr;
+<span class='line'>1678</span>      * { ...&lt;&lt;ResponseData properties...>>...
+<span class='line'>1679</span>      *   sigalg: "SHA256withRSA",
+<span class='line'>1680</span>      *   sighex: "12abcd...",
+<span class='line'>1681</span>      *   certs: [&lt;&lt;PEMorHEXstringOfCert1>>,...] });
+<span class='line'>1682</span>      */</span><span class="WHIT">
+<span class='line'>1683</span> </span><span class="WHIT">    </span><span class="NAME">this.getBasicOCSPResponse</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1684</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1685</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1686</span> 
+<span class='line'>1687</span> </span><span class="WHIT">	</span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getResponseData</span><span class="PUNC">(</span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1688</span> 
+<span class='line'>1689</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1690</span> </span><span class="WHIT">	</span><span class="NAME">result.alg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x.getAlgorithmIdentifierName</span><span class="PUNC">(</span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1691</span> 
+<span class='line'>1692</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hSigHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1693</span> </span><span class="WHIT">	</span><span class="NAME">result.sighex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hSigHex.substr</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1694</span> </span><span class="WHIT">	
+<span class='line'>1695</span> 	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hExt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getVbyListEx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="STRN">"[0]"</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1696</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hExt</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1697</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aCertIdx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">hExt</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1698</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aCert</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1699</span> </span><span class="WHIT">	    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">aCertIdx.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1700</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hCert</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">hExt</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">aCertIdx</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1701</span> </span><span class="WHIT">		</span><span class="NAME">aCert.push</span><span class="PUNC">(</span><span class="NAME">hCert</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1702</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1703</span> </span><span class="WHIT">	    </span><span class="NAME">result.certs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aCert</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1704</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1705</span> 
+<span class='line'>1706</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1707</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1708</span> 
+<span class='line'>1709</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1710</span>      * parse ASN.1 ResponseData of OCSP&lt;br/>
+<span class='line'>1711</span>      * @name getResponseData
+<span class='line'>1712</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
+<span class='line'>1713</span>      * @function
+<span class='line'>1714</span>      * @param {String} h hexadecimal string of ResponseData
+<span class='line'>1715</span>      * @return JSON object of ResponseData parameter
+<span class='line'>1716</span>      * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+<span class='line'>1717</span>      * @see KJUR.asn1.ocsp.ResponseData
+<span class='line'>1718</span>      *
+<span class='line'>1719</span>      * @description
+<span class='line'>1720</span>      * &lt;pre>
+<span class='line'>1721</span>      * ResponseData ::= SEQUENCE {
+<span class='line'>1722</span>      *    version              [0] EXPLICIT Version DEFAULT v1,
+<span class='line'>1723</span>      *    responderID              ResponderID,
+<span class='line'>1724</span>      *    producedAt               GeneralizedTime,
+<span class='line'>1725</span>      *    responses                SEQUENCE OF SingleResponse,
+<span class='line'>1726</span>      *    responseExtensions   [1] EXPLICIT Extensions OPTIONAL }
+<span class='line'>1727</span>      * &lt;/pre>
+<span class='line'>1728</span>      *
+<span class='line'>1729</span>      * @example
+<span class='line'>1730</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
+<span class='line'>1731</span>      * o.getResponseData("30..") &rarr;
+<span class='line'>1732</span>      * { respid: {key: "12ab..."},
+<span class='line'>1733</span>      *   prodat: "20200903235959Z",
+<span class='line'>1734</span>      *   array: [&lt;&lt;SingleResponse parameter1>>, ...],
+<span class='line'>1735</span>      *   ext: [
+<span class='line'>1736</span>      *     {extname:"ocspNonce",hex:"12ab..."}]}
+<span class='line'>1737</span>      */</span><span class="WHIT">
+<span class='line'>1738</span> </span><span class="WHIT">    </span><span class="NAME">this.getResponseData</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1739</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1740</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">alen</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1741</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1742</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1743</span> 
+<span class='line'>1744</span> </span><span class="WHIT">	</span><span class="COMM">// skip to relax interoperability even though explicit DEFAULT</span><span class="WHIT">
+<span class='line'>1745</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"a0"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="PUNC">++</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1746</span> 
+<span class='line'>1747</span> </span><span class="WHIT">	</span><span class="NAME">result.respid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getResponderID</span><span class="PUNC">(</span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">idx</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1748</span> </span><span class="WHIT">	
+<span class='line'>1749</span> 	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hProdAtV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">idx</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1750</span> </span><span class="WHIT">	</span><span class="NAME">result.prodat</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hextoutf8</span><span class="PUNC">(</span><span class="NAME">hProdAtV</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1751</span> </span><span class="WHIT">	
+<span class='line'>1752</span> 	</span><span class="NAME">result.array</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getSingleResponseList</span><span class="PUNC">(</span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">idx</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1753</span> 
+<span class='line'>1754</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">alen</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"a1"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1755</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hExt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">  </span><span class="NAME">_getTLVbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">alen</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1756</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1757</span> </span><span class="WHIT">	    </span><span class="NAME">result.ext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x.getExtParamArray</span><span class="PUNC">(</span><span class="NAME">hExt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1758</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1759</span> 
+<span class='line'>1760</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1761</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1762</span> 
+<span class='line'>1763</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1764</span>      * parse ASN.1 ResponderID of OCSP&lt;br/>
+<span class='line'>1765</span>      * @name getResponderID
+<span class='line'>1766</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
+<span class='line'>1767</span>      * @function
+<span class='line'>1768</span>      * @param {String} h hexadecimal string of ResponderID
+<span class='line'>1769</span>      * @return JSON object of ResponderID parameter
+<span class='line'>1770</span>      * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+<span class='line'>1771</span>      * @see KJUR.asn1.ocsp.ResponderID
+<span class='line'>1772</span>      *
+<span class='line'>1773</span>      * @description
+<span class='line'>1774</span>      * &lt;pre>
+<span class='line'>1775</span>      * ResponderID ::= CHOICE {
+<span class='line'>1776</span>      *    byName               [1] Name,
+<span class='line'>1777</span>      *    byKey                [2] KeyHash }
+<span class='line'>1778</span>      * KeyHash ::= OCTET STRING -- SHA-1 hash of responder's public key
+<span class='line'>1779</span>      *                             (excluding the tag and length fields)
+<span class='line'>1780</span>      * &lt;/pre>
+<span class='line'>1781</span>      *
+<span class='line'>1782</span>      * @example
+<span class='line'>1783</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
+<span class='line'>1784</span>      * o.getResponderID("a1..") &rarr; {name: {array: [[{type:"C",value:"JP",ds:"prn"}]...]}}
+<span class='line'>1785</span>      * o.getResponderID("a2..") &rarr; {key: "12ab..."}
+<span class='line'>1786</span>      */</span><span class="WHIT">
+<span class='line'>1787</span> </span><span class="WHIT">    </span><span class="NAME">this.getResponderID</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1788</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1789</span> 
+<span class='line'>1790</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"a2"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1791</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hKeyV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getVbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1792</span> </span><span class="WHIT">	    </span><span class="NAME">result.key</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hKeyV</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1793</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1794</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"a1"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1795</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1796</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1797</span> </span><span class="WHIT">	    </span><span class="NAME">result.name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x.getX500Name</span><span class="PUNC">(</span><span class="NAME">hName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1798</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1799</span> </span><span class="WHIT">	
+<span class='line'>1800</span> 	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1801</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1802</span> 
+<span class='line'>1803</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1804</span>      * parse ASN.1 SEQUENCE OF SingleResponse of OCSP&lt;br/>
+<span class='line'>1805</span>      * @name getSingleResponseList
+<span class='line'>1806</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
+<span class='line'>1807</span>      * @function
+<span class='line'>1808</span>      * @param {String} h hexadecimal string of SEQUENCE OF SingleResponse
+<span class='line'>1809</span>      * @return array of SingleResponse parameter JSON object
+<span class='line'>1810</span>      * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+<span class='line'>1811</span>      * @see KJUR.asn1.ocsp.SingleResponseList
+<span class='line'>1812</span>      *
+<span class='line'>1813</span>      * @description
+<span class='line'>1814</span>      * &lt;pre>
+<span class='line'>1815</span>      * ResponseData ::= SEQUENCE {
+<span class='line'>1816</span>      *    version              [0] EXPLICIT Version DEFAULT v1,
+<span class='line'>1817</span>      *    responderID              ResponderID,
+<span class='line'>1818</span>      *    producedAt               GeneralizedTime,
+<span class='line'>1819</span>      *    responses                SEQUENCE OF SingleResponse,
+<span class='line'>1820</span>      *    responseExtensions   [1] EXPLICIT Extensions OPTIONAL }
+<span class='line'>1821</span>      * SingleResponse ::= SEQUENCE {
+<span class='line'>1822</span>      *    certID                       CertID,
+<span class='line'>1823</span>      *    certStatus                   CertStatus,
+<span class='line'>1824</span>      *    thisUpdate                   GeneralizedTime,
+<span class='line'>1825</span>      *    nextUpdate         [0]       EXPLICIT GeneralizedTime OPTIONAL,
+<span class='line'>1826</span>      *    singleExtensions   [1]       EXPLICIT Extensions OPTIONAL }
+<span class='line'>1827</span>      * &lt;/pre>
+<span class='line'>1828</span>      *
+<span class='line'>1829</span>      * @example
+<span class='line'>1830</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
+<span class='line'>1831</span>      * o.getSingleResponseList("30..") &rarr;
+<span class='line'>1832</span>      * [{ certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+<span class='line'>1833</span>      *    status: {status: "good"},
+<span class='line'>1834</span>      *    thisupdate: "20200903235959Z",
+<span class='line'>1835</span>      *    nextupdate: "20200913235959Z",
+<span class='line'>1836</span>      *    ext: [&lt;&lt;Extension parameters>>...] }]
+<span class='line'>1837</span>      */</span><span class="WHIT">
+<span class='line'>1838</span> </span><span class="WHIT">    </span><span class="NAME">this.getSingleResponseList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1839</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1840</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1841</span> 
+<span class='line'>1842</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1843</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getSingleResponse</span><span class="PUNC">(</span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1844</span> </span><span class="WHIT">	    </span><span class="NAME">result.push</span><span class="PUNC">(</span><span class="NAME">p</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1845</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1846</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1847</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1848</span> 
+<span class='line'>1849</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1850</span>      * parse ASN.1 SingleResponse of OCSP&lt;br/>
+<span class='line'>1851</span>      * @name getSingleResponse
+<span class='line'>1852</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
+<span class='line'>1853</span>      * @function
+<span class='line'>1854</span>      * @param {String} h hexadecimal string of SingleResponse
+<span class='line'>1855</span>      * @return JSON object of SingleResponse parameter
+<span class='line'>1856</span>      * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+<span class='line'>1857</span>      * @see KJUR.asn1.ocsp.SingleResponse
+<span class='line'>1858</span>      *
+<span class='line'>1859</span>      * @description
+<span class='line'>1860</span>      * &lt;pre>
+<span class='line'>1861</span>      * SingleResponse ::= SEQUENCE {
+<span class='line'>1862</span>      *    certID                       CertID,
+<span class='line'>1863</span>      *    certStatus                   CertStatus,
+<span class='line'>1864</span>      *    thisUpdate                   GeneralizedTime,
+<span class='line'>1865</span>      *    nextUpdate         [0]       EXPLICIT GeneralizedTime OPTIONAL,
+<span class='line'>1866</span>      *    singleExtensions   [1]       EXPLICIT Extensions OPTIONAL }
+<span class='line'>1867</span>      * &lt;/pre>
+<span class='line'>1868</span>      *
+<span class='line'>1869</span>      * @example
+<span class='line'>1870</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
+<span class='line'>1871</span>      * o.getSingleResponse("30..") &rarr;
+<span class='line'>1872</span>      * { certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+<span class='line'>1873</span>      *   status: {status: "good"},
+<span class='line'>1874</span>      *   thisupdate: "20200903235959Z",
+<span class='line'>1875</span>      *   nextupdate: "20200913235959Z",
+<span class='line'>1876</span>      *   ext: [&lt;&lt;Extension parameters>>...] }
+<span class='line'>1877</span>      */</span><span class="WHIT">
+<span class='line'>1878</span> </span><span class="WHIT">    </span><span class="NAME">this.getSingleResponse</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1879</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getChildIdx</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1880</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1881</span> 
+<span class='line'>1882</span> </span><span class="WHIT">	</span><span class="COMM">// 1. CertID</span><span class="WHIT">
+<span class='line'>1883</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pCertID</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getCertID</span><span class="PUNC">(</span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1884</span> </span><span class="WHIT">	</span><span class="NAME">result.certid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">pCertID</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1885</span> 
+<span class='line'>1886</span> </span><span class="WHIT">	</span><span class="COMM">// 2. CertStatus</span><span class="WHIT">
+<span class='line'>1887</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pCertStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getCertStatus</span><span class="PUNC">(</span><span class="NAME">_getTLV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1888</span> </span><span class="WHIT">	</span><span class="NAME">result.status</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">pCertStatus</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1889</span> 
+<span class='line'>1890</span> </span><span class="WHIT">	</span><span class="COMM">// 3. ThisUpdate(GeneralizedTime)</span><span class="WHIT">
+<span class='line'>1891</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"18"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1892</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hThisUpdateV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1893</span> </span><span class="WHIT">	    </span><span class="NAME">result.thisupdate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hextoutf8</span><span class="PUNC">(</span><span class="NAME">hThisUpdateV</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1894</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1895</span> </span><span class="WHIT">	
+<span class='line'>1896</span> 	</span><span class="COMM">// 4. OPTIONAL(nextUpdate, singleExtensions)</span><span class="WHIT">
+<span class='line'>1897</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">a.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1898</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"a0"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">// nextUpdate</span><span class="WHIT">
+<span class='line'>1899</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hNextUpdateV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getVbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"18"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1900</span> </span><span class="WHIT">		</span><span class="NAME">result.nextupdate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hextoutf8</span><span class="PUNC">(</span><span class="NAME">hNextUpdateV</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1901</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1902</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NAME">a</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"a1"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">// singleExtensions</span><span class="WHIT">
+<span class='line'>1903</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1904</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hExt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1905</span> </span><span class="WHIT">		</span><span class="NAME">result.ext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x.getExtParamArray</span><span class="PUNC">(</span><span class="NAME">hExt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1906</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1907</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1908</span> 
+<span class='line'>1909</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1910</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1911</span> 
+<span class='line'>1912</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1913</span>      * parse ASN.1 CertStatus of OCSP&lt;br/>
+<span class='line'>1914</span>      * @name getCertStatus
+<span class='line'>1915</span>      * @memberOf KJUR.asn1.ocsp.OCSPParser#
+<span class='line'>1916</span>      * @function
+<span class='line'>1917</span>      * @param {String} h hexadecimal string of CertStatus
+<span class='line'>1918</span>      * @return JSON object of CertStatus parameter
+<span class='line'>1919</span>      * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+<span class='line'>1920</span>      * @see KJUR.asn1.ocsp.CertStatus
+<span class='line'>1921</span>      *
+<span class='line'>1922</span>      * @description
+<span class='line'>1923</span>      * &lt;pre>
+<span class='line'>1924</span>      * CertStatus ::= CHOICE {
+<span class='line'>1925</span>      *     good        [0]     IMPLICIT NULL,
+<span class='line'>1926</span>      *     revoked     [1]     IMPLICIT RevokedInfo,
+<span class='line'>1927</span>      *     unknown     [2]     IMPLICIT UnknownInfo }
+<span class='line'>1928</span>      * RevokedInfo ::= SEQUENCE {
+<span class='line'>1929</span>      *     revocationTime              GeneralizedTime,
+<span class='line'>1930</span>      *     revocationReason    [0]     EXPLICIT CRLReason OPTIONAL }
+<span class='line'>1931</span>      * UnknownInfo ::= NULL
+<span class='line'>1932</span>      * &lt;/pre>
+<span class='line'>1933</span>      *
+<span class='line'>1934</span>      * @example
+<span class='line'>1935</span>      * o = new KJUR.asn1.ocsp.OCSPParser();
+<span class='line'>1936</span>      * o.getCertStatus("8000") &rarr; {status: "good"}
+<span class='line'>1937</span>      * o.getCertStatus("8200") &rarr; {status: "unknown"}
+<span class='line'>1938</span>      * o.getCertStatus("a1..") &rarr; {status: "revoked", time: "2021...Z"}
+<span class='line'>1939</span>      */</span><span class="WHIT">
+<span class='line'>1940</span> </span><span class="WHIT">    </span><span class="NAME">this.getCertStatus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1941</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1942</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"8000"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">status</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"good"</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1943</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"8200"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">status</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"unknown"</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1944</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"a1"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1945</span> </span><span class="WHIT">	    </span><span class="NAME">result.status</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"revoked"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1946</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hTime</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getVbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1947</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sTime</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hextoutf8</span><span class="PUNC">(</span><span class="NAME">hTime</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1948</span> </span><span class="WHIT">	    </span><span class="NAME">result.time</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sTime</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1949</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1950</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1951</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1952</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1953</span> 
+<span class='line'>1954</span> </span></pre></body></html>

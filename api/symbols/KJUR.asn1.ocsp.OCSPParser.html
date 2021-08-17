@@ -579,6 +579,22 @@ OCSP related ASN.1 data.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getBasicOCSPResponse">getBasicOCSPResponse</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 BasicOCSPResponse of OCSP<br/>
+<pre>
+BasicOCSPResponse       ::= SEQUENCE {
+   tbsResponseData      ResponseData,
+   signatureAlgorithm   AlgorithmIdentifier,
+   signature            BIT STRING,
+   certs            [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
+</pre></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getCertID">getCertID</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 CertID of OCSP<br/>
@@ -588,6 +604,25 @@ CertID ::= SEQUENCE {
   issuerNameHash  OCTET STRING, -- Hash of issuer's DN
   issuerKeyHash   OCTET STRING, -- Hash of issuer's public key
   serialNumber    CertificateSerialNumber }
+</pre></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getCertStatus">getCertStatus</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 CertStatus of OCSP<br/>
+<pre>
+CertStatus ::= CHOICE {
+    good        [0]     IMPLICIT NULL,
+    revoked     [1]     IMPLICIT RevokedInfo,
+    unknown     [2]     IMPLICIT UnknownInfo }
+RevokedInfo ::= SEQUENCE {
+    revocationTime              GeneralizedTime,
+    revocationReason    [0]     EXPLICIT CRLReason OPTIONAL }
+UnknownInfo ::= NULL
 </pre></div>
 							</td>
 						</tr>
@@ -607,6 +642,28 @@ TBSRequest  ::=  SEQUENCE {
   requestorName      [1]  EXPLICIT GeneralName OPTIONAL,
   requestList             SEQUENCE OF Request,
   requestExtensions  [2]  EXPLICIT Extensions OPTIONAL }
+</pre></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getOCSPResponse">getOCSPResponse</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 OCSPResponse of OCSP<br/>
+<pre>
+OCSPResponse ::= SEQUENCE {
+   responseStatus         OCSPResponseStatus,
+   responseBytes          [0] EXPLICIT ResponseBytes OPTIONAL }
+OCSPResponseStatus ::= ENUMERATED {
+    successful            (0),  -- Response has valid confirmations
+    malformedRequest      (1),  -- Illegal confirmation request
+    internalError         (2),  -- Internal error in issuer
+    tryLater              (3),  -- Try again later
+                                -- (4) is not used
+    sigRequired           (5),  -- Must sign the request
+    unauthorized          (6)   -- Request unauthorized }
 </pre></div>
 							</td>
 						</tr>
@@ -640,6 +697,101 @@ TBSRequest  ::=  SEQUENCE {
 Request ::= SEQUENCE {
   reqCert                  CertID,
   singleRequestExtensions  [0] EXPLICIT Extensions OPTIONAL }      
+</pre></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getResponderID">getResponderID</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 ResponderID of OCSP<br/>
+<pre>
+ResponderID ::= CHOICE {
+   byName               [1] Name,
+   byKey                [2] KeyHash }
+KeyHash ::= OCTET STRING -- SHA-1 hash of responder's public key
+                            (excluding the tag and length fields)
+</pre></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getResponseBytes">getResponseBytes</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 ResponseBytes of OCSP<br/>
+<pre>
+ResponseBytes ::=       SEQUENCE {
+    responseType   OBJECT IDENTIFIER,
+    response       OCTET STRING }
+id-pkix-ocsp           OBJECT IDENTIFIER ::= { id-ad-ocsp }
+id-pkix-ocsp-basic     OBJECT IDENTIFIER ::= { id-pkix-ocsp 1 }
+
+BasicOCSPResponse       ::= SEQUENCE {
+   tbsResponseData      ResponseData,
+   signatureAlgorithm   AlgorithmIdentifier,
+   signature            BIT STRING,
+   certs            [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
+</pre></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getResponseData">getResponseData</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 ResponseData of OCSP<br/>
+<pre>
+ResponseData ::= SEQUENCE {
+   version              [0] EXPLICIT Version DEFAULT v1,
+   responderID              ResponderID,
+   producedAt               GeneralizedTime,
+   responses                SEQUENCE OF SingleResponse,
+   responseExtensions   [1] EXPLICIT Extensions OPTIONAL }
+</pre></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getSingleResponse">getSingleResponse</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 SingleResponse of OCSP<br/>
+<pre>
+SingleResponse ::= SEQUENCE {
+   certID                       CertID,
+   certStatus                   CertStatus,
+   thisUpdate                   GeneralizedTime,
+   nextUpdate         [0]       EXPLICIT GeneralizedTime OPTIONAL,
+   singleExtensions   [1]       EXPLICIT Extensions OPTIONAL }
+</pre></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getSingleResponseList">getSingleResponseList</a></b>(h)
+								</div>
+								<div class="description">parse ASN.1 SEQUENCE OF SingleResponse of OCSP<br/>
+<pre>
+ResponseData ::= SEQUENCE {
+   version              [0] EXPLICIT Version DEFAULT v1,
+   responderID              ResponderID,
+   producedAt               GeneralizedTime,
+   responses                SEQUENCE OF SingleResponse,
+   responseExtensions   [1] EXPLICIT Extensions OPTIONAL }
+SingleResponse ::= SEQUENCE {
+   certID                       CertID,
+   certStatus                   CertStatus,
+   thisUpdate                   GeneralizedTime,
+   nextUpdate         [0]       EXPLICIT GeneralizedTime OPTIONAL,
+   singleExtensions   [1]       EXPLICIT Extensions OPTIONAL }
 </pre></div>
 							</td>
 						</tr>
@@ -683,9 +835,37 @@ TBSRequest  ::=  SEQUENCE {
 				<div class="description">
 					OCSP request and response parser<br/>
 This class provides ASN.1 parser for
-OCSP related ASN.1 data.
-Currntly only OCSP request parsers are
-available.
+OCSP related ASN.1 data. <br/>
+NOTE: OCSPResponse parser supported from jsrsasign 10.4.0.
+<br/>
+This parser supports following OCSP ASN.1 classes:
+<ul>
+<li>OCSP REQUEST
+<ul>
+<li>OCSPRequest - <a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getOCSPRequest">KJUR.asn1.ocsp.OCSPParser#getOCSPRequest</a></li>
+<li>TBSRequest - <a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getTBSRequest">KJUR.asn1.ocsp.OCSPParser#getTBSRequest</a></li>
+<li>SEQUENCE OF Request - <a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getRequestList">KJUR.asn1.ocsp.OCSPParser#getRequestList</a></li>
+<li>Request - <a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getRequest">KJUR.asn1.ocsp.OCSPParser#getRequest</a></li>
+</ul>
+</li>
+<li>OCSP RESPONSE
+<ul>
+<li>OCSPResponse - <a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getOCSPResponse">KJUR.asn1.ocsp.OCSPParser#getOCSPResponse</a></li>
+<li>ResponseBytes - <a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getResponseBytes">KJUR.asn1.ocsp.OCSPParser#getResponseBytes</a></li>
+<li>BasicOCSPResponse - <a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getBasicOCSPResponse">KJUR.asn1.ocsp.OCSPParser#getBasicOCSPResponse</a></li>
+<li>ResponseData - <a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getResponseData">KJUR.asn1.ocsp.OCSPParser#getResponseData</a></li>
+<li>ResponderID - <a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getResponderID">KJUR.asn1.ocsp.OCSPParser#getResponderID</a></li>
+<li>SEQUENCE OF SingleResponse - <a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getSingleResponseList">KJUR.asn1.ocsp.OCSPParser#getSingleResponseList</a></li>
+<li>SingleResponse - <a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getSingleResponse">KJUR.asn1.ocsp.OCSPParser#getSingleResponse</a></li>
+<li>CertStatus - <a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getCertStatus">KJUR.asn1.ocsp.OCSPParser#getCertStatus</a></li>
+</ul>
+</li>
+<li>common
+<ul>
+<li>CertID - <a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getCertID">KJUR.asn1.ocsp.OCSPParser#getCertID</a></li>
+</ul>
+</li>
+</ul>
 					
 				</div>
 				
@@ -716,6 +896,78 @@ available.
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name="getBasicOCSPResponse"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getBasicOCSPResponse</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 BasicOCSPResponse of OCSP<br/>
+<pre>
+BasicOCSPResponse       ::= SEQUENCE {
+   tbsResponseData      ResponseData,
+   signatureAlgorithm   AlgorithmIdentifier,
+   signature            BIT STRING,
+   certs            [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.ocsp.OCSPParser();
+o.getBasicOCSPResponse("30..") &rarr;
+{ ...<<ResponseData properties...>>...
+  sigalg: "SHA256withRSA",
+  sighex: "12abcd...",
+  certs: [<<PEMorHEXstringOfCert1>>,...] });</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of BasicOCSPResponse</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.4.0 asn1ocsp 1.1.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>JSON object of BasicOCSPResponse parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.BasicOCSPResponse.html">KJUR.asn1.ocsp.BasicOCSPResponse</a></dd>
+							
+							</dl>
+						
+
+					<hr />
 				
 					<a name="getCertID"> </a>
 					<div class="fixedFont">
@@ -789,6 +1041,79 @@ o.getCertID("30...") &rarr;
 
 					<hr />
 				
+					<a name="getCertStatus"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getCertStatus</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 CertStatus of OCSP<br/>
+<pre>
+CertStatus ::= CHOICE {
+    good        [0]     IMPLICIT NULL,
+    revoked     [1]     IMPLICIT RevokedInfo,
+    unknown     [2]     IMPLICIT UnknownInfo }
+RevokedInfo ::= SEQUENCE {
+    revocationTime              GeneralizedTime,
+    revocationReason    [0]     EXPLICIT CRLReason OPTIONAL }
+UnknownInfo ::= NULL
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.ocsp.OCSPParser();
+o.getCertStatus("8000") &rarr; {status: "good"}
+o.getCertStatus("8200") &rarr; {status: "unknown"}
+o.getCertStatus("a1..") &rarr; {status: "revoked", time: "2021...Z"}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of CertStatus</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.4.0 asn1ocsp 1.1.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>JSON object of CertStatus parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.CertStatus.html">KJUR.asn1.ocsp.CertStatus</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
 					<a name="getOCSPRequest"> </a>
 					<div class="fixedFont">
 					
@@ -855,6 +1180,92 @@ o.getOCSPRequest("30...") &rarr;
 							</dl>
 						
 						
+						
+
+					<hr />
+				
+					<a name="getOCSPResponse"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getOCSPResponse</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 OCSPResponse of OCSP<br/>
+<pre>
+OCSPResponse ::= SEQUENCE {
+   responseStatus         OCSPResponseStatus,
+   responseBytes          [0] EXPLICIT ResponseBytes OPTIONAL }
+OCSPResponseStatus ::= ENUMERATED {
+    successful            (0),  -- Response has valid confirmations
+    malformedRequest      (1),  -- Illegal confirmation request
+    internalError         (2),  -- Internal error in issuer
+    tryLater              (3),  -- Try again later
+                                -- (4) is not used
+    sigRequired           (5),  -- Must sign the request
+    unauthorized          (6)   -- Request unauthorized }
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.ocsp.OCSPParser();
+o.getOCSPResponse("30..") &rarr;
+{ resstatus: 0,
+  restype: "ocspBasic",
+  respid: {key: "12ab"},
+  prodat: "20200903235959Z",
+  array: [{
+    certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+    status: {status: "good"},
+    thisupdate: "20200903235959Z" }],
+  ext: [{extname: "ocspNonce", hex: "1234abcd"}],
+  alg: "SHA256withRSA",
+  sighex: "12ab",
+  certs: ["030101", "030101"] }</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of OCSPResponse</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.4.0 asn1ocsp 1.1.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>JSON object of OCSResponse parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPResponse.html">KJUR.asn1.ocsp.OCSPResponse</a></dd>
+							
+							</dl>
 						
 
 					<hr />
@@ -990,6 +1401,379 @@ o.getRequestList("30...") &rarr;
 							</dl>
 						
 						
+						
+
+					<hr />
+				
+					<a name="getResponderID"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getResponderID</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 ResponderID of OCSP<br/>
+<pre>
+ResponderID ::= CHOICE {
+   byName               [1] Name,
+   byKey                [2] KeyHash }
+KeyHash ::= OCTET STRING -- SHA-1 hash of responder's public key
+                            (excluding the tag and length fields)
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.ocsp.OCSPParser();
+o.getResponderID("a1..") &rarr; {name: {array: [[{type:"C",value:"JP",ds:"prn"}]...]}}
+o.getResponderID("a2..") &rarr; {key: "12ab..."}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ResponderID</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.4.0 asn1ocsp 1.1.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>JSON object of ResponderID parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.ResponderID.html">KJUR.asn1.ocsp.ResponderID</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getResponseBytes"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getResponseBytes</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 ResponseBytes of OCSP<br/>
+<pre>
+ResponseBytes ::=       SEQUENCE {
+    responseType   OBJECT IDENTIFIER,
+    response       OCTET STRING }
+id-pkix-ocsp           OBJECT IDENTIFIER ::= { id-ad-ocsp }
+id-pkix-ocsp-basic     OBJECT IDENTIFIER ::= { id-pkix-ocsp 1 }
+
+BasicOCSPResponse       ::= SEQUENCE {
+   tbsResponseData      ResponseData,
+   signatureAlgorithm   AlgorithmIdentifier,
+   signature            BIT STRING,
+   certs            [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.ocsp.OCSPParser();
+o.getResponseBytes("30..") &rarr;
+{ restype: "ocspBasic",
+  ...<<BasicOCSPResponse properties...>>...</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ResponseBytes</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.4.0 asn1ocsp 1.1.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>JSON object of ResponseBytes parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.ResponseBytes.html">KJUR.asn1.ocsp.ResponseBytes</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getResponseData"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getResponseData</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 ResponseData of OCSP<br/>
+<pre>
+ResponseData ::= SEQUENCE {
+   version              [0] EXPLICIT Version DEFAULT v1,
+   responderID              ResponderID,
+   producedAt               GeneralizedTime,
+   responses                SEQUENCE OF SingleResponse,
+   responseExtensions   [1] EXPLICIT Extensions OPTIONAL }
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.ocsp.OCSPParser();
+o.getResponseData("30..") &rarr;
+{ respid: {key: "12ab..."},
+  prodat: "20200903235959Z",
+  array: [<<SingleResponse parameter1>>, ...],
+  ext: [
+    {extname:"ocspNonce",hex:"12ab..."}]}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ResponseData</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.4.0 asn1ocsp 1.1.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>JSON object of ResponseData parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.ResponseData.html">KJUR.asn1.ocsp.ResponseData</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getSingleResponse"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getSingleResponse</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 SingleResponse of OCSP<br/>
+<pre>
+SingleResponse ::= SEQUENCE {
+   certID                       CertID,
+   certStatus                   CertStatus,
+   thisUpdate                   GeneralizedTime,
+   nextUpdate         [0]       EXPLICIT GeneralizedTime OPTIONAL,
+   singleExtensions   [1]       EXPLICIT Extensions OPTIONAL }
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.ocsp.OCSPParser();
+o.getSingleResponse("30..") &rarr;
+{ certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+  status: {status: "good"},
+  thisupdate: "20200903235959Z",
+  nextupdate: "20200913235959Z",
+  ext: [<<Extension parameters>>...] }</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of SingleResponse</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.4.0 asn1ocsp 1.1.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>JSON object of SingleResponse parameter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.SingleResponse.html">KJUR.asn1.ocsp.SingleResponse</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getSingleResponseList"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getSingleResponseList</b>(h)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 SEQUENCE OF SingleResponse of OCSP<br/>
+<pre>
+ResponseData ::= SEQUENCE {
+   version              [0] EXPLICIT Version DEFAULT v1,
+   responderID              ResponderID,
+   producedAt               GeneralizedTime,
+   responses                SEQUENCE OF SingleResponse,
+   responseExtensions   [1] EXPLICIT Extensions OPTIONAL }
+SingleResponse ::= SEQUENCE {
+   certID                       CertID,
+   certStatus                   CertStatus,
+   thisUpdate                   GeneralizedTime,
+   nextUpdate         [0]       EXPLICIT GeneralizedTime OPTIONAL,
+   singleExtensions   [1]       EXPLICIT Extensions OPTIONAL }
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.ocsp.OCSPParser();
+o.getSingleResponseList("30..") &rarr;
+[{ certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+   status: {status: "good"},
+   thisupdate: "20200903235959Z",
+   nextupdate: "20200913235959Z",
+   ext: [<<Extension parameters>>...] }]</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of SEQUENCE OF SingleResponse</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.4.0 asn1ocsp 1.1.5</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd>array of SingleResponse parameter JSON object</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.SingleResponseList.html">KJUR.asn1.ocsp.SingleResponseList</a></dd>
+							
+							</dl>
 						
 
 					<hr />

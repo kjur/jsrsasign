@@ -1,4 +1,4 @@
-/* asn1ocsp-1.1.4.js (c) 2016-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1ocsp-1.1.5.js (c) 2016-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1ocsp.js - ASN.1 DER encoder classes for OCSP protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1ocsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.3.2 asn1ocsp 1.1.4 (2021-Aug-15)
+ * @version jsrsasign 10.4.0 asn1ocsp 1.1.5 (2021-Aug-17)
  * @since jsrsasign 6.1.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1218,13 +1218,15 @@ KJUR.asn1.ocsp.OCSPUtil.getRequestHex = function(issuerCert, subjectCert, alg) {
 };
 
 /**
- * parse OCSPResponse<br/>
+ * simple parser for OCSPResponse (DEPRECATED)<br/>
  * @name getOCSPResponseInfo
  * @memberOf KJUR.asn1.ocsp.OCSPUtil
  * @function
  * @param {String} h hexadecimal string of DER OCSPResponse
  * @return {Object} JSON object of parsed OCSPResponse
  * @since jsrsasign 6.1.0 asn1ocsp 1.0.1
+ * @deprecated since jsrsasign 10.4.0 asn1ocsp 1.1.5 Please use OCSPParser.getOCSPRespnose
+ *
  * @description
  * This static method parse a hexadecimal string of DER OCSPResponse and
  * returns JSON object of its parsed result.
@@ -1235,6 +1237,9 @@ KJUR.asn1.ocsp.OCSPUtil.getRequestHex = function(issuerCert, subjectCert, alg) {
  * <li>thisUpdate - string of thisUpdate in Zulu(ex. 20151231235959Z)</li>
  * <li>nextUpdate - string of nextUpdate in Zulu(ex. 20151231235959Z)</li>
  * </ul>
+ * NOTE: This method may not work preperly. Please use 
+ * {@link KJUR.asn1.ocsp.OCSPParser#getOCSPResponse}.
+ *
  * @example
  * info = KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo("3082...");
  */
@@ -1293,9 +1298,37 @@ KJUR.asn1.ocsp.OCSPUtil.getOCSPResponseInfo = function(h) {
  *
  * @description
  * This class provides ASN.1 parser for
- * OCSP related ASN.1 data.
- * Currntly only OCSP request parsers are
- * available.
+ * OCSP related ASN.1 data. <br/>
+ * NOTE: OCSPResponse parser supported from jsrsasign 10.4.0.
+ * <br/>
+ * This parser supports following OCSP ASN.1 classes:
+ * <ul>
+ * <li>OCSP REQUEST
+ * <ul>
+ * <li>OCSPRequest - {@link KJUR.asn1.ocsp.OCSPParser#getOCSPRequest}</li>
+ * <li>TBSRequest - {@link KJUR.asn1.ocsp.OCSPParser#getTBSRequest}</li>
+ * <li>SEQUENCE OF Request - {@link KJUR.asn1.ocsp.OCSPParser#getRequestList}</li>
+ * <li>Request - {@link KJUR.asn1.ocsp.OCSPParser#getRequest}</li>
+ * </ul>
+ * </li>
+ * <li>OCSP RESPONSE
+ * <ul>
+ * <li>OCSPResponse - {@link KJUR.asn1.ocsp.OCSPParser#getOCSPResponse}</li>
+ * <li>ResponseBytes - {@link KJUR.asn1.ocsp.OCSPParser#getResponseBytes}</li>
+ * <li>BasicOCSPResponse - {@link KJUR.asn1.ocsp.OCSPParser#getBasicOCSPResponse}</li>
+ * <li>ResponseData - {@link KJUR.asn1.ocsp.OCSPParser#getResponseData}</li>
+ * <li>ResponderID - {@link KJUR.asn1.ocsp.OCSPParser#getResponderID}</li>
+ * <li>SEQUENCE OF SingleResponse - {@link KJUR.asn1.ocsp.OCSPParser#getSingleResponseList}</li>
+ * <li>SingleResponse - {@link KJUR.asn1.ocsp.OCSPParser#getSingleResponse}</li>
+ * <li>CertStatus - {@link KJUR.asn1.ocsp.OCSPParser#getCertStatus}</li>
+ * </ul>
+ * </li>
+ * <li>common
+ * <ul>
+ * <li>CertID - {@link KJUR.asn1.ocsp.OCSPParser#getCertID}</li>
+ * </ul>
+ * </li>
+ * </ul>
  */
 KJUR.asn1.ocsp.OCSPParser = function() {
     var _Error = Error,
@@ -1305,6 +1338,9 @@ KJUR.asn1.ocsp.OCSPParser = function() {
 	_getV = _ASN1HEX.getV,
 	_getTLV = _ASN1HEX.getTLV,
 	_getIdxbyList = _ASN1HEX.getIdxbyList,
+	_getVbyList = _ASN1HEX.getVbyList,
+	_getTLVbyList = _ASN1HEX.getTLVbyList,
+	_getVbyListEx = _ASN1HEX.getVbyListEx,
 	_getTLVbyListEx = _ASN1HEX.getTLVbyListEx,
 	_getChildIdx = _ASN1HEX.getChildIdx;
 
@@ -1513,6 +1549,405 @@ KJUR.asn1.ocsp.OCSPParser = function() {
 	result.isskey = _getV(h, a[2]);
 	result.sbjsn = _getV(h, a[3]);
 	
+	return result;
+    };
+
+    /**
+     * parse ASN.1 OCSPResponse of OCSP<br/>
+     * @name getOCSPResponse
+     * @memberOf KJUR.asn1.ocsp.OCSPParser#
+     * @function
+     * @param {String} h hexadecimal string of OCSPResponse
+     * @return JSON object of OCSResponse parameter
+     * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+     * @see KJUR.asn1.ocsp.OCSPResponse
+     *
+     * @description
+     * <pre>
+     * OCSPResponse ::= SEQUENCE {
+     *    responseStatus         OCSPResponseStatus,
+     *    responseBytes          [0] EXPLICIT ResponseBytes OPTIONAL }
+     * OCSPResponseStatus ::= ENUMERATED {
+     *     successful            (0),  -- Response has valid confirmations
+     *     malformedRequest      (1),  -- Illegal confirmation request
+     *     internalError         (2),  -- Internal error in issuer
+     *     tryLater              (3),  -- Try again later
+     *                                 -- (4) is not used
+     *     sigRequired           (5),  -- Must sign the request
+     *     unauthorized          (6)   -- Request unauthorized }
+     * </pre>
+     *
+     * @example
+     * o = new KJUR.asn1.ocsp.OCSPParser();
+     * o.getOCSPResponse("30..") &rarr;
+     * { resstatus: 0,
+     *   restype: "ocspBasic",
+     *   respid: {key: "12ab"},
+     *   prodat: "20200903235959Z",
+     *   array: [{
+     *     certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+     *     status: {status: "good"},
+     *     thisupdate: "20200903235959Z" }],
+     *   ext: [{extname: "ocspNonce", hex: "1234abcd"}],
+     *   alg: "SHA256withRSA",
+     *   sighex: "12ab",
+     *   certs: ["030101", "030101"] }
+     */
+    this.getOCSPResponse = function(h) {
+	var a = _getChildIdx(h, 0);
+	var result;
+
+	var hStatusV = _getV(h, a[0]);
+	var iStatusV = parseInt(hStatusV);
+	
+	if (a.length == 1) return {resstatus: iStatusV};
+
+	var hResponseBytes = _getTLVbyList(h, 0, [1, 0]);
+	result = this.getResponseBytes(hResponseBytes);
+	result.resstatus = iStatusV;
+	
+	return result;
+    };
+
+    /**
+     * parse ASN.1 ResponseBytes of OCSP<br/>
+     * @name getResponseBytes
+     * @memberOf KJUR.asn1.ocsp.OCSPParser#
+     * @function
+     * @param {String} h hexadecimal string of ResponseBytes
+     * @return JSON object of ResponseBytes parameter
+     * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+     * @see KJUR.asn1.ocsp.ResponseBytes
+     *
+     * @description
+     * <pre>
+     * ResponseBytes ::=       SEQUENCE {
+     *     responseType   OBJECT IDENTIFIER,
+     *     response       OCTET STRING }
+     * id-pkix-ocsp           OBJECT IDENTIFIER ::= { id-ad-ocsp }
+     * id-pkix-ocsp-basic     OBJECT IDENTIFIER ::= { id-pkix-ocsp 1 }
+     *
+     * BasicOCSPResponse       ::= SEQUENCE {
+     *    tbsResponseData      ResponseData,
+     *    signatureAlgorithm   AlgorithmIdentifier,
+     *    signature            BIT STRING,
+     *    certs            [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
+     * </pre>
+     *
+     * @example
+     * o = new KJUR.asn1.ocsp.OCSPParser();
+     * o.getResponseBytes("30..") &rarr;
+     * { restype: "ocspBasic",
+     *   ...<<BasicOCSPResponse properties...>>...
+     */
+    this.getResponseBytes = function(h) {
+	var a = _getChildIdx(h, 0);
+	var result;
+
+	var hBasicOCSPResponse = _getTLVbyList(h, 0, [1, 0]);
+	result = this.getBasicOCSPResponse(hBasicOCSPResponse);
+
+	var hResTypeV = _getV(h, a[0]);
+	result.restype = KJUR.asn1.x509.OID.oid2name(hextooid(hResTypeV));
+	
+	return result;
+    };
+
+    /**
+     * parse ASN.1 BasicOCSPResponse of OCSP<br/>
+     * @name getBasicOCSPResponse
+     * @memberOf KJUR.asn1.ocsp.OCSPParser#
+     * @function
+     * @param {String} h hexadecimal string of BasicOCSPResponse
+     * @return JSON object of BasicOCSPResponse parameter
+     * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+     * @see KJUR.asn1.ocsp.BasicOCSPResponse
+     *
+     * @description
+     * <pre>
+     * BasicOCSPResponse       ::= SEQUENCE {
+     *    tbsResponseData      ResponseData,
+     *    signatureAlgorithm   AlgorithmIdentifier,
+     *    signature            BIT STRING,
+     *    certs            [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
+     * </pre>
+     *
+     * @example
+     * o = new KJUR.asn1.ocsp.OCSPParser();
+     * o.getBasicOCSPResponse("30..") &rarr;
+     * { ...<<ResponseData properties...>>...
+     *   sigalg: "SHA256withRSA",
+     *   sighex: "12abcd...",
+     *   certs: [<<PEMorHEXstringOfCert1>>,...] });
+     */
+    this.getBasicOCSPResponse = function(h) {
+	var a = _getChildIdx(h, 0);
+	var result;
+
+	result = this.getResponseData(_getTLV(h, a[0]));
+
+	var x = new X509();
+	result.alg = x.getAlgorithmIdentifierName(_getTLV(h, a[1]));
+
+	var hSigHex = _getV(h, a[2]);
+	result.sighex = hSigHex.substr(2);
+	
+	var hExt = _getVbyListEx(h, 0, ["[0]"]);
+	if (hExt != null) {
+	    var aCertIdx = _getChildIdx(hExt, 0);
+	    var aCert = [];
+	    for (var i = 0; i < aCertIdx.length; i++) {
+		var hCert = _getTLV(hExt, aCertIdx[i]);
+		aCert.push(hCert);
+	    }
+	    result.certs = aCert;
+	}
+
+	return result;
+    };
+
+    /**
+     * parse ASN.1 ResponseData of OCSP<br/>
+     * @name getResponseData
+     * @memberOf KJUR.asn1.ocsp.OCSPParser#
+     * @function
+     * @param {String} h hexadecimal string of ResponseData
+     * @return JSON object of ResponseData parameter
+     * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+     * @see KJUR.asn1.ocsp.ResponseData
+     *
+     * @description
+     * <pre>
+     * ResponseData ::= SEQUENCE {
+     *    version              [0] EXPLICIT Version DEFAULT v1,
+     *    responderID              ResponderID,
+     *    producedAt               GeneralizedTime,
+     *    responses                SEQUENCE OF SingleResponse,
+     *    responseExtensions   [1] EXPLICIT Extensions OPTIONAL }
+     * </pre>
+     *
+     * @example
+     * o = new KJUR.asn1.ocsp.OCSPParser();
+     * o.getResponseData("30..") &rarr;
+     * { respid: {key: "12ab..."},
+     *   prodat: "20200903235959Z",
+     *   array: [<<SingleResponse parameter1>>, ...],
+     *   ext: [
+     *     {extname:"ocspNonce",hex:"12ab..."}]}
+     */
+    this.getResponseData = function(h) {
+	var a = _getChildIdx(h, 0);
+	var alen = a.length;
+	var result = {};
+	var idx = 0;
+
+	// skip to relax interoperability even though explicit DEFAULT
+	if (h.substr(a[0], 2) == "a0") idx++;
+
+	result.respid = this.getResponderID(_getTLV(h, a[idx++]));
+	
+	var hProdAtV = _getV(h, a[idx++]);
+	result.prodat = hextoutf8(hProdAtV);
+	
+	result.array = this.getSingleResponseList(_getTLV(h, a[idx++]));
+
+	if (h.substr(a[alen - 1], 2) == "a1") {
+	    var hExt =  _getTLVbyList(h, a[alen - 1], [0]);
+	    var x = new X509();
+	    result.ext = x.getExtParamArray(hExt);
+	}
+
+	return result;
+    };
+
+    /**
+     * parse ASN.1 ResponderID of OCSP<br/>
+     * @name getResponderID
+     * @memberOf KJUR.asn1.ocsp.OCSPParser#
+     * @function
+     * @param {String} h hexadecimal string of ResponderID
+     * @return JSON object of ResponderID parameter
+     * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+     * @see KJUR.asn1.ocsp.ResponderID
+     *
+     * @description
+     * <pre>
+     * ResponderID ::= CHOICE {
+     *    byName               [1] Name,
+     *    byKey                [2] KeyHash }
+     * KeyHash ::= OCTET STRING -- SHA-1 hash of responder's public key
+     *                             (excluding the tag and length fields)
+     * </pre>
+     *
+     * @example
+     * o = new KJUR.asn1.ocsp.OCSPParser();
+     * o.getResponderID("a1..") &rarr; {name: {array: [[{type:"C",value:"JP",ds:"prn"}]...]}}
+     * o.getResponderID("a2..") &rarr; {key: "12ab..."}
+     */
+    this.getResponderID = function(h) {
+	var result = {};
+
+	if (h.substr(0, 2) == "a2") {
+	    var hKeyV = _getVbyList(h, 0, [0]);
+	    result.key = hKeyV;
+	}
+	if (h.substr(0, 2) == "a1") {
+	    var hName = _getTLVbyList(h, 0, [0]);
+	    var x = new X509();
+	    result.name = x.getX500Name(hName);
+	}
+	
+	return result;
+    };
+
+    /**
+     * parse ASN.1 SEQUENCE OF SingleResponse of OCSP<br/>
+     * @name getSingleResponseList
+     * @memberOf KJUR.asn1.ocsp.OCSPParser#
+     * @function
+     * @param {String} h hexadecimal string of SEQUENCE OF SingleResponse
+     * @return array of SingleResponse parameter JSON object
+     * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+     * @see KJUR.asn1.ocsp.SingleResponseList
+     *
+     * @description
+     * <pre>
+     * ResponseData ::= SEQUENCE {
+     *    version              [0] EXPLICIT Version DEFAULT v1,
+     *    responderID              ResponderID,
+     *    producedAt               GeneralizedTime,
+     *    responses                SEQUENCE OF SingleResponse,
+     *    responseExtensions   [1] EXPLICIT Extensions OPTIONAL }
+     * SingleResponse ::= SEQUENCE {
+     *    certID                       CertID,
+     *    certStatus                   CertStatus,
+     *    thisUpdate                   GeneralizedTime,
+     *    nextUpdate         [0]       EXPLICIT GeneralizedTime OPTIONAL,
+     *    singleExtensions   [1]       EXPLICIT Extensions OPTIONAL }
+     * </pre>
+     *
+     * @example
+     * o = new KJUR.asn1.ocsp.OCSPParser();
+     * o.getSingleResponseList("30..") &rarr;
+     * [{ certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+     *    status: {status: "good"},
+     *    thisupdate: "20200903235959Z",
+     *    nextupdate: "20200913235959Z",
+     *    ext: [<<Extension parameters>>...] }]
+     */
+    this.getSingleResponseList = function(h) {
+	var a = _getChildIdx(h, 0);
+	var result = [];
+
+	for (var i = 0; i < a.length; i++) {
+	    var p = this.getSingleResponse(_getTLV(h, a[i]));
+	    result.push(p);
+	}
+	return result;
+    };
+
+    /**
+     * parse ASN.1 SingleResponse of OCSP<br/>
+     * @name getSingleResponse
+     * @memberOf KJUR.asn1.ocsp.OCSPParser#
+     * @function
+     * @param {String} h hexadecimal string of SingleResponse
+     * @return JSON object of SingleResponse parameter
+     * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+     * @see KJUR.asn1.ocsp.SingleResponse
+     *
+     * @description
+     * <pre>
+     * SingleResponse ::= SEQUENCE {
+     *    certID                       CertID,
+     *    certStatus                   CertStatus,
+     *    thisUpdate                   GeneralizedTime,
+     *    nextUpdate         [0]       EXPLICIT GeneralizedTime OPTIONAL,
+     *    singleExtensions   [1]       EXPLICIT Extensions OPTIONAL }
+     * </pre>
+     *
+     * @example
+     * o = new KJUR.asn1.ocsp.OCSPParser();
+     * o.getSingleResponse("30..") &rarr;
+     * { certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+     *   status: {status: "good"},
+     *   thisupdate: "20200903235959Z",
+     *   nextupdate: "20200913235959Z",
+     *   ext: [<<Extension parameters>>...] }
+     */
+    this.getSingleResponse = function(h) {
+	var a = _getChildIdx(h, 0);
+	var result = {};
+
+	// 1. CertID
+	var pCertID = this.getCertID(_getTLV(h, a[0]));
+	result.certid = pCertID;
+
+	// 2. CertStatus
+	var pCertStatus = this.getCertStatus(_getTLV(h, a[1]));
+	result.status = pCertStatus;
+
+	// 3. ThisUpdate(GeneralizedTime)
+	if (h.substr(a[2], 2) == "18") {
+	    var hThisUpdateV = _getV(h, a[2]);
+	    result.thisupdate = hextoutf8(hThisUpdateV);
+	}
+	
+	// 4. OPTIONAL(nextUpdate, singleExtensions)
+	for (var i = 3; i < a.length; i++) {
+	    if (h.substr(a[i], 2) == "a0") { // nextUpdate
+		var hNextUpdateV = _getVbyList(h, a[i], [0], "18");
+		result.nextupdate = hextoutf8(hNextUpdateV);
+	    }
+	    if (h.substr(a[i], 2) == "a1") { // singleExtensions
+		var x = new X509();
+		var hExt = _getTLVbyList(h, 0, [i, 0]);
+		result.ext = x.getExtParamArray(hExt);
+	    }
+	}
+
+	return result;
+    };
+
+    /**
+     * parse ASN.1 CertStatus of OCSP<br/>
+     * @name getCertStatus
+     * @memberOf KJUR.asn1.ocsp.OCSPParser#
+     * @function
+     * @param {String} h hexadecimal string of CertStatus
+     * @return JSON object of CertStatus parameter
+     * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
+     * @see KJUR.asn1.ocsp.CertStatus
+     *
+     * @description
+     * <pre>
+     * CertStatus ::= CHOICE {
+     *     good        [0]     IMPLICIT NULL,
+     *     revoked     [1]     IMPLICIT RevokedInfo,
+     *     unknown     [2]     IMPLICIT UnknownInfo }
+     * RevokedInfo ::= SEQUENCE {
+     *     revocationTime              GeneralizedTime,
+     *     revocationReason    [0]     EXPLICIT CRLReason OPTIONAL }
+     * UnknownInfo ::= NULL
+     * </pre>
+     * NOTE: Currently revocationReason not supported.
+     *
+     * @example
+     * o = new KJUR.asn1.ocsp.OCSPParser();
+     * o.getCertStatus("8000") &rarr; {status: "good"}
+     * o.getCertStatus("8200") &rarr; {status: "unknown"}
+     * o.getCertStatus("a1..") &rarr; {status: "revoked", time: "2021...Z"}
+     */
+    this.getCertStatus = function(h) {
+	var result = {};
+	if (h == "8000") return {status: "good"};
+	if (h == "8200") return {status: "unknown"};
+	if (h.substr(0, 2) == "a1") {
+	    result.status = "revoked";
+	    var hTime = _getVbyList(h, 0, [0]);
+	    var sTime = hextoutf8(hTime);
+	    result.time = sTime;
+	}
 	return result;
     };
 };

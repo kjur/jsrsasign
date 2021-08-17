@@ -580,7 +580,7 @@ This class provides utility static methods for OCSP.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">KJUR.asn1.ocsp.OCSPUtil.<b><a href="../symbols/KJUR.asn1.ocsp.OCSPUtil.html#.getOCSPResponseInfo">getOCSPResponseInfo</a></b>(h)
 								</div>
-								<div class="description">parse OCSPResponse<br/>
+								<div class="description">parse OCSPResponse (DEPRECATED)<br/>
 This static method parse a hexadecimal string of DER OCSPResponse and
 returns JSON object of its parsed result.</div>
 							</td>
@@ -661,7 +661,7 @@ This class provides utility static methods for OCSP.
 					
 					</div>
 					<div class="description">
-						parse OCSPResponse<br/>
+						parse OCSPResponse (DEPRECATED)<br/>
 This static method parse a hexadecimal string of DER OCSPResponse and
 returns JSON object of its parsed result.
 Its result has following properties:
@@ -671,6 +671,8 @@ Its result has following properties:
 <li>thisUpdate - string of thisUpdate in Zulu(ex. 20151231235959Z)</li>
 <li>nextUpdate - string of nextUpdate in Zulu(ex. 20151231235959Z)</li>
 </ul>
+NOTE: This method may not work preperly. Please use 
+<a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getOCSPResponse">KJUR.asn1.ocsp.OCSPParser#getOCSPResponse</a>.
 						
 						
 					</div>
@@ -693,6 +695,13 @@ Its result has following properties:
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 10.4.0 asn1ocsp 1.1.5 Please use OCSPParser.getOCSPRespnose
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">
