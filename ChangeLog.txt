@@ -1,10 +1,17 @@
 
 ChangeLog for jsrsasign
 
+Full support for parsing OCSP response
+* Changes from 10.3.2 to 10.4.0 (2021-08-17)
+  - asn1ocsp.js
+    - add OCSP response parser support in OCSPParser class (request #501)
+    - OCSPParser.get{OCSPResponse,ResponseBytes,BasicOCSPResponse,ResponseData,ResponderID,SingleResponseList,SingleResponse,CertStatus} methods added
+    - DEPRECATED: OCSPUtil.getOCSPResponseInfo
+
 fix wrong OCSPRequest for EC public key certificate
 * Changes from 10.3.1 to 10.3.2 (2021-08-15)
   - asn1ocsp.js
-    - CertID.setByCert fixed for issuer EC public key (#500)
+    - CertID.setByCert fixed for issuer EC public key (issue #500)
 
 document fix for deprecated kjur.github.com domain
 * Changes from 10.3.0 to 10.3.1

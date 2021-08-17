@@ -563,6 +563,174 @@ equal(ASN1HEX.getTLVbyList(hOCSPRES_wikipedia_revoked, 0, [1,0,1,0,0,2,0,3,0]),
       "180f32303136313030363032353332375a", "o t2");
 });
 
+test("OCSPParser.getOCSPResponse test", function() {
+var obj = new KJUR.asn1.ocsp.OCSPParser();
+
+var h = "30819a0a0100a0819430819106092b06010505073001010481833081803060a204040212ab180f32303230303930333233353935395a302e302c3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395aa1173015301306092b0601050507300102040604041234abcd300d06092a864886f70d01010b050003030012aba0083006030101030101";
+var param = {
+  resstatus: 0,
+  restype: "ocspBasic",
+  respid: {key: "12ab"},
+  prodat: "20200903235959Z",
+  array: [{
+    certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+    status: {status: "good"},
+    thisupdate: "20200903235959Z"
+  }],
+  ext: [
+    {extname: "ocspNonce", hex: "1234abcd"}
+  ],
+  alg: "SHA256withRSA",
+  sighex: "12ab",
+  certs: ["030101", "030101"]
+};
+deepEqual(obj.getOCSPResponse(h), param, "successful + responseBytes");
+
+var h2 = "30030a0106";
+var param2 = {resstatus: 6};
+deepEqual(obj.getOCSPResponse(h2), param2, "unauhorized(6)");
+});
+
+test("OCSPParser.getResponseBytes test", function() {
+var obj = new KJUR.asn1.ocsp.OCSPParser();
+
+var h = "30819106092b06010505073001010481833081803060a204040212ab180f32303230303930333233353935395a302e302c3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395aa1173015301306092b0601050507300102040604041234abcd300d06092a864886f70d01010b050003030012aba0083006030101030101";
+var param = {
+  restype: "ocspBasic",
+  respid: {key: "12ab"},
+  prodat: "20200903235959Z",
+  array: [{
+    certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+    status: {status: "good"},
+    thisupdate: "20200903235959Z"
+  }],
+  ext: [
+    {extname: "ocspNonce", hex: "1234abcd"}
+  ],
+  alg: "SHA256withRSA",
+  sighex: "12ab",
+  certs: ["030101", "030101"]
+};
+deepEqual(obj.getResponseBytes(h), param, "test1");
+});
+
+test("OCSPParser.getBasicOCSPResponse test", function() {
+var obj = new KJUR.asn1.ocsp.OCSPParser();
+
+var h = "3081803060a204040212ab180f32303230303930333233353935395a302e302c3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395aa1173015301306092b0601050507300102040604041234abcd300d06092a864886f70d01010b050003030012aba0083006030101030101";
+var param = {
+  respid: {key: "12ab"},
+  prodat: "20200903235959Z",
+  array: [{
+    certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+    status: {status: "good"},
+    thisupdate: "20200903235959Z"
+  }],
+  ext: [
+    {extname: "ocspNonce", hex: "1234abcd"}
+  ],
+  alg: "SHA256withRSA",
+  sighex: "12ab",
+  certs: ["030101", "030101"]
+};
+deepEqual(obj.getBasicOCSPResponse(h), param, "test1");
+});
+
+test("OCSPParser.getResponseData test", function() {
+var obj = new KJUR.asn1.ocsp.OCSPParser();
+
+var h = "3060a204040212ab180f32303230303930333233353935395a302e302c3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395aa1173015301306092b0601050507300102040604041234abcd";
+var param = {
+  respid: {key: "12ab"},
+  prodat: "20200903235959Z",
+  array: [{
+    certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+    status: {status: "good"},
+    thisupdate: "20200903235959Z"
+  }],
+  ext: [
+    {extname: "ocspNonce", hex: "1234abcd"}
+  ]
+};
+deepEqual(obj.getResponseData(h), param, "test1");
+});
+
+test("OCSPParser.getResponderID test", function() {
+var obj = new KJUR.asn1.ocsp.OCSPParser();
+
+var h = "a204040212ab";
+var param = {key: "12ab"};
+deepEqual(obj.getResponderID(h), param, "key");
+
+var h2 = "a11c301a310b3009060355040613024a50310b3009060355040a0c024f31";
+var param2 = {name: {
+  array: [[{type: "C",value:"JP",ds:"prn"}],[{type:"O",value:"O1",ds:"utf8"}]],
+  str: "/C=JP/O=O1"
+}};
+deepEqual(obj.getResponderID(h2), param2, "name");
+});
+
+test("OCSPParser.getSingleResponseList test", function() {
+var obj = new KJUR.asn1.ocsp.OCSPParser();
+
+var h = "302e302c3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395a";
+var param = [{
+certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+status: {status: "good"},
+thisupdate: "20200903235959Z"
+}];
+deepEqual(obj.getSingleResponseList(h), param, "test");
+});
+
+test("OCSPParser.getSingleResponse test", function() {
+var obj = new KJUR.asn1.ocsp.OCSPParser();
+
+var h = "302c3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395a";
+var param = {
+certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+status: {status: "good"},
+thisupdate: "20200903235959Z"
+};
+deepEqual(obj.getSingleResponse(h), param, "test");
+
+var h2 = "303f3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395aa011180f32303230303931333233353935395a";
+var param2 = {
+certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+status: {status: "good"},
+thisupdate: "20200903235959Z",
+nextupdate: "20200913235959Z"
+};
+deepEqual(obj.getSingleResponse(h2), param2, "test2");
+
+// raising error in extension
+var h3 = "304f3017300906052b0e03021a0500040212ab040212ab020212ab8000180f32303230303930333233353935395aa011180f32303230303931333233353935395aa10e300c300a06032a03040403030101";
+var param3 = {
+certid: {alg:"sha1",issname:"12ab",isskey:"12ab",sbjsn:"12ab"},
+status: {status: "good"},
+thisupdate: "20200903235959Z",
+nextupdate: "20200913235959Z",
+ext: [{extname:"1.2.3.4",extn:"030101"}]
+};
+deepEqual(obj.getSingleResponse(h3), param3, "test3");
+
+});
+
+test("OCSPParser.getCertStatus test", function() {
+var obj = new KJUR.asn1.ocsp.OCSPParser();
+
+var h1 = "8000";
+var param1 = {status: "good"};
+deepEqual(obj.getCertStatus(h1),param1,"good");
+
+var h2 = "8200";
+var param2 = {status: "unknown"};
+deepEqual(obj.getCertStatus(h2),param2,"unknown");
+
+var h3 = "a111180f32303230303930333233353935395a";
+var param3 = {status: "revoked", time: "20200903235959Z"};
+deepEqual(obj.getCertStatus(h3),param3,"revoked");
+});
+
 // getocsp/digicertcom-ev-unauthorized
 test("OCSPParser.getOCSPRequest test", function() {
 var obj = new KJUR.asn1.ocsp.OCSPParser();
