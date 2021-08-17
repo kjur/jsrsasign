@@ -420,9 +420,7 @@ extendClass(KJUR.asn1.ocsp.BasicOCSPResponse, KJUR.asn1.ASN1Object);
  *   array: [
  *     <<SingleResponse parameter1>>, ...
  *   ],
- *   ext: [
- *     {extname:"ocspNonce",hex:"12ab..."}
- *   ]
+ *   ext: [{extname:"ocspNonce",hex:"12ab..."}]
  * });
  */
 KJUR.asn1.ocsp.ResponseData = function(params) {
@@ -1354,6 +1352,9 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
      *
      * @description
+     * This method will parse a hexadecimal string of 
+     * OCSPRequest ASN.1 class is defined in 
+     * <a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>. 
      * <pre>
      * OCSPRequest ::= SEQUENCE {
      *   tbsRequest              TBSRequest,
@@ -1363,7 +1364,17 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      *   requestorName      [1]  EXPLICIT GeneralName OPTIONAL,
      *   requestList             SEQUENCE OF Request,
      *   requestExtensions  [2]  EXPLICIT Extensions OPTIONAL }
+     * Signature       ::=     SEQUENCE {
+     *   signatureAlgorithm      AlgorithmIdentifier,
+     *   signature               BIT STRING,
+     *   certs              [0] EXPLICIT SEQUENCE OF Certificate
+     *                          OPTIONAL}
      * </pre>
+     * Currently Signature in OCSPRequest is not supported.
+     * <br/>
+     * 
+     * @see KJUR.asn1.ocsp.OCSPParser#getTBSRequest
+     * @see KJUR.asn1.ocsp.OCSPRequest
      *
      * @example
      * o = new KJUR.asn1.ocsp.OCSPParser();
@@ -1372,8 +1383,7 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      *    "alg": "sha1",
      *    "issname": "105fa67a80089db5279f35ce830b43889ea3c70d",
      *    "isskey": "0f80611c823161d52f28e78d4638b42ce1c6d9e2",
-     *    "sbjsn": "0fef62075d715dc5e1d8bd03775c9686"
-     * }]}
+     *    "sbjsn": "0fef62075d715dc5e1d8bd03775c9686" }]}
      */
     this.getOCSPRequest = function(h) {
 	var a = _getChildIdx(h, 0);
@@ -1396,6 +1406,9 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
      *
      * @description
+     * This method will parse
+     * TBSRequest ASN.1 class is defined in 
+     * <a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>. 
      * <pre>
      * TBSRequest  ::=  SEQUENCE {
      *   version            [0]  EXPLICIT Version DEFAULT v1,
@@ -1404,6 +1417,10 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      *   requestExtensions  [2]  EXPLICIT Extensions OPTIONAL }
      * </pre>
      *
+     * @see KJUR.asn1.ocsp.OCSPParser#getOCSPRequest
+     * @see KJUR.asn1.ocsp.OCSPParser#getRequestList
+     * @see KJUR.asn1.ocsp.TBSRequest
+     *
      * @example
      * o = new KJUR.asn1.ocsp.OCSPParser();
      * o.getTBSRequest("30...") &rarr;
@@ -1411,8 +1428,7 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      *   "alg": "sha1",
      *   "issname": "105fa67a80089db5279f35ce830b43889ea3c70d",
      *   "isskey": "0f80611c823161d52f28e78d4638b42ce1c6d9e2",
-     *   "sbjsn": "0fef62075d715dc5e1d8bd03775c9686"
-     * }]}
+     *   "sbjsn": "0fef62075d715dc5e1d8bd03775c9686" }]}
      */
     this.getTBSRequest = function(h) {
 	var result = {};
@@ -1436,6 +1452,11 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
      *
      * @description
+     * This method will parse a hexadecimal string of
+     * SEQUENCE OF Request ASN.1 class is defined in 
+     * <a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>. 
+     * <br/>
+     * NOTE: singleRequestExtensions is not supported yet in this version such as nonce.
      * <pre>
      * TBSRequest  ::=  SEQUENCE {
      *   version            [0]  EXPLICIT Version DEFAULT v1,
@@ -1447,6 +1468,11 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      *   singleRequestExtensions  [0] EXPLICIT Extensions OPTIONAL }      
      * </pre>
      *
+     * @see KJUR.asn1.ocsp.OCSPParser#getTBSRequest
+     * @see KJUR.asn1.ocsp.OCSPParser#getRequest
+     * @see KJUR.asn1.ocsp.RequestList
+     * @see KJUR.asn1.ocsp.Request
+     *
      * @example
      * o = new KJUR.asn1.ocsp.OCSPParser();
      * o.getRequestList("30...") &rarr;
@@ -1454,8 +1480,7 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      *   issname: "...hex...",
      *   isskey: "...hex...",
      *   sbjsn: "...hex...",
-     *   ext: [<<singleRequestExtension parameters>>...]
-     * }]
+     *   ext: [<<singleRequestExtension parameters>>...] }]
      */
     this.getRequestList = function(h) {
 	var result = [];
@@ -1477,11 +1502,21 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
      *
      * @description
+     * This method will parse a hexadecimal string of
+     * Request ASN.1 class is defined in 
+     * <a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>. 
      * <pre>
      * Request ::= SEQUENCE {
      *   reqCert                  CertID,
      *   singleRequestExtensions  [0] EXPLICIT Extensions OPTIONAL }      
      * </pre>
+     *
+     * @see KJUR.asn1.ocsp.OCSPParser#getTBSRequest
+     * @see KJUR.asn1.ocsp.OCSPParser#getRequestList
+     * @see KJUR.asn1.ocsp.OCSPParser#getCertID
+     * @see KJUR.asn1.ocsp.RequestList
+     * @see KJUR.asn1.ocsp.Request
+     * @see KJUR.asn1.ocsp.CertID
      *
      * @example
      * o = new KJUR.asn1.ocsp.OCSPParser();
@@ -1490,8 +1525,7 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      *   issname: "...hex...",
      *   isskey: "...hex...",
      *   sbjsn: "...hex...",
-     *   ext: [<<singleRequestExtension parameters>>...]
-     * }
+     *   ext: [<<singleRequestExtension parameters>>...] }
      */
     this.getRequest = function(h) {
 	var a = _getChildIdx(h, 0);
@@ -1517,9 +1551,11 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      * @param {String} h hexadecimal string of CertID
      * @return JSON object of CertID parameter
      * @since jsrsasign 9.1.6 asn1ocsp 1.1.0
-     * @see KJUR.asn1.ocsp.CertID
      *
      * @description
+     * This method will parse a hexadecimal string of
+     * CertID ASN.1 class is defined in 
+     * <a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>. 
      * <pre>
      * CertID ::= SEQUENCE {
      *   hashAlgorithm   AlgorithmIdentifier,
@@ -1527,6 +1563,10 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      *   issuerKeyHash   OCTET STRING, -- Hash of issuer's public key
      *   serialNumber    CertificateSerialNumber }
      * </pre>
+     *
+     * @see KJUR.asn1.ocsp.OCSPParser#getRequest
+     * @see KJUR.asn1.ocsp.OCSPParser#getSingleResponse
+     * @see KJUR.asn1.ocsp.CertID
      *
      * @example
      * o = new KJUR.asn1.ocsp.OCSPParser();
@@ -1560,9 +1600,11 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      * @param {String} h hexadecimal string of OCSPResponse
      * @return JSON object of OCSResponse parameter
      * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
-     * @see KJUR.asn1.ocsp.OCSPResponse
      *
      * @description
+     * This method will parse a hexadecimal string of
+     * ASN.1 OCSPResponse defined in
+     * <a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>. 
      * <pre>
      * OCSPResponse ::= SEQUENCE {
      *    responseStatus         OCSPResponseStatus,
@@ -1576,6 +1618,9 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      *     sigRequired           (5),  -- Must sign the request
      *     unauthorized          (6)   -- Request unauthorized }
      * </pre>
+     *
+     * @see KJUR.asn1.ocsp.OCSPParser#getResponseBytes
+     * @see KJUR.asn1.ocsp.OCSPResponse
      *
      * @example
      * o = new KJUR.asn1.ocsp.OCSPParser();
@@ -1591,7 +1636,7 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      *   ext: [{extname: "ocspNonce", hex: "1234abcd"}],
      *   alg: "SHA256withRSA",
      *   sighex: "12ab",
-     *   certs: ["030101", "030101"] }
+     *   certs: ["3082...", "3082..."] }
      */
     this.getOCSPResponse = function(h) {
 	var a = _getChildIdx(h, 0);
@@ -1617,9 +1662,11 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      * @param {String} h hexadecimal string of ResponseBytes
      * @return JSON object of ResponseBytes parameter
      * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
-     * @see KJUR.asn1.ocsp.ResponseBytes
      *
      * @description
+     * This method will parse a hexadecimal string of
+     * ASN.1 ResponseBytes defined in
+     * <a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>. 
      * <pre>
      * ResponseBytes ::=       SEQUENCE {
      *     responseType   OBJECT IDENTIFIER,
@@ -1633,6 +1680,10 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      *    signature            BIT STRING,
      *    certs            [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
      * </pre>
+     *
+     * @see KJUR.asn1.ocsp.OCSPParser#getOCSPResponse
+     * @see KJUR.asn1.ocsp.OCSPParser#getBasicOCSPResponse
+     * @see KJUR.asn1.ocsp.ResponseBytes
      *
      * @example
      * o = new KJUR.asn1.ocsp.OCSPParser();
@@ -1661,9 +1712,11 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      * @param {String} h hexadecimal string of BasicOCSPResponse
      * @return JSON object of BasicOCSPResponse parameter
      * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
-     * @see KJUR.asn1.ocsp.BasicOCSPResponse
      *
      * @description
+     * This method will parse a hexadecimal string of
+     * BasicOCSPResponse defined in 
+     * <a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>. 
      * <pre>
      * BasicOCSPResponse       ::= SEQUENCE {
      *    tbsResponseData      ResponseData,
@@ -1671,6 +1724,10 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      *    signature            BIT STRING,
      *    certs            [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
      * </pre>
+     *
+     * @see KJUR.asn1.ocsp.OCSPParser#getResponseBytes
+     * @see KJUR.asn1.ocsp.OCSPParser#getResponseData
+     * @see KJUR.asn1.ocsp.BasicOCSPResponse
      *
      * @example
      * o = new KJUR.asn1.ocsp.OCSPParser();
@@ -1714,9 +1771,11 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      * @param {String} h hexadecimal string of ResponseData
      * @return JSON object of ResponseData parameter
      * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
-     * @see KJUR.asn1.ocsp.ResponseData
      *
      * @description
+     * This method will parse a hexadecimal string of
+     * ASN.1 ResponseData defined in
+     * <a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>. 
      * <pre>
      * ResponseData ::= SEQUENCE {
      *    version              [0] EXPLICIT Version DEFAULT v1,
@@ -1725,6 +1784,10 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      *    responses                SEQUENCE OF SingleResponse,
      *    responseExtensions   [1] EXPLICIT Extensions OPTIONAL }
      * </pre>
+     *
+     * @see KJUR.asn1.ocsp.OCSPParser#getBasicOCSPResponse
+     * @see KJUR.asn1.ocsp.OCSPParser#getSingleResponse
+     * @see KJUR.asn1.ocsp.ResponseData
      *
      * @example
      * o = new KJUR.asn1.ocsp.OCSPParser();
@@ -1808,9 +1871,11 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      * @param {String} h hexadecimal string of SEQUENCE OF SingleResponse
      * @return array of SingleResponse parameter JSON object
      * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
-     * @see KJUR.asn1.ocsp.SingleResponseList
      *
      * @description
+     * This method will parse a hexadecimal string of
+     * ASN.1 class of SEQUENCE OF SingleResponse is defined in 
+     * <a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>. 
      * <pre>
      * ResponseData ::= SEQUENCE {
      *    version              [0] EXPLICIT Version DEFAULT v1,
@@ -1825,6 +1890,11 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      *    nextUpdate         [0]       EXPLICIT GeneralizedTime OPTIONAL,
      *    singleExtensions   [1]       EXPLICIT Extensions OPTIONAL }
      * </pre>
+     *
+     * @see KJUR.asn1.ocsp.OCSPParse#getResponseData
+     * @see KJUR.asn1.ocsp.OCSPParse#getSingleResponse
+     * @see KJUR.asn1.ocsp.OCSPParse#getCertID
+     * @see KJUR.asn1.ocsp.SingleResponseList
      *
      * @example
      * o = new KJUR.asn1.ocsp.OCSPParser();
@@ -1854,9 +1924,11 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      * @param {String} h hexadecimal string of SingleResponse
      * @return JSON object of SingleResponse parameter
      * @since jsrsasign 10.4.0 asn1ocsp 1.1.5
-     * @see KJUR.asn1.ocsp.SingleResponse
      *
      * @description
+     * This method will parse a hexadecimal string of
+     * ASN.1 class of SingleResponse is defined in 
+     * <a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>. 
      * <pre>
      * SingleResponse ::= SEQUENCE {
      *    certID                       CertID,
@@ -1865,6 +1937,10 @@ KJUR.asn1.ocsp.OCSPParser = function() {
      *    nextUpdate         [0]       EXPLICIT GeneralizedTime OPTIONAL,
      *    singleExtensions   [1]       EXPLICIT Extensions OPTIONAL }
      * </pre>
+     *
+     * @see KJUR.asn1.ocsp.OCSPParse#getSingleResponseList
+     * @see KJUR.asn1.ocsp.OCSPParse#getCertID
+     * @see KJUR.asn1.ocsp.SingleResponse
      *
      * @example
      * o = new KJUR.asn1.ocsp.OCSPParser();
