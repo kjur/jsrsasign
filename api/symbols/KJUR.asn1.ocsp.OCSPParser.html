@@ -582,13 +582,9 @@ OCSP related ASN.1 data.</div>
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getBasicOCSPResponse">getBasicOCSPResponse</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 BasicOCSPResponse of OCSP<br/>
-<pre>
-BasicOCSPResponse       ::= SEQUENCE {
-   tbsResponseData      ResponseData,
-   signatureAlgorithm   AlgorithmIdentifier,
-   signature            BIT STRING,
-   certs            [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
-</pre></div>
+This method will parse a hexadecimal string of
+BasicOCSPResponse defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>.</div>
 							</td>
 						</tr>
 					
@@ -598,13 +594,9 @@ BasicOCSPResponse       ::= SEQUENCE {
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getCertID">getCertID</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 CertID of OCSP<br/>
-<pre>
-CertID ::= SEQUENCE {
-  hashAlgorithm   AlgorithmIdentifier,
-  issuerNameHash  OCTET STRING, -- Hash of issuer's DN
-  issuerKeyHash   OCTET STRING, -- Hash of issuer's public key
-  serialNumber    CertificateSerialNumber }
-</pre></div>
+This method will parse a hexadecimal string of
+CertID ASN.1 class is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>.</div>
 							</td>
 						</tr>
 					
@@ -623,7 +615,8 @@ RevokedInfo ::= SEQUENCE {
     revocationTime              GeneralizedTime,
     revocationReason    [0]     EXPLICIT CRLReason OPTIONAL }
 UnknownInfo ::= NULL
-</pre></div>
+</pre>
+NOTE: Currently revocationReason not supported.</div>
 							</td>
 						</tr>
 					
@@ -633,16 +626,9 @@ UnknownInfo ::= NULL
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getOCSPRequest">getOCSPRequest</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 OCSPRequest<br/>
-<pre>
-OCSPRequest ::= SEQUENCE {
-  tbsRequest              TBSRequest,
-  optionalSignature  [0]  EXPLICIT Signature OPTIONAL }
-TBSRequest  ::=  SEQUENCE {
-  version            [0]  EXPLICIT Version DEFAULT v1,
-  requestorName      [1]  EXPLICIT GeneralName OPTIONAL,
-  requestList             SEQUENCE OF Request,
-  requestExtensions  [2]  EXPLICIT Extensions OPTIONAL }
-</pre></div>
+This method will parse a hexadecimal string of 
+OCSPRequest ASN.1 class is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>.</div>
 							</td>
 						</tr>
 					
@@ -652,19 +638,9 @@ TBSRequest  ::=  SEQUENCE {
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getOCSPResponse">getOCSPResponse</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 OCSPResponse of OCSP<br/>
-<pre>
-OCSPResponse ::= SEQUENCE {
-   responseStatus         OCSPResponseStatus,
-   responseBytes          [0] EXPLICIT ResponseBytes OPTIONAL }
-OCSPResponseStatus ::= ENUMERATED {
-    successful            (0),  -- Response has valid confirmations
-    malformedRequest      (1),  -- Illegal confirmation request
-    internalError         (2),  -- Internal error in issuer
-    tryLater              (3),  -- Try again later
-                                -- (4) is not used
-    sigRequired           (5),  -- Must sign the request
-    unauthorized          (6)   -- Request unauthorized }
-</pre></div>
+This method will parse a hexadecimal string of
+ASN.1 OCSPResponse defined in
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>.</div>
 							</td>
 						</tr>
 					
@@ -674,11 +650,9 @@ OCSPResponseStatus ::= ENUMERATED {
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getRequest">getRequest</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 Request of OCSP<br/>
-<pre>
-Request ::= SEQUENCE {
-  reqCert                  CertID,
-  singleRequestExtensions  [0] EXPLICIT Extensions OPTIONAL }      
-</pre></div>
+This method will parse a hexadecimal string of
+Request ASN.1 class is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>.</div>
 							</td>
 						</tr>
 					
@@ -688,16 +662,9 @@ Request ::= SEQUENCE {
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getRequestList">getRequestList</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 SEQUENCE OF Request in OCSP<br/>
-<pre>
-TBSRequest  ::=  SEQUENCE {
-  version            [0]  EXPLICIT Version DEFAULT v1,
-  requestorName      [1]  EXPLICIT GeneralName OPTIONAL,
-  requestList             SEQUENCE OF Request,
-  requestExtensions  [2]  EXPLICIT Extensions OPTIONAL }
-Request ::= SEQUENCE {
-  reqCert                  CertID,
-  singleRequestExtensions  [0] EXPLICIT Extensions OPTIONAL }      
-</pre></div>
+This method will parse a hexadecimal string of
+SEQUENCE OF Request ASN.1 class is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>.</div>
 							</td>
 						</tr>
 					
@@ -723,19 +690,9 @@ KeyHash ::= OCTET STRING -- SHA-1 hash of responder's public key
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getResponseBytes">getResponseBytes</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 ResponseBytes of OCSP<br/>
-<pre>
-ResponseBytes ::=       SEQUENCE {
-    responseType   OBJECT IDENTIFIER,
-    response       OCTET STRING }
-id-pkix-ocsp           OBJECT IDENTIFIER ::= { id-ad-ocsp }
-id-pkix-ocsp-basic     OBJECT IDENTIFIER ::= { id-pkix-ocsp 1 }
-
-BasicOCSPResponse       ::= SEQUENCE {
-   tbsResponseData      ResponseData,
-   signatureAlgorithm   AlgorithmIdentifier,
-   signature            BIT STRING,
-   certs            [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
-</pre></div>
+This method will parse a hexadecimal string of
+ASN.1 ResponseBytes defined in
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>.</div>
 							</td>
 						</tr>
 					
@@ -745,14 +702,9 @@ BasicOCSPResponse       ::= SEQUENCE {
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getResponseData">getResponseData</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 ResponseData of OCSP<br/>
-<pre>
-ResponseData ::= SEQUENCE {
-   version              [0] EXPLICIT Version DEFAULT v1,
-   responderID              ResponderID,
-   producedAt               GeneralizedTime,
-   responses                SEQUENCE OF SingleResponse,
-   responseExtensions   [1] EXPLICIT Extensions OPTIONAL }
-</pre></div>
+This method will parse a hexadecimal string of
+ASN.1 ResponseData defined in
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>.</div>
 							</td>
 						</tr>
 					
@@ -762,14 +714,9 @@ ResponseData ::= SEQUENCE {
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getSingleResponse">getSingleResponse</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 SingleResponse of OCSP<br/>
-<pre>
-SingleResponse ::= SEQUENCE {
-   certID                       CertID,
-   certStatus                   CertStatus,
-   thisUpdate                   GeneralizedTime,
-   nextUpdate         [0]       EXPLICIT GeneralizedTime OPTIONAL,
-   singleExtensions   [1]       EXPLICIT Extensions OPTIONAL }
-</pre></div>
+This method will parse a hexadecimal string of
+ASN.1 class of SingleResponse is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>.</div>
 							</td>
 						</tr>
 					
@@ -779,20 +726,9 @@ SingleResponse ::= SEQUENCE {
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getSingleResponseList">getSingleResponseList</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 SEQUENCE OF SingleResponse of OCSP<br/>
-<pre>
-ResponseData ::= SEQUENCE {
-   version              [0] EXPLICIT Version DEFAULT v1,
-   responderID              ResponderID,
-   producedAt               GeneralizedTime,
-   responses                SEQUENCE OF SingleResponse,
-   responseExtensions   [1] EXPLICIT Extensions OPTIONAL }
-SingleResponse ::= SEQUENCE {
-   certID                       CertID,
-   certStatus                   CertStatus,
-   thisUpdate                   GeneralizedTime,
-   nextUpdate         [0]       EXPLICIT GeneralizedTime OPTIONAL,
-   singleExtensions   [1]       EXPLICIT Extensions OPTIONAL }
-</pre></div>
+This method will parse a hexadecimal string of
+ASN.1 class of SEQUENCE OF SingleResponse is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>.</div>
 							</td>
 						</tr>
 					
@@ -802,13 +738,9 @@ SingleResponse ::= SEQUENCE {
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getTBSRequest">getTBSRequest</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 TBSRequest of OCSP<br/>
-<pre>
-TBSRequest  ::=  SEQUENCE {
-  version            [0]  EXPLICIT Version DEFAULT v1,
-  requestorName      [1]  EXPLICIT GeneralName OPTIONAL,
-  requestList             SEQUENCE OF Request,
-  requestExtensions  [2]  EXPLICIT Extensions OPTIONAL }
-</pre></div>
+This method will parse
+TBSRequest ASN.1 class is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>.</div>
 							</td>
 						</tr>
 					
@@ -906,6 +838,9 @@ This parser supports following OCSP ASN.1 classes:
 					</div>
 					<div class="description">
 						parse ASN.1 BasicOCSPResponse of OCSP<br/>
+This method will parse a hexadecimal string of
+BasicOCSPResponse defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>. 
 <pre>
 BasicOCSPResponse       ::= SEQUENCE {
    tbsResponseData      ResponseData,
@@ -962,6 +897,10 @@ o.getBasicOCSPResponse("30..") &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getResponseBytes">KJUR.asn1.ocsp.OCSPParser#getResponseBytes</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getResponseData">KJUR.asn1.ocsp.OCSPParser#getResponseData</a></dd>
+							
 								<dd><a href="../symbols/KJUR.asn1.ocsp.BasicOCSPResponse.html">KJUR.asn1.ocsp.BasicOCSPResponse</a></dd>
 							
 							</dl>
@@ -978,6 +917,9 @@ o.getBasicOCSPResponse("30..") &rarr;
 					</div>
 					<div class="description">
 						parse ASN.1 CertID of OCSP<br/>
+This method will parse a hexadecimal string of
+CertID ASN.1 class is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>. 
 <pre>
 CertID ::= SEQUENCE {
   hashAlgorithm   AlgorithmIdentifier,
@@ -1034,6 +976,10 @@ o.getCertID("30...") &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getRequest">KJUR.asn1.ocsp.OCSPParser#getRequest</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getSingleResponse">KJUR.asn1.ocsp.OCSPParser#getSingleResponse</a></dd>
+							
 								<dd><a href="../symbols/KJUR.asn1.ocsp.CertID.html">KJUR.asn1.ocsp.CertID</a></dd>
 							
 							</dl>
@@ -1060,6 +1006,7 @@ RevokedInfo ::= SEQUENCE {
     revocationReason    [0]     EXPLICIT CRLReason OPTIONAL }
 UnknownInfo ::= NULL
 </pre>
+NOTE: Currently revocationReason not supported.
 						
 						
 					</div>
@@ -1123,6 +1070,9 @@ o.getCertStatus("a1..") &rarr; {status: "revoked", time: "2021...Z"}</pre>
 					</div>
 					<div class="description">
 						parse ASN.1 OCSPRequest<br/>
+This method will parse a hexadecimal string of 
+OCSPRequest ASN.1 class is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>. 
 <pre>
 OCSPRequest ::= SEQUENCE {
   tbsRequest              TBSRequest,
@@ -1132,7 +1082,14 @@ TBSRequest  ::=  SEQUENCE {
   requestorName      [1]  EXPLICIT GeneralName OPTIONAL,
   requestList             SEQUENCE OF Request,
   requestExtensions  [2]  EXPLICIT Extensions OPTIONAL }
+Signature       ::=     SEQUENCE {
+  signatureAlgorithm      AlgorithmIdentifier,
+  signature               BIT STRING,
+  certs              [0] EXPLICIT SEQUENCE OF Certificate
+                         OPTIONAL}
 </pre>
+Currently Signature in OCSPRequest is not supported.
+<br/>
 						
 						
 					</div>
@@ -1145,8 +1102,7 @@ o.getOCSPRequest("30...") &rarr;
    "alg": "sha1",
    "issname": "105fa67a80089db5279f35ce830b43889ea3c70d",
    "isskey": "0f80611c823161d52f28e78d4638b42ce1c6d9e2",
-   "sbjsn": "0fef62075d715dc5e1d8bd03775c9686"
-}]}</pre>
+   "sbjsn": "0fef62075d715dc5e1d8bd03775c9686" }]}</pre>
 					
 					
 					
@@ -1181,6 +1137,15 @@ o.getOCSPRequest("30...") &rarr;
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getTBSRequest">KJUR.asn1.ocsp.OCSPParser#getTBSRequest</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPRequest.html">KJUR.asn1.ocsp.OCSPRequest</a></dd>
+							
+							</dl>
+						
 
 					<hr />
 				
@@ -1193,6 +1158,9 @@ o.getOCSPRequest("30...") &rarr;
 					</div>
 					<div class="description">
 						parse ASN.1 OCSPResponse of OCSP<br/>
+This method will parse a hexadecimal string of
+ASN.1 OCSPResponse defined in
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>. 
 <pre>
 OCSPResponse ::= SEQUENCE {
    responseStatus         OCSPResponseStatus,
@@ -1225,7 +1193,7 @@ o.getOCSPResponse("30..") &rarr;
   ext: [{extname: "ocspNonce", hex: "1234abcd"}],
   alg: "SHA256withRSA",
   sighex: "12ab",
-  certs: ["030101", "030101"] }</pre>
+  certs: ["3082...", "3082..."] }</pre>
 					
 					
 					
@@ -1263,6 +1231,8 @@ o.getOCSPResponse("30..") &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getResponseBytes">KJUR.asn1.ocsp.OCSPParser#getResponseBytes</a></dd>
+							
 								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPResponse.html">KJUR.asn1.ocsp.OCSPResponse</a></dd>
 							
 							</dl>
@@ -1279,6 +1249,9 @@ o.getOCSPResponse("30..") &rarr;
 					</div>
 					<div class="description">
 						parse ASN.1 Request of OCSP<br/>
+This method will parse a hexadecimal string of
+Request ASN.1 class is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>. 
 <pre>
 Request ::= SEQUENCE {
   reqCert                  CertID,
@@ -1296,8 +1269,7 @@ o.getRequest("30...") &rarr;
   issname: "...hex...",
   isskey: "...hex...",
   sbjsn: "...hex...",
-  ext: [<<singleRequestExtension parameters>>...]
-}</pre>
+  ext: [<<singleRequestExtension parameters>>...] }</pre>
 					
 					
 					
@@ -1332,6 +1304,23 @@ o.getRequest("30...") &rarr;
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getTBSRequest">KJUR.asn1.ocsp.OCSPParser#getTBSRequest</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getRequestList">KJUR.asn1.ocsp.OCSPParser#getRequestList</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getCertID">KJUR.asn1.ocsp.OCSPParser#getCertID</a></dd>
+							
+								<dd>KJUR.asn1.ocsp.RequestList</dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.Request.html">KJUR.asn1.ocsp.Request</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.CertID.html">KJUR.asn1.ocsp.CertID</a></dd>
+							
+							</dl>
+						
 
 					<hr />
 				
@@ -1344,6 +1333,11 @@ o.getRequest("30...") &rarr;
 					</div>
 					<div class="description">
 						parse ASN.1 SEQUENCE OF Request in OCSP<br/>
+This method will parse a hexadecimal string of
+SEQUENCE OF Request ASN.1 class is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>. 
+<br/>
+NOTE: singleRequestExtensions is not supported yet in this version such as nonce.
 <pre>
 TBSRequest  ::=  SEQUENCE {
   version            [0]  EXPLICIT Version DEFAULT v1,
@@ -1366,8 +1360,7 @@ o.getRequestList("30...") &rarr;
   issname: "...hex...",
   isskey: "...hex...",
   sbjsn: "...hex...",
-  ext: [<<singleRequestExtension parameters>>...]
-}]</pre>
+  ext: [<<singleRequestExtension parameters>>...] }]</pre>
 					
 					
 					
@@ -1401,6 +1394,19 @@ o.getRequestList("30...") &rarr;
 							</dl>
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getTBSRequest">KJUR.asn1.ocsp.OCSPParser#getTBSRequest</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getRequest">KJUR.asn1.ocsp.OCSPParser#getRequest</a></dd>
+							
+								<dd>KJUR.asn1.ocsp.RequestList</dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.Request.html">KJUR.asn1.ocsp.Request</a></dd>
+							
+							</dl>
 						
 
 					<hr />
@@ -1483,6 +1489,9 @@ o.getResponderID("a2..") &rarr; {key: "12ab..."}</pre>
 					</div>
 					<div class="description">
 						parse ASN.1 ResponseBytes of OCSP<br/>
+This method will parse a hexadecimal string of
+ASN.1 ResponseBytes defined in
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>. 
 <pre>
 ResponseBytes ::=       SEQUENCE {
     responseType   OBJECT IDENTIFIER,
@@ -1543,6 +1552,10 @@ o.getResponseBytes("30..") &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getOCSPResponse">KJUR.asn1.ocsp.OCSPParser#getOCSPResponse</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getBasicOCSPResponse">KJUR.asn1.ocsp.OCSPParser#getBasicOCSPResponse</a></dd>
+							
 								<dd><a href="../symbols/KJUR.asn1.ocsp.ResponseBytes.html">KJUR.asn1.ocsp.ResponseBytes</a></dd>
 							
 							</dl>
@@ -1559,6 +1572,9 @@ o.getResponseBytes("30..") &rarr;
 					</div>
 					<div class="description">
 						parse ASN.1 ResponseData of OCSP<br/>
+This method will parse a hexadecimal string of
+ASN.1 ResponseData defined in
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>. 
 <pre>
 ResponseData ::= SEQUENCE {
    version              [0] EXPLICIT Version DEFAULT v1,
@@ -1617,6 +1633,10 @@ o.getResponseData("30..") &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getBasicOCSPResponse">KJUR.asn1.ocsp.OCSPParser#getBasicOCSPResponse</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getSingleResponse">KJUR.asn1.ocsp.OCSPParser#getSingleResponse</a></dd>
+							
 								<dd><a href="../symbols/KJUR.asn1.ocsp.ResponseData.html">KJUR.asn1.ocsp.ResponseData</a></dd>
 							
 							</dl>
@@ -1633,6 +1653,9 @@ o.getResponseData("30..") &rarr;
 					</div>
 					<div class="description">
 						parse ASN.1 SingleResponse of OCSP<br/>
+This method will parse a hexadecimal string of
+ASN.1 class of SingleResponse is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>. 
 <pre>
 SingleResponse ::= SEQUENCE {
    certID                       CertID,
@@ -1691,6 +1714,10 @@ o.getSingleResponse("30..") &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
+								<dd>KJUR.asn1.ocsp.OCSPParse#getSingleResponseList</dd>
+							
+								<dd>KJUR.asn1.ocsp.OCSPParse#getCertID</dd>
+							
 								<dd><a href="../symbols/KJUR.asn1.ocsp.SingleResponse.html">KJUR.asn1.ocsp.SingleResponse</a></dd>
 							
 							</dl>
@@ -1707,6 +1734,9 @@ o.getSingleResponse("30..") &rarr;
 					</div>
 					<div class="description">
 						parse ASN.1 SEQUENCE OF SingleResponse of OCSP<br/>
+This method will parse a hexadecimal string of
+ASN.1 class of SEQUENCE OF SingleResponse is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.2.1">RFC 6960 4.2.1</a>. 
 <pre>
 ResponseData ::= SEQUENCE {
    version              [0] EXPLICIT Version DEFAULT v1,
@@ -1771,6 +1801,12 @@ o.getSingleResponseList("30..") &rarr;
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
+								<dd>KJUR.asn1.ocsp.OCSPParse#getResponseData</dd>
+							
+								<dd>KJUR.asn1.ocsp.OCSPParse#getSingleResponse</dd>
+							
+								<dd>KJUR.asn1.ocsp.OCSPParse#getCertID</dd>
+							
 								<dd><a href="../symbols/KJUR.asn1.ocsp.SingleResponseList.html">KJUR.asn1.ocsp.SingleResponseList</a></dd>
 							
 							</dl>
@@ -1787,6 +1823,9 @@ o.getSingleResponseList("30..") &rarr;
 					</div>
 					<div class="description">
 						parse ASN.1 TBSRequest of OCSP<br/>
+This method will parse
+TBSRequest ASN.1 class is defined in 
+<a href="https://tools.ietf.org/html/rfc6960#section-4.1.1">RFC 6960 4.1.1</a>. 
 <pre>
 TBSRequest  ::=  SEQUENCE {
   version            [0]  EXPLICIT Version DEFAULT v1,
@@ -1806,8 +1845,7 @@ o.getTBSRequest("30...") &rarr;
   "alg": "sha1",
   "issname": "105fa67a80089db5279f35ce830b43889ea3c70d",
   "isskey": "0f80611c823161d52f28e78d4638b42ce1c6d9e2",
-  "sbjsn": "0fef62075d715dc5e1d8bd03775c9686"
-}]}</pre>
+  "sbjsn": "0fef62075d715dc5e1d8bd03775c9686" }]}</pre>
 					
 					
 					
@@ -1841,6 +1879,17 @@ o.getTBSRequest("30...") &rarr;
 							</dl>
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getOCSPRequest">KJUR.asn1.ocsp.OCSPParser#getOCSPRequest</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.OCSPParser.html#getRequestList">KJUR.asn1.ocsp.OCSPParser#getRequestList</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.ocsp.TBSRequest.html">KJUR.asn1.ocsp.TBSRequest</a></dd>
+							
+							</dl>
 						
 
 					
