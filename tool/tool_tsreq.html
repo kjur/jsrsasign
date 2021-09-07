@@ -15,8 +15,8 @@ function doIt() {
   var f1 = document.form1;
 
   var json = {
-    mi: { hashAlg: f1.hashalg1.value,
-          hashValue: f1.hashval1.value }
+    messageImprint: { alg: f1.hashalg1.value,
+		      hash: f1.hashval1.value }
   };
   if (f1.policy1.value != "") 
     json.policy = {oid: f1.policy1.value};

@@ -1,6 +1,13 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 10.4.0 to next release
+  - tool/tool_tsreq.html
+    - messageImprint bug fix (#504)
+  - jsrsasign-*-min.js
+    - header URL fix to kjur.github.io (#503)
+      (will be fixed in next release while rebuild)
+
 Full support for parsing OCSP response
 * Changes from 10.3.2 to 10.4.0 (2021-08-17)
   - asn1ocsp.js
