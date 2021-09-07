@@ -4,6 +4,8 @@ ChangeLog for jsrsasign
 * Changes from 10.4.0 to next release
   - tool/tool_tsreq.html
     - messageImprint bug fix (#504)
+  - tool/tool_tsres.html
+    - serialNumber bug fix (#505)
   - jsrsasign-*-min.js
     - header URL fix to kjur.github.io (#503)
       (will be fixed in next release while rebuild)
