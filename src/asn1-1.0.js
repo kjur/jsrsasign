@@ -1,4 +1,4 @@
-/* asn1-1.0.21.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1-1.0.22.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.0 asn1 1.0.21 (2020-Nov-18)
+ * @version jsrsasign 10.4.1 asn1 1.0.22 (2021-Sep-30)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -632,6 +632,9 @@ extendClass(KJUR.asn1.DERAbstractString, KJUR.asn1.ASN1Object);
  * @extends KJUR.asn1.ASN1Object
  * @description
  * @see KJUR.asn1.ASN1Object - superclass
+ * @see KJUR.asn1.DERGeneralizedTime
+ * @see KJUR.asn1.DERUTCTime
+ * @see KJUR.asn1.x509.Time
  */
 KJUR.asn1.DERAbstractTime = function(params) {
     KJUR.asn1.DERAbstractTime.superclass.constructor.call(this);
@@ -683,29 +686,82 @@ KJUR.asn1.DERAbstractTime = function(params) {
     };
 
     // --- PUBLIC METHODS --------------------
+
     /**
-     * get string value of this string object
+     * set parameter of time
+     * @name setByParam
+     * @memberOf KJUR.asn1.DERAbstractTime#
+     * @function
+     * @param {Object} params JSON object, Date object or string of time
+     * @since jsrsasign 10.4.1 asn1 1.0.22
+     *
+     * NOTE: If a member "millis" has a value "true",
+     * a fraction of second will be specified for this object. 
+     * This default is "false".
+     *
+     * @example
+     * d1 = new KJUR.asn1.DERGeneralizedTime();
+     * d1.setByParam("20210930235959.123Z");
+     * d1.setByParam({str: "20210930235959.123Z"});
+     *
+     * d1.setByParam(new Date("2013/12/31 23:59:59.12"));
+     * date1 = new Date(Date.UTC(2021,8,31,23,59,59,123));
+     * d1.setByParam(date1);
+     * d1.setByParam({date: date1});
+     * d1.setByParam({date: date1, millis: true});
+     */
+    this.setByParam = function(params) {
+	this.hV = null;
+	this.hTLV = null;
+	this.params = params;
+    };
+
+    /**
+     * get string value of this string object (DEPRECATED)
      * @name getString
      * @memberOf KJUR.asn1.DERAbstractTime#
      * @function
      * @return {String} string value of this time object
+     * @deprecated from jsrsasign 10.4.1 asn1 1.0.22.
      */
     this.getString = function() {
-        return this.s;
+        return undefined;
     };
 
     /**
-     * set value by a string
+     * set value by a string (DEPRECATED)
      * @name setString
      * @memberOf KJUR.asn1.DERAbstractTime#
      * @function
      * @param {String} newS value by a string to set such like "130430235959Z"
+     * @deprecated from jsrsasign 10.4.1 asn1 1.0.22.
      */
     this.setString = function(newS) {
         this.hTLV = null;
         this.isModified = true;
-        this.s = newS;
-        this.hV = stohex(newS);
+	if (this.params == undefined) this.params = {};
+	this.params.str = newS;
+    };
+
+    /**
+     * set value by a Date object<br/>
+     * @name setByDate
+     * @memberOf KJUR.asn1.DERAbstractTime#
+     * @function
+     * @param {Date} dateObject Date object to set ASN.1 value(V)
+     * @since jsrsasign 10.4.1 asn1 1.0.22
+     *
+     * @example
+     * o = new KJUR.asn1.DERUTCTime();
+     * o.setByDate(new Date("2016/12/31 23:59:59.12"));
+     * // 2015-Jan-31 23:59:59.12
+     * o.setByDate(new Date(Date.UTC(2015, 0, 31, 23, 59, 59, 0)));
+     */
+    this.setByDate = function(dateObject) {
+        this.hTLV = null;
+        this.isModified = true;
+	if (this.params == undefined) this.params = {};
+	this.params.date = dateObject;
     };
 
     /**
@@ -721,7 +777,8 @@ KJUR.asn1.DERAbstractTime = function(params) {
      * @param {Integer} sec seconds of date
      */
     this.setByDateValue = function(year, month, day, hour, min, sec) {
-        var dateObject = new Date(Date.UTC(year, month - 1, day, hour, min, sec, 0));
+        var dateObject = new Date(Date.UTC(year, month - 1, day, 
+					   hour, min, sec, 0));
         this.setByDate(dateObject);
     };
 
@@ -1445,67 +1502,69 @@ extendClass(KJUR.asn1.DERBMPString, KJUR.asn1.DERAbstractString);
  * @class class for ASN.1 DER UTCTime
  * @param {Array} params associative array of parameters (ex. {'str': '130430235959Z'})
  * @extends KJUR.asn1.DERAbstractTime
+ * @see KJUR.asn1.DERGeneralizedTime
+ * @see KJUR.asn1.x509.Time
+ *
  * @description
  * <br/>
  * As for argument 'params' for constructor, you can specify one of
  * following properties:
  * <ul>
  * <li>str - specify initial ASN.1 value(V) by a string (ex.'130430235959Z')</li>
- * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
  * <li>date - specify Date object.</li>
+ * <li>millis - specify flag to show milliseconds (from 1.0.6)</li>
  * </ul>
- * NOTE: 'params' can be omitted.
+ * NOTE1: 'params' can be omitted.
+ * NOTE2: 'millis' property is supported from jsrsasign 10.4.1 asn1 1.0.22.
+ *
  * <h4>EXAMPLES</h4>
  * @example
- * d1 = new KJUR.asn1.DERUTCTime();
- * d1.setString('130430125959Z');
- *
- * d2 = new KJUR.asn1.DERUTCTime({'str': '130430125959Z'});
- * d3 = new KJUR.asn1.DERUTCTime({'date': new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0))});
- * d4 = new KJUR.asn1.DERUTCTime('130430125959Z');
+ * new DERUTCTime("20151231235959Z")
+ * new DERUTCTime("20151231235959.123Z")
+ * new DERUTCTime(new Date())
+ * new DERUTCTime(new Date(Date.UTC(2015,11,31,23,59,59,123)))
+ * new DERUTCTime({str: "20151231235959.123Z"})
+ * new DERUTCTime({date: new Date()})
+ * new DERUTCTime({date: new Date(), millis: true})
+ * new DERUTCTime({millis: true})
  */
 KJUR.asn1.DERUTCTime = function(params) {
     KJUR.asn1.DERUTCTime.superclass.constructor.call(this, params);
     this.hT = "17";
-
-    /**
-     * set value by a Date object<br/>
-     * @name setByDate
-     * @memberOf KJUR.asn1.DERUTCTime#
-     * @function
-     * @param {Date} dateObject Date object to set ASN.1 value(V)
-     * @example
-     * o = new KJUR.asn1.DERUTCTime();
-     * o.setByDate(new Date("2016/12/31"));
-     */
-    this.setByDate = function(dateObject) {
-        this.hTLV = null;
-        this.isModified = true;
-        this.date = dateObject;
-        this.s = this.formatDate(this.date, 'utc');
-        this.hV = stohex(this.s);
-    };
+    this.params = undefined;
 
     this.getFreshValueHex = function() {
-        if (typeof this.date == "undefined" && typeof this.s == "undefined") {
-            this.date = new Date();
-            this.s = this.formatDate(this.date, 'utc');
-            this.hV = stohex(this.s);
-        }
-        return this.hV;
+	var params = this.params;
+
+	if (this.params == undefined) params = { date: new Date() };
+
+	if (typeof params == "string") {
+	    if (params.match(/^[0-9]{12}Z$/) ||
+		params.match(/^[0-9]{12}\.[0-9]+Z$/)) {
+		this.hV = stohex(params);
+	    } else {
+		throw new Error("malformed string for GeneralizedTime: " + params);
+	    }
+	} else if (params.str != undefined) {
+	    this.hV = stohex(params.str);
+	} else if (params.date == undefined && params.millis == true) {
+	    var date = new Date();
+	    this.hV = stohex(this.formatDate(date, 'utc', true));
+	} else if (params.date != undefined &&
+		   params.date instanceof Date) {
+	    var withMillis = (params.millis === true);
+	    this.hV = stohex(this.formatDate(params.date, 'utc', withMillis));
+	} else if (params instanceof Date) {
+	    this.hV = stohex(this.formatDate(params, 'utc'));
+	}
+
+	if (this.hV == undefined) {
+	    throw new Error("parameter not specified properly for UTCTime");
+	}
+	return this.hV;
     };
 
-    if (params !== undefined) {
-        if (params.str !== undefined) {
-            this.setString(params.str);
-        } else if (typeof params == "string" && params.match(/^[0-9]{12}Z$/)) {
-            this.setString(params);
-        } else if (params.hex !== undefined) {
-            this.setStringHex(params.hex);
-        } else if (params.date !== undefined) {
-            this.setByDate(params.date);
-        }
-    }
+    if (params != undefined) this.setByParam(params);
 };
 extendClass(KJUR.asn1.DERUTCTime, KJUR.asn1.DERAbstractTime);
 
@@ -1517,68 +1576,69 @@ extendClass(KJUR.asn1.DERUTCTime, KJUR.asn1.DERAbstractTime);
  * @param {Array} params associative array of parameters (ex. {'str': '20130430235959Z'})
  * @property {Boolean} withMillis flag to show milliseconds or not
  * @extends KJUR.asn1.DERAbstractTime
+ * @see KJUR.asn1.DERUTCTime
+ * @see KJUR.asn1.x509.Time
+ *
  * @description
  * <br/>
  * As for argument 'params' for constructor, you can specify one of
  * following properties:
  * <ul>
  * <li>str - specify initial ASN.1 value(V) by a string (ex.'20130430235959Z')</li>
- * <li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
  * <li>date - specify Date object.</li>
  * <li>millis - specify flag to show milliseconds (from 1.0.6)</li>
  * </ul>
  * NOTE1: 'params' can be omitted.
- * NOTE2: 'withMillis' property is supported from asn1 1.0.6.
+ * NOTE2: 'millis' property is supported from asn1 1.0.6.
+ *
+ * <h4>EXAMPLES</h4>
+ * @example
+ * new DERGeneralizedTime("20151231235959Z")
+ * new DERGeneralizedTime("20151231235959.123Z")
+ * new DERGeneralizedTime(new Date())
+ * new DERGeneralizedTime(new Date(Date.UTC(2015,11,31,23,59,59,123)))
+ * new DERGeneralizedTime({str: "20151231235959.123Z"})
+ * new DERGeneralizedTime({date: new Date()})
+ * new DERGeneralizedTime({date: new Date(), millis: true})
+ * new DERGeneralizedTime({millis: true})
  */
 KJUR.asn1.DERGeneralizedTime = function(params) {
     KJUR.asn1.DERGeneralizedTime.superclass.constructor.call(this, params);
     this.hT = "18";
-    this.withMillis = false;
-
-    /**
-     * set value by a Date object
-     * @name setByDate
-     * @memberOf KJUR.asn1.DERGeneralizedTime#
-     * @function
-     * @param {Date} dateObject Date object to set ASN.1 value(V)
-     * @example
-     * When you specify UTC time, use 'Date.UTC' method like this:<br/>
-     * o1 = new DERUTCTime();
-     * o1.setByDate(date);
-     *
-     * date = new Date(Date.UTC(2015, 0, 31, 23, 59, 59, 0)); #2015JAN31 23:59:59
-     */
-    this.setByDate = function(dateObject) {
-        this.hTLV = null;
-        this.isModified = true;
-        this.date = dateObject;
-        this.s = this.formatDate(this.date, 'gen', this.withMillis);
-        this.hV = stohex(this.s);
-    };
+    this.params = params;
 
     this.getFreshValueHex = function() {
-        if (this.date === undefined && this.s === undefined) {
-            this.date = new Date();
-            this.s = this.formatDate(this.date, 'gen', this.withMillis);
-            this.hV = stohex(this.s);
-        }
-        return this.hV;
+	var params = this.params;
+
+	if (this.params == undefined) params = { date: new Date() };
+
+	if (typeof params == "string") {
+	    if (params.match(/^[0-9]{14}Z$/) ||
+		params.match(/^[0-9]{14}\.[0-9]+Z$/)) {
+		this.hV = stohex(params);
+	    } else {
+		throw new Error("malformed string for GeneralizedTime: " + params);
+	    }
+	} else if (params.str != undefined) {
+	    this.hV = stohex(params.str);
+	} else if (params.date == undefined && params.millis == true) {
+	    var date = new Date();
+	    this.hV = stohex(this.formatDate(date, 'gen', true));
+	} else if (params.date != undefined &&
+		   params.date instanceof Date) {
+	    var withMillis = (params.millis === true);
+	    this.hV = stohex(this.formatDate(params.date, 'gen', withMillis));
+	} else if (params instanceof Date) {
+	    this.hV = stohex(this.formatDate(params, 'gen'));
+	}
+
+	if (this.hV == undefined) {
+	    throw new Error("parameter not specified properly for GeneralizedTime");
+	}
+	return this.hV;
     };
 
-    if (params !== undefined) {
-        if (params.str !== undefined) {
-            this.setString(params.str);
-        } else if (typeof params == "string" && params.match(/^[0-9]{14}Z$/)) {
-            this.setString(params);
-        } else if (params.hex !== undefined) {
-            this.setStringHex(params.hex);
-        } else if (params.date !== undefined) {
-            this.setByDate(params.date);
-        }
-        if (params.millis === true) {
-            this.withMillis = true;
-        }
-    }
+    if (params != undefined) this.setByParam(params);
 };
 extendClass(KJUR.asn1.DERGeneralizedTime, KJUR.asn1.DERAbstractTime);
 

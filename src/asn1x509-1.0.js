@@ -1,4 +1,4 @@
-/* asn1x509-2.1.8.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1x509-2.1.9.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.10 asn1x509 2.1.8 (2021-Feb-14)
+ * @version jsrsasign 10.4.1 asn1x509 2.1.9 (2021-Sep-30)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -3508,6 +3508,64 @@ extendClass(KJUR.asn1.x509.SubjectPublicKeyInfo, KJUR.asn1.ASN1Object);
  */
 KJUR.asn1.x509.Time = function(params) {
     KJUR.asn1.x509.Time.superclass.constructor.call(this);
+    var type = null,
+	timeParams = null,
+	_KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERUTCTime = _KJUR_asn1.DERUTCTime,
+	_DERGeneralizedTime = _KJUR_asn1.DERGeneralizedTime;
+    this.params = null;
+    this.type = null;
+
+    // deprecated
+    this.setTimeParams = function(timeParams) {
+        this.timeParams = timeParams;
+    }
+
+    this.setByParam = function(params) {
+	this.params = params;
+    };
+
+    this.getType = function(s) {
+        if (s.match(/^[0-9]{12}Z$/)) return "utc";
+        if (s.match(/^[0-9]{14}Z$/)) return "gen";
+        if (s.match(/^[0-9]{12}\.[0-9]+Z$/)) return "utc";
+        if (s.match(/^[0-9]{14}\.[0-9]+Z$/)) return "gen";
+	return null;
+    };
+
+    this.getEncodedHex = function() {
+	var params = this.params;
+        var o = null;
+
+	if (typeof params == "string") params = {str: params};
+	if (params != null &&
+	    params.str && 
+	    (params.type == null || params.type == undefined)) {
+	    params.type = this.getType(params.str);
+	}
+
+	if (params != null && params.str) {
+	    if (params.type == "utc") o = new _DERUTCTime(params.str);
+	    if (params.type == "gen") o = new _DERGeneralizedTime(params.str);
+	} else {
+	    if (this.type == "gen") {
+		o = new _DERGeneralizedTime();
+	    } else {
+		o = new _DERUTCTime();
+	    }
+	}
+
+	if (o == null) throw new Error("wrong setting for Time");
+        this.TLV = o.getEncodedHex();
+        return this.TLV;
+    };
+
+    if (params != undefined) this.setByParam(params);
+};
+
+KJUR.asn1.x509.Time_bak = function(params) {
+    KJUR.asn1.x509.Time_bak.superclass.constructor.call(this);
     var type = null,
 	timeParams = null,
 	_KJUR = KJUR,

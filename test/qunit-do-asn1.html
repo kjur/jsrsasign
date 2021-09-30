@@ -14,6 +14,7 @@
 <script src="../ext/jsbn2.js"></script>
 <script src="../ext/base64.js"></script>
 <script src="../src/base64x-1.1.js"></script>
+<script src="../src/asn1hex-1.1.js"></script>
 <script src="../src/asn1-1.0.js"></script>
 <script src="../src/asn1x509-1.0.js"></script>
 
@@ -200,56 +201,182 @@ test("BMPString Test", function() {
 });
 
 test("UTCTime Test", function() {
-  expect(5);
+var _DERUTCTime = KJUR.asn1.DERUTCTime;
+var d;
 
-  var d1 = new KJUR.asn1.DERUTCTime();
-  d1.setString('130430125959Z');
-  equal(d1.getEncodedHex(), "170d3133303433303132353935395a", "setString 130430125959Z");
+d = new _DERUTCTime();
+d.setString('130430125959Z');
+equal(d.getEncodedHex(),
+      "170d3133303433303132353935395a",
+      "d.setString(130430125959Z)");
 
-  var d2 = new KJUR.asn1.DERUTCTime();
-  d2.setByDate(new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0)));
-  equal(d2.s, "150131000000Z", "setByDate Date.UTC");
+d = new _DERUTCTime();
+d.setByDate(new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0)));
+equal(d.getEncodedHex(),
+      "170d3135303133313030303030305a",
+      "d.setByDate(new Date(?2015/01/31 00:00:00?))");
 
-  var d3 = new KJUR.asn1.DERUTCTime();
-  d3.setByDateValue(2015, 1, 31, 0, 0, 0);
-  equal(d3.s, "150131000000Z", "setByDateValue");
+d = new _DERUTCTime();
+d.setByDateValue(2015, 1, 31, 0, 0, 0);
+equal(d.getEncodedHex(),
+      "170d3135303133313030303030305a", 
+      "d.setByDateValue(2015,1,31,0,0,0)");
 
-  var d4 = new KJUR.asn1.DERUTCTime({'date':new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0))});
-  equal(d4.s, "150131000000Z", "constructor date argument");
+// -- implicit constructor test --
+d = new _DERUTCTime({'date':new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0))});
+equal(d.getEncodedHex(),
+      "170d3135303133313030303030305a",
+      "new DERUTCTime({date: new Date(?2015/01/31 00:00:00?)})");
 
-  var d5 = new KJUR.asn1.DERUTCTime();
-  var d5hex = d5.getEncodedHex()
-  equal(d5hex.substr(0, 4), "170d", "now[0,4]=170d");
+d = new _DERUTCTime("150131000000Z");
+equal(d.getEncodedHex(),
+      "170d3135303133313030303030305a",
+      "new DERUTCTime(20150131000000Z)");
+
+d = new _DERUTCTime("150131000000.123Z");
+equal(d.getEncodedHex(),
+      "17113135303133313030303030302e3132335a",
+      "new DERUTCTime(20150131000000.123Z)");
+
+// -- JSON constructor test --
+d = new _DERUTCTime({
+    'date': new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0))
+});
+equal(d.getEncodedHex(),
+      "170d3135303133313030303030305a",
+      "new DERUTCTime({date: new Date(?2015/01/31 00:00:00?)})");
+
+d = new _DERUTCTime({
+    'date': new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 120)),
+    millis: true
+});
+equal(d.getEncodedHex(),
+      "17103135303133313030303030302e31325a",
+      "new UTCTime({date: new Date(?2015/01/31 00:00:00.12?)})");
+
+d = new _DERUTCTime({str: "150131000000Z"});
+equal(d.getEncodedHex(),
+      "170d3135303133313030303030305a",
+      "new DERUTCTime({str: 150131000000Z})");
+
+d = new _DERUTCTime({str: "150131000000.12Z"});
+equal(d.getEncodedHex(),
+      "17103135303133313030303030302e31325a",
+      "new DERUTCTime({str: 150131000000.123Z})");
+
+d = new _DERUTCTime();
+var d5hex = d.getEncodedHex()
+equal(d5hex.substr(0, 4), "170d", "new DERUTCTime() -> 170d...");
+
+// now + millis test
+// - fraction of second may not include with one in a hundred chance
+// - so any of three times is fine, it will be fine.
+var d6flag = false;
+var s1 = "";
+for (var i = 0; i < 3; i++) {
+    var startMsec = new Date();
+    while (new Date() - startMsec < 258);
+    d = new _DERUTCTime({millis: true});
+    var d6hex = d.getEncodedHex();
+    if (d6hex.substr(0, 2) != "17") continue;
+    var hS = ASN1HEX.getV(d6hex, 0);
+    var s = hextoutf8(hS);
+    s1 += s + "/";
+    if (s.indexOf(".") == -1) continue;
+    d6flag = true;
+}
+equal(d6flag, true, "new DERUTCTime({millis: true}): " + s1);
+
 });
 
 test("GeneralizedTime Test", function() {
-  expect(7);
-  var d1 = new KJUR.asn1.DERGeneralizedTime();
-  d1.setString('20130430125959Z');
-  equal(d1.getEncodedHex(), "180f32303133303433303132353935395a", 
-         "GeneralizedTime 20130430125959Z");
+var _DERGeneralizedTime = KJUR.asn1.DERGeneralizedTime;    
+var d;
 
-  var d2 = new KJUR.asn1.DERGeneralizedTime();
-  d2.setByDate(new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0)));
-  equal(d2.s, "20150131000000Z", "setByDate Date.UTC");
+// setter method test
+d = new _DERGeneralizedTime();
+d.setString('20130430125959Z');
+equal(d.getEncodedHex(),
+      "180f32303133303433303132353935395a", 
+      "d.setString(20130430125959Z)");
 
-  var d3 = new KJUR.asn1.DERGeneralizedTime();
-  d3.setByDateValue(2015, 1, 31, 0, 0, 0);
-  equal(d3.s, "20150131000000Z", "setByDateValue");
+d = new _DERGeneralizedTime();
+d.setByDate(new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0)));
+equal(d.getEncodedHex(),
+      "180f32303135303133313030303030305a",
+      "d.setByDate(new Date(?2015/01/31 00:00:00?))");
 
-  var date4 = new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0));
-  var d4 = new KJUR.asn1.DERGeneralizedTime({'date': date4});
-  equal(d4.s, "20150131000000Z", "constructor date argument");
+d = new _DERGeneralizedTime();
+d.setByDateValue(2015, 1, 31, 0, 0, 0);
+equal(d.getEncodedHex(),
+      "180f32303135303133313030303030305a",
+      "d.setByDateValue(2015,1,31,0,0,0)");
 
-  var d5 = new KJUR.asn1.DERGeneralizedTime();
-  var d5hex = d5.getEncodedHex()
-  equal(d5hex.substr(0, 4), "180f", "now[0,4]=180f");
-  equal(d5.s.length, 15, "now length=15");
+// -- implicit constructor test --
+d = new _DERGeneralizedTime(new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0)));
+equal(d.getEncodedHex(),
+      "180f32303135303133313030303030305a",
+      "new GeneralizedTime(new Date(?2015/01/31 00:00:00?))");
 
-  var d6 = new KJUR.asn1.DERGeneralizedTime({millis: true});
-  var d6hex = d6.getEncodedHex()
-  equal(d6.s.match(/^[0-9]+[.]?[0-9]*Z$/) != null, true, "now ({millis: true}) match/^d+.?d*Z$/");
+d = new _DERGeneralizedTime("20150131000000Z");
+equal(d.getEncodedHex(),
+      "180f32303135303133313030303030305a",
+      "new GeneralizedTime(20150131000000Z)");
 
+d = new _DERGeneralizedTime("20150131000000.123Z");
+equal(d.getEncodedHex(),
+      "181332303135303133313030303030302e3132335a",
+      "new GeneralizedTime(20150131000000.123Z)");
+
+// -- JSON constructor test --
+d = new _DERGeneralizedTime({
+    'date': new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0))
+});
+equal(d.getEncodedHex(),
+      "180f32303135303133313030303030305a",
+      "new GeneralizedTime({date: new Date(?2015/01/31 00:00:00?)})");
+
+d = new _DERGeneralizedTime({
+    'date': new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 120)),
+    millis: true
+});
+equal(d.getEncodedHex(),
+      "181232303135303133313030303030302e31325a",
+      "new GeneralizedTime({date: new Date(?2015/01/31 00:00:00.12?)})");
+
+d = new _DERGeneralizedTime({str: "20150131000000Z"});
+equal(d.getEncodedHex(),
+      "180f32303135303133313030303030305a",
+      "new DERGeneralizedTime({str: 20150131000000Z})");
+
+d = new _DERGeneralizedTime({str: "20150131000000.123Z"});
+equal(d.getEncodedHex(),
+      "181332303135303133313030303030302e3132335a",
+      "new DERGeneralizedTime({str: 20150131000000.123Z})");
+
+d = new _DERGeneralizedTime();
+var d5hex = d.getEncodedHex()
+equal(d5hex.substr(0, 4), "180f", "new GeneralizedTime() -> 180f...");
+equal(d5hex.length, 34, "new GeneralizedTime().getEncodedHex().length()=34");
+
+// now + millis test
+// - fraction of second may not include with one in a hundred chance
+// - so any of three times is fine, it will be fine.
+var d6flag = false;
+var s1 = "";
+for (var i = 0; i < 3; i++) {
+    var startMsec = new Date();
+    while (new Date() - startMsec < 258);
+    d = new _DERGeneralizedTime({millis: true});
+    var d6hex = d.getEncodedHex();
+    if (d6hex.substr(0, 2) != "18") continue;
+    var hS = ASN1HEX.getV(d6hex, 0);
+    var s = hextoutf8(hS);
+    s1 += s + "/";
+    if (s.indexOf(".") == -1) continue;
+    d6flag = true;
+}
+equal(d6flag, true, "new GeneralizedTime({millis: true}): " + s1);
 });
 
 test("Sequence Test", function() {
