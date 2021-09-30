@@ -603,32 +603,10 @@ following properties:
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.DERGeneralizedTime.">
-					<caption>Method Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERGeneralizedTime.html#setByDate">setByDate</a></b>(dateObject)
-								</div>
-								<div class="description">set value by a Date object</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.DERAbstractTime.html">KJUR.asn1.DERAbstractTime</a>: </dt><dd><a href="../symbols/KJUR.asn1.DERAbstractTime.html#getString">getString</a>, <a href="../symbols/KJUR.asn1.DERAbstractTime.html#setByDateValue">setByDateValue</a>, <a href="../symbols/KJUR.asn1.DERAbstractTime.html#setString">setString</a></dd><dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.DERAbstractTime.html">KJUR.asn1.DERAbstractTime</a>: </dt><dd><a href="../symbols/KJUR.asn1.DERAbstractTime.html#getString">getString</a>, <a href="../symbols/KJUR.asn1.DERAbstractTime.html#setByDate">setByDate</a>, <a href="../symbols/KJUR.asn1.DERAbstractTime.html#setByDateValue">setByDateValue</a>, <a href="../symbols/KJUR.asn1.DERAbstractTime.html#setByParam">setByParam</a>, <a href="../symbols/KJUR.asn1.DERAbstractTime.html#setString">setString</a></dd><dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a></dd>
 				</dl>
 				
 			
@@ -653,14 +631,26 @@ As for argument 'params' for constructor, you can specify one of
 following properties:
 <ul>
 <li>str - specify initial ASN.1 value(V) by a string (ex.'20130430235959Z')</li>
-<li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
 <li>date - specify Date object.</li>
 <li>millis - specify flag to show milliseconds (from 1.0.6)</li>
 </ul>
 NOTE1: 'params' can be omitted.
-NOTE2: 'withMillis' property is supported from asn1 1.0.6.
+NOTE2: 'millis' property is supported from asn1 1.0.6.
+
+<h4>EXAMPLES</h4>
 					
 				</div>
+				
+				
+				
+				<pre class="code">new DERGeneralizedTime("20151231235959Z")
+new DERGeneralizedTime("20151231235959.123Z")
+new DERGeneralizedTime(new Date())
+new DERGeneralizedTime(new Date(Date.UTC(2015,11,31,23,59,59,123)))
+new DERGeneralizedTime({str: "20151231235959.123Z"})
+new DERGeneralizedTime({date: new Date()})
+new DERGeneralizedTime({date: new Date(), millis: true})
+new DERGeneralizedTime({millis: true})</pre>
 				
 				
 				
@@ -682,6 +672,15 @@ NOTE2: 'withMillis' property is supported from asn1 1.0.6.
 					
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.DERUTCTime.html">KJUR.asn1.DERUTCTime</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.Time.html">KJUR.asn1.x509.Time</a></dd>
+						
+						</dl>
 					
 
 			</div>
@@ -718,55 +717,6 @@ NOTE2: 'withMillis' property is supported from asn1 1.0.6.
 			
 
 <!-- ============================== method details ========================= -->		
-			
-				<div class="sectionTitle">
-					Method Detail
-				</div>
-				
-					<a name="setByDate"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setByDate</b>(dateObject)
-					
-					</div>
-					<div class="description">
-						set value by a Date object
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">When you specify UTC time, use 'Date.UTC' method like this:<br/>
-o1 = new DERUTCTime();
-o1.setByDate(date);
-
-date = new Date(Date.UTC(2015, 0, 31, 23, 59, 59, 0)); #2015JAN31 23:59:59</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Date}</span> <b>dateObject</b>
-									
-								</dt>
-								<dd>Date object to set ASN.1 value(V)</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					
-				
 			
 			
 <!-- ============================== event details ========================= -->		

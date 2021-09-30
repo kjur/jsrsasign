@@ -469,19 +469,43 @@ equal(o8.sRule, "prn", "o8 sRule=prn");
 // ===== END Name related class test ==============
 
 test("Time class test", function() {
-  expect(4);
+var _Time = KJUR.asn1.x509.Time;
+var o;
 
-  var o1 = new KJUR.asn1.x509.Time({'str':'130430235959Z'}); // UTC
-  equal(o1.getEncodedHex(), "170d3133303433303233353935395a", "constructor default timestr");
+o = new _Time({'str':'130430235959Z'}); // UTC
+equal(o.getEncodedHex(), "170d3133303433303233353935395a", "param={str: utcstr}");
 
-  var o2 = new KJUR.asn1.x509.Time({'str':'20130430235959Z', 'type': 'gen'}); // Gen
-  equal(o2.getEncodedHex(), "180f32303133303433303233353935395a", "constructor default timestr");
+o = new _Time({'str':'20130430235959Z', 'type': 'gen'}); // Gen
+equal(o.getEncodedHex(), "180f32303133303433303233353935395a", "constructor default timestr");
 
-  var o3 = new KJUR.asn1.x509.Time({'str':'20130430235959Z'}); // Gen
-  equal(o3.getEncodedHex(), "180f32303133303433303233353935395a", "constructor default timestr (auto gen)");
+o = new _Time({'str':'20130430235959Z'}); // Gen
+equal(o.getEncodedHex(), "180f32303133303433303233353935395a", "param={str: genstr}");
 
-  var o4 = new KJUR.asn1.x509.Time(); // auto UTC
-  equal(o4.getEncodedHex().substr(0, 4), "170d", "constructor default timestr (empty)=170d...");
+o = new _Time(); // auto UTC
+equal(o.getEncodedHex().substr(0, 4), "170d", "no param");
+
+o = new _Time('130430235959Z'); // UTC
+equal(o.getEncodedHex(), "170d3133303433303233353935395a", "param=utcstr");
+
+o = new _Time('130430235959.12Z'); // UTC
+equal(o.getEncodedHex(),
+      "17103133303433303233353935392e31325a",
+      "new Time(130430235959.12Z) - UTC");
+
+o = new _Time('20130430235959Z'); // Gen
+equal(o.getEncodedHex(),
+      "180f32303133303433303233353935395a",
+      "new Time(20130430235959Z) - Gen");
+
+o = new _Time('20130430235959.12Z'); // Gen
+equal(o.getEncodedHex(),
+      "181232303133303433303233353935392e31325a",
+      "new Time(20130430235959.12Z) - Gen");
+
+o = new _Time({type: "utc", str: '130430235959.12Z'}); // UTC
+equal(o.getEncodedHex(),
+      "17103133303433303233353935392e31325a",
+      "new Time({type:utc, str:130430235959.12Z})");
 });
 
 test("SubjectPublicKeyInfo class test", function() {

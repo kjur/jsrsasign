@@ -591,7 +591,16 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERAbstractTime.html#getString">getString</a></b>()
 								</div>
-								<div class="description">get string value of this string object</div>
+								<div class="description">get string value of this string object (DEPRECATED)</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERAbstractTime.html#setByDate">setByDate</a></b>(dateObject)
+								</div>
+								<div class="description">set value by a Date object<br/></div>
 							</td>
 						</tr>
 					
@@ -607,9 +616,18 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERAbstractTime.html#setByParam">setByParam</a></b>(params)
+								</div>
+								<div class="description">set parameter of time</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERAbstractTime.html#setString">setString</a></b>(newS)
 								</div>
-								<div class="description">set value by a string</div>
+								<div class="description">set value by a string (DEPRECATED)</div>
 							</td>
 						</tr>
 					
@@ -669,6 +687,12 @@ ul.inheritsList
 						
 							<dd><a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a> - superclass</dd>
 						
+							<dd><a href="../symbols/KJUR.asn1.DERGeneralizedTime.html">KJUR.asn1.DERGeneralizedTime</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.DERUTCTime.html">KJUR.asn1.DERUTCTime</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.Time.html">KJUR.asn1.x509.Time</a></dd>
+						
 						</dl>
 					
 
@@ -692,7 +716,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						get string value of this string object
+						get string value of this string object (DEPRECATED)
 						
 						
 					</div>
@@ -700,6 +724,13 @@ ul.inheritsList
 					
 					
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from jsrsasign 10.4.1 asn1 1.0.22.
+							</dt>
+							</dl>
 						
 						
 						
@@ -710,6 +741,55 @@ ul.inheritsList
 								<dd><span class="light fixedFont">{String}</span> string value of this time object</dd>
 							
 							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="setByDate"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setByDate</b>(dateObject)
+					
+					</div>
+					<div class="description">
+						set value by a Date object<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.DERUTCTime();
+o.setByDate(new Date("2016/12/31 23:59:59.12"));
+// 2015-Jan-31 23:59:59.12
+o.setByDate(new Date(Date.UTC(2015, 0, 31, 23, 59, 59, 0)));</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Date}</span> <b>dateObject</b>
+									
+								</dt>
+								<dd>Date object to set ASN.1 value(V)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.4.1 asn1 1.0.22</dd>
+							</dl>
+							</dl>
+						
+						
 						
 						
 						
@@ -782,6 +862,64 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="setByParam"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setByParam</b>(params)
+					
+					</div>
+					<div class="description">
+						set parameter of time
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">d1 = new KJUR.asn1.DERGeneralizedTime();
+d1.setByParam("20210930235959.123Z");
+d1.setByParam({str: "20210930235959.123Z"});
+
+d1.setByParam(new Date("2013/12/31 23:59:59.12"));
+date1 = new Date(Date.UTC(2021,8,31,23,59,59,123));
+d1.setByParam(date1);
+d1.setByParam({date: date1});
+d1.setByParam({date: date1, millis: true});</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>params</b>
+									
+								</dt>
+								<dd>JSON object, Date object or string of time</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.4.1 asn1 1.0.22
+
+NOTE: If a member "millis" has a value "true",
+a fraction of second will be specified for this object. 
+This default is "false".</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="setString"> </a>
 					<div class="fixedFont">
 					
@@ -790,7 +928,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						set value by a string
+						set value by a string (DEPRECATED)
 						
 						
 					</div>
@@ -809,6 +947,13 @@ ul.inheritsList
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								from jsrsasign 10.4.1 asn1 1.0.22.
+							</dt>
+							</dl>
 						
 						
 						
