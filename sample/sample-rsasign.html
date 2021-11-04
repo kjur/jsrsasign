@@ -14,6 +14,7 @@ function doSign() {
 function doVerify() {
   var sMsg = document.form1.msgverified.value;
   var hSig = document.form1.sigverified.value;
+  hSig = hSig.replace(/[^0-9a-f]+/g, "");
 
   var pubKey = KEYUTIL.getKey(document.form1.cert.value);
   var isValid = pubKey.verify(sMsg, hSig);

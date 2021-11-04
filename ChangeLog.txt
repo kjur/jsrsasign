@@ -1,6 +1,10 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 10.4.1 to next release
+  - sample/sample-rsasign.html
+    - fix to trim non hexadecimal strings (#517)
+
 GeneralizedTime, UTCTime refactoring and some bug fix
 * Changes from 10.4.0 to 10.4.1 release
   - src/asn1.js
