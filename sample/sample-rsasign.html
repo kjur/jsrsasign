@@ -63,7 +63,7 @@ TD  {vertical-align: top}
 <td>
 PEM RSA Private Key<br/>
 <!-- _test/z5.* for X.509v1 certificate and private key -->
-<textarea name="prvkey1" rows="10" cols="65">
+<textarea name="prvkey1" rows="10" cols="80">
 -----BEGIN RSA PRIVATE KEY-----
 MIICWwIBAAKBgQDRhGF7X4A0ZVlEg594WmODVVUIiiPQs04aLmvfg8SborHss5gQ
 Xu0aIdUT6nb5rTh5hD2yfpF2WIW6M8z0WxRhwicgXwi80H1aLPf6lEPPLvN29EhQ
@@ -81,7 +81,7 @@ dqRh3rcNvpY6BKJqFapda1DjdcncZECMizT/GMrc1w==
 -----END RSA PRIVATE KEY-----
 </textarea><br/>
 Text message to be signed.<br/>
-<input type="text" name="msgsigned" size="100" value="aaa"/><br/>
+<input type="text" name="msgsigned" size="82" value="aaa"/><br/>
 </td>
 <td></td>
 <td>
@@ -93,8 +93,8 @@ Verification Result
 <tr>
 <td>
 <select name="hashalg">
-<option value="sha1" selected>SHA1
-<option value="sha256">SHA256
+<option value="sha1">SHA1
+<option value="sha256" selected>SHA256
 <option value="sha512">SHA512
 <option value="md5">MD5
 <option value="ripemd160">RIPEMD-160
@@ -112,22 +112,22 @@ Verification Result
 <tr>
 <td>
 Generated Signature<br/>
-<textarea name="siggenerated" rows="4" cols="65"></textarea>
+<textarea name="siggenerated" rows="4" cols="80"></textarea>
 </td>
 <td>
 </td>
 <td>
 Verifying Signature<br/>
-<textarea name="sigverified" rows="4" cols="65">
+<textarea name="sigverified" rows="4" cols="80">
 6f7df91d8f973a0619d525c319337741130b77b21f9667dc7d1d74853b644cbe
 5e6b0e84aacc2faee883d43affb811fc653b67c38203d4f206d1b838c4714b6b
 2cf17cd621303c21bac96090df3883e58784a0576e501c10cdefb12b6bf887e5
 48f6b07b09ae80d8416151d7dab7066d645e2eee57ac5f7af2a70ee0724c8e47
 </textarea><br/>
 Text message to be verified.<br/>
-<input type="text" name="msgverified" size="100" value="aaa"/><br/>
+<input type="text" name="msgverified" size="82" value="aaa"/><br/>
 Signer's Public Key Certificate.<br/>
-<textarea name="cert" rows="10" cols="65">
+<textarea name="cert" rows="10" cols="80">
 -----BEGIN CERTIFICATE-----
 MIIBvTCCASYCCQD55fNzc0WF7TANBgkqhkiG9w0BAQUFADAjMQswCQYDVQQGEwJK
 UDEUMBIGA1UEChMLMDAtVEVTVC1SU0EwHhcNMTAwNTI4MDIwODUxWhcNMjAwNTI1
@@ -182,7 +182,7 @@ X.509v1 and X.509v3 is available however X.509v2 is not supported now.
 </li>
 </ul>
 <center>
-Copyright &copy; 2010-2012 Kenji Urushima, All Rights Reserved.
+Copyright &copy; 2010-2021 Kenji Urushima, All Rights Reserved.
 </center>
 
 <div align="right">
