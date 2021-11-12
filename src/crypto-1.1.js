@@ -1012,6 +1012,7 @@ KJUR.crypto.Mac = function(params) {
  * <li>secp256k1</li>
  * <li>secp256r1, NIST P-256, P-256, prime256v1</li>
  * <li>secp384r1, NIST P-384, P-384</li>
+ * <li>secp521r1, NIST P-521, P-521</li>
  * </ul>
  * NOTE1: DSA signing algorithm is also supported since crypto 1.1.5.
  * <h4>EXAMPLES</h4>
@@ -1512,8 +1513,8 @@ KJUR.crypto.OID = new function() {
 	'2b8104001f': 'secp192k1',
 	'2b81040021': 'secp224r1',
 	'2b8104000a': 'secp256k1',
-	'2b81040023': 'secp521r1',
 	'2b81040022': 'secp384r1',
+	'2b81040023': 'secp521r1',
 	'2a8648ce380403': 'SHA1withDSA', // 1.2.840.10040.4.3
 	'608648016503040301': 'SHA224withDSA', // 2.16.840.1.101.3.4.3.1
 	'608648016503040302': 'SHA256withDSA', // 2.16.840.1.101.3.4.3.2

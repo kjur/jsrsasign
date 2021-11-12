@@ -217,6 +217,15 @@ test("generate ECC key for secp384r1 curve", function() {
   equal(keypair['ecpubhex'].length, (384 / 4) * 2 + 2, "public key hexstr length");
 });
 
+test("generate ECC key for secp521r1 curve", function() {
+  var ec = new KJUR.crypto.ECDSA({"curve": "secp521r1"});
+  var keypair = ec.generateKeyPairHex();
+
+  expect(2);
+  equal(keypair['ecprvhex'].length, Math.ceil(521 / 8) * 2, "private key hexstr length");
+  equal(keypair['ecpubhex'].length, (Math.ceil(521 / 8) * 2) * 2 + 2, "public key hexstr length");
+});
+
 test("key generation, signing and verification for secp256r1 curve", function() {
   // key generation
   var ec0 = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
@@ -228,6 +237,36 @@ test("key generation, signing and verification for secp256r1 curve", function() 
 
   // signature validation
   var ec2 = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
+  var result2 = ec2.verifyHex(hashAAA256Hex, sigHex, keypair.ecpubhex);
+  equal(result2, true, "ecdsa sign");
+});
+
+test("key generation, signing and verification for secp384r1 curve", function() {
+  // key generation
+  var ec0 = new KJUR.crypto.ECDSA({'curve': 'secp384r1'});
+  var keypair = ec0.generateKeyPairHex();
+
+  // signing
+  var ec1 = new KJUR.crypto.ECDSA({'curve': 'secp384r1'});
+  var sigHex = ec1.signHex(hashAAA256Hex, keypair.ecprvhex);
+
+  // signature validation
+  var ec2 = new KJUR.crypto.ECDSA({'curve': 'secp384r1'});
+  var result2 = ec2.verifyHex(hashAAA256Hex, sigHex, keypair.ecpubhex);
+  equal(result2, true, "ecdsa sign");
+});
+
+test("key generation, signing and verification for secp521r1 curve", function() {
+  // key generation
+  var ec0 = new KJUR.crypto.ECDSA({'curve': 'secp521r1'});
+  var keypair = ec0.generateKeyPairHex();
+
+  // signing
+  var ec1 = new KJUR.crypto.ECDSA({'curve': 'secp521r1'});
+  var sigHex = ec1.signHex(hashAAA256Hex, keypair.ecprvhex);
+
+  // signature validation
+  var ec2 = new KJUR.crypto.ECDSA({'curve': 'secp521r1'});
   var result2 = ec2.verifyHex(hashAAA256Hex, sigHex, keypair.ecpubhex);
   equal(result2, true, "ecdsa sign");
 });
@@ -295,7 +334,7 @@ test("readCertPubKeyHex k1", function() {
 
 <b>NOTE:</b>
 <p>
-Currently this library works for only secp256r1, secp256k1 and secp384r1 EC curves
+Currently this library works for only secp256r1, secp256k1, secp384r1 and secp521 EC curves
 besides some other curves are pre-defined.
 </p>
 
