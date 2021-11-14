@@ -39,6 +39,8 @@
 <script src="../src/ecdsa-modified-1.0.js"></script>
 <script src="../src/ecparam-1.0.js"></script>
 
+<script src="ecc-testvectors.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -127,6 +129,40 @@ var ECK1PRVP5HEX = "3077020101042011b5737cf9d93f17c0cb1a84655d3995a02824097effa5
 var ECK1PRVP8HEX = "308187020100301306072a8648ce3d020106082a8648ce3d030107046d306b020101042011b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3a14403420004a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425"; // k1.prv.p8p.der
 var ECK1PUBP8HEX = "3059301306072a8648ce3d020106082a8648ce3d03010703420004a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425"; // k1.pub.der
 var ECK1CERTHEX = "3082017c30820121a003020102020900a6f110b42f4940cd300a06082a8648ce3d040302301a310b3009060355040613025553310b3009060355040a0c024b31301e170d3133303731343032313731375a170d3233303731323032313731375a301a310b3009060355040613025553310b3009060355040a0c024b313059301306072a8648ce3d020106082a8648ce3d03010703420004a01532a3c0900053de60fbefefcca58793301598d308b41e6f4e364e388c2711bef432c599148c94143d4ff46c2cb73e3e6a41d7eef23c047ea11e60667de425a350304e301d0603551d0e04160414c847be327cccff638870757496e2be366c44a8fc301f0603551d23041830168014c847be327cccff638870757496e2be366c44a8fc300c0603551d13040530030101ff300a06082a8648ce3d0403020349003046022100df01c4bf58a06b3fa241824b10569a788ddab80b9dd8bb817936468c82d8401e022100d19175600fd50756f65ead8a0950c1da89b384f47bcf8d62ff917006f7558c27"; // k1.self.cer.der
+
+function checkTestVector(curve, tv) {
+    var biPrv = new BigInteger(tv.k, 10);
+    equal(tv.k, biPrv.toString(10), "k=" + tv.k);
+
+    var biX = new BigInteger(tv.x, 16);
+    var biY = new BigInteger(tv.y, 16);
+
+    var ec = new KJUR.crypto.ECDSA({curve: curve, prv: biPrv.toString(16) });
+    ec.generatePublicKeyHex();
+    var pub = ec.getPublicKeyXYHex();
+    var biPubX = new BigInteger(pub.x, 16);
+    var biPubY = new BigInteger(pub.y, 16);
+    equal(biX.toString(16), biPubX.toString(16), "X with k=" + tv.k);
+    equal(biY.toString(16), biPubY.toString(16), "Y with k=" + tv.k);
+}
+
+test("generatePublicKey (secp256r1)", function() {
+  for (var i=0; i<ECC_TESTVECTORS.secp256r1.length; i++) {
+    checkTestVector("secp256r1", ECC_TESTVECTORS.secp256r1[i]);
+  }
+});
+
+test("generatePublicKey (secp384r1)", function() {
+  for (var i=0; i<ECC_TESTVECTORS.secp384r1.length; i++) {
+    checkTestVector("secp384r1", ECC_TESTVECTORS.secp384r1[i]);
+  }
+});
+
+test("generatePublicKey (secp521r1)", function() {
+  for (var i=0; i<ECC_TESTVECTORS.secp521r1.length; i++) {
+    checkTestVector("secp521r1", ECC_TESTVECTORS.secp521r1[i]);
+  }
+});
 
 test("default(secp256r1) sign and verify aaa", function() {
   // signing a message

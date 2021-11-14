@@ -184,20 +184,36 @@ KJUR.crypto.ECDSA = function(params) {
     this.generateKeyPairHex = function() {
 	var biN = this.ecparams['n'];
 	var biPrv = this.getBigRandom(biN);
-	var epPub = this.ecparams['G'].multiply(biPrv);
-	var biX = epPub.getX().toBigInteger();
-	var biY = epPub.getY().toBigInteger();
-
 	var charlen = this.ecparams.keycharlen;
 	var hPrv = ("0000000000" + biPrv.toString(16)).slice(- charlen);
-	var hX   = ("0000000000" + biX.toString(16)).slice(- charlen);
-	var hY   = ("0000000000" + biY.toString(16)).slice(- charlen);
-	var hPub = "04" + hX + hY;
-
 	this.setPrivateKeyHex(hPrv);
-	this.setPublicKeyHex(hPub);
+	hPub = this.generatePublicKeyHex();
 	return {'ecprvhex': hPrv, 'ecpubhex': hPub};
     };
+
+	/**
+     * generate public key for EC private key
+     * @name generatePublicKeyHex
+     * @memberOf KJUR.crypto.ECDSA#
+     * @function
+     * @return {String} associative array of hexadecimal string of private and public key
+     * @example
+     * var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1', 'prv': prvHex});
+     * var pubhex = ec.generatePublicKeyHex(); // hexadecimal string of EC public key
+     * var pub ec.getPublicKeyXYHex() &rarr; { x: '01bacf...', y: 'c3bc22...' }
+     */
+	this.generatePublicKeyHex = function() {
+		var biPrv = new _BigInteger(this.prvKeyHex, 16);
+		var epPub = this.ecparams['G'].multiply(biPrv);
+		var biX = epPub.getX().toBigInteger();
+		var biY = epPub.getY().toBigInteger();
+		var charlen = this.ecparams.keycharlen;;
+		var hX   = ("0000000000" + biX.toString(16)).slice(- charlen);
+		var hY   = ("0000000000" + biY.toString(16)).slice(- charlen);
+		var hPub = "04" + hX + hY;
+		this.setPublicKeyHex(hPub);
+		return hPub;
+	}
 
     this.signWithMessageHash = function(hashHex) {
 	return this.signHex(hashHex, this.prvKeyHex);
