@@ -1238,7 +1238,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
  * NOTE1: As for RSA algoirthm, public exponent has fixed
  * value '0x10001'.
  * NOTE2: As for EC algorithm, supported names of curve are
- * secp256r1, secp256k1 and secp384r1.
+ * secp256r1, secp256k1, secp384r1 and secp521r1.
  * NOTE3: DSA is not supported yet.
  * @example
  * var rsaKeypair = KEYUTIL.generateKeypair("RSA", 1024);

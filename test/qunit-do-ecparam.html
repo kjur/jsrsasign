@@ -32,6 +32,7 @@
 <script src="../ext/ec.js"></script>
 <script src="../ext/ec-patch.js"></script>
 
+<script src="../src/base64x-1.1.js"></script>
 <script src="../src/asn1hex-1.1.js"></script>
 <script src="../src/asn1-1.0.js"></script>
 <script src="../src/crypto-1.1.js"></script>
@@ -43,13 +44,34 @@ $(document).ready(function(){
 
 test("ECParameterDB NIST P-256", function() {
   var db = KJUR.crypto.ECParameterDB;
-  expect(5);
+  expect(6);
   equal(typeof db.getByName("secp256r1"), "object", "secp256r1 defined");
   equal(typeof db.getByName("NIST P-256"), "object", "alias NIST P-256 defined");
   equal(typeof db.getByName("P-256"), "object", "alias P-256 defined");
   equal(typeof db.getByName("prime256v1"), "object", "alias prime256v1 defined");
   var ecparam = db.getByName("prime256v1");
   equal(ecparam['n'].toString(16), "ffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551", "prime256v1:n = ");
+  equal(ecparam.keycharlen, 64, "prime256v1:keycharlen = ");
+});
+
+test("ECParameterDB NIST P-384", function() {
+  var db = KJUR.crypto.ECParameterDB;
+  expect(4);
+  equal(typeof db.getByName("secp384r1"), "object", "secp384r1 defined");
+  equal(typeof db.getByName("NIST P-384"), "object", "alias NIST P-384 defined");
+  equal(typeof db.getByName("P-384"), "object", "alias P-384 defined");
+  var ecparam = db.getByName("secp384r1");
+  equal(ecparam.keycharlen, 96, "secp384r1:keycharlen = ");
+});
+
+test("ECParameterDB NIST P-521", function() {
+  var db = KJUR.crypto.ECParameterDB;
+  expect(4);
+  equal(typeof db.getByName("secp521r1"), "object", "secp521r1 defined");
+  equal(typeof db.getByName("NIST P-521"), "object", "alias NIST P-521 defined");
+  equal(typeof db.getByName("P-521"), "object", "alias P-521 defined");
+  var ecparam = db.getByName("secp521r1");
+  equal(ecparam.keycharlen, 132, "secp521r1:keycharlen = ");
 });
 
 });
