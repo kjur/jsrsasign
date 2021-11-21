@@ -1,9 +1,9 @@
-/* ecdsa-modified-1.1.4.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
+/* ecdsa-modified-1.2.0.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
  */
 /*
  * ecdsa-modified.js - modified Bitcoin.ECDSA class
  * 
- * Copyright (c) 2013-2020 Stefan Thomas (github.com/justmoon)
+ * Copyright (c) 2013-2021 Stefan Thomas (github.com/justmoon)
  *                         Kenji Urushima (kenji.urushima@gmail.com)
  * LICENSE
  *   https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
@@ -13,7 +13,7 @@
  * @fileOverview
  * @name ecdsa-modified-1.0.js
  * @author Stefan Thomas (github.com/justmoon) and Kenji Urushima (kenji.urushima@gmail.com)
- * @version jsrsasign 8.0.21 ecdsa-modified 1.1.4 (2020-Jul-24)
+ * @version jsrsasign 10.5.0 ecdsa-modified 1.2.0 (2021-Nov-21)
  * @since jsrsasign 4.0
  * @license <a href="https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE">MIT License</a>
  */
@@ -39,6 +39,7 @@ if (typeof KJUR.crypto == "undefined" || !KJUR.crypto) KJUR.crypto = {};
  * <li>secp256r1, NIST P-256, P-256, prime256v1 (*)</li>
  * <li>secp256k1 (*)</li>
  * <li>secp384r1, NIST P-384, P-384 (*)</li>
+ * <li>secp521r1, NIST P-521, P-521 (*)</li>
  * </ul>
  * </p>
  */
@@ -134,7 +135,7 @@ KJUR.crypto.ECDSA = function(params) {
 	if (h.substr(0, 2) !== "04")
 	    throw "this method supports uncompressed format(04) only";
 
-	var charlen = this.ecparams.keylen / 4;
+	var charlen = this.ecparams.keycharlen;
 	if (h.length !== 2 + charlen * 2)
 	    throw "malformed public key hex length";
 
@@ -162,6 +163,8 @@ KJUR.crypto.ECDSA = function(params) {
 	    return "P-256";
 	if (s === "secp384r1" || s === "NIST P-384" || s === "P-384")
 	    return "P-384";
+	if (s === "secp521r1" || s === "NIST P-521" || s === "P-521")
+	    return "P-521";
 	return null;
     };
 
@@ -181,20 +184,36 @@ KJUR.crypto.ECDSA = function(params) {
     this.generateKeyPairHex = function() {
 	var biN = this.ecparams['n'];
 	var biPrv = this.getBigRandom(biN);
-	var epPub = this.ecparams['G'].multiply(biPrv);
-	var biX = epPub.getX().toBigInteger();
-	var biY = epPub.getY().toBigInteger();
-
-	var charlen = this.ecparams['keylen'] / 4;
+	var charlen = this.ecparams.keycharlen;
 	var hPrv = ("0000000000" + biPrv.toString(16)).slice(- charlen);
-	var hX   = ("0000000000" + biX.toString(16)).slice(- charlen);
-	var hY   = ("0000000000" + biY.toString(16)).slice(- charlen);
-	var hPub = "04" + hX + hY;
-
 	this.setPrivateKeyHex(hPrv);
-	this.setPublicKeyHex(hPub);
+	hPub = this.generatePublicKeyHex();
 	return {'ecprvhex': hPrv, 'ecpubhex': hPub};
     };
+
+	/**
+     * generate public key for EC private key
+     * @name generatePublicKeyHex
+     * @memberOf KJUR.crypto.ECDSA#
+     * @function
+     * @return {String} associative array of hexadecimal string of private and public key
+     * @example
+     * var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1', 'prv': prvHex});
+     * var pubhex = ec.generatePublicKeyHex(); // hexadecimal string of EC public key
+     * var pub ec.getPublicKeyXYHex() &rarr; { x: '01bacf...', y: 'c3bc22...' }
+     */
+	this.generatePublicKeyHex = function() {
+		var biPrv = new _BigInteger(this.prvKeyHex, 16);
+		var epPub = this.ecparams['G'].multiply(biPrv);
+		var biX = epPub.getX().toBigInteger();
+		var biY = epPub.getY().toBigInteger();
+		var charlen = this.ecparams.keycharlen;;
+		var hX   = ("0000000000" + biX.toString(16)).slice(- charlen);
+		var hY   = ("0000000000" + biY.toString(16)).slice(- charlen);
+		var hPub = "04" + hX + hY;
+		this.setPublicKeyHex(hPub);
+		return hPub;
+	}
 
     this.signWithMessageHash = function(hashHex) {
 	return this.signHex(hashHex, this.prvKeyHex);
@@ -218,7 +237,7 @@ KJUR.crypto.ECDSA = function(params) {
 	var n = this.ecparams['n'];
 
 	// message hash is truncated with curve key length (FIPS 186-4 6.4)
-        var e = new _BigInteger(hashHex.substring(0, this.ecparams.keylen / 4), 16);
+        var e = new _BigInteger(hashHex.substring(0, this.ecparams.keycharlen), 16);
 
 	do {
 	    var k = this.getBigRandom(n);
@@ -277,7 +296,7 @@ KJUR.crypto.ECDSA = function(params) {
 	    var Q = _ECPointFp.decodeFromHex(this.ecparams['curve'], pubkeyHex);
 
 	    // message hash is truncated with curve key length (FIPS 186-4 6.4)
-            var e = new _BigInteger(hashHex.substring(0, this.ecparams.keylen / 4), 16);
+            var e = new _BigInteger(hashHex.substring(0, this.ecparams.keycharlen), 16);
 
 	    return this.verifyRaw(e, r, s, Q);
 	} catch (ex) {
@@ -846,10 +865,12 @@ KJUR.crypto.ECDSA.getName = function(s) {
     if (s === "2b8104000a") return "secp256k1"; // 1.3.132.0.10
     if (s === "2b81040021") return "secp224r1"; // 1.3.132.0.33
     if (s === "2b81040022") return "secp384r1"; // 1.3.132.0.34
+	if (s === "2b81040023") return "secp521r1"; // 1.3.132.0.35
     if ("|secp256r1|NIST P-256|P-256|prime256v1|".indexOf(s) !== -1) return "secp256r1";
     if ("|secp256k1|".indexOf(s) !== -1) return "secp256k1";
     if ("|secp224r1|NIST P-224|P-224|".indexOf(s) !== -1) return "secp224r1";
     if ("|secp384r1|NIST P-384|P-384|".indexOf(s) !== -1) return "secp384r1";
+	if ("|secp521r1|NIST P-521|P-521|".indexOf(s) !== -1) return "secp521r1";
     return null;
 };
 

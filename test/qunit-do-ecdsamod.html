@@ -32,6 +32,7 @@
 <script src="../ext/ec.js"></script>
 <script src="../ext/ec-patch.js"></script>
 
+<script src="../src/base64x-1.1.js"></script>
 <script src="../src/asn1hex-1.1.js"></script>
 <script src="../src/asn1-1.0.js"></script>
 <script src="../src/crypto-1.1.js"></script>
@@ -216,6 +217,15 @@ test("generate ECC key for secp384r1 curve", function() {
   equal(keypair['ecpubhex'].length, (384 / 4) * 2 + 2, "public key hexstr length");
 });
 
+test("generate ECC key for secp521r1 curve", function() {
+  var ec = new KJUR.crypto.ECDSA({"curve": "secp521r1"});
+  var keypair = ec.generateKeyPairHex();
+
+  expect(2);
+  equal(keypair['ecprvhex'].length, Math.ceil(521 / 8) * 2, "private key hexstr length");
+  equal(keypair['ecpubhex'].length, (Math.ceil(521 / 8) * 2) * 2 + 2, "public key hexstr length");
+});
+
 test("key generation, signing and verification for secp256r1 curve", function() {
   // key generation
   var ec0 = new KJUR.crypto.ECDSA({'curve': 'secp256r1'});
@@ -231,6 +241,36 @@ test("key generation, signing and verification for secp256r1 curve", function() 
   equal(result2, true, "ecdsa sign");
 });
 
+test("key generation, signing and verification for secp384r1 curve", function() {
+  // key generation
+  var ec0 = new KJUR.crypto.ECDSA({'curve': 'secp384r1'});
+  var keypair = ec0.generateKeyPairHex();
+
+  // signing
+  var ec1 = new KJUR.crypto.ECDSA({'curve': 'secp384r1'});
+  var sigHex = ec1.signHex(hashAAA256Hex, keypair.ecprvhex);
+
+  // signature validation
+  var ec2 = new KJUR.crypto.ECDSA({'curve': 'secp384r1'});
+  var result2 = ec2.verifyHex(hashAAA256Hex, sigHex, keypair.ecpubhex);
+  equal(result2, true, "ecdsa sign");
+});
+
+test("key generation, signing and verification for secp521r1 curve", function() {
+  // key generation
+  var ec0 = new KJUR.crypto.ECDSA({'curve': 'secp521r1'});
+  var keypair = ec0.generateKeyPairHex();
+
+  // signing
+  var ec1 = new KJUR.crypto.ECDSA({'curve': 'secp521r1'});
+  var sigHex = ec1.signHex(hashAAA256Hex, keypair.ecprvhex);
+
+  // signature validation
+  var ec2 = new KJUR.crypto.ECDSA({'curve': 'secp521r1'});
+  var result2 = ec2.verifyHex(hashAAA256Hex, sigHex, keypair.ecpubhex);
+  equal(result2, true, "ecdsa sign");
+});
+
 test("getPublicKeyXYHex() method test", function() {
   var ec1 = new KJUR.crypto.ECDSA({'curve': 'secp256r1', 'pub': ECK1PUBHEX});
   var xy = ec1.getPublicKeyXYHex();
@@ -239,9 +279,14 @@ test("getPublicKeyXYHex() method test", function() {
 });
 
 test("getShortNISTPCurveName() method test", function() {
-  var ec1 = new KJUR.crypto.ECDSA({'curve': 'secp256r1', 'pub': ECK1PUBHEX});
+  var ec1;
+  ec1 = new KJUR.crypto.ECDSA({'curve': 'secp256r1', 'pub': ECK1PUBHEX});
   equal(ec1.getShortNISTPCurveName(), "P-256", "secp256r1 - P-256");
-  var ec1 = new KJUR.crypto.ECDSA({'curve': 'secp256k1', 'pub': ECK1PUBHEX});
+  ec1 = new KJUR.crypto.ECDSA({'curve': 'secp384r1', 'pub': ECK1PUBHEX});
+  equal(ec1.getShortNISTPCurveName(), "P-384", "secp384r1 - P-384");
+  ec1 = new KJUR.crypto.ECDSA({'curve': 'secp521r1', 'pub': ECK1PUBHEX});
+  equal(ec1.getShortNISTPCurveName(), "P-521", "secp521r1 - P-521");
+  ec1 = new KJUR.crypto.ECDSA({'curve': 'secp256k1', 'pub': ECK1PUBHEX});
   equal(ec1.getShortNISTPCurveName(), null, "secp256k1 - null");
 });
 
@@ -294,8 +339,8 @@ test("readCertPubKeyHex k1", function() {
 
 <b>NOTE:</b>
 <p>
-Currently this library works for only secp256r1, secp256k1 and secp384r1 EC curves
-besides some other curves are pre-defined.
+In 10.4.1 or before, only secp256r1(P-256), secp256k1, and secp384r1(P-384) curves have been supported.<br/>
+From 10.5.0(2021-Nov-21), secp192r1, secp224r1 and secp521r1(P-521) are also supported.<br/>
 </p>
 
 <p>
@@ -305,6 +350,7 @@ ECC related QUnit test pages:
 <a href="qunit-do-crypto-ecdsa.html">crypto.js Signature class for ECDSA</a> | 
 <a href="qunit-do-ecdsamod.html">ecdsa-modified.js</a> | 
 <a href="qunit-do-ecdsamod-unsupport.html">ecdsa-modified unsupported curve</a> | 
+<a href="qunit-do-ecdsamod-nisttv.html">ecdsa-modified NIST ECC test vector key generation test</a> | 
 <a href="qunit-do-ecparam.html">ecparam.js</a> | 
 </p>
 

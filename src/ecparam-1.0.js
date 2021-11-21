@@ -1,9 +1,9 @@
-/* ecparam-1.0.0.js (c) 2013 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* ecparam-1.0.1.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * ecparam.js - Elliptic Curve Cryptography Curve Parameter Definition class
  *
- * Copyright (c) 2013 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2021 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name ecparam-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.0 (2013-Jul-17)
+ * @version jsrsasign 10.5.0 ecparam 1.0.1 (2021-Nov-21)
  * @since jsrsasign 4.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -107,6 +107,7 @@ KJUR.crypto.ECParameterDB = new function() {
         var G = curve.decodePointHex("04" + gxHex + gyHex);
 	db[name]['name'] = name;
 	db[name]['keylen'] = keylen;
+  db[name]['keycharlen'] = Math.ceil(keylen / 8) * 2; // for P-521
         db[name]['curve'] = curve;
         db[name]['G'] = G;
         db[name]['n'] = n;
@@ -242,7 +243,7 @@ KJUR.crypto.ECParameterDB.regist(
   "051953EB9618E1C9A1F929A21A0B68540EEA2DA725B99B315F3B8B489918EF109E156193951EC7E937B1652C0BD3BB1BF073573DF883D2C34F1EF451FD46B503F00", // b
   "1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFA51868783BF2F966B7FCC0148F709A5D03BB5C9B8899C47AEBB6FB71E91386409", // n
   "1", // h
-  "C6858E06B70404E9CD9E3ECB662395B4429C648139053FB521F828AF606B4D3DBAA14B5E77EFE75928FE1DC127A2FFA8DE3348B3C1856A429BF97E7E31C2E5BD66", // gx
+  "00C6858E06B70404E9CD9E3ECB662395B4429C648139053FB521F828AF606B4D3DBAA14B5E77EFE75928FE1DC127A2FFA8DE3348B3C1856A429BF97E7E31C2E5BD66", // gx
   "011839296a789a3bc0045c8a5fb42c7d1bd998f54449579b446817afbd17273e662c97ee72995ef42640c550b9013fad0761353c7086a272c24088be94769fd16650", // gy
   ["NIST P-521", "P-521"]); // alias
 

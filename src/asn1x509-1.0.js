@@ -1,4 +1,4 @@
-/* asn1x509-2.1.9.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1x509-2.1.10.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.4.1 asn1x509 2.1.9 (2021-Sep-30)
+ * @version jsrsasign 10.5.0 asn1x509 2.1.10 (2021-Nov-21)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -4162,6 +4162,7 @@ KJUR.asn1.x509.OID = new function(params) {
         'secp256r1':            '1.2.840.10045.3.1.7',
         'secp256k1':            '1.3.132.0.10',
         'secp384r1':            '1.3.132.0.34',
+        'secp521r1':            '1.3.132.0.35',
 
         'pkcs5PBES2':           '1.2.840.113549.1.5.13',
         'pkcs5PBKDF2':          '1.2.840.113549.1.5.12',

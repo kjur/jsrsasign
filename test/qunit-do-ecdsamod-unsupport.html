@@ -32,6 +32,7 @@
 <script src="../ext/ec.js"></script>
 <script src="../ext/ec-patch.js"></script>
 
+<script src="../src/base64x-1.1.js"></script>
 <script src="../src/asn1hex-1.1.js"></script>
 <script src="../src/asn1-1.0.js"></script>
 <script src="../src/crypto-1.1.js"></script>
@@ -81,8 +82,9 @@ test("KNOWN ISSUE: k5.sig.aaa.1 secp521r1 sha256", function() {
 
 <b>NOTE:</b>
 <p>
-Currently this library works for only secp256r1, secp256k1 and secp384r1 EC curves
-besides some other curves are pre-defined.
+In 10.4.1 or before, only secp256r1(P-256), secp256k1, and secp384r1(P-384) curves have been supported.<br/>
+From 10.5.0(2021-Nov-21), secp192r1, secp224r1 and secp521r1(P-521) are also supported.<br/>
+So this file will be merged and removed in the future.
 </p>
 
 <p>

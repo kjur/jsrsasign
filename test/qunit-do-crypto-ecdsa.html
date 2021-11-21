@@ -182,11 +182,19 @@ test("ECDSA sign+verify test4 (secp384r1,aaa,SHA256withECDSA)", function() {
 <div id="qunit"></div>
 <div id="qunit-fixture">test markup</div>
 
+<b>NOTE:</b>
+<p>
+In 10.4.1 or before, only secp256r1(P-256), secp256k1, and secp384r1(P-384) curves have been supported.<br/>
+From 10.5.0(2021-Nov-21), secp192r1, secp224r1 and secp521r1(P-521) are also supported.<br/>
+</p>
+
 <p>
 ECC related QUnit test pages: 
 <a href="qunit-do-crypto.html">crypto.js</a> | 
 <a href="qunit-do-crypto-ecdsa.html">crypto.js Signature class for ECDSA</a> | 
 <a href="qunit-do-ecdsamod.html">ecdsa-modified.js</a> | 
+<a href="qunit-do-ecdsamod-unsupport.html">ecdsa-modified unsupported curve</a> | 
+<a href="qunit-do-ecdsamod-nisttv.html">ecdsa-modified NIST ECC test vector key generation test</a> | 
 <a href="qunit-do-ecparam.html">ecparam.js</a> | 
 </p>
 

@@ -614,6 +614,15 @@ for generating an EC key pair.</div>
 						</tr>
 					
 						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.ECDSA.html#generatePublicKeyHex">generatePublicKeyHex</a></b>()
+								</div>
+								<div class="description">generate public key for EC private key</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">KJUR.crypto.ECDSA.<b><a href="../symbols/KJUR.crypto.ECDSA.html#.getName">getName</a></b>(s)
@@ -759,6 +768,7 @@ Currently this class supports following named curves and their aliases.
 <li>secp256r1, NIST P-256, P-256, prime256v1 (*)</li>
 <li>secp256k1 (*)</li>
 <li>secp384r1, NIST P-384, P-384 (*)</li>
+<li>secp521r1, NIST P-521, P-521 (*)</li>
 </ul>
 </p>
 					
@@ -977,6 +987,44 @@ var prvhex = keypair.ecprvhex; // hexadecimal string of EC private key (=d)</pre
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{Array}</span> associative array of hexadecimal string of private and public key</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="generatePublicKeyHex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>generatePublicKeyHex</b>()
+					
+					</div>
+					<div class="description">
+						generate public key for EC private key
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var ec = new KJUR.crypto.ECDSA({'curve': 'secp256r1', 'prv': prvHex});
+var pubhex = ec.generatePublicKeyHex(); // hexadecimal string of EC public key
+var pub ec.getPublicKeyXYHex() &rarr; { x: '01bacf...', y: 'c3bc22...' }</pre>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> associative array of hexadecimal string of private and public key</dd>
 							
 							</dl>
 						
