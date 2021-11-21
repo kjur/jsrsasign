@@ -1,9 +1,9 @@
-/* ecparam-1.0.0.js (c) 2013 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* ecparam-1.0.1.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * ecparam.js - Elliptic Curve Cryptography Curve Parameter Definition class
  *
- * Copyright (c) 2013 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2021 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name ecparam-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.0.0 (2013-Jul-17)
+ * @version jsrsasign 10.5.0 ecparam 1.0.1 (2021-Nov-21)
  * @since jsrsasign 4.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */

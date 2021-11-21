@@ -1,9 +1,9 @@
-/* crypto-1.2.4.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* crypto-1.2.6.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
  *
- * Copyright (c) 2013-2020 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2021 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version 1.2.4 (2020-Jul-28)
+ * @version jsrsasign 10.5.0 crypto 1.2.6 (2021-Nov-21)
  * @since jsrsasign 2.2
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */

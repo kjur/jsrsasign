@@ -1,9 +1,9 @@
-/* ecdsa-modified-1.1.4.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
+/* ecdsa-modified-1.2.0.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
  */
 /*
  * ecdsa-modified.js - modified Bitcoin.ECDSA class
  * 
- * Copyright (c) 2013-2020 Stefan Thomas (github.com/justmoon)
+ * Copyright (c) 2013-2021 Stefan Thomas (github.com/justmoon)
  *                         Kenji Urushima (kenji.urushima@gmail.com)
  * LICENSE
  *   https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
@@ -13,7 +13,7 @@
  * @fileOverview
  * @name ecdsa-modified-1.0.js
  * @author Stefan Thomas (github.com/justmoon) and Kenji Urushima (kenji.urushima@gmail.com)
- * @version jsrsasign 8.0.21 ecdsa-modified 1.1.4 (2020-Jul-24)
+ * @version jsrsasign 10.5.0 ecdsa-modified 1.2.0 (2021-Nov-21)
  * @since jsrsasign 4.0
  * @license <a href="https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE">MIT License</a>
  */

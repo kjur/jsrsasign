@@ -1,7 +1,19 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 10.4.1 to next release
+Add EC support for secp521r1 secp224r1 secp192r1
+* Changes from 10.4.1 to 10.5.0
+  - Add EC support for secp521r1 secp224r1 secp192r1 (#521 #519)
+    Thank you indeed for @cplussharp 's great work.
+    - EC key length bugs for newly supported curves are fixed.
+      - src/ecdsa-modified: key length fixes
+      - src/ecparam.js: add keycharlen property
+      - src/asn1x509.js: add secp521r1 OID
+      - test/qunit-do-ecdsamod.html: all test code passed
+      - test/qunit-do-ecdsamod-unsupport.html: all test code passed
+      - test/qunit-do-ecdsamod-s.html: all test code passed
+      - test/qunit-do-ecdsamod-nisttv.html: added for NIST EC keygen test
+      - sample/sample-ecdsa.html: add P-521
   - sample/sample-rsasign.html
     - fix to trim non hexadecimal strings (#517)
 
