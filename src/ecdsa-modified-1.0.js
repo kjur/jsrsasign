@@ -187,7 +187,7 @@ KJUR.crypto.ECDSA = function(params) {
 	var charlen = this.ecparams.keycharlen;
 	var hPrv = ("0000000000" + biPrv.toString(16)).slice(- charlen);
 	this.setPrivateKeyHex(hPrv);
-	hPub = this.generatePublicKeyHex();
+	var hPub = this.generatePublicKeyHex();
 	return {'ecprvhex': hPrv, 'ecpubhex': hPub};
     };
 
