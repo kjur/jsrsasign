@@ -84,6 +84,24 @@ lBQ9T/RsLLc+PmpB1+7yPAR+oR5gZn3kJQ==
 -----END EC PRIVATE KEY-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+var k5PrvP8PPem = "" +
+"-----BEGIN PRIVATE KEY-----\n" +
+"MIHuAgEAMBAGByqGSM49AgEGBSuBBAAjBIHWMIHTAgEBBEIBRNEQ8Y1gwDMH8pne\n" +
+"z9uq4ODLE/KTx7eCzMNKlGRIhx/8Mo2+B9ORKPMFk4on0wFW7T+rp7NpXm1wxTOY\n" +
+"HSTf7mWhgYkDgYYABADSmlI0TDURn/W+oZrgkPgC0F/56jGtzDFSTQEodep5E0Sw\n" +
+"KvBrWN48PSbxukE9JdXPm2soe1yc9BC/Km6nrQJhnQDeIhUCoVSA8GTZ0EwL1AcT\n" +
+"5YfKcvwwCdM4lHRU1jYXti4IpC/pggFT3N+IRFmS6M8gTYzvxCZMDUnYHimDB+1p\n" +
+"jw==\n" +
+"-----END PRIVATE KEY-----\n";
+
+var k5PubP8Pem = "" +
+"-----BEGIN PUBLIC KEY-----\n" +
+"MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQA0ppSNEw1EZ/1vqGa4JD4AtBf+eox\n" +
+"rcwxUk0BKHXqeRNEsCrwa1jePD0m8bpBPSXVz5trKHtcnPQQvypup60CYZ0A3iIV\n" +
+"AqFUgPBk2dBMC9QHE+WHynL8MAnTOJR0VNY2F7YuCKQv6YIBU9zfiERZkujPIE2M\n" +
+"78QmTA1J2B4pgwftaY8=\n" +
+"-----END PUBLIC KEY-----\n";
+
 test("KEYUTIL.getKeyFromPlainPrivatePKCS8Hex(K1PRVP8HEX) k1.prv.p8p.der", function() {
   var key = KEYUTIL.getKeyFromPlainPrivatePKCS8Hex(K1PRVP8HEX);
   equal(key.isPublic, false, "isPublic");
@@ -135,6 +153,24 @@ test("KEYUTIL.getKey(K1PRVP5PPEM) EC k1.prv.p5p.pem", function() {
   equal(key.curveName, "secp256r1", "curveName");
   equal(key.prvKeyHex, K1PRVRAWHEX, "prvKeyHex");
   equal(key.pubKeyHex, K1PUBRAWHEX, "pubKeyHex");
+});
+
+test("KEYUTIL.getKey(PEM) Private P-521 PKCS8", function() {
+  var key = KEYUTIL.getKey(k5PrvP8PPem);
+  equal(key.isPrivate, true, "is private key");
+  equal(key.isPublic, false, "is public key");
+  equal(key.type, "EC", "type");
+  equal(key.curveName, "secp521r1", "curveName");
+  equal(key.prvKeyHex, "0144d110f18d60c03307f299decfdbaae0e0cb13f293c7b782ccc34a946448871ffc328dbe07d39128f305938a27d30156ed3faba7b3695e6d70c533981d24dfee65", "prvKeyHex");
+});
+
+test("KEYUTIL.getKey(PEM) Public P-521 PKCS8", function() {
+  var key = KEYUTIL.getKey(k5PubP8Pem);
+  equal(key.isPrivate, false, "is private key");
+  equal(key.isPublic, true, "is public key");
+  equal(key.type, "EC", "type");
+  equal(key.curveName, "secp521r1", "curveName");
+  equal(key.pubKeyHex, "0400d29a52344c35119ff5bea19ae090f802d05ff9ea31adcc31524d012875ea791344b02af06b58de3c3d26f1ba413d25d5cf9b6b287b5c9cf410bf2a6ea7ad02619d00de221502a15480f064d9d04c0bd40713e587ca72fc3009d338947454d63617b62e08a42fe9820153dcdf88445992e8cf204d8cefc4264c0d49d81e298307ed698f", "pubKeyHex");
 });
 
 });
