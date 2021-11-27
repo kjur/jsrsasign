@@ -142,6 +142,15 @@ zEdmr9C6I7cPVkWO+sUV7zfFukexIcANmsd/oBBGKRoYzP5Tti4=
 -----END RSA PRIVATE KEY-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+// K5
+var prvP521jwk = {
+  "kty": "EC",
+  "crv": "P-521",
+  "d": "AUTREPGNYMAzB_KZ3s_bquDgyxPyk8e3gszDSpRkSIcf_DKNvgfTkSjzBZOKJ9MBVu0_q6ezaV5tcMUzmB0k3-5l",
+  "x": 'ANKaUjRMNRGf9b6hmuCQ-ALQX_nqMa3MMVJNASh16nkTRLAq8GtY3jw9JvG6QT0l1c-bayh7XJz0EL8qbqetAmGd',
+  "y": 'AN4iFQKhVIDwZNnQTAvUBxPlh8py_DAJ0ziUdFTWNhe2LgikL-mCAVPc34hEWZLozyBNjO_EJkwNSdgeKYMH7WmP'
+};
+
 test("getKey JWK pubEC1", function() {
   var ec = KEYUTIL.getKey(pubEC1);
   equal(ec.isPublic, true, "is public key");
@@ -168,6 +177,24 @@ test("getKey JWK prvEC1", function() {
   equal(ec.isPrivate, true, "is private key");
   equal(ec.curveName, "P-256", "P-256");
   equal(ec.prvKeyHex, "f3bd0c07a81fb932781ed52752f60cc89a6be5e51934fe01938ddb55d8f77801", "d");
+});
+
+test("getKey JWK Private P-521", function() {
+  var ec = KEYUTIL.getKey(prvP521jwk);
+  equal(ec.isPrivate, true, "is private key");
+  equal(ec.isPublic, true, "is public key");
+  equal(ec.curveName, "P-521", "P-521");
+  equal(ec.prvKeyHex, "0144d110f18d60c03307f299decfdbaae0e0cb13f293c7b782ccc34a946448871ffc328dbe07d39128f305938a27d30156ed3faba7b3695e6d70c533981d24dfee65", "d");
+});
+
+test("getKey JWK Public P-521", function() {
+  var pubP521jwk = Object.assign({}, prvP521jwk);
+  delete pubP521jwk.d;
+  var ec = KEYUTIL.getKey(pubP521jwk);
+  equal(ec.isPrivate, false, "is private key");
+  equal(ec.isPublic, true, "is public key");
+  equal(ec.curveName, "P-521", "P-521");
+  equal(ec.pubKeyHex, "0400d29a52344c35119ff5bea19ae090f802d05ff9ea31adcc31524d012875ea791344b02af06b58de3c3d26f1ba413d25d5cf9b6b287b5c9cf410bf2a6ea7ad02619d00de221502a15480f064d9d04c0bd40713e587ca72fc3009d338947454d63617b62e08a42fe9820153dcdf88445992e8cf204d8cefc4264c0d49d81e298307ed698f", "xy");
 });
 
 test("getKey JWK prvRSA1", function() {
@@ -223,6 +250,28 @@ test("getJWKFromKey() - prvEC1", function() {
   equal(jwk.x, "MKBCTNIcKUSDii11ySs3526iDZ8AiTo7Tu6KPAqv7D4", "x");
   equal(jwk.y, "4Etl6SRW2YiLUrN5vfvVHuhp7x8PxltmWWlbbM4IFyM", "y");
   equal(jwk.d, "870MB6gfuTJ4HtUnUvYMyJpr5eUZNP4Bk43bVdj3eAE", "d");
+});
+
+test("getJWKFromKey() - Private P-521", function() {
+  var ec = KEYUTIL.getKey(prvP521jwk);
+  var jwk = KEYUTIL.getJWKFromKey(ec);
+  equal(jwk.kty, "EC", "jwk.kty == EC");
+  equal(jwk.crv, "P-521", "jwk.crv == P-521");
+  equal(jwk.x, prvP521jwk.x, "x");
+  equal(jwk.y, prvP521jwk.y, "y");
+  equal(jwk.d, prvP521jwk.d, "d");
+});
+
+test("getJWKFromKey() - Public P-521", function() {
+  var pubP521jwk = Object.assign({}, prvP521jwk);
+  delete pubP521jwk.d;
+  var ec = KEYUTIL.getKey(pubP521jwk);
+  var jwk = KEYUTIL.getJWKFromKey(ec);
+  equal(jwk.kty, "EC", "jwk.kty == EC");
+  equal(jwk.crv, "P-521", "jwk.crv == P-521");
+  equal(jwk.x, prvP521jwk.x, "x");
+  equal(jwk.y, prvP521jwk.y, "y");
+  equal(jwk.d, undefined, "d");
 });
 
 test("getJWKFromKey() - pubRSA1", function() {
