@@ -810,7 +810,7 @@ KJUR.jws.JWS.jwsalg2sigalg = {
     "RS512":	"SHA512withRSA",
     "ES256":	"SHA256withECDSA",
     "ES384":	"SHA384withECDSA",
-    //"ES512":	"SHA512withECDSA", // unsupported because of jsrsasign's bug
+    "ES512":	"SHA512withECDSA",
     "PS256":	"SHA256withRSAandMGF1",
     "PS384":	"SHA384withRSAandMGF1",
     "PS512":	"SHA512withRSAandMGF1",

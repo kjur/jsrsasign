@@ -25,12 +25,13 @@ function _setAlg() {
     case 5: _setKey(z4PrvP5EPem, z4PrvP5EPass); break;
     case 6: _setKey(k1PrvP8PPem, ''); break;
     case 7: _setKey(k6PrvP8PPem, ''); break;
-    case 8: _setKey(z4PrvP5EPem, z4PrvP5EPass); break;
+    case 8: _setKey(k5PrvP8PPem, ''); break;
     case 9: _setKey(z4PrvP5EPem, z4PrvP5EPass); break;
     case 10: _setKey(z4PrvP5EPem, z4PrvP5EPass); break;
-    case 11: _setKey(z4PrvP5PPem, ''); break;
-    case 12: _setKey(z4PrvP8PPem, ''); break;
-    case 13: _setKey(z4PrvP8EPem, z4PrvP8EPass); break;
+    case 11: _setKey(z4PrvP5EPem, z4PrvP5EPass); break;
+    case 12: _setKey(z4PrvP5PPem, ''); break;
+    case 13: _setKey(z4PrvP8PPem, ''); break;
+    case 14: _setKey(z4PrvP8EPem, z4PrvP8EPass); break;
   }
 }
 
@@ -136,9 +137,11 @@ function _setAlg2() {
     case 2: _setKey2(z4PubP8Pem); break;
     case 3: _setKey2(z4CertPem); break;
     case 4: _setKey2(k1PubP8Pem); break;
-    case 4: _setKey2(k1CertPem); break;
-    case 5: _setKey2(k6PubP8Pem); break;
-    case 5: _setKey2(k6CertPem); break;
+    case 5: _setKey2(k1CertPem); break;
+    case 6: _setKey2(k6PubP8Pem); break;
+    case 7: _setKey2(k6CertPem); break;
+    case 8: _setKey2(k5PubP8Pem); break;
+    case 9: _setKey2(k5CertPem); break;
   }
 }
 
@@ -307,6 +310,16 @@ var k6PrvP8PPem = "" +
 "6xwFR0yaTivuwoyXC+ScGUnwnpaXmid6UUgw4ypbneHsaKuZ9JLdMAo=\n" +
 "-----END PRIVATE KEY-----\n";
 
+var k5PrvP8PPem = "" +
+"-----BEGIN PRIVATE KEY-----\n" +
+"MIHuAgEAMBAGByqGSM49AgEGBSuBBAAjBIHWMIHTAgEBBEIBRNEQ8Y1gwDMH8pne\n" +
+"z9uq4ODLE/KTx7eCzMNKlGRIhx/8Mo2+B9ORKPMFk4on0wFW7T+rp7NpXm1wxTOY\n" +
+"HSTf7mWhgYkDgYYABADSmlI0TDURn/W+oZrgkPgC0F/56jGtzDFSTQEodep5E0Sw\n" +
+"KvBrWN48PSbxukE9JdXPm2soe1yc9BC/Km6nrQJhnQDeIhUCoVSA8GTZ0EwL1AcT\n" +
+"5YfKcvwwCdM4lHRU1jYXti4IpC/pggFT3N+IRFmS6M8gTYzvxCZMDUnYHimDB+1p\n" +
+"jw==\n" +
+"-----END PRIVATE KEY-----\n";
+
 // PUBLIC KEY
 var z4PubP8Pem = "" +
 "-----BEGIN PUBLIC KEY-----\n" +
@@ -377,6 +390,30 @@ var k6CertPem = "" +
 "jteX+S/Btn1akjFeWf35iEbFpT9iPRxPZbUrCaEYBycyemCRTQslG5fxys9OGTtC\n" +
 "AjB+9NmIQ5QtTgDDiZf6SaeDosq81aU/1S8eOdD/7H9SdclILyo93+i+S9qDio75\n" +
 "2F8=\n" +
+"-----END CERTIFICATE-----\n";
+
+var k5PubP8Pem = "" +
+"-----BEGIN PUBLIC KEY-----\n" +
+"MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQA0ppSNEw1EZ/1vqGa4JD4AtBf+eox\n" +
+"rcwxUk0BKHXqeRNEsCrwa1jePD0m8bpBPSXVz5trKHtcnPQQvypup60CYZ0A3iIV\n" +
+"AqFUgPBk2dBMC9QHE+WHynL8MAnTOJR0VNY2F7YuCKQv6YIBU9zfiERZkujPIE2M\n" +
+"78QmTA1J2B4pgwftaY8=\n" +
+"-----END PUBLIC KEY-----\n";
+
+var k5CertPem = "" +
+"-----BEGIN CERTIFICATE-----\n" +
+"MIICETCCAXKgAwIBAgIUYcEvdqjSYTHDXGJJMmK76h+q/bYwCgYIKoZIzj0EAwQw\n" +
+"GjELMAkGA1UEBhMCVVMxCzAJBgNVBAoMAks1MB4XDTIxMTEyNzEwMzgyMFoXDTQx\n" +
+"MTEyMjEwMzgyMFowGjELMAkGA1UEBhMCVVMxCzAJBgNVBAoMAks1MIGbMBAGByqG\n" +
+"SM49AgEGBSuBBAAjA4GGAAQA0ppSNEw1EZ/1vqGa4JD4AtBf+eoxrcwxUk0BKHXq\n" +
+"eRNEsCrwa1jePD0m8bpBPSXVz5trKHtcnPQQvypup60CYZ0A3iIVAqFUgPBk2dBM\n" +
+"C9QHE+WHynL8MAnTOJR0VNY2F7YuCKQv6YIBU9zfiERZkujPIE2M78QmTA1J2B4p\n" +
+"gwftaY+jUzBRMB0GA1UdDgQWBBRlDRyXy9CrDdTZW7gEIWipef3DhzAfBgNVHSME\n" +
+"GDAWgBRlDRyXy9CrDdTZW7gEIWipef3DhzAPBgNVHRMBAf8EBTADAQH/MAoGCCqG\n" +
+"SM49BAMEA4GMADCBiAJCAV4C6IirulahutoguAzYfHsFZieP6Z5tqm0ql/bXsDgd\n" +
+"ZqxlrvTrpbHjSZr8vROiDPWaj9umJz2R8EOGk36vTY0MAkIAo2TRkneSYP3ZDjSh\n" +
+"+29UnKQBS2/JazRBJ5ztk58L+4UkPInmj4lWXk3Rzhi8h2lKWVPK/5oq1KcvvHpd\n" +
+"JPZcEXw=\n" +
 "-----END CERTIFICATE-----\n";
 
 </script>
@@ -462,6 +499,7 @@ Choose JWS signature algorithm and default value: <br/>
 <option value="RS512"/> RS512 (SHA512withRSA RSA2048bit:z4) with default private key
 <option value="ES256"/> ES256 (SHA256withECDSA NIST P-256) with default private key
 <option value="ES384"/> ES384 (SHA384withECDSA NIST P-384) with default private key
+<option value="ES512"/> ES512 (SHA512withECDSA NIST P-521) with default private key
 <option value="PS256"/> PS256 (SHA256withRSAandMGF1 RSA2048bit:z4) with default private key
 <option value="PS384"/> PS384 (SHA384withRSAandMGF1 RSA2048bit:z4) with default private key
 <option value="PS512"/> PS512 (SHA512withRSAandMGF1 RSA2048bit:z4) with default private key
@@ -521,7 +559,9 @@ This is a sample program to generate and verify JSON Web Token(JWT).
 <option value="ES256-PUB"/> default public key for ES256 (SHA256withECDSA NIST P-256 k1)
 <option value="ES256-CER"/> default X.509 certificate for ES256 (SHA256withECDSA NIST P-256 k1)
 <option value="ES384-PUB"/> default public key for ES384 (SHA384withECDSA NIST P-384 k6)
-<option value="ES384-PUB"/> default X.509 certificate for ES384 (SHA384withECDSA NIST P-384 k6)
+<option value="ES384-CER"/> default X.509 certificate for ES384 (SHA384withECDSA NIST P-384 k6)
+<option value="ES512-PUB"/> default public key for ES512 (SHA512withECDSA NIST P-521 k5)
+<option value="ES512-CER"/> default X.509 certificate for ES512 (SHA512withECDSA NIST P-521 k5)
 </select>
 <br/>
 <textarea name="key2" cols="65" rows="3"></textarea><br/>
