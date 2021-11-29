@@ -438,6 +438,26 @@ function X509(params) {
     };
 
     /**
+     * get a JSON Web Key object of the public key, including the certificate itself<br/>
+     * @name getPublicKeyJWK
+     * @memberOf X509#
+     * @function
+     * @return {Object} JSON Web Key object of the certificate
+     * @example
+     * x = new X509();
+     * x.readCertPEM(sCertPEM);
+     * jwk = x.getPublicKeyJWK();
+     */
+    this.getPublicKeyJWK = function() {
+        var key = this.getPublicKey();
+        var jwk = KEYUTIL.getJWKFromKey(key);
+        jwk.x5c = [hex2b64(this.hex)];
+        jwk.x5t = b64tob64u(hex2b64(KJUR.crypto.Util.hashHex(this.hex, "sha1")));
+        jwk["x5t#S256"] = b64tob64u(hex2b64(KJUR.crypto.Util.hashHex(this.hex, "sha256")));
+        return jwk;
+    };
+
+    /**
      * get signature algorithm name from hexadecimal certificate data
      * @name getSignatureAlgorithmName
      * @memberOf X509#
@@ -2266,6 +2286,20 @@ function X509(params) {
      */
     this.readCertPEM = function(sCertPEM) {
         this.readCertHex(_pemtohex(sCertPEM));
+    };
+
+    /**
+     * read X.509 certificate from JWK object.<br/>
+     * @name readCertJWK
+     * @memberOf X509#
+     * @function
+     * @param {Object} oJwk JSON Web Key object containing a "x5c" member
+     * @example
+     * x = new X509();
+     * x.readCertJWK(oJwk); // read certificate
+     */
+    this.readCertJWK = function(oJwk) {
+        this.readCertHex(b64tohex(oJwk.x5c[0]));
     };
 
     /**
