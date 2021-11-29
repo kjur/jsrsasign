@@ -9,9 +9,56 @@
 <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="qunit.js"></script>
 
-<script language="JavaScript" type="text/javascript" src="../jsrsasign-all-min.js"></script>
-<script language="JavaScript" type="text/javascript" src="../src/crypto-1.1.js"></script>
-<script language="JavaScript" type="text/javascript" src="../src/jws-3.3.js"></script>
+<script src="../ext/cj/cryptojs-312-core-fix.js"></script>
+<script src="../ext/cj/x64-core.js"></script>
+<script src="../ext/cj/cipher-core_min.js"></script>
+<script src="../ext/cj/aes_min.js"></script>
+<script src="../ext/cj/tripledes_min.js"></script>
+<script src="../ext/cj/enc-base64_min.js"></script>
+<script src="../ext/cj/md5_min.js"></script>
+<script src="../ext/cj/sha1_min.js"></script>
+<script src="../ext/cj/sha256_min.js"></script>
+<script src="../ext/cj/sha224_min.js"></script>
+<script src="../ext/cj/sha512_min.js"></script>
+<script src="../ext/cj/sha384_min.js"></script>
+<script src="../ext/cj/ripemd160_min.js"></script>
+<script src="../ext/cj/hmac_min.js"></script>
+<script src="../ext/cj/pbkdf2_min.js"></script>
+
+<script src="../ext/jsbn.js"></script>
+<script src="../ext/jsbn2.js"></script>
+<script src="../ext/prng4.js"></script>
+<script src="../ext/rng.js"></script>
+<script src="../ext/base64.js"></script>
+<script src="../ext/rsa.js"></script>
+<script src="../ext/rsa2.js"></script>
+<script src="../ext/ec.js"></script>
+<script src="../ext/ec-patch.js"></script>
+<script src="../ext/json-sans-eval.js"></script>
+
+<script src="../src/base64x-1.1.js"></script>
+<script src="../src/asn1hex-1.1.js"></script>
+<script src="../src/rsapem-1.1.js"></script>
+<script src="../src/rsasign-1.2.js"></script>
+<script src="../src/crypto-1.1.js"></script>
+<script src="../src/ecdsa-modified-1.0.js"></script>
+<script src="../src/ecparam-1.0.js"></script>
+<script src="../src/asn1-1.0.js"></script>
+<script src="../src/asn1x509-1.0.js"></script>
+<script src="../src/keyutil-1.0.js"></script>
+
+<script src="../src/base64x-1.1.js"></script>
+<script src="../src/asn1hex-1.1.js"></script>
+<script src="../src/asn1-1.0.js"></script>
+<script src="../src/ecdsa-modified-1.0.js"></script>
+<script src="../src/ecparam-1.0.js"></script>
+<script src="../src/keyutil-1.0.js"></script>
+<script src="../src/rsapem-1.1.js"></script>
+<script src="../src/rsasign-1.2.js"></script>
+<script src="../src/x509-1.1.js"></script>
+<script src="../src/crypto-1.1.js"></script>
+
+<script src="../src/jws-3.3.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -179,6 +226,26 @@ var k6PubPemP8 = "" +
 "8J6Wl5onelFIMOMqW53h7GirmfSS3TAK\n" +
 "-----END PUBLIC KEY-----\n";
 
+// (ECC NIST P-521)
+var k5PrvPemP8P = "" +
+"-----BEGIN PRIVATE KEY-----\n" +
+"MIHuAgEAMBAGByqGSM49AgEGBSuBBAAjBIHWMIHTAgEBBEIBRNEQ8Y1gwDMH8pne\n" +
+"z9uq4ODLE/KTx7eCzMNKlGRIhx/8Mo2+B9ORKPMFk4on0wFW7T+rp7NpXm1wxTOY\n" +
+"HSTf7mWhgYkDgYYABADSmlI0TDURn/W+oZrgkPgC0F/56jGtzDFSTQEodep5E0Sw\n" +
+"KvBrWN48PSbxukE9JdXPm2soe1yc9BC/Km6nrQJhnQDeIhUCoVSA8GTZ0EwL1AcT\n" +
+"5YfKcvwwCdM4lHRU1jYXti4IpC/pggFT3N+IRFmS6M8gTYzvxCZMDUnYHimDB+1p\n" +
+"jw==\n" +
+"-----END PRIVATE KEY-----\n";
+
+// (ECC NIST P-521)
+var k5PubPemP8 = "" +
+"-----BEGIN PUBLIC KEY-----\n" +
+"MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQA0ppSNEw1EZ/1vqGa4JD4AtBf+eox\n" +
+"rcwxUk0BKHXqeRNEsCrwa1jePD0m8bpBPSXVz5trKHtcnPQQvypup60CYZ0A3iIV\n" +
+"AqFUgPBk2dBMC9QHE+WHynL8MAnTOJR0VNY2F7YuCKQv6YIBU9zfiERZkujPIE2M\n" +
+"78QmTA1J2B4pgwftaY8=\n" +
+"-----END PUBLIC KEY-----\n";
+
 // 1. sign test for algorithm name
 
 test("algorithm test: unknown algorithm", function() {
@@ -225,19 +292,33 @@ test("algorithm test: RS512", function() {
 test("sign test for algorithm ES256(NIST P-256 k1)", function() {
   var sJWS = KJUR.jws.JWS.sign(null, '{"alg":"ES256", "cty":"JWT"}', '{"age": 21}', k1PrvPemP8P);
   var a = sJWS.split(".");
-  expect(3);
+  expect(4);
   equal(a[0], 'eyJhbGciOiJFUzI1NiIsICJjdHkiOiJKV1QifQ', "head");
   equal(a[1], 'eyJhZ2UiOiAyMX0', 'payload');
   equal(a[2] != '', true, 'sign exists');
+  equal(a[2].length, (64 * 4 + 2) / 3, 'signature length');
 });
 
 test("sign test for algorithm ES384(NIST P-384 k6)", function() {
   var sJWS = KJUR.jws.JWS.sign(null, '{"alg":"ES384", "cty":"JWT"}', '{"age": 21}', k6PrvPemP8P);
   var a = sJWS.split(".");
-  expect(3);
+  expect(4);
   equal(a[0], 'eyJhbGciOiJFUzM4NCIsICJjdHkiOiJKV1QifQ', "head");
   equal(a[1], 'eyJhZ2UiOiAyMX0', 'payload');
   equal(a[2] != '', true, 'sign exists');
+  equal(a[2].length, (96 * 4) / 3, 'signature length');
+});
+
+test("sign test for algorithm ES512(NIST P-521 k5)", function() {
+  var sJWS = KJUR.jws.JWS.sign(null, '{"alg":"ES512", "cty":"JWT"}', '{"age": 21}', k5PrvPemP8P);
+  var a = sJWS.split(".");
+  expect(4);
+  equal(a[0], 'eyJhbGciOiJFUzUxMiIsICJjdHkiOiJKV1QifQ', "head");
+  equal(a[1], 'eyJhZ2UiOiAyMX0', 'payload');
+  equal(a[2] != '', true, 'sign exists');
+  var min = (130 * 4 + 2) / 3;
+  var max = (132 * 4) / 3;
+  ok(a[2].length >= min && a[2].length <= max, 'signature length');
 });
 
 test("algorithm test: PS256", function() {
@@ -316,6 +397,13 @@ test("verify test for algorithm ES384(NIST P-384 k6)", function() {
   equal(KJUR.jws.JWS.verify('eyJhbGciOiJFUzM4NCIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.ImFmrFvzlyl-BGHz8sdD6we6T1uCL5d6Q-oCWmDSh-q8eSL1bxPix7XZjxZGYJySw1On974Vw2NmzffgXvDPk7Ayvau0_fp0v4KUh4x6RcGKZDQgXVli1mfrGKTFP37C', k6PubPemP8), true, "1");
   equal(KJUR.jws.JWS.verify('eyJhbGciOiJFUzM4NCIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.Ay21GOTDEXWXr2svATEXAmDBVOVX38G4vSf5HJ9Nfqn1IggP1EDQQU6sJYPunNGkW7dQOZ5fOsgU9WibnOCrz73D3NDNDW5lVtFDmSp3dPQz_pddyv_SzOgXh81tlx-o', k6PubPemP8), true, "1");
   equal(KJUR.jws.JWS.verify('eyJhbGciOiJFUzM4NCIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.1z6jcEq6MZxqRSdzGW7scWe-un0IQsB87EsUPY5HipsOrlusPcTAKGkGAodrQEEVxfGca2OCssfKdTH_lTwscmfuUayZDK9XzohB7tf6E92RI4Faox0AcicG-WXAH4fS', k6PubPemP8), true, "1");
+});
+
+test("verify test for algorithm ES512(NIST P-521 k5)", function() {
+  expect(3);
+  equal(KJUR.jws.JWS.verify('eyJhbGciOiJFUzUxMiIsImN0eSI6IkpXVCJ9.eyJhZ2UiOiAyMX0.AIKp4hQBsuzi4MRGQxmLApgXwsddXNKmCaEp10nDt85scVDVNo2e3ky7dSo1tDmnP9oEXrQysUUL6asrVSVvz0cvAcpoFq2efdKd5qiDt48actcAH55TnbtFNn_-2dgXigeapDrvGWU1nBCvu_Eta-kW9IavO8PI3_bnTKhO80zRK3tY', k5PubPemP8), true, "1");
+  equal(KJUR.jws.JWS.verify('eyJhbGciOiJFUzUxMiIsImN0eSI6IkpXVCJ9.eyJhZ2UiOiAyMX0.ADBsjngn209INTUgHnNb3FLjqGkLIssvsvFK9wGzSMj7wJeCZ4MhH764gI9jZCiixuvuUk-0AWdGU6q_t6WOcjVUADfyFfIZS8vkM-OHOQ2d9-kcHUJanWfK4PzkdHyVUZHMiEHJ2aaihgVVI9VjGA3bhmrLhjKG7xE8koV2Y6B2oNVu', k5PubPemP8), true, "1");
+  equal(KJUR.jws.JWS.verify('eyJhbGciOiJFUzUxMiIsImN0eSI6IkpXVCJ9.eyJhZ2UiOiAyMX0.ANuNdc_lGg6x0xVjvWhUniDbL_1SOErLqtR5SRSb_T7tcsoFyklhmzPtKl0UCCFXia47sVIURnBLQVSX9qcd1EZwAF-3YIds0DL1ZcrcbfFbmoxg8XY1VF6oyTg8ttTgPz2-dZ0WZilBIH9DGzHFwjO89p3LWnxO3-X6hDnJn-buG1jk', k5PubPemP8), true, "1");
 });
 
 test("verify test for algorithm PS256 z3", function() {

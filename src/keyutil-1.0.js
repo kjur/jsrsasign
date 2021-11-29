@@ -1044,7 +1044,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	param.y !== undefined &&
         param.d === undefined) {
 	var ec = new _KJUR_crypto_ECDSA({"curve": param.crv});
-	var charlen = ec.ecparams.keylen / 4;
+	var charlen = ec.ecparams.keycharlen;
         var hX   = ("0000000000" + b64utohex(param.x)).slice(- charlen);
         var hY   = ("0000000000" + b64utohex(param.y)).slice(- charlen);
         var hPub = "04" + hX + hY;
@@ -1059,7 +1059,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	param.y !== undefined &&
         param.d !== undefined) {
 	var ec = new _KJUR_crypto_ECDSA({"curve": param.crv});
-	var charlen = ec.ecparams.keylen / 4;
+	var charlen = ec.ecparams.keycharlen;
         var hX   = ("0000000000" + b64utohex(param.x)).slice(- charlen);
         var hY   = ("0000000000" + b64utohex(param.y)).slice(- charlen);
         var hPub = "04" + hX + hY;
@@ -1789,7 +1789,7 @@ KEYUTIL.getJWKFromKey = function(keyObj) {
 	return jwk;
     } else if (keyObj instanceof KJUR.crypto.ECDSA && keyObj.isPrivate) {
 	var name = keyObj.getShortNISTPCurveName();
-	if (name !== "P-256" && name !== "P-384")
+	if (name !== "P-256" && name !== "P-384" && name !== "P-521")
 	    throw new Error("unsupported curve name for JWT: " + name);
 	var xy = keyObj.getPublicKeyXYHex();
 	jwk.kty = "EC";
@@ -1800,7 +1800,7 @@ KEYUTIL.getJWKFromKey = function(keyObj) {
 	return jwk;
     } else if (keyObj instanceof KJUR.crypto.ECDSA && keyObj.isPublic) {
 	var name = keyObj.getShortNISTPCurveName();
-	if (name !== "P-256" && name !== "P-384")
+	if (name !== "P-256" && name !== "P-384" && name !== "P-521")
 	    throw new Error("unsupported curve name for JWT: " + name);
 	var xy = keyObj.getPublicKeyXYHex();
 	jwk.kty = "EC";
