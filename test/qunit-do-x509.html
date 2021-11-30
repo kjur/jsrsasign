@@ -40,9 +40,9 @@
 <script src="../src/rsapem-1.1.js"></script>
 <script src="../src/rsasign-1.2.js"></script>
 <script src="../src/x509-1.1.js"></script>
+<script src="../src/base64x-1.1.js"></script>
 <script src="../src/asn1-1.0.js"></script>
 <script src="../src/asn1x509-1.0.js"></script>
-<script src="../src/base64x-1.1.js"></script>
 <script src="../src/keyutil-1.0.js"></script>
 <script src="../src/dsa-2.0.js"></script>
 <script src="../src/ecdsa-modified-1.0.js"></script>
@@ -53,19 +53,20 @@ $(document).ready(function(){
 
 // **** DATA **********
 
-// z2 self
-  var sCer1PEM = "" +
-"-----BEGIN CERTIFICATE-----\n" + 
-"MIIBqDCCAVKgAwIBAgIJAJ53Xn2fQ6vJMA0GCSqGSIb3DQEBBQUAMBoxCzAJBgNV\n" + 
-"BAYTAkpQMQswCQYDVQQKEwJ6MjAeFw0xMDA1MzEwNjE3NTZaFw0yMDA1MjgwNjE3\n" + 
-"NTZaMBoxCzAJBgNVBAYTAkpQMQswCQYDVQQKEwJ6MjBcMA0GCSqGSIb3DQEBAQUA\n" + 
-"A0sAMEgCQQC5sAMpUF/i7WDsVondzfW5TQWrQW4WQ7HKP5b8Ry7rH2LtR2iX8Vmu\n" + 
-"mLfzrezseXHetfZNmiWQHE3HpJdy5aArAgMBAAGjezB5MB0GA1UdDgQWBBS7MIUo\n" + 
-"gYmDIf2DOqOcwYCKCb3GjDBKBgNVHSMEQzBBgBS7MIUogYmDIf2DOqOcwYCKCb3G\n" + 
-"jKEepBwwGjELMAkGA1UEBhMCSlAxCzAJBgNVBAoTAnoyggkAnndefZ9Dq8kwDAYD\n" + 
-"VR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAANBAFhZ88q7ZS7THEcPJ8ogQ+78nyAn\n" + 
-"DN7F1FsLp7jE9oM3kYQl6KYy0pwch6Wd6ypW86pel4JFOEr+LnVGODaoxFE=\n" + 
-"-----END CERTIFICATE-----\n";
+// _test/0cert_rsa/z2.self.cer
+  var sCer1PEM = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIBqDCCAVKgAwIBAgIJAJ53Xn2fQ6vJMA0GCSqGSIb3DQEBBQUAMBoxCzAJBgNV
+BAYTAkpQMQswCQYDVQQKEwJ6MjAeFw0xMDA1MzEwNjE3NTZaFw0yMDA1MjgwNjE3
+NTZaMBoxCzAJBgNVBAYTAkpQMQswCQYDVQQKEwJ6MjBcMA0GCSqGSIb3DQEBAQUA
+A0sAMEgCQQC5sAMpUF/i7WDsVondzfW5TQWrQW4WQ7HKP5b8Ry7rH2LtR2iX8Vmu
+mLfzrezseXHetfZNmiWQHE3HpJdy5aArAgMBAAGjezB5MB0GA1UdDgQWBBS7MIUo
+gYmDIf2DOqOcwYCKCb3GjDBKBgNVHSMEQzBBgBS7MIUogYmDIf2DOqOcwYCKCb3G
+jKEepBwwGjELMAkGA1UEBhMCSlAxCzAJBgNVBAoTAnoyggkAnndefZ9Dq8kwDAYD
+VR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAANBAFhZ88q7ZS7THEcPJ8ogQ+78nyAn
+DN7F1FsLp7jE9oM3kYQl6KYy0pwch6Wd6ypW86pel4JFOEr+LnVGODaoxFE=
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
 
   var sCer1B64 = "MIIBqDCCAVKgAwIBAgIJAJ53Xn2fQ6vJMA0GCSqGSIb3DQEBBQUAMBoxCzAJBgNVBAYTAkpQMQswCQYDVQQKEwJ6MjAeFw0xMDA1MzEwNjE3NTZaFw0yMDA1MjgwNjE3NTZaMBoxCzAJBgNVBAYTAkpQMQswCQYDVQQKEwJ6MjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQC5sAMpUF/i7WDsVondzfW5TQWrQW4WQ7HKP5b8Ry7rH2LtR2iX8VmumLfzrezseXHetfZNmiWQHE3HpJdy5aArAgMBAAGjezB5MB0GA1UdDgQWBBS7MIUogYmDIf2DOqOcwYCKCb3GjDBKBgNVHSMEQzBBgBS7MIUogYmDIf2DOqOcwYCKCb3GjKEepBwwGjELMAkGA1UEBhMCSlAxCzAJBgNVBAoTAnoyggkAnndefZ9Dq8kwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAANBAFhZ88q7ZS7THEcPJ8ogQ+78nyAnDN7F1FsLp7jE9oM3kYQl6KYy0pwch6Wd6ypW86pel4JFOEr+LnVGODaoxFE=";
 
@@ -101,10 +102,6 @@ $(document).ready(function(){
 "VR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAANBAFhZ88q7ZS7THEcPJ8ogQ+78nyAn\n" + 
 "DN7F1FsLp7jE9oM3kYQl6KYy0pwch6Wd6ypW86pel4JFOEr+LnVGODaoxFE=\n" + 
 "-----END CERTIFICATE-----\n";
-
-  var hSig3 = "" + 
-"a30ea363514246b686a25529e6446d79ed3081b9709c6213f0611a495456b5b5\n" + 
-"6efb33e92ad1c00348c84c6335d01425a1033e0c5006b377ab0d6b34c9322d62\n";
 
 // _gitpg/jsrsasign/test/eckey/k1.self.cer
 var k1CertPEM = "" +
@@ -343,6 +340,32 @@ QemRa94Q++bO728=
 -----END CERTIFICATE-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+// _test/0cert_rsa/z4.self.cer
+var Z4CER = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIC/zCCAeegAwIBAgIBATANBgkqhkiG9w0BAQUFADAaMQswCQYDVQQGEwJVUzEL
+MAkGA1UECgwCWjQwHhcNMTMwODI4MTgyODM0WhcNMjMwODI4MTgyODM0WjAaMQsw
+CQYDVQQGEwJVUzELMAkGA1UECgwCWjQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw
+ggEKAoIBAQDfdOqotHd55SYO0dLz2oXengw/tZ+q3ZmOPeVmMuOMIYO/Cv1wk2U0
+OK4pug4OBSJPhl09Zs6IwB8NwPOU7EDTgMOcQUYB/6QNCI1J7Zm2oLtuchzz4pIb
++o4ZAhVprLhRyvqi8OTKQ7kfGfs5Tuwmn1M/0fQkfzMxADpjOKNgf0uy6lN6utjd
+TrPKKFUQNdc6/Ty8EeTnQEwUlsT2LAXCfEKxTn5RlRljDztS7Sfgs8VL0FPy1Qi8
+B+dFcgRYKFrcpsVaZ1lBmXKsXDRu5QR/Rg3f9DRq4GR1sNH8RLY9uApMl2SNz+sR
+4zRPG85R/se5Q06Gu0BUQ3UPm67ETVZLAgMBAAGjUDBOMB0GA1UdDgQWBBQHZPTE
+yQVu/0I/3QWhlTyW7WoTzTAfBgNVHSMEGDAWgBQHZPTEyQVu/0I/3QWhlTyW7WoT
+zTAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQDHxqJ9y8alTH7agVMW
+Zfic/RbrdvHwyq+IOrgDToqyo0w+IZ6BCn9vjv5iuhqu4ForOWDAFpQKZW0DLBJE
+Qy/7/0+9pk2DPhK1XzdOovlSrkRt+GcEpGnUXnzACXDBbO0+Wrk+hcjEkQRRK1bW
+2rknARIEJG9GS+pShP9Bq/0BmNsMepdNcBa0z3a5B0fzFyCQoUlX6RTqxRw1h1Qt
+5F00pfsp7SjXVIvYcewHaNASbto1n5hrSz1VY9hLba11ivL1N4WoWbmzAL6BWabs
+C2D/MenST2/X6hTKyGXpg3Eg2h3iLvUtwcNny0hRKstc73Jl9xR3qXfXKJH0ThTl
+q0gq
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// datasign aaa z4.prv.p5p.pem xxx SHA1withRSA
+var Z4SHA1AAASIG = "2f3705127a4a748fee37ef92e8beca3d17fd22c6cadf004d315c5144fc00dc47c983441d6ad55c2f98d378b0d2b362f876ab8d5207331264931388d05cbc96814a70c8e2cd8c047b0008db71cdf5ead5b33bd3606285f6cbf05a86282c710ddf21a439dde79af3d2f2f10ce3cbf273d81893b11506d43dfb292f343d39e6324a130741d5bf4db64bf9c004ba7f857b6c81b2d9502fbca97644a4f7f661f02c4c295502b54e46fdee7e543ac7dab2dff585e9067ca576fb71a8e1b93cc7305263aca99fbb01f9e599125f0642e9ab71cc1973482ecc26f3d1b75409d936eed1ade353abdbdc7602f7c8c78763fcd6d254e73ae57ef5602f5a5ad5be267ef01755";
+
 // **** TEST **********
 
 test("getPublicKeyIdx", function() {
@@ -369,12 +392,13 @@ test("readCertPEM - X509v3 without ext adfs-signing.crt", function() {
   deepEqual(c.aExtInfo, [], "aExtInfo == []");
 });
 
-test("getPublicKey(), RSAKey.verify() integration test", function() {
-  var c = new X509();
-  c.readCertPEM(sCer1PEM);
-  var key = c.getPublicKey();
-  equal(key.verify("aaa", hSig3), true, "check sig is valid");
-  equal(key.verify("aab", hSig3), false, "check sig is invalid.");
+test("getPublicKey(), RSAKey.verify() integration test z4", function() {
+// RSA 2048bit key(z4) is fine but this fails with RSA 512 bit key(sCer1)
+var c = new X509();
+c.readCertPEM(Z4CER);
+var key = c.getPublicKey();
+equal(key.verify("aaa", Z4SHA1AAASIG), true, "check sig is valid");
+equal(key.verify("aab", Z4SHA1AAASIG), false, "check sig is invalid.");
 });
 
 test("new X509(PEM).get{Version,SerialNumber,Issuer,Subject,NotBefore,NotAfter} test", function() {
