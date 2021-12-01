@@ -1,10 +1,8 @@
 
 ChangeLog for jsrsasign
 
-fix EC P-521 concat signature value and add support for P-521 JWS JWK
-* Changes from 10.5.0 to next release
-  - src/ecdsa-modified.js
-    - missing variable definition fix (#527)
+add KEYUTIL.getJWK, fix EC P-521 concat signature value and add support for P-521 JWS JWK
+* Changes from 10.5.0 to 10.5.1 (2021-Dec-01)
   - fix ECC P-521 curve issues (#528)
     - src/ecdsa-modified.js
       - asn1SigToConcatSig fix P521 issue
@@ -29,12 +27,18 @@ fix EC P-521 concat signature value and add support for P-521 JWS JWK
     - test/qunit-do-x509-key.html
       - add P-521 certificate test
   - JWK from X509 certificate (#529)
-    - src/x509.js (followings will be move to KEYUTIL)
-      - getPublicKeyJWK
-      - readCertJWK
-    - test/qunit-do-x509-jwk.html (NEW)
-      - add getPublicKeyJWK, readCertJWK test cases
+    - this PR was merged but 
+      - X509.getPublicKeyJWK was moved to KEYUTIL.getJWK
+      - some tests in qunit-do-x509-jwk was moved to
+        qunit-do-keyutil-jwk
+      - readCertJWK was removed
+  - src/keyutil
+    - KEYUTIL.getJWK added and x5c/x5t/x5t#S256/kid member support
+    - KEYUTIL.getJWKFromKey now deprecated
+  - src/ecdsa-modified.js
+    - missing variable definition fix (#527)
   - test/qunit-do-x509.html test error fix
+  - Great appreciate for @cplussharp 's contribution.
 
 Add EC support for secp521r1 secp224r1 secp192r1
 * Changes from 10.4.1 to 10.5.0

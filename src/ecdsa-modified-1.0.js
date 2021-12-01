@@ -1,4 +1,4 @@
-/* ecdsa-modified-1.2.0.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
+/* ecdsa-modified-1.2.1.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
  */
 /*
  * ecdsa-modified.js - modified Bitcoin.ECDSA class
@@ -13,7 +13,7 @@
  * @fileOverview
  * @name ecdsa-modified-1.0.js
  * @author Stefan Thomas (github.com/justmoon) and Kenji Urushima (kenji.urushima@gmail.com)
- * @version jsrsasign 10.5.0 ecdsa-modified 1.2.0 (2021-Nov-21)
+ * @version jsrsasign 10.5.1 ecdsa-modified 1.2.1 (2021-Dec-01)
  * @since jsrsasign 4.0
  * @license <a href="https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE">MIT License</a>
  */
@@ -764,10 +764,10 @@ KJUR.crypto.ECDSA.asn1SigToConcatSig = function(asn1Sig) {
 	// P-521 special case (65-66 bytes are allowed)
 	if (hR.length >= 130 && hR.length <= 134) {
 		if (hR.length % 2 != 0) {
-			throw Error(`unknown ECDSA sig r length error (${hR.length} is not a multiple of 2)`);
+			throw Error("unknown ECDSA sig r length error");
 		}
 		if (hS.length % 2 != 0) {
-			throw Error(`unknown ECDSA sig s length error (${hS.length} is not a multiple of 2)`);
+			throw Error("unknown ECDSA sig s length error");
 		}
 		if (hR.substr(0, 2) == "00") hR = hR.substr(2);
 		if (hS.substr(0, 2) == "00") hS = hS.substr(2);
@@ -797,9 +797,9 @@ KJUR.crypto.ECDSA.asn1SigToConcatSig = function(asn1Sig) {
     // If R and S length is not still multiple of 128bit(32 chars),
     // then error
     if (hR.length % 32 != 0)
-	throw Error(`unknown ECDSA sig r length error (${hR.length} is not a multiple of 32)`);
+	throw Error("unknown ECDSA sig r length error");
     if (hS.length % 32 != 0)
-	throw Error(`unknown ECDSA sig s length error (${hS.length} is not a multiple of 32)`);
+	throw Error("unknown ECDSA sig s length error");
 
     return hR + hS;
 };
@@ -817,7 +817,7 @@ KJUR.crypto.ECDSA.asn1SigToConcatSig = function(asn1Sig) {
  */
 KJUR.crypto.ECDSA.concatSigToASN1Sig = function(concatSig) {
 	if (concatSig.length % 4 != 0) {
-		throw Error(`unknown ECDSA concatinated r-s sig length error (${concatSig.length} is not a multiple of 4)`);
+		throw Error("unknown ECDSA concatinated r-s sig length error");
 	}
 
     var hR = concatSig.substr(0, concatSig.length / 2);

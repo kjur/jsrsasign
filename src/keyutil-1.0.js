@@ -1,9 +1,9 @@
-/* keyutil-1.2.4.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* keyutil-1.2.5.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
  *
- * Copyright (c) 2013-2020 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2021 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.2.1 keyutil 1.2.4 (2021-May-22)
+ * @version jsrsasign 10.5.1 keyutil 1.2.5 (2021-Dec-01)
  * @since jsrsasign 4.1.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1746,7 +1746,144 @@ KEYUTIL.getKeyID = function(obj) {
 }
 
 /**
- * convert from RSAKey/KJUR.crypto.ECDSA public/private key object to RFC 7517 JSON Web Key(JWK)
+ * convert from certificate, public/private key object to RFC 7517 JSON Web Key(JWK)
+ * @name getJWK
+ * @memberOf KEYUTIL
+ * @function
+ * @static
+ * @param {Object or string} keyinfo public/private key object, PEM key or PEM certificate
+ * @param {boolean} nokid set true if you don't need kid (OPTION, DEFAULT=undefined)
+ * @param {boolean} nox5c set true if you don't need x5c of certificate (OPTION, DEFAULT=undefined)
+ * @param {boolean} nox5t set true if you don't need x5t of certificate (OPTION, DEFAULT=undefined)
+ * @param {boolean} nox5t2 set true if you don't need x5c#S256 of certificate (OPTION, DEFAULT=undefined)
+ * @return {Object} JWK object
+ * @since keyutil 1.2.5 jsrsasign 10.5.1
+ * @description
+ * This static method provides RFC 7517 JSON Web Key(JWK) JSON
+ * object from following argument types:
+ * <ul>
+ * <li>
+ * <b>JWK private key</b>
+ * <ul>
+ * <li>RSAKey or KJUR.crypto.{ECDSA,DSA} private key object</li>
+ * <li>PKCS#5 or PKCS#8 plain PEM private key</li>
+ * </ul>
+ * </li>
+ * <li>
+ * <b>JWK public key</b>
+ * <ul>
+ * <li>RSAKey or KJUR.crypto.{ECDSA,DSA} public key object</li>
+ * <li>PKCS#5 or PKCS#8 PEM public key</li>
+ * <li>X509 certificate object</li>
+ * <li>PEM certificate</li>
+ * </ul>
+ * </li>
+ * </ul>
+ * 
+ * @example
+ * kp1 = KEYUTIL.generateKeypair("EC", "P-256");
+ * jwkPrv1 = KEYUTIL.getJWK(kp1.prvKeyObj);
+ * jwkPub1 = KEYUTIL.getJWK(kp1.pubKeyObj);
+ *
+ * kp2 = KEYUTIL.generateKeypair("RSA", 2048);
+ * jwkPrv2 = KEYUTIL.getJWK(kp2.prvKeyObj);
+ * jwkPub2 = KEYUTIL.getJWK(kp2.pubKeyObj);
+ *
+ * KEYUTIL.getJWK("-----BEGIN CERTIFICATE...") &rarr
+ * {
+ *   kty: "EC", crv: "P-521", x: "...", y: "...",
+ *   x5c: ["MI..."],
+ *   x5t: "...",
+ *   "x5t#S256": "...",
+ *   kid: "..."
+ * }
+ *
+ * x509obj = new X509("-----BEGIN CERTIFICATE...");
+ * KEYUTIL.getJWK(x509obj) &rarr;
+ * {
+ *   kty: "EC", crv: "P-521", x: "...", y: "...",
+ *   ...
+ * }
+ */
+KEYUTIL.getJWK = function(keyinfo, nokid, nox5c, nox5t, nox5t2) {
+    var keyObj;
+    var jwk = {};
+    var hCert;
+    var _hashHex = KJUR.crypto.Util.hashHex;
+
+    if (typeof keyinfo == "string") {
+	keyObj = KEYUTIL.getKey(keyinfo);
+	if (keyinfo.indexOf("CERTIFICATE") != -1) {
+	    hCert = pemtohex(keyinfo)
+	}
+    } else if (typeof keyinfo == "object") {
+	if (keyinfo instanceof X509) {
+	    keyObj = keyinfo.getPublicKey();
+	    hCert = keyinfo.hex;
+	} else {
+	    keyObj = keyinfo;
+	}
+    } else {
+	throw new Error("unsupported keyinfo type");
+    }
+
+    if (keyObj instanceof RSAKey && keyObj.isPrivate) {
+	jwk.kty = "RSA";
+	jwk.n = hextob64u(keyObj.n.toString(16));
+	jwk.e = hextob64u(keyObj.e.toString(16));
+	jwk.d = hextob64u(keyObj.d.toString(16));
+	jwk.p = hextob64u(keyObj.p.toString(16));
+	jwk.q = hextob64u(keyObj.q.toString(16));
+	jwk.dp = hextob64u(keyObj.dmp1.toString(16));
+	jwk.dq = hextob64u(keyObj.dmq1.toString(16));
+	jwk.qi = hextob64u(keyObj.coeff.toString(16));
+    } else if (keyObj instanceof RSAKey && keyObj.isPublic) {
+	jwk.kty = "RSA";
+	jwk.n = hextob64u(keyObj.n.toString(16));
+	jwk.e = hextob64u(keyObj.e.toString(16));
+    } else if (keyObj instanceof KJUR.crypto.ECDSA && keyObj.isPrivate) {
+	var name = keyObj.getShortNISTPCurveName();
+	if (name !== "P-256" && name !== "P-384" && name !== "P-521")
+	    throw new Error("unsupported curve name for JWT: " + name);
+	var xy = keyObj.getPublicKeyXYHex();
+	jwk.kty = "EC";
+	jwk.crv =  name;
+	jwk.x = hextob64u(xy.x);
+	jwk.y = hextob64u(xy.y);
+	jwk.d = hextob64u(keyObj.prvKeyHex);
+    } else if (keyObj instanceof KJUR.crypto.ECDSA && keyObj.isPublic) {
+	var name = keyObj.getShortNISTPCurveName();
+	if (name !== "P-256" && name !== "P-384" && name !== "P-521")
+	    throw new Error("unsupported curve name for JWT: " + name);
+	var xy = keyObj.getPublicKeyXYHex();
+	jwk.kty = "EC";
+	jwk.crv =  name;
+	jwk.x = hextob64u(xy.x);
+	jwk.y = hextob64u(xy.y);
+    }
+    if (jwk.kty == undefined) throw new Error("unsupported keyinfo");
+
+    if ((! keyObj.isPrivate) && nokid != true) {
+	jwk.kid = KJUR.jws.JWS.getJWKthumbprint(jwk);
+    }
+
+    if (hCert != undefined && nox5c != true) {
+	jwk.x5c = [hex2b64(hCert)];
+    }
+
+    if (hCert != undefined && nox5t != true) {
+	jwk.x5t = b64tob64u(hex2b64(_hashHex(hCert, "sha1")));
+    }
+
+    if (hCert != undefined && nox5t2 != true) {
+	jwk["x5t#S256"] = b64tob64u(hex2b64(_hashHex(hCert, "sha256")));
+    }
+
+    return jwk;
+};
+
+/**
+ * convert from RSAKey/KJUR.crypto.ECDSA public/private key object to RFC 7517 JSON Web Key(JWK) (DEPRECATED)
  * @name getJWKFromKey
  * @memberOf KEYUTIL
  * @function
@@ -1754,6 +1891,8 @@ KEYUTIL.getKeyID = function(obj) {
  * @param {Object} RSAKey/KJUR.crypto.ECDSA public/private key object
  * @return {Object} JWK object
  * @since keyutil 1.0.13 jsrsasign 5.0.14
+ * @deprecated since jsrsasign 10.5.1 keyutil 1.2.5 please use getJWK method
+ *
  * @description
  * This static method convert from RSAKey/KJUR.crypto.ECDSA public/private key object 
  * to RFC 7517 JSON Web Key(JWK)
@@ -1770,46 +1909,5 @@ KEYUTIL.getKeyID = function(obj) {
  * jwkPub2.kid = KJUR.jws.JWS.getJWKthumbprint(jwkPub2);
  */
 KEYUTIL.getJWKFromKey = function(keyObj) {
-    var jwk = {};
-    if (keyObj instanceof RSAKey && keyObj.isPrivate) {
-	jwk.kty = "RSA";
-	jwk.n = hextob64u(keyObj.n.toString(16));
-	jwk.e = hextob64u(keyObj.e.toString(16));
-	jwk.d = hextob64u(keyObj.d.toString(16));
-	jwk.p = hextob64u(keyObj.p.toString(16));
-	jwk.q = hextob64u(keyObj.q.toString(16));
-	jwk.dp = hextob64u(keyObj.dmp1.toString(16));
-	jwk.dq = hextob64u(keyObj.dmq1.toString(16));
-	jwk.qi = hextob64u(keyObj.coeff.toString(16));
-	return jwk;
-    } else if (keyObj instanceof RSAKey && keyObj.isPublic) {
-	jwk.kty = "RSA";
-	jwk.n = hextob64u(keyObj.n.toString(16));
-	jwk.e = hextob64u(keyObj.e.toString(16));
-	return jwk;
-    } else if (keyObj instanceof KJUR.crypto.ECDSA && keyObj.isPrivate) {
-	var name = keyObj.getShortNISTPCurveName();
-	if (name !== "P-256" && name !== "P-384" && name !== "P-521")
-	    throw new Error("unsupported curve name for JWT: " + name);
-	var xy = keyObj.getPublicKeyXYHex();
-	jwk.kty = "EC";
-	jwk.crv =  name;
-	jwk.x = hextob64u(xy.x);
-	jwk.y = hextob64u(xy.y);
-	jwk.d = hextob64u(keyObj.prvKeyHex);
-	return jwk;
-    } else if (keyObj instanceof KJUR.crypto.ECDSA && keyObj.isPublic) {
-	var name = keyObj.getShortNISTPCurveName();
-	if (name !== "P-256" && name !== "P-384" && name !== "P-521")
-	    throw new Error("unsupported curve name for JWT: " + name);
-	var xy = keyObj.getPublicKeyXYHex();
-	jwk.kty = "EC";
-	jwk.crv =  name;
-	jwk.x = hextob64u(xy.x);
-	jwk.y = hextob64u(xy.y);
-	return jwk;
-    }
-    throw new Error("not supported key object");
-};
-
-
+    return KEYUTIL.getJWK(keyObj, true, true, true, true);
+}
