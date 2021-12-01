@@ -627,8 +627,10 @@ version string of KEYUTIL class</div>
 							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getJWK">getJWK</a></b>(keyinfo, nokid, nox5c, nox5t, nox5t2)
 								</div>
-								<div class="description">convert from certificate, public/private key object to RFC 7517 JSON Web Key(JWK)
-This static method provides RFC 7517 JSON Web Key(JWK) JSON
+								<div class="description">convert from certificate, public/private key object to RFC 7517 JSON Web Key(JWK)<br/>
+This static method provides 
+<a href="https://datatracker.ietf.org/doc/html/rfc7517">
+RFC 7517 JSON Web Key(JWK) JSON</a>
 object from following argument types:
 <ul>
 <li>
@@ -643,7 +645,7 @@ object from following argument types:
 							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getJWKFromKey">getJWKFromKey</a></b>()
 								</div>
-								<div class="description">convert from RSAKey/KJUR.crypto.ECDSA public/private key object to RFC 7517 JSON Web Key(JWK) (DEPRECATED)
+								<div class="description">convert from RSAKey/KJUR.crypto.ECDSA public/private key object to RFC 7517 JSON Web Key(JWK) (DEPRECATED)<br/>
 This static method convert from RSAKey/KJUR.crypto.ECDSA public/private key object 
 to RFC 7517 JSON Web Key(JWK)</div>
 							</td>
@@ -1100,8 +1102,10 @@ var ecKeypair = KEYUTIL.generateKeypair("EC", "secp256r1");</pre>
 					
 					</div>
 					<div class="description">
-						convert from certificate, public/private key object to RFC 7517 JSON Web Key(JWK)
-This static method provides RFC 7517 JSON Web Key(JWK) JSON
+						convert from certificate, public/private key object to RFC 7517 JSON Web Key(JWK)<br/>
+This static method provides 
+<a href="https://datatracker.ietf.org/doc/html/rfc7517">
+RFC 7517 JSON Web Key(JWK) JSON</a>
 object from following argument types:
 <ul>
 <li>
@@ -1135,7 +1139,8 @@ kp2 = KEYUTIL.generateKeypair("RSA", 2048);
 jwkPrv2 = KEYUTIL.getJWK(kp2.prvKeyObj);
 jwkPub2 = KEYUTIL.getJWK(kp2.pubKeyObj);
 
-KEYUTIL.getJWK("-----BEGIN CERTIFICATE...") &rarr
+// from PEM certificate
+KEYUTIL.getJWK("-----BEGIN CERTIFICATE...") &rarr;
 {
   kty: "EC", crv: "P-521", x: "...", y: "...",
   x5c: ["MI..."],
@@ -1144,11 +1149,19 @@ KEYUTIL.getJWK("-----BEGIN CERTIFICATE...") &rarr
   kid: "..."
 }
 
+// from X509 object
 x509obj = new X509("-----BEGIN CERTIFICATE...");
 KEYUTIL.getJWK(x509obj) &rarr;
 {
   kty: "EC", crv: "P-521", x: "...", y: "...",
   ...
+}
+
+// from PEM certificate without kid, x5t and x5t#S256 (i.e. only x5c)
+KEYUTIL.getJWK("-----BEGIN CERTIFICATE...", true, false, true, true) &rarr;
+{
+  kty: "EC", crv: "P-521", x: "...", y: "...",
+  x5c: ["MI..."]
 }</pre>
 					
 					
@@ -1208,6 +1221,17 @@ KEYUTIL.getJWK(x509obj) &rarr;
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/RSAKey.html">RSAKey</a></dd>
+							
+								<dd><a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a></dd>
+							
+								<dd><a href="../symbols/KJUR.crypto.DSA.html">KJUR.crypto.DSA</a></dd>
+							
+							</dl>
+						
 
 					<hr />
 				
@@ -1219,7 +1243,7 @@ KEYUTIL.getJWK(x509obj) &rarr;
 					
 					</div>
 					<div class="description">
-						convert from RSAKey/KJUR.crypto.ECDSA public/private key object to RFC 7517 JSON Web Key(JWK) (DEPRECATED)
+						convert from RSAKey/KJUR.crypto.ECDSA public/private key object to RFC 7517 JSON Web Key(JWK) (DEPRECATED)<br/>
 This static method convert from RSAKey/KJUR.crypto.ECDSA public/private key object 
 to RFC 7517 JSON Web Key(JWK)
 						
@@ -1278,6 +1302,13 @@ jwkPub2.kid = KJUR.jws.JWS.getJWKthumbprint(jwkPub2);</pre>
 							</dl>
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KEYUTIL.html#.getJWK">KEYUTIL.getJWK</a></dd>
+							
+							</dl>
 						
 
 					<hr />
