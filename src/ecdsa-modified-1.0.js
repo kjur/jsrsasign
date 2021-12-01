@@ -1,4 +1,4 @@
-/* ecdsa-modified-1.2.0.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
+/* ecdsa-modified-1.2.1.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
  */
 /*
  * ecdsa-modified.js - modified Bitcoin.ECDSA class
@@ -13,7 +13,7 @@
  * @fileOverview
  * @name ecdsa-modified-1.0.js
  * @author Stefan Thomas (github.com/justmoon) and Kenji Urushima (kenji.urushima@gmail.com)
- * @version jsrsasign 10.5.0 ecdsa-modified 1.2.0 (2021-Nov-21)
+ * @version jsrsasign 10.5.1 ecdsa-modified 1.2.1 (2021-Dec-01)
  * @since jsrsasign 4.0
  * @license <a href="https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE">MIT License</a>
  */
@@ -187,7 +187,7 @@ KJUR.crypto.ECDSA = function(params) {
 	var charlen = this.ecparams.keycharlen;
 	var hPrv = ("0000000000" + biPrv.toString(16)).slice(- charlen);
 	this.setPrivateKeyHex(hPrv);
-	hPub = this.generatePublicKeyHex();
+	var hPub = this.generatePublicKeyHex();
 	return {'ecprvhex': hPrv, 'ecpubhex': hPub};
     };
 
@@ -753,12 +753,32 @@ KJUR.crypto.ECDSA.parseSigHexInHexRS = function(sigHex) {
  * @static
  * @param {String} asn1Hex hexadecimal string of ASN.1 encoded ECDSA signature value
  * @return {String} r-s concatinated format of ECDSA signature value
+ * @throws Error when signature length is unsupported
  * @since ecdsa-modified 1.0.3
  */
 KJUR.crypto.ECDSA.asn1SigToConcatSig = function(asn1Sig) {
     var pSig = KJUR.crypto.ECDSA.parseSigHexInHexRS(asn1Sig);
     var hR = pSig.r;
     var hS = pSig.s;
+
+	// P-521 special case (65-66 bytes are allowed)
+	if (hR.length >= 130 && hR.length <= 134) {
+		if (hR.length % 2 != 0) {
+			throw Error("unknown ECDSA sig r length error");
+		}
+		if (hS.length % 2 != 0) {
+			throw Error("unknown ECDSA sig s length error");
+		}
+		if (hR.substr(0, 2) == "00") hR = hR.substr(2);
+		if (hS.substr(0, 2) == "00") hS = hS.substr(2);
+
+		// make sure they have the same length
+		var length = Math.max(hR.length, hS.length);
+		hR = ("000000" + hR).slice(- length);
+		hS = ("000000" + hS).slice(- length);
+
+		return hR + hS;
+	}
 
     // R and S length is assumed multiple of 128bit(32chars in hex).
     // If leading is "00" and modulo of length is 2(chars) then
@@ -777,9 +797,9 @@ KJUR.crypto.ECDSA.asn1SigToConcatSig = function(asn1Sig) {
     // If R and S length is not still multiple of 128bit(32 chars),
     // then error
     if (hR.length % 32 != 0)
-	throw "unknown ECDSA sig r length error";
+	throw Error("unknown ECDSA sig r length error");
     if (hS.length % 32 != 0)
-	throw "unknown ECDSA sig s length error";
+	throw Error("unknown ECDSA sig s length error");
 
     return hR + hS;
 };
@@ -792,11 +812,13 @@ KJUR.crypto.ECDSA.asn1SigToConcatSig = function(asn1Sig) {
  * @static
  * @param {String} concatSig r-s concatinated format of ECDSA signature value
  * @return {String} hexadecimal string of ASN.1 encoded ECDSA signature value
+ * @throws Error when signature length is unsupported
  * @since ecdsa-modified 1.0.3
  */
 KJUR.crypto.ECDSA.concatSigToASN1Sig = function(concatSig) {
-    if ((((concatSig.length / 2) * 8) % (16 * 8)) != 0)
-	throw "unknown ECDSA concatinated r-s sig  length error";
+	if (concatSig.length % 4 != 0) {
+		throw Error("unknown ECDSA concatinated r-s sig length error");
+	}
 
     var hR = concatSig.substr(0, concatSig.length / 2);
     var hS = concatSig.substr(concatSig.length / 2);

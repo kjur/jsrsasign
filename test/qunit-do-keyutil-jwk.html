@@ -30,6 +30,25 @@
 <script src="../src/ecdsa-modified-1.0.js"></script>
 <script src="../src/ecparam-1.0.js"></script>
 <script src="../src/keyutil-1.0.js"></script>
+<script src="../src/jws-3.3.js"></script>
+<script src="../src/x509-1.1.js"></script>
+
+<script src="../ext/cj/cryptojs-312-core-fix.js"></script>
+<script src="../ext/cj/x64-core.js"></script>
+<script src="../ext/cj/cipher-core_min.js"></script>
+<script src="../ext/cj/aes_min.js"></script>
+<script src="../ext/cj/tripledes_min.js"></script>
+<script src="../ext/cj/enc-base64_min.js"></script>
+<script src="../ext/cj/md5_min.js"></script>
+<script src="../ext/cj/sha1_min.js"></script>
+<script src="../ext/cj/sha256_min.js"></script>
+<script src="../ext/cj/sha224_min.js"></script>
+<script src="../ext/cj/sha512_min.js"></script>
+<script src="../ext/cj/sha384_min.js"></script>
+<script src="../ext/cj/ripemd160_min.js"></script>
+<script src="../ext/cj/hmac_min.js"></script>
+<script src="../ext/cj/pbkdf2_min.js"></script>
+<script src="../src/crypto-1.1.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -142,109 +161,342 @@ zEdmr9C6I7cPVkWO+sUV7zfFukexIcANmsd/oBBGKRoYzP5Tti4=
 -----END RSA PRIVATE KEY-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+// K5
+var prvP521jwk = {
+  "kty": "EC",
+  "crv": "P-521",
+  "d": "AUTREPGNYMAzB_KZ3s_bquDgyxPyk8e3gszDSpRkSIcf_DKNvgfTkSjzBZOKJ9MBVu0_q6ezaV5tcMUzmB0k3-5l",
+  "x": 'ANKaUjRMNRGf9b6hmuCQ-ALQX_nqMa3MMVJNASh16nkTRLAq8GtY3jw9JvG6QT0l1c-bayh7XJz0EL8qbqetAmGd',
+  "y": 'AN4iFQKhVIDwZNnQTAvUBxPlh8py_DAJ0ziUdFTWNhe2LgikL-mCAVPc34hEWZLozyBNjO_EJkwNSdgeKYMH7WmP'
+};
+
+// z1 cert
+var z1CertPEM = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIBdTCCAR+gAwIBAgIBBTANBgkqhkiG9w0BAQUFADAaMQswCQYDVQQGEwJVUzEL
+MAkGA1UECgwCYTEwHhcNMTMwNTA0MDM0MTQxWhcNMjMwNTA0MDM0MTQxWjAaMQsw
+CQYDVQQGEwJVUzELMAkGA1UECgwCYTEwXDANBgkqhkiG9w0BAQEFAANLADBIAkEA
+6GZN0rQFKRIVaPOzm8l6Yue6PAm6vcTw3NjfkOt5C5u2RaK3DjESdHtNPEG1FCSJ
+URX++I951D6uWxpONRj9WQIDAQABo1AwTjAdBgNVHQ4EFgQUxUc+4gDI561wA9/1
+QguM3fTCDhUwHwYDVR0jBBgwFoAUxUc+4gDI561wA9/1QguM3fTCDhUwDAYDVR0T
+BAUwAwEB/zANBgkqhkiG9w0BAQUFAANBALL2k69LjwOYfDXv3TXJUAFGUqto+Noj
+CJLP08fOfNBZy+KAIy0GsrNU/3uRViqbuGqAnH9kFFwHQjOAFrAe8XQ=
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// z1 cert
+var z1CertJwk = {
+  kty: "RSA",
+  n: '6GZN0rQFKRIVaPOzm8l6Yue6PAm6vcTw3NjfkOt5C5u2RaK3DjESdHtNPEG1FCSJURX--I951D6uWxpONRj9WQ',
+  e: "AQAB",
+  x5c: ["MIIBdTCCAR+gAwIBAgIBBTANBgkqhkiG9w0BAQUFADAaMQswCQYDVQQGEwJVUzELMAkGA1UECgwCYTEwHhcNMTMwNTA0MDM0MTQxWhcNMjMwNTA0MDM0MTQxWjAaMQswCQYDVQQGEwJVUzELMAkGA1UECgwCYTEwXDANBgkqhkiG9w0BAQEFAANLADBIAkEA6GZN0rQFKRIVaPOzm8l6Yue6PAm6vcTw3NjfkOt5C5u2RaK3DjESdHtNPEG1FCSJURX++I951D6uWxpONRj9WQIDAQABo1AwTjAdBgNVHQ4EFgQUxUc+4gDI561wA9/1QguM3fTCDhUwHwYDVR0jBBgwFoAUxUc+4gDI561wA9/1QguM3fTCDhUwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAANBALL2k69LjwOYfDXv3TXJUAFGUqto+NojCJLP08fOfNBZy+KAIy0GsrNU/3uRViqbuGqAnH9kFFwHQjOAFrAe8XQ="],
+  x5t: "UA2-H4laZVxA0yjgdsv6pQeJjDo",
+  "x5t#S256": "ZWjlGMDlS2Exn5a3WbEQ-4Ez935ZVY8UJsjUKs3LKwo",
+  kid: "12wtf3FN3H1o2Uq2olrnklYdtefsLQHSZEUa7iF6nGE",
+};
+
+// k6 cert pem
+var k6CertPEM = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIBrjCCATWgAwIBAgIBATAJBgcqhkjOPQQBMBoxCzAJBgNVBAYTAlVTMQswCQYD
+VQQKDAJLNjAeFw0xMzA4MjgxODI2MDNaFw0yMzA4MjgxODI2MDNaMBoxCzAJBgNV
+BAYTAlVTMQswCQYDVQQKDAJLNjB2MBAGByqGSM49AgEGBSuBBAAiA2IABFQ1Jqvf
+xHOUo/JkWw1IZRqfOk1G2HQL4yKRUQfwUCUMcwykCzfh3IXggrS7GBuIR71tD6J4
+uuXrHAVHTJpOK+7CjJcL5JwZSfCelpeaJ3pRSDDjKlud4exoq5n0kt0wCqNQME4w
+HQYDVR0OBBYEFDr7X/HKjspl4kCJ9a8zWed/DZHrMB8GA1UdIwQYMBaAFDr7X/HK
+jspl4kCJ9a8zWed/DZHrMAwGA1UdEwQFMAMBAf8wCQYHKoZIzj0EAQNoADBlAjEA
+jteX+S/Btn1akjFeWf35iEbFpT9iPRxPZbUrCaEYBycyemCRTQslG5fxys9OGTtC
+AjB+9NmIQ5QtTgDDiZf6SaeDosq81aU/1S8eOdD/7H9SdclILyo93+i+S9qDio75
+2F8=
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+var k6CertJwk = {
+  kty: "EC",
+  crv: "P-384",
+  x: 'VDUmq9_Ec5Sj8mRbDUhlGp86TUbYdAvjIpFRB_BQJQxzDKQLN-HcheCCtLsYG4hH',
+  y: 'vW0Poni65escBUdMmk4r7sKMlwvknBlJ8J6Wl5onelFIMOMqW53h7GirmfSS3TAK',
+  x5c: ["MIIBrjCCATWgAwIBAgIBATAJBgcqhkjOPQQBMBoxCzAJBgNVBAYTAlVTMQswCQYDVQQKDAJLNjAeFw0xMzA4MjgxODI2MDNaFw0yMzA4MjgxODI2MDNaMBoxCzAJBgNVBAYTAlVTMQswCQYDVQQKDAJLNjB2MBAGByqGSM49AgEGBSuBBAAiA2IABFQ1JqvfxHOUo/JkWw1IZRqfOk1G2HQL4yKRUQfwUCUMcwykCzfh3IXggrS7GBuIR71tD6J4uuXrHAVHTJpOK+7CjJcL5JwZSfCelpeaJ3pRSDDjKlud4exoq5n0kt0wCqNQME4wHQYDVR0OBBYEFDr7X/HKjspl4kCJ9a8zWed/DZHrMB8GA1UdIwQYMBaAFDr7X/HKjspl4kCJ9a8zWed/DZHrMAwGA1UdEwQFMAMBAf8wCQYHKoZIzj0EAQNoADBlAjEAjteX+S/Btn1akjFeWf35iEbFpT9iPRxPZbUrCaEYBycyemCRTQslG5fxys9OGTtCAjB+9NmIQ5QtTgDDiZf6SaeDosq81aU/1S8eOdD/7H9SdclILyo93+i+S9qDio752F8="],
+  x5t: "qs3xobcwmaHC1zuZ9GaD4Cjga80",
+  "x5t#S256": "Jg6rIIYsbkuh641caFsEXhwXQB-km3MtQZUG5dnkuWE",
+  kid: "ABAUUfNSONFsZYvZ_o_0bsPT3qeG3jttXB09VC_ETWQ"
+};
+
+// === getKey JWK =======================================================
+
 test("getKey JWK pubEC1", function() {
-  var ec = KEYUTIL.getKey(pubEC1);
-  equal(ec.isPublic, true, "is public key");
-  equal(ec.curveName, "P-256", "P-256");
-  equal(ec.pubKeyHex, "047fcdce2770f6c45d4183cbee6fdb4b7b580733357be9ef13bacf6e3c7bd15445c7f144cd1bbd9b7e872cdfedb9eeb9f4b3695d6ea90b24ad8a4623288588e5ad", "04xy");
+var ec = KEYUTIL.getKey(pubEC1);
+equal(ec.isPublic, true, "is public key");
+equal(ec.curveName, "P-256", "P-256");
+equal(ec.pubKeyHex, "047fcdce2770f6c45d4183cbee6fdb4b7b580733357be9ef13bacf6e3c7bd15445c7f144cd1bbd9b7e872cdfedb9eeb9f4b3695d6ea90b24ad8a4623288588e5ad", "04xy");
 });
 
 test("getKey JWK pubEC2", function() {
-  var ec = KEYUTIL.getKey(pubEC2);
-  equal(ec.isPublic, true, "is public key");
-  equal(ec.curveName, "P-256", "P-256");
-  equal(ec.pubKeyHex, "0430a0424cd21c2944838a2d75c92b37e76ea20d9f00893a3b4eee8a3c0aafec3ee04b65e92456d9888b52b379bdfbd51ee869ef1f0fc65b6659695b6cce081723", "04xy");
+var ec = KEYUTIL.getKey(pubEC2);
+equal(ec.isPublic, true, "is public key");
+equal(ec.curveName, "P-256", "P-256");
+equal(ec.pubKeyHex, "0430a0424cd21c2944838a2d75c92b37e76ea20d9f00893a3b4eee8a3c0aafec3ee04b65e92456d9888b52b379bdfbd51ee869ef1f0fc65b6659695b6cce081723", "04xy");
 });
 
 test("getKey JWK pubRSA1", function() {
-  var k = KEYUTIL.getKey(pubRSA1);
-  equal(k.isPublic, true, "is public key");
-  equal(k.n.toString(16), "d2fc7b6a0a1e6c67104aeb8f88b257669b4df679ddad099b5c4a6cd9a88015b5a133bf0b856c7871b6df000b554fceb3c2ed512bb68f145c6e8434752fab52a1cfc124408f79b58a4578c16428855789f7a249e384cb2d9fae2d67fd96fb926c198e077399fdc815c0af097dde5aadeff44de70e827f4878432439bfeeb96068d0474fc50d6d90bf3a98dfaf1040c89c02d692ab3b3c2896609d86fd73b774ce0740647ceeeaa310bd12f985a8eb9f59fdd426cea5b2120f4f2a34bcab764b7e6c54d6840238bcc40587a59e66ed1f33894577635c470af75cf92c20d1da43e1bfc419e222a6f0d0bb358c5e38f9cb050aeafe904814f1ac1aa49cca9ea0ca83", "n");
+var k = KEYUTIL.getKey(pubRSA1);
+equal(k.isPublic, true, "is public key");
+equal(k.n.toString(16), "d2fc7b6a0a1e6c67104aeb8f88b257669b4df679ddad099b5c4a6cd9a88015b5a133bf0b856c7871b6df000b554fceb3c2ed512bb68f145c6e8434752fab52a1cfc124408f79b58a4578c16428855789f7a249e384cb2d9fae2d67fd96fb926c198e077399fdc815c0af097dde5aadeff44de70e827f4878432439bfeeb96068d0474fc50d6d90bf3a98dfaf1040c89c02d692ab3b3c2896609d86fd73b774ce0740647ceeeaa310bd12f985a8eb9f59fdd426cea5b2120f4f2a34bcab764b7e6c54d6840238bcc40587a59e66ed1f33894577635c470af75cf92c20d1da43e1bfc419e222a6f0d0bb358c5e38f9cb050aeafe904814f1ac1aa49cca9ea0ca83", "n");
   equal(k.e, 65537, "65537");
 });
 
 test("getKey JWK prvEC1", function() {
-  var ec = KEYUTIL.getKey(prvEC1);
-  equal(ec.isPrivate, true, "is private key");
-  equal(ec.curveName, "P-256", "P-256");
-  equal(ec.prvKeyHex, "f3bd0c07a81fb932781ed52752f60cc89a6be5e51934fe01938ddb55d8f77801", "d");
+var ec = KEYUTIL.getKey(prvEC1);
+equal(ec.isPrivate, true, "is private key");
+equal(ec.curveName, "P-256", "P-256");
+equal(ec.prvKeyHex, "f3bd0c07a81fb932781ed52752f60cc89a6be5e51934fe01938ddb55d8f77801", "d");
+});
+
+test("getKey JWK Private P-521", function() {
+var ec = KEYUTIL.getKey(prvP521jwk);
+equal(ec.isPrivate, true, "is private key");
+equal(ec.isPublic, true, "is public key");
+equal(ec.curveName, "P-521", "P-521");
+equal(ec.prvKeyHex, "0144d110f18d60c03307f299decfdbaae0e0cb13f293c7b782ccc34a946448871ffc328dbe07d39128f305938a27d30156ed3faba7b3695e6d70c533981d24dfee65", "d");
+});
+
+test("getKey JWK Public P-521", function() {
+var pubP521jwk = Object.assign({}, prvP521jwk);
+delete pubP521jwk.d;
+var ec = KEYUTIL.getKey(pubP521jwk);
+equal(ec.isPrivate, false, "is private key");
+equal(ec.isPublic, true, "is public key");
+equal(ec.curveName, "P-521", "P-521");
+equal(ec.pubKeyHex, "0400d29a52344c35119ff5bea19ae090f802d05ff9ea31adcc31524d012875ea791344b02af06b58de3c3d26f1ba413d25d5cf9b6b287b5c9cf410bf2a6ea7ad02619d00de221502a15480f064d9d04c0bd40713e587ca72fc3009d338947454d63617b62e08a42fe9820153dcdf88445992e8cf204d8cefc4264c0d49d81e298307ed698f", "xy");
 });
 
 test("getKey JWK prvRSA1", function() {
-  var k = KEYUTIL.getKey(prvRSA1);
-  equal(k.isPrivate, true, "is private key");
-  equal(k.n.toString(16), "d2fc7b6a0a1e6c67104aeb8f88b257669b4df679ddad099b5c4a6cd9a88015b5a133bf0b856c7871b6df000b554fceb3c2ed512bb68f145c6e8434752fab52a1cfc124408f79b58a4578c16428855789f7a249e384cb2d9fae2d67fd96fb926c198e077399fdc815c0af097dde5aadeff44de70e827f4878432439bfeeb96068d0474fc50d6d90bf3a98dfaf1040c89c02d692ab3b3c2896609d86fd73b774ce0740647ceeeaa310bd12f985a8eb9f59fdd426cea5b2120f4f2a34bcab764b7e6c54d6840238bcc40587a59e66ed1f33894577635c470af75cf92c20d1da43e1bfc419e222a6f0d0bb358c5e38f9cb050aeafe904814f1ac1aa49cca9ea0ca83", "n");
-  equal(k.e, 65537, "65537");
-  equal(k.d.toString(16), "5f8713b5e258fe09f81583ec5c1f2b7578b1e6fc2c83514b37913711a1ba449a151fe1cb2ca0fd33b771e68a3b1944649dc867ad1c1e5240bb853e5f24b33459b14028d2d6636befec1e8da974b352fc53d3f6127ea8a3c29dd14f3941682c56a78768164e4dda8f06cbf9c734aae8003224278ea9454a21b17cb06d178075868cc05b3db6ff1dfdc3d56378b4edadedf0c37a4cdc26d1d49ac26f6fe3b5220a5dd29396621bbc688cf2eee2c6e0d54da3c782014cd0739db252cc51caeba8d3f1b824baab24d068ec903264d7d678ab08f06ec9e7e23d960628b744bf94b3694656463c7e417399ed73d076c891fcf463a9aa9ce62da9cd17e237dc2a8002f1", "d");
-  equal(k.p.toString(16), "f378beec8bcc197a0c5c2b24bfbdd32abf3adfb1623bb676ef3bfca23ea96d6510c8b3d0050c6d3d59f00f6d11fbad1e4c3983dae8e732de4fa2a32b9bc45f98d855583b638cc9823233a949789c1478fb5ceb95218432a955a558487a74ddfa19565893ddcdf0173dbd8e35c72f01f51cf3386550cd7bcd12f9fb3b49d56dfb", "p");
-  equal(k.q.toString(16), "ddd7ce47d72e62afb44be9a414bce022d80c11f173076ab78567a132e1b4a02baa9dbdefa1b2f2ba6aa355940ed5d22b7708139c276963305c39f5b9af7ef40055e38967edfcd1848a8be89e2ce12a9a3d5554bbf13cc583190876b79c45ecec67ed6461dfecd6a0dbc6d9031207c0213006f4b527003ba7e2f21c6fac9e9719", "q");
-  equal(k.dmp1.toString(16), "1b8b0f5e473a61af72f28256f7f20b8f8c6ea69bb49738bf1fb553912f318f949d5f7728134a22998c31222d9e99302e7b450e6b97698051b2049e1cf2d436545e34d9746e80a0d33fc6a4621168e6d000efb41efcd9adb9865cdc2de6dc8db81b61af479b120f153200ddb3abc2df9fd1149aceab63739bf187a22a44e2063d", "dmp1");
-  equal(k.dmq1.toString(16), "b3d9401fd7e0801b28151f0e69cd91fc4da0c36f36ad3da418e021bc896511313579fac0ea1b9452f31f05c3299fc96a796eafcf39d8639492405ee931d0bf6a02379c6f086e9d4151bd09522ada44da947cb85c41bfddf461780e1edeef859b46ca1b4689ee8d360dd7109a3fa4ceeb58ef5ab5fe2f5f2dc57c38f7843f7209", "dmq1");
-  equal(k.coeff.toString(16), "1b233fa7a26b5f24a2cf5b6816029b595f89748de3438ca9bbdadb316c77ad02417e6b7416863381421911514470eab07a644df35ce80c069af819342963460e3247643743985856dc037b948fa9bb193f987646275d6bc7247c3b9e572d27b748f9917cac1923ac94db8671bd0285608b5d95d50a1b33ba21aeb34ca8405515", "coeff");
+var k = KEYUTIL.getKey(prvRSA1);
+equal(k.isPrivate, true, "is private key");
+equal(k.n.toString(16), "d2fc7b6a0a1e6c67104aeb8f88b257669b4df679ddad099b5c4a6cd9a88015b5a133bf0b856c7871b6df000b554fceb3c2ed512bb68f145c6e8434752fab52a1cfc124408f79b58a4578c16428855789f7a249e384cb2d9fae2d67fd96fb926c198e077399fdc815c0af097dde5aadeff44de70e827f4878432439bfeeb96068d0474fc50d6d90bf3a98dfaf1040c89c02d692ab3b3c2896609d86fd73b774ce0740647ceeeaa310bd12f985a8eb9f59fdd426cea5b2120f4f2a34bcab764b7e6c54d6840238bcc40587a59e66ed1f33894577635c470af75cf92c20d1da43e1bfc419e222a6f0d0bb358c5e38f9cb050aeafe904814f1ac1aa49cca9ea0ca83", "n");
+equal(k.e, 65537, "65537");
+equal(k.d.toString(16), "5f8713b5e258fe09f81583ec5c1f2b7578b1e6fc2c83514b37913711a1ba449a151fe1cb2ca0fd33b771e68a3b1944649dc867ad1c1e5240bb853e5f24b33459b14028d2d6636befec1e8da974b352fc53d3f6127ea8a3c29dd14f3941682c56a78768164e4dda8f06cbf9c734aae8003224278ea9454a21b17cb06d178075868cc05b3db6ff1dfdc3d56378b4edadedf0c37a4cdc26d1d49ac26f6fe3b5220a5dd29396621bbc688cf2eee2c6e0d54da3c782014cd0739db252cc51caeba8d3f1b824baab24d068ec903264d7d678ab08f06ec9e7e23d960628b744bf94b3694656463c7e417399ed73d076c891fcf463a9aa9ce62da9cd17e237dc2a8002f1", "d");
+equal(k.p.toString(16), "f378beec8bcc197a0c5c2b24bfbdd32abf3adfb1623bb676ef3bfca23ea96d6510c8b3d0050c6d3d59f00f6d11fbad1e4c3983dae8e732de4fa2a32b9bc45f98d855583b638cc9823233a949789c1478fb5ceb95218432a955a558487a74ddfa19565893ddcdf0173dbd8e35c72f01f51cf3386550cd7bcd12f9fb3b49d56dfb", "p");
+equal(k.q.toString(16), "ddd7ce47d72e62afb44be9a414bce022d80c11f173076ab78567a132e1b4a02baa9dbdefa1b2f2ba6aa355940ed5d22b7708139c276963305c39f5b9af7ef40055e38967edfcd1848a8be89e2ce12a9a3d5554bbf13cc583190876b79c45ecec67ed6461dfecd6a0dbc6d9031207c0213006f4b527003ba7e2f21c6fac9e9719", "q");
+equal(k.dmp1.toString(16), "1b8b0f5e473a61af72f28256f7f20b8f8c6ea69bb49738bf1fb553912f318f949d5f7728134a22998c31222d9e99302e7b450e6b97698051b2049e1cf2d436545e34d9746e80a0d33fc6a4621168e6d000efb41efcd9adb9865cdc2de6dc8db81b61af479b120f153200ddb3abc2df9fd1149aceab63739bf187a22a44e2063d", "dmp1");
+equal(k.dmq1.toString(16), "b3d9401fd7e0801b28151f0e69cd91fc4da0c36f36ad3da418e021bc896511313579fac0ea1b9452f31f05c3299fc96a796eafcf39d8639492405ee931d0bf6a02379c6f086e9d4151bd09522ada44da947cb85c41bfddf461780e1edeef859b46ca1b4689ee8d360dd7109a3fa4ceeb58ef5ab5fe2f5f2dc57c38f7843f7209", "dmq1");
+equal(k.coeff.toString(16), "1b233fa7a26b5f24a2cf5b6816029b595f89748de3438ca9bbdadb316c77ad02417e6b7416863381421911514470eab07a644df35ce80c069af819342963460e3247643743985856dc037b948fa9bb193f987646275d6bc7247c3b9e572d27b748f9917cac1923ac94db8671bd0285608b5d95d50a1b33ba21aeb34ca8405515", "coeff");
 });
 
 test("getKey JWK prvRSA2 compare to PEM", function() {
-  var k1 = KEYUTIL.getKey(prvRSA2);
-  var k2 = KEYUTIL.getKey(prvRSA2PEM);
-  equal(k1.isPrivate, true, "is private key");
-  equal(k1.n.compareTo(k2.n), 0, "n");
-  equal(k1.e, k2.e, "e");
-  equal(k1.d.compareTo(k2.d), 0, "d");
-  equal(k1.p.compareTo(k2.p), 0, "p");
-  equal(k1.q.compareTo(k2.q), 0, "q");
-  equal(k1.dmp1.compareTo(k2.dmp1), 0, "dmp1");
-  equal(k1.dmq1.compareTo(k2.dmq1), 0, "dmq2");
-  equal(k1.coeff.compareTo(k2.coeff), 0, "coeff");
+var k1 = KEYUTIL.getKey(prvRSA2);
+var k2 = KEYUTIL.getKey(prvRSA2PEM);
+equal(k1.isPrivate, true, "is private key");
+equal(k1.n.compareTo(k2.n), 0, "n");
+equal(k1.e, k2.e, "e");
+equal(k1.d.compareTo(k2.d), 0, "d");
+equal(k1.p.compareTo(k2.p), 0, "p");
+equal(k1.q.compareTo(k2.q), 0, "q");
+equal(k1.dmp1.compareTo(k2.dmp1), 0, "dmp1");
+equal(k1.dmq1.compareTo(k2.dmq1), 0, "dmq2");
+equal(k1.coeff.compareTo(k2.coeff), 0, "coeff");
 });
 
 test("getKey JWK prvRSA2s(without P/Q/DP/DQ/COEFF) compare to PEM", function() {
-  var k1 = KEYUTIL.getKey(prvRSA2s);
-  var k2 = KEYUTIL.getKey(prvRSA2PEM);
-  equal(k1.isPrivate, true, "is private key");
-  equal(k1.n.compareTo(k2.n), 0, "n");
-  equal(k1.e, k2.e, "e");
-  equal(k1.d.compareTo(k2.d), 0, "d");
+var k1 = KEYUTIL.getKey(prvRSA2s);
+var k2 = KEYUTIL.getKey(prvRSA2PEM);
+equal(k1.isPrivate, true, "is private key");
+equal(k1.n.compareTo(k2.n), 0, "n");
+equal(k1.e, k2.e, "e");
+equal(k1.d.compareTo(k2.d), 0, "d");
 });
 
-test("getJWKFromKey() - pubEC1", function() {
-  var ec = KEYUTIL.getKey(pubEC1);
-  var jwk = KEYUTIL.getJWKFromKey(ec);
-  equal(jwk.kty, "EC", "jwk.kty == EC");
-  equal(jwk.crv, "P-256", "jwk.crv == P-256");
-  equal(jwk.x, "f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU", "x");
-  equal(jwk.y, "x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0", "y");
+// == getJWK =====================================
+
+test("getJWK() - public EC P-256", function() {
+var ec = KEYUTIL.getKey(pubEC1);
+var jwk = KEYUTIL.getJWK(ec);
+var expected = {
+    kty: "EC",
+    crv: "P-256",
+    x: "f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU",
+    y: "x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0",
+    kid: "oKIywvGUpTVTyxMQ3bwIIeQUudfr_CkLMjCE19ECD-U"
+};
+deepEqual(jwk, expected, "EC P-256");
 });
 
-test("getJWKFromKey() - prvEC1", function() {
-  var ec = KEYUTIL.getKey(prvEC1);
-  var jwk = KEYUTIL.getJWKFromKey(ec);
-  equal(jwk.kty, "EC", "jwk.kty == EC");
-  equal(jwk.crv, "P-256", "jwk.crv == P-256");
-  equal(jwk.x, "MKBCTNIcKUSDii11ySs3526iDZ8AiTo7Tu6KPAqv7D4", "x");
-  equal(jwk.y, "4Etl6SRW2YiLUrN5vfvVHuhp7x8PxltmWWlbbM4IFyM", "y");
-  equal(jwk.d, "870MB6gfuTJ4HtUnUvYMyJpr5eUZNP4Bk43bVdj3eAE", "d");
+test("getJWK() - private EC P-256", function() {
+var ec = KEYUTIL.getKey(prvEC1);
+var jwk = KEYUTIL.getJWK(ec);
+var expected = {
+    kty: "EC",
+    crv: "P-256",
+    x: "MKBCTNIcKUSDii11ySs3526iDZ8AiTo7Tu6KPAqv7D4",
+    y: "4Etl6SRW2YiLUrN5vfvVHuhp7x8PxltmWWlbbM4IFyM",
+    d: "870MB6gfuTJ4HtUnUvYMyJpr5eUZNP4Bk43bVdj3eAE",
+};
+deepEqual(jwk, expected, "EC P-256");
 });
 
-test("getJWKFromKey() - pubRSA1", function() {
-  var key = KEYUTIL.getKey(pubRSA1);
-  var jwk = KEYUTIL.getJWKFromKey(key);
-  equal(jwk.kty, "RSA", "jwk.kty == RSA");
-  equal(jwk.n, "0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zgdAZHzu6qMQvRL5hajrn1n91CbOpbISD08qNLyrdkt-bFTWhAI4vMQFh6WeZu0fM4lFd2NcRwr3XPksINHaQ-G_xBniIqbw0Ls1jF44-csFCur-kEgU8awapJzKnqDKgw", "n");
-  equal(jwk.e, "AQAB", "e");
+test("getJWK() - public EC P-521", function() {
+var pubP521jwk = Object.assign({}, prvP521jwk);
+delete pubP521jwk.d;
+pubP521jwk.kid = "FnKSnyAq-6ipF1aZFBwO59a_zjgy13xz5S4Sn05xG6E";
+
+var ec = KEYUTIL.getKey(pubP521jwk);
+var jwk = KEYUTIL.getJWK(ec);
+deepEqual(jwk, pubP521jwk, "EC P-256");
 });
 
-test("getJWKFromKey() - prvRSA1", function() {
-  var key = KEYUTIL.getKey(prvRSA1);
-  var jwk = KEYUTIL.getJWKFromKey(key);
-  equal(jwk.kty, "RSA", "jwk.kty == RSA");
-  equal(jwk.n, "0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zgdAZHzu6qMQvRL5hajrn1n91CbOpbISD08qNLyrdkt-bFTWhAI4vMQFh6WeZu0fM4lFd2NcRwr3XPksINHaQ-G_xBniIqbw0Ls1jF44-csFCur-kEgU8awapJzKnqDKgw", "n");
-  equal(jwk.e, "AQAB", "e");
-  equal(jwk.d, "X4cTteJY_gn4FYPsXB8rdXix5vwsg1FLN5E3EaG6RJoVH-HLLKD9M7dx5oo7GURknchnrRweUkC7hT5fJLM0WbFAKNLWY2vv7B6NqXSzUvxT0_YSfqijwp3RTzlBaCxWp4doFk5N2o8Gy_nHNKroADIkJ46pRUohsXywbReAdYaMwFs9tv8d_cPVY3i07a3t8MN6TNwm0dSawm9v47UiCl3Sk5ZiG7xojPLu4sbg1U2jx4IBTNBznbJSzFHK66jT8bgkuqsk0GjskDJk19Z4qwjwbsnn4j2WBii3RL-Us2lGVkY8fkFzme1z0HbIkfz0Y6mqnOYtqc0X4jfcKoAC8Q", "d");
-  equal(jwk.p, "83i-7IvMGXoMXCskv73TKr8637FiO7Z27zv8oj6pbWUQyLPQBQxtPVnwD20R-60eTDmD2ujnMt5PoqMrm8RfmNhVWDtjjMmCMjOpSXicFHj7XOuVIYQyqVWlWEh6dN36GVZYk93N8Bc9vY41xy8B9RzzOGVQzXvNEvn7O0nVbfs", "p");
-  equal(jwk.q, "3dfOR9cuYq-0S-mkFLzgItgMEfFzB2q3hWehMuG0oCuqnb3vobLyumqjVZQO1dIrdwgTnCdpYzBcOfW5r370AFXjiWft_NGEiovonizhKpo9VVS78TzFgxkIdrecRezsZ-1kYd_s1qDbxtkDEgfAITAG9LUnADun4vIcb6yelxk", "q");
-  equal(jwk.dp, "G4sPXkc6Ya9y8oJW9_ILj4xuppu0lzi_H7VTkS8xj5SdX3coE0oimYwxIi2emTAue0UOa5dpgFGyBJ4c8tQ2VF402XRugKDTP8akYhFo5tAA77Qe_NmtuYZc3C3m3I24G2GvR5sSDxUyAN2zq8Lfn9EUms6rY3Ob8YeiKkTiBj0", "dp");
-  equal(jwk.dq, "s9lAH9fggBsoFR8Oac2R_E2gw282rT2kGOAhvIllETE1efrA6huUUvMfBcMpn8lqeW6vzznYY5SSQF7pMdC_agI3nG8Ibp1BUb0JUiraRNqUfLhcQb_d9GF4Dh7e74WbRsobRonujTYN1xCaP6TO61jvWrX-L18txXw494Q_cgk", "dq");
-  equal(jwk.qi, "GyM_p6JrXySiz1toFgKbWV-JdI3jQ4ypu9rbMWx3rQJBfmt0FoYzgUIZEVFEcOqwemRN81zoDAaa-Bk0KWNGDjJHZDdDmFhW3AN7lI-puxk_mHZGJ11rxyR8O55XLSe3SPmRfKwZI6yU24ZxvQKFYItdldUKGzO6Ia6zTKhAVRU", "qi");
+test("getJWK() - private EC P-521", function() {
+var ec = KEYUTIL.getKey(prvP521jwk);
+var jwk = KEYUTIL.getJWK(ec);
+deepEqual(jwk, prvP521jwk, "EC P-521");
+});
+
+test("getJWK() - public RSA", function() {
+var key = KEYUTIL.getKey(pubRSA1);
+var jwk = KEYUTIL.getJWK(key);
+var expected = {
+    kty: "RSA",
+    n: "0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zgdAZHzu6qMQvRL5hajrn1n91CbOpbISD08qNLyrdkt-bFTWhAI4vMQFh6WeZu0fM4lFd2NcRwr3XPksINHaQ-G_xBniIqbw0Ls1jF44-csFCur-kEgU8awapJzKnqDKgw",
+    e: "AQAB",
+    kid: "NzbLsXh8uDCcd-6MNwXF4W_7noWXFZAfHkxZsRGC9Xs"
+};
+deepEqual(jwk, expected, "RSA public");
+});
+
+test("getJWK() - private RSA", function() {
+var key = KEYUTIL.getKey(prvRSA1);
+var jwk = KEYUTIL.getJWK(key);
+var expected = {
+    kty: "RSA",
+    n: "0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zgdAZHzu6qMQvRL5hajrn1n91CbOpbISD08qNLyrdkt-bFTWhAI4vMQFh6WeZu0fM4lFd2NcRwr3XPksINHaQ-G_xBniIqbw0Ls1jF44-csFCur-kEgU8awapJzKnqDKgw",
+    e: "AQAB",
+    d: "X4cTteJY_gn4FYPsXB8rdXix5vwsg1FLN5E3EaG6RJoVH-HLLKD9M7dx5oo7GURknchnrRweUkC7hT5fJLM0WbFAKNLWY2vv7B6NqXSzUvxT0_YSfqijwp3RTzlBaCxWp4doFk5N2o8Gy_nHNKroADIkJ46pRUohsXywbReAdYaMwFs9tv8d_cPVY3i07a3t8MN6TNwm0dSawm9v47UiCl3Sk5ZiG7xojPLu4sbg1U2jx4IBTNBznbJSzFHK66jT8bgkuqsk0GjskDJk19Z4qwjwbsnn4j2WBii3RL-Us2lGVkY8fkFzme1z0HbIkfz0Y6mqnOYtqc0X4jfcKoAC8Q",
+    p: "83i-7IvMGXoMXCskv73TKr8637FiO7Z27zv8oj6pbWUQyLPQBQxtPVnwD20R-60eTDmD2ujnMt5PoqMrm8RfmNhVWDtjjMmCMjOpSXicFHj7XOuVIYQyqVWlWEh6dN36GVZYk93N8Bc9vY41xy8B9RzzOGVQzXvNEvn7O0nVbfs",
+    q: "3dfOR9cuYq-0S-mkFLzgItgMEfFzB2q3hWehMuG0oCuqnb3vobLyumqjVZQO1dIrdwgTnCdpYzBcOfW5r370AFXjiWft_NGEiovonizhKpo9VVS78TzFgxkIdrecRezsZ-1kYd_s1qDbxtkDEgfAITAG9LUnADun4vIcb6yelxk",
+    dp: "G4sPXkc6Ya9y8oJW9_ILj4xuppu0lzi_H7VTkS8xj5SdX3coE0oimYwxIi2emTAue0UOa5dpgFGyBJ4c8tQ2VF402XRugKDTP8akYhFo5tAA77Qe_NmtuYZc3C3m3I24G2GvR5sSDxUyAN2zq8Lfn9EUms6rY3Ob8YeiKkTiBj0",
+    dq: "s9lAH9fggBsoFR8Oac2R_E2gw282rT2kGOAhvIllETE1efrA6huUUvMfBcMpn8lqeW6vzznYY5SSQF7pMdC_agI3nG8Ibp1BUb0JUiraRNqUfLhcQb_d9GF4Dh7e74WbRsobRonujTYN1xCaP6TO61jvWrX-L18txXw494Q_cgk",
+    qi: "GyM_p6JrXySiz1toFgKbWV-JdI3jQ4ypu9rbMWx3rQJBfmt0FoYzgUIZEVFEcOqwemRN81zoDAaa-Bk0KWNGDjJHZDdDmFhW3AN7lI-puxk_mHZGJ11rxyR8O55XLSe3SPmRfKwZI6yU24ZxvQKFYItdldUKGzO6Ia6zTKhAVRU"
+};
+deepEqual(jwk, expected, "RSA private");
+});
+
+test("getJWK() - RSA certificate z1", function() {
+var jwk = KEYUTIL.getJWK(z1CertPEM);
+deepEqual(jwk, z1CertJwk, "RSA certificate");
+});
+
+test("getJWK() - EC certificate k6", function() {
+var jwk = KEYUTIL.getJWK(k6CertPEM);
+deepEqual(jwk, k6CertJwk, "EC certificate");
+});
+
+test("getJWK() - EC certificate k6, nox5t2", function() {
+var expected = Object.assign({}, k6CertJwk);
+delete expected["x5t#S256"];
+var jwk = KEYUTIL.getJWK(k6CertPEM, false, false, false, true);
+deepEqual(jwk, expected, "EC certificate");
+});
+
+test("getJWK() - EC certificate k6, nox5t, nox5t2", function() {
+var expected = Object.assign({}, k6CertJwk);
+delete expected["x5t#S256"];
+delete expected.x5t;
+var jwk = KEYUTIL.getJWK(k6CertPEM, false, false, true, true);
+deepEqual(jwk, expected, "EC certificate");
+});
+
+test("getJWK() - EC certificate k6, nox5c, nox5t, nox5t2", function() {
+var expected = Object.assign({}, k6CertJwk);
+delete expected["x5t#S256"];
+delete expected.x5t;
+delete expected.x5c;
+var jwk = KEYUTIL.getJWK(k6CertPEM, false, true, true, true);
+deepEqual(jwk, expected, "EC certificate");
+});
+
+test("getJWK() - EC certificate k6, nokid, nox5c, nox5t, nox5t2", function() {
+var expected = Object.assign({}, k6CertJwk);
+delete expected["x5t#S256"];
+delete expected.x5t;
+delete expected.x5c;
+delete expected.kid;
+var jwk = KEYUTIL.getJWK(k6CertPEM, true, true, true, true);
+deepEqual(jwk, expected, "EC certificate");
+});
+
+test("getJWK() - EC certificate k6 X509 object", function() {
+var x509obj = new X509(k6CertPEM);
+var jwk = KEYUTIL.getJWK(x509obj);
+deepEqual(jwk, k6CertJwk, "EC certificate");
+});
+
+// == getJWKFromKey ===============================
+
+test("DEPRECATED getJWKFromKey() - public EC P-256", function() {
+var ec = KEYUTIL.getKey(pubEC1);
+var jwk = KEYUTIL.getJWKFromKey(ec);
+var expected = {
+    kty: "EC",
+    crv: "P-256",
+    x: "f83OJ3D2xF1Bg8vub9tLe1gHMzV76e8Tus9uPHvRVEU",
+    y: "x_FEzRu9m36HLN_tue659LNpXW6pCyStikYjKIWI5a0"
+};
+deepEqual(jwk, expected, "EC P-256");
+});
+
+test("DEPRECATED getJWKFromKey() - private EC P-256", function() {
+var ec = KEYUTIL.getKey(prvEC1);
+var jwk = KEYUTIL.getJWKFromKey(ec);
+var expected = {
+    kty: "EC",
+    crv: "P-256",
+    x: "MKBCTNIcKUSDii11ySs3526iDZ8AiTo7Tu6KPAqv7D4",
+    y: "4Etl6SRW2YiLUrN5vfvVHuhp7x8PxltmWWlbbM4IFyM",
+    d: "870MB6gfuTJ4HtUnUvYMyJpr5eUZNP4Bk43bVdj3eAE"
+};
+deepEqual(jwk, expected, "EC P-256");
+});
+
+test("DEPRECATED getJWKFromKey() - public EC P-521", function() {
+var pubP521jwk = Object.assign({}, prvP521jwk);
+delete pubP521jwk.d;
+
+var ec = KEYUTIL.getKey(pubP521jwk);
+var jwk = KEYUTIL.getJWKFromKey(ec);
+deepEqual(jwk, pubP521jwk, "EC P-256");
+});
+
+test("DEPRECATED getJWKFromKey() - private EC P-521", function() {
+var ec = KEYUTIL.getKey(prvP521jwk);
+var jwk = KEYUTIL.getJWKFromKey(ec);
+deepEqual(jwk, prvP521jwk, "EC P-521");
+});
+
+test("DEPRECATED getJWKFromKey() - public RSA", function() {
+var key = KEYUTIL.getKey(pubRSA1);
+var jwk = KEYUTIL.getJWKFromKey(key);
+var expected = {
+    kty: "RSA",
+    n: "0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zgdAZHzu6qMQvRL5hajrn1n91CbOpbISD08qNLyrdkt-bFTWhAI4vMQFh6WeZu0fM4lFd2NcRwr3XPksINHaQ-G_xBniIqbw0Ls1jF44-csFCur-kEgU8awapJzKnqDKgw",
+    e: "AQAB",
+};
+deepEqual(jwk, expected, "RSA public");
+});
+
+test("DEPRECATED getJWKFromKey() - private RSA", function() {
+var key = KEYUTIL.getKey(prvRSA1);
+var jwk = KEYUTIL.getJWKFromKey(key);
+var expected = {
+    kty: "RSA",
+    n: "0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zgdAZHzu6qMQvRL5hajrn1n91CbOpbISD08qNLyrdkt-bFTWhAI4vMQFh6WeZu0fM4lFd2NcRwr3XPksINHaQ-G_xBniIqbw0Ls1jF44-csFCur-kEgU8awapJzKnqDKgw",
+    e: "AQAB",
+    d: "X4cTteJY_gn4FYPsXB8rdXix5vwsg1FLN5E3EaG6RJoVH-HLLKD9M7dx5oo7GURknchnrRweUkC7hT5fJLM0WbFAKNLWY2vv7B6NqXSzUvxT0_YSfqijwp3RTzlBaCxWp4doFk5N2o8Gy_nHNKroADIkJ46pRUohsXywbReAdYaMwFs9tv8d_cPVY3i07a3t8MN6TNwm0dSawm9v47UiCl3Sk5ZiG7xojPLu4sbg1U2jx4IBTNBznbJSzFHK66jT8bgkuqsk0GjskDJk19Z4qwjwbsnn4j2WBii3RL-Us2lGVkY8fkFzme1z0HbIkfz0Y6mqnOYtqc0X4jfcKoAC8Q",
+    p: "83i-7IvMGXoMXCskv73TKr8637FiO7Z27zv8oj6pbWUQyLPQBQxtPVnwD20R-60eTDmD2ujnMt5PoqMrm8RfmNhVWDtjjMmCMjOpSXicFHj7XOuVIYQyqVWlWEh6dN36GVZYk93N8Bc9vY41xy8B9RzzOGVQzXvNEvn7O0nVbfs",
+    q: "3dfOR9cuYq-0S-mkFLzgItgMEfFzB2q3hWehMuG0oCuqnb3vobLyumqjVZQO1dIrdwgTnCdpYzBcOfW5r370AFXjiWft_NGEiovonizhKpo9VVS78TzFgxkIdrecRezsZ-1kYd_s1qDbxtkDEgfAITAG9LUnADun4vIcb6yelxk",
+    dp: "G4sPXkc6Ya9y8oJW9_ILj4xuppu0lzi_H7VTkS8xj5SdX3coE0oimYwxIi2emTAue0UOa5dpgFGyBJ4c8tQ2VF402XRugKDTP8akYhFo5tAA77Qe_NmtuYZc3C3m3I24G2GvR5sSDxUyAN2zq8Lfn9EUms6rY3Ob8YeiKkTiBj0",
+    dq: "s9lAH9fggBsoFR8Oac2R_E2gw282rT2kGOAhvIllETE1efrA6huUUvMfBcMpn8lqeW6vzznYY5SSQF7pMdC_agI3nG8Ibp1BUb0JUiraRNqUfLhcQb_d9GF4Dh7e74WbRsobRonujTYN1xCaP6TO61jvWrX-L18txXw494Q_cgk",
+    qi: "GyM_p6JrXySiz1toFgKbWV-JdI3jQ4ypu9rbMWx3rQJBfmt0FoYzgUIZEVFEcOqwemRN81zoDAaa-Bk0KWNGDjJHZDdDmFhW3AN7lI-puxk_mHZGJ11rxyR8O55XLSe3SPmRfKwZI6yU24ZxvQKFYItdldUKGzO6Ia6zTKhAVRU"
+};
+deepEqual(jwk, expected, "RSA private");
 });
 
 });
