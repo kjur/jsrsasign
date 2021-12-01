@@ -1746,7 +1746,7 @@ KEYUTIL.getKeyID = function(obj) {
 }
 
 /**
- * convert from certificate, public/private key object to RFC 7517 JSON Web Key(JWK)
+ * convert from certificate, public/private key object to RFC 7517 JSON Web Key(JWK)<br/>
  * @name getJWK
  * @memberOf KEYUTIL
  * @function
@@ -1758,8 +1758,14 @@ KEYUTIL.getKeyID = function(obj) {
  * @param {boolean} nox5t2 set true if you don't need x5c#S256 of certificate (OPTION, DEFAULT=undefined)
  * @return {Object} JWK object
  * @since keyutil 1.2.5 jsrsasign 10.5.1
+ * @see RSAKey
+ * @see KJUR.crypto.ECDSA
+ * @see KJUR.crypto.DSA
+ *
  * @description
- * This static method provides RFC 7517 JSON Web Key(JWK) JSON
+ * This static method provides 
+ * <a href="https://datatracker.ietf.org/doc/html/rfc7517">
+ * RFC 7517 JSON Web Key(JWK) JSON</a>
  * object from following argument types:
  * <ul>
  * <li>
@@ -1789,7 +1795,8 @@ KEYUTIL.getKeyID = function(obj) {
  * jwkPrv2 = KEYUTIL.getJWK(kp2.prvKeyObj);
  * jwkPub2 = KEYUTIL.getJWK(kp2.pubKeyObj);
  *
- * KEYUTIL.getJWK("-----BEGIN CERTIFICATE...") &rarr
+ * // from PEM certificate
+ * KEYUTIL.getJWK("-----BEGIN CERTIFICATE...") &rarr;
  * {
  *   kty: "EC", crv: "P-521", x: "...", y: "...",
  *   x5c: ["MI..."],
@@ -1798,11 +1805,19 @@ KEYUTIL.getKeyID = function(obj) {
  *   kid: "..."
  * }
  *
+ * // from X509 object
  * x509obj = new X509("-----BEGIN CERTIFICATE...");
  * KEYUTIL.getJWK(x509obj) &rarr;
  * {
  *   kty: "EC", crv: "P-521", x: "...", y: "...",
  *   ...
+ * }
+ *
+ * // from PEM certificate without kid, x5t and x5t#S256 (i.e. only x5c)
+ * KEYUTIL.getJWK("-----BEGIN CERTIFICATE...", true, false, true, true) &rarr;
+ * {
+ *   kty: "EC", crv: "P-521", x: "...", y: "...",
+ *   x5c: ["MI..."]
  * }
  */
 KEYUTIL.getJWK = function(keyinfo, nokid, nox5c, nox5t, nox5t2) {
@@ -1883,7 +1898,7 @@ KEYUTIL.getJWK = function(keyinfo, nokid, nox5c, nox5t, nox5t2) {
 };
 
 /**
- * convert from RSAKey/KJUR.crypto.ECDSA public/private key object to RFC 7517 JSON Web Key(JWK) (DEPRECATED)
+ * convert from RSAKey/KJUR.crypto.ECDSA public/private key object to RFC 7517 JSON Web Key(JWK) (DEPRECATED)<br/>
  * @name getJWKFromKey
  * @memberOf KEYUTIL
  * @function
@@ -1892,10 +1907,12 @@ KEYUTIL.getJWK = function(keyinfo, nokid, nox5c, nox5t, nox5t2) {
  * @return {Object} JWK object
  * @since keyutil 1.0.13 jsrsasign 5.0.14
  * @deprecated since jsrsasign 10.5.1 keyutil 1.2.5 please use getJWK method
+ * @see KEYUTIL.getJWK
  *
  * @description
  * This static method convert from RSAKey/KJUR.crypto.ECDSA public/private key object 
  * to RFC 7517 JSON Web Key(JWK)
+ * 
  * @example
  * kp1 = KEYUTIL.generateKeypair("EC", "P-256");
  * jwkPrv1 = KEYUTIL.getJWKFromKey(kp1.prvKeyObj);
