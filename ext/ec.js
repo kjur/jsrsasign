@@ -58,6 +58,10 @@ ECFieldElementFp.prototype.multiply = feFpMultiply;
 ECFieldElementFp.prototype.square = feFpSquare;
 ECFieldElementFp.prototype.divide = feFpDivide;
 
+ECFieldElementFp.prototype.sqrt = function() {
+    return new ECFieldElementFp(this.q, this.x.sqrt().mod(this.q));
+}
+
 // ----------------
 // ECPointFp
 
@@ -312,8 +316,18 @@ function curveFpDecodePointHex(s) {
 	return this.infinity;
     case 2:
     case 3:
+	var hYTilde = s.substr(0,2); // "02" or "03"
+	var hX = s.substr(2);
+	// y = sqrt((x^2+a)x+b) = sqrt(x^3+ax+b)
+	var x = this.fromBigInteger(new BigInteger(xHex, 16)); // FE
+	var a = this.getA(); // FE
+	var b = this.getB(); // FE
+	var rhs = x.square().add(a).multiply(x).add(b); //FE
+	var y = rhs.sqrt();  // FE
+	if (hYTilde == "03") y = y.negate();
+	return new ECPointFp(this, x, y);
 	// point compression not supported yet
-	return null;
+	// return null;
     case 4:
     case 6:
     case 7:

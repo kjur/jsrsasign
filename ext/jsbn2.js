@@ -656,3 +656,16 @@ BigInteger.prototype.square = bnSquare;
 // int hashCode()
 // long longValue()
 // static BigInteger valueOf(long val)
+
+BigInteger.prototype.sqrt = function() {
+    var div = BigInteger.ZERO.setBit(this.bitLength()/2);
+    var div2 = div;
+    for (;;) {
+	var y = div.add(this.divide(div)).shiftRight(1);
+	if (y.equals(div) || y.equals(div2))
+	    return y;
+	div2 = div;
+	div = y;
+    }
+}
+
