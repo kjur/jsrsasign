@@ -96,3 +96,10 @@ You can donate cryptocurrency to jsrsasign using the following addresses:
 - Ethereum(ETH): [0x9c4cdbb531e5b84796ff5f91a9f652704761e64e](https://en.cryptobadges.io/donate/0x9c4cdbb531e5b84796ff5f91a9f652704761e64e)
 - Litecoin(LTC): [LPf3VDJVamwPcNJNjjVtrUQuJQ17ZyWzeU](https://en.cryptobadges.io/donate/LPf3VDJVamwPcNJNjjVtrUQuJQ17ZyWzeU)
 - Bitcoin Cash(BCH): bitcoincash:pq3hy08pc9vm57q6ddgsc06cqdffmfzwwqxd9yejyf
+
+## SPONSORS
+<p font="+5" align="center">
+<b>Silver Sponsers</b><br clear="all"/>
+<img src="https://avatars.githubusercontent.com/u/2549434?s=200&v=4" height="150"/>
+<p>
+
