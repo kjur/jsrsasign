@@ -100,6 +100,6 @@ You can donate cryptocurrency to jsrsasign using the following addresses:
 ## SPONSORS
 <p align="center">
 <font size="+2"><b>Silver Sponsors</b></font><br clear="all"/>
-<img src="https://avatars.githubusercontent.com/u/2549434?s=200&v=4" height="150"/>
+<a href="https://shiguredo.jp/" target="_blank"><img src="https://avatars.githubusercontent.com/u/2549434?s=200&v=4" height="150"/></a>
 </p>
 
