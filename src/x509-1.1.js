@@ -99,6 +99,7 @@ function X509(params) {
     var _ASN1HEX = ASN1HEX,
 	_getChildIdx = _ASN1HEX.getChildIdx,
 	_getV = _ASN1HEX.getV,
+    _dump = _ASN1HEX.dump,
 	_getTLV = _ASN1HEX.getTLV,
 	_getVbyList = _ASN1HEX.getVbyList,
 	_getVbyListEx = _ASN1HEX.getVbyListEx,
@@ -1230,6 +1231,7 @@ function X509(params) {
 	if (tag == "86") return {uri: sValue};
 	if (tag == "87") return {ip: hextoip(hValue)};
 	if (tag == "a4") return {dn: this.getX500Name(hValue)};
+    if (tag == "a0") return {otherName: this.getOtherName(h)};
 	return undefined;
     };
 
@@ -1666,6 +1668,17 @@ function X509(params) {
 	}
 
 	return result;
+    };
+
+    this.getOtherName = function(h) {
+        var result = {};
+
+        var a = _getChildIdx(h, 0);
+        var hOID = _getVbyList(h, a[0], [], "06");
+        var hValue = _getVbyList(h, a[1], []);
+        result.oid = KJUR.asn1.ASN1Util.oidHexToInt(hOID);
+        result.obj = _dump(hValue);
+        return result;
     };
 
     /**
@@ -2120,6 +2133,9 @@ function X509(params) {
 	var s = this.dnarraytostr(a);
 	return { array: a, str: s };
     };
+
+    
+    
 
     /**
      * get X.500 Name ASN.1 structure parameter array<br/>
