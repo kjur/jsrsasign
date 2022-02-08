@@ -1,16 +1,21 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 10.5.1 to next release
+small update for OID and JWK
+* Changes from 10.5.1 to 10.5.2 (2022-Feb-08)
+  - src/asn1x509.js
+    - add OID.{registerOIDs,checkOIDs} method
   - src/keyutil.js
-    - getJWK, getJWKFromKey APIC doc update
+    - getJWK, getJWKFromKey API doc update
+  - test/qunit-do-asn1x509.html updated
+    - test case added
 
 add KEYUTIL.getJWK, fix EC P-521 concat signature value and add support for P-521 JWS JWK
 * Changes from 10.5.0 to 10.5.1 (2021-Dec-01)
   - fix ECC P-521 curve issues (#528)
     - src/ecdsa-modified.js
-      - asn1SigToConcatSig fix P521 issue
-      - concatSigToASN1Sig fix P521 issue
+      - asn1SigToConcatSig fix P-521 issue
+      - concatSigToASN1Sig fix P-521 issue
     - src/jws.js
       - add ES512 support
     - src/keyutil.js

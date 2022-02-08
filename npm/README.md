@@ -37,7 +37,7 @@ HIGHLIGHTS
 - no dependency to other library
 - no dependency to [W3C Web Cryptography API](https://www.w3.org/TR/WebCryptoAPI/) nor [OpenSSL](https://www.openssl.org/)
 - no dependency on newer ECMAScirpt function. So old browsers also supported. 
-- very popular crypto library with [0.6M+ npm downloads/month](https://npm-stat.com/charts.html?package=jsrsasign&from=2016-05-01&to=2021-11-20)
+- very popular crypto library with [0.6M+ npm downloads/month](https://npm-stat.com/charts.html?package=jsrsasign&from=2016-05-01&to=2022-02-04)
 
 INSTALL
 -------
@@ -96,3 +96,10 @@ You can donate cryptocurrency to jsrsasign using the following addresses:
 - Ethereum(ETH): [0x9c4cdbb531e5b84796ff5f91a9f652704761e64e](https://en.cryptobadges.io/donate/0x9c4cdbb531e5b84796ff5f91a9f652704761e64e)
 - Litecoin(LTC): [LPf3VDJVamwPcNJNjjVtrUQuJQ17ZyWzeU](https://en.cryptobadges.io/donate/LPf3VDJVamwPcNJNjjVtrUQuJQ17ZyWzeU)
 - Bitcoin Cash(BCH): bitcoincash:pq3hy08pc9vm57q6ddgsc06cqdffmfzwwqxd9yejyf
+
+## SPONSORS
+<p align="center">
+<font size="+2"><b>Silver Sponsors</b></font><br clear="all"/>
+<a href="https://shiguredo.jp/" target="_blank"><img src="https://avatars.githubusercontent.com/u/2549434?s=200&v=4" height="150"/></a>
+</p>
+
