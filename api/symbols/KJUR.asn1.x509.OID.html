@@ -636,10 +636,22 @@ This class defines OID name and values.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.OID.<b><a href="../symbols/KJUR.asn1.x509.OID.html#.checkOIDs">checkOIDs</a></b>(oids)
+								</div>
+								<div class="description">check validity for OID list<br/>
+This static method validates an associative array
+as oid list.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KJUR.asn1.x509.OID.<b><a href="../symbols/KJUR.asn1.x509.OID.html#.name2obj">name2obj</a></b>(name)
 								</div>
 								<div class="description">get DERObjectIdentifier by registered OID name
-</div>
+This static method returns DERObjectIdentifier object
+for the specified OID.</div>
 							</td>
 						</tr>
 					
@@ -670,6 +682,17 @@ This static method converts OID string to its AttributeType name.</div>
 								</div>
 								<div class="description">convert OID to name<br/>
 This static method converts OID string to its name.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.OID.<b><a href="../symbols/KJUR.asn1.x509.OID.html#.registerOIDs">registerOIDs</a></b>(oids)
+								</div>
+								<div class="description">register OID list<br/>
+This static method to register an oids to existing list
+additionally.</div>
 							</td>
 						</tr>
 					
@@ -821,7 +844,7 @@ AttributeType names registered in OID.atype2oidList are following:
 					<a name=".atype2obj"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					<span class="light">{@link KJUR.asn1.DERObjectIdentifier}</span>
+					
 					<span class="light">KJUR.asn1.x509.OID.</span><b>atype2obj</b>(atype)
 					
 					</div>
@@ -860,7 +883,7 @@ KJUR.asn1.x509.OID.atype2obj('2.5.4.9') &rarr; DERObjectIdentifier of 2.5.4.9</p
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{@link KJUR.asn1.DERObjectIdentifier}</span> instance</dd>
+								<dd>KJUR.asn1.DERObjectIdentifier instance</dd>
 							
 							</dl>
 						
@@ -869,23 +892,95 @@ KJUR.asn1.x509.OID.atype2obj('2.5.4.9') &rarr; DERObjectIdentifier of 2.5.4.9</p
 
 					<hr />
 				
+					<a name=".checkOIDs"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{boolean}</span>
+					<span class="light">KJUR.asn1.x509.OID.</span><b>checkOIDs</b>(oids)
+					
+					</div>
+					<div class="description">
+						check validity for OID list<br/>
+This static method validates an associative array
+as oid list.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.asn1.x509.OID.checkOIDs(*non-assoc-array*) &rarr; false
+KJUR.asn1.x509.OID.checkOIDs({}) &rarr; false
+KJUR.asn1.x509.OID.checkOIDs({"test1": "apple"}) &rarr; false
+KJUR.asn1.x509.OID.checkOIDs({
+  "test1": "1.2.3",
+  "test2": "0.2.3.4.23",
+}) &rarr; true // valid oids
+KJUR.asn1.x509.OID.checkOIDs({
+  "test1": "4.5.7.8"
+}) &rarr; false // invalid oid</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>oids</b>
+									
+								</dt>
+								<dd>associative array of names and oids</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.2 asn1x509 2.1.11</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{boolean}</span> return true when valid OID list otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>KJUR.asn1.x509.OID.registOIDs</dd>
+							
+							</dl>
+						
+
+					<hr />
+				
 					<a name=".name2obj"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					
+					<span class="light">{Object}</span>
 					<span class="light">KJUR.asn1.x509.OID.</span><b>name2obj</b>(name)
 					
 					</div>
 					<div class="description">
 						get DERObjectIdentifier by registered OID name
-
+This static method returns DERObjectIdentifier object
+for the specified OID.
 						
 						
 					</div>
 					
 					
 					
-					<pre class="code">var asn1ObjOID = OID.name2obj('SHA1withRSA');</pre>
+					<pre class="code">var asn1ObjOID = KJUR.asn1.x509.OID.name2obj('SHA1withRSA');</pre>
 					
 					
 					
@@ -905,7 +1000,21 @@ KJUR.asn1.x509.OID.atype2obj('2.5.4.9') &rarr; DERObjectIdentifier of 2.5.4.9</p
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> DERObjectIdentifier instance</dd>
+							
+							</dl>
 						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.DERObjectIdentifier.html">KJUR.asn1.DERObjectIdentifier</a></dd>
+							
+							</dl>
 						
 
 					<hr />
@@ -1076,6 +1185,70 @@ If OID is undefined then it returns empty string (i.e. '').
 							</dl>
 						
 						
+						
+
+					<hr />
+				
+					<a name=".registerOIDs"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.OID.</span><b>registerOIDs</b>(oids)
+					
+					</div>
+					<div class="description">
+						register OID list<br/>
+This static method to register an oids to existing list
+additionally.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.asn1.x509.OID.checkOIDs({
+  "test1": "4.5.7.8"
+}) // do nothing for invalid list
+
+KJUR.asn1.x509.OID.registerOIDs({
+  "test1": "1.2.3",
+  "test2": "0.2.3.4.23",
+}) // successfully registered
+
+KJUR.asn1.x509.OID.name2oid("test1") &rarr; "1.2.3"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>oids</b>
+									
+								</dt>
+								<dd>associative array of names and oids</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.2 asn1x509 2.1.11</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.OID.html#.checkOIDs">KJUR.asn1.x509.OID.checkOIDs</a></dd>
+							
+							</dl>
 						
 
 					

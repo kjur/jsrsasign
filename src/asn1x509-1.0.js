@@ -1,9 +1,9 @@
-/* asn1x509-2.1.10.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1x509-2.1.11.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
  *
- * Copyright (c) 2013-2021 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2022 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.0 asn1x509 2.1.10 (2021-Nov-21)
+ * @version jsrsasign 10.5.2 asn1x509 2.1.11 (2022-Feb-08)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -4006,6 +4006,7 @@ extendClass(KJUR.asn1.x509.GeneralNames, KJUR.asn1.ASN1Object);
  * @property {Assoc Array} atype2oidList for short attribute type name and oid (ex. 'C' and '2.5.4.6')
  * @property {Assoc Array} name2oidList for oid name and oid (ex. 'keyUsage' and '2.5.29.15')
  * @property {Assoc Array} objCache for caching name and DERObjectIdentifier object
+ *
  * @description
  * This class defines OID name and values.
  * AttributeType names registered in OID.atype2oidList are following:
@@ -4032,35 +4033,9 @@ extendClass(KJUR.asn1.x509.GeneralNames, KJUR.asn1.ASN1Object);
  *
  * @example
  */
-KJUR.asn1.x509.OID = new function(params) {
-    this.atype2oidList = {
-	// RFC 4514 AttributeType name string (MUST recognized)
-        'CN':		'2.5.4.3',
-        'L':		'2.5.4.7',
-        'ST':		'2.5.4.8',
-        'O':		'2.5.4.10',
-        'OU':		'2.5.4.11',
-        'C':		'2.5.4.6',
-        'STREET':	'2.5.4.9',
-        'DC':		'0.9.2342.19200300.100.1.25',
-        'UID':		'0.9.2342.19200300.100.1.1',
-	// other AttributeType name string
-	// http://blog.livedoor.jp/k_urushima/archives/656114.html
-        'SN':		'2.5.4.4', // surname
-        'T':		'2.5.4.12', // title
-        'DN':		'2.5.4.49', // distinguishedName
-        'E':		'1.2.840.113549.1.9.1', // emailAddress in MS.NET or Bouncy
-	// other AttributeType name string (no short name)
-	'description':			'2.5.4.13',
-	'businessCategory':		'2.5.4.15',
-	'postalCode':			'2.5.4.17',
-	'serialNumber':			'2.5.4.5',
-	'uniqueIdentifier':		'2.5.4.45',
-	'organizationIdentifier':	'2.5.4.97',
-	'jurisdictionOfIncorporationL':	'1.3.6.1.4.1.311.60.2.1.1',
-	'jurisdictionOfIncorporationSP':'1.3.6.1.4.1.311.60.2.1.2',
-	'jurisdictionOfIncorporationC':	'1.3.6.1.4.1.311.60.2.1.3'
-    };
+KJUR.asn1.x509.OID = new function() {
+    var _DERObjectIdentifier = KJUR.asn1.DERObjectIdentifier;
+
     this.name2oidList = {
         'sha1':                 '1.3.14.3.2.26',
         'sha256':               '2.16.840.1.101.3.4.2.1',
@@ -4192,6 +4167,35 @@ KJUR.asn1.x509.OID = new function(params) {
 	'adobeTimeStamp':	'1.2.840.113583.1.1.9.1' // Adobe
     };
 
+    this.atype2oidList = {
+	// RFC 4514 AttributeType name string (MUST recognized)
+        'CN':		'2.5.4.3',
+        'L':		'2.5.4.7',
+        'ST':		'2.5.4.8',
+        'O':		'2.5.4.10',
+        'OU':		'2.5.4.11',
+        'C':		'2.5.4.6',
+        'STREET':	'2.5.4.9',
+        'DC':		'0.9.2342.19200300.100.1.25',
+        'UID':		'0.9.2342.19200300.100.1.1',
+	// other AttributeType name string
+	// http://blog.livedoor.jp/k_urushima/archives/656114.html
+        'SN':		'2.5.4.4', // surname
+        'T':		'2.5.4.12', // title
+        'DN':		'2.5.4.49', // distinguishedName
+        'E':		'1.2.840.113549.1.9.1', // emailAddress in MS.NET or Bouncy
+	// other AttributeType name string (no short name)
+	'description':			'2.5.4.13',
+	'businessCategory':		'2.5.4.15',
+	'postalCode':			'2.5.4.17',
+	'serialNumber':			'2.5.4.5',
+	'uniqueIdentifier':		'2.5.4.45',
+	'organizationIdentifier':	'2.5.4.97',
+	'jurisdictionOfIncorporationL':	'1.3.6.1.4.1.311.60.2.1.1',
+	'jurisdictionOfIncorporationSP':'1.3.6.1.4.1.311.60.2.1.2',
+	'jurisdictionOfIncorporationC':	'1.3.6.1.4.1.311.60.2.1.3'
+    };
+    
     this.objCache = {};
 
     /**
@@ -4200,9 +4204,15 @@ KJUR.asn1.x509.OID = new function(params) {
      * @memberOf KJUR.asn1.x509.OID
      * @function
      * @param {String} name OID
+     * @return {Object} DERObjectIdentifier instance
+     * @see KJUR.asn1.DERObjectIdentifier
+     *
      * @description
+     * This static method returns DERObjectIdentifier object
+     * for the specified OID.
+     *
      * @example
-     * var asn1ObjOID = OID.name2obj('SHA1withRSA');
+     * var asn1ObjOID = KJUR.asn1.x509.OID.name2obj('SHA1withRSA');
      */
     this.name2obj = function(name) {
         if (typeof this.objCache[name] != "undefined")
@@ -4210,7 +4220,7 @@ KJUR.asn1.x509.OID = new function(params) {
         if (typeof this.name2oidList[name] == "undefined")
             throw "Name of ObjectIdentifier not defined: " + name;
         var oid = this.name2oidList[name];
-        var obj = new KJUR.asn1.DERObjectIdentifier({'oid': oid});
+        var obj = new _DERObjectIdentifier({'oid': oid});
         this.objCache[name] = obj;
         return obj;
     };
@@ -4221,7 +4231,7 @@ KJUR.asn1.x509.OID = new function(params) {
      * @memberOf KJUR.asn1.x509.OID
      * @function
      * @param {String} atype short attribute type name such like 'C', 'CN' or OID
-     * @return {@link KJUR.asn1.DERObjectIdentifier} instance
+     * @return KJUR.asn1.DERObjectIdentifier instance
      * @description
      * @example
      * KJUR.asn1.x509.OID.atype2obj('CN') &rarr; DERObjectIdentifier of 2.5.4.3
@@ -4242,12 +4252,88 @@ KJUR.asn1.x509.OID = new function(params) {
 	} else if (this.name2oidList[atype] !== undefined) {
 	    oid = this.name2oidList[atype];
     	} else {
-            throw "AttributeType name undefined: " + atype;
+            throw new Error("AttributeType name undefined: " + atype);
 	}
-        var obj = new KJUR.asn1.DERObjectIdentifier({'oid': oid});
+        var obj = new _DERObjectIdentifier({'oid': oid});
         this.objCache[atype] = obj;
         return obj;
     };
+
+    /**
+     * register OID list<br/>
+     * @name registerOIDs
+     * @memberOf KJUR.asn1.x509.OID
+     * @function
+     * @param {object} oids associative array of names and oids
+     * @since jsrsasign 10.5.2 asn1x509 2.1.11
+     * @see KJUR.asn1.x509.OID.checkOIDs
+     * 
+     * @description
+     * This static method to register an oids to existing list
+     * additionally.
+     *
+     * @example
+     * KJUR.asn1.x509.OID.checkOIDs({
+     *   "test1": "4.5.7.8"
+     * }) // do nothing for invalid list
+     *
+     * KJUR.asn1.x509.OID.registerOIDs({
+     *   "test1": "1.2.3",
+     *   "test2": "0.2.3.4.23",
+     * }) // successfully registered
+     *
+     * KJUR.asn1.x509.OID.name2oid("test1") &rarr; "1.2.3"
+     */
+    this.registerOIDs = function(oids) {
+	if (! this.checkOIDs(oids)) return;
+	for (var name in oids) {
+	    this.name2oidList[name] = oids[name];
+	}
+    };
+
+    /**
+     * check validity for OID list<br/>
+     * @name checkOIDs
+     * @memberOf KJUR.asn1.x509.OID
+     * @function
+     * @param {object} oids associative array of names and oids
+     * @return {boolean} return true when valid OID list otherwise false
+     * @since jsrsasign 10.5.2 asn1x509 2.1.11
+     * @see KJUR.asn1.x509.OID.registOIDs
+     * 
+     * @description
+     * This static method validates an associative array
+     * as oid list.
+     *
+     * @example
+     * KJUR.asn1.x509.OID.checkOIDs(*non-assoc-array*) &rarr; false
+     * KJUR.asn1.x509.OID.checkOIDs({}) &rarr; false
+     * KJUR.asn1.x509.OID.checkOIDs({"test1": "apple"}) &rarr; false
+     * KJUR.asn1.x509.OID.checkOIDs({
+     *   "test1": "1.2.3",
+     *   "test2": "0.2.3.4.23",
+     * }) &rarr; true // valid oids
+     * KJUR.asn1.x509.OID.checkOIDs({
+     *   "test1": "4.5.7.8"
+     * }) &rarr; false // invalid oid
+     */
+    this.checkOIDs = function(oids) {
+	try {
+	    var nameList = Object.keys(oids);
+	    if (nameList.length == 0)
+		return false;
+	    nameList.map(function(value, index, array) {
+		var oid = this[value];
+		if (! oid.match(/^[0-2]\.[0-9.]+$/))
+		    throw new Error("value is not OID");
+	    }, oids);
+	    return true;
+	} catch(ex) {
+	    return false;
+	}
+    };
+
+
 };
 
 /**

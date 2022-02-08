@@ -1214,14 +1214,40 @@ ASN1HEX.dump(hExpect),
 });
 
 test("OID class test", function() {
-  var o = KJUR.asn1.x509.OID;
-  equal(o.atype2obj('C').getEncodedHex(), "0603550406", "C");
-  equal(o.name2obj('SHA1withRSA').getEncodedHex(), 
-         "06092a864886f70d010105", "name2obj SHA1withRSA");
-  equal(o.name2oid('basicConstraints'), '2.5.29.19', "name2oid basicConstraints");
-  equal(o.name2oid('UNKNOWNOIDNAME'), '', "name2oid unknown name");
-  equal(o.oid2name('2.5.29.19'), 'basicConstraints', "oid2name basicConstraints");
-  equal(o.oid2name('0.0.0.0'), '', "oid2name unknown oid");
+var o = KJUR.asn1.x509.OID;
+equal(o.atype2obj('C').getEncodedHex(), "0603550406", "C");
+equal(o.name2obj('SHA1withRSA').getEncodedHex(), 
+      "06092a864886f70d010105", "name2obj SHA1withRSA");
+equal(o.name2oid('basicConstraints'), '2.5.29.19', "name2oid basicConstraints");
+equal(o.name2oid('UNKNOWNOIDNAME'), '', "name2oid unknown name");
+equal(o.oid2name('2.5.29.19'), 'basicConstraints', "oid2name basicConstraints");
+equal(o.oid2name('0.0.0.0'), '', "oid2name unknown oid");
+});
+
+test("OID.registerOIDs test", function() {
+var o = KJUR.asn1.x509.OID;
+o.registerOIDs({
+    "test1": "1.2.3.4",
+    "test2": "0.1.2.3"
+});
+equal(o.name2oid("test1"), "1.2.3.4", "regist test1=1.2.3.4");
+equal(o.oid2name("0.1.2.3"), "test2", "regist 0.1.2.3=test2");
+equal(o.name2obj("test1").getEncodedHex(), "06032a0304", "regist test1 asn1obj");
+});
+
+test("OID.checkOIDs test", function() {
+var o = KJUR.asn1.x509.OID;
+equal(o.checkOIDs({
+    "test1": "1.2.3.4",
+    "test2": "0.1.2.3"
+}), true, "{test1: 1.2.3.4} > true");
+equal(o.checkOIDs({"test1": "3.4.5",}), false, "{test1: 3.4.5} > false");
+equal(o.checkOIDs({"test1": 1}), false, "{test1: 1} > false");
+equal(o.checkOIDs({"test1": "apple"}), false, "{test1: apple} > false");
+equal(o.checkOIDs(1), false, "1 > false");
+equal(o.checkOIDs(true), false, "true > false");
+equal(o.checkOIDs([]), false, "[] > false");
+equal(o.checkOIDs({}), false, "{} > false");
 });
 
 });
