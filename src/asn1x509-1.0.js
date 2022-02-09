@@ -3819,15 +3819,18 @@ KJUR.asn1.x509.GeneralName = function(params) {
     KJUR.asn1.x509.GeneralName.superclass.constructor.call(this);
     var asn1Obj = null,
 	type = null,
-	pTag = {rfc822: '81', dns: '82', dn: 'a4',  uri: '86', ip: '87'},
+	pTag = {rfc822: '81', dns: '82', dn: 'a4',  uri: '86', ip: '87', otherName: 'a0'},
 	_KJUR = KJUR,
 	_KJUR_asn1 = _KJUR.asn1,
+    _DERObjectIdentifier = _KJUR_asn1.DERObjectIdentifier,
 	_DERSequence = _KJUR_asn1.DERSequence,
 	_DEROctetString = _KJUR_asn1.DEROctetString,
+    _DERPrintableString = _KJUR_asn1.DERPrintableString,
 	_DERIA5String = _KJUR_asn1.DERIA5String,
 	_DERTaggedObject = _KJUR_asn1.DERTaggedObject,
 	_ASN1Object = _KJUR_asn1.ASN1Object,
 	_X500Name = _KJUR_asn1.x509.X500Name,
+    _newObject = _KJUR_asn1.ASN1Util.newObject,
 	_pemtohex = pemtohex;
 	
     this.explicit = false;
@@ -3841,6 +3844,20 @@ KJUR.asn1.x509.GeneralName = function(params) {
         if (params.rfc822 !== undefined) {
             this.type = 'rfc822';
             v = new _DERIA5String({str: params[this.type]});
+        }
+
+        if (params.otherName !== undefined) {
+            this.type = 'otherName';
+
+            var asn1Oid = new _DERObjectIdentifier({'oid': params[this.type].oid});            
+            var asn1Value = _newObject(params[this.type].obj)                                              
+
+            var asn1Array = new Array();
+            asn1Array.push(asn1Oid);
+            asn1Array.push(asn1Value);
+
+            v = new _DERSequence({'array': asn1Array}); 
+
         }
 
         if (params.dns !== undefined) {
@@ -4164,7 +4181,9 @@ KJUR.asn1.x509.OID = new function() {
 	'counterSignature':	'1.2.840.113549.1.9.6',//PKCS#9
 	'archiveTimeStampV3':	'0.4.0.1733.2.4',//ETSI EN29319122/TS101733
 	'pdfRevocationInfoArchival':'1.2.840.113583.1.1.8', //Adobe
-	'adobeTimeStamp':	'1.2.840.113583.1.1.9.1' // Adobe
+	'adobeTimeStamp':	'1.2.840.113583.1.1.9.1', // Adobe
+    // icpBrasil
+    //'dados-pf':	'2.16.76.1.3.1'
     };
 
     this.atype2oidList = {
