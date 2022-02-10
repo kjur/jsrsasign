@@ -481,7 +481,8 @@ KJUR.asn1.ASN1Object = function(params) {
         } else {
             var hNlen = hN.length / 2;
             if (hNlen > 15) {
-                throw "ASN.1 length too long to represent by 8x: n = " + n.toString(16);
+                throw new Error("ASN.1 length too long to represent by 8x: n = "
+				+ n.toString(16));
             }
             var head = 128 + hNlen;
             return head.toString(16) + hN;
@@ -978,7 +979,7 @@ extendClass(KJUR.asn1.DERInteger, KJUR.asn1.ASN1Object);
  * // initialize with boolean array
  * o = new KJUR.asn1.DERBitString({array: [true,false,true,true]});
  * // initialize with hexadecimal string (04 is unused bits)
- * o = new KJUR.asn1.DEROctetString({hex: "04bac0"});
+ * o = new KJUR.asn1.DERBitString({hex: "04bac0"});
  * // initialize with ASN1Util.newObject argument for encapsulated
  * o = new KJUR.asn1.DERBitString({obj: {seq: [{int: 3}, {prnstr: 'aaa'}]}});
  * // above generates a ASN.1 data like this:

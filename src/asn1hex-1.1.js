@@ -1,9 +1,9 @@
-/* asn1hex-1.2.9.js (c) 2012-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1hex-1.2.10.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
  *
- * Copyright (c) 2010-2021 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2022 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license/
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.13 asn1hex 1.2.9 (2021-Mar-07)
+ * @version jsrsasign 10.5.3 asn1hex 1.2.10 (2022-Feb-10)
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -1003,6 +1003,91 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
 };
 
 /**
+ * parse ASN.1 DER hexadecimal string<br/>
+ * @name parse
+ * @memberOf ASN1HEX
+ * @function
+ * @param {String} h hexadecimal string of ASN1. DER
+ * @return {Object} associative array of ASN.1 parsed result
+ * @since jsrsasign 10.5.3 asn1hex 1.1.x
+ * @see KJUR.asn1.ASN1Util.newOjbect
+ *
+ * @description
+ * This method parses ASN.1 DER hexadecimal string.
+ * Its result can be applied to KJUR.asn1.ASN1Util.newOjbect.
+ *
+ * @example
+ */
+ASN1HEX.parse = function(h) {
+    var _ASN1HEX = ASN1HEX;
+    var _parse = _ASN1HEX.parse;
+    var _getV = _ASN1HEX.getV;
+    var _getTLV = _ASN1HEX.getTLV;
+    var _dump = _ASN1HEX.dump;
+    var _getChildIdx = _ASN1HEX.getChildIdx;
+    var tagName = {
+	"0c": "utf8str", "13": "prnstr", "14": "telstr",
+	"16": "ia5str", "17": "utctime", "18": "gentime",
+	"1a": "visstr", "1e": "bmpstr", "30": "seq",
+	"31": "set"
+    };
+
+    var _parseChild = function(h) {
+	var result = [];
+	var aIdx = _getChildIdx(h, 0);
+	for (var i = 0; i < aIdx.length; i++) {
+	    var idx = aIdx[i];
+	    var hTLV = _getTLV(h, idx);
+	    var pItem = _parse(hTLV);
+	    result.push(pItem);
+	}
+	return result;
+    };
+
+    var tag = h.substr(0, 2);
+    var result = {};
+    var hV = _getV(h, 0);
+    if (tag == "01") {
+	if (h == "0101ff") return {bool: true};
+	return {bool: false};
+    } else if (tag == "02") {
+	return {"int": {hex: hV}};
+    } else if (tag == "03") {
+	return {bitstr: {hex: hV}};
+    } else if (tag == "04") {
+	return {octstr: {hex: hV}};
+    } else if (tag == "05") {
+	return {"null": ''};
+    } else if (tag == "06") {
+	var oidDot = KJUR.asn1.ASN1Util.oidHexToInt(hV);
+	var oidName = KJUR.asn1.x509.OID.oid2name(oidDot);
+	return {oid: oidName};
+    } else if (tag == "0a") {
+	if (hV.length > 4) {
+	    return {"enum": {hex: hV}};
+	} else {
+	    return {"enum": parseInt(hV, 16)};
+	}
+    } else if (tag == "30" || tag == "31") {
+	result[tagName[tag]] = _parseChild(h);
+	return result;
+    } else if (":0c:13:14:16:17:18:1a:1e:".indexOf(tag) != -1) {
+	var s = hextoutf8(hV);
+	result[tagName[tag]] = {str: s};
+	return result;
+    } else if (tag.match(/^8[0-9]$/)) {
+	return {"tag": {"tag": tag, explicit: false, hex: hV}};
+    } else if (tag.match(/^a[0-9]$/)) {
+	return {"tag": {"tag": tag, explicit: true, hex: hV}};
+    } else {
+	var d = new KJUR.asn1.ASN1Object();
+	d.hV = hV;
+	var hL = d.getLengthHexFromValue();
+	return {"asn1": {"tlv": tag + hL + hV}};
+    }
+};
+
+/**
  * check if a hexadecimal tag is a specified ASN.1 context specific tag
  * @name isContextTag
  * @memberOf ASN1HEX
@@ -1067,7 +1152,7 @@ ASN1HEX.isContextTag = function(hTag, sTag) {
 };
 
 /**
- * simple ASN.1 DER hexadecimal string checker
+ * simple ASN.1 DER hexadecimal string checker<br/>
  * @name isASN1HEX
  * @memberOf ASN1HEX
  * @function

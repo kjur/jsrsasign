@@ -1,6 +1,24 @@
 
 ChangeLog for jsrsasign
 
+add OtherName support in GeneralName
+* Changes from 10.5.2 to 10.5.3 (2022-Feb-10)
+  - add otherName support in GeneralName by PR
+    with small update (#535)
+  - src/asn1x509.js
+    - add otherName of GeneralName support (#535)
+    - GeneralName class refactoring
+    - add OtherName class
+  - src/x509.js
+    - add otherName of GeneralName support
+  - src/asn1hex.js
+    - add ASN1HEX.parse method
+  - src/asn1.js
+    - API doc and error exception fix 
+  - test/qunit-do-{asn1x509,x509-ext}.html
+    - test case added
+  - test/qunit-do-asn1hex-parse.html added
+
 small update for OID and JWK
 * Changes from 10.5.1 to 10.5.2 (2022-Feb-08)
   - src/asn1x509.js
