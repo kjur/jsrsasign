@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta charset="utf-8">
+<title>QUnit for ASN1HEX.parse</title>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script src="../ext/jsbn.js"></script>
+<script src="../ext/jsbn2.js"></script>
+<script src="../ext/rsa.js"></script>
+<script src="../ext/rsa2.js"></script>
+<script src="../ext/base64.js"></script>
+<script src="../src/base64x-1.1.js"></script>
+<script src="../src/asn1hex-1.1.js"></script>
+<script src="../src/asn1-1.0.js"></script>
+<script src="../src/asn1x509-1.0.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+test("ASN1HEX.parse test", function() {
+var _parse = ASN1HEX.parse;
+var hIN, oExpect;
+
+hIn = "0101ff";
+oExpect = {bool: true};
+deepEqual(_parse(hIn), oExpect, "01 bool true");
+
+hIn = "010100";
+oExpect = {bool: false};
+deepEqual(_parse(hIn), oExpect, "01 bool false");
+
+hIn = "020301abcd";
+oExpect = {"int": {hex: "01abcd"}};
+deepEqual(_parse(hIn), oExpect, "02 int 0x01abcd");
+
+hIn = "030300abcd";
+oExpect = {bitstr: {hex: "00abcd"}};
+deepEqual(_parse(hIn), oExpect, "03 bitstr 00abcd");
+
+hIn = "040300abcd";
+oExpect = {octstr: {hex: "00abcd"}};
+deepEqual(_parse(hIn), oExpect, "04 octstr 00abcd");
+
+hIn = "0500";
+oExpect = {"null": ""};
+deepEqual(_parse(hIn), oExpect, "05 null");
+
+hIn = "0609608648016503040201";
+oExpect = {oid: "sha256"};
+deepEqual(_parse(hIn), oExpect, "06 oid sha256");
+
+hIn = "0a010b";
+oExpect = {enum: 11};
+deepEqual(_parse(hIn), oExpect, "07 enum 11");
+
+hIn = "0a0301abcd";
+oExpect = {enum: {hex: "01abcd"}};
+deepEqual(_parse(hIn), oExpect, "07 enum 01abcd");
+
+hIn = "0c03616161";
+oExpect = {utf8str: {str: "aaa"}};
+deepEqual(_parse(hIn), oExpect, "0c utf8str aaa");
+
+hIn = "1303616161";
+oExpect = {prnstr: {str: "aaa"}};
+deepEqual(_parse(hIn), oExpect, "13 prnstr aaa");
+
+hIn = "1403616161";
+oExpect = {telstr: {str: "aaa"}};
+deepEqual(_parse(hIn), oExpect, "14 telstr aaa");
+
+hIn = "1603616161";
+oExpect = {ia5str: {str: "aaa"}};
+deepEqual(_parse(hIn), oExpect, "16 ia5str aaa");
+
+hIn = "170d3232303231303033303630385a";
+oExpect = {utctime: {str: "220210030608Z"}};
+deepEqual(_parse(hIn), oExpect, "17 utctime 220210030608Z");
+
+hIn = "180f32303232303231303033303832325a";
+oExpect = {gentime: {str: "20220210030822Z"}};
+deepEqual(_parse(hIn), oExpect, "18 gentime 20220210030822Z");
+
+hIn = "1a03616161";
+oExpect = {visstr: {str: "aaa"}};
+deepEqual(_parse(hIn), oExpect, "1a visstr aaa");
+
+hIn = "3009130161130161130161";
+oExpect = {seq: [
+    {prnstr: {str: "a"}},
+    {prnstr: {str: "a"}},
+    {prnstr: {str: "a"}}
+]};
+deepEqual(_parse(hIn), oExpect, "30 seq");
+
+hIn = "3109130161130161130161";
+oExpect = {"set": [
+    {prnstr: {str: "a"}},
+    {prnstr: {str: "a"}},
+    {prnstr: {str: "a"}}
+]};
+deepEqual(_parse(hIn), oExpect, "31 set");
+
+hIn = "8003616161";
+oExpect = {"tag": {"tag": "80", explicit: false, hex: "616161"}};
+deepEqual(_parse(hIn), oExpect, "80 tag[0] 616161");
+
+hIn = "a0051303616161";
+oExpect = {"tag": {"tag": "a0", explicit: true, hex: "1303616161"}};
+deepEqual(_parse(hIn), oExpect, "a0 tag[0] 1303616161");
+
+hIn = "e103616161";
+oExpect = {"asn1": {"tlv": "e103616161"}};
+deepEqual(_parse(hIn), oExpect, "e1 unknown e103616161");
+
+});
+
+});
+
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+<p>
+<a href="../">TOP</a> | 
+<a href="index.html">TEST INDEX</a> | 
+<a href="qunit-do-asn1hex.html">asn1hex</a> | 
+<a href="qunit-do-asn1hex-parse.html">asn1hex-parse</a> | 
+</p>
+</body>
+</html>

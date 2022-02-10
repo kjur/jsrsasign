@@ -1,9 +1,9 @@
-/* x509-2.0.11.js (c) 2012-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.0.12.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
  *
- * Copyright (c) 2010-2021 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2022 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.13 x509 2.0.11 (2021-Mar-07)
+ * @version jsrsasign 10.5.3 x509 2.0.12 (2022-Feb-10)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -99,6 +99,8 @@ function X509(params) {
     var _ASN1HEX = ASN1HEX,
 	_getChildIdx = _ASN1HEX.getChildIdx,
 	_getV = _ASN1HEX.getV,
+	_dump = _ASN1HEX.dump,
+	_ASN1HEX_parse = _ASN1HEX.parse,
 	_getTLV = _ASN1HEX.getTLV,
 	_getVbyList = _ASN1HEX.getVbyList,
 	_getVbyListEx = _ASN1HEX.getVbyListEx,
@@ -1188,9 +1190,13 @@ function X509(params) {
      * @function
      * @param {String} h hexadecimal string of GeneralName
      * @return {Array} JSON object of GeneralName parameters or undefined
-     * @see KJUR.asn1.x509.GeneralNames
-     * @see X509#getGeneralName
      * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see KJUR.asn1.x509.GeneralNames
+     * @see KJUR.asn1.x509.GeneralName
+     * @see KJUR.asn1.x509.OtherName
+     * @see X509#getGeneralName
+     * @see X509#getOtherName
+     *
      * @description
      * This method will get GeneralName parameters defined in
      * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.6">
@@ -1230,6 +1236,7 @@ function X509(params) {
 	if (tag == "86") return {uri: sValue};
 	if (tag == "87") return {ip: hextoip(hValue)};
 	if (tag == "a4") return {dn: this.getX500Name(hValue)};
+	if (tag == "a0") return {other: this.getOtherName(h)};
 	return undefined;
     };
 
@@ -1666,6 +1673,48 @@ function X509(params) {
 	}
 
 	return result;
+    };
+
+    /**
+     * getOtherName ASN.1 structure parameter as JSON object<br/>
+     * @name getOtherName
+     * @memberOf X509#
+     * @param {String} h hexadecimal string of GeneralName
+     * @return {Array} associative array of OtherName
+     * @since jsrsasign 10.5.3 x509 2.0.12
+     * @see KJUR.asn1.x509.GeneralNames
+     * @see KJUR.asn1.x509.GeneralName
+     * @see KJUR.asn1.x509.OtherName
+     * @see X509#getGeneralName
+     * @see ASN1HEX#parse
+     *
+     * @description
+     * This method will get OtherName parameters defined in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.6">
+     * RFC 5280 4.2.1.6</a>.
+     * <pre>
+     * OtherName ::= SEQUENCE {
+     *    type-id    OBJECT IDENTIFIER,
+     *    value      [0] EXPLICIT ANY DEFINED BY type-id }
+     * </pre>
+     * The value of member "other" is converted by 
+     * {@link ASN1HEX#parse}.
+     *
+     * @example
+     * x = new X509();
+     * x.getOtherName("30...") &rarr;
+     * { oid: "1.2.3.4",
+     *   other: {utf8str: {str: "aaa"}} }
+     */
+    this.getOtherName = function(h) {
+        var result = {};
+
+        var a = _getChildIdx(h, 0);
+        var hOID = _getVbyList(h, a[0], [], "06");
+        var hValue = _getVbyList(h, a[1], []);
+        result.oid = KJUR.asn1.ASN1Util.oidHexToInt(hOID);
+        result.obj = _ASN1HEX_parse(hValue);
+        return result;
     };
 
     /**
@@ -2120,6 +2169,9 @@ function X509(params) {
 	var s = this.dnarraytostr(a);
 	return { array: a, str: s };
     };
+
+    
+    
 
     /**
      * get X.500 Name ASN.1 structure parameter array<br/>

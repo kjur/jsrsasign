@@ -277,6 +277,40 @@ test("GeneralName class test", function() {
   equal(o.getEncodedHex(), "8704c0a80101", "ip: c0a80101");
 });
 
+test("GeneralName OtherName test", function() {
+var o;
+var _GeneralName = KJUR.asn1.x509.GeneralName;
+
+var param = {other: {
+  oid:"2.16.76.1.3.1", 
+  value: {prnstr:{str:"260619863371256782000000000000000000000000000"}}
+}};
+var hExpect = "a0380605604c010301a02f132d323630363139383633333731323536373832303030303030303030303030303030303030303030303030303030";
+o = new _GeneralName(param);
+equal(o.getEncodedHex(), hExpect, "2.16.76.1.3.1, prn:260619...");
+
+var param3 = {other: {
+  oid: "1.2.392.200149.8.5.5.1",
+  value: {utf8str:{str: '山田　太郎'}}
+}};
+var hExpect3 = "a01f060a2a83088c9b5508050501a0110c0fe5b1b1e794b0e38080e5a4aae9838e";
+o = new _GeneralName(param3);
+equal(o.getEncodedHex(), hExpect3, "1.2.392.200149.8.5.5.1, utf8:山田　太郎");
+
+});
+
+// == OtherName class test 
+test("OtherName test", function() {
+var o;
+var _OtherName = KJUR.asn1.x509.OtherName;
+var param = {
+  oid: "2.16.76.1.3.1",
+  value: {prnstr: {str: "260619863371256782000000000000000000000000000"}}
+};
+var hExpect = "30380605604c010301a02f132d323630363139383633333731323536373832303030303030303030303030303030303030303030303030303030";
+equal((new _OtherName(param)).getEncodedHex(), hExpect, "{oid: 2.16.76.1.3.1, value: {prnstr: 2606...}}");
+});
+
 // == X500Name class test 
 
 test("X500Name class test", function() {

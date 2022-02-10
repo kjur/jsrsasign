@@ -1,4 +1,4 @@
-/* asn1x509-2.1.11.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1x509-2.1.12.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.2 asn1x509 2.1.11 (2022-Feb-08)
+ * @version jsrsasign 10.5.3 asn1x509 2.1.12 (2022-Feb-09)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -3760,6 +3760,9 @@ KJUR.asn1.x509.AlgorithmIdentifier.PSSNAME2ASN1TLV = {
  * GeneralName ASN.1 structure class<br/>
  * @name KJUR.asn1.x509.GeneralName
  * @class GeneralName ASN.1 structure class
+ * @see KJUR.asn1.x509.OtherName
+ * @see KJUR.asn1.x509.X500Name
+ *
  * @description
  * <br/>
  * As for argument 'params' for constructor, you can specify one of
@@ -3780,6 +3783,7 @@ KJUR.asn1.x509.AlgorithmIdentifier.PSSNAME2ASN1TLV = {
  * NOTE2: dn and ldapdn were supported since jsrsasign 6.2.3 asn1x509 1.0.19.<br/>
  * NOTE3: ip were supported since jsrsasign 8.0.10 asn1x509 1.1.4.<br/>
  * NOTE4: X500Name parameters in dn were supported since jsrsasign 8.0.16.<br/>
+ * NOTE5: otherName is supported since jsrsasign 10.5.3.<br/>
  *
  * Here is definition of the ASN.1 syntax:
  * <pre>
@@ -3794,6 +3798,10 @@ KJUR.asn1.x509.AlgorithmIdentifier.PSSNAME2ASN1TLV = {
  *   uniformResourceIdentifier  [6] IA5String,
  *   iPAddress                  [7] OCTET STRING,
  *   registeredID               [8] OBJECT IDENTIFIER }
+ *
+ * OtherName ::= SEQUENCE {
+ *   type-id    OBJECT IDENTIFIER,
+ *   value      [0] EXPLICIT ANY DEFINED BY type-id }
  * </pre>
  *
  * @example
@@ -3810,6 +3818,10 @@ KJUR.asn1.x509.AlgorithmIdentifier.PSSNAME2ASN1TLV = {
  * gn = new KJUR.asn1.x509.GeneralName({rfc822: 'test@aaa.com'});
  * gn = new KJUR.asn1.x509.GeneralName({dns:    'aaa.com'});
  * gn = new KJUR.asn1.x509.GeneralName({uri:    'http://aaa.com/'});
+ * gn = new KJUR.asn1.x509.GeneralName({other: {
+ *   oid: "1.2.3.4",
+ *   value: {utf8: "example"} // any ASN.1 which passed to ASN1Util.newObject
+ * }});
  *
  * gn = new KJUR.asn1.x509.GeneralName({ldapdn:     'O=Test,C=US'}); // DEPRECATED
  * gn = new KJUR.asn1.x509.GeneralName({certissuer: certPEM});       // DEPRECATED
@@ -3817,17 +3829,140 @@ KJUR.asn1.x509.AlgorithmIdentifier.PSSNAME2ASN1TLV = {
  */
 KJUR.asn1.x509.GeneralName = function(params) {
     KJUR.asn1.x509.GeneralName.superclass.constructor.call(this);
-    var asn1Obj = null,
-	type = null,
-	pTag = {rfc822: '81', dns: '82', dn: 'a4',  uri: '86', ip: '87'},
+
+    var pTag = { rfc822: '81', dns: '82', dn: 'a4',  
+		 uri: '86', ip: '87', otherName: 'a0'},
 	_KJUR = KJUR,
 	_KJUR_asn1 = _KJUR.asn1,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_X500Name = _KJUR_asn1_x509.X500Name,
+	_OtherName = _KJUR_asn1_x509.OtherName,
+	_DERIA5String = _KJUR_asn1.DERIA5String,
+	_DERPrintableString = _KJUR_asn1.DERPrintableString,
+	_DEROctetString = _KJUR_asn1.DEROctetString,
+	_DERTaggedObject = _KJUR_asn1.DERTaggedObject,
+	_ASN1Object = _KJUR_asn1.ASN1Object,
+	_Error = Error;
+
+    this.params = null;
+
+    this.setByParam = function(params) {
+	this.params = params;
+    };
+
+    this.getEncodedHex = function() {
+	var params = this.params;
+	var hTag, explicitFlag, dObj;
+	var explicitFlag = false;
+	if (params.other !== undefined) {
+	    hTag = "a0",
+	    dObj = new _OtherName(params.other);
+	} else if (params.rfc822 !== undefined) {
+	    hTag = "81";
+	    dObj = new _DERIA5String({str: params.rfc822});
+	} else if (params.dns !== undefined) {
+	    hTag = "82";
+	    dObj = new _DERIA5String({str: params.dns});
+	} else if (params.dn !== undefined) {
+	    hTag = "a4";
+	    explicitFlag = true;
+	    if (typeof params.dn === "string") {
+		dObj = new _X500Name({str: params.dn});
+	    } else if (params.dn instanceof KJUR.asn1.x509.X500Name) {
+		dObj = params.dn;
+	    } else {
+		dObj = new _X500Name(params.dn);
+	    }
+	} else if (params.ldapdn !== undefined) {
+	    hTag = "a4";
+	    explicitFlag = true;
+	    dObj = new _X500Name({ldapstr: params.ldapdn});
+	} else if (params.certissuer !== undefined ||
+		   params.certsubj !== undefined) {
+	    hTag = "a4";
+	    explicitFlag = true;
+	    var isIssuer, certStr;
+	    var certHex = null;
+	    if (params.certsubj !== undefined) {
+		isIssuer = false;
+		certStr = params.certsubj;
+	    } else {
+		isIssuer = true;
+		certStr = params.certissuer;
+	    }
+
+	    if (certStr.match(/^[0-9A-Fa-f]+$/)) {
+		certHex == certStr;
+            }
+	    if (certStr.indexOf("-----BEGIN ") != -1) {
+		certHex = pemtohex(certStr);
+	    }
+	    if (certHex == null) 
+		throw new Error("certsubj/certissuer not cert");
+
+	    var x = new X509();
+	    x.hex = certHex;
+
+	    var hDN;
+	    if (isIssuer) {
+		hDN = x.getIssuerHex();
+	    } else {
+		hDN = x.getSubjectHex();
+	    }
+	    dObj = new _ASN1Object();
+	    dObj.hTLV = hDN;
+	} else if (params.uri !== undefined) {
+	    hTag = "86";
+	    dObj = new _DERIA5String({str: params.uri});
+	} else if (params.ip !== undefined) {
+	    hTag = "87";
+	    var ip = params.ip;
+	    var hIP;
+	    var errmsg = "malformed IP address";
+	    if (ip.match(/^[0-9.]+[.][0-9.]+$/)) { // ipv4
+		hIP = intarystrtohex("[" + ip.split(".").join(",") + "]");
+		if (hIP.length !== 8)
+		    throw new _Error(errmsg);
+	    } else if (ip.match(/^[0-9A-Fa-f:]+:[0-9A-Fa-f:]+$/)) { // ipv6
+		hIP = ipv6tohex(ip);
+	    } else if (ip.match(/^([0-9A-Fa-f][0-9A-Fa-f]){1,}$/)) { // hex
+		hIP = ip;
+	    } else {
+		throw new _Error(errmsg);
+	    }
+	    dObj = new _DEROctetString({hex: hIP});
+	} else {
+	    throw new _Error("improper params");
+	}
+
+	var dTag = new _DERTaggedObject({tag: hTag,
+					 explicit: explicitFlag,
+					 obj: dObj});
+	return dTag.getEncodedHex();
+    };
+
+    if (params !== undefined) this.setByParam(params);
+};
+
+KJUR.asn1.x509.GeneralName_bak = function(params) {
+    KJUR.asn1.x509.GeneralName.superclass.constructor.call(this);
+    var asn1Obj = null,
+	type = null,
+	pTag = { rfc822: '81', dns: '82', dn: 'a4',  
+		 uri: '86', ip: '87', otherName: 'a0'},
+	_KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_KJUR_asn1_x509 = _KJURd_asn1.x509,
+	_DERObjectIdentifier = _KJUR_asn1.DERObjectIdentifier,
 	_DERSequence = _KJUR_asn1.DERSequence,
 	_DEROctetString = _KJUR_asn1.DEROctetString,
+	_DERPrintableString = _KJUR_asn1.DERPrintableString,
 	_DERIA5String = _KJUR_asn1.DERIA5String,
 	_DERTaggedObject = _KJUR_asn1.DERTaggedObject,
 	_ASN1Object = _KJUR_asn1.ASN1Object,
-	_X500Name = _KJUR_asn1.x509.X500Name,
+	_X500Name = _KJUR_asn1_x509.X500Name,
+	_OtherName = _KJUR_asn1_x509.OtherName,
+	_newObject = _KJUR_asn1.ASN1Util.newObject,
 	_pemtohex = pemtohex;
 	
     this.explicit = false;
@@ -3841,6 +3976,20 @@ KJUR.asn1.x509.GeneralName = function(params) {
         if (params.rfc822 !== undefined) {
             this.type = 'rfc822';
             v = new _DERIA5String({str: params[this.type]});
+        }
+
+        if (params.other !== undefined) {
+            this.type = 'otherName';
+
+            var asn1Oid = new _DERObjectIdentifier({'oid': params[this.type].oid});            
+            var asn1Value = _newObject(params[this.type].obj)                                              
+
+            var asn1Array = new Array();
+            asn1Array.push(asn1Oid);
+            asn1Array.push(asn1Value);
+
+            v = new _DERSequence({'array': asn1Array}); 
+
         }
 
         if (params.dns !== undefined) {
@@ -3945,7 +4094,6 @@ KJUR.asn1.x509.GeneralName = function(params) {
     if (params !== undefined) {
         this.setByParam(params);
     }
-
 };
 extendClass(KJUR.asn1.x509.GeneralName, KJUR.asn1.ASN1Object);
 
@@ -3998,6 +4146,70 @@ KJUR.asn1.x509.GeneralNames = function(paramsArray) {
     }
 };
 extendClass(KJUR.asn1.x509.GeneralNames, KJUR.asn1.ASN1Object);
+
+/**
+ * OtherName of GeneralName ASN.1 structure class<br/>
+ * @name KJUR.asn1.x509.OtherName
+ * @class OtherName ASN.1 structure class
+ * @since jsrsasign 10.5.3 asn1x509 2.1.12
+ * @see KJUR.asn1.x509.GeneralName
+ * @see KJUR.asn1.ASN1Util.newObject
+ *
+ * @description
+ * This class is for OtherName of GeneralName ASN.1 structure.
+ * Constructor has two members:
+ * <ul>
+ * <li>oid - oid string (ex. "1.2.3.4")</li>
+ * <li>value - associative array passed to ASN1Util.newObject</li>
+ * </ul>
+ *
+ * <pre>
+ * OtherName ::= SEQUENCE {
+ *   type-id    OBJECT IDENTIFIER,
+ *   value      [0] EXPLICIT ANY DEFINED BY type-id }
+ * </pre>
+ *
+ * @example
+ * new KJUR.asn1.x509.OtherName({
+ *   oid: "1.2.3.4",
+ *   value: {prnstr: {str: "abc"}}
+ * })
+ */
+KJUR.asn1.x509.OtherName = function(params) {
+    KJUR.asn1.x509.OtherName.superclass.constructor.call(this);
+
+    var asn1Obj = null,
+	type = null,
+	_KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_DERObjectIdentifier = _KJUR_asn1.DERObjectIdentifier,
+	_DERSequence = _KJUR_asn1.DERSequence,
+	_newObject = _KJUR_asn1.ASN1Util.newObject;
+
+    this.params = null;
+
+    this.setByParam = function(params) {
+	this.params = params;
+    };
+
+    this.getEncodedHex = function() {
+	var params = this.params;
+
+	if (params.oid == undefined || params.value == undefined)
+	    throw new Error("oid or value not specified");
+
+	var dOid = new _DERObjectIdentifier({oid: params.oid});
+	var dValue = _newObject({tag: {tag: "a0",
+				       explicit: true,
+				       obj: params.value}});
+	var dSeq = new _DERSequence({array: [dOid, dValue]});
+
+        return dSeq.getEncodedHex();
+    };
+
+    if (params !== undefined) this.setByParam(params);
+};
+extendClass(KJUR.asn1.x509.OtherName, KJUR.asn1.ASN1Object);
 
 /**
  * static object for OID
@@ -4164,7 +4376,7 @@ KJUR.asn1.x509.OID = new function() {
 	'counterSignature':	'1.2.840.113549.1.9.6',//PKCS#9
 	'archiveTimeStampV3':	'0.4.0.1733.2.4',//ETSI EN29319122/TS101733
 	'pdfRevocationInfoArchival':'1.2.840.113583.1.1.8', //Adobe
-	'adobeTimeStamp':	'1.2.840.113583.1.1.9.1' // Adobe
+	'adobeTimeStamp':	'1.2.840.113583.1.1.9.1', // Adobe
     };
 
     this.atype2oidList = {

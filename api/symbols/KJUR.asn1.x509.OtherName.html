@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign JavaScript API Reference - KJUR.asn1.DERObjectIdentifier</title>
+		<title>jsrsasign JavaScript API Reference - KJUR.asn1.x509.OtherName</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -520,26 +520,24 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.DERObjectIdentifier
+				Class KJUR.asn1.x509.OtherName
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
-				<br />Extends
-					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
-				class for ASN.1 DER ObjectIdentifier
+				OtherName ASN.1 structure class
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1-1.0.js.html">asn1-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.DERObjectIdentifier.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.OtherName.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -552,14 +550,10 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.DERObjectIdentifier.html#constructor">KJUR.asn1.DERObjectIdentifier</a></b>(JSON)
+								<b><a href="../symbols/KJUR.asn1.x509.OtherName.html#constructor">KJUR.asn1.x509.OtherName</a></b>()
 							</div>
-							<div class="description">class for ASN.1 DER ObjectIdentifier
-<br/>
-As for argument 'params' for constructor, you can specify one of
-following properties:
-<ul>
-<li>oid - specify initial ASN.1 value(V) by a oid string (ex.</div>
+							<div class="description">OtherName of GeneralName ASN.1 structure class<br/>
+This class is for OtherName of GeneralName ASN.1 structure.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -568,67 +562,8 @@ following properties:
 
 <!-- ============================== properties summary ===================== -->
 			
-				
-				
-				
-				
-				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#params">params</a></dd>
-				</dl>
-				
-			
 
 <!-- ============================== methods summary ======================== -->
-			
-				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.DERObjectIdentifier.">
-					<caption>Method Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERObjectIdentifier.html#setValueHex">setValueHex</a></b>(newHexString)
-								</div>
-								<div class="description">set value by a hexadecimal string</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERObjectIdentifier.html#setValueName">setValueName</a></b>(oidName)
-								</div>
-								<div class="description">set value by a OID name
-OID name shall be defined in 'KJUR.asn1.x509.OID.name2oidList'.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.DERObjectIdentifier.html#setValueOidString">setValueOidString</a></b>(oidString)
-								</div>
-								<div class="description">set value by a OID string<br/></div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
-				
-				
-				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a></dd>
-				</dl>
-				
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -641,46 +576,43 @@ OID name shall be defined in 'KJUR.asn1.x509.OID.name2oidList'.</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.DERObjectIdentifier</b>(JSON)
+						<b>KJUR.asn1.x509.OtherName</b>()
 				</div>
 				
 				<div class="description">
-					class for ASN.1 DER ObjectIdentifier
-<br/>
-As for argument 'params' for constructor, you can specify one of
-following properties:
+					OtherName of GeneralName ASN.1 structure class<br/>
+This class is for OtherName of GeneralName ASN.1 structure.
+Constructor has two members:
 <ul>
-<li>oid - specify initial ASN.1 value(V) by a oid string (ex. 2.5.4.13)</li>
-<li>hex - specify initial ASN.1 value(V) by a hexadecimal string</li>
+<li>oid - oid string (ex. "1.2.3.4")</li>
+<li>value - associative array passed to ASN1Util.newObject</li>
 </ul>
-NOTE: 'params' can be omitted.
+
+<pre>
+OtherName ::= SEQUENCE {
+  type-id    OBJECT IDENTIFIER,
+  value      [0] EXPLICIT ANY DEFINED BY type-id }
+</pre>
 					
 				</div>
 				
 				
 				
-				<pre class="code">new DERObjectIdentifier({"name": "sha1"})
-new DERObjectIdentifier({"oid": "1.2.3.4"})
-new DERObjectIdentifier({"hex": "2d..."})
-new DERObjectIdentifier("1.2.3.4")
-new DERObjectIdentifier("SHA1withRSA")</pre>
+				<pre class="code">new KJUR.asn1.x509.OtherName({
+  oid: "1.2.3.4",
+  value: {prnstr: {str: "abc"}}
+})</pre>
 				
 				
 				
 				
+					
+					
 					
 						<dl class="detailList">
-						<dt class="heading">Parameters:</dt>
-						
-							<dt>
-								<span class="light fixedFont">{Object}</span>  <b>JSON</b>
-								
-							</dt>
-								<dd>object or string of parameters (ex. {'oid': '2.5.4.5'})</dd>
-						
+						<dt class="heading">Since:</dt>
+							<dd>jsrsasign 10.5.3 asn1x509 2.1.12</dd>
 						</dl>
-					
-					
 					
 					
 					
@@ -689,7 +621,9 @@ new DERObjectIdentifier("SHA1withRSA")</pre>
 						<dl class="detailList">
 						<dt class="heading">See:</dt>
 						
-							<dd><a href="../symbols/global__.html#oidtohex">oidtohex</a></dd>
+							<dd><a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.ASN1Util.html#.newObject">KJUR.asn1.ASN1Util.newObject</a></dd>
 						
 						</dl>
 					
@@ -701,137 +635,6 @@ new DERObjectIdentifier("SHA1withRSA")</pre>
 			
 
 <!-- ============================== method details ========================= -->		
-			
-				<div class="sectionTitle">
-					Method Detail
-				</div>
-				
-					<a name="setValueHex"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setValueHex</b>(newHexString)
-					
-					</div>
-					<div class="description">
-						set value by a hexadecimal string
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>newHexString</b>
-									
-								</dt>
-								<dd>hexadecimal value of OID bytes</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="setValueName"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setValueName</b>(oidName)
-					
-					</div>
-					<div class="description">
-						set value by a OID name
-OID name shall be defined in 'KJUR.asn1.x509.OID.name2oidList'.
-Otherwise raise error.
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">o = new KJUR.asn1.DERObjectIdentifier();
-o.setValueName("serverAuth");</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>oidName</b>
-									
-								</dt>
-								<dd>OID name (ex. 'serverAuth')</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>1.0.1</dd>
-							</dl>
-							</dl>
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="setValueOidString"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setValueOidString</b>(oidString)
-					
-					</div>
-					<div class="description">
-						set value by a OID string<br/>
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">o = new KJUR.asn1.DERObjectIdentifier();
-o.setValueOidString("2.5.4.13");</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>oidString</b>
-									
-								</dt>
-								<dd>OID string (ex. 2.5.4.13)</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					
-				
 			
 			
 <!-- ============================== event details ========================= -->		
