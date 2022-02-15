@@ -1,6 +1,33 @@
 
 ChangeLog for jsrsasign
 
+ASN.1 parser update and fix
+* Changes from 10.5.3 to 10.5.4 (2022-Feb-15)
+  - src/asn1.js
+    - DERTaggedObject
+      - refactoring
+      - add {tag: xx, str:"aaa"} parameter support
+      - add {tag: xx, hex:"616161"} parameter support
+      - setASN1Object method now *deprecated*. Please use setByParam
+  - src/asn1hex.js
+    - ASN1HEX.parse
+      - add encapsulated OctetString, BitString support
+      - add encapsulated structured TaggedObject support
+      - changed to return binary string for 3byte or less BitString value
+      - ObjectIdentifier fix when undefined OID name
+  - src/base64x.js
+    - added bitstrtobinstr/binstrtobitstr 
+    - utf8tohex fix for lower case hexadecimal string
+    - hextoutf8 fix for improper hexadecimal string for UTF-8
+    - bitstrtoint/inttobitstr fix for error case return
+  - test/qunit-do-asn1.html 
+    - TaggedObject test case update
+  - test/qunit-do-asn1hex-parse.html
+    - BitString, TaggedObject test case update
+  - test/qunit-do-base64x.html
+    - hextoutf8/utf8tohex testcase update
+    - bitstrtobinstr/binstrtobitstr testcase added
+
 add OtherName support in GeneralName
 * Changes from 10.5.2 to 10.5.3 (2022-Feb-10)
   - add otherName support in GeneralName by PR

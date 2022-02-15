@@ -423,6 +423,7 @@ test("TaggedObject Test", function() {
 var _DERTaggedObject = KJUR.asn1.DERTaggedObject;
 var _DERInteger = KJUR.asn1.DERInteger;
 
+var d;
 var d1a = new KJUR.asn1.DERUTF8String();
 d1a.setString('a'); // 0c0161
 var d1 = new KJUR.asn1.DERTaggedObject();
@@ -441,29 +442,41 @@ var d4a = new KJUR.asn1.DERUTF8String({'str':'a'});
 var d4 = new KJUR.asn1.DERTaggedObject({'obj':d2a});
 equal(d4.getEncodedHex(), "a0030c0161", "constructor with defaults");
 
-var d5 = new _DERTaggedObject({
+d = new _DERTaggedObject({
   tage: "a2",
   obj: new _DERInteger({int: 7})
 });
-equal(d5.getEncodedHex(), "a203020107", "tage a2 DERInteger(7)");
+equal(d.getEncodedHex(), "a203020107", "tage a2 DERInteger(7)");
 
-var d6 = new _DERTaggedObject({
+d = new _DERTaggedObject({
   tage: "a2",
   obj: {'int': {'int': 7}}
 });
-equal(d6.getEncodedHex(), "a203020107", "tage a2 {int: {int: 7}}");
+equal(d.getEncodedHex(), "a203020107", "tage a2 {int: {int: 7}}");
 
-var d7 = new _DERTaggedObject({
+d = new _DERTaggedObject({
   tagi: "82",
   obj: {'int': {'int': 7}}
 });
-equal(d7.getEncodedHex(), "820107", "tagi 82 {int: {int: 7}}");
+equal(d.getEncodedHex(), "820107", "tagi 82 {int: {int: 7}}");
 
-var d8 = new _DERTaggedObject({
+d = new _DERTaggedObject({
   tage: "a2",
   obj: {'asn1': {'tlv': '020107'}}
 });
-equal(d8.getEncodedHex(), "a203020107", "tage a2 {asn1: {tlv: ''020107'}}");
+equal(d.getEncodedHex(), "a203020107", "tage a2 {asn1: {tlv: ''020107'}}");
+
+d = new _DERTaggedObject({
+  tag: "81",
+  str: "aaa"
+});
+equal(d.getEncodedHex(), "8103616161", "tag 81, str: aaa");
+
+d = new _DERTaggedObject({
+  tag: "81",
+  hex: "616161"
+});
+equal(d.getEncodedHex(), "8103616161", "tag 81, hex: 616161");
 
 });
 

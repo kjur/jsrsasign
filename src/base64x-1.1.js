@@ -1,9 +1,9 @@
-/* base64x-1.1.20 (c) 2012-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* base64x-1.1.21 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * Copyright (c) 2012-2021 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2012-2022 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.13 base64x 1.1.20 (2021-Mar-07)
+ * @version jsrsasign 10.5.4 base64x 1.1.21 (2022-Feb-14)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -322,7 +322,7 @@ function b64toutf8(s) {
  * @since 1.1.1
  */
 function utf8tohex(s) {
-  return uricmptohex(encodeURIComponentAll(s));
+  return uricmptohex(encodeURIComponentAll(s)).toLowerCase();
 }
 
 /**
@@ -336,7 +336,11 @@ function utf8tohex(s) {
  * @since 1.1.1
  */
 function hextoutf8(s) {
-  return decodeURIComponent(hextouricmp(s));
+  try {
+    return decodeURIComponent(hextouricmp(s));
+  } catch(ex) {
+    return null;
+  }
 }
 
 /**
@@ -1467,7 +1471,9 @@ var strpad = function(s, len, padchar) {
  * 
  * @description
  * This function converts from hexadecimal string of ASN.1 BitString
- * value with unused bit to its integer value.
+ * value with unused bit to its integer value. <br/>
+ * When an improper hexadecimal string of BitString value
+ * is applied, this returns -1.
  * 
  * @example
  * // "03c8" &rarr; 0xc8 unusedbit=03 &rarr; 11001000b unusedbit=03 &rarr; 11001b &rarr; 25
@@ -1475,23 +1481,32 @@ var strpad = function(s, len, padchar) {
  * // "02fff8" &rarr; 0xfff8 unusedbit=02 &rarr; 1111111111111000b unusedbit=02
  * //   11111111111110b &rarr; 16382
  * bitstrtoint("02fff8") &rarr; 16382
+ * bitstrtoint("05a0") &rarr; 5 (=101b)
+ * bitstrtoint("ff00") &rarr; -1 // for improper BitString value
+ * bitstrtoint("05a0").toString(2) &rarr; "101"
+ * bitstrtoint("07a080").toString(2) &rarr; "101000001"
  */
 function bitstrtoint(h) {
+    if (h.length % 2 != 0) return -1; 
+    h = h.toLowerCase();
+    if (h.match(/^[0-9a-f]+$/) == null) return -1;
     try {
 	var hUnusedbit = h.substr(0, 2);
 	if (hUnusedbit == "00")
 	    return parseInt(h.substr(2), 16);
 	var iUnusedbit = parseInt(hUnusedbit, 16);
+	if (iUnusedbit > 7) return -1;
 	var hValue = h.substr(2);
 	var bValue = parseInt(hValue, 16).toString(2);
 	if (bValue == "0") bValue = "00000000";
 	bValue = bValue.slice(0, 0 - iUnusedbit);
-	return parseInt(bValue, 2);
+	var iValue = parseInt(bValue, 2);
+	if (iValue == NaN) return -1;
+	return iValue;
     } catch(ex) {
 	return -1;
     }
 };
-
 
 /**
  * convert from integer value to hexadecimal string of ASN.1 BitString value with unused bit<br/>
@@ -1507,13 +1522,21 @@ function bitstrtoint(h) {
  * @description
  * This function converts from an integer value to 
  * hexadecimal string of ASN.1 BitString value
- * with unused bit.
+ * with unused bit. <br/>
+ * When "n" is not non-negative number, this returns null
  * 
  * @example
  * // 25 &rarr; 11001b &rarr; 11001000b unusedbit=03 &rarr; 0xc8 unusedbit=03 &rarr; "03c8"
  * inttobitstr(25) &rarr; "03c8"
+ * inttobitstr(-3) &rarr; null
+ * inttobitstr("abc") &rarr; null
+ * inttobitstr(parseInt("11001", 2)) &rarr; "03c8"
+ * inttobitstr(parseInt("101", 2)) &rarr; "05a0"
+ * inttobitstr(parseInt("101000001", 2)) &rarr; "07a080"
  */
 function inttobitstr(n) {
+    if (typeof n != "number") return null;
+    if (n < 0) return null;
     var bValue = Number(n).toString(2);
     var iUnusedbit = 8 - bValue.length % 8;
     if (iUnusedbit == 8) iUnusedbit = 0;
@@ -1524,6 +1547,72 @@ function inttobitstr(n) {
     return hUnusedbit + hValue;
 };
 
+// ==== bitstr hex / binary string =======================
+
+/**
+ * convert from hexadecimal string of ASN.1 BitString value with unused bit to binary string<br/>
+ * @name bitstrtobinstr
+ * @function
+ * @param {string} h hexadecimal string of ASN.1 BitString value with unused bit
+ * @return {string} binary string
+ * @since jsrsasign 10.5.4 base64x 1.1.21
+ * @see binstrtobitstr
+ * @see inttobitstr
+ * 
+ * @description
+ * This function converts from hexadecimal string of ASN.1 BitString
+ * value with unused bit to its integer value. <br/>
+ * When an improper hexadecimal string of BitString value
+ * is applied, this returns null.
+ * 
+ * @example
+ * bitstrtobinstr("05a0") &rarr; "101"
+ * bitstrtobinstr("07a080") &rarr; "101000001"
+ * bitstrtoint(502) &rarr; null // non ASN.1 BitString value
+ * bitstrtoint("ff00") &rarr; -1 // for improper BitString value
+ */
+function bitstrtobinstr(h) {
+    var n = bitstrtoint(h);
+    if (n == -1) return null;
+    return n.toString(2);
+}
+
+/**
+ * convert from binary string to hexadecimal string of ASN.1 BitString value with unused bit<br/>
+ * @name binstrtobitstr
+ * @function
+ * @param {string} s binary string (ex. "101")
+ * @return {string} hexadecimal string of ASN.1 BitString value with unused bit
+ * @since jsrsasign 10.5.4 base64x 1.1.21
+ * @see bitstrtobinstr
+ * @see inttobitstr
+ * @see KJUR.asn1.DERBitString
+ * 
+ * @description
+ * This function converts from an binary string (ex. "101") to 
+ * hexadecimal string of ASN.1 BitString value
+ * with unused bit (ex. "05a0"). <br/>
+ * When "s" is not binary string, this returns null.
+ * 
+ * @example
+ * binstrtobitstr("101") &rarr; "05a0"
+ * binstrtobitstr("11001") &rarr; "03c8"
+ * binstrtobitstr("101000001") &rarr; "07a080"
+ * binstrtobitstr(101) &rarr; null // not number
+ * binstrtobitstr("xyz") &rarr; null // not binary string
+ */
+function binstrtobitstr(s) {
+    if (typeof s != "string") return null;
+    if (s.match(/^[01]+$/) == null) return null;
+    try {
+	var n = parseInt(s, 2);
+	return inttobitstr(n);
+    } catch(ex) {
+	return null;
+    }
+}
+
+// =======================================================
 /**
  * set class inheritance<br/>
  * @name extendClass

@@ -1,9 +1,9 @@
-/* asn1-1.0.22.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1-1.0.23.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
  *
- * Copyright (c) 2013-2020 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2022 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.4.1 asn1 1.0.22 (2021-Sep-30)
+ * @version jsrsasign 10.5.4 asn1 1.0.23 (2022-Feb-14)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1041,7 +1041,7 @@ KJUR.asn1.DERBitString = function(params) {
      * NOTE: Trailing zeros '0' will be ignored.
      * @example
      * o = new KJUR.asn1.DERBitString();
-     * o.setByBooleanArray("01011");
+     * o.setByBinaryString("01011");
      */
     this.setByBinaryString = function(binaryString) {
         binaryString = binaryString.replace(/0+$/, '');
@@ -1756,12 +1756,17 @@ extendClass(KJUR.asn1.DERSet, KJUR.asn1.DERAbstractStructured);
 KJUR.asn1.DERTaggedObject = function(params) {
     KJUR.asn1.DERTaggedObject.superclass.constructor.call(this);
 
-    var _KJUR_asn1 = KJUR.asn1;
+    var _KJUR_asn1 = KJUR.asn1,
+	_ASN1HEX = ASN1HEX,
+	_getV = _ASN1HEX.getV,
+	_isASN1HEX = _ASN1HEX.isASN1HEX,
+	_newObject = _KJUR_asn1.ASN1Util.newObject;
 
     this.hT = "a0";
     this.hV = '';
     this.isExplicit = true;
     this.asn1Object = null;
+    this.params = {tag: "a0", explicit: true}; //"tag": "a0, "explicit": true};
 
     /**
      * set value by an ASN1Object
@@ -1771,53 +1776,60 @@ KJUR.asn1.DERTaggedObject = function(params) {
      * @param {Boolean} isExplicitFlag flag for explicit/implicit tag
      * @param {Integer} tagNoHex hexadecimal string of ASN.1 tag
      * @param {ASN1Object} asn1Object ASN.1 to encapsulate
+     * @deprecated since jsrsasign 10.5.4 please use setByParam instead
      */
     this.setASN1Object = function(isExplicitFlag, tagNoHex, asn1Object) {
-        this.hT = tagNoHex;
-        this.isExplicit = isExplicitFlag;
-        this.asn1Object = asn1Object;
-        if (this.isExplicit) {
-            this.hV = this.asn1Object.getEncodedHex();
-            this.hTLV = null;
-            this.isModified = true;
-        } else {
-            this.hV = null;
-            this.hTLV = asn1Object.getEncodedHex();
-            this.hTLV = this.hTLV.replace(/^../, tagNoHex);
-            this.isModified = false;
-        }
+	this.params = {tag: tagNoHex,
+		       explicit: isExplicitFlag,
+		       obj: asn1Object};
     };
 
     this.getFreshValueHex = function() {
+	var params = this.params;
+
+	if (params.explicit == undefined) params.explicit = true;
+
+	if (params.tage != undefined) {
+	    params.tag = params.tage;
+	    params.explicit = true;
+	}
+	if (params.tagi != undefined) {
+	    params.tag = params.tagi;
+	    params.explicit = false;
+	}
+
+	if (params.str != undefined) {
+	    this.hV = utf8tohex(params.str);
+	} else if (params.hex != undefined) {
+	    this.hV = params.hex;
+	} else if (params.obj != undefined) {
+	    var hV1;
+	    if (params.obj instanceof _KJUR_asn1.ASN1Object) {
+		hV1 = params.obj.getEncodedHex();
+	    } else if (typeof params.obj == "object") {
+		hV1 = _newObject(params.obj).getEncodedHex();
+	    }
+	    if (params.explicit) {
+		this.hV = hV1;
+	    } else {
+		this.hV = _getV(hV1, 0);
+	    }
+	} else {
+	    throw new Error("str, hex nor obj not specified");
+	}
+
+	if (params.tag == undefined) params.tag = "a0";
+	this.hT = params.tag;
+        this.hTLV = null;
+        this.isModified = true;
+
         return this.hV;
     };
 
     this.setByParam = function(params) {
-        if (params.tag != undefined) {
-            this.hT = params.tag;
-        }
-        if (params.explicit != undefined) {
-            this.isExplicit = params.explicit;
-        }
-	if (params.tage != undefined) {
-	    this.hT = params.tage;
-            this.isExplicit = true;
-	}
-	if (params.tagi != undefined) {
-	    this.hT = params.tagi;
-            this.isExplicit = false;
-	}
-        if (params.obj != undefined) {
-	    if (params.obj instanceof _KJUR_asn1.ASN1Object) {
-		this.asn1Object = params.obj;
-		this.setASN1Object(this.isExplicit, this.hT, this.asn1Object);
-	    } else if (typeof params.obj == "object") {
-		this.asn1Object = _KJUR_asn1.ASN1Util.newObject(params.obj);
-		this.setASN1Object(this.isExplicit, this.hT, this.asn1Object);
-	    }
-        }
+	this.params = params;
     };
 
-    if (params != undefined) this.setByParam(params);
+    if (params !== undefined) this.setByParam(params);
 };
 extendClass(KJUR.asn1.DERTaggedObject, KJUR.asn1.ASN1Object);

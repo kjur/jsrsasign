@@ -1,4 +1,4 @@
-/* asn1hex-1.2.10.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1hex-1.2.11.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.3 asn1hex 1.2.10 (2022-Feb-10)
+ * @version jsrsasign 10.5.4 asn1hex 1.2.11 (2022-Feb-14)
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -1019,12 +1019,17 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
  * @example
  */
 ASN1HEX.parse = function(h) {
-    var _ASN1HEX = ASN1HEX;
-    var _parse = _ASN1HEX.parse;
-    var _getV = _ASN1HEX.getV;
-    var _getTLV = _ASN1HEX.getTLV;
-    var _dump = _ASN1HEX.dump;
-    var _getChildIdx = _ASN1HEX.getChildIdx;
+    var _ASN1HEX = ASN1HEX,
+	_parse = _ASN1HEX.parse,
+	_isASN1HEX = _ASN1HEX.isASN1HEX,
+	_getV = _ASN1HEX.getV,
+	_getTLV = _ASN1HEX.getTLV,
+	_getChildIdx = _ASN1HEX.getChildIdx,
+	_KJUR_asn1 = KJUR.asn1,
+	_oidHexToInt = _KJUR_asn1.ASN1Util.oidHexToInt,
+	_oid2name = _KJUR_asn1.x509.OID.oid2name,
+	_hextoutf8 = hextoutf8;
+
     var tagName = {
 	"0c": "utf8str", "13": "prnstr", "14": "telstr",
 	"16": "ia5str", "17": "utctime", "18": "gentime",
@@ -1053,15 +1058,37 @@ ASN1HEX.parse = function(h) {
     } else if (tag == "02") {
 	return {"int": {hex: hV}};
     } else if (tag == "03") {
-	return {bitstr: {hex: hV}};
+	try {
+	    if (hV.substr(0, 2) != "00") throw "not encap";
+	    var hV1 = hV.substr(2);
+	    if (! _isASN1HEX(hV1)) throw "not encap";
+	    return {bitstr: {obj: _parse(hV1)}};
+	} catch(ex) {
+	    var bV = null;
+	    if (hV.length <= 6) bV = bitstrtobinstr(hV);
+	    if (bV == null) {
+		return {bitstr: {hex: hV}};
+	    } else {
+		return {bitstr: {bin: bV}};
+	    }
+	}
     } else if (tag == "04") {
-	return {octstr: {hex: hV}};
+	try {
+	    if (! _isASN1HEX(hV)) throw "not encap";
+	    return {octstr: {obj: _parse(hV)}};
+	} catch(ex) {
+	    return {octstr: {hex: hV}};
+	}
     } else if (tag == "05") {
 	return {"null": ''};
     } else if (tag == "06") {
-	var oidDot = KJUR.asn1.ASN1Util.oidHexToInt(hV);
-	var oidName = KJUR.asn1.x509.OID.oid2name(oidDot);
-	return {oid: oidName};
+	var oidDot = _oidHexToInt(hV);
+	var oidName = _oid2name(oidDot);
+	if (oidName == "") {
+	    return {oid: oidDot};
+	} else {
+	    return {oid: oidName};
+	}
     } else if (tag == "0a") {
 	if (hV.length > 4) {
 	    return {"enum": {hex: hV}};
@@ -1072,13 +1099,28 @@ ASN1HEX.parse = function(h) {
 	result[tagName[tag]] = _parseChild(h);
 	return result;
     } else if (":0c:13:14:16:17:18:1a:1e:".indexOf(tag) != -1) {
-	var s = hextoutf8(hV);
+	var s = _hextoutf8(hV);
 	result[tagName[tag]] = {str: s};
 	return result;
     } else if (tag.match(/^8[0-9]$/)) {
-	return {"tag": {"tag": tag, explicit: false, hex: hV}};
+	var s = _hextoutf8(hV);
+	if (s == null |
+	    s == "" | 
+	    (s.match(/[\x00-\x1F\x7F-\x9F]/) != null) |
+	    (s.match(/[\u0000-\u001F\u0080–\u009F]/) != null)) {
+	    return {"tag": {"tag": tag, explicit: false, hex: hV}};
+	} else {
+	    return {"tag": {"tag": tag, explicit: false, str: s}};
+	}
     } else if (tag.match(/^a[0-9]$/)) {
-	return {"tag": {"tag": tag, explicit: true, hex: hV}};
+	try {
+	    if (! _isASN1HEX(hV)) throw "not encap";
+	    return {"tag": {"tag": tag, 
+			    explicit: true,
+			    obj: _parse(hV)}};
+	} catch(ex) {
+	    return {"tag": {"tag": tag, explicit: true, hex: hV}};
+	}
     } else {
 	var d = new KJUR.asn1.ASN1Object();
 	d.hV = hV;

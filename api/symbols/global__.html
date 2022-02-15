@@ -649,6 +649,27 @@ string with new lines to a hexadecimal string.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#binstrtobitstr">binstrtobitstr</a></b>(s)
+								</div>
+								<div class="description">convert from binary string to hexadecimal string of ASN.1 BitString value with unused bit<br/>
+This function converts from an binary string (ex.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#bitstrtobinstr">bitstrtobinstr</a></b>(h)
+								</div>
+								<div class="description">convert from hexadecimal string of ASN.1 BitString value with unused bit to binary string<br/>
+This function converts from hexadecimal string of ASN.1 BitString
+value with unused bit to its integer value.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#bitstrtoint">bitstrtoint</a></b>(h)
 								</div>
 								<div class="description">convert from hexadecimal string of ASN.1 BitString value with unused bit to integer value<br/>
@@ -1686,6 +1707,153 @@ b64utoutf8("YWFh") &rarr; "aaa"</pre>
 
 					<hr />
 				
+					<a name="binstrtobitstr"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{string}</span>
+					<b>binstrtobitstr</b>(s)
+					
+					</div>
+					<div class="description">
+						convert from binary string to hexadecimal string of ASN.1 BitString value with unused bit<br/>
+This function converts from an binary string (ex. "101") to 
+hexadecimal string of ASN.1 BitString value
+with unused bit (ex. "05a0"). <br/>
+When "s" is not binary string, this returns null.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">binstrtobitstr("101") &rarr; "05a0"
+binstrtobitstr("11001") &rarr; "03c8"
+binstrtobitstr("101000001") &rarr; "07a080"
+binstrtobitstr(101) &rarr; null // not number
+binstrtobitstr("xyz") &rarr; null // not binary string</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>s</b>
+									
+								</dt>
+								<dd>binary string (ex. "101")</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.4 base64x 1.1.21</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> hexadecimal string of ASN.1 BitString value with unused bit</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/global__.html#bitstrtobinstr">bitstrtobinstr</a></dd>
+							
+								<dd><a href="../symbols/global__.html#inttobitstr">inttobitstr</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.DERBitString.html">KJUR.asn1.DERBitString</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="bitstrtobinstr"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{string}</span>
+					<b>bitstrtobinstr</b>(h)
+					
+					</div>
+					<div class="description">
+						convert from hexadecimal string of ASN.1 BitString value with unused bit to binary string<br/>
+This function converts from hexadecimal string of ASN.1 BitString
+value with unused bit to its integer value. <br/>
+When an improper hexadecimal string of BitString value
+is applied, this returns null.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">bitstrtobinstr("05a0") &rarr; "101"
+bitstrtobinstr("07a080") &rarr; "101000001"
+bitstrtoint(502) &rarr; null // non ASN.1 BitString value
+bitstrtoint("ff00") &rarr; -1 // for improper BitString value</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of ASN.1 BitString value with unused bit</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.4 base64x 1.1.21</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> binary string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/global__.html#binstrtobitstr">binstrtobitstr</a></dd>
+							
+								<dd><a href="../symbols/global__.html#inttobitstr">inttobitstr</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
 					<a name="bitstrtoint"> </a>
 					<div class="fixedFont">
 					
@@ -1696,7 +1864,9 @@ b64utoutf8("YWFh") &rarr; "aaa"</pre>
 					<div class="description">
 						convert from hexadecimal string of ASN.1 BitString value with unused bit to integer value<br/>
 This function converts from hexadecimal string of ASN.1 BitString
-value with unused bit to its integer value.
+value with unused bit to its integer value. <br/>
+When an improper hexadecimal string of BitString value
+is applied, this returns -1.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -1710,7 +1880,11 @@ value with unused bit to its integer value.
 bitstrtoint("03c8") &rarr; 25
 // "02fff8" &rarr; 0xfff8 unusedbit=02 &rarr; 1111111111111000b unusedbit=02
 //   11111111111110b &rarr; 16382
-bitstrtoint("02fff8") &rarr; 16382</pre>
+bitstrtoint("02fff8") &rarr; 16382
+bitstrtoint("05a0") &rarr; 5 (=101b)
+bitstrtoint("ff00") &rarr; -1 // for improper BitString value
+bitstrtoint("05a0").toString(2) &rarr; "101"
+bitstrtoint("07a080").toString(2) &rarr; "101000001"</pre>
 					
 					
 					
@@ -2763,7 +2937,8 @@ have extra space or newline string so that they will be ignored.
 						convert from integer value to hexadecimal string of ASN.1 BitString value with unused bit<br/>
 This function converts from an integer value to 
 hexadecimal string of ASN.1 BitString value
-with unused bit.
+with unused bit. <br/>
+When "n" is not non-negative number, this returns null
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -2774,7 +2949,12 @@ with unused bit.
 					
 					
 					<pre class="code">// 25 &rarr; 11001b &rarr; 11001000b unusedbit=03 &rarr; 0xc8 unusedbit=03 &rarr; "03c8"
-inttobitstr(25) &rarr; "03c8"</pre>
+inttobitstr(25) &rarr; "03c8"
+inttobitstr(-3) &rarr; null
+inttobitstr("abc") &rarr; null
+inttobitstr(parseInt("11001", 2)) &rarr; "03c8"
+inttobitstr(parseInt("101", 2)) &rarr; "05a0"
+inttobitstr(parseInt("101000001", 2)) &rarr; "07a080"</pre>
 					
 					
 					
