@@ -71,18 +71,27 @@ equal(b64utoutf8("44GC"), "あ", "あ");
 equal(b64utoutf8("YWFh"), "aaa", "aaa");
 });
 
+test("hextoutf8", function() {
+equal(hextoutf8("e88ab1"), "花", "e88ab1 > 花");
+equal(hextoutf8("9301"), null, "9301 > null");
+});
+
+test("utf8tohex", function() {
+equal(utf8tohex("花"), "e88ab1", "花 > e88ab1");
+});
+
 test("KJUR.lang.String.isInteger", function() {
-  equal(KJUR.lang.String.isInteger("123"), true, "123");
-  equal(KJUR.lang.String.isInteger("-123"), true, "-123");
-  equal(KJUR.lang.String.isInteger("abc"), false, "abc");
-  equal(KJUR.lang.String.isInteger("0"), true, "0");
+equal(KJUR.lang.String.isInteger("123"), true, "123");
+equal(KJUR.lang.String.isInteger("-123"), true, "-123");
+equal(KJUR.lang.String.isInteger("abc"), false, "abc");
+equal(KJUR.lang.String.isInteger("0"), true, "0");
 });
 
 test("KJUR.lang.String.isHex", function() {
-  equal(KJUR.lang.String.isHex("123"), false, "123");
-  equal(KJUR.lang.String.isHex("1234"), true, "1234");
-  equal(KJUR.lang.String.isHex("az12"), false, "az12");
-  equal(KJUR.lang.String.isHex("az1%"), false, "az1%");
+equal(KJUR.lang.String.isHex("123"), false, "123");
+equal(KJUR.lang.String.isHex("1234"), true, "1234");
+equal(KJUR.lang.String.isHex("az12"), false, "az12");
+equal(KJUR.lang.String.isHex("az1%"), false, "az1%");
 });
 
 test("KJUR.lang.String.isBase64", function() {
@@ -292,7 +301,7 @@ test("iptohex", function() {
 });
 
 test("ucs2hextoutf8", function() {
-  equal(ucs2hextoutf8('006600fc0072'), 'für', 'für');
+equal(ucs2hextoutf8('006600fc0072'), 'für', 'für');
 });
 
 test("oidtohex", function() {
@@ -325,6 +334,7 @@ equal(bitstrtoint("04b0"), 11, "04b0 > 11");
 equal(bitstrtoint("03c8"), 25, "03c8 > 25");
 equal(bitstrtoint("02fff8"), 16382, "02ff8 > 16382");
 equal(bitstrtoint("02fffc"), 16383, "02ffc > 16383");
+equal(bitstrtoint("ff"), -1, "hoge");
 });
 
 test("inttobitstr test", function() {
@@ -338,6 +348,23 @@ equal(inttobitstr(16382), "02fff8", "16382 > 02fff8");
 equal(inttobitstr(16383), "02fffc", "16383 > 02fffc");
 });
 
+test("bitstrtobinstr test", function() {
+equal(bitstrtobinstr("05a0"), "101", "05a0 > 101");
+equal(bitstrtobinstr("07a080"), "101000001", "07a080 > 101000001");
+equal(bitstrtobinstr("0"), null, "0 > null");
+equal(bitstrtobinstr("ff"), null, "ff > null");
+equal(bitstrtobinstr("xyz"), null, "xyz > null");
+equal(bitstrtobinstr("rxyz"), null, "rxyz > null");
+equal(bitstrtobinstr(1234), null, "1234 > null");
+});
+
+test("binstrtobitstr test", function() {
+equal(binstrtobitstr("101"), "05a0", "101 > 05a0");
+equal(binstrtobitstr("101000001"), "07a080", "101000001 > 07a080");
+equal(binstrtobitstr("xyz"), null, "xyz > null");
+equal(binstrtobitstr(1234), null, "1234 > null");
+
+});
 
 
 });
