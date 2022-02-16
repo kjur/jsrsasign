@@ -1,6 +1,11 @@
 
 ChangeLog for jsrsasign
 
+X509CRL.findRevCert bugfix
+* Changes from 10.5.5 to 10.5.6 (2022-Feb-17)
+  - src/x509crl.js X509CRL class
+    - fix sn error in findRevCert 
+
 CRL parser update
 * Changes from 10.5.4 to 10.5.5 (2022-Feb-17)
   - src/x509crl.js X509CRL class

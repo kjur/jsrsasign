@@ -346,7 +346,7 @@ var X509CRL = function(params) {
     this.findRevCert = function(sCert) {
 	var x = new X509(sCert);
 	var hSN = x.getSerialNumberHex();
-	return this.findRevCertBySN(sn);
+	return this.findRevCertBySN(hSN);
     };
     
     /**
