@@ -629,11 +629,42 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509CRL.html#findRevCert">findRevCert</a></b>(PEM)
+								</div>
+								<div class="description">get revokedCertificate associative array for checking certificate<br/>
+This method will find revokedCertificate entry as JSON object
+for a specified certificate.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509CRL.html#findRevCertBySN">findRevCertBySN</a></b>(hexadecimal)
+								</div>
+								<div class="description">get revokedCertificate associative array for serial number<br/>
+This method will find revokedCertificate entry as JSON object
+for a specified serial number.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509CRL.html#getIssuer">getIssuer</a></b>()
 								</div>
 								<div class="description">get JSON object of issuer field<br/>
 This method returns parsed issuer field value as
 JSON object.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509CRL.html#getIssuerHex">getIssuerHex</a></b>()
+								</div>
+								<div class="description">get hexadecimal string of issuer field TLV of certificate.</div>
 							</td>
 						</tr>
 					
@@ -762,6 +793,7 @@ get field value:<br/>
 <li>version - <a href="../symbols/X509CRL.html#getVersion">X509CRL#getVersion</a></li>
 <li>signatureAlgorithm - <a href="../symbols/X509CRL.html#getSignatureAlgorithmField">X509CRL#getSignatureAlgorithmField</a></li>
 <li>issuer - <a href="../symbols/X509CRL.html#getIssuer">X509CRL#getIssuer</a></li>
+<li>issuer - <a href="../symbols/X509CRL.html#getIssuerHex">X509CRL#getIssuerHex</a></li>
 <li>thisUpdate - <a href="../symbols/X509CRL.html#getThisUpdate">X509CRL#getThisUpdate</a></li>
 <li>nextUpdate - <a href="../symbols/X509CRL.html#getNextUpdate">X509CRL#getNextUpdate</a></li>
 <li>revokedCertificates - <a href="../symbols/X509CRL.html#getRevCertArray">X509CRL#getRevCertArray</a></li>
@@ -774,6 +806,12 @@ get field value:<br/>
 </ul>
 					<br /><i>Author: </i>Kenji Urushima.
 				</div>
+				
+				
+				
+				<pre class="code">// constructor
+crl = new X509CRL("-----BEGIN X509 CRL...");
+crl = new X509CRL("3082...");</pre>
 				
 				
 				
@@ -889,6 +927,159 @@ get field value:<br/>
 					Method Detail
 				</div>
 				
+					<a name="findRevCert"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{object}</span>
+					<b>findRevCert</b>(PEM)
+					
+					</div>
+					<div class="description">
+						get revokedCertificate associative array for checking certificate<br/>
+This method will find revokedCertificate entry as JSON object
+for a specified certificate. <br/>
+When the serial number is not found in the entry, this returns null.<br/>
+Before finding, <a href="../symbols/X509CRL.html#getParam">X509CRL#getParam</a> is called internally
+to parse CRL.<br/>
+NOTE: This method will just find an entry for a serial number.
+You need to check whether CRL is proper one or not
+for checking certificate such as signature validation or
+name checking.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">crl = new X509CRL(PEMCRL);
+
+crl.findRevCert(PEMCERT-REVOKED) &rarr; 
+{sn:"123a", date:"208025235959Z", ext: [{extname:"cRLReason",code:3}]}
+
+crl.findRevCert(PEMCERT-NOTREVOKED) &rarr; null
+
+crl.findRevCert(CERT-HEX) &rarr; null or {sn:...}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>PEM</b>
+									
+								</dt>
+								<dd>or hexadecimal string of certificate to be revocation-checked</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.5 x509crl 1.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> JSON object for revokedCertificate or null</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509CRL.html#getParam">X509CRL#getParam</a></dd>
+							
+								<dd><a href="../symbols/X509CRL.html#findRevCertBySN">X509CRL#findRevCertBySN</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="findRevCertBySN"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{object}</span>
+					<b>findRevCertBySN</b>(hexadecimal)
+					
+					</div>
+					<div class="description">
+						get revokedCertificate associative array for serial number<br/>
+This method will find revokedCertificate entry as JSON object
+for a specified serial number. <br/>
+When the serial number is not found in the entry, this returns null.<br/>
+Before finding, <a href="../symbols/X509CRL.html#getParam">X509CRL#getParam</a> is called internally
+to parse CRL.<br/>
+NOTE: This method will just find an entry for a serial number.
+You need to check whether CRL is proper one or not
+for checking certificate such as signature validation or
+name checking.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">crl = new X509CRL(PEMCRL);
+crl.findRevCertBySN("123a") &rarr; // revoked
+{sn:"123a", date:"208025235959Z", ext: [{extname:"cRLReason",code:3}]}
+
+crl.findRevCertBySN("0000") &rarr; null // not revoked</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>hexadecimal</b>
+									
+								</dt>
+								<dd>string of checking certificate serial number</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.5 x509crl 1.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> JSON object for revokedCertificate or null</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509CRL.html#getParam">X509CRL#getParam</a></dd>
+							
+								<dd><a href="../symbols/X509CRL.html#findRevCert">X509CRL#findRevCert</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
 					<a name="getIssuer"> </a>
 					<div class="fixedFont">
 					
@@ -935,6 +1126,58 @@ x.getIssuer() &rarr;
 								<dd><a href="../symbols/X509.html#getX500Name">X509#getX500Name</a></dd>
 							
 								<dd><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getIssuerHex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{string}</span>
+					<b>getIssuerHex</b>()
+					
+					</div>
+					<div class="description">
+						get hexadecimal string of issuer field TLV of certificate.<br/>
+This method returns ASN.1 DER hexadecimal string of
+issuer field.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">crl = new X509CRL("-----BEGIN X509 CRL...");
+x.getIssuerHex() &rarr; "30..."</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.5 x509crl 1.0.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> hexadecial string of issuer DN ASN.1</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509CRL.html#getIssuer">X509CRL#getIssuer</a></dd>
 							
 							</dl>
 						
