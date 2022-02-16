@@ -39,6 +39,7 @@
 <script src="../src/rsapem-1.1.js"></script>
 <script src="../src/rsasign-1.2.js"></script>
 <script src="../src/x509-1.1.js"></script>
+<script src="../src/base64x-1.1.js"></script>
 <script src="../src/asn1-1.0.js"></script>
 <script src="../src/asn1x509-1.0.js"></script>
 <script src="../src/base64x-1.1.js"></script>
@@ -140,7 +141,25 @@ equal(crl.posRevCert, 5, "posRevCert=5");
 deepEqual(crl.getParam(), hExpect, "param");
 });
 
-test("X509CRL.verifySignature test (digicert global root crl)", function() {
+test("getIssuerHex test (digicert global root crl)", function() {
+var crl = new X509CRL(pemCRLDigiCert);
+equal(crl.getIssuerHex(), "3061310b300906035504061302555331153013060355040a130c446967694365727420496e6331193017060355040b13107777772e64696769636572742e636f6d3120301e06035504031317446967694365727420476c6f62616c20526f6f74204341", "hex");
+});
+
+test("findRevCertBySN test (digicert global root crl)", function() {
+var crl = new X509CRL(pemCRLDigiCert);
+var sn = "2a846fb0eac24af297540ac0ea634e08";
+var pExpect = {
+    sn:{hex:"2a846fb0eac24af297540ac0ea634e08"},
+    date:"061110000000Z",
+    ext:[{extname:"cRLReason",code:4}]
+};
+deepEqual(crl.findRevCertBySN(sn), pExpect, "2a84...");
+deepEqual(crl.findRevCertBySN("0000"), null, "0000 > null(not found)");
+});
+
+
+test("verifySignature test (digicert global root crl)", function() {
 var crl = new X509CRL(pemCRLDigiCert);
 equal(crl.verifySignature(pemPubDigiCert), true, "verify=true digicert");
 equal(crl.verifySignature(pemPubGitHub), false, "verify=false github");

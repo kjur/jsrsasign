@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+CRL parser update
+* Changes from 10.5.4 to 10.5.5 (2022-Feb-17)
+  - src/x509crl.js X509CRL class
+    - add getIssuerHex method
+    - add findRevCert method
+    - add findRevCertBySN method
+  - test/x509crl.html update
+
 ASN.1 parser update and fix
 * Changes from 10.5.3 to 10.5.4 (2022-Feb-15)
   - src/asn1.js

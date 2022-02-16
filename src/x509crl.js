@@ -1,9 +1,9 @@
-/* x509crl.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509crl.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509crl.js - X509CRL class to parse X.509 CRL
  *
- * Copyright (c) 2010-2020 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2022 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509crl.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.0 x509crl 1.0.2 (2020-Nov-18)
+ * @version jsrsasign 10.5.5 x509crl 1.0.3 (2021-Feb-17)
  * @since jsrsasign 10.1.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -41,6 +41,7 @@
  * <li>version - {@link X509CRL#getVersion}</li>
  * <li>signatureAlgorithm - {@link X509CRL#getSignatureAlgorithmField}</li>
  * <li>issuer - {@link X509CRL#getIssuer}</li>
+ * <li>issuer - {@link X509CRL#getIssuerHex}</li>
  * <li>thisUpdate - {@link X509CRL#getThisUpdate}</li>
  * <li>nextUpdate - {@link X509CRL#getNextUpdate}</li>
  * <li>revokedCertificates - {@link X509CRL#getRevCertArray}</li>
@@ -51,6 +52,11 @@
  * <ul>
  * <li>{@link X509CRL#getParam} - get all parameters</li>
  * </ul>
+ *
+ * @example
+ * // constructor
+ * crl = new X509CRL("-----BEGIN X509 CRL...");
+ * crl = new X509CRL("3082...");
  */
 var X509CRL = function(params) {
     var _KJUR = KJUR,
@@ -69,6 +75,7 @@ var X509CRL = function(params) {
     this.hex = null;
     this.posSigAlg = null;
     this.posRevCert = null;
+    this.parsed = null;
 
     /*
      * set field position of SignatureAlgorithm and revokedCertificates<br/>
@@ -169,8 +176,28 @@ var X509CRL = function(params) {
      *   str: "/C=JP/..." }
      */
     this.getIssuer = function() {
-	var hIssuer = _getTLVbyList(this.hex, 0, [0, this.posSigAlg + 1], "30");
-	return _x509obj.getX500Name(hIssuer);
+	return _x509obj.getX500Name(this.getIssuerHex());
+    };
+
+    /**
+     * get hexadecimal string of issuer field TLV of certificate.<br/>
+     * @name getIssuerHex
+     * @memberOf X509CRL#
+     * @function
+     * @return {string} hexadecial string of issuer DN ASN.1
+     * @see X509CRL#getIssuer
+     * @since jsrsasign 10.5.5 x509crl 1.0.3
+     *
+     * @description
+     * This method returns ASN.1 DER hexadecimal string of
+     * issuer field.
+     *
+     * @example
+     * crl = new X509CRL("-----BEGIN X509 CRL...");
+     * x.getIssuerHex() &rarr; "30..."
+     */
+    this.getIssuerHex = function() {
+	return _getTLVbyList(this.hex, 0, [0, this.posSigAlg + 1], "30");
     };
 
     /**
@@ -283,7 +310,83 @@ var X509CRL = function(params) {
 
 	return param;
     };
+
+    /**
+     * get revokedCertificate associative array for checking certificate<br/>
+     * @name findRevCert
+     * @memberOf X509CRL#
+     * @function
+     * @param {string} PEM or hexadecimal string of certificate to be revocation-checked
+     * @return {object} JSON object for revokedCertificate or null
+     * @see X509CRL#getParam
+     * @see X509CRL#findRevCertBySN
+     * @since jsrsasign 10.5.5 x509crl 1.0.3
+     *
+     * @description
+     * This method will find revokedCertificate entry as JSON object
+     * for a specified certificate. <br/>
+     * When the serial number is not found in the entry, this returns null.<br/>
+     * Before finding, {@link X509CRL#getParam} is called internally
+     * to parse CRL.<br/>
+     * NOTE: This method will just find an entry for a serial number.
+     * You need to check whether CRL is proper one or not
+     * for checking certificate such as signature validation or
+     * name checking.
+     *
+     * @example
+     * crl = new X509CRL(PEMCRL);
+     *
+     * crl.findRevCert(PEMCERT-REVOKED) &rarr; 
+     * {sn:"123a", date:"208025235959Z", ext: [{extname:"cRLReason",code:3}]}
+     *
+     * crl.findRevCert(PEMCERT-NOTREVOKED) &rarr; null
+     * 
+     * crl.findRevCert(CERT-HEX) &rarr; null or {sn:...}
+     */
+    this.findRevCert = function(sCert) {
+	var x = new X509(sCert);
+	var hSN = x.getSerialNumberHex();
+	return this.findRevCertBySN(sn);
+    };
     
+    /**
+     * get revokedCertificate associative array for serial number<br/>
+     * @name findRevCertBySN
+     * @memberOf X509CRL#
+     * @function
+     * @param {string} hexadecimal string of checking certificate serial number
+     * @return {object} JSON object for revokedCertificate or null
+     * @see X509CRL#getParam
+     * @see X509CRL#findRevCert
+     * @since jsrsasign 10.5.5 x509crl 1.0.3
+     *
+     * @description
+     * This method will find revokedCertificate entry as JSON object
+     * for a specified serial number. <br/>
+     * When the serial number is not found in the entry, this returns null.<br/>
+     * Before finding, {@link X509CRL#getParam} is called internally
+     * to parse CRL.<br/>
+     * NOTE: This method will just find an entry for a serial number.
+     * You need to check whether CRL is proper one or not
+     * for checking certificate such as signature validation or
+     * name checking.
+     *
+     * @example
+     * crl = new X509CRL(PEMCRL);
+     * crl.findRevCertBySN("123a") &rarr; // revoked
+     * {sn:"123a", date:"208025235959Z", ext: [{extname:"cRLReason",code:3}]}
+     *
+     * crl.findRevCertBySN("0000") &rarr; null // not revoked
+     */
+    this.findRevCertBySN = function(hSN) {
+	if (this.parsed == null) this.getParam();
+	var revcert = this.parsed.revcert;
+	for (var i = 0; i < revcert.length; i++) {
+	    if (hSN == revcert[i].sn.hex) return revcert[i];
+	}
+	return null;
+    };
+
     /**
      * get signature value as hexadecimal string<br/>
      * @name getSignatureValueHex
@@ -389,6 +492,8 @@ var X509CRL = function(params) {
 	}
 
 	result.sighex = this.getSignatureValueHex();
+
+	this.parsed = result;
 	return result;
     };
 

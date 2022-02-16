@@ -1,5 +1,5 @@
 /*
- * jsrsasign(jwths) 10.5.4 (2022-02-15) (c) 2010-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+ * jsrsasign(jwths) 10.5.5 (2022-02-17) (c) 2010-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 
 /*! CryptoJS v3.1.2 core-fix.js
