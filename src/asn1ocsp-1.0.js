@@ -111,8 +111,8 @@ KJUR.asn1.ocsp.DEFAULT_HASH = "sha1";
  *   <<ResponseBytes parameters>>
  * });
  * // constructor for error
- * new KJUR.asn1.ocsp.OCSPRequest({resstatus: 1})
- * new KJUR.asn1.ocsp.OCSPRequest({resstatus: "unauthorized"})
+ * new KJUR.asn1.ocsp.OCSPResponse({resstatus: 1})
+ * new KJUR.asn1.ocsp.OCSPResponse({resstatus: "unauthorized"})
  */
 KJUR.asn1.ocsp.OCSPResponse = function(params) {
     KJUR.asn1.ocsp.OCSPResponse.superclass.constructor.call(this);
