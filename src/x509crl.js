@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509crl.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.5 x509crl 1.0.3 (2021-Feb-17)
+ * @version jsrsasign 10.5.7 x509crl 1.0.4 (2021-Feb-19)
  * @since jsrsasign 10.1.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -380,6 +380,7 @@ var X509CRL = function(params) {
      */
     this.findRevCertBySN = function(hSN) {
 	if (this.parsed == null) this.getParam();
+	if (this.parsed.revcert == null) return null;
 	var revcert = this.parsed.revcert;
 	for (var i = 0; i < revcert.length; i++) {
 	    if (hSN == revcert[i].sn.hex) return revcert[i];

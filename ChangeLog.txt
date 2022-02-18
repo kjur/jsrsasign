@@ -1,6 +1,11 @@
 
 ChangeLog for jsrsasign
 
+X509CRL.findRevCert bugfix for empty revCerts
+* Changes from 10.5.6 to 10.5.7 (2022-Feb-19)
+  - src/x509crl.js 
+    - X509CRL.{findRevCert,findRevCertBySN} method fix for empty revCerts
+
 X509CRL.findRevCert bugfix
 * Changes from 10.5.5 to 10.5.6 (2022-Feb-17)
   - src/x509crl.js X509CRL class
