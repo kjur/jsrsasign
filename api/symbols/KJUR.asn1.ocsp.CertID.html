@@ -592,6 +592,15 @@ CertID ASN.1 class is defined in
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.CertID.html#getParamByCerts">getParamByCerts</a></b>(issuerCert, subjectCert, algName, associative)
+								</div>
+								<div class="description">calculate CertID parameter by certificates.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ocsp.CertID.html#setByCert">setByCert</a></b>(issuerCert, subjectCert, algName)
 								</div>
 								<div class="description">set CertID ASN.1 object by PEM certificates.</div>
@@ -719,6 +728,79 @@ o = new KJUR.asn1.ocsp.CertID({issuerCert: "-----BEGIN...", subjectCert: "-----B
 					Method Detail
 				</div>
 				
+					<a name="getParamByCerts"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getParamByCerts</b>(issuerCert, subjectCert, algName, associative)
+					
+					</div>
+					<div class="description">
+						calculate CertID parameter by certificates.<br/>
+This method calculates issuer name hash, issuer key hash and subject serial
+number then returns an associative array with alg, issname, isskey and sbjsn members.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">o = new KJUR.asn1.ocsp.CertID();
+o.getParamByCerts("-----BEGIN...", "-----BEGIN...", "sha256") &rarr;
+{
+  alg: "sha256",
+  issname: "12abcd...",
+  isskey: "23cdef...",
+  sbjsn: "57b3..."
+}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>issuerCert</b>
+									
+								</dt>
+								<dd>string of PEM issuer certificate</dd>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>subjectCert</b>
+									
+								</dt>
+								<dd>string of PEM subject certificate to be verified by OCSP</dd>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>algName</b>
+									
+								</dt>
+								<dd>hash algorithm name used for above arguments (ex. "sha1") DEFAULT: sha1</dd>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>associative</b>
+									
+								</dt>
+								<dd>array with alg, issname, isskey and sbjsn members</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.7 asn1ocsp 1.1.6</dd>
+							</dl>
+							</dl>
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="setByCert"> </a>
 					<div class="fixedFont">
 					
@@ -764,6 +846,13 @@ o.setByCert("-----BEGIN...", "-----BEGIN...", "sha256");</pre>
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 10.5.7 asn1ocsp 1.1.6. Please use setByParam instead.
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">

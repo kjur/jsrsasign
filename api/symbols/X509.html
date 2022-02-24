@@ -912,7 +912,7 @@ as comma separated string of usage names.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtOCSPNoCheck">getExtOCSPNoCheck</a></b>(hExtV, critical)
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtOcspNoCheck">getExtOcspNoCheck</a></b>(hExtV, critical)
 								</div>
 								<div class="description">parse OCSPNoCheck OCSP extension as JSON object<br/>
 This method parses
@@ -925,7 +925,7 @@ RFC 6960 4.2.2.2.1</a> as JSON object.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtOCSPNonce">getExtOCSPNonce</a></b>(hExtV, critical)
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtOcspNonce">getExtOcspNonce</a></b>(hExtV, critical)
 								</div>
 								<div class="description">parse OCSPNonce OCSP extension as JSON object<br/>
 This method parses
@@ -1231,6 +1231,24 @@ This method will get signature value of certificate:</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getSPKI">getSPKI</a></b>()
+								</div>
+								<div class="description">get ASN.1 TLV hexadecimal string of subjectPublicKeyInfo field.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getSPKIValue">getSPKIValue</a></b>()
+								</div>
+								<div class="description">get hexadecimal string of subjectPublicKey of subjectPublicKeyInfo field.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getSubject">getSubject</a></b>()
 								</div>
 								<div class="description">get JSON object of subject field<br/>
@@ -1481,8 +1499,8 @@ X509 class provides following functionality:
   <li>authorityInfoAccess - <a href="../symbols/X509.html#getExtAIAInfo">X509#getExtAIAInfo</a> (DEPRECATED)</li>
   <li>cRLNumber - <a href="../symbols/X509.html#getExtCRLNumber">X509#getExtCRLNumber</a></li>
   <li>cRLReason - <a href="../symbols/X509.html#getExtCRLReason">X509#getExtCRLReason</a></li>
-  <li>ocspNonce - <a href="../symbols/X509.html#getExtOCSPNonce">X509#getExtOCSPNonce</a></li>
-  <li>ocspNoCheck - <a href="../symbols/X509.html#getExtOCSPNoCheck">X509#getExtOCSPNoCheck</a></li>
+  <li>ocspNonce - <a href="../symbols/X509.html#getExtOcspNonce">X509#getExtOcspNonce</a></li>
+  <li>ocspNoCheck - <a href="../symbols/X509.html#getExtOcspNoCheck">X509#getExtOcspNoCheck</a></li>
   <li>adobeTimeStamp - <a href="../symbols/X509.html#getExtAdobeTimeStamp">X509#getExtAdobeTimeStamp</a></li>
   </ul>
 </li>
@@ -3516,11 +3534,11 @@ x.getExtKeyUsageString() &rarr; "digitalSignature,keyEncipherment"</pre>
 
 					<hr />
 				
-					<a name="getExtOCSPNoCheck"> </a>
+					<a name="getExtOcspNoCheck"> </a>
 					<div class="fixedFont">
 					
 					<span class="light">{Array}</span>
-					<b>getExtOCSPNoCheck</b>(hExtV, critical)
+					<b>getExtOcspNoCheck</b>(hExtV, critical)
 					
 					</div>
 					<div class="description">
@@ -3542,7 +3560,7 @@ Result of this method can be passed to
 					
 					
 					<pre class="code">x = new X509();
-x.getExtOCSPNoCheck(<<extn hex value >>) &rarr;
+x.getExtOcspNoCheck(<<extn hex value >>) &rarr;
 { extname: "ocspNoCheck" }</pre>
 					
 					
@@ -3598,11 +3616,11 @@ x.getExtOCSPNoCheck(<<extn hex value >>) &rarr;
 
 					<hr />
 				
-					<a name="getExtOCSPNonce"> </a>
+					<a name="getExtOcspNonce"> </a>
 					<div class="fixedFont">
 					
 					<span class="light">{Array}</span>
-					<b>getExtOCSPNonce</b>(hExtV, critical)
+					<b>getExtOcspNonce</b>(hExtV, critical)
 					
 					</div>
 					<div class="description">
@@ -3626,7 +3644,7 @@ Result of this method can be passed to
 					
 					
 					<pre class="code">x = new X509();
-x.getExtOCSPNonce(<<extn hex value >>) &rarr;
+x.getExtOcspNonce(<<extn hex value >>) &rarr;
 { extname: "ocspNonce", hex: "1a2b..." }</pre>
 					
 					
@@ -4958,13 +4976,19 @@ NOTE: DSA is also supported since x509 1.1.2.
 					
 					
 					
-					<pre class="code">x = new X509();
-x.readCertPEM(sCertPEM);
+					<pre class="code">x = new X509(sCertPEM);
 hSPKI = x.getPublicKeyHex(); // return string like "30820122..."</pre>
 					
 					
 					
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 10.5.7 x509 2.0.13. Please use <a href="../symbols/X509.html#getSPKI">X509#getSPKI</a> instead.
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">
@@ -5350,6 +5374,124 @@ x.getSignatureValueHex() &rarr "8a4c47913..."</pre>
 							</dl>
 						
 						
+						
+
+					<hr />
+				
+					<a name="getSPKI"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{string}</span>
+					<b>getSPKI</b>()
+					
+					</div>
+					<div class="description">
+						get ASN.1 TLV hexadecimal string of subjectPublicKeyInfo field.<br/>
+Get a hexadecimal string of SubjectPublicKeyInfo ASN.1 TLV of the certificate.<br/>
+<pre>
+SubjectPublicKeyInfo  ::=  SEQUENCE  {
+   algorithm         AlgorithmIdentifier,
+   subjectPublicKey  BIT STRING  }
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509(sCertPEM);
+hSPKI = x.getSPKI(); // return string like "30820122..."</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.8 x509 2.0.13</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> ASN.1 SEQUENCE hexadecimal string of subjectPublicKeyInfo field</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509.html#getPublicKeyHex">X509#getPublicKeyHex</a></dd>
+							
+								<dd><a href="../symbols/X509.html#getSPKIValue">X509#getSPKIValue</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getSPKIValue"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{string}</span>
+					<b>getSPKIValue</b>()
+					
+					</div>
+					<div class="description">
+						get hexadecimal string of subjectPublicKey of subjectPublicKeyInfo field.<br/>
+Get a hexadecimal string of subjectPublicKey ASN.1 value of SubjectPublicKeyInfo 
+of the certificate without unusedbit "00".
+The "subjectPublicKey" is encapsulated by BIT STRING.
+This method returns BIT STRING value without unusedbits.
+<br/>
+<pre>
+SubjectPublicKeyInfo  ::=  SEQUENCE  {
+   algorithm         AlgorithmIdentifier,
+   subjectPublicKey  BIT STRING  }
+</pre>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509(sCertPEM);
+hSPKIValue = x.getSPKIValue(); // without BIT STRING Encapusulation.</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.8 x509 2.0.13</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> ASN.1 hexadecimal string of subjectPublicKey</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509.html#getSPKI">X509#getSPKI</a></dd>
+							
+							</dl>
 						
 
 					<hr />

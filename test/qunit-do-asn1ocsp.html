@@ -387,22 +387,12 @@ ASN1HEX.dump(hExpect2),
 test("CertID.setByValue", function() {
 var o1 = new KJUR.asn1.ocsp.CertID();
 o1.setByValue("01020304", "05060708", "123456", "sha1");
-
-equal(o1.dHashAlg.getEncodedHex(),        "300906052b0e03021a0500", "sha1");
-equal(o1.dIssuerNameHash.getEncodedHex(), "040401020304", "040401020304");
-equal(o1.dIssuerKeyHash.getEncodedHex(),  "040405060708", "040405060708");
-equal(o1.dSerialNumber.getEncodedHex(),   "0203123456", "0203123456");
 equal(o1.getEncodedHex(), "301c300906052b0e03021a05000404010203040404050607080203123456", "all");
 });
 
 test("CertID.setByCert", function() {
 var o1 = new KJUR.asn1.ocsp.CertID();
 o1.setByCert(certCA1, certEE1, "sha1");
-
-equal(o1.dHashAlg.getEncodedHex(),        "300906052b0e03021a0500", "sha1");
-equal(o1.dIssuerNameHash.getEncodedHex(), "04147ae13ee8a0c42a2cb428cbe7a605461940e2a1e9", "name hash");
-equal(o1.dIssuerKeyHash.getEncodedHex(),  "041490af6a3a945a0bd890ea125673df43b43a28dae7", "key hash");
-equal(o1.dSerialNumber.getEncodedHex(),   "021100d09282634303a97fadf55568a48ca87e", "serial");
 equal(o1.getEncodedHex(), "304a300906052b0e03021a050004147ae13ee8a0c42a2cb428cbe7a605461940e2a1e9041490af6a3a945a0bd890ea125673df43b43a28dae7021100d09282634303a97fadf55568a48ca87e", "all");
 });
 

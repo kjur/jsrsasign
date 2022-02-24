@@ -1,4 +1,4 @@
-/* x509-2.0.12.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.0.13.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.3 x509 2.0.12 (2022-Feb-10)
+ * @version jsrsasign 10.5.8 x509 2.0.13 (2022-Feb-25)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -79,8 +79,8 @@
  *   <li>authorityInfoAccess - {@link X509#getExtAIAInfo} (DEPRECATED)</li>
  *   <li>cRLNumber - {@link X509#getExtCRLNumber}</li>
  *   <li>cRLReason - {@link X509#getExtCRLReason}</li>
- *   <li>ocspNonce - {@link X509#getExtOCSPNonce}</li>
- *   <li>ocspNoCheck - {@link X509#getExtOCSPNoCheck}</li>
+ *   <li>ocspNonce - {@link X509#getExtOcspNonce}</li>
+ *   <li>ocspNoCheck - {@link X509#getExtOcspNoCheck}</li>
  *   <li>adobeTimeStamp - {@link X509#getExtAdobeTimeStamp}</li>
  *   </ul>
  * </li>
@@ -380,13 +380,71 @@ function X509(params) {
      * @function
      * @return {String} ASN.1 SEQUENCE hexadecimal string of subjectPublicKeyInfo field
      * @since jsrsasign 7.1.4 x509 1.1.13
+     * @deprecated since jsrsasign 10.5.7 x509 2.0.13. Please use {@link X509#getSPKI} instead.
+     *
      * @example
-     * x = new X509();
-     * x.readCertPEM(sCertPEM);
+     * x = new X509(sCertPEM);
      * hSPKI = x.getPublicKeyHex(); // return string like "30820122..."
      */
     this.getPublicKeyHex = function() {
-	return _ASN1HEX.getTLVbyList(this.hex, 0, [0, 6 + this.foffset], "30");
+	return this.getSPKI();
+    };
+
+    /**
+     * get ASN.1 TLV hexadecimal string of subjectPublicKeyInfo field.<br/>
+     * @name getSPKI
+     * @memberOf X509#
+     * @function
+     * @return {string} ASN.1 SEQUENCE hexadecimal string of subjectPublicKeyInfo field
+     * @since jsrsasign 10.5.8 x509 2.0.13
+     * @see X509#getPublicKeyHex
+     * @see X509#getSPKIValue
+     *
+     * @description
+     * Get a hexadecimal string of SubjectPublicKeyInfo ASN.1 TLV of the certificate.<br/>
+     * <pre>
+     * SubjectPublicKeyInfo  ::=  SEQUENCE  {
+     *    algorithm         AlgorithmIdentifier,
+     *    subjectPublicKey  BIT STRING  }
+     * </pre>
+     *
+     * @example
+     * x = new X509(sCertPEM);
+     * hSPKI = x.getSPKI(); // return string like "30820122..."
+     */
+    this.getSPKI = function() {
+	return _getTLVbyList(this.hex, 0, [0, 6 + this.foffset], "30");
+    };
+
+    /**
+     * get hexadecimal string of subjectPublicKey of subjectPublicKeyInfo field.<br/>
+     * @name getSPKIValue
+     * @memberOf X509#
+     * @function
+     * @return {string} ASN.1 hexadecimal string of subjectPublicKey
+     * @since jsrsasign 10.5.8 x509 2.0.13
+     * @see X509#getSPKI
+     *
+     * @description
+     * Get a hexadecimal string of subjectPublicKey ASN.1 value of SubjectPublicKeyInfo 
+     * of the certificate without unusedbit "00".
+     * The "subjectPublicKey" is encapsulated by BIT STRING.
+     * This method returns BIT STRING value without unusedbits.
+     * <br/>
+     * <pre>
+     * SubjectPublicKeyInfo  ::=  SEQUENCE  {
+     *    algorithm         AlgorithmIdentifier,
+     *    subjectPublicKey  BIT STRING  }
+     * </pre>
+     *
+     * @example
+     * x = new X509(sCertPEM);
+     * hSPKIValue = x.getSPKIValue(); // without BIT STRING Encapusulation.
+     */
+    this.getSPKIValue = function() {
+	var hSPKI = this.getSPKI();
+	if (hSPKI == null) return null;
+	return _getVbyList(hSPKI, 0, [1], "03", true); // true: remove unused bit
     };
 
     /**
@@ -1453,19 +1511,16 @@ function X509(params) {
      * ["http://example.com/aaa.crl", "http://example.org/aaa.crl"]
      */
     this.getExtCRLDistributionPointsURI = function() {
-	var info = this.getExtInfo("cRLDistributionPoints");
-	if (info === undefined) return info;
-
-	var result = new Array();
-	var a = _getChildIdx(this.hex, info.vidx);
+	var p = this.getExtCRLDistributionPoints();
+	var a = p.array;
+	var result = [];
 	for (var i = 0; i < a.length; i++) {
 	    try {
-		var hURI = _getVbyList(this.hex, a[i], [0, 0, 0], "86");
-		var uri = hextoutf8(hURI);
-		result.push(uri);
-	    } catch(ex) {};
+		if (a[i].dpname.full[0].uri != undefined) {
+		    result.push(a[i].dpname.full[0].uri);
+		}
+	    } catch(ex) {}
 	}
-
 	return result;
     };
 
@@ -1934,7 +1989,7 @@ function X509(params) {
 
     /**
      * parse OCSPNonce OCSP extension as JSON object<br/>
-     * @name getExtOCSPNonce
+     * @name getExtOcspNonce
      * @memberOf X509#
      * @function
      * @param {String} hExtV hexadecimal string of extension value
@@ -1959,7 +2014,7 @@ function X509(params) {
      * {@link KJUR.asn1.x509.OCSPNonce} constructor.
      * @example
      * x = new X509();
-     * x.getExtOCSPNonce(<<extn hex value >>) &rarr;
+     * x.getExtOcspNonce(<<extn hex value >>) &rarr;
      * { extname: "ocspNonce", hex: "1a2b..." }
      */
     this.getExtOcspNonce = function(hExtV, critical) {
@@ -1974,7 +2029,7 @@ function X509(params) {
 
     /**
      * parse OCSPNoCheck OCSP extension as JSON object<br/>
-     * @name getExtOCSPNoCheck
+     * @name getExtOcspNoCheck
      * @memberOf X509#
      * @function
      * @param {String} hExtV hexadecimal string of extension value
@@ -1997,7 +2052,7 @@ function X509(params) {
      * {@link KJUR.asn1.x509.OCSPNoCheck} constructor.
      * @example
      * x = new X509();
-     * x.getExtOCSPNoCheck(<<extn hex value >>) &rarr;
+     * x.getExtOcspNoCheck(<<extn hex value >>) &rarr;
      * { extname: "ocspNoCheck" }
      */
     this.getExtOcspNoCheck = function(hExtV, critical) {

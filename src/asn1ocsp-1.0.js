@@ -1,4 +1,4 @@
-/* asn1ocsp-1.1.5.js (c) 2016-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1ocsp-1.1.6.js (c) 2016-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1ocsp.js - ASN.1 DER encoder classes for OCSP protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1ocsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.4.0 asn1ocsp 1.1.5 (2021-Aug-17)
+ * @version jsrsasign 10.5.8 asn1ocsp 1.1.6 (2022-Feb-22)
  * @since jsrsasign 6.1.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -771,14 +771,13 @@ KJUR.asn1.ocsp.CertID = function(params) {
 	_KJUR_crypto = _KJUR.crypto,
 	_hashHex = _KJUR_crypto.Util.hashHex,
 	_X509 = X509,
-	_ASN1HEX = ASN1HEX;
+	_ASN1HEX = ASN1HEX,
+	_getVbyList = _ASN1HEX.getVbyList;
 
     _KJUR_asn1_ocsp.CertID.superclass.constructor.call(this);
 
-    this.dHashAlg = null;
-    this.dIssuerNameHash = null;
-    this.dIssuerKeyHash = null;
-    this.dSerialNumber = null;
+    this.DEFAULT_HASH = "sha1";
+    this.params = null;
 
     /**
      * set CertID ASN.1 object by values.<br/>
@@ -797,11 +796,13 @@ KJUR.asn1.ocsp.CertID = function(params) {
      */
     this.setByValue = function(issuerNameHashHex, issuerKeyHashHex,
 			       serialNumberHex, algName) {
-	if (algName === undefined) algName = _DEFAULT_HASH;
-	this.dHashAlg =        new _AlgorithmIdentifier({name: algName});
-	this.dIssuerNameHash = new _DEROctetString({hex: issuerNameHashHex});
-	this.dIssuerKeyHash =  new _DEROctetString({hex: issuerKeyHashHex});
-	this.dSerialNumber =   new _DERInteger({hex: serialNumberHex});
+	if (algName == undefined) algName = this.DEFAULT_HASH;
+	this.params = {
+	    alg: algName,
+	    issname: issuerNameHashHex,
+	    isskey: issuerKeyHashHex,
+	    sbjsn: serialNumberHex
+	};
     };
 
     /**
@@ -813,6 +814,7 @@ KJUR.asn1.ocsp.CertID = function(params) {
      * @param {String} subjectCert string of PEM subject certificate to be verified by OCSP
      * @param {String} algName hash algorithm name used for above arguments (ex. "sha1") DEFAULT: sha1
      * @since jsrsasign 6.1.0 asn1ocsp 1.0.0
+     * @deprecated since jsrsasign 10.5.7 asn1ocsp 1.1.6. Please use setByParam instead.
      *
      * @example
      * o = new KJUR.asn1.ocsp.CertID();
@@ -820,55 +822,94 @@ KJUR.asn1.ocsp.CertID = function(params) {
      * o.setByCert("-----BEGIN...", "-----BEGIN...", "sha256");
      */
     this.setByCert = function(issuerCert, subjectCert, algName) {
-	if (algName === undefined) algName = _DEFAULT_HASH;
+	if (algName == undefined) algName = this.DEFAULT_HASH;
+	this.params = {
+	    alg: algName,
+	    issuerCert: issuerCert,
+	    subjectCert: subjectCert,
+	};
+    };
 
-	var xSbj = new _X509();
-	xSbj.readCertPEM(subjectCert);
-	var xIss = new _X509();
-	xIss.readCertPEM(issuerCert);
-
-	var hISS_SPKI = xIss.getPublicKeyHex();
-	var issuerKeyHex = _ASN1HEX.getVbyList(hISS_SPKI, 0, [1], "03", true);
-
-	var serialNumberHex = xSbj.getSerialNumberHex();
-	var issuerNameHashHex = _hashHex(xIss.getSubjectHex(), algName);
-	var issuerKeyHashHex = _hashHex(issuerKeyHex, algName);
-	this.setByValue(issuerNameHashHex, issuerKeyHashHex,
-			serialNumberHex, algName);
-	this.hoge = xSbj.getSerialNumberHex();
+    /**
+     * calculate CertID parameter by certificates.<br/>
+     * @name getParamByCerts
+     * @memberOf KJUR.asn1.ocsp.CertID#
+     * @function
+     * @param {string} issuerCert string of PEM issuer certificate
+     * @param {string} subjectCert string of PEM subject certificate to be verified by OCSP
+     * @param {string} algName hash algorithm name used for above arguments (ex. "sha1") DEFAULT: sha1
+     * @param {object} associative array with alg, issname, isskey and sbjsn members
+     * @since jsrsasign 10.5.7 asn1ocsp 1.1.6
+     *
+     * @description
+     * This method calculates issuer name hash, issuer key hash and subject serial
+     * number then returns an associative array with alg, issname, isskey and sbjsn members.
+     *
+     * @example
+     * o = new KJUR.asn1.ocsp.CertID();
+     * o.getParamByCerts("-----BEGIN...", "-----BEGIN...", "sha256") &rarr;
+     * {
+     *   alg: "sha256",
+     *   issname: "12abcd...",
+     *   isskey: "23cdef...",
+     *   sbjsn: "57b3..."
+     * }
+     */
+    this.getParamByCerts = function(issCert, sbjCert, algName) {
+	if (algName == undefined) algName = this.DEFAULT_HASH;
+	var xISS = new _X509(issCert);
+	var xSBJ = new _X509(sbjCert);
+	var issname = _hashHex(xISS.getSubjectHex(), algName);
+	var hSPKI = xISS.getPublicKeyHex();
+	var isskey = _hashHex(_getVbyList(hSPKI, 0, [1], "03", true), algName);
+	var sbjsn = xSBJ.getSerialNumberHex();
+	var info = {
+	    alg: algName,
+	    issname: issname,
+	    isskey: isskey,
+	    sbjsn: sbjsn
+	};
+	return info;
     };
 
     this.getEncodedHex = function() {
-	if (this.dHashAlg === null && 
-	    this.dIssuerNameHash === null &&
-	    this.dIssuerKeyHash === null &&
-	    this.dSerialNumber === null)
-	    throw "not yet set values";
+	if (typeof this.params != "object") throw new Error("params not set");
+	    
+	var p = this.params;
+	var issname, isskey, sbjsn, alg;
 
-	var a = [this.dHashAlg, this.dIssuerNameHash,
-		 this.dIssuerKeyHash, this.dSerialNumber];
-	var seq = new _DERSequence({array: a});
+	if (p.alg == undefined) {
+	    alg = this.DEFAULT_HASH;
+	} else {
+	    alg = p.alg;
+	}
+
+	if (p.issuerCert != undefined &&
+	    p.subjectCert != undefined) {
+	    var info = this.getParamByCerts(p.issuerCert, p.subjectCert, alg);
+	    issname = info.issname;
+	    isskey = info.isskey;
+	    sbjsn = info.sbjsn;
+	} else if (p.issname != undefined &&
+		   p.isskey != undefined &&
+		   p.sbjsn != undefined) {
+	    issname = p.issname;
+	    isskey = p.isskey;
+	    sbjsn = p.sbjsn;
+	} else {
+	    throw new Error("required param members not defined");
+	}
+
+	var dAlg = new _AlgorithmIdentifier({name: alg});
+	var dIssName = new _DEROctetString({hex: issname});
+	var dIssKey = new _DEROctetString({hex: isskey});
+	var dSbjSn = new _DERInteger({hex: sbjsn});
+	var seq = new _DERSequence({array: [dAlg, dIssName, dIssKey, dSbjSn]});
         this.hTLV = seq.getEncodedHex();
         return this.hTLV;
     };
 
-    if (params !== undefined) {
-	var p = params;
-	if (p.issuerCert !== undefined &&
-	    p.subjectCert !== undefined) {
-	    var alg = _DEFAULT_HASH;
-	    if (p.alg === undefined) alg = undefined;
-	    this.setByCert(p.issuerCert, p.subjectCert, alg);
-	} else if (p.issname !== undefined &&
-		   p.isskey !== undefined &&
-		   p.sbjsn !== undefined) {
-	    var alg = _DEFAULT_HASH;
-	    if (p.alg === undefined) alg = undefined;
-	    this.setByValue(p.issname, p.isskey, p.sbjsn, alg);
-	} else {
-	    throw new Error("invalid constructor arguments");
-	}
-    }
+    if (params !== undefined) this.setByParam(params);
 };
 extendClass(KJUR.asn1.ocsp.CertID, KJUR.asn1.ASN1Object);
 
