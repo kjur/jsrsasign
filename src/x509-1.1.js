@@ -79,8 +79,8 @@
  *   <li>authorityInfoAccess - {@link X509#getExtAIAInfo} (DEPRECATED)</li>
  *   <li>cRLNumber - {@link X509#getExtCRLNumber}</li>
  *   <li>cRLReason - {@link X509#getExtCRLReason}</li>
- *   <li>ocspNonce - {@link X509#getExtOCSPNonce}</li>
- *   <li>ocspNoCheck - {@link X509#getExtOCSPNoCheck}</li>
+ *   <li>ocspNonce - {@link X509#getExtOcspNonce}</li>
+ *   <li>ocspNoCheck - {@link X509#getExtOcspNoCheck}</li>
  *   <li>adobeTimeStamp - {@link X509#getExtAdobeTimeStamp}</li>
  *   </ul>
  * </li>
@@ -1934,7 +1934,7 @@ function X509(params) {
 
     /**
      * parse OCSPNonce OCSP extension as JSON object<br/>
-     * @name getExtOCSPNonce
+     * @name getExtOcspNonce
      * @memberOf X509#
      * @function
      * @param {String} hExtV hexadecimal string of extension value
@@ -1959,7 +1959,7 @@ function X509(params) {
      * {@link KJUR.asn1.x509.OCSPNonce} constructor.
      * @example
      * x = new X509();
-     * x.getExtOCSPNonce(<<extn hex value >>) &rarr;
+     * x.getExtOcspNonce(<<extn hex value >>) &rarr;
      * { extname: "ocspNonce", hex: "1a2b..." }
      */
     this.getExtOcspNonce = function(hExtV, critical) {
@@ -1974,7 +1974,7 @@ function X509(params) {
 
     /**
      * parse OCSPNoCheck OCSP extension as JSON object<br/>
-     * @name getExtOCSPNoCheck
+     * @name getExtOcspNoCheck
      * @memberOf X509#
      * @function
      * @param {String} hExtV hexadecimal string of extension value
@@ -1997,7 +1997,7 @@ function X509(params) {
      * {@link KJUR.asn1.x509.OCSPNoCheck} constructor.
      * @example
      * x = new X509();
-     * x.getExtOCSPNoCheck(<<extn hex value >>) &rarr;
+     * x.getExtOcspNoCheck(<<extn hex value >>) &rarr;
      * { extname: "ocspNoCheck" }
      */
     this.getExtOcspNoCheck = function(hExtV, critical) {
