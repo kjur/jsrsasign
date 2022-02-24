@@ -609,6 +609,22 @@ test("getExtCRLDistributionPointsURI github", function() {
              "for GitHub.com site");
 });
 
+test("getExtCRLDistributionPoints danmarks", function() {
+var x = new X509(danmarksUser1PEM);
+var pExpect = {
+  extname: "cRLDistributionPoints",
+  "array": [
+    {dpname: {full: [{uri: "http://crl.ica02.trust2408.com/ica02.crl"}]}},
+    {dpname: {full: [{dn: {array: [
+                [{ds: "prn", type: "C", value: "DK"}],
+                [{ds: "utf8",type: "O", value: "TRUST2408"}],
+                [{ds: "utf8", type: "CN", value: "TRUST2408 OCES CA II"}],
+                [{ds: "utf8", type: "CN", value: "CRL3117"}]
+              ],
+              "str": "/C=DK/O=TRUST2408/CN=TRUST2408 OCES CA II/CN=CRL3117"}}]}}]};
+deepEqual(x.getExtCRLDistributionPoints(), pExpect, "for Danmarks Apotekerforening User cert");
+});
+
 test("getExtCRLDistributionPointsURI danmarks", function() {
   var x = new X509();
   x.readCertPEM(danmarksUser1PEM);

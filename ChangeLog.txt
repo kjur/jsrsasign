@@ -1,9 +1,18 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 10.5.7 to next release
-  - x509.js
+OCSP CertID and X509 class update
+* Changes from 10.5.7 to 10.5.8 (2022-Feb-25)
+  - src/asn1ocsp.js
+    - CertID class refactoring
+    - CertID.getParamByCerts method added
+  - src/x509.js
+    - DEPRECATED getPublicKeyHex method (use getSPKI instead)
+    - getSPKI, getSPKIValue method added
+    - getExtCRLDistributionPointsURI bugfix
     - API document fix
+  - test/qunit-do-{asn1ocsp,x509-ext,x509,x509-v1}.html
+    - test case update and bugfix for above updates.
 
 X509CRL.findRevCert bugfix for empty revCerts
 * Changes from 10.5.6 to 10.5.7 (2022-Feb-19)

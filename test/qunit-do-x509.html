@@ -24,7 +24,6 @@
 <script src="../ext/cj/hmac_min.js"></script>
 <script src="../ext/cj/pbkdf2_min.js"></script>
 
-
 <script src="../ext/jsbn.js"></script>
 <script src="../ext/jsbn2.js"></script>
 <script src="../ext/prng4.js"></script>
@@ -35,15 +34,15 @@
 <script src="../ext/ec.js"></script>
 <script src="../ext/ec-patch.js"></script>
 
-<script src="../src/crypto-1.1.js"></script>
 <script src="../src/asn1hex-1.1.js"></script>
+<script src="../src/base64x-1.1.js"></script>
 <script src="../src/rsapem-1.1.js"></script>
 <script src="../src/rsasign-1.2.js"></script>
 <script src="../src/x509-1.1.js"></script>
-<script src="../src/base64x-1.1.js"></script>
 <script src="../src/asn1-1.0.js"></script>
 <script src="../src/asn1x509-1.0.js"></script>
 <script src="../src/keyutil-1.0.js"></script>
+<script src="../src/crypto-1.1.js"></script>
 <script src="../src/dsa-2.0.js"></script>
 <script src="../src/ecdsa-modified-1.0.js"></script>
 <script src="../src/ecparam-1.0.js"></script>
@@ -367,6 +366,18 @@ q0gq
 var Z4SHA1AAASIG = "2f3705127a4a748fee37ef92e8beca3d17fd22c6cadf004d315c5144fc00dc47c983441d6ad55c2f98d378b0d2b362f876ab8d5207331264931388d05cbc96814a70c8e2cd8c047b0008db71cdf5ead5b33bd3606285f6cbf05a86282c710ddf21a439dde79af3d2f2f10ce3cbf273d81893b11506d43dfb292f343d39e6324a130741d5bf4db64bf9c004ba7f857b6c81b2d9502fbca97644a4f7f661f02c4c295502b54e46fdee7e543ac7dab2dff585e9067ca576fb71a8e1b93cc7305263aca99fbb01f9e599125f0642e9ab71cc1973482ecc26f3d1b75409d936eed1ade353abdbdc7602f7c8c78763fcd6d254e73ae57ef5602f5a5ad5be267ef01755";
 
 // **** TEST **********
+
+test("getSPKI", function() {
+var x = new X509(hCer1);
+var hExpect = "305c300d06092a864886f70d0101010500034b003048024100b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b0203010001";
+equal(x.getSPKI(), hExpect, "getSPKI for hCer1");
+});
+
+test("getSPKValue", function() {
+var x = new X509(hCer1);
+var hExpect = "3048024100b9b00329505fe2ed60ec5689ddcdf5b94d05ab416e1643b1ca3f96fc472eeb1f62ed476897f159ae98b7f3adecec7971deb5f64d9a25901c4dc7a49772e5a02b0203010001";
+equal(x.getSPKIValue(), hExpect, "getSPKIValue for hCer1");
+});
 
 test("getPublicKeyIdx", function() {
   var x = new X509();
