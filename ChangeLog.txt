@@ -1,6 +1,10 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 10.5.8 to next version
+  - src/asn1csr.js
+    - fix CSRUtil.getParam (#544)
+
 OCSP CertID and X509 class update
 * Changes from 10.5.7 to 10.5.8 (2022-Feb-25)
   - src/asn1ocsp.js

@@ -1,4 +1,4 @@
-/* asn1csr-2.0.3.js (c) 2015-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1csr-2.0.4.js (c) 2015-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1csr-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.0 asn1csr 2.0.3 (2020-Nov-18)
+ * @version jsrsasign 10.1.0 asn1csr 2.0.4 (2022-Mar-08)
  * @since jsrsasign 4.9.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -419,8 +419,8 @@ KJUR.asn1.csr.CSRUtil.newCSRPEM = function(param) {
  */
 KJUR.asn1.csr.CSRUtil.getParam = function(sPEM) {
     var _ASN1HEX = ASN1HEX,
-	_getV = _ASN1HEX.getV;
-	_getIdxbyList = _ASN1HEX.getIdxbyList;
+	_getV = _ASN1HEX.getV,
+	_getIdxbyList = _ASN1HEX.getIdxbyList,
 	_getTLVbyList = _ASN1HEX.getTLVbyList,
 	_getTLVbyListEx = _ASN1HEX.getTLVbyListEx,
 	_getVbyListEx = _ASN1HEX.getVbyListEx;
