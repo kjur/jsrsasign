@@ -1,4 +1,4 @@
-/* pkcs5pkey-1.1.2.js (c) 2013-2017 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* pkcs5pkey-1.1.2.js (c) 2013-2017 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * pkcs5pkey.js - reading passcode protected PKCS#5 PEM formatted RSA private key

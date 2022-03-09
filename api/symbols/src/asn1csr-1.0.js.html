@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1csr-2.0.3.js (c) 2015-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1csr-2.0.4.js (c) 2015-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name asn1csr-1.0.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign 10.1.0 asn1csr 2.0.3 (2020-Nov-18)
+<span class='line'> 19</span>  * @version jsrsasign 10.1.0 asn1csr 2.0.4 (2022-Mar-08)
 <span class='line'> 20</span>  * @since jsrsasign 4.9.0
 <span class='line'> 21</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -426,8 +426,8 @@
 <span class='line'>419</span>  */</span><span class="WHIT">
 <span class='line'>420</span> </span><span class="NAME">KJUR.asn1.csr.CSRUtil.getParam</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">sPEM</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>421</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>422</span> </span><span class="WHIT">	</span><span class="NAME">_getV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getV</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>423</span> </span><span class="WHIT">	</span><span class="NAME">_getIdxbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getIdxbyList</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>422</span> </span><span class="WHIT">	</span><span class="NAME">_getV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getV</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>423</span> </span><span class="WHIT">	</span><span class="NAME">_getIdxbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getIdxbyList</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>424</span> </span><span class="WHIT">	</span><span class="NAME">_getTLVbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getTLVbyList</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>425</span> </span><span class="WHIT">	</span><span class="NAME">_getTLVbyListEx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getTLVbyListEx</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>426</span> </span><span class="WHIT">	</span><span class="NAME">_getVbyListEx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getVbyListEx</span><span class="PUNC">;</span><span class="WHIT">

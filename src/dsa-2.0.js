@@ -1,4 +1,4 @@
-/* dsa-2.1.2.js (c) 2016-2020 Kenji Urushimma | kjur.github.com/jsrsasign/license
+/* dsa-2.1.2.js (c) 2016-2020 Kenji Urushimma | kjur.github.io/jsrsasign/license
  */
 /*
  * dsa.js - new DSA class

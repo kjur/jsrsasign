@@ -1,4 +1,4 @@
-/* rsapem-1.3.1.js (c) 2012-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* rsapem-1.3.1.js (c) 2012-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * rsapem.js - Cryptographic Algorithm Provider class

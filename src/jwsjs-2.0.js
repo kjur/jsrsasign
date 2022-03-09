@@ -1,4 +1,4 @@
-/* jwsjs-2.2.1 (c) 2010-2018 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* jwsjs-2.2.1 (c) 2010-2018 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * jwsjs.js - JSON Web Signature JSON Serialization (JWSJS) Class

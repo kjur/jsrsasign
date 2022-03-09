@@ -1,4 +1,4 @@
-/* rsasign-1.3.4.js (c) 2010-2021 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* rsasign-1.3.4.js (c) 2010-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * rsa-sign.js - adding signing functions to RSAKey class.

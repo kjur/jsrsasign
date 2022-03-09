@@ -1,4 +1,4 @@
-/* asn1cades-2.0.1.js (c) 2014-2020 Kenji Urushima | kjur.github.com/jsrsasign/license
+/* asn1cades-2.0.1.js (c) 2014-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1cades.js - ASN.1 DER encoder classes for RFC 5126 CAdES long term signature
