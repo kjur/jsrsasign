@@ -1,4 +1,4 @@
-/* base64x-1.1.21 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* base64x-1.1.22 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.4 base64x 1.1.21 (2022-Feb-14)
+ * @version jsrsasign 10.5.9 base64x 1.1.22 (2022-Mar-10)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -624,7 +624,7 @@ function zulutomsec(s) {
 	}
 	return Date.UTC(year, month, day, hour, min, sec, msec);
     }
-    throw "unsupported zulu format: " + s;
+    throw new Error("unsupported zulu format: " + s);
 }
 
 /**
@@ -647,8 +647,7 @@ function zulutomsec(s) {
  * zulutosec("20071231235959Z")       &rarr; 1199145599 #Mon, 31 Dec 2007 23:59:59 GMT
  */
 function zulutosec(s) {
-    var msec = zulutomsec(s);
-    return ~~(msec / 1000);
+    return Math.round(zulutomsec(s) / 1000.0);
 }
 
 // ==== zulu / Date =================================
