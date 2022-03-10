@@ -1,8 +1,15 @@
 
 ChangeLog for jsrsasign
 
+hextoipv6 fix
+* Changes from 10.5.9 to 10.5.10 (2022-Mar-10)
+  - src/base64x.js
+    - fix hextoipv6 for shrinking leading zeros (#536)
+  - test/qunit-do-base64x.html
+    - test case added for above updates.
+
 small fix
-* Changes from 10.5.8 to 10.5.9 version
+* Changes from 10.5.8 to 10.5.9 (2022-Mar-10)
   - src/base64x.js
     - fix zulutosec (#538)
   - src/asn1csr.js

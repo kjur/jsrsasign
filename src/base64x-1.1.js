@@ -1,4 +1,4 @@
-/* base64x-1.1.22 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* base64x-1.1.23 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.9 base64x 1.1.22 (2022-Mar-10)
+ * @version jsrsasign 10.5.10 base64x 1.1.23 (2022-Mar-10)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -800,42 +800,44 @@ function ipv6tohex(s) {
  * <a href="https://tools.ietf.org/html/rfc5952">RFC 5952</a>
  * canonicalized IPv6 address string.
  * @example
- * hextoip("871020010db8000000000000000000000004") &rarr "2001:db8::4"
- * hextoip("871020010db8000000000000000000") &rarr raise exception
- * hextoip("xyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyz") &rarr raise exception
+ * hextoipv6("871020010db8000000000000000000000004") &rarr "2001:db8::4"
+ * hextoipv6("871020010db8000000000000000000") &rarr raise exception
+ * hextoipv6("xyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyz") &rarr raise exception
  */
 function hextoipv6(s) {
-  if (! s.match(/^[0-9A-Fa-f]{32}$/))
-    throw "malformed IPv6 address octet";
+    if (! s.match(/^[0-9A-Fa-f]{32}$/))
+	throw new Error("malformed IPv6 address: " + s);
 
-  // 1. downcase
-  s = s.toLowerCase();
+    // 1. downcase
+    s = s.toLowerCase();
 
-  // 2. split 4
-  var a = s.match(/.{1,4}/g);
+    // 2. split 4 > ["0123", "00a4", "0000", ..., "ffff"]
+    var a = s.match(/.{1,4}/g);
 
-  // 3. trim leading 0
-  for (var i = 0; i < 8; i++) {
-    a[i] = a[i].replace(/^0+/, "");
-    if (a[i] == '') a[i] = '0';
-  }
-  s = ":" + a.join(":") + ":";
+    // 3. trim leading 0 for items and join > "123:a4:0:...:ffff"
+    a = a.map(function(s){s.replace(/^0+/, '')});
+    a = a.map(function(s){s == '' ? '0' : s});
+    s = ':' + a.join(':') + ':';
 
-  // 4. find shrinkables :0:0:...
-  var aZero = s.match(/:(0:){2,}/g);
+    // 4. find shrinkable candidates :0:0:..:0:
+    var aZero = s.match(/:(0:){2,}/g);
 
-  // 5. no shrinkable
-  if (aZero === null) return s.slice(1, -1);
+    // 5. no shrinkable
+    if (aZero == null) return s.slice(1, -1);
 
-  // 6. find max length :0:0:...
-  var item = '';
-  for (var i = 0; i < aZero.length; i++) {
-    if (aZero[i].length > item.length) item = aZero[i];
-  }
+    // 6. fix max length zero(:0:...:0:)
+    var sMaxZero = aZero.sort().slice(-1)[0];
 
-  // 7. shrink
-  s = s.replace(item, '::');
-  return s.slice(1, -1);
+    // 7. replace shrinked
+    s = s.replace(sMaxZero.substr(0, sMaxZero.length - 1), ':');
+
+    // 8. trim leading ':' if not '::'
+    if (s.substr(0, 2) != '::') s = s.substr(1);
+
+    // 9. trim tail ':' if not '::'
+    if (s.substr(-2, 2) != '::') s = s.substr(0, s.length - 1);
+
+    return s;
 }
 
 // ==== hex / ip =================================

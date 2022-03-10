@@ -94,13 +94,17 @@ gitadd: gitadd-all-doc gitadd-release
 	@echo done
 
 rsync-test:
+	rsync -n -av api/ ../../_gitpg/jsrsasign/api
 	rsync -n -av --include="[a-z]*.js" --exclude="*" src/ ../../_gitpg/jsrsasign/src
 	rsync -n -av --include="[a-z]*.min.js" --exclude="*" min/ ../../_gitpg/jsrsasign/min
 	rsync -n -av --include="[a-z]*.html" --exclude="*" test/ ../../_gitpg/jsrsasign/test
 
 rsync:
+	rsync -av api/ ../../_gitpg/jsrsasign/api
 	rsync -av --include="[a-z]*.js" --exclude="*" src/ ../../_gitpg/jsrsasign/src
 	rsync -av --include="[a-z]*.min.js" --exclude="*" min/ ../../_gitpg/jsrsasign/min
 	rsync -av --include="[a-z]*.html" --exclude="*" test/ ../../_gitpg/jsrsasign/test
 
+
+bbb:
 
