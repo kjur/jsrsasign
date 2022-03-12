@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+asn1hex update
+* Changes from 10.5.10 to 10.5.11 (2022-Mar-12)
+  - src/ash1hex.js
+    - ASN1HEX.parse add NumericStiring(x12) support
+    - ASN1HEX.parse fix for "8x" tag (non structured tag)
+  - test/qunit-do-asn1hex.html
+    - test case added for above updates.
+
 hextoipv6 fix
 * Changes from 10.5.9 to 10.5.10 (2022-Mar-10)
   - src/base64x.js
