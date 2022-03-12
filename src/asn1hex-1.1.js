@@ -1,4 +1,4 @@
-/* asn1hex-1.2.11.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1hex-1.2.12.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.4 asn1hex 1.2.11 (2022-Feb-14)
+ * @version jsrsasign 10.5.11 asn1hex 1.2.12 (2022-Mar-12)
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -1031,10 +1031,10 @@ ASN1HEX.parse = function(h) {
 	_hextoutf8 = hextoutf8;
 
     var tagName = {
-	"0c": "utf8str", "13": "prnstr", "14": "telstr",
-	"16": "ia5str", "17": "utctime", "18": "gentime",
-	"1a": "visstr", "1e": "bmpstr", "30": "seq",
-	"31": "set"
+	"0c": "utf8str", "12": "numstr", "13": "prnstr", 
+	"14": "telstr", "16": "ia5str", "17": "utctime", 
+	"18": "gentime", "1a": "visstr", "1e": "bmpstr", 
+	"30": "seq", "31": "set"
     };
 
     var _parseChild = function(h) {
@@ -1098,23 +1098,23 @@ ASN1HEX.parse = function(h) {
     } else if (tag == "30" || tag == "31") {
 	result[tagName[tag]] = _parseChild(h);
 	return result;
-    } else if (":0c:13:14:16:17:18:1a:1e:".indexOf(tag) != -1) {
+    } else if (":0c:12:13:14:16:17:18:1a:1e:".indexOf(tag) != -1) {
 	var s = _hextoutf8(hV);
 	result[tagName[tag]] = {str: s};
 	return result;
     } else if (tag.match(/^8[0-9]$/)) {
 	var s = _hextoutf8(hV);
-	if (s == null |
-	    s == "" | 
-	    (s.match(/[\x00-\x1F\x7F-\x9F]/) != null) |
-	    (s.match(/[\u0000-\u001F\u0080–\u009F]/) != null)) {
+	if (s == null | s == "") {
+	    return {"tag": {"tag": tag, explicit: false, hex: hV}};
+	} else if (s.match(/[\x00-\x1F\x7F-\x9F]/) != null ||
+		   s.match(/[\u0000-\u001F\u0080–\u009F]/) != null) {
 	    return {"tag": {"tag": tag, explicit: false, hex: hV}};
 	} else {
 	    return {"tag": {"tag": tag, explicit: false, str: s}};
 	}
     } else if (tag.match(/^a[0-9]$/)) {
 	try {
-	    if (! _isASN1HEX(hV)) throw "not encap";
+	    if (! _isASN1HEX(hV)) throw new Error("not encap");
 	    return {"tag": {"tag": tag, 
 			    explicit: true,
 			    obj: _parse(hV)}};

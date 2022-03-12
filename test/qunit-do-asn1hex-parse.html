@@ -34,6 +34,7 @@ oExpect = {bool: false};
 deepEqual(_parse(hIn), oExpect, "01 bool false");
 });
 
+//=======================================
 test("ASN1HEX.parse 03 BitString test", function() {
 var _parse = ASN1HEX.parse;
 var hIN, oExpect;
@@ -54,9 +55,23 @@ deepEqual(_parse(hIn), oExpect, "05a0 > {bin: 101}");
 hIn = "030307a080";
 oExpect = {bitstr: {bin: "101000001"}};
 deepEqual(_parse(hIn), oExpect, "07a080 > {bin: 101000001}");
-
 });
 
+//=======================================
+test("ASN1HEX.parse 04 OctetString test", function() {
+var _parse = ASN1HEX.parse;
+var hIN, oExpect;
+
+hIn = "040300abcd";
+oExpect = {octstr: {hex: "00abcd"}};
+deepEqual(_parse(hIn), oExpect, "04 octstr 00abcd");
+
+hIn = "0405020301abcd";
+oExpect = {octstr: {obj: {"int": {hex: "01abcd"}}}};
+deepEqual(_parse(hIn), oExpect, "04 octstr {int: 01abcd} encap");
+});
+
+//=======================================
 test("ASN1HEX.parse test", function() {
 var _parse = ASN1HEX.parse;
 var hIN, oExpect;
@@ -64,10 +79,6 @@ var hIN, oExpect;
 hIn = "020301abcd";
 oExpect = {"int": {hex: "01abcd"}};
 deepEqual(_parse(hIn), oExpect, "02 int 0x01abcd");
-
-hIn = "040300abcd";
-oExpect = {octstr: {hex: "00abcd"}};
-deepEqual(_parse(hIn), oExpect, "04 octstr 00abcd");
 
 hIn = "0500";
 oExpect = {"null": ""};
@@ -88,6 +99,10 @@ deepEqual(_parse(hIn), oExpect, "07 enum 01abcd");
 hIn = "0c03616161";
 oExpect = {utf8str: {str: "aaa"}};
 deepEqual(_parse(hIn), oExpect, "0c utf8str aaa");
+
+hIn = "120431323334";
+oExpect = {numstr: {str: "1234"}};
+deepEqual(_parse(hIn), oExpect, "12 numstr 1234");
 
 hIn = "1303616161";
 oExpect = {prnstr: {str: "aaa"}};
@@ -136,6 +151,10 @@ deepEqual(_parse(hIn), oExpect, "80 tag[0] aaa");
 hIn = "8003010203";
 oExpect = {"tag": {"tag": "80", explicit: false, hex: "010203"}};
 deepEqual(_parse(hIn), oExpect, "80 tag[0] x010203");
+
+hIn = "81104e6d478b26f27d657f768e025ce3d494";
+oExpect = {"tag": {"tag": "81", explicit: false, hex: "4e6d478b26f27d657f768e025ce3d494"}};
+deepEqual(_parse(hIn), oExpect, "81 tag[1] x4e6d...");
 
 hIn = "a0051303616161";
 oExpect = {"tag": {"tag": "a0", explicit: true, 
