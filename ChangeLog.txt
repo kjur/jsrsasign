@@ -1,6 +1,27 @@
 
 ChangeLog for jsrsasign
 
+support ISO 8859-1 TeletexString and BMPString for X500Name
+* Changes from 10.5.11 to 10.5.12 (2022-Mar-13)
+  - src/asn1hex.js
+    - ASN1HEX.parse fixed for TeletexString and BMPString
+    - ASN1HEX.parse TeletexString supports non-ASCII 
+      ISO 8859-1 Latin1 characters. Before this version,
+      only supports ASCII characters.
+    - hextoipv6 bug fix raised in some of enviroment
+  - src/base64x.js
+    - iso88591hextoutf8/utf8toiso88591hex added
+    - iso88591hextoutf8hex/utf8hextoiso88591hex added
+    - hextoipv6 fixed
+  - src/x509.js
+    - refactoring for X509.get{X500NameArray,RDN,AttrTypeAndValue}.
+      Add support for Teletex/BMPString and more attrTypes
+  - test/qunit-do-*.html
+    - test case added for above updates.
+      - qunit-do-base64x: add iso8859-1 / utf-8 converter tests
+      - qunit-do-asn1hex-parse: add TeletexString parse tests
+      - qunit-do-x509-ext: add NumericString/TeletexString X500Name tests
+
 asn1hex update
 * Changes from 10.5.10 to 10.5.11 (2022-Mar-12)
   - src/ash1hex.js

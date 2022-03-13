@@ -942,9 +942,10 @@ equal(x.getX500NameRule([[{type:"C",value:"JP",ds:"prn"}],[{type:"O",value:"b",d
 
 test("getX500Name test", function() {
 var x = new X509();
+var hIn, pExpect;
 
-var hIn1 = "302a310b3009060355040613024a50310a3008060355040a0c0162310f300d060355040316066140612e6a70";
-var pExpect = {
+hIn = "302a310b3009060355040613024a50310a3008060355040a0c0162310f300d060355040316066140612e6a70";
+pExpect = {
   array: [
     [{type:"C",value:"JP",ds:"prn"}],
     [{type:"O",value:"b",ds:"utf8"}],
@@ -952,19 +953,19 @@ var pExpect = {
   ],
   str: "/C=JP/O=b/CN=a@a.jp"
 };
-deepEqual(x.getX500Name(hIn1), pExpect, "/C=JP/O=b/CN=a@a.jp")
+deepEqual(x.getX500Name(hIn), pExpect, "/C=JP/O=b/CN=a@a.jp")
 
-var hIn2 = "30123110300e06035504030c0743c3a06e617279";
-var pExpect2 = {
+hIn = "30123110300e06035504030c0743c3a06e617279";
+pExpect = {
   array: [
     [{type:"CN",value:"Cànary",ds:"utf8"}]
   ],
   str: "/CN=Cànary"
 };
-deepEqual(x.getX500Name(hIn2), pExpect2, "/CN=Cànary (UTF-8 non ascii)")
+deepEqual(x.getX500Name(hIn), pExpect, "/CN=Cànary (UTF-8 non ascii)")
 
-var hIn3 = "3081cf310b300906035504061302415431818b308188060355040a1e81800041002d005400720075007300740020004700650073002e0020006600fc007200200053006900630068006500720068006500690074007300730079007300740065006d006500200069006d00200065006c0065006b00740072002e00200044006100740065006e007600650072006b00650068007200200047006d0062004831183016060355040b130f412d54727573742d5175616c2d3031311830160603550403130f412d54727573742d5175616c2d3031";
-var pExpect3 = {
+hIn = "3081cf310b300906035504061302415431818b308188060355040a1e81800041002d005400720075007300740020004700650073002e0020006600fc007200200053006900630068006500720068006500690074007300730079007300740065006d006500200069006d00200065006c0065006b00740072002e00200044006100740065006e007600650072006b00650068007200200047006d0062004831183016060355040b130f412d54727573742d5175616c2d3031311830160603550403130f412d54727573742d5175616c2d3031";
+pExpect = {
   array: [
     [{type:"C",value:"AT",ds:"prn"}],
     [{type:"O",value:"A-Trust Ges. für Sicherheitssysteme im elektr. Datenverkehr GmbH",ds:"bmp"}],
@@ -973,7 +974,7 @@ var pExpect3 = {
   ],
   str: "/C=AT/O=A-Trust Ges. für Sicherheitssysteme im elektr. Datenverkehr GmbH/OU=A-Trust-Qual-01/CN=A-Trust-Qual-01"
 };
-deepEqual(x.getX500Name(hIn3), pExpect3, "BMP(ICS2) non ascii)")
+deepEqual(x.getX500Name(hIn), pExpect, "BMP(ICS2) non ascii)")
 
 });
 
@@ -989,22 +990,32 @@ test("getAttrTypeAndValue test", function() {
 var x = new X509();
 
 deepEqual(
+x.getAttrTypeAndValue("300d0603550403140631323334a9fa"),
+{type:"CN",value:"1234©ú",ds:"tel"},
+"CN=1234©ú tel");
+
+deepEqual(
+x.getAttrTypeAndValue("300d06035504031206313233343536"),
+{type:"CN",value:"123456",ds:"num"},
+"CN=123456 num");
+
+deepEqual(
 x.getAttrTypeAndValue("300d060355040316066140612e6a70"),
 {type:"CN",value:"a@a.jp",ds:"ia5"},
-"CN a@a.jp ia5");
-
+"CN=a@a.jp ia5");
 
 deepEqual(
 x.getAttrTypeAndValue("3008060355040a0c0162"),
 {type:"O",value:"b",ds:"utf8"},
-"O b utf8");
+"O=b utf8");
 
 deepEqual(
 x.getAttrTypeAndValue("3009060355040613024a50"),
 {type:"C",value:"JP",ds:"prn"},
-"C JP prn");
+"C=JP prn");
 });
 
+// ===================================
 test("X509.dnarraytostr", function() {
 var x = new X509();
 

@@ -80,6 +80,29 @@ test("utf8tohex", function() {
 equal(utf8tohex("花"), "e88ab1", "花 > e88ab1");
 });
 
+// == iso88591hextoutf8/utf8toiso88591hex ============
+test("iso88591hextoutf8", function() {
+equal(iso88591hextoutf8("41a9fa"), "A©ú", "41a9fa > A©ú");
+equal(iso88591hextoutf8("616161"), "aaa", "616161 > aaa");
+});
+
+test("utf8toiso88591hex", function() {
+equal(utf8toiso88591hex("A©ú"), "41a9fa", "A©ú > 41a9fa");
+equal(utf8toiso88591hex("aaa"), "616161", "aaa > 616161");
+});
+
+// == iso88591hextoutf8hex/utf8hextoiso88591hex ======
+test("iso88591hextoutf8hex", function() {
+equal(iso88591hextoutf8hex("41a9fa"), "41c2a9c3ba", "41a9fa > 41c2a8c3ba");
+equal(iso88591hextoutf8hex("616161"), "616161", "616161 > 616161");
+});
+
+test("utf8hextoiso88591hex", function() {
+equal(utf8hextoiso88591hex("41c2a9c3ba"), "41a9fa", "41c2a8c3ba > 41a9fa");
+equal(utf8hextoiso88591hex("616161"), "616161", "616161 > 616161");
+});
+
+// ===================================================
 test("KJUR.lang.String.isInteger", function() {
 equal(KJUR.lang.String.isInteger("123"), true, "123");
 equal(KJUR.lang.String.isInteger("-123"), true, "-123");

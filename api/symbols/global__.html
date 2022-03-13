@@ -887,6 +887,24 @@ to a 16 byte hexadecimal string of address.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#iso88591hextoutf8">iso88591hextoutf8</a></b>(h)
+								</div>
+								<div class="description">convert a hexadecimal ISO 8859-1 latin string to UTF-8 string<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#iso88591hextoutf8hex">iso88591hextoutf8hex</a></b>(h)
+								</div>
+								<div class="description">convert a hexadecimal ISO 8859-1 latin string to UTF-8 hexadecimal string<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#newline_toDos">newline_toDos</a></b>(s)
 								</div>
 								<div class="description">convert all UNIX new line("\r\n") to DOS new line("\n") in 
@@ -1111,6 +1129,15 @@ UTF-8 string.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#utf8hextoiso88591hex">utf8hextoiso88591hex</a></b>(h)
+								</div>
+								<div class="description">convert UTF-8 string to a hexadecimal ISO 8859-1 latin string<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#utf8tob64">utf8tob64</a></b>(s)
 								</div>
 								<div class="description">convert a UTF-8 encoded string including CJK or Latin to a Base64 encoded string.</div>
@@ -1132,6 +1159,15 @@ UTF-8 string.</div>
 								<div class="fixedFont"><b><a href="../symbols/global__.html#utf8tohex">utf8tohex</a></b>(s)
 								</div>
 								<div class="description">convert a UTF-8 encoded string including CJK or Latin to a hexadecimal encoded string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#utf8toiso88591hex">utf8toiso88591hex</a></b>(s)
+								</div>
+								<div class="description">convert UTF-8 string to a hexadecimal ISO 8859-1 latin string<br/></div>
 							</td>
 						</tr>
 					
@@ -3175,6 +3211,134 @@ ishex("121") &rarr; false -- odd length</pre>
 
 					<hr />
 				
+					<a name="iso88591hextoutf8"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>iso88591hextoutf8</b>(h)
+					
+					</div>
+					<div class="description">
+						convert a hexadecimal ISO 8859-1 latin string to UTF-8 string<br/>
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">iso88591hextoutf8("41a9fa") &rarr; "A©ú"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal ISO 8859-1 latin string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.12 base64x 1.1.25</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> UTF-8 string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/global__.html#utf8toiso88591hex">utf8toiso88591hex</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="iso88591hextoutf8hex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>iso88591hextoutf8hex</b>(h)
+					
+					</div>
+					<div class="description">
+						convert a hexadecimal ISO 8859-1 latin string to UTF-8 hexadecimal string<br/>
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">iso88591hextoutf8hex("41a9fa") &rarr; "41c2a9c3ba"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal ISO 8859-1 latin string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.12 base64x 1.1.25</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> UTF-8 hexadecimal string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/global__.html#iso88591hextoutf8">iso88591hextoutf8</a></dd>
+							
+								<dd><a href="../symbols/global__.html#utf8hextoiso88591hex">utf8hextoiso88591hex</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
 					<a name="newline_toDos"> </a>
 					<div class="fixedFont">
 					
@@ -4420,6 +4584,71 @@ UTF-8 string.
 
 					<hr />
 				
+					<a name="utf8hextoiso88591hex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>utf8hextoiso88591hex</b>(h)
+					
+					</div>
+					<div class="description">
+						convert UTF-8 string to a hexadecimal ISO 8859-1 latin string<br/>
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">utf8hextoiso88591hex("41c2a9c3ba") &rarr; "41a9fa"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal UTF-8 string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.12 base64x 1.1.25</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal ISO 8859-1 latin string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/global__.html#iso88591hextoutf8hex">iso88591hextoutf8hex</a></dd>
+							
+								<dd><a href="../symbols/global__.html#utf8toiso88591hex">utf8toiso88591hex</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
 					<a name="utf8tob64"> </a>
 					<div class="fixedFont">
 					
@@ -4577,6 +4806,69 @@ utf8tob64u("aaa") &rarr; "YWFh"</pre>
 							</dl>
 						
 						
+						
+
+					<hr />
+				
+					<a name="utf8toiso88591hex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>utf8toiso88591hex</b>(s)
+					
+					</div>
+					<div class="description">
+						convert UTF-8 string to a hexadecimal ISO 8859-1 latin string<br/>
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">utf8toiso88591hex("A©ú") &rarr; "41a9fa"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>hexadecimal ISO 8859-1 latin string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.12 base64x 1.1.25</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> UTF-8 string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/global__.html#iso88591hextoutf8">iso88591hextoutf8</a></dd>
+							
+							</dl>
 						
 
 					<hr />
