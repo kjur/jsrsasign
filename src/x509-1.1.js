@@ -1,4 +1,4 @@
-/* x509-2.0.13.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.0.14.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.8 x509 2.0.13 (2022-Feb-25)
+ * @version jsrsasign 10.5.12 x509 2.0.14 (2022-Mar-13)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -2125,6 +2125,85 @@ function X509(params) {
     };
 
     // ===== BEGIN X500Name related =====================================
+    /*
+     * convert ASN.1 parsed object to attrTypeAndValue assoc array<br/>
+     * @name _convATV
+     * @param p associative array of parsed attrTypeAndValue object
+     * @return attrTypeAndValue associative array
+     * @since jsrsasign 10.5.12 x509 2.0.14
+     * @example
+     * _convATV({seq: [...]} &rarr: {type:"C",value:"JP",ds:"prn"}
+     */
+    var _convATV = function(p) {
+	var result = {};
+	try {
+	    var name = p.seq[0].oid;
+	    var oid = KJUR.asn1.x509.OID.name2oid(name);
+	    result.type = KJUR.asn1.x509.OID.oid2atype(oid);
+	    var item1 = p.seq[1];
+	    if (item1.utf8str != undefined) {
+		result.ds = "utf8";
+		result.value = item1.utf8str.str;
+	    } else if (item1.numstr != undefined) {
+		result.ds = "num";
+		result.value = item1.numstr.str;
+	    } else if (item1.telstr != undefined) {
+		result.ds = "tel";
+		result.value = item1.telstr.str;
+	    } else if (item1.prnstr != undefined) {
+		result.ds = "prn";
+		result.value = item1.prnstr.str;
+	    } else if (item1.ia5str != undefined) {
+		result.ds = "ia5";
+		result.value = item1.ia5str.str;
+	    } else if (item1.visstr != undefined) {
+		result.ds = "vis";
+		result.value = item1.visstr.str;
+	    } else if (item1.bmpstr != undefined) {
+		result.ds = "bmp";
+		result.value = item1.bmpstr.str;
+	    } else {
+		throw "error";
+	    }
+	    return result;
+	} catch(ex) {
+	    throw new Erorr("improper ASN.1 parsed AttrTypeAndValue");
+	}
+    };
+
+    /*
+     * convert ASN.1 parsed object to RDN array<br/>
+     * @name _convRDN
+     * @param p associative array of parsed RDN object
+     * @return RDN array
+     * @since jsrsasign 10.5.12 x509 2.0.14
+     * @example
+     * _convRDN({set: [...]} &rarr: [{type:"C",value:"JP",ds:"prn"}]
+     */
+    var _convRDN = function(p) {
+	try {
+	    return p.set.map(function(pATV){return _convATV(pATV)});
+	} catch(ex) {
+	    throw new Error("improper ASN.1 parsed RDN: " + ex);
+	}
+    };
+
+    /*
+     * convert ASN.1 parsed object to X500Name array<br/>
+     * @name _convX500Name
+     * @param p associative array of parsed X500Name array object
+     * @return RDN array
+     * @since jsrsasign 10.5.12 x509 2.0.14
+     * @example
+     * _convX500Name({seq: [...]} &rarr: [[{type:"C",value:"JP",ds:"prn"}]]
+     */
+    var _convX500Name = function(p) {
+	try {
+	    return p.seq.map(function(pRDN){return _convRDN(pRDN)});
+	} catch(ex) {
+	    throw new Error("improper ASN.1 parsed X500Name: " + ex);
+	}
+    };
 
     this.getX500NameRule = function(aDN) {
 	var isPRNRule = true;
@@ -2185,6 +2264,117 @@ function X509(params) {
     };
 
     /**
+     * get AttributeTypeAndValue ASN.1 structure parameter as JSON object<br/>
+     * @name getAttrTypeAndValue
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of AttributeTypeAndValue
+     * @return {Object} JSON object of AttributeTypeAndValue parameters
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see X509#getX500Name
+     * @see X509#getRDN
+     * @description
+     * This method will get AttributeTypeAndValue parameters defined in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
+     * RFC 5280 4.1.2.4</a>.
+     * <pre>
+     * AttributeTypeAndValue ::= SEQUENCE {
+     *   type     AttributeType,
+     *   value    AttributeValue }
+     * AttributeType ::= OBJECT IDENTIFIER
+     * AttributeValue ::= ANY -- DEFINED BY AttributeType
+     * </pre>
+     * <ul>
+     * <li>{String}type - AttributeType name or OID(ex. C,O,CN)</li>
+     * <li>{String}value - raw string of ASN.1 value of AttributeValue</li>
+     * <li>{String}ds - DirectoryString type of AttributeValue</li>
+     * </ul>
+     * "ds" has one of following value:
+     * <ul>
+     * <li>utf8 - (0x0c) UTF8String</li>
+     * <li>num  - (0x12) NumericString</li>
+     * <li>prn  - (0x13) PrintableString</li>
+     * <li>tel  - (0x14) TeletexString</li>
+     * <li>ia5  - (0x16) IA5String</li>
+     * <li>vis  - (0x1a) VisibleString</li>
+     * <li>bmp  - (0x1e) BMPString</li>
+     * </ul>
+     * @example
+     * x = new X509();
+     * x.getAttrTypeAndValue("30...") &rarr;
+     * {type:"CN",value:"john.smith@example.com",ds:"ia5"} or
+     * {type:"O",value:"Sample Corp.",ds:"prn"}
+     */
+    // unv  - (0x1c??) UniversalString ... for future
+    this.getAttrTypeAndValue = function(h) {
+	var p = _ASN1HEX_parse(h);
+	return _convATV(p);
+    };
+
+    /**
+     * get RelativeDistinguishedName ASN.1 structure parameter array<br/>
+     * @name getRDN
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of RDN
+     * @return {Array} array of AttrTypeAndValue parameters
+     * @since jsrsasign 9.0.0 x509 2.0.0
+     * @see X509#getX500Name
+     * @see X509#getRDN
+     * @see X509#getAttrTypeAndValue
+     * @description
+     * This method will get RelativeDistinguishedName parameters defined in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
+     * RFC 5280 4.1.2.4</a>.
+     * <pre>
+     * RelativeDistinguishedName ::=
+     *   SET SIZE (1..MAX) OF AttributeTypeAndValue
+     * </pre>
+     * @example
+     * x = new X509();
+     * x.getRDN("31...") &rarr;
+     * [{type:"C",value:"US",ds:"prn"}] or
+     * [{type:"O",value:"Sample Corp.",ds:"prn"}] or
+     * [{type:"CN",value:"john.smith@example.com",ds:"ia5"}]
+     */
+    this.getRDN = function(h) {
+	var p = _ASN1HEX_parse(h);
+	return _convRDN(p);
+    };
+
+    /**
+     * get X.500 Name ASN.1 structure parameter array<br/>
+     * @name getX500NameArray
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of Name
+     * @return {Array} array of RDN parameter array
+     * @since jsrsasign 10.0.6 x509 2.0.9
+     * @see X509#getX500Name
+     * @see X509#getRDN
+     * @see X509#getAttrTypeAndValue
+     * @description
+     * This method will get Name parameter defined in
+     * <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
+     * RFC 5280 4.1.2.4</a>.
+     * <pre>
+     * Name ::= CHOICE { -- only one possibility for now --
+     *   rdnSequence  RDNSequence }
+     * RDNSequence ::= SEQUENCE OF RelativeDistinguishedName
+     * </pre>
+     * @example
+     * x = new X509();
+     * x.getX500NameArray("30...") &rarr;
+     * [[{type:"C",value:"US",ds:"prn"}],
+     *  [{type:"O",value:"Sample Corp.",ds:"utf8"}],
+     *  [{type:"CN",value:"john.smith@example.com",ds:"ia5"}]]
+     */
+    this.getX500NameArray = function(h) {
+	var p = _ASN1HEX_parse(h);
+	return _convX500Name(p);
+    };
+
+    /**
      * get Name ASN.1 structure parameter array<br/>
      * @name getX500Name
      * @memberOf X509#
@@ -2223,139 +2413,6 @@ function X509(params) {
 	var a = this.getX500NameArray(h);
 	var s = this.dnarraytostr(a);
 	return { array: a, str: s };
-    };
-
-    
-    
-
-    /**
-     * get X.500 Name ASN.1 structure parameter array<br/>
-     * @name getX500NameArray
-     * @memberOf X509#
-     * @function
-     * @param {String} h hexadecimal string of Name
-     * @return {Array} array of RDN parameter array
-     * @since jsrsasign 10.0.6 x509 2.0.9
-     * @see X509#getX500Name
-     * @see X509#getRDN
-     * @see X509#getAttrTypeAndValue
-     * @description
-     * This method will get Name parameter defined in
-     * <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
-     * RFC 5280 4.1.2.4</a>.
-     * <pre>
-     * Name ::= CHOICE { -- only one possibility for now --
-     *   rdnSequence  RDNSequence }
-     * RDNSequence ::= SEQUENCE OF RelativeDistinguishedName
-     * </pre>
-     * @example
-     * x = new X509();
-     * x.getX500NameArray("30...") &rarr;
-     * [[{type:"C",value:"US",ds:"prn"}],
-     *  [{type:"O",value:"Sample Corp.",ds:"utf8"}],
-     *  [{type:"CN",value:"john.smith@example.com",ds:"ia5"}]]
-     */
-    this.getX500NameArray = function(h) {
-	var result = [];
-	var a = _getChildIdx(h, 0);
-	for (var i = 0; i < a.length; i++) {
-	    result.push(this.getRDN(_getTLV(h, a[i])));
-	}
-	return result;
-    };
-    
-    /**
-     * get RelativeDistinguishedName ASN.1 structure parameter array<br/>
-     * @name getRDN
-     * @memberOf X509#
-     * @function
-     * @param {String} h hexadecimal string of RDN
-     * @return {Array} array of AttrTypeAndValue parameters
-     * @since jsrsasign 9.0.0 x509 2.0.0
-     * @see X509#getX500Name
-     * @see X509#getRDN
-     * @see X509#getAttrTypeAndValue
-     * @description
-     * This method will get RelativeDistinguishedName parameters defined in
-     * <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
-     * RFC 5280 4.1.2.4</a>.
-     * <pre>
-     * RelativeDistinguishedName ::=
-     *   SET SIZE (1..MAX) OF AttributeTypeAndValue
-     * </pre>
-     * @example
-     * x = new X509();
-     * x.getRDN("31...") &rarr;
-     * [{type:"C",value:"US",ds:"prn"}] or
-     * [{type:"O",value:"Sample Corp.",ds:"prn"}] or
-     * [{type:"CN",value:"john.smith@example.com",ds:"ia5"}]
-     */
-    this.getRDN = function(h) {
-	var result = [];
-	var a = _getChildIdx(h, 0);
-	for (var i = 0; i < a.length; i++) {
-	    result.push(this.getAttrTypeAndValue(_getTLV(h, a[i])));
-	}
-	return result;
-    };
-
-    /**
-     * get AttributeTypeAndValue ASN.1 structure parameter as JSON object<br/>
-     * @name getAttrTypeAndValue
-     * @memberOf X509#
-     * @function
-     * @param {String} h hexadecimal string of AttributeTypeAndValue
-     * @return {Object} JSON object of AttributeTypeAndValue parameters
-     * @since jsrsasign 9.0.0 x509 2.0.0
-     * @see X509#getX500Name
-     * @see X509#getRDN
-     * @description
-     * This method will get AttributeTypeAndValue parameters defined in
-     * <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
-     * RFC 5280 4.1.2.4</a>.
-     * <pre>
-     * AttributeTypeAndValue ::= SEQUENCE {
-     *   type     AttributeType,
-     *   value    AttributeValue }
-     * AttributeType ::= OBJECT IDENTIFIER
-     * AttributeValue ::= ANY -- DEFINED BY AttributeType
-     * </pre>
-     * <ul>
-     * <li>{String}type - AttributeType name or OID(ex. C,O,CN)</li>
-     * <li>{String}value - raw string of ASN.1 value of AttributeValue</li>
-     * <li>{String}ds - DirectoryString type of AttributeValue</li>
-     * </ul>
-     * "ds" has one of following value:
-     * <ul>
-     * <li>utf8 - (0x0c) UTF8String</li>
-     * <li>prn  - (0x13) PrintableString</li>
-     * <li>ia5  - (0x16) IA5String</li>
-     * <li>vis  - (0x1a) VisibleString</li>
-     * <li>bmp  - (0x1e) BMPString</li>
-     * </ul>
-     * @example
-     * x = new X509();
-     * x.getAttrTypeAndValue("30...") &rarr;
-     * {type:"CN",value:"john.smith@example.com",ds:"ia5"} or
-     * {type:"O",value:"Sample Corp.",ds:"prn"}
-     */
-    // tel  - (0x14) TeletexString ... for future
-    // num  - (0x12) NumericString ... for future
-    // unv  - (0x1c??) UniversalString ... for future
-    this.getAttrTypeAndValue = function(h) {
-	var result = {type: null, value: null, ds: null};
-	var a = _getChildIdx(h, 0);
-	var hOID = _getVbyList(h, a[0], [], "06");
-	var hValue = _getVbyList(h, a[1], []);
-	var oid = KJUR.asn1.ASN1Util.oidHexToInt(hOID);
-	result.type = KJUR.asn1.x509.OID.oid2atype(oid);
-	result.ds = this.HEX2STAG[h.substr(a[1], 2)];
-	if (result.ds != "bmp") {
-	    result.value = hextoutf8(hValue);
-	} else {
-	    result.value = ucs2hextoutf8(hValue);
-	}
-	return result;
     };
 
     // ===== END X500Name related =====================================

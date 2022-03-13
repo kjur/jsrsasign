@@ -72,6 +72,20 @@ deepEqual(_parse(hIn), oExpect, "04 octstr {int: 01abcd} encap");
 });
 
 //=======================================
+test("ASN1HEX.parse 14 TeletexString test", function() {
+var _parse = ASN1HEX.parse;
+var hIN, oExpect;
+
+hIn = "1403616161";
+oExpect = {telstr: {str: "aaa"}};
+deepEqual(_parse(hIn), oExpect, "14 telstr 616161 > aaa");
+
+hIn = "140341a9fa";
+oExpect = {telstr: {str: "A©ú"}};
+deepEqual(_parse(hIn), oExpect, "14 telstr 41a9fa > A©ú");
+});
+
+//=======================================
 test("ASN1HEX.parse test", function() {
 var _parse = ASN1HEX.parse;
 var hIN, oExpect;
@@ -107,10 +121,6 @@ deepEqual(_parse(hIn), oExpect, "12 numstr 1234");
 hIn = "1303616161";
 oExpect = {prnstr: {str: "aaa"}};
 deepEqual(_parse(hIn), oExpect, "13 prnstr aaa");
-
-hIn = "1403616161";
-oExpect = {telstr: {str: "aaa"}};
-deepEqual(_parse(hIn), oExpect, "14 telstr aaa");
 
 hIn = "1603616161";
 oExpect = {ia5str: {str: "aaa"}};

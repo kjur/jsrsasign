@@ -1,4 +1,4 @@
-/* asn1hex-1.2.12.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1hex-1.2.13.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.11 asn1hex 1.2.12 (2022-Mar-12)
+ * @version jsrsasign 10.5.12 asn1hex 1.2.13 (2022-Mar-13)
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -1014,9 +1014,11 @@ ASN1HEX.dump = function(hexOrObj, flags, idx, indent) {
  *
  * @description
  * This method parses ASN.1 DER hexadecimal string.
- * Its result can be applied to KJUR.asn1.ASN1Util.newOjbect.
+ * Its result can be applied to {@link KJUR.asn1.ASN1Util.newOjbect}.
  *
  * @example
+ * ASN1HEX.parse("31193017...") &rarr; // RDN
+ * {set: [{seq: [{oid: "localityName"}, {utf8str: {str: "Test"}}] }]}
  */
 ASN1HEX.parse = function(h) {
     var _ASN1HEX = ASN1HEX,
@@ -1028,7 +1030,9 @@ ASN1HEX.parse = function(h) {
 	_KJUR_asn1 = KJUR.asn1,
 	_oidHexToInt = _KJUR_asn1.ASN1Util.oidHexToInt,
 	_oid2name = _KJUR_asn1.x509.OID.oid2name,
-	_hextoutf8 = hextoutf8;
+	_hextoutf8 = hextoutf8,
+	_ucs2hextoutf8 = ucs2hextoutf8,
+	_iso88591hextoutf8 = iso88591hextoutf8;
 
     var tagName = {
 	"0c": "utf8str", "12": "numstr", "13": "prnstr", 
@@ -1098,7 +1102,15 @@ ASN1HEX.parse = function(h) {
     } else if (tag == "30" || tag == "31") {
 	result[tagName[tag]] = _parseChild(h);
 	return result;
-    } else if (":0c:12:13:14:16:17:18:1a:1e:".indexOf(tag) != -1) {
+    } else if (tag == "14") { // TeletexString
+	var s = _iso88591hextoutf8(hV);
+	result[tagName[tag]] = {str: s};
+	return result;
+    } else if (tag == "1e") { // BMPString
+	var s = _ucs2hextoutf8(hV);
+	result[tagName[tag]] = {str: s};
+	return result;
+    } else if (":0c:12:13:16:17:18:1a:".indexOf(tag) != -1) { // Other Strings types
 	var s = _hextoutf8(hV);
 	result[tagName[tag]] = {str: s};
 	return result;

@@ -1,4 +1,4 @@
-/* base64x-1.1.23 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* base64x-1.1.25 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.10 base64x 1.1.23 (2022-Mar-10)
+ * @version jsrsasign 10.5.12 base64x 1.1.25 (2022-Mar-13)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -343,6 +343,103 @@ function hextoutf8(s) {
   }
 }
 
+// ==== iso8859-1 latin1 / utf8 ===================
+/**
+ * convert a hexadecimal ISO 8859-1 latin string to UTF-8 string<br/>
+ * @name iso88591hextoutf8
+ * @function
+ * @param {String} h hexadecimal ISO 8859-1 latin string
+ * @return {String} UTF-8 string
+ * @since jsrsasign 10.5.12 base64x 1.1.25
+ * @see utf8toiso88591hex
+ *
+ * @example
+ * iso88591hextoutf8("41a9fa") &rarr; "A©ú"
+ */
+function iso88591hextoutf8(h) {
+    return hextoutf8(iso88591hextoutf8hex(h));
+}
+
+/**
+ * convert UTF-8 string to a hexadecimal ISO 8859-1 latin string<br/>
+ * @name utf8toiso88591hex
+ * @function
+ * @param {String} s hexadecimal ISO 8859-1 latin string
+ * @return {String} UTF-8 string
+ * @since jsrsasign 10.5.12 base64x 1.1.25
+ * @see iso88591hextoutf8
+ *
+ * @example
+ * utf8toiso88591hex("A©ú") &rarr; "41a9fa"
+ */
+function utf8toiso88591hex(s) {
+    return utf8hextoiso88591hex(utf8tohex(s));
+}
+
+/**
+ * convert a hexadecimal ISO 8859-1 latin string to UTF-8 hexadecimal string<br/>
+ * @name iso88591hextoutf8hex
+ * @function
+ * @param {String} h hexadecimal ISO 8859-1 latin string
+ * @return {String} UTF-8 hexadecimal string
+ * @since jsrsasign 10.5.12 base64x 1.1.25
+ * @see iso88591hextoutf8
+ * @see utf8hextoiso88591hex
+ *
+ * @example
+ * iso88591hextoutf8hex("41a9fa") &rarr; "41c2a9c3ba"
+ */
+function iso88591hextoutf8hex(h) {
+    var a = h.match(/.{1,2}/g);
+    var a2 = [];
+    for (var i = 0; i < a.length; i++) {
+	var di = parseInt(a[i], 16);
+	if (0xa1 <= di && di <= 0xbf) {
+	    a2.push("c2");
+	    a2.push(a[i]);
+	} else if (0xc0 <= di && di <= 0xff) {
+	    a2.push("c3");
+	    a2.push((di - 64).toString(16));
+	} else {
+	    a2.push(a[i]);
+	}
+    }
+    return a2.join('');
+}
+
+/**
+ * convert UTF-8 string to a hexadecimal ISO 8859-1 latin string<br/>
+ * @name utf8hextoiso88591hex
+ * @function
+ * @param {String} h hexadecimal UTF-8 string
+ * @return {String} hexadecimal ISO 8859-1 latin string
+ * @since jsrsasign 10.5.12 base64x 1.1.25
+ * @see iso88591hextoutf8hex
+ * @see utf8toiso88591hex
+ *
+ * @example
+ * utf8hextoiso88591hex("41c2a9c3ba") &rarr; "41a9fa"
+ */
+function utf8hextoiso88591hex(h) {
+    var a = h.match(/.{1,2}/g);
+    var a2 = [];
+    for (var i = 0; i < a.length; i++) {
+	if (a[i] == 'c2') {
+	    i++;
+	    a2.push(a[i]);
+	} else if (a[i] == 'c3') {
+	    i++;
+	    var ci = a[i];
+	    var di = parseInt(a[i], 16) + 64;
+	    a2.push(di.toString(16));
+	} else {
+	    a2.push(a[i]);
+	}
+    }
+    return a2.join('');
+}
+
+// ==== rstr / hex ================================
 /**
  * convert a hexadecimal encoded string to raw string including non printable characters.<br/>
  * @name hextorstr
@@ -815,8 +912,8 @@ function hextoipv6(s) {
     var a = s.match(/.{1,4}/g);
 
     // 3. trim leading 0 for items and join > "123:a4:0:...:ffff"
-    a = a.map(function(s){s.replace(/^0+/, '')});
-    a = a.map(function(s){s == '' ? '0' : s});
+    a = a.map(function(s){return s.replace(/^0+/, '')});
+    a = a.map(function(s){return s == '' ? '0' : s});
     s = ':' + a.join(':') + ':';
 
     // 4. find shrinkable candidates :0:0:..:0:
