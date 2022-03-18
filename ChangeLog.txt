@@ -1,6 +1,11 @@
 
 ChangeLog for jsrsasign
 
+RSA key private generation fix
+* Changes from 10.5.12 to 10.5.13 (2022-Mar-18)
+  - ext/rsa2.js
+    - fix RSAGenerate for checking |p - q| (#546)
+
 support ISO 8859-1 TeletexString and BMPString for X500Name
 * Changes from 10.5.11 to 10.5.12 (2022-Mar-13)
   - src/asn1hex.js

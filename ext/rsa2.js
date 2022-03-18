@@ -1,4 +1,4 @@
-/*! (c) Tom Wu | http://www-cs-students.stanford.edu/~tjw/jsbn/
+/*! (c) Tom Wu, Kenji Urushima | http://www-cs-students.stanford.edu/~tjw/jsbn/
  */
 // Depends on rsa.js and jsbn2.js
 
@@ -178,25 +178,43 @@ function RSASetPrivateEx(N,E,D,P,Q,DP,DQ,C) {
 }
 
 // Generate a new random private key B bits long, using public expt E
+/*
+ * @example
+ * RSAKey.generate(1024, "10001")
+ */
 function RSAGenerate(B,E) {
   var rng = new SecureRandom();
   var qs = B>>1;
   this.e = parseInt(E,16);
   var ee = new BigInteger(E,16);
+
+  var mindiffbits = (B / 2) - 100;
+  var minDiff = BigInteger.ONE.shiftLeft(mindiffbits);
+
   for(;;) {
     for(;;) {
       this.p = new BigInteger(B-qs,1,rng);
-      if(this.p.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 && this.p.isProbablePrime(10)) break;
+      if(this.p.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 &&
+	 this.p.isProbablePrime(10)) break;
     }
     for(;;) {
       this.q = new BigInteger(qs,1,rng);
-      if(this.q.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 && this.q.isProbablePrime(10)) break;
+      if(this.q.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 &&
+	 this.q.isProbablePrime(10)) break;
     }
+
+    // p <= q
     if(this.p.compareTo(this.q) <= 0) {
       var t = this.p;
       this.p = this.q;
       this.q = t;
     }
+
+    // |p - q| > 2^(bitlen/2-100)=minDiff
+    var diff = this.q.subtract(this.p).abs();
+    if (diff.bitLength() < mindiffbits || diff.compareTo(minDiff) <= 0) continue;
+
+    // calculate dmp1,dmq1,coeff
     var p1 = this.p.subtract(BigInteger.ONE);	// p1 = p - 1
     var q1 = this.q.subtract(BigInteger.ONE);	// q1 = q - 1
     var phi = p1.multiply(q1);
