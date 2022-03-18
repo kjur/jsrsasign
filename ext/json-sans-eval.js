@@ -3,7 +3,7 @@
 // This source code is free for use in the public domain.
 // NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
 
-// http://code.google.com/p/json-sans-eval/
+// https://code.google.com/p/json-sans-eval/
 
 /**
  * Parses a string of well-formed JSON text.
