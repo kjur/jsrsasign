@@ -157,12 +157,20 @@ var z1PrvP5PPEM = "" +
 "-----END RSA PRIVATE KEY-----\n";
 
 // _gitpg/jsrsasign/test/eckey/k1.prv.p8p.pem (ECC)
-var k1PrvP8PPEM = "" +
-"-----BEGIN PRIVATE KEY-----\n" +
-"MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgEbVzfPnZPxfAyxqE\n" +
-"ZV05laAoJAl+/6Xt2O4mOB611sOhRANCAASgFTKjwJAAU95g++/vzKWHkzAVmNMI\n" +
-"tB5vTjZOOIwnEb70MsWZFIyUFD1P9Gwstz4+akHX7vI8BH6hHmBmfeQl\n" +
-"-----END PRIVATE KEY-----\n";
+var k1PrvP8PPEM = (function() {/*
+-----BEGIN PRIVATE KEY-----
+MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgEbVzfPnZPxfAyxqE
+ZV05laAoJAl+/6Xt2O4mOB611sOhRANCAASgFTKjwJAAU95g++/vzKWHkzAVmNMI
+tB5vTjZOOIwnEb70MsWZFIyUFD1P9Gwstz4+akHX7vI8BH6hHmBmfeQl
+-----END PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+var k1PrvP8PPEMnopub = (function() {/*
+-----BEGIN PRIVATE KEY-----
+MEECAQAwEwYHKoZIzj0CAQYIKoZIzj0DAQcEJzAlAgEBBCARtXN8+dk/F8DLGoRl
+XTmVoCgkCX7/pe3Y7iY4HrXWww==
+-----END PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
 
 var k1PrvP5PPEM = "" +
 "-----BEGIN EC PARAMETERS-----\n" +
@@ -271,6 +279,13 @@ var key2 = KEYUTIL.getKey(pem);
 expect(2);
 equal(pem.indexOf("-BEGIN PRIVATE KEY-") != -1, true, "");
 equal(key2.prvKeyHex, "11b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3", "");
+});
+
+test("getPEM private ECDSA k1.prv hex > PKCS8PRV without optional public key field", function() {
+var prvhex = "11b5737cf9d93f17c0cb1a84655d3995a02824097effa5edd8ee26381eb5d6c3";
+var key = new KJUR.crypto.ECDSA({prv: prvhex, curve: "secp256r1"});
+equal("\n" + KEYUTIL.getPEM(key, "PKCS8PRV").replace(/\r\n/g, "\n"), 
+      k1PrvP8PPEMnopub, "k1prvhex > PKCS8PRV without optional public key");
 });
 
 test("getPEM private DSA d1.prv.p5p.pem > PKCS8PRV plain", function() {

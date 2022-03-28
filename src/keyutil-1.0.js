@@ -1,9 +1,9 @@
-/* keyutil-1.2.5.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* keyutil-1.2.6.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
  *
- * Copyright (c) 2013-2021 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2022 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.1 keyutil 1.2.5 (2021-Dec-01)
+ * @version jsrsasign 10.5.14 keyutil 1.2.6 (2022-Mar-28)
  * @since jsrsasign 4.1.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1572,13 +1572,16 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         keyObjOrHex instanceof _ECDSA &&
         keyObjOrHex.isPrivate  == true) {
 
-        var keyObj = new _newObject({
+	var pKeyObj = {
             "seq": [
                 {"int": 1},
-                {"octstr": {"hex": keyObjOrHex.prvKeyHex}},
-                {"tag": ['a1', true, {"bitstr": {"hex": "00" + keyObjOrHex.pubKeyHex}}]}
+                {"octstr": {"hex": keyObjOrHex.prvKeyHex}}
             ]
-        });
+        };
+	if (typeof keyObjOrHex.pubKeyHex == "string") {
+	    pKeyObj.seq.push({"tag": ['a1', true, {"bitstr": {"hex": "00" + keyObjOrHex.pubKeyHex}}]});
+	}
+        var keyObj = new _newObject(pKeyObj);
         var keyHex = keyObj.getEncodedHex();
 
         var asn1Obj = _newObject({
