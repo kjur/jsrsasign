@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+KEYUTIL.getPEM small fix
+* Changes from 10.5.13 to 10.5.14 (2022-Mar-28)
+  - src/keyutil.js
+    - fix KEYUTIL.getPEM when public key is not specified for ECDSA object.
+      optional public key field will be omitted in such case. (#549)
+  - test/qunit-do-*.html
+    - test case added for above updates.
+
 RSA key private generation fix
 * Changes from 10.5.12 to 10.5.13 (2022-Mar-18)
   - ext/rsa2.js
