@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+X509.getExtCRLDistributionPointsURI small fix
+  - src/x509.js
+    - fix X509.getExtCRLDistributionPointsURI. This returns 
+      undefined when no CDP extension as specified in document
+      even though it is deprecated method.
+
 KEYUTIL.getPEM small fix
 * Changes from 10.5.13 to 10.5.14 (2022-Mar-28)
   - src/keyutil.js
