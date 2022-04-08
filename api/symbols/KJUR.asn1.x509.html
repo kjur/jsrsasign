@@ -433,9 +433,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.GeneralSubtree.html">KJUR.asn1.x509.GeneralSubtree</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.NameConstraints.html">KJUR.asn1.x509.NameConstraints</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.NoticeReference.html">KJUR.asn1.x509.NoticeReference</a></li>
 	
@@ -662,6 +666,15 @@ ul.inheritsList
 							</td>
 						</tr>
 					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.x509.<b>tohex</b>()
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
 					</tbody>
 				</table>
 				
@@ -711,6 +724,7 @@ ul.inheritsList
 <li><a href="../symbols/KJUR.asn1.x509.UserNotice.html">KJUR.asn1.x509.UserNotice</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.NoticeReference.html">KJUR.asn1.x509.NoticeReference</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.DisplayText.html">KJUR.asn1.x509.DisplayText</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.GeneralSubtree.html">KJUR.asn1.x509.GeneralSubtree</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.CRL.html">KJUR.asn1.x509.CRL</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.TBSCertList.html">KJUR.asn1.x509.TBSCertList</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.CRLEntry.html">KJUR.asn1.x509.CRLEntry</a> (DEPRECATED)</li>
@@ -718,17 +732,17 @@ ul.inheritsList
 </ul>
 <h4>SUPPORTED EXTENSIONS</h4>
 <ul>
-<li><a href="../symbols/KJUR.asn1.x509.BasicConstraints.html">KJUR.asn1.x509.BasicConstraints</a></li>
-<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
-<li><a href="../symbols/KJUR.asn1.x509.CRLDistributionPoints.html">KJUR.asn1.x509.CRLDistributionPoints</a></li>
-<li><a href="../symbols/KJUR.asn1.x509.CertificatePolicies.html">KJUR.asn1.x509.CertificatePolicies</a></li>
-<li><a href="../symbols/KJUR.asn1.x509.ExtKeyUsage.html">KJUR.asn1.x509.ExtKeyUsage</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.AuthorityKeyIdentifier.html">KJUR.asn1.x509.AuthorityKeyIdentifier</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.SubjectKeyIdentifier.html">KJUR.asn1.x509.SubjectKeyIdentifier</a></li>
-<li><a href="../symbols/KJUR.asn1.x509.AuthorityInfoAccess.html">KJUR.asn1.x509.AuthorityInfoAccess</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.CertificatePolicies.html">KJUR.asn1.x509.CertificatePolicies</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.SubjectAltName.html">KJUR.asn1.x509.SubjectAltName</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
-<li><a href="../symbols/KJUR.asn1.x509.CertificatePolicies.html">KJUR.asn1.x509.CertificatePolicies</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.BasicConstraints.html">KJUR.asn1.x509.BasicConstraints</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.NameConstraints.html">KJUR.asn1.x509.NameConstraints</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.ExtKeyUsage.html">KJUR.asn1.x509.ExtKeyUsage</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.CRLDistributionPoints.html">KJUR.asn1.x509.CRLDistributionPoints</a></li>
+<li><a href="../symbols/KJUR.asn1.x509.AuthorityInfoAccess.html">KJUR.asn1.x509.AuthorityInfoAccess</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.CRLNumber.html">KJUR.asn1.x509.CRLNumber</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.CRLReason.html">KJUR.asn1.x509.CRLReason</a></li>
 <li><a href="../symbols/KJUR.asn1.x509.OCSPNonce.html">KJUR.asn1.x509.OCSPNonce</a></li>
@@ -1034,6 +1048,31 @@ jsrsasign 8.0.23 asn1x509 1.1.12<br/>
 					
 					
 					<span class="light">KJUR.asn1.x509.</span><b>sign</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".tohex"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">KJUR.asn1.x509.</span><b>tohex</b>()
 					
 					</div>
 					<div class="description">

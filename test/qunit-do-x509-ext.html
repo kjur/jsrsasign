@@ -24,7 +24,6 @@
 <script src="../ext/cj/hmac_min.js"></script>
 <script src="../ext/cj/pbkdf2_min.js"></script>
 
-
 <script src="../ext/jsbn.js"></script>
 <script src="../ext/jsbn2.js"></script>
 <script src="../ext/prng4.js"></script>
@@ -1031,6 +1030,74 @@ var s2 = "/C=JP/O=T1+CN=Bob";
 equal(x.dnarraytostr(a2), s2, s2);
 });
 
+// ===nameConstraints================================
+test("X509.getExtNameConstraints", function() {
+var x = new X509();
+var hIn, pExpect;
+
+hIn = "301aa01830168214746573746365727469666963617465732e676f76",
+pExpect = {
+  extname: "nameConstraints",
+  critical: true,
+  permit: [{dns: 'testcertificates.gov'}]
+};
+deepEqual(x.getExtNameConstraints(hIn, true), pExpect, "permit [{dns: testcertificates.gov}]");
+
+hIn = "301aa11830168214746573746365727469666963617465732e676f76",
+pExpect = {
+  extname: "nameConstraints",
+  critical: true,
+  exclude: [{dns: 'testcertificates.gov'}]
+};
+deepEqual(x.getExtNameConstraints(hIn, true), pExpect, "exclude [{dns: testcertificates.gov}]");
+
+hIn = "301ba019301786152e746573746365727469666963617465732e676f76";
+pExpect = {
+  extname: "nameConstraints",
+  critical: true,
+  permit: [{uri: '.testcertificates.gov'}]
+};
+deepEqual(x.getExtNameConstraints(hIn, true), pExpect, "permit [{uri: .testcertificates.gov}]");
+
+//hIn = "a44c304a310b3009060355040613025553311f301d060355040a131654657374204365727469666963617465732032303131311a3018060355040b13117065726d69747465645375627472656531";
+//pExpect = {};
+//deepEqual(x.getGeneralName(hIn), pExpect, "dn1"); // PASS
+
+hIn = "3052a050304ea44c304a310b3009060355040613025553311f301d060355040a131654657374204365727469666963617465732032303131311a3018060355040b13117065726d69747465645375627472656531";
+pExpect = {
+  extname: "nameConstraints",
+  critical: true,
+  permit: [{dn: {
+    array: [
+      [{ds:"prn",type:"C",value:"US"}],
+      [{ds:"prn",type:"O",value:"Test Certificates 2011"}],
+      [{ds:"prn",type:"OU",value:"permittedSubtree1"}]],
+    str: "/C=US/O=Test Certificates 2011/OU=permittedSubtree1"
+  }}]
+};
+deepEqual(x.getExtNameConstraints(hIn, true), pExpect, "permit [{dn: /C=US/O=Test Certificates 2011/OU=permittedSubtree1}]");
+
+});
+
+test("X509.getGeneralSubtree", function() {
+var x = new X509();
+var hIn, pExpect;
+
+hIn = "30168214746573746365727469666963617465732e676f76";
+pExpect = {dns: 'testcertificates.gov'};
+deepEqual(x.getGeneralSubtree(hIn), pExpect, "{dns: testcertificates.gov}");
+
+hIn = "304ea44c304a310b3009060355040613025553311f301d060355040a131654657374204365727469666963617465732032303131311a3018060355040b13117065726d69747465645375627472656531";
+pExpect = {dn: {
+  array: [
+    [{ds:"prn",type:"C",value:"US"}],
+    [{ds:"prn",type:"O",value:"Test Certificates 2011"}],
+    [{ds:"prn",type:"OU",value:"permittedSubtree1"}]],
+  str: "/C=US/O=Test Certificates 2011/OU=permittedSubtree1"
+}};
+deepEqual(x.getGeneralSubtree(hIn), pExpect, "{dn: testcertificates.gov}");
+
+});
 
 });
 </script>
@@ -1053,6 +1120,6 @@ equal(x.dnarraytostr(a2), s2, s2);
 </p>
 
 </body>
-<center><p>&copy; 2015-2021 Kenji Urushima</p></center>
+<center><p>&copy; 2015-2022 Kenji Urushima</p></center>
 </html>
 

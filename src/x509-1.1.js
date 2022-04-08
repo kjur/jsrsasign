@@ -1,4 +1,4 @@
-/* x509-2.0.15.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.0.16.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.15 x509 2.0.15 (2022-Apr-06)
+ * @version jsrsasign 10.5.16 x509 2.0.16 (2022-Apr-08)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -71,6 +71,7 @@
  *   <li>subjectAltName2 - {@link X509#getExtSubjectAltName2} (DEPRECATED)</li>
  *   <li>issuerAltName - {@link X509#getExtIssuerAltName}</li>
  *   <li>basicConstraints - {@link X509#getExtBasicConstraints}</li>
+ *   <li>nameConstraints - {@link X509#getExtNameConstraints}</li>
  *   <li>extKeyUsage - {@link X509#getExtExtKeyUsage}</li>
  *   <li>extKeyUsage - {@link X509#getExtExtKeyUsageName} (DEPRECATED)</li>
  *   <li>cRLDistributionPoints - {@link X509#getExtCRLDistributionPoints}</li>
@@ -744,6 +745,116 @@ function X509(params) {
     };
 
     /**
+     * get NameConstraints extension value as object in the certificate<br/>
+     * @name getExtNameConstraints
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
+     * @param {Boolean} critical flag (OPTIONAL)
+     * @return {Object} JSON object of NamConstraints parameter or undefined
+     * @since jsrsasign 10.5.16 x509 2.0.16
+     * @see KJUR.asn1.x509.NameConstraints
+     * @see KJUR.asn1.x509.GeneralSubtree
+     * @see KJUR.asn1.x509.GeneralName
+     * @see X509#getGeneralSubtree
+     * @see X509#getGeneralName
+     *
+     * @description
+     * This method will get name constraints extension value as object with following paramters.
+     * <ul>
+     * <li>{Array}permit - array of {@link KJUR.asn1.x509.GeneralSubtree} parameter</li>
+     * <li>{Array}exclude - array of {@link KJUR.asn1.x509.GeneralSubtree} parameter</li>
+     * <li>{Boolean}critical - critical flag</li>
+     * </ul>
+     *
+     * @example
+     * x = new X509(sCertPEM);
+     * x.getExtNameConstraints() &rarr; {
+     *   critical: true,
+     *   permit: [{dns: 'example.com'},{rfc822: 'john@example.com'}],
+     *   exclude: [{dn: {...X500Name parameter...}}]
+     * }
+     */
+    this.getExtNameConstraints = function(hExtV, critical) {
+	if (hExtV === undefined && critical === undefined) {
+	    var info = this.getExtInfo("nameConstraints");
+	    if (info === undefined) return undefined;
+	    hExtV = _getTLV(this.hex, info.vidx);
+	    critical = info.critical;
+	}
+
+	var result = {extname:"nameConstraints"};
+	if (critical) result.critical = true;
+
+	var aIdx = _getChildIdx(hExtV, 0);
+	for (var i = 0; i < aIdx.length; i++) {
+	    var aList = [];
+	    var aIdx2 = _getChildIdx(hExtV, aIdx[i]);
+	    for (var j = 0; j < aIdx2.length; j++) {
+		var hSub = _getTLV(hExtV, aIdx2[j]);
+		var p = this.getGeneralSubtree(hSub);
+		aList.push(p);
+	    }
+
+	    var tag = hExtV.substr(aIdx[i], 2); 
+	    if (tag == "a0") {
+		result.permit = aList;
+	    } else if (tag == "a1") {
+		result.exclude = aList;
+	    }
+	}
+	return result;
+    };
+
+    /**
+     * get GeneralSubtree ASN.1 structure parameter as JSON object<br/>
+     * @name getGeneralSubtree
+     * @memberOf X509#
+     * @function
+     * @param {String} h hexadecimal string of GeneralSubtree
+     * @return {Object} JSON object of GeneralSubtree parameters or undefined
+     * @since jsrsasign 10.5.16 x509 2.0.16
+     * @see KJUR.asn1.x509.GeneralSubtree
+     * @see KJUR.asn1.x509.GeneralName
+     * @see X509#getExtNameConstraints
+     * @see X509#getGeneralName
+     *
+     * @description
+     * This method will get GeneralSubtree parameters defined in
+     * <a href="https://datatracker.ietf.org/doc/html/rfc5280#section-4.2.1.10">
+     * RFC 5280 4.2.1.10</a>.
+     * <pre>
+     * GeneralSubtree ::= SEQUENCE {
+     *      base                    GeneralName,
+     *      minimum         [0]     BaseDistance DEFAULT 0,
+     *      maximum         [1]     BaseDistance OPTIONAL }
+     * BaseDistance ::= INTEGER (0..MAX)
+     * </pre>
+     * Result of this method can be passed to
+     * {@link KJUR.asn1.x509.GeneralSubtree} constructor.
+     * 
+     * @example
+     * x = new X509(sPEM);
+     * x.getGeneralSubtree("30...") &rarr; { dn: ...X500NameObject..., min: 1, max: 3 }
+     * x.getGeneralSubtree("30...") &rarr; { dns: ".example.com" }
+     */
+    this.getGeneralSubtree = function(h) {
+	var aIdx = _getChildIdx(h, 0);
+	var len = aIdx.length;
+	if (len < 1 || 2 < len) throw new Error("wrong num elements");
+	var result = this.getGeneralName(_getTLV(h, aIdx[0]));
+
+	for (var i = 1; i < len; i++) {
+	    var tag = h.substr(aIdx[i], 2);
+	    var hV = _getV(h, aIdx[i]);
+	    var minmaxValue = parseInt(hV, 16);
+	    if (tag == "80") result.min = minmaxValue;
+	    if (tag == "81") result.max = minmaxValue;
+	}
+	return result;
+    };
+
+    /**
      * get KeyUsage extension value as JSON object
      * @memberOf X509#
      * @function
@@ -1242,7 +1353,7 @@ function X509(params) {
     };
 
     /**
-     * get GeneralName ASN.1 structure parameter as JSON object
+     * get GeneralName ASN.1 structure parameter as JSON object<br/>
      * @name getGeneralName
      * @memberOf X509#
      * @function
@@ -2463,13 +2574,25 @@ function X509(params) {
      * @name getParam
      * @memberOf X509#
      * @function
-     * @return {Array} JSON object of certificate parameters
+     * @param {Object} option optional setting for return object
+     * @return {Object} JSON object of certificate parameters
      * @since jsrsasign 9.0.0 x509 2.0.0
      * @see KJUR.asn1.x509.X509Util.newCertPEM
+     *
      * @description
      * This method returns a JSON object of the certificate
      * parameters. Return value can be passed to
      * {@link KJUR.asn1.x509.X509Util.newCertPEM}.
+     * <br>
+     * NOTE1: From jsrsasign 10.5.16, optional argument can be applied.
+     * It can have following members:
+     * <ul>
+     * <li>tbshex - if this is true, tbshex member with hex value of
+     * tbsCertificate will be added</li>
+     * <li>nodnarray - if this is true, array member for subject and
+     * issuer will be deleted to simplify it<li>
+     * </ul>
+     *
      * @example
      * x = new X509();
      * x.readCertPEM("-----BEGIN CERTIFICATE...");
@@ -2492,8 +2615,11 @@ function X509(params) {
      *  ],
      *  sighex:"0b76...8"
      * };
+     *
+     * x.getParam({tbshex: true}) &rarr; { ... , tbshex: "30..." }
+     * x.getParam({nodnarray: true}) &rarr; {issuer: {str: "/C=JP"}, ...}
      */
-    this.getParam = function() {
+    this.getParam = function(option) {
 	var result = {};
 	result.version = this.getVersion();
 	result.serial = {hex: this.getSerialNumberHex()};
@@ -2507,6 +2633,17 @@ function X509(params) {
 	    result.ext = this.getExtParamArray();
 	}
 	result.sighex = this.getSignatureValueHex();
+
+	// for options
+	if (typeof option == "object") {
+	    if (option.tbshex == true) {
+		result.tbshex = _getTLVbyList(this.hex, 0, [0]);
+	    }
+	    if (option.nodnarray == true) {
+		delete result.issuer.array;
+		delete result.subject.array;
+	    }
+	}
 	return result;
     };
 
@@ -2611,6 +2748,8 @@ function X509(params) {
 	    extParam = this.getExtIssuerAltName(hExtV, critical);
 	} else if (oid == "2.5.29.19") {
 	    extParam = this.getExtBasicConstraints(hExtV, critical);
+	} else if (oid == "2.5.29.30") {
+	    extParam = this.getExtNameConstraints(hExtV, critical);
 	} else if (oid == "2.5.29.31") {
 	    extParam = this.getExtCRLDistributionPoints(hExtV, critical);
 	} else if (oid == "2.5.29.32") {

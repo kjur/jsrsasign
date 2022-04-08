@@ -45,40 +45,42 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-var certGithubPEM = "-----BEGIN CERTIFICATE-----\r\n" +
-"MIIF4DCCBMigAwIBAgIQDACTENIG2+M3VTWAEY3chzANBgkqhkiG9w0BAQsFADB1\r\n" +
-"MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3\r\n" +
-"d3cuZGlnaWNlcnQuY29tMTQwMgYDVQQDEytEaWdpQ2VydCBTSEEyIEV4dGVuZGVk\r\n" +
-"IFZhbGlkYXRpb24gU2VydmVyIENBMB4XDTE0MDQwODAwMDAwMFoXDTE2MDQxMjEy\r\n" +
-"MDAwMFowgfAxHTAbBgNVBA8MFFByaXZhdGUgT3JnYW5pemF0aW9uMRMwEQYLKwYB\r\n" +
-"BAGCNzwCAQMTAlVTMRkwFwYLKwYBBAGCNzwCAQITCERlbGF3YXJlMRAwDgYDVQQF\r\n" +
-"Ewc1MTU3NTUwMRcwFQYDVQQJEw41NDggNHRoIFN0cmVldDEOMAwGA1UEERMFOTQx\r\n" +
-"MDcxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1T\r\n" +
-"YW4gRnJhbmNpc2NvMRUwEwYDVQQKEwxHaXRIdWIsIEluYy4xEzARBgNVBAMTCmdp\r\n" +
-"dGh1Yi5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCx1Nw8r/3z\r\n" +
-"Tu3BZ63myyLot+KrKPL33GJwCNEMr9YWaiGwNksXDTZjBK6/6iBRlWVm8r+5TaQM\r\n" +
-"Kev1FbHoNbNwEJTVG1m0Jg/Wg1dZneF8Cd3gE8pNb0Obzc+HOhWnhd1mg+2TDP4r\r\n" +
-"bTgceYiQz61YGC1R0cKj8keMbzgJubjvTJMLy4OUh+rgo7XZe5trD0P5yu6ADSin\r\n" +
-"dvEl9ME1PPZ0rd5qM4J73P1LdqfC7vJqv6kkpl/nLnwO28N0c/p+xtjPYOs2ViG2\r\n" +
-"wYq4JIJNeCS66R2hiqeHvmYlab++O3JuT+DkhSUIsZGJuNZ0ZXabLE9iH6H6Or6c\r\n" +
-"JL+fyrDFwGeNAgMBAAGjggHuMIIB6jAfBgNVHSMEGDAWgBQ901Cl1qCt7vNKYApl\r\n" +
-"0yHU+PjWDzAdBgNVHQ4EFgQUakOQfTuYFHJSlTqqKApD+FF+06YwJQYDVR0RBB4w\r\n" +
-"HIIKZ2l0aHViLmNvbYIOd3d3LmdpdGh1Yi5jb20wDgYDVR0PAQH/BAQDAgWgMB0G\r\n" +
-"A1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjB1BgNVHR8EbjBsMDSgMqAwhi5o\r\n" +
-"dHRwOi8vY3JsMy5kaWdpY2VydC5jb20vc2hhMi1ldi1zZXJ2ZXItZzEuY3JsMDSg\r\n" +
-"MqAwhi5odHRwOi8vY3JsNC5kaWdpY2VydC5jb20vc2hhMi1ldi1zZXJ2ZXItZzEu\r\n" +
-"Y3JsMEIGA1UdIAQ7MDkwNwYJYIZIAYb9bAIBMCowKAYIKwYBBQUHAgEWHGh0dHBz\r\n" +
-"Oi8vd3d3LmRpZ2ljZXJ0LmNvbS9DUFMwgYgGCCsGAQUFBwEBBHwwejAkBggrBgEF\r\n" +
-"BQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29tMFIGCCsGAQUFBzAChkZodHRw\r\n" +
-"Oi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vRGlnaUNlcnRTSEEyRXh0ZW5kZWRWYWxp\r\n" +
-"ZGF0aW9uU2VydmVyQ0EuY3J0MAwGA1UdEwEB/wQCMAAwDQYJKoZIhvcNAQELBQAD\r\n" +
-"ggEBAG/nbcuC8++QhwnXDxUiLIz+06scipbbXRJd0XjAMbD/RciJ9wiYUhcfTEsg\r\n" +
-"ZGpt21DXEL5+q/4vgNipSlhBaYFyGQiDm5IQTmIte0ZwQ26jUxMf4pOmI1v3kj43\r\n" +
-"FHU7uUskQS6lPUgND5nqHkKXxv6V2qtHmssrA9YNQMEK93ga2rWDpK21mUkgLviT\r\n" +
-"PB5sPdE7IzprOCp+Ynpf3RcFddAkXb6NqJoQRPrStMrv19C1dqUmJRwIQdhkkqev\r\n" +
-"ff6IQDlhC8BIMKmCNK33cEYDfDWROtW7JNgBvBTwww8jO1gyug8SbGZ6bZ3k8OV8\r\n" +
-"XX4C2NesiZcLYbc2n7B9O+63M2k=\r\n" +
-"-----END CERTIFICATE-----\r\n";
+var certGithubPEM = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIF4DCCBMigAwIBAgIQDACTENIG2+M3VTWAEY3chzANBgkqhkiG9w0BAQsFADB1
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+d3cuZGlnaWNlcnQuY29tMTQwMgYDVQQDEytEaWdpQ2VydCBTSEEyIEV4dGVuZGVk
+IFZhbGlkYXRpb24gU2VydmVyIENBMB4XDTE0MDQwODAwMDAwMFoXDTE2MDQxMjEy
+MDAwMFowgfAxHTAbBgNVBA8MFFByaXZhdGUgT3JnYW5pemF0aW9uMRMwEQYLKwYB
+BAGCNzwCAQMTAlVTMRkwFwYLKwYBBAGCNzwCAQITCERlbGF3YXJlMRAwDgYDVQQF
+Ewc1MTU3NTUwMRcwFQYDVQQJEw41NDggNHRoIFN0cmVldDEOMAwGA1UEERMFOTQx
+MDcxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1T
+YW4gRnJhbmNpc2NvMRUwEwYDVQQKEwxHaXRIdWIsIEluYy4xEzARBgNVBAMTCmdp
+dGh1Yi5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCx1Nw8r/3z
+Tu3BZ63myyLot+KrKPL33GJwCNEMr9YWaiGwNksXDTZjBK6/6iBRlWVm8r+5TaQM
+Kev1FbHoNbNwEJTVG1m0Jg/Wg1dZneF8Cd3gE8pNb0Obzc+HOhWnhd1mg+2TDP4r
+bTgceYiQz61YGC1R0cKj8keMbzgJubjvTJMLy4OUh+rgo7XZe5trD0P5yu6ADSin
+dvEl9ME1PPZ0rd5qM4J73P1LdqfC7vJqv6kkpl/nLnwO28N0c/p+xtjPYOs2ViG2
+wYq4JIJNeCS66R2hiqeHvmYlab++O3JuT+DkhSUIsZGJuNZ0ZXabLE9iH6H6Or6c
+JL+fyrDFwGeNAgMBAAGjggHuMIIB6jAfBgNVHSMEGDAWgBQ901Cl1qCt7vNKYApl
+0yHU+PjWDzAdBgNVHQ4EFgQUakOQfTuYFHJSlTqqKApD+FF+06YwJQYDVR0RBB4w
+HIIKZ2l0aHViLmNvbYIOd3d3LmdpdGh1Yi5jb20wDgYDVR0PAQH/BAQDAgWgMB0G
+A1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjB1BgNVHR8EbjBsMDSgMqAwhi5o
+dHRwOi8vY3JsMy5kaWdpY2VydC5jb20vc2hhMi1ldi1zZXJ2ZXItZzEuY3JsMDSg
+MqAwhi5odHRwOi8vY3JsNC5kaWdpY2VydC5jb20vc2hhMi1ldi1zZXJ2ZXItZzEu
+Y3JsMEIGA1UdIAQ7MDkwNwYJYIZIAYb9bAIBMCowKAYIKwYBBQUHAgEWHGh0dHBz
+Oi8vd3d3LmRpZ2ljZXJ0LmNvbS9DUFMwgYgGCCsGAQUFBwEBBHwwejAkBggrBgEF
+BQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29tMFIGCCsGAQUFBzAChkZodHRw
+Oi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vRGlnaUNlcnRTSEEyRXh0ZW5kZWRWYWxp
+ZGF0aW9uU2VydmVyQ0EuY3J0MAwGA1UdEwEB/wQCMAAwDQYJKoZIhvcNAQELBQAD
+ggEBAG/nbcuC8++QhwnXDxUiLIz+06scipbbXRJd0XjAMbD/RciJ9wiYUhcfTEsg
+ZGpt21DXEL5+q/4vgNipSlhBaYFyGQiDm5IQTmIte0ZwQ26jUxMf4pOmI1v3kj43
+FHU7uUskQS6lPUgND5nqHkKXxv6V2qtHmssrA9YNQMEK93ga2rWDpK21mUkgLviT
+PB5sPdE7IzprOCp+Ynpf3RcFddAkXb6NqJoQRPrStMrv19C1dqUmJRwIQdhkkqev
+ff6IQDlhC8BIMKmCNK33cEYDfDWROtW7JNgBvBTwww8jO1gyug8SbGZ6bZ3k8OV8
+XX4C2NesiZcLYbc2n7B9O+63M2k=
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
 
 // _test/0cert_sites/digicertevroot.cer
 var digiCertEvRootPEM = (function() {/*
@@ -265,6 +267,34 @@ jjM5RcOO5LlXbKr8EpbsU8Yt5CRsuZRj+9xTaGdWPoO4zzUhw8lo/s7awlOqzJCK
 mcIfeg7jLQitChws/zyrVQ4PkX4268NXSb7hLi18YIvDQVETI53O9zJrlAGomecs
 Mx86OyXShkDOOyyGeMlhLxS67ttVb9+E7gUJTb0o2HLO02JQZR7rkpeDMdmztcpH
 WD9f
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// NIST PKITS nameConstraints Test01 ICA pkitsnc/nc01.pem
+var certPKITSNC01PEM = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIID7TCCAtWgAwIBAgIBPjANBgkqhkiG9w0BAQsFADBFMQswCQYDVQQGEwJVUzEf
+MB0GA1UEChMWVGVzdCBDZXJ0aWZpY2F0ZXMgMjAxMTEVMBMGA1UEAxMMVHJ1c3Qg
+QW5jaG9yMB4XDTEwMDEwMTA4MzAwMFoXDTMwMTIzMTA4MzAwMFowTzELMAkGA1UE
+BhMCVVMxHzAdBgNVBAoTFlRlc3QgQ2VydGlmaWNhdGVzIDIwMTExHzAdBgNVBAMT
+Fm5hbWVDb25zdHJhaW50cyBETjEgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw
+ggEKAoIBAQDIFZChS4W10eHwp3smMrXyTluiMJTrq0f8LEx4D63qlvrjNngGxCHt
+BOlFbIH3uKwK24yKHywpFK38bHLyDf+2LoaEYox32sfyeqneYurTGJ4sZ1T/fsZk
+lG/n5fkMlvIU0iu4eOkshyEEtvUGpvdSEg4a7TiadjmsAZkJkgBHV0h9VYaRYvgY
+BnDsTd8MrzKo0bNnpMgiUGtGJB9lB0DmhO51IelaxiyaJUVIsKUZfpA1NPjSboLi
+NLgKhP8El/AlBY3BG190xJ3a5xDIhDq5SRTJ16554PIIwzfE7nvY+9TpwfkYvVKL
+zCOTyrA6VnFwTLKc8sLYKFfmKNEboLafAgMBAAGjgd0wgdowHwYDVR0jBBgwFoAU
+5H1f0VyVhggsBa6+dbZlp9ldqGYwHQYDVR0OBBYEFEF4QkbNTqiC5+E53/epFsAK
+/O+GMA4GA1UdDwEB/wQEAwIBBjAXBgNVHSAEEDAOMAwGCmCGSAFlAwIBMAEwDwYD
+VR0TAQH/BAUwAwEB/zBeBgNVHR4BAf8EVDBSoFAwTqRMMEoxCzAJBgNVBAYTAlVT
+MR8wHQYDVQQKExZUZXN0IENlcnRpZmljYXRlcyAyMDExMRowGAYDVQQLExFwZXJt
+aXR0ZWRTdWJ0cmVlMTANBgkqhkiG9w0BAQsFAAOCAQEAaRFMK70B7a7bqMhucX7K
+3AnChP1D8T/CFQUnOWeC/yKAcHbplQf3uWzL52ZJIoKLJaT7dnCuLxx9St/m5aCI
+MKZuIda+85I2WisV4brJJWyZlgLauA0WLZuEswqB0viCZG0vgtWTm9uN6O8Lqua3
+fnM/0WQtcmMMNs3NWN+FTX6SHIu5Z/DuUZWSF0H76jjheSJG2wXn0TJk8RRJ7mn5
+dnDEoDFUpePO0qaOjl1KGov28zz2QGIr7Nq+S0Z3Gk1Z2O3DlgYMeYtqkiMPKZ4Y
+sPDZIABuaSYI1o0ZoFnpLgiWVWbBJDO3w5x6eIS/CueS8hKfX0h7+dIcgQhABleo
+2w==
 -----END CERTIFICATE-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
@@ -500,7 +530,6 @@ var x = new X509();
 x.readCertPEM(pulseCioGovPEM);
 var j = x.getParam();
 deepEqual(j, j2, "pulse.cio.gov");
-equal(utf8tohex(JSON.stringify(j,null,"  ")), utf8tohex(JSON.stringify(j2,null,"  ")), "pulse.cio.gov str");
 });
 
 test("getParam digicert ev root test", function() {
@@ -554,6 +583,63 @@ var x = new X509();
 x.readCertPEM(digiCertEvRootPEM);
 var j = x.getParam();
 deepEqual(j, j2, "digicert ha ev root");
+});
+
+test("getParam digicert ev root test", function() {
+var pIn = new X509(certPKITSNC01PEM).getParam();
+var pExpected = 
+{
+  version: 3,
+  serial: {hex: "3e"},
+  sigalg: "SHA256withRSA",
+  issuer: {
+    array: [
+      [{type: "C", value: "US", ds: "prn"}],
+      [{type: "O", value: "Test Certificates 2011", ds: "prn"}],
+      [{type: "CN", value: "Trust Anchor", ds: "prn"}]],
+      str: "/C=US/O=Test Certificates 2011/CN=Trust Anchor"},
+  notbefore: "100101083000Z",
+  notafter: "301231083000Z",
+  subject: {
+    array: [
+      [{type: "C", value: "US", ds: "prn"}],
+      [{type: "O", value: "Test Certificates 2011", ds: "prn"}],
+      [{type: "CN", value: "nameConstraints DN1 CA", ds: "prn"}]],
+    str: "/C=US/O=Test Certificates 2011/CN=nameConstraints DN1 CA"},
+  sbjpubkey: "-----BEGIN PUBLIC KEY-----\r\n" + 
+"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyBWQoUuFtdHh8Kd7JjK1\r\n" + 
+"8k5bojCU66tH/CxMeA+t6pb64zZ4BsQh7QTpRWyB97isCtuMih8sKRSt/Gxy8g3/\r\n" + 
+"ti6GhGKMd9rH8nqp3mLq0xieLGdU/37GZJRv5+X5DJbyFNIruHjpLIchBLb1Bqb3\r\n" + 
+"UhIOGu04mnY5rAGZCZIAR1dIfVWGkWL4GAZw7E3fDK8yqNGzZ6TIIlBrRiQfZQdA\r\n" + 
+"5oTudSHpWsYsmiVFSLClGX6QNTT40m6C4jS4CoT/BJfwJQWNwRtfdMSd2ucQyIQ6\r\n" + 
+"uUkUydeueeDyCMM3xO572PvU6cH5GL1Si8wjk8qwOlZxcEyynPLC2ChX5ijRG6C2\r\n" + 
+"nwIDAQAB\r\n" + 
+"-----END PUBLIC KEY-----\r\n",
+  ext: [
+    { extname: "authorityKeyIdentifier",
+      kid: {hex: "e47d5fd15c9586082c05aebe75b665a7d95da866"}},
+    { extname: "subjectKeyIdentifier",
+      kid: {hex: "41784246cd4ea882e7e139dff7a916c00afcef86"}},
+    { extname: "keyUsage",
+      critical: true,
+      names: ["keyCertSign", "cRLSign"]},
+    { extname: "certificatePolicies",
+      array: [{"policyoid": "2.16.840.1.101.3.2.1.48.1"}]},
+    { extname: "basicConstraints",
+      cA: true,
+      critical: true },
+    { extname: "nameConstraints",
+      critical: true,
+      permit: [
+        {dn: {array: [
+          [{type: "C", value: "US", ds: "prn"}],
+          [{type: "O", value: "Test Certificates 2011", ds: "prn"}],
+          [{type: "OU", value: "permittedSubtree1", ds: "prn"}]],
+          str: "/C=US/O=Test Certificates 2011/OU=permittedSubtree1"}}]}
+  ],
+  sighex: "69114c2bbd01edaedba8c86e717ecadc09c284fd43f13fc2150527396782ff22807076e99507f7b96ccbe7664922828b25a4fb7670ae2f1c7d4adfe6e5a08830a66e21d6bef392365a2b15e1bac9256c999602dab80d162d9b84b30a81d2f882646d2f82d5939bdb8de8ef0baae6b77e733fd1642d72630c36cdcd58df854d7e921c8bb967f0ee5195921741fbea38e1792246db05e7d13264f11449ee69f97670c4a03154a5e3ced2a68e8e5d4a1a8bf6f33cf640622becdabe4b46771a4d59d8edc396060c798b6a92230f299e18b0f0d920006e692608d68d19a059e92e08965566c12433b7c39c7a7884bf0ae792f2129f5f487bf9d21c8108400657a8db",
+};
+deepEqual(pIn, pExpected, "NIST PKITS nameConstraints Test01 ICA");
 });
 
 test("findParam test", function() {

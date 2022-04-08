@@ -433,9 +433,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.GeneralSubtree.html">KJUR.asn1.x509.GeneralSubtree</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.NameConstraints.html">KJUR.asn1.x509.NameConstraints</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.NoticeReference.html">KJUR.asn1.x509.NoticeReference</a></li>
 	
@@ -604,7 +608,7 @@ Parameter 'tagNoNex' is ASN.1 tag(T) value for this object.</div>
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#tohex">tohex</a></dd>
 				</dl>
 				
 			
@@ -657,7 +661,7 @@ new KJUR.asn1.DERTaggedObject({
 // to hexadecimal
 d1 = new KJUR.asn1.DERUTF8String({str':'a'})
 d2 = new KJUR.asn1.DERTaggedObject({'obj': d1});
-hex = d2.getEncodedHex();</pre>
+hex = d2.tohex();</pre>
 				
 				
 				

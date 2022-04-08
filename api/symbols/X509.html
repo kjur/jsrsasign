@@ -433,9 +433,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.GeneralSubtree.html">KJUR.asn1.x509.GeneralSubtree</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.NameConstraints.html">KJUR.asn1.x509.NameConstraints</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.NoticeReference.html">KJUR.asn1.x509.NoticeReference</a></li>
 	
@@ -912,6 +916,16 @@ as comma separated string of usage names.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtNameConstraints">getExtNameConstraints</a></b>(hExtV, critical)
+								</div>
+								<div class="description">get NameConstraints extension value as object in the certificate<br/>
+This method will get name constraints extension value as object with following paramters.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtOcspNoCheck">getExtOcspNoCheck</a></b>(hExtV, critical)
 								</div>
 								<div class="description">parse OCSPNoCheck OCSP extension as JSON object<br/>
@@ -996,7 +1010,7 @@ SubjectKeyIdentifier extension</a> value as JSON object.</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getGeneralName">getGeneralName</a></b>(h)
 								</div>
-								<div class="description">get GeneralName ASN.1 structure parameter as JSON object
+								<div class="description">get GeneralName ASN.1 structure parameter as JSON object<br/>
 This method will get GeneralName parameters defined in
 <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.6">
 RFC 5280 4.2.1.6</a>.</div>
@@ -1012,6 +1026,18 @@ RFC 5280 4.2.1.6</a>.</div>
 This method will get GeneralNames parameters defined in
 <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.6">
 RFC 5280 4.2.1.6</a>.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getGeneralSubtree">getGeneralSubtree</a></b>(h)
+								</div>
+								<div class="description">get GeneralSubtree ASN.1 structure parameter as JSON object<br/>
+This method will get GeneralSubtree parameters defined in
+<a href="https://datatracker.ietf.org/doc/html/rfc5280#section-4.2.1.10">
+RFC 5280 4.2.1.10</a>.</div>
 							</td>
 						</tr>
 					
@@ -1073,7 +1099,7 @@ RFC 5280 4.2.1.6</a>.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getParam">getParam</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getParam">getParam</a></b>(option)
 								</div>
 								<div class="description">get JSON object of certificate parameters<br/>
 This method returns a JSON object of the certificate
@@ -1491,6 +1517,7 @@ X509 class provides following functionality:
   <li>subjectAltName2 - <a href="../symbols/X509.html#getExtSubjectAltName2">X509#getExtSubjectAltName2</a> (DEPRECATED)</li>
   <li>issuerAltName - <a href="../symbols/X509.html#getExtIssuerAltName">X509#getExtIssuerAltName</a></li>
   <li>basicConstraints - <a href="../symbols/X509.html#getExtBasicConstraints">X509#getExtBasicConstraints</a></li>
+  <li>nameConstraints - <a href="../symbols/X509.html#getExtNameConstraints">X509#getExtNameConstraints</a></li>
   <li>extKeyUsage - <a href="../symbols/X509.html#getExtExtKeyUsage">X509#getExtExtKeyUsage</a></li>
   <li>extKeyUsage - <a href="../symbols/X509.html#getExtExtKeyUsageName">X509#getExtExtKeyUsageName</a> (DEPRECATED)</li>
   <li>cRLDistributionPoints - <a href="../symbols/X509.html#getExtCRLDistributionPoints">X509#getExtCRLDistributionPoints</a></li>
@@ -3536,6 +3563,91 @@ x.getExtKeyUsageString() &rarr; "digitalSignature,keyEncipherment"</pre>
 
 					<hr />
 				
+					<a name="getExtNameConstraints"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getExtNameConstraints</b>(hExtV, critical)
+					
+					</div>
+					<div class="description">
+						get NameConstraints extension value as object in the certificate<br/>
+This method will get name constraints extension value as object with following paramters.
+<ul>
+<li>{Array}permit - array of <a href="../symbols/KJUR.asn1.x509.GeneralSubtree.html">KJUR.asn1.x509.GeneralSubtree</a> parameter</li>
+<li>{Array}exclude - array of <a href="../symbols/KJUR.asn1.x509.GeneralSubtree.html">KJUR.asn1.x509.GeneralSubtree</a> parameter</li>
+<li>{Boolean}critical - critical flag</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509(sCertPEM);
+x.getExtNameConstraints() &rarr; {
+  critical: true,
+  permit: [{dns: 'example.com'},{rfc822: 'john@example.com'}],
+  exclude: [{dn: {...X500Name parameter...}}]
+}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hExtV</b>
+									
+								</dt>
+								<dd>hexadecimal string of extension value (OPTIONAL)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span> <b>critical</b>
+									
+								</dt>
+								<dd>flag (OPTIONAL)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.16 x509 2.0.16</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> JSON object of NamConstraints parameter or undefined</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.NameConstraints.html">KJUR.asn1.x509.NameConstraints</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.GeneralSubtree.html">KJUR.asn1.x509.GeneralSubtree</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a></dd>
+							
+								<dd><a href="../symbols/X509.html#getGeneralSubtree">X509#getGeneralSubtree</a></dd>
+							
+								<dd><a href="../symbols/X509.html#getGeneralName">X509#getGeneralName</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
 					<a name="getExtOcspNoCheck"> </a>
 					<div class="fixedFont">
 					
@@ -4103,7 +4215,7 @@ x.getExtSubjectKeyIdentifier() &rarr;
 					
 					</div>
 					<div class="description">
-						get GeneralName ASN.1 structure parameter as JSON object
+						get GeneralName ASN.1 structure parameter as JSON object<br/>
 This method will get GeneralName parameters defined in
 <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.6">
 RFC 5280 4.2.1.6</a>.
@@ -4265,6 +4377,86 @@ x.getGeneralNames("301ea41c30...") &rarr;
 								<dd><a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a></dd>
 							
 								<dd><a href="../symbols/X509.html#getGeneralNames">X509#getGeneralNames</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getGeneralSubtree"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getGeneralSubtree</b>(h)
+					
+					</div>
+					<div class="description">
+						get GeneralSubtree ASN.1 structure parameter as JSON object<br/>
+This method will get GeneralSubtree parameters defined in
+<a href="https://datatracker.ietf.org/doc/html/rfc5280#section-4.2.1.10">
+RFC 5280 4.2.1.10</a>.
+<pre>
+GeneralSubtree ::= SEQUENCE {
+     base                    GeneralName,
+     minimum         [0]     BaseDistance DEFAULT 0,
+     maximum         [1]     BaseDistance OPTIONAL }
+BaseDistance ::= INTEGER (0..MAX)
+</pre>
+Result of this method can be passed to
+<a href="../symbols/KJUR.asn1.x509.GeneralSubtree.html">KJUR.asn1.x509.GeneralSubtree</a> constructor.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509(sPEM);
+x.getGeneralSubtree("30...") &rarr; { dn: ...X500NameObject..., min: 1, max: 3 }
+x.getGeneralSubtree("30...") &rarr; { dns: ".example.com" }</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of GeneralSubtree</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.16 x509 2.0.16</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> JSON object of GeneralSubtree parameters or undefined</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.GeneralSubtree.html">KJUR.asn1.x509.GeneralSubtree</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a></dd>
+							
+								<dd><a href="../symbols/X509.html#getExtNameConstraints">X509#getExtNameConstraints</a></dd>
+							
+								<dd><a href="../symbols/X509.html#getGeneralName">X509#getGeneralName</a></dd>
 							
 							</dl>
 						
@@ -4554,8 +4746,8 @@ var notBefore = x.getNotBefore(); // return string like "151231235959Z"</pre>
 					<a name="getParam"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{Array}</span>
-					<b>getParam</b>()
+					<span class="light">{Object}</span>
+					<b>getParam</b>(option)
 					
 					</div>
 					<div class="description">
@@ -4563,6 +4755,15 @@ var notBefore = x.getNotBefore(); // return string like "151231235959Z"</pre>
 This method returns a JSON object of the certificate
 parameters. Return value can be passed to
 <a href="../symbols/KJUR.asn1.x509.X509Util.html#.newCertPEM">KJUR.asn1.x509.X509Util.newCertPEM</a>.
+<br>
+NOTE1: From jsrsasign 10.5.16, optional argument can be applied.
+It can have following members:
+<ul>
+<li>tbshex - if this is true, tbshex member with hex value of
+tbsCertificate will be added</li>
+<li>nodnarray - if this is true, array member for subject and
+issuer will be deleted to simplify it<li>
+</ul>
 						
 						
 					</div>
@@ -4589,10 +4790,24 @@ x.getParam() &rarr;
   {extname:"certificatePolicies",array:[{policyoid:"2.23.140.1.2.1"}]}
  ],
  sighex:"0b76...8"
-};</pre>
+};
+
+x.getParam({tbshex: true}) &rarr; { ... , tbshex: "30..." }
+x.getParam({nodnarray: true}) &rarr; {issuer: {str: "/C=JP"}, ...}</pre>
 					
 					
 					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>option</b>
+									
+								</dt>
+								<dd>optional setting for return object</dd>
+							
+							</dl>
 						
 						
 						
@@ -4607,7 +4822,7 @@ x.getParam() &rarr;
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{Array}</span> JSON object of certificate parameters</dd>
+								<dd><span class="light fixedFont">{Object}</span> JSON object of certificate parameters</dd>
 							
 							</dl>
 						

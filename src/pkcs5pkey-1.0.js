@@ -1,4 +1,4 @@
-/* pkcs5pkey-1.1.2.js (c) 2013-2017 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* pkcs5pkey-1.1.3.js (c) 2013-2017 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * pkcs5pkey.js - reading passcode protected PKCS#5 PEM formatted RSA private key
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name pkcs5pkey-1.0.js (DEPRECATED)
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 7.2.1 pkcs5pkey 1.1.2 (2017-Jun-03)
+ * @version jsrsasign 10.5.16 pkcs5pkey 1.1.3 (2022-Apr-08)
  * @since jsrsasign 2.0.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -465,7 +465,7 @@ var PKCS5PKEY = function() {
             var dmq1 = new KJUR.asn1.DERInteger({'bigint': pKey.dmq1});
             var coeff = new KJUR.asn1.DERInteger({'bigint': pKey.coeff});
             var seq = new KJUR.asn1.DERSequence({'array': [version, n, e, d, p, q, dmp1, dmq1, coeff]});
-            var hex = seq.getEncodedHex();
+            var hex = seq.tohex();
             return this.getEncryptedPKCS5PEMFromPrvKeyHex(hex, passcode, alg, ivsaltHex);
         },
 

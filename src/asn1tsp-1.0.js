@@ -1,4 +1,4 @@
-/* asn1tsp-2.0.4.js (c) 2014-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1tsp-2.0.5.js (c) 2014-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1tsp.js - ASN.1 DER encoder classes for RFC 3161 Time Stamp Protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1tsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.4 asn1tsp 2.0.4 (2020-Nov-22)
+ * @version jsrsasign 10.5.16 asn1tsp 2.0.5 (2022-Apr-08)
  * @since jsrsasign 4.5.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -137,7 +137,7 @@ KJUR.asn1.tsp.TimeStampToken = function(params) {
     this.getEncodedHexPrepare = function() {
 	//alert("getEncodedHexPrepare called...");
 	var dTSTInfo = new _KJUR_asn1_tsp.TSTInfo(this.params.econtent.content);
-	this.params.econtent.content.hex = dTSTInfo.getEncodedHex();
+	this.params.econtent.content.hex = dTSTInfo.tohex();
     };
 
     if (params != undefined) this.setByParam(params);
@@ -214,7 +214,7 @@ KJUR.asn1.tsp.TSTInfo = function(params) {
     this.dNonce = null;
     this.dTsa = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
         var a = [this.dVersion];
 
         if (this.dPolicy == null) throw new Error("policy shall be specified.");
@@ -238,9 +238,10 @@ KJUR.asn1.tsp.TSTInfo = function(params) {
         if (this.dTsa != null) a.push(this.dTsa);
 
         var seq = new _DERSequence({array: a});
-        this.hTLV = seq.getEncodedHex();
+        this.hTLV = seq.tohex();
         return this.hTLV;
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) {
         if (typeof params.policy == "string") {
@@ -314,7 +315,7 @@ KJUR.asn1.tsp.Accuracy = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 	var a = [];
 	if (params.seconds != undefined &&
@@ -329,8 +330,9 @@ KJUR.asn1.tsp.Accuracy = function(params) {
 	    typeof params.micros == "number") {
 	    a.push({tag: {tagi:"81", obj:{"int": params.micros}}});
 	}
-	return _newObject({"seq": a}).getEncodedHex();
+	return _newObject({"seq": a}).tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -379,13 +381,14 @@ KJUR.asn1.tsp.MessageImprint = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 	var dAlg = new _AlgorithmIdentifier({name: params.alg});
 	var dHash = new _DEROctetString({hex: params.hash});
 	var seq = new _DERSequence({array: [dAlg, dHash]});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) this.setByParam(params);
 };
@@ -434,7 +437,7 @@ KJUR.asn1.tsp.TimeStampReq = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	var a = [];
@@ -452,8 +455,9 @@ KJUR.asn1.tsp.TimeStampReq = function(params) {
 	    a.push(new _DERBoolean());
 
         var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -485,7 +489,7 @@ KJUR.asn1.tsp.TimeStampResp = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	var a = [new _PKIStatusInfo(params.statusinfo)];
@@ -500,8 +504,9 @@ KJUR.asn1.tsp.TimeStampResp = function(params) {
 	}
 
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -556,7 +561,7 @@ KJUR.asn1.tsp.PKIStatusInfo = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	var a = [];
@@ -576,8 +581,9 @@ KJUR.asn1.tsp.PKIStatusInfo = function(params) {
 	}
 
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -625,7 +631,7 @@ KJUR.asn1.tsp.PKIStatus = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	var dObj, value;
@@ -642,8 +648,9 @@ KJUR.asn1.tsp.PKIStatus = function(params) {
 	    throw new _Error("unsupported params");
 	}
 
-	return (new _DERInteger({"int": value})).getEncodedHex();
+	return (new _DERInteger({"int": value})).tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -681,7 +688,7 @@ KJUR.asn1.tsp.PKIFreeText = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	if (! params instanceof Array)
@@ -693,8 +700,9 @@ KJUR.asn1.tsp.PKIFreeText = function(params) {
 	};
 	
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -747,7 +755,7 @@ KJUR.asn1.tsp.PKIFailureInfo = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	var value;
@@ -762,8 +770,9 @@ KJUR.asn1.tsp.PKIFailureInfo = function(params) {
 	} else {
 	    throw new _Error("wrong params");
 	}
-	return (new _DERBitString({"bin": value.toString(2)})).getEncodedHex();
+	return (new _DERBitString({"bin": value.toString(2)})).tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };

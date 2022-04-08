@@ -433,9 +433,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.GeneralSubtree.html">KJUR.asn1.x509.GeneralSubtree</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.NameConstraints.html">KJUR.asn1.x509.NameConstraints</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.NoticeReference.html">KJUR.asn1.x509.NoticeReference</a></li>
 	
@@ -1899,14 +1903,15 @@ Parameter "ivsaltHex" supported since jsrsasign 8.0.0 keyutil 1.2.0.
 					
 					
 					
-					<pre class="code">KEUUTIL.getPEM(publicKey) =&gt; generates PEM PKCS#8 public key 
-KEUUTIL.getPEM(privateKey, "PKCS1PRV") =&gt; generates PEM PKCS#1 plain private key
-KEUUTIL.getPEM(privateKey, "PKCS5PRV", "pass") =&gt; generates PEM PKCS#5 encrypted private key 
+					<pre class="code">KEUUTIL.getPEM(publicKey) &rarr; generates PEM PKCS#8 public key 
+KEUUTIL.getPEM(privateKey) &rarr; generates PEM PKCS#8 plain private key by default
+KEUUTIL.getPEM(privateKey, "PKCS1PRV") &rarr; generates PEM PKCS#1 plain private key
+KEUUTIL.getPEM(privateKey, "PKCS5PRV", "pass") &rarr; generates PEM PKCS#5 encrypted private key 
                                                          with DES-EDE3-CBC (DEFAULT)
-KEUUTIL.getPEM(privateKey, "PKCS5PRV", "pass", "DES-CBC") =&gt; generates PEM PKCS#5 encrypted 
+KEUUTIL.getPEM(privateKey, "PKCS5PRV", "pass", "DES-CBC") &rarr; generates PEM PKCS#5 encrypted 
                                                                 private key with DES-CBC
-KEUUTIL.getPEM(privateKey, "PKCS8PRV") =&gt; generates PEM PKCS#8 plain private key
-KEUUTIL.getPEM(privateKey, "PKCS8PRV", "pass") =&gt; generates PEM PKCS#8 encrypted private key
+KEUUTIL.getPEM(privateKey, "PKCS8PRV") &rarr; generates PEM PKCS#8 plain private key
+KEUUTIL.getPEM(privateKey, "PKCS8PRV", "pass") &rarr; generates PEM PKCS#8 encrypted private key
                                                      with PBKDF2_HmacSHA1_3DES</pre>
 					
 					

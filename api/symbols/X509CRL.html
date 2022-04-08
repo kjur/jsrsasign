@@ -433,9 +433,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.GeneralSubtree.html">KJUR.asn1.x509.GeneralSubtree</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.NameConstraints.html">KJUR.asn1.x509.NameConstraints</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.NoticeReference.html">KJUR.asn1.x509.NoticeReference</a></li>
 	
@@ -1248,6 +1252,15 @@ This method returns a JSON object of the CRL
 parameters. 
 Return value can be passed to
 <a href="../symbols/KJUR.asn1.x509.CRL.html">KJUR.asn1.x509.CRL</a> constructor.
+<br/>
+NOTE1: From jsrsasign 10.5.16, optional argument can be applied.
+It can have following members:
+<ul>
+<li>tbshex - if this is true, tbshex member with hex value of
+tbsCertList will be added</li>
+<li>nodnarray - if this is true, array member for subject and
+issuer will be deleted to simplify it<li>
+</ul>
 						
 						
 					</div>
@@ -1269,7 +1282,10 @@ crl.getParam() &rarr;
  ext: [
   {extname:"authorityKeyIdentifier",kid:{hex: "03de..."}},
   {extname:"cRLNumber",num:{hex:"0211"}}],
- sighex: "3c5e..."}</pre>
+ sighex: "3c5e..."}
+
+crl.getParam({tbshex: true}) &rarr; { ... , tbshex: "30..." }
+crl.getParam({nodnarray: true}) &rarr; {issuer: {str: "/C=JP"}, ...}</pre>
 					
 					
 					

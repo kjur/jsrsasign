@@ -24,7 +24,6 @@
 <script src="../ext/cj/hmac_min.js"></script>
 <script src="../ext/cj/pbkdf2_min.js"></script>
 
-
 <script src="../ext/jsbn.js"></script>
 <script src="../ext/jsbn2.js"></script>
 <script src="../ext/prng4.js"></script>
@@ -266,32 +265,44 @@ equal(ASN1HEX.dump(cert.getEncodedHex()), "Moge", "moge");
  */
 
 test("Extensions class test", function() {
-var hExpect = "301830160603551d11040f300d820b6578616d706c652e636f6d";
-var seq = new KJUR.asn1.x509.Extensions([{
+var _Extensions = KJUR.asn1.x509.Extensions;
+var aIn, dIn, hExpect;
+
+aIn = [{
 extname:"subjectAltName",
 array:[{dns:"example.com"}]
-}]);
-equal(seq.getEncodedHex(), hExpect, "hex");
+}];
+hExpect = "301830160603551d11040f300d820b6578616d706c652e636f6d";
+dIn = new _Extensions(aIn);
+equal(dIn.tohex(), hExpect, "san hex");
 equal(
-ASN1HEX.dump(seq.getEncodedHex()), 
+ASN1HEX.dump(dIn.tohex()), 
 ASN1HEX.dump(hExpect),
-"dump");
-});
+"san dump");
 
-test("Extensions class test (with private extension)", function() {
-var hExpect = "302430160603551d11040f300d820b6578616d706c652e636f6d300a06032a03040403130161";
-var seq = new KJUR.asn1.x509.Extensions([{
+aIn = [{
   extname:"subjectAltName",
   array:[{dns:"example.com"}]
 },{
   extname:"1.2.3.4",
   extn:{prnstr:'a'}
-}]);
-equal(seq.getEncodedHex(), hExpect, "hex");
+}];
+hExpect = "302430160603551d11040f300d820b6578616d706c652e636f6d300a06032a03040403130161";
+dIn = new _Extensions(aIn);
+equal(dIn.tohex(), hExpect, "san prv hex");
 equal(
-ASN1HEX.dump(seq.getEncodedHex()), 
+ASN1HEX.dump(dIn.tohex()), 
 ASN1HEX.dump(hExpect),
-"dump");
+"san prv dump");
+
+aIn = [{
+  extname: "nameConstraints",
+  critical: true,
+  permit: [{dns: "a.com"}]
+}];
+hExpect = "301b30190603551d1e0101ff040f300da00b300930078205612e636f6d";
+dIn = new _Extensions(aIn);
+equal(dIn.tohex(), hExpect, "nameConstraints hex");
 });
 
 });

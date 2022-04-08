@@ -206,7 +206,7 @@ var d;
 
 d = new _DERUTCTime();
 d.setString('130430125959Z');
-equal(d.getEncodedHex(),
+equal(d.tohex(),
       "170d3133303433303132353935395a",
       "d.setString(130430125959Z)");
 
@@ -224,17 +224,17 @@ equal(d.getEncodedHex(),
 
 // -- implicit constructor test --
 d = new _DERUTCTime({'date':new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0))});
-equal(d.getEncodedHex(),
+equal(d.tohex(),
       "170d3135303133313030303030305a",
       "new DERUTCTime({date: new Date(?2015/01/31 00:00:00?)})");
 
 d = new _DERUTCTime("150131000000Z");
-equal(d.getEncodedHex(),
+equal(d.tohex(),
       "170d3135303133313030303030305a",
       "new DERUTCTime(20150131000000Z)");
 
 d = new _DERUTCTime("150131000000.123Z");
-equal(d.getEncodedHex(),
+equal(d.tohex(),
       "17113135303133313030303030302e3132335a",
       "new DERUTCTime(20150131000000.123Z)");
 
@@ -242,7 +242,7 @@ equal(d.getEncodedHex(),
 d = new _DERUTCTime({
     'date': new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 0))
 });
-equal(d.getEncodedHex(),
+equal(d.tohex(),
       "170d3135303133313030303030305a",
       "new DERUTCTime({date: new Date(?2015/01/31 00:00:00?)})");
 
@@ -250,22 +250,22 @@ d = new _DERUTCTime({
     'date': new Date(Date.UTC(2015, 0, 31, 0, 0, 0, 120)),
     millis: true
 });
-equal(d.getEncodedHex(),
+equal(d.tohex(),
       "17103135303133313030303030302e31325a",
       "new UTCTime({date: new Date(?2015/01/31 00:00:00.12?)})");
 
 d = new _DERUTCTime({str: "150131000000Z"});
-equal(d.getEncodedHex(),
+equal(d.tohex(),
       "170d3135303133313030303030305a",
       "new DERUTCTime({str: 150131000000Z})");
 
 d = new _DERUTCTime({str: "150131000000.12Z"});
-equal(d.getEncodedHex(),
+equal(d.tohex(),
       "17103135303133313030303030302e31325a",
       "new DERUTCTime({str: 150131000000.123Z})");
 
 d = new _DERUTCTime();
-var d5hex = d.getEncodedHex()
+var d5hex = d.tohex()
 equal(d5hex.substr(0, 4), "170d", "new DERUTCTime() -> 170d...");
 
 // now + millis test
@@ -277,7 +277,7 @@ for (var i = 0; i < 3; i++) {
     var startMsec = new Date();
     while (new Date() - startMsec < 258);
     d = new _DERUTCTime({millis: true});
-    var d6hex = d.getEncodedHex();
+    var d6hex = d.tohex();
     if (d6hex.substr(0, 2) != "17") continue;
     var hS = ASN1HEX.getV(d6hex, 0);
     var s = hextoutf8(hS);

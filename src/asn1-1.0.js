@@ -1,4 +1,4 @@
-/* asn1-1.0.23.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1-1.0.24.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.4 asn1 1.0.23 (2022-Feb-14)
+ * @version jsrsasign 10.5.16 asn1 1.0.24 (2022-Apr-08)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -296,17 +296,6 @@ KJUR.asn1.ASN1Util = new function() {
 					     obj: obj});
             } else {
 		return new _DERTaggedObject(tagParam);
-/*
-                var newParam = {};
-                if (tagParam.explicit !== undefined)
-                    newParam.explicit = tagParam.explicit;
-                if (tagParam.tag !== undefined)
-                    newParam.tag = tagParam.tag;
-                if (tagParam.obj === undefined)
-                    throw "obj shall be specified for 'tag'.";
-                newParam.obj = _newObject(tagParam.obj);
-                return new _DERTaggedObject(newParam);
- */
             }
         }
     };
@@ -327,7 +316,7 @@ KJUR.asn1.ASN1Util = new function() {
      */
     this.jsonToASN1HEX = function(param) {
         var asn1Obj = this.newObject(param);
-        return asn1Obj.getEncodedHex();
+        return asn1Obj.tohex();
     };
 };
 
@@ -490,13 +479,17 @@ KJUR.asn1.ASN1Object = function(params) {
     };
 
     /**
-     * get hexadecimal string of ASN.1 TLV bytes
-     * @name getEncodedHex
+     * get hexadecimal string of ASN.1 TLV bytes<br/>
+     * @name tohex
      * @memberOf KJUR.asn1.ASN1Object#
      * @function
      * @return {String} hexadecimal string of ASN.1 TLV
+     * @since jsrsasign 10.5.16 asn1 1.0.24
+     * @see KJUR.asn1.ASN1Object#getEncodedHex
+     * @example
+     * ...ASN1ObjectInstance.tohex() &rarr; "3003020101"
      */
-    this.getEncodedHex = function() {
+    this.tohex = function() {
         if (this.hTLV == null || this.isModified) {
             this.hV = this.getFreshValueHex();
             this.hL = this.getLengthHexFromValue();
@@ -508,6 +501,16 @@ KJUR.asn1.ASN1Object = function(params) {
     };
 
     /**
+     * get hexadecimal string of ASN.1 TLV bytes (DEPRECATED)<br/>
+     * @name getEncodedHex
+     * @memberOf KJUR.asn1.ASN1Object#
+     * @function
+     * @return {String} hexadecimal string of ASN.1 TLV
+     * @deprecated since jsrsasign 10.5.16 please use {@link KJUR.asn1.ASN1Object#tohex}
+     */
+    this.getEncodedHex = function() { return this.tohex(); };
+
+    /**
      * get hexadecimal string of ASN.1 TLV value(V) bytes
      * @name getValueHex
      * @memberOf KJUR.asn1.ASN1Object#
@@ -515,7 +518,7 @@ KJUR.asn1.ASN1Object = function(params) {
      * @return {String} hexadecimal string of ASN.1 TLV value(V) bytes
      */
     this.getValueHex = function() {
-        this.getEncodedHex();
+        this.tohex();
         return this.hV;
     }
 
@@ -993,7 +996,7 @@ extendClass(KJUR.asn1.DERInteger, KJUR.asn1.ASN1Object);
 KJUR.asn1.DERBitString = function(params) {
     if (params !== undefined && typeof params.obj !== "undefined") {
 	var o = KJUR.asn1.ASN1Util.newObject(params.obj);
-	params.hex = "00" + o.getEncodedHex();
+	params.hex = "00" + o.tohex();
     }
     KJUR.asn1.DERBitString.superclass.constructor.call(this);
     this.hT = "03";
@@ -1165,7 +1168,7 @@ extendClass(KJUR.asn1.DERBitString, KJUR.asn1.ASN1Object);
 KJUR.asn1.DEROctetString = function(params) {
     if (params !== undefined && typeof params.obj !== "undefined") {
 	var o = KJUR.asn1.ASN1Util.newObject(params.obj);
-	params.hex = o.getEncodedHex();
+	params.hex = o.tohex();
     }
     KJUR.asn1.DEROctetString.superclass.constructor.call(this, params);
     this.hT = "04";
@@ -1544,7 +1547,7 @@ KJUR.asn1.DERUTCTime = function(params) {
 		params.match(/^[0-9]{12}\.[0-9]+Z$/)) {
 		this.hV = stohex(params);
 	    } else {
-		throw new Error("malformed string for GeneralizedTime: " + params);
+		throw new Error("malformed string for UTCTime: " + params);
 	    }
 	} else if (params.str != undefined) {
 	    this.hV = stohex(params.str);
@@ -1665,7 +1668,7 @@ KJUR.asn1.DERSequence = function(params) {
         var h = '';
         for (var i = 0; i < this.asn1Array.length; i++) {
             var asn1Obj = this.asn1Array[i];
-            h += asn1Obj.getEncodedHex();
+            h += asn1Obj.tohex();
         }
         this.hV = h;
         return this.hV;
@@ -1698,7 +1701,7 @@ KJUR.asn1.DERSet = function(params) {
         var a = new Array();
         for (var i = 0; i < this.asn1Array.length; i++) {
             var asn1Obj = this.asn1Array[i];
-            a.push(asn1Obj.getEncodedHex());
+            a.push(asn1Obj.tohex());
         }
         if (this.sortFlag == true) a.sort();
         this.hV = a.join('');
@@ -1751,7 +1754,7 @@ extendClass(KJUR.asn1.DERSet, KJUR.asn1.DERAbstractStructured);
  * // to hexadecimal
  * d1 = new KJUR.asn1.DERUTF8String({str':'a'})
  * d2 = new KJUR.asn1.DERTaggedObject({'obj': d1});
- * hex = d2.getEncodedHex();
+ * hex = d2.tohex();
  */
 KJUR.asn1.DERTaggedObject = function(params) {
     KJUR.asn1.DERTaggedObject.superclass.constructor.call(this);
@@ -1805,9 +1808,9 @@ KJUR.asn1.DERTaggedObject = function(params) {
 	} else if (params.obj != undefined) {
 	    var hV1;
 	    if (params.obj instanceof _KJUR_asn1.ASN1Object) {
-		hV1 = params.obj.getEncodedHex();
+		hV1 = params.obj.tohex();
 	    } else if (typeof params.obj == "object") {
-		hV1 = _newObject(params.obj).getEncodedHex();
+		hV1 = _newObject(params.obj).tohex();
 	    }
 	    if (params.explicit) {
 		this.hV = hV1;

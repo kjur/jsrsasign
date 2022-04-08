@@ -1,4 +1,4 @@
-/* asn1x509-2.1.12.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1x509-2.1.13.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.3 asn1x509 2.1.12 (2022-Feb-09)
+ * @version jsrsasign 10.5.16 asn1x509 2.1.13 (2022-Apr-08)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -66,6 +66,7 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * <li>{@link KJUR.asn1.x509.UserNotice}</li>
  * <li>{@link KJUR.asn1.x509.NoticeReference}</li>
  * <li>{@link KJUR.asn1.x509.DisplayText}</li>
+ * <li>{@link KJUR.asn1.x509.GeneralSubtree}</li>
  * <li>{@link KJUR.asn1.x509.CRL}</li>
  * <li>{@link KJUR.asn1.x509.TBSCertList}</li>
  * <li>{@link KJUR.asn1.x509.CRLEntry} (DEPRECATED)</li>
@@ -73,17 +74,17 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * </ul>
  * <h4>SUPPORTED EXTENSIONS</h4>
  * <ul>
- * <li>{@link KJUR.asn1.x509.BasicConstraints}</li>
- * <li>{@link KJUR.asn1.x509.KeyUsage}</li>
- * <li>{@link KJUR.asn1.x509.CRLDistributionPoints}</li>
- * <li>{@link KJUR.asn1.x509.CertificatePolicies}</li>
- * <li>{@link KJUR.asn1.x509.ExtKeyUsage}</li>
  * <li>{@link KJUR.asn1.x509.AuthorityKeyIdentifier}</li>
  * <li>{@link KJUR.asn1.x509.SubjectKeyIdentifier}</li>
- * <li>{@link KJUR.asn1.x509.AuthorityInfoAccess}</li>
+ * <li>{@link KJUR.asn1.x509.KeyUsage}</li>
+ * <li>{@link KJUR.asn1.x509.CertificatePolicies}</li>
  * <li>{@link KJUR.asn1.x509.SubjectAltName}</li>
  * <li>{@link KJUR.asn1.x509.IssuerAltName}</li>
- * <li>{@link KJUR.asn1.x509.CertificatePolicies}</li>
+ * <li>{@link KJUR.asn1.x509.BasicConstraints}</li>
+ * <li>{@link KJUR.asn1.x509.NameConstraints}</li>
+ * <li>{@link KJUR.asn1.x509.ExtKeyUsage}</li>
+ * <li>{@link KJUR.asn1.x509.CRLDistributionPoints}</li>
+ * <li>{@link KJUR.asn1.x509.AuthorityInfoAccess}</li>
  * <li>{@link KJUR.asn1.x509.CRLNumber}</li>
  * <li>{@link KJUR.asn1.x509.CRLReason}</li>
  * <li>{@link KJUR.asn1.x509.OCSPNonce}</li>
@@ -230,7 +231,7 @@ KJUR.asn1.x509.Certificate = function(params) {
 	if (params.sigalg.name != undefined) 
 	    sigalg = params.sigalg.name;
 
-	var hTBS = params.tbsobj.getEncodedHex();
+	var hTBS = params.tbsobj.tohex();
 	var sig = new KJUR.crypto.Signature({alg: sigalg});
 	sig.init(params.cakey);
 	sig.updateHex(hTBS);
@@ -253,10 +254,10 @@ KJUR.asn1.x509.Certificate = function(params) {
      * "-----BEGIN CERTIFICATE-----\r\n..."
      */
     this.getPEM = function() {
-	return hextopem(this.getEncodedHex(), "CERTIFICATE");
+	return hextopem(this.tohex(), "CERTIFICATE");
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 	
 	if (params.tbsobj == undefined || params.tbsobj == null) {
@@ -276,8 +277,9 @@ KJUR.asn1.x509.Certificate = function(params) {
 	a.push(new _AlgorithmIdentifier({name: params.sigalg}));
 	a.push(new _DERBitString({hex: "00" + params.sighex}));
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.params = params;
 };
@@ -353,7 +355,7 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
 	this.params = params;
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var a = [];
 	var params = this.params;
 
@@ -379,8 +381,9 @@ KJUR.asn1.x509.TBSCertificate = function(params) {
 	}
 
 	var seq = new KJUR.asn1.DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) this.setByParam(params);
 };
@@ -440,7 +443,7 @@ extendClass(KJUR.asn1.x509.TBSCertificate, KJUR.asn1.ASN1Object);
  *   {extname:"subjectAltName",array:[{dns:"example.com"}]},
  *   {extname:"1.2.3.4",extn:{prnstr:"aa"}} // private extension
  * ]);
- * o.getEncodedHex() &rarr; "30..."
+ * o.tohex() &rarr; "30..."
  */
 KJUR.asn1.x509.Extensions = function(aParam) {
     KJUR.asn1.x509.Extensions.superclass.constructor.call(this);
@@ -452,7 +455,7 @@ KJUR.asn1.x509.Extensions = function(aParam) {
 
     this.setByParam = function(aParam) { this.aParam = aParam; }
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var a = [];
 	for (var i = 0; i < this.aParam.length; i++) {
 	    var param = this.aParam[i];
@@ -471,6 +474,8 @@ KJUR.asn1.x509.Extensions = function(aParam) {
 		obj = new _KJUR_asn1_x509.IssuerAltName(param);
 	    } else if (extname == "basicConstraints") {
 		obj = new _KJUR_asn1_x509.BasicConstraints(param);
+	    } else if (extname == "nameConstraints") {
+		obj = new _KJUR_asn1_x509.NameConstraints(param);
 	    } else if (extname == "cRLDistributionPoints") {
 		obj = new _KJUR_asn1_x509.CRLDistributionPoints(param);
 	    } else if (extname == "certificatePolicies") {
@@ -501,8 +506,9 @@ KJUR.asn1.x509.Extensions = function(aParam) {
 	}
 
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (aParam != undefined) this.setByParam(aParam);
 };
@@ -539,7 +545,7 @@ KJUR.asn1.x509.Extension = function(params) {
 	_DERBoolean = _KJUR_asn1.DERBoolean,
 	_DERSequence = _KJUR_asn1.DERSequence;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
         var asn1Oid = new _DERObjectIdentifier({'oid': this.oid});
         var asn1EncapExtnValue =
             new _DEROctetString({'hex': this.getExtnValueHex()});
@@ -550,8 +556,9 @@ KJUR.asn1.x509.Extension = function(params) {
         asn1Array.push(asn1EncapExtnValue);
 
         var asn1Seq = new _DERSequence({'array': asn1Array});
-        return asn1Seq.getEncodedHex();
+        return asn1Seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     this.critical = false;
     if (params !== undefined) {
@@ -594,7 +601,7 @@ KJUR.asn1.x509.KeyUsage = function(params) {
     var _KEYUSAGE_NAME = X509.KEYUSAGE_NAME;
 
     this.getExtnValueHex = function() {
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     this.oid = "2.5.29.15";
@@ -667,7 +674,7 @@ KJUR.asn1.x509.BasicConstraints = function(params) {
             asn1Array.push(new _DERInteger({'int': this.pathLen}));
         var asn1Seq = new _DERSequence({'array': asn1Array});
         this.asn1ExtnValue = asn1Seq;
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     this.oid = "2.5.29.19";
@@ -726,7 +733,7 @@ KJUR.asn1.x509.CRLDistributionPoints = function(params) {
 	_KJUR_asn1_x509 = _KJUR_asn1.x509;
 
     this.getExtnValueHex = function() {
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     this.setByDPArray = function(dpArray) {
@@ -805,7 +812,7 @@ KJUR.asn1.x509.DistributionPoint = function(params) {
 	_KJUR_asn1 = _KJUR.asn1,
 	_DistributionPointName = _KJUR_asn1.x509.DistributionPointName;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
         var seq = new _KJUR_asn1.DERSequence();
         if (this.asn1DP != null) {
             var o1 = new _KJUR_asn1.DERTaggedObject({'explicit': true,
@@ -813,9 +820,10 @@ KJUR.asn1.x509.DistributionPoint = function(params) {
                                                      'obj': this.asn1DP});
             seq.appendASN1Object(o1);
         }
-        this.hTLV = seq.getEncodedHex();
+        this.hTLV = seq.tohex();
         return this.hTLV;
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) {
         if (params.dpobj !== undefined) {
@@ -874,15 +882,16 @@ KJUR.asn1.x509.DistributionPointName = function(params) {
 	_KJUR_asn1 = _KJUR.asn1,
 	_DERTaggedObject = _KJUR_asn1.DERTaggedObject;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
         if (this.type != "full")
             throw new Error("currently type shall be 'full': " + this.type);
         this.asn1Obj = new _DERTaggedObject({'explicit': false,
                                              'tag': this.tag,
                                              'obj': this.asn1V});
-        this.hTLV = this.asn1Obj.getEncodedHex();
+        this.hTLV = this.asn1Obj.tohex();
         return this.hTLV;
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) {
         if (_KJUR_asn1.x509.GeneralNames.prototype.isPrototypeOf(params)) {
@@ -964,7 +973,7 @@ KJUR.asn1.x509.CertificatePolicies = function(params) {
 	}
 	var seq = new _DERSequence({array: aPI});
 	this.asn1ExtnValue = seq;
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     this.oid = "2.5.29.32";
@@ -1029,7 +1038,7 @@ KJUR.asn1.x509.PolicyInformation = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	if (this.params.policyoid === undefined &&
 	    this.params.array === undefined)
 	    throw new Error("parameter oid and array missing");
@@ -1049,8 +1058,9 @@ KJUR.asn1.x509.PolicyInformation = function(params) {
 	}
 
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) {
 	this.params = params;
@@ -1107,22 +1117,23 @@ KJUR.asn1.x509.PolicyQualifierInfo = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	if (this.params.cps !== undefined) {
 	    var seq = new _DERSequence({array: [
 		new _DERObjectIdentifier({oid: '1.3.6.1.5.5.7.2.1'}),
 		new _DERIA5String({str: this.params.cps})
 	    ]});
-	    return seq.getEncodedHex();
+	    return seq.tohex();
 	}
 	if (this.params.unotice != undefined) {
 	    var seq = new _DERSequence({array: [
 		new _DERObjectIdentifier({oid: '1.3.6.1.5.5.7.2.2'}),
 		new _UserNotice(this.params.unotice)
 	    ]});
-	    return seq.getEncodedHex();
+	    return seq.tohex();
 	}
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) {
 	this.params = params;
@@ -1172,7 +1183,7 @@ KJUR.asn1.x509.UserNotice = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var a = [];
 	if (this.params.noticeref !== undefined) {
 	    a.push(new _NoticeReference(this.params.noticeref));
@@ -1181,8 +1192,9 @@ KJUR.asn1.x509.UserNotice = function(params) {
 	    a.push(new _DisplayText(this.params.exptext));
 	}
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) {
 	this.params = params;
@@ -1227,7 +1239,7 @@ KJUR.asn1.x509.NoticeReference = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var a = [];
 	if (this.params.org !== undefined) {
 	    a.push(new _DisplayText(this.params.org));
@@ -1242,8 +1254,9 @@ KJUR.asn1.x509.NoticeReference = function(params) {
 	}
 	if (a.length == 0) throw new Error("parameter is empty");
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     }
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) {
 	this.params = params;
@@ -1304,6 +1317,157 @@ extendClass(KJUR.asn1.x509.DisplayText, KJUR.asn1.DERAbstractString);
 
 // =====================================================================
 /**
+ * NameConstraints ASN.1 structure class<br/>
+ * @name KJUR.asn1.x509.NameConstraints
+ * @class NameConstraints ASN.1 structure class
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.x509.Extension
+ * @since jsrsasign 10.5.16 asn1x509 2.1.13
+ * @see X509#getExtNameConstraints
+ * @see KJUR.asn1.x509.GeneralSubtree
+ * @see KJUR.asn1.x509.GeneralName
+
+ * @description
+ * This class provides X.509v3 NameConstraints extension.
+ * defined in 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.10">
+ * RFC 5280 4.2.1.10</a>.
+ * <pre>
+ * id-ce-nameConstraints OBJECT IDENTIFIER ::=  { id-ce 30 }
+ * NameConstraints ::= SEQUENCE {
+ *   permittedSubtrees  [0]  GeneralSubtrees OPTIONAL,
+ *   excludedSubtrees   [1]  GeneralSubtrees OPTIONAL }
+ * GeneralSubtrees ::= SEQUENCE SIZE (1..MAX) OF GeneralSubtree
+ * GeneralSubtree ::= SEQUENCE {
+ *   base           GeneralName,
+ *   minimum   [0]  BaseDistance DEFAULT 0,
+ *   maximum   [1]  BaseDistance OPTIONAL }
+ * BaseDistance ::= INTEGER (0..MAX)
+ * </pre>
+ *
+ * @example
+ * new NameConstraints({permit: [{dns: "example.com"}], critical: true})
+ * new NameConstraints({exclude: [{uri: "example.com"}], critical: true})
+ * new NameConstraints({exclude: [{dn: "/C=JP/O=T1"}], critical: true})
+ * new NameConstraints({
+ *   critical: true,
+ *   permit: [{dn: "/C=JP/O=T1"}],
+ *   exclude: [{dn: "/C=US/O=T1", max: 2}]})
+ */
+KJUR.asn1.x509.NameConstraints = function(params) {
+    KJUR.asn1.x509.NameConstraints.superclass.constructor.call(this, params);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_newObject = _KJUR_asn1.ASN1Util.newObject,
+	_GeneralSubtree = _KJUR_asn1_x509.GeneralSubtree;
+
+    this.params = null;
+
+    this.getExtnValueHex = function() {
+	var params = this.params;
+	var aItem = [];
+	if (params.permit != undefined &&
+	    params.permit.length != undefined) {
+	    var aPermit = [];
+	    for (var i = 0; i < params.permit.length; i++) {
+		aPermit.push(new _GeneralSubtree(params.permit[i]));
+	    }
+	    aItem.push({tag: {tage: "a0", obj: {seq: aPermit}}});
+	}
+
+	if (params.exclude != undefined &&
+	    params.exclude.length != undefined) {
+	    var aExclude = [];
+	    for (var i = 0; i < params.exclude.length; i++) {
+		aExclude.push(new _GeneralSubtree(params.exclude[i]));
+	    }
+	    aItem.push({tag: {tage: "a1", obj: {seq: aExclude}}});
+	}
+
+	this.asn1ExtnValue = _newObject({seq: aItem});
+        return this.asn1ExtnValue.tohex();
+    };
+
+    this.oid = "2.5.29.30";
+    if (params !== undefined) this.params = params;
+};
+extendClass(KJUR.asn1.x509.NameConstraints, KJUR.asn1.x509.Extension);
+
+/**
+ * GeneralSubtree ASN.1 structure class<br/>
+ * @name KJUR.asn1.x509.GeneralSubtree
+ * @class GeneralSubtree ASN.1 structure class
+ * @since jsrsasign 10.5.16 asn1x509 2.1.13
+ * @see KJUR.asn1.x509.NameConstraints
+ * @see KJUR.asn1.x509.GeneralName
+ * @see X509#getExtNameConstraints
+ * @see X509#getGeneralSubtree
+ *
+ * @description
+ * This class provides a encoder for GeneralSubtree 
+ * defined in 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.10">
+ * RFC 5280 4.2.1.10</a>. 
+ * This will be used for nameConstraints extension.
+ * <br>
+ * Here is definition of the ASN.1 syntax:
+ * <pre>
+ * GeneralSubtree ::= SEQUENCE {
+ *   base           GeneralName,
+ *   minimum   [0]  BaseDistance DEFAULT 0,
+ *   maximum   [1]  BaseDistance OPTIONAL }
+ * BaseDistance ::= INTEGER (0..MAX)
+ * </pre>
+ * An argument for constructor is the same as
+ * {@link KJUR.asn1.x509.GeneralName} except
+ * this has following optional members:
+ * <ul>
+ * <li>min - {Number} value for the minimum field</li>
+ * <li>max - {Number} value for the maximum field</li>
+ * </ul>
+ * Please note that min and max can't be specified since
+ * they are prohibited in RFC 5280.
+ *
+ * @example
+ * new GeneralSubtree({dns: "example.com"})
+ * new GeneralSubtree({uri: ".example.com"})
+ * new GeneralSubtree({dn: "/C=JP/O=Test1"})
+ */
+KJUR.asn1.x509.GeneralSubtree = function(params) {
+    KJUR.asn1.x509.GeneralSubtree.superclass.constructor.call(this);
+
+    var _KJUR_asn1 = KJUR.asn1,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_GeneralName = _KJUR_asn1_x509.GeneralName,
+	_newObject = _KJUR_asn1.ASN1Util.newObject;
+
+    this.params = null;
+
+    this.setByParam = function(params) {
+	this.params = params;
+    };
+
+    this.tohex = function() {
+	var params = this.params;
+
+	var aItem = [new _GeneralName(params)];
+	if (params.min != undefined)
+	    aItem.push({tag: {tagi:"80", obj: {"int": params.min}}});
+	if (params.max != undefined)
+	    aItem.push({tag: {tagi:"81", obj: {"int": params.max}}});
+
+	var dSeq = _newObject({seq: aItem});
+	return dSeq.tohex();
+    }
+    this.getEncodedHex = function() { return this.tohex(); };
+
+    if (params !== undefined) this.setByParam(params);
+};
+extendClass(KJUR.asn1.x509.GeneralSubtree, KJUR.asn1.ASN1Object);
+
+// =====================================================================
+/**
  * KeyUsage ASN.1 structure class
  * @name KJUR.asn1.x509.ExtKeyUsage
  * @class ExtKeyUsage ASN.1 structure class
@@ -1338,7 +1502,7 @@ KJUR.asn1.x509.ExtKeyUsage = function(params) {
     };
 
     this.getExtnValueHex = function() {
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     this.oid = "2.5.29.37";
@@ -1429,7 +1593,7 @@ KJUR.asn1.x509.AuthorityKeyIdentifier = function(params) {
 
         var asn1Seq = new _KJUR_asn1.DERSequence({'array': a});
         this.asn1ExtnValue = asn1Seq;
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     /**
@@ -1645,7 +1809,7 @@ KJUR.asn1.x509.SubjectKeyIdentifier = function(params) {
 
     this.getExtnValueHex = function() {
         this.asn1ExtnValue = this.asn1KID;
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     /**
@@ -1789,7 +1953,7 @@ KJUR.asn1.x509.AuthorityInfoAccess = function(params) {
     };
 
     this.getExtnValueHex = function() {
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     this.oid = "1.3.6.1.5.5.7.1.1";
@@ -1841,7 +2005,7 @@ KJUR.asn1.x509.SubjectAltName = function(params) {
     };
 
     this.getExtnValueHex = function() {
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     this.oid = "2.5.29.17";
@@ -1893,7 +2057,7 @@ KJUR.asn1.x509.IssuerAltName = function(params) {
     };
 
     this.getExtnValueHex = function() {
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     this.oid = "2.5.29.18";
@@ -1980,7 +2144,7 @@ KJUR.asn1.x509.SubjectDirectoryAttributes = function(params) {
 	}
 	var seq = new _DERSequence({array: a});
 	this.asn1ExtnValue = seq;
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     this.oid = "2.5.29.9";
@@ -2060,7 +2224,7 @@ KJUR.asn1.x509.PrivateExtension = function(params) {
 	    return extn;
 	} else if (typeof extn == "object") {
 	    try {
-		return _newObject(extn).getEncodedHex();
+		return _newObject(extn).tohex();
 	    } catch(ex) {}
 	}
 	throw new Error("unsupported extn value");
@@ -2136,7 +2300,7 @@ extendClass(KJUR.asn1.x509.PrivateExtension, KJUR.asn1.x509.Extension);
  *  ],
  *  cakey: prvkey
  * });
- * crl.getEncodedHex() &rarr; "30..."
+ * crl.gettohex() &rarr; "30..."
  * crl.getPEM() &rarr; "-----BEGIN X509 CRL..."
  */
 KJUR.asn1.x509.CRL = function(params) {
@@ -2169,7 +2333,7 @@ KJUR.asn1.x509.CRL = function(params) {
      * crl.sign()
      */
     this.sign = function() {
-	var hTBSCL = (new _TBSCertList(this.params)).getEncodedHex();
+	var hTBSCL = (new _TBSCertList(this.params)).tohex();
 	var sig = new KJUR.crypto.Signature({alg: this.params.sigalg});
 	sig.init(this.params.cakey);
 	sig.updateHex(hTBSCL);
@@ -2193,10 +2357,10 @@ KJUR.asn1.x509.CRL = function(params) {
      * "-----BEGIN X509 CRL-----\r\n..."
      */
     this.getPEM = function() {
-	return hextopem(this.getEncodedHex(), "X509 CRL");
+	return hextopem(this.tohex(), "X509 CRL");
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	if (params.tbsobj == undefined) {
@@ -2216,8 +2380,9 @@ KJUR.asn1.x509.CRL = function(params) {
 	a.push(new _AlgorithmIdentifier({name: params.sigalg}));
 	a.push(new _DERBitString({hex: "00" + params.sighex}));
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.params = params;
 };
@@ -2293,7 +2458,7 @@ extendClass(KJUR.asn1.x509.CRL, KJUR.asn1.ASN1Object);
  *   {extname: "authorityKeyIdentifier", "kid": {hex: "12ab"}}
  *  ]
  * });
- * o.getEncodedHex() &rarr; "30..."
+ * o.tohex() &rarr; "30..."
  */
 KJUR.asn1.x509.TBSCertList = function(params) {
     KJUR.asn1.x509.TBSCertList.superclass.constructor.call(this);
@@ -2347,7 +2512,7 @@ KJUR.asn1.x509.TBSCertList = function(params) {
 	return new _DERSequence({array: a});
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var a = [];
 	var params = this.params;
 
@@ -2373,8 +2538,9 @@ KJUR.asn1.x509.TBSCertList = function(params) {
 	}
 
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) this.setByParam(params);
 };
@@ -2439,11 +2605,12 @@ KJUR.asn1.x509.CRLEntry = function(params) {
         this.time = new _KJUR_asn1.x509.Time(timeParam);
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
         var o = new _KJUR_asn1.DERSequence({"array": [this.sn, this.time]});
-        this.TLV = o.getEncodedHex();
+        this.TLV = o.tohex();
         return this.TLV;
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) {
         if (params.time !== undefined) {
@@ -2493,7 +2660,7 @@ KJUR.asn1.x509.CRLNumber = function(params) {
 
     this.getExtnValueHex = function() {
         this.asn1ExtnValue = new KJUR.asn1.DERInteger(this.params.num);
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     this.oid = "2.5.29.20";
@@ -2547,7 +2714,7 @@ KJUR.asn1.x509.CRLReason = function(params) {
 
     this.getExtnValueHex = function() {
         this.asn1ExtnValue = new KJUR.asn1.DEREnumerated(this.params.code);
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     this.oid = "2.5.29.21";
@@ -2599,7 +2766,7 @@ KJUR.asn1.x509.OCSPNonce = function(params) {
 
     this.getExtnValueHex = function() {
         this.asn1ExtnValue = new KJUR.asn1.DEROctetString(this.params);
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     this.oid = "1.3.6.1.5.5.7.48.1.2";
@@ -2641,7 +2808,7 @@ KJUR.asn1.x509.OCSPNoCheck = function(params) {
 
     this.getExtnValueHex = function() {
         this.asn1ExtnValue = new KJUR.asn1.DERNull();
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     this.oid = "1.3.6.1.5.5.7.48.1.5";
@@ -2709,7 +2876,7 @@ KJUR.asn1.x509.AdobeTimeStamp = function(params) {
 	}
 
         this.asn1ExtnValue = new _DERSequence({array: a});
-        return this.asn1ExtnValue.getEncodedHex();
+        return this.asn1ExtnValue.tohex();
     };
 
     this.oid = "1.2.840.113583.1.1.9.1";
@@ -2907,7 +3074,7 @@ KJUR.asn1.x509.X500Name = function(params) {
 	}
     }
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
         if (typeof this.hTLV == "string") return this.hTLV;
 
 	if (this.asn1Array.length == 0 && this.paramArray.length > 0) {
@@ -2920,9 +3087,10 @@ KJUR.asn1.x509.X500Name = function(params) {
 	}
 
         var o = new _KJUR_asn1.DERSequence({"array": this.asn1Array});
-        this.hTLV = o.getEncodedHex();
+        this.hTLV = o.tohex();
         return this.hTLV;
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) this.setByParam(params);
 };
@@ -3127,7 +3295,7 @@ KJUR.asn1.x509.RDN = function(params) {
 	}
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	if (this.asn1Array.length == 0 && this.paramArray.length > 0) {
 	    for (var i = 0; i < this.paramArray.length; i++) {
 		var param = this.paramArray[i];
@@ -3141,9 +3309,10 @@ KJUR.asn1.x509.RDN = function(params) {
 	    }
 	}
         var o = new KJUR.asn1.DERSet({"array": this.asn1Array});
-        this.TLV = o.getEncodedHex();
+        this.TLV = o.tohex();
         return this.TLV;
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) {
 	this.setByParam(params);
@@ -3352,14 +3521,16 @@ KJUR.asn1.x509.AttributeTypeAndValue = function(params) {
 			dsType + " value=" + valueStr);
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	if (this.dsType == null) this.dsType = this._getDsType();
 	var asn1Type = KJUR.asn1.x509.OID.atype2obj(this.sType);
 	var asn1Value = this.getValueObj(this.dsType, this.sValue);
         var o = new _DERSequence({"array": [asn1Type, asn1Value]});
-        this.TLV = o.getEncodedHex();
+        this.TLV = o.tohex();
         return this.TLV;
-    };
+    }
+
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) {
 	this.setByParam(params);
@@ -3422,11 +3593,12 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
         return o;
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
         var o = this.getASN1Object();
-        this.hTLV = o.getEncodedHex();
+        this.hTLV = o.tohex();
         return this.hTLV;
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     /**
      * @name setPubKey
@@ -3446,7 +3618,7 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
 		var asn1RsaPub = _newObject({
 		    'seq': [{'int': {'bigint': key.n}}, {'int': {'int': key.e}}]
 		});
-		var rsaKeyHex = asn1RsaPub.getEncodedHex();
+		var rsaKeyHex = asn1RsaPub.tohex();
 		this.asn1AlgId = new _AlgorithmIdentifier({'name':'rsaEncryption'});
 		this.asn1SubjPKey = new _DERBitString({'hex':'00'+rsaKeyHex});
 	    }
@@ -3474,7 +3646,7 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
 					      'asn1params': asn1Params});
 		var pubInt = new _DERInteger({'bigint': key.y});
 		this.asn1SubjPKey = 
-		    new _DERBitString({'hex': '00' + pubInt.getEncodedHex()});
+		    new _DERBitString({'hex': '00' + pubInt.tohex()});
 	    }
 	} catch(ex) {};
     };
@@ -3534,7 +3706,7 @@ KJUR.asn1.x509.Time = function(params) {
 	return null;
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
         var o = null;
 
@@ -3557,9 +3729,10 @@ KJUR.asn1.x509.Time = function(params) {
 	}
 
 	if (o == null) throw new Error("wrong setting for Time");
-        this.TLV = o.getEncodedHex();
+        this.TLV = o.tohex();
         return this.TLV;
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -3577,7 +3750,7 @@ KJUR.asn1.x509.Time_bak = function(params) {
         this.timeParams = timeParams;
     }
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
         var o = null;
 
         if (this.timeParams != null) {
@@ -3593,9 +3766,10 @@ KJUR.asn1.x509.Time_bak = function(params) {
                 o = new _DERGeneralizedTime();
             }
         }
-        this.TLV = o.getEncodedHex();
+        this.TLV = o.tohex();
         return this.TLV;
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     this.type = "utc";
     if (params !== undefined) {
@@ -3679,7 +3853,7 @@ KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
 	_KJUR_asn1 = _KJUR.asn1,
 	_PSSNAME2ASN1TLV = _KJUR_asn1.x509.AlgorithmIdentifier.PSSNAME2ASN1TLV;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
         if (this.nameAlg === null && this.asn1Alg === null) {
             throw new Error("algorithm not specified");
         }
@@ -3706,9 +3880,10 @@ KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
         if (this.asn1Params !== null) a.push(this.asn1Params);
 
         var o = new _KJUR_asn1.DERSequence({'array': a});
-        this.hTLV = o.getEncodedHex();
+        this.hTLV = o.tohex();
         return this.hTLV;
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) {
         if (params.name !== undefined) {
@@ -3850,7 +4025,7 @@ KJUR.asn1.x509.GeneralName = function(params) {
 	this.params = params;
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 	var hTag, explicitFlag, dObj;
 	var explicitFlag = false;
@@ -3938,162 +4113,11 @@ KJUR.asn1.x509.GeneralName = function(params) {
 	var dTag = new _DERTaggedObject({tag: hTag,
 					 explicit: explicitFlag,
 					 obj: dObj});
-	return dTag.getEncodedHex();
+	return dTag.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) this.setByParam(params);
-};
-
-KJUR.asn1.x509.GeneralName_bak = function(params) {
-    KJUR.asn1.x509.GeneralName.superclass.constructor.call(this);
-    var asn1Obj = null,
-	type = null,
-	pTag = { rfc822: '81', dns: '82', dn: 'a4',  
-		 uri: '86', ip: '87', otherName: 'a0'},
-	_KJUR = KJUR,
-	_KJUR_asn1 = _KJUR.asn1,
-	_KJUR_asn1_x509 = _KJURd_asn1.x509,
-	_DERObjectIdentifier = _KJUR_asn1.DERObjectIdentifier,
-	_DERSequence = _KJUR_asn1.DERSequence,
-	_DEROctetString = _KJUR_asn1.DEROctetString,
-	_DERPrintableString = _KJUR_asn1.DERPrintableString,
-	_DERIA5String = _KJUR_asn1.DERIA5String,
-	_DERTaggedObject = _KJUR_asn1.DERTaggedObject,
-	_ASN1Object = _KJUR_asn1.ASN1Object,
-	_X500Name = _KJUR_asn1_x509.X500Name,
-	_OtherName = _KJUR_asn1_x509.OtherName,
-	_newObject = _KJUR_asn1.ASN1Util.newObject,
-	_pemtohex = pemtohex;
-	
-    this.explicit = false;
-
-    this.setByParam = function(params) {
-        var str = null;
-        var v = null;
-
-	if (params === undefined) return;
-
-        if (params.rfc822 !== undefined) {
-            this.type = 'rfc822';
-            v = new _DERIA5String({str: params[this.type]});
-        }
-
-        if (params.other !== undefined) {
-            this.type = 'otherName';
-
-            var asn1Oid = new _DERObjectIdentifier({'oid': params[this.type].oid});            
-            var asn1Value = _newObject(params[this.type].obj)                                              
-
-            var asn1Array = new Array();
-            asn1Array.push(asn1Oid);
-            asn1Array.push(asn1Value);
-
-            v = new _DERSequence({'array': asn1Array}); 
-
-        }
-
-        if (params.dns !== undefined) {
-            this.type = 'dns';
-            v = new _DERIA5String({str: params[this.type]});
-        }
-
-        if (params.uri !== undefined) {
-            this.type = 'uri';
-            v = new _DERIA5String({str: params[this.type]});
-        }
-
-        if (params.dn !== undefined) {
-	    this.type = 'dn';
-	    this.explicit = true;
-	    if (typeof params.dn === "string") {
-		v = new _X500Name({str: params.dn});
-	    } else if (params.dn instanceof KJUR.asn1.x509.X500Name) {
-		v = params.dn;
-	    } else {
-		v = new _X500Name(params.dn);
-	    }
-	}
-
-        if (params.ldapdn !== undefined) {
-	    this.type = 'dn';
-	    this.explicit = true;
-	    v = new _X500Name({ldapstr: params.ldapdn});
-	}
-
-	if (params.certissuer !== undefined) {
-	    this.type = 'dn';
-	    this.explicit = true;
-	    var certStr = params.certissuer;
-	    var certHex = null;
-
-	    if (certStr.match(/^[0-9A-Fa-f]+$/)) {
-		certHex == certStr;
-            }
-
-	    if (certStr.indexOf("-----BEGIN ") != -1) {
-		certHex = _pemtohex(certStr);
-	    }
-
-	    if (certHex == null) throw "certissuer param not cert";
-	    var x = new X509();
-	    x.hex = certHex;
-	    var dnHex = x.getIssuerHex();
-	    v = new _ASN1Object();
-	    v.hTLV = dnHex;
-	}
-
-	if (params.certsubj !== undefined) {
-	    this.type = 'dn';
-	    this.explicit = true;
-	    var certStr = params.certsubj;
-	    var certHex = null;
-	    if (certStr.match(/^[0-9A-Fa-f]+$/)) {
-		certHex == certStr;
-            }
-	    if (certStr.indexOf("-----BEGIN ") != -1) {
-		certHex = _pemtohex(certStr);
-	    }
-	    if (certHex == null) throw "certsubj param not cert";
-	    var x = new X509();
-	    x.hex = certHex;
-	    var dnHex = x.getSubjectHex();
-	    v = new _ASN1Object();
-	    v.hTLV = dnHex;
-	}
-
-	if (params.ip !== undefined) {
-	    this.type = 'ip';
-	    this.explicit = false;
-	    var ip = params.ip;
-	    var hIP;
-	    var malformedIPMsg = "malformed IP address";
-	    if (ip.match(/^[0-9.]+[.][0-9.]+$/)) { // ipv4
-		hIP = intarystrtohex("[" + ip.split(".").join(",") + "]");
-		if (hIP.length !== 8) throw malformedIPMsg;
-	    } else if (ip.match(/^[0-9A-Fa-f:]+:[0-9A-Fa-f:]+$/)) { // ipv6
-		hIP = ipv6tohex(ip);
-	    } else if (ip.match(/^([0-9A-Fa-f][0-9A-Fa-f]){1,}$/)) { // hex
-		hIP = ip;
-	    } else {
-		throw malformedIPMsg;
-	    }
-	    v = new _DEROctetString({hex: hIP});
-	}
-
-        if (this.type == null)
-            throw "unsupported type in params=" + params;
-        this.asn1Obj = new _DERTaggedObject({'explicit': this.explicit,
-                                             'tag': pTag[this.type],
-                                             'obj': v});
-    };
-
-    this.getEncodedHex = function() {
-        return this.asn1Obj.getEncodedHex();
-    }
-
-    if (params !== undefined) {
-        this.setByParam(params);
-    }
 };
 extendClass(KJUR.asn1.x509.GeneralName, KJUR.asn1.ASN1Object);
 
@@ -4135,10 +4159,11 @@ KJUR.asn1.x509.GeneralNames = function(paramsArray) {
         }
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
         var o = new _KJUR_asn1.DERSequence({'array': this.asn1Array});
-        return o.getEncodedHex();
+        return o.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     this.asn1Array = new Array();
     if (typeof paramsArray != "undefined") {
@@ -4192,7 +4217,7 @@ KJUR.asn1.x509.OtherName = function(params) {
 	this.params = params;
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	if (params.oid == undefined || params.value == undefined)
@@ -4204,8 +4229,9 @@ KJUR.asn1.x509.OtherName = function(params) {
 				       obj: params.value}});
 	var dSeq = new _DERSequence({array: [dOid, dValue]});
 
-        return dSeq.getEncodedHex();
+        return dSeq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) this.setByParam(params);
 };

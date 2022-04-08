@@ -1,4 +1,4 @@
-/* ecdsa-modified-1.2.1.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
+/* ecdsa-modified-1.2.2.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
  */
 /*
  * ecdsa-modified.js - modified Bitcoin.ECDSA class
@@ -13,7 +13,7 @@
  * @fileOverview
  * @name ecdsa-modified-1.0.js
  * @author Stefan Thomas (github.com/justmoon) and Kenji Urushima (kenji.urushima@gmail.com)
- * @version jsrsasign 10.5.1 ecdsa-modified 1.2.1 (2021-Dec-01)
+ * @version jsrsasign 10.5.16 ecdsa-modified 1.2.2 (2022-Apr-08)
  * @since jsrsasign 4.0
  * @license <a href="https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE">MIT License</a>
  */
@@ -858,7 +858,7 @@ KJUR.crypto.ECDSA.biRSSigToASN1Sig = function(biR, biS) {
     var derR = new _KJUR_asn1.DERInteger({'bigint': biR});
     var derS = new _KJUR_asn1.DERInteger({'bigint': biS});
     var derSeq = new _KJUR_asn1.DERSequence({'array': [derR, derS]});
-    return derSeq.getEncodedHex();
+    return derSeq.tohex();
 };
 
 /**
