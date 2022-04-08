@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* ecdsa-modified-1.2.1.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* ecdsa-modified-1.2.2.js (c) Stephan Thomas, Kenji Urushima | github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * ecdsa-modified.js - modified Bitcoin.ECDSA class
@@ -20,7 +20,7 @@
 <span class='line'> 13</span>  * @fileOverview
 <span class='line'> 14</span>  * @name ecdsa-modified-1.0.js
 <span class='line'> 15</span>  * @author Stefan Thomas (github.com/justmoon) and Kenji Urushima (kenji.urushima@gmail.com)
-<span class='line'> 16</span>  * @version jsrsasign 10.5.1 ecdsa-modified 1.2.1 (2021-Dec-01)
+<span class='line'> 16</span>  * @version jsrsasign 10.5.16 ecdsa-modified 1.2.2 (2022-Apr-08)
 <span class='line'> 17</span>  * @since jsrsasign 4.0
 <span class='line'> 18</span>  * @license &lt;a href="https://github.com/bitcoinjs/bitcoinjs-lib/blob/master/LICENSE">MIT License&lt;/a>
 <span class='line'> 19</span>  */</span><span class="WHIT">
@@ -865,7 +865,7 @@
 <span class='line'>858</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">derR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_KJUR_asn1.DERInteger</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'bigint'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">biR</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>859</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">derS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_KJUR_asn1.DERInteger</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'bigint'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">biS</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>860</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">derSeq</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_KJUR_asn1.DERSequence</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'array'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">derR</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">derS</span><span class="PUNC">]</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>861</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">derSeq.getEncodedHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>861</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">derSeq.tohex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>862</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>863</span> 
 <span class='line'>864</span> </span><span class="COMM">/**

@@ -1,4 +1,4 @@
-/* asn1cms-2.0.4.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1cms-2.0.5.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1cms.js - ASN.1 DER encoder and verifier classes for Cryptographic Message Syntax(CMS)
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cms-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.5 asn1cms 2.0.4 (2021-Jan-17)
+ * @version jsrsasign 10.5.16 asn1cms 2.0.5 (2022-Apr-08)
  * @since jsrsasign 4.2.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -128,12 +128,13 @@ KJUR.asn1.cms.Attribute = function(params) {
 	throw new _Error("not yet implemented abstract");
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var dType = new _DERObjectIdentifier({oid: this.typeOid});
 	var dValueSet = new _DERSet({array: this.getValueArray()});
 	var seq = new _DERSequence({array: [dType, dValueSet]});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 };
 extendClass(KJUR.asn1.cms.Attribute, KJUR.asn1.ASN1Object);
 
@@ -447,7 +448,7 @@ KJUR.asn1.cms.ESSCertID = function(params) {
 	return _KJUR.crypto.Util.hashHex(hCert, alg);
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	var hCertHash = this.getCertHash(params, 'sha1');
@@ -462,8 +463,9 @@ KJUR.asn1.cms.ESSCertID = function(params) {
 	     params.serial != undefined))
 	    a.push(new _IssuerSerial(params));
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -626,7 +628,7 @@ KJUR.asn1.cms.ESSCertIDv2 = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	var hCertHash = this.getCertHash(params, 'sha256');
@@ -643,8 +645,9 @@ KJUR.asn1.cms.ESSCertIDv2 = function(params) {
 	     params.serial != undefined))
 	    a.push(new _IssuerSerial(params));
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -703,7 +706,7 @@ KJUR.asn1.cms.IssuerSerial = function(params) {
 	this.params = params;
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	var pIssuer, pSerial;
@@ -732,8 +735,9 @@ KJUR.asn1.cms.IssuerSerial = function(params) {
 	var dIssuer = new _GeneralNames([{dn: pIssuer}]);
 	var dSerial = new _DERInteger(pSerial);
 	var seq = new _DERSequence({array: [dIssuer, dSerial]});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -815,18 +819,19 @@ KJUR.asn1.cms.SignerIdentifier = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 	if (params.type == "isssn") {
 	    var dISSSN = new _IssuerAndSerialNumber(params);
-	    return dISSSN.getEncodedHex();
+	    return dISSSN.tohex();
 	} else if (params.type == "skid") {
 	    var dSKID = new _SubjectKeyIdentifier(params);
-	    return dSKID.getEncodedHex();
+	    return dSKID.tohex();
 	} else {
 	    throw new Error("wrong property for isssn or skid");
 	}
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -881,7 +886,7 @@ KJUR.asn1.cms.IssuerAndSerialNumber = function(params) {
     
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	var pIssuer, pSerial;
@@ -909,9 +914,9 @@ KJUR.asn1.cms.IssuerAndSerialNumber = function(params) {
 	var dIssuer = new _X500Name(pIssuer);
 	var dSerial = new _DERInteger(pSerial);
 	var seq = new _DERSequence({array: [dIssuer, dSerial]});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
-
+    this.getEncodedHex = function() { return this.tohex(); };
 
     this.setByParam = function(params) {
 	this.params = params;
@@ -957,7 +962,7 @@ KJUR.asn1.cms.SubjectKeyIdentifier = function(params) {
 
     _KJUR_asn1_cms.SubjectKeyIdentifier.superclass.constructor.call(this);
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	if (params.cert == undefined && params.skid == undefined)
@@ -973,8 +978,9 @@ KJUR.asn1.cms.SubjectKeyIdentifier = function(params) {
 	}
 	var dSKID = 
 	    _newObject({tag:{tage:"a0",obj:{octstr:{hex:hSKID}}}});
-	return dSKID.getEncodedHex();
+	return dSKID.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -1021,7 +1027,7 @@ KJUR.asn1.cms.AttributeList = function(params) {
 	this.params = params;
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 	if (this.hTLV != null) return this.hTLV;
 
@@ -1056,9 +1062,10 @@ KJUR.asn1.cms.AttributeList = function(params) {
 	}
 	
 	var dSet = new _DERSet({array: a, sortflag: sortflag});
-	this.hTLV = dSet.getEncodedHex();
+	this.hTLV = dSet.tohex();
 	return this.hTLV;
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -1163,8 +1170,7 @@ KJUR.asn1.cms.SignerInfo = function(params) {
      * private key and algorithm by 
      * "params.signkey" and "params.sigalg" parameter.
      * In general, you don't need to call this method.
-     * It will be called when getEncodedHex() method
-     * if necessary.
+     * It will be called when tohex() method if necessary.
      *
      * @example
      * si = new KJUR.asn1.cms.SignerInfo({...});
@@ -1174,7 +1180,7 @@ KJUR.asn1.cms.SignerInfo = function(params) {
 	var params = this.params;
 	var sigalg = params.sigalg;
 
-	var hData = (new _AttributeList(params.sattrs)).getEncodedHex();
+	var hData = (new _AttributeList(params.sattrs)).tohex();
 	var prvkey = _KEYUTIL.getKey(params.signkey);
 	var sig = new _KJUR_crypto.Signature({alg: sigalg});
 	sig.init(prvkey);
@@ -1183,7 +1189,7 @@ KJUR.asn1.cms.SignerInfo = function(params) {
 	params.sighex = hSig;
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	var a = [];
@@ -1225,8 +1231,9 @@ KJUR.asn1.cms.SignerInfo = function(params) {
 	}
 
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -1280,7 +1287,7 @@ KJUR.asn1.cms.EncapsulatedContentInfo = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	var a = [];
@@ -1299,8 +1306,9 @@ KJUR.asn1.cms.EncapsulatedContentInfo = function(params) {
 	}
 
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     this.setByParam = function(params) {
 	this.params = params;
@@ -1345,7 +1353,7 @@ KJUR.asn1.cms.ContentInfo = function(params) {
     
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	var a = [];
@@ -1359,8 +1367,9 @@ KJUR.asn1.cms.ContentInfo = function(params) {
 	a.push(dContent0);
 
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     this.setByParam = function(params) {
 	this.params = params;
@@ -1620,7 +1629,7 @@ KJUR.asn1.cms.SignedData = function(params) {
 	return 1;
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	if (this.getEncodedHexPrepare != undefined) {
@@ -1660,8 +1669,9 @@ KJUR.asn1.cms.SignedData = function(params) {
 	a.push(new _DERSet({array: aSignerInfo}));
 
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     /**
      * get CotentInfo ASN.1 object concluding CMS SignedData<br/>
@@ -1706,7 +1716,7 @@ KJUR.asn1.cms.SignedData = function(params) {
      * sd.getContentInfoEncodedHex() &rarr "3082..."
      */
     this.getContentInfoEncodedHex = function() {
-	return this.getContentInfo().getEncodedHex();
+	return this.getContentInfo().tohex();
     };
 
     if (params != undefined) this.setByParam(params);
@@ -1763,7 +1773,7 @@ KJUR.asn1.cms.CertificateSet = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 	var a = [];
 
@@ -1792,8 +1802,9 @@ KJUR.asn1.cms.CertificateSet = function(params) {
 	    explicit: false,
 	    obj: dSet
 	});
-	return dTagObj.getEncodedHex();
+	return dTagObj.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -1835,7 +1846,7 @@ KJUR.asn1.cms.RevocationInfoChoices = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	if (! params instanceof Array)
@@ -1846,8 +1857,9 @@ KJUR.asn1.cms.RevocationInfoChoices = function(params) {
 	    a.push(new KJUR.asn1.cms.RevocationInfoChoice(params[i]));
 	}
 	var dRevInfos = KJUR.asn1.ASN1Util.newObject({tag: {tagi:"a1",obj:{set:a}}});
-	return dRevInfos.getEncodedHex();
+	return dRevInfos.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -1890,7 +1902,7 @@ KJUR.asn1.cms.RevocationInfoChoice = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	if (params.crl != undefined && typeof params.crl == "string") {
@@ -1904,11 +1916,12 @@ KJUR.asn1.cms.RevocationInfoChoice = function(params) {
 		tagi: "a1",
 		obj: new KJUR.asn1.cms.OtherRevocationFormat(params)
 	    }});
-	    return dTag1.getEncodedHex();
+	    return dTag1.tohex();
 	} else {
 	    throw new Error("property crl or ocsp undefined");
 	}
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -1957,7 +1970,7 @@ KJUR.asn1.cms.OtherRevocationFormat = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 	if (params.ocsp == undefined)
 	    throw new _Error("property ocsp not specified");
@@ -1971,8 +1984,9 @@ KJUR.asn1.cms.OtherRevocationFormat = function(params) {
 		{asn1: {tlv: params.ocsp}}
 	    ]
 	});
-	return dOtherRev.getEncodedHex();
+	return dOtherRev.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };

@@ -14,6 +14,7 @@
 <script src="../ext/jsbn2.js"></script>
 <script src="../ext/base64.js"></script>
 <script src="../src/base64x-1.1.js"></script>
+<script src="../src/asn1hex-1.1.js"></script>
 <script src="../src/asn1-1.0.js"></script>
 <script src="../src/asn1x509-1.0.js"></script>
 
@@ -32,12 +33,25 @@ test("boolean test", function() {
   equal(KJUR.asn1.ASN1Util.newObject({'bool': {}}).getEncodedHex(), "0101ff", "boolean test1");
 });
 
-test("int 3", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'int': {'int': 3}}).getEncodedHex(), "020103", "test1");
-});
+test("int test", function() {
+var pIn;
+var _newObject = KJUR.asn1.ASN1Util.newObject;
 
-test("int 3", function() {
-  equal(KJUR.asn1.ASN1Util.newObject({'int': 3}).getEncodedHex(), "020103", "test1");
+pIn = {"int": 3};
+equal(_newObject(pIn).getEncodedHex(), "020103", "{int: 3}");
+
+pIn = {"int": {"int": 3}};
+equal(_newObject(pIn).getEncodedHex(), "020103", "{int: {int: 3}}");
+
+pIn = {"int": {"bigint": new BigInteger("123456", 10)}};
+equal(_newObject(pIn).getEncodedHex(), "020301e240", "{int: {bigint: new BigInteger(123456,10}}");
+
+pIn = {"int": {"bigint": new BigInteger("1abcd", 16)}};
+equal(_newObject(pIn).getEncodedHex(), "020301abcd", "{int: {bigint: new BigInteger(1abcd,16}}");
+
+pIn = {"int": {"hex": "01abcd"}};
+equal(_newObject(pIn).getEncodedHex(), "020301abcd", "{int: {hex: 1abcd}}");
+
 });
 
 test("bitstr test unused:0 1a2b", function() {
@@ -132,13 +146,21 @@ test("tag test seq [int 3, int 4] explicit", function() {
 });
 
 test("tag test", function() {
+var pIn;
 var _newObject = KJUR.asn1.ASN1Util.newObject;
 
-var params = {tag: {tage: "a3", obj: {seq: [{'int': 3}, {'int': 4}]}}};
-equal(_newObject(params).getEncodedHex(), "a3083006020103020104", "test1");
+pIn = {tag: {tagi: "81", hex: "04"}};
+equal(_newObject(pIn).getEncodedHex(), "810104", "{tagi:81,hex:04}"); 
 
-var params = {tag: {tagi: "a4", obj: {seq: [{'int': 3}, {'int': 4}]}}};
-equal(_newObject(params).getEncodedHex(), "a406020103020104", "test1");
+pIn = {tag: {tagi: "80", obj: {"int": {"int": 3}}}};
+equal(_newObject(pIn).getEncodedHex(), "800103", "80 int:3");
+
+pIn = {tag: {tage: "a3", obj: {seq: [{'int': 3}, {'int': 4}]}}};
+equal(_newObject(pIn).getEncodedHex(), "a3083006020103020104", "a3 seq");
+
+pIn = {tag: {tagi: "a4", obj: {seq: [{'int': 3}, {'int': 4}]}}};
+equal(_newObject(pIn).getEncodedHex(), "a406020103020104", "a4 seq");
+
 });
 
 test("tag test RFC 3161 TSP Accuracy 500ms", function() {

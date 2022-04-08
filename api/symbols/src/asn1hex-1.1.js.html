@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1hex-1.2.13.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1hex-1.2.14.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * asn1hex.js - Hexadecimal represented ASN.1 string library
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name asn1hex-1.1.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign 10.5.12 asn1hex 1.2.13 (2022-Mar-13)
+<span class='line'> 19</span>  * @version jsrsasign 10.5.16 asn1hex 1.2.14 (2022-Apr-08)
 <span class='line'> 20</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 21</span>  */</span><span class="WHIT">
 <span class='line'> 22</span> 
@@ -852,7 +852,7 @@
 <span class='line'>845</span> 
 <span class='line'>846</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hexOrObj</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>847</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hexOrObj</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.ASN1Object</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>848</span> </span><span class="WHIT">	</span><span class="NAME">hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hexOrObj.getEncodedHex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>848</span> </span><span class="WHIT">	</span><span class="NAME">hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hexOrObj.tohex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>849</span> 
 <span class='line'>850</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_skipLongHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">limitNumOctet</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>851</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hex.length</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">limitNumOctet</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">

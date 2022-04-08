@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign JavaScript API Reference - KJUR.asn1.x509.Time</title>
+		<title>jsrsasign JavaScript API Reference - KJUR.asn1.x509.GeneralSubtree</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -524,17 +524,15 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.x509.Time
+				Class KJUR.asn1.x509.GeneralSubtree
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
-				<br />Extends
-					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
 				
 			
-				Time ASN.1 structure class
+				GeneralSubtree ASN.1 structure class
 				
 				
 					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
@@ -543,7 +541,7 @@ ul.inheritsList
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.Time.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.GeneralSubtree.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -556,16 +554,13 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.x509.Time.html#constructor">KJUR.asn1.x509.Time</a></b>(params)
+								<b><a href="../symbols/KJUR.asn1.x509.GeneralSubtree.html#constructor">KJUR.asn1.x509.GeneralSubtree</a></b>()
 							</div>
-							<div class="description">Time ASN.1 structure class<br/>
-This class represents Time ASN.1 structure defined in 
-<a href="https://tools.ietf.org/html/rfc5280">RFC 5280</a>
-<pre>
-Time ::= CHOICE {
-     utcTime        UTCTime,
-     generalTime    GeneralizedTime }
-</pre></div>
+							<div class="description">GeneralSubtree ASN.1 structure class<br/>
+This class provides a encoder for GeneralSubtree 
+defined in 
+<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.10">
+RFC 5280 4.2.1.10</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -574,26 +569,8 @@ Time ::= CHOICE {
 
 <!-- ============================== properties summary ===================== -->
 			
-				
-				
-				
-				
-				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#params">params</a></dd>
-				</dl>
-				
-			
 
 <!-- ============================== methods summary ======================== -->
-			
-				
-				
-				
-				
-				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#tohex">tohex</a></dd>
-				</dl>
-				
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -606,42 +583,53 @@ Time ::= CHOICE {
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.x509.Time</b>(params)
+						<b>KJUR.asn1.x509.GeneralSubtree</b>()
 				</div>
 				
 				<div class="description">
-					Time ASN.1 structure class<br/>
-This class represents Time ASN.1 structure defined in 
-<a href="https://tools.ietf.org/html/rfc5280">RFC 5280</a>
+					GeneralSubtree ASN.1 structure class<br/>
+This class provides a encoder for GeneralSubtree 
+defined in 
+<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.10">
+RFC 5280 4.2.1.10</a>. 
+This will be used for nameConstraints extension.
+<br>
+Here is definition of the ASN.1 syntax:
 <pre>
-Time ::= CHOICE {
-     utcTime        UTCTime,
-     generalTime    GeneralizedTime }
+GeneralSubtree ::= SEQUENCE {
+  base           GeneralName,
+  minimum   [0]  BaseDistance DEFAULT 0,
+  maximum   [1]  BaseDistance OPTIONAL }
+BaseDistance ::= INTEGER (0..MAX)
 </pre>
+An argument for constructor is the same as
+<a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a> except
+this has following optional members:
+<ul>
+<li>min - {Number} value for the minimum field</li>
+<li>max - {Number} value for the maximum field</li>
+</ul>
+Please note that min and max can't be specified since
+they are prohibited in RFC 5280.
 					
 				</div>
 				
 				
 				
-				<pre class="code">var t1 = new KJUR.asn1.x509.Time{'str': '130508235959Z'} // UTCTime by default
-var t2 = new KJUR.asn1.x509.Time{'type': 'gen',  'str': '20130508235959Z'} // GeneralizedTime</pre>
+				<pre class="code">new GeneralSubtree({dns: "example.com"})
+new GeneralSubtree({uri: ".example.com"})
+new GeneralSubtree({dn: "/C=JP/O=Test1"})</pre>
 				
 				
 				
 				
+					
+					
 					
 						<dl class="detailList">
-						<dt class="heading">Parameters:</dt>
-						
-							<dt>
-								<span class="light fixedFont">{Array}</span>  <b>params</b>
-								
-							</dt>
-								<dd>associative array of parameters (ex. {'str': '130508235959Z'})</dd>
-						
+						<dt class="heading">Since:</dt>
+							<dd>jsrsasign 10.5.16 asn1x509 2.1.13</dd>
 						</dl>
-					
-					
 					
 					
 					
@@ -650,9 +638,13 @@ var t2 = new KJUR.asn1.x509.Time{'type': 'gen',  'str': '20130508235959Z'} // Ge
 						<dl class="detailList">
 						<dt class="heading">See:</dt>
 						
-							<dd><a href="../symbols/KJUR.asn1.DERUTCTime.html">KJUR.asn1.DERUTCTime</a></dd>
+							<dd><a href="../symbols/KJUR.asn1.x509.NameConstraints.html">KJUR.asn1.x509.NameConstraints</a></dd>
 						
-							<dd><a href="../symbols/KJUR.asn1.DERGeneralizedTime.html">KJUR.asn1.DERGeneralizedTime</a></dd>
+							<dd><a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a></dd>
+						
+							<dd><a href="../symbols/X509.html#getExtNameConstraints">X509#getExtNameConstraints</a></dd>
+						
+							<dd><a href="../symbols/X509.html#getGeneralSubtree">X509#getGeneralSubtree</a></dd>
 						
 						</dl>
 					

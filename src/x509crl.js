@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509crl.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.7 x509crl 1.0.4 (2021-Feb-19)
+ * @version jsrsasign 10.5.16 x509crl 1.0.5 (2022-Apr-08)
  * @since jsrsasign 10.1.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -451,6 +451,15 @@ var X509CRL = function(params) {
      * parameters. 
      * Return value can be passed to
      * {@link KJUR.asn1.x509.CRL} constructor.
+     * <br/>
+     * NOTE1: From jsrsasign 10.5.16, optional argument can be applied.
+     * It can have following members:
+     * <ul>
+     * <li>tbshex - if this is true, tbshex member with hex value of
+     * tbsCertList will be added</li>
+     * <li>nodnarray - if this is true, array member for subject and
+     * issuer will be deleted to simplify it<li>
+     * </ul>
      *
      * @example
      * crl = new X509CRL("-----BEGIN X509 CRL...");
@@ -469,8 +478,11 @@ var X509CRL = function(params) {
      *   {extname:"authorityKeyIdentifier",kid:{hex: "03de..."}},
      *   {extname:"cRLNumber",num:{hex:"0211"}}],
      *  sighex: "3c5e..."}
+     *
+     * crl.getParam({tbshex: true}) &rarr; { ... , tbshex: "30..." }
+     * crl.getParam({nodnarray: true}) &rarr; {issuer: {str: "/C=JP"}, ...}
      */
-    this.getParam = function() {
+    this.getParam = function(option) {
 	var result = {};
 
 	var version = this.getVersion();
@@ -495,6 +507,17 @@ var X509CRL = function(params) {
 	result.sighex = this.getSignatureValueHex();
 
 	this.parsed = result;
+
+	// for options
+	if (typeof option == "object") {
+	    if (option.tbshex == true) {
+		result.tbshex = _getTLVbyList(this.hex, 0, [0]);
+	    }
+	    if (option.nodnarray == true) {
+		delete result.issuer.array;
+	    }
+	}
+
 	return result;
     };
 

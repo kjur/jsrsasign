@@ -433,9 +433,13 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.GeneralNames.html">KJUR.asn1.x509.GeneralNames</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.GeneralSubtree.html">KJUR.asn1.x509.GeneralSubtree</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.NameConstraints.html">KJUR.asn1.x509.NameConstraints</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.NoticeReference.html">KJUR.asn1.x509.NoticeReference</a></li>
 	
@@ -660,7 +664,7 @@ This class is ASN.1 DER object encode base class.</div>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a></b>()
 								</div>
-								<div class="description">get hexadecimal string of ASN.1 TLV bytes</div>
+								<div class="description">get hexadecimal string of ASN.1 TLV bytes (DEPRECATED)<br/></div>
 							</td>
 						</tr>
 					
@@ -679,6 +683,15 @@ This class is ASN.1 DER object encode base class.</div>
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a></b>()
 								</div>
 								<div class="description">get hexadecimal string of ASN.1 TLV value(V) bytes</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.ASN1Object.html#tohex">tohex</a></b>()
+								</div>
+								<div class="description">get hexadecimal string of ASN.1 TLV bytes<br/></div>
 							</td>
 						</tr>
 					
@@ -891,7 +904,7 @@ This class is ASN.1 DER object encode base class.
 					
 					</div>
 					<div class="description">
-						get hexadecimal string of ASN.1 TLV bytes
+						get hexadecimal string of ASN.1 TLV bytes (DEPRECATED)<br/>
 						
 						
 					</div>
@@ -899,6 +912,13 @@ This class is ASN.1 DER object encode base class.
 					
 					
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 10.5.16 please use <a href="../symbols/KJUR.asn1.ASN1Object.html#tohex">KJUR.asn1.ASN1Object#tohex</a>
+							</dt>
+							</dl>
 						
 						
 						
@@ -975,6 +995,55 @@ This class is ASN.1 DER object encode base class.
 							</dl>
 						
 						
+						
+
+					<hr />
+				
+					<a name="tohex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>tohex</b>()
+					
+					</div>
+					<div class="description">
+						get hexadecimal string of ASN.1 TLV bytes<br/>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">...ASN1ObjectInstance.tohex() &rarr; "3003020101"</pre>
+					
+					
+					
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.16 asn1 1.0.24</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{String}</span> hexadecimal string of ASN.1 TLV</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">KJUR.asn1.ASN1Object#getEncodedHex</a></dd>
+							
+							</dl>
 						
 
 					

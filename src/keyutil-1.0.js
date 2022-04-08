@@ -1,4 +1,4 @@
-/* keyutil-1.2.6.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* keyutil-1.2.7.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.14 keyutil 1.2.6 (2022-Mar-28)
+ * @version jsrsasign 10.5.16 keyutil 1.2.7 (2022-Apr-08)
  * @since jsrsasign 4.1.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1316,14 +1316,15 @@ KEYUTIL.generateKeypair = function(alg, keylenOrCurve) {
  * Parameter "ivsaltHex" supported since jsrsasign 8.0.0 keyutil 1.2.0.
  * </dl>
  * @example
- * KEUUTIL.getPEM(publicKey) =&gt; generates PEM PKCS#8 public key 
- * KEUUTIL.getPEM(privateKey, "PKCS1PRV") =&gt; generates PEM PKCS#1 plain private key
- * KEUUTIL.getPEM(privateKey, "PKCS5PRV", "pass") =&gt; generates PEM PKCS#5 encrypted private key 
+ * KEUUTIL.getPEM(publicKey) &rarr; generates PEM PKCS#8 public key 
+ * KEUUTIL.getPEM(privateKey) &rarr; generates PEM PKCS#8 plain private key by default
+ * KEUUTIL.getPEM(privateKey, "PKCS1PRV") &rarr; generates PEM PKCS#1 plain private key
+ * KEUUTIL.getPEM(privateKey, "PKCS5PRV", "pass") &rarr; generates PEM PKCS#5 encrypted private key 
  *                                                          with DES-EDE3-CBC (DEFAULT)
- * KEUUTIL.getPEM(privateKey, "PKCS5PRV", "pass", "DES-CBC") =&gt; generates PEM PKCS#5 encrypted 
+ * KEUUTIL.getPEM(privateKey, "PKCS5PRV", "pass", "DES-CBC") &rarr; generates PEM PKCS#5 encrypted 
  *                                                                 private key with DES-CBC
- * KEUUTIL.getPEM(privateKey, "PKCS8PRV") =&gt; generates PEM PKCS#8 plain private key
- * KEUUTIL.getPEM(privateKey, "PKCS8PRV", "pass") =&gt; generates PEM PKCS#8 encrypted private key
+ * KEUUTIL.getPEM(privateKey, "PKCS8PRV") &rarr; generates PEM PKCS#8 plain private key
+ * KEUUTIL.getPEM(privateKey, "PKCS8PRV", "pass") &rarr; generates PEM PKCS#8 encrypted private key
  *                                                      with PBKDF2_HmacSHA1_3DES
  */
 KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsaltHex) {
@@ -1391,7 +1392,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         keyObjOrHex.isPublic == true &&
         (formatType === undefined || formatType == "PKCS8PUB")) {
         var asn1Obj = new _SubjectPublicKeyInfo(keyObjOrHex);
-        var asn1Hex = asn1Obj.getEncodedHex();
+        var asn1Hex = asn1Obj.tohex();
         return hextopem(asn1Hex, "PUBLIC KEY");
     }
     
@@ -1405,7 +1406,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         keyObjOrHex.isPrivate  == true) {
 
         var asn1Obj = _rsaprv2asn1obj(keyObjOrHex);
-        var asn1Hex = asn1Obj.getEncodedHex();
+        var asn1Hex = asn1Obj.tohex();
         return hextopem(asn1Hex, "RSA PRIVATE KEY");
     }
 
@@ -1418,9 +1419,9 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
 
         var asn1Obj1 = 
 	    new _DERObjectIdentifier({'name': keyObjOrHex.curveName});
-        var asn1Hex1 = asn1Obj1.getEncodedHex();
+        var asn1Hex1 = asn1Obj1.tohex();
         var asn1Obj2 = _ecdsaprv2asn1obj(keyObjOrHex);
-        var asn1Hex2 = asn1Obj2.getEncodedHex();
+        var asn1Hex2 = asn1Obj2.tohex();
 
         var s = "";
         s += hextopem(asn1Hex1, "EC PARAMETERS");
@@ -1436,7 +1437,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         keyObjOrHex.isPrivate  == true) {
 
         var asn1Obj = _dsaprv2asn1obj(keyObjOrHex);
-        var asn1Hex = asn1Obj.getEncodedHex();
+        var asn1Hex = asn1Obj.tohex();
         return hextopem(asn1Hex, "DSA PRIVATE KEY");
     }
 
@@ -1450,7 +1451,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         keyObjOrHex.isPrivate  == true) {
 
         var asn1Obj = _rsaprv2asn1obj(keyObjOrHex);
-        var asn1Hex = asn1Obj.getEncodedHex();
+        var asn1Hex = asn1Obj.tohex();
 
         if (encAlg === undefined) encAlg = "DES-EDE3-CBC";
         return this.getEncryptedPKCS5PEMFromPrvKeyHex("RSA", asn1Hex, passwd, encAlg, ivsaltHex);
@@ -1464,7 +1465,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         keyObjOrHex.isPrivate  == true) {
 
         var asn1Obj = _ecdsaprv2asn1obj(keyObjOrHex);
-        var asn1Hex = asn1Obj.getEncodedHex();
+        var asn1Hex = asn1Obj.tohex();
 
         if (encAlg === undefined) encAlg = "DES-EDE3-CBC";
         return this.getEncryptedPKCS5PEMFromPrvKeyHex("EC", asn1Hex, passwd, encAlg, ivsaltHex);
@@ -1478,7 +1479,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         keyObjOrHex.isPrivate  == true) {
 
         var asn1Obj = _dsaprv2asn1obj(keyObjOrHex);
-        var asn1Hex = asn1Obj.getEncodedHex();
+        var asn1Hex = asn1Obj.tohex();
 
         if (encAlg === undefined) encAlg = "DES-EDE3-CBC";
         return this.getEncryptedPKCS5PEMFromPrvKeyHex("DSA", asn1Hex, passwd, encAlg, ivsaltHex);
@@ -1511,7 +1512,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
                 {"octstr": {"hex": info.ciphertext}}
             ]
         });
-        return asn1Obj.getEncodedHex();
+        return asn1Obj.tohex();
     };
 
     var _getEencryptedPKCS8Info = function(plainKeyHex, passcode) {
@@ -1547,7 +1548,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         keyObjOrHex.isPrivate  == true) {
 
         var keyObj = _rsaprv2asn1obj(keyObjOrHex);
-        var keyHex = keyObj.getEncodedHex();
+        var keyHex = keyObj.tohex();
 
         var asn1Obj = _newObject({
             "seq": [
@@ -1556,7 +1557,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
                 {"octstr": {"hex": keyHex}}
             ]
         });
-        var asn1Hex = asn1Obj.getEncodedHex();
+        var asn1Hex = asn1Obj.tohex();
 
         if (passwd === undefined || passwd == null) {
             return hextopem(asn1Hex, "PRIVATE KEY");
@@ -1582,7 +1583,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
 	    pKeyObj.seq.push({"tag": ['a1', true, {"bitstr": {"hex": "00" + keyObjOrHex.pubKeyHex}}]});
 	}
         var keyObj = new _newObject(pKeyObj);
-        var keyHex = keyObj.getEncodedHex();
+        var keyHex = keyObj.tohex();
 
         var asn1Obj = _newObject({
             "seq": [
@@ -1595,7 +1596,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
             ]
         });
 
-        var asn1Hex = asn1Obj.getEncodedHex();
+        var asn1Hex = asn1Obj.tohex();
         if (passwd === undefined || passwd == null) {
             return hextopem(asn1Hex, "PRIVATE KEY");
         } else {
@@ -1611,7 +1612,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         keyObjOrHex.isPrivate  == true) {
 
         var keyObj = new _DERInteger({'bigint': keyObjOrHex.x});
-        var keyHex = keyObj.getEncodedHex();
+        var keyHex = keyObj.tohex();
 
         var asn1Obj = _newObject({
             "seq": [
@@ -1628,7 +1629,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
             ]
         });
 
-        var asn1Hex = asn1Obj.getEncodedHex();
+        var asn1Hex = asn1Obj.tohex();
         if (passwd === undefined || passwd == null) {
             return hextopem(asn1Hex, "PRIVATE KEY");
         } else {

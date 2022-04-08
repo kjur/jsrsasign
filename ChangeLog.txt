@@ -1,7 +1,41 @@
 
 ChangeLog for jsrsasign
 
+Add NameConstraints extension and modify getEncodedHex to tohex
+* Changes from 10.5.15 to 10.5.16 (2022-Apr-08)
+  - src/asn1x509.js
+    - NameConstraints and GeneralSubtree class added
+    - add support for nameConstraints in Extensions class
+    - remove old GeneralName code
+  - src/x509.js
+    - getExtNameConstraints and getGeneralSubbtree method added
+    - add support for nameConstraints in getParam method
+    - X509.getParam supports optional arguments:
+      - tbshex: to return hexadecimal tbsCertificate value
+      - nodnarray: delete array member of subject and issuer 
+        in the result.
+  - src/x509crl.js
+    - X509CRL.getParam supports optional arguments:
+      - tbshex: to return hexadecimal tbsCertList value
+      - nodnarray: delete array member of subject and issuer 
+        in the result.
+  - src/asn1.js
+    - ASN1Object.tohex() method added
+    - ASN1Object.getEncodedHex() method is now DEPRECATED.
+      Please use ASN1Object.tohex() instead.
+    - clean up some codes
+  - src/*.js
+    - update for ASN1Object.tohex()
+  - test/qunit-do-x509-ext.html
+    - getExtNameConstraints and getGeneralSubtree method test added
+  - test/qunit-do-asn1x509.html
+    - NameConstraints and GeneralSubtree class test added
+  - test/qunit-do-asn1-newobj.html
+    - int and tag test refactoring
+    - bugfix
+
 X509.getExtCRLDistributionPointsURI small fix
+* Changes from 10.5.14 to 10.5.15 (2022-Apr-06)
   - src/x509.js
     - fix X509.getExtCRLDistributionPointsURI. This returns 
       undefined when no CDP extension as specified in document

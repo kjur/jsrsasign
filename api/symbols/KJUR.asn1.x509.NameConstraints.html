@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign JavaScript API Reference - KJUR.asn1.x509.Time</title>
+		<title>jsrsasign JavaScript API Reference - KJUR.asn1.x509.NameConstraints</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -524,17 +524,17 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.asn1.x509.Time
+				Class KJUR.asn1.x509.NameConstraints
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
 				<br />Extends
-					<a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>.<br />
+					<a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a>.<br />
 				
 			
-				Time ASN.1 structure class
+				NameConstraints ASN.1 structure class
 				
 				
 					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
@@ -543,7 +543,7 @@ ul.inheritsList
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.Time.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.NameConstraints.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -556,16 +556,10 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.x509.Time.html#constructor">KJUR.asn1.x509.Time</a></b>(params)
+								<b><a href="../symbols/KJUR.asn1.x509.NameConstraints.html#constructor">KJUR.asn1.x509.NameConstraints</a></b>(params)
 							</div>
-							<div class="description">Time ASN.1 structure class<br/>
-This class represents Time ASN.1 structure defined in 
-<a href="https://tools.ietf.org/html/rfc5280">RFC 5280</a>
-<pre>
-Time ::= CHOICE {
-     utcTime        UTCTime,
-     generalTime    GeneralizedTime }
-</pre></div>
+							<div class="description">NameConstraints ASN.1 structure class<br/>
+This class provides X.509v3 NameConstraints extension.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -606,25 +600,39 @@ Time ::= CHOICE {
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.x509.Time</b>(params)
+						<b>KJUR.asn1.x509.NameConstraints</b>(params)
 				</div>
 				
 				<div class="description">
-					Time ASN.1 structure class<br/>
-This class represents Time ASN.1 structure defined in 
-<a href="https://tools.ietf.org/html/rfc5280">RFC 5280</a>
+					NameConstraints ASN.1 structure class<br/>
+This class provides X.509v3 NameConstraints extension.
+defined in 
+<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.10">
+RFC 5280 4.2.1.10</a>.
 <pre>
-Time ::= CHOICE {
-     utcTime        UTCTime,
-     generalTime    GeneralizedTime }
+id-ce-nameConstraints OBJECT IDENTIFIER ::=  { id-ce 30 }
+NameConstraints ::= SEQUENCE {
+  permittedSubtrees  [0]  GeneralSubtrees OPTIONAL,
+  excludedSubtrees   [1]  GeneralSubtrees OPTIONAL }
+GeneralSubtrees ::= SEQUENCE SIZE (1..MAX) OF GeneralSubtree
+GeneralSubtree ::= SEQUENCE {
+  base           GeneralName,
+  minimum   [0]  BaseDistance DEFAULT 0,
+  maximum   [1]  BaseDistance OPTIONAL }
+BaseDistance ::= INTEGER (0..MAX)
 </pre>
 					
 				</div>
 				
 				
 				
-				<pre class="code">var t1 = new KJUR.asn1.x509.Time{'str': '130508235959Z'} // UTCTime by default
-var t2 = new KJUR.asn1.x509.Time{'type': 'gen',  'str': '20130508235959Z'} // GeneralizedTime</pre>
+				<pre class="code">new NameConstraints({permit: [{dns: "example.com"}], critical: true})
+new NameConstraints({exclude: [{uri: "example.com"}], critical: true})
+new NameConstraints({exclude: [{dn: "/C=JP/O=T1"}], critical: true})
+new NameConstraints({
+  critical: true,
+  permit: [{dn: "/C=JP/O=T1"}],
+  exclude: [{dn: "/C=US/O=T1", max: 2}]})</pre>
 				
 				
 				
@@ -637,11 +645,16 @@ var t2 = new KJUR.asn1.x509.Time{'type': 'gen',  'str': '20130508235959Z'} // Ge
 								<span class="light fixedFont">{Array}</span>  <b>params</b>
 								
 							</dt>
-								<dd>associative array of parameters (ex. {'str': '130508235959Z'})</dd>
+								<dd>associative array of parameters</dd>
 						
 						</dl>
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">Since:</dt>
+							<dd>jsrsasign 10.5.16 asn1x509 2.1.13</dd>
+						</dl>
 					
 					
 					
@@ -650,9 +663,11 @@ var t2 = new KJUR.asn1.x509.Time{'type': 'gen',  'str': '20130508235959Z'} // Ge
 						<dl class="detailList">
 						<dt class="heading">See:</dt>
 						
-							<dd><a href="../symbols/KJUR.asn1.DERUTCTime.html">KJUR.asn1.DERUTCTime</a></dd>
+							<dd><a href="../symbols/X509.html#getExtNameConstraints">X509#getExtNameConstraints</a></dd>
 						
-							<dd><a href="../symbols/KJUR.asn1.DERGeneralizedTime.html">KJUR.asn1.DERGeneralizedTime</a></dd>
+							<dd><a href="../symbols/KJUR.asn1.x509.GeneralSubtree.html">KJUR.asn1.x509.GeneralSubtree</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.GeneralName.html">KJUR.asn1.x509.GeneralName</a></dd>
 						
 						</dl>
 					

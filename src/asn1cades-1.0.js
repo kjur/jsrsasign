@@ -1,9 +1,9 @@
-/* asn1cades-2.0.1.js (c) 2014-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1cades-2.0.2.js (c) 2014-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1cades.js - ASN.1 DER encoder classes for RFC 5126 CAdES long term signature
  *
- * Copyright (c) 2014-2021 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2014-2022 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1cades-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.0.5 asn1cades 2.0.1 (2021-Jan-17)
+ * @version jsrsasign 10.5.16 asn1cades 2.0.2 (2022-Apr-08)
  * @since jsrsasign 4.7.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -308,15 +308,16 @@ KJUR.asn1.cades.SignaturePolicyId = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	var a = [];
 	a.push(new _DERObjectIdentifier(params.oid));
 	a.push(new _OtherHashAlgAndValue(params));
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     this.setByParam = function(params) {
 	this.params = params;
@@ -382,7 +383,7 @@ KJUR.asn1.cades.OtherHashAlgAndValue = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	if (params.alg == undefined)
@@ -409,8 +410,9 @@ KJUR.asn1.cades.OtherHashAlgAndValue = function(params) {
 	a.push(new _AlgorithmIdentifier({name: params.alg}));
 	a.push(new _DEROctetString({hex: hHash}));
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -448,7 +450,7 @@ KJUR.asn1.cades.OtherHashValue = function(params) {
     
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	if (params.hash == undefined && params.cert == undefined) {
@@ -468,8 +470,9 @@ KJUR.asn1.cades.OtherHashValue = function(params) {
 	    }
 	    hHash = KJUR.crypto.Util.hashHex(hCert, "sha1");
 	}
-	return (new _DEROctetString({hex: hHash})).getEncodedHex();
+	return (new _DEROctetString({hex: hHash})).tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -539,7 +542,7 @@ KJUR.asn1.cades.SignatureTimeStamp = function(params) {
 	} else if (params.res != undefined) {
 	    var hRes = params.res;
 	    if (hRes instanceof _ASN1Object) {
-		hRes = hRes.getEncodedHex();
+		hRes = hRes.tohex();
 	    }
 	    if (typeof hRes != "string" || (! _isHex(hRes))) {
 		throw new _Error("params.res has wrong value");
@@ -683,7 +686,7 @@ KJUR.asn1.cades.OtherCertID = function(params) {
 
     this.params = params;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	if (typeof params == "string") {
@@ -711,8 +714,9 @@ KJUR.asn1.cades.OtherCertID = function(params) {
 	}
 	
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };
@@ -763,7 +767,7 @@ KJUR.asn1.cades.OtherHash = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	if (typeof params == "string") {
@@ -780,8 +784,9 @@ KJUR.asn1.cades.OtherHash = function(params) {
 	} else {
 	    dOtherHash = new _OtherHashValue(params);
 	}
-	return dOtherHash.getEncodedHex();
+	return dOtherHash.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };

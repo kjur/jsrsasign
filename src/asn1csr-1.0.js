@@ -1,4 +1,4 @@
-/* asn1csr-2.0.4.js (c) 2015-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1csr-2.0.5.js (c) 2015-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1csr-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.1.0 asn1csr 2.0.4 (2022-Mar-08)
+ * @version jsrsasign 10.5.16 asn1csr 2.0.5 (2022-Apr-08)
  * @since jsrsasign 4.9.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -158,7 +158,7 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
      */
     this.sign = function() {
 	var hCSRI = 
-	    (new _CertificationRequestInfo(this.params)).getEncodedHex();
+	    (new _CertificationRequestInfo(this.params)).tohex();
 	var sig = new KJUR.crypto.Signature({alg: this.params.sigalg});
 	sig.init(this.params.sbjprvkey);
 	sig.updateHex(hCSRI);
@@ -183,10 +183,10 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
      * csr.getPEM() &rarr; "-----BEGIN CERTIFICATE REQUEST..."
      */
     this.getPEM = function() {
-	return hextopem(this.getEncodedHex(), "CERTIFICATE REQUEST");
+	return hextopem(this.tohex(), "CERTIFICATE REQUEST");
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 	var csri = new KJUR.asn1.csr.CertificationRequestInfo(this.params);
 	var algid = 
@@ -203,8 +203,9 @@ KJUR.asn1.csr.CertificationRequest = function(params) {
 	var asn1Sig = new _DERBitString({hex: "00" + params.sighex});
 	
 	var seq = new _DERSequence({array: [csri, algid, asn1Sig]});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) this.setByParam(params);
 };
@@ -243,7 +244,7 @@ extendClass(KJUR.asn1.csr.CertificationRequest, KJUR.asn1.ASN1Object);
  *   extreq: [
  *     {extname:"subjectAltName", array:[{dns:"example.com"}]}
  *   ]});
- * csri.getEncodedHex() &rarr; "30..."
+ * csri.tohex() &rarr; "30..."
  */
 KJUR.asn1.csr.CertificationRequestInfo = function(params) {
     var _KJUR = KJUR,
@@ -268,7 +269,7 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
 	if (params != undefined) this.params = params;
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 	var a = [];
 	a.push(new _DERInteger({'int': 0})); // version
@@ -291,8 +292,9 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
 					 obj:new _DERUTF8String({str:''})}));
 	}
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params != undefined) this.setByParam(params);
 };

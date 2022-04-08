@@ -577,6 +577,71 @@ test("BasicConstraints class test", function() {
   equal(o3.getEncodedHex(), "300f0603551d13040830060101ff020107", "constructor cA=t pl=7 getEncodedHex");
 });
 
+// NameConstraints
+test("NameConstraints class test", function() {
+var _NameConstraints = KJUR.asn1.x509.NameConstraints;
+var pIn, hExpect;
+
+pIn = {extname: "nameConstraints", critical: true, permit: [{dns: "a.com"}]};
+hExpect = "30190603551d1e0101ff040f300da00b300930078205612e636f6d";
+equal(new _NameConstraints(pIn).getEncodedHex(), hExpect, "permit [{dns: a.com}]");
+
+pIn = {extname: "nameConstraints", critical: true, exclude: [{uri: ".a.com"}]};
+hExpect = "301a0603551d1e0101ff0410300ea10c300a300886062e612e636f6d";
+equal(new _NameConstraints(pIn).getEncodedHex(), hExpect, "exclude [{uri: .a.com}]");
+
+pIn = {
+  extname: "nameConstraints",
+  critical: true, 
+  permit: [{dns: ".a.com"}],
+  exclude: [{uri: ".b.com"}]
+};
+hExpect = "30280603551d1e0101ff041e301ca00c300a300882062e612e636f6da10c300a300886062e622e636f6d";
+equal(new _NameConstraints(pIn).getEncodedHex(), hExpect,
+      "permit: [{dns: .a.com}], exclude [{uri: .a.com}]");
+
+pIn = {
+  extname: "nameConstraints",
+  critical: true, 
+  permit: [{dns: ".a.com"},{uri: ".b.com"}]
+};
+hExpect = "30240603551d1e0101ff041a3018a0163014300882062e612e636f6d300886062e622e636f6d";
+equal(new _NameConstraints(pIn).getEncodedHex(), hExpect, "permit: [{dns:.a.com},{uri:.b.com}]");
+
+pIn = {
+  extname: "nameConstraints",
+  critical: true, 
+  permit: [{dn: "/C=JP/O=T1"}]
+};
+hExpect = "30300603551d1e0101ff04263024a0223020301ea41c301a310b3009060355040613024a50310b3009060355040a0c025431";
+equal(new _NameConstraints(pIn).getEncodedHex(), hExpect, "permit: [{dn: /C=JP/O=T1}]");
+});
+
+test("GeneralSubtree class test", function() {
+var _GeneralSubtree = KJUR.asn1.x509.GeneralSubtree;
+var pIn, hExpect;
+
+pIn = {dns: "a.com"};
+hExpect = "30078205612e636f6d";
+equal(new _GeneralSubtree(pIn).getEncodedHex(), hExpect, "{dns:a.com}")
+
+pIn = {uri: "a.com"};
+hExpect = "30078605612e636f6d";
+equal(new _GeneralSubtree(pIn).getEncodedHex(), hExpect, "{uri:a.com}");
+
+pIn = {dn: "/C=JP/O=T1"};
+hExpect = "301ea41c301a310b3009060355040613024a50310b3009060355040a0c025431";
+equal(new _GeneralSubtree(pIn).getEncodedHex(), hExpect, "{dn:/C=JP/O=T1}");
+
+pIn = {dn: "/C=JP/O=T1", min: 2};
+hExpect = "3021a41c301a310b3009060355040613024a50310b3009060355040a0c025431800102";
+equal(new _GeneralSubtree(pIn).getEncodedHex(), hExpect, "{dn:/C=JP/O=T1,min:2}");
+
+pIn = {dn: "/C=JP/O=T1", min: 2, max: 4};
+hExpect = "3024a41c301a310b3009060355040613024a50310b3009060355040a0c025431800102810104";
+equal(new _GeneralSubtree(pIn).getEncodedHex(), hExpect, "{dn:/C=JP/O=T1,min:2,max:4}");
+});
+
 // KeyUsage
 test("KeyUsage class test", function() {
   var o;

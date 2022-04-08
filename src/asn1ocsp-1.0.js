@@ -1,4 +1,4 @@
-/* asn1ocsp-1.1.6.js (c) 2016-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1ocsp-1.1.7.js (c) 2016-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1ocsp.js - ASN.1 DER encoder classes for OCSP protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1ocsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.8 asn1ocsp 1.1.6 (2022-Feb-22)
+ * @version jsrsasign 10.5.16 asn1ocsp 1.1.7 (2022-Apr-08)
  * @since jsrsasign 6.1.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -137,7 +137,7 @@ KJUR.asn1.ocsp.OCSPResponse = function(params) {
 	this.params = params;
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	var code = this._getStatusCode();
@@ -147,15 +147,16 @@ KJUR.asn1.ocsp.OCSPResponse = function(params) {
 	}
 
 	if (code != 0) {
-	    return _newObject({seq: [{'enum': {'int': code}}]}).getEncodedHex();
+	    return _newObject({seq: [{'enum': {'int': code}}]}).tohex();
 	}
 	
 	var dResBytes = new _ResponseBytes(params);
 	return _newObject({seq: [
 	    {'enum': {'int': 0}},
 	    {tag: {tag: "a0", explicit: true, obj: dResBytes}}
-	]}).getEncodedHex();
+	]}).tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) this.setByParam(params);
 };
@@ -209,7 +210,7 @@ KJUR.asn1.ocsp.ResponseBytes = function(params) {
 	this.params = params;
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	if (params.restype != "ocspBasic") {
@@ -220,11 +221,12 @@ KJUR.asn1.ocsp.ResponseBytes = function(params) {
 
 	var a = [];
 	a.push(new _DERObjectIdentifier({name: "ocspBasic"}));
-	a.push(new _DEROctetString({hex: dBasic.getEncodedHex()}));
+	a.push(new _DEROctetString({hex: dBasic.tohex()}));
 
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) this.setByParam(params);
 };
@@ -325,14 +327,14 @@ KJUR.asn1.ocsp.BasicOCSPResponse = function(params) {
 
     this.sign = function() {
 	var params = this.params;
-	var hTBS = params.tbsresp.getEncodedHex();
+	var hTBS = params.tbsresp.tohex();
 	var sig = new KJUR.crypto.Signature({alg: params.sigalg});
 	sig.init(params.reskey);
 	sig.updateHex(hTBS);
 	params.sighex = sig.sign();
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	if (params.tbsresp == undefined) {
@@ -368,8 +370,9 @@ KJUR.asn1.ocsp.BasicOCSPResponse = function(params) {
 	}
 	
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) this.setByParam(params);
 };
@@ -438,7 +441,7 @@ KJUR.asn1.ocsp.ResponseData = function(params) {
     
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 	if (params.respid != undefined) new _Error("respid not specified");
 	if (params.prodat != undefined) new _Error("prodat not specified");
@@ -455,8 +458,9 @@ KJUR.asn1.ocsp.ResponseData = function(params) {
 	}
 
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     this.setByParam = function(params) {
 	this.params = params;
@@ -508,21 +512,22 @@ KJUR.asn1.ocsp.ResponderID = function(params) {
     
     this.params = null;
     
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 	if (params.key != undefined) {
 	    var dTag = _newObject({tag: {tag:"a2",
 					 explicit:true,
 					 obj:{octstr:{hex:params.key}}}});
-	    return dTag.getEncodedHex();
+	    return dTag.tohex();
 	} else if (params.name != undefined) {
 	    var dTag = _newObject({tag: {tag:"a1",
 					 explicit:true,
 					 obj:new _X500Name(params.name)}});
-	    return dTag.getEncodedHex();
+	    return dTag.tohex();
 	}
 	throw new Error("key or name not specified");
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     this.setByParam = function(params) {
 	this.params = params;
@@ -589,7 +594,7 @@ KJUR.asn1.ocsp.SingleResponseList = function(params) {
 
     this.params = null;
     
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 
 	if (typeof params != "object" || params.length == undefined) {
@@ -602,8 +607,9 @@ KJUR.asn1.ocsp.SingleResponseList = function(params) {
 	}
 
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     this.setByParam = function(params) {
 	this.params = params;
@@ -678,7 +684,7 @@ KJUR.asn1.ocsp.SingleResponse = function(params) {
 
     this.params = null;
     
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 	var a = [];
 
@@ -701,8 +707,9 @@ KJUR.asn1.ocsp.SingleResponse = function(params) {
 	}
 
 	var seq = new _DERSequence({array: a});
-	return seq.getEncodedHex();
+	return seq.tohex();
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     this.setByParam = function(params) {
 	this.params = params;
@@ -872,7 +879,7 @@ KJUR.asn1.ocsp.CertID = function(params) {
 	return info;
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	if (typeof this.params != "object") throw new Error("params not set");
 	    
 	var p = this.params;
@@ -905,9 +912,10 @@ KJUR.asn1.ocsp.CertID = function(params) {
 	var dIssKey = new _DEROctetString({hex: isskey});
 	var dSbjSn = new _DERInteger({hex: sbjsn});
 	var seq = new _DERSequence({array: [dAlg, dIssName, dIssKey, dSbjSn]});
-        this.hTLV = seq.getEncodedHex();
+        this.hTLV = seq.tohex();
         return this.hTLV;
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) this.setByParam(params);
 };
@@ -971,7 +979,7 @@ KJUR.asn1.ocsp.CertStatus = function(params) {
 
     this.params = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var params = this.params;
 	if (params.status == "good") return "8000";
 	if (params.status == "unknown") return "8200";
@@ -983,10 +991,11 @@ KJUR.asn1.ocsp.CertStatus = function(params) {
 			      obj: {'enum': {'int': params.reason}}}});
 	    }
 	    var tagParam = {tag: 'a1', explicit: false, obj: {seq: a}};
-	    return KJUR.asn1.ASN1Util.newObject({tag: tagParam}).getEncodedHex();
+	    return KJUR.asn1.ASN1Util.newObject({tag: tagParam}).tohex();
 	}
 	throw new Error("bad status");
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     this.setByParam = function(params) {
 	this.params = params;
@@ -1034,7 +1043,7 @@ KJUR.asn1.ocsp.Request = function(params) {
     this.dReqCert = null;
     this.dExt = null;
     
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var a = [];
 
 	// 1. reqCert
@@ -1046,9 +1055,10 @@ KJUR.asn1.ocsp.Request = function(params) {
 
 	// 3. construct SEQUENCE
 	var seq = new _DERSequence({array: a});
-        this.hTLV = seq.getEncodedHex();
+        this.hTLV = seq.tohex();
         return this.hTLV;
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (typeof params !== "undefined") {
 	var o = new _KJUR_asn1_ocsp.CertID(params);
@@ -1118,7 +1128,7 @@ KJUR.asn1.ocsp.TBSRequest = function(params) {
 	this.dRequestList = a;
     };
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var a = [];
 
 	// 1. version
@@ -1140,9 +1150,10 @@ KJUR.asn1.ocsp.TBSRequest = function(params) {
 
 	// 5. construct SEQUENCE
 	var seq = new _DERSequence({array: a});
-        this.hTLV = seq.getEncodedHex();
+        this.hTLV = seq.tohex();
         return this.hTLV;
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) {
 	if (params.reqList !== undefined)
@@ -1187,7 +1198,7 @@ KJUR.asn1.ocsp.OCSPRequest = function(params) {
     this.dTbsRequest = null;
     this.dOptionalSignature = null;
 
-    this.getEncodedHex = function() {
+    this.tohex = function() {
 	var a = [];
 
 	// 1. tbsRequest
@@ -1203,9 +1214,10 @@ KJUR.asn1.ocsp.OCSPRequest = function(params) {
 
 	// 3. construct SEQUENCE
 	var seq = new _DERSequence({array: a});
-        this.hTLV = seq.getEncodedHex();
+        this.hTLV = seq.tohex();
         return this.hTLV;
     };
+    this.getEncodedHex = function() { return this.tohex(); };
 
     if (params !== undefined) {
 	if (params.reqList !== undefined) {
@@ -1253,7 +1265,7 @@ KJUR.asn1.ocsp.OCSPUtil.getRequestHex = function(issuerCert, subjectCert, alg) {
     if (alg === undefined) alg = _KJUR_asn1_ocsp.DEFAULT_HASH;
     var param = {alg: alg, issuerCert: issuerCert, subjectCert: subjectCert};
     var o = new _KJUR_asn1_ocsp.OCSPRequest({reqList: [param]});
-    return o.getEncodedHex();
+    return o.tohex();
 };
 
 /**
