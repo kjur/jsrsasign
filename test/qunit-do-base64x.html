@@ -321,14 +321,34 @@ test("hextoip", function() {
   equal(hextoip('123456abcd'),
         '123456abcd',
         '123456abcd');
+
+equal(hextoip("c0a80101ffffff00"), "192.168.1.1/24",  "c0a80101ffffff00 > 192.168.1.1/24");
+equal(hextoip("c0a80101ffffffff"), "192.168.1.1/32",  "c0a80101ffffffff > 192.168.1.1/32");
+equal(hextoip("20010db80000000000000000abcdef12ffffffffffffffffffffffffffffff00"),
+	      "2001:db8::abcd:ef12/120", "2001:db8::abcd:ef12/120");
+equal(hextoip("20010db80000000000000000abcdef12ffffffffffffffffffffffffffffffff"),
+	      "2001:db8::abcd:ef12/128", "2001:db8::abcd:ef12/128");
 });
 
 test("iptohex", function() {
-  equal(iptohex('192.168.1.1'), 'c0a80101', 'c0a80101=192.168.1.1');
-  equal(iptohex('192.168.1.10'), 'c0a8010a', 'c0a8010a=192.168.1.10');
-  equal(iptohex('2001:db8::abcd:ef12'),
-        '20010db80000000000000000abcdef12',
-        '2001:db8::abcd:ef12');
+equal(iptohex('192.168.1.1'), 'c0a80101', 'c0a80101=192.168.1.1');
+equal(iptohex('192.168.1.10'), 'c0a8010a', 'c0a8010a=192.168.1.10');
+equal(iptohex('2001:db8::abcd:ef12'),
+      '20010db80000000000000000abcdef12',
+      '2001:db8::abcd:ef12');
+equal(iptohex("192.168.1.1/32"), 'c0a80101ffffffff', "192.168.1.1/32");
+equal(iptohex("192.168.1.1/24"), 'c0a80101ffffff00', "192.168.1.1/24");
+equal(iptohex("2001:db8::abcd:ef12/120"),
+      "20010db80000000000000000abcdef12ffffffffffffffffffffffffffffff00",
+      "2001:db8::abcd:ef12/120");
+equal(iptohex("2001:db8::abcd:ef12/128"),
+      "20010db80000000000000000abcdef12ffffffffffffffffffffffffffffffff",
+      "2001:db8::abcd:ef12/128");
+
+//equal(ipnetmask(24, 32), "ffffff00", "24,32 > ffffff00");
+//equal(ipnetmask(32, 32), "ffffffff", "32,32 > ffffffff");
+//equal(ipnetmask(120, 128), "ffffffffffffffffffffffffffffff00", "120,128 > ffffffffffffffffffffffffffffff00");
+//equal(ipnetmask(128, 128), "ffffffffffffffffffffffffffffffff", "128,128 > ffffffffffffffffffffffffffffffff");
 });
 
 test("ucs2hextoutf8", function() {

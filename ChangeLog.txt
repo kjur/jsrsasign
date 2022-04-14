@@ -1,6 +1,18 @@
 
 ChangeLog for jsrsasign
 
+CIDR subnet mask support in iptohex and hextoip
+* Changes from 10.5.16 to 10.5.17 (2022-Apr-14)
+  - src/asn1x509.js
+    - add IP address support in NameConstraints class
+    - bugfix in NameConstraints ip address
+    - wrong ASN.1 encoder in NameConstraints class bug fix (wrong explicit tag)
+  - src/base64x.js
+    - add CIDR subnet mask support in iptohex and hextoip
+    - iptohex, hextoip refactoring
+  - test/qunit-do-{x509-ext,base64x,asn1x509-tbscert,asn1x509}.html
+    - add some test cases and fix for above
+
 Add NameConstraints extension and modify getEncodedHex to tohex
 * Changes from 10.5.15 to 10.5.16 (2022-Apr-08)
   - src/asn1x509.js

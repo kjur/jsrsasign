@@ -300,7 +300,7 @@ aIn = [{
   critical: true,
   permit: [{dns: "a.com"}]
 }];
-hExpect = "301b30190603551d1e0101ff040f300da00b300930078205612e636f6d";
+hExpect = "301930170603551d1e0101ff040d300ba00930078205612e636f6d";
 dIn = new _Extensions(aIn);
 equal(dIn.tohex(), hExpect, "nameConstraints hex");
 });

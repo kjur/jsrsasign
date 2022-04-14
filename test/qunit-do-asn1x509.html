@@ -230,51 +230,68 @@ test("GeneralNames class test", function() {
 });
 
 test("GeneralName class test", function() {
-  var o;
-  o = new KJUR.asn1.x509.GeneralName({'rfc822':'u1@foo.com'});
-  equal(o.getEncodedHex(), "810a753140666f6f2e636f6d", "constructor rfc822 u1@foo.com");
+var _GeneralName = KJUR.asn1.x509.GeneralName;
+var o;
 
-  o = new KJUR.asn1.x509.GeneralName({'dns':'foo.com'});
-  equal(o.getEncodedHex(), "8207666f6f2e636f6d", "constructor dns foo.com");
+o = new _GeneralName({'rfc822':'u1@foo.com'});
+equal(o.tohex(), "810a753140666f6f2e636f6d", "constructor rfc822 u1@foo.com");
 
-  o = new KJUR.asn1.x509.GeneralName({'uri':'http://aaa.com/'});
-  equal(o.getEncodedHex(), "860f687474703a2f2f6161612e636f6d2f", "constructor uri http://aaa.com/");
+o = new _GeneralName({'dns':'foo.com'});
+equal(o.tohex(), "8207666f6f2e636f6d", "constructor dns foo.com");
 
-  o = new KJUR.asn1.x509.GeneralName({certissuer: z4TSACERT});
-  equal(o.getEncodedHex(), "a41d301b310b3009060355040613025553310c300a060355040a0c03434131", "constructor certissuer cert1");
+o = new _GeneralName({'uri':'http://aaa.com/'});
+equal(o.tohex(), "860f687474703a2f2f6161612e636f6d2f", "constructor uri http://aaa.com/");
 
-  o = new KJUR.asn1.x509.GeneralName({certsubj: z4TSACERT});
-  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b06035504030c0454534131", "constructor certsubj cert1");
+o = new _GeneralName({certissuer: z4TSACERT});
+equal(o.tohex(), "a41d301b310b3009060355040613025553310c300a060355040a0c03434131", "constructor certissuer cert1");
 
-  o = new KJUR.asn1.x509.GeneralName({dn: '/C=US/O=Test'});
-  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "dn /C=US/O=Test out=" + o.getEncodedHex());
+o = new _GeneralName({certsubj: z4TSACERT});
+equal(o.tohex(), "a41e301c310b3009060355040613025553310d300b06035504030c0454534131", "constructor certsubj cert1");
 
-  o = new KJUR.asn1.x509.GeneralName({dn: {str: '/C=US/O=Test'}});
-  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "dn str /C=US/O=Test");
+o = new _GeneralName({dn: '/C=US/O=Test'});
+equal(o.tohex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "dn /C=US/O=Test out=" + o.tohex());
 
-  o = new KJUR.asn1.x509.GeneralName({dn: {ldapstr: 'O=Test,C=US'}});
-  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "dn ldapstr O=Test,C=US");
+o = new _GeneralName({dn: {str: '/C=US/O=Test'}});
+equal(o.tohex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "dn str /C=US/O=Test");
 
-  o = new KJUR.asn1.x509.GeneralName({dn: {certsubject: CERTEE1}});
-  equal(o.getEncodedHex(), "a41d301b310b3009060355040613025553310c300a060355040a0c03454531", "dn certsubject=EE1 out=" + o.getEncodedHex());
+o = new _GeneralName({dn: {ldapstr: 'O=Test,C=US'}});
+equal(o.tohex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "dn ldapstr O=Test,C=US");
 
-  o = new KJUR.asn1.x509.GeneralName({dn: {certissuer: CERTEE1}});
-  equal(o.getEncodedHex(), "a41d301b310b3009060355040613025553310c300a060355040a0c03434131", "dn certissuer=CA1 out=" + o.getEncodedHex());
+o = new _GeneralName({dn: {certsubject: CERTEE1}});
+equal(o.tohex(), "a41d301b310b3009060355040613025553310c300a060355040a0c03454531", "dn certsubject=EE1 out=" + o.tohex());
 
-  o = new KJUR.asn1.x509.GeneralName({ldapdn: 'O=Test,C=US'});
-  equal(o.getEncodedHex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "ldapdn O=Test,C=US");
+o = new _GeneralName({dn: {certissuer: CERTEE1}});
+equal(o.tohex(), "a41d301b310b3009060355040613025553310c300a060355040a0c03434131", "dn certissuer=CA1 out=" + o.tohex());
 
-  o = new KJUR.asn1.x509.GeneralName({ip: '192.168.1.1'});
-  equal(o.getEncodedHex(), "8704c0a80101", "ip: 192.168.1.1");
+o = new _GeneralName({ldapdn: 'O=Test,C=US'});
+equal(o.tohex(), "a41e301c310b3009060355040613025553310d300b060355040a0c0454657374", "ldapdn O=Test,C=US");
 
-  o = new KJUR.asn1.x509.GeneralName({ip: '2001:db8::4'});
-  equal(o.getEncodedHex(), "871020010db8000000000000000000000004", "ip: 2001:db8::4");
+o = new _GeneralName({ip: '192.168.1.1'});
+equal(o.tohex(), "8704c0a80101", "ip: 192.168.1.1");
 
-  o = new KJUR.asn1.x509.GeneralName({ip: '2606:4700:4700::1111'});
-  equal(o.getEncodedHex(), "871026064700470000000000000000001111", "ip: 2606:4700:4700::1111");
+o = new _GeneralName({ip: '2001:db8::4'});
+equal(o.tohex(), "871020010db8000000000000000000000004", "ip: 2001:db8::4");
 
-  o = new KJUR.asn1.x509.GeneralName({ip: 'c0a80101'});
-  equal(o.getEncodedHex(), "8704c0a80101", "ip: c0a80101");
+o = new _GeneralName({ip: '2001:db8::'});
+equal(o.tohex(), "871020010db8000000000000000000000000", "ip: 2001:db8::");
+
+o = new _GeneralName({ip: '2606:4700:4700::1111'});
+equal(o.tohex(), "871026064700470000000000000000001111", "ip: 2606:4700:4700::1111");
+
+o = new _GeneralName({ip: 'c0a80101'});
+equal(o.tohex(), "8704c0a80101", "ip: c0a80101");
+
+o = new _GeneralName({ip: '192.168.1.1/24'});
+equal(o.tohex(), "8708c0a80101ffffff00", "ip: 192.168.1.1/24");
+
+o = new _GeneralName({ip: '192.168.1.1/32'});
+equal(o.tohex(), "8708c0a80101ffffffff", "ip: 192.168.1.1/32");
+
+o = new _GeneralName({ip: '2001:db8::/120'});
+equal(o.tohex(), "872020010db8000000000000000000000000ffffffffffffffffffffffffffffff00", "ip: 2001:db8::/120");
+
+o = new _GeneralName({ip: '2001:db8::/128'}); // ??
+equal(o.tohex(), "872020010db8000000000000000000000000ffffffffffffffffffffffffffffffff", "ip: 2001:db8::/128");
 });
 
 test("GeneralName OtherName test", function() {
@@ -583,12 +600,20 @@ var _NameConstraints = KJUR.asn1.x509.NameConstraints;
 var pIn, hExpect;
 
 pIn = {extname: "nameConstraints", critical: true, permit: [{dns: "a.com"}]};
-hExpect = "30190603551d1e0101ff040f300da00b300930078205612e636f6d";
-equal(new _NameConstraints(pIn).getEncodedHex(), hExpect, "permit [{dns: a.com}]");
+hExpect = "30170603551d1e0101ff040d300ba00930078205612e636f6d";
+equal(new _NameConstraints(pIn).tohex(), hExpect, "permit [{dns: a.com}]");
 
 pIn = {extname: "nameConstraints", critical: true, exclude: [{uri: ".a.com"}]};
-hExpect = "301a0603551d1e0101ff0410300ea10c300a300886062e612e636f6d";
-equal(new _NameConstraints(pIn).getEncodedHex(), hExpect, "exclude [{uri: .a.com}]");
+hExpect = "30180603551d1e0101ff040e300ca10a300886062e612e636f6d";
+equal(new _NameConstraints(pIn).tohex(), hExpect, "exclude [{uri: .a.com}]");
+
+pIn = {extname: "nameConstraints", critical: true, exclude: [{ip: "192.168.1.1/24"}]};
+hExpect = "301a0603551d1e0101ff0410300ea10c300a8708c0a80101ffffff00";
+equal(new _NameConstraints(pIn).tohex(), hExpect, "exclude [{ip: 192.168.1.1/24}]");
+
+pIn = {extname: "nameConstraints", critical: true, exclude: [{ip: "192.168.1.1/24"},{dns: "a.jp"}]};
+hExpect = "30220603551d1e0101ff04183016a114300a8708c0a80101ffffff0030068204612e6a70";
+equal(new _NameConstraints(pIn).tohex(), hExpect, "exclude [{ip: 192.168.1.1/24},{dns: a.jp}]");
 
 pIn = {
   extname: "nameConstraints",
@@ -596,8 +621,8 @@ pIn = {
   permit: [{dns: ".a.com"}],
   exclude: [{uri: ".b.com"}]
 };
-hExpect = "30280603551d1e0101ff041e301ca00c300a300882062e612e636f6da10c300a300886062e622e636f6d";
-equal(new _NameConstraints(pIn).getEncodedHex(), hExpect,
+hExpect = "30240603551d1e0101ff041a3018a00a300882062e612e636f6da10a300886062e622e636f6d";
+equal(new _NameConstraints(pIn).tohex(), hExpect,
       "permit: [{dns: .a.com}], exclude [{uri: .a.com}]");
 
 pIn = {
@@ -605,16 +630,16 @@ pIn = {
   critical: true, 
   permit: [{dns: ".a.com"},{uri: ".b.com"}]
 };
-hExpect = "30240603551d1e0101ff041a3018a0163014300882062e612e636f6d300886062e622e636f6d";
-equal(new _NameConstraints(pIn).getEncodedHex(), hExpect, "permit: [{dns:.a.com},{uri:.b.com}]");
+hExpect = "30220603551d1e0101ff04183016a014300882062e612e636f6d300886062e622e636f6d";
+equal(new _NameConstraints(pIn).tohex(), hExpect, "permit: [{dns:.a.com},{uri:.b.com}]");
 
 pIn = {
   extname: "nameConstraints",
   critical: true, 
   permit: [{dn: "/C=JP/O=T1"}]
 };
-hExpect = "30300603551d1e0101ff04263024a0223020301ea41c301a310b3009060355040613024a50310b3009060355040a0c025431";
-equal(new _NameConstraints(pIn).getEncodedHex(), hExpect, "permit: [{dn: /C=JP/O=T1}]");
+hExpect = "302e0603551d1e0101ff04243022a020301ea41c301a310b3009060355040613024a50310b3009060355040a0c025431";
+equal(new _NameConstraints(pIn).tohex(), hExpect, "permit: [{dn: /C=JP/O=T1}]");
 });
 
 test("GeneralSubtree class test", function() {
@@ -623,23 +648,27 @@ var pIn, hExpect;
 
 pIn = {dns: "a.com"};
 hExpect = "30078205612e636f6d";
-equal(new _GeneralSubtree(pIn).getEncodedHex(), hExpect, "{dns:a.com}")
+equal(new _GeneralSubtree(pIn).tohex(), hExpect, "{dns:a.com}")
 
 pIn = {uri: "a.com"};
 hExpect = "30078605612e636f6d";
-equal(new _GeneralSubtree(pIn).getEncodedHex(), hExpect, "{uri:a.com}");
+equal(new _GeneralSubtree(pIn).tohex(), hExpect, "{uri:a.com}");
+
+pIn = {ip: "192.168.1.1/24"};
+hExpect = "300a8708c0a80101ffffff00";
+equal(new _GeneralSubtree(pIn).tohex(), hExpect, "{ip: 192.168.1.1/24}");
 
 pIn = {dn: "/C=JP/O=T1"};
 hExpect = "301ea41c301a310b3009060355040613024a50310b3009060355040a0c025431";
-equal(new _GeneralSubtree(pIn).getEncodedHex(), hExpect, "{dn:/C=JP/O=T1}");
+equal(new _GeneralSubtree(pIn).tohex(), hExpect, "{dn:/C=JP/O=T1}");
 
 pIn = {dn: "/C=JP/O=T1", min: 2};
 hExpect = "3021a41c301a310b3009060355040613024a50310b3009060355040a0c025431800102";
-equal(new _GeneralSubtree(pIn).getEncodedHex(), hExpect, "{dn:/C=JP/O=T1,min:2}");
+equal(new _GeneralSubtree(pIn).tohex(), hExpect, "{dn:/C=JP/O=T1,min:2}");
 
 pIn = {dn: "/C=JP/O=T1", min: 2, max: 4};
 hExpect = "3024a41c301a310b3009060355040613024a50310b3009060355040a0c025431800102810104";
-equal(new _GeneralSubtree(pIn).getEncodedHex(), hExpect, "{dn:/C=JP/O=T1,min:2,max:4}");
+equal(new _GeneralSubtree(pIn).tohex(), hExpect, "{dn:/C=JP/O=T1,min:2,max:4}");
 });
 
 // KeyUsage

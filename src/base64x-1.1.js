@@ -1,4 +1,4 @@
-/* base64x-1.1.25 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* base64x-1.1.26 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.12 base64x 1.1.25 (2022-Mar-13)
+ * @version jsrsasign 10.5.17 base64x 1.1.26 (2022-Apr-14)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -946,38 +946,75 @@ function hextoipv6(s) {
  * @param {String} s hexadecimal string of IP address
  * @return {String} IP address string
  * @since jsrsasign 8.0.10 base64x 1.1.13
+ * @see hextoipv6
+ * @see iptohex
+ *
  * @description
  * This function converts a hexadecimal string of IPv4 or 
  * IPv6 address to IPv4 or IPv6 address string.
  * If byte length is not 4 nor 16, this returns a
  * hexadecimal string without conversion.
- * @see {@link hextoipv6}
+ * <br/>
+ * NOTE: From jsrsasign 10.5.17, CIDR subnet mask notation also supported.
+ *
  * @example
- * hextoip("c0a80101") &rarr "192.168.1.1"
+ * hextoip("c0a80101") &rarr; "192.168.1.1"
  * hextoip("871020010db8000000000000000000000004") &rarr "2001:db8::4"
- * hextoip("c0a801010203") &rarr "c0a801010203" // 6 bytes
- * hextoip("zzz")) &rarr raise exception because of not hexadecimal
+ * hextoip("c0a80100ffffff00") &rarr; "192.168.1.0/24"
+ * hextoip("c0a801010203") &rarr; "c0a801010203" // wrong 6 bytes
+ * hextoip("zzz")) &rarr; raise exception because of not hexadecimal
  */
 function hextoip(s) {
-  var malformedMsg = "malformed hex value";
-  if (! s.match(/^([0-9A-Fa-f][0-9A-Fa-f]){1,}$/))
-    throw malformedMsg;
-  if (s.length == 8) { // ipv4
-    var ip;
-    try {
-      ip = parseInt(s.substr(0, 2), 16) + "." +
-           parseInt(s.substr(2, 2), 16) + "." +
-           parseInt(s.substr(4, 2), 16) + "." +
-           parseInt(s.substr(6, 2), 16);
-      return ip;
-    } catch (ex) {
-      throw malformedMsg;
-    }
+    var malformedErr = new Error("malformed hex value");
+    if (! s.match(/^([0-9A-Fa-f][0-9A-Fa-f]){1,}$/))
+	throw malformedErr;
+    if (s.length == 8) { // ipv4
+	var ip;
+	try {
+	    ip = parseInt(s.substr(0, 2), 16) + "." +
+ 		 parseInt(s.substr(2, 2), 16) + "." +
+		 parseInt(s.substr(4, 2), 16) + "." +
+		 parseInt(s.substr(6, 2), 16);
+	    return ip;
+	} catch (ex) {
+	    throw malformedErr;
+	}
+  } else if (s.length == 16) {
+      try {
+	  return hextoip(s.substr(0, 8)) + "/" + ipprefixlen(s.substr(8));
+      } catch (ex) {
+	  throw malformedErr;
+      }
   } else if (s.length == 32) {
-    return hextoipv6(s);
+      return hextoipv6(s);
+  } else if (s.length == 64) {
+      try {
+	  return hextoipv6(s.substr(0, 32)) + "/" + ipprefixlen(s.substr(32));
+      } catch (ex) {
+	  throw malformedErr;
+      }
+      return 
   } else {
     return s;
   }
+}
+
+/*
+ * convert subnet mask hex to ip address prefix length<br/>
+ * @name ipprefixlen
+ * @param {string} hMask hexadecimal string of ipv4/6 subnet mask (ex. "ffffff00" for v4 class C)
+ * @return {nummber} ip address prefix length (ex. 24 for IPv4 class C)
+ */
+function ipprefixlen(hMask) {
+    var malformedErr = new Error("malformed mask");
+    var bMask;
+    try {
+	bMask = new BigInteger(hMask, 16).toString(2);
+    } catch(ex) {
+	throw malformedErr;
+    }
+    if (! bMask.match(/^1*0*$/)) throw malformedErr;
+    return bMask.replace(/0+$/, '').length;
 }
 
 /**
@@ -987,36 +1024,68 @@ function hextoip(s) {
  * @param {String} s IPv4/v6 address string
  * @return {String} hexadecimal string of IP address
  * @since jsrsasign 8.0.12 base64x 1.1.14
+ * @see hextoip
+ * @see ipv6tohex
+ *
  * @description
  * This function converts IPv4 or IPv6 address string to
  * a hexadecimal string of IPv4 or IPv6 address.
+ * <br/>
+ * NOTE: From jsrsasign 10.5.17, CIDR net mask notation also supported.
+ *
  * @example
- * iptohex("192.168.1.1") &rarr "c0a80101"
- * iptohex("2001:db8::4") &rarr "871020010db8000000000000000000000004"
- * iptohex("zzz")) &rarr raise exception
+ * iptohex("192.168.1.1") &rarr; "c0a80101"
+ * iptohex("2001:db8::4") &rarr; "871020010db8000000000000000000000004"
+ * iptohex("192.168.1.1/24") &rarr; "c0a80101ffffff00"
+ * iptohex("2001:db8::/120") &rarr; "871020010db8000000000000000000000000ffffffffffffffffffffffffffffffffff00"
+ * iptohex("zzz")) &rarr; raise exception
  */
 function iptohex(s) {
-  var malformedMsg = "malformed IP address";
-  s = s.toLowerCase(s);
+    var malformedErr = new Error("malformed IP address");
+    s = s.toLowerCase(s);
 
-  if (s.match(/^[0-9.]+$/)) {
-    var a = s.split(".");
-    if (a.length !== 4) throw malformedMsg;
-    var hex = "";
-    try {
-      for (var i = 0; i < 4; i++) {
-        var d = parseInt(a[i]);
-        hex += ("0" + d.toString(16)).slice(-2);
-      }
-      return hex;
-    } catch(ex) {
-      throw malformedMsg;
+    if (! s.match(/^[0-9a-f.:/]+$/) ) throw malformedErr;
+
+    if (s.match(/^[0-9.]+$/)) {
+	var a = s.split(".");
+	if (a.length !== 4) throw malformedErr;
+	var hex = "";
+	try {
+	    for (var i = 0; i < 4; i++) {
+		var d = parseInt(a[i]);
+		hex += ("0" + d.toString(16)).slice(-2);
+	    }
+	    return hex;
+	} catch(ex) {
+	    throw malformedErr;
+	}
+    } else if (s.match(/^[0-9.]+\/[0-9]+$/)) {
+	var aItem = s.split("/");
+	return iptohex(aItem[0]) + ipnetmask(parseInt(aItem[1]), 32);
+    } else if (s.match(/^[0-9a-f:]+$/) && s.indexOf(":") !== -1) {
+	return ipv6tohex(s);
+    } else if (s.match(/^[0-9a-f:]+\/[0-9]+$/) && s.indexOf(":") !== -1) {
+	var aItem = s.split("/");
+	return ipv6tohex(aItem[0]) + ipnetmask(parseInt(aItem[1]), 128);
+    } else {
+	throw malformedErr;
     }
-  } else if (s.match(/^[0-9a-f:]+$/) && s.indexOf(":") !== -1) {
-    return ipv6tohex(s);
-  } else {
-    throw malformedMsg;
-  }
+}
+
+/*
+ * convert ip prefix length to net mask octets<br/>
+ * @param {number} prefixlen ip prefix length value (ex. 24 for IPv4 class C)
+ * @param {number} len ip address length (ex. 32 for IPv4 and 128 for IPv6)
+ * @return {string} hexadecimal string of net mask octets
+ * @example
+ * ipnetmask(24, 32) &rarr; "ffffff00" 
+ * ipnetmask(120, 128) &rarr; "ffffffffffffffffffffffffffffff00"
+ */
+function ipnetmask(prefixlen, len) {
+    if (len == 32 && prefixlen == 0) return "00000000"; // v4
+    if (len == 128 && prefixlen == 0) return "00000000000000000000000000000000"; // v6
+    var b = Array(prefixlen + 1).join("1") + Array(len - prefixlen + 1).join("0");
+    return new BigInteger(b, 2).toString(16);
 }
 
 // ==== ucs2hex / utf8 ==============================

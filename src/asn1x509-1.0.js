@@ -1,4 +1,4 @@
-/* asn1x509-2.1.13.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1x509-2.1.14.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.16 asn1x509 2.1.13 (2022-Apr-08)
+ * @version jsrsasign 10.5.17 asn1x509 2.1.14 (2022-Apr-14)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1373,7 +1373,7 @@ KJUR.asn1.x509.NameConstraints = function(params) {
 	    for (var i = 0; i < params.permit.length; i++) {
 		aPermit.push(new _GeneralSubtree(params.permit[i]));
 	    }
-	    aItem.push({tag: {tage: "a0", obj: {seq: aPermit}}});
+	    aItem.push({tag: {tagi: "a0", obj: {seq: aPermit}}});
 	}
 
 	if (params.exclude != undefined &&
@@ -1382,7 +1382,7 @@ KJUR.asn1.x509.NameConstraints = function(params) {
 	    for (var i = 0; i < params.exclude.length; i++) {
 		aExclude.push(new _GeneralSubtree(params.exclude[i]));
 	    }
-	    aItem.push({tag: {tage: "a1", obj: {seq: aExclude}}});
+	    aItem.push({tag: {tagi: "a1", obj: {seq: aExclude}}});
 	}
 
 	this.asn1ExtnValue = _newObject({seq: aItem});
@@ -4091,19 +4091,21 @@ KJUR.asn1.x509.GeneralName = function(params) {
 	    dObj = new _DERIA5String({str: params.uri});
 	} else if (params.ip !== undefined) {
 	    hTag = "87";
-	    var ip = params.ip;
 	    var hIP;
-	    var errmsg = "malformed IP address";
-	    if (ip.match(/^[0-9.]+[.][0-9.]+$/)) { // ipv4
-		hIP = intarystrtohex("[" + ip.split(".").join(",") + "]");
-		if (hIP.length !== 8)
-		    throw new _Error(errmsg);
-	    } else if (ip.match(/^[0-9A-Fa-f:]+:[0-9A-Fa-f:]+$/)) { // ipv6
-		hIP = ipv6tohex(ip);
-	    } else if (ip.match(/^([0-9A-Fa-f][0-9A-Fa-f]){1,}$/)) { // hex
-		hIP = ip;
-	    } else {
-		throw new _Error(errmsg);
+	    var ip = params.ip;
+	    try {
+		if (ip.match(/^[0-9a-f]+$/)) {
+		    var len = ip.length;
+		    if (len == 8 || len == 16 || len == 32 || len == 64) {
+			hIP = ip;
+		    } else {
+			throw "err";
+		    }
+		} else {
+		    hIP = iptohex(ip);
+		}
+	    } catch(ex) {
+		throw new _Error("malformed IP address: " + params.ip + ":" + ex.message);
 	    }
 	    dObj = new _DEROctetString({hex: hIP});
 	} else {
