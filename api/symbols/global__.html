@@ -2411,6 +2411,8 @@ This function converts a hexadecimal string of IPv4 or
 IPv6 address to IPv4 or IPv6 address string.
 If byte length is not 4 nor 16, this returns a
 hexadecimal string without conversion.
+<br/>
+NOTE: From jsrsasign 10.5.17, CIDR subnet mask notation also supported.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -2420,10 +2422,11 @@ hexadecimal string without conversion.
 					
 					
 					
-					<pre class="code">hextoip("c0a80101") &rarr "192.168.1.1"
+					<pre class="code">hextoip("c0a80101") &rarr; "192.168.1.1"
 hextoip("871020010db8000000000000000000000004") &rarr "2001:db8::4"
-hextoip("c0a801010203") &rarr "c0a801010203" // 6 bytes
-hextoip("zzz")) &rarr raise exception because of not hexadecimal</pre>
+hextoip("c0a80100ffffff00") &rarr; "192.168.1.0/24"
+hextoip("c0a801010203") &rarr; "c0a801010203" // wrong 6 bytes
+hextoip("zzz")) &rarr; raise exception because of not hexadecimal</pre>
 					
 					
 					
@@ -2461,7 +2464,9 @@ hextoip("zzz")) &rarr raise exception because of not hexadecimal</pre>
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd></dd>
+								<dd><a href="../symbols/global__.html#hextoipv6">hextoipv6</a></dd>
+							
+								<dd><a href="../symbols/global__.html#iptohex">iptohex</a></dd>
 							
 							</dl>
 						
@@ -3054,6 +3059,8 @@ inttobitstr(parseInt("101000001", 2)) &rarr; "07a080"</pre>
 						convert IPv4/v6 addresss to a hexadecimal string<br/>
 This function converts IPv4 or IPv6 address string to
 a hexadecimal string of IPv4 or IPv6 address.
+<br/>
+NOTE: From jsrsasign 10.5.17, CIDR net mask notation also supported.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -3063,9 +3070,11 @@ a hexadecimal string of IPv4 or IPv6 address.
 					
 					
 					
-					<pre class="code">iptohex("192.168.1.1") &rarr "c0a80101"
-iptohex("2001:db8::4") &rarr "871020010db8000000000000000000000004"
-iptohex("zzz")) &rarr raise exception</pre>
+					<pre class="code">iptohex("192.168.1.1") &rarr; "c0a80101"
+iptohex("2001:db8::4") &rarr; "871020010db8000000000000000000000004"
+iptohex("192.168.1.1/24") &rarr; "c0a80101ffffff00"
+iptohex("2001:db8::/120") &rarr; "871020010db8000000000000000000000000ffffffffffffffffffffffffffffffffff00"
+iptohex("zzz")) &rarr; raise exception</pre>
 					
 					
 					
@@ -3099,6 +3108,15 @@ iptohex("zzz")) &rarr raise exception</pre>
 							</dl>
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/global__.html#hextoip">hextoip</a></dd>
+							
+								<dd><a href="../symbols/global__.html#ipv6tohex">ipv6tohex</a></dd>
+							
+							</dl>
 						
 
 					<hr />

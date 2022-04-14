@@ -875,13 +875,18 @@ deepEqual(x.getGeneralNames(hIn2), pExpect2, "[{dn}]");
 
 test("getGeneralName test" , function() {
 var x = new X509();
+var hIn, pExpect;
 
-var hIn1 = "860f687474703a2f2f6161612e636f6d2f";
-var pExpect1 = {uri: "http://aaa.com/"};
-deepEqual(x.getGeneralName(hIn1), pExpect1, "uri");
+hIn = "860f687474703a2f2f6161612e636f6d2f";
+pExpect = {uri: "http://aaa.com/"};
+deepEqual(x.getGeneralName(hIn), pExpect, "uri");
 
-var hIn2 = "a41c301a310b3009060355040613024a50310b3009060355040a0c025431";
-var pExpect2 = {
+hIn = "8708c0a80101ffffff00";
+pExpect = {ip: '192.168.1.1/24'};
+deepEqual(x.getGeneralName(hIn), pExpect, "ip 192.168.1.1/24");
+
+hIn = "a41c301a310b3009060355040613024a50310b3009060355040a0c025431";
+pExpect = {
   dn: {
     array: [
       [{type:"C", value:"JP", ds:"prn"}],
@@ -890,8 +895,7 @@ var pExpect2 = {
     str: "/C=JP/O=T1"
   }
 };
-deepEqual(x.getGeneralName(hIn2), pExpect2, "dn");
-
+deepEqual(x.getGeneralName(hIn), pExpect, "dn");
 });
 
 test("getGeneralName OtherName test" , function() {
@@ -1059,6 +1063,14 @@ pExpect = {
 };
 deepEqual(x.getExtNameConstraints(hIn, true), pExpect, "permit [{uri: .testcertificates.gov}]");
 
+hIn = "300ea10c300a8708c0a80101ffffff00";
+pExpect = {
+  extname: "nameConstraints",
+  critical: true,
+  exclude: [{ip: '192.168.1.1/24'}]
+};
+deepEqual(x.getExtNameConstraints(hIn, true), pExpect, "permit [{ip: 192.168.1.1/24}]");
+
 //hIn = "a44c304a310b3009060355040613025553311f301d060355040a131654657374204365727469666963617465732032303131311a3018060355040b13117065726d69747465645375627472656531";
 //pExpect = {};
 //deepEqual(x.getGeneralName(hIn), pExpect, "dn1"); // PASS
@@ -1087,6 +1099,10 @@ hIn = "30168214746573746365727469666963617465732e676f76";
 pExpect = {dns: 'testcertificates.gov'};
 deepEqual(x.getGeneralSubtree(hIn), pExpect, "{dns: testcertificates.gov}");
 
+hIn = "300a8708c0a80101ffffff00";
+pExpect = {ip: "192.168.1.1/24"};
+deepEqual(x.getGeneralSubtree(hIn), pExpect, "{ip: 192.168.1.1/24}");
+
 hIn = "304ea44c304a310b3009060355040613025553311f301d060355040a131654657374204365727469666963617465732032303131311a3018060355040b13117065726d69747465645375627472656531";
 pExpect = {dn: {
   array: [
@@ -1095,7 +1111,7 @@ pExpect = {dn: {
     [{ds:"prn",type:"OU",value:"permittedSubtree1"}]],
   str: "/C=US/O=Test Certificates 2011/OU=permittedSubtree1"
 }};
-deepEqual(x.getGeneralSubtree(hIn), pExpect, "{dn: testcertificates.gov}");
+deepEqual(x.getGeneralSubtree(hIn), pExpect, "{dn: /C=US/O=...}");
 
 });
 
