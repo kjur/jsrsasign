@@ -645,6 +645,17 @@ This method parses ASN.1 TimeStampRsp defined in RFC 3161.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#getTimeStampReq">getTimeStampReq</a></b>(h)
+								</div>
+								<div class="description">parse hexadecimal string of TimeStampReq<br/>
+This method parses a hexadecimal string of TimeStampReq
+and returns parsed their fields:</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#getToken">getToken</a></b>(h)
 								</div>
 								<div class="description">parse ASN.1 TimeStampToken<br/>
@@ -1111,6 +1122,70 @@ parser.getResponse("30...") &rarr;
 								<dd><a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a></dd>
 							
 								<dd><a href="../symbols/KJUR.asn1.cms.CMSParser.html#getCMSSignedData">KJUR.asn1.cms.CMSParser#getCMSSignedData</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getTimeStampReq"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getTimeStampReq</b>(h)
+					
+					</div>
+					<div class="description">
+						parse hexadecimal string of TimeStampReq<br/>
+This method parses a hexadecimal string of TimeStampReq
+and returns parsed their fields:
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var json = KJUR.asn1.tsp.TSPUtil.parseTimeStampReq("302602...");
+// resulted DUMP of above 'json':
+{
+ messageImprint: {
+      alg: 'sha256',          // MessageImprint hashAlg
+      hash: 'a1a2a3a4...'},   // MessageImprint hashValue
+ policy: '1.2.3.4.5',         // tsaPolicy (OPTION)
+ nonce: '9abcf318...',        // nonce (OPTION)
+ certreq: true }              // certReq (OPTION)</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>h</b>
+									
+								</dt>
+								<dd>hexadecimal string of TimeStampReq</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> JSON object of parsed parameters</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.TSPUtil.html#.parseTimeStampReq">KJUR.asn1.tsp.TSPUtil.parseTimeStampReq</a></dd>
 							
 							</dl>
 						

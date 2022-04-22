@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+Time stamp package update
+* Changes from 10.5.17 to 10.5.18 (2022-Apr-22)
+  - src/asn1tsp.js
+    - TSPParser.getTimeStampReq added
+    - TSPUtil.parse{TimeStampReq,MessageImprint} now *DEPRECATED*. Please use TSPParser.
+  - test/qunit-do-asn1tsp.html
+    - add some test cases and fix for above
+
 CIDR subnet mask support in iptohex and hextoip
 * Changes from 10.5.16 to 10.5.17 (2022-Apr-14)
   - src/asn1x509.js
