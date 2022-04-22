@@ -696,7 +696,7 @@ and returns parsed their fields:</div>
 							<dl class="detailList">
 							<dt class="heading">Deprecated:</dt>
 							<dt>
-								since jsrsasign 10.0.0 asn1tsp 2.0.0 use TimeStampToken class
+								since jsrsasign 10.0.0 asn1tsp 2.0.0. Please use TimeStampToken class
 							</dt>
 							</dl>
 						
@@ -739,10 +739,8 @@ and returns parsed their fields:
 					
 					
 					
-					<pre class="code">var json = KJUR.asn1.tsp.TSPUtil.parseMessageImprint("302602...");
-// resulted DUMP of above 'json':
-{hashAlg: 'sha256',          // MessageImprint hashAlg
- hashValue: 'a1a2a3a4...'}   // MessageImprint hashValue</pre>
+					<pre class="code">KJUR.asn1.tsp.TSPUtil.parseMessageImprint("302602...") &rarr;
+{ alg:  'sha256', hash: 'a1a2a3a4...'}</pre>
 					
 					
 					
@@ -759,6 +757,13 @@ and returns parsed their fields:
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 10.5.18 asn1tsp 2.0.6. Please use TSPParser.getMessageImprint instead.
+							</dt>
+							</dl>
+						
 						
 						
 						
@@ -770,6 +775,13 @@ and returns parsed their fields:
 							</dl>
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#getMessageImprint">KJUR.asn1.tsp.TSPParser#getMessageImprint</a></dd>
+							
+							</dl>
 						
 
 					<hr />
@@ -816,6 +828,13 @@ and returns parsed their fields:
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 10.5.18 asn1tsp 2.0.6. Please use TSPParser.getTimeStampReq instead.
+							</dt>
+							</dl>
+						
 						
 						
 						
@@ -827,6 +846,13 @@ and returns parsed their fields:
 							</dl>
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.TSPParser.html#getTimeStampReq">KJUR.asn1.tsp.TSPParser#getTimeStampReq</a></dd>
+							
+							</dl>
 						
 
 					

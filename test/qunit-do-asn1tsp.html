@@ -335,6 +335,41 @@ test("PKIFailureInfo test", function() {
   equal(o2.getEncodedHex(), "030203c8", "by name systemFailure");
 });
 
+test("TimeStampReq", function() {
+var _TimeStampReq = KJUR.asn1.tsp.TimeStampReq;
+
+var hExpect = "30260201013015300d060960864801650304020105000404a1a2a3a406042a03040502049abcf318";
+
+var params = {
+  messageImprint: new KJUR.asn1.tsp.MessageImprint({alg: 'sha256', hash: 'a1a2a3a4'}),
+  policy: {oid: '1.2.3.4.5'},
+  nonce: {hex: '9abcf318'},
+  certreq: false
+};
+var o = new _TimeStampReq(params);
+equal(o.getEncodedHex(), hExpect, "hex");
+equal(
+ASN1HEX.dump(o.getEncodedHex()),
+ASN1HEX.dump(hExpect),
+"dump");
+
+var hExpect2 = "302b0201013015300d060960864801650304020105000404a1a2a3a406040101020202068a8b8c8d8e8f0101ff";
+//var hExpect2 = "030101";
+var params2 = {
+  policy: {oid: '0.1.1.2.2'},
+  messageImprint: {alg: 'sha256', hash: 'a1a2a3a4'},
+  nonce: {hex: '8a8b8c8d8e8f'},
+  certreq: true
+}
+var o2 = new _TimeStampReq(params2);
+equal(o2.getEncodedHex(), hExpect2, "hex2");
+equal(
+ASN1HEX.dump(o2.getEncodedHex()),
+ASN1HEX.dump(hExpect2),
+"dump2");
+
+});
+
 // ----- newTimeStampToken -----------
 
 test("TSPUtil.newTimeStampToken test (DEPRECATED)", function() {
@@ -381,47 +416,14 @@ ASN1HEX.dump(hExpect),
 
 });
 
-test("TimeStampReq", function() {
-var _TimeStampReq = KJUR.asn1.tsp.TimeStampReq;
-
-var hExpect = "30260201013015300d060960864801650304020105000404a1a2a3a406042a03040502049abcf318";
-
-var params = {
-  messageImprint: new KJUR.asn1.tsp.MessageImprint({alg: 'sha256', hash: 'a1a2a3a4'}),
-  policy: {oid: '1.2.3.4.5'},
-  nonce: {hex: '9abcf318'},
-  certreq: false
-};
-var o = new _TimeStampReq(params);
-equal(o.getEncodedHex(), hExpect, "hex");
-equal(
-ASN1HEX.dump(o.getEncodedHex()),
-ASN1HEX.dump(hExpect),
-"dump");
-
-var hExpect2 = "302b0201013015300d060960864801650304020105000404a1a2a3a406040101020202068a8b8c8d8e8f0101ff";
-//var hExpect2 = "030101";
-var params2 = {
-  policy: {oid: '0.1.1.2.2'},
-  messageImprint: {alg: 'sha256', hash: 'a1a2a3a4'},
-  nonce: {hex: '8a8b8c8d8e8f'},
-  certreq: true
-}
-var o2 = new _TimeStampReq(params2);
-equal(o2.getEncodedHex(), hExpect2, "hex2");
-equal(
-ASN1HEX.dump(o2.getEncodedHex()),
-ASN1HEX.dump(hExpect2),
-"dump2");
-
-});
-
 // ----- TSPUtil.parseTimeStampReq ------
 
-test("TSPUtil.parseTimeStampReq", function() {
+test("TSPUtil.parseTimeStampReq (DEPRECATED)", function() {
 var _parseTimeStampReq = KJUR.asn1.tsp.TSPUtil.parseTimeStampReq;
+var hIn, pExpect;
 
-var pExpect = {
+hIn = "30260201013015300d060960864801650304020105000404a1a2a3a406042a03040502049abcf318";
+pExpect = {
   policy: "1.2.3.4.5",
   messageImprint: {
     alg: "sha256",
@@ -430,10 +432,10 @@ var pExpect = {
   nonce: "9abcf318",
   certreq: false
 }
-var params = "30260201013015300d060960864801650304020105000404a1a2a3a406042a03040502049abcf318";
-deepEqual(_parseTimeStampReq(params), pExpect, "p1");
+deepEqual(_parseTimeStampReq(hIn), pExpect, "p1");
 
-var pExpect2 = {
+hIn = "302b0201013015300d060960864801650304020105000404a1a2a3a406040101020202068a8b8c8d8e8f0101ff";
+pExpect = {
   policy: "0.1.1.2.2",
   messageImprint: {
     alg: "sha256",
@@ -442,10 +444,10 @@ var pExpect2 = {
   nonce: "8a8b8c8d8e8f",
   certreq: true
 }
-var params2 = "302b0201013015300d060960864801650304020105000404a1a2a3a406040101020202068a8b8c8d8e8f0101ff";
-deepEqual(_parseTimeStampReq(params2), pExpect2, "p1");
+deepEqual(_parseTimeStampReq(hIn), pExpect, "p1");
 
-var pExpect3 = {
+hIn = "304c0201013031300d0609608648016503040201050004209834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f006042a030405020b1a1b1c1e1f2a2b2c2d2e2f0101ff";
+var pExpect = {
   policy: "1.2.3.4.5",
   messageImprint: {
     alg: "sha256",
@@ -454,8 +456,19 @@ var pExpect3 = {
   nonce: "1a1b1c1e1f2a2b2c2d2e2f",
   certreq: true
 }
-var params3 = "304c0201013031300d0609608648016503040201050004209834876dcfb05cb167a5c24953eba58c4ac89b1adf57f28f2f9d09af107ee8f006042a030405020b1a1b1c1e1f2a2b2c2d2e2f0101ff";
-deepEqual(_parseTimeStampReq(params3), pExpect3, "p1");
+deepEqual(_parseTimeStampReq(hIn), pExpect, "p1");
+});
+
+test("TSPUtil.parseMessageImprint (DEPRECATED)", function() {
+var _parse = KJUR.asn1.tsp.TSPUtil.parseMessageImprint;
+var hIn, pExpect;
+
+hIn = "3031300d06096086480165030402010500042017e682f060b5f8e47ea04c5c4855908b0a5ad612022260fe50e11ecb0cc0ab76";
+pExpect = {
+  alg: "sha256",
+  hash: "17e682f060b5f8e47ea04c5c4855908b0a5ad612022260fe50e11ecb0cc0ab76"
+};
+deepEqual(_parse(hIn), pExpect, "sha256 aaa");
 });
 
 test("FixedTSAAdapter test", function() {
@@ -667,6 +680,7 @@ var parser = new KJUR.asn1.tsp.TSPParser();
 var hIn = "300f0c036161610c036161610c03616161";
 var aExp = ["aaa", "aaa", "aaa"];
 deepEqual(parser.getPKIFreeText(hIn), aExp, "[aaa,aaa,aaa]");
+});
 
 test("TSPParser.getPKIFailureInfo test", function() {
 var parser = new KJUR.asn1.tsp.TSPParser();
@@ -675,9 +689,35 @@ equal(parser.getPKIFailureInfo("03020700"), "badAlg", "0700=badAlg");
 equal(parser.getPKIFailureInfo("03020780"), 1, "0780=1");
 });
 
+test("TSPParser.getMessageImprint test", function() {
+var _parser = new KJUR.asn1.tsp.TSPParser();
+var _getMessageImprint = _parser.getMessageImprint;
+var hIn, pExpect;
+hIn = "3031300d06096086480165030402010500042017e682f060b5f8e47ea04c5c4855908b0a5ad612022260fe50e11ecb0cc0ab76";
+pExpect = {
+    alg: "sha256",
+    hash: "17e682f060b5f8e47ea04c5c4855908b0a5ad612022260fe50e11ecb0cc0ab76"
+};
+deepEqual(_getMessageImprint(hIn), pExpect, "sha256 aaa");
+});
+
+test("TSPParser.getTimeStampReq test", function() {
+var _parser = new KJUR.asn1.tsp.TSPParser();
+var _getTimeStampReq = _parser.getTimeStampReq;
+var hIn, pExpect;
+hIn = "30390201013031300d06096086480165030402010500042017e682f060b5f8e47ea04c5c4855908b0a5ad612022260fe50e11ecb0cc0ab760101ff";
+pExpect = {
+    messageImprint: {
+	alg: "sha256",
+	hash: "17e682f060b5f8e47ea04c5c4855908b0a5ad612022260fe50e11ecb0cc0ab76"
+    },
+    certreq: true
+};
+deepEqual(_getTimeStampReq(hIn), pExpect, "sha256 aaa certreq=true");
 });
 
 });
+
 -->
 </script>
   
