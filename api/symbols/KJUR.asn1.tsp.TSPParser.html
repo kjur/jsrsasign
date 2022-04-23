@@ -1145,15 +1145,14 @@ and returns parsed their fields:
 					
 					
 					
-					<pre class="code">var json = KJUR.asn1.tsp.TSPUtil.parseTimeStampReq("302602...");
-// resulted DUMP of above 'json':
-{
- messageImprint: {
+					<pre class="code">var parser = new KJUR.asn1.tsp.TSPParser();
+parser.getTimeStampReq("302602...") &rarr;
+{ messageImprint: {
       alg: 'sha256',          // MessageImprint hashAlg
       hash: 'a1a2a3a4...'},   // MessageImprint hashValue
- policy: '1.2.3.4.5',         // tsaPolicy (OPTION)
- nonce: '9abcf318...',        // nonce (OPTION)
- certreq: true }              // certReq (OPTION)</pre>
+  policy: '1.2.3.4.5',         // tsaPolicy (OPTION)
+  nonce: '9abcf318...',        // nonce (OPTION)
+  certreq: true }              // certReq (OPTION)</pre>
 					
 					
 					
@@ -1171,6 +1170,12 @@ and returns parsed their fields:
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.18 asn1tsp 2.0.6</dd>
+							</dl>
+							</dl>
+						
 						
 						
 							<dl class="detailList">
@@ -1184,6 +1189,8 @@ and returns parsed their fields:
 						
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.TimeStampReq.html">KJUR.asn1.tsp.TimeStampReq</a></dd>
 							
 								<dd><a href="../symbols/KJUR.asn1.tsp.TSPUtil.html#.parseTimeStampReq">KJUR.asn1.tsp.TSPUtil.parseTimeStampReq</a></dd>
 							
