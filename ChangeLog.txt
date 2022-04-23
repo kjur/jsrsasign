@@ -2,6 +2,13 @@
 ChangeLog for jsrsasign
 
 Time stamp package update
+* Changes from 10.5.18 to 10.5.19 (2022-Apr-23)
+  - src/asn1tsp.js
+    - TimeStampResp class update to statusinfo member
+      will be optional. If omitted, it will be "granted" by default.
+    - API manual update for more detail
+
+Time stamp package update
 * Changes from 10.5.17 to 10.5.18 (2022-Apr-22)
   - src/asn1tsp.js
     - TSPParser.getTimeStampReq added

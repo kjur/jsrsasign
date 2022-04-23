@@ -1,4 +1,4 @@
-/* asn1tsp-2.0.6.js (c) 2014-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1tsp-2.0.7.js (c) 2014-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1tsp.js - ASN.1 DER encoder classes for RFC 3161 Time Stamp Protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1tsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.18 asn1tsp 2.0.6 (2022-Apr-22)
+ * @version jsrsasign 10.5.19 asn1tsp 2.0.7 (2022-Apr-23)
  * @since jsrsasign 4.5.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -464,18 +464,84 @@ KJUR.asn1.tsp.TimeStampReq = function(params) {
 extendClass(KJUR.asn1.tsp.TimeStampReq, KJUR.asn1.ASN1Object);
 
 /**
- * class for TSP TimeStampResp ASN.1 object
+ * class for TSP TimeStampResp ASN.1 object<br/>
  * @name KJUR.asn1.tsp.TimeStampResp
  * @class class for TSP TimeStampResp ASN.1 object
  * @param {Array} params associative array of parameters
  * @extends KJUR.asn1.ASN1Object
  * @since jsrsasign 4.6.0 asn1tsp 1.0.0
+ * @see KJUR.asn1.tsp.TimeStampToken
+ * @see KJUR.asn1.tsp.PKIStatusInfo
+ *
  * @description
+ * This is an ASN.1 encoder for TimeStampResp
+ * ASN.1 structure defined in
+ * <a href="https://tools.ietf.org/html/rfc3161#section-2.4.2">
+ * RFC 3161 TSP section 2.4.2</a>.
+ * 
  * <pre>
  * TimeStampResp ::= SEQUENCE  {
  *    status                  PKIStatusInfo,
  *    timeStampToken          TimeStampToken     OPTIONAL  }
+ *
+ * TimeStampToken ::= ContentInfo
+ *
+ * TSTInfo ::= SEQUENCE  {
+ *    version           INTEGER  { v1(1) },
+ *    policy            TSAPolicyId,
+ *    messageImprint    MessageImprint,
+ *    serialNumber      INTEGER,
+ *    genTime           GeneralizedTime,
+ *    accuracy          Accuracy                 OPTIONAL,
+ *    ordering          BOOLEAN                  DEFAULT FALSE,
+ *    nonce             INTEGER                  OPTIONAL,
+ *    tsa               [0] GeneralName          OPTIONAL,
+ *    extensions        [1] IMPLICIT Extensions  OPTIONAL  }
  * </pre>
+ *
+ * The constructor argument "params" can be used all of 
+ * {@link KJUR.asn1.tsp.TimeStampToken} object further more
+ * following members can be specified:
+ * <ul>
+ * <li>statusinfo: any {@link KJUR.asn1.tsp.PKIStatusInfo} parameter.
+ * When parameters for TimeStampToken is specified and statusinfo member is omitted, 
+ * status will be "granted" by default. (OPTIONAL)</li>
+ * <li>tst: {@link KJUR.asn1.tsp.TimeStampToken} object instead of TimeStampToken members (OPTIONAL)</li>
+ * </ul>
+ *
+ * @example
+ * // by TimeStampToken parameters (statusinfo will be "granted" by default)
+ * new KJUR.asn1.tsp.TimeStampResp({
+ *   version: 1,
+ *   hashalgs: ["sha256"],
+ *   econtent: {
+ *     type: "tstinfo",
+ *     content: {
+ *       policy: "1.2.3.4.5",
+ *       messageImprint: {alg:"sha256", hash:"12ab..."},
+ *       serial: {"int": 3},
+ *       genTime: {millis: true}, // current time with millis
+ *       accuracy: { millis: 500 }
+ *     }
+ *   }
+ *   certs: [...],
+ *   sinfos: [{
+ *     version: 1,
+ *     id: {type:"isssn", cert: ...},
+ *     hashalg: "sha256",
+ *     sattrs: {array: [{...}]},
+ *     sigalg: "SHA256withRSA",
+ *     signkey: ...
+ *   }]
+ * })
+ * // by TimeStampToken object
+ * new KJUR.asn1.tsp.TimeStampResp({
+ *   tst: new KJUR.asn1.tsp.TimeStapToken(...)
+ * })
+ * // error case
+ * new KJUR.asn1.tsp.TimeStampResp({statusinfo: "rejection"})
+ * // finally, encode to hexadecimal string
+ * new KJUR.asn1.tsp.TimeStampResp(...).tohex() &rarr; "3082..."
  */
 KJUR.asn1.tsp.TimeStampResp = function(params) {
     var _KJUR = KJUR,
@@ -492,17 +558,30 @@ KJUR.asn1.tsp.TimeStampResp = function(params) {
     this.tohex = function() {
 	var params = this.params;
 
-	var a = [new _PKIStatusInfo(params.statusinfo)];
+	var a = [];
 
-	if (params.econtent != undefined) {
-	    a.push((new _KJUR_asn1_tsp.TimeStampToken(params)).getContentInfo());
+	if (params.econtent != undefined || params.tst != undefined) {
+	    // statusInfo
+	    if (params.statusinfo != undefined) {
+		a.push(new _PKIStatusInfo(params.statusinfo));
+	    } else {
+		a.push(new _PKIStatusInfo("granted"));
+	    }
+	    
+	    // TimeStampToken
+	    if (params.econtent != undefined) {
+		a.push((new _KJUR_asn1_tsp.TimeStampToken(params)).getContentInfo());
+	    } else if (params.tst instanceof _KJUR_asn1.ASN1Object) {
+		a.push(params.tst);
+	    } else {
+		throw new Error("improper member tst value");
+	    }
+	} else if (params.statusinfo != undefined) {
+	    a.push(new _PKIStatusInfo(params.statusinfo));
+	} else {
+	    throw new Error("parameter for token nor statusinfo not specified");
 	}
-
-	if (params.tst != undefined && 
-	    params.tst instanceof _KJUR_asn1.ASN1Object) {
-	    a.push(params.tst);
-	}
-
+	    
 	var seq = new _DERSequence({array: a});
 	return seq.tohex();
     };
@@ -1465,6 +1544,8 @@ KJUR.asn1.tsp.TSPParser = function() {
      * @function
      * @param {String} h hexadecimal string of TimeStampReq
      * @return {Array} JSON object of parsed parameters
+     * @since jsrsasign 10.5.18 asn1tsp 2.0.6
+     * @see KJUR.asn1.tsp.TimeStampReq
      * @see KJUR.asn1.tsp.TSPUtil.parseTimeStampReq
      *
      * @description
@@ -1472,15 +1553,14 @@ KJUR.asn1.tsp.TSPParser = function() {
      * and returns parsed their fields:
      *
      * @example
-     * var json = KJUR.asn1.tsp.TSPUtil.parseTimeStampReq("302602...");
-     * // resulted DUMP of above 'json':
-     * {
-     *  messageImprint: {
+     * var parser = new KJUR.asn1.tsp.TSPParser();
+     * parser.getTimeStampReq("302602...") &rarr;
+     * { messageImprint: {
      *       alg: 'sha256',          // MessageImprint hashAlg
      *       hash: 'a1a2a3a4...'},   // MessageImprint hashValue
-     *  policy: '1.2.3.4.5',         // tsaPolicy (OPTION)
-     *  nonce: '9abcf318...',        // nonce (OPTION)
-     *  certreq: true }              // certReq (OPTION)
+     *   policy: '1.2.3.4.5',         // tsaPolicy (OPTION)
+     *   nonce: '9abcf318...',        // nonce (OPTION)
+     *   certreq: true }              // certReq (OPTION)
      */
     this.getTimeStampReq = function(h) {
 	var json = {};
@@ -1493,7 +1573,6 @@ KJUR.asn1.tsp.TSPParser = function() {
 
 	var miHex = _getTLV(h, idxList[1]);
 	json.messageImprint = KJUR.asn1.tsp.TSPUtil.parseMessageImprint(miHex); 
-	//json.messageImprint = getMessageImprint(miHex); 
 
 	for (var i = 2; i < idxList.length; i++) {
             var idx = idxList[i];

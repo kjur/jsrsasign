@@ -558,12 +558,11 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/KJUR.asn1.tsp.TimeStampResp.html#constructor">KJUR.asn1.tsp.TimeStampResp</a></b>(params)
 							</div>
-							<div class="description">class for TSP TimeStampResp ASN.1 object
-<pre>
-TimeStampResp ::= SEQUENCE  {
-   status                  PKIStatusInfo,
-   timeStampToken          TimeStampToken     OPTIONAL  }
-</pre></div>
+							<div class="description">class for TSP TimeStampResp ASN.1 object<br/>
+This is an ASN.1 encoder for TimeStampResp
+ASN.1 structure defined in
+<a href="https://tools.ietf.org/html/rfc3161#section-2.4.2">
+RFC 3161 TSP section 2.4.2</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -608,14 +607,78 @@ TimeStampResp ::= SEQUENCE  {
 				</div>
 				
 				<div class="description">
-					class for TSP TimeStampResp ASN.1 object
+					class for TSP TimeStampResp ASN.1 object<br/>
+This is an ASN.1 encoder for TimeStampResp
+ASN.1 structure defined in
+<a href="https://tools.ietf.org/html/rfc3161#section-2.4.2">
+RFC 3161 TSP section 2.4.2</a>.
+
 <pre>
 TimeStampResp ::= SEQUENCE  {
    status                  PKIStatusInfo,
    timeStampToken          TimeStampToken     OPTIONAL  }
+
+TimeStampToken ::= ContentInfo
+
+TSTInfo ::= SEQUENCE  {
+   version           INTEGER  { v1(1) },
+   policy            TSAPolicyId,
+   messageImprint    MessageImprint,
+   serialNumber      INTEGER,
+   genTime           GeneralizedTime,
+   accuracy          Accuracy                 OPTIONAL,
+   ordering          BOOLEAN                  DEFAULT FALSE,
+   nonce             INTEGER                  OPTIONAL,
+   tsa               [0] GeneralName          OPTIONAL,
+   extensions        [1] IMPLICIT Extensions  OPTIONAL  }
 </pre>
+
+The constructor argument "params" can be used all of 
+<a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a> object further more
+following members can be specified:
+<ul>
+<li>statusinfo: any <a href="../symbols/KJUR.asn1.tsp.PKIStatusInfo.html">KJUR.asn1.tsp.PKIStatusInfo</a> parameter.
+When parameters for TimeStampToken is specified and statusinfo member is omitted, 
+status will be "granted" by default. (OPTIONAL)</li>
+<li>tst: <a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a> object instead of TimeStampToken members (OPTIONAL)</li>
+</ul>
 					
 				</div>
+				
+				
+				
+				<pre class="code">// by TimeStampToken parameters (statusinfo will be "granted" by default)
+new KJUR.asn1.tsp.TimeStampResp({
+  version: 1,
+  hashalgs: ["sha256"],
+  econtent: {
+    type: "tstinfo",
+    content: {
+      policy: "1.2.3.4.5",
+      messageImprint: {alg:"sha256", hash:"12ab..."},
+      serial: {"int": 3},
+      genTime: {millis: true}, // current time with millis
+      accuracy: { millis: 500 }
+    }
+  }
+  certs: [...],
+  sinfos: [{
+    version: 1,
+    id: {type:"isssn", cert: ...},
+    hashalg: "sha256",
+    sattrs: {array: [{...}]},
+    sigalg: "SHA256withRSA",
+    signkey: ...
+  }]
+})
+// by TimeStampToken object
+new KJUR.asn1.tsp.TimeStampResp({
+  tst: new KJUR.asn1.tsp.TimeStapToken(...)
+})
+// error case
+new KJUR.asn1.tsp.TimeStampResp({statusinfo: "rejection"})
+// finally, encode to hexadecimal string
+new KJUR.asn1.tsp.TimeStampResp(...).tohex() &rarr; "3082..."</pre>
 				
 				
 				
@@ -642,6 +705,15 @@ TimeStampResp ::= SEQUENCE  {
 					
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.tsp.TimeStampToken.html">KJUR.asn1.tsp.TimeStampToken</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.tsp.PKIStatusInfo.html">KJUR.asn1.tsp.PKIStatusInfo</a></dd>
+						
+						</dl>
 					
 
 			</div>
