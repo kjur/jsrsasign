@@ -1,6 +1,15 @@
 
 ChangeLog for jsrsasign
 
+OCSP ResponderID object udpate
+* Changes from 10.5.19 to 10.5.20 (2022-Apr-25)
+  - src/asn1ocsp.js
+    - ResponderID class now also supports PEM certificate or
+      X509 object for key and name field.
+  - test/qunit-do-asn1ocsp.html
+    - add some test cases and fix for above
+  - remove silver sponsor
+
 Time stamp package update
 * Changes from 10.5.18 to 10.5.19 (2022-Apr-23)
   - src/asn1tsp.js

@@ -1,4 +1,4 @@
-/* asn1ocsp-1.1.7.js (c) 2016-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1ocsp-1.1.8.js (c) 2016-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1ocsp.js - ASN.1 DER encoder classes for OCSP protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1ocsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.16 asn1ocsp 1.1.7 (2022-Apr-08)
+ * @version jsrsasign 10.5.20 asn1ocsp 1.1.8 (2022-Apr-25)
  * @since jsrsasign 6.1.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -481,6 +481,8 @@ extendClass(KJUR.asn1.ocsp.ResponseData, KJUR.asn1.ASN1Object);
  * @see KJUR.asn1.ocsp.ResponseBytes
  * @see KJUR.asn1.ocsp.BasicOCSPResponse
  * @see KJUR.asn1.ocsp.ResponseData
+ * @see X509#getSubject
+ * @see X509#getExtSubjectKeyIdentifier
  *
  * @description
  * ResponderID ASN.1 class is defined in 
@@ -494,38 +496,80 @@ extendClass(KJUR.asn1.ocsp.ResponseData, KJUR.asn1.ASN1Object);
  * </pre>
  * Following properties are available:
  * <ul>
- * <li>{Array}name (OPTION) - JSON object of {@link KJUR.asn1.x509.X500Name} parameter
- * for "byName"</li>
- * <li>{String}key (OPTION) - hexadecimal string of KeyHash value</li>
+ * <li>{Array}name (OPTION) - JSON object of {@link KJUR.asn1.x509.X500Name} parameter,
+ * PEM string of X.509 certificate or {@link X509 object} for "byName",</li>
+ * <li>{String}key (OPTION) - hexadecimal string of KeyHash value,
+ * PEM string of X.509 certificate or {@link X509 object} for "byKey"</li>
  * </ul>
+ * <br/>
+ * NOTE: From jsrsasign 10.5.20, "name" and "key" member values can be
+ * specified by PEM string of X.509 certificate or {@link X509 object}.
+ * For "name", subject field of the certificate will be used and
+ * for "key", subjectKeyIdentifier extension value of the certificate will be used
+ * respectively.
  *
  * @example
+ * new KJUR.asn1.ocsp.ResponderID({key: "12ab..."})
  * new KJUR.asn1.ocsp.ResponderID({name: {str: "/C=JP/O=Resp"}})
  * new KJUR.asn1.ocsp.ResponderID({name: {array: [[{type:"C",value:"JP",ds:"prn"}]...]}})
- * new KJUR.asn1.ocsp.ResponderID({key: "12ab..."})
+ * // by certificate
+ * new KJUR.asn1.ocsp.ResponderID({key: "-----BEGIN CERTIFICATE..."})
+ * new KJUR.asn1.ocsp.ResponderID({name: "-----BEGIN CERTIFICATE..."})
+ * // by X509 object
+ * new KJUR.asn1.ocsp.ResponderID({key: new X509(...)})
+ * new KJUR.asn1.ocsp.ResponderID({name: new X509(...)})
  */
 KJUR.asn1.ocsp.ResponderID = function(params) {
     KJUR.asn1.ocsp.ResponderID.superclass.constructor.call(this);
-    var _KJUR_asn1 = KJUR.asn1,
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
 	_newObject = _KJUR_asn1.ASN1Util.newObject,
-	_X500Name = _KJUR_asn1.x509.X500Name;
+	_X500Name = _KJUR_asn1.x509.X500Name,
+	_isHex = _KJUR.lang.String.isHex,
+	_Error = Error;
     
     this.params = null;
     
     this.tohex = function() {
 	var params = this.params;
 	if (params.key != undefined) {
+	    var hKey = null;
+	    if (typeof params.key == "string") {
+		if (_isHex(params.key)) hKey = params.key;
+		if (params.key.match(/-----BEGIN CERTIFICATE/)) {
+		    var x = new X509(params.key);
+		    var extSKID = x.getExtSubjectKeyIdentifier();
+		    if (extSKID != null) hKey = extSKID.kid.hex;
+		}
+	    } else if (params.key instanceof X509) {
+		var extSKID = params.key.getExtSubjectKeyIdentifier();
+		if (extSKID != null) hKey = extSKID.kid.hex;
+	    }
+	    if (hKey == null) throw new _Error("wrong key member value");
 	    var dTag = _newObject({tag: {tag:"a2",
 					 explicit:true,
-					 obj:{octstr:{hex:params.key}}}});
+					 obj:{octstr:{hex:hKey}}}});
 	    return dTag.tohex();
 	} else if (params.name != undefined) {
+	    var pName = null;
+	    if (typeof params.name == "string" &&
+		params.name.match(/-----BEGIN CERTIFICATE/)) {
+		var x = new X509(params.name);
+		pName = x.getSubject();
+	    } else if (params.name instanceof X509) {
+		pName = params.name.getSubject();
+	    } else if (typeof params.name == "object" &&
+		       (params.name.array != undefined ||
+			params.name.str != undefined)) {
+		pName = params.name;
+	    }
+	    if (pName == null) throw new _Error("wrong name member value");
 	    var dTag = _newObject({tag: {tag:"a1",
 					 explicit:true,
-					 obj:new _X500Name(params.name)}});
+					 obj:new _X500Name(pName)}});
 	    return dTag.tohex();
 	}
-	throw new Error("key or name not specified");
+	throw new _Error("key or name not specified");
     };
     this.getEncodedHex = function() { return this.tohex(); };
 

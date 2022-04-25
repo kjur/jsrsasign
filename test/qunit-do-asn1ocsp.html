@@ -124,6 +124,9 @@ lBlGGSW4gNfL1IYoakRwJiNiqZ+Gb7+6kHDSVneFeO/qJakXzlByjAA6quPbYzSf
 -----END CERTIFICATE-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+// raymii.org cert
+// SBJDN=/OU=Domain Control Validated/OU=PositiveSSL/CN=raymii.org
+// SKID=70585f8fd3eff27167b12b4a5a9faa8f3154a592
 var certEE1 = (function() {/*
 -----BEGIN CERTIFICATE-----
 MIIGQzCCBSugAwIBAgIRANCSgmNDA6l/rfVVaKSMqH4wDQYJKoZIhvcNAQELBQAw
@@ -319,22 +322,55 @@ ASN1HEX.dump(hExpect),
 
 test("ResponderID test", function() {
 var _ResponderID = KJUR.asn1.ocsp.ResponderID;
+var pIn, hExpect;
 
-var hExpect = "a204040212ab";
-var params = {key: "12ab"};
-equal((new _ResponderID(params)).getEncodedHex(), hExpect, "hex by key");
+pIn = {key: "12ab"};
+hExpect = "a204040212ab";
+equal((new _ResponderID(pIn)).tohex(), hExpect, "hex by key");
 equal(
-ASN1HEX.dump((new _ResponderID(params)).getEncodedHex()),
+ASN1HEX.dump((new _ResponderID(pIn)).tohex()),
 ASN1HEX.dump(hExpect),
-"dump by key");
+"dump by key hex");
 
-var hExpect2 = "a11c301a310b3009060355040613024a50310b3009060355040a0c024f31";
-var params2 = {name: {str: "/C=JP/O=O1"}};
-equal((new _ResponderID(params2)).getEncodedHex(), hExpect2, "hex by name");
+pIn = {name: {str: "/C=JP/O=O1"}};
+hExpect = "a11c301a310b3009060355040613024a50310b3009060355040a0c024f31";
+equal((new _ResponderID(pIn)).tohex(), hExpect, "hex by name param");
 equal(
-ASN1HEX.dump((new _ResponderID(params2)).getEncodedHex()),
-ASN1HEX.dump(hExpect2),
+ASN1HEX.dump((new _ResponderID(pIn)).tohex()),
+ASN1HEX.dump(hExpect),
 "dump by name");
+
+pIn = {key: certEE1};
+hExpect = "a216041470585f8fd3eff27167b12b4a5a9faa8f3154a592";
+equal((new _ResponderID(pIn)).tohex(), hExpect, "key by cert");
+equal(
+ASN1HEX.dump((new _ResponderID(pIn)).tohex()),
+ASN1HEX.dump(hExpect),
+"key by cert dump");
+
+pIn = {name: certEE1};
+hExpect = "a150304e3121301f060355040b1318446f6d61696e20436f6e74726f6c2056616c69646174656431143012060355040b130b506f73697469766553534c311330110603550403130a7261796d69692e6f7267";
+equal((new _ResponderID(pIn)).tohex(), hExpect, "name by cert");
+equal(
+ASN1HEX.dump((new _ResponderID(pIn)).tohex()),
+ASN1HEX.dump(hExpect),
+"name by cert dump");
+
+pIn = {key: new X509(certEE1)};
+hExpect = "a216041470585f8fd3eff27167b12b4a5a9faa8f3154a592";
+equal((new _ResponderID(pIn)).tohex(), hExpect, "key by X509 obj");
+equal(
+ASN1HEX.dump((new _ResponderID(pIn)).tohex()),
+ASN1HEX.dump(hExpect),
+"key by X509 obj dump");
+
+pIn = {name: new X509(certEE1)};
+hExpect = "a150304e3121301f060355040b1318446f6d61696e20436f6e74726f6c2056616c69646174656431143012060355040b130b506f73697469766553534c311330110603550403130a7261796d69692e6f7267";
+equal((new _ResponderID(pIn)).tohex(), hExpect, "name by X509 obj");
+equal(
+ASN1HEX.dump((new _ResponderID(pIn)).tohex()),
+ASN1HEX.dump(hExpect),
+"name by X509 obj dump");
 
 });
 

@@ -99,9 +99,4 @@ You can donate cryptocurrency to jsrsasign using the following addresses:
 - Litecoin(LTC): [LPf3VDJVamwPcNJNjjVtrUQuJQ17ZyWzeU](https://en.cryptobadges.io/donate/LPf3VDJVamwPcNJNjjVtrUQuJQ17ZyWzeU)
 - Bitcoin Cash(BCH): bitcoincash:pq3hy08pc9vm57q6ddgsc06cqdffmfzwwqxd9yejyf
 
-## SPONSORS
-<p align="center">
-<font size="+2"><b>Silver Sponsors</b></font><br clear="all"/>
-<a href="https://shiguredo.jp/" target="_blank"><img src="https://avatars.githubusercontent.com/u/2549434?s=200&v=4" height="150"/></a>
-</p>
 
