@@ -1,6 +1,10 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 10.5.20 to next release
+  - src/asn1ocsp.js
+    - ResponderID API document fix
+
 OCSP ResponderID object udpate
 * Changes from 10.5.19 to 10.5.20 (2022-Apr-25)
   - src/asn1ocsp.js
