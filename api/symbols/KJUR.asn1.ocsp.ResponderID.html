@@ -618,13 +618,13 @@ KeyHash ::= OCTET STRING -- SHA-1 hash of responder's public key
 Following properties are available:
 <ul>
 <li>{Array}name (OPTION) - JSON object of <a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a> parameter,
-PEM string of X.509 certificate or {@link X509 object} for "byName",</li>
+PEM string of X.509 certificate or <a href="../symbols/X509.html">X509</a> object for "byName",</li>
 <li>{String}key (OPTION) - hexadecimal string of KeyHash value,
-PEM string of X.509 certificate or {@link X509 object} for "byKey"</li>
+PEM string of X.509 certificate or <a href="../symbols/X509.html">X509</a> object for "byKey"</li>
 </ul>
 <br/>
 NOTE: From jsrsasign 10.5.20, "name" and "key" member values can be
-specified by PEM string of X.509 certificate or {@link X509 object}.
+specified by PEM string of X.509 certificate or <a href="../symbols/X509.html">X509</a> object.
 For "name", subject field of the certificate will be used and
 for "key", subjectKeyIdentifier extension value of the certificate will be used
 respectively.

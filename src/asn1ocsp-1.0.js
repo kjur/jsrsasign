@@ -497,13 +497,13 @@ extendClass(KJUR.asn1.ocsp.ResponseData, KJUR.asn1.ASN1Object);
  * Following properties are available:
  * <ul>
  * <li>{Array}name (OPTION) - JSON object of {@link KJUR.asn1.x509.X500Name} parameter,
- * PEM string of X.509 certificate or {@link X509 object} for "byName",</li>
+ * PEM string of X.509 certificate or {@link X509} object for "byName",</li>
  * <li>{String}key (OPTION) - hexadecimal string of KeyHash value,
- * PEM string of X.509 certificate or {@link X509 object} for "byKey"</li>
+ * PEM string of X.509 certificate or {@link X509} object for "byKey"</li>
  * </ul>
  * <br/>
  * NOTE: From jsrsasign 10.5.20, "name" and "key" member values can be
- * specified by PEM string of X.509 certificate or {@link X509 object}.
+ * specified by PEM string of X.509 certificate or {@link X509} object.
  * For "name", subject field of the certificate will be used and
  * for "key", subjectKeyIdentifier extension value of the certificate will be used
  * respectively.
