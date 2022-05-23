@@ -676,7 +676,14 @@ new KJUR.asn1.tsp.TimeStampResp({
   tst: new KJUR.asn1.tsp.TimeStapToken(...)
 })
 // error case
-new KJUR.asn1.tsp.TimeStampResp({statusinfo: "rejection"})
+new KJUR.asn1.tsp.TimeStampResp({statusinfo: "rejection"}})
+new KJUR.asn1.tsp.TimeStampResp({
+   statusinfo: {
+     status: "rejection",
+     statusstr: ["policy shall be 1.2.3.4.5"],
+     failinfo: "unacceptedPolicy"
+   }
+})
 // finally, encode to hexadecimal string
 new KJUR.asn1.tsp.TimeStampResp(...).tohex() &rarr; "3082..."</pre>
 				

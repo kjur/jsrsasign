@@ -72,34 +72,46 @@ test("Integer Test", function() {
   equal(d5.getEncodedHex(), "020200fd", "constructor hex 00fd");
 });
 
-test("BitString Test", function() {
-  var d = new KJUR.asn1.DERBitString();
-  d.setHexValueIncludingUnusedBits("04bac0");
-  equal(d.getEncodedHex(), "030304bac0", "setHexValueIncludingUnusedBits > ub=4, bac0");
-  d.setUnusedBitsAndHexValue(5, "bad0");
-  equal(d.getEncodedHex(), "030305bad0", "setUnusedBitsAndHexValue > ub=5, bad0");
-  d.setByBinaryString('1011');
-  equal(d.getEncodedHex(), "030204b0", "setByBinaryString 1011 > ub=4, b0"); 
+test("DERBitString.setByBinaryString test", function() {
+var d = new KJUR.asn1.DERBitString();
 
-  d.setByBinaryString('1011000');
-  equal(d.getEncodedHex(), "030204b0", "setByBinaryString 1011000 > ub=4, b0"); 
-
-  d.setByBinaryString('11111111');
-  equal(d.getEncodedHex(), "030200ff", "setByBinaryString 1(8) > ub=0, ff"); 
-
-  d.setByBinaryString('111111111');
-  equal(d.getEncodedHex(), "030307ff80", "setByBinaryString 1(9) > ub=7, ff80"); 
-  d.setByBooleanArray([true, false, true, true, false]);
-  equal(d.getEncodedHex(), "030204b0", "setByBooleanArray([t,f,t,t,f]) > ub=4, b0"); 
-  var d2 = new KJUR.asn1.DERBitString({"hex":"04bac0"});
-  equal(d2.getEncodedHex(), "030304bac0", "constructor hex 04bac0");
-  var d3 = new KJUR.asn1.DERBitString({"bin":"1011"});
-  equal(d3.getEncodedHex(), "030204b0", "constructor bin 1011"); 
-  var d4 = new KJUR.asn1.DERBitString({"array": [true,false,true,true]});
-  equal(d4.getEncodedHex(), "030204b0", "constructor array [t,f,t,t]"); 
-  var d5 = new KJUR.asn1.DERBitString({obj:{seq: [{int: 3},{prnstr: {str: "aaa"}}]}});
-  equal(d5.getEncodedHex(), "030b0030080201031303616161", "constructor params asn1");
+d.setByBinaryString("1");
+equal(d.tohex(), "03020780", "1 unused=7");
+d.setByBinaryString("100");
+equal(d.tohex(), "03020580", "100 unused=5");
+d.setByBinaryString('1011');
+equal(d.tohex(), "030204b0", "1011 > ub=4, b0"); 
+d.setByBinaryString('1011000');
+equal(d.tohex(), "030201b0", "1011000 > ub=1, b0"); 
+d.setByBinaryString('11111111');
+equal(d.tohex(), "030200ff", "11111111 > ub=0, ff"); 
+d.setByBinaryString('111111111');
+equal(d.tohex(), "030307ff80", "111111111 > ub=7, ff80"); 
 });
+
+test("BitString Test", function() {
+var d = new KJUR.asn1.DERBitString();
+d.setHexValueIncludingUnusedBits("04bac0");
+equal(d.tohex(), "030304bac0", "setHexValueIncludingUnusedBits > ub=4, bac0");
+d.setUnusedBitsAndHexValue(5, "bad0");
+equal(d.tohex(), "030305bad0", "setUnusedBitsAndHexValue > ub=5, bad0");
+
+d.setByBooleanArray([true, false, true, true, false]);
+equal(d.tohex(), "030203b0", "setByBooleanArray([t,f,t,t,f]) > ub=3, b0"); 
+
+var d2 = new KJUR.asn1.DERBitString({"hex":"04bac0"});
+equal(d2.tohex(), "030304bac0", "constructor hex 04bac0");
+var d3 = new KJUR.asn1.DERBitString({"bin":"1011"});
+equal(d3.tohex(), "030204b0", "constructor bin 1011"); 
+var d4 = new KJUR.asn1.DERBitString({"array": [true,false,true,true]});
+equal(d4.tohex(), "030204b0", "constructor array [t,f,t,t]"); 
+var d5 = new KJUR.asn1.DERBitString({obj:{seq: [{int: 3},{prnstr: {str: "aaa"}}]}});
+equal(d5.tohex(), "030b0030080201031303616161", "constructor params asn1");
+});
+
+
+
+
 
 test("OctetString Test", function() {
   var d = new KJUR.asn1.DEROctetString();

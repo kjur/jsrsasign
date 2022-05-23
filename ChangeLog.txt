@@ -1,9 +1,20 @@
 
 ChangeLog for jsrsasign
 
-* Changes from 10.5.20 to next release
+DERBitString, KeyUsage and  tsp PKIFailureInfo fix
+* Changes from 10.5.20 to 10.5.21 (2022-May-23)
+  - src/asn1x509.js
+    - KeyUsage bugfix, refactoring
+  - src/asn1tsp.js
+    - PKIFailureInfo bugfix, refactoring
+  - src/asn1.js
+    - DERBitString refactoring
+  - src/base64x.js
+    - new function namearraytobinstr added
   - src/asn1ocsp.js
     - ResponderID API document fix
+  - test/qunit-do-{asn1,asn1tsp,asn1x509,base64x,x509-ext}.html
+    - add and fix some test cases for above
 
 OCSP ResponderID object udpate
 * Changes from 10.5.19 to 10.5.20 (2022-Apr-25)

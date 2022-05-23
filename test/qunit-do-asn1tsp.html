@@ -104,7 +104,7 @@ var sZ4_CERPEM =
 
 // ----- TimeStampResp --------------
 
-test("TimeStampResp/1 with resp(by params)", function() {
+test("TimeStampResp/1 with token(by params)", function() {
 var hExpect = "3082024130030201003082023806092a864886f70d010702a082022930820225020103310f300d060960864801650304020105003053060b2a864886f70d0109100104a0440442304002010106042a0304053011300906052b0e03021a05000404a1a2a3a4020103181332303133313233313233353935392e3132335a3004800201f40101ff020103318201b8308201b40201013020301b310b3009060355040613025553310c300a060355040a0c0343413102014d300d06096086480165030402010500a06b301a06092a864886f70d010903310d060b2a864886f70d0109100104301c06092a864886f70d010905310f170d3133313233313233353935395a302f06092a864886f70d0109043122042024e488bbec64ebd7696c0e1aeff2743c697950f50d82404a4fb620d29f430259300d06092a864886f70d01010b0500048201003c2ef00801d245023bd1e519c7188e1585675550822de111b25db4cf6f3a400caec35758a5ceb08fb4a689eeb1541001f0c3ed5e1c2390cb9165bcde64cc6ed9e53752bfb8833784920be7f3838959180a46a6ade9b5cd901c4d845c95182cbedd37df79afc3096dc276d2e0c4b0ea514807e40d6bdac2c8fc83869f550968ccc0405b9f4e455ddb5683cc06bdc125afee75c898d29d1069a644721f12a51689508a1b09695978b828ff9025e877fd4b31ecde81ca1647be347dc47e8f2c85dc7d34e051382fa8ca5e834f8de224418f469d1eb78a631fa04f910a3de86c7badc273e212dba2b60791b0aec251046521fe9c2bd2d84f717f520035baa9a4577e";
 var params = {
   statusinfo: 'granted',
@@ -145,7 +145,7 @@ equal(o.getEncodedHex(), hExpect, "hex");
 equal(ASN1HEX.dump(o.getEncodedHex()),ASN1HEX.dump(hExpect), "dump");
 });
 
-test("TimeStampResp/2 with resp(by tst)", function() {
+test("TimeStampResp/2 with token(by tst)", function() {
 var hExpect = "3082024130030201003082023806092a864886f70d010702a082022930820225020103310f300d060960864801650304020105003053060b2a864886f70d0109100104a0440442304002010106042a0304053011300906052b0e03021a05000404a1a2a3a4020103181332303133313233313233353935392e3132335a3004800201f40101ff020103318201b8308201b40201013020301b310b3009060355040613025553310c300a060355040a0c0343413102014d300d06096086480165030402010500a06b301a06092a864886f70d010903310d060b2a864886f70d0109100104301c06092a864886f70d010905310f170d3133313233313233353935395a302f06092a864886f70d0109043122042024e488bbec64ebd7696c0e1aeff2743c697950f50d82404a4fb620d29f430259300d06092a864886f70d01010b0500048201003c2ef00801d245023bd1e519c7188e1585675550822de111b25db4cf6f3a400caec35758a5ceb08fb4a689eeb1541001f0c3ed5e1c2390cb9165bcde64cc6ed9e53752bfb8833784920be7f3838959180a46a6ade9b5cd901c4d845c95182cbedd37df79afc3096dc276d2e0c4b0ea514807e40d6bdac2c8fc83869f550968ccc0405b9f4e455ddb5683cc06bdc125afee75c898d29d1069a644721f12a51689508a1b09695978b828ff9025e877fd4b31ecde81ca1647be347dc47e8f2c85dc7d34e051382fa8ca5e834f8de224418f469d1eb78a631fa04f910a3de86c7badc273e212dba2b60791b0aec251046521fe9c2bd2d84f717f520035baa9a4577e";
 var params = {
   version: 1,
@@ -186,27 +186,27 @@ equal(o.getEncodedHex(), hExpect, "hex");
 equal(ASN1HEX.dump(o.getEncodedHex()),ASN1HEX.dump(hExpect), "dump");
 });
 
-test("TimeStampResp/3 without resp", function() {
+test("TimeStampResp/3 without token", function() {
 var _TimeStampResp = KJUR.asn1.tsp.TimeStampResp;
+var hExpect, params, o;
 
-var hExpect = "30053003020102";
-var params = {statusinfo: "rejection"}
-var o = new _TimeStampResp(params);
+hExpect = "30053003020102";
+params = {statusinfo: "rejection"}
+o = new _TimeStampResp(params);
 equal(o.getEncodedHex(), hExpect, "hex rejection");
 equal(
 ASN1HEX.dump(o.getEncodedHex()),
 ASN1HEX.dump(hExpect),
 "dump rejection");
 
-var hExpect2 = "301b301902010230110c0f756e737570706f7274656420616c67030100";
-var params2 = {statusinfo: {status:"rejection", statusstr:["unsupported alg"], failinfo: 'badAlg'}};
-var o2 = new _TimeStampResp(params2);
-equal(o2.getEncodedHex(), hExpect2, "hex rejection/str/badAlg");
+hExpect = "301c301a02010230110c0f756e737570706f7274656420616c6703020780";
+params = {statusinfo: {status:"rejection", statusstr:["unsupported alg"], failinfo: 'badAlg'}};
+o = new _TimeStampResp(params);
+equal(o.getEncodedHex(), hExpect, "hex rejection/str/badAlg");
 equal(
-ASN1HEX.dump(o2.getEncodedHex()),
-ASN1HEX.dump(hExpect2),
+ASN1HEX.dump(o.getEncodedHex()),
+ASN1HEX.dump(hExpect),
 "dump rejection/str/badAlg");
-
 });
 
 // ----- TimeStampToken -----------------
@@ -308,7 +308,7 @@ var o = new KJUR.asn1.tsp.PKIStatusInfo({
   statusstr: ['aaa'],
   failinfo: 'badAlg'
 });
-equal(o.getEncodedHex(), "300d02010230050c03616161030100", "rejection/str=[aaa]/badAlg");
+equal(o.getEncodedHex(), "300e02010230050c0361616103020780", "rejection/str=[aaa]/badAlg");
 
 var o2 = new KJUR.asn1.tsp.PKIStatusInfo("granted");
 equal(o2.getEncodedHex(), "3003020100", "granted");
@@ -328,11 +328,35 @@ equal(o.getEncodedHex(), "300a0c036161610c03626262", "by [aaa, bbb]");
 });
 
 test("PKIFailureInfo test", function() {
-  var o = new KJUR.asn1.tsp.PKIFailureInfo(25);
-  equal(o.getEncodedHex(), "030203c8", "by int 25");
+var o;
+o = new KJUR.asn1.tsp.PKIFailureInfo(0);
+equal(o.getEncodedHex(), "03020780", "0");
+o = new KJUR.asn1.tsp.PKIFailureInfo(2);
+equal(o.getEncodedHex(), "03020580", "2");
+o = new KJUR.asn1.tsp.PKIFailureInfo(25);
+equal(o.getEncodedHex(), "03050680000000", "25");
+o = new KJUR.asn1.tsp.PKIFailureInfo('badAlg');
+equal(o.getEncodedHex(), "03020780", "badAlg");
+o = new KJUR.asn1.tsp.PKIFailureInfo('badRequest');
+equal(o.getEncodedHex(), "03020580", "badRequest");
+o = new KJUR.asn1.tsp.PKIFailureInfo('systemFailure');
+equal(o.getEncodedHex(), "03050680000000", "systemFailure");
+o = new KJUR.asn1.tsp.PKIFailureInfo(['badAlg','badRequest']);
+equal(o.getEncodedHex(), "030205a0", "[badAlg,badRequest]");
+});
 
-  var o2 = new KJUR.asn1.tsp.PKIFailureInfo('systemFailure');
-  equal(o2.getEncodedHex(), "030203c8", "by name systemFailure");
+test("PKIFailureInfo.getBinValue test", function() {
+var o;
+o = new KJUR.asn1.tsp.PKIFailureInfo(0);
+equal(o.getBinValue(), "1", "0");
+o = new KJUR.asn1.tsp.PKIFailureInfo(2);
+equal(o.getBinValue(), "100", "2");
+o = new KJUR.asn1.tsp.PKIFailureInfo(25);
+equal(o.getBinValue(), "10000000000000000000000000", "25");
+o = new KJUR.asn1.tsp.PKIFailureInfo('timeNotAvailable');
+equal(o.getBinValue(), "100000000000000", "timeNotAvailable");
+o = new KJUR.asn1.tsp.PKIFailureInfo(['badAlg','systemFailure','badRequest']);
+equal(o.getBinValue(), "10000000000000000000000101", "[badAlg,systemFailure,badRequest]");
 });
 
 test("TimeStampReq", function() {

@@ -558,18 +558,11 @@ ul.inheritsList
 							<div class="fixedFont">
 								<b><a href="../symbols/KJUR.asn1.tsp.PKIFailureInfo.html#constructor">KJUR.asn1.tsp.PKIFailureInfo</a></b>(params)
 							</div>
-							<div class="description">class for TSP PKIFailureInfo ASN.1 object
-<pre>
-PKIFailureInfo ::= BIT STRING {
-   badAlg                 (0),
-   badRequest             (2),
-   badDataFormat          (5),
-   timeNotAvailable       (14),
-   unacceptedPolicy       (15),
-   unacceptedExtension    (16),
-   addInfoNotAvailable    (17),
-   systemFailure          (25) }
-</pre></div>
+							<div class="description">class for TSP PKIFailureInfo ASN.1 object<br/>
+This class provides ASN.1 PKIFailureInfo encoder
+defined in 
+<a href="https://tools.ietf.org/html/rfc3161#section-2.4.2">
+RFC 3161 section 2.4.2</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -614,7 +607,11 @@ PKIFailureInfo ::= BIT STRING {
 				</div>
 				
 				<div class="description">
-					class for TSP PKIFailureInfo ASN.1 object
+					class for TSP PKIFailureInfo ASN.1 object<br/>
+This class provides ASN.1 PKIFailureInfo encoder
+defined in 
+<a href="https://tools.ietf.org/html/rfc3161#section-2.4.2">
+RFC 3161 section 2.4.2</a>.
 <pre>
 PKIFailureInfo ::= BIT STRING {
    badAlg                 (0),
@@ -626,13 +623,18 @@ PKIFailureInfo ::= BIT STRING {
    addInfoNotAvailable    (17),
    systemFailure          (25) }
 </pre>
+NOTE: Constructor of an array of failureInfo names string
+has been supported since jsrsasign 10.5.21.
+Ordering of names will be ignored so that
+['unacceptedPolicy', 'badAlg'] is also fine.
 					
 				</div>
 				
 				
 				
 				<pre class="code">new KJUR.asn1.tsp.PKIFailureInfo('badAlg')
-new KJUR.asn1.tsp.PKIFailureInfo(5)</pre>
+new KJUR.asn1.tsp.PKIFailureInfo(5)
+new KJUR.asn1.tsp.PKIFailureInfo(['badAlg', 'unacceptedPolicy'])</pre>
 				
 				
 				
@@ -659,6 +661,13 @@ new KJUR.asn1.tsp.PKIFailureInfo(5)</pre>
 					
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd><a href="../symbols/KJUR.asn1.tsp.PKIStatusInfo.html">KJUR.asn1.tsp.PKIStatusInfo</a></dd>
+						
+						</dl>
 					
 
 			</div>

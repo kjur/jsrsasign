@@ -1,4 +1,4 @@
-/* asn1tsp-2.0.7.js (c) 2014-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1tsp-2.0.8.js (c) 2014-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1tsp.js - ASN.1 DER encoder classes for RFC 3161 Time Stamp Protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1tsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.19 asn1tsp 2.0.7 (2022-Apr-23)
+ * @version jsrsasign 10.5.21 asn1tsp 2.0.8 (2022-May-23)
  * @since jsrsasign 4.5.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -539,7 +539,14 @@ extendClass(KJUR.asn1.tsp.TimeStampReq, KJUR.asn1.ASN1Object);
  *   tst: new KJUR.asn1.tsp.TimeStapToken(...)
  * })
  * // error case
- * new KJUR.asn1.tsp.TimeStampResp({statusinfo: "rejection"})
+ * new KJUR.asn1.tsp.TimeStampResp({statusinfo: "rejection"}})
+ * new KJUR.asn1.tsp.TimeStampResp({
+ *    statusinfo: {
+ *      status: "rejection",
+ *      statusstr: ["policy shall be 1.2.3.4.5"],
+ *      failinfo: "unacceptedPolicy"
+ *    }
+ * })
  * // finally, encode to hexadecimal string
  * new KJUR.asn1.tsp.TimeStampResp(...).tohex() &rarr; "3082..."
  */
@@ -788,13 +795,19 @@ KJUR.asn1.tsp.PKIFreeText = function(params) {
 extendClass(KJUR.asn1.tsp.PKIFreeText, KJUR.asn1.ASN1Object);
 
 /**
- * class for TSP PKIFailureInfo ASN.1 object
+ * class for TSP PKIFailureInfo ASN.1 object<br/>
  * @name KJUR.asn1.tsp.PKIFailureInfo
  * @class class for TSP PKIFailureInfo ASN.1 object
  * @param {Array} params associative array of parameters
  * @extends KJUR.asn1.ASN1Object
  * @since jsrsasign 4.6.0 asn1tsp 1.0.0
+ * @see KJUR.asn1.tsp.PKIStatusInfo
+ *
  * @description
+ * This class provides ASN.1 PKIFailureInfo encoder
+ * defined in 
+ * <a href="https://tools.ietf.org/html/rfc3161#section-2.4.2">
+ * RFC 3161 section 2.4.2</a>.
  * <pre>
  * PKIFailureInfo ::= BIT STRING {
  *    badAlg                 (0),
@@ -806,10 +819,15 @@ extendClass(KJUR.asn1.tsp.PKIFreeText, KJUR.asn1.ASN1Object);
  *    addInfoNotAvailable    (17),
  *    systemFailure          (25) }
  * </pre>
+ * NOTE: Constructor of an array of failureInfo names string
+ * has been supported since jsrsasign 10.5.21.
+ * Ordering of names will be ignored so that
+ * ['unacceptedPolicy', 'badAlg'] is also fine.
  * 
  * @example
  * new KJUR.asn1.tsp.PKIFailureInfo('badAlg')
  * new KJUR.asn1.tsp.PKIFailureInfo(5)
+ * new KJUR.asn1.tsp.PKIFailureInfo(['badAlg', 'unacceptedPolicy'])
  */
 KJUR.asn1.tsp.PKIFailureInfo = function(params) {
     var _Error = Error,
@@ -834,22 +852,32 @@ KJUR.asn1.tsp.PKIFailureInfo = function(params) {
 
     this.params = null;
 
-    this.tohex = function() {
+    this.getBinValue = function() {
 	var params = this.params;
 
-	var value;
-	if (typeof params == "string") {
-	    try {
-		value = _nameValue[params];
-	    } catch(ex) {
-		throw new _Error("undefined name: " + params);
-	    }
-	} else if (typeof params == "number") {
-	    value = params;
+	var d = 0;
+
+	if (typeof params == "number" && 
+	    0 <= params && params <= 25) {
+	    d |= 1 << params;
+	} else if (typeof params == "string" &&
+		   _nameValue[params] != undefined) {
+	    return namearraytobinstr([params], _nameValue);
+	} else if (typeof params == "object" &&
+		   params.length != undefined) {
+	    return namearraytobinstr(params, _nameValue);
 	} else {
 	    throw new _Error("wrong params");
 	}
-	return (new _DERBitString({"bin": value.toString(2)})).tohex();
+
+	return d.toString(2);
+    };
+
+    this.tohex = function() {
+	var params = this.params;
+
+	var binValue = this.getBinValue();
+	return (new _DERBitString({"bin": binValue})).tohex();
     };
     this.getEncodedHex = function() { return this.tohex(); };
 
