@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* base64x-1.1.26 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* base64x-1.1.27 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name base64x-1.1.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign 10.5.17 base64x 1.1.26 (2022-Apr-14)
+<span class='line'> 19</span>  * @version jsrsasign 10.5.21 base64x 1.1.27 (2022-May-23)
 <span class='line'> 20</span>  * @since jsrsasign 2.1
 <span class='line'> 21</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -1788,39 +1788,70 @@
 <span class='line'>1781</span> 
 <span class='line'>1782</span> </span><span class="COMM">// =======================================================</span><span class="WHIT">
 <span class='line'>1783</span> </span><span class="COMM">/**
-<span class='line'>1784</span>  * set class inheritance&lt;br/>
-<span class='line'>1785</span>  * @name extendClass
+<span class='line'>1784</span>  * convert array of names to bit string&lt;br/>
+<span class='line'>1785</span>  * @name namearraytobinstr
 <span class='line'>1786</span>  * @function
-<span class='line'>1787</span>  * @param {Function} subClass sub class to set inheritance
-<span class='line'>1788</span>  * @param {Function} superClass super class to inherit
-<span class='line'>1789</span>  * @since jsrsasign 10.3.0 base64x 1.1.21
-<span class='line'>1790</span>  *
-<span class='line'>1791</span>  * @description
-<span class='line'>1792</span>  * This function extends a class and set an inheritance
-<span class='line'>1793</span>  * for member variables and methods.
-<span class='line'>1794</span>  *
-<span class='line'>1795</span>  * @example
-<span class='line'>1796</span>  * var Animal = function() {
-<span class='line'>1797</span>  *   this.hello = function(){console.log("Hello")};
-<span class='line'>1798</span>  *   this.name="Ani";
-<span class='line'>1799</span>  * };
-<span class='line'>1800</span>  * var Dog = function() {
-<span class='line'>1801</span>  *   Dog.superclass.constructor.call(this);
-<span class='line'>1802</span>  *   this.vow = function(){console.log("Vow wow")};
-<span class='line'>1803</span>  *   this.tail=true;
-<span class='line'>1804</span>  * };
-<span class='line'>1805</span>  * extendClass(Dog, Animal);
-<span class='line'>1806</span>  */</span><span class="WHIT">
-<span class='line'>1807</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">extendClass</span><span class="PUNC">(</span><span class="NAME">subClass</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">superClass</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1808</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">F</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1809</span> </span><span class="WHIT">    </span><span class="NAME">F.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">superClass.prototype</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1810</span> </span><span class="WHIT">    </span><span class="NAME">subClass.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">F</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1811</span> </span><span class="WHIT">    </span><span class="NAME">subClass.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">subClass</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1812</span> </span><span class="WHIT">    </span><span class="NAME">subClass.superclass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">superClass.prototype</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1813</span> </span><span class="WHIT">     
-<span class='line'>1814</span>     </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">superClass.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">Object.prototype.constructor</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1815</span> </span><span class="WHIT">        </span><span class="NAME">superClass.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">superClass</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1816</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1817</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1818</span> 
-<span class='line'>1819</span> </span></pre></body></html>
+<span class='line'>1787</span>  * @param {array} namearray array of name string
+<span class='line'>1788</span>  * @param {object} namedb associative array of name and value
+<span class='line'>1789</span>  * @return {string} binary string (ex. "110001")
+<span class='line'>1790</span>  * @since jsrsasign 10.5.21 base64x 1.1.27
+<span class='line'>1791</span>  * @see KJUR.asn1.x509.KeyUsage
+<span class='line'>1792</span>  * @see KJUR.asn1.tsp.PKIFailureInfo
+<span class='line'>1793</span>  * 
+<span class='line'>1794</span>  * @description
+<span class='line'>1795</span>  * This function converts from an array of names to
+<span class='line'>1796</span>  * a binary string. DB value bit will be set.
+<span class='line'>1797</span>  * Note that ordering of namearray items
+<span class='line'>1798</span>  * will be ignored.
+<span class='line'>1799</span>  *
+<span class='line'>1800</span>  * @example
+<span class='line'>1801</span>  * db = { a: 0, b: 3, c: 8, d: 9, e: 17, f: 19 };
+<span class='line'>1802</span>  * namearraytobinstr(['a', 'c', 'd'], db) &rarr: '1100000001'
+<span class='line'>1803</span>  * namearraytobinstr(['c', 'b'], db) &rarr: '100001000'
+<span class='line'>1804</span>  */</span><span class="WHIT">
+<span class='line'>1805</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">namearraytobinstr</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">namearray</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">namedb</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1806</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1807</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">namearray.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1808</span> </span><span class="WHIT">	</span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">|</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">&lt;&lt;</span><span class="WHIT"> </span><span class="NAME">namedb</span><span class="PUNC">[</span><span class="NAME">namearray</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1809</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1810</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">d.toString</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1811</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1812</span> 
+<span class='line'>1813</span> </span><span class="COMM">// =======================================================</span><span class="WHIT">
+<span class='line'>1814</span> </span><span class="COMM">/**
+<span class='line'>1815</span>  * set class inheritance&lt;br/>
+<span class='line'>1816</span>  * @name extendClass
+<span class='line'>1817</span>  * @function
+<span class='line'>1818</span>  * @param {Function} subClass sub class to set inheritance
+<span class='line'>1819</span>  * @param {Function} superClass super class to inherit
+<span class='line'>1820</span>  * @since jsrsasign 10.3.0 base64x 1.1.21
+<span class='line'>1821</span>  *
+<span class='line'>1822</span>  * @description
+<span class='line'>1823</span>  * This function extends a class and set an inheritance
+<span class='line'>1824</span>  * for member variables and methods.
+<span class='line'>1825</span>  *
+<span class='line'>1826</span>  * @example
+<span class='line'>1827</span>  * var Animal = function() {
+<span class='line'>1828</span>  *   this.hello = function(){console.log("Hello")};
+<span class='line'>1829</span>  *   this.name="Ani";
+<span class='line'>1830</span>  * };
+<span class='line'>1831</span>  * var Dog = function() {
+<span class='line'>1832</span>  *   Dog.superclass.constructor.call(this);
+<span class='line'>1833</span>  *   this.vow = function(){console.log("Vow wow")};
+<span class='line'>1834</span>  *   this.tail=true;
+<span class='line'>1835</span>  * };
+<span class='line'>1836</span>  * extendClass(Dog, Animal);
+<span class='line'>1837</span>  */</span><span class="WHIT">
+<span class='line'>1838</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">extendClass</span><span class="PUNC">(</span><span class="NAME">subClass</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">superClass</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1839</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">F</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1840</span> </span><span class="WHIT">    </span><span class="NAME">F.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">superClass.prototype</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1841</span> </span><span class="WHIT">    </span><span class="NAME">subClass.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">F</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1842</span> </span><span class="WHIT">    </span><span class="NAME">subClass.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">subClass</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1843</span> </span><span class="WHIT">    </span><span class="NAME">subClass.superclass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">superClass.prototype</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1844</span> </span><span class="WHIT">     
+<span class='line'>1845</span>     </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">superClass.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">Object.prototype.constructor</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1846</span> </span><span class="WHIT">        </span><span class="NAME">superClass.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">superClass</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1847</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1848</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1849</span> 
+<span class='line'>1850</span> </span></pre></body></html>

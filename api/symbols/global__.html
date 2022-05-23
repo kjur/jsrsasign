@@ -909,6 +909,17 @@ to a 16 byte hexadecimal string of address.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#namearraytobinstr">namearraytobinstr</a></b>(namearray, namedb)
+								</div>
+								<div class="description">convert array of names to bit string<br/>
+This function converts from an array of names to
+a binary string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#newline_toDos">newline_toDos</a></b>(s)
 								</div>
 								<div class="description">convert all UNIX new line("\r\n") to DOS new line("\n") in 
@@ -3355,6 +3366,83 @@ ishex("121") &rarr; false -- odd length</pre>
 								<dd><a href="../symbols/global__.html#iso88591hextoutf8">iso88591hextoutf8</a></dd>
 							
 								<dd><a href="../symbols/global__.html#utf8hextoiso88591hex">utf8hextoiso88591hex</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="namearraytobinstr"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{string}</span>
+					<b>namearraytobinstr</b>(namearray, namedb)
+					
+					</div>
+					<div class="description">
+						convert array of names to bit string<br/>
+This function converts from an array of names to
+a binary string. DB value bit will be set.
+Note that ordering of namearray items
+will be ignored.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">db = { a: 0, b: 3, c: 8, d: 9, e: 17, f: 19 };
+namearraytobinstr(['a', 'c', 'd'], db) &rarr: '1100000001'
+namearraytobinstr(['c', 'b'], db) &rarr: '100001000'</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{array}</span> <b>namearray</b>
+									
+								</dt>
+								<dd>array of name string</dd>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>namedb</b>
+									
+								</dt>
+								<dd>associative array of name and value</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.21 base64x 1.1.27</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> binary string (ex. "110001")</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.tsp.PKIFailureInfo.html">KJUR.asn1.tsp.PKIFailureInfo</a></dd>
 							
 							</dl>
 						

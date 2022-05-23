@@ -790,7 +790,7 @@ o.newFalseArray(3) &rarr; [false, false, false]</pre>
 						set ASN.1 DER BitString by binary string<br/>
 Its unused bits will be calculated automatically by length of 
 'binaryValue'. <br/>
-NOTE: Trailing zeros '0' will be ignored.
+NOTE: Leading zeros '0' will be ignored.
 						
 						
 					</div>
@@ -798,7 +798,8 @@ NOTE: Trailing zeros '0' will be ignored.
 					
 					
 					<pre class="code">o = new KJUR.asn1.DERBitString();
-o.setByBinaryString("01011");</pre>
+o.setByBinaryString("1011");
+o.setByBinaryString("001"); // leading zeros ignored</pre>
 					
 					
 					

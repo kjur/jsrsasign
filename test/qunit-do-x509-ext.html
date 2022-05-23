@@ -373,20 +373,18 @@ x3.getExtBasicConstraints(),
 });
 
 test("getExtKeyUsageBin()", function() {
-var x1 = new X509();
-x1.readCertPEM(certGithubPEM);
+var x1 = new X509(certGithubPEM);
 equal(x1.getExtKeyUsageBin(), "101", "101 for GitHub.com site");
 
-var x2 = new X509();
-x2.readCertPEM(digiCertEvRootPEM);
+var x2 = new X509(digiCertEvRootPEM);
 equal(x2.getExtKeyUsageBin(), "1000011", "1000011 for DigiCert EV root");
 
-var x3 = new X509();
-x3.readCertPEM(certGlobalSignRootR6PEM);
+var x3 = new X509(certGlobalSignRootR6PEM);
 equal(x3.getExtKeyUsageBin(), "0000011", "0000011 for GlobalSign R6 root");
 
 var x = new X509();
 equal(x.getExtKeyUsageBin("0303070080"), "000000001", "decipherOnly");
+equal(x.getExtKeyUsageBin("030201c2"), "1100001", "dsig,cert,crl");
 });
 
 test("getExtKeyUsageString()", function() {
