@@ -682,12 +682,18 @@ o = new KJUR.asn1.x509.KeyUsage({'bin':'11', 'critical': true});
 equal(o.tohex(), "300e0603551d0f0101ff0404030206c0", "bin 11 critical getEncodedHex");
 o = new KJUR.asn1.x509.KeyUsage({'names': ['digitalSignature', 'nonRepudiation']});
 equal(o.tohex(), "300b0603551d0f0404030206c0", "name [digitalSignature, nonRepudiation]");
-o = new KJUR.asn1.x509.KeyUsage({'bin':'11000000000'});
-equal(o.tohex(), "300c0603551d0f0405030305c000", "bin 110000000");
+o = new KJUR.asn1.x509.KeyUsage({'bin':'000000011'});
+equal(o.tohex(), "300c0603551d0f04050303070180", "bin 000000011");
 o = new KJUR.asn1.x509.KeyUsage({'names': ['encipherOnly', 'decipherOnly']});
-equal(o.tohex(), "300c0603551d0f0405030307c000", "name [encipherOnly, decipherOnly]");
+equal(o.tohex(), "300c0603551d0f04050303070180", "name [encipherOnly, decipherOnly]");
+o = new KJUR.asn1.x509.KeyUsage({'bin':'1000011'});
+equal(o.tohex(), "300b0603551d0f040403020186", "bin 1000011");
 o = new KJUR.asn1.x509.KeyUsage({'names': ['digitalSignature','keyCertSign','cRLSign']});
-equal(o.tohex(), "300b0603551d0f0404030201c2", "name [dsig,certsign,crlsign]");
+equal(o.tohex(), "300b0603551d0f040403020186", "name [dsig,certsign,crlsign]");
+o = new KJUR.asn1.x509.KeyUsage({'bin':'0000011'});
+equal(o.tohex(), "300b0603551d0f040403020106", "bin 0000011");
+o = new KJUR.asn1.x509.KeyUsage({'names': ['keyCertSign','cRLSign']});
+equal(o.tohex(), "300b0603551d0f040403020106", "name [certsign,crlsign]");
 });
 
 // CRLDP

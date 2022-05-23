@@ -1,4 +1,4 @@
-/* asn1x509-2.1.15.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1x509-2.1.16.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.21 asn1x509 2.1.15 (2022-May-23)
+ * @version jsrsasign 10.5.22 asn1x509 2.1.16 (2022-May-24)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -637,35 +637,6 @@ KJUR.asn1.x509.KeyUsage = function(params) {
 
     this.oid = "2.5.29.15";
     if (params !== undefined) this.params = params;
-};
-KJUR.asn1.x509.KeyUsage_bak = function(params) {
-    KJUR.asn1.x509.KeyUsage.superclass.constructor.call(this, params);
-    var _KEYUSAGE_NAME = X509.KEYUSAGE_NAME;
-
-    this.getExtnValueHex = function() {
-        return this.asn1ExtnValue.tohex();
-    };
-
-    this.oid = "2.5.29.15";
-    if (params !== undefined) {
-        if (params.bin !== undefined) {
-            this.asn1ExtnValue = new KJUR.asn1.DERBitString(params);
-        }
-	if (params.names !== undefined &&
-	    params.names.length !== undefined) {
-	    var names = params.names;
-	    var s = "000000000";
-	    for (var i = 0; i < names.length; i++) {
-		for (var j = 0; j < _KEYUSAGE_NAME.length; j++) {
-		    if (names[i] === _KEYUSAGE_NAME[j]) {
-			s = s.substring(0, j) + '1' + 
-			    s.substring(j + 1, s.length);
-		    }
-		}
-	    }
-            this.asn1ExtnValue = new KJUR.asn1.DERBitString({bin: s});
-	}
-    }
 };
 extendClass(KJUR.asn1.x509.KeyUsage, KJUR.asn1.x509.Extension);
 

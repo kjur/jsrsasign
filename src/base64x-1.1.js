@@ -1,4 +1,4 @@
-/* base64x-1.1.27 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* base64x-1.1.28 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.21 base64x 1.1.27 (2022-May-23)
+ * @version jsrsasign 10.5.22 base64x 1.1.28 (2022-May-24)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1799,15 +1799,21 @@ function binstrtobitstr(s) {
  *
  * @example
  * db = { a: 0, b: 3, c: 8, d: 9, e: 17, f: 19 };
- * namearraytobinstr(['a', 'c', 'd'], db) &rarr: '1100000001'
- * namearraytobinstr(['c', 'b'], db) &rarr: '100001000'
+ * namearraytobinstr(['a', 'c', 'd'], db) &rarr: '1000000011'
+ * namearraytobinstr(['c', 'b'], db) &rarr: '000100001'
  */
 function namearraytobinstr (namearray, namedb) {
     var d = 0;
     for (var i = 0; i < namearray.length; i++) {
 	d |= 1 << namedb[namearray[i]];
     }
-    return d.toString(2);
+
+    var s = d.toString(2);
+    var r = "";
+    for (var i = s.length - 1; i >=0; i--) {
+	r += s[i];
+    }
+    return r;
 }
 
 // =======================================================

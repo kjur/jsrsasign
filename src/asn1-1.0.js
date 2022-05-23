@@ -1,4 +1,4 @@
-/* asn1-1.0.25.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1-1.0.26.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.21 asn1 1.0.25 (2022-May-23)
+ * @version jsrsasign 10.5.22 asn1 1.0.26 (2022-May-24)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -974,6 +974,7 @@ extendClass(KJUR.asn1.DERInteger, KJUR.asn1.ASN1Object);
  * NOTE1: 'params' can be omitted.<br/>
  * NOTE2: 'obj' parameter have been supported since
  * asn1 1.0.11, jsrsasign 6.1.1 (2016-Sep-25).<br/>
+ *
  * @example
  * // default constructor
  * o = new KJUR.asn1.DERBitString();
@@ -1048,7 +1049,7 @@ KJUR.asn1.DERBitString = function(params) {
      * o.setByBinaryString("001"); // leading zeros ignored
      */
     this.setByBinaryString = function(binaryString) {
-        binaryString = binaryString.replace(/^0+/, '');
+        binaryString = binaryString.replace(/0+$/, '');
         var unusedBits = 8 - binaryString.length % 8;
         if (unusedBits == 8) unusedBits = 0;
 	

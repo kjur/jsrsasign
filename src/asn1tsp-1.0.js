@@ -1,4 +1,4 @@
-/* asn1tsp-2.0.8.js (c) 2014-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1tsp-2.0.9.js (c) 2014-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1tsp.js - ASN.1 DER encoder classes for RFC 3161 Time Stamp Protocol
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1tsp-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.21 asn1tsp 2.0.8 (2022-May-23)
+ * @version jsrsasign 10.5.22 asn1tsp 2.0.9 (2022-May-24)
  * @since jsrsasign 4.5.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -860,6 +860,10 @@ KJUR.asn1.tsp.PKIFailureInfo = function(params) {
 	if (typeof params == "number" && 
 	    0 <= params && params <= 25) {
 	    d |= 1 << params;
+	    var s = d.toString(2);
+	    var r = "";
+	    for (var i = s.length - 1; i >= 0; i--) r += s[i];
+	    return r;
 	} else if (typeof params == "string" &&
 		   _nameValue[params] != undefined) {
 	    return namearraytobinstr([params], _nameValue);
@@ -870,7 +874,7 @@ KJUR.asn1.tsp.PKIFailureInfo = function(params) {
 	    throw new _Error("wrong params");
 	}
 
-	return d.toString(2);
+	return 
     };
 
     this.tohex = function() {

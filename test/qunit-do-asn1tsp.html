@@ -332,17 +332,19 @@ var o;
 o = new KJUR.asn1.tsp.PKIFailureInfo(0);
 equal(o.getEncodedHex(), "03020780", "0");
 o = new KJUR.asn1.tsp.PKIFailureInfo(2);
-equal(o.getEncodedHex(), "03020580", "2");
+equal(o.getEncodedHex(), "03020520", "2");
 o = new KJUR.asn1.tsp.PKIFailureInfo(25);
-equal(o.getEncodedHex(), "03050680000000", "25");
+equal(o.getEncodedHex(), "03050600000040", "25");
 o = new KJUR.asn1.tsp.PKIFailureInfo('badAlg');
 equal(o.getEncodedHex(), "03020780", "badAlg");
 o = new KJUR.asn1.tsp.PKIFailureInfo('badRequest');
-equal(o.getEncodedHex(), "03020580", "badRequest");
+equal(o.getEncodedHex(), "03020520", "badRequest");
 o = new KJUR.asn1.tsp.PKIFailureInfo('systemFailure');
-equal(o.getEncodedHex(), "03050680000000", "systemFailure");
+equal(o.getEncodedHex(), "03050600000040", "systemFailure");
 o = new KJUR.asn1.tsp.PKIFailureInfo(['badAlg','badRequest']);
 equal(o.getEncodedHex(), "030205a0", "[badAlg,badRequest]");
+o = new KJUR.asn1.tsp.PKIFailureInfo(['badAlg','badRequest','systemFailure']);
+equal(o.getEncodedHex(), "030506a0000040", "[badAlg,badRequest,systemFailure]");
 });
 
 test("PKIFailureInfo.getBinValue test", function() {
@@ -350,13 +352,13 @@ var o;
 o = new KJUR.asn1.tsp.PKIFailureInfo(0);
 equal(o.getBinValue(), "1", "0");
 o = new KJUR.asn1.tsp.PKIFailureInfo(2);
-equal(o.getBinValue(), "100", "2");
+equal(o.getBinValue(), "001", "2");
 o = new KJUR.asn1.tsp.PKIFailureInfo(25);
-equal(o.getBinValue(), "10000000000000000000000000", "25");
+equal(o.getBinValue(), "00000000000000000000000001", "25");
 o = new KJUR.asn1.tsp.PKIFailureInfo('timeNotAvailable');
-equal(o.getBinValue(), "100000000000000", "timeNotAvailable");
+equal(o.getBinValue(), "000000000000001", "timeNotAvailable");
 o = new KJUR.asn1.tsp.PKIFailureInfo(['badAlg','systemFailure','badRequest']);
-equal(o.getBinValue(), "10000000000000000000000101", "[badAlg,systemFailure,badRequest]");
+equal(o.getBinValue(), "10100000000000000000000001", "[badAlg,systemFailure,badRequest]");
 });
 
 test("TimeStampReq", function() {
