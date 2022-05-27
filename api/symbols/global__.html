@@ -1781,6 +1781,7 @@ When "s" is not binary string, this returns null.
 					
 					
 					<pre class="code">binstrtobitstr("101") &rarr; "05a0"
+binstrtobitstr("001") &rarr; "0520"
 binstrtobitstr("11001") &rarr; "03c8"
 binstrtobitstr("101000001") &rarr; "07a080"
 binstrtobitstr(101) &rarr; null // not number
@@ -1856,9 +1857,10 @@ is applied, this returns null.
 					
 					
 					<pre class="code">bitstrtobinstr("05a0") &rarr; "101"
+bitstrtobinstr("0520") &rarr; "001"
 bitstrtobinstr("07a080") &rarr; "101000001"
-bitstrtoint(502) &rarr; null // non ASN.1 BitString value
-bitstrtoint("ff00") &rarr; -1 // for improper BitString value</pre>
+bitstrtobinstr(502) &rarr; null // non ASN.1 BitString value
+bitstrtobinstr("ff00") &rarr; null // for improper BitString value</pre>
 					
 					
 					
