@@ -401,6 +401,8 @@ equal(inttobitstr(16383), "02fffc", "16383 > 02fffc");
 
 test("bitstrtobinstr test", function() {
 equal(bitstrtobinstr("05a0"), "101", "05a0 > 101");
+equal(bitstrtobinstr("0520"), "001", "0520 > 001");
+equal(bitstrtobinstr("0400000010"), "0000000000000000000000000001", "03050400000010 > 0..1");
 equal(bitstrtobinstr("07a080"), "101000001", "07a080 > 101000001");
 equal(bitstrtobinstr("0"), null, "0 > null");
 equal(bitstrtobinstr("ff"), null, "ff > null");

@@ -40,8 +40,8 @@ var _parse = ASN1HEX.parse;
 var hIN, oExpect;
 
 hIn = "030400abcdef";
-oExpect = {bitstr: {hex: "00abcdef"}};
-deepEqual(_parse(hIn), oExpect, "00abcdef > 00abcdef");
+oExpect = {bitstr: {bin: "101010111100110111101111"}};
+deepEqual(_parse(hIn), oExpect, "00abcdef > 1010...1111");
 
 hIn = "030400130161";
 oExpect = {bitstr: {obj: {"prnstr": {str: "a"}}}};
@@ -51,6 +51,10 @@ deepEqual(_parse(hIn), oExpect,
 hIn = "030205a0";
 oExpect = {bitstr: {bin: "101"}};
 deepEqual(_parse(hIn), oExpect, "05a0 > {bin: 101}");
+
+hIn = "03020520";
+oExpect = {bitstr: {bin: "001"}};
+deepEqual(_parse(hIn), oExpect, "0520 > {bin: 001}");
 
 hIn = "030307a080";
 oExpect = {bitstr: {bin: "101000001"}};

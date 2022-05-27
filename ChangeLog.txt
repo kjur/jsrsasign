@@ -1,6 +1,18 @@
 
 ChangeLog for jsrsasign
 
+BitString parsing bug fix
+* Changes from 10.5.22 to 10.5.23 (2022-May-27)
+  - src/base64x.js
+    - bitstrtobinstr bugfix fix
+  - src/asn1hex.js
+    - ASN1HEX.parse change for bin string range
+  - npm/lib/footers.js
+    - add missed exports (bitstrtobinstr, binstrtobitstr, 
+      namearraytobinstr, extendClass)
+  - test/qunit-do-{asn1hex-parse,base64x}.html
+    - add and fix some test cases for above
+
 DERBitString, KeyUsage and  tsp PKIFailureInfo critical bug fix
 * Changes from 10.5.21 to 10.5.22 (2022-May-24)
   - src/asn1.js

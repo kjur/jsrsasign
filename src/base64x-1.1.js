@@ -1,4 +1,4 @@
-/* base64x-1.1.28 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* base64x-1.1.29 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.22 base64x 1.1.28 (2022-May-24)
+ * @version jsrsasign 10.5.23 base64x 1.1.29 (2022-May-27)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1734,14 +1734,31 @@ function inttobitstr(n) {
  * 
  * @example
  * bitstrtobinstr("05a0") &rarr; "101"
+ * bitstrtobinstr("0520") &rarr; "001"
  * bitstrtobinstr("07a080") &rarr; "101000001"
- * bitstrtoint(502) &rarr; null // non ASN.1 BitString value
- * bitstrtoint("ff00") &rarr; -1 // for improper BitString value
+ * bitstrtobinstr(502) &rarr; null // non ASN.1 BitString value
+ * bitstrtobinstr("ff00") &rarr; null // for improper BitString value
  */
 function bitstrtobinstr(h) {
-    var n = bitstrtoint(h);
-    if (n == -1) return null;
-    return n.toString(2);
+    if (typeof h != "string") return null;
+    if (h.length % 2 != 0) return null;
+    if (! h.match(/^[0-9a-f]+$/)) return null;
+    try {
+	var unusedBits = parseInt(h.substr(0, 2), 16);
+	if (unusedBits < 0 || 7 < unusedBits) return null
+
+	var value = h.substr(2);
+	var bin = "";
+	for (var i = 0; i < value.length; i += 2) {
+	    var hi = value.substr(i, 2);
+	    var bi = parseInt(hi, 16).toString(2);
+	    bi = ("0000000" + bi).slice(-8);
+	    bin += bi;
+	}
+	return  bin.substr(0, bin.length - unusedBits);
+    } catch(ex) {
+	return null;
+    }
 }
 
 /**
@@ -1763,6 +1780,7 @@ function bitstrtobinstr(h) {
  * 
  * @example
  * binstrtobitstr("101") &rarr; "05a0"
+ * binstrtobitstr("001") &rarr; "0520"
  * binstrtobitstr("11001") &rarr; "03c8"
  * binstrtobitstr("101000001") &rarr; "07a080"
  * binstrtobitstr(101) &rarr; null // not number

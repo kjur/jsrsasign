@@ -74,6 +74,10 @@ exports.hextooid = hextooid;
 exports.strpad = strpad;
 exports.bitstrtoint = bitstrtoint;
 exports.inttobitstr = inttobitstr;
+exports.bitstrtobinstr = bitstrtobinstr;
+exports.binstrtobitstr = binstrtobitstr;
+exports.namearraytobinstr = namearraytobinstr;
+exports.extendClass = extendClass;
 
 // name spaces
 exports.KJUR = KJUR;

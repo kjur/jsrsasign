@@ -1,4 +1,4 @@
-/* asn1hex-1.2.14.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1hex-1.2.15.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1hex.js - Hexadecimal represented ASN.1 string library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1hex-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.16 asn1hex 1.2.14 (2022-Apr-08)
+ * @version jsrsasign 10.5.23 asn1hex 1.2.15 (2022-May-27)
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
@@ -1069,7 +1069,7 @@ ASN1HEX.parse = function(h) {
 	    return {bitstr: {obj: _parse(hV1)}};
 	} catch(ex) {
 	    var bV = null;
-	    if (hV.length <= 6) bV = bitstrtobinstr(hV);
+	    if (hV.length <= 10) bV = bitstrtobinstr(hV);
 	    if (bV == null) {
 		return {bitstr: {hex: hV}};
 	    } else {
