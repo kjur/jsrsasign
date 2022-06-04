@@ -1,5 +1,5 @@
 /*
- * jsrsasign(rsa) 10.5.23 (2022-05-27) (c) 2010-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+ * jsrsasign(rsa) 10.5.24 (2022-06-04) (c) 2010-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 
 /*! CryptoJS v3.1.2 core-fix.js

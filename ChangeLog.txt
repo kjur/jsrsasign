@@ -1,6 +1,11 @@
 
 ChangeLog for jsrsasign
 
+X509.getParam bugfix for v1 certificate
+* Changes from 10.5.23 to 10.5.24 (2022-Jun-04)
+  - src/x509.js
+    - X509.getParam bugfix for X.509v1 certificate without extension
+
 BitString parsing bug fix
 * Changes from 10.5.22 to 10.5.23 (2022-May-27)
   - src/base64x.js

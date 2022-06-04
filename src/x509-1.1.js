@@ -1,4 +1,4 @@
-/* x509-2.0.16.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.0.17.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.16 x509 2.0.16 (2022-Apr-08)
+ * @version jsrsasign 10.5.24 x509 2.0.17 (2022-Jun-04)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -2629,7 +2629,8 @@ function X509(params) {
 	result.notafter = this.getNotAfter();
 	result.subject = this.getSubject();
 	result.sbjpubkey = hextopem(this.getPublicKeyHex(), "PUBLIC KEY");
-	if (this.aExtInfo.length > 0) {
+	if (this.aExtInfo != undefined &&
+	    this.aExtInfo.length > 0) {
 	    result.ext = this.getExtParamArray();
 	}
 	result.sighex = this.getSignatureValueHex();
