@@ -1,9 +1,9 @@
-/* jws-3.3.11 (c) 2013-2018 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* jws-3.3.12 (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * jws.js - JSON Web Signature(JWS) and JSON Web Token(JWT) Class
  *
- * Copyright (c) 2010-2018 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2022 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license/
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name jws-3.3.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 8.0.3 jws 3.3.11 (2018-Mar-11)
+ * @version jsrsasign 10.5.25 jws 3.3.12 (2022-Jun-23)
  * @since jsjws 1.0, jsrsasign 4.8.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -402,6 +402,9 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
     
     if (typeof RSAKey !== undefined) _RSAKey = RSAKey;
 
+    // 0. checking dot concatinatd Base64URL encoded string
+    if (! isBase64URLDot(sJWS)) return false;
+
     var a = sJWS.split(".");
     if (a.length !== 3) return false;
 
@@ -663,8 +666,12 @@ KJUR.jws.JWS.verifyJWT = function(sJWT, key, acceptField) {
 	_inArray = _KJUR_jws_JWS.inArray,
 	_includedArray = _KJUR_jws_JWS.includedArray;
 
+    // 0. checking dot concatinatd Base64URL encoded string
+    if (! isBase64URLDot(sJWT)) return false;
+
     // 1. parse JWT
     var a = sJWT.split(".");
+    if (a.length != 3) return false;
     var uHeader = a[0];
     var uPayload = a[1];
     var uSignatureInput = uHeader + "." + uPayload;

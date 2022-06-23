@@ -1,4 +1,4 @@
-/* base64x-1.1.29 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* base64x-1.1.30 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.23 base64x 1.1.29 (2022-May-27)
+ * @version jsrsasign 10.5.25 base64x 1.1.30 (2022-Jun-23)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1304,6 +1304,27 @@ KJUR.lang.String.isBase64URL = function(s) {
     s = b64utob64(s);
     return KJUR.lang.String.isBase64(s);
 };
+
+
+/**
+ * check whether a string is a base64url encoded string and dot or not<br/>
+ * Input string can conclude new lines or space characters.
+ * @name isBase64URLDot
+ * @function
+ * @static
+ * @param {String} s input string
+ * @return {Boolean} true if a string "s" is a base64url encoded string and dot otherwise false
+ * @since base64x 1.1.30 jsrsasign 10.5.25
+ * @example
+ * isBase64URLDot("YWE") &rarr; true
+ * isBase64URLDot("YWE.YWE.YWE") &rarr; true
+ * isBase64URLDot("YW-") &rarr; true
+ * isBase64URLDot("YW+") &rarr; false
+ */
+function isBase64URLDot(s) {
+    if (s.match(/^[0-9A-Za-z-_.]+$/)) return true;
+    return false;
+}
 
 /**
  * check whether a string is a string of integer array or not<br/>

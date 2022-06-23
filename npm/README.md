@@ -39,7 +39,7 @@ HIGHLIGHTS
 - no dependency to other library
 - no dependency to [W3C Web Cryptography API](https://www.w3.org/TR/WebCryptoAPI/) nor [OpenSSL](https://www.openssl.org/)
 - no dependency on newer ECMAScirpt function. So old browsers also supported. 
-- very popular crypto library with [0.6M+ npm downloads/month](https://npm-stat.com/charts.html?package=jsrsasign&from=2016-05-01&to=2022-06-01)
+- very popular crypto library with [0.6M+ npm downloads/month](https://npm-stat.com/charts.html?package=jsrsasign&from=2016-05-01&to=2022-06-20)
 
 INSTALL
 -------
@@ -78,6 +78,7 @@ MORE TUTORIALS AND SAMPLES
 
 |published|fixed version|title/advisory|CVE|CVSS|
 |:---|:---|:---|:---|:---|
+|2022Jun24|10.5.25|[JWS and JWT signature validation vulnerability with special characters](https://github.com/kjur/jsrsasign/security/advisories/GHSA-3fvg-4v2m-98jf)|CVE-2022-25898|?|
 |2021Apr14|10.2.0|[RSA signature validation vulnerability on maleable encoded message](https://github.com/kjur/jsrsasign/security/advisories/GHSA-27fj-mc8w-j9wg)|CVE-2021-30246|9.1|
 |2020Jun22|8.0.19|[ECDSA signature validation vulnerability by accepting wrong ASN.1 encoding](https://github.com/kjur/jsrsasign/security/advisories/GHSA-p8c3-7rj8-q963)|CVE-2020-14966|5.5|
 |2020Jun22|8.0.18|[RSA RSAES-PKCS1-v1_5 and RSA-OAEP decryption vulnerability with prepending zeros](https://github.com/kjur/jsrsasign/security/advisories/GHSA-xxxq-chmp-67g4)|CVE-2020-14967|4.8|

@@ -76,6 +76,7 @@ exports.bitstrtoint = bitstrtoint;
 exports.inttobitstr = inttobitstr;
 exports.bitstrtobinstr = bitstrtobinstr;
 exports.binstrtobitstr = binstrtobitstr;
+exports.isBase64URLDot = isBase64URLDot;
 exports.namearraytobinstr = namearraytobinstr;
 exports.extendClass = extendClass;
 

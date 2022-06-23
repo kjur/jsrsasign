@@ -1,6 +1,19 @@
 
 ChangeLog for jsrsasign
 
+CVE-2022-25898 Security fix in JWS and JWT validation
+* Changes from 10.5.24 to 10.5.25 (2022-Jun-23)
+  - src/jws.js
+    - JWS.verify and JWS.verifyJWT
+      - CVE-2022-25898 SECURITY FIX: 
+        verify and verifyJWT may accept signature with special characters 
+        or \number characters by mistake.
+        Please see security advisory:
+        https://github.com/kjur/jsrsasign/security/advisories/GHSA-3fvg-4v2m-98jf
+  - src/base64x.js
+    - function isBase64URLDot added
+  - test/qunit-do-jwt-veri.html
+
 X509.getParam bugfix for v1 certificate
 * Changes from 10.5.23 to 10.5.24 (2022-Jun-04)
   - src/x509.js
