@@ -882,6 +882,16 @@ to a 16 byte hexadecimal string of address.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#.isBase64URLDot">isBase64URLDot</a></b>(s)
+								</div>
+								<div class="description">check whether a string is a base64url encoded string and dot or not<br/>
+Input string can conclude new lines or space characters.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#.ishex">ishex</a></b>(s)
 								</div>
 								<div class="description">check whether a string is an hexadecimal string or not<br/></div>
@@ -3178,6 +3188,66 @@ to a 16 byte hexadecimal string of address.
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> 16 byte hexadecimal string of IPv6 address</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".isBase64URLDot"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<b>isBase64URLDot</b>(s)
+					
+					</div>
+					<div class="description">
+						check whether a string is a base64url encoded string and dot or not<br/>
+Input string can conclude new lines or space characters.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">isBase64URLDot("YWE") &rarr; true
+isBase64URLDot("YWE.YWE.YWE") &rarr; true
+isBase64URLDot("YW-") &rarr; true
+isBase64URLDot("YW+") &rarr; false</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s</b>
+									
+								</dt>
+								<dd>input string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>base64x 1.1.30 jsrsasign 10.5.25</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> true if a string "s" is a base64url encoded string and dot otherwise false</dd>
 							
 							</dl>
 						
