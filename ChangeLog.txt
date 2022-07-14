@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+CSRUtil class enhancement
+* Changes from 10.5.25 to 10.5.26 (2022-Jul-14)
+  - src/asn1csr.js
+    - CSRUtil.verifySignature method added
+    - CSRUtil.getParam enhanced to support optional argument flagTBS
+  - test/qunit-do-asn1csr.html
+    - update some test cases for above
+
 CVE-2022-25898 Security fix in JWS and JWT validation
 * Changes from 10.5.24 to 10.5.25 (2022-Jun-23)
   - src/jws.js

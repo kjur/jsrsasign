@@ -1,9 +1,9 @@
-/* asn1csr-2.0.5.js (c) 2015-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1csr-2.0.6.js (c) 2015-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
  *
- * Copyright (c) 2015-2020 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2015-2022 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1csr-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.16 asn1csr 2.0.5 (2022-Apr-08)
+ * @version jsrsasign 10.5.26 asn1csr 2.0.6 (2022-Jul-14)
  * @since jsrsasign 4.9.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -383,10 +383,12 @@ KJUR.asn1.csr.CSRUtil.newCSRPEM = function(param) {
  * @name getParam
  * @memberOf KJUR.asn1.csr.CSRUtil
  * @function
- * @param {String} sPEM PEM string of CSR/PKCS#10
+ * @param {string} sPEM PEM string of CSR/PKCS#10
+ * @param {boolean} flagTBS result object also concludes CertificationRequestInfo (OPTION, DEFAULT=false)
  * @returns {Array} JSON object with parsed parameters such as name or public key
  * @since jsrsasign 9.0.0 asn1csr 2.0.0
  * @see KJUR.asn1.csr.CertificationRequest
+ * @see KJUR.asn1.csr.CertificationRequestInfo
  * @see KJUR.asn1.x509.X500Name
  * @see X509#getExtParamArray
  * @description
@@ -400,6 +402,7 @@ KJUR.asn1.csr.CSRUtil.newCSRPEM = function(param) {
  * <li>{Array}extreq - array of extensionRequest parameters</li>
  * <li>{String}sigalg - name of signature algorithm field</li>
  * <li>{String}sighex - hexadecimal string of signature value</li>
+ * <li>{String}tbs - a hexadecimal string of CertificationRequestInfo as to be signed(OPTION)</li>
  * </ul>
  * Returned JSON object can be passed to 
  * {@link KJUR.asn1.csr.CertificationRequest} class constructor.
@@ -407,6 +410,9 @@ KJUR.asn1.csr.CSRUtil.newCSRPEM = function(param) {
  * CAUTION: 
  * Returned JSON value format have been changed without 
  * backward compatibility since jsrsasign 9.0.0 asn1csr 2.0.0.
+ * <br/>
+ * NOTE:
+ * The "flagTBS" supported since jsrsasign 10.5.26.
  *
  * @example
  * KJUR.asn1.csr.CSRUtil.getParam("-----BEGIN CERTIFICATE REQUEST...") &rarr;
@@ -418,8 +424,11 @@ KJUR.asn1.csr.CSRUtil.newCSRPEM = function(param) {
  *   sigalg: "SHA256withRSA",
  *   sighex: "1ab3df.."
  * }
+ *
+ * KJUR.asn1.csr.CSRUtil.getParam("-----BEGIN CERTIFICATE REQUEST...", true) &rarr;
+ * result will also have a member "tbs" in the object.
  */
-KJUR.asn1.csr.CSRUtil.getParam = function(sPEM) {
+KJUR.asn1.csr.CSRUtil.getParam = function(sPEM, flagTBS) {
     var _ASN1HEX = ASN1HEX,
 	_getV = _ASN1HEX.getV,
 	_getIdxbyList = _ASN1HEX.getIdxbyList,
@@ -447,6 +456,10 @@ KJUR.asn1.csr.CSRUtil.getParam = function(sPEM) {
 	throw new Error("argument is not PEM file");
 
     var hex = pemtohex(sPEM, "CERTIFICATE REQUEST");
+
+    if (flagTBS) {
+	result.tbs = _getTLVbyList(hex, 0, [0]);
+    }
 
     try {
 	var hSubject = _getTLVbyListEx(hex, 0, [0, 1]);
@@ -480,6 +493,53 @@ KJUR.asn1.csr.CSRUtil.getParam = function(sPEM) {
     } catch (ex) {};
 
     return result;
+};
+
+/**
+ * verify self-signed CSR/PKCS#10 signature<br/>
+ * @name verifySignature
+ * @memberOf KJUR.asn1.csr.CSRUtil
+ * @function
+ * @param {object} csr PEM CSR string or parsed JSON object of CSR
+ * @returns {boolean} true if self-signed signature is valid otherwise false
+ * @since jsrsasign 10.5.26 asn1csr 2.0.6
+ * @see KJUR.asn1.csr.CertificationRequest
+ * @see KJUR.asn1.csr.CertificationRequestInfo
+ * @see KJUR.asn1.csr.CSRUtil#getParam
+ * @description
+ * This method verifies self-signed signature of CSR/PKCS#10
+ * with its public key which is concluded in the CSR.
+ *
+ * @example
+ * KJUR.asn1.csr.CSRUtil.verifySignatrue("-----BEGIN CERTIFICATE REQUEST...") &rarr; true or false
+ * 
+ * p = KJUR.asn1.csr.CSRUtil.getParam("-----BEGIN CERTIFICATE REQUEST-----", true); // with tbs
+ * KJUR.asn1.csr.CSRUtil.verifySignatrue(p) &rarr; true or false
+ */
+KJUR.asn1.csr.CSRUtil.verifySignature = function(csr) {
+    try {
+	var pCSR = null;
+	if (typeof csr == "string" &&
+	    csr.indexOf("-----BEGIN CERTIFICATE REQUEST") != -1) {
+	    pCSR = KJUR.asn1.csr.CSRUtil.getParam(csr, true);
+	} else if (typeof csr == "object" &&
+		   csr.sbjpubkey != undefined &&
+		   csr.sigalg != undefined &&
+		   csr.sighex != undefined &&
+		   csr.tbs != undefined) {
+	    pCSR = csr;
+	}
+	if (pCSR == null) return false;
+
+	// verify self-signed signature
+	var sig = new KJUR.crypto.Signature({alg: pCSR.sigalg});
+	sig.init(pCSR.sbjpubkey);
+	sig.updateHex(pCSR.tbs);
+	return sig.verify(pCSR.sighex);
+    } catch(ex) {
+	alert(ex);
+	return false;
+    }
 };
 
 

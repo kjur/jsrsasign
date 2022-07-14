@@ -584,7 +584,7 @@ This class provides utility static methods for CSR/PKCS#10.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.csr.CSRUtil.<b><a href="../symbols/KJUR.asn1.csr.CSRUtil.html#.getParam">getParam</a></b>(sPEM)
+								<div class="fixedFont">KJUR.asn1.csr.CSRUtil.<b><a href="../symbols/KJUR.asn1.csr.CSRUtil.html#.getParam">getParam</a></b>(sPEM, flagTBS)
 								</div>
 								<div class="description">get field values from CSR/PKCS#10 PEM string<br/>
 This method parses PEM CSR/PKCS#1 string and retrieves
@@ -599,6 +599,17 @@ fields such as subject name and public key.</div>
 								</div>
 								<div class="description">generate a PEM format of CSR/PKCS#10 certificate signing request (DEPRECATED)<br/>
 This method can generate a CSR certificate signing.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KJUR.asn1.csr.CSRUtil.<b><a href="../symbols/KJUR.asn1.csr.CSRUtil.html#.verifySignature">verifySignature</a></b>(csr)
+								</div>
+								<div class="description">verify self-signed CSR/PKCS#10 signature<br/>
+This method verifies self-signed signature of CSR/PKCS#10
+with its public key which is concluded in the CSR.</div>
 							</td>
 						</tr>
 					
@@ -661,7 +672,7 @@ Here is a list of methods:
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{Array}</span>
-					<span class="light">KJUR.asn1.csr.CSRUtil.</span><b>getParam</b>(sPEM)
+					<span class="light">KJUR.asn1.csr.CSRUtil.</span><b>getParam</b>(sPEM, flagTBS)
 					
 					</div>
 					<div class="description">
@@ -676,6 +687,7 @@ resulted JSON object.
 <li>{Array}extreq - array of extensionRequest parameters</li>
 <li>{String}sigalg - name of signature algorithm field</li>
 <li>{String}sighex - hexadecimal string of signature value</li>
+<li>{String}tbs - a hexadecimal string of CertificationRequestInfo as to be signed(OPTION)</li>
 </ul>
 Returned JSON object can be passed to 
 <a href="../symbols/KJUR.asn1.csr.CertificationRequest.html">KJUR.asn1.csr.CertificationRequest</a> class constructor.
@@ -683,6 +695,9 @@ Returned JSON object can be passed to
 CAUTION: 
 Returned JSON value format have been changed without 
 backward compatibility since jsrsasign 9.0.0 asn1csr 2.0.0.
+<br/>
+NOTE:
+The "flagTBS" supported since jsrsasign 10.5.26.
 						
 						
 					</div>
@@ -697,7 +712,10 @@ backward compatibility since jsrsasign 9.0.0 asn1csr 2.0.0.
   extreq: [{extname:"subjectAltName",array:[{dns:"example.com"}]}]
   sigalg: "SHA256withRSA",
   sighex: "1ab3df.."
-}</pre>
+}
+
+KJUR.asn1.csr.CSRUtil.getParam("-----BEGIN CERTIFICATE REQUEST...", true) &rarr;
+result will also have a member "tbs" in the object.</pre>
 					
 					
 					
@@ -706,10 +724,16 @@ backward compatibility since jsrsasign 9.0.0 asn1csr 2.0.0.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>sPEM</b>
+									<span class="light fixedFont">{string}</span> <b>sPEM</b>
 									
 								</dt>
 								<dd>PEM string of CSR/PKCS#10</dd>
+							
+								<dt>
+									<span class="light fixedFont">{boolean}</span> <b>flagTBS</b>
+									
+								</dt>
+								<dd>result object also concludes CertificationRequestInfo (OPTION, DEFAULT=false)</dd>
 							
 							</dl>
 						
@@ -736,6 +760,8 @@ backward compatibility since jsrsasign 9.0.0 asn1csr 2.0.0.
 							<dt class="heading">See:</dt>
 							
 								<dd><a href="../symbols/KJUR.asn1.csr.CertificationRequest.html">KJUR.asn1.csr.CertificationRequest</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.csr.CertificationRequestInfo.html">KJUR.asn1.csr.CertificationRequestInfo</a></dd>
 							
 								<dd><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></dd>
 							
@@ -834,6 +860,75 @@ pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
 						
 						
 						
+						
+
+					<hr />
+				
+					<a name=".verifySignature"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{boolean}</span>
+					<span class="light">KJUR.asn1.csr.CSRUtil.</span><b>verifySignature</b>(csr)
+					
+					</div>
+					<div class="description">
+						verify self-signed CSR/PKCS#10 signature<br/>
+This method verifies self-signed signature of CSR/PKCS#10
+with its public key which is concluded in the CSR.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KJUR.asn1.csr.CSRUtil.verifySignatrue("-----BEGIN CERTIFICATE REQUEST...") &rarr; true or false
+
+p = KJUR.asn1.csr.CSRUtil.getParam("-----BEGIN CERTIFICATE REQUEST-----", true); // with tbs
+KJUR.asn1.csr.CSRUtil.verifySignatrue(p) &rarr; true or false</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>csr</b>
+									
+								</dt>
+								<dd>PEM CSR string or parsed JSON object of CSR</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.5.26 asn1csr 2.0.6</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{boolean}</span> true if self-signed signature is valid otherwise false</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.csr.CertificationRequest.html">KJUR.asn1.csr.CertificationRequest</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.csr.CertificationRequestInfo.html">KJUR.asn1.csr.CertificationRequestInfo</a></dd>
+							
+								<dd>KJUR.asn1.csr.CSRUtil#getParam</dd>
+							
+							</dl>
 						
 
 					
