@@ -439,45 +439,67 @@ var pem = KJUR.asn1.csr.CSRUtil.newCSRPEM({
 equal(pem, csrextpem, "CSR PEM keyusage, basicconstraints");
 });
 
-test("(14) CSRUtil.getParam key2.csr", function() {
+test("CSRUtil.getParam(key2.csr) without tbs", function() {
 var p = KJUR.asn1.csr.CSRUtil.getParam(key2csrpem);
-
-deepEqual(p.subject, {
-array:[
- [{ds:'prn',type:'C',value:'US'}],
- [{ds:'utf8',type:'O',value:'Test'}],
- [{ds:'utf8',type:'CN',value:'example.com'}]
-],
-str:"/C=US/O=Test/CN=example.com"
-},
-"subject");
-
-equal(p.sbjpubkey.replace(/\s+/g,''),
-      key2pub.replace(/\s+/g,''),
-      "sbjpubkey");
-
-equal(p.sigalg, "SHA256withRSA", "sigalg");
+var pExpect = {
+  subject: {
+    array: [
+      [{type: "C", value: "US", ds: "prn"}],
+      [{type: "O", value: "Test", ds: "utf8"}],
+      [{type: "CN", value: "example.com", ds: "utf8"}]
+    ],
+    str: "/C=US/O=Test/CN=example.com"
+  },
+  sbjpubkey: key2pub.substr(1).replace(/\n/g, "\r\n"),
+  sigalg: "SHA256withRSA",
+  sighex: "60f76944264ee26ca31814e560048427a1596c976906c62d1147bcd01b3d8adafaae7bd01e682732a3da6e56c3f0da4908dad2e6ec1a399cc41dbfe4b240ed3c318301fb9f4a1510f396a5cab91cecb69893afb523bd5641994273994ec181f55e5edec3fbaad4274152c499c294464abaf0c1563d04d8ddc5efdd123b3d992132c82979189b232589cd2bca77cdfc59bade2129542d95100b274d529d97d27ca53105c3847def151ecfac8d12e398192ff33a827d5b5bb042b2276b3d8e31915e5a2788a929a45f1dd29d4cdf472c899ffe9692aa8dab958644e00705bd1b187df5c3394bb180ad742c03058b5e8e38a1257877787b01fd120c93edd8de6668"
+};
+deepEqual(p, pExpect, "key2.csr all members without tbs");
 });
 
-test("(15) CSRUtil.getParam certbot1.csr.pem (with san, no sbjname)", function() {
+test("CSRUtil.getParam(certbot1.csr.pem) (with san, no sbjname)", function() {
 var p = KJUR.asn1.csr.CSRUtil.getParam(csrcertbot1);
-equal(p != undefined, true, "p");
+var pExpect = {
+  subject: {},
+  sbjpubkey: certbot1PUBPEM.substr(1).replace(/\n/g, "\r\n"),
+  extreq: [
+    { extname: "subjectAltName",
+      array: [{dns: "nodejs.rz-bsd.my.corp"}]}
+  ],
+  sigalg: "SHA256withRSA",
+  sighex: "748ac811239ec2d860accd974b768b808e92195daf16d42dc58ce1dc77a450efb15dfa1db67e7eb7804301510937005ceae2dd9bf0978e1f5c636788234c45c7e3084e87de6047e2c3bd598ade48481c12cc542c89814114353649a1a32eeda761a5b257b5a887a67cbadec42f87742d121edaaccc7c11a0e1f0c298050e624f296f374492ff241c52f692e2416ce4225313f60615ea5a59d0563e51380b9a09f79ea59ee65244796e80a1d4cd60ff57fb5260b0c9990549eec3cd24cd4969377bf5c0ea71bb6a302aa183418a1f83a66eb4be66ef7d8a8c7e23b31bb2ef7e178ad98e29decf5968a10e617c9fba140b711351c8dbfc7860319166d0eac1c15e"
+};
+deepEqual(p, pExpect, "certbot1.csr all members without tbs");
+});
 
-deepEqual(p.subject, {}, "subject");
+test("CSRUtil.getParam(key2csr, flagTBS=true)", function() {
+var p = KJUR.asn1.csr.CSRUtil.getParam(key2csrpem, true);
+var pExpect = {
+  subject: {
+    array: [
+      [{type: "C", value: "US", ds: "prn"}],
+      [{type: "O", value: "Test", ds: "utf8"}],
+      [{type: "CN", value: "example.com", ds: "utf8"}]
+    ],
+    str: "/C=US/O=Test/CN=example.com"
+  },
+  sbjpubkey: key2pub.substr(1).replace(/\n/g, "\r\n"),
+  sigalg: "SHA256withRSA",
+  sighex: "60f76944264ee26ca31814e560048427a1596c976906c62d1147bcd01b3d8adafaae7bd01e682732a3da6e56c3f0da4908dad2e6ec1a399cc41dbfe4b240ed3c318301fb9f4a1510f396a5cab91cecb69893afb523bd5641994273994ec181f55e5edec3fbaad4274152c499c294464abaf0c1563d04d8ddc5efdd123b3d992132c82979189b232589cd2bca77cdfc59bade2129542d95100b274d529d97d27ca53105c3847def151ecfac8d12e398192ff33a827d5b5bb042b2276b3d8e31915e5a2788a929a45f1dd29d4cdf472c899ffe9692aa8dab958644e00705bd1b187df5c3394bb180ad742c03058b5e8e38a1257877787b01fd120c93edd8de6668",
+  tbs: "3082015f0201003032310b3009060355040613025553310d300b060355040a0c04546573743114301206035504030c0b6578616d706c652e636f6d30820122300d06092a864886f70d01010105000382010f003082010a0282010100e7fd901cc041be2aeb8ae7218a9479d3645ade837f8ddb97948162d1e5a941e9b64b422b2b0822057f7e84d9e386a321397a7893fe88b82387e8f211a494a417537fb6eef2a734d5c274fc2d0a1fe5d69142d78714f537c3731e95db84e6718f8c997c8dc577ea3b6fb7b9e79198c9bd93e5b902cd02de9acc8bc8df5050a8d203d71dd12034f155ae80f79dae9ddb68ebaf6c52e39c8d4085c70602937bb99bcf51a5aca8c8010adebaba5db485faca62ad62c7783174779f21306bdbc08f183e7a7b74d44f534f1683d414244f252447ccc805ce61ad9e29193d9aa07b8e41180c78aa34fce3b26dc24f46a69fc7b607e7505188127b74678f9f13a2222bc50203010001a000"
+};
+deepEqual(p, pExpect, "key2.csr all members including tbs");
+});
 
-equal(p.sbjpubkey.replace(/\s+/g,''),
-      certbot1PUBPEM.replace(/\s+/g,''),
-      "sbjpubkey");
+test("CSRUtil.verifySignature(key2csrpem)", function() {
+equal(KJUR.asn1.csr.CSRUtil.verifySignature(key2csrpem), true, "valid key2csr pem");
 
-deepEqual(p.extreq,
-[{extname: "subjectAltName",
-  array: [{dns:"nodejs.rz-bsd.my.corp"}]
- }
-],
-"extreq=" + JSON.stringify(p.extreq));
+var pCSR = KJUR.asn1.csr.CSRUtil.getParam(key2csrpem, true);
+equal(KJUR.asn1.csr.CSRUtil.verifySignature(pCSR), true, "valid key2csr obj");
 
-equal(p.sigalg, "SHA256withRSA", "sigalg=" + p.sigalg);
-equal(p.sighex, "748ac811239ec2d860accd974b768b808e92195daf16d42dc58ce1dc77a450efb15dfa1db67e7eb7804301510937005ceae2dd9bf0978e1f5c636788234c45c7e3084e87de6047e2c3bd598ade48481c12cc542c89814114353649a1a32eeda761a5b257b5a887a67cbadec42f87742d121edaaccc7c11a0e1f0c298050e624f296f374492ff241c52f692e2416ce4225313f60615ea5a59d0563e51380b9a09f79ea59ee65244796e80a1d4cd60ff57fb5260b0c9990549eec3cd24cd4969377bf5c0ea71bb6a302aa183418a1f83a66eb4be66ef7d8a8c7e23b31bb2ef7e178ad98e29decf5968a10e617c9fba140b711351c8dbfc7860319166d0eac1c15e", "sighex=" + p.sighex);
+var pCSR2 = KJUR.asn1.csr.CSRUtil.getParam(key2csrpem, true);
+pCSR2.sighex = pCSR2.sighex.substr(2) + "ab"; // forge signature
+equal(KJUR.asn1.csr.CSRUtil.verifySignature(pCSR2), false, "invalid forged key2csr obj");
 });
 
 });

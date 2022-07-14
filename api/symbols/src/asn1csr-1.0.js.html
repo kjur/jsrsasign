@@ -5,12 +5,12 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1csr-2.0.5.js (c) 2015-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1csr-2.0.6.js (c) 2015-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
 <span class='line'>  5</span>  *
-<span class='line'>  6</span>  * Copyright (c) 2015-2020 Kenji Urushima (kenji.urushima@gmail.com)
+<span class='line'>  6</span>  * Copyright (c) 2015-2022 Kenji Urushima (kenji.urushima@gmail.com)
 <span class='line'>  7</span>  *
 <span class='line'>  8</span>  * This software is licensed under the terms of the MIT License.
 <span class='line'>  9</span>  * https://kjur.github.io/jsrsasign/license
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name asn1csr-1.0.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign 10.5.16 asn1csr 2.0.5 (2022-Apr-08)
+<span class='line'> 19</span>  * @version jsrsasign 10.5.26 asn1csr 2.0.6 (2022-Jul-14)
 <span class='line'> 20</span>  * @since jsrsasign 4.9.0
 <span class='line'> 21</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -390,104 +390,164 @@
 <span class='line'>383</span>  * @name getParam
 <span class='line'>384</span>  * @memberOf KJUR.asn1.csr.CSRUtil
 <span class='line'>385</span>  * @function
-<span class='line'>386</span>  * @param {String} sPEM PEM string of CSR/PKCS#10
-<span class='line'>387</span>  * @returns {Array} JSON object with parsed parameters such as name or public key
-<span class='line'>388</span>  * @since jsrsasign 9.0.0 asn1csr 2.0.0
-<span class='line'>389</span>  * @see KJUR.asn1.csr.CertificationRequest
-<span class='line'>390</span>  * @see KJUR.asn1.x509.X500Name
-<span class='line'>391</span>  * @see X509#getExtParamArray
-<span class='line'>392</span>  * @description
-<span class='line'>393</span>  * This method parses PEM CSR/PKCS#1 string and retrieves
-<span class='line'>394</span>  * fields such as subject name and public key. 
-<span class='line'>395</span>  * Following parameters are available in the
-<span class='line'>396</span>  * resulted JSON object.
-<span class='line'>397</span>  * &lt;ul>
-<span class='line'>398</span>  * &lt;li>{X500Name}subject - subject name parameters &lt;/li>
-<span class='line'>399</span>  * &lt;li>{String}sbjpubkey - PEM string of subject public key&lt;/li>
-<span class='line'>400</span>  * &lt;li>{Array}extreq - array of extensionRequest parameters&lt;/li>
-<span class='line'>401</span>  * &lt;li>{String}sigalg - name of signature algorithm field&lt;/li>
-<span class='line'>402</span>  * &lt;li>{String}sighex - hexadecimal string of signature value&lt;/li>
-<span class='line'>403</span>  * &lt;/ul>
-<span class='line'>404</span>  * Returned JSON object can be passed to 
-<span class='line'>405</span>  * {@link KJUR.asn1.csr.CertificationRequest} class constructor.
-<span class='line'>406</span>  * &lt;br/>
-<span class='line'>407</span>  * CAUTION: 
-<span class='line'>408</span>  * Returned JSON value format have been changed without 
-<span class='line'>409</span>  * backward compatibility since jsrsasign 9.0.0 asn1csr 2.0.0.
-<span class='line'>410</span>  *
-<span class='line'>411</span>  * @example
-<span class='line'>412</span>  * KJUR.asn1.csr.CSRUtil.getParam("-----BEGIN CERTIFICATE REQUEST...") &rarr;
-<span class='line'>413</span>  * {
-<span class='line'>414</span>  *   subject: { array:[[{type:"C",value:"JP",ds:"prn"}],...],
-<span class='line'>415</span>  *              str: "/C=JP/O=Test"},
-<span class='line'>416</span>  *   sbjpubkey: "-----BEGIN PUBLIC KEY...",
-<span class='line'>417</span>  *   extreq: [{extname:"subjectAltName",array:[{dns:"example.com"}]}]
-<span class='line'>418</span>  *   sigalg: "SHA256withRSA",
-<span class='line'>419</span>  *   sighex: "1ab3df.."
-<span class='line'>420</span>  * }
-<span class='line'>421</span>  */</span><span class="WHIT">
-<span class='line'>422</span> </span><span class="NAME">KJUR.asn1.csr.CSRUtil.getParam</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">sPEM</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>423</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>424</span> </span><span class="WHIT">	</span><span class="NAME">_getV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getV</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>425</span> </span><span class="WHIT">	</span><span class="NAME">_getIdxbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getIdxbyList</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>426</span> </span><span class="WHIT">	</span><span class="NAME">_getTLVbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getTLVbyList</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>427</span> </span><span class="WHIT">	</span><span class="NAME">_getTLVbyListEx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getTLVbyListEx</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>428</span> </span><span class="WHIT">	</span><span class="NAME">_getVbyListEx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getVbyListEx</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>429</span> 
-<span class='line'>430</span> </span><span class="WHIT">    </span><span class="COMM">/*
-<span class='line'>431</span>      * get a hexadecimal string of sequence of extension request attribute value
-<span class='line'>432</span>      * @param {String} h hexadecimal string of whole CSR
-<span class='line'>433</span>      * @return {String} hexadecimal string of SEQUENCE of extension request attribute value
-<span class='line'>434</span>      */</span><span class="WHIT">
-<span class='line'>435</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_getExtReqSeqHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>436</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">idx1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getIdxbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"06"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// extreq attr OID idx</span><span class="WHIT">
-<span class='line'>437</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"2a864886f70d01090e"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>438</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>439</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>440</span> 
-<span class='line'>441</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_getTLVbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// ext seq idx</span><span class="WHIT">
-<span class='line'>442</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>443</span> 
-<span class='line'>444</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>445</span> 
-<span class='line'>446</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">sPEM.indexOf</span><span class="PUNC">(</span><span class="STRN">"-----BEGIN CERTIFICATE REQUEST"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>447</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"argument is not PEM file"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>448</span> 
-<span class='line'>449</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">pemtohex</span><span class="PUNC">(</span><span class="NAME">sPEM</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"CERTIFICATE REQUEST"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>450</span> 
-<span class='line'>451</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>452</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hSubject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyListEx</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>453</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hSubject</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"3000"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>454</span> </span><span class="WHIT">	    </span><span class="NAME">result.subject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>455</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>456</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>457</span> </span><span class="WHIT">	    </span><span class="NAME">result.subject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x.getX500Name</span><span class="PUNC">(</span><span class="NAME">hSubject</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>458</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>459</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>460</span> 
-<span class='line'>461</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hPubKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyListEx</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>462</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pubkeyobj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KEYUTIL.getKey</span><span class="PUNC">(</span><span class="NAME">hPubKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"pkcs8pub"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>463</span> </span><span class="WHIT">    </span><span class="NAME">result.sbjpubkey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KEYUTIL.getPEM</span><span class="PUNC">(</span><span class="NAME">pubkeyobj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"PKCS8PUB"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>464</span> 
-<span class='line'>465</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hExtReqSeq</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getExtReqSeqHex</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>466</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>467</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hExtReqSeq</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>468</span> </span><span class="WHIT">	</span><span class="NAME">result.extreq</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x.getExtParamArray</span><span class="PUNC">(</span><span class="NAME">hExtReqSeq</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>469</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>470</span> 
-<span class='line'>471</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>472</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hSigAlg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyListEx</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>473</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>474</span> </span><span class="WHIT">	</span><span class="NAME">result.sigalg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x.getAlgorithmIdentifierName</span><span class="PUNC">(</span><span class="NAME">hSigAlg</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>475</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>476</span> 
-<span class='line'>477</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>478</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hSig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getVbyListEx</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>479</span> </span><span class="WHIT">	</span><span class="NAME">result.sighex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hSig</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>480</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>481</span> 
-<span class='line'>482</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>483</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>484</span> 
-<span class='line'>485</span> 
-<span class='line'>486</span> </span></pre></body></html>
+<span class='line'>386</span>  * @param {string} sPEM PEM string of CSR/PKCS#10
+<span class='line'>387</span>  * @param {boolean} flagTBS result object also concludes CertificationRequestInfo (OPTION, DEFAULT=false)
+<span class='line'>388</span>  * @returns {Array} JSON object with parsed parameters such as name or public key
+<span class='line'>389</span>  * @since jsrsasign 9.0.0 asn1csr 2.0.0
+<span class='line'>390</span>  * @see KJUR.asn1.csr.CertificationRequest
+<span class='line'>391</span>  * @see KJUR.asn1.csr.CertificationRequestInfo
+<span class='line'>392</span>  * @see KJUR.asn1.x509.X500Name
+<span class='line'>393</span>  * @see X509#getExtParamArray
+<span class='line'>394</span>  * @description
+<span class='line'>395</span>  * This method parses PEM CSR/PKCS#1 string and retrieves
+<span class='line'>396</span>  * fields such as subject name and public key. 
+<span class='line'>397</span>  * Following parameters are available in the
+<span class='line'>398</span>  * resulted JSON object.
+<span class='line'>399</span>  * &lt;ul>
+<span class='line'>400</span>  * &lt;li>{X500Name}subject - subject name parameters &lt;/li>
+<span class='line'>401</span>  * &lt;li>{String}sbjpubkey - PEM string of subject public key&lt;/li>
+<span class='line'>402</span>  * &lt;li>{Array}extreq - array of extensionRequest parameters&lt;/li>
+<span class='line'>403</span>  * &lt;li>{String}sigalg - name of signature algorithm field&lt;/li>
+<span class='line'>404</span>  * &lt;li>{String}sighex - hexadecimal string of signature value&lt;/li>
+<span class='line'>405</span>  * &lt;li>{String}tbs - a hexadecimal string of CertificationRequestInfo as to be signed(OPTION)&lt;/li>
+<span class='line'>406</span>  * &lt;/ul>
+<span class='line'>407</span>  * Returned JSON object can be passed to 
+<span class='line'>408</span>  * {@link KJUR.asn1.csr.CertificationRequest} class constructor.
+<span class='line'>409</span>  * &lt;br/>
+<span class='line'>410</span>  * CAUTION: 
+<span class='line'>411</span>  * Returned JSON value format have been changed without 
+<span class='line'>412</span>  * backward compatibility since jsrsasign 9.0.0 asn1csr 2.0.0.
+<span class='line'>413</span>  * &lt;br/>
+<span class='line'>414</span>  * NOTE:
+<span class='line'>415</span>  * The "flagTBS" supported since jsrsasign 10.5.26.
+<span class='line'>416</span>  *
+<span class='line'>417</span>  * @example
+<span class='line'>418</span>  * KJUR.asn1.csr.CSRUtil.getParam("-----BEGIN CERTIFICATE REQUEST...") &rarr;
+<span class='line'>419</span>  * {
+<span class='line'>420</span>  *   subject: { array:[[{type:"C",value:"JP",ds:"prn"}],...],
+<span class='line'>421</span>  *              str: "/C=JP/O=Test"},
+<span class='line'>422</span>  *   sbjpubkey: "-----BEGIN PUBLIC KEY...",
+<span class='line'>423</span>  *   extreq: [{extname:"subjectAltName",array:[{dns:"example.com"}]}]
+<span class='line'>424</span>  *   sigalg: "SHA256withRSA",
+<span class='line'>425</span>  *   sighex: "1ab3df.."
+<span class='line'>426</span>  * }
+<span class='line'>427</span>  *
+<span class='line'>428</span>  * KJUR.asn1.csr.CSRUtil.getParam("-----BEGIN CERTIFICATE REQUEST...", true) &rarr;
+<span class='line'>429</span>  * result will also have a member "tbs" in the object.
+<span class='line'>430</span>  */</span><span class="WHIT">
+<span class='line'>431</span> </span><span class="NAME">KJUR.asn1.csr.CSRUtil.getParam</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">sPEM</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">flagTBS</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>432</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>433</span> </span><span class="WHIT">	</span><span class="NAME">_getV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getV</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>434</span> </span><span class="WHIT">	</span><span class="NAME">_getIdxbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getIdxbyList</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>435</span> </span><span class="WHIT">	</span><span class="NAME">_getTLVbyList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getTLVbyList</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>436</span> </span><span class="WHIT">	</span><span class="NAME">_getTLVbyListEx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getTLVbyListEx</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>437</span> </span><span class="WHIT">	</span><span class="NAME">_getVbyListEx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getVbyListEx</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>438</span> 
+<span class='line'>439</span> </span><span class="WHIT">    </span><span class="COMM">/*
+<span class='line'>440</span>      * get a hexadecimal string of sequence of extension request attribute value
+<span class='line'>441</span>      * @param {String} h hexadecimal string of whole CSR
+<span class='line'>442</span>      * @return {String} hexadecimal string of SEQUENCE of extension request attribute value
+<span class='line'>443</span>      */</span><span class="WHIT">
+<span class='line'>444</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_getExtReqSeqHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>445</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">idx1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getIdxbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"06"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// extreq attr OID idx</span><span class="WHIT">
+<span class='line'>446</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idx1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"2a864886f70d01090e"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>447</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>448</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>449</span> 
+<span class='line'>450</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_getTLVbyList</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// ext seq idx</span><span class="WHIT">
+<span class='line'>451</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>452</span> 
+<span class='line'>453</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">result</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>454</span> 
+<span class='line'>455</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">sPEM.indexOf</span><span class="PUNC">(</span><span class="STRN">"-----BEGIN CERTIFICATE REQUEST"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>456</span> </span><span class="WHIT">	</span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"argument is not PEM file"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>457</span> 
+<span class='line'>458</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">pemtohex</span><span class="PUNC">(</span><span class="NAME">sPEM</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"CERTIFICATE REQUEST"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>459</span> 
+<span class='line'>460</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">flagTBS</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>461</span> </span><span class="WHIT">	</span><span class="NAME">result.tbs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyList</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>462</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>463</span> 
+<span class='line'>464</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>465</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hSubject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyListEx</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>466</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hSubject</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"3000"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>467</span> </span><span class="WHIT">	    </span><span class="NAME">result.subject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>468</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>469</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>470</span> </span><span class="WHIT">	    </span><span class="NAME">result.subject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x.getX500Name</span><span class="PUNC">(</span><span class="NAME">hSubject</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>471</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>472</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>473</span> 
+<span class='line'>474</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hPubKey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyListEx</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>475</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pubkeyobj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KEYUTIL.getKey</span><span class="PUNC">(</span><span class="NAME">hPubKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"pkcs8pub"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>476</span> </span><span class="WHIT">    </span><span class="NAME">result.sbjpubkey</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KEYUTIL.getPEM</span><span class="PUNC">(</span><span class="NAME">pubkeyobj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"PKCS8PUB"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>477</span> 
+<span class='line'>478</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hExtReqSeq</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getExtReqSeqHex</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>479</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>480</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hExtReqSeq</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>481</span> </span><span class="WHIT">	</span><span class="NAME">result.extreq</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x.getExtParamArray</span><span class="PUNC">(</span><span class="NAME">hExtReqSeq</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>482</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>483</span> 
+<span class='line'>484</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>485</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hSigAlg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getTLVbyListEx</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"30"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>486</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">X509</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>487</span> </span><span class="WHIT">	</span><span class="NAME">result.sigalg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x.getAlgorithmIdentifierName</span><span class="PUNC">(</span><span class="NAME">hSigAlg</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>488</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>489</span> 
+<span class='line'>490</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>491</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hSig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getVbyListEx</span><span class="PUNC">(</span><span class="NAME">hex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>492</span> </span><span class="WHIT">	</span><span class="NAME">result.sighex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hSig</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>493</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>494</span> 
+<span class='line'>495</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">result</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>496</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>497</span> 
+<span class='line'>498</span> </span><span class="COMM">/**
+<span class='line'>499</span>  * verify self-signed CSR/PKCS#10 signature&lt;br/>
+<span class='line'>500</span>  * @name verifySignature
+<span class='line'>501</span>  * @memberOf KJUR.asn1.csr.CSRUtil
+<span class='line'>502</span>  * @function
+<span class='line'>503</span>  * @param {object} csr PEM CSR string or parsed JSON object of CSR
+<span class='line'>504</span>  * @returns {boolean} true if self-signed signature is valid otherwise false
+<span class='line'>505</span>  * @since jsrsasign 10.5.26 asn1csr 2.0.6
+<span class='line'>506</span>  * @see KJUR.asn1.csr.CertificationRequest
+<span class='line'>507</span>  * @see KJUR.asn1.csr.CertificationRequestInfo
+<span class='line'>508</span>  * @see KJUR.asn1.csr.CSRUtil#getParam
+<span class='line'>509</span>  * @description
+<span class='line'>510</span>  * This method verifies self-signed signature of CSR/PKCS#10
+<span class='line'>511</span>  * with its public key which is concluded in the CSR.
+<span class='line'>512</span>  *
+<span class='line'>513</span>  * @example
+<span class='line'>514</span>  * KJUR.asn1.csr.CSRUtil.verifySignatrue("-----BEGIN CERTIFICATE REQUEST...") &rarr; true or false
+<span class='line'>515</span>  * 
+<span class='line'>516</span>  * p = KJUR.asn1.csr.CSRUtil.getParam("-----BEGIN CERTIFICATE REQUEST-----", true); // with tbs
+<span class='line'>517</span>  * KJUR.asn1.csr.CSRUtil.verifySignatrue(p) &rarr; true or false
+<span class='line'>518</span>  */</span><span class="WHIT">
+<span class='line'>519</span> </span><span class="NAME">KJUR.asn1.csr.CSRUtil.verifySignature</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">csr</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>520</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>521</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pCSR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>522</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">csr</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>523</span> </span><span class="WHIT">	    </span><span class="NAME">csr.indexOf</span><span class="PUNC">(</span><span class="STRN">"-----BEGIN CERTIFICATE REQUEST"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>524</span> </span><span class="WHIT">	    </span><span class="NAME">pCSR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.csr.CSRUtil.getParam</span><span class="PUNC">(</span><span class="NAME">csr</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>525</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">csr</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"object"</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>526</span> </span><span class="WHIT">		   </span><span class="NAME">csr.sbjpubkey</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>527</span> </span><span class="WHIT">		   </span><span class="NAME">csr.sigalg</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>528</span> </span><span class="WHIT">		   </span><span class="NAME">csr.sighex</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>529</span> </span><span class="WHIT">		   </span><span class="NAME">csr.tbs</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>530</span> </span><span class="WHIT">	    </span><span class="NAME">pCSR</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">csr</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>531</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>532</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">pCSR</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>533</span> 
+<span class='line'>534</span> </span><span class="WHIT">	</span><span class="COMM">// verify self-signed signature</span><span class="WHIT">
+<span class='line'>535</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">sig</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">KJUR.crypto.Signature</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">alg</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">pCSR.sigalg</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>536</span> </span><span class="WHIT">	</span><span class="NAME">sig.init</span><span class="PUNC">(</span><span class="NAME">pCSR.sbjpubkey</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>537</span> </span><span class="WHIT">	</span><span class="NAME">sig.updateHex</span><span class="PUNC">(</span><span class="NAME">pCSR.tbs</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>538</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">sig.verify</span><span class="PUNC">(</span><span class="NAME">pCSR.sighex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>539</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>540</span> </span><span class="WHIT">	</span><span class="NAME">alert</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>541</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>542</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>543</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>544</span> 
+<span class='line'>545</span> 
+<span class='line'>546</span> </span></pre></body></html>
