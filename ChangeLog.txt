@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+extend CertificationRequestInfo class for challengePassword and unstructuredName
+* Changes from 10.5.26 to 10.5.27 (2022-Aug-19)
+  - src/asn1csr.js
+    - CertificationRequestInfo class
+      - add support for challengePassword and unstructuredName (#522)
+      - "attrs" member support in constructure argument
+  - test/qunit-do-asn1csr.html
+
 CSRUtil class enhancement
 * Changes from 10.5.25 to 10.5.26 (2022-Jul-14)
   - src/asn1csr.js

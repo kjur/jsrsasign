@@ -617,13 +617,24 @@ CertificationRequestInfo ::= SEQUENCE {
   version       INTEGER { v1(0) } (v1,...),
   subject       Name,
   subjectPKInfo SubjectPublicKeyInfo{{ PKInfoAlgorithms }},
-  attributes    [0] Attributes{{ CRIAttributes }} }
+  attributes    [0] Attributes {{ CRIAttributes }} }
 </pre>
 <br/>
 <br/>
-CAUTION: 
+NOTE1: 
 Argument "params" JSON value format have been changed without 
-backward compatibility since jsrsasign 9.0.0 asn1csr 2.0.0.
+backward compatibility since jsrsasign 9.0.0 asn1csr 2.0.0.<br/>
+NOTE2:
+From jsrsasign 10.5.27, "attrs" member in the constructor argument
+object have been supported to support more Attributes type.
+Currently following Attribute types are supported:
+<ul>
+<li>challengePassword</li>
+<li>unstructuredName - member "names" will be array of 
+DirectoryStrings. (ex. [{prnstr: "aaa"},{utf8str: "bbb"}]</li>
+<li>extensionRequest - any <a href="../symbols/KJUR.asn1.x509.Extensions.html">KJUR.asn1.x509.Extensions</a> 
+constructor argument can be specified for "ext" member value.</li>
+</ul>
 					
 				</div>
 				
@@ -634,6 +645,20 @@ backward compatibility since jsrsasign 9.0.0 asn1csr 2.0.0.
   sbjpubkey: <<PUBLIC KEY PEM>>,
   extreq: [
     {extname:"subjectAltName", array:[{dns:"example.com"}]}
+  ]});
+csri.tohex() &rarr; "30..."
+
+// From jsrsasign 10.5.27, "attrs" supported
+csri = new KJUR.asn1.csr.CertificationRequestInfo({
+  subject: {str: '/C=US/CN=b'},
+  sbjpubkey: <<PUBLIC KEY PEM>>,
+  attrs: [
+    {attr: "challengePassword", password: "secret"},
+    {attr: "unstructuredName", names: [{utf8str:"aaa"},{ia5str:"bbb"}]},
+    {attr: "extensionRequest", ext: [
+      {extname: "basicConstraints", cA: true},
+      {extname: "subjectKeyIdentifier", kid: "1a2b..."}
+    ]}
   ]});
 csri.tohex() &rarr; "30..."</pre>
 				
@@ -667,6 +692,8 @@ csri.tohex() &rarr; "30..."</pre>
 						<dt class="heading">See:</dt>
 						
 							<dd><a href="../symbols/KJUR.asn1.csr.CertificationRequest.html">KJUR.asn1.csr.CertificationRequest</a></dd>
+						
+							<dd><a href="../symbols/KJUR.asn1.x509.Extensions.html">KJUR.asn1.x509.Extensions</a></dd>
 						
 						</dl>
 					

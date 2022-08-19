@@ -90,7 +90,7 @@ if (typeof KJUR.asn1.cms == "undefined" || !KJUR.asn1.cms) KJUR.asn1.cms = {};
  * This is an abstract class for CMS attribute
  * ASN.1 encoder as defined in
  * <a href="https://tools.ietf.org/html/rfc5652#section-5.3">
- * RFC 5652 CMS 5.3 SignerInfo.
+ * RFC 5652 CMS 5.3 SignerInfo</a>.
  * <pre>
  * Attributes ::= SET OF Attribute
  * Attribute ::= SEQUENCE {
