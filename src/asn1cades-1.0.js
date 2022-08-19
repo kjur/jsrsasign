@@ -251,7 +251,7 @@ KJUR.asn1.cades.SignaturePolicyIdentifier = function(params) {
     if (params != undefined) this.setByParam(params);
 };
 extendClass(KJUR.asn1.cades.SignaturePolicyIdentifier,
-                  KJUR.asn1.cms.Attribute);
+            KJUR.asn1.cms.Attribute);
 
 /**
  * RFC 5126 CAdES SignaturePolicyId ASN.1 structure class<br/>
@@ -557,7 +557,7 @@ KJUR.asn1.cades.SignatureTimeStamp = function(params) {
     if (params != null) this.setByParam(params);
 };
 extendClass(KJUR.asn1.cades.SignatureTimeStamp,
-                  KJUR.asn1.cms.Attribute);
+            KJUR.asn1.cms.Attribute);
 
 /**
  * class for RFC 5126 CAdES CompleteCertificateRefs attribute<br/>
@@ -638,7 +638,7 @@ KJUR.asn1.cades.CompleteCertificateRefs = function(params) {
     if (params != undefined) this.setByParam(params);
 };
 extendClass(KJUR.asn1.cades.CompleteCertificateRefs,
-                  KJUR.asn1.cms.Attribute);
+            KJUR.asn1.cms.Attribute);
 
 /**
  * class for OtherCertID ASN.1 object

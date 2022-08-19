@@ -289,6 +289,24 @@ hExpect,
 equal(ASN1HEX.dump(csri.getEncodedHex()), ASN1HEX.dump(hExpect), "dump");
 });
 
+test("(2-1) CertificationRequestInfo with attrs[unstructuredName,challengePassword,extensionRequest]", function() {
+var param = {
+subject: {str: '/C=US/CN=b'},
+sbjpubkey: z1PubP8PEM,
+attrs: [
+  {attr:"challengePassword", password: "PassWord"},
+  {attr:"unstructuredName", names: [{ia5str:"aaa"},{utf8str:"bbb"}]},
+  {attr:"extensionRequest", ext: [
+    {extname: "basicConstraints", cA: true}
+  ]}
+]
+};
+var hExpect = "3081d10201003019310b3009060355040613025553310a300806035504030c0162305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a0533151301706092a864886f70d010902310a0c036262621603616161301706092a864886f70d010907310a0c0850617373576f7264301d06092a864886f70d01090e3110300e300c0603551d13040530030101ff";
+var csri = new KJUR.asn1.csr.CertificationRequestInfo(param);
+equal(csri.tohex(), hExpect, "hex");
+equal(ASN1HEX.dump(csri.tohex()), ASN1HEX.dump(hExpect), "dump");
+});
+
 test("(3) CertificationRequestInfo.appendExtensionByName", function() {
 var hExpect = "3081ad0201003019310b3009060355040613025553310a300806035504030c0162305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001a02f302d06092a864886f70d01090e3120301e300b0603551d0f0404030206c0300f0603551d130101ff040530030101ff";
 var param = {

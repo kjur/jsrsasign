@@ -1,4 +1,4 @@
-/* asn1csr-2.0.6.js (c) 2015-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1csr-2.0.7.js (c) 2015-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1csr.js - ASN.1 DER encoder classes for PKCS#10 CSR
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1csr-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.26 asn1csr 2.0.6 (2022-Jul-14)
+ * @version jsrsasign 10.5.27 asn1csr 2.0.7 (2022-Aug-19)
  * @since jsrsasign 4.9.0
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -219,6 +219,7 @@ extendClass(KJUR.asn1.csr.CertificationRequest, KJUR.asn1.ASN1Object);
  * @extends KJUR.asn1.ASN1Object
  * @since jsrsasign 4.9.0 asn1csr 1.0.0
  * @see KJUR.asn1.csr.CertificationRequest
+ * @see KJUR.asn1.x509.Extensions
  * @description
  * This class provides CertificateRequestInfo ASN.1 structure
  * defined in 
@@ -229,13 +230,24 @@ extendClass(KJUR.asn1.csr.CertificationRequest, KJUR.asn1.ASN1Object);
  *   version       INTEGER { v1(0) } (v1,...),
  *   subject       Name,
  *   subjectPKInfo SubjectPublicKeyInfo{{ PKInfoAlgorithms }},
- *   attributes    [0] Attributes{{ CRIAttributes }} }
+ *   attributes    [0] Attributes {{ CRIAttributes }} }
  * </pre>
  * <br/>
  * <br/>
- * CAUTION: 
+ * NOTE1: 
  * Argument "params" JSON value format have been changed without 
- * backward compatibility since jsrsasign 9.0.0 asn1csr 2.0.0.
+ * backward compatibility since jsrsasign 9.0.0 asn1csr 2.0.0.<br/>
+ * NOTE2:
+ * From jsrsasign 10.5.27, "attrs" member in the constructor argument
+ * object have been supported to support more Attributes type.
+ * Currently following Attribute types are supported:
+ * <ul>
+ * <li>challengePassword</li>
+ * <li>unstructuredName - member "names" will be array of 
+ * DirectoryStrings. (ex. [{prnstr: "aaa"},{utf8str: "bbb"}]</li>
+ * <li>extensionRequest - any {@link KJUR.asn1.x509.Extensions} 
+ * constructor argument can be specified for "ext" member value.</li>
+ * </ul>
  *
  * @example
  * csri = new KJUR.asn1.csr.CertificationRequestInfo({
@@ -243,6 +255,20 @@ extendClass(KJUR.asn1.csr.CertificationRequest, KJUR.asn1.ASN1Object);
  *   sbjpubkey: <<PUBLIC KEY PEM>>,
  *   extreq: [
  *     {extname:"subjectAltName", array:[{dns:"example.com"}]}
+ *   ]});
+ * csri.tohex() &rarr; "30..."
+ *
+ * // From jsrsasign 10.5.27, "attrs" supported
+ * csri = new KJUR.asn1.csr.CertificationRequestInfo({
+ *   subject: {str: '/C=US/CN=b'},
+ *   sbjpubkey: <<PUBLIC KEY PEM>>,
+ *   attrs: [
+ *     {attr: "challengePassword", password: "secret"},
+ *     {attr: "unstructuredName", names: [{utf8str:"aaa"},{ia5str:"bbb"}]},
+ *     {attr: "extensionRequest", ext: [
+ *       {extname: "basicConstraints", cA: true},
+ *       {extname: "subjectKeyIdentifier", kid: "1a2b..."}
+ *     ]}
  *   ]});
  * csri.tohex() &rarr; "30..."
  */
@@ -259,7 +285,8 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
 	_KJUR_asn1_x509 = _KJUR_asn1.x509,
 	_X500Name = _KJUR_asn1_x509.X500Name,
 	_Extensions = _KJUR_asn1_x509.Extensions,
-	_SubjectPublicKeyInfo = _KJUR_asn1_x509.SubjectPublicKeyInfo;
+	_SubjectPublicKeyInfo = _KJUR_asn1_x509.SubjectPublicKeyInfo,
+	_AttributeList = _KJUR_asn1_csr.AttributeList;
     
     _KJUR_asn1_csr.CertificationRequestInfo.superclass.constructor.call(this);
 
@@ -275,12 +302,15 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
 	a.push(new _DERInteger({'int': 0})); // version
 	a.push(new _X500Name(params.subject));
 	a.push(new _SubjectPublicKeyInfo(KEYUTIL.getKey(params.sbjpubkey)));
-	if (params.extreq != undefined) {
+	if (params.attrs != undefined) {
+	    var asn1Param = _conv(params.attrs);
+	    var tagobj = _newObject({tag: {tage: "a0", obj: asn1Param}});
+	    a.push(tagobj);
+	} else if (params.extreq != undefined) {
 	    var extseq = new _Extensions(params.extreq);
 	    var tagobj = _newObject({
 		tag: {
-		    tag:'a0',
-		    explict:true,
+		    tage:'a0',
 		    obj:{seq: [{oid: "1.2.840.113549.1.9.14"},
 			       {set: [extseq]}]}
 		}
@@ -296,10 +326,44 @@ KJUR.asn1.csr.CertificationRequestInfo = function(params) {
     };
     this.getEncodedHex = function() { return this.tohex(); };
 
+    /*
+     * converter from attrs member value to newObject acceptable data
+     */
+    function _conv(aAttrParam) {
+	var _Error = Error,
+	    _Extensions = KJUR.asn1.x509.Extensions;
+	var a = [];
+	for (var i = 0; i < aAttrParam.length; i++) {
+	    var pAttr = aAttrParam[i];
+	    var attrName = pAttr.attr;
+	    if (attrName == "extensionRequest") {
+		var oExt = new _Extensions(pAttr.ext);
+		var p = {seq: [{oid: "1.2.840.113549.1.9.14"},{set: [oExt]}]};
+		a.push(p);
+	    } else if (attrName == "unstructuredName") {
+		var p = {seq: [{oid: "1.2.840.113549.1.9.2"},{set: pAttr.names}]};
+		a.push(p);
+	    } else if (attrName == "challengePassword") {
+		var p = {seq: [{oid: "1.2.840.113549.1.9.7"},
+			       {set: [{utf8str: pAttr.password}]}]};
+		a.push(p);
+	    } else {
+		throw new _Error("unknown CSR attribute");
+	    }
+	}
+	return {set: a};
+    }
+
     if (params != undefined) this.setByParam(params);
 };
-
 extendClass(KJUR.asn1.csr.CertificationRequestInfo, KJUR.asn1.ASN1Object);
+
+KJUR.asn1.csr.AttributeList = function(aParam) {
+    function _paramToASN1Param(aParam) {
+    }
+};
+extendClass(KJUR.asn1.csr.AttributeList, KJUR.asn1.ASN1Object);
+
 
 /**
  * Certification Request (CSR/PKCS#10) utilities class<br/>
