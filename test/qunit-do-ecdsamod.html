@@ -287,7 +287,7 @@ test("getShortNISTPCurveName() method test", function() {
   ec1 = new KJUR.crypto.ECDSA({'curve': 'secp521r1', 'pub': ECK1PUBHEX});
   equal(ec1.getShortNISTPCurveName(), "P-521", "secp521r1 - P-521");
   ec1 = new KJUR.crypto.ECDSA({'curve': 'secp256k1', 'pub': ECK1PUBHEX});
-  equal(ec1.getShortNISTPCurveName(), null, "secp256k1 - null");
+  equal(ec1.getShortNISTPCurveName(), "secp256k1", "secp256k1 - null");
 });
 
 test("readPKCS5PrvKeyHex k1", function() {

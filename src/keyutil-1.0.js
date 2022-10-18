@@ -1862,7 +1862,7 @@ KEYUTIL.getJWK = function(keyinfo, nokid, nox5c, nox5t, nox5t2) {
 	jwk.e = hextob64u(keyObj.e.toString(16));
     } else if (keyObj instanceof KJUR.crypto.ECDSA && keyObj.isPrivate) {
 	var name = keyObj.getShortNISTPCurveName();
-	if (name !== "P-256" && name !== "P-384" && name !== "P-521")
+	if (name !== "P-256" && name !== "P-384" && name !== "P-521" && name !== "secp256k1")
 	    throw new Error("unsupported curve name for JWT: " + name);
 	var xy = keyObj.getPublicKeyXYHex();
 	jwk.kty = "EC";
@@ -1872,7 +1872,7 @@ KEYUTIL.getJWK = function(keyinfo, nokid, nox5c, nox5t, nox5t2) {
 	jwk.d = hextob64u(keyObj.prvKeyHex);
     } else if (keyObj instanceof KJUR.crypto.ECDSA && keyObj.isPublic) {
 	var name = keyObj.getShortNISTPCurveName();
-	if (name !== "P-256" && name !== "P-384" && name !== "P-521")
+	if (name !== "P-256" && name !== "P-384" && name !== "P-521" && name !== "secp256k1")
 	    throw new Error("unsupported curve name for JWT: " + name);
 	var xy = keyObj.getPublicKeyXYHex();
 	jwk.kty = "EC";

@@ -165,6 +165,8 @@ KJUR.crypto.ECDSA = function(params) {
 	    return "P-384";
 	if (s === "secp521r1" || s === "NIST P-521" || s === "P-521")
 	    return "P-521";
+	if (s === "secp256k1")
+		return "secp256k1";
 	return null;
     };
 

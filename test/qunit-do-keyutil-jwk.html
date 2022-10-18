@@ -92,6 +92,26 @@ var prvEC1 =
   "use" : "enc",
   "kid" : "1"
 };
+// Arbitrary test data for secp256k1
+var pubsecp256k1 = 
+{
+  "kty" : "EC",
+  "crv" : "secp256k1",
+  "x" : "ETkUVhg6-xtkT_JL6KAFjw3ZB26ZtVQhpAE871EpVm4",
+  "y" : "kTKkieii1A4UCAmZHT1us1Eq_mLX1FUonGRLCpfo-YQ",
+  "use" : "enc",
+  "kid" : "1"
+}
+var prvsecp256k1 = 
+{
+  "kty" : "EC",
+  "crv" : "secp256k1",
+  "x" : "ETkUVhg6-xtkT_JL6KAFjw3ZB26ZtVQhpAE871EpVm4",
+  "y" : "kTKkieii1A4UCAmZHT1us1Eq_mLX1FUonGRLCpfo-YQ",
+  "d" : "cdsLOXwL9pUNlwVbigl2UYBwHOtRVCn9N0AmHHr-IA0",
+  "use" : "enc",
+  "kid" : "1"
+};
 // RFC7517 A.2.2 RSA PRV
 var prvRSA1 =
 { "kty" : "RSA",
@@ -332,6 +352,32 @@ var expected = {
     d: "870MB6gfuTJ4HtUnUvYMyJpr5eUZNP4Bk43bVdj3eAE",
 };
 deepEqual(jwk, expected, "EC P-256");
+});
+
+test("getJWK() - public EC secp256k1", function() {
+var ec = KEYUTIL.getKey(pubsecp256k1);
+var jwk = KEYUTIL.getJWK(ec);
+var expected = {
+    kty: "EC",
+    crv: "secp256k1",
+    x : "ETkUVhg6-xtkT_JL6KAFjw3ZB26ZtVQhpAE871EpVm4",
+    y : "kTKkieii1A4UCAmZHT1us1Eq_mLX1FUonGRLCpfo-YQ",
+    kid: "y_68HYcuzVEv4WsG5AElS1p4JUOp7jZDgrlrZXjmEWM"
+};
+deepEqual(jwk, expected, "EC secp256k1");
+});
+
+test("getJWK() - private EC secp256k1", function() {
+var ec = KEYUTIL.getKey(prvsecp256k1);
+var jwk = KEYUTIL.getJWK(ec);
+var expected = {
+    kty: "EC",
+    crv: "secp256k1",
+    x : "ETkUVhg6-xtkT_JL6KAFjw3ZB26ZtVQhpAE871EpVm4",
+    y : "kTKkieii1A4UCAmZHT1us1Eq_mLX1FUonGRLCpfo-YQ",
+    d : "cdsLOXwL9pUNlwVbigl2UYBwHOtRVCn9N0AmHHr-IA0"
+};
+deepEqual(jwk, expected, "EC secp256k1");
 });
 
 test("getJWK() - public EC P-521", function() {
