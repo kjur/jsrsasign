@@ -1,4 +1,4 @@
-/* asn1x509-2.1.16.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1x509-2.1.17.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.22 asn1x509 2.1.16 (2022-May-24)
+ * @version jsrsasign 10.6.0 asn1x509 2.1.17 (2022-Nov-04)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -4008,7 +4008,7 @@ KJUR.asn1.x509.AlgorithmIdentifier.PSSNAME2ASN1TLV = {
  * gn = new KJUR.asn1.x509.GeneralName({uri:    'http://aaa.com/'});
  * gn = new KJUR.asn1.x509.GeneralName({other: {
  *   oid: "1.2.3.4",
- *   value: {utf8: "example"} // any ASN.1 which passed to ASN1Util.newObject
+ *   value: {utf8str: "example"} // any ASN.1 which passed to ASN1Util.newObject
  * }});
  *
  * gn = new KJUR.asn1.x509.GeneralName({ldapdn:     'O=Test,C=US'}); // DEPRECATED
@@ -4200,7 +4200,7 @@ extendClass(KJUR.asn1.x509.GeneralNames, KJUR.asn1.ASN1Object);
  * Constructor has two members:
  * <ul>
  * <li>oid - oid string (ex. "1.2.3.4")</li>
- * <li>value - associative array passed to ASN1Util.newObject</li>
+ * <li>value - JSON object passed to ASN1Util.newObject or ASN1Object object</li>
  * </ul>
  *
  * <pre>
@@ -4378,6 +4378,9 @@ KJUR.asn1.x509.OID = new function() {
         'emailProtection':      '1.3.6.1.5.5.7.3.4',
         'timeStamping':         '1.3.6.1.5.5.7.3.8',
         'ocspSigning':          '1.3.6.1.5.5.7.3.9',
+
+	// 'otherNameForms':	'1.3.6.1.5.5.7.8',
+	'smtpUTF8Mailbox':	'1.3.6.1.5.5.7.8.9',
 
         'dateOfBirth':          '1.3.6.1.5.5.7.9.1',
         'placeOfBirth':         '1.3.6.1.5.5.7.9.2',

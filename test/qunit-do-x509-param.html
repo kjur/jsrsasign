@@ -298,6 +298,23 @@ sPDZIABuaSYI1o0ZoFnpLgiWVWbBJDO3w5x6eIS/CueS8hKfX0h7+dIcgQhABleo
 -----END CERTIFICATE-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+// for getParam({dncanon:true,dnhex:true}) test
+var dn1PEM = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIB3zCCAUigAwIBAgIBATANBgkqhkiG9w0BAQsFADAeMQswCQYDVQQGEwJKUDEP
+MA0GA1UECgwGVGVzdENBMB4XDTIyMTAyODE0MDAwM1oXDTIzMTAyODE0MDAwM1ow
+PjELMAkGA1UEBhMCSlAxHzAdBgNVBAoMFiAgICBUZXN0ICAgICBPcmcxICAgICAx
+DjAMBgNVBAMMBVVzZXIxMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCw4pBR
+MWTBFuW8LI/Q3JBAPgIu42Hu/iJ+VB6bKgmql5T5SUBac4g1gx6dSJViOq/p2f+w
+CYUt8usG1axfCDeKISmoGtSyC90Q35xm5uEHBdOq6xNLx5DAC1LtKP+85kdKlIHj
+Z0YXdtSf/ub7fZ822ooJJYIVtwymAmmTf59wmwIDAQABow0wCzAJBgNVHRMEAjAA
+MA0GCSqGSIb3DQEBCwUAA4GBACX9Y1l8dkxrwxDjobQvFzgc6u5DLFQsXoyCoJDb
+9QCtZR7g6VLBRMOld0u0nAxaD87N11hWask7O3pe7QyQ45ooCjk+D41jOlW5ymIE
+BS6CWMFShsDGV5im/cF5ipyZ2m24eX926OPNEypAMwNnescJaxUcP8AvVCE6xAPh
+U5z/
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
 // _gitpg/jsrsasign/test/eckey/k1.self.cer
 var k1CertPEM = "" +
 "-----BEGIN CERTIFICATE-----\n" +
@@ -640,6 +657,40 @@ var pExpected =
   sighex: "69114c2bbd01edaedba8c86e717ecadc09c284fd43f13fc2150527396782ff22807076e99507f7b96ccbe7664922828b25a4fb7670ae2f1c7d4adfe6e5a08830a66e21d6bef392365a2b15e1bac9256c999602dab80d162d9b84b30a81d2f882646d2f82d5939bdb8de8ef0baae6b77e733fd1642d72630c36cdcd58df854d7e921c8bb967f0ee5195921741fbea38e1792246db05e7d13264f11449ee69f97670c4a03154a5e3ced2a68e8e5d4a1a8bf6f33cf640622becdabe4b46771a4d59d8edc396060c798b6a92230f299e18b0f0d920006e692608d68d19a059e92e08965566c12433b7c39c7a7884bf0ae792f2129f5f487bf9d21c8108400657a8db",
 };
 deepEqual(pIn, pExpected, "NIST PKITS nameConstraints Test01 ICA");
+});
+
+test("getParam canonicalized DN and hex test", function() {
+var pIn = new X509(dn1PEM).getParam({dncanon: true, dnhex: true});
+var pExpected = {
+  version: 3,
+  serial: {hex: "01"},
+  sigalg: "SHA256withRSA",
+  issuer: {
+    array: [
+      [{ds:"prn",type: "C",value: "JP"}],
+      [{ds:"utf8",type: "O",value: "TestCA"}]
+    ],
+    canon: "/c=jp/o=testca",
+    hex: "301e310b3009060355040613024a50310f300d060355040a0c06546573744341",
+    str: "/C=JP/O=TestCA"
+  },
+  notafter: "231028140003Z",
+  notbefore: "221028140003Z",
+  subject: {
+    array: [
+      [{ds:"prn",type: "C",value: "JP"}],
+      [{ds:"utf8",type: "O",value: "    Test     Org1     "}],
+      [{ds:"utf8",type: "CN",value: "User1"}]
+    ],
+    canon: "/c=jp/o=test org1/cn=user1",
+    hex: "303e310b3009060355040613024a50311f301d060355040a0c16202020205465737420202020204f7267312020202020310e300c06035504030c055573657231",
+    str: "/C=JP/O=    Test     Org1     /CN=User1"
+  },
+  sbjpubkey: "-----BEGIN PUBLIC KEY-----\r\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCw4pBRMWTBFuW8LI/Q3JBAPgIu\r\n42Hu/iJ+VB6bKgmql5T5SUBac4g1gx6dSJViOq/p2f+wCYUt8usG1axfCDeKISmo\r\nGtSyC90Q35xm5uEHBdOq6xNLx5DAC1LtKP+85kdKlIHjZ0YXdtSf/ub7fZ822ooJ\r\nJYIVtwymAmmTf59wmwIDAQAB\r\n-----END PUBLIC KEY-----\r\n",
+  ext: [{extname: "basicConstraints"}],
+  sighex: "25fd63597c764c6bc310e3a1b42f17381ceaee432c542c5e8c82a090dbf500ad651ee0e952c144c3a5774bb49c0c5a0fcecdd758566ac93b3b7a5eed0c90e39a280a393e0f8d633a55b9ca6204052e8258c15286c0c65798a6fdc1798a9c99da6db8797f76e8e3cd132a403303677ac7096b151c3fc02f54213ac403e1539cff"
+};
+deepEqual(pIn, pExpected, JSON.stringify(pExpected));
 });
 
 test("findParam test", function() {

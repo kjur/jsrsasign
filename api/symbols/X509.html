@@ -646,6 +646,23 @@ RFC 5280 4.2.1.6</a>.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#c14nRDNArray">c14nRDNArray</a></b>(aRDN)
+								</div>
+								<div class="description">simple canonicalization(c14n) for RDN array<br/>
+This method canonicalizes a DN string according to
+<a href="https://datatracker.ietf.org/doc/html/rfc4518#appendix-B">
+"RFC 4518 StringPrep Appendix B Substring Matching"</a> as following:
+<ul>
+<li>convert to lower case</li>
+<li>convert from all sequence of spaces to a space</li>
+<li>remove leading and trailing spaces</li>
+</ul></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#dnarraytostr">dnarraytostr</a></b>(aDN)
 								</div>
 								<div class="description">convert array for X500 distinguish name to distinguish name string<br/>
@@ -1053,10 +1070,10 @@ RFC 5280 4.2.1.10</a>.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getIssuer">getIssuer</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getIssuer">getIssuer</a></b>(flagCanon, flagHex)
 								</div>
 								<div class="description">get JSON object of issuer field<br/>
-</div>
+Get a JSON object of an issuer field.</div>
 							</td>
 						</tr>
 					
@@ -1275,10 +1292,10 @@ This method will get signature value of certificate:</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getSubject">getSubject</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getSubject">getSubject</a></b>(flagCanon, flagHex)
 								</div>
 								<div class="description">get JSON object of subject field<br/>
-</div>
+Get a JSON object of a subject field.</div>
 							</td>
 						</tr>
 					
@@ -1325,7 +1342,7 @@ This method returns a format version of X.509 certificate.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/X509.html#getX500Name">getX500Name</a></b>(h)
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getX500Name">getX500Name</a></b>(h, flagCanon, flagHex)
 								</div>
 								<div class="description">get Name ASN.1 structure parameter array<br/>
 This method will get Name parameter defined in
@@ -1406,6 +1423,20 @@ NOTE: <a href="../symbols/X509.html#parseExt">X509#parseExt</a> will called inte
 								<div class="fixedFont"><b><a href="../symbols/X509.html#readCertPEM">readCertPEM</a></b>(sCertPEM)
 								</div>
 								<div class="description">read PEM formatted X.509 certificate from string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#setCanonicalizedDN">setCanonicalizedDN</a></b>(pDN)
+								</div>
+								<div class="description">set canonicalized DN to a DN parameter<br/>
+This method canonicalizes a DN string as following:
+<ul>
+<li>convert to lower case</li>
+<li>convert from all multiple spaces to a space</li>
+</ul></div>
 							</td>
 						</tr>
 					
@@ -1632,7 +1663,7 @@ ASN1HEX#parse.
 					<pre class="code">x = new X509();
 x.getOtherName("30...") &rarr;
 { oid: "1.2.3.4",
-  other: {utf8str: {str: "aaa"}} }</pre>
+  value: {utf8str: {str: "aaa"}} }</pre>
 					
 					
 
@@ -1714,6 +1745,72 @@ x.getOtherName("30...") &rarr;
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name="c14nRDNArray"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{string}</span>
+					<b>c14nRDNArray</b>(aRDN)
+					
+					</div>
+					<div class="description">
+						simple canonicalization(c14n) for RDN array<br/>
+This method canonicalizes a DN string according to
+<a href="https://datatracker.ietf.org/doc/html/rfc4518#appendix-B">
+"RFC 4518 StringPrep Appendix B Substring Matching"</a> as following:
+<ul>
+<li>convert to lower case</li>
+<li>convert from all sequence of spaces to a space</li>
+<li>remove leading and trailing spaces</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var x = new X509();
+x.c14nRDNArray([
+  [{type:"C", value:"JP", ds: "prn"}],
+  [{type:"O", value:"    Test    1234     ", ds: "utf8"}],
+  [{type:"OU", value:"HR   45", ds: "utf8"}]
+]) &rarr; "/c=jp/o=test 1234/ou=hr 45"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{array}</span> <b>aRDN</b>
+									
+								</dt>
+								<dd>array of RDN parameters</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.6.0 x509 2.1.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> canonicalized distinguish name (ex. "/c=jp/o=test ca")</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
 				
 					<a name="dnarraytostr"> </a>
 					<div class="fixedFont">
@@ -4534,12 +4631,17 @@ signature: 1c1a0697dcd79c9f...</pre>
 					<div class="fixedFont">
 					
 					<span class="light">{Array}</span>
-					<b>getIssuer</b>()
+					<b>getIssuer</b>(flagCanon, flagHex)
 					
 					</div>
 					<div class="description">
 						get JSON object of issuer field<br/>
-
+Get a JSON object of an issuer field.
+<br>
+NOTE: From jsrsasign 10.6.0, flagHex and flagCanon has been 
+supported to conclude a canonicalized name for caseIgnoreMatch
+desribed in <a href="https://tools.ietf.org/html/rfc4518">
+RFC 4518</a>.
 						
 						
 					</div>
@@ -4549,10 +4651,34 @@ signature: 1c1a0697dcd79c9f...</pre>
 					<pre class="code">var x = new X509(sCertPEM);
 x.getIssuer() &rarr;
 { array: [[{type:'C',value:'JP',ds:'prn'}],...],
-  str: "/C=JP/..." }</pre>
+  str: "/C=JP/..." }
+
+// with flags
+x.getIssuer(true, true) &rarr;
+{ array: ...,
+  str: "/C=JP/O=   Test    123   ",
+  canon: "/c=jp/o=test 123",
+  hex: "30..." }</pre>
 					
 					
 					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{boolean}</span> <b>flagCanon</b>
+									
+								</dt>
+								<dd>flag to conclude canonicalized name (DEFAULT false)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{boolean}</span> <b>flagHex</b>
+									
+								</dt>
+								<dd>flag to conclude hexadecimal string (DEFAULT false)</dd>
+							
+							</dl>
 						
 						
 						
@@ -4755,15 +4881,20 @@ var notBefore = x.getNotBefore(); // return string like "151231235959Z"</pre>
 This method returns a JSON object of the certificate
 parameters. Return value can be passed to
 <a href="../symbols/KJUR.asn1.x509.X509Util.html#.newCertPEM">KJUR.asn1.x509.X509Util.newCertPEM</a>.
-<br>
+<br/>
 NOTE1: From jsrsasign 10.5.16, optional argument can be applied.
 It can have following members:
 <ul>
-<li>tbshex - if this is true, tbshex member with hex value of
-tbsCertificate will be added</li>
-<li>nodnarray - if this is true, array member for subject and
-issuer will be deleted to simplify it<li>
+<li>tbshex - (boolean) tbshex member with hex value of 
+tbsCertificate will be added if true (DEFAULT undefined)</li>
+<li>nodnarray - (boolean) array member for subject and
+issuer will be deleted to simplify it if true (DEFAULT undefined)<li>
+<li>dncanon - (boolean) add canon member to subject and issuer for DN StringPrep if true(DEFAULT undefined)</li>
+<li>dnhex - (boolean) add hex member to subject and issuer if true(DEFAULT undefined)</li>
 </ul>
+<br/>
+NOTE2: From jsrsasign 10.6.0, member "dncanon" and "dnhex" supported
+in the "option" argument.
 						
 						
 					</div>
@@ -4793,7 +4924,9 @@ x.getParam() &rarr;
 };
 
 x.getParam({tbshex: true}) &rarr; { ... , tbshex: "30..." }
-x.getParam({nodnarray: true}) &rarr; {issuer: {str: "/C=JP"}, ...}</pre>
+x.getParam({nodnarray: true}) &rarr; {issuer: {str: "/C=JP"}, ...}
+x.getParam({dncanon: true}) &rarr; {... {issuer: {canon: "/c=jp/o=..."} ...} ...}
+x.getParam({dnhex: true}) &rarr; {... {issuer: {hex: "30..."} ...} ...}</pre>
 					
 					
 					
@@ -5716,13 +5849,18 @@ hSPKIValue = x.getSPKIValue(); // without BIT STRING Encapusulation.</pre>
 					<a name="getSubject"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{Array}</span>
-					<b>getSubject</b>()
+					<span class="light">{object}</span>
+					<b>getSubject</b>(flagCanon, flagHex)
 					
 					</div>
 					<div class="description">
 						get JSON object of subject field<br/>
-
+Get a JSON object of a subject field.
+<br>
+NOTE: From jsrsasign 10.6.0, flagHex and flagCanon has been 
+supported to conclude a canonicalized name for caseIgnoreMatch
+desribed in <a href="https://tools.ietf.org/html/rfc4518">
+RFC 4518</a>.
 						
 						
 					</div>
@@ -5732,10 +5870,34 @@ hSPKIValue = x.getSPKIValue(); // without BIT STRING Encapusulation.</pre>
 					<pre class="code">var x = new X509(sCertPEM);
 x.getSubject() &rarr;
 { array: [[{type:'C',value:'JP',ds:'prn'}],...],
-  str: "/C=JP/..." }</pre>
+  str: "/C=JP/..." }
+
+// with flags
+x.getSubject(true, true) &rarr;
+{ array: ...,
+  str: "/C=JP/O=   Test    123   ",
+  canon: "/c=jp/o=test 123",
+  hex: "30..." }</pre>
 					
 					
 					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{boolean}</span> <b>flagCanon</b>
+									
+								</dt>
+								<dd>flag to conclude canonicalized name (DEFAULT false)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{boolean}</span> <b>flagHex</b>
+									
+								</dt>
+								<dd>flag to conclude hexadecimal string (DEFAULT false)</dd>
+							
+							</dl>
 						
 						
 						
@@ -5750,7 +5912,7 @@ x.getSubject() &rarr;
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{Array}</span> JSON object of subject field</dd>
+								<dd><span class="light fixedFont">{object}</span> JSON object of subject field</dd>
 							
 							</dl>
 						
@@ -5983,7 +6145,7 @@ sn = x.getSerialNumberHex(); // return string like "01ad..."</pre>
 					<div class="fixedFont">
 					
 					<span class="light">{Array}</span>
-					<b>getX500Name</b>(h)
+					<b>getX500Name</b>(h, flagCanon, flagHex)
 					
 					</div>
 					<div class="description">
@@ -5996,6 +6158,11 @@ Name ::= CHOICE { -- only one possibility for now --
   rdnSequence  RDNSequence }
 RDNSequence ::= SEQUENCE OF RelativeDistinguishedName
 </pre>
+<br>
+NOTE: From jsrsasign 10.6.0, flagHex and flagCanon has been 
+supported to conclude a canonicalized name for caseIgnoreMatch
+desribed in <a href="https://tools.ietf.org/html/rfc4518">
+RFC 4518</a>.
 						
 						
 					</div>
@@ -6010,8 +6177,16 @@ x.getX500Name("30...") &rarr;
     [{type:"CN",value:"john.smith@example.com",ds:"ia5"}]
   ],
   str: "/C=US/O=Sample Corp./CN=john.smith@example.com",
-  hex: "30..."
-}</pre>
+  hex: "30..." }
+
+x.getX500Name("30...", true) &rarr;
+{ array: [
+    [{type:"C",value:"US",ds:"prn"}],
+    [{type:"O",value:"Sample    Corp.",ds:"utf8"}]
+  ],
+  str: "/C=US/O=Sample    Corp.",
+  canon: "/c=us/o=sample corp.",
+  hex: "30..." }</pre>
 					
 					
 					
@@ -6024,6 +6199,18 @@ x.getX500Name("30...") &rarr;
 									
 								</dt>
 								<dd>hexadecimal string of Name</dd>
+							
+								<dt>
+									<span class="light fixedFont">{boolean}</span> <b>flagCanon</b>
+									
+								</dt>
+								<dd>flag to conclude canonicalized name (DEFAULT false)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{boolean}</span> <b>flagHex</b>
+									
+								</dt>
+								<dd>flag to conclude hexadecimal string (DEFAULT false)</dd>
 							
 							</dl>
 						
@@ -6054,6 +6241,8 @@ x.getX500Name("30...") &rarr;
 								<dd><a href="../symbols/X509.html#getRDN">X509#getRDN</a></dd>
 							
 								<dd><a href="../symbols/X509.html#getAttrTypeAndValue">X509#getAttrTypeAndValue</a></dd>
+							
+								<dd><a href="../symbols/X509.html#c14nRDNArray">X509#c14nRDNArray</a></dd>
 							
 								<dd><a href="../symbols/KJUR.asn1.x509.X500Name.html">KJUR.asn1.x509.X500Name</a></dd>
 							
@@ -6473,6 +6662,70 @@ x.readCertPEM(sCertPEM); // read certificate</pre>
 							</dl>
 						
 						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="setCanonicalizedDN"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setCanonicalizedDN</b>(pDN)
+					
+					</div>
+					<div class="description">
+						set canonicalized DN to a DN parameter<br/>
+This method canonicalizes a DN string as following:
+<ul>
+<li>convert to lower case</li>
+<li>convert from all multiple spaces to a space</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">var x = new X509();
+var pDN = {
+  array: [
+    [{type:'C',value:'JP',ds:'prn'}],
+    [{type:'O',value:'Test    1',ds:'prn'}] ],
+  str: "/C=JP/O=Test    1" };
+x.setCanonicalizedDN(pDN);
+// pDN will become following
+pDN = {
+  array: [
+    [{type:'C',value:'JP',ds:'prn'}],
+    [{type:'O',value:'Test    1',ds:'prn'}] ],
+  str: "/C=JP/O=Test    1",
+  canon: "/c=jp/o=test 1" };</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>pDN</b>
+									
+								</dt>
+								<dd>DN parameter associative array</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.6.0 x509 2.1.0</dd>
+							</dl>
+							</dl>
 						
 						
 						

@@ -1731,118 +1731,127 @@
 <span class='line'>1724</span>  * @name KJUR.asn1.DERTaggedObject
 <span class='line'>1725</span>  * @class class for ASN.1 DER TaggedObject
 <span class='line'>1726</span>  * @extends KJUR.asn1.ASN1Object
-<span class='line'>1727</span>  *
-<span class='line'>1728</span>  * @description
-<span class='line'>1729</span>  * &lt;br/>
-<span class='line'>1730</span>  * Parameter 'tagNoNex' is ASN.1 tag(T) value for this object.
-<span class='line'>1731</span>  * For example, if you find '[1]' tag in a ASN.1 dump, 
-<span class='line'>1732</span>  * 'tagNoHex' will be 'a1'.
-<span class='line'>1733</span>  * &lt;br/>
-<span class='line'>1734</span>  * As for optional argument 'params' for constructor, you can specify *ANY* of
-<span class='line'>1735</span>  * following properties:
-<span class='line'>1736</span>  * &lt;ul>
-<span class='line'>1737</span>  * &lt;li>tag - specify tag (default is 'a0' which means [0])&lt;/li>
-<span class='line'>1738</span>  * &lt;li>explicit - specify true if this is explicit tag otherwise false 
-<span class='line'>1739</span>  *     (default is 'true').&lt;/li>
-<span class='line'>1740</span>  * &lt;li>obj - specify ASN1Object which is tagged&lt;/li>
-<span class='line'>1741</span>  * &lt;li>tage - specify tag with explicit&lt;/li>
-<span class='line'>1742</span>  * &lt;li>tagi - specify tag with implicit&lt;/li>
-<span class='line'>1743</span>  * &lt;/ul>
-<span class='line'>1744</span>  *
-<span class='line'>1745</span>  * @example
-<span class='line'>1746</span>  * new KJUR.asn1.DERTaggedObject({
-<span class='line'>1747</span>  *  tage:'a0', obj: new KJUR.asn1.DERInteger({int: 3}) // explicit
-<span class='line'>1748</span>  * }) 
-<span class='line'>1749</span>  * new KJUR.asn1.DERTaggedObject({
-<span class='line'>1750</span>  *  tagi:'a0', obj: new KJUR.asn1.DERInteger({int: 3}) // implicit
-<span class='line'>1751</span>  * }) 
-<span class='line'>1752</span>  * new KJUR.asn1.DERTaggedObject({
-<span class='line'>1753</span>  *  tag:'a0', explicit: true, obj: new KJUR.asn1.DERInteger({int: 3}) // explicit
-<span class='line'>1754</span>  * }) 
-<span class='line'>1755</span>  *
-<span class='line'>1756</span>  * // to hexadecimal
-<span class='line'>1757</span>  * d1 = new KJUR.asn1.DERUTF8String({str':'a'})
-<span class='line'>1758</span>  * d2 = new KJUR.asn1.DERTaggedObject({'obj': d1});
-<span class='line'>1759</span>  * hex = d2.tohex();
-<span class='line'>1760</span>  */</span><span class="WHIT">
-<span class='line'>1761</span> </span><span class="NAME">KJUR.asn1.DERTaggedObject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1762</span> </span><span class="WHIT">    </span><span class="NAME">KJUR.asn1.DERTaggedObject.superclass.constructor.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1763</span> 
-<span class='line'>1764</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_KJUR_asn1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1765</span> </span><span class="WHIT">	</span><span class="NAME">_ASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1766</span> </span><span class="WHIT">	</span><span class="NAME">_getV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getV</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1767</span> </span><span class="WHIT">	</span><span class="NAME">_isASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.isASN1HEX</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1768</span> </span><span class="WHIT">	</span><span class="NAME">_newObject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_KJUR_asn1.ASN1Util.newObject</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1769</span> 
-<span class='line'>1770</span> </span><span class="WHIT">    </span><span class="NAME">this.hT</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"a0"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1771</span> </span><span class="WHIT">    </span><span class="NAME">this.hV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1772</span> </span><span class="WHIT">    </span><span class="NAME">this.isExplicit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1773</span> </span><span class="WHIT">    </span><span class="NAME">this.asn1Object</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1774</span> </span><span class="WHIT">    </span><span class="NAME">this.params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">tag</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"a0"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">explicit</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">//"tag": "a0, "explicit": true};</span><span class="WHIT">
-<span class='line'>1775</span> 
-<span class='line'>1776</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>1777</span>      * set value by an ASN1Object
-<span class='line'>1778</span>      * @name setString
-<span class='line'>1779</span>      * @memberOf KJUR.asn1.DERTaggedObject#
-<span class='line'>1780</span>      * @function
-<span class='line'>1781</span>      * @param {Boolean} isExplicitFlag flag for explicit/implicit tag
-<span class='line'>1782</span>      * @param {Integer} tagNoHex hexadecimal string of ASN.1 tag
-<span class='line'>1783</span>      * @param {ASN1Object} asn1Object ASN.1 to encapsulate
-<span class='line'>1784</span>      * @deprecated since jsrsasign 10.5.4 please use setByParam instead
-<span class='line'>1785</span>      */</span><span class="WHIT">
-<span class='line'>1786</span> </span><span class="WHIT">    </span><span class="NAME">this.setASN1Object</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">isExplicitFlag</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">tagNoHex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">asn1Object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1787</span> </span><span class="WHIT">	</span><span class="NAME">this.params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">tag</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">tagNoHex</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1788</span> </span><span class="WHIT">		       </span><span class="NAME">explicit</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">isExplicitFlag</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>1789</span> </span><span class="WHIT">		       </span><span class="NAME">obj</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">asn1Object</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1790</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1791</span> 
-<span class='line'>1792</span> </span><span class="WHIT">    </span><span class="NAME">this.getFreshValueHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1793</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1794</span> 
-<span class='line'>1795</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.explicit</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">params.explicit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1796</span> 
-<span class='line'>1797</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.tage</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1798</span> </span><span class="WHIT">	    </span><span class="NAME">params.tag</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params.tage</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1799</span> </span><span class="WHIT">	    </span><span class="NAME">params.explicit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1800</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1801</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.tagi</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1802</span> </span><span class="WHIT">	    </span><span class="NAME">params.tag</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params.tagi</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1803</span> </span><span class="WHIT">	    </span><span class="NAME">params.explicit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1804</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1727</span>  * @see KJUR_asn1.ASN1Util.newObject
+<span class='line'>1728</span>  *
+<span class='line'>1729</span>  * @description
+<span class='line'>1730</span>  * &lt;br/>
+<span class='line'>1731</span>  * Parameter 'tagNoNex' is ASN.1 tag(T) value for this object.
+<span class='line'>1732</span>  * For example, if you find '[1]' tag in a ASN.1 dump, 
+<span class='line'>1733</span>  * 'tagNoHex' will be 'a1'.
+<span class='line'>1734</span>  * &lt;br/>
+<span class='line'>1735</span>  * As for optional argument 'params' for constructor, you can specify *ANY* of
+<span class='line'>1736</span>  * following properties:
+<span class='line'>1737</span>  * &lt;ul>
+<span class='line'>1738</span>  * &lt;li>tag - specify tag (default is 'a0' which means [0])&lt;/li>
+<span class='line'>1739</span>  * &lt;li>explicit - specify true if this is explicit tag otherwise false 
+<span class='line'>1740</span>  *     (default is 'true').&lt;/li>
+<span class='line'>1741</span>  * &lt;li>obj - specify ASN1Object or JSON object which will be tagged&lt;/li>
+<span class='line'>1742</span>  * &lt;li>tage - specify tag with explicit&lt;/li>
+<span class='line'>1743</span>  * &lt;li>tagi - specify tag with implicit&lt;/li>
+<span class='line'>1744</span>  * &lt;/ul>
+<span class='line'>1745</span>  * As for the member "obj" value of JSON object, 
+<span class='line'>1746</span>  * {@link KJUR_asn1.ASN1Util.newObject} is used to generate.
+<span class='line'>1747</span>  *
+<span class='line'>1748</span>  * @example
+<span class='line'>1749</span>  * // by JSON
+<span class='line'>1750</span>  * new KJUR.asn1.DERTaggedObject({
+<span class='line'>1751</span>  *  tag:'a0', explicit: true, obj: { "prnstr": { "str": "aaa" } }
+<span class='line'>1752</span>  * }).tohex()
+<span class='line'>1753</span>  *
+<span class='line'>1754</span>  * // by ASN1Object object
+<span class='line'>1755</span>  * new KJUR.asn1.DERTaggedObject({
+<span class='line'>1756</span>  *  tage:'a0', obj: new KJUR.asn1.DERInteger({int: 3}) // explicit
+<span class='line'>1757</span>  * }) 
+<span class='line'>1758</span>  * new KJUR.asn1.DERTaggedObject({
+<span class='line'>1759</span>  *  tagi:'a0', obj: new KJUR.asn1.DERInteger({int: 3}) // implicit
+<span class='line'>1760</span>  * }) 
+<span class='line'>1761</span>  * new KJUR.asn1.DERTaggedObject({
+<span class='line'>1762</span>  *  tag:'a0', explicit: true, obj: new KJUR.asn1.DERInteger({int: 3}) // explicit
+<span class='line'>1763</span>  * }) 
+<span class='line'>1764</span>  *
+<span class='line'>1765</span>  * // to hexadecimal
+<span class='line'>1766</span>  * d1 = new KJUR.asn1.DERUTF8String({str':'a'})
+<span class='line'>1767</span>  * d2 = new KJUR.asn1.DERTaggedObject({'obj': d1});
+<span class='line'>1768</span>  * hex = d2.tohex();
+<span class='line'>1769</span>  */</span><span class="WHIT">
+<span class='line'>1770</span> </span><span class="NAME">KJUR.asn1.DERTaggedObject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1771</span> </span><span class="WHIT">    </span><span class="NAME">KJUR.asn1.DERTaggedObject.superclass.constructor.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1772</span> 
+<span class='line'>1773</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_KJUR_asn1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1774</span> </span><span class="WHIT">	</span><span class="NAME">_ASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ASN1HEX</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1775</span> </span><span class="WHIT">	</span><span class="NAME">_getV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.getV</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1776</span> </span><span class="WHIT">	</span><span class="NAME">_isASN1HEX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_ASN1HEX.isASN1HEX</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1777</span> </span><span class="WHIT">	</span><span class="NAME">_newObject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_KJUR_asn1.ASN1Util.newObject</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1778</span> 
+<span class='line'>1779</span> </span><span class="WHIT">    </span><span class="NAME">this.hT</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"a0"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1780</span> </span><span class="WHIT">    </span><span class="NAME">this.hV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1781</span> </span><span class="WHIT">    </span><span class="NAME">this.isExplicit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1782</span> </span><span class="WHIT">    </span><span class="NAME">this.asn1Object</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1783</span> </span><span class="WHIT">    </span><span class="NAME">this.params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">tag</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"a0"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">explicit</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">//"tag": "a0, "explicit": true};</span><span class="WHIT">
+<span class='line'>1784</span> 
+<span class='line'>1785</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>1786</span>      * set value by an ASN1Object
+<span class='line'>1787</span>      * @name setString
+<span class='line'>1788</span>      * @memberOf KJUR.asn1.DERTaggedObject#
+<span class='line'>1789</span>      * @function
+<span class='line'>1790</span>      * @param {Boolean} isExplicitFlag flag for explicit/implicit tag
+<span class='line'>1791</span>      * @param {Integer} tagNoHex hexadecimal string of ASN.1 tag
+<span class='line'>1792</span>      * @param {ASN1Object} asn1Object ASN.1 to encapsulate
+<span class='line'>1793</span>      * @deprecated since jsrsasign 10.5.4 please use setByParam instead
+<span class='line'>1794</span>      */</span><span class="WHIT">
+<span class='line'>1795</span> </span><span class="WHIT">    </span><span class="NAME">this.setASN1Object</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">isExplicitFlag</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">tagNoHex</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">asn1Object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1796</span> </span><span class="WHIT">	</span><span class="NAME">this.params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">tag</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">tagNoHex</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1797</span> </span><span class="WHIT">		       </span><span class="NAME">explicit</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">isExplicitFlag</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>1798</span> </span><span class="WHIT">		       </span><span class="NAME">obj</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">asn1Object</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1799</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1800</span> 
+<span class='line'>1801</span> </span><span class="WHIT">    </span><span class="NAME">this.getFreshValueHex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1802</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.params</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1803</span> 
+<span class='line'>1804</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.explicit</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">params.explicit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>1805</span> 
-<span class='line'>1806</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.str</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1807</span> </span><span class="WHIT">	    </span><span class="NAME">this.hV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">utf8tohex</span><span class="PUNC">(</span><span class="NAME">params.str</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1808</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.hex</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1809</span> </span><span class="WHIT">	    </span><span class="NAME">this.hV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params.hex</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1810</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.obj</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1811</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hV1</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1812</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.obj</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">_KJUR_asn1.ASN1Object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1813</span> </span><span class="WHIT">		</span><span class="NAME">hV1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params.obj.tohex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1814</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params.obj</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"object"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1815</span> </span><span class="WHIT">		</span><span class="NAME">hV1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_newObject</span><span class="PUNC">(</span><span class="NAME">params.obj</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">tohex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1816</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1817</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.explicit</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1818</span> </span><span class="WHIT">		</span><span class="NAME">this.hV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hV1</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1819</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1820</span> </span><span class="WHIT">		</span><span class="NAME">this.hV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">hV1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1821</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1822</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1823</span> </span><span class="WHIT">	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"str, hex nor obj not specified"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1824</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1825</span> 
-<span class='line'>1826</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.tag</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">params.tag</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"a0"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1827</span> </span><span class="WHIT">	</span><span class="NAME">this.hT</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params.tag</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1828</span> </span><span class="WHIT">        </span><span class="NAME">this.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1829</span> </span><span class="WHIT">        </span><span class="NAME">this.isModified</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1830</span> 
-<span class='line'>1831</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.hV</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1832</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1833</span> 
-<span class='line'>1834</span> </span><span class="WHIT">    </span><span class="NAME">this.setByParam</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1835</span> </span><span class="WHIT">	</span><span class="NAME">this.params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1836</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1837</span> 
-<span class='line'>1838</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">this.setByParam</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1839</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1840</span> </span><span class="NAME">extendClass</span><span class="PUNC">(</span><span class="NAME">KJUR.asn1.DERTaggedObject</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.ASN1Object</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1841</span> </span></pre></body></html>
+<span class='line'>1806</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.tage</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1807</span> </span><span class="WHIT">	    </span><span class="NAME">params.tag</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params.tage</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1808</span> </span><span class="WHIT">	    </span><span class="NAME">params.explicit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1809</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1810</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.tagi</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1811</span> </span><span class="WHIT">	    </span><span class="NAME">params.tag</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params.tagi</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1812</span> </span><span class="WHIT">	    </span><span class="NAME">params.explicit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1813</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1814</span> 
+<span class='line'>1815</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.str</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1816</span> </span><span class="WHIT">	    </span><span class="NAME">this.hV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">utf8tohex</span><span class="PUNC">(</span><span class="NAME">params.str</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1817</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.hex</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1818</span> </span><span class="WHIT">	    </span><span class="NAME">this.hV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params.hex</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1819</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.obj</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1820</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hV1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1821</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.obj</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">_KJUR_asn1.ASN1Object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1822</span> </span><span class="WHIT">		</span><span class="NAME">hV1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params.obj.tohex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1823</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">params.obj</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"object"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1824</span> </span><span class="WHIT">		</span><span class="NAME">hV1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_newObject</span><span class="PUNC">(</span><span class="NAME">params.obj</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">tohex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1825</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1826</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.explicit</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1827</span> </span><span class="WHIT">		</span><span class="NAME">this.hV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hV1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1828</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1829</span> </span><span class="WHIT">		</span><span class="NAME">this.hV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_getV</span><span class="PUNC">(</span><span class="NAME">hV1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1830</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1831</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1832</span> </span><span class="WHIT">	    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"str, hex nor obj not specified"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1833</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1834</span> 
+<span class='line'>1835</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params.tag</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">params.tag</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"a0"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1836</span> </span><span class="WHIT">	</span><span class="NAME">this.hT</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params.tag</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1837</span> </span><span class="WHIT">        </span><span class="NAME">this.hTLV</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1838</span> </span><span class="WHIT">        </span><span class="NAME">this.isModified</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1839</span> 
+<span class='line'>1840</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.hV</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1841</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1842</span> 
+<span class='line'>1843</span> </span><span class="WHIT">    </span><span class="NAME">this.setByParam</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1844</span> </span><span class="WHIT">	</span><span class="NAME">this.params</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1845</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1846</span> 
+<span class='line'>1847</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">params</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">this.setByParam</span><span class="PUNC">(</span><span class="NAME">params</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1848</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1849</span> </span><span class="NAME">extendClass</span><span class="PUNC">(</span><span class="NAME">KJUR.asn1.DERTaggedObject</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.ASN1Object</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1850</span> </span></pre></body></html>

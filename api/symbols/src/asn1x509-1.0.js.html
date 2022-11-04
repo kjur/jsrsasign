@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1x509-2.1.16.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* asn1x509-2.1.17.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name asn1x509-1.0.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign 10.5.22 asn1x509 2.1.16 (2022-May-24)
+<span class='line'> 19</span>  * @version jsrsasign 10.6.0 asn1x509 2.1.17 (2022-Nov-04)
 <span class='line'> 20</span>  * @since jsrsasign 2.1
 <span class='line'> 21</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -4015,7 +4015,7 @@
 <span class='line'>4008</span>  * gn = new KJUR.asn1.x509.GeneralName({uri:    'http://aaa.com/'});
 <span class='line'>4009</span>  * gn = new KJUR.asn1.x509.GeneralName({other: {
 <span class='line'>4010</span>  *   oid: "1.2.3.4",
-<span class='line'>4011</span>  *   value: {utf8: "example"} // any ASN.1 which passed to ASN1Util.newObject
+<span class='line'>4011</span>  *   value: {utf8str: "example"} // any ASN.1 which passed to ASN1Util.newObject
 <span class='line'>4012</span>  * }});
 <span class='line'>4013</span>  *
 <span class='line'>4014</span>  * gn = new KJUR.asn1.x509.GeneralName({ldapdn:     'O=Test,C=US'}); // DEPRECATED
@@ -4207,7 +4207,7 @@
 <span class='line'>4200</span>  * Constructor has two members:
 <span class='line'>4201</span>  * &lt;ul>
 <span class='line'>4202</span>  * &lt;li>oid - oid string (ex. "1.2.3.4")&lt;/li>
-<span class='line'>4203</span>  * &lt;li>value - associative array passed to ASN1Util.newObject&lt;/li>
+<span class='line'>4203</span>  * &lt;li>value - JSON object passed to ASN1Util.newObject or ASN1Object object&lt;/li>
 <span class='line'>4204</span>  * &lt;/ul>
 <span class='line'>4205</span>  *
 <span class='line'>4206</span>  * &lt;pre>
@@ -4386,379 +4386,382 @@
 <span class='line'>4379</span> </span><span class="WHIT">        </span><span class="STRN">'timeStamping'</span><span class="PUNC">:</span><span class="WHIT">         </span><span class="STRN">'1.3.6.1.5.5.7.3.8'</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>4380</span> </span><span class="WHIT">        </span><span class="STRN">'ocspSigning'</span><span class="PUNC">:</span><span class="WHIT">          </span><span class="STRN">'1.3.6.1.5.5.7.3.9'</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>4381</span> 
-<span class='line'>4382</span> </span><span class="WHIT">        </span><span class="STRN">'dateOfBirth'</span><span class="PUNC">:</span><span class="WHIT">          </span><span class="STRN">'1.3.6.1.5.5.7.9.1'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4383</span> </span><span class="WHIT">        </span><span class="STRN">'placeOfBirth'</span><span class="PUNC">:</span><span class="WHIT">         </span><span class="STRN">'1.3.6.1.5.5.7.9.2'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4384</span> </span><span class="WHIT">        </span><span class="STRN">'gender'</span><span class="PUNC">:</span><span class="WHIT">               </span><span class="STRN">'1.3.6.1.5.5.7.9.3'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4385</span> </span><span class="WHIT">        </span><span class="STRN">'countryOfCitizenship'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'1.3.6.1.5.5.7.9.4'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4386</span> </span><span class="WHIT">        </span><span class="STRN">'countryOfResidence'</span><span class="PUNC">:</span><span class="WHIT">   </span><span class="STRN">'1.3.6.1.5.5.7.9.5'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4387</span> 
-<span class='line'>4388</span> </span><span class="WHIT">        </span><span class="STRN">'ecPublicKey'</span><span class="PUNC">:</span><span class="WHIT">          </span><span class="STRN">'1.2.840.10045.2.1'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4389</span> </span><span class="WHIT">        </span><span class="STRN">'P-256'</span><span class="PUNC">:</span><span class="WHIT">                </span><span class="STRN">'1.2.840.10045.3.1.7'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4390</span> </span><span class="WHIT">        </span><span class="STRN">'secp256r1'</span><span class="PUNC">:</span><span class="WHIT">            </span><span class="STRN">'1.2.840.10045.3.1.7'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4391</span> </span><span class="WHIT">        </span><span class="STRN">'secp256k1'</span><span class="PUNC">:</span><span class="WHIT">            </span><span class="STRN">'1.3.132.0.10'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4392</span> </span><span class="WHIT">        </span><span class="STRN">'secp384r1'</span><span class="PUNC">:</span><span class="WHIT">            </span><span class="STRN">'1.3.132.0.34'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4393</span> </span><span class="WHIT">        </span><span class="STRN">'secp521r1'</span><span class="PUNC">:</span><span class="WHIT">            </span><span class="STRN">'1.3.132.0.35'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4394</span> 
-<span class='line'>4395</span> </span><span class="WHIT">        </span><span class="STRN">'pkcs5PBES2'</span><span class="PUNC">:</span><span class="WHIT">           </span><span class="STRN">'1.2.840.113549.1.5.13'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4396</span> </span><span class="WHIT">        </span><span class="STRN">'pkcs5PBKDF2'</span><span class="PUNC">:</span><span class="WHIT">          </span><span class="STRN">'1.2.840.113549.1.5.12'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4382</span> </span><span class="WHIT">	</span><span class="COMM">// 'otherNameForms':	'1.3.6.1.5.5.7.8',</span><span class="WHIT">
+<span class='line'>4383</span> </span><span class="WHIT">	</span><span class="STRN">'smtpUTF8Mailbox'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.3.6.1.5.5.7.8.9'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4384</span> 
+<span class='line'>4385</span> </span><span class="WHIT">        </span><span class="STRN">'dateOfBirth'</span><span class="PUNC">:</span><span class="WHIT">          </span><span class="STRN">'1.3.6.1.5.5.7.9.1'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4386</span> </span><span class="WHIT">        </span><span class="STRN">'placeOfBirth'</span><span class="PUNC">:</span><span class="WHIT">         </span><span class="STRN">'1.3.6.1.5.5.7.9.2'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4387</span> </span><span class="WHIT">        </span><span class="STRN">'gender'</span><span class="PUNC">:</span><span class="WHIT">               </span><span class="STRN">'1.3.6.1.5.5.7.9.3'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4388</span> </span><span class="WHIT">        </span><span class="STRN">'countryOfCitizenship'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'1.3.6.1.5.5.7.9.4'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4389</span> </span><span class="WHIT">        </span><span class="STRN">'countryOfResidence'</span><span class="PUNC">:</span><span class="WHIT">   </span><span class="STRN">'1.3.6.1.5.5.7.9.5'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4390</span> 
+<span class='line'>4391</span> </span><span class="WHIT">        </span><span class="STRN">'ecPublicKey'</span><span class="PUNC">:</span><span class="WHIT">          </span><span class="STRN">'1.2.840.10045.2.1'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4392</span> </span><span class="WHIT">        </span><span class="STRN">'P-256'</span><span class="PUNC">:</span><span class="WHIT">                </span><span class="STRN">'1.2.840.10045.3.1.7'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4393</span> </span><span class="WHIT">        </span><span class="STRN">'secp256r1'</span><span class="PUNC">:</span><span class="WHIT">            </span><span class="STRN">'1.2.840.10045.3.1.7'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4394</span> </span><span class="WHIT">        </span><span class="STRN">'secp256k1'</span><span class="PUNC">:</span><span class="WHIT">            </span><span class="STRN">'1.3.132.0.10'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4395</span> </span><span class="WHIT">        </span><span class="STRN">'secp384r1'</span><span class="PUNC">:</span><span class="WHIT">            </span><span class="STRN">'1.3.132.0.34'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4396</span> </span><span class="WHIT">        </span><span class="STRN">'secp521r1'</span><span class="PUNC">:</span><span class="WHIT">            </span><span class="STRN">'1.3.132.0.35'</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>4397</span> 
-<span class='line'>4398</span> </span><span class="WHIT">        </span><span class="STRN">'des-EDE3-CBC'</span><span class="PUNC">:</span><span class="WHIT">         </span><span class="STRN">'1.2.840.113549.3.7'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4399</span> 
-<span class='line'>4400</span> </span><span class="WHIT">        </span><span class="STRN">'data'</span><span class="PUNC">:</span><span class="WHIT">                 </span><span class="STRN">'1.2.840.113549.1.7.1'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// CMS data</span><span class="WHIT">
-<span class='line'>4401</span> </span><span class="WHIT">        </span><span class="STRN">'signed-data'</span><span class="PUNC">:</span><span class="WHIT">          </span><span class="STRN">'1.2.840.113549.1.7.2'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// CMS signed-data</span><span class="WHIT">
-<span class='line'>4402</span> </span><span class="WHIT">        </span><span class="STRN">'enveloped-data'</span><span class="PUNC">:</span><span class="WHIT">       </span><span class="STRN">'1.2.840.113549.1.7.3'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// CMS enveloped-data</span><span class="WHIT">
-<span class='line'>4403</span> </span><span class="WHIT">        </span><span class="STRN">'digested-data'</span><span class="PUNC">:</span><span class="WHIT">        </span><span class="STRN">'1.2.840.113549.1.7.5'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// CMS digested-data</span><span class="WHIT">
-<span class='line'>4404</span> </span><span class="WHIT">        </span><span class="STRN">'encrypted-data'</span><span class="PUNC">:</span><span class="WHIT">       </span><span class="STRN">'1.2.840.113549.1.7.6'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// CMS encrypted-data</span><span class="WHIT">
-<span class='line'>4405</span> </span><span class="WHIT">        </span><span class="STRN">'authenticated-data'</span><span class="PUNC">:</span><span class="WHIT">   </span><span class="STRN">'1.2.840.113549.1.9.16.1.2'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// CMS authenticated-data</span><span class="WHIT">
-<span class='line'>4406</span> </span><span class="WHIT">        </span><span class="STRN">'tstinfo'</span><span class="PUNC">:</span><span class="WHIT">              </span><span class="STRN">'1.2.840.113549.1.9.16.1.4'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// RFC3161 TSTInfo</span><span class="WHIT">
-<span class='line'>4407</span> </span><span class="WHIT">	</span><span class="STRN">'signingCertificate'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113549.1.9.16.2.12'</span><span class="PUNC">,</span><span class="COMM">// SMIME</span><span class="WHIT">
-<span class='line'>4408</span> </span><span class="WHIT">	</span><span class="STRN">'timeStampToken'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113549.1.9.16.2.14'</span><span class="PUNC">,</span><span class="COMM">// sigTS</span><span class="WHIT">
-<span class='line'>4409</span> </span><span class="WHIT">	</span><span class="STRN">'signaturePolicyIdentifier'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113549.1.9.16.2.15'</span><span class="PUNC">,</span><span class="COMM">// cades</span><span class="WHIT">
-<span class='line'>4410</span> </span><span class="WHIT">	</span><span class="STRN">'etsArchiveTimeStamp'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113549.1.9.16.2.27'</span><span class="PUNC">,</span><span class="COMM">// SMIME</span><span class="WHIT">
-<span class='line'>4411</span> </span><span class="WHIT">	</span><span class="STRN">'signingCertificateV2'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113549.1.9.16.2.47'</span><span class="PUNC">,</span><span class="COMM">// SMIME</span><span class="WHIT">
-<span class='line'>4412</span> </span><span class="WHIT">	</span><span class="STRN">'etsArchiveTimeStampV2'</span><span class="PUNC">:</span><span class="STRN">'1.2.840.113549.1.9.16.2.48'</span><span class="PUNC">,</span><span class="COMM">// SMIME</span><span class="WHIT">
-<span class='line'>4413</span> </span><span class="WHIT">        </span><span class="STRN">'extensionRequest'</span><span class="PUNC">:</span><span class="WHIT">     </span><span class="STRN">'1.2.840.113549.1.9.14'</span><span class="PUNC">,</span><span class="COMM">// CSR extensionRequest</span><span class="WHIT">
-<span class='line'>4414</span> </span><span class="WHIT">	</span><span class="STRN">'contentType'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'1.2.840.113549.1.9.3'</span><span class="PUNC">,</span><span class="COMM">//PKCS#9</span><span class="WHIT">
-<span class='line'>4415</span> </span><span class="WHIT">	</span><span class="STRN">'messageDigest'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113549.1.9.4'</span><span class="PUNC">,</span><span class="COMM">//PKCS#9</span><span class="WHIT">
-<span class='line'>4416</span> </span><span class="WHIT">	</span><span class="STRN">'signingTime'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'1.2.840.113549.1.9.5'</span><span class="PUNC">,</span><span class="COMM">//PKCS#9</span><span class="WHIT">
-<span class='line'>4417</span> </span><span class="WHIT">	</span><span class="STRN">'counterSignature'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113549.1.9.6'</span><span class="PUNC">,</span><span class="COMM">//PKCS#9</span><span class="WHIT">
-<span class='line'>4418</span> </span><span class="WHIT">	</span><span class="STRN">'archiveTimeStampV3'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'0.4.0.1733.2.4'</span><span class="PUNC">,</span><span class="COMM">//ETSI EN29319122/TS101733</span><span class="WHIT">
-<span class='line'>4419</span> </span><span class="WHIT">	</span><span class="STRN">'pdfRevocationInfoArchival'</span><span class="PUNC">:</span><span class="STRN">'1.2.840.113583.1.1.8'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">//Adobe</span><span class="WHIT">
-<span class='line'>4420</span> </span><span class="WHIT">	</span><span class="STRN">'adobeTimeStamp'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113583.1.1.9.1'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// Adobe</span><span class="WHIT">
-<span class='line'>4421</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4422</span> 
-<span class='line'>4423</span> </span><span class="WHIT">    </span><span class="NAME">this.atype2oidList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4424</span> </span><span class="WHIT">	</span><span class="COMM">// RFC 4514 AttributeType name string (MUST recognized)</span><span class="WHIT">
-<span class='line'>4425</span> </span><span class="WHIT">        </span><span class="STRN">'CN'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.3'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4426</span> </span><span class="WHIT">        </span><span class="STRN">'L'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.7'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4427</span> </span><span class="WHIT">        </span><span class="STRN">'ST'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.8'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4428</span> </span><span class="WHIT">        </span><span class="STRN">'O'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.10'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4429</span> </span><span class="WHIT">        </span><span class="STRN">'OU'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.11'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4430</span> </span><span class="WHIT">        </span><span class="STRN">'C'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.6'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4431</span> </span><span class="WHIT">        </span><span class="STRN">'STREET'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'2.5.4.9'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4432</span> </span><span class="WHIT">        </span><span class="STRN">'DC'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'0.9.2342.19200300.100.1.25'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4433</span> </span><span class="WHIT">        </span><span class="STRN">'UID'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'0.9.2342.19200300.100.1.1'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4434</span> </span><span class="WHIT">	</span><span class="COMM">// other AttributeType name string</span><span class="WHIT">
-<span class='line'>4435</span> </span><span class="WHIT">	</span><span class="COMM">// http://blog.livedoor.jp/k_urushima/archives/656114.html</span><span class="WHIT">
-<span class='line'>4436</span> </span><span class="WHIT">        </span><span class="STRN">'SN'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.4'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// surname</span><span class="WHIT">
-<span class='line'>4437</span> </span><span class="WHIT">        </span><span class="STRN">'T'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.12'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// title</span><span class="WHIT">
-<span class='line'>4438</span> </span><span class="WHIT">        </span><span class="STRN">'DN'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.49'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// distinguishedName</span><span class="WHIT">
-<span class='line'>4439</span> </span><span class="WHIT">        </span><span class="STRN">'E'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'1.2.840.113549.1.9.1'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// emailAddress in MS.NET or Bouncy</span><span class="WHIT">
-<span class='line'>4440</span> </span><span class="WHIT">	</span><span class="COMM">// other AttributeType name string (no short name)</span><span class="WHIT">
-<span class='line'>4441</span> </span><span class="WHIT">	</span><span class="STRN">'description'</span><span class="PUNC">:</span><span class="WHIT">			</span><span class="STRN">'2.5.4.13'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4442</span> </span><span class="WHIT">	</span><span class="STRN">'businessCategory'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.15'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4443</span> </span><span class="WHIT">	</span><span class="STRN">'postalCode'</span><span class="PUNC">:</span><span class="WHIT">			</span><span class="STRN">'2.5.4.17'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4444</span> </span><span class="WHIT">	</span><span class="STRN">'serialNumber'</span><span class="PUNC">:</span><span class="WHIT">			</span><span class="STRN">'2.5.4.5'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4445</span> </span><span class="WHIT">	</span><span class="STRN">'uniqueIdentifier'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.45'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4446</span> </span><span class="WHIT">	</span><span class="STRN">'organizationIdentifier'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'2.5.4.97'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4447</span> </span><span class="WHIT">	</span><span class="STRN">'jurisdictionOfIncorporationL'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.3.6.1.4.1.311.60.2.1.1'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4448</span> </span><span class="WHIT">	</span><span class="STRN">'jurisdictionOfIncorporationSP'</span><span class="PUNC">:</span><span class="STRN">'1.3.6.1.4.1.311.60.2.1.2'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4449</span> </span><span class="WHIT">	</span><span class="STRN">'jurisdictionOfIncorporationC'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.3.6.1.4.1.311.60.2.1.3'</span><span class="WHIT">
-<span class='line'>4450</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4451</span> </span><span class="WHIT">    
-<span class='line'>4452</span>     </span><span class="NAME">this.objCache</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4453</span> 
-<span class='line'>4454</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>4455</span>      * get DERObjectIdentifier by registered OID name
-<span class='line'>4456</span>      * @name name2obj
-<span class='line'>4457</span>      * @memberOf KJUR.asn1.x509.OID
-<span class='line'>4458</span>      * @function
-<span class='line'>4459</span>      * @param {String} name OID
-<span class='line'>4460</span>      * @return {Object} DERObjectIdentifier instance
-<span class='line'>4461</span>      * @see KJUR.asn1.DERObjectIdentifier
-<span class='line'>4462</span>      *
-<span class='line'>4463</span>      * @description
-<span class='line'>4464</span>      * This static method returns DERObjectIdentifier object
-<span class='line'>4465</span>      * for the specified OID.
-<span class='line'>4466</span>      *
-<span class='line'>4467</span>      * @example
-<span class='line'>4468</span>      * var asn1ObjOID = KJUR.asn1.x509.OID.name2obj('SHA1withRSA');
-<span class='line'>4469</span>      */</span><span class="WHIT">
-<span class='line'>4470</span> </span><span class="WHIT">    </span><span class="NAME">this.name2obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4471</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">this.objCache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>4472</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.objCache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4473</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">this.name2oidList</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>4474</span> </span><span class="WHIT">            </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Name of ObjectIdentifier not defined: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4475</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.name2oidList</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4476</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_DERObjectIdentifier</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'oid'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4477</span> </span><span class="WHIT">        </span><span class="NAME">this.objCache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4478</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4479</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4480</span> 
-<span class='line'>4481</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>4482</span>      * get DERObjectIdentifier by registered attribute type name such like 'C' or 'CN'&lt;br/>
-<span class='line'>4483</span>      * @name atype2obj
-<span class='line'>4484</span>      * @memberOf KJUR.asn1.x509.OID
-<span class='line'>4485</span>      * @function
-<span class='line'>4486</span>      * @param {String} atype short attribute type name such like 'C', 'CN' or OID
-<span class='line'>4487</span>      * @return KJUR.asn1.DERObjectIdentifier instance
-<span class='line'>4488</span>      * @description
-<span class='line'>4489</span>      * @example
-<span class='line'>4490</span>      * KJUR.asn1.x509.OID.atype2obj('CN') &rarr; DERObjectIdentifier of 2.5.4.3
-<span class='line'>4491</span>      * KJUR.asn1.x509.OID.atype2obj('OU') &rarr; DERObjectIdentifier of 2.5.4.11
-<span class='line'>4492</span>      * KJUR.asn1.x509.OID.atype2obj('streetAddress') &rarr; DERObjectIdentifier of 2.5.4.9
-<span class='line'>4493</span>      * KJUR.asn1.x509.OID.atype2obj('2.5.4.9') &rarr; DERObjectIdentifier of 2.5.4.9
-<span class='line'>4494</span>      */</span><span class="WHIT">
-<span class='line'>4495</span> </span><span class="WHIT">    </span><span class="NAME">this.atype2obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">atype</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4496</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.objCache</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>4497</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.objCache</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4498</span> 
-<span class='line'>4499</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4500</span> 
-<span class='line'>4501</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">atype.match</span><span class="PUNC">(</span><span class="REGX">/^\d+\.\d+\.[0-9.]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4502</span> </span><span class="WHIT">	    </span><span class="NAME">oid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">atype</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4503</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.atype2oidList</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4504</span> </span><span class="WHIT">	    </span><span class="NAME">oid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.atype2oidList</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4505</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.name2oidList</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4506</span> </span><span class="WHIT">	    </span><span class="NAME">oid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.name2oidList</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4507</span> </span><span class="WHIT">    	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4508</span> </span><span class="WHIT">            </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"AttributeType name undefined: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">atype</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4509</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>4510</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_DERObjectIdentifier</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'oid'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4511</span> </span><span class="WHIT">        </span><span class="NAME">this.objCache</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4512</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4513</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4514</span> 
-<span class='line'>4515</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>4516</span>      * register OID list&lt;br/>
-<span class='line'>4517</span>      * @name registerOIDs
-<span class='line'>4518</span>      * @memberOf KJUR.asn1.x509.OID
-<span class='line'>4519</span>      * @function
-<span class='line'>4520</span>      * @param {object} oids associative array of names and oids
-<span class='line'>4521</span>      * @since jsrsasign 10.5.2 asn1x509 2.1.11
-<span class='line'>4522</span>      * @see KJUR.asn1.x509.OID.checkOIDs
-<span class='line'>4523</span>      * 
-<span class='line'>4524</span>      * @description
-<span class='line'>4525</span>      * This static method to register an oids to existing list
-<span class='line'>4526</span>      * additionally.
-<span class='line'>4527</span>      *
-<span class='line'>4528</span>      * @example
-<span class='line'>4529</span>      * KJUR.asn1.x509.OID.checkOIDs({
-<span class='line'>4530</span>      *   "test1": "4.5.7.8"
-<span class='line'>4531</span>      * }) // do nothing for invalid list
-<span class='line'>4532</span>      *
-<span class='line'>4533</span>      * KJUR.asn1.x509.OID.registerOIDs({
-<span class='line'>4534</span>      *   "test1": "1.2.3",
-<span class='line'>4535</span>      *   "test2": "0.2.3.4.23",
-<span class='line'>4536</span>      * }) // successfully registered
-<span class='line'>4537</span>      *
-<span class='line'>4538</span>      * KJUR.asn1.x509.OID.name2oid("test1") &rarr; "1.2.3"
-<span class='line'>4539</span>      */</span><span class="WHIT">
-<span class='line'>4540</span> </span><span class="WHIT">    </span><span class="NAME">this.registerOIDs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">oids</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4541</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">this.checkOIDs</span><span class="PUNC">(</span><span class="NAME">oids</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4542</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">oids</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4543</span> </span><span class="WHIT">	    </span><span class="NAME">this.name2oidList</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">oids</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4544</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>4545</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4546</span> 
-<span class='line'>4547</span> </span><span class="WHIT">    </span><span class="COMM">/**
-<span class='line'>4548</span>      * check validity for OID list&lt;br/>
-<span class='line'>4549</span>      * @name checkOIDs
-<span class='line'>4550</span>      * @memberOf KJUR.asn1.x509.OID
-<span class='line'>4551</span>      * @function
-<span class='line'>4552</span>      * @param {object} oids associative array of names and oids
-<span class='line'>4553</span>      * @return {boolean} return true when valid OID list otherwise false
-<span class='line'>4554</span>      * @since jsrsasign 10.5.2 asn1x509 2.1.11
-<span class='line'>4555</span>      * @see KJUR.asn1.x509.OID.registOIDs
-<span class='line'>4556</span>      * 
-<span class='line'>4557</span>      * @description
-<span class='line'>4558</span>      * This static method validates an associative array
-<span class='line'>4559</span>      * as oid list.
-<span class='line'>4560</span>      *
-<span class='line'>4561</span>      * @example
-<span class='line'>4562</span>      * KJUR.asn1.x509.OID.checkOIDs(*non-assoc-array*) &rarr; false
-<span class='line'>4563</span>      * KJUR.asn1.x509.OID.checkOIDs({}) &rarr; false
-<span class='line'>4564</span>      * KJUR.asn1.x509.OID.checkOIDs({"test1": "apple"}) &rarr; false
-<span class='line'>4565</span>      * KJUR.asn1.x509.OID.checkOIDs({
-<span class='line'>4566</span>      *   "test1": "1.2.3",
-<span class='line'>4567</span>      *   "test2": "0.2.3.4.23",
-<span class='line'>4568</span>      * }) &rarr; true // valid oids
-<span class='line'>4569</span>      * KJUR.asn1.x509.OID.checkOIDs({
-<span class='line'>4570</span>      *   "test1": "4.5.7.8"
-<span class='line'>4571</span>      * }) &rarr; false // invalid oid
-<span class='line'>4572</span>      */</span><span class="WHIT">
-<span class='line'>4573</span> </span><span class="WHIT">    </span><span class="NAME">this.checkOIDs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">oids</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4574</span> </span><span class="WHIT">	</span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4575</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nameList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Object.keys</span><span class="PUNC">(</span><span class="NAME">oids</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4576</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">nameList.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>4577</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4578</span> </span><span class="WHIT">	    </span><span class="NAME">nameList.map</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">index</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">array</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4579</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">value</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4580</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">oid.match</span><span class="PUNC">(</span><span class="REGX">/^[0-2]\.[0-9.]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>4581</span> </span><span class="WHIT">		    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"value is not OID"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4582</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">oids</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4583</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4584</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4585</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4586</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>4587</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4588</span> 
-<span class='line'>4589</span> 
-<span class='line'>4590</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4398</span> </span><span class="WHIT">        </span><span class="STRN">'pkcs5PBES2'</span><span class="PUNC">:</span><span class="WHIT">           </span><span class="STRN">'1.2.840.113549.1.5.13'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4399</span> </span><span class="WHIT">        </span><span class="STRN">'pkcs5PBKDF2'</span><span class="PUNC">:</span><span class="WHIT">          </span><span class="STRN">'1.2.840.113549.1.5.12'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4400</span> 
+<span class='line'>4401</span> </span><span class="WHIT">        </span><span class="STRN">'des-EDE3-CBC'</span><span class="PUNC">:</span><span class="WHIT">         </span><span class="STRN">'1.2.840.113549.3.7'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4402</span> 
+<span class='line'>4403</span> </span><span class="WHIT">        </span><span class="STRN">'data'</span><span class="PUNC">:</span><span class="WHIT">                 </span><span class="STRN">'1.2.840.113549.1.7.1'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// CMS data</span><span class="WHIT">
+<span class='line'>4404</span> </span><span class="WHIT">        </span><span class="STRN">'signed-data'</span><span class="PUNC">:</span><span class="WHIT">          </span><span class="STRN">'1.2.840.113549.1.7.2'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// CMS signed-data</span><span class="WHIT">
+<span class='line'>4405</span> </span><span class="WHIT">        </span><span class="STRN">'enveloped-data'</span><span class="PUNC">:</span><span class="WHIT">       </span><span class="STRN">'1.2.840.113549.1.7.3'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// CMS enveloped-data</span><span class="WHIT">
+<span class='line'>4406</span> </span><span class="WHIT">        </span><span class="STRN">'digested-data'</span><span class="PUNC">:</span><span class="WHIT">        </span><span class="STRN">'1.2.840.113549.1.7.5'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// CMS digested-data</span><span class="WHIT">
+<span class='line'>4407</span> </span><span class="WHIT">        </span><span class="STRN">'encrypted-data'</span><span class="PUNC">:</span><span class="WHIT">       </span><span class="STRN">'1.2.840.113549.1.7.6'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// CMS encrypted-data</span><span class="WHIT">
+<span class='line'>4408</span> </span><span class="WHIT">        </span><span class="STRN">'authenticated-data'</span><span class="PUNC">:</span><span class="WHIT">   </span><span class="STRN">'1.2.840.113549.1.9.16.1.2'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// CMS authenticated-data</span><span class="WHIT">
+<span class='line'>4409</span> </span><span class="WHIT">        </span><span class="STRN">'tstinfo'</span><span class="PUNC">:</span><span class="WHIT">              </span><span class="STRN">'1.2.840.113549.1.9.16.1.4'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// RFC3161 TSTInfo</span><span class="WHIT">
+<span class='line'>4410</span> </span><span class="WHIT">	</span><span class="STRN">'signingCertificate'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113549.1.9.16.2.12'</span><span class="PUNC">,</span><span class="COMM">// SMIME</span><span class="WHIT">
+<span class='line'>4411</span> </span><span class="WHIT">	</span><span class="STRN">'timeStampToken'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113549.1.9.16.2.14'</span><span class="PUNC">,</span><span class="COMM">// sigTS</span><span class="WHIT">
+<span class='line'>4412</span> </span><span class="WHIT">	</span><span class="STRN">'signaturePolicyIdentifier'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113549.1.9.16.2.15'</span><span class="PUNC">,</span><span class="COMM">// cades</span><span class="WHIT">
+<span class='line'>4413</span> </span><span class="WHIT">	</span><span class="STRN">'etsArchiveTimeStamp'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113549.1.9.16.2.27'</span><span class="PUNC">,</span><span class="COMM">// SMIME</span><span class="WHIT">
+<span class='line'>4414</span> </span><span class="WHIT">	</span><span class="STRN">'signingCertificateV2'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113549.1.9.16.2.47'</span><span class="PUNC">,</span><span class="COMM">// SMIME</span><span class="WHIT">
+<span class='line'>4415</span> </span><span class="WHIT">	</span><span class="STRN">'etsArchiveTimeStampV2'</span><span class="PUNC">:</span><span class="STRN">'1.2.840.113549.1.9.16.2.48'</span><span class="PUNC">,</span><span class="COMM">// SMIME</span><span class="WHIT">
+<span class='line'>4416</span> </span><span class="WHIT">        </span><span class="STRN">'extensionRequest'</span><span class="PUNC">:</span><span class="WHIT">     </span><span class="STRN">'1.2.840.113549.1.9.14'</span><span class="PUNC">,</span><span class="COMM">// CSR extensionRequest</span><span class="WHIT">
+<span class='line'>4417</span> </span><span class="WHIT">	</span><span class="STRN">'contentType'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'1.2.840.113549.1.9.3'</span><span class="PUNC">,</span><span class="COMM">//PKCS#9</span><span class="WHIT">
+<span class='line'>4418</span> </span><span class="WHIT">	</span><span class="STRN">'messageDigest'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113549.1.9.4'</span><span class="PUNC">,</span><span class="COMM">//PKCS#9</span><span class="WHIT">
+<span class='line'>4419</span> </span><span class="WHIT">	</span><span class="STRN">'signingTime'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'1.2.840.113549.1.9.5'</span><span class="PUNC">,</span><span class="COMM">//PKCS#9</span><span class="WHIT">
+<span class='line'>4420</span> </span><span class="WHIT">	</span><span class="STRN">'counterSignature'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113549.1.9.6'</span><span class="PUNC">,</span><span class="COMM">//PKCS#9</span><span class="WHIT">
+<span class='line'>4421</span> </span><span class="WHIT">	</span><span class="STRN">'archiveTimeStampV3'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'0.4.0.1733.2.4'</span><span class="PUNC">,</span><span class="COMM">//ETSI EN29319122/TS101733</span><span class="WHIT">
+<span class='line'>4422</span> </span><span class="WHIT">	</span><span class="STRN">'pdfRevocationInfoArchival'</span><span class="PUNC">:</span><span class="STRN">'1.2.840.113583.1.1.8'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">//Adobe</span><span class="WHIT">
+<span class='line'>4423</span> </span><span class="WHIT">	</span><span class="STRN">'adobeTimeStamp'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.2.840.113583.1.1.9.1'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// Adobe</span><span class="WHIT">
+<span class='line'>4424</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4425</span> 
+<span class='line'>4426</span> </span><span class="WHIT">    </span><span class="NAME">this.atype2oidList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4427</span> </span><span class="WHIT">	</span><span class="COMM">// RFC 4514 AttributeType name string (MUST recognized)</span><span class="WHIT">
+<span class='line'>4428</span> </span><span class="WHIT">        </span><span class="STRN">'CN'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.3'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4429</span> </span><span class="WHIT">        </span><span class="STRN">'L'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.7'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4430</span> </span><span class="WHIT">        </span><span class="STRN">'ST'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.8'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4431</span> </span><span class="WHIT">        </span><span class="STRN">'O'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.10'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4432</span> </span><span class="WHIT">        </span><span class="STRN">'OU'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.11'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4433</span> </span><span class="WHIT">        </span><span class="STRN">'C'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.6'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4434</span> </span><span class="WHIT">        </span><span class="STRN">'STREET'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'2.5.4.9'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4435</span> </span><span class="WHIT">        </span><span class="STRN">'DC'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'0.9.2342.19200300.100.1.25'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4436</span> </span><span class="WHIT">        </span><span class="STRN">'UID'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'0.9.2342.19200300.100.1.1'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4437</span> </span><span class="WHIT">	</span><span class="COMM">// other AttributeType name string</span><span class="WHIT">
+<span class='line'>4438</span> </span><span class="WHIT">	</span><span class="COMM">// http://blog.livedoor.jp/k_urushima/archives/656114.html</span><span class="WHIT">
+<span class='line'>4439</span> </span><span class="WHIT">        </span><span class="STRN">'SN'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.4'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// surname</span><span class="WHIT">
+<span class='line'>4440</span> </span><span class="WHIT">        </span><span class="STRN">'T'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.12'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// title</span><span class="WHIT">
+<span class='line'>4441</span> </span><span class="WHIT">        </span><span class="STRN">'DN'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.49'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// distinguishedName</span><span class="WHIT">
+<span class='line'>4442</span> </span><span class="WHIT">        </span><span class="STRN">'E'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'1.2.840.113549.1.9.1'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">// emailAddress in MS.NET or Bouncy</span><span class="WHIT">
+<span class='line'>4443</span> </span><span class="WHIT">	</span><span class="COMM">// other AttributeType name string (no short name)</span><span class="WHIT">
+<span class='line'>4444</span> </span><span class="WHIT">	</span><span class="STRN">'description'</span><span class="PUNC">:</span><span class="WHIT">			</span><span class="STRN">'2.5.4.13'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4445</span> </span><span class="WHIT">	</span><span class="STRN">'businessCategory'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.15'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4446</span> </span><span class="WHIT">	</span><span class="STRN">'postalCode'</span><span class="PUNC">:</span><span class="WHIT">			</span><span class="STRN">'2.5.4.17'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4447</span> </span><span class="WHIT">	</span><span class="STRN">'serialNumber'</span><span class="PUNC">:</span><span class="WHIT">			</span><span class="STRN">'2.5.4.5'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4448</span> </span><span class="WHIT">	</span><span class="STRN">'uniqueIdentifier'</span><span class="PUNC">:</span><span class="WHIT">		</span><span class="STRN">'2.5.4.45'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4449</span> </span><span class="WHIT">	</span><span class="STRN">'organizationIdentifier'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'2.5.4.97'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4450</span> </span><span class="WHIT">	</span><span class="STRN">'jurisdictionOfIncorporationL'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.3.6.1.4.1.311.60.2.1.1'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4451</span> </span><span class="WHIT">	</span><span class="STRN">'jurisdictionOfIncorporationSP'</span><span class="PUNC">:</span><span class="STRN">'1.3.6.1.4.1.311.60.2.1.2'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4452</span> </span><span class="WHIT">	</span><span class="STRN">'jurisdictionOfIncorporationC'</span><span class="PUNC">:</span><span class="WHIT">	</span><span class="STRN">'1.3.6.1.4.1.311.60.2.1.3'</span><span class="WHIT">
+<span class='line'>4453</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4454</span> </span><span class="WHIT">    
+<span class='line'>4455</span>     </span><span class="NAME">this.objCache</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4456</span> 
+<span class='line'>4457</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>4458</span>      * get DERObjectIdentifier by registered OID name
+<span class='line'>4459</span>      * @name name2obj
+<span class='line'>4460</span>      * @memberOf KJUR.asn1.x509.OID
+<span class='line'>4461</span>      * @function
+<span class='line'>4462</span>      * @param {String} name OID
+<span class='line'>4463</span>      * @return {Object} DERObjectIdentifier instance
+<span class='line'>4464</span>      * @see KJUR.asn1.DERObjectIdentifier
+<span class='line'>4465</span>      *
+<span class='line'>4466</span>      * @description
+<span class='line'>4467</span>      * This static method returns DERObjectIdentifier object
+<span class='line'>4468</span>      * for the specified OID.
+<span class='line'>4469</span>      *
+<span class='line'>4470</span>      * @example
+<span class='line'>4471</span>      * var asn1ObjOID = KJUR.asn1.x509.OID.name2obj('SHA1withRSA');
+<span class='line'>4472</span>      */</span><span class="WHIT">
+<span class='line'>4473</span> </span><span class="WHIT">    </span><span class="NAME">this.name2obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4474</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">this.objCache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>4475</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.objCache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4476</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">this.name2oidList</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"undefined"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>4477</span> </span><span class="WHIT">            </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="STRN">"Name of ObjectIdentifier not defined: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4478</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.name2oidList</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4479</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_DERObjectIdentifier</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'oid'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4480</span> </span><span class="WHIT">        </span><span class="NAME">this.objCache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4481</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4482</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4483</span> 
+<span class='line'>4484</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>4485</span>      * get DERObjectIdentifier by registered attribute type name such like 'C' or 'CN'&lt;br/>
+<span class='line'>4486</span>      * @name atype2obj
+<span class='line'>4487</span>      * @memberOf KJUR.asn1.x509.OID
+<span class='line'>4488</span>      * @function
+<span class='line'>4489</span>      * @param {String} atype short attribute type name such like 'C', 'CN' or OID
+<span class='line'>4490</span>      * @return KJUR.asn1.DERObjectIdentifier instance
+<span class='line'>4491</span>      * @description
+<span class='line'>4492</span>      * @example
+<span class='line'>4493</span>      * KJUR.asn1.x509.OID.atype2obj('CN') &rarr; DERObjectIdentifier of 2.5.4.3
+<span class='line'>4494</span>      * KJUR.asn1.x509.OID.atype2obj('OU') &rarr; DERObjectIdentifier of 2.5.4.11
+<span class='line'>4495</span>      * KJUR.asn1.x509.OID.atype2obj('streetAddress') &rarr; DERObjectIdentifier of 2.5.4.9
+<span class='line'>4496</span>      * KJUR.asn1.x509.OID.atype2obj('2.5.4.9') &rarr; DERObjectIdentifier of 2.5.4.9
+<span class='line'>4497</span>      */</span><span class="WHIT">
+<span class='line'>4498</span> </span><span class="WHIT">    </span><span class="NAME">this.atype2obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">atype</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4499</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.objCache</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>4500</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.objCache</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4501</span> 
+<span class='line'>4502</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4503</span> 
+<span class='line'>4504</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">atype.match</span><span class="PUNC">(</span><span class="REGX">/^\d+\.\d+\.[0-9.]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4505</span> </span><span class="WHIT">	    </span><span class="NAME">oid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">atype</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4506</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.atype2oidList</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4507</span> </span><span class="WHIT">	    </span><span class="NAME">oid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.atype2oidList</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4508</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.name2oidList</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4509</span> </span><span class="WHIT">	    </span><span class="NAME">oid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.name2oidList</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4510</span> </span><span class="WHIT">    	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4511</span> </span><span class="WHIT">            </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"AttributeType name undefined: "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">atype</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4512</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>4513</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_DERObjectIdentifier</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="STRN">'oid'</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4514</span> </span><span class="WHIT">        </span><span class="NAME">this.objCache</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4515</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4516</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4517</span> 
+<span class='line'>4518</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>4519</span>      * register OID list&lt;br/>
+<span class='line'>4520</span>      * @name registerOIDs
+<span class='line'>4521</span>      * @memberOf KJUR.asn1.x509.OID
+<span class='line'>4522</span>      * @function
+<span class='line'>4523</span>      * @param {object} oids associative array of names and oids
+<span class='line'>4524</span>      * @since jsrsasign 10.5.2 asn1x509 2.1.11
+<span class='line'>4525</span>      * @see KJUR.asn1.x509.OID.checkOIDs
+<span class='line'>4526</span>      * 
+<span class='line'>4527</span>      * @description
+<span class='line'>4528</span>      * This static method to register an oids to existing list
+<span class='line'>4529</span>      * additionally.
+<span class='line'>4530</span>      *
+<span class='line'>4531</span>      * @example
+<span class='line'>4532</span>      * KJUR.asn1.x509.OID.checkOIDs({
+<span class='line'>4533</span>      *   "test1": "4.5.7.8"
+<span class='line'>4534</span>      * }) // do nothing for invalid list
+<span class='line'>4535</span>      *
+<span class='line'>4536</span>      * KJUR.asn1.x509.OID.registerOIDs({
+<span class='line'>4537</span>      *   "test1": "1.2.3",
+<span class='line'>4538</span>      *   "test2": "0.2.3.4.23",
+<span class='line'>4539</span>      * }) // successfully registered
+<span class='line'>4540</span>      *
+<span class='line'>4541</span>      * KJUR.asn1.x509.OID.name2oid("test1") &rarr; "1.2.3"
+<span class='line'>4542</span>      */</span><span class="WHIT">
+<span class='line'>4543</span> </span><span class="WHIT">    </span><span class="NAME">this.registerOIDs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">oids</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4544</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">this.checkOIDs</span><span class="PUNC">(</span><span class="NAME">oids</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4545</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">oids</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4546</span> </span><span class="WHIT">	    </span><span class="NAME">this.name2oidList</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">oids</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4547</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>4548</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4549</span> 
+<span class='line'>4550</span> </span><span class="WHIT">    </span><span class="COMM">/**
+<span class='line'>4551</span>      * check validity for OID list&lt;br/>
+<span class='line'>4552</span>      * @name checkOIDs
+<span class='line'>4553</span>      * @memberOf KJUR.asn1.x509.OID
+<span class='line'>4554</span>      * @function
+<span class='line'>4555</span>      * @param {object} oids associative array of names and oids
+<span class='line'>4556</span>      * @return {boolean} return true when valid OID list otherwise false
+<span class='line'>4557</span>      * @since jsrsasign 10.5.2 asn1x509 2.1.11
+<span class='line'>4558</span>      * @see KJUR.asn1.x509.OID.registOIDs
+<span class='line'>4559</span>      * 
+<span class='line'>4560</span>      * @description
+<span class='line'>4561</span>      * This static method validates an associative array
+<span class='line'>4562</span>      * as oid list.
+<span class='line'>4563</span>      *
+<span class='line'>4564</span>      * @example
+<span class='line'>4565</span>      * KJUR.asn1.x509.OID.checkOIDs(*non-assoc-array*) &rarr; false
+<span class='line'>4566</span>      * KJUR.asn1.x509.OID.checkOIDs({}) &rarr; false
+<span class='line'>4567</span>      * KJUR.asn1.x509.OID.checkOIDs({"test1": "apple"}) &rarr; false
+<span class='line'>4568</span>      * KJUR.asn1.x509.OID.checkOIDs({
+<span class='line'>4569</span>      *   "test1": "1.2.3",
+<span class='line'>4570</span>      *   "test2": "0.2.3.4.23",
+<span class='line'>4571</span>      * }) &rarr; true // valid oids
+<span class='line'>4572</span>      * KJUR.asn1.x509.OID.checkOIDs({
+<span class='line'>4573</span>      *   "test1": "4.5.7.8"
+<span class='line'>4574</span>      * }) &rarr; false // invalid oid
+<span class='line'>4575</span>      */</span><span class="WHIT">
+<span class='line'>4576</span> </span><span class="WHIT">    </span><span class="NAME">this.checkOIDs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">oids</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4577</span> </span><span class="WHIT">	</span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4578</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nameList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Object.keys</span><span class="PUNC">(</span><span class="NAME">oids</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4579</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">nameList.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>4580</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4581</span> </span><span class="WHIT">	    </span><span class="NAME">nameList.map</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">value</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">index</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">array</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4582</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">value</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4583</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">oid.match</span><span class="PUNC">(</span><span class="REGX">/^[0-2]\.[0-9.]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>4584</span> </span><span class="WHIT">		    </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"value is not OID"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4585</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">oids</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4586</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4587</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4588</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4589</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>4590</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>4591</span> 
-<span class='line'>4592</span> </span><span class="COMM">/**
-<span class='line'>4593</span>  * convert OID to name&lt;br/>
-<span class='line'>4594</span>  * @name oid2name
-<span class='line'>4595</span>  * @memberOf KJUR.asn1.x509.OID
-<span class='line'>4596</span>  * @function
-<span class='line'>4597</span>  * @param {String} oid dot noted Object Identifer string (ex. 1.2.3.4)
-<span class='line'>4598</span>  * @return {String} OID name if registered otherwise empty string
-<span class='line'>4599</span>  * @since asn1x509 1.0.9
-<span class='line'>4600</span>  * @description
-<span class='line'>4601</span>  * This static method converts OID string to its name.
-<span class='line'>4602</span>  * If OID is undefined then it returns empty string (i.e. '').
-<span class='line'>4603</span>  * @example
-<span class='line'>4604</span>  * KJUR.asn1.x509.OID.oid2name("1.3.6.1.5.5.7.1.1") &rarr; 'authorityInfoAccess'
-<span class='line'>4605</span>  */</span><span class="WHIT">
-<span class='line'>4606</span> </span><span class="NAME">KJUR.asn1.x509.OID.oid2name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">oid</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4607</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">list</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509.OID.name2oidList</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4608</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">list</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4609</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">list</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4610</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>4611</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4612</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4613</span> 
-<span class='line'>4614</span> </span><span class="COMM">/**
-<span class='line'>4615</span>  * convert OID to AttributeType name&lt;br/>
-<span class='line'>4616</span>  * @name oid2atype
-<span class='line'>4617</span>  * @memberOf KJUR.asn1.x509.OID
-<span class='line'>4618</span>  * @function
-<span class='line'>4619</span>  * @param {String} oid dot noted Object Identifer string (ex. 1.2.3.4)
-<span class='line'>4620</span>  * @return {String} OID AttributeType name if registered otherwise oid
-<span class='line'>4621</span>  * @since jsrsasign 6.2.2 asn1x509 1.0.18
-<span class='line'>4622</span>  * @description
-<span class='line'>4623</span>  * This static method converts OID string to its AttributeType name.
-<span class='line'>4624</span>  * If OID is not defined in OID.atype2oidList associative array then it returns OID
-<span class='line'>4625</span>  * specified as argument.
-<span class='line'>4626</span>  * @example
-<span class='line'>4627</span>  * KJUR.asn1.x509.OID.oid2atype("2.5.4.3") &rarr; CN
-<span class='line'>4628</span>  * KJUR.asn1.x509.OID.oid2atype("1.3.6.1.4.1.311.60.2.1.3") &rarr; jurisdictionOfIncorporationC
-<span class='line'>4629</span>  * KJUR.asn1.x509.OID.oid2atype("0.1.2.3.4") &rarr; 0.1.2.3.4 // unregistered OID
-<span class='line'>4630</span>  */</span><span class="WHIT">
-<span class='line'>4631</span> </span><span class="NAME">KJUR.asn1.x509.OID.oid2atype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">oid</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4632</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">list</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509.OID.atype2oidList</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4633</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">atype</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">list</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4634</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">list</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">atype</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4635</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>4636</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4637</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4638</span> 
-<span class='line'>4639</span> </span><span class="COMM">/**
-<span class='line'>4640</span>  * convert OID name to OID value&lt;br/>
-<span class='line'>4641</span>  * @name name2oid
-<span class='line'>4642</span>  * @memberOf KJUR.asn1.x509.OID
-<span class='line'>4643</span>  * @function
-<span class='line'>4644</span>  * @param {String} name OID name or OID (ex. "sha1" or "1.2.3.4")
-<span class='line'>4645</span>  * @return {String} dot noted Object Identifer string (ex. 1.2.3.4)
-<span class='line'>4646</span>  * @since asn1x509 1.0.11
-<span class='line'>4647</span>  * @description
-<span class='line'>4648</span>  * This static method converts from OID name to OID string.
-<span class='line'>4649</span>  * If OID is undefined then it returns empty string (i.e. '').
-<span class='line'>4650</span>  * @example
-<span class='line'>4651</span>  * KJUR.asn1.x509.OID.name2oid("authorityInfoAccess") &rarr; "1.3.6.1.5.5.7.1.1"
-<span class='line'>4652</span>  * KJUR.asn1.x509.OID.name2oid("1.2.3.4") &rarr; "1.2.3.4"
-<span class='line'>4653</span>  * KJUR.asn1.x509.OID.name2oid("UNKNOWN NAME") &rarr; ""
-<span class='line'>4654</span>  */</span><span class="WHIT">
-<span class='line'>4655</span> </span><span class="NAME">KJUR.asn1.x509.OID.name2oid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4656</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">name.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9.]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4657</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">list</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509.OID.name2oidList</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4658</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">list</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4659</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">list</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4660</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4661</span> 
-<span class='line'>4662</span> </span><span class="COMM">/**
-<span class='line'>4663</span>  * X.509 certificate and CRL utilities class&lt;br/>
-<span class='line'>4664</span>  * @name KJUR.asn1.x509.X509Util
-<span class='line'>4665</span>  * @class X.509 certificate and CRL utilities class
-<span class='line'>4666</span>  */</span><span class="WHIT">
-<span class='line'>4667</span> </span><span class="NAME">KJUR.asn1.x509.X509Util</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4668</span> 
-<span class='line'>4669</span> </span><span class="COMM">/**
-<span class='line'>4670</span>  * issue a certificate in PEM format (DEPRECATED)
-<span class='line'>4671</span>  * @name newCertPEM
-<span class='line'>4672</span>  * @memberOf KJUR.asn1.x509.X509Util
-<span class='line'>4673</span>  * @function
-<span class='line'>4674</span>  * @param {Array} param JSON object of parameter to issue a certificate
-<span class='line'>4675</span>  * @since asn1x509 1.0.6
-<span class='line'>4676</span>  * @deprecated since jsrsasign 9.0.0 asn1x509 2.0.0. please move to {@link KJUR.asn1.x509.Certificate} constructor
-<span class='line'>4677</span>  * @description
-<span class='line'>4678</span>  * This method can issue a certificate by a simple
-<span class='line'>4679</span>  * JSON object.
-<span class='line'>4680</span>  * Signature value will be provided by signing with
-<span class='line'>4681</span>  * private key using 'cakey' parameter or
-<span class='line'>4682</span>  * hexadecimal signature value by 'sighex' parameter.
-<span class='line'>4683</span>  * &lt;br/>
-<span class='line'>4684</span>  * NOTE: Algorithm parameter of AlgorithmIdentifier will
-<span class='line'>4685</span>  * be set automatically by default. 
-<span class='line'>4686</span>  * (see {@link KJUR.asn1.x509.AlgorithmIdentifier})
-<span class='line'>4687</span>  * from jsrsasign 7.1.1 asn1x509 1.0.20.
-<span class='line'>4688</span>  * &lt;br/>
-<span class='line'>4689</span>  * NOTE2: 
-<span class='line'>4690</span>  * RSA-PSS algorithm has been supported from jsrsasign 8.0.21.
-<span class='line'>4691</span>  * As for RSA-PSS signature algorithm names and signing parameters 
-<span class='line'>4692</span>  * such as MGF function and salt length, please see
-<span class='line'>4693</span>  * {@link KJUR.asn1.x509.AlgorithmIdentifier} class.
-<span class='line'>4694</span>  *
-<span class='line'>4695</span>  * @example
-<span class='line'>4696</span>  * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
-<span class='line'>4697</span>  *   serial: {int: 4},
-<span class='line'>4698</span>  *   sigalg: {name: 'SHA1withECDSA'},
-<span class='line'>4699</span>  *   issuer: {str: '/C=US/O=a'},
-<span class='line'>4700</span>  *   notbefore: {'str': '130504235959Z'},
-<span class='line'>4701</span>  *   notafter: {'str': '140504235959Z'},
-<span class='line'>4702</span>  *   subject: {str: '/C=US/O=b'},
-<span class='line'>4703</span>  *   sbjpubkey: pubKeyObj,
-<span class='line'>4704</span>  *   ext: [
-<span class='line'>4705</span>  *     {basicConstraints: {cA: true, critical: true}},
-<span class='line'>4706</span>  *     {keyUsage: {bin: '11'}},
-<span class='line'>4707</span>  *   ],
-<span class='line'>4708</span>  *   cakey: prvKeyObj
-<span class='line'>4709</span>  * });
-<span class='line'>4710</span>  * // -- or --
-<span class='line'>4711</span>  * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
-<span class='line'>4712</span>  *   serial: {int: 4},
-<span class='line'>4713</span>  *   sigalg: {name: 'SHA1withECDSA'},
-<span class='line'>4714</span>  *   issuer: {str: '/C=US/O=a'},
-<span class='line'>4715</span>  *   notbefore: {'str': '130504235959Z'},
-<span class='line'>4716</span>  *   notafter: {'str': '140504235959Z'},
-<span class='line'>4717</span>  *   subject: {str: '/C=US/O=b'},
-<span class='line'>4718</span>  *   sbjpubkey: pubKeyPEM,
-<span class='line'>4719</span>  *   ext: [
-<span class='line'>4720</span>  *     {basicConstraints: {cA: true, critical: true}},
-<span class='line'>4721</span>  *     {keyUsage: {bin: '11'}},
-<span class='line'>4722</span>  *   ],
-<span class='line'>4723</span>  *   cakey: [prvkey, pass]}
-<span class='line'>4724</span>  * );
-<span class='line'>4725</span>  * // -- or --
-<span class='line'>4726</span>  * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
-<span class='line'>4727</span>  *   serial: {int: 1},
-<span class='line'>4728</span>  *   sigalg: {name: 'SHA1withRSA'},
-<span class='line'>4729</span>  *   issuer: {str: '/C=US/O=T1'},
-<span class='line'>4730</span>  *   notbefore: {'str': '130504235959Z'},
-<span class='line'>4731</span>  *   notafter: {'str': '140504235959Z'},
-<span class='line'>4732</span>  *   subject: {str: '/C=US/O=T1'},
-<span class='line'>4733</span>  *   sbjpubkey: pubKeyObj,
-<span class='line'>4734</span>  *   sighex: '0102030405..'
-<span class='line'>4735</span>  * });
-<span class='line'>4736</span>  * // for the issuer and subject field, another
-<span class='line'>4737</span>  * // representation is also available
-<span class='line'>4738</span>  * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
-<span class='line'>4739</span>  *   serial: {int: 1},
-<span class='line'>4740</span>  *   sigalg: {name: 'SHA256withRSA'},
-<span class='line'>4741</span>  *   issuer: {C: "US", O: "T1"},
-<span class='line'>4742</span>  *   notbefore: {'str': '130504235959Z'},
-<span class='line'>4743</span>  *   notafter: {'str': '140504235959Z'},
-<span class='line'>4744</span>  *   subject: {C: "US", O: "T1", CN: "http://example.com/"},
-<span class='line'>4745</span>  *   sbjpubkey: pubKeyObj,
-<span class='line'>4746</span>  *   sighex: '0102030405..'
-<span class='line'>4747</span>  * });
-<span class='line'>4748</span>  */</span><span class="WHIT">
-<span class='line'>4749</span> </span><span class="NAME">KJUR.asn1.x509.X509Util.newCertPEM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">param</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>4750</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_KJUR_asn1_x509</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4751</span> </span><span class="WHIT">	</span><span class="NAME">_TBSCertificate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_KJUR_asn1_x509.TBSCertificate</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>4752</span> </span><span class="WHIT">	</span><span class="NAME">_Certificate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_KJUR_asn1_x509.Certificate</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4753</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cert</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_Certificate</span><span class="PUNC">(</span><span class="NAME">param</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4754</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">cert.getPEM</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4755</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>4756</span> 
-<span class='line'>4757</span> </span></pre></body></html>
+<span class='line'>4592</span> 
+<span class='line'>4593</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4594</span> 
+<span class='line'>4595</span> </span><span class="COMM">/**
+<span class='line'>4596</span>  * convert OID to name&lt;br/>
+<span class='line'>4597</span>  * @name oid2name
+<span class='line'>4598</span>  * @memberOf KJUR.asn1.x509.OID
+<span class='line'>4599</span>  * @function
+<span class='line'>4600</span>  * @param {String} oid dot noted Object Identifer string (ex. 1.2.3.4)
+<span class='line'>4601</span>  * @return {String} OID name if registered otherwise empty string
+<span class='line'>4602</span>  * @since asn1x509 1.0.9
+<span class='line'>4603</span>  * @description
+<span class='line'>4604</span>  * This static method converts OID string to its name.
+<span class='line'>4605</span>  * If OID is undefined then it returns empty string (i.e. '').
+<span class='line'>4606</span>  * @example
+<span class='line'>4607</span>  * KJUR.asn1.x509.OID.oid2name("1.3.6.1.5.5.7.1.1") &rarr; 'authorityInfoAccess'
+<span class='line'>4608</span>  */</span><span class="WHIT">
+<span class='line'>4609</span> </span><span class="NAME">KJUR.asn1.x509.OID.oid2name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">oid</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4610</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">list</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509.OID.name2oidList</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4611</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">list</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4612</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">list</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4613</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>4614</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4615</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4616</span> 
+<span class='line'>4617</span> </span><span class="COMM">/**
+<span class='line'>4618</span>  * convert OID to AttributeType name&lt;br/>
+<span class='line'>4619</span>  * @name oid2atype
+<span class='line'>4620</span>  * @memberOf KJUR.asn1.x509.OID
+<span class='line'>4621</span>  * @function
+<span class='line'>4622</span>  * @param {String} oid dot noted Object Identifer string (ex. 1.2.3.4)
+<span class='line'>4623</span>  * @return {String} OID AttributeType name if registered otherwise oid
+<span class='line'>4624</span>  * @since jsrsasign 6.2.2 asn1x509 1.0.18
+<span class='line'>4625</span>  * @description
+<span class='line'>4626</span>  * This static method converts OID string to its AttributeType name.
+<span class='line'>4627</span>  * If OID is not defined in OID.atype2oidList associative array then it returns OID
+<span class='line'>4628</span>  * specified as argument.
+<span class='line'>4629</span>  * @example
+<span class='line'>4630</span>  * KJUR.asn1.x509.OID.oid2atype("2.5.4.3") &rarr; CN
+<span class='line'>4631</span>  * KJUR.asn1.x509.OID.oid2atype("1.3.6.1.4.1.311.60.2.1.3") &rarr; jurisdictionOfIncorporationC
+<span class='line'>4632</span>  * KJUR.asn1.x509.OID.oid2atype("0.1.2.3.4") &rarr; 0.1.2.3.4 // unregistered OID
+<span class='line'>4633</span>  */</span><span class="WHIT">
+<span class='line'>4634</span> </span><span class="NAME">KJUR.asn1.x509.OID.oid2atype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">oid</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4635</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">list</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509.OID.atype2oidList</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4636</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">atype</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">list</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4637</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">list</span><span class="PUNC">[</span><span class="NAME">atype</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">atype</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4638</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>4639</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">oid</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4640</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4641</span> 
+<span class='line'>4642</span> </span><span class="COMM">/**
+<span class='line'>4643</span>  * convert OID name to OID value&lt;br/>
+<span class='line'>4644</span>  * @name name2oid
+<span class='line'>4645</span>  * @memberOf KJUR.asn1.x509.OID
+<span class='line'>4646</span>  * @function
+<span class='line'>4647</span>  * @param {String} name OID name or OID (ex. "sha1" or "1.2.3.4")
+<span class='line'>4648</span>  * @return {String} dot noted Object Identifer string (ex. 1.2.3.4)
+<span class='line'>4649</span>  * @since asn1x509 1.0.11
+<span class='line'>4650</span>  * @description
+<span class='line'>4651</span>  * This static method converts from OID name to OID string.
+<span class='line'>4652</span>  * If OID is undefined then it returns empty string (i.e. '').
+<span class='line'>4653</span>  * @example
+<span class='line'>4654</span>  * KJUR.asn1.x509.OID.name2oid("authorityInfoAccess") &rarr; "1.3.6.1.5.5.7.1.1"
+<span class='line'>4655</span>  * KJUR.asn1.x509.OID.name2oid("1.2.3.4") &rarr; "1.2.3.4"
+<span class='line'>4656</span>  * KJUR.asn1.x509.OID.name2oid("UNKNOWN NAME") &rarr; ""
+<span class='line'>4657</span>  */</span><span class="WHIT">
+<span class='line'>4658</span> </span><span class="NAME">KJUR.asn1.x509.OID.name2oid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4659</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">name.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9.]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4660</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">list</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509.OID.name2oidList</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4661</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">list</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4662</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">list</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4663</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4664</span> 
+<span class='line'>4665</span> </span><span class="COMM">/**
+<span class='line'>4666</span>  * X.509 certificate and CRL utilities class&lt;br/>
+<span class='line'>4667</span>  * @name KJUR.asn1.x509.X509Util
+<span class='line'>4668</span>  * @class X.509 certificate and CRL utilities class
+<span class='line'>4669</span>  */</span><span class="WHIT">
+<span class='line'>4670</span> </span><span class="NAME">KJUR.asn1.x509.X509Util</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4671</span> 
+<span class='line'>4672</span> </span><span class="COMM">/**
+<span class='line'>4673</span>  * issue a certificate in PEM format (DEPRECATED)
+<span class='line'>4674</span>  * @name newCertPEM
+<span class='line'>4675</span>  * @memberOf KJUR.asn1.x509.X509Util
+<span class='line'>4676</span>  * @function
+<span class='line'>4677</span>  * @param {Array} param JSON object of parameter to issue a certificate
+<span class='line'>4678</span>  * @since asn1x509 1.0.6
+<span class='line'>4679</span>  * @deprecated since jsrsasign 9.0.0 asn1x509 2.0.0. please move to {@link KJUR.asn1.x509.Certificate} constructor
+<span class='line'>4680</span>  * @description
+<span class='line'>4681</span>  * This method can issue a certificate by a simple
+<span class='line'>4682</span>  * JSON object.
+<span class='line'>4683</span>  * Signature value will be provided by signing with
+<span class='line'>4684</span>  * private key using 'cakey' parameter or
+<span class='line'>4685</span>  * hexadecimal signature value by 'sighex' parameter.
+<span class='line'>4686</span>  * &lt;br/>
+<span class='line'>4687</span>  * NOTE: Algorithm parameter of AlgorithmIdentifier will
+<span class='line'>4688</span>  * be set automatically by default. 
+<span class='line'>4689</span>  * (see {@link KJUR.asn1.x509.AlgorithmIdentifier})
+<span class='line'>4690</span>  * from jsrsasign 7.1.1 asn1x509 1.0.20.
+<span class='line'>4691</span>  * &lt;br/>
+<span class='line'>4692</span>  * NOTE2: 
+<span class='line'>4693</span>  * RSA-PSS algorithm has been supported from jsrsasign 8.0.21.
+<span class='line'>4694</span>  * As for RSA-PSS signature algorithm names and signing parameters 
+<span class='line'>4695</span>  * such as MGF function and salt length, please see
+<span class='line'>4696</span>  * {@link KJUR.asn1.x509.AlgorithmIdentifier} class.
+<span class='line'>4697</span>  *
+<span class='line'>4698</span>  * @example
+<span class='line'>4699</span>  * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
+<span class='line'>4700</span>  *   serial: {int: 4},
+<span class='line'>4701</span>  *   sigalg: {name: 'SHA1withECDSA'},
+<span class='line'>4702</span>  *   issuer: {str: '/C=US/O=a'},
+<span class='line'>4703</span>  *   notbefore: {'str': '130504235959Z'},
+<span class='line'>4704</span>  *   notafter: {'str': '140504235959Z'},
+<span class='line'>4705</span>  *   subject: {str: '/C=US/O=b'},
+<span class='line'>4706</span>  *   sbjpubkey: pubKeyObj,
+<span class='line'>4707</span>  *   ext: [
+<span class='line'>4708</span>  *     {basicConstraints: {cA: true, critical: true}},
+<span class='line'>4709</span>  *     {keyUsage: {bin: '11'}},
+<span class='line'>4710</span>  *   ],
+<span class='line'>4711</span>  *   cakey: prvKeyObj
+<span class='line'>4712</span>  * });
+<span class='line'>4713</span>  * // -- or --
+<span class='line'>4714</span>  * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
+<span class='line'>4715</span>  *   serial: {int: 4},
+<span class='line'>4716</span>  *   sigalg: {name: 'SHA1withECDSA'},
+<span class='line'>4717</span>  *   issuer: {str: '/C=US/O=a'},
+<span class='line'>4718</span>  *   notbefore: {'str': '130504235959Z'},
+<span class='line'>4719</span>  *   notafter: {'str': '140504235959Z'},
+<span class='line'>4720</span>  *   subject: {str: '/C=US/O=b'},
+<span class='line'>4721</span>  *   sbjpubkey: pubKeyPEM,
+<span class='line'>4722</span>  *   ext: [
+<span class='line'>4723</span>  *     {basicConstraints: {cA: true, critical: true}},
+<span class='line'>4724</span>  *     {keyUsage: {bin: '11'}},
+<span class='line'>4725</span>  *   ],
+<span class='line'>4726</span>  *   cakey: [prvkey, pass]}
+<span class='line'>4727</span>  * );
+<span class='line'>4728</span>  * // -- or --
+<span class='line'>4729</span>  * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
+<span class='line'>4730</span>  *   serial: {int: 1},
+<span class='line'>4731</span>  *   sigalg: {name: 'SHA1withRSA'},
+<span class='line'>4732</span>  *   issuer: {str: '/C=US/O=T1'},
+<span class='line'>4733</span>  *   notbefore: {'str': '130504235959Z'},
+<span class='line'>4734</span>  *   notafter: {'str': '140504235959Z'},
+<span class='line'>4735</span>  *   subject: {str: '/C=US/O=T1'},
+<span class='line'>4736</span>  *   sbjpubkey: pubKeyObj,
+<span class='line'>4737</span>  *   sighex: '0102030405..'
+<span class='line'>4738</span>  * });
+<span class='line'>4739</span>  * // for the issuer and subject field, another
+<span class='line'>4740</span>  * // representation is also available
+<span class='line'>4741</span>  * var certPEM = KJUR.asn1.x509.X509Util.newCertPEM({
+<span class='line'>4742</span>  *   serial: {int: 1},
+<span class='line'>4743</span>  *   sigalg: {name: 'SHA256withRSA'},
+<span class='line'>4744</span>  *   issuer: {C: "US", O: "T1"},
+<span class='line'>4745</span>  *   notbefore: {'str': '130504235959Z'},
+<span class='line'>4746</span>  *   notafter: {'str': '140504235959Z'},
+<span class='line'>4747</span>  *   subject: {C: "US", O: "T1", CN: "http://example.com/"},
+<span class='line'>4748</span>  *   sbjpubkey: pubKeyObj,
+<span class='line'>4749</span>  *   sighex: '0102030405..'
+<span class='line'>4750</span>  * });
+<span class='line'>4751</span>  */</span><span class="WHIT">
+<span class='line'>4752</span> </span><span class="NAME">KJUR.asn1.x509.X509Util.newCertPEM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">param</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>4753</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_KJUR_asn1_x509</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">KJUR.asn1.x509</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4754</span> </span><span class="WHIT">	</span><span class="NAME">_TBSCertificate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_KJUR_asn1_x509.TBSCertificate</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>4755</span> </span><span class="WHIT">	</span><span class="NAME">_Certificate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">_KJUR_asn1_x509.Certificate</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4756</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cert</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">_Certificate</span><span class="PUNC">(</span><span class="NAME">param</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4757</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">cert.getPEM</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4758</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>4759</span> 
+<span class='line'>4760</span> </span></pre></body></html>

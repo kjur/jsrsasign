@@ -412,18 +412,89 @@ equal(key.verify("aaa", Z4SHA1AAASIG), true, "check sig is valid");
 equal(key.verify("aab", Z4SHA1AAASIG), false, "check sig is invalid.");
 });
 
-test("new X509(PEM).get{Version,SerialNumber,Issuer,Subject,NotBefore,NotAfter} test", function() {
-  var c = new X509();
-  c.readCertPEM(sCer1PEM);
-  equal(c.getVersion(), 3, "version=3");
-  equal(c.getSerialNumberHex(), "009e775e7d9f43abc9", "sn = 02");
-  equal(c.getIssuerHex(), "301a310b3009060355040613024a50310b3009060355040a13027a32", "issuer");
-  equal(c.getSubjectHex(), "301a310b3009060355040613024a50310b3009060355040a13027a32", "subject");
-  equal(c.getNotBefore(), "100531061756Z", "notbefore");
-  equal(c.getNotAfter(), "200528061756Z", "notafter");
-  equal(X509.hex2dn(c.getSubjectHex()), "/C=JP/O=z2", "subjecthex2str");
-  equal(c.getIssuerString(), "/C=JP/O=z2", "issuer str");
-  equal(c.getSubjectString(), "/C=JP/O=z2", "subject str");
+test("new X509(PEM).get{Version,SerialNumber,IssuerHex,SubjectHex,NotBefore,NotAfter} test", function() {
+var c = new X509(sCer1PEM);
+equal(c.getVersion(), 3, "version=3");
+equal(c.getSerialNumberHex(), "009e775e7d9f43abc9", "sn = 02");
+equal(c.getIssuerHex(), "301a310b3009060355040613024a50310b3009060355040a13027a32", "issuer");
+equal(c.getSubjectHex(), "301a310b3009060355040613024a50310b3009060355040a13027a32", "subject");
+equal(c.getNotBefore(), "100531061756Z", "notbefore");
+equal(c.getNotAfter(), "200528061756Z", "notafter");
+equal(X509.hex2dn(c.getSubjectHex()), "/C=JP/O=z2", "subjecthex2str");
+equal(c.getIssuerString(), "/C=JP/O=z2", "issuer str");
+equal(c.getSubjectString(), "/C=JP/O=z2", "subject str");
+});
+
+test("getSubject", function() {
+var x = new X509(sCer1PEM);
+var pExpect;
+
+pExpect = {
+  array: [
+    [{type:"C", value:"JP", ds:"prn"}],
+    [{type:"O", value:"z2", ds:"prn"}]
+  ],
+  str: "/C=JP/O=z2"
+};
+deepEqual(x.getSubject(), pExpect, "getSubject /C=JP/O=z2");
+
+pExpect = {
+  array: [
+    [{type:"C", value:"JP", ds:"prn"}],
+    [{type:"O", value:"z2", ds:"prn"}]
+  ],
+  str: "/C=JP/O=z2",
+  canon: "/c=jp/o=z2"
+};
+deepEqual(x.getSubject(true), pExpect, "getSubject(true) /C=JP/O=z2");
+
+pExpect = {
+  array: [
+    [{type:"C", value:"JP", ds:"prn"}],
+    [{type:"O", value:"z2", ds:"prn"}]
+  ],
+  str: "/C=JP/O=z2",
+  canon: "/c=jp/o=z2",
+  hex: "301a310b3009060355040613024a50310b3009060355040a13027a32"
+};
+deepEqual(x.getSubject(true,true), pExpect, "getSubject(true,true) /C=JP/O=z2");
+
+});
+
+test("getIssuer", function() {
+var x = new X509(sCer1PEM);
+var pExpect;
+
+pExpect = {
+  array: [
+    [{type:"C", value:"JP", ds:"prn"}],
+    [{type:"O", value:"z2", ds:"prn"}]
+  ],
+  str: "/C=JP/O=z2"
+};
+deepEqual(x.getIssuer(), pExpect, "getIssuer /C=JP/O=z2");
+
+pExpect = {
+  array: [
+    [{type:"C", value:"JP", ds:"prn"}],
+    [{type:"O", value:"z2", ds:"prn"}]
+  ],
+  str: "/C=JP/O=z2",
+  canon: "/c=jp/o=z2"
+};
+deepEqual(x.getIssuer(true), pExpect, "getIssuer(true) /C=JP/O=z2");
+
+pExpect = {
+  array: [
+    [{type:"C", value:"JP", ds:"prn"}],
+    [{type:"O", value:"z2", ds:"prn"}]
+  ],
+  str: "/C=JP/O=z2",
+  canon: "/c=jp/o=z2",
+  hex: "301a310b3009060355040613024a50310b3009060355040a13027a32"
+};
+deepEqual(x.getIssuer(true,true), pExpect, "getIssuer(true,true) /C=JP/O=z2");
+
 });
 
 /*
@@ -566,6 +637,36 @@ var pubkey = KEYUTIL.getKey(K4PUBP8);
 var x = new X509();
 x.readCertPEM(K1SELFSHA256CER);
 equal(x.verifySignature(pubkey), false, "false");
+});
+
+test("setCanonicalizedDN", function() {
+var x = new X509();
+var p, pOrg, pExpect;
+
+p = { str: "/C=JP/O=Test    1234/OU=HR   45" };
+pExpect = {
+  str: "/C=JP/O=Test    1234/OU=HR   45",
+  canon: "/c=jp/o=test 1234/ou=hr 45"
+};
+x.setCanonicalizedDN(p);
+deepEqual(p, pExpect, "hoge");
+
+p = {array: [
+  [{type:"C", value:"JP", ds: "prn"}],
+  [{type:"O", value:"Test    1234", ds: "utf8"}],
+  [{type:"OU", value:"HR   45", ds: "utf8"}]
+]};
+pExpect = {
+array: [
+  [{type:"C", value:"JP", ds: "prn"}],
+  [{type:"O", value:"Test    1234", ds: "utf8"}],
+  [{type:"OU", value:"HR   45", ds: "utf8"}]
+],
+canon: "/c=jp/o=test 1234/ou=hr 45"
+};
+x.setCanonicalizedDN(p);
+deepEqual(p, pExpect, "hoge2");
+
 });
 
 });

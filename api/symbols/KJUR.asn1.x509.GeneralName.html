@@ -648,7 +648,7 @@ gn = new KJUR.asn1.x509.GeneralName({dns:    'aaa.com'});
 gn = new KJUR.asn1.x509.GeneralName({uri:    'http://aaa.com/'});
 gn = new KJUR.asn1.x509.GeneralName({other: {
   oid: "1.2.3.4",
-  value: {utf8: "example"} // any ASN.1 which passed to ASN1Util.newObject
+  value: {utf8str: "example"} // any ASN.1 which passed to ASN1Util.newObject
 }});
 
 gn = new KJUR.asn1.x509.GeneralName({ldapdn:     'O=Test,C=US'}); // DEPRECATED

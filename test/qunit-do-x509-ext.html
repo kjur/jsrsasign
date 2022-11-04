@@ -904,7 +904,7 @@ hIn = "a0380605604c010301a02f132d32363036313938363333373132353637383230303030303
 pExpect = {
   other: {
       oid: "2.16.76.1.3.1",
-      obj: {prnstr: {str: '260619863371256782000000000000000000000000000'}}
+      value: {prnstr: {str: '260619863371256782000000000000000000000000000'}}
   }
 };
 deepEqual(x.getGeneralName(hIn), pExpect, "other brazil");
@@ -913,7 +913,7 @@ hIn = "a01f060a2a83088c9b5508050501a0110c0fe5b1b1e794b0e38080e5a4aae9838e";
 pExpect = {
   other: {
       oid: "1.2.392.200149.8.5.5.1",
-      obj: {utf8str: {str: '山田　太郎'}}
+      value: {utf8str: {str: '山田　太郎'}}
   }
 };
 deepEqual(x.getGeneralName(hIn), pExpect, "other jpki cn");
