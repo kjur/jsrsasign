@@ -185,6 +185,23 @@ U2rgoKzYAzliiC89n3hrNbm7rcBLgDFfWsHUtO1w2PDfRAqJcHWoTQiIQNUCPTa8
 B9LZ8g==
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+// _test/???
+var san1PEM = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIICCjCCAXOgAwIBAgIBATANBgkqhkiG9w0BAQsFADAeMQswCQYDVQQGEwJKUDEP
+MA0GA1UECgwGVGVzdENBMB4XDTIyMTAyODE0MDAwM1oXDTIzMTAyODE0MDAwM1ow
+EDEOMAwGA1UEAwwFYS5jb20wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALDi
+kFExZMEW5bwsj9DckEA+Ai7jYe7+In5UHpsqCaqXlPlJQFpziDWDHp1IlWI6r+nZ
+/7AJhS3y6wbVrF8IN4ohKaga1LIL3RDfnGbm4QcF06rrE0vHkMALUu0o/7zmR0qU
+geNnRhd21J/+5vt9nzbaigklghW3DKYCaZN/n3CbAgMBAAGjZjBkMGIGA1UdEQRb
+MFmkHDAaMQswCQYDVQQGEwJKUDELMAkGA1UECgwCTzGHBMCoAQWBB2FAYS5jb22G
+DGh0dHA6Ly9hLmNvbYIFYS5jb22gFQYIKwYBBQUHCAmgCQwHYUBhLmNvbTANBgkq
+hkiG9w0BAQsFAAOBgQATHBsnLqNsnH+3xH+tj8u1HXrQb3Z3AmPQ/W++kvlOMi1i
+o/WbHGa3lrJCYomw7O1U36HkCedSCPbv2zoof0MYVLa4XyWt8DuL9GT/WTO9vHzv
+Y0OgvwaSbp0daCfOHdXDGb8E2qJXutdNgAvXl/gprZ6dM0c8d0kLUs+hTuAHpw==
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
 // _test/0cert/digicertevroot.cer
 var certDigicertOUT = (function() {/*Basic Fields
   serial number: 02ac5c266a0b409b8f0b79f2ae462577
@@ -237,7 +254,9 @@ X509v3 Extensions:
     ocsp: http://ocsp.int-x3.letsencrypt.org/
     caissuer: http://cert.int-x3.letsencrypt.org/
   subjectAltName :
-    dns:https.cio.gov,dns:pulse.cio.gov,dns:staging.pulse.cio.gov
+    dns: https.cio.gov
+    dns: pulse.cio.gov
+    dns: staging.pulse.cio.gov
   certificatePolicies :
     policy oid: 2.23.140.1.2.1
     policy oid: 1.3.6.1.4.1.44947.1.1.1
@@ -264,7 +283,8 @@ X509v3 Extensions:
   subjectKeyIdentifier :
     6a43907d3b98147252953aaa280a43f8517ed3a6
   subjectAltName :
-    dns:github.com,dns:www.github.com
+    dns: github.com
+    dns: www.github.com
   keyUsage CRITICAL:
     digitalSignature,keyEncipherment
   extKeyUsage :
@@ -306,7 +326,7 @@ X509v3 Extensions:
     policy oid: 1.2.208.169.1.1.1.3.4
     cps: http://www.trust2408.com/repository
   subjectAltName :
-    rfc822:apotekerforeningen@apotekerforeningen.dk
+    rfc822: apotekerforeningen@apotekerforeningen.dk
   cRLDistributionPoints :
     http://crl.ica02.trust2408.com/ica02.crl
   authorityKeyIdentifier :
@@ -319,31 +339,55 @@ signature algorithm: SHA256withRSA
 signature: 5a0323b8bc53d46b...
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+// _test/???
+var san1OUT = (function() {/*Basic Fields
+  serial number: 01
+  signature algorithm: SHA256withRSA
+  issuer: /C=JP/O=TestCA
+  notBefore: 221028140003Z
+  notAfter: 231028140003Z
+  subject: /CN=a.com
+  subject public key info: 
+    key algorithm: RSA
+    n=00b0e290513164c1...
+    e=010001
+X509v3 Extensions:
+  subjectAltName :
+    dn: /C=JP/O=O1
+    ip: 192.168.1.5
+    rfc822: a@a.com
+    uri: http://a.com
+    dns: a.com
+    other: smtpUTF8Mailbox={utf8str:{str:a@a.com}}
+signature algorithm: SHA256withRSA
+signature: 131c1b272ea36c9c...
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
 test("X509.getInfo() DigiCert EV Root", function() {
-  var c = new X509();
-  c.readCertPEM(certDigicertPEM);
-  //c.readCertPEM(certGithubPEM);
-  equal(c.getInfo(), certDigicertOUT, certDigicertOUT);
+var c = new X509(certDigicertPEM);
+equal(c.getInfo(), certDigicertOUT, certDigicertOUT);
 });
 
 test("X509.getInfo() pulse.cio.gov SSL cert", function() {
-  var c = new X509();
-  c.readCertPEM(certCioGovPEM);
-  equal(c.getInfo(), certCioGovOUT, certCioGovOUT);
+var c = new X509(certCioGovPEM);
+equal(c.getInfo(), certCioGovOUT, certCioGovOUT);
 });
 
 test("X509.getInfo() github.com SSL cert", function() {
-  var c = new X509();
-  c.readCertPEM(certGithubPEM);
-  equal(c.getInfo(), certGithubOUT, certGithubOUT);
+var c = new X509(certGithubPEM);
+equal(c.getInfo(), certGithubOUT, certGithubOUT);
 });
 
 test("X509.getInfo() danmarks user cert", function() {
-var x = new X509();
-x.readCertPEM(danmarksUser1PEM);
+var x = new X509(danmarksUser1PEM);
 //deepEqual(x.getExtCertificatePolicies(),{},"cp");
 //deepEqual(x.getExtCRLDistributionPoints(),{},"cdp");
-equal(x.getInfo(), danmarksUser1OUT, "danmarksUser1");
+equal(x.getInfo(), danmarksUser1OUT, danmarksUser1OUT);
+});
+
+test("X509.getInfo() various SAN", function() {
+var x = new X509(san1PEM);
+equal(x.getInfo(), san1OUT, san1OUT);
 });
 
 });
@@ -366,7 +410,5 @@ equal(x.getInfo(), danmarksUser1OUT, "danmarksUser1");
 </p>
 
 </body>
-<center><p>&copy; 2016-2017 Kenji Urushima</p></center>
+<center><p>&copy; 2016-2022 Kenji Urushima</p></center>
 </html>
-
-

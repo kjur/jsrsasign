@@ -1,4 +1,4 @@
-/* x509-2.0.17.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.1.0.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.24 x509 2.0.17 (2022-Jun-04)
+ * @version jsrsasign 10.6.0 x509 2.1.0 (2022-Nov-04)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -239,18 +239,35 @@ function X509(params) {
      * @name getIssuer
      * @memberOf X509#
      * @function
+     * @param {boolean} flagCanon flag to conclude canonicalized name (DEFAULT false)
+     * @param {boolean} flagHex flag to conclude hexadecimal string (DEFAULT false)
      * @return {Array} JSON object of issuer field
      * @since jsrsasign 9.0.0 x509 2.0.0
      * @see X509#getX500Name
+     *
      * @description
+     * Get a JSON object of an issuer field.
+     * <br>
+     * NOTE: From jsrsasign 10.6.0, flagHex and flagCanon has been 
+     * supported to conclude a canonicalized name for caseIgnoreMatch
+     * desribed in <a href="https://tools.ietf.org/html/rfc4518">
+     * RFC 4518</a>.
+     *
      * @example
      * var x = new X509(sCertPEM);
      * x.getIssuer() &rarr;
      * { array: [[{type:'C',value:'JP',ds:'prn'}],...],
      *   str: "/C=JP/..." }
+     *
+     * // with flags
+     * x.getIssuer(true, true) &rarr;
+     * { array: ...,
+     *   str: "/C=JP/O=   Test    123   ",
+     *   canon: "/c=jp/o=test 123",
+     *   hex: "30..." }
      */
-    this.getIssuer = function() {
-	return this.getX500Name(this.getIssuerHex())
+    this.getIssuer = function(flagCanon, flagHex) {
+	return this.getX500Name(this.getIssuerHex(), flagCanon, flagHex);
     };
 
     /**
@@ -291,18 +308,35 @@ function X509(params) {
      * @name getSubject
      * @memberOf X509#
      * @function
-     * @return {Array} JSON object of subject field
+     * @param {boolean} flagCanon flag to conclude canonicalized name (DEFAULT false)
+     * @param {boolean} flagHex flag to conclude hexadecimal string (DEFAULT false)
+     * @return {object} JSON object of subject field
      * @since jsrsasign 9.0.0 x509 2.0.0
      * @see X509#getX500Name
+     *
      * @description
+     * Get a JSON object of a subject field.
+     * <br>
+     * NOTE: From jsrsasign 10.6.0, flagHex and flagCanon has been 
+     * supported to conclude a canonicalized name for caseIgnoreMatch
+     * desribed in <a href="https://tools.ietf.org/html/rfc4518">
+     * RFC 4518</a>.
+     *
      * @example
      * var x = new X509(sCertPEM);
      * x.getSubject() &rarr;
      * { array: [[{type:'C',value:'JP',ds:'prn'}],...],
      *   str: "/C=JP/..." }
+     *
+     * // with flags
+     * x.getSubject(true, true) &rarr;
+     * { array: ...,
+     *   str: "/C=JP/O=   Test    123   ",
+     *   canon: "/c=jp/o=test 123",
+     *   hex: "30..." }
      */
-    this.getSubject = function() {
-	return this.getX500Name(this.getSubjectHex());
+    this.getSubject = function(flagCanon, flagHex) {
+	return this.getX500Name(this.getSubjectHex(), flagCanon, flagHex);
     };
 
     /**
@@ -1871,16 +1905,15 @@ function X509(params) {
      * x = new X509();
      * x.getOtherName("30...") &rarr;
      * { oid: "1.2.3.4",
-     *   other: {utf8str: {str: "aaa"}} }
+     *   value: {utf8str: {str: "aaa"}} }
      */
     this.getOtherName = function(h) {
         var result = {};
-
         var a = _getChildIdx(h, 0);
         var hOID = _getVbyList(h, a[0], [], "06");
         var hValue = _getVbyList(h, a[1], []);
-        result.oid = KJUR.asn1.ASN1Util.oidHexToInt(hOID);
-        result.obj = _ASN1HEX_parse(hValue);
+	result.oid = _oidname(hOID);
+	result.value = _ASN1HEX_parse(hValue);
         return result;
     };
 
@@ -2492,14 +2525,18 @@ function X509(params) {
      * @memberOf X509#
      * @function
      * @param {String} h hexadecimal string of Name
+     * @param {boolean} flagCanon flag to conclude canonicalized name (DEFAULT false)
+     * @param {boolean} flagHex flag to conclude hexadecimal string (DEFAULT false)
      * @return {Array} array of RDN parameter array
      * @since jsrsasign 9.0.0 x509 2.0.0
      * @see X509#getX500NameArray
      * @see X509#getRDN
      * @see X509#getAttrTypeAndValue
+     * @see X509#c14nRDNArray
      * @see KJUR.asn1.x509.X500Name
      * @see KJUR.asn1.x509.GeneralName
      * @see KJUR.asn1.x509.GeneralNames
+     *
      * @description
      * This method will get Name parameter defined in
      * <a href="https://tools.ietf.org/html/rfc5280#section-4.1.2.4">
@@ -2509,6 +2546,12 @@ function X509(params) {
      *   rdnSequence  RDNSequence }
      * RDNSequence ::= SEQUENCE OF RelativeDistinguishedName
      * </pre>
+     * <br>
+     * NOTE: From jsrsasign 10.6.0, flagHex and flagCanon has been 
+     * supported to conclude a canonicalized name for caseIgnoreMatch
+     * desribed in <a href="https://tools.ietf.org/html/rfc4518">
+     * RFC 4518</a>.
+     *
      * @example
      * x = new X509();
      * x.getX500Name("30...") &rarr;
@@ -2518,13 +2561,26 @@ function X509(params) {
      *     [{type:"CN",value:"john.smith@example.com",ds:"ia5"}]
      *   ],
      *   str: "/C=US/O=Sample Corp./CN=john.smith@example.com",
-     *   hex: "30..."
-     * }
+     *   hex: "30..." }
+     *
+     * x.getX500Name("30...", true) &rarr;
+     * { array: [
+     *     [{type:"C",value:"US",ds:"prn"}],
+     *     [{type:"O",value:"Sample    Corp.",ds:"utf8"}]
+     *   ],
+     *   str: "/C=US/O=Sample    Corp.",
+     *   canon: "/c=us/o=sample corp.",
+     *   hex: "30..." }
      */
-    this.getX500Name = function(h) {
+    this.getX500Name = function(h, flagCanon, flagHex) {
 	var a = this.getX500NameArray(h);
 	var s = this.dnarraytostr(a);
-	return { array: a, str: s };
+	var result = { str: s };
+
+	result.array = a;
+	if (flagHex == true) result.hex = h;
+	if (flagCanon == true) result.canon = this.c14nRDNArray(a);
+	return result;
     };
 
     // ===== END X500Name related =====================================
@@ -2583,15 +2639,20 @@ function X509(params) {
      * This method returns a JSON object of the certificate
      * parameters. Return value can be passed to
      * {@link KJUR.asn1.x509.X509Util.newCertPEM}.
-     * <br>
+     * <br/>
      * NOTE1: From jsrsasign 10.5.16, optional argument can be applied.
      * It can have following members:
      * <ul>
-     * <li>tbshex - if this is true, tbshex member with hex value of
-     * tbsCertificate will be added</li>
-     * <li>nodnarray - if this is true, array member for subject and
-     * issuer will be deleted to simplify it<li>
+     * <li>tbshex - (boolean) tbshex member with hex value of 
+     * tbsCertificate will be added if true (DEFAULT undefined)</li>
+     * <li>nodnarray - (boolean) array member for subject and
+     * issuer will be deleted to simplify it if true (DEFAULT undefined)<li>
+     * <li>dncanon - (boolean) add canon member to subject and issuer for DN StringPrep if true(DEFAULT undefined)</li>
+     * <li>dnhex - (boolean) add hex member to subject and issuer if true(DEFAULT undefined)</li>
      * </ul>
+     * <br/>
+     * NOTE2: From jsrsasign 10.6.0, member "dncanon" and "dnhex" supported
+     * in the "option" argument.
      *
      * @example
      * x = new X509();
@@ -2618,16 +2679,20 @@ function X509(params) {
      *
      * x.getParam({tbshex: true}) &rarr; { ... , tbshex: "30..." }
      * x.getParam({nodnarray: true}) &rarr; {issuer: {str: "/C=JP"}, ...}
+     * x.getParam({dncanon: true}) &rarr; {... {issuer: {canon: "/c=jp/o=..."} ...} ...}
+     * x.getParam({dnhex: true}) &rarr; {... {issuer: {hex: "30..."} ...} ...}
      */
     this.getParam = function(option) {
 	var result = {};
+	if (option == undefined) option = {};
+
 	result.version = this.getVersion();
 	result.serial = {hex: this.getSerialNumberHex()};
 	result.sigalg = this.getSignatureAlgorithmField();
-	result.issuer = this.getIssuer();
+	result.issuer = this.getIssuer(option.dncanon, option.dnhex);
 	result.notbefore = this.getNotBefore();
 	result.notafter = this.getNotAfter();
-	result.subject = this.getSubject();
+	result.subject = this.getSubject(option.dncanon, option.dnhex);
 	result.sbjpubkey = hextopem(this.getPublicKeyHex(), "PUBLIC KEY");
 	if (this.aExtInfo != undefined &&
 	    this.aExtInfo.length > 0) {
@@ -2636,15 +2701,14 @@ function X509(params) {
 	result.sighex = this.getSignatureValueHex();
 
 	// for options
-	if (typeof option == "object") {
-	    if (option.tbshex == true) {
-		result.tbshex = _getTLVbyList(this.hex, 0, [0]);
-	    }
-	    if (option.nodnarray == true) {
-		delete result.issuer.array;
-		delete result.subject.array;
-	    }
+	if (option.tbshex == true) {
+	    result.tbshex = _getTLVbyList(this.hex, 0, [0]);
 	}
+	if (option.nodnarray == true) {
+	    delete result.issuer.array;
+	    delete result.subject.array;
+	}
+
 	return result;
     };
 
@@ -2986,6 +3050,98 @@ function X509(params) {
     };
 
     /**
+     * set canonicalized DN to a DN parameter<br/>
+     * @name setCanonicalizedDN
+     * @memberOf X509#
+     * @function
+     * @param {object} pDN DN parameter associative array
+     * @since jsrsasign 10.6.0 x509 2.1.0
+     * 
+     * @description
+     * This method canonicalizes a DN string as following:
+     * <ul>
+     * <li>convert to lower case</li>
+     * <li>convert from all multiple spaces to a space</li>
+     * </ul>
+     * 
+     * @example
+     * var x = new X509();
+     * var pDN = {
+     *   array: [
+     *     [{type:'C',value:'JP',ds:'prn'}],
+     *     [{type:'O',value:'Test    1',ds:'prn'}] ],
+     *   str: "/C=JP/O=Test    1" };
+     * x.setCanonicalizedDN(pDN);
+
+     * // pDN will become following
+     * pDN = {
+     *   array: [
+     *     [{type:'C',value:'JP',ds:'prn'}],
+     *     [{type:'O',value:'Test    1',ds:'prn'}] ],
+     *   str: "/C=JP/O=Test    1",
+     *   canon: "/c=jp/o=test 1" };
+     */
+    this.setCanonicalizedDN = function(pDN) {
+	var aRDN;
+	if (pDN.str != undefined && pDN.array == undefined) {
+	    var dDN = new KJUR.asn1.x509.X500Name({str: pDN.str});
+	    var hDN = dDN.tohex();
+	    aRDN = this.getX500NameArray(hDN);
+	} else {
+	    aRDN = pDN.array;
+	}
+	if (pDN.canon == undefined) {
+	    pDN.canon = this.c14nRDNArray(aRDN);
+	}
+    };
+
+    /**
+     * simple canonicalization(c14n) for RDN array<br/>
+     * @name c14nRDNArray
+     * @memberOf X509#
+     * @function
+     * @param {array} aRDN array of RDN parameters
+     * @return {string} canonicalized distinguish name (ex. "/c=jp/o=test ca")
+     * @since jsrsasign 10.6.0 x509 2.1.0
+     * 
+     * @description
+     * This method canonicalizes a DN string according to
+     * <a href="https://datatracker.ietf.org/doc/html/rfc4518#appendix-B">
+     * "RFC 4518 StringPrep Appendix B Substring Matching"</a> as following:
+     * <ul>
+     * <li>convert to lower case</li>
+     * <li>convert from all sequence of spaces to a space</li>
+     * <li>remove leading and trailing spaces</li>
+     * </ul>
+     * 
+     * @example
+     * var x = new X509();
+     * x.c14nRDNArray([
+     *   [{type:"C", value:"JP", ds: "prn"}],
+     *   [{type:"O", value:"    Test    1234     ", ds: "utf8"}],
+     *   [{type:"OU", value:"HR   45", ds: "utf8"}]
+     * ]) &rarr; "/c=jp/o=test 1234/ou=hr 45"
+     */
+    this.c14nRDNArray = function(aRDN) {
+	var a = [];
+	for (var i = 0; i < aRDN.length; i++) {
+	    var aAVA = aRDN[i];
+	    var a2 = [];
+	    for (var j = 0; j < aAVA.length; j++) {
+		var pAVA = aAVA[j];
+		var value = pAVA.value;
+		value = value.replace(/^\s*/, '');
+		value = value.replace(/\s*$/, '');
+		value = value.replace(/\s+/g, ' ');
+		value = value.toLowerCase();
+		a2.push(pAVA.type.toLowerCase() + "=" + value);
+	    }
+	    a.push(a2.join("+"));
+	}
+	return "/" + a.join("/");
+    };
+
+    /**
      * get certificate information as string.<br/>
      * @name getInfo
      * @memberOf X509#
@@ -3022,7 +3178,24 @@ function X509(params) {
      */
     this.getInfo = function() {
 	var _getSubjectAltNameStr = function(params) {
-	    var s = JSON.stringify(params.array).replace(/[\[\]\{\}\"]/g, '');
+	    var s = "";
+	    var indent = "    ";
+	    var NL = "\n";
+	    var a = params.array;
+	    for (var i = 0; i < a.length; i++) {
+		var pGN = a[i];
+		if (pGN.dn != undefined)	s += indent + "dn: " + pGN.dn.str + NL;
+		if (pGN.ip != undefined)	s += indent + "ip: " + pGN.ip + NL;
+		if (pGN.rfc822 != undefined)	s += indent + "rfc822: " + pGN.rfc822 + NL;
+		if (pGN.dns != undefined)	s += indent + "dns: " + pGN.dns + NL;
+		if (pGN.uri != undefined)	s += indent + "uri: " + pGN.uri + NL;
+		if (pGN.other != undefined) {
+		    var oidname = pGN.other.oid;
+		    var value = JSON.stringify(pGN.other.value).replace(/\"/g, '');
+		    s += indent + "other: " + oidname + "=" + value + NL;
+		}
+	    }
+	    s = s.replace(/\n$/, '');
 	    return s;
 	};
 	var _getCertificatePoliciesStr = function(params) {
@@ -3132,7 +3305,7 @@ function X509(params) {
 		    s += "    " + eku.join(", ") + "\n";
 		} else if (extName === "subjectAltName") {
 		    var san = _getSubjectAltNameStr(this.getExtSubjectAltName());
-		    s += "    " + san + "\n";
+		    s += san + "\n";
 		} else if (extName === "cRLDistributionPoints") {
 		    var cdp = this.getExtCRLDistributionPoints();
 		    s += _getCRLDistributionPointsStr(cdp);

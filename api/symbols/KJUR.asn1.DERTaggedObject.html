@@ -639,16 +639,24 @@ following properties:
 <li>tag - specify tag (default is 'a0' which means [0])</li>
 <li>explicit - specify true if this is explicit tag otherwise false 
     (default is 'true').</li>
-<li>obj - specify ASN1Object which is tagged</li>
+<li>obj - specify ASN1Object or JSON object which will be tagged</li>
 <li>tage - specify tag with explicit</li>
 <li>tagi - specify tag with implicit</li>
 </ul>
+As for the member "obj" value of JSON object, 
+KJUR_asn1.ASN1Util.newObject is used to generate.
 					
 				</div>
 				
 				
 				
-				<pre class="code">new KJUR.asn1.DERTaggedObject({
+				<pre class="code">// by JSON
+new KJUR.asn1.DERTaggedObject({
+ tag:'a0', explicit: true, obj: { "prnstr": { "str": "aaa" } }
+}).tohex()
+
+// by ASN1Object object
+new KJUR.asn1.DERTaggedObject({
  tage:'a0', obj: new KJUR.asn1.DERInteger({int: 3}) // explicit
 }) 
 new KJUR.asn1.DERTaggedObject({
@@ -672,6 +680,13 @@ hex = d2.tohex();</pre>
 					
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd>KJUR_asn1.ASN1Util.newObject</dd>
+						
+						</dl>
 					
 
 			</div>

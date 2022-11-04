@@ -915,12 +915,36 @@ test("SubjectKeyIdentifier class test (kid=CERTPEM)", function() {
 
 // SubjectAltName
 test("SubjectAltName", function() {
-  var o1 = new KJUR.asn1.x509.SubjectAltName({
-    critical: true,
-    array: [{uri: 'http://a.com'}, {uri: 'http://b.com'}]
-  });
-  equal(o1.getExtnValueHex(), "301c860c687474703a2f2f612e636f6d860c687474703a2f2f622e636f6d", "URIs critical");
-  equal(o1.getEncodedHex(), "30280603551d110101ff041e301c860c687474703a2f2f612e636f6d860c687474703a2f2f622e636f6d", "ext hex");
+var _SAN = KJUR.asn1.x509.SubjectAltName;
+var o, hExpect1, hExpect2;
+
+o = new _SAN({
+  critical: true,
+  array: [{uri: 'http://a.com'}, {uri: 'http://b.com'}]
+});
+hExpect1 = "301c860c687474703a2f2f612e636f6d860c687474703a2f2f622e636f6d";
+hExpect2 = "30280603551d110101ff041e301c860c687474703a2f2f612e636f6d860c687474703a2f2f622e636f6d";
+equal(o.getExtnValueHex(), hExpect1, "URI[2] critical");
+equal(o.tohex(), hExpect2, "URI[2] ext hex");
+
+o = new _SAN({array: [{rfc822: "aaa@a.com"}]});
+hExpect1 = "300b810961616140612e636f6d";
+hExpect2 = "30140603551d11040d300b810961616140612e636f6d";
+equal(o.getExtnValueHex(), hExpect1, "RFC822=aaa@a.com extnValue");
+equal(o.tohex(), hExpect2, "RFC822=aaa@a.com ext hex");
+
+o = new _SAN({array: [{ip: "192.168.1.5"}]});
+hExpect1 = "30068704c0a80105";
+hExpect2 = "300f0603551d11040830068704c0a80105";
+equal(o.getExtnValueHex(), hExpect1, "IP=192.168.1.5 extnValue");
+equal(o.tohex(), hExpect2, "IP=192.168.1.5 ext hex");
+
+o = new _SAN({array: [{other: {oid: "smtpUTF8Mailbox", value: {utf8str: {str: "a@a.com"}}}}]});
+hExpect1 = "3017a01506082b06010505070809a0090c076140612e636f6d";
+hExpect2 = "30200603551d1104193017a01506082b06010505070809a0090c076140612e636f6d";
+equal(o.getExtnValueHex(), hExpect1, "other smtpUTF8Mbox=a@a.com extnValue");
+equal(o.tohex(), hExpect2, "other smtpUTF8Mbox=a@a.com ext hex");
+
 });
 
 test("IssuerAltName", function() {

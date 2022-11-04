@@ -1724,6 +1724,7 @@ extendClass(KJUR.asn1.DERSet, KJUR.asn1.DERAbstractStructured);
  * @name KJUR.asn1.DERTaggedObject
  * @class class for ASN.1 DER TaggedObject
  * @extends KJUR.asn1.ASN1Object
+ * @see KJUR_asn1.ASN1Util.newObject
  *
  * @description
  * <br/>
@@ -1737,12 +1738,20 @@ extendClass(KJUR.asn1.DERSet, KJUR.asn1.DERAbstractStructured);
  * <li>tag - specify tag (default is 'a0' which means [0])</li>
  * <li>explicit - specify true if this is explicit tag otherwise false 
  *     (default is 'true').</li>
- * <li>obj - specify ASN1Object which is tagged</li>
+ * <li>obj - specify ASN1Object or JSON object which will be tagged</li>
  * <li>tage - specify tag with explicit</li>
  * <li>tagi - specify tag with implicit</li>
  * </ul>
+ * As for the member "obj" value of JSON object, 
+ * {@link KJUR_asn1.ASN1Util.newObject} is used to generate.
  *
  * @example
+ * // by JSON
+ * new KJUR.asn1.DERTaggedObject({
+ *  tag:'a0', explicit: true, obj: { "prnstr": { "str": "aaa" } }
+ * }).tohex()
+ *
+ * // by ASN1Object object
  * new KJUR.asn1.DERTaggedObject({
  *  tage:'a0', obj: new KJUR.asn1.DERInteger({int: 3}) // explicit
  * }) 
