@@ -669,9 +669,8 @@ test("getExtAIAInfo test (DEPRECATED)", function() {
 
 });
 
-test("getCertificatePolicies", function() {
-var x = new X509();
-x.readCertPEM(certGithubPEM);
+test("getExtCertificatePolicies", function() {
+var x = new X509(certGithubPEM);
 deepEqual(
 x.getExtCertificatePolicies(),
 { extname:"certificatePolicies",
@@ -683,8 +682,7 @@ x.getExtCertificatePolicies(),
 "for GitHub.com site"
 );  
 
-var x1 = new X509();
-x1.readCertPEM(pulseCioGovPEM);
+var x1 = new X509(pulseCioGovPEM);
 deepEqual(
 x1.getExtCertificatePolicies(),
 { extname:"certificatePolicies",
@@ -700,6 +698,62 @@ x1.getExtCertificatePolicies(),
 },
 "for pulse.cio.gov site Let's Encrypt cert");
 
+});
+
+test("getExtPolicyMappings", function() {
+var hIn, pExpect;
+var x = new X509();
+
+hIn = "300c300a0604551d200006020102";
+pExpect = {
+  extname: "policyMappings",
+  critical: true,
+  array: [["anyPolicy", "0.1.2"]]
+};
+deepEqual(x.getExtPolicyMappings(hIn, true), pExpect, JSON.stringify(pExpect));
+
+hIn = "3014300806022a0306020102300806022a0506020105";
+pExpect = {
+  extname: "policyMappings",
+  critical: true,
+  array: [["1.2.3", "0.1.2"],["1.2.5", "0.1.5"]]
+};
+deepEqual(x.getExtPolicyMappings(hIn, true), pExpect, JSON.stringify(pExpect));
+});
+
+
+test("getExtPolicyConstraints", function() {
+var hIn, pExpect;
+var x = new X509();
+
+hIn = "3003810103";
+pExpect = {
+  extname: "policyConstraints",
+  critical: true,
+  inhibit: 3
+};
+deepEqual(x.getExtPolicyConstraints(hIn, true), pExpect, JSON.stringify(pExpect));
+
+hIn = "3003800102";
+pExpect = {
+  extname: "policyConstraints",
+  critical: true,
+  reqexp: 2
+};
+deepEqual(x.getExtPolicyConstraints(hIn, true), pExpect, JSON.stringify(pExpect));
+});
+
+test("getExtInhibitAnyPolicy", function() {
+var hIn, pExpect;
+var x = new X509();
+
+hIn = "020103";
+pExpect = {
+  extname: "inhibitAnyPolicy",
+  critical: true,
+  skip: 3
+};
+deepEqual(x.getExtInhibitAnyPolicy(hIn, true), pExpect, JSON.stringify(pExpect));
 });
 
 // === OLD STATIC METHODS ==================

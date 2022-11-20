@@ -1,4 +1,4 @@
-/* x509-2.1.0.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.1.1.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.6.0 x509 2.1.0 (2022-Nov-04)
+ * @version jsrsasign 10.6.1 x509 2.1.1 (2022-Nov-20)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -67,6 +67,9 @@
  *   <li>keyUsage - {@link X509#getExtKeyUsageBin}</li>
  *   <li>keyUsage - {@link X509#getExtKeyUsageString}</li>
  *   <li>certificatePolicies - {@link X509#getExtCertificatePolicies}</li>
+ *   <li>policyMappings - {@link X509#getExtPolicyMappings}</li>
+ *   <li>policyConstraints - {@link X509#getExtPolicyConstraints}</li>
+ *   <li>inhibitAnyPolicy - {@link X509#getExtInhibitAnyPolicy}</li>
  *   <li>subjectAltName - {@link X509#getExtSubjectAltName}</li>
  *   <li>subjectAltName2 - {@link X509#getExtSubjectAltName2} (DEPRECATED)</li>
  *   <li>issuerAltName - {@link X509#getExtIssuerAltName}</li>
@@ -92,6 +95,7 @@
  *   <li>get all certificate information - {@link X509#getInfo}</li>
  *   <li>get specified extension information - {@link X509#getExtInfo}</li>
  *   <li>verify signature value - {@link X509#verifySignature}</li>
+ *   <li>utility for extensions - {@link X509#getCriticalExtV}</li>
  *   </ul>
  * </li>
  * </ul>
@@ -115,7 +119,8 @@ function X509(params) {
 	_hextooidstr = _ASN1HEX.hextooidstr,
 	_X509 = X509,
 	_pemtohex = pemtohex,
-	_PSSNAME2ASN1TLV;
+	_PSSNAME2ASN1TLV,
+	_Error = Error;
 
     try {
 	_PSSNAME2ASN1TLV = KJUR.asn1.x509.AlgorithmIdentifier.PSSNAME2ASN1TLV;
@@ -724,6 +729,34 @@ function X509(params) {
     };
 
     /**
+     * get extension value and critical flag value<br/>
+     * @name getCriticalExtV
+     * @memberOf X509#
+     * @function
+     * @param {string} extname name string of the extension
+     * @param {string} hExtV hexadecimal string of extension
+     * @param {boolean} critical flag
+     * @return {Array} extension value hex and critical flag
+     * @since jsrsasign 10.6.1 x509 2.1.1
+     *
+     * @description
+     * This method is an utility method for all getExt* of extensions.
+     *
+     * @example
+     * x = new X509(sCertPEM);
+     * x.getCriticalExtV("inhibitAnyPolicy") &rarr ["020103", true] // get from X509 object
+     * x.getCriticalExtV("inhibitAnyPolicy",
+     *                   "020104",
+     *                   true) &rarr ["020104", true] // by argument of method.
+     */
+    this.getCriticalExtV = function(extname, hExtV, critical) {
+	if (hExtV != undefined) return [hExtV, critical];
+	var info = this.getExtInfo(extname);
+	if (info == undefined) return [null, null];
+	return [_getTLV(this.hex, info.vidx), info.critical];
+    };
+
+    /**
      * get BasicConstraints extension value as object in the certificate
      * @name getExtBasicConstraints
      * @memberOf X509#
@@ -810,13 +843,10 @@ function X509(params) {
      * }
      */
     this.getExtNameConstraints = function(hExtV, critical) {
-	if (hExtV === undefined && critical === undefined) {
-	    var info = this.getExtInfo("nameConstraints");
-	    if (info === undefined) return undefined;
-	    hExtV = _getTLV(this.hex, info.vidx);
-	    critical = info.critical;
-	}
-
+	var aExtVCritical = this.getCriticalExtV("nameConstraints", hExtV, critical);
+	hExtV = aExtVCritical[0];
+	critical = aExtVCritical[1];
+	if (hExtV == null) return undefined;
 	var result = {extname:"nameConstraints"};
 	if (critical) result.critical = true;
 
@@ -934,13 +964,10 @@ function X509(params) {
      * x.getExtKeyUsage("306230...", true) 
      */
     this.getExtKeyUsage = function(hExtV, critical) {
-	if (hExtV === undefined && critical === undefined) {
-	    var info = this.getExtInfo("keyUsage");
-	    if (info === undefined) return undefined;
-	    hExtV = _getTLV(this.hex, info.vidx);
-	    critical = info.critical;
-	}
-
+	var aExtVCritical = this.getCriticalExtV("keyUsage", hExtV, critical);
+	hExtV = aExtVCritical[0];
+	critical = aExtVCritical[1];
+	if (hExtV == null) return undefined;
 	var result = {extname:"keyUsage"};
 	if (critical) result.critical = true;
 
@@ -2044,6 +2071,158 @@ function X509(params) {
     };
 
     /**
+     * get PolicyMappings extension value as JSON object<br/>
+     * @name getExtPolicyMappings
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
+     * @param {Boolean} critical flag (OPTIONAL)
+     * @return {Object} JSON object of PolicyMappings parameters or undefined
+     * @since jsrsasign 10.6.1 x509 2.1.1
+     * @see KJUR.asn1.x509.PolicyMappings
+     *
+     * @description
+     * This method will get certificate policies value
+     * as an array of JSON object which has properties defined
+     * in {@link KJUR.asn1.x509.PolicyMappings}.
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.PolicyMappings} constructor.
+     * If there is no this extension in the certificate,
+     * it returns undefined.
+     * <br>
+     * When hExtV and critical specified as arguments, return value
+     * will be generated from them.
+     * @example
+     * x = new X509(sCertPEM);
+     * x.getExtPolicyMappings() &rarr; 
+     * { extname: "policyMappings",
+     *   critical: true,
+     *   array: [["1.2.3", "1.4.5"],["0.1.2", "anyPolicy"]]}
+     */
+    this.getExtPolicyMappings = function(hExtV, critical) {
+	var aExtVCritical = this.getCriticalExtV("policyMappings", hExtV, critical);
+	hExtV = aExtVCritical[0];
+	critical = aExtVCritical[1];
+	if (hExtV == null) return undefined;
+	var result = {extname: "policyMappings"};
+	if (critical) result.critical = true;
+
+	try {
+	    var p = _ASN1HEX_parse(hExtV);
+	    //result._asn1 = p;
+	    var aPair = p.seq;
+	    var a = [];
+	    for (var i = 0; i < aPair.length; i++) {
+		var aOid = aPair[i].seq;
+		a.push([aOid[0].oid, aOid[1].oid]);
+	    }
+	    result.array = a;
+	} catch(ex) {
+	    throw new _Error("malformed policyMappings");
+	}
+
+	return result;
+    };
+
+    /**
+     * get PolicyConstraints extension value as JSON object<br/>
+     * @name getExtPolicyConstraints
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
+     * @param {Boolean} critical flag (OPTIONAL)
+     * @return {Object} JSON object of PolicyConstraints parameters or undefined
+     * @since jsrsasign 10.6.1 x509 2.1.1
+     * @see KJUR.asn1.x509.PolicyConstraints
+     *
+     * @description
+     * This method will get certificate policies value
+     * as an array of JSON object which has properties defined
+     * in {@link KJUR.asn1.x509.PolicyConstraints}.
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.PolicyConstraints} constructor.
+     * If there is no this extension in the certificate,
+     * it returns undefined.
+     * <br>
+     * When hExtV and critical specified as arguments, return value
+     * will be generated from them.
+     * @example
+     * x = new X509(sCertPEM);
+     * x.getExtPolicyConstraints() &rarr; 
+     * { extname: "policyConstraints",
+     *   critical: true,
+     *   reqexp: 3,
+     *   inhibit: 3 }
+     */
+    this.getExtPolicyConstraints = function(hExtV, critical) {
+	var aExtVCritical = this.getCriticalExtV("policyConstraints", hExtV, critical);
+	hExtV = aExtVCritical[0];
+	critical = aExtVCritical[1];
+	if (hExtV == null) return undefined;
+	var result = {extname: "policyConstraints"};
+	if (critical) result.critical = true;
+
+	var p = _ASN1HEX_parse(hExtV);
+	try {
+	    var aItem = p.seq;
+	    for (var i = 0; i < aItem.length; i++) {
+		var pTag = aItem[i].tag;
+		if (pTag.explicit != false) continue;
+		if (pTag.tag == "80") result.reqexp = parseInt(pTag.hex, 16);
+		if (pTag.tag == "81") result.inhibit = parseInt(pTag.hex, 16);
+	    }
+	} catch(ex) {
+	    return new _Error("malformed policyConstraints value");
+	}
+	return result;
+    };
+
+    /**
+     * get InhibitAnyPolicy extension value as JSON object<br/>
+     * @name getExtInhibitAnyPolicy
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value (OPTIONAL)
+     * @param {Boolean} critical flag (OPTIONAL)
+     * @return {Object} JSON object of InhibitAnyPolicy parameters or undefined
+     * @since jsrsasign 10.6.1 x509 2.1.1
+     * @see KJUR.asn1.x509.InhibitAnyPolicy
+     *
+     * @description
+     * This method will get certificate policies value
+     * as an array of JSON object which has properties defined
+     * in {@link KJUR.asn1.x509.InhibitAnyPolicy}.
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.InhibitAnyPolicy} constructor.
+     * If there is no this extension in the certificate,
+     * it returns undefined.
+     * <br>
+     * When hExtV and critical specified as arguments, return value
+     * will be generated from them.
+     * @example
+     * x = new X509(sCertPEM);
+     * x.getExtInhibitAnyPolicy() &rarr; 
+     * { extname: "policyConstraints",
+     *   critical: true,
+     *   skip: 3 }
+     *
+     * x.getExtInhibitAnyPolicy("020103", true) &rarr; same as above
+     */
+    this.getExtInhibitAnyPolicy = function(hExtV, critical) {
+	var aExtVCritical = this.getCriticalExtV("inhibitAnyPolicy", hExtV, critical);
+	hExtV = aExtVCritical[0];
+	critical = aExtVCritical[1];
+	if (hExtV == null) return undefined;
+	var result = {extname: "inhibitAnyPolicy"};
+	if (critical) result.critical = true;
+
+	var skip = _getInt(hExtV, 0);
+	if (skip == -1) return new _Error("wrong value");
+	result.skip = skip;
+	return result;
+    };
+
+    /**
      * parse cRLNumber CRL extension as JSON object<br/>
      * @name getExtCRLNumber
      * @memberOf X509#
@@ -2079,7 +2258,7 @@ function X509(params) {
 	    result.num = {hex: _getV(hExtV, 0)};
 	    return result;
 	}
-	throw new Error("hExtV parse error: " + hExtV);
+	throw new _Error("hExtV parse error: " + hExtV);
     };
 
     /**
@@ -2819,10 +2998,16 @@ function X509(params) {
 	    extParam = this.getExtCRLDistributionPoints(hExtV, critical);
 	} else if (oid == "2.5.29.32") {
 	    extParam = this.getExtCertificatePolicies(hExtV, critical);
+	} else if (oid == "2.5.29.33") {
+	    extParam = this.getExtPolicyMappings(hExtV, critical);
 	} else if (oid == "2.5.29.35") {
 	    extParam = this.getExtAuthorityKeyIdentifier(hExtV, critical);
+	} else if (oid == "2.5.29.36") {
+	    extParam = this.getExtPolicyConstraints(hExtV, critical);
 	} else if (oid == "2.5.29.37") {
 	    extParam = this.getExtExtKeyUsage(hExtV, critical);
+	} else if (oid == "2.5.29.54") {
+	    extParam = this.getExtInhibitAnyPolicy(hExtV, critical);
 	} else if (oid == "1.3.6.1.5.5.7.1.1") {
 	    extParam = this.getExtAuthorityInfoAccess(hExtV, critical);
 	} else if (oid == "2.5.29.20") {
@@ -3292,27 +3477,43 @@ function X509(params) {
 			    s += ", pathLen=" + bc.pathLen;
 			s += "\n";
 		    }
-		} else if (extName === "keyUsage") {
+		} else if (extName == "policyMappings") {
+		    var a = this.getExtPolicyMappings().array;
+		    var sMap = a.map(function(item){
+			var aPolicy = item;
+			return aPolicy[0] + ":" + aPolicy[1];
+		    }).join(", ");
+		    s += "    " + sMap + "\n";
+		} else if (extName == "policyConstraints") {
+		    var p = this.getExtPolicyConstraints();
+		    s += "    ";
+		    if (p.reqexp != undefined) s += " reqexp=" + p.reqexp;
+		    if (p.inhibit != undefined) s += " inhibit=" + p.inhibit;
+		    s += "\n";
+		} else if (extName == "inhibitAnyPolicy") {
+		    var p = this.getExtInhibitAnyPolicy();
+		    s += "    skip=" + p.skip + "\n";
+		} else if (extName == "keyUsage") {
 		    s += "    " + this.getExtKeyUsageString() + "\n";
-		} else if (extName === "subjectKeyIdentifier") {
+		} else if (extName == "subjectKeyIdentifier") {
 		    s += "    " + this.getExtSubjectKeyIdentifier().kid.hex + "\n";
-		} else if (extName === "authorityKeyIdentifier") {
+		} else if (extName == "authorityKeyIdentifier") {
 		    var akid = this.getExtAuthorityKeyIdentifier();
 		    if (akid.kid !== undefined)
 			s += "    kid=" + akid.kid.hex + "\n";
-		} else if (extName === "extKeyUsage") {
+		} else if (extName == "extKeyUsage") {
 		    var eku = this.getExtExtKeyUsage().array;
 		    s += "    " + eku.join(", ") + "\n";
-		} else if (extName === "subjectAltName") {
+		} else if (extName == "subjectAltName") {
 		    var san = _getSubjectAltNameStr(this.getExtSubjectAltName());
 		    s += san + "\n";
-		} else if (extName === "cRLDistributionPoints") {
+		} else if (extName == "cRLDistributionPoints") {
 		    var cdp = this.getExtCRLDistributionPoints();
 		    s += _getCRLDistributionPointsStr(cdp);
-		} else if (extName === "authorityInfoAccess") {
+		} else if (extName == "authorityInfoAccess") {
 		    var aia = this.getExtAuthorityInfoAccess();
 		    s += _getAuthorityInfoAccessStr(aia);
-		} else if (extName === "certificatePolicies") {
+		} else if (extName == "certificatePolicies") {
 		    s += _getCertificatePoliciesStr(this.getExtCertificatePolicies());
 		}
 	    }

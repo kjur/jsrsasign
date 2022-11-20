@@ -1,4 +1,4 @@
-/* asn1x509-2.1.17.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1x509-2.1.18.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.6.0 asn1x509 2.1.17 (2022-Nov-04)
+ * @version jsrsasign 10.6.1 asn1x509 2.1.18 (2022-Nov-20)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -78,6 +78,9 @@ if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) KJUR.asn1 = {};
  * <li>{@link KJUR.asn1.x509.SubjectKeyIdentifier}</li>
  * <li>{@link KJUR.asn1.x509.KeyUsage}</li>
  * <li>{@link KJUR.asn1.x509.CertificatePolicies}</li>
+ * <li>{@link KJUR.asn1.x509.PolicyMappings} 2.5.29.33</li>
+ * <li>{@link KJUR.asn1.x509.PolicyConstraints} 2.5.29.36</li>
+ * <li>{@link KJUR.asn1.x509.InhibitAnyPolicy} 2.5.29.54</li>
  * <li>{@link KJUR.asn1.x509.SubjectAltName}</li>
  * <li>{@link KJUR.asn1.x509.IssuerAltName}</li>
  * <li>{@link KJUR.asn1.x509.BasicConstraints}</li>
@@ -480,6 +483,12 @@ KJUR.asn1.x509.Extensions = function(aParam) {
 		obj = new _KJUR_asn1_x509.CRLDistributionPoints(param);
 	    } else if (extname == "certificatePolicies") {
 		obj = new _KJUR_asn1_x509.CertificatePolicies(param);
+	    } else if (extname == "policyMappings") {
+		obj = new _KJUR_asn1_x509.PolicyMappings(param);
+	    } else if (extname == "policyConstraints") {
+		obj = new _KJUR_asn1_x509.PolicyConstraints(param);
+	    } else if (extname == "inhibitAnyPolicy") {
+		obj = new _KJUR_asn1_x509.InhibitAnyPolicy(param);
 	    } else if (extname == "authorityKeyIdentifier") {
 		obj = new _KJUR_asn1_x509.AuthorityKeyIdentifier(param);
 	    } else if (extname == "extKeyUsage") {
@@ -1327,6 +1336,177 @@ KJUR.asn1.x509.DisplayText = function(params) {
 };
 extendClass(KJUR.asn1.x509.DisplayText, KJUR.asn1.DERAbstractString);
 // ===== END CertificatePolicies related classes =====
+
+// =====================================================================
+
+/**
+ * PolicyMappings ASN.1 structure class<br/>
+ * @name KJUR.asn1.x509.PolicyMappings
+ * @class PolicyMappings ASN.1 structure class
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.x509.Extension
+ * @since jsrsasign 10.6.1 asn1x509 2.1.17
+ * @description
+ * This class represents 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.5">
+ * PolicyMappings extension defined in RFC 5280 4.2.1.5</a>.
+ * <pre>
+ * id-ce-policyMappings OBJECT IDENTIFIER ::=  { id-ce 33 }
+ * PolicyMappings ::= SEQUENCE SIZE (1..MAX) OF SEQUENCE {
+ *    issuerDomainPolicy      CertPolicyId,
+ *    subjectDomainPolicy     CertPolicyId }
+ * </pre>
+ * Its constructor can have following parameters:
+ * <ul>
+ * <li>array - Array: one or more pairs of OIDS</li>
+ * <li>critical - boolean: critical flag</li>
+ * </ul>
+ * OID in "array" can use an OID name registered in
+ * {@link KJUR.asn1.x509.OID} such as "anyPolicy".
+ * @example
+ * e1 = new KJUR.asn1.x509.PolicyMappings({
+ *   array: [["1.2.3", "0.1.2"], ["anyPolicy", "1.2.4"]],
+ *   critical: true
+ * });
+ */
+KJUR.asn1.x509.PolicyMappings = function(params) {
+    KJUR.asn1.x509.PolicyMappings.superclass.constructor.call(this, params);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_newObject = _KJUR_asn1.ASN1Util.newObject;
+
+    this.params = null;
+
+    this.getExtnValueHex = function() {
+	var params = this.params;
+	var aItem = [];
+	for (var i = 0; i < params.array.length; i++) {
+	    var aOid = params.array[i];
+	    aItem.push({seq: [{oid: aOid[0]}, {oid: aOid[1]}]});
+	}
+	this.asn1ExtnValue = _newObject({seq: aItem});
+        return this.asn1ExtnValue.tohex();
+    };
+
+    this.oid = "2.5.29.33";
+    if (params !== undefined) {
+	this.params = params;
+    }
+};
+extendClass(KJUR.asn1.x509.PolicyMappings, KJUR.asn1.x509.Extension);
+
+/**
+ * PolicyConstraints ASN.1 structure class<br/>
+ * @name KJUR.asn1.x509.PolicyConstraints
+ * @class PolicyConstraints ASN.1 structure class
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.x509.Extension
+ * @since jsrsasign 10.6.1 asn1x509 2.1.17
+ * @description
+ * This class represents 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.11">
+ * PolicyConstraints extension defined in RFC 5280 4.2.1.11</a>.
+ * <pre>
+ * id-ce-policyConstraints OBJECT IDENTIFIER ::=  { id-ce 36 }
+ * PolicyConstraints ::= SEQUENCE {
+ *    requireExplicitPolicy  [0] SkipCerts OPTIONAL,
+ *    inhibitPolicyMapping   [1] SkipCerts OPTIONAL }
+ * SkipCerts ::= INTEGER (0..MAX)
+ * </pre>
+ * Its constructor can have following parameters:
+ * <ul>
+ * <li>reqexp - integer: the number of additional certificates that may appear 
+ * in the path before an explicit policy is required for the entire path.</li>
+ * <li>inhibit - integer: the number of additional certificates that may appear 
+ * in the path before policy mapping is no longer permitted.</li>
+ * <li>critical - boolean: critical flag</li>
+ * </ul>
+ * @example
+ * e1 = new KJUR.asn1.x509.PolicyConstraints({
+ *   reqexp: 3,
+ *   inhibit: 3,
+ *   critical: true
+ * });
+ */
+KJUR.asn1.x509.PolicyConstraints = function(params) {
+    KJUR.asn1.x509.PolicyConstraints.superclass.constructor.call(this, params);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_newObject = _KJUR_asn1.ASN1Util.newObject;
+
+    this.params = null;
+
+    this.getExtnValueHex = function() {
+	var params = this.params;
+	var aItem = [];
+	if (params.reqexp != undefined) {
+	    aItem.push({tag: {tagi: "80", obj: {"int": params.reqexp}}});
+	}
+	if (params.inhibit != undefined) {
+	    aItem.push({tag: {tagi: "81", obj: {"int": params.inhibit}}});
+	}
+
+	this.asn1ExtnValue = _newObject({"seq": aItem});
+        return this.asn1ExtnValue.tohex();
+    };
+
+    this.oid = "2.5.29.36";
+    if (params !== undefined) {
+	this.params = params;
+    }
+};
+extendClass(KJUR.asn1.x509.PolicyConstraints, KJUR.asn1.x509.Extension);
+
+/**
+ * InhibitAnyPolicy ASN.1 structure class<br/>
+ * @name KJUR.asn1.x509.InhibitAnyPolicy
+ * @class InhibitAnyPolicy ASN.1 structure class
+ * @param {Array} params associative array of parameters
+ * @extends KJUR.asn1.x509.Extension
+ * @since jsrsasign 10.6.1 asn1x509 2.1.17
+ * @description
+ * This class represents 
+ * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.14">
+ * InhibitAnyPolicy extension defined in RFC 5280 4.2.1.14</a>.
+ * <pre>
+ * id-ce-inhibitAnyPolicy OBJECT IDENTIFIER ::=  { id-ce 54 }
+ * InhibitAnyPolicy ::= SkipCerts
+ * SkipCerts ::= INTEGER (0..MAX)
+ * </pre>
+ * Its constructor can have following parameters:
+ * <ul>
+ * <li>skip - the number of additional non-self-issued certificates that may appear
+ * in the path before anyPolicy is no longer permitted<li>
+ * <li>critical - boolean: critical flag</li>
+ * </ul>
+ * @example
+ * e1 = new KJUR.asn1.x509.InhibitAnyPolicy({
+ *   skip: 5,
+ *   critical: true
+ * });
+ */
+KJUR.asn1.x509.InhibitAnyPolicy = function(params) {
+    KJUR.asn1.x509.InhibitAnyPolicy.superclass.constructor.call(this, params);
+    var _KJUR = KJUR,
+	_KJUR_asn1 = _KJUR.asn1,
+	_KJUR_asn1_x509 = _KJUR_asn1.x509,
+	_newObject = _KJUR_asn1.ASN1Util.newObject;
+
+    this.params = null;
+
+    this.getExtnValueHex = function() {
+	this.asn1ExtnValue = _newObject({"int": this.params.skip});
+        return this.asn1ExtnValue.tohex();
+    };
+
+    this.oid = "2.5.29.54";
+    if (params !== undefined) {
+	this.params = params;
+    }
+};
+extendClass(KJUR.asn1.x509.InhibitAnyPolicy, KJUR.asn1.x509.Extension);
 
 // =====================================================================
 /**
@@ -4361,9 +4541,11 @@ KJUR.asn1.x509.OID = new function() {
         'cRLDistributionPoints':'2.5.29.31',
         'certificatePolicies':  '2.5.29.32',
         'anyPolicy':  		'2.5.29.32.0',
+	'policyMappings':	'2.5.29.33',
         'authorityKeyIdentifier':'2.5.29.35',
         'policyConstraints':    '2.5.29.36',
         'extKeyUsage':          '2.5.29.37',
+	'inhibitAnyPolicy':	'2.5.29.54',
         'authorityInfoAccess':  '1.3.6.1.5.5.7.1.1',
         'ocsp':                 '1.3.6.1.5.5.7.48.1',
         'ocspBasic':            '1.3.6.1.5.5.7.48.1.1',

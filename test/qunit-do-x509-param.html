@@ -352,6 +352,20 @@ cbtqMCqhg0GKH4OmbrS+Zu99iox+I7Mbsu9+F4rZjinez1looQ5hfJ+6FAtxE1HI
 -----END CERTIFICATE REQUEST-----
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+// test cert for PolicyMappings/PolicyConstraints/InhibitAnyPolicy
+var certpolicy1 = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIBXzCCAQmgAwIBAgIBBTANBgkqhkiG9w0BAQsFADAZMQswCQYDVQQGEwJVUzEK
+MAgGA1UECgwBYTAeFw0xMzA1MDQyMzU5NTlaFw0xNDA1MDQyMzU5NTlaMBkxCzAJ
+BgNVBAYTAlVTMQowCAYDVQQKDAFiMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOhm
+TdK0BSkSFWjzs5vJemLnujwJur3E8NzY35DreQubtkWitw4xEnR7TTxBtRQkiVEV
+/viPedQ+rlsaTjUY/VkCAwEAAaM8MDowGAYDVR0hAQH/BA4wDDAKBgRVHSAABgIq
+AzAPBgNVHSQBAf8EBTADgAEBMA0GA1UdNgEB/wQDAgEBMA0GCSqGSIb3DQEBCwUA
+A0EAGwTGkeupwtmSq8EaulvG/Hwhv/gXtBNaX0SK/1r8YIrEYXx5znfLTchD39ka
+SawVIARW+0ZiDLfbAZHUM60cVQ==
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
 // ======================================================================
 
 test("X509.getExtParam test", function() {
@@ -689,6 +703,27 @@ var pExpected = {
   sbjpubkey: "-----BEGIN PUBLIC KEY-----\r\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCw4pBRMWTBFuW8LI/Q3JBAPgIu\r\n42Hu/iJ+VB6bKgmql5T5SUBac4g1gx6dSJViOq/p2f+wCYUt8usG1axfCDeKISmo\r\nGtSyC90Q35xm5uEHBdOq6xNLx5DAC1LtKP+85kdKlIHjZ0YXdtSf/ub7fZ822ooJ\r\nJYIVtwymAmmTf59wmwIDAQAB\r\n-----END PUBLIC KEY-----\r\n",
   ext: [{extname: "basicConstraints"}],
   sighex: "25fd63597c764c6bc310e3a1b42f17381ceaee432c542c5e8c82a090dbf500ad651ee0e952c144c3a5774bb49c0c5a0fcecdd758566ac93b3b7a5eed0c90e39a280a393e0f8d633a55b9ca6204052e8258c15286c0c65798a6fdc1798a9c99da6db8797f76e8e3cd132a403303677ac7096b151c3fc02f54213ac403e1539cff"
+};
+deepEqual(pIn, pExpected, JSON.stringify(pExpected));
+});
+
+test("getParam for policy related extensions", function() {
+var pIn = new X509(certpolicy1).getParam({nodnarray: true});
+var pExpected = {
+  version: 3,
+  serial: {hex: "05"},
+  sigalg: "SHA256withRSA",
+  issuer: {str: "/C=US/O=a"},
+  notbefore: '130504235959Z',
+  notafter:  '140504235959Z',
+  subject: {str: "/C=US/O=b"},
+  sbjpubkey: "-----BEGIN PUBLIC KEY-----\r\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOhmTdK0BSkSFWjzs5vJemLnujwJur3E\r\n8NzY35DreQubtkWitw4xEnR7TTxBtRQkiVEV/viPedQ+rlsaTjUY/VkCAwEAAQ==\r\n-----END PUBLIC KEY-----\r\n",
+  ext: [
+    {extname: "policyMappings", critical: true, array: [["anyPolicy", "1.2.3"]]},
+    {extname: "policyConstraints", critical: true, reqexp: 1},
+    {extname: "inhibitAnyPolicy", critical: true, skip: 1}
+  ],
+  sighex: "1b04c691eba9c2d992abc11aba5bc6fc7c21bff817b4135a5f448aff5afc608ac4617c79ce77cb4dc843dfd91a49ac15200456fb46620cb7db0191d433ad1c55"
 };
 deepEqual(pIn, pExpected, JSON.stringify(pExpected));
 });
