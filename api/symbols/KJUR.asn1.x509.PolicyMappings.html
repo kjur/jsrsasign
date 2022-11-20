@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign JavaScript API Reference - KJUR.crypto.Signature</title>
+		<title>jsrsasign JavaScript API Reference - KJUR.asn1.x509.PolicyMappings</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -530,24 +530,26 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class KJUR.crypto.Signature
+				Class KJUR.asn1.x509.PolicyMappings
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
+				<br />Extends
+					<a href="../symbols/KJUR.asn1.x509.Extension.html">KJUR.asn1.x509.Extension</a>.<br />
 				
 			
-				Signature class which is very similar to java.security.Signature class
+				PolicyMappings ASN.1 structure class
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/crypto-1.1.js.html">crypto-1.1.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/asn1x509-1.0.js.html">asn1x509-1.0.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.crypto.Signature.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.x509.PolicyMappings.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -560,13 +562,12 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.crypto.Signature.html#constructor">KJUR.crypto.Signature</a></b>(params)
+								<b><a href="../symbols/KJUR.asn1.x509.PolicyMappings.html#constructor">KJUR.asn1.x509.PolicyMappings</a></b>(params)
 							</div>
-							<div class="description">Signature class which is very similar to java.security.Signature class
-<br/>
-As for params of constructor's argument, it can be specify following attributes:
-<ul>
-<li>alg - signature algorithm name (ex.</div>
+							<div class="description">PolicyMappings ASN.1 structure class<br/>
+This class represents 
+<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.5">
+PolicyMappings extension defined in RFC 5280 4.2.1.5</a>.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -577,30 +578,11 @@ As for params of constructor's argument, it can be specify following attributes:
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class KJUR.crypto.Signature.">
-					<caption>Field Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/KJUR.crypto.Signature.html#state">state</a></b>
-								</div>
-								<div class="description">Current state of this signature object whether 'SIGN', 'VERIFY' or null</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
 				
 				
+				<dl class="inheritsList">
+				<dt>Fields borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#hL">hL</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hT">hT</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hTLV">hTLV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#hV">hV</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#isModified">isModified</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#params">params</a></dd>
+				</dl>
 				
 			
 
@@ -608,101 +590,11 @@ As for params of constructor's argument, it can be specify following attributes:
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.crypto.Signature.">
-					<caption>Method Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Signature.html#init">init</a></b>(key, pass)
-								</div>
-								<div class="description">Initialize this object for signing or verifying depends on key
-This method is very useful initialize method for Signature class since
-you just specify key then this method will automatically initialize it
-using <a href="../symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> method.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Signature.html#setAlgAndProvider">setAlgAndProvider</a></b>(alg, prov)
-								</div>
-								<div class="description">set signature algorithm and provider
-</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Signature.html#sign">sign</a></b>()
-								</div>
-								<div class="description">Returns the signature bytes of all data updates as a hexadecimal string
-</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Signature.html#signHex">signHex</a></b>(hex)
-								</div>
-								<div class="description">performs final update on the sign using hexadecimal string, then returns the signature bytes of all data updates as a hexadecimal string
-</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Signature.html#signString">signString</a></b>(str)
-								</div>
-								<div class="description">performs final update on the sign using string, then returns the signature bytes of all data updates as a hexadecimal string
-</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Signature.html#updateHex">updateHex</a></b>(hex)
-								</div>
-								<div class="description">Updates the data to be signed or verified by a hexadecimal string
-</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Signature.html#updateString">updateString</a></b>(str)
-								</div>
-								<div class="description">Updates the data to be signed or verified by a string
-</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/KJUR.crypto.Signature.html#verify">verify</a></b>(str)
-								</div>
-								<div class="description">verifies the passed-in signature.</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
 				
 				
+				<dl class="inheritsList">
+				<dt>Methods borrowed from class <a href="../symbols/KJUR.asn1.ASN1Object.html">KJUR.asn1.ASN1Object</a>: </dt><dd><a href="../symbols/KJUR.asn1.ASN1Object.html#getEncodedHex">getEncodedHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getLengthHexFromValue">getLengthHexFromValue</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#getValueHex">getValueHex</a>, <a href="../symbols/KJUR.asn1.ASN1Object.html#tohex">tohex</a></dd>
+				</dl>
 				
 			
 <!-- ============================== events summary ======================== -->
@@ -716,87 +608,36 @@ using <a href="../symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> method.</div>
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.crypto.Signature</b>(params)
+						<b>KJUR.asn1.x509.PolicyMappings</b>(params)
 				</div>
 				
 				<div class="description">
-					Signature class which is very similar to java.security.Signature class
-<br/>
-As for params of constructor's argument, it can be specify following attributes:
+					PolicyMappings ASN.1 structure class<br/>
+This class represents 
+<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.5">
+PolicyMappings extension defined in RFC 5280 4.2.1.5</a>.
+<pre>
+id-ce-policyMappings OBJECT IDENTIFIER ::=  { id-ce 33 }
+PolicyMappings ::= SEQUENCE SIZE (1..MAX) OF SEQUENCE {
+   issuerDomainPolicy      CertPolicyId,
+   subjectDomainPolicy     CertPolicyId }
+</pre>
+Its constructor can have following parameters:
 <ul>
-<li>alg - signature algorithm name (ex. {MD5,SHA1,SHA224,SHA256,SHA384,SHA512,RIPEMD160}with{RSA,ECDSA,DSA})</li>
-<li>provider - currently 'cryptojs/jsrsa' only</li>
+<li>array - Array: one or more pairs of OIDS</li>
+<li>critical - boolean: critical flag</li>
 </ul>
-<h4>SUPPORTED ALGORITHMS AND PROVIDERS</h4>
-This Signature class supports following signature algorithm and provider names:
-<ul>
-<li>MD5withRSA - cryptojs/jsrsa</li>
-<li>SHA1withRSA - cryptojs/jsrsa</li>
-<li>SHA224withRSA - cryptojs/jsrsa</li>
-<li>SHA256withRSA - cryptojs/jsrsa</li>
-<li>SHA384withRSA - cryptojs/jsrsa</li>
-<li>SHA512withRSA - cryptojs/jsrsa</li>
-<li>RIPEMD160withRSA - cryptojs/jsrsa</li>
-<li>MD5withECDSA - cryptojs/jsrsa</li>
-<li>SHA1withECDSA - cryptojs/jsrsa</li>
-<li>SHA224withECDSA - cryptojs/jsrsa</li>
-<li>SHA256withECDSA - cryptojs/jsrsa</li>
-<li>SHA384withECDSA - cryptojs/jsrsa</li>
-<li>SHA512withECDSA - cryptojs/jsrsa</li>
-<li>RIPEMD160withECDSA - cryptojs/jsrsa</li>
-<li>MD5withRSAandMGF1 - cryptojs/jsrsa</li>
-<li>SHAwithRSAandMGF1 - cryptojs/jsrsa</li>
-<li>SHA1withRSAandMGF1 - cryptojs/jsrsa</li>
-<li>SHA224withRSAandMGF1 - cryptojs/jsrsa</li>
-<li>SHA256withRSAandMGF1 - cryptojs/jsrsa</li>
-<li>SHA384withRSAandMGF1 - cryptojs/jsrsa</li>
-<li>SHA512withRSAandMGF1 - cryptojs/jsrsa</li>
-<li>RIPEMD160withRSAandMGF1 - cryptojs/jsrsa</li>
-<li>SHA1withDSA - cryptojs/jsrsa</li>
-<li>SHA224withDSA - cryptojs/jsrsa</li>
-<li>SHA256withDSA - cryptojs/jsrsa</li>
-</ul>
-As for RSA-PSS signature algorithm names and signing parameters 
-such as MGF function and salt length, please see
-<a href="../symbols/KJUR.asn1.x509.AlgorithmIdentifier.html">KJUR.asn1.x509.AlgorithmIdentifier</a> class.
-
-Here are supported elliptic cryptographic curve names and their aliases for ECDSA:
-<ul>
-<li>secp256k1</li>
-<li>secp256r1, NIST P-256, P-256, prime256v1</li>
-<li>secp384r1, NIST P-384, P-384</li>
-<li>secp521r1, NIST P-521, P-521</li>
-</ul>
-NOTE1: DSA signing algorithm is also supported since crypto 1.1.5.
-<h4>EXAMPLES</h4>
+OID in "array" can use an OID name registered in
+<a href="../symbols/KJUR.asn1.x509.OID.html">KJUR.asn1.x509.OID</a> such as "anyPolicy".
 					
 				</div>
 				
 				
 				
-				<pre class="code">// RSA signature generation
-var sig = new KJUR.crypto.Signature({"alg": "SHA1withRSA"});
-sig.init(prvKeyPEM);
-sig.updateString('aaa');
-var hSigVal = sig.sign();
-
-// DSA signature validation
-var sig2 = new KJUR.crypto.Signature({"alg": "SHA1withDSA"});
-sig2.init(certPEM);
-sig.updateString('aaa');
-var isValid = sig2.verify(hSigVal);
-
-// ECDSA signing
-var sig = new KJUR.crypto.Signature({'alg':'SHA1withECDSA'});
-sig.init(prvKeyPEM);
-sig.updateString('aaa');
-var sigValueHex = sig.sign();
-
-// ECDSA verifying
-var sig2 = new KJUR.crypto.Signature({'alg':'SHA1withECDSA'});
-sig.init(certPEM);
-sig.updateString('aaa');
-var isValid = sig.verify(sigValueHex);</pre>
+				<pre class="code">e1 = new KJUR.asn1.x509.PolicyMappings({
+  array: [["1.2.3", "0.1.2"], ["anyPolicy", "1.2.4"]],
+  critical: true
+});</pre>
 				
 				
 				
@@ -809,11 +650,16 @@ var isValid = sig.verify(sigValueHex);</pre>
 								<span class="light fixedFont">{Array}</span>  <b>params</b>
 								
 							</dt>
-								<dd>parameters for constructor</dd>
+								<dd>associative array of parameters</dd>
 						
 						</dl>
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">Since:</dt>
+							<dd>jsrsasign 10.6.1 asn1x509 2.1.17</dd>
+						</dl>
 					
 					
 					
@@ -825,425 +671,8 @@ var isValid = sig.verify(sigValueHex);</pre>
 
 <!-- ============================== field details ========================== -->		
 			
-				<div class="sectionTitle">
-					Field Detail
-				</div>
-				
-					<a name="state"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{String}</span>
-					<b>state</b>
-					
-					</div>
-					<div class="description">
-						Current state of this signature object whether 'SIGN', 'VERIFY' or null
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					
-				
-			
 
 <!-- ============================== method details ========================= -->		
-			
-				<div class="sectionTitle">
-					Method Detail
-				</div>
-				
-					<a name="init"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>init</b>(key, pass)
-					
-					</div>
-					<div class="description">
-						Initialize this object for signing or verifying depends on key
-This method is very useful initialize method for Signature class since
-you just specify key then this method will automatically initialize it
-using <a href="../symbols/KEYUTIL.html#.getKey">KEYUTIL.getKey</a> method.
-As for 'key',  following argument type are supported:
-<h5>signing</h5>
-<ul>
-<li>PEM formatted PKCS#8 encrypted RSA/ECDSA private key concluding "BEGIN ENCRYPTED PRIVATE KEY"</li>
-<li>PEM formatted PKCS#5 encrypted RSA/DSA private key concluding "BEGIN RSA/DSA PRIVATE KEY" and ",ENCRYPTED"</li>
-<li>PEM formatted PKCS#8 plain RSA/ECDSA private key concluding "BEGIN PRIVATE KEY"</li>
-<li>PEM formatted PKCS#5 plain RSA/DSA private key concluding "BEGIN RSA/DSA PRIVATE KEY" without ",ENCRYPTED"</li>
-<li>RSAKey object of private key</li>
-<li>KJUR.crypto.ECDSA object of private key</li>
-<li>KJUR.crypto.DSA object of private key</li>
-</ul>
-<h5>verification</h5>
-<ul>
-<li>PEM formatted PKCS#8 RSA/EC/DSA public key concluding "BEGIN PUBLIC KEY"</li>
-<li>PEM formatted X.509 certificate with RSA/EC/DSA public key concluding
-    "BEGIN CERTIFICATE", "BEGIN X509 CERTIFICATE" or "BEGIN TRUSTED CERTIFICATE".</li>
-<li>RSAKey object of public key</li>
-<li>KJUR.crypto.ECDSA object of public key</li>
-<li>KJUR.crypto.DSA object of public key</li>
-</ul>
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">sig.init(sCertPEM)</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>key</b>
-									
-								</dt>
-								<dd>specifying public or private key as plain/encrypted PKCS#5/8 PEM file, certificate PEM or <a href="../symbols/RSAKey.html">RSAKey</a>, <a href="../symbols/KJUR.crypto.DSA.html">KJUR.crypto.DSA</a> or <a href="../symbols/KJUR.crypto.ECDSA.html">KJUR.crypto.ECDSA</a> object</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>pass</b>
-									
-								</dt>
-								<dd>(OPTION) passcode for encrypted private key</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>crypto 1.1.3</dd>
-							</dl>
-							</dl>
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="setAlgAndProvider"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setAlgAndProvider</b>(alg, prov)
-					
-					</div>
-					<div class="description">
-						set signature algorithm and provider
-
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">md.setAlgAndProvider('SHA1withRSA', 'cryptojs/jsrsa');</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>alg</b>
-									
-								</dt>
-								<dd>signature algorithm name</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>prov</b>
-									
-								</dt>
-								<dd>provider name</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="sign"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>sign</b>()
-					
-					</div>
-					<div class="description">
-						Returns the signature bytes of all data updates as a hexadecimal string
-
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">var hSigValue = sig.sign()</pre>
-					
-					
-					
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>the signature bytes as a hexadecimal string</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="signHex"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>signHex</b>(hex)
-					
-					</div>
-					<div class="description">
-						performs final update on the sign using hexadecimal string, then returns the signature bytes of all data updates as a hexadecimal string
-
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">var hSigValue = sig.signHex('1fdc33')</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hex</b>
-									
-								</dt>
-								<dd>hexadecimal string to final update</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>the signature bytes of a hexadecimal string</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="signString"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>signString</b>(str)
-					
-					</div>
-					<div class="description">
-						performs final update on the sign using string, then returns the signature bytes of all data updates as a hexadecimal string
-
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">var hSigValue = sig.signString('aaa')</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>str</b>
-									
-								</dt>
-								<dd>string to final update</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>the signature bytes of a hexadecimal string</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="updateHex"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>updateHex</b>(hex)
-					
-					</div>
-					<div class="description">
-						Updates the data to be signed or verified by a hexadecimal string
-
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">sig.updateHex('1f2f3f')</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>hex</b>
-									
-								</dt>
-								<dd>hexadecimal string to use for the update</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="updateString"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>updateString</b>(str)
-					
-					</div>
-					<div class="description">
-						Updates the data to be signed or verified by a string
-
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">sig.updateString('aaa')</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>str</b>
-									
-								</dt>
-								<dd>string to use for the update</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="verify"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{Boolean}</span>
-					<b>verify</b>(str)
-					
-					</div>
-					<div class="description">
-						verifies the passed-in signature.
-
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">var isValid = sig.verify('1fbcefdca4823a7(snip)')</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>str</b>
-									
-								</dt>
-								<dd>string to final update</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Boolean}</span> true if the signature was verified, otherwise false</dd>
-							
-							</dl>
-						
-						
-						
-
-					
-				
 			
 			
 <!-- ============================== event details ========================= -->		

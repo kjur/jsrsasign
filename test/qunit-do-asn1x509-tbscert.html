@@ -266,6 +266,7 @@ equal(ASN1HEX.dump(cert.getEncodedHex()), "Moge", "moge");
 
 test("Extensions class test", function() {
 var _Extensions = KJUR.asn1.x509.Extensions;
+var _dump = ASN1HEX.dump;
 var aIn, dIn, hExpect;
 
 aIn = [{
@@ -303,6 +304,37 @@ aIn = [{
 hExpect = "301930170603551d1e0101ff040d300ba00930078205612e636f6d";
 dIn = new _Extensions(aIn);
 equal(dIn.tohex(), hExpect, "nameConstraints hex");
+
+aIn = [{
+  extname: "policyMappings",
+  critical: true,
+  array: [["0.1.2", "1.2.3"]]
+}];
+hExpect = "301830160603551d210101ff040c300a30080602010206022a03";
+dIn = new _Extensions(aIn);
+equal(dIn.tohex(), hExpect, "policyMappings 0.1.2>1.2.3");
+equal(_dump(dIn.tohex()), _dump(hExpect), "policyMappings 0.1.2>1.2.3 dump");
+
+aIn = [{
+  extname: "policyConstraints",
+  critical: true,
+  reqexp: 3
+}];
+hExpect = "3011300f0603551d240101ff04053003800103";
+dIn = new _Extensions(aIn);
+equal(dIn.tohex(), hExpect, "policyConstraints reqexp=3");
+equal(_dump(dIn.tohex()), _dump(hExpect), "policyConstraints reqexp=3 dump");
+
+aIn = [{
+  extname: "inhibitAnyPolicy",
+  critical: true,
+  skip: 3
+}];
+hExpect = "300f300d0603551d360101ff0403020103";
+dIn = new _Extensions(aIn);
+equal(dIn.tohex(), hExpect, "inhibitAnyPolicy skip=3");
+equal(_dump(dIn.tohex()), _dump(hExpect), "inhibitAnyPolicy skip=3 dump");
+
 });
 
 });

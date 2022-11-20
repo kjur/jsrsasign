@@ -435,6 +435,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.GeneralSubtree.html">KJUR.asn1.x509.GeneralSubtree</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.InhibitAnyPolicy.html">KJUR.asn1.x509.InhibitAnyPolicy</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.IssuerAltName.html">KJUR.asn1.x509.IssuerAltName</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.KeyUsage.html">KJUR.asn1.x509.KeyUsage</a></li>
@@ -451,7 +453,11 @@ ul.inheritsList
 	
 	<li><a href="../symbols/KJUR.asn1.x509.OtherName.html">KJUR.asn1.x509.OtherName</a></li>
 	
+	<li><a href="../symbols/KJUR.asn1.x509.PolicyConstraints.html">KJUR.asn1.x509.PolicyConstraints</a></li>
+	
 	<li><a href="../symbols/KJUR.asn1.x509.PolicyInformation.html">KJUR.asn1.x509.PolicyInformation</a></li>
+	
+	<li><a href="../symbols/KJUR.asn1.x509.PolicyMappings.html">KJUR.asn1.x509.PolicyMappings</a></li>
 	
 	<li><a href="../symbols/KJUR.asn1.x509.PolicyQualifierInfo.html">KJUR.asn1.x509.PolicyQualifierInfo</a></li>
 	
@@ -707,6 +713,16 @@ RFC 5280 4.1.2.4</a>.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getCriticalExtV">getCriticalExtV</a></b>(extname, hExtV, critical)
+								</div>
+								<div class="description">get extension value and critical flag value<br/>
+This method is an utility method for all getExt* of extensions.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getDisplayText">getDisplayText</a></b>(h)
 								</div>
 								<div class="description">get DisplayText ASN.1 structure parameter as JSON object
@@ -889,6 +905,18 @@ as array of name or OID string.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtInhibitAnyPolicy">getExtInhibitAnyPolicy</a></b>(hExtV, critical)
+								</div>
+								<div class="description">get InhibitAnyPolicy extension value as JSON object<br/>
+This method will get certificate policies value
+as an array of JSON object which has properties defined
+in <a href="../symbols/KJUR.asn1.x509.InhibitAnyPolicy.html">KJUR.asn1.x509.InhibitAnyPolicy</a>.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtIssuerAltName">getExtIssuerAltName</a></b>(hExtV, critical)
 								</div>
 								<div class="description">get issuerAltName value as array of string in the certificate
@@ -984,6 +1012,30 @@ This method returns a extension parameters as JSON object.</div>
 								<div class="description">get array of certificate extension parameter JSON object<br/>
 This method returns an array of certificate extension
 parameters.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtPolicyConstraints">getExtPolicyConstraints</a></b>(hExtV, critical)
+								</div>
+								<div class="description">get PolicyConstraints extension value as JSON object<br/>
+This method will get certificate policies value
+as an array of JSON object which has properties defined
+in <a href="../symbols/KJUR.asn1.x509.PolicyConstraints.html">KJUR.asn1.x509.PolicyConstraints</a>.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#getExtPolicyMappings">getExtPolicyMappings</a></b>(hExtV, critical)
+								</div>
+								<div class="description">get PolicyMappings extension value as JSON object<br/>
+This method will get certificate policies value
+as an array of JSON object which has properties defined
+in <a href="../symbols/KJUR.asn1.x509.PolicyMappings.html">KJUR.asn1.x509.PolicyMappings</a>.</div>
 							</td>
 						</tr>
 					
@@ -1544,6 +1596,9 @@ X509 class provides following functionality:
   <li>keyUsage - <a href="../symbols/X509.html#getExtKeyUsageBin">X509#getExtKeyUsageBin</a></li>
   <li>keyUsage - <a href="../symbols/X509.html#getExtKeyUsageString">X509#getExtKeyUsageString</a></li>
   <li>certificatePolicies - <a href="../symbols/X509.html#getExtCertificatePolicies">X509#getExtCertificatePolicies</a></li>
+  <li>policyMappings - <a href="../symbols/X509.html#getExtPolicyMappings">X509#getExtPolicyMappings</a></li>
+  <li>policyConstraints - <a href="../symbols/X509.html#getExtPolicyConstraints">X509#getExtPolicyConstraints</a></li>
+  <li>inhibitAnyPolicy - <a href="../symbols/X509.html#getExtInhibitAnyPolicy">X509#getExtInhibitAnyPolicy</a></li>
   <li>subjectAltName - <a href="../symbols/X509.html#getExtSubjectAltName">X509#getExtSubjectAltName</a></li>
   <li>subjectAltName2 - <a href="../symbols/X509.html#getExtSubjectAltName2">X509#getExtSubjectAltName2</a> (DEPRECATED)</li>
   <li>issuerAltName - <a href="../symbols/X509.html#getExtIssuerAltName">X509#getExtIssuerAltName</a></li>
@@ -1569,6 +1624,7 @@ X509 class provides following functionality:
   <li>get all certificate information - <a href="../symbols/X509.html#getInfo">X509#getInfo</a></li>
   <li>get specified extension information - <a href="../symbols/X509.html#getExtInfo">X509#getExtInfo</a></li>
   <li>verify signature value - <a href="../symbols/X509.html#verifySignature">X509#verifySignature</a></li>
+  <li>utility for extensions - <a href="../symbols/X509.html#getCriticalExtV">X509#getCriticalExtV</a></li>
   </ul>
 </li>
 </ul>
@@ -2120,6 +2176,76 @@ x.getAttrTypeAndValue("30...") &rarr;
 								<dd><a href="../symbols/X509.html#getRDN">X509#getRDN</a></dd>
 							
 							</dl>
+						
+
+					<hr />
+				
+					<a name="getCriticalExtV"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Array}</span>
+					<b>getCriticalExtV</b>(extname, hExtV, critical)
+					
+					</div>
+					<div class="description">
+						get extension value and critical flag value<br/>
+This method is an utility method for all getExt* of extensions.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509(sCertPEM);
+x.getCriticalExtV("inhibitAnyPolicy") &rarr ["020103", true] // get from X509 object
+x.getCriticalExtV("inhibitAnyPolicy",
+                  "020104",
+                  true) &rarr ["020104", true] // by argument of method.</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>extname</b>
+									
+								</dt>
+								<dd>name string of the extension</dd>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>hExtV</b>
+									
+								</dt>
+								<dd>hexadecimal string of extension</dd>
+							
+								<dt>
+									<span class="light fixedFont">{boolean}</span> <b>critical</b>
+									
+								</dt>
+								<dd>flag</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.6.1 x509 2.1.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Array}</span> extension value hex and critical flag</dd>
+							
+							</dl>
+						
+						
 						
 
 					<hr />
@@ -3332,6 +3458,88 @@ x.getExtInfo("unknownExt") &rarr; undefined</pre>
 
 					<hr />
 				
+					<a name="getExtInhibitAnyPolicy"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getExtInhibitAnyPolicy</b>(hExtV, critical)
+					
+					</div>
+					<div class="description">
+						get InhibitAnyPolicy extension value as JSON object<br/>
+This method will get certificate policies value
+as an array of JSON object which has properties defined
+in <a href="../symbols/KJUR.asn1.x509.InhibitAnyPolicy.html">KJUR.asn1.x509.InhibitAnyPolicy</a>.
+Result of this method can be passed to 
+<a href="../symbols/KJUR.asn1.x509.InhibitAnyPolicy.html">KJUR.asn1.x509.InhibitAnyPolicy</a> constructor.
+If there is no this extension in the certificate,
+it returns undefined.
+<br>
+When hExtV and critical specified as arguments, return value
+will be generated from them.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509(sCertPEM);
+x.getExtInhibitAnyPolicy() &rarr; 
+{ extname: "policyConstraints",
+  critical: true,
+  skip: 3 }
+
+x.getExtInhibitAnyPolicy("020103", true) &rarr; same as above</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hExtV</b>
+									
+								</dt>
+								<dd>hexadecimal string of extension value (OPTIONAL)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span> <b>critical</b>
+									
+								</dt>
+								<dd>flag (OPTIONAL)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.6.1 x509 2.1.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> JSON object of InhibitAnyPolicy parameters or undefined</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.InhibitAnyPolicy.html">KJUR.asn1.x509.InhibitAnyPolicy</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
 					<a name="getExtIssuerAltName"> </a>
 					<div class="fixedFont">
 					
@@ -4057,6 +4265,167 @@ x.getExtParamArray() &rarr;
 								<dd><a href="../symbols/X509CRL.html#getParam">X509CRL#getParam</a></dd>
 							
 								<dd><a href="../symbols/KJUR.asn1.csr.CSRUtil.html#.getParam">KJUR.asn1.csr.CSRUtil.getParam</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getExtPolicyConstraints"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getExtPolicyConstraints</b>(hExtV, critical)
+					
+					</div>
+					<div class="description">
+						get PolicyConstraints extension value as JSON object<br/>
+This method will get certificate policies value
+as an array of JSON object which has properties defined
+in <a href="../symbols/KJUR.asn1.x509.PolicyConstraints.html">KJUR.asn1.x509.PolicyConstraints</a>.
+Result of this method can be passed to 
+<a href="../symbols/KJUR.asn1.x509.PolicyConstraints.html">KJUR.asn1.x509.PolicyConstraints</a> constructor.
+If there is no this extension in the certificate,
+it returns undefined.
+<br>
+When hExtV and critical specified as arguments, return value
+will be generated from them.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509(sCertPEM);
+x.getExtPolicyConstraints() &rarr; 
+{ extname: "policyConstraints",
+  critical: true,
+  reqexp: 3,
+  inhibit: 3 }</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hExtV</b>
+									
+								</dt>
+								<dd>hexadecimal string of extension value (OPTIONAL)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span> <b>critical</b>
+									
+								</dt>
+								<dd>flag (OPTIONAL)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.6.1 x509 2.1.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> JSON object of PolicyConstraints parameters or undefined</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.PolicyConstraints.html">KJUR.asn1.x509.PolicyConstraints</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getExtPolicyMappings"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>getExtPolicyMappings</b>(hExtV, critical)
+					
+					</div>
+					<div class="description">
+						get PolicyMappings extension value as JSON object<br/>
+This method will get certificate policies value
+as an array of JSON object which has properties defined
+in <a href="../symbols/KJUR.asn1.x509.PolicyMappings.html">KJUR.asn1.x509.PolicyMappings</a>.
+Result of this method can be passed to 
+<a href="../symbols/KJUR.asn1.x509.PolicyMappings.html">KJUR.asn1.x509.PolicyMappings</a> constructor.
+If there is no this extension in the certificate,
+it returns undefined.
+<br>
+When hExtV and critical specified as arguments, return value
+will be generated from them.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509(sCertPEM);
+x.getExtPolicyMappings() &rarr; 
+{ extname: "policyMappings",
+  critical: true,
+  array: [["1.2.3", "1.4.5"],["0.1.2", "anyPolicy"]]}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>hExtV</b>
+									
+								</dt>
+								<dd>hexadecimal string of extension value (OPTIONAL)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span> <b>critical</b>
+									
+								</dt>
+								<dd>flag (OPTIONAL)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.6.1 x509 2.1.1</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> JSON object of PolicyMappings parameters or undefined</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.PolicyMappings.html">KJUR.asn1.x509.PolicyMappings</a></dd>
 							
 							</dl>
 						

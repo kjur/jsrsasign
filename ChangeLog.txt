@@ -1,6 +1,22 @@
 
 ChangeLog for jsrsasign
 
+Add PolicyMappings, PolicyConstraints and InhibitAnyPolicy extension support
+* Changes from 10.6.0 to 10.6.1 (2022-Nov-20)
+  - asn1x509.js
+    - KJUR.asn1.x509.{PolicyMappings,PolicyConstraints,InhibitAnyPolicy} class added
+    - KJUR.asn1.x509.Extension updated to support
+      PolicyMappings, PolicyConstraints and InhibitAnyPolicy
+  - x509.js
+    - X509.getExt{PolicyMappings,PolicyConstraints,InhibitAnyPolicy} method added
+    - X509.getCriticalExtV utility method added
+    - X509.getExtParam updated to support 
+      {PolicyMappings,PolicyConstraints,InhibitAnyPolicy}
+    - X509.getInfo updated to support
+      {PolicyMappings,PolicyConstraints,InhibitAnyPolicy}
+  - test/qunit-do-{asn1x509-tbscert,x509-ext,x509-getinfo,x509-param}.html
+    - update and add some test cases for above
+
 StringPrep DN canonicalization support and some fix
 * Changes from 10.5.27 to 10.6.0 (2022-Nov-04)
   - x509.js

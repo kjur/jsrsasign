@@ -1131,6 +1131,65 @@ equal((new _DisplayText({type: 'bmp', str: 'aaa'})).getEncodedHex(),
       "bmp,aaa=1e03616161");
 });
 
+test("PolicyMappings class test", function() {
+var _PolicyMappings = KJUR.asn1.x509.PolicyMappings;
+var _dump = ASN1HEX.dump;
+var pExt, hExpect;
+
+pParam = {
+    extname: "policyMappings",
+    array: [["anyPolicy", "0.1.2"]],
+    critical: true
+};
+hExpect = "30180603551d210101ff040e300c300a0604551d200006020102";
+equal(new _PolicyMappings(pParam).tohex(), hExpect, "any>0.1.2 critical");
+equal(_dump(new _PolicyMappings(pParam).tohex()),
+_dump(hExpect), "any>0.1.2 critical dump");
+
+pParam = {
+    extname: "policyMappings",
+    array: [["1.2.3", "0.1.2"],["1.2.5", "0.1.5"]],
+    critical: true
+};
+hExpect = "30200603551d210101ff04163014300806022a0306020102300806022a0506020105";
+equal(new _PolicyMappings(pParam).tohex(), hExpect, "1.2.3>0.1.2,1.2.5>0.1.5 critical");
+equal(_dump(new _PolicyMappings(pParam).tohex()),
+_dump(hExpect), "1.2.3>0.1.2,1.2.5>0.1.5 critical dump");
+
+});
+
+test("PolicyConstraints class test", function() {
+var _PolicyConstraints = KJUR.asn1.x509.PolicyConstraints;
+var _dump = ASN1HEX.dump;
+var pExt, hExpect;
+
+pParam = { extname: "policyConstraints", reqexp: 2, critical: true };
+hExpect = "300f0603551d240101ff04053003800102";
+equal(new _PolicyConstraints(pParam).tohex(), hExpect, "reqext=2 critical");
+equal(_dump(new _PolicyConstraints(pParam).tohex()),
+_dump(hExpect), "reqext=2 critical dump");
+
+pParam = { extname: "policyConstraints", inhibit: 3, critical: true };
+hExpect = "300f0603551d240101ff04053003810103";
+equal(new _PolicyConstraints(pParam).tohex(), hExpect, "inhibit=3 critical");
+equal(_dump(new _PolicyConstraints(pParam).tohex()),
+_dump(hExpect), "inhibit=3 critical dump");
+
+});
+
+test("InhibitAnyPolicy class test", function() {
+var _InhibitAnyPolicy = KJUR.asn1.x509.InhibitAnyPolicy;
+var _dump = ASN1HEX.dump;
+var pExt, hExpect;
+
+pParam = { extname: "inhibitAnyPolicy", skip: 3, critical: true };
+hExpect = "300d0603551d360101ff0403020103";
+equal(new _InhibitAnyPolicy(pParam).tohex(), hExpect, "skip=3 critical");
+equal(_dump(new _InhibitAnyPolicy(pParam).tohex()),
+_dump(hExpect), "skip=3 critical dump");
+
+});
+
 test("AuthorityInfoAccess class test", function() {
 equal(
 (new KJUR.asn1.x509.AuthorityInfoAccess({

@@ -363,6 +363,44 @@ signature algorithm: SHA256withRSA
 signature: 131c1b272ea36c9c...
 */}).toString().match(/\/\*([^]*)\*\//)[1];
 
+// test cert for PolicyMappings/PolicyConstraints/InhibitAnyPolicy
+var certpolicy1 = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIBXzCCAQmgAwIBAgIBBTANBgkqhkiG9w0BAQsFADAZMQswCQYDVQQGEwJVUzEK
+MAgGA1UECgwBYTAeFw0xMzA1MDQyMzU5NTlaFw0xNDA1MDQyMzU5NTlaMBkxCzAJ
+BgNVBAYTAlVTMQowCAYDVQQKDAFiMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOhm
+TdK0BSkSFWjzs5vJemLnujwJur3E8NzY35DreQubtkWitw4xEnR7TTxBtRQkiVEV
+/viPedQ+rlsaTjUY/VkCAwEAAaM8MDowGAYDVR0hAQH/BA4wDDAKBgRVHSAABgIq
+AzAPBgNVHSQBAf8EBTADgAEBMA0GA1UdNgEB/wQDAgEBMA0GCSqGSIb3DQEBCwUA
+A0EAGwTGkeupwtmSq8EaulvG/Hwhv/gXtBNaX0SK/1r8YIrEYXx5znfLTchD39ka
+SawVIARW+0ZiDLfbAZHUM60cVQ==
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+var certpolicy1OUT = (function() {/*Basic Fields
+  serial number: 05
+  signature algorithm: SHA256withRSA
+  issuer: /C=US/O=a
+  notBefore: 130504235959Z
+  notAfter: 140504235959Z
+  subject: /C=US/O=b
+  subject public key info: 
+    key algorithm: RSA
+    n=00e8664dd2b40529...
+    e=010001
+X509v3 Extensions:
+  policyMappings CRITICAL:
+    anyPolicy:1.2.3
+  policyConstraints CRITICAL:
+     reqexp=1
+  inhibitAnyPolicy CRITICAL:
+    skip=1
+signature algorithm: SHA256withRSA
+signature: 1b04c691eba9c2d9...
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// == END OF TEST DATA ============================================
+
 test("X509.getInfo() DigiCert EV Root", function() {
 var c = new X509(certDigicertPEM);
 equal(c.getInfo(), certDigicertOUT, certDigicertOUT);
@@ -388,6 +426,11 @@ equal(x.getInfo(), danmarksUser1OUT, danmarksUser1OUT);
 test("X509.getInfo() various SAN", function() {
 var x = new X509(san1PEM);
 equal(x.getInfo(), san1OUT, san1OUT);
+});
+
+test("getInfo() for policy related extensions", function() {
+var x = new X509(certpolicy1);
+equal(x.getInfo(), certpolicy1OUT, "for certificate policy related extensions");
 });
 
 });
