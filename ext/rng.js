@@ -29,7 +29,7 @@ if (rng_pool == null) {
   rng_pool = new Array();
   rng_pptr = 0;
   var t;
-  if (window !== undefined &&
+  if (typeof window !== "undefined" &&
       (window.crypto !== undefined ||
        window.msCrypto !== undefined)) {
     var crypto = window.crypto || window.msCrypto;
