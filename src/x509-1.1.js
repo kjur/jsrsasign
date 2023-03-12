@@ -1,4 +1,4 @@
-/* x509-2.1.1.js (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.1.2.js (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.6.1 x509 2.1.1 (2022-Nov-20)
+ * @version jsrsasign 10.7.0 x509 2.1.2 (2023-Mar-11)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -3020,6 +3020,8 @@ function X509(params) {
 	    extParam = this.getExtOcspNoCheck(hExtV, critical);
 	} else if (oid == "1.2.840.113583.1.1.9.1") {
 	    extParam = this.getExtAdobeTimeStamp(hExtV, critical);
+	} else if (X509.EXT_PARSER[oid] != undefined) {
+	    extParam = X509.EXT_PARSER[oid](oid, critical, hExtV);
 	}
 	if (extParam != undefined) return extParam;
 
@@ -3533,6 +3535,56 @@ function X509(params) {
     }
 };
 // ----- END of X509 class -----
+
+/**
+ * additional definition for X.509 extension parsers<br/>
+ * @see X509.registExtParser
+ */
+X509.EXT_PARSER = {
+};
+
+/**
+ * define X.509 extension parser for specified OID<br/>
+ * @name registExtParser
+ * @memberOf X509
+ * @function
+ * @param {string} oid extension OID string (ex. "1.2.3.4")
+ * @param {function} func registering func extension value parsing function
+ * @return unspecified
+ * @since jsrsasign 10.7.0 x509 2.1.2
+ * 
+ * @description
+ * <p>
+ * This static method specifies a X.509 extension value parsing function
+ * for specified an extension OID.
+ * </p>
+ * <p>
+ * Extension parser function must have following three arguments:
+ * <ul>
+ * <li>{string} oid - OID for extension (ex. "1.2.3.4")</li>
+ * <li>{boolean} critical - critical flag of extension</li>
+ * <li>{string} hExtV - hexadecimal string of extension value</li>
+ * </ul>
+ * The funcition must return an associative array for the extension
+ * when hExtV can be parsed properly. Otherwise it must return
+ * value "undefined".
+ * </p>
+ *
+ * @example
+ * function _extparser1(oid, critical, hExtV) {
+ *   try {
+ *     var result = { extname: oid, value: ASN1HEX.parse(hExtV).utf8str.str };
+ *     if (critical) result.critical = true;
+ *     return result;
+ *   } catch(ex) {
+ *     return undefined;
+ *   }
+ * }
+ * X509.registExtParser("1.2.3.4", _extparser1);
+ */
+X509.registExtParser = function(oid, func) {
+    X509.EXT_PARSER[oid] = func;
+};
 
 /**
  * get distinguished name string in OpenSSL online format from hexadecimal string of ASN.1 DER X.500 name<br/>

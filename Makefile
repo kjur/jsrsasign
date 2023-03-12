@@ -67,7 +67,7 @@ jsdoc:
 	)
 	mv $(APIDOCDIR)/symbols/_global_.html $(APIDOCDIR)/symbols/global__.html
 	find $(APIDOCDIR) -type f -name "*.html" -print0 | xargs -0 sed -i.bak -e "s/_global_/global__/g"
-	find $(APIDOCDIR) -type f -name "*.html" -print0 | xargs -0 sed -i.bak -e "s/2012-2020/2012-2021/g"
+	find $(APIDOCDIR) -type f -name "*.html" -print0 | xargs -0 sed -i.bak -e "s/2012-2020/2012-2023/g"
 	find $(APIDOCDIR) -type f -name "*.html.bak" -exec rm {} \;
 	rm -rf ../../_gitpg/jsrsasign/api
 	cp -r $(APIDOCDIR) ../../_gitpg/jsrsasign/api

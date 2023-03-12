@@ -225,6 +225,43 @@ equal(datetozulu(d, true), "170520235959Z", "UTCTime");
 equal(datetozulu(d, false, true), "20170520235959.67Z", "GenTime with milli");
 });
 
+test("timetogen", function() {
+equal(timetogen(  "071231235959Z"), "20071231235959Z",   "071231235959Z");
+equal(timetogen(  "931231235959Z"), "19931231235959Z",   "931231235959Z");
+equal(timetogen(  "561231235959Z"), "19561231235959Z",   "561231235959Z");
+equal(timetogen("20071231235959Z"), "20071231235959Z", "20071231235959Z");
+equal(timetogen(  "071231235959.345Z"), "20071231235959.345Z",   "071231235959.345Z");
+equal(timetogen(  "931231235959.345Z"), "19931231235959.345Z",   "931231235959.345Z");
+equal(timetogen("20071231235959.345Z"), "20071231235959.345Z", "20071231235959.345Z");
+});
+
+test("hextob64nl", function() {
+equal(hextob64nl("042867a6150c948e574bd6478f0646631b015f16179310e4e9f79b905faf058609895deafbdbddd863e5453481ac99fd806d36cfde5a6d6834771c510176b0091ada"), "BChnphUMlI5XS9ZHjwZGYxsBXxYXkxDk6febkF+vBYYJiV3q+9vd2GPlRTSBrJn9\r\ngG02z95abWg0dxxRAXawCRra", "base64 04286...");
+});
+
+test("foldnl", function() {
+equal(foldnl("1234567890", 4), "1234\r\n5678\r\n90", "10 chars 4 cols");
+equal(foldnl("1234567890", 3), "123\r\n456\r\n789\r\n0", "10 chars 3 cols");
+});
+
+test("pemtob64", function() {
+var pem = (function() {/*
+FOO BAR1
+-----BEGIN FOO BAR-----
+gYmDIf2DOqOcwYCKCb3GjDBKBgNVHSMEQzBBgBS7MIUogYmDIf2DOqOcwYCKCb3G
+DN7F1FsLp7jE9oM3kYQl6KYy0pwch6Wd6ypW86pel4JFOEr+LnVGODaoxFE=
+-----END FOO BAR-----
+FOO FOO3
+-----BEGIN FOO FOO-----
+LyhP+OoOTmETMegAVQMq71choVJyOFE5BtQa6M/lCHEOya5QUfoRF2HF9EjRF44K
+3OK+u3ivTSj3zwjtpudY5Xo=
+-----END FOO FOO-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+equal(pemtob64(pem), "gYmDIf2DOqOcwYCKCb3GjDBKBgNVHSMEQzBBgBS7MIUogYmDIf2DOqOcwYCKCb3GDN7F1FsLp7jE9oM3kYQl6KYy0pwch6Wd6ypW86pel4JFOEr+LnVGODaoxFE=", "the first of two pem strings");
+equal(pemtob64("foo"), null, "not pem foo");
+equal(pemtob64("-----BEGIN FOO-----\r\nabcd#%34-----END FOO-----"), null, "not pem %@");
+});
+
 test("pemtohex", function() {
   // _data/z0512.pub.p8
   var pem = "" +

@@ -1,6 +1,19 @@
 
 ChangeLog for jsrsasign
 
+custom X.509 extension support and utility functions
+* Changes from 10.6.1 to 10.7.0 (2023-Mar-12)
+  - x509.js
+    - add X509.registExtParser(): register custom extension parser
+  - base64x.js
+    - add utility functions
+      - b64topem() Base64 string to PEM
+      - pemtob64() PEM to Base64 string
+      - foldnl() wrap string to fit in specified width
+      - timetogen() align to UTCTime to GeneralizedTime
+  - test/qunit-do-{x509-ext,base64x}.html
+    - update and add some test cases for above
+
 Add PolicyMappings, PolicyConstraints and InhibitAnyPolicy extension support
 * Changes from 10.6.0 to 10.6.1 (2022-Nov-20)
   - asn1x509.js

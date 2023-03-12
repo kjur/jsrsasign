@@ -79,6 +79,10 @@ exports.binstrtobitstr = binstrtobitstr;
 exports.isBase64URLDot = isBase64URLDot;
 exports.namearraytobinstr = namearraytobinstr;
 exports.extendClass = extendClass;
+exports.foldnl = foldnl;
+exports.b64topem = b64topem;
+exports.pemtob64 = pemtob64;
+exports.timeogen = timetogen;
 
 // name spaces
 exports.KJUR = KJUR;
@@ -86,5 +90,9 @@ exports.crypto = KJUR.crypto;
 exports.asn1 = KJUR.asn1;
 exports.jws = KJUR.jws;
 exports.lang = KJUR.lang;
+
+exports.VERSION = VERSION;
+exports.VERSION_FULL = VERSION_FULL;
+
 
 
