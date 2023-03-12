@@ -1,9 +1,9 @@
-/* base64x-1.1.30 (c) 2012-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* base64x-1.1.31 (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
  *
- * Copyright (c) 2012-2022 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2012-2023 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.25 base64x 1.1.30 (2022-Jun-23)
+ * @version jsrsasign 10.7.0 base64x 1.1.31 (2023-Mar-11)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -513,10 +513,27 @@ function hextob64(s) {
  * OTAxMjM0NTY3ODkwCg==
  */
 function hextob64nl(s) {
-    var b64 = hextob64(s);
-    var b64nl = b64.replace(/(.{64})/g, "$1\r\n");
-    b64nl = b64nl.replace(/\r\n$/, '');
-    return b64nl;
+    return foldnl(hextob64(s), 64);
+}
+
+/**
+ * wrap string with new lines to fit in specified width<br/>
+ * @name foldnl
+ * @function
+ * @param {string} s string
+ * @param {number} n width
+ * @return {string} wrapped string with new lines
+ * @since jsrsasign 10.7.0 base64x 1.1.31
+ * @description
+ * This function wrap a string with new lines to fit in specified width.
+ * @example
+ * foldnl("1234567890", 6)
+ * &rarr;
+ * 123456
+ * 7890
+ */
+function foldnl(s, n) {
+    return s.replace(new RegExp('(.{' + n + '})', 'g'), "$1\r\n");
 }
 
 /**
@@ -545,6 +562,32 @@ function b64nltohex(s) {
     return hex;
 } 
 
+// ==== b64 / pem =========================================
+/**
+ * get PEM string from Base64 string
+ * @name b64topem
+ * @function
+ * @param {string} b64 Base64 string of PEM body
+ * @param {string} pemHeader PEM header string (ex. 'RSA PRIVATE KEY')
+ * @return {string} PEM formatted string of input data
+ * @since jsrasign 10.7.0 base64x 1.1.31
+ * @description
+ * This function converts a Base64 string to a PEM string with
+ * a specified header. Its line break will be CRLF("\r\n").
+ * @example
+ * b64topem('YWFh', 'RSA PRIVATE KEY') &rarr;
+ * -----BEGIN PRIVATE KEY-----
+ * YWFh
+ * -----END PRIVATE KEY-----
+ */
+function b64topem(b64, pemHeader) {
+    return "-----BEGIN " + pemHeader + "-----\r\n" + 
+	foldnl(b64, 64) +
+        "\r\n-----END " + pemHeader + "-----\r\n";
+}
+
+
+
 // ==== hex / pem =========================================
 
 /**
@@ -565,9 +608,8 @@ function b64nltohex(s) {
  * -----END PRIVATE KEY-----
  */
 function hextopem(dataHex, pemHeader) {
-    var pemBody = hextob64nl(dataHex);
     return "-----BEGIN " + pemHeader + "-----\r\n" + 
-        pemBody + 
+	foldnl(hextob64(dataHex), 64) +
         "\r\n-----END " + pemHeader + "-----\r\n";
 }
 
@@ -579,6 +621,7 @@ function hextopem(dataHex, pemHeader) {
  * @param {String} sHead PEM header string without BEGIN/END(OPTION)
  * @return {String} hexadecimal string data of PEM contents
  * @since jsrsasign 7.2.1 base64x 1.1.12
+ *
  * @description
  * This static method gets a hexacedimal string of contents 
  * from PEM format data. You can explicitly specify PEM header 
@@ -586,10 +629,11 @@ function hextopem(dataHex, pemHeader) {
  * Any space characters such as white space or new line
  * will be omitted.<br/>
  * NOTE: Now {@link KEYUTIL.getHexFromPEM} and {@link X509.pemToHex}
- * have been deprecated since jsrsasign 7.2.1. 
+ * have been deprecated since jsrsasign 7.2.1. <br/>
  * Please use this method instead.
  * NOTE2: From jsrsasign 8.0.14 this can process multi
- * "BEGIN...END" section such as "EC PRIVATE KEY" with "EC PARAMETERS".
+ * "BEGIN...END" section such as "EC PRIVATE KEY" with "EC PARAMETERS".<br/>
+ *
  * @example
  * pemtohex("-----BEGIN PUBLIC KEY...") &rarr; "3082..."
  * pemtohex("-----BEGIN CERTIFICATE...", "CERTIFICATE") &rarr; "3082..."
@@ -598,7 +642,7 @@ function hextopem(dataHex, pemHeader) {
  */
 function pemtohex(s, sHead) {
     if (s.indexOf("-----BEGIN ") == -1)
-        throw "can't find PEM header: " + sHead;
+        throw new Error("can't find PEM header");
 
     if (sHead !== undefined) {
         s = s.replace(new RegExp('^[^]*-----BEGIN ' + sHead + '-----'), '');
@@ -608,6 +652,31 @@ function pemtohex(s, sHead) {
         s = s.replace(/-----END [^-]+-----[^]*$/, '');
     }
     return b64nltohex(s);
+}
+
+/**
+ * get Base64 string from PEM format data<br/>
+ * @name pemtob64
+ * @function
+ * @param {string} s PEM formatted string
+ * @return {string} Base64 string or null
+ * @since jsrsasign 10.7.0 base64x 1.1.31
+ *
+ * @description
+ * This static method gets a Base64 string of contents 
+ * from PEM format data.
+ * When s is not PEM data, it returns null.
+ *
+ * @example
+ * pemtohex("-----BEGIN CERTIFICATE...", "CERTIFICATE") &rarr; "MIIBvTCC..."
+ */
+function pemtob64(s) {
+    if (s.indexOf("-----BEGIN ") == -1 ||
+        s.indexOf("-----END ") == -1 ) return null;
+    s = s.replace(/^[\s\S]*?-----BEGIN [^-]+-----/m, '');
+    s = s.replace(/-----END [\s\S]+$/m, '');
+    s = s.replace(/\s+/g, '');
+    return (s.match(/^[0-9a-zA-Z+/=]+$/)) ? s : null;
 }
 
 // ==== hex / ArrayBuffer =================================
@@ -695,18 +764,11 @@ function zulutomsec(s) {
     var year, month, day, hour, min, sec, msec, d;
     var sYear, sFrac, sMsec, matchResult;
 
-    matchResult = s.match(/^(\d{2}|\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)(|\.\d+)Z$/);
+    s = timetogen(s);
+    matchResult = s.match(/^(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)(|\.\d+)Z$/);
 
     if (matchResult) {
-        sYear = matchResult[1];
-	year = parseInt(sYear);
-        if (sYear.length === 2) {
-	    if (50 <= year && year < 100) {
-		year = 1900 + year;
-	    } else if (0 <= year && year < 50) {
-		year = 2000 + year;
-	    }
-	}
+	year = parseInt(matchResult[1]);
 	month = parseInt(matchResult[2]) - 1;
 	day = parseInt(matchResult[3]);
 	hour = parseInt(matchResult[4]);
@@ -773,8 +835,6 @@ function zulutodate(s) {
     return new Date(zulutomsec(s));
 }
 
-// ==== Date / zulu =================================
-
 /**
  * Date object to zulu time string<br>
  * @name datetozulu
@@ -821,6 +881,33 @@ function datetozulu(d, flagUTCTime, flagMilli) {
 	}
     }
     s += "Z";
+    return s;
+}
+
+/**
+ * GeneralizedTime or UTCTime string to GeneralizedTime<br>
+ * @name timetogen
+ * @function
+ * @param {string} s GeneralizedTime or UTCTime string (ex. 20170412235959.384Z)
+ * @return {string} GeneralizedTime
+ * @since jsrsasign 10.7.0 base64x 1.1.31
+ * @description
+ * This function converts UTCTime string (i.e. YYMMDDHHmmSSZ ) to 
+ * GeneralizedTime (YYYYMMDDHHmmSSZ) when the argument 's' is UTCTime. 
+ * Argument string may have fraction of seconds and
+ * its length is one or more digits such as "170410235959.1234567Z".
+ * As for UTCTime, if year "YY" is equal or less than 49 then it is 20YY.
+ * If year "YY" is equal or greater than 50 then it is 19YY.
+ * @example
+ * timetogen(  "071231235959Z") &rarr; "20071231235959Z"
+ * timetogen(  "971231235959Z") &rarr; "19971231235959Z"
+ * timetogen("20071231235959Z") &rarr; "20071231235959Z"
+ * timetogen(  "971231235959.123Z") &rarr; "19971231235959.123Z"
+ */
+function timetogen(s) {
+    if (s.match(/^[0-9]{12}Z$/) || s.match(/^[0-9]{12}[.][0-9]*Z$/)) {
+	return (s.match(/^[0-4]/)) ? "20" + s : "19" + s;
+    }
     return s;
 }
 

@@ -1167,6 +1167,30 @@ deepEqual(x.getGeneralSubtree(hIn), pExpect, "{dn: /C=US/O=...}");
 
 });
 
+test("X509.registExtParser", function() {
+var x = new X509();
+function _f1(oid, critical, hExtV) {
+    try {
+	var result = { extname: oid, value: ASN1HEX.parse(hExtV).utf8str.str };
+	if (critical) result.critical = true;
+	return result;
+    } catch(ex) {
+	return undefined;
+    }
+}
+X509.registExtParser("1.2.392.100300.1.1.2", _f1);
+var pExp = {
+    extname: "1.2.392.100300.1.1.2",
+    value: "東京"
+};
+deepEqual(x.getExtParam("301506092a8308868f4c01010204080c06e69db1e4baac"), pExp, "success case");
+var pExp2 = {
+    extname: "1.2.392.100300.1.1.2",
+    extn: "1306e69db1e4baac"
+};
+deepEqual(x.getExtParam("301506092a8308868f4c01010204081306e69db1e4baac"), pExp2, "fail case");
+});
+
 });
 </script>
   

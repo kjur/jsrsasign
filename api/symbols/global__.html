@@ -596,6 +596,17 @@ string with new lines to a hexadecimal string.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#b64topem">b64topem</a></b>(b64, pemHeader)
+								</div>
+								<div class="description">get PEM string from Base64 string
+This function converts a Base64 string to a PEM string with
+a specified header.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#b64toutf8">b64toutf8</a></b>(s)
 								</div>
 								<div class="description">convert a Base64 encoded string to a UTF-8 encoded string including CJK or Latin.</div>
@@ -715,6 +726,16 @@ This function converts from Date object to GeneralizedTime string (i.e.</div>
 								<div class="description">set class inheritance<br/>
 This function extends a class and set an inheritance
 for member variables and methods.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#foldnl">foldnl</a></b>(s, n)
+								</div>
+								<div class="description">wrap string with new lines to fit in specified width<br/>
+This function wrap a string with new lines to fit in specified width.</div>
 							</td>
 						</tr>
 					
@@ -966,6 +987,17 @@ This static method converts from object identifier value string.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#pemtob64">pemtob64</a></b>(s)
+								</div>
+								<div class="description">get Base64 string from PEM format data<br/>
+This static method gets a Base64 string of contents 
+from PEM format data.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#pemtohex">pemtohex</a></b>(s, sHead)
 								</div>
 								<div class="description">get hexacedimal string from PEM format data<br/>
@@ -1134,6 +1166,16 @@ This function only works in Node.js.</div>
 								<div class="fixedFont"><b><a href="../symbols/global__.html#strpad">strpad</a></b>(s, len, padchar)
 								</div>
 								<div class="description">string padding<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#timetogen">timetogen</a></b>(s)
+								</div>
+								<div class="description">GeneralizedTime or UTCTime string to GeneralizedTime<br>
+This function converts UTCTime string (i.e.</div>
 							</td>
 						</tr>
 					
@@ -1422,6 +1464,73 @@ including new line.
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> Base64URL encoded string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="b64topem"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{string}</span>
+					<b>b64topem</b>(b64, pemHeader)
+					
+					</div>
+					<div class="description">
+						get PEM string from Base64 string
+This function converts a Base64 string to a PEM string with
+a specified header. Its line break will be CRLF("\r\n").
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">b64topem('YWFh', 'RSA PRIVATE KEY') &rarr;
+-----BEGIN PRIVATE KEY-----
+YWFh
+-----END PRIVATE KEY-----</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>b64</b>
+									
+								</dt>
+								<dd>Base64 string of PEM body</dd>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>pemHeader</b>
+									
+								</dt>
+								<dd>PEM header string (ex. 'RSA PRIVATE KEY')</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrasign 10.7.0 base64x 1.1.31</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> PEM formatted string of input data</dd>
 							
 							</dl>
 						
@@ -2195,6 +2304,72 @@ extendClass(Dog, Animal);</pre>
 							</dl>
 						
 						
+						
+						
+						
+
+					<hr />
+				
+					<a name="foldnl"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{string}</span>
+					<b>foldnl</b>(s, n)
+					
+					</div>
+					<div class="description">
+						wrap string with new lines to fit in specified width<br/>
+This function wrap a string with new lines to fit in specified width.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">foldnl("1234567890", 6)
+&rarr;
+123456
+7890</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>s</b>
+									
+								</dt>
+								<dd>string</dd>
+							
+								<dt>
+									<span class="light fixedFont">{number}</span> <b>n</b>
+									
+								</dt>
+								<dd>width</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.7.0 base64x 1.1.31</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> wrapped string with new lines</dd>
+							
+							</dl>
 						
 						
 						
@@ -3691,6 +3866,65 @@ to hexadecimal string representation of it.
 
 					<hr />
 				
+					<a name="pemtob64"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{string}</span>
+					<b>pemtob64</b>(s)
+					
+					</div>
+					<div class="description">
+						get Base64 string from PEM format data<br/>
+This static method gets a Base64 string of contents 
+from PEM format data.
+When s is not PEM data, it returns null.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">pemtohex("-----BEGIN CERTIFICATE...", "CERTIFICATE") &rarr; "MIIBvTCC..."</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>s</b>
+									
+								</dt>
+								<dd>PEM formatted string</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.7.0 base64x 1.1.31</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> Base64 string or null</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="pemtohex"> </a>
 					<div class="fixedFont">
 					
@@ -3706,10 +3940,10 @@ by sHead argument.
 Any space characters such as white space or new line
 will be omitted.<br/>
 NOTE: Now KEYUTIL.getHexFromPEM and X509.pemToHex
-have been deprecated since jsrsasign 7.2.1. 
+have been deprecated since jsrsasign 7.2.1. <br/>
 Please use this method instead.
 NOTE2: From jsrsasign 8.0.14 this can process multi
-"BEGIN...END" section such as "EC PRIVATE KEY" with "EC PARAMETERS".
+"BEGIN...END" section such as "EC PRIVATE KEY" with "EC PARAMETERS".<br/>
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
@@ -4662,6 +4896,71 @@ strpad("1234", 10)      &rarr; "0000001234"</pre>
 
 					<hr />
 				
+					<a name="timetogen"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{string}</span>
+					<b>timetogen</b>(s)
+					
+					</div>
+					<div class="description">
+						GeneralizedTime or UTCTime string to GeneralizedTime<br>
+This function converts UTCTime string (i.e. YYMMDDHHmmSSZ ) to 
+GeneralizedTime (YYYYMMDDHHmmSSZ) when the argument 's' is UTCTime. 
+Argument string may have fraction of seconds and
+its length is one or more digits such as "170410235959.1234567Z".
+As for UTCTime, if year "YY" is equal or less than 49 then it is 20YY.
+If year "YY" is equal or greater than 50 then it is 19YY.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">timetogen(  "071231235959Z") &rarr; "20071231235959Z"
+timetogen(  "971231235959Z") &rarr; "19971231235959Z"
+timetogen("20071231235959Z") &rarr; "20071231235959Z"
+timetogen(  "971231235959.123Z") &rarr; "19971231235959.123Z"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>s</b>
+									
+								</dt>
+								<dd>GeneralizedTime or UTCTime string (ex. 20170412235959.384Z)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.7.0 base64x 1.1.31</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> GeneralizedTime</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="ucs2hextoutf8"> </a>
 					<div class="fixedFont">
 					
@@ -5268,9 +5567,9 @@ zulutosec("20071231235959Z")       &rarr; 1199145599 #Mon, 31 Dec 2007 23:59:59 
 		
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
-                        &copy; 2012-2022 Kenji Urushima, All rights reserved<br/>
+                        &copy; 2012-2023 Kenji Urushima, All rights reserved<br/>
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 
+			Documentation generated by <a href="https://code.google.com/archive/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 
 		</div>
 	</body>
 </html>
