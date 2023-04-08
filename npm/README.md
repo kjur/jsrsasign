@@ -18,8 +18,22 @@ Public page is https://kjur.github.io/jsrsasign .
 
 Your bugfix and pull request contribution are always welcomed :)
 
+NOTICE FOR COMMING 11.0.0 RELEASE
+---------------------------------
+The "jsrsasign" library is a long lived JavaScript library from 2010 developed with old JavaScript style and backword compatibility. From coming release 11.0.0, following are planed and suport them gradually:
+- Stop to support Internet Explorer.
+- Stop to support bower.
+- Modern ECMA functions will be introduced such as Promise, let, Array methods or class.
+- API document generator will be changed from Jsdoc Toolkit to JSDoc3.
+- Module bandler will be used such as browserify or webpack.
+- Not to use YUI compressor.
+- Unit test framework will be changed from QUnit and mocha to jest.
+- W3C Web Crypto API support.
+- split into some modules besides jsrsasign have been all in package before 11.0.0.
+
 NEWS
 ----
+- 2023-Mar-12: [10.7.0 Release](https://github.com/kjur/jsrsasign/releases/tag/10.7.0). Now supports custom X.509 extension and custom OIDs by new "Add-on" architecture. ([See here in detail](https://github.com/kjur/jsrsasign/wiki/jsrsasign-Add-On2))
 - 2021-Nov-21: [10.5.0 Release](https://github.com/kjur/jsrsasign/releases/tag/10.5.0). Now supports secp521r1(P-521) ECDSA.
 - 2021-Apr-14: [Security advisory](https://github.com/kjur/jsrsasign/security/advisories/GHSA-27fj-mc8w-j9wg) and [update](https://github.com/kjur/jsrsasign/releases/tag/10.2.0) for CVE-2021-30246 RSA signature validation vulnerability published
 - 2020-Oct-05: jsrsasign won [Google Open Source Peer Bonus Award](https://opensource.googleblog.com/2020/10/announcing-latest-google-open-source.html). Thank you Google.
@@ -39,7 +53,8 @@ HIGHLIGHTS
 - no dependency to other library
 - no dependency to [W3C Web Cryptography API](https://www.w3.org/TR/WebCryptoAPI/) nor [OpenSSL](https://www.openssl.org/)
 - no dependency on newer ECMAScirpt function. So old browsers also supported. 
-- very popular crypto library with [1M+ npm downloads/month](https://npm-stat.com/charts.html?package=jsrsasign&from=2016-05-01&to=2022-11-18)
+- very popular crypto library with [1M+ npm downloads/month](https://npm-stat.com/charts.html?package=jsrsasign&from=2016-05-01&to=2023-04-05)
+- supports "Add-on" architecture
 
 INSTALL
 -------

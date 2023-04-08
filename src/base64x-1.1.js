@@ -1,4 +1,4 @@
-/* base64x-1.1.31 (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* base64x-1.1.32 (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.7.0 base64x 1.1.31 (2023-Mar-11)
+ * @version jsrsasign 10.8.0 base64x 1.1.32 (2023-Apr-08)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -784,6 +784,38 @@ function zulutomsec(s) {
 	return Date.UTC(year, month, day, hour, min, sec, msec);
     }
     throw new Error("unsupported zulu format: " + s);
+}
+
+/**
+ * Unix origin milliseconds GeneralizedTime string<br>
+ * @name msectozulu
+ * @function
+ * @param {number} n milliseconds from Unix origin time (i.e. Jan 1, 1970 0:00:00 UTC)
+ * @return {string} GeneralizedTime string (ex. 20170412235959.384Z)
+ * @since jsrsasign 10.8.0 base64x 1.1.31
+ *
+ * @description
+ * This function converts from milliseconds of Unix origin time (ex. 1199145599000
+ * for 31 Dec 2007 23:59:59 GMT) to GeneralizedTime string (i.e. YYYYMMDDHHmmSSZ).
+ * The result string may have a fraction of second.
+ *
+ * @example
+ * msectozulu(1199145599000) &rarr; "20071231235959Z"       #Mon, 31 Dec 2007 23:59:59     GMT
+ * msectozulu(1199145599100) &rarr; "20071231235959.1Z"     #Mon, 31 Dec 2007 23:59:59.1   GMT
+ * msectozulu(1199145599123) &rarr; "20071231235959.123Z"   #Mon, 31 Dec 2007 23:59:59.123 GMT
+ */
+function msectozulu(n) {
+    var d = new Date(n),
+        year = ("0000" + d.getUTCFullYear()).slice(-4),
+        mon =  ("00" + (d.getUTCMonth() + 1)).slice(-2),
+        day =  ("00" + d.getUTCDate()).slice(-2),
+        hour = ("00" + d.getUTCHours()).slice(-2),
+        min =  ("00" + d.getUTCMinutes()).slice(-2),
+        sec =  ("00" + d.getUTCSeconds()).slice(-2),
+	msec = ("000" + d.getUTCMilliseconds()).slice(-3);
+    msec = msec.replace(/0+$/, '');
+    msec = (msec != '') ? '.' + msec : msec;
+    return year + mon + day + hour + min + sec + msec + "Z";
 }
 
 /**
@@ -1941,6 +1973,49 @@ function namearraytobinstr (namearray, namedb) {
     }
     return r;
 }
+
+/**
+ * get value of array by key name list<br/>
+ * @function
+ * @param {object} val array of associative array
+ * @param {string} keys concatinated key list with dot (ex. 'type.name.0.info')
+ * @param {object} def default value if value is not found (OPTIONAL)
+ * @return {object} value if found otherwise returns def
+ * @since jsrsasign 10.8.0 base64x 1.1.32
+ *
+ * @description
+ * This function returns the value of an array or associative array 
+ * which referred by a concatinated key list string.
+ * If a value for key is not defined, it returns 'undefined' by default.
+ * When an optional argument 'def' is specified and a value for key is
+ * not defined, it returns a value of 'def'.
+ * 
+ * @example
+ * let p = {
+ *   fruit: apple,
+ *   info: [
+ *     { toy: 4 },
+ *     { pen: 6 }
+ *   ]
+ * };
+ * aryval(p, 'fruit') &rarr "apple"
+ * aryval(p, 'info') &rarr [{toy: 4},{pen: 6}]
+ * aryval(p, 'info.1') &rarr {pen: 6}
+ * aryval(p, 'info.1.pen') &rarr 6
+ * aryval(p, 'money.amount') &rarr undefined
+ * aryval(p, 'money.amount', null) &rarr null
+ */
+function aryval(val, keys, def) {
+    if (typeof val != "object") return undefined
+    var keys = String(keys).split('.');
+    for (var i = 0; i < keys.length && val; i++) {
+	var key = keys[i];
+	if (key.match(/^[0-9]+$/)) key = parseInt(key);
+        val = val[key];
+    }
+    return val || val === false ? val : def;
+}
+
 
 // =======================================================
 /**

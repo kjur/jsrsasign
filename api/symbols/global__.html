@@ -576,6 +576,17 @@ This function converts from an ArrayBuffer to a hexadecimal string.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#aryval">aryval</a></b>(val, keys, def)
+								</div>
+								<div class="description">get value of array by key name list<br/>
+This function returns the value of an array or associative array 
+which referred by a concatinated key list string.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#b64nltohex">b64nltohex</a></b>(s)
 								</div>
 								<div class="description">convert a Base64 encoded string with new lines to a hexadecimal string<br/>
@@ -940,6 +951,16 @@ Input string can conclude new lines or space characters.</div>
 								<div class="fixedFont"><b><a href="../symbols/global__.html#iso88591hextoutf8hex">iso88591hextoutf8hex</a></b>(h)
 								</div>
 								<div class="description">convert a hexadecimal ISO 8859-1 latin string to UTF-8 hexadecimal string<br/></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#msectozulu">msectozulu</a></b>(n)
+								</div>
+								<div class="description">Unix origin milliseconds GeneralizedTime string<br>
+This function converts from milliseconds of Unix origin time (ex.</div>
 							</td>
 						</tr>
 					
@@ -1349,6 +1370,91 @@ ArrayBuffertohex(buffer) &rarr; "fafb01"</pre>
 							<dt class="heading">Returns:</dt>
 							
 								<dd><span class="light fixedFont">{String}</span> hexadecimal string</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="aryval"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{object}</span>
+					<b>aryval</b>(val, keys, def)
+					
+					</div>
+					<div class="description">
+						get value of array by key name list<br/>
+This function returns the value of an array or associative array 
+which referred by a concatinated key list string.
+If a value for key is not defined, it returns 'undefined' by default.
+When an optional argument 'def' is specified and a value for key is
+not defined, it returns a value of 'def'.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">let p = {
+  fruit: apple,
+  info: [
+    { toy: 4 },
+    { pen: 6 }
+  ]
+};
+aryval(p, 'fruit') &rarr "apple"
+aryval(p, 'info') &rarr [{toy: 4},{pen: 6}]
+aryval(p, 'info.1') &rarr {pen: 6}
+aryval(p, 'info.1.pen') &rarr 6
+aryval(p, 'money.amount') &rarr undefined
+aryval(p, 'money.amount', null) &rarr null</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>val</b>
+									
+								</dt>
+								<dd>array of associative array</dd>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>keys</b>
+									
+								</dt>
+								<dd>concatinated key list with dot (ex. 'type.name.0.info')</dd>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>def</b>
+									
+								</dt>
+								<dd>default value if value is not found (OPTIONAL)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.8.0 base64x 1.1.32</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> value if found otherwise returns def</dd>
 							
 							</dl>
 						
@@ -3621,6 +3727,67 @@ ishex("121") &rarr; false -- odd length</pre>
 								<dd><a href="../symbols/global__.html#utf8hextoiso88591hex">utf8hextoiso88591hex</a></dd>
 							
 							</dl>
+						
+
+					<hr />
+				
+					<a name="msectozulu"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{string}</span>
+					<b>msectozulu</b>(n)
+					
+					</div>
+					<div class="description">
+						Unix origin milliseconds GeneralizedTime string<br>
+This function converts from milliseconds of Unix origin time (ex. 1199145599000
+for 31 Dec 2007 23:59:59 GMT) to GeneralizedTime string (i.e. YYYYMMDDHHmmSSZ).
+The result string may have a fraction of second.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">msectozulu(1199145599000) &rarr; "20071231235959Z"       #Mon, 31 Dec 2007 23:59:59     GMT
+msectozulu(1199145599100) &rarr; "20071231235959.1Z"     #Mon, 31 Dec 2007 23:59:59.1   GMT
+msectozulu(1199145599123) &rarr; "20071231235959.123Z"   #Mon, 31 Dec 2007 23:59:59.123 GMT</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{number}</span> <b>n</b>
+									
+								</dt>
+								<dd>milliseconds from Unix origin time (i.e. Jan 1, 1970 0:00:00 UTC)</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.8.0 base64x 1.1.31</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> GeneralizedTime string (ex. 20170412235959.384Z)</dd>
+							
+							</dl>
+						
+						
 						
 
 					<hr />

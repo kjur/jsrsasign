@@ -1,6 +1,19 @@
 
 ChangeLog for jsrsasign
 
+UserNotice of CertificatePolicies support and more
+* Changes from 10.7.0 to 10.8.0 (2023-Apr-8)
+  - x509.js
+    - X509.getUserNotice supports NoticeReference
+    - add asn1ToDisplayText method
+  - base64x.js
+    - add function msectozulu
+    - add aryval for nested JSON value access
+  - asn1.js
+    - DERInteger refactoring
+  - test/qunit-do-{asn1,asn1x509,base64x,x509-ext}.html
+    - update and add some test cases for above
+
 custom X.509 extension support and utility functions
 * Changes from 10.6.1 to 10.7.0 (2023-Mar-12)
   - x509.js

@@ -1,4 +1,4 @@
-/* asn1-1.0.26.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1-1.0.27.js (c) 2013-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.22 asn1 1.0.26 (2022-May-24)
+ * @version jsrsasign 10.8.0 asn1 1.0.27 (2023-Apr-08)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -891,6 +891,8 @@ extendClass(KJUR.asn1.DERBoolean, KJUR.asn1.ASN1Object);
 KJUR.asn1.DERInteger = function(params) {
     KJUR.asn1.DERInteger.superclass.constructor.call(this);
     this.hT = "02";
+    this.params = null;
+    var _biToTwoCompl = KJUR.asn1.ASN1Util.bigIntToMinTwosComplementsHex;
 
     /**
      * set value by Tom Wu's BigInteger object
@@ -900,9 +902,8 @@ KJUR.asn1.DERInteger = function(params) {
      * @param {BigInteger} bigIntegerValue to set
      */
     this.setByBigInteger = function(bigIntegerValue) {
-        this.hTLV = null;
-        this.isModified = true;
-        this.hV = KJUR.asn1.ASN1Util.bigIntToMinTwosComplementsHex(bigIntegerValue);
+	this.isModified = true;
+	this.params = { bigint: bigIntegerValue };
     };
 
     /**
@@ -913,8 +914,8 @@ KJUR.asn1.DERInteger = function(params) {
      * @param {Integer} integer value to set
      */
     this.setByInteger = function(intValue) {
-        var bi = new BigInteger(String(intValue), 10);
-        this.setByBigInteger(bi);
+	this.isModified = true;
+	this.params = intValue;
     };
 
     /**
@@ -931,25 +932,38 @@ KJUR.asn1.DERInteger = function(params) {
      * new KJUR.asn1.DERInteger(123);
      * new KJUR.asn1.DERInteger({'int': 123});
      * new KJUR.asn1.DERInteger({'hex': '1fad'});
+     * new KJUR.asn1.DERInteger({'bigint': new BigInteger("1234", 10)});
      */
     this.setValueHex = function(newHexString) {
-        this.hV = newHexString;
+	this.isModified = true;
+	this.params = { hex: newHexString };
     };
 
     this.getFreshValueHex = function() {
+	var params = this.params;
+	var bi = null;
+	if (params == null) throw new Error("value not set");
+
+	if (typeof params == "object" && params.hex != undefined) {
+	    this.hV = params.hex;
+            return this.hV;
+	}
+
+	if (typeof params == "number") {
+	    bi = new BigInteger(String(params), 10);
+	} else if (params["int"] != undefined) {
+	    bi = new BigInteger(String(params["int"]), 10);
+	} else if (params.bigint != undefined) {
+	    bi = params.bigint;
+	} else {
+	    throw new Error("wrong parameter");
+	}
+	this.hV = _biToTwoCompl(bi);
         return this.hV;
     };
 
-    if (typeof params != "undefined") {
-        if (typeof params['bigint'] != "undefined") {
-            this.setByBigInteger(params['bigint']);
-        } else if (typeof params['int'] != "undefined") {
-            this.setByInteger(params['int']);
-        } else if (typeof params == "number") {
-            this.setByInteger(params);
-        } else if (typeof params['hex'] != "undefined") {
-            this.setValueHex(params['hex']);
-        }
+    if (params != undefined) {
+	this.params = params;
     }
 };
 extendClass(KJUR.asn1.DERInteger, KJUR.asn1.ASN1Object);

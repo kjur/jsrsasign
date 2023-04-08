@@ -670,9 +670,9 @@ test("getExtAIAInfo test (DEPRECATED)", function() {
 });
 
 test("getExtCertificatePolicies", function() {
-var x = new X509(certGithubPEM);
+var x1 = new X509(certGithubPEM);
 deepEqual(
-x.getExtCertificatePolicies(),
+x1.getExtCertificatePolicies(),
 { extname:"certificatePolicies",
   array: [{
     policyoid: "2.16.840.1.114412.2.1",
@@ -682,9 +682,9 @@ x.getExtCertificatePolicies(),
 "for GitHub.com site"
 );  
 
-var x1 = new X509(pulseCioGovPEM);
+var x2 = new X509(pulseCioGovPEM);
 deepEqual(
-x1.getExtCertificatePolicies(),
+x2.getExtCertificatePolicies(),
 { extname:"certificatePolicies",
   array: [{
     policyoid: "2.23.140.1.2.1"
@@ -698,12 +698,128 @@ x1.getExtCertificatePolicies(),
 },
 "for pulse.cio.gov site Let's Encrypt cert");
 
+var x3 = new X509();
+var hIn = "3081b03081ad06092a8308868f4c01030330819f30819c06082b0601050507020230818f301a1a134d696e6973747279206f66204a75737469636530030201011a7154686973206365727469666963617465207761732069737375656420696e206163636f7264616e636520776974682074686520436f6d6d65726369616c20526567697374726174696f6e2041637420616e6420746865206f746865722072656c6174656420726567756c6174696f6e732e";
+var pExp = {
+    extname: "certificatePolicies",
+    array: [{
+	policyoid: "1.2.392.100300.1.3.3",
+	array: [{
+	    unotice: {
+		noticeref: {
+		    org: {type: "vis", str: "Ministry of Justice"},
+		    noticenum: [1]
+		},
+		exptext: {
+		    type: "vis",
+		    str: "This certificate was issued in accordance with the Commercial Registration Act and the other related regulations."
+		}
+	    }
+	}]
+    }]
+};
+deepEqual(x3.getExtCertificatePolicies(hIn, false), pExp, "moj CP");
+});
+
+test("_asn1ToUnotice", function() {
+var pIn, pExpect;
+var x = new X509();
+
+pIn = {
+  seq: [
+      {
+	  seq: [
+              {utf8str: {str: "test utf8 org name"}},
+              {seq: [{"int": {hex: "01"}}]}
+	  ]
+      },
+      {"utf8str": {"str": "test utf8 explicit text"}}
+  ]
+};
+pExpect = { 
+  noticeref: {
+    org: { type: "utf8", str: "test utf8 org name" },
+    noticenum: [1]
+  },
+  exptext: { type: "utf8", str: "test utf8 explicit text" }
+};
+deepEqual(x._asn1ToUnotice(pIn), pExpect, "noticeref, exptext");
+
+pIn = { seq: [ {"utf8str": {"str": "test utf8 explicit text"}} ] };
+pExpect = { exptext: { type: "utf8", str: "test utf8 explicit text" } };
+deepEqual(x._asn1ToUnotice(pIn), pExpect, "exptext");
+
+pIn = {
+  seq: [
+      {
+	  seq: [
+              {utf8str: {str: "test utf8 org name"}},
+              {seq: [{"int": {hex: "01"}}]}
+	  ]
+      }
+  ]
+};
+pExpect = { 
+  noticeref: {
+    org: { type: "utf8", str: "test utf8 org name" },
+    noticenum: [1]
+  }
+};
+deepEqual(x._asn1ToUnotice(pIn), pExpect, "noticeref");
+
+});
+
+test("_asn1ToNoticeRef", function() {
+var pIn, pExpect;
+var x = new X509();
+
+pIn = {
+    "seq": [
+        {"utf8str": {"str": "test utf8 org name"}},
+        {"seq": [{"int": {"hex": "01"}}]}
+    ]
+};
+pExpect = {
+    org: { type: "utf8", str: "test utf8 org name" },
+    noticenum: [1]
+};
+deepEqual(x._asn1ToNoticeRef(pIn), pExpect, "org, num");
+
+pIn = {"seq": [{"utf8str": {"str": "test utf8 org name"}}]};
+pExpect = { org: { type: "utf8", str: "test utf8 org name" } };
+deepEqual(x._asn1ToNoticeRef(pIn), pExpect, "org");
+
+pIn = {"seq": [{"seq": [{"int": {"hex": "01"}}]}]};
+pExpect = {noticenum: [1]};
+deepEqual(x._asn1ToNoticeRef(pIn), pExpect, "num");
+
+});
+
+test("_asn1ToNoticeNum", function() {
+    var pIn, pExpect;
+    var x = new X509();
+    pIn = {seq: [{"int": {hex: "01"}}, {"int": {hex: 16}}]};
+    pExpect = [1, 22];
+    deepEqual(x._asn1ToNoticeNum(pIn), pExpect, "[1, 22]");
+});
+
+test("getUserNotice", function() {
+var hIn, pExpect;
+var x = new X509();
+hIn = "303430190c12746573742075746638206f7267206e616d6530030201010c17746573742075746638206578706c696369742074657874";
+pExpect = {
+    noticeref: {
+	org: { type: "utf8", str: "test utf8 org name" },
+	noticenum: [1]
+    },
+    exptext: { type: "utf8", str: "test utf8 explicit text" }
+}
+deepEqual(x.getUserNotice(hIn), pExpect, "sample UserNotice");
 });
 
 test("getExtPolicyMappings", function() {
 var hIn, pExpect;
 var x = new X509();
-
 hIn = "300c300a0604551d200006020102";
 pExpect = {
   extname: "policyMappings",
@@ -1212,6 +1328,6 @@ deepEqual(x.getExtParam("301506092a8308868f4c01010204081306e69db1e4baac"), pExp2
 </p>
 
 </body>
-<center><p>&copy; 2015-2022 Kenji Urushima</p></center>
+<center><p>&copy; 2015-2023 Kenji Urushima</p></center>
 </html>
 
