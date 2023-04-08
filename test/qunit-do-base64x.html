@@ -197,6 +197,13 @@ equal(zulutomsec("20071231235959.345Z"), 1199145599345, "20071231235959.345Z");
 equal(zulutomsec("561231235959Z"), -410227201000, "561231235959Z");
 });
 
+test("msectozulu", function() {
+equal(msectozulu(1199145599000), "20071231235959Z",     "20071231235959Z");
+equal(msectozulu(1199145599345), "20071231235959.345Z", "20071231235959.345Z");
+equal(msectozulu(757382399345),  "19931231235959.345Z", "19931231235959.345Z");
+equal(msectozulu(-410227201000), "19561231235959Z",     "19561231235959Z");
+});
+
 test("zulutosec", function() {
 equal(zulutosec("071231235959Z"), 1199145599, "071231235959Z");
 equal(zulutosec("071231235959Z"), 1199145599, "071231235959.345Z");
@@ -466,6 +473,23 @@ var db = {
 equal(namearraytobinstr(['apple'], db), '1', '> 1');
 equal(namearraytobinstr(['apple','banana','mango'], db), '10011', '> 10011');
 equal(namearraytobinstr(['banana','kiwi','orange'], db), '0001000011', '> 0001000011');
+});
+
+test("aryval", function() {
+var p = {
+    fruit: 'apple',
+    info: [
+	{ toy: 4 },
+	{ pen: 6 }
+    ]
+};
+deepEqual(aryval(p, 'fruit'), 'apple', 'p.fruit');
+deepEqual(aryval(p, 'info'), [{toy: 4},{pen: 6}], 'p.info');
+deepEqual(aryval(p, 'info.1'), {pen: 6}, 'p.info.1');
+deepEqual(aryval(p, 'info.1.pen'), 6, 'p.info.1.pen');
+deepEqual(aryval(p, 'info.3.pen'), undefined, 'p.info.3.pen');
+deepEqual(aryval(p, 'car'), undefined, 'p.car');
+deepEqual(aryval(p, 'car', null), null, 'p.car null');
 });
 
 });

@@ -1,9 +1,9 @@
-/* x509-2.1.2.js (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.1.3.js (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
  *
- * Copyright (c) 2010-2022 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2010-2023 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.7.0 x509 2.1.2 (2023-Mar-11)
+ * @version jsrsasign 10.8.0 x509 2.1.3 (2023-Apr-08)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -2004,6 +2004,8 @@ function X509(params) {
      * @see X509#getExtCertificatePolicies
      * @see X509#getPolicyInformation
      * @see X509#getPolicyQualifierInfo
+     * @see KJUR.asn1.x509.UserNotice
+     *
      * @description
      * This method will get 
      * <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
@@ -2012,27 +2014,84 @@ function X509(params) {
      * UserNotice ::= SEQUENCE {
      *      noticeRef        NoticeReference OPTIONAL,
      *      explicitText     DisplayText OPTIONAL }
+     * NoticeReference ::= SEQUENCE {
+     *      organization     DisplayText,
+     *      noticeNumbers    SEQUENCE OF INTEGER }
      * </pre>
      * Result of this method can be passed to 
-     * {@link KJUR.asn1.x509.NoticeReference} constructor.
+     * {@link KJUR.asn1.x509.UserNotice} constructor.
      * <br/>
-     * NOTE: NoticeReference parsing is currently not supported and
-     * it will be ignored.
+     * NOTE: NoticeReference supported from jsrsasign 10.8.0.
+     *
      * @example
      * x = new X509();
-     * x.getUserNotice("30...") &rarr; {exptext: {type: 'utf8', str: 'aaa'}}
+     * x.getUserNotice("30...") &rarr; { 
+     *   noticeref: {
+     *     org: {type: 'utf8', str: 'test org'},
+     *     noticenum: [1]
+     *   },
+     *   exptext: {type: 'utf8', str: 'test text'}
+     * }
      */
     this.getUserNotice = function(h) {
+	var pASN1 = null;
 	var result = {};
-	var a = _getChildIdx(h, 0);
-	for (var i = 0; i < a.length; i++) {
-	    var hItem = _getTLV(h, a[i]);
-	    if (hItem.substr(0, 2) != "30") {
-		result.exptext = this.getDisplayText(hItem);
-	    }
+	try { 
+	    pASN1 = _ASN1HEX.parse(h);
+	    var pUnotice = this._asn1ToUnotice(pASN1);
+	    return pUnotice;
+	} catch(ex) {
+	    return undefined;
 	}
-	return result;
     };
+
+    this._asn1ToUnotice = function(p) {
+	try {
+	    var result = {};
+	    var a = aryval(p, "seq");
+	    for (var i = 0; i < a.length; i++) {
+		var pNoticeRef = this._asn1ToNoticeRef(a[i]);
+		if (pNoticeRef != undefined) result.noticeref = pNoticeRef;
+		var pExpText = this.asn1ToDisplayText(a[i]);
+		if (pExpText != undefined) result.exptext = pExpText;
+	    }
+	    if (Object.keys(result).length > 0) return result;
+	    return undefined;
+	} catch(ex) {
+	    return undefined;
+	}
+    }
+
+    this._asn1ToNoticeRef = function(p) {
+	try {
+	    var result = {};
+	    var a = aryval(p, "seq");
+	    for (var i = 0; i < a.length; i++) {
+		var pNoticeNum = this._asn1ToNoticeNum(a[i]);
+		if (pNoticeNum != undefined) result.noticenum = pNoticeNum;
+		var pOrg = this.asn1ToDisplayText(a[i]);
+		if (pOrg != undefined) result.org = pOrg;
+	    }
+	    if (Object.keys(result).length > 0) return result;
+	    return undefined;
+	} catch(ex) {
+	    return undefined;
+	}
+    }
+
+    this._asn1ToNoticeNum = function(p) {
+	try {
+	    var a = aryval(p, "seq");
+	    var result = [];
+	    for (var i = 0; i < a.length; i++) {
+		var item = a[i];
+		result.push(parseInt(aryval(item, "int.hex"), 16));
+	    }
+	    return result;
+	} catch(ex) {
+	    return undefined;
+	}
+    }
 
     /**
      * get DisplayText ASN.1 structure parameter as JSON object
@@ -2069,6 +2128,47 @@ function X509(params) {
 	result.str = hextorstr(_getV(h, 0));
 	return result;
     };
+
+    /**
+     * convert ASN1Object parameter to DisplayText parameter
+     * @name asn1ToDisplayText
+     * @memberOf X509#
+     * @function
+     * @param {Object} pASN1 ASN1Object paramter for DisplayText
+     * @return {Object} DisplayText paramter
+     * @since jsrsasign 10.8.0 x509 2.1.3
+     * @see X509#getDisplayText
+     * @see KJUR.asn1.x509.DisplayText
+     * @see KJUR.asn1.ASN1Util#newObject
+     *
+     * @description
+     * This method converts from {@link KJUR.asn1.ASN1Util#newObject} paramter to
+     * {@link KJUR.asn1.x509.DisplayText} paramter
+     * for <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
+     * DisplayText</a> ASN.1 structure.
+     * <pre>
+     * DisplayText ::= CHOICE {
+     *      ia5String        IA5String      (SIZE (1..200)),
+     *      visibleString    VisibleString  (SIZE (1..200)),
+     *      bmpString        BMPString      (SIZE (1..200)),
+     *      utf8String       UTF8String     (SIZE (1..200)) }     
+     * </pre>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.DisplayText} constructor.
+     *
+     * @example
+     * x = new X509();
+     * x.asn1ToDisplayText({utf8str: {str: "aaa"}}) &rarr {type: 'utf8', str: 'aaa'}
+     * x.asn1ToDisplayText({bmpstr: {str: "aaa"}}) &rarr {type: 'bmp',  str: 'aaa'}
+     */
+    this.asn1ToDisplayText = function(pASN1) {
+	if (pASN1.utf8str != undefined) return { type: "utf8", str: pASN1.utf8str.str };
+	if (pASN1.ia5str != undefined)  return { type: "ia5", str: pASN1.ia5str.str };
+	if (pASN1.visstr != undefined)  return { type: "vis", str: pASN1.visstr.str };
+	if (pASN1.bmpstr != undefined)  return { type: "bmp", str: pASN1.bmpstr.str };
+	if (pASN1.prnstr != undefined)  return { type: "prn", str: pASN1.prnstr.str };
+	return undefined;
+    }
 
     /**
      * get PolicyMappings extension value as JSON object<br/>

@@ -662,6 +662,19 @@ RFC 5280 4.2.1.6</a>.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/X509.html#asn1ToDisplayText">asn1ToDisplayText</a></b>(pASN1)
+								</div>
+								<div class="description">convert ASN1Object parameter to DisplayText parameter
+This method converts from KJUR.asn1.ASN1Util#newObject paramter to
+<a href="../symbols/KJUR.asn1.x509.DisplayText.html">KJUR.asn1.x509.DisplayText</a> paramter
+for <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
+DisplayText</a> ASN.1 structure.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/X509.html#c14nRDNArray">c14nRDNArray</a></b>(aRDN)
 								</div>
 								<div class="description">simple canonicalization(c14n) for RDN array<br/>
@@ -1852,6 +1865,85 @@ x.getOtherName("30...") &rarr;
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name="asn1ToDisplayText"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>asn1ToDisplayText</b>(pASN1)
+					
+					</div>
+					<div class="description">
+						convert ASN1Object parameter to DisplayText parameter
+This method converts from KJUR.asn1.ASN1Util#newObject paramter to
+<a href="../symbols/KJUR.asn1.x509.DisplayText.html">KJUR.asn1.x509.DisplayText</a> paramter
+for <a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.4">
+DisplayText</a> ASN.1 structure.
+<pre>
+DisplayText ::= CHOICE {
+     ia5String        IA5String      (SIZE (1..200)),
+     visibleString    VisibleString  (SIZE (1..200)),
+     bmpString        BMPString      (SIZE (1..200)),
+     utf8String       UTF8String     (SIZE (1..200)) }     
+</pre>
+Result of this method can be passed to 
+<a href="../symbols/KJUR.asn1.x509.DisplayText.html">KJUR.asn1.x509.DisplayText</a> constructor.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">x = new X509();
+x.asn1ToDisplayText({utf8str: {str: "aaa"}}) &rarr {type: 'utf8', str: 'aaa'}
+x.asn1ToDisplayText({bmpstr: {str: "aaa"}}) &rarr {type: 'bmp',  str: 'aaa'}</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>pASN1</b>
+									
+								</dt>
+								<dd>ASN1Object paramter for DisplayText</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.8.0 x509 2.1.3</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> DisplayText paramter</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/X509.html#getDisplayText">X509#getDisplayText</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.DisplayText.html">KJUR.asn1.x509.DisplayText</a></dd>
+							
+								<dd>KJUR.asn1.ASN1Util#newObject</dd>
+							
+							</dl>
+						
+
+					<hr />
 				
 					<a name="c14nRDNArray"> </a>
 					<div class="fixedFont">
@@ -6448,12 +6540,14 @@ UserNotice</a> parameters.
 UserNotice ::= SEQUENCE {
      noticeRef        NoticeReference OPTIONAL,
      explicitText     DisplayText OPTIONAL }
+NoticeReference ::= SEQUENCE {
+     organization     DisplayText,
+     noticeNumbers    SEQUENCE OF INTEGER }
 </pre>
 Result of this method can be passed to 
-<a href="../symbols/KJUR.asn1.x509.NoticeReference.html">KJUR.asn1.x509.NoticeReference</a> constructor.
+<a href="../symbols/KJUR.asn1.x509.UserNotice.html">KJUR.asn1.x509.UserNotice</a> constructor.
 <br/>
-NOTE: NoticeReference parsing is currently not supported and
-it will be ignored.
+NOTE: NoticeReference supported from jsrsasign 10.8.0.
 						
 						
 					</div>
@@ -6461,7 +6555,13 @@ it will be ignored.
 					
 					
 					<pre class="code">x = new X509();
-x.getUserNotice("30...") &rarr; {exptext: {type: 'utf8', str: 'aaa'}}</pre>
+x.getUserNotice("30...") &rarr; { 
+  noticeref: {
+    org: {type: 'utf8', str: 'test org'},
+    noticenum: [1]
+  },
+  exptext: {type: 'utf8', str: 'test text'}
+}</pre>
 					
 					
 					
@@ -6504,6 +6604,8 @@ x.getUserNotice("30...") &rarr; {exptext: {type: 'utf8', str: 'aaa'}}</pre>
 								<dd><a href="../symbols/X509.html#getPolicyInformation">X509#getPolicyInformation</a></dd>
 							
 								<dd><a href="../symbols/X509.html#getPolicyQualifierInfo">X509#getPolicyQualifierInfo</a></dd>
+							
+								<dd><a href="../symbols/KJUR.asn1.x509.UserNotice.html">KJUR.asn1.x509.UserNotice</a></dd>
 							
 							</dl>
 						

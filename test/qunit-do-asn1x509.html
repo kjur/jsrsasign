@@ -1087,29 +1087,30 @@ equal(
 });
 
 test("NoticeReference test", function() {
+var pIn, hExpect;
 var _NoticeReference = KJUR.asn1.x509.NoticeReference;
 
-equal(
-(new _NoticeReference({
+pIn = {
   org: {type: "bmp", str: "Sample Org"},
   noticenum: [{int: 3}, {hex: "01af"}]
-})).getEncodedHex(),
-"30151e0a53616d706c65204f72673007020103020201af",
-"both");
+};
+hExpect = "30151e0a53616d706c65204f72673007020103020201af";
+equal(new _NoticeReference(pIn).tohex(), hExpect, "both");
 
-equal(
-(new _NoticeReference({
-  org: {type: "bmp", str: "Sample Org"}
-})).getEncodedHex(),
-"300c1e0a53616d706c65204f7267",
-"org only");
+pIn = {
+  org: {type: "bmp", str: "Sample Org"},
+  noticenum: [3, {hex: "01af"}]
+};
+hExpect = "30151e0a53616d706c65204f72673007020103020201af";
+equal(new _NoticeReference(pIn).tohex(), hExpect, "both(2)");
 
-equal(
-(new _NoticeReference({
-  noticenum: [{int: 3}, {hex: "01af"}]
-})).getEncodedHex(),
-"30093007020103020201af",
-"noticenum only");
+pIn = { org: {type: "bmp", str: "Sample Org"} };
+hExpect = "300c1e0a53616d706c65204f7267";
+equal(new _NoticeReference(pIn).tohex(), hExpect, "org only");
+
+pIn = { noticenum: [{int: 3}, {hex: "01af"}] };
+hExpect = "30093007020103020201af";
+equal(new _NoticeReference(pIn).tohex(), hExpect, "noticenum only");
 });
 
 test("DisplayText test", function() {

@@ -50,6 +50,7 @@ test("Boolean Test", function() {
 
 test("Integer Test", function() {
   var d = new KJUR.asn1.DERInteger();
+  var _DERInteger = KJUR.asn1.DERInteger;
   d.setByBigInteger(new BigInteger("3", 16));
   equal(d.getEncodedHex(), "020103", "setByBigInteger(BI('3',16))");
   d.setByBigInteger(new BigInteger("3f", 16));
@@ -62,14 +63,12 @@ test("Integer Test", function() {
   equal(d.getEncodedHex(), "0201ff", "setByBigInteger(BI('-1',16))");
   d.setByInteger(-3);
   equal(d.getEncodedHex(), "0201fd", "setByInteger(-3)");
-  var d2 = new KJUR.asn1.DERInteger({'bigint': new BigInteger("-3", 16)});
-  equal(d2.getEncodedHex(), "0201fd", "constructor bigint -3");
-  var d3 = new KJUR.asn1.DERInteger({'int': -3});
-  equal(d3.getEncodedHex(), "0201fd", "constructor int -3");
-  var d4 = new KJUR.asn1.DERInteger({'hex': 'fd'});
-  equal(d4.getEncodedHex(), "0201fd", "constructor hex fd");
-  var d5 = new KJUR.asn1.DERInteger({'hex': '00fd'});
-  equal(d5.getEncodedHex(), "020200fd", "constructor hex 00fd");
+
+  equal(new _DERInteger({'bigint': new BigInteger("-3", 16)}).tohex(), "0201fd", "new DERInteger({bigint: new BigInteger(-3, 16)})");
+  equal(new _DERInteger({"int": -3}).tohex(), "0201fd", "new DERInteger({int: -3})");
+  equal(new _DERInteger({hex: "fd"}).tohex(), "0201fd", "new DERInteger({hex: fd})");
+  equal(new _DERInteger({hex: "00fd"}).tohex(), "020200fd", "new DERInteger({hex: 00fd})");
+  equal(new _DERInteger(-3).tohex(), "0201fd", "new DERInteger(-3)");
 });
 
 test("DERBitString.setByBinaryString test", function() {
