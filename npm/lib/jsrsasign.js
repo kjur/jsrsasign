@@ -4,10 +4,10 @@ navigator.userAgent = false;
 
 var window = {};
 /*
- * jsrsasign(all) 10.8.0 (2023-04-08) (c) 2010-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
+ * jsrsasign(all) 10.8.1 (2023-04-09) (c) 2010-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
-var VERSION = "10.8.0";
-var VERSION_FULL = "jsrsasign(all) 10.8.0 (2023-04-08) (c) 2010-2023 Kenji Urushima | kjur.github.io/jsrsasign/license";
+var VERSION = "10.8.1";
+var VERSION_FULL = "jsrsasign(all) 10.8.1 (2023-04-09) (c) 2010-2023 Kenji Urushima | kjur.github.io/jsrsasign/license";
 
 /*! CryptoJS v3.1.2 core-fix.js
  * code.google.com/p/crypto-js
@@ -299,6 +299,7 @@ exports.pemtohex = pemtohex;
 exports.hextoArrayBuffer = hextoArrayBuffer;
 exports.ArrayBuffertohex = ArrayBuffertohex;
 exports.zulutomsec = zulutomsec;
+exports.msectozulu = msectozulu;
 exports.zulutosec = zulutosec;
 exports.zulutodate = zulutodate;
 exports.datetozulu = datetozulu;
@@ -329,6 +330,7 @@ exports.foldnl = foldnl;
 exports.b64topem = b64topem;
 exports.pemtob64 = pemtob64;
 exports.timeogen = timetogen;
+exports.aryval = aryval;
 
 // name spaces
 exports.KJUR = KJUR;

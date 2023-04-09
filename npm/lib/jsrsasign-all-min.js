@@ -1,8 +1,8 @@
 /*
- * jsrsasign(all) 10.8.0 (2023-04-08) (c) 2010-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
+ * jsrsasign(all) 10.8.1 (2023-04-09) (c) 2010-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
-var VERSION = "10.8.0";
-var VERSION_FULL = "jsrsasign(all) 10.8.0 (2023-04-08) (c) 2010-2023 Kenji Urushima | kjur.github.io/jsrsasign/license";
+var VERSION = "10.8.1";
+var VERSION_FULL = "jsrsasign(all) 10.8.1 (2023-04-09) (c) 2010-2023 Kenji Urushima | kjur.github.io/jsrsasign/license";
 
 /*! CryptoJS v3.1.2 core-fix.js
  * code.google.com/p/crypto-js
