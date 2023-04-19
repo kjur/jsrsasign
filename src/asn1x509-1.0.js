@@ -1,4 +1,4 @@
-/* asn1x509-2.1.18.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1x509-2.1.19.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.6.1 asn1x509 2.1.18 (2022-Nov-20)
+ * @version jsrsasign 10.8.3 asn1x509 2.1.19 (2023-Apr-20)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -4603,6 +4603,19 @@ KJUR.asn1.x509.OID = new function() {
 	'archiveTimeStampV3':	'0.4.0.1733.2.4',//ETSI EN29319122/TS101733
 	'pdfRevocationInfoArchival':'1.2.840.113583.1.1.8', //Adobe
 	'adobeTimeStamp':	'1.2.840.113583.1.1.9.1', // Adobe
+	// CABF S/MIME BR
+	'smimeMailboxLegacy':		'2.23.140.1.5.1.1',
+	'smimeMailboxMulti':		'2.23.140.1.5.1.2',
+	'smimeMailboxStrict':		'2.23.140.1.5.1.3',
+	'smimeOrganizationLegacy':	'2.23.140.1.5.2.1',
+	'smimeOrganizationMulti':	'2.23.140.1.5.2.2',
+	'smimeOrganizationStrict':	'2.23.140.1.5.2.3',
+	'smimeSponsorLegacy':		'2.23.140.1.5.3.1',
+	'smimeSponsorMulti':		'2.23.140.1.5.3.2',
+	'smimeSponsorStrict':		'2.23.140.1.5.3.3',
+	'smimeIndividualLegacy':	'2.23.140.1.5.4.1',
+	'smimeIndividualMulti':		'2.23.140.1.5.4.2',
+	'smimeIndividualStrict':	'2.23.140.1.5.4.3',
     };
 
     this.atype2oidList = {
@@ -4620,6 +4633,7 @@ KJUR.asn1.x509.OID = new function() {
 	// http://blog.livedoor.jp/k_urushima/archives/656114.html
         'SN':		'2.5.4.4', // surname
         'T':		'2.5.4.12', // title
+        'GN':		'2.5.4.42', // givenName
         'DN':		'2.5.4.49', // distinguishedName
         'E':		'1.2.840.113549.1.9.1', // emailAddress in MS.NET or Bouncy
 	// other AttributeType name string (no short name)

@@ -1,6 +1,11 @@
 
 ChangeLog for jsrsasign
 
+CABF SMIMEBR OID support
+* Changes from 10.8.2 to 10.8.3 (2023-Apr-20)
+  - src/asn1x509.js
+    - Add OIDs for CABR S/MIME BR policy OIDs and GN givenName attribute type
+
 RSA OAEP encryption fix
 * Changes from 10.8.1 to 10.8.2 (2023-Apr-15)
   - ext/rsa.js
