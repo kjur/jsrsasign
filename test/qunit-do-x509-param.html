@@ -725,7 +725,25 @@ var pExpected = {
   ],
   sighex: "1b04c691eba9c2d992abc11aba5bc6fc7c21bff817b4135a5f448aff5afc608ac4617c79ce77cb4dc843dfd91a49ac15200456fb46620cb7db0191d433ad1c55"
 };
-deepEqual(pIn, pExpected, JSON.stringify(pExpected));
+var pExpected2 = {
+  version: 3,
+  serial: {hex: "05"},
+  sigalg: "SHA256withRSA",
+  issuer: {str: "/C=US/O=a"},
+  notbefore: '130504235959Z',
+  notafter:  '140504235959Z',
+  subject: {str: "/C=US/O=b"},
+  sbjpubkey: "-----BEGIN PUBLIC KEY-----\r\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOhmTdK0BSkSFWjzs5vJemLnujwJur3E\r\n8NzY35DreQubtkWitw4xEnR7TTxBtRQkiVEV/viPedQ+rlsaTjUY/VkCAwEAAQ==\r\n-----END PUBLIC KEY-----\r\n",
+  ext: [
+    {extname: "policyMappings", critical: true, array: [["anyPolicy", "1.2.3"]]},
+    {extname: "policyConstraints", critical: true, reqexp: 1},
+    {extname: "inhibitAnyPolicy", critical: true, skip: 1}
+  ],
+  sighex: "1b04c691eba9c2d992abc11aba5bc6fc7c21bff817b4135a5f448aff5afc608ac4617c79ce77cb4dc843dfd91a49ac15200456fb46620cb7db0191d433ad1c55"
+};
+//deepEqual(pIn, pExpected, JSON.stringify(pExpected));
+//deepEqual(pIn, pExpected, "hogeho");
+equal(JSON.stringify(pIn, null, 2), JSON.stringify(pExpected, null, 2), "hogeho2");
 });
 
 test("findParam test", function() {

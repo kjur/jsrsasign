@@ -1,4 +1,4 @@
-/* x509-2.1.3.js (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.1.4.js (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.8.0 x509 2.1.3 (2023-Apr-08)
+ * @version jsrsasign 10.8.4 x509 2.1.4 (2023-Apr-26)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -2548,6 +2548,70 @@ function X509(params) {
 	return result;
     };
 
+    /**
+     * parse SubjectDirectoryAttributes extension as JSON object<br/>
+     * @name getExtSubjectDirectoryAttributes
+     * @memberOf X509#
+     * @function
+     * @param {String} hExtV hexadecimal string of extension value
+     * @param {Boolean} critical flag
+     * @return {Array} JSON object of parsed SubjectDirectoryAttributes extension
+     * @since jsrsasign 10.8.4 x509 2.1.4
+     * @see KJUR.asn1.x509.SubjectDirectoryAttributes
+     * @see X509#getExtParamArray
+     * @see X509#getExtParam
+     *
+     * @description
+     * This method parses
+     * SubjectDirectoryAttributes extension value defined in the
+     * defined in <a href="https://tools.ietf.org/html/rfc3739#section-3.3.2">
+     * RFC 3739 Qualified Certificate Profile section 3.3.2</a> as JSON object.
+     * <pre>
+     * SubjectDirectoryAttributes ::= Attributes
+     * Attributes ::= SEQUENCE SIZE (1..MAX) OF Attribute
+     * Attribute ::= SEQUENCE {
+     *   type AttributeType 
+     *   values SET OF AttributeValue }
+     * AttributeType ::= OBJECT IDENTIFIER
+     * AttributeValue ::= ANY DEFINED BY AttributeType
+     * </pre>
+     * <br/>
+     * Result of this method can be passed to 
+     * {@link KJUR.asn1.x509.SubjectDirectoryAttributes} constructor.
+     *
+     * @example
+     * x.getExtSubjectDirectoryAttributes(<<extn hex value >>) &rarr;
+     * { "extname": "SubjectDirectoryAttributes",
+     *   "array": [
+     *     { "attr": "gender", "array": [{"prnstr": {"str": "female"}}] },
+     *     { "attr": "1.2.3.4.5", "array": [{"prnstr": {"str": "aaa"}}, {"utf8str": {"str": "bbb"}}] }
+     *   ] }
+     */
+    this.getExtSubjectDirectoryAttributes = function(hExtV, critical) {
+	if (hExtV === undefined && critical === undefined) {
+	    var info = this.getExtInfo("subjectDirectoryAttributes");
+	    if (info === undefined) return undefined;
+	    hExtV = _getTLV(this.hex, info.vidx);
+	    critical = info.critical;
+	}
+
+	var result = { extname: "subjectDirectoryAttributes" };
+	if (critical) result.critical = true;
+	try {
+	    var pASN1 = _ASN1HEX_parse(hExtV);
+	    for (var i = 0; i < pASN1.seq.length; i++) {
+		var aASN1Attribute = pASN1.seq[i];
+		var attrType = aryval(aASN1Attribute, "0.oid");
+		var attrValue = aryval(aASN1Attribute, "1.set");
+		return { attr: attrType, array: attrValue };
+	    }
+	    result.array = aValue;
+	    return result;
+	} catch(ex) {
+	    throw new Error("malformed subjectDirectoryAttributes extension value");
+	}
+    }
+
     // ===== BEGIN X500Name related =====================================
     /*
      * convert ASN.1 parsed object to attrTypeAndValue assoc array<br/>
@@ -3114,6 +3178,8 @@ function X509(params) {
 	    extParam = this.getExtCRLNumber(hExtV, critical);
 	} else if (oid == "2.5.29.21") {
 	    extParam = this.getExtCRLReason(hExtV, critical);
+	} else if (oid == "2.5.29.9") {
+	    extParam = this.getExtSubjectDirectoryAttributes(hExtV, critical);
 	} else if (oid == "1.3.6.1.5.5.7.48.1.2") {
 	    extParam = this.getExtOcspNonce(hExtV, critical);
 	} else if (oid == "1.3.6.1.5.5.7.48.1.5") {
@@ -3125,7 +3191,11 @@ function X509(params) {
 	}
 	if (extParam != undefined) return extParam;
 
+	// for private or unsupported extension
 	var privateParam = { extname: oid, extn: hExtV };
+	try {
+	    privateParam.extn = _ASN1HEX_parse(hExtV);
+	} catch(ex) {}
 	if (critical) privateParam.critical = true;
 	return privateParam;
     };

@@ -1,4 +1,4 @@
-/* base64x-1.1.32 (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* base64x-1.1.33 (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.8.0 base64x 1.1.32 (2023-Apr-08)
+ * @version jsrsasign 10.8.4 base64x 1.1.33 (2023-Apr-26)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -533,7 +533,9 @@ function hextob64nl(s) {
  * 7890
  */
 function foldnl(s, n) {
-    return s.replace(new RegExp('(.{' + n + '})', 'g'), "$1\r\n");
+    s = s.replace(new RegExp('(.{' + n + '})', 'g'), "$1\r\n");
+    s = s.replace(/\s+$/, '');
+    return s;
 }
 
 /**

@@ -1,6 +1,23 @@
 
 ChangeLog for jsrsasign
 
+more SubjectDirectoryExtension support
+* Changes from 10.8.3 to 10.8.4 (2023-Apr-26)
+  - src/asn1x509.js
+    - SubjectDirectoryAttributes class
+      - add array of array support for arbitrary attribute value
+  - src/x509.js
+    - add X509.getExtSubjectDirectoryAttributes method for 
+      ExtSubjectDirectoryAttributes extension
+    - update X509.getExtParam method
+      - support SubjectDirectoryAttributes
+      - parse unknown extension as ASN.1
+  - src/base64x.js
+    - bugfix foldnl function: when length of s is multiple of n,
+      result has unnecessary new line in the end of string.
+  - qunit-do-{asn1x509,x509-ext,base64x,x500-param}.html
+    - update and add some test cases for above
+
 CABF SMIMEBR OID support
 * Changes from 10.8.2 to 10.8.3 (2023-Apr-20)
   - src/asn1x509.js

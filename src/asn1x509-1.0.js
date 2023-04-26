@@ -1,9 +1,9 @@
-/* asn1x509-2.1.19.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1x509-2.1.20.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
  *
- * Copyright (c) 2013-2022 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2023 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.8.3 asn1x509 2.1.19 (2023-Apr-20)
+ * @version jsrsasign 10.8.4 asn1x509 2.1.20 (2023-Apr-26)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -2269,6 +2269,8 @@ extendClass(KJUR.asn1.x509.IssuerAltName, KJUR.asn1.x509.Extension);
  * @param {Array} params associative array of parameters
  * @extends KJUR.asn1.x509.Extension
  * @since jsrsasign 10.1.9 asn1x509 2.1.7
+ * @see
+ * 
  * @description
  * This class provides X.509v3 SubjectDirectoryAttributes extension
  * defined in <a href="https://tools.ietf.org/html/rfc3739#section-3.3.2">
@@ -2282,6 +2284,16 @@ extendClass(KJUR.asn1.x509.IssuerAltName, KJUR.asn1.x509.Extension);
  * AttributeType ::= OBJECT IDENTIFIER
  * AttributeValue ::= ANY DEFINED BY AttributeType
  * </pre>
+ * Value of member "array" is an array which as following associative arrays as elements:
+ * <ul>
+ * <li>attr: OID name or value of attribute type (ex. "gender" or "1.2.3.4")</li>
+ * <li>str: attribute value of pre defined types (See example for registered attribute types)</li>
+ * <li>array: array of ASN.1 parameters as attribute value (See {@link KJUR.asn1.ASN1Util#newObject})</li>
+ * </ul>
+ * <br/>
+ * NOTE: From jsrsasign 10.8.4, member "array in array" supported for an arbitrary
+ * attribute value.
+ *
  * @example
  * e1 = new KJUR.asn1.x509.SubjectDirectoryAttributes({
  *   extname: "subjectDirectoryAttributes",
@@ -2290,7 +2302,8 @@ extendClass(KJUR.asn1.x509.IssuerAltName, KJUR.asn1.x509.Extension);
  *     { attr: "placeOfBirth", str: "Tokyo" },
  *     { attr: "gender", str: "F" },
  *     { attr: "countryOfCitizenship", str: "JP" },
- *     { attr: "countryOfResidence", str: "JP" }
+ *     { attr: "countryOfResidence", str: "JP" },
+ *     { attr: "1.2.3.4.5", array: [{prnstr: {str: "aaa"}}] }
  *   ]
  * });
  */
@@ -2308,12 +2321,13 @@ KJUR.asn1.x509.SubjectDirectoryAttributes = function(params) {
 	for (var i = 0; i < this.params.array.length; i++) {
 	    var pAttr = this.params.array[i];
 
-	    var newparam = {
-		"seq": [
-		    {"oid": "1.2.3.4"},
-		    {"set": [{"utf8str": "DE"}]}
-		]
-	    };
+	    if (pAttr.attr != undefined && pAttr.array != undefined) {
+		var pObj = {"seq": [{"oid": pAttr.attr}, {"set": pAttr.array}]};
+		a.push(_newObject(pObj));
+		continue;
+	    }
+
+	    var newparam = {"seq": [{"oid": "1.2.3.4"}, {"set": [{"utf8str": "DE"}]}]};
 
 	    if (pAttr.attr == "dateOfBirth") {
 		newparam.seq[0].oid = _name2oid(pAttr.attr);
