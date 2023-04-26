@@ -1,6 +1,11 @@
 
 ChangeLog for jsrsasign
 
+X509.getExtSubjectDirectoryAttributes bugfix
+* Changes from 10.8.4 to 10.8.5 (2023-Apr-26)
+  - src/x509.js
+    - bugfix X509.getExtSubjectDirectoryAttributes method
+
 more SubjectDirectoryExtension support
 * Changes from 10.8.3 to 10.8.4 (2023-Apr-26)
   - src/asn1x509.js

@@ -1,4 +1,4 @@
-/* x509-2.1.4.js (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* x509-2.1.5.js (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * x509.js - X509 class to read subject public key from certificate.
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name x509-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.8.4 x509 2.1.4 (2023-Apr-26)
+ * @version jsrsasign 10.8.5 x509 2.1.5 (2023-Apr-26)
  * @since jsrsasign 1.x.x
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -2601,8 +2601,9 @@ function X509(params) {
 	    var pASN1 = _ASN1HEX_parse(hExtV);
 	    for (var i = 0; i < pASN1.seq.length; i++) {
 		var aASN1Attribute = pASN1.seq[i];
-		var attrType = aryval(aASN1Attribute, "0.oid");
-		var attrValue = aryval(aASN1Attribute, "1.set");
+		var attrType = aryval(aASN1Attribute, "seq.0.oid");
+		var attrValue = aryval(aASN1Attribute, "seq.1.set");
+		if (attrType == undefined || attrValue == undefined) throw "error";
 		return { attr: attrType, array: attrValue };
 	    }
 	    result.array = aValue;
