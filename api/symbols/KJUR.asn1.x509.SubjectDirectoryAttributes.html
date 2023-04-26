@@ -625,6 +625,15 @@ Attribute ::= SEQUENCE {
 AttributeType ::= OBJECT IDENTIFIER
 AttributeValue ::= ANY DEFINED BY AttributeType
 </pre>
+Value of member "array" is an array which as following associative arrays as elements:
+<ul>
+<li>attr: OID name or value of attribute type (ex. "gender" or "1.2.3.4")</li>
+<li>str: attribute value of pre defined types (See example for registered attribute types)</li>
+<li>array: array of ASN.1 parameters as attribute value (See KJUR.asn1.ASN1Util#newObject)</li>
+</ul>
+<br/>
+NOTE: From jsrsasign 10.8.4, member "array in array" supported for an arbitrary
+attribute value.
 					
 				</div>
 				
@@ -637,7 +646,8 @@ AttributeValue ::= ANY DEFINED BY AttributeType
     { attr: "placeOfBirth", str: "Tokyo" },
     { attr: "gender", str: "F" },
     { attr: "countryOfCitizenship", str: "JP" },
-    { attr: "countryOfResidence", str: "JP" }
+    { attr: "countryOfResidence", str: "JP" },
+    { attr: "1.2.3.4.5", array: [{prnstr: {str: "aaa"}}] }
   ]
 });</pre>
 				
@@ -666,6 +676,13 @@ AttributeValue ::= ANY DEFINED BY AttributeType
 					
 					
 					
+					
+						<dl class="detailList">
+						<dt class="heading">See:</dt>
+						
+							<dd></dd>
+						
+						</dl>
 					
 
 			</div>

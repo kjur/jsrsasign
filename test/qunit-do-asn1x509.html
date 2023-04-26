@@ -1411,9 +1411,10 @@ ASN1HEX.dump(hExpect),
 });
 
 test("SubjectDirectoryAttributes test", function() {
+var pIn, hExpect;
 var _SDA = KJUR.asn1.x509.SubjectDirectoryAttributes;
-var hExpect = "30720603551d09046b3069301d06082b060105050709013111180f31393730313233313233303030305a301306082b0601050507090231070c05546f6b796f300f06082b060105050709033103130146301006082b06010505070904310413024a50301006082b06010505070905310413024a50";
-var param = {
+hExpect = "30720603551d09046b3069301d06082b060105050709013111180f31393730313233313233303030305a301306082b0601050507090231070c05546f6b796f300f06082b060105050709033103130146301006082b06010505070904310413024a50301006082b06010505070905310413024a50";
+pIn = {
   extname: "subjectDirectoryAttributes",
   array: [
     { attr: "dateOfBirth", str: "19701231230000Z" },
@@ -1423,11 +1424,26 @@ var param = {
     { attr: "countryOfResidence", str: "JP" }
   ]
 };
-equal((new _SDA(param)).getEncodedHex(), hExpect, "hex");
+equal((new _SDA(pIn)).tohex(), hExpect, "str hex");
 equal(
-ASN1HEX.dump((new _SDA(param)).getEncodedHex()),
+ASN1HEX.dump((new _SDA(pIn)).tohex()),
 ASN1HEX.dump(hExpect),
-"dump");
+"str dump");
+
+hExpect = "302e0603551d0904273025300d06042a03040531051303616161301406082b060105050709033108130666656d616c65";
+pIn = {
+  extname: "subjectDirectoryAttributes",
+  array: [
+    { attr: "1.2.3.4.5", array: [{prnstr: "aaa"}] },
+    { attr: "gender", array: [{prnstr: "female"}] },
+  ]
+};
+equal((new _SDA(pIn)).tohex(), hExpect, "array hex");
+equal(
+ASN1HEX.dump((new _SDA(pIn)).tohex()),
+ASN1HEX.dump(hExpect),
+"array dump");
+
 });
 
 test("OID class test", function() {

@@ -996,6 +996,21 @@ var r = x.getExtBasicConstraints();
 equal(r == undefined, true, "no basicConstraints returns undefined");
 });
 
+test("getExtSubjectDirectoryAttributes", function() {
+var hIn, pExpect;
+var x = new X509();
+hIn = "3025300d06042a03040531051303616161301406082b060105050709033108130666656d616c65";
+pExpect = {
+    extname: "subjectDirectoryAttributes",
+    array: [
+	{ attr: "1.2.3.4.5", array: [{prnstr: {str: "aaa"}}] },
+	{ attr: "gender", array: [{prnstr: {str: "female"}}] }
+    ]
+};
+deepEqual(x.getExtSubjectDirectoryAttributes(hIn), pExpect, "hoge");
+
+});
+
 test("parseExt(CSR) test (csrcertbot1)", function() {
   var x = new X509();
   x.parseExt(csrcertbot1);
@@ -1147,6 +1162,18 @@ pExpect = {
 };
 deepEqual(x.getX500Name(hIn), pExpect, "BMP(ICS2) non ascii)")
 
+hIn = "3064310f300d06035504040c0659616d616461310f300d060355042a0c0648616e616b6f3116301406035504030c0d59414d4144412048616e616b6f3128302606092a864886f70d010901161968616e616b6f2e79616d616461406578616d706c652e636f6d";
+pExpect = {
+  array: [
+    [{type: "SN", value: "Yamada", ds: "utf8"}],
+    [{type: "GN", value: "Hanako", ds: "utf8"}],
+    [{type: "CN", value: "YAMADA Hanako", ds: "utf8"}],
+    [{type: "E", value: "hanako.yamada@example.com", ds: "ia5"}]
+  ],
+  str: "/SN=Yamada/GN=Hanako/CN=YAMADA Hanako/E=hanako.yamada@example.com"
+};
+deepEqual(x.getX500Name(hIn), pExpect, "CABF SMIME BR sample");
+
 });
 
 test("getRDN test", function() {
@@ -1283,6 +1310,17 @@ deepEqual(x.getGeneralSubtree(hIn), pExpect, "{dn: /C=US/O=...}");
 
 });
 
+test("getExtParam - unknown private extension", function() {
+var x = new X509();
+var hIn, pExpect;
+hIn = "301506092a8308868f4c01010504080c06e69db1e4baac";
+pExpect = {
+    extname: "1.2.392.100300.1.1.5",
+    extn: { utf8str: { str: "東京" } }
+};
+deepEqual(x.getExtParam(hIn), pExpect, "unknown extension 1.2.392.100300.1.1.5={prn 東京}");
+});
+
 test("X509.registExtParser", function() {
 var x = new X509();
 function _f1(oid, critical, hExtV) {
@@ -1294,18 +1332,23 @@ function _f1(oid, critical, hExtV) {
 	return undefined;
     }
 }
+
 X509.registExtParser("1.2.392.100300.1.1.2", _f1);
 var pExp = {
     extname: "1.2.392.100300.1.1.2",
     value: "東京"
 };
-deepEqual(x.getExtParam("301506092a8308868f4c01010204080c06e69db1e4baac"), pExp, "success case");
+deepEqual(x.getExtParam("301506092a8308868f4c01010204080c06e69db1e4baac"), pExp, "success case (=utf8)");
+
 var pExp2 = {
     extname: "1.2.392.100300.1.1.2",
-    extn: "1306e69db1e4baac"
+    extn: { prnstr: { str: "東京" } }
 };
-deepEqual(x.getExtParam("301506092a8308868f4c01010204081306e69db1e4baac"), pExp2, "fail case");
+deepEqual(x.getExtParam("301506092a8308868f4c01010204081306e69db1e4baac"), pExp2, "fail case (=prnstr)");
+
 });
+
+
 
 });
 </script>

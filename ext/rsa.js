@@ -186,12 +186,14 @@ function RSAEncrypt(text) {
 
 // Return the PKCS#1 OAEP RSA encryption of "text" as an even-length hex string
 function RSAEncryptOAEP(text, hash, hashLen) {
-  var m = oaep_pad(text, (this.n.bitLength() + 7) >> 3, hash, hashLen);
+  var n = (this.n.bitLength() + 7) >> 3;
+  var m = oaep_pad(text, n, hash, hashLen);
   if(m == null) return null;
   var c = this.doPublic(m);
   if(c == null) return null;
   var h = c.toString(16);
-  if((h.length & 1) == 0) return h; else return "0" + h;
+  while (h.length < n*2) h = "0" + h;
+  return h;
 }
 
 // Return the PKCS#1 RSA encryption of "text" as a Base64-encoded string

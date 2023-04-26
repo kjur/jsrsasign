@@ -248,6 +248,7 @@ equal(hextob64nl("042867a6150c948e574bd6478f0646631b015f16179310e4e9f79b905faf05
 
 test("foldnl", function() {
 equal(foldnl("1234567890", 4), "1234\r\n5678\r\n90", "10 chars 4 cols");
+equal(foldnl("12345678", 4), "1234\r\n5678", "8 chars 4 cols");
 equal(foldnl("1234567890", 3), "123\r\n456\r\n789\r\n0", "10 chars 3 cols");
 });
 
