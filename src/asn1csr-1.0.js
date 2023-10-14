@@ -575,7 +575,10 @@ KJUR.asn1.csr.CSRUtil.getParam = function(sPEM, flagTBS) {
  * with its public key which is concluded in the CSR.
  *
  * @example
- * KJUR.asn1.csr.CSRUtil.verifySignatrue("-----BEGIN CERTIFICATE REQUEST...") &rarr; true or false
+ * const {KJUR} = require('jsrsasign'); // CJS
+ * // import {KJUR} from 'jsrsasign'; // ESM
+ *
+ * KJUR.asn1.csr.CSRUtil.verifySignature("-----BEGIN CERTIFICATE REQUEST...") &rarr; true or false
  * 
  * p = KJUR.asn1.csr.CSRUtil.getParam("-----BEGIN CERTIFICATE REQUEST-----", true); // with tbs
  * KJUR.asn1.csr.CSRUtil.verifySignatrue(p) &rarr; true or false
