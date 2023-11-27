@@ -599,7 +599,7 @@ NOTE: (*) is not supported in Java JCE.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.decrypt">decrypt</a></b>(hex, keyObj, algName)
+								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.decrypt">decrypt</a></b>(hex, keyObj, algName, param)
 								</div>
 								<div class="description">decrypt encrypted hexadecimal string with specified key and algorithm<br/>
 This static method decrypts encrypted hexadecimal string with specified key and algorithm.</div>
@@ -609,7 +609,7 @@ This static method decrypts encrypted hexadecimal string with specified key and 
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.encrypt">encrypt</a></b>(s, keyObj, algName)
+								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.encrypt">encrypt</a></b>(s, keyObj, algName, param)
 								</div>
 								<div class="description">encrypt raw string by specified key and algorithm<br/>
 This static method encrypts raw string with specified key and algorithm.</div>
@@ -716,12 +716,14 @@ However it is planning to implement also symmetric ciphers near in the future
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{String}</span>
-					<span class="light">KJUR.crypto.Cipher.</span><b>decrypt</b>(hex, keyObj, algName)
+					<span class="light">KJUR.crypto.Cipher.</span><b>decrypt</b>(hex, keyObj, algName, param)
 					
 					</div>
 					<div class="description">
 						decrypt encrypted hexadecimal string with specified key and algorithm<br/>
 This static method decrypts encrypted hexadecimal string with specified key and algorithm.
+<br/>
+NOTE: From jsrsasign 10.9.0, asymmetric cipher ({des-EDE3,aes{128,256}}-CBCis also supported.
 						
 						
 					</div>
@@ -729,8 +731,14 @@ This static method decrypts encrypted hexadecimal string with specified key and 
 					
 					
 					<pre class="code">
+// asynchronous cipher
 KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj) &rarr; "1abc2d..."
-KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."</pre>
+KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."
+// synchronous cipher
+KJUR.crypto.Cipher.decrypt("12abcd...", "5a7d...", "aes256-CBC", { iv: "1b3c..." }) 
+KJUR.crypto.Cipher.decrypt("12abcd...", "5a7d...", any, { encalg: "aes128-CBC", iv: "1b3c..." }) 
+KJUR.crypto.Cipher.decrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." }) 
+KJUR.crypto.Cipher.decrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41...", enc: "12abcd..." })</pre>
 					
 					
 					
@@ -739,22 +747,28 @@ KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."</pr
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>hex</b>
+									<span class="light fixedFont">{string}</span> <b>hex</b>
 									
 								</dt>
-								<dd>hexadecial string of encrypted message</dd>
+								<dd>hexadecimal string of encrypted message</dd>
 							
 								<dt>
-									<span class="light fixedFont">{Object}</span> <b>keyObj</b>
+									<span class="light fixedFont">{object}</span> <b>keyObj</b>
 									
 								</dt>
 								<dd>RSAKey object or hexadecimal string of symmetric cipher key</dd>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>algName</b>
+									<span class="light fixedFont">{string}</span> <b>algName</b>
 									
 								</dt>
-								<dd>short/long algorithm name for encryption/decryption</dd>
+								<dd>short/long algorithm name for encryption/decryption (OPTION)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>param</b>
+									
+								</dt>
+								<dd>parameters for synchronous cipher such as initial vector (OPTION)</dd>
 							
 							</dl>
 						
@@ -784,12 +798,14 @@ KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."</pr
 					<div class="fixedFont">&lt;static&gt; 
 					
 					<span class="light">{String}</span>
-					<span class="light">KJUR.crypto.Cipher.</span><b>encrypt</b>(s, keyObj, algName)
+					<span class="light">KJUR.crypto.Cipher.</span><b>encrypt</b>(s, keyObj, algName, param)
 					
 					</div>
 					<div class="description">
 						encrypt raw string by specified key and algorithm<br/>
 This static method encrypts raw string with specified key and algorithm.
+<br/>
+NOTE: From jsrsasign 10.9.0, asymmetric cipher ({des-EDE3,aes{128,256}}-CBC) is also supported.
 						
 						
 					</div>
@@ -797,8 +813,14 @@ This static method encrypts raw string with specified key and algorithm.
 					
 					
 					<pre class="code">
+// asynchronous cipher
 KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj) &rarr; "1abc2d..."
-KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj, "RSAOAEP") &rarr; "23ab02..."</pre>
+KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj, "RSAOAEP") &rarr; "23ab02..."
+// synchronous cipher
+KJUR.crypto.Cipher.encrypt("12abcd...", "5a7d...", "aes256-CBC", { iv: "1b3c..." }) 
+KJUR.crypto.Cipher.encrypt("12abcd...", "5a7d...", any, { encalg: "aes128-CBC", iv: "1b3c..." }) 
+KJUR.crypto.Cipher.encrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." }) 
+KJUR.crypto.Cipher.encrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41...", enc: "12abcd..." })</pre>
 					
 					
 					
@@ -822,7 +844,13 @@ KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj, "RSAOAEP") &rarr; "23ab02..."</p
 									<span class="light fixedFont">{String}</span> <b>algName</b>
 									
 								</dt>
-								<dd>short/long algorithm name for encryption/decryption</dd>
+								<dd>short/long algorithm name for encryption/decryption (OPTION)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>param</b>
+									
+								</dt>
+								<dd>parameters for synchronous cipher such as initial vector (OPTION)</dd>
 							
 							</dl>
 						

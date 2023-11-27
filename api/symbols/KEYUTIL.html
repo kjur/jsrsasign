@@ -637,6 +637,17 @@ version string of KEYUTIL class</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getDKFromPBES2Param">getDKFromPBES2Param</a></b>(pPBES2, passcode)
+								</div>
+								<div class="description">get derived key from PBES2 parameters and passcode
+This method derives a key from a passcode and a PBES2 parameter by 
+<a href="../symbols/KEYUTIL.html#.parsePBES2">KEYUTIL.parsePBES2</a>.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getJWK">getJWK</a></b>(keyinfo, nokid, nox5c, nox5t, nox5t2)
 								</div>
 								<div class="description">convert from certificate, public/private key object to RFC 7517 JSON Web Key(JWK)<br/>
@@ -746,7 +757,7 @@ target="_blank">RFC 5280 4.2.1.2.</div>
 							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getPBKDF2KeyHexFromParam">getPBKDF2KeyHexFromParam</a></b>(info, passcode)
 								</div>
-								<div class="description">generate PBKDF2 key hexstring with specified passcode and information
+								<div class="description">generate PBKDF2 key hexstring with specified passcode and information (DEPRECATED)
 As for info, this uses following properties:
 <ul>
 <li>info.pbkdf2Salt - hexadecimal string of PBKDF2 salt</li>
@@ -779,6 +790,17 @@ Parameter "ivsaltHex" supported since jsrsasign 8.0.0 keyutil 1.2.0.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.getPlainHexFromEncryptedPKCS8PEM">getPlainHexFromEncryptedPKCS8PEM</a></b>(pkcs8PEM, passcode)
+								</div>
+								<div class="description">get plaintext hexadecimal PKCS#8 private key from encrypted PKCS#8 PEM private key
+This will get a plaintext hexadecimal PKCS#8 private key from a
+encrypted PKCS#8 PEM private key.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.parseCSRHex">parseCSRHex</a></b>(csrHex)
 								</div>
 								<div class="description">parse hexadecimal string of PKCS#10 CSR (certificate signing request)
@@ -794,7 +816,7 @@ Resulted associative array has following properties:
 							<td class="nameDescription">
 								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.parseHexOfEncryptedPKCS8">parseHexOfEncryptedPKCS8</a></b>(passcode)
 								</div>
-								<div class="description">generate PBKDF2 key hexstring with specified passcode and information
+								<div class="description">generate PBKDF2 key hexstring with specified passcode and information (DEPRECATED)
 The associative array which is returned by this method has following properties:
 <ul>
 <li>info.pbkdf2Salt - hexadecimal string of PBKDF2 salt</li>
@@ -804,6 +826,18 @@ The associative array which is returned by this method has following properties:
 <li>info.encryptionSchemeIV - initial vector for encryption algorithm</li>
 </ul>
 Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">KEYUTIL.<b><a href="../symbols/KEYUTIL.html#.parsePBES2">parsePBES2</a></b>(hP8Prv)
+								</div>
+								<div class="description">parse ASN.1 hexadecimal encrypted PKCS#8 private key and return as JSON
+This method parses ASN.1 hexadecimal encrypted PKCS#8 private key and returns as 
+JSON object based on 
+<a href="https://datatracker.ietf.org/doc/html/rfc8018" target="_blank">RFC 8018</a>.</div>
 							</td>
 						</tr>
 					
@@ -1102,6 +1136,87 @@ var ecKeypair = KEYUTIL.generateKeypair("EC", "secp256r1");</pre>
 							</dl>
 						
 						
+						
+
+					<hr />
+				
+					<a name=".getDKFromPBES2Param"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{string}</span>
+					<span class="light">KEYUTIL.</span><b>getDKFromPBES2Param</b>(pPBES2, passcode)
+					
+					</div>
+					<div class="description">
+						get derived key from PBES2 parameters and passcode
+This method derives a key from a passcode and a PBES2 parameter by 
+<a href="../symbols/KEYUTIL.html#.parsePBES2">KEYUTIL.parsePBES2</a>.
+Currently following algorithms are supported:
+<ul>
+<li>prf(psudorandom function) - hmacWithSHA1,SHA224,SHA256,SHA384,SHA512</li>
+<li>encryptionScheme - des-EDE3-CBC,aes128-CBC,aes256-CBC</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">pPBES2 = {
+  "prf": "hmacWithSHA256",
+  "salt": "1234567890abcdef",
+  "iter": 2048,
+  "encalg": "aes256-CBC",
+  "enciv": "12ab...",
+  "enc": "34cd..."
+}
+KEYUTIL.getDKFromPBES2Param(pPBES2, "passwd") &rarr; "3ab10fd..."</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>pPBES2</b>
+									
+								</dt>
+								<dd>parsed PBES2 parameter by <a href="../symbols/KEYUTIL.html#.parsePBES2">KEYUTIL.parsePBES2</a> method</dd>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>passcode</b>
+									
+								</dt>
+								<dd>password to derive the key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.9.0 keyutil 1.3.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> hexadecimal string of derived key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KEYUTIL.html#.parsePBES2">KEYUTIL.parsePBES2</a></dd>
+							
+							</dl>
 						
 
 					<hr />
@@ -1819,7 +1934,7 @@ KEYTUTIL.getKey(pubkeyobj) &rarr; "a612..."</pre>
 					
 					</div>
 					<div class="description">
-						generate PBKDF2 key hexstring with specified passcode and information
+						generate PBKDF2 key hexstring with specified passcode and information (DEPRECATED)
 As for info, this uses following properties:
 <ul>
 <li>info.pbkdf2Salt - hexadecimal string of PBKDF2 salt</li>
@@ -1838,7 +1953,7 @@ Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 an
 					
 					<pre class="code">// to convert plain PKCS#5 private key to encrypted PKCS#8 private
 // key with PBKDF2 with TripleDES
-% openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem</pre>
+% openssl pkcs8 -in plain_p5.pem -topk8 -v2 des3 -out encrypted_p8.pem</pre>
 					
 					
 					
@@ -1860,6 +1975,13 @@ Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 an
 							
 							</dl>
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 10.9.0 keyutil 1.3.0. Use <a href="../symbols/KEYUTIL.html#.getDKFromPBES2Param">KEYUTIL.getDKFromPBES2Param</a> instead.
+							</dt>
+							</dl>
 						
 						
 							<dl class="detailList">
@@ -1979,6 +2101,80 @@ KEUUTIL.getPEM(privateKey, "PKCS8PRV", "pass") &rarr; generates PEM PKCS#8 encry
 
 					<hr />
 				
+					<a name=".getPlainHexFromEncryptedPKCS8PEM"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{string}</span>
+					<span class="light">KEYUTIL.</span><b>getPlainHexFromEncryptedPKCS8PEM</b>(pkcs8PEM, passcode)
+					
+					</div>
+					<div class="description">
+						get plaintext hexadecimal PKCS#8 private key from encrypted PKCS#8 PEM private key
+This will get a plaintext hexadecimal PKCS#8 private key from a
+encrypted PKCS#8 PEM private key.
+Currently following algorithms are supported:
+<ul>
+<li>prf(psudorandom function) - hmacWithSHA1,SHA224,SHA256,SHA384,SHA512</li>
+<li>encryptionScheme - des-EDE3-CBC,aes128-CBC,aes256-CBC</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">pem = "-----BEGIN ENCRYPTED PRIVATE KEY...";
+KEYUTIL.getPlainHexFromEncryptedPKCS8PEM(pem, "passwd") &rarr; "3082..."</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>pkcs8PEM</b>
+									
+								</dt>
+								<dd>PEM string of encrypted PKCS#8 private key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>passcode</b>
+									
+								</dt>
+								<dd>passcode to decrypt the private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.9.0 keyutil 1.3.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> hexadecimal string of decrypted plaintext PKCS#8 private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KEYUTIL.html#.parsePBES2">KEYUTIL.parsePBES2</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
 					<a name=".parseCSRHex"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -2040,7 +2236,7 @@ Resulted associative array has following properties:
 					
 					</div>
 					<div class="description">
-						generate PBKDF2 key hexstring with specified passcode and information
+						generate PBKDF2 key hexstring with specified passcode and information (DEPRECATED)
 The associative array which is returned by this method has following properties:
 <ul>
 <li>info.pbkdf2Salt - hexadecimal string of PBKDF2 salt</li>
@@ -2079,6 +2275,13 @@ Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 an
 							</dl>
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Deprecated:</dt>
+							<dt>
+								since jsrsasign 10.9.0 keyutil 1.3.0. Use <a href="../symbols/KEYUTIL.html#.parsePBES2">KEYUTIL.parsePBES2</a> instead.
+							</dt>
+							</dl>
+						
 						
 							<dl class="detailList">
 							<dt class="heading">Since:</dt>
@@ -2096,6 +2299,86 @@ Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 an
 							</dl>
 						
 						
+						
+
+					<hr />
+				
+					<a name=".parsePBES2"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{object}</span>
+					<span class="light">KEYUTIL.</span><b>parsePBES2</b>(hP8Prv)
+					
+					</div>
+					<div class="description">
+						parse ASN.1 hexadecimal encrypted PKCS#8 private key and return as JSON
+This method parses ASN.1 hexadecimal encrypted PKCS#8 private key and returns as 
+JSON object based on 
+<a href="https://datatracker.ietf.org/doc/html/rfc8018" target="_blank">RFC 8018</a>.
+Currently following algorithms are supported:
+<ul>
+<li>prf(psudorandom function) - hmacWithSHA1,SHA224,SHA256,SHA384,SHA512</li>
+<li>encryptionScheme - des-EDE3-CBC,aes128-CBC,aes256-CBC</li>
+</ul>
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">KEYUTIL.parsePBES2("3082...") &rarr;
+{
+  "prf": "hmacWithSHA256",
+  "salt": "1234567890abcdef",
+  "iter": 2048,
+  "encalg": "aes256-CBC",
+  "enciv": "12ab...",
+  "enc": "34cd..."
+}
+
+// to convert plain PKCS#5 private key to encrypted PKCS#8 private
+// key with PBKDF2 with TripleDES
+% openssl pkcs8 -in plain_p5.pem -topk8 -v2 des3 -out encrypted_p8.pem</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>hP8Prv</b>
+									
+								</dt>
+								<dd>hexadecimal encrypted PKCS#8 private key</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.9.0 keyutil 1.3.0</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> parsed PBES2 parameters JSON object</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/KEYUTIL.html#.getDKFromPBES2Param">KEYUTIL.getDKFromPBES2Param</a></dd>
+							
+							</dl>
 						
 
 					<hr />
