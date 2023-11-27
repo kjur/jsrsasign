@@ -1,4 +1,4 @@
-/* asn1-1.0.27.js (c) 2013-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1-1.0.28.js (c) 2013-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1.js - ASN.1 DER encoder classes
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.8.0 asn1 1.0.27 (2023-Apr-08)
+ * @version jsrsasign 10.9.0 asn1 1.0.28 (2023-Nov-27)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -103,36 +103,9 @@ KJUR.asn1.ASN1Util = new function() {
         if ((h.length % 2) == 1) h = '0' + h;
         return h;
     };
-    this.bigIntToMinTwosComplementsHex = function(bigIntegerValue) {
-        var h = bigIntegerValue.toString(16);
-        if (h.substr(0, 1) != '-') {
-            if (h.length % 2 == 1) {
-                h = '0' + h;
-            } else {
-                if (! h.match(/^[0-7]/)) {
-                    h = '00' + h;
-                }
-            }
-        } else {
-            var hPos = h.substr(1);
-            var xorLen = hPos.length;
-            if (xorLen % 2 == 1) {
-                xorLen += 1;
-            } else {
-                if (! h.match(/^[0-7]/)) {
-                    xorLen += 2;
-                }
-            }
-            var hMask = '';
-            for (var i = 0; i < xorLen; i++) {
-                hMask += 'f';
-            }
-            var biMask = new BigInteger(hMask, 16);
-            var biNeg = biMask.xor(bigIntegerValue).add(BigInteger.ONE);
-            h = biNeg.toString(16).replace(/^-/, '');
-        }
-        return h;
-    };
+    this.bigIntToMinTwosComplementsHex = function(bigIntegerValue) { // DEPRECATED. use twoscompl
+	return twoscompl(bigIntegerValue);
+    }
     /**
      * get PEM string from hexadecimal data and header string
      * @name getPEMStringFromHex
@@ -892,7 +865,7 @@ KJUR.asn1.DERInteger = function(params) {
     KJUR.asn1.DERInteger.superclass.constructor.call(this);
     this.hT = "02";
     this.params = null;
-    var _biToTwoCompl = KJUR.asn1.ASN1Util.bigIntToMinTwosComplementsHex;
+    var _biToTwoCompl = twoscompl;
 
     /**
      * set value by Tom Wu's BigInteger object
@@ -1355,7 +1328,7 @@ KJUR.asn1.DEREnumerated = function(params) {
     this.setByBigInteger = function(bigIntegerValue) {
         this.hTLV = null;
         this.isModified = true;
-        this.hV = KJUR.asn1.ASN1Util.bigIntToMinTwosComplementsHex(bigIntegerValue);
+        this.hV = twoscompl(bigIntegerValue);
     };
 
     /**

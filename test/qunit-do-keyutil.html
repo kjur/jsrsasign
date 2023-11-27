@@ -48,13 +48,178 @@
 <script src="../src/x509-1.1.js"></script>
 <script src="../src/keyutil-1.0.js"></script>
 <script src="../src/asn1x509-1.0.js"></script>
+<script src="../src/crypto-1.1.js"></script>
 
 <script type="text/javascript">
 <!--
 $(document).ready(function(){
 
-var sk10pem = "" +
-"-----BEGIN RSA PRIVATE KEY-----\r\n" +
+// I-D draft-gutmann-testkeys 2.1 RSA 1024bit Encrypted PKCS#8 ENC=3DES,PRF=SHA1,ITER=2048 pass=passwd
+var T1P8E_3DS1 = (function() {/*
+-----BEGIN ENCRYPTED PRIVATE KEY-----
+MIICxjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQI/yC7aYk9eggCAggA
+MBQGCCqGSIb3DQMHBAhSkqLPxEn8TQSCAoD3OjkXQsyNNKiC9i5PKUk3d9s8ta0t
+MipR6ugvqnqff9X7Zmk5tJYl+bOUxyPnYWbRa+PpoIV8PrLmcZg6rqH4jNlV4Aef
+4U2geHg1kOfR5ZGm/P9OzyMqX04W7Pb0JrvSOM+f9pWaL4FXLJXUUHShi477U+kU
+lmdmig9W9ZUvdMz/zjOE1sUol5Doz50XieyTDerXUeGuibuKDxy2xA7dMPEMEvUP
+lbk6ihx+SnrKRf/qXN/MSxzpU7gOXjsES/3mA9WAgBFLia7NsbmPcE6i54ZfXKjh
+eU1vrw8rV/d0Wg5M+ENoylcebEDHX6sipfYLztBTicb1e/79oa6VshP2PF43GYqs
+NWRaVf6WrGaygEgP5e4FLU5ayHElxdRkchfaXFkShBjH3UYzklN1HHioN7EW5C/J
+9giOJAWNSmhlql4xIqG+PIzF2RM1PbSbmxL8TUwDx6xPGyVoCJ44mHR42LHeMu1F
++JHy+05Y4Jc34CfuB3+zUIDDNYU2+82JPbsLfPVBwRlhnkFjqV8X4Z7m1qva++Dd
+H9xs+Px6prlKOus4YHtHX4MzBhVKGj0/9hEedjCBXpyY3huoMWJjnw3QqGmBHkoK
+bRnFhCUHRzbTXKTb+jRb7JTJ2tu4TmGtMM3uMCuONtdc7Oc59Yji4/4Gg0sa81oX
+A8jjuRP0nZlc333moLaLpQ9HuG2gws3X7hBpDQWznTYNCeFg3eeOFlAlJjMpxUrW
+Yrmdh4ZnV9BRGUeyA55jCsuXwNdIvDQrvEUBl3/ip8BNtMXhHjdcRNsxhF7IEQgG
+S0//SJkaUNmPw+SlJP/WcZIuAwi3w3EkOXNIkZzpj4deI1jVp/uHXDFv
+-----END ENCRYPTED PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// I-D draft-gutmann-testkeys 2.1 RSA 1024bit Encrypted PKCS#8 ENC=3DES,PRF=SHA256,ITER=2048 pass=passwd t1.p8e3desh256.prv
+var T1P8E_3DS2 = (function() {/*
+-----BEGIN ENCRYPTED PRIVATE KEY-----
+MIIC1DBOBgkqhkiG9w0BBQ0wQTApBgkqhkiG9w0BBQwwHAQIFZyz8U2F2hACAggA
+MAwGCCqGSIb3DQIJBQAwFAYIKoZIhvcNAwcECHVAAy7OPsoxBIICgMbyQK3VEpFI
+LBNTUzL7zpUUK/hE1a7o8dFRHWugeAxd29F5Sb4w/uw6ikgfMxgViXZwac5wlvcM
+ARfnQyHGwFszTPI7SXO54ZY6y/bMU7S2WcYz/dS40X5yAp9GeaE9I8jKEHry8ku9
+OlgtlbEDUxKSyvA6W1TgOQzKavR3dKfH86wMhfr4z02woOllJrIpvR2qYnVrL+Rm
+Ynhq1I2zOXs/Re+/VZEeVPowTzzkbEHb+Y9vLTJeILXV3C7l4SvtCP31RFGPSLtR
+dlMsVogWJdA0zhxYcEPSJ9osscp7HMLldJE3S7WYQFuivvIeuRvF4L/739BlP3Fh
+15ZuI9iSscciS8bb8aYyKlEfKyxU1D/CYWZqAW2VduZjGPivq+PLd+3jxxYLzLL8
+ahX76PTGP/w8MD8M3s7G3+Vqsq5IZA7nO11eNzyyHN0V1nA7dcCXuLQUH7MCyJMX
+t3epuKM2nWnPTya3B0cbhUWcT9fAVaLifSl+N3aXGU2OIV9lo5hxns63gLPaaPva
+24MvE4dUsZSuaC1grzXiRoVe3eYzCi1HPAmtcKfs/Hyg+ukoKnPjGWvvk9ZLAxG7
++XZXadJJWhYErZkus2oUAEIwQhSoLKPYYpaMHO2J2Pd2Qe1bJaMC/5us3ifYLYV5
+ZB9ijDqYEEoeyJGvLAIsWg6aWGneR6JoFkfUj+cNfYkxjQL2DOkF5W9KwxXmdV+s
+f5Sbnwlr/001nSid1vFfPDB7y1XoRx63Z0w2+LRd6GJ/DvuqKnMNI+N7itb6EO9k
+b/x8L50TQkh0+kwBdJDRZ90CYw/sjgCg88TnHxX4UPQu7q1tHtnHnQgbkcK9X72U
+r+KQgz2juF8=
+-----END ENCRYPTED PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// I-D draft-gutmann-testkeys 2.1 RSA 1024bit Encrypted PKCS#8 ENC=AES128-CBC,PRF=SHA256,ITER=2048 pass=passwd t1.p8eaes128h256.prv
+var T1P8E_A1S2 = (function() {/*
+-----BEGIN ENCRYPTED PRIVATE KEY-----
+MIIC3TBXBgkqhkiG9w0BBQ0wSjApBgkqhkiG9w0BBQwwHAQICZdg+tYJDdoCAggA
+MAwGCCqGSIb3DQIJBQAwHQYJYIZIAWUDBAECBBA1rsjrNbh9zpv4RqGG/4UXBIIC
+gA9m4KgUQCpi4WWW3U3d9d83fecjSum8wkif4mUacb/+Eiesdb5kK+aG4SLBCWBz
+2kgs8/Nj8x9TxxWMRoVz7xRFt+yhj9w7xuyqgFEIl5RcX5BO+GKdT7dEOdVvXmxI
+QfVuD0jvuxHt2Io1+gtHAWkyu+vjhBfpICDw2b4P9vbgb17UQ9OUrm7Koxi5SQaJ
+Z1KEFd9TGKZ365zGIDBxXaIUqLBrVc/4Y+OUAdxB+opoCrR2GlD8bSvVSTiXsEos
+oZ+zJEjOYf5PephkfZ6s3F+IbsTiAigrOjc6KOoG4zaZxJ8T7xjZbmMYJheQfwZn
+oviNdzZ39CRscbvzKDfHAtfAfCWi81G3r5iCpIZpmOd86BGesHKVWbH3hlngjYn6
+hbUy82eOjvlcLoNc75HNwjvsO/gjiMSNUyt0xA8UzrsSEqN3fHlLqHJMLV0EfXVh
+2bXQs9P5Ts3lyXeNjkGLeRsXBS4oUiATXEOPtZK/CPfscNNSiAlgdCFWkap+oNU7
+pUp2urK0fybf251/IRm6lZf8zwvabewrENC+ruZwZ+I82hrpHjfDgY6E50Z3LAXY
+uy29+5c6vXwAB1zfEM/jlvmxSzo2dGWonzOd50AzLr+j8OAtVyDMObPhnSAnLl0n
+Cio4IuyeECDZn7tmkpUKY/NmV9ig+h4t5ghDNTKhhveQmbAnsjMXTfVlLIsQy9TI
+QDwaa5d6EqaAa23VS1cQ8/YUu3sr+d070ul5+0UNxMnbnvzyhZ7LDo6YEA3+kQl7
+htm5esTWl03WFeoNDPT5rG5/Q4btfvpgLNdgrlRZaCqrJ/9/Tudr1HKcn6wCSP3Z
+AMYnFZFc62+sLTTYj3iML+M=
+-----END ENCRYPTED PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// I-D draft-gutmann-testkeys 2.1 RSA 1024bit Encrypted PKCS#8 ENC=AES128-CBC,PRF=SHA256,ITER=600,000 pass=passwd t1.p8eaes128h256i600k.prv
+var T1P8E_A1S2I6 = (function() {/*
+-----BEGIN ENCRYPTED PRIVATE KEY-----
+MIIC3jBYBgkqhkiG9w0BBQ0wSzAqBgkqhkiG9w0BBQwwHQQIDjbZmvp1tbkCAwkn
+wDAMBggqhkiG9w0CCQUAMB0GCWCGSAFlAwQBAgQQ9V9G1hPZrYr33qulIowZTASC
+AoAX3am1rd5b11mfta3HuHmdZ9Yxnbs04jzSD71qhjwPTpVMzUTOH6uRtwbEHpoA
+ryR1RCMnkPerYXn8kIFd9/4yxW8wxi9pJe4NACV5wOZ44T0o1aYe0xGmLNkvyeSo
+oXNW1ipwRIPp5p+ihSfekyZvbEUbOhSKVZtBywewYX3+SO0GtSkIqnWS+/5Rv0wk
+Xzv6zuJilmK6j9pCMlVjQ/rwbdnvoP6rw9uYY1OEfWAAa4Njdy7WAqYte5SkkqnK
+Ofpb69iUGzZV7mO0c/eM/5f4yUQSeq/1KwqRlziD9YoIuN9E7YXukg3Vt6mug8T/
++o2d7Zma3IJGxi3ACuCVnNzquUtSdA1GsinQO/j1UTA/xPRr5kDjHGGYsjsrPJsC
+ObDHbppYGP9QQrt1La5CxbRoF/q+ATjeFsfGEJNhaeiYMu5tEz0D4Ug/e0w/h/Ai
+kS7BsY9hoqdFfC0QDEGhgEIhijMzn4NrNMMRkrZuFgtYCG73uq3iwToNWxiIfYF1
+MBexGTlKGd4JsXThYGGBRGjLVPEuHqYONWM+PbVrWWSpU2iaKIa0p479ZZGWttUu
+xZzJUZTabg/UEK9AKr60cL/0rOWnnniwk+xMhtrO4ENjWgBhbVOlFmZJfTXxA7cn
+raHu5WKmb7w1yS6oLApB/Ei3/dcUVqCGn84i0t5+hCivSponWkCE1uVJN8iPSRLS
+4tVonTwL69r7pFsba4xEnxT+56cROeNhgs0U4u+yYAKoL/qwURKba20hhbuP4jJQ
+kXRiRgriEVY1NyefQYl7IoHAORaGOql27IF0bM5cqs6Lb5yv0y0bb40MCTAsrzYn
+U9CjIgf6MG6PtrDHEy2QJHky
+-----END ENCRYPTED PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// I-D draft-gutmann-testkeys 2.1 RSA 1024bit Encrypted PKCS#8 ENC=AES256-CBC,PRF=SHA384,ITER=2048 pass=passwd t1.p8eaes256h384.prv
+var T1P8E_A2S3 = (function() {/*
+-----BEGIN ENCRYPTED PRIVATE KEY-----
+MIIC3TBXBgkqhkiG9w0BBQ0wSjApBgkqhkiG9w0BBQwwHAQIO5njuMkvKwYCAggA
+MAwGCCqGSIb3DQIKBQAwHQYJYIZIAWUDBAEqBBCPmzMDMZlcbaJRuUyK19FpBIIC
+gEdmJwCwOioS/RPEr21M2tXUbGD5HoTTrRq7y/ffIs2Hjdh6BUNGiezkujqeUPst
+NaAjF0EzYfuRzHfOCRWDKFPDhieOg4Ay2yrW46722wGDqstVv0O46oNcAFabDwoW
+kzgSdCkIt2bWjmIodEzVcmZDm2MMBRXJOTD+4jV+JSCzYylUV0Gajw3Cs2xP7Oz3
+Gn49mBYmOWeYIzwfhVMXU0h4mDsRw4C4Vx2Lka3W8u6nU4VyzcLQ6LyhK4E+sNbJ
+KKX+62l8tt3CIsbwKAtnHDvLx3sbO+unAUK+Z6IvzXDPPIy3ZiQOUKliC69o/6AA
+wbjchOZDDO0Z30z3JEhq/72LUi6J4iQF2sSUlGdTMKqjaiVbFlE9hUDcwIDJsElB
+dD4PGGPaVCtcjubKK2lHKjwbfaMVHgleVJT12lHtlsAbrbZG1mqeqVo3VGttkuBq
+ZG7eBi2p/Dzx2vrmIDqWo9LGf4MwsQfvjUoqEiXbmkQxdtC05X3n1cfCRiiV2nI5
+VOtV1T2OTcvUnorHJBNwr+zK00NZv7rZZ3i1k93QOyINmQRE27pCAB49GxQzfxdn
+f2oTNsJ8si6b9WeF3S4n+4yQZQ4b3FTANYj6qspx5k4Wmg5xhfyJLBZQs86KVUPV
+gqaKj5+UkXNvDtf+njJ01vfhwcRM1EOcy3Ren89L/bvWKQxY/7UrVq6IEMct+sF+
+q1PkjybH3oNRn9o484JAP4fnPgBEnXGhpctcgvJbrjZg38BNbJr7VgvA231jwC7M
+NsSosuUT0EA8zkeOaYDBhql1t2PaCtjvrdGqLev1C5awILjWY86IgRTPDJHQeTF3
+6CanZisgKX+G6fHaNGbqdZU=
+-----END ENCRYPTED PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// I-D draft-gutmann-testkeys 2.1 RSA 1024bit Encrypted PKCS#8 ENC=AES256-CBC,PRF=SHA512,ITER=2048 pass=passwd t1.p8eaes256h512.prv
+var T1P8E_A2S5 = (function() {/*
+-----BEGIN ENCRYPTED PRIVATE KEY-----
+MIIC3TBXBgkqhkiG9w0BBQ0wSjApBgkqhkiG9w0BBQwwHAQI6IdHWkgjBRECAggA
+MAwGCCqGSIb3DQILBQAwHQYJYIZIAWUDBAEqBBA8uGEdD7CTGzcL+YLs8GMABIIC
+gLdfLLxh+oxOK6J5V26jjDsbqVnDoeB6tBGSvV7qupjWIPmsOCYyvaEGGF06ZL2s
+YzAZhRPtKmZ43PQo/TsSJVWSlVWLjfNgTYIL18MES7cHXdKcAPOTyOrCQxgcrEXN
+idpyq1/czrs5JoJBAS2IQVVN5lXiEivtogCypmDTg6YyCRwmcsQFLCLwpjAeudnX
+O/VlPj/TcEudnjn3exuSwL3xr5789wvim9VNUGEiTuN8TDq3Vh0mjKb0mu0C0iVz
+T58aGYlsDcRRH7SBE1dZVoKk1l0x8WFh64Qr/PkRsRGTG3nq/k/yutG9i4Zhe+rC
+bz9EJufYXXsqD4qnCeodz28TmIDrrPkJ1YwHUORnTSpNUr5h6AZ3x6pI0mkn8ZUp
+iBtykiQOBn7SqwRlPHGO79m0GnroZr86GajfmFbcqPWjTU0HRQtHNzyRPPh0UUSi
+aDzdnVBbqXtHOZsldjl6wb8NNB8YcXGTh2E58yPfplRuwGtvEhYfWc2Ib8IdqBf8
+t+Krim2FyEPxPNEjhM6H1M3VAM4kjLdEEdpcH/HYKJVpCifD1HUJZoQRJLVsjK9D
+tv+qNQPbBxDbMkkbHHUMReXsTUvr81bP2kTgRl9PkvFs5s6HGs7RDtdDBX2aFIiS
+L1iKYM1TGmGpP61GMMi5xqW1PfQ7Kje8teI6G+VTm8i4Eot3iU97dG4gDJnQPHUM
+6gGWXhHacsrFl3nhFFZkEiQ7q+ZwByTfjajQ0mYBTd9oROsRgH1VBeYlx5tDOrL3
+kQvF44cfyGbcuQfw15wXbQRRSAmWWNmnBlou/syRBDXtQaPKymAfIJWA7sXzcJ8e
+11/QoIygwpHKz7GNJ1Yt/t4=-----END ENCRYPTED PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// I-D draft-gutmann-testkeys 2.1 RSA 1024bit Plain PKCS#8
+var T1P8P = (function() {/*
+-----BEGIN PRIVATE KEY-----
+MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALDRg1Koj1PVUW9G
+wg56Nn196IrPVKAZ9t71erm0TO3bIkKxvKD7G1y4KzA2F2pjkDVk3sbrQdsvj8eH
+9OUuEUnjM0dXKXP2YMPHfKngghwraVvnrp19MPQHkRD0iq5vi3AtR0spAIF/KGYk
+m+wSorGbgnhBaAj4GuH8+bd3imI/AgMBAAECgYBILp+PpOQt8w11gctCob2Q6U9/
+Kzh+y1qulkPtf59QEn8f/vLkPN5ksYJgAhT5B4Ada/pN9khCNF5btDLTREUl2DAW
+VMVEKwpeEbnH4gH6MvQauvTwpuA88ODLgmbGKtEdlW1TyUZuSJlf6iYMhTbwQcs1
+YvqsURxNZqj+0RGykQJBAOnYbk3DSphafsdab1SnXORROeRSQLOGq3Edt5G82YcY
+oTuvIYwkSTZGaAdWy1Cmy+4VjiUhRJkSMBwNQUkRGEUCQQDBkfo7VQs5GnywcoN2
+J3KV5hxlTwvvL1jc5clioQt9118GAVRl5VB25GYmPuvK7SDS66s5MT6LxWcyD+iy
+3GKzAkEA5zrgN3y4slYprq66D5c+v3WiLSc4W0z7Ees0raNz5aZxKDdQkOcAje6o
+xzkH6kREurQNzqFK16GoeNSSjdGdkQJAQZl5FhZyIT4Kt7l3N9mSiZ5cTTEGuF5x
+XRs6roQpYtJUT7KvqYCXTlOFEr0MJ89I6nIXquA3dCLIID0n/UWW5QJBALmdf49N
+TUVfH7pGLZkKLoSMQowevuAdwAGEyKdlg603n2mtr1R1VDD2PEJT0bt4zJvSMmQ0
+AIC4TBqRfeCLbts=
+-----END PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// zp8e.pem hoge
+var ZP8EPEM = (function() {/*
+-----BEGIN ENCRYPTED PRIVATE KEY-----
+MIIBpjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQIU9Y9p2EfWucCAggA
+MBQGCCqGSIb3DQMHBAhdNa9kLcmywQSCAWAoZaR4ib7mOcfpJQr7lyp/ume0srhJ
+6G1GuYaZzh/At3EHVrPtH9i8OaLiS/nIitWTdd1tITzWAIGNy1jDasvLUEk+agH2
+FGOuGfN86bNVUVbtHxkzpslNbcZcsNZtDvrDRJoZo2nAlcNW1tICpfzMTCBl/1Pl
+LNqit+IdcZVYRU8DJB0+AsaXevxBp7ifpthfHq2+9kCcSCqnonAH3pnsGlcBNinP
+M4L2QQ6YMMSRl7nCZNT4/AJg+OyKGzNgQpcRfgrxsQXA8/4GrAcMF0YqaRS6Am6M
+y42+85E5qsMYmQQu+PZDDOfmaNomwT5fA4TAp0nJP0zX8gBTBLywMubPlmuMWo4N
+XlHKSl4Wn1sQlJOhWOAIsamdtXYPryDcQGEeiHb9Y83f9di4e9JlViZVkv+iPcGv
+IjsZNp6zmlqf/RXnETsJjGd0TXRWaEdu+XOOyVyPskX2177X9DUJoD31
+-----END ENCRYPTED PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+var sk10pem = "-----BEGIN RSA PRIVATE KEY-----\r\n" +
 "Proc-Type: 4,ENCRYPTED\r\n" +
 "DEK-Info: AES-256-CBC,40555967F759530864FE022E257DE34E\r\n" +
 "\r\n" +
@@ -288,35 +453,158 @@ test("getPEM, getEncryptedPKCS5PEMFromPrvKeyHex/4 with key generation", function
   equal(pem.match(/DEK-Info: DES-EDE3-CBC,([0-9A-F]{16})\s+/) != null, true, "iv len match: iv=" + RegExp.$1 + "--" + pem);
 });
 
-test("parseHexOfEncryptedPKCS8", function() {
-  var info = KEYUTIL.parseHexOfEncryptedPKCS8(sk12hex);
+test("parsePBES2", function() {
+var pem, pExpect;
 
-  expect(5);
-  equal(info.ciphertext, sk12ciphertext, "ciphertext");
-  equal(info.encryptionSchemeAlg, "TripleDES", "encryptionSchemeAlg");
-  equal(info.encryptionSchemeIV, "5d35af642dc9b2c1", "encryptionSchemeIV");
-  equal(info.pbkdf2Salt, "53d63da7611f5ae7", "pbkdf2Salt");
-  equal(info.pbkdf2Iter, 2048, "pbkdf2Iter");
+// t1.p8eaes128h256i600k.prv
+pem = T1P8E_A1S2I6;
+pExpect = {
+  "enc": "17dda9b5adde5bd7599fb5adc7b8799d67d6319dbb34e23cd20fbd6a863c0f4e954ccd44ce1fab91b706c41e9a00af247544232790f7ab6179fc90815df7fe32c56f30c62f6925ee0d002579c0e678e13d28d5a61ed311a62cd92fc9e4a8a17356d62a704483e9e69fa28527de93266f6c451b3a148a559b41cb07b0617dfe48ed06b52908aa7592fbfe51bf4c245f3bfacee2629662ba8fda4232556343faf06dd9efa0feabc3db986353847d60006b8363772ed602a62d7b94a492a9ca39fa5bebd8941b3655ee63b473f78cff97f8c944127aaff52b0a91973883f58a08b8df44ed85ee920dd5b7a9ae83c4fffa8d9ded999adc8246c62dc00ae0959cdceab94b52740d46b229d03bf8f551303fc4f46be640e31c6198b23b2b3c9b0239b0c76e9a5818ff5042bb752dae42c5b46817fabe0138de16c7c610936169e89832ee6d133d03e1483f7b4c3f87f022912ec1b18f61a2a7457c2d100c41a18042218a33339f836b34c31192b66e160b58086ef7baade2c13a0d5b18887d81753017b119394a19de09b174e16061814468cb54f12e1ea60e35633e3db56b5964a953689a2886b4a78efd659196b6d52ec59cc95194da6e0fd410af402abeb470bff4ace5a79e78b093ec4c86dacee043635a00616d53a51666497d35f103b727ada1eee562a66fbc35c92ea82c0a41fc48b7fdd71456a0869fce22d2de7e8428af4a9a275a4084d6e54937c88f4912d2e2d5689d3c0bebdafba45b1b6b8c449f14fee7a71139e36182cd14e2efb26002a82ffab051129b6b6d2185bb8fe23250917462460ae211563537279f41897b2281c03916863aa976ec81746cce5caace8b6f9cafd32d1b6f8d0c09302caf362753d0a32207fa306e8fb6b0c7132d90247932",
+  "encalg": "aes128-CBC",
+  "enciv": "f55f46d613d9ad8af7deaba5228c194c",
+  "iter": 600000,
+  "prf": "hmacWithSHA256",
+  "salt": "0e36d99afa75b5b9"
+};
+deepEqual(KEYUTIL.parsePBES2(pemtohex(pem)), pExpect, "t1.p8eaes128h256i600k.prv(enc=aes128cbc,prf=HmacSHA256,iter=600,000)");
+
+// t1.p8eaes128h256.prv
+pem = T1P8E_A1S2;
+pExpect = {
+  "enc": "0f66e0a814402a62e16596dd4dddf5df377de7234ae9bcc2489fe2651a71bffe1227ac75be642be686e122c1096073da482cf3f363f31f53c7158c468573ef1445b7eca18fdc3bc6ecaa80510897945c5f904ef8629d4fb74439d56f5e6c4841f56e0f48efbb11edd88a35fa0b47016932bbebe38417e92020f0d9be0ff6f6e06f5ed443d394ae6ecaa318b949068967528415df5318a677eb9cc62030715da214a8b06b55cff863e39401dc41fa8a680ab4761a50fc6d2bd5493897b04a2ca19fb32448ce61fe4f7a98647d9eacdc5f886ec4e202282b3a373a28ea06e33699c49f13ef18d96e63182617907f0667a2f88d773677f4246c71bbf32837c702d7c07c25a2f351b7af9882a4866998e77ce8119eb0729559b1f78659e08d89fa85b532f3678e8ef95c2e835cef91cdc23bec3bf82388c48d532b74c40f14cebb1212a3777c794ba8724c2d5d047d7561d9b5d0b3d3f94ecde5c9778d8e418b791b17052e285220135c438fb592bf08f7ec70d35288096074215691aa7ea0d53ba54a76bab2b47f26dfdb9d7f2119ba9597fccf0bda6dec2b10d0beaee67067e23cda1ae91e37c3818e84e746772c05d8bb2dbdfb973abd7c00075cdf10cfe396f9b14b3a367465a89f339de740332ebfa3f0e02d5720cc39b3e19d20272e5d270a2a3822ec9e1020d99fbb6692950a63f36657d8a0fa1e2de608433532a186f79099b027b233174df5652c8b10cbd4c8403c1a6b977a12a6806b6dd54b5710f3f614bb7b2bf9dd3bd2e979fb450dc4c9db9efcf2859ecb0e8e98100dfe91097b86d9b97ac4d6974dd615ea0d0cf4f9ac6e7f4386ed7efa602cd760ae5459682aab27ff7f4ee76bd4729c9fac0248fdd900c62715915ceb6fac2d34d88f788c2fe3",
+  "encalg": "aes128-CBC",
+  "enciv": "35aec8eb35b87dce9bf846a186ff8517",
+  "iter": 2048,
+  "prf": "hmacWithSHA256",
+  "salt": "099760fad6090dda"
+};
+deepEqual(KEYUTIL.parsePBES2(pemtohex(pem)), pExpect, "t1.p8eaes128h256.prv(enc=aes128cbc,prf=HmacSHA256,iter=2048)");
+
+// t1.p8e3desh256.prv
+pem = T1P8E_3DS2;
+pExpect = {
+  "enc": "c6f240add51291482c13535332fbce95142bf844d5aee8f1d1511d6ba0780c5ddbd17949be30feec3a8a481f33181589767069ce7096f70c0117e74321c6c05b334cf23b4973b9e1963acbf6cc53b4b659c633fdd4b8d17e72029f4679a13d23c8ca107af2f24bbd3a582d95b103531292caf03a5b54e0390cca6af47774a7c7f3ac0c85faf8cf4db0a0e96526b229bd1daa62756b2fe46662786ad48db3397b3f45efbf55911e54fa304f3ce46c41dbf98f6f2d325e20b5d5dc2ee5e12bed08fdf544518f48bb5176532c56881625d034ce1c587043d227da2cb1ca7b1cc2e57491374bb598405ba2bef21eb91bc5e0bffbdfd0653f7161d7966e23d892b1c7224bc6dbf1a6322a511f2b2c54d43fc261666a016d9576e66318f8afabe3cb77ede3c7160bccb2fc6a15fbe8f4c63ffc3c303f0cdecec6dfe56ab2ae48640ee73b5d5e373cb21cdd15d6703b75c097b8b4141fb302c89317b777a9b8a3369d69cf4f26b707471b85459c4fd7c055a2e27d297e377697194d8e215f65a398719eceb780b3da68fbdadb832f138754b194ae682d60af35e246855edde6330a2d473c09ad70a7ecfc7ca0fae9282a73e3196bef93d64b0311bbf9765769d2495a1604ad992eb36a140042304214a82ca3d862968c1ced89d8f77641ed5b25a302ff9bacde27d82d8579641f628c3a98104a1ec891af2c022c5a0e9a5869de47a2681647d48fe70d7d89318d02f60ce905e56f4ac315e6755fac7f949b9f096bff4d359d289dd6f15f3c307bcb55e8471eb7674c36f8b45de8627f0efbaa2a730d23e37b8ad6fa10ef646ffc7c2f9d13424874fa4c017490d167dd02630fec8e00a0f3c4e71f15f850f42eeead6d1ed9c79d081b91c2bd5fbd94afe290833da3b85f",
+  "encalg": "des-EDE3-CBC",
+  "enciv": "7540032ece3eca31",
+  "iter": 2048,
+  "prf": "hmacWithSHA256",
+  "salt": "159cb3f14d85da10"
+};
+deepEqual(KEYUTIL.parsePBES2(pemtohex(pem)), pExpect, "t1.p8e3desh256.prv(enc=3des,prf=HmacSHA256,iter=2048)");
+
+// t1.p8e3desh1.prv
+pem = T1P8E_3DS1;
+pExpect = {
+  "enc": "f73a391742cc8d34a882f62e4f29493777db3cb5ad2d322a51eae82faa7a9f7fd5fb666939b49625f9b394c723e76166d16be3e9a0857c3eb2e671983aaea1f88cd955e0079fe14da078783590e7d1e591a6fcff4ecf232a5f4e16ecf6f426bbd238cf9ff6959a2f81572c95d45074a18b8efb53e9149667668a0f56f5952f74ccffce3384d6c5289790e8cf9d1789ec930dead751e1ae89bb8a0f1cb6c40edd30f10c12f50f95b93a8a1c7e4a7aca45ffea5cdfcc4b1ce953b80e5e3b044bfde603d58080114b89aecdb1b98f704ea2e7865f5ca8e1794d6faf0f2b57f7745a0e4cf84368ca571e6c40c75fab22a5f60bced05389c6f57bfefda1ae95b213f63c5e37198aac35645a55fe96ac66b280480fe5ee052d4e5ac87125c5d4647217da5c59128418c7dd46339253751c78a837b116e42fc9f6088e24058d4a6865aa5e3122a1be3c8cc5d913353db49b9b12fc4d4c03c7ac4f1b2568089e38987478d8b1de32ed45f891f2fb4e58e09737e027ee077fb35080c3358536fbcd893dbb0b7cf541c119619e4163a95f17e19ee6d6abdafbe0dd1fdc6cf8fc7aa6b94a3aeb38607b475f833306154a1a3d3ff6111e7630815e9c98de1ba83162639f0dd0a869811e4a0a6d19c58425074736d35ca4dbfa345bec94c9dadbb84e61ad30cdee302b8e36d75cece739f588e2e3fe06834b1af35a1703c8e3b913f49d995cdf7de6a0b68ba50f47b86da0c2cdd7ee10690d05b39d360d09e160dde78e165025263329c54ad662b99d87866757d0511947b2039e630acb97c0d748bc342bbc4501977fe2a7c04db4c5e11e375c44db31845ec81108064b4fff48991a50d98fc3e4a524ffd671922e0308b7c37124397348919ce98f875e2358d5a7fb875c316f",
+  "encalg": "des-EDE3-CBC",
+  "enciv": "5292a2cfc449fc4d",
+  "iter": 2048,
+  "prf": "hmacWithSHA1",
+  "salt": "ff20bb69893d7a08"
+};
+deepEqual(KEYUTIL.parsePBES2(pemtohex(pem)), pExpect, "t1.p8e3desh1.prv(enc=3des,prf=HmacSHA1,iter=2048)");
+
+// zp8e.pem
+pem = ZP8EPEM;
+pExpect = {
+  "enc": "2865a47889bee639c7e9250afb972a7fba67b4b2b849e86d46b98699ce1fc0b7710756b3ed1fd8bc39a2e24bf9c88ad59375dd6d213cd600818dcb58c36acbcb50493e6a01f61463ae19f37ce9b3555156ed1f1933a6c94d6dc65cb0d66d0efac3449a19a369c095c356d6d202a5fccc4c2065ff53e52cdaa2b7e21d719558454f03241d3e02c6977afc41a7b89fa6d85f1eadbef6409c482aa7a27007de99ec1a57013629cf3382f6410e9830c49197b9c264d4f8fc0260f8ec8a1b33604297117e0af1b105c0f3fe06ac070c17462a6914ba026e8ccb8dbef39139aac31899042ef8f6430ce7e668da26c13e5f0384c0a749c93f4cd7f2005304bcb032e6cf966b8c5a8e0d5e51ca4a5e169f5b109493a158e008b1a99db5760faf20dc40611e8876fd63cddff5d8b87bd26556265592ffa23dc1af223b19369eb39a5a9ffd15e7113b098c67744d745668476ef9738ec95c8fb245f6d7bed7f43509a03df5",
+  "encalg": "des-EDE3-CBC",
+  "enciv": "5d35af642dc9b2c1",
+  "iter": 2048,
+  "prf": "hmacWithSHA1",
+  "salt": "53d63da7611f5ae7"
+};
+deepEqual(KEYUTIL.parsePBES2(pemtohex(pem)), pExpect, "zp8e.pem");
+equal(KEYUTIL.getDKFromPBES2Param(pExpect, "hoge"), "c540389de62486834ff3a208a9ab457291df38f4372ad920", "c540...");
+
 });
 
-test("getPBKDF2KeyHexFromParam", function() {
+test("getDKFromPBES2Param", function() {
+var pPBES2, hKey;
+
+pPBES2 = KEYUTIL.parsePBES2(pemtohex(T1P8E_3DS1));
+hKey = KEYUTIL.getDKFromPBES2Param(pPBES2, "passwd"); 
+equal(hKey, "3ba8fc07d0651f57e0c2b027b50fbf339b3f17211515c154", "T1PBE_3DS1 -K "+hKey+" -iv "+pPBES2.enciv);
+
+pPBES2 = KEYUTIL.parsePBES2(pemtohex(T1P8E_3DS2));
+hKey = KEYUTIL.getDKFromPBES2Param(pPBES2, "passwd"); 
+equal(hKey, "0fc60e11d99ae06f55c5b29e258d2d08604027aac037a6ad", "T1PBE_3DS2 -K "+hKey+" -iv "+pPBES2.enciv);
+
+pPBES2 = KEYUTIL.parsePBES2(pemtohex(T1P8E_A1S2));
+hKey = KEYUTIL.getDKFromPBES2Param(pPBES2, "passwd"); 
+equal(hKey, "674950b41894b5e2d5f6704acee4bbc5", "T1PBE_A1S2 -K "+hKey+" -iv "+pPBES2.enciv);
+
+pPBES2 = KEYUTIL.parsePBES2(pemtohex(T1P8E_A2S5));
+hKey = KEYUTIL.getDKFromPBES2Param(pPBES2, "passwd"); 
+equal(hKey, "f305c553ff811197110f6b84541687fe51ba922d4da508fc222316ba4f010a6c", "T1PBE_A2S5 -K "+hKey+" -iv "+pPBES2.enciv);
+});
+
+test("getPlainHexFromEncryptedPKCS8PEM", function() {
+equal(KEYUTIL.getPlainHexFromEncryptedPKCS8PEM(T1P8E_3DS1, "passwd"), pemtohex(T1P8P), "T1P8E_3DS1(3DES,HmacSHA1,iter2048)");
+equal(KEYUTIL.getPlainHexFromEncryptedPKCS8PEM(T1P8E_3DS2, "passwd"), pemtohex(T1P8P), "T1P8E_3DS2(3DES,HmacSHA256,iter2048)");
+equal(KEYUTIL.getPlainHexFromEncryptedPKCS8PEM(T1P8E_A1S2, "passwd"), pemtohex(T1P8P), "T1P8E_A1S2(AES128,HmacSHA256,iter2048)");
+equal(KEYUTIL.getPlainHexFromEncryptedPKCS8PEM(T1P8E_A2S3, "passwd"), pemtohex(T1P8P), "T1P8E_A2S3(AES256,HmacSHA384,iter2048)");
+equal(KEYUTIL.getPlainHexFromEncryptedPKCS8PEM(T1P8E_A2S5, "passwd"), pemtohex(T1P8P), "T1P8E_A2S5(AES256,HmacSHA512,iter2048)");
+//equal(KEYUTIL.getPlainHexFromEncryptedPKCS8PEM(T1P8E_A1S2I6, "passwd"), pemtohex(T1P8P), "T1P8E_A1S2I6");
+//equal(KEYUTIL.getPlainHexFromEncryptedPKCS8PEM(ZP8EPEM, "hoge"), "aa", "aa");
+});
+
+test("parseHexOfEncryptedPKCS8 (DEPRECATED)", function() {
+var pResult = KEYUTIL.parseHexOfEncryptedPKCS8(sk12hex);
+var pExpect = {
+  ciphertext: sk12ciphertext,
+  encryptionSchemeAlg: "TripleDES",
+  encryptionSchemeIV: "5d35af642dc9b2c1",
+  pbkdf2Salt: "53d63da7611f5ae7",
+  pbkdf2Iter: 2048
+};
+deepEqual(pResult, pExpect, "sk12hex");
+});
+
+test("getPBKDF2KeyHexFromParam (DEPRECATED)", function() {
   var info = KEYUTIL.parseHexOfEncryptedPKCS8(sk12hex);
   var hKey = KEYUTIL.getPBKDF2KeyHexFromParam(info, "hoge");
   equal(hKey, "c540389de62486834ff3a208a9ab457291df38f4372ad920", "getPBKDF2KeyHexFromParam");
 });
 
-test("_getPlainPKCS8HexFromEncryptedPKCS8PEM", function() {
+test("_getPlainPKCS8HexFromEncryptedPKCS8PEM (DEPRECATED)", function() {
   var h = KEYUTIL._getPlainPKCS8HexFromEncryptedPKCS8PEM(sk12pem, "hoge");
   equal(h, sk12plainhex, "sk12pem -> sk12plainhex");
 });
 
 test("getKey(PKCS8PEM, pass)", function() {
-  //var k = KEYUTIL.getRSAKeyFromEncryptedPKCS8PEM(sk12pem, "hoge");
-  var k = KEYUTIL.getKey(sk12pem, "hoge");
-  // n,e,d,p,q,dmp1,dmq1,coeff
-  equal(k.n.toString(16), "dc6d990d4a71c769ec704db7cce04da8b8f15bfad7b6e3e129e191c30df7db0243635a8ffb293a6e4a74599911c0d15ae8e72d9c84bd8dcf19ffee839fd05167", "rsaKey.n");
-  equal(k.e.toString(16), "10001", "rsaKey.e");
-  equal(k.d.toString(16), "ac15f412e8378393323f4aad5f890d97d72ab6c0528039cfa33eb2e930927bab09994944a11e1cdcf4153f1c8d9c1825bdeed0a1e86b1c268b42e1c348ad3f61", "rsaKey.d");
+var k, nExpect, dExpect;
+
+nExpect = "b0d18352a88f53d5516f46c20e7a367d7de88acf54a019f6def57ab9b44ceddb2242b1bca0fb1b5cb82b3036176a63903564dec6eb41db2f8fc787f4e52e1149e33347572973f660c3c77ca9e0821c2b695be7ae9d7d30f4079110f48aae6f8b702d474b2900817f2866249bec12a2b19b8278416808f81ae1fcf9b7778a623f";
+dExpect = "482e9f8fa4e42df30d7581cb42a1bd90e94f7f2b387ecb5aae9643ed7f9f50127f1ffef2e43cde64b182600214f907801d6bfa4df64842345e5bb432d3444525d8301654c5442b0a5e11b9c7e201fa32f41abaf4f0a6e03cf0e0cb8266c62ad11d956d53c9466e48995fea260c8536f041cb3562faac511c4d66a8fed111b291";
+
+k = KEYUTIL.getKey(T1P8E_3DS1, "passwd");
+equal(k.n.toString(16), nExpect, "T1P8E_3DS1 n");
+equal(k.d.toString(16), dExpect, "T1P8E_3DS1 d")
+
+k = KEYUTIL.getKey(T1P8E_3DS2, "passwd");
+equal(k.n.toString(16), nExpect, "T1P8E_3DS2 n");
+equal(k.d.toString(16), dExpect, "T1P8E_3DS2 d")
+
+k = KEYUTIL.getKey(T1P8E_A1S2, "passwd");
+equal(k.n.toString(16), nExpect, "T1P8E_A1S2 n");
+equal(k.d.toString(16), dExpect, "T1P8E_A1S2 d")
+
+k = KEYUTIL.getKey(T1P8E_A2S3, "passwd");
+equal(k.n.toString(16), nExpect, "T1P8E_A2S3 n");
+equal(k.d.toString(16), dExpect, "T1P8E_A2S3 d")
+
+k = KEYUTIL.getKey(T1P8E_A2S5, "passwd");
+equal(k.n.toString(16), nExpect, "T1P8E_A2S5 n");
+equal(k.d.toString(16), dExpect, "T1P8E_A2S5 d")
+
+nExpect = "dc6d990d4a71c769ec704db7cce04da8b8f15bfad7b6e3e129e191c30df7db0243635a8ffb293a6e4a74599911c0d15ae8e72d9c84bd8dcf19ffee839fd05167";
+dExpect = "ac15f412e8378393323f4aad5f890d97d72ab6c0528039cfa33eb2e930927bab09994944a11e1cdcf4153f1c8d9c1825bdeed0a1e86b1c268b42e1c348ad3f61";
+k = KEYUTIL.getKey(sk12pem, "hoge");
+equal(k.n.toString(16), nExpect, "T1P8E_A2S5 n");
+equal(k.d.toString(16), dExpect, "T1P8E_A2S5 d")
+
+// n,e,d,p,q,dmp1,dmq1,coeff
 });
 
 test("getKey(cert1) sample-rsasign.html", function() {

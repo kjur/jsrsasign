@@ -1,4 +1,4 @@
-/* crypto-1.2.6.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* crypto-1.3.0.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.0 crypto 1.2.6 (2021-Nov-21)
+ * @version jsrsasign 10.9.0 crypto 1.3.0 (2023-Nov-27)
  * @since jsrsasign 2.2
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1404,17 +1404,47 @@ KJUR.crypto.Cipher = function(params) {
  * @function
  * @param {String} s input string to encrypt
  * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
- * @param {String} algName short/long algorithm name for encryption/decryption 
+ * @param {String} algName short/long algorithm name for encryption/decryption (OPTION)
+ * @param {object} param parameters for synchronous cipher such as initial vector (OPTION)
  * @return {String} hexadecimal encrypted string
  * @since jsrsasign 6.2.0 crypto 1.1.10
+ *
  * @description
  * This static method encrypts raw string with specified key and algorithm.
+ * <br/>
+ * NOTE: From jsrsasign 10.9.0, asymmetric cipher ({des-EDE3,aes{128,256}}-CBC) is also supported.
+ *
  * @example 
+ * // asynchronous cipher
  * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj) &rarr; "1abc2d..."
  * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj, "RSAOAEP") &rarr; "23ab02..."
+ * // synchronous cipher
+ * KJUR.crypto.Cipher.encrypt("12abcd...", "5a7d...", "aes256-CBC", { iv: "1b3c..." }) 
+ * KJUR.crypto.Cipher.encrypt("12abcd...", "5a7d...", any, { encalg: "aes128-CBC", iv: "1b3c..." }) 
+ * KJUR.crypto.Cipher.encrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." }) 
+ * KJUR.crypto.Cipher.encrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41...", enc: "12abcd..." }) 
  */
-KJUR.crypto.Cipher.encrypt = function(s, keyObj, algName) {
-    if (keyObj instanceof RSAKey && keyObj.isPublic) {
+KJUR.crypto.Cipher.encrypt = function(s, keyObj, algName, param) {
+    if (aryval(param, "enclag") != undefined) algName = param.encalg;
+
+    if (typeof algName == "string" && algName.substr(-4) == "-CBC") {
+	var hKey = keyObj;
+	var hPlain = s;
+	if (aryval(param, "key") != undefined) hKey = param.key;
+	if (aryval(param, "enc") != undefined) hEnc = param.enc;
+	var wKey = CryptoJS.enc.Hex.parse(hKey);
+	var wPlain = CryptoJS.enc.Hex.parse(hPlain);
+	var wIV = CryptoJS.enc.Hex.parse(param.iv);
+	var wEnc;
+	if (algName == "des-EDE3-CBC") {
+	    wEnc = CryptoJS.TripleDES.encrypt(wPlain, wKey, { iv: wIV });
+	} else if (algName == "aes128-CBC" || algName == "aes256-CBC") {
+	    wEnc = CryptoJS.AES.encrypt(wPlain, wKey, { iv: wIV });
+	} else {
+	    throw new Error("unsupported algorithm: " + algName);
+	}
+	return wEnc + "";
+    } else if (keyObj instanceof RSAKey && keyObj.isPublic) {
 	var algName2 = KJUR.crypto.Cipher.getAlgByKeyAndName(keyObj, algName);
 	if (algName2 === "RSA") return keyObj.encrypt(s);
 	if (algName2 === "RSAOAEP") return keyObj.encryptOAEP(s, "sha1");
@@ -1433,19 +1463,49 @@ KJUR.crypto.Cipher.encrypt = function(s, keyObj, algName) {
  * @name decrypt
  * @memberOf KJUR.crypto.Cipher
  * @function
- * @param {String} hex hexadecial string of encrypted message
- * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
- * @param {String} algName short/long algorithm name for encryption/decryption
+ * @param {string} hex hexadecimal string of encrypted message
+ * @param {object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
+ * @param {string} algName short/long algorithm name for encryption/decryption (OPTION)
+ * @param {object} param parameters for synchronous cipher such as initial vector (OPTION)
  * @return {String} decrypted raw string
  * @since jsrsasign 6.2.0 crypto 1.1.10
+ *
  * @description
  * This static method decrypts encrypted hexadecimal string with specified key and algorithm.
+ * <br/>
+ * NOTE: From jsrsasign 10.9.0, asymmetric cipher ({des-EDE3,aes{128,256}}-CBCis also supported.
+ *
  * @example 
+ * // asynchronous cipher
  * KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj) &rarr; "1abc2d..."
  * KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."
+ * // synchronous cipher
+ * KJUR.crypto.Cipher.decrypt("12abcd...", "5a7d...", "aes256-CBC", { iv: "1b3c..." }) 
+ * KJUR.crypto.Cipher.decrypt("12abcd...", "5a7d...", any, { encalg: "aes128-CBC", iv: "1b3c..." }) 
+ * KJUR.crypto.Cipher.decrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." }) 
+ * KJUR.crypto.Cipher.decrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41...", enc: "12abcd..." }) 
  */
-KJUR.crypto.Cipher.decrypt = function(hex, keyObj, algName) {
-    if (keyObj instanceof RSAKey && keyObj.isPrivate) {
+KJUR.crypto.Cipher.decrypt = function(hex, keyObj, algName, param) {
+    if (aryval(param, "enclag") != undefined) algName = param.encalg;
+
+    if (typeof algName == "string" && algName.substr(-4) == "-CBC") {
+	var hKey = keyObj;
+	var hEnc = hex;
+	if (aryval(param, "key") != undefined) hKey = param.key;
+	if (aryval(param, "enc") != undefined) hEnc = param.enc;
+	var wKey = CryptoJS.enc.Hex.parse(hKey);
+	var wEnc = CryptoJS.enc.Hex.parse(hEnc);
+	var wIV = CryptoJS.enc.Hex.parse(param.iv);
+	var wDec;
+	if (algName == "des-EDE3-CBC") {
+	    wDec = CryptoJS.TripleDES.decrypt({ ciphertext: wEnc }, wKey, { iv: wIV });
+	} else if (algName == "aes128-CBC" || algName == "aes256-CBC") {
+	    wDec = CryptoJS.AES.decrypt({ ciphertext: wEnc }, wKey, { iv: wIV });
+	} else {
+	    throw new Error("unsupported algorithm: " + algName);
+	}
+	return CryptoJS.enc.Hex.stringify(wDec);
+    } else if (keyObj instanceof RSAKey && keyObj.isPrivate) {
 	var algName2 = KJUR.crypto.Cipher.getAlgByKeyAndName(keyObj, algName);
 	if (algName2 === "RSA") return keyObj.decrypt(hex);
 	if (algName2 === "RSAOAEP") return keyObj.decryptOAEP(hex, "sha1");

@@ -10,6 +10,7 @@
 <!-- tom wo's -->
 <script src="../ext/base64.js"></script>
 <script src="../ext/jsbn.js"></script>
+<script src="../ext/jsbn2.js"></script>
 <!-- jsrsasign -->
 <script src="../src/base64x-1.1.js"></script>
 
@@ -412,6 +413,20 @@ test("hextooid", function() {
 equal(hextooid("608648016503040201"), "2.16.840.1.101.3.4.2.1", "sha256");
 equal(hextooid("2a864886f70d010105"), "1.2.840.113549.1.1.5", "SHA1withRSA");
 equal(hextooid("=-=-"), null, "=-=- > null");
+});
+
+test("inttohex", function() {
+equal(inttohex(1), "01", "1 > 01")
+equal(inttohex(-1), "ff", "-1 > ff")
+equal(inttohex(2048), "0800", "2048 > 0800")
+equal(inttohex(-2048), "f800", "-2048 > f800")
+});
+
+test("twoscompl", function() {
+equal(twoscompl(new BigInteger(String(1), 10)), "01", "1 > 01")
+equal(twoscompl(new BigInteger(String(-1), 10)), "ff", "-1 > ff")
+equal(twoscompl(new BigInteger(String(2048), 10)), "0800", "2048 > 0800")
+equal(twoscompl(new BigInteger(String(-2048), 10)), "f800", "-2048 > f800")
 });
 
 test("strpad test", function() {

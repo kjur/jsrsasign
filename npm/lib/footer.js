@@ -85,6 +85,8 @@ exports.b64topem = b64topem;
 exports.pemtob64 = pemtob64;
 exports.timeogen = timetogen;
 exports.aryval = aryval;
+exports.inttohex = inttohex;
+exports.twoscompl = twoscompl;
 
 // name spaces
 exports.KJUR = KJUR;

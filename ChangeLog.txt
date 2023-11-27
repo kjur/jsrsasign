@@ -1,6 +1,30 @@
 
 ChangeLog for jsrsasign
 
+enhanced support for encrypted PKCS8
+* Changes from 10.8.6 to 10.9.0 (2023-Nov-27)
+  - KEYUTIL.getPEM is updated not to use weak ciphers (#599)
+    - default encryptionScheme is changed from des-EDE3-CBC to aes256-CBC
+    - default prf is changed from hmacWithSHA1 to hmacWithSHA256
+  - src/keyutil.js
+    - more encrypted PKCS#8 private key support
+      - KEYUTIL.getKey now supports encrypted PKCS#8 private key with
+        aes128-CBC, aes256-CBC encrypted and using hmacWithSHA224/256/384/512 as
+        psudorandom function.
+      - KEYUTIL.getPEM now supports such as above encrypted PKCS#8 PEM 
+        priavte key.
+  - src/crypto.js
+    - Cipher.decrypt/encrypt now supports symmetric ciphers (des-EDE3-CBC,aes128-CBC,aes256-CBC)
+  - src/base64x.js
+    - function inttohex and twoscompl are added
+  - src/asn1.js
+    - ASN1Util.bigIntToMinTwosComplementsHex is now DEPRECATED. use twoscompl.
+  - src/asn1x509.js
+    - aes*-CBC and hmacWithSHA* OIDs are added
+  - test/qunit-do-{base64x,crypto-cipher,keyutil-eprv,keyutil,keyutil-p8egen}.html
+    - update and add some test cases for above
+  - stop bower support (bower.json removed)
+
 X509.getExtSubjectDirectoryAttributes another bugfix
 * Changes from 10.8.5 to 10.8.6 (2023-Apr-26)
   - src/x509.js

@@ -1,4 +1,4 @@
-/* asn1x509-2.1.20.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1x509-2.1.21.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1x509.js - ASN.1 DER encoder classes for X.509 certificate
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name asn1x509-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.8.4 asn1x509 2.1.20 (2023-Apr-26)
+ * @version jsrsasign 10.9.0 asn1x509 2.1.21 (2023-Nov-27)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -4484,6 +4484,9 @@ KJUR.asn1.x509.OID = new function() {
     var _DERObjectIdentifier = KJUR.asn1.DERObjectIdentifier;
 
     this.name2oidList = {
+	'aes128-CBC':		'2.16.840.1.101.3.4.1.2',
+	'aes256-CBC':		'2.16.840.1.101.3.4.1.42',
+
         'sha1':                 '1.3.14.3.2.26',
         'sha256':               '2.16.840.1.101.3.4.2.1',
         'sha384':               '2.16.840.1.101.3.4.2.2',
@@ -4492,6 +4495,12 @@ KJUR.asn1.x509.OID = new function() {
         'md5':                  '1.2.840.113549.2.5',
         'md2':                  '1.3.14.7.2.2.1',
         'ripemd160':            '1.3.36.3.2.1',
+
+	'hmacWithSHA1':		'1.2.840.113549.2.7',
+	'hmacWithSHA224':	'1.2.840.113549.2.8',
+	'hmacWithSHA256':	'1.2.840.113549.2.9',
+	'hmacWithSHA384':	'1.2.840.113549.2.10',
+	'hmacWithSHA512':	'1.2.840.113549.2.11',
 
         'MD2withRSA':           '1.2.840.113549.1.1.2',
         'MD4withRSA':           '1.2.840.113549.1.1.3',

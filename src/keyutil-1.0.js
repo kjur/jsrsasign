@@ -1,9 +1,9 @@
-/* keyutil-1.2.7.js (c) 2013-2022 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* keyutil-1.3.0.js (c) 2013-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * keyutil.js - key utility for PKCS#1/5/8 PEM, RSA/DSA/ECDSA key object
  *
- * Copyright (c) 2013-2022 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2023 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -15,7 +15,7 @@
  * @fileOverview
  * @name keyutil-1.0.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.5.16 keyutil 1.2.7 (2022-Apr-08)
+ * @version jsrsasign 10.9.0 keyutil 1.3.0 (2023-Nov-25)
  * @since jsrsasign 4.1.4
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -392,16 +392,226 @@ var KEYUTIL = function() {
             return sPEM;
         },
 
+        // === NEW ENCRYPTED PKCS8 GENERATOR =======================================
+        /*
+         * get Encrypted PKCS8 PEM private key by PEM string of plain priavte key
+         * @name getEncryptedPKCS8PEM
+         * @memberOf KEYUTIL
+         * @function
+         * @param {string} hPlainPKCS8Prv hexadecimal string of plain PKCS#8 private key
+         * @param {string} passcode password string for encrytion
+         * @param {object} param associative array object of parameters for encrypted PKCS#8 (OPITON)
+         * @return {string} PEM string of encrypted PKCS#8 private key
+         * @since jsrsasign 10.9.0 keyutil 1.3.0
+         * @see KEYUTIL.getEncryptedPKCS8Hex
+         *
+         * @description
+         * <br/>
+         * generate hexadecimal string of encrypted PKCS#8 private key by a hexadecimal string of 
+	 * plain PKCS#8 private key with encryption parameters.
+	 * <pre>
+	 * { // (OPTION) encryption algorithm (ex. des-EDE3-CBC,aes128-CBC) DEFAULT:aes256-CBC
+         *   encalg: "aes128-CBC", 
+	 *   // (OPTION) iteration count, DEFAULT:2048,
+	 *   iter: 1024, 
+	 *   // (OPTION) psudorandom function (ex. hmacWithSHA{1,224,256,384,512}) DEFAULT: hmacWithSHA256
+	 *   prf: "hmacWithSHA512", 
+	 *   // (OPTION) explicitly specifed 8 bytes hexadecimal salt string.
+	 *   salt: "12ab...", 
+	 *   // (OPTION) explicitly specified hexadecimal IV string.
+	 *   enciv: "257c..." 
+	 * </pre>
+	 *
+         * @example
+	 * // generate with default parameters
+	 * KEYUTIL.getEncryptedPKCS8PEM("3082...", "password")
+	 *   &rarr; "-----BEGIN ENCRYPTED PRIVATE KEY..."
+	 * // des-EDE3-CBC with 4096 iteration
+	 * KEYUTIL.getEncryptedPKCS8PEM("3082...", "password", { encalg: "des-EDE3-CBC", iter: 4096 })
+	 *   &rarr; "-----BEGIN ENCRYPTED PRIVATE KEY..."
+         */
+	getEncryptedPKCS8PEM: function(hPlainPKCS8Prv, passcode, param) {
+	    var hP8E = this.getEncryptedPKCS8Hex(hPlainPKCS8Prv, passcode, param);
+	    return hextopem(hP8E, "ENCRYPTED PRIVATE KEY");
+	},
+
+        /*
+         * get Encrypted PKCS8 private key by PEM string of plain priavte key
+         * @name 
+         * @memberOf KEYUTIL
+         * @function getEncryptedPKCS8Hex
+         * @param {string} hPlainPKCS8Prv hexadecimal string of plain PKCS#8 private key
+	 * @param {string} passcode password string for encrytion
+	 * @param {object} param associative array object of parameters for encrypted PKCS#8 (OPTION)
+         * @return {string} PEM string of encrypted PKCS#8 private key
+         * @since jsrsasign 10.9.0 keyutil 1.3.0
+	 * @see KEYUTIL.getEncryptedPKCS8PEM
+	 *
+         * @description
+         * <br/>
+         * generate PEM formatted encrypted PKCS#8 private key by a hexadecimal string of 
+	 * plain PKCS#8 private key with encryption parameters.
+	 * Regarding to "param", see {@link KEYUTIL.getEncryptedPKCS8PEM}.
+	 *
+         * @example
+	 * // generate with default parameters
+	 * KEYUTIL.getEncryptedPKCS8Hex("3082...", "password") &rarr; "3082..."
+	 * // des-EDE3-CBC with 4096 iteration
+	 * KEYUTIL.getEncryptedPKCS8PEM("3082...", "password", { encalg: "des-EDE3-CBC", iter: 4096 })  &rarr; "3082..."
+         */
+	getEncryptedPKCS8Hex: function(hPlainPKCS8Prv, passcode, param) {
+	    var pParam2;
+	    if (param == undefined || param == null) {
+		pParam2 = {};
+	    } else {
+		pParam2 = JSON.parse(JSON.stringify(param));
+	    }
+	    pParam2.plain = hPlainPKCS8Prv;
+	    
+	    this.initPBES2Param(pParam2);
+	    this.encryptPBES2Param(pParam2, passcode);
+	    var pASN = this.generatePBES2ASN1Param(pParam2);
+	    return KJUR.asn1.ASN1Util.newObject(pASN).tohex();
+	},
+
+        /*
+         * set default PBES2 parameters if not specified
+         * @name 
+         * @memberOf KEYUTIL
+         * @function initPBES2Param
+	 * @param {object} param associative array object of parameters for encrypted PKCS#8
+         * @since jsrsasign 10.9.0 keyutil 1.3.0
+	 * @see KEYUTIL.getEncryptedPKCS8PEM
+	 * @see KEYUTIL.getEncryptedPKCS8Hex
+	 *
+         * @description
+         * <br/>
+         * set default PBES2 parameters if not specified in the "param" associative array.
+	 * Here is members:
+	 * <ul>
+	 * <li>encalg - set "aes256-CBC" encryption algorithm if not specified</li>
+	 * <li>iter - set 2048 iteration count if not specified</li>
+	 * <li>prf - set "hmacWithSHA256" psudorandom function if not specified</li>
+	 * <li>salt - set 8 bytes random number hexadecimal string if not specified</li>
+	 * <li>enciv - set random number hexadecimal string of initial vector if not specified.
+	 * The length depends on encryption algorithm.</li>
+	 * </ul>
+         */
+	initPBES2Param: function(pPBES2) {
+	    if (aryval(pPBES2, "encalg") == undefined) pPBES2.encalg = "aes256-CBC";
+	    if (aryval(pPBES2, "iter") == undefined) pPBES2.iter = 2048;
+	    if (aryval(pPBES2, "prf") == undefined) pPBES2.prf = "hmacWithSHA256";
+	    if (aryval(pPBES2, "salt") == undefined) pPBES2.salt = CryptoJS.enc.Hex.stringify(CryptoJS.lib.WordArray.random(8));
+	    if (aryval(pPBES2, "enciv") == undefined) {
+		var nbytes;
+		if (pPBES2.encalg == "des-EDE3-CBC") nbytes = 8;
+		if (pPBES2.encalg == "aes128-CBC") nbytes = 16;
+		if (pPBES2.encalg == "aes256-CBC") nbytes = 16;
+		pPBES2.enciv = CryptoJS.enc.Hex.stringify(CryptoJS.lib.WordArray.random(nbytes));
+	    }
+	},
+
+        /*
+         * encrypt plain private key with PBES2 paramters
+         * @name 
+         * @memberOf KEYUTIL
+         * @function encryptPBES2Param
+	 * @param {object} param associative array object of parameters for encrypted PKCS#8 private key
+	 * @param {string} passcode password string for encrypted PKCS#8 private key.
+         * @since jsrsasign 10.9.0 keyutil 1.3.0
+	 * @see KEYUTIL.getEncryptedPKCS8PEM
+	 * @see KEYUTIL.getEncryptedPKCS8Hex
+	 *
+         * @description
+         * <br/>
+         * encrypt plain private key with PBES2 parameters.
+	 * Here is input members in PBES2 paramters.
+	 * <ul>
+	 * <li>plain - hexadecimal string of messages (i.e. plain private key) which will be encrypted</li>
+	 * <li>encalg - encryption algorithm</li>
+	 * <li>iter - iteration count</li>
+	 * <li>prf - psudorandom function</li>
+	 * <li>salt - salt</li>
+	 * <li>enciv - initial vector</li>
+	 * </ul>
+	 * Encrypted result will be set as a new "enc" member of hexadecimal string in PBES2 parameters.
+         */
+	encryptPBES2Param: function(pPBES2, passcode) {
+	    var hKey = KEYUTIL.getDKFromPBES2Param(pPBES2, passcode);
+	    try {
+		var hEnc = KJUR.crypto.Cipher.encrypt(pPBES2.plain, hKey, pPBES2.encalg, { iv: pPBES2.enciv });
+	    } catch(ex) {
+		throw new Error("encrypt error: " + pPBES2.plain + " " + hKey + " " + pPBES2.encalg + " " + pPBES2.enciv);
+	    }
+	    pPBES2.enc = hEnc;
+	},
+
+        /*
+         * convert from PBES2 parameters to PKCS#8 encrypted private key ASN1 object
+         * @name 
+         * @memberOf KEYUTIL
+         * @function generatePBES2ASN1Param
+	 * @param {object} param associative array object of parameters for encrypted PKCS#8 private key
+	 * @param {object} associative array object of ASN1 object
+         * @since jsrsasign 10.9.0 keyutil 1.3.0
+	 * @see KEYUTIL.getEncryptedPKCS8PEM
+	 * @see KEYUTIL.getEncryptedPKCS8Hex
+	 * @see KJUR.asn1.ASN1Util.newObject
+	 *
+         * @description
+         * <br/>
+	 * convert from PBES2 paramters to ASN1 object which can be
+	 * passwd to {@link KJUR.asn1.ASN1Util.newObject}.
+	 * Here is input members in PBES2 paramters.
+	 * <ul>
+	 * <li>encalg - encryption algorithm</li>
+	 * <li>iter - iteration count</li>
+	 * <li>prf - psudorandom function</li>
+	 * <li>salt - salt</li>
+	 * <li>enciv - initial vector</li>
+	 * <li>enc - encrypted private key</li>
+	 * </ul>
+	 * Note that prf will be omitted when prf is a default "hmacWithSHA1".
+         */
+	generatePBES2ASN1Param: function(pPBES2) {
+	    var pASN = 
+		{ seq: [
+		    { seq: [
+			{ oid: "pkcs5PBES2" },
+			{ seq: [
+			    { seq: [
+				{ oid: "pkcs5PBKDF2" },
+				{ seq: [
+				    { octstr: { hex: pPBES2.salt } },
+				    { "int": { hex: inttohex(pPBES2.iter) } }
+				] }
+			    ] },
+			    { seq: [
+				{ oid: pPBES2.encalg },
+				{ octstr: { hex: pPBES2.enciv } }
+			    ] }
+			] }
+		    ] },
+		    { octstr: { hex: pPBES2.enc } }
+		] };
+	    if (pPBES2.prf != "hmacWithSHA1") {
+		pASN.seq[0].seq[1].seq[0].seq[1].seq.push({seq:[{oid:pPBES2.prf},{"null":""}]});
+	    }
+	    return pASN;
+	},
+
         // === PKCS8 ===============================================================
 
         /**
-         * generate PBKDF2 key hexstring with specified passcode and information
+         * generate PBKDF2 key hexstring with specified passcode and information (DEPRECATED)
          * @name parseHexOfEncryptedPKCS8
          * @memberOf KEYUTIL
          * @function
          * @param {String} passcode passcode to decrypto private key
          * @return {Array} info associative array of PKCS#8 parameters
          * @since pkcs5pkey 1.0.3
+	 * @deprecated since jsrsasign 10.9.0 keyutil 1.3.0. Use {@link KEYUTIL.parsePBES2} instead.
+	 *
          * @description
          * The associative array which is returned by this method has following properties:
          * <ul>
@@ -495,7 +705,7 @@ var KEYUTIL = function() {
         },
 
         /**
-         * generate PBKDF2 key hexstring with specified passcode and information
+         * generate PBKDF2 key hexstring with specified passcode and information (DEPRECATED)
          * @name getPBKDF2KeyHexFromParam
          * @memberOf KEYUTIL
          * @function
@@ -503,6 +713,8 @@ var KEYUTIL = function() {
          * @param {String} passcode passcode to decrypto private key
          * @return {String} hexadecimal string of PBKDF2 key
          * @since pkcs5pkey 1.0.3
+	 * @deprecated since jsrsasign 10.9.0 keyutil 1.3.0. Use {@link KEYUTIL.getDKFromPBES2Param} instead.
+	 *
          * @description
          * As for info, this uses following properties:
          * <ul>
@@ -517,7 +729,7 @@ var KEYUTIL = function() {
          * @example
          * // to convert plain PKCS#5 private key to encrypted PKCS#8 private
          * // key with PBKDF2 with TripleDES
-         * % openssl pkcs8 -in plain_p5.pem -topk8 -v2 -des3 -out encrypted_p8.pem
+         * % openssl pkcs8 -in plain_p5.pem -topk8 -v2 des3 -out encrypted_p8.pem
          */
         getPBKDF2KeyHexFromParam: function(info, passcode) {
             var pbkdf2SaltWS = CryptoJS.enc.Hex.parse(info.pbkdf2Salt);
@@ -530,7 +742,7 @@ var KEYUTIL = function() {
         },
 
         /*
-         * read PEM formatted encrypted PKCS#8 private key and returns hexadecimal string of plain PKCS#8 private key
+         * read PEM formatted encrypted PKCS#8 private key and returns hexadecimal string of plain PKCS#8 private key (DEPRECATED)
          * @name getPlainPKCS8HexFromEncryptedPKCS8PEM
          * @memberOf KEYUTIL
          * @function
@@ -538,6 +750,8 @@ var KEYUTIL = function() {
          * @param {String} passcode passcode to decrypto private key
          * @return {String} hexadecimal string of plain PKCS#8 private key
          * @since pkcs5pkey 1.0.3
+	 * @deprecated since jsrsasign 10.9.0 keyutil 1.3.0. Use {@link KEYUTIL.getPlainHexFromEncryptedPKCS8PEM} instead.
+	 * 
          * @description
          * Currently, this method only supports PKCS#5v2.0 with PBES2/PBDKF2 of HmacSHA1 and TripleDES.
          * <ul>
@@ -566,6 +780,183 @@ var KEYUTIL = function() {
             return decHex;
         },
 
+	/**
+         * parse ASN.1 hexadecimal encrypted PKCS#8 private key and return as JSON
+         * @name parsePBES2
+         * @memberOf KEYUTIL
+         * @function
+         * @param {string} hP8Prv hexadecimal encrypted PKCS#8 private key
+	 * @return {object} parsed PBES2 parameters JSON object
+         * @since jsrsasign 10.9.0 keyutil 1.3.0
+         * @description
+	 * This method parses ASN.1 hexadecimal encrypted PKCS#8 private key and returns as 
+	 * JSON object based on 
+	 * <a href="https://datatracker.ietf.org/doc/html/rfc8018" target="_blank">RFC 8018</a>.
+	 * Currently following algorithms are supported:
+	 * <ul>
+	 * <li>prf(psudorandom function) - hmacWithSHA1,SHA224,SHA256,SHA384,SHA512</li>
+	 * <li>encryptionScheme - des-EDE3-CBC,aes128-CBC,aes256-CBC</li>
+	 * </ul>
+	 * @see KEYUTIL.getDKFromPBES2Param
+	 *
+         * @example
+	 * KEYUTIL.parsePBES2("3082...") &rarr;
+	 * {
+	 *   "prf": "hmacWithSHA256",
+	 *   "salt": "1234567890abcdef",
+	 *   "iter": 2048,
+	 *   "encalg": "aes256-CBC",
+	 *   "enciv": "12ab...",
+	 *   "enc": "34cd..."
+	 * }
+	 *
+         * // to convert plain PKCS#5 private key to encrypted PKCS#8 private
+         * // key with PBKDF2 with TripleDES
+         * % openssl pkcs8 -in plain_p5.pem -topk8 -v2 des3 -out encrypted_p8.pem
+	 */
+	parsePBES2: function(hP8Prv) {
+	    var pASN = ASN1HEX.parse(hP8Prv);
+	    if (aryval(pASN, "seq.0.seq.0.oid") != "pkcs5PBES2" ||
+		aryval(pASN, "seq.0.seq.1.seq.0.seq.0.oid") != "pkcs5PBKDF2") {
+		throw new Error("not pkcs5PBES2 and pkcs5PBKDF2 used");
+	    }
+	    var pASNKDF = aryval(pASN, "seq.0.seq.1.seq.0.seq.1.seq");
+	    if (pASNKDF == undefined) {
+		throw new Error("PBKDF2 parameter not found");
+	    }
+	    var salt = aryval(pASNKDF, "0.octstr.hex");
+	    var hIter = aryval(pASNKDF, "1.int.hex");
+	    var prf = aryval(pASNKDF, "2.seq.0.oid", "hmacWithSHA1");
+		
+	    var iter = -1;
+	    try {
+		iter = parseInt(hIter, 16);
+	    } catch(ex) {
+		throw new Error("iter not proper value");
+	    };
+
+	    var encalg = aryval(pASN, "seq.0.seq.1.seq.1.seq.0.oid");
+	    var enciv = aryval(pASN, "seq.0.seq.1.seq.1.seq.1.octstr.hex");
+	    var enc = aryval(pASN, "seq.1.octstr.hex");
+	    if (encalg == undefined || enciv == undefined || enc == undefined)
+		throw new Error("encalg, enciv or enc is undefined");
+
+	    var result = {
+		salt: salt,
+		iter: iter,
+		prf: prf,
+		encalg: encalg,
+		enciv: enciv,
+		enc: enc
+	    };
+	    return result;
+	},
+
+	/**
+         * get derived key from PBES2 parameters and passcode
+         * @name getDKFromPBES2Param
+         * @memberOf KEYUTIL
+         * @function
+         * @param {object} pPBES2 parsed PBES2 parameter by {@link KEYUTIL.parsePBES2} method
+	 * @param {string} passcode password to derive the key
+	 * @return {string} hexadecimal string of derived key
+         * @since jsrsasign 10.9.0 keyutil 1.3.0
+	 * @see KEYUTIL.parsePBES2
+	 *
+         * @description
+	 * This method derives a key from a passcode and a PBES2 parameter by 
+	 * {@link KEYUTIL.parsePBES2}.
+	 * Currently following algorithms are supported:
+	 * <ul>
+	 * <li>prf(psudorandom function) - hmacWithSHA1,SHA224,SHA256,SHA384,SHA512</li>
+	 * <li>encryptionScheme - des-EDE3-CBC,aes128-CBC,aes256-CBC</li>
+	 * </ul>
+	 *
+         * @example
+	 * pPBES2 = {
+	 *   "prf": "hmacWithSHA256",
+	 *   "salt": "1234567890abcdef",
+	 *   "iter": 2048,
+	 *   "encalg": "aes256-CBC",
+	 *   "enciv": "12ab...",
+	 *   "enc": "34cd..."
+	 * }
+	 * KEYUTIL.getDKFromPBES2Param(pPBES2, "passwd") &rarr; "3ab10fd..."
+	 */
+	getDKFromPBES2Param: function(pPBES2, passcode) {
+	    var pHasher = {
+		"hmacWithSHA1":   CryptoJS.algo.SHA1,
+		"hmacWithSHA224": CryptoJS.algo.SHA224,
+		"hmacWithSHA256": CryptoJS.algo.SHA256,
+		"hmacWithSHA384": CryptoJS.algo.SHA384,
+		"hmacWithSHA512": CryptoJS.algo.SHA512
+	    };
+	    var pKeySize = {
+		"des-EDE3-CBC": 192/32,
+		"aes128-CBC": 128/32,
+		"aes256-CBC": 256/32,
+	    };
+
+	    var hasher = pHasher[pPBES2.prf];
+	    if (hasher == undefined)
+		throw new Error("unsupported prf");
+
+	    var keysize = pKeySize[pPBES2.encalg];
+	    if (keysize == undefined)
+		throw new Error("unsupported encalg");
+
+	    var wSalt = CryptoJS.enc.Hex.parse(pPBES2.salt);
+	    var iter = pPBES2.iter;
+	    try {
+		var wKey = CryptoJS.PBKDF2(passcode,
+					   wSalt,
+					   { keySize: keysize,
+					     iterations: iter,
+					     hasher: hasher }); 
+		return CryptoJS.enc.Hex.stringify(wKey);
+	    } catch(ex) {
+		throw new Error("PBKDF2 error: " + ex + " " + JSON.stringify(pPBES2) + " " + passcode);
+	    }
+	},
+
+	/**
+         * get plaintext hexadecimal PKCS#8 private key from encrypted PKCS#8 PEM private key 
+         * @name getPlainHexFromEncryptedPKCS8PEM
+         * @memberOf KEYUTIL
+         * @function
+         * @param {string} pkcs8PEM PEM string of encrypted PKCS#8 private key
+	 * @param {string} passcode passcode to decrypt the private key
+	 * @return {string} hexadecimal string of decrypted plaintext PKCS#8 private key
+         * @since jsrsasign 10.9.0 keyutil 1.3.0
+	 * @see KEYUTIL.parsePBES2
+	 *
+         * @description
+	 * This will get a plaintext hexadecimal PKCS#8 private key from a
+	 * encrypted PKCS#8 PEM private key.
+	 * Currently following algorithms are supported:
+	 * <ul>
+	 * <li>prf(psudorandom function) - hmacWithSHA1,SHA224,SHA256,SHA384,SHA512</li>
+	 * <li>encryptionScheme - des-EDE3-CBC,aes128-CBC,aes256-CBC</li>
+	 * </ul>
+	 *
+         * @example
+	 * pem = "-----BEGIN ENCRYPTED PRIVATE KEY...";
+	 * KEYUTIL.getPlainHexFromEncryptedPKCS8PEM(pem, "passwd") &rarr; "3082..."
+	 */
+	getPlainHexFromEncryptedPKCS8PEM: function(pkcs8PEM, passcode) {
+	    if (pkcs8PEM.indexOf("BEGIN ENCRYPTED PRIVATE KEY") == -1)
+		throw new Error("not Encrypted PKCS#8 PEM string");
+	    var hPBES2 = pemtohex(pkcs8PEM);
+	    var pPBES2;
+	    try {
+		pPBES2 = KEYUTIL.parsePBES2(hPBES2);
+	    } catch(ex) {
+		throw new Error("malformed PBES2 format: " + ex.message);
+	    }
+	    var hKey = KEYUTIL.getDKFromPBES2Param(pPBES2, passcode);
+	    return KJUR.crypto.Cipher.decrypt(pPBES2.enc, hKey, pPBES2.encalg, { iv: pPBES2.enciv });
+	},
+
         /**
          * get RSAKey/ECDSA private key object from encrypted PEM PKCS#8 private key
          * @name getKeyFromEncryptedPKCS8PEM
@@ -577,7 +968,7 @@ var KEYUTIL = function() {
          * @since pkcs5pkey 1.0.5
          */
         getKeyFromEncryptedPKCS8PEM: function(pkcs8PEM, passcode) {
-            var prvKeyHex = this._getPlainPKCS8HexFromEncryptedPKCS8PEM(pkcs8PEM, passcode);
+	    var prvKeyHex = this.getPlainHexFromEncryptedPKCS8PEM(pkcs8PEM, passcode);
             var key = this.getKeyFromPlainPrivatePKCS8Hex(prvKeyHex);
             return key;
         },
@@ -1302,6 +1693,7 @@ KEYUTIL.generateKeypair = function(alg, keylenOrCurve) {
  * @param {String} hexType (OPTION) type of hex string (ex. pkcs5prv, pkcs8prv)
  * @param {String} ivsaltHex hexadecimal string of IV and salt (default generated random IV)
  * @since keyutil 1.0.4
+ *
  * @description
  * <dl>
  * <dt><b>NOTE1:</b>
@@ -1315,6 +1707,7 @@ KEYUTIL.generateKeypair = function(alg, keylenOrCurve) {
  * <dd>
  * Parameter "ivsaltHex" supported since jsrsasign 8.0.0 keyutil 1.2.0.
  * </dl>
+ *
  * @example
  * KEUUTIL.getPEM(publicKey) &rarr; generates PEM PKCS#8 public key 
  * KEUUTIL.getPEM(privateKey) &rarr; generates PEM PKCS#8 plain private key by default
@@ -1486,59 +1879,16 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
     }
 
     // x. ======================================================================
-
-    var _getEncryptedPKCS8 = function(plainKeyHex, passcode) {
-        var info = _getEencryptedPKCS8Info(plainKeyHex, passcode);
-        //alert("iv=" + info.encryptionSchemeIV);
-        //alert("info.ciphertext2[" + info.ciphertext.length + "=" + info.ciphertext);
-        var asn1Obj = new _newObject({
-            "seq": [
-                {"seq": [
-                    {"oid": {"name": "pkcs5PBES2"}},
-                    {"seq": [
-                        {"seq": [
-                            {"oid": {"name": "pkcs5PBKDF2"}},
-                            {"seq": [
-                                {"octstr": {"hex": info.pbkdf2Salt}},
-                                {"int": info.pbkdf2Iter}
-                            ]}
-                        ]},
-                        {"seq": [
-                            {"oid": {"name": "des-EDE3-CBC"}},
-                            {"octstr": {"hex": info.encryptionSchemeIV}}
-                        ]}
-                    ]}
-                ]},
-                {"octstr": {"hex": info.ciphertext}}
-            ]
-        });
-        return asn1Obj.tohex();
-    };
-
-    var _getEencryptedPKCS8Info = function(plainKeyHex, passcode) {
-        var pbkdf2Iter = 100;
-        var pbkdf2SaltWS = CryptoJS.lib.WordArray.random(8);
-        var encryptionSchemeAlg = "DES-EDE3-CBC";
-        var encryptionSchemeIVWS = CryptoJS.lib.WordArray.random(8);
-        // PBKDF2 key
-        var pbkdf2KeyWS = CryptoJS.PBKDF2(passcode, 
-                                          pbkdf2SaltWS, { "keySize": 192/32,
-                                                          "iterations": pbkdf2Iter });
-        // ENCRYPT
-        var plainKeyWS = CryptoJS.enc.Hex.parse(plainKeyHex);
-        var encryptedKeyHex = 
-            CryptoJS.TripleDES.encrypt(plainKeyWS, pbkdf2KeyWS, { "iv": encryptionSchemeIVWS }) + "";
-
-        //alert("encryptedKeyHex=" + encryptedKeyHex);
-
-        var info = {};
-        info.ciphertext = encryptedKeyHex;
-        //alert("info.ciphertext=" + info.ciphertext);
-        info.pbkdf2Salt = CryptoJS.enc.Hex.stringify(pbkdf2SaltWS);
-        info.pbkdf2Iter = pbkdf2Iter;
-        info.encryptionSchemeAlg = encryptionSchemeAlg;
-        info.encryptionSchemeIV = CryptoJS.enc.Hex.stringify(encryptionSchemeIVWS);
-        return info;
+    
+    var _getEncryptedPKCS8PEM = function(plainKeyHex, passcodeOrParam) {
+	if (typeof passcodeOrParam == "string") {
+	    return KEYUTIL.getEncryptedPKCS8PEM(plainKeyHex, passcodeOrParam);
+	} else if (typeof passcodeOrParam == "object" && aryval(passcodeOrParam, "passcode") != undefined) {
+	    var param = JSON.parse(JSON.stringify(passcodeOrParam));
+	    var passcode = param.passcode;
+	    delete param.passcode;
+	    return KEYUTIL.getEncryptedPKCS8PEM(plainKeyHex, passcode, param);
+	}
     };
 
     // x. PEM PKCS#8 plain private key of RSA private key object
@@ -1562,8 +1912,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         if (passwd === undefined || passwd == null) {
             return hextopem(asn1Hex, "PRIVATE KEY");
         } else {
-            var asn1Hex2 = _getEncryptedPKCS8(asn1Hex, passwd);
-            return hextopem(asn1Hex2, "ENCRYPTED PRIVATE KEY");
+            return _getEncryptedPKCS8PEM(asn1Hex, passwd);
         }
     }
 
@@ -1600,8 +1949,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         if (passwd === undefined || passwd == null) {
             return hextopem(asn1Hex, "PRIVATE KEY");
         } else {
-            var asn1Hex2 = _getEncryptedPKCS8(asn1Hex, passwd);
-            return hextopem(asn1Hex2, "ENCRYPTED PRIVATE KEY");
+            return _getEncryptedPKCS8PEM(asn1Hex, passwd);
         }
     }
 
@@ -1633,8 +1981,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         if (passwd === undefined || passwd == null) {
             return hextopem(asn1Hex, "PRIVATE KEY");
         } else {
-            var asn1Hex2 = _getEncryptedPKCS8(asn1Hex, passwd);
-            return hextopem(asn1Hex2, "ENCRYPTED PRIVATE KEY");
+            return _getEncryptedPKCS8PEM(asn1Hex, passwd);
         }
     }
 
@@ -1714,6 +2061,8 @@ KEYUTIL.parseCSRHex = function(csrHex) {
 
     return result;
 };
+
+// -- ENCRYPTED PKCS#8 PRIVATE KEY GENERATION METHODS  ------------------------
 
 // -- OTHER STATIC PUBLIC METHODS  --------------------------------------------
 

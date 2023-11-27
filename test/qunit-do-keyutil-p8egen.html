@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>QUnit test for encrypted PKCS8 private key generation of 'keyutil.js'</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+
+<!-- script type="text/javascript" src="qunit.js" /script -->
+<!-- link rel="stylesheet" href="qunit.css" type="text/css" media="screen" -->
+<script src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="screen"/>
+
+<script src="../ext/cj/cryptojs-312-core-fix.js"></script>
+<script src="../ext/cj/x64-core.js"></script>
+<script src="../ext/cj/cipher-core_min.js"></script>
+<script src="../ext/cj/aes_min.js"></script>
+<script src="../ext/cj/tripledes_min.js"></script>
+<script src="../ext/cj/enc-base64_min.js"></script>
+<script src="../ext/cj/md5_min.js"></script>
+<script src="../ext/cj/sha1_min.js"></script>
+<script src="../ext/cj/sha256_min.js"></script>
+<script src="../ext/cj/sha224_min.js"></script>
+<script src="../ext/cj/sha512_min.js"></script>
+<script src="../ext/cj/sha384_min.js"></script>
+<script src="../ext/cj/ripemd160_min.js"></script>
+<script src="../ext/cj/hmac_min.js"></script>
+<script src="../ext/cj/pbkdf2_min.js"></script>
+
+
+<script src="../ext/jsbn.js"></script>
+<script src="../ext/jsbn2.js"></script>
+<script src="../ext/prng4.js"></script>
+<script src="../ext/rng.js"></script>
+<script src="../ext/base64.js"></script>
+<script src="../ext/rsa.js"></script>
+<script src="../ext/rsa2.js"></script>
+<script src="../ext/ec.js"></script>
+<script src="../ext/ec-patch.js"></script>
+
+<script src="../src/base64x-1.1.js"></script>
+<script src="../src/asn1hex-1.1.js"></script>
+<script src="../src/rsapem-1.1.js"></script>
+<script src="../src/rsasign-1.2.js"></script>
+<script src="../src/crypto-1.1.js"></script>
+<script src="../src/ecdsa-modified-1.0.js"></script>
+<script src="../src/ecparam-1.0.js"></script>
+<script src="../src/asn1-1.0.js"></script>
+<script src="../src/keyutil-1.0.js"></script>
+<script src="../src/asn1x509-1.0.js"></script>
+
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+
+// I-D draft-gutmann-testkeys 2.1 RSA 1024bit Encrypted PKCS#8 ENC=3DES,PRF=SHA1,ITER=2048 pass=passwd
+var T1P8E_3DS1 = (function() {/*
+-----BEGIN ENCRYPTED PRIVATE KEY-----
+MIICxjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQI/yC7aYk9eggCAggA
+MBQGCCqGSIb3DQMHBAhSkqLPxEn8TQSCAoD3OjkXQsyNNKiC9i5PKUk3d9s8ta0t
+MipR6ugvqnqff9X7Zmk5tJYl+bOUxyPnYWbRa+PpoIV8PrLmcZg6rqH4jNlV4Aef
+4U2geHg1kOfR5ZGm/P9OzyMqX04W7Pb0JrvSOM+f9pWaL4FXLJXUUHShi477U+kU
+lmdmig9W9ZUvdMz/zjOE1sUol5Doz50XieyTDerXUeGuibuKDxy2xA7dMPEMEvUP
+lbk6ihx+SnrKRf/qXN/MSxzpU7gOXjsES/3mA9WAgBFLia7NsbmPcE6i54ZfXKjh
+eU1vrw8rV/d0Wg5M+ENoylcebEDHX6sipfYLztBTicb1e/79oa6VshP2PF43GYqs
+NWRaVf6WrGaygEgP5e4FLU5ayHElxdRkchfaXFkShBjH3UYzklN1HHioN7EW5C/J
+9giOJAWNSmhlql4xIqG+PIzF2RM1PbSbmxL8TUwDx6xPGyVoCJ44mHR42LHeMu1F
++JHy+05Y4Jc34CfuB3+zUIDDNYU2+82JPbsLfPVBwRlhnkFjqV8X4Z7m1qva++Dd
+H9xs+Px6prlKOus4YHtHX4MzBhVKGj0/9hEedjCBXpyY3huoMWJjnw3QqGmBHkoK
+bRnFhCUHRzbTXKTb+jRb7JTJ2tu4TmGtMM3uMCuONtdc7Oc59Yji4/4Gg0sa81oX
+A8jjuRP0nZlc333moLaLpQ9HuG2gws3X7hBpDQWznTYNCeFg3eeOFlAlJjMpxUrW
+Yrmdh4ZnV9BRGUeyA55jCsuXwNdIvDQrvEUBl3/ip8BNtMXhHjdcRNsxhF7IEQgG
+S0//SJkaUNmPw+SlJP/WcZIuAwi3w3EkOXNIkZzpj4deI1jVp/uHXDFv
+-----END ENCRYPTED PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// I-D draft-gutmann-testkeys 2.1 RSA 1024bit Encrypted PKCS#8 ENC=AES256-CBC,PRF=SHA512,ITER=2048 pass=passwd t1.p8eaes256h512.prv
+var T1P8E_A2S5 = (function() {/*
+-----BEGIN ENCRYPTED PRIVATE KEY-----
+MIIC3TBXBgkqhkiG9w0BBQ0wSjApBgkqhkiG9w0BBQwwHAQI6IdHWkgjBRECAggA
+MAwGCCqGSIb3DQILBQAwHQYJYIZIAWUDBAEqBBA8uGEdD7CTGzcL+YLs8GMABIIC
+gLdfLLxh+oxOK6J5V26jjDsbqVnDoeB6tBGSvV7qupjWIPmsOCYyvaEGGF06ZL2s
+YzAZhRPtKmZ43PQo/TsSJVWSlVWLjfNgTYIL18MES7cHXdKcAPOTyOrCQxgcrEXN
+idpyq1/czrs5JoJBAS2IQVVN5lXiEivtogCypmDTg6YyCRwmcsQFLCLwpjAeudnX
+O/VlPj/TcEudnjn3exuSwL3xr5789wvim9VNUGEiTuN8TDq3Vh0mjKb0mu0C0iVz
+T58aGYlsDcRRH7SBE1dZVoKk1l0x8WFh64Qr/PkRsRGTG3nq/k/yutG9i4Zhe+rC
+bz9EJufYXXsqD4qnCeodz28TmIDrrPkJ1YwHUORnTSpNUr5h6AZ3x6pI0mkn8ZUp
+iBtykiQOBn7SqwRlPHGO79m0GnroZr86GajfmFbcqPWjTU0HRQtHNzyRPPh0UUSi
+aDzdnVBbqXtHOZsldjl6wb8NNB8YcXGTh2E58yPfplRuwGtvEhYfWc2Ib8IdqBf8
+t+Krim2FyEPxPNEjhM6H1M3VAM4kjLdEEdpcH/HYKJVpCifD1HUJZoQRJLVsjK9D
+tv+qNQPbBxDbMkkbHHUMReXsTUvr81bP2kTgRl9PkvFs5s6HGs7RDtdDBX2aFIiS
+L1iKYM1TGmGpP61GMMi5xqW1PfQ7Kje8teI6G+VTm8i4Eot3iU97dG4gDJnQPHUM
+6gGWXhHacsrFl3nhFFZkEiQ7q+ZwByTfjajQ0mYBTd9oROsRgH1VBeYlx5tDOrL3
+kQvF44cfyGbcuQfw15wXbQRRSAmWWNmnBlou/syRBDXtQaPKymAfIJWA7sXzcJ8e
+11/QoIygwpHKz7GNJ1Yt/t4=-----END ENCRYPTED PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+// I-D draft-gutmann-testkeys 2.1 RSA 1024bit Plain PKCS#8 private key
+var T1P8P = (function() {/*
+-----BEGIN PRIVATE KEY-----
+MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALDRg1Koj1PVUW9G
+wg56Nn196IrPVKAZ9t71erm0TO3bIkKxvKD7G1y4KzA2F2pjkDVk3sbrQdsvj8eH
+9OUuEUnjM0dXKXP2YMPHfKngghwraVvnrp19MPQHkRD0iq5vi3AtR0spAIF/KGYk
+m+wSorGbgnhBaAj4GuH8+bd3imI/AgMBAAECgYBILp+PpOQt8w11gctCob2Q6U9/
+Kzh+y1qulkPtf59QEn8f/vLkPN5ksYJgAhT5B4Ada/pN9khCNF5btDLTREUl2DAW
+VMVEKwpeEbnH4gH6MvQauvTwpuA88ODLgmbGKtEdlW1TyUZuSJlf6iYMhTbwQcs1
+YvqsURxNZqj+0RGykQJBAOnYbk3DSphafsdab1SnXORROeRSQLOGq3Edt5G82YcY
+oTuvIYwkSTZGaAdWy1Cmy+4VjiUhRJkSMBwNQUkRGEUCQQDBkfo7VQs5GnywcoN2
+J3KV5hxlTwvvL1jc5clioQt9118GAVRl5VB25GYmPuvK7SDS66s5MT6LxWcyD+iy
+3GKzAkEA5zrgN3y4slYprq66D5c+v3WiLSc4W0z7Ees0raNz5aZxKDdQkOcAje6o
+xzkH6kREurQNzqFK16GoeNSSjdGdkQJAQZl5FhZyIT4Kt7l3N9mSiZ5cTTEGuF5x
+XRs6roQpYtJUT7KvqYCXTlOFEr0MJ89I6nIXquA3dCLIID0n/UWW5QJBALmdf49N
+TUVfH7pGLZkKLoSMQowevuAdwAGEyKdlg603n2mtr1R1VDD2PEJT0bt4zJvSMmQ0
+AIC4TBqRfeCLbts=
+-----END PRIVATE KEY-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+var hT1P8P = pemtohex(T1P8P);
+
+test("generatePBES2ASN1Param", function() {
+var pIn, pExpected;
+
+pIn = {
+  salt: "ff20bb69893d7a08",
+  iter: 2048,
+  prf: "hmacWithSHA1",
+  encalg: "des-EDE3-CBC",
+  enciv: "5292a2cfc449fc4d",
+  enc: "f73a391742cc8d34a882f62e4f29493777db3cb5ad2d322a51eae82faa7a9f7fd5fb666939b49625f9b394c723e76166d16be3e9a0857c3eb2e671983aaea1f88cd955e0079fe14da078783590e7d1e591a6fcff4ecf232a5f4e16ecf6f426bbd238cf9ff6959a2f81572c95d45074a18b8efb53e9149667668a0f56f5952f74ccffce3384d6c5289790e8cf9d1789ec930dead751e1ae89bb8a0f1cb6c40edd30f10c12f50f95b93a8a1c7e4a7aca45ffea5cdfcc4b1ce953b80e5e3b044bfde603d58080114b89aecdb1b98f704ea2e7865f5ca8e1794d6faf0f2b57f7745a0e4cf84368ca571e6c40c75fab22a5f60bced05389c6f57bfefda1ae95b213f63c5e37198aac35645a55fe96ac66b280480fe5ee052d4e5ac87125c5d4647217da5c59128418c7dd46339253751c78a837b116e42fc9f6088e24058d4a6865aa5e3122a1be3c8cc5d913353db49b9b12fc4d4c03c7ac4f1b2568089e38987478d8b1de32ed45f891f2fb4e58e09737e027ee077fb35080c3358536fbcd893dbb0b7cf541c119619e4163a95f17e19ee6d6abdafbe0dd1fdc6cf8fc7aa6b94a3aeb38607b475f833306154a1a3d3ff6111e7630815e9c98de1ba83162639f0dd0a869811e4a0a6d19c58425074736d35ca4dbfa345bec94c9dadbb84e61ad30cdee302b8e36d75cece739f588e2e3fe06834b1af35a1703c8e3b913f49d995cdf7de6a0b68ba50f47b86da0c2cdd7ee10690d05b39d360d09e160dde78e165025263329c54ad662b99d87866757d0511947b2039e630acb97c0d748bc342bbc4501977fe2a7c04db4c5e11e375c44db31845ec81108064b4fff48991a50d98fc3e4a524ffd671922e0308b7c37124397348919ce98f875e2358d5a7fb875c316f"
+};
+deepEqual(KEYUTIL.generatePBES2ASN1Param(pIn),ASN1HEX.parse(pemtohex(T1P8E_3DS1)), "T1P8E_3DS1");
+
+pIn = {
+  salt: "e887475a48230511",
+  iter: 2048,
+  prf: "hmacWithSHA512",
+  encalg: "aes256-CBC",
+  enciv: "3cb8611d0fb0931b370bf982ecf06300",
+  enc: "b75f2cbc61fa8c4e2ba279576ea38c3b1ba959c3a1e07ab41192bd5eeaba98d620f9ac382632bda106185d3a64bdac6330198513ed2a6678dcf428fd3b1225559295558b8df3604d820bd7c3044bb7075dd29c00f393c8eac243181cac45cd89da72ab5fdccebb39268241012d8841554de655e2122beda200b2a660d383a632091c2672c4052c22f0a6301eb9d9d73bf5653e3fd3704b9d9e39f77b1b92c0bdf1af9efcf70be29bd54d5061224ee37c4c3ab7561d268ca6f49aed02d225734f9f1a19896c0dc4511fb4811357595682a4d65d31f16161eb842bfcf911b111931b79eafe4ff2bad1bd8b86617beac26f3f4426e7d85d7b2a0f8aa709ea1dcf6f139880ebacf909d58c0750e4674d2a4d52be61e80677c7aa48d26927f19529881b7292240e067ed2ab04653c718eefd9b41a7ae866bf3a19a8df9856dca8f5a34d4d07450b47373c913cf8745144a2683cdd9d505ba97b47399b2576397ac1bf0d341f18717193876139f323dfa6546ec06b6f12161f59cd886fc21da817fcb7e2ab8a6d85c843f13cd12384ce87d4cdd500ce248cb74411da5c1ff1d82895690a27c3d4750966841124b56c8caf43b6ffaa3503db0710db32491b1c750c45e5ec4d4bebf356cfda44e0465f4f92f16ce6ce871aced10ed743057d9a1488922f588a60cd531a61a93fad4630c8b9c6a5b53df43b2a37bcb5e23a1be5539bc8b8128b77894f7b746e200c99d03c750cea01965e11da72cac59779e114566412243babe6700724df8da8d0d266014ddf6844eb11807d5505e625c79b433ab2f7910bc5e3871fc866dcb907f0d79c176d045148099658d9a7065a2efecc910435ed41a3caca601f209580eec5f3709f1ed75fd0a08ca0c291cacfb18d27562dfede"
+};
+deepEqual(KEYUTIL.generatePBES2ASN1Param(pIn),ASN1HEX.parse(pemtohex(T1P8E_A2S5)), "T1P8E_A2S5");
+//equal(KJUR.asn1.ASN1Util.newObject(KEYUTIL.generatePBES2ASN1Param(pIn)).tohex(), pemtohex(T1P8E_3DS1), "T1P8E_3DS1");
+});
+
+test("getEncryptedPKCS8Hex", function() {
+var hResult, pResult, hDec;
+var hPlain = pemtohex(T1P8P);
+
+// default
+hResult = KEYUTIL.getEncryptedPKCS8Hex(hPlain, "passwd");
+pResult = KEYUTIL.parsePBES2(hResult);
+hDec = KEYUTIL.getPlainHexFromEncryptedPKCS8PEM(hextopem(hResult, "ENCRYPTED PRIVATE KEY"), "passwd");
+equal(pResult["encalg"], "aes256-CBC", "(1) default encalg=aes256-CBC");
+equal(pResult["prf"], "hmacWithSHA256", "(1) default prf=hmacWithSHA256");
+equal(pResult["iter"], 2048, "(1) default iter=2048");
+equal(pResult["salt"].length, 16, "(1) default salt length=16(8bytes)");
+equal(pResult["enciv"].length, 32, "(1) default enciv(for aes256-CBC)=32(16bytes)");
+equal(hDec, hT1P8P, "(1) decrypted plain hex");
+
+// encalg=des-EDE3-CBC, iter=100
+hResult = KEYUTIL.getEncryptedPKCS8Hex(hPlain, "passwd", {encalg:"des-EDE3-CBC",iter:100});
+pResult = KEYUTIL.parsePBES2(hResult);
+hDec = KEYUTIL.getPlainHexFromEncryptedPKCS8PEM(hextopem(hResult, "ENCRYPTED PRIVATE KEY"), "passwd");
+equal(pResult["encalg"], "des-EDE3-CBC", "(2) encalg=des-EDE3-CBC");
+equal(pResult["iter"], 100, "(2) iter=100");
+equal(hDec, hT1P8P, "(2) decrypted plain hex");
+
+// encalg=aes128-CBC, prf=hmacWithSHA512
+hResult = KEYUTIL.getEncryptedPKCS8Hex(hPlain, "passwd", {encalg:"aes128-CBC",prf:"hmacWithSHA512"});
+pResult = KEYUTIL.parsePBES2(hResult);
+hDec = KEYUTIL.getPlainHexFromEncryptedPKCS8PEM(hextopem(hResult, "ENCRYPTED PRIVATE KEY"), "passwd");
+equal(pResult["encalg"], "aes128-CBC", "(3) encalg=aes128-CBC");
+equal(pResult["prf"], "hmacWithSHA512", "(3) prf=hmacWithSHA512");
+equal(hDec, hT1P8P, "(3) decrypted plain hex");
+
+//equal(KEYUTIL.getEncryptedPKCS8Hex(hPlain, "passwd"), "", "hoge");
+//equal(KEYUTIL.getEncryptedPKCS8PEM(hPlain, "passwd", {encalg:"des-EDE3-CBC"}), "", "hoge"); //OK
+//equal(KEYUTIL.getEncryptedPKCS8PEM(hPlain, "passwd", {encalg:"aes128-CBC"}), "", "hoge");
+//equal(KEYUTIL.getEncryptedPKCS8PEM(hPlain, "passwd", {encalg:"aes256-CBC"}), "", "hoge");
+});
+
+test("getPEM", function() {
+var hResult, pResult, hDec, prvepem;
+var prv = KEYUTIL.getKey(T1P8P);
+
+// default
+prvepem = KEYUTIL.getPEM(prv, "PKCS8PRV", {passcode: "passwd"});
+pResult = KEYUTIL.parsePBES2(pemtohex(prvepem));
+hDec = KEYUTIL.getPlainHexFromEncryptedPKCS8PEM(prvepem, "passwd");
+equal(pResult["encalg"], "aes256-CBC", "(1) default encalg=aes256-CBC");
+equal(pResult["prf"], "hmacWithSHA256", "(1) default prf=hmacWithSHA256");
+equal(pResult["iter"], 2048, "(1) default iter=2048");
+equal(pResult["salt"].length, 16, "(1) default salt length=16(8bytes)");
+equal(pResult["enciv"].length, 32, "(1) default enciv(for aes256-CBC)=32(16bytes)");
+equal(hDec, hT1P8P, "(1) decrypted plain hex");
+
+// encalg=aes128-CBC, prf=hmacWithSHA512
+prvepem = KEYUTIL.getPEM(prv, "PKCS8PRV", {passcode:"passwd",encalg:"aes128-CBC",prf:"hmacWithSHA512"});
+pResult = KEYUTIL.parsePBES2(pemtohex(prvepem));
+hDec = KEYUTIL.getPlainHexFromEncryptedPKCS8PEM(prvepem, "passwd");
+equal(pResult["encalg"], "aes128-CBC", "(3) encalg=aes128-CBC");
+equal(pResult["prf"], "hmacWithSHA512", "(3) prf=hmacWithSHA512");
+equal(hDec, hT1P8P, "(3) decrypted plain hex");
+
+});
+
+});
+-->
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+<div>
+<a href="index.html">TEST INDEX</a> |
+<a href="../api/index.html">APIDOCS</a> | 
+<a href="qunit-do-keyutil.html">keyutil</a> | 
+<a href="qunit-do-keyutil-eprv.html">keyutil-eprv</a> | 
+<a href="qunit-do-keyutil-pub.html">keyutil-pub</a> | 
+</div>
+</body>
+</html>
+

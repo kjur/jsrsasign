@@ -1,4 +1,4 @@
-/* base64x-1.1.33 (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* base64x-1.1.34 (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name base64x-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.8.4 base64x 1.1.33 (2023-Apr-26)
+ * @version jsrsasign 10.9.0 base64x 1.1.34 (2023-Nov-27)
  * @since jsrsasign 2.1
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1744,6 +1744,85 @@ function hextooid(h) {
 	return null;
     }
 };
+
+// ==== int / hex =================================
+/**
+ * get hexadecimal string of minimum two's complement of integer<br/>
+ * @name inttohex
+ * @function
+ * @param {number} i integer value
+ * @return {string} hexadecimal string of two's complement of the integer
+ * @since jsrsasign 10.9.0 base64x 1.1.34
+ * @see twoscompl
+ * @see DERInteger
+ *
+ * @description
+ * This static method converts from integer value to a minimum length 
+ * hexadecimal string of two's complement of the integer.
+ * This method is useful for {@link DERInteger}.
+ *
+ * @example
+ * inttohex(1) &rarr; "01"
+ * inttohex(-1) &rarr; "ff"
+ * inttohex(2048) &rarr; "0800"
+ * inttohex(-2048) &rarr; "f800"
+ */
+function inttohex(i) {
+    var bi = new BigInteger(String(i), 10);
+    return twoscompl(bi);
+}
+
+/**
+ * get hexadecimal string of minimum two's complement of BigInteger<br/>
+ * @name twoscompl
+ * @function
+ * @param {BigInteger} bi BigInteger object
+ * @return {string} hexadecimal string of two's complement of the integer
+ * @since jsrsasign 10.9.0 base64x 1.1.34
+ * @see inttohex
+ *
+ * @description
+ * This static method converts from a BigInteger object to a minimum length
+ * hexadecimal string of two's complement of the integer.
+ * <br/>
+ * NOTE: This function is a replacement of deprecated ASN1Util.bigIntToMinTwosComplementsHex method.
+ *
+ * @example
+ * twoscompl(new BigInteger("1", 10)) &rarr; "01"
+ * twoscompl(new BigInteger("-1", 10)) &rarr; "ff"
+ */
+function twoscompl(bi) {
+    var h = bi.toString(16);
+    // positive
+    if (h.substr(0, 1) != '-') {
+	if (h.length % 2 == 1) {
+	    h = '0' + h;
+	} else {
+	    if (! h.match(/^[0-7]/)) {
+		h = '00' + h;
+	    }
+	}
+	return h;
+    }
+    // negative
+    var hPos = h.substr(1);
+    var xorLen = hPos.length;
+    if (xorLen % 2 == 1) {
+        xorLen += 1;
+    } else {
+        if (! h.match(/^[0-7]/)) {
+            xorLen += 2;
+        }
+    }
+    var hMask = '';
+    for (var i = 0; i < xorLen; i++) {
+        hMask += 'f';
+    }
+    var biMask = new BigInteger(hMask, 16);
+    var biNeg = biMask.xor(bi).add(BigInteger.ONE);
+    h = biNeg.toString(16).replace(/^-/, '');
+    return h;
+}
 
 /**
  * string padding<br/>
