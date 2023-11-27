@@ -898,6 +898,17 @@ with unused bit.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#inttohex">inttohex</a></b>(i)
+								</div>
+								<div class="description">get hexadecimal string of minimum two's complement of integer<br/>
+This static method converts from integer value to a minimum length 
+hexadecimal string of two's complement of the integer.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#iptohex">iptohex</a></b>(s)
 								</div>
 								<div class="description">convert IPv4/v6 addresss to a hexadecimal string<br/>
@@ -1197,6 +1208,17 @@ This function only works in Node.js.</div>
 								</div>
 								<div class="description">GeneralizedTime or UTCTime string to GeneralizedTime<br>
 This function converts UTCTime string (i.e.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#twoscompl">twoscompl</a></b>(bi)
+								</div>
+								<div class="description">get hexadecimal string of minimum two's complement of BigInteger<br/>
+This static method converts from a BigInteger object to a minimum length
+hexadecimal string of two's complement of the integer.</div>
 							</td>
 						</tr>
 					
@@ -3358,6 +3380,77 @@ inttobitstr(parseInt("101000001", 2)) &rarr; "07a080"</pre>
 
 					<hr />
 				
+					<a name="inttohex"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{string}</span>
+					<b>inttohex</b>(i)
+					
+					</div>
+					<div class="description">
+						get hexadecimal string of minimum two's complement of integer<br/>
+This static method converts from integer value to a minimum length 
+hexadecimal string of two's complement of the integer.
+This method is useful for DERInteger.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">inttohex(1) &rarr; "01"
+inttohex(-1) &rarr; "ff"
+inttohex(2048) &rarr; "0800"
+inttohex(-2048) &rarr; "f800"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{number}</span> <b>i</b>
+									
+								</dt>
+								<dd>integer value</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.9.0 base64x 1.1.34</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> hexadecimal string of two's complement of the integer</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/global__.html#twoscompl">twoscompl</a></dd>
+							
+								<dd>DERInteger</dd>
+							
+							</dl>
+						
+
+					<hr />
+				
 					<a name="iptohex"> </a>
 					<div class="fixedFont">
 					
@@ -5124,6 +5217,74 @@ timetogen(  "971231235959.123Z") &rarr; "19971231235959.123Z"</pre>
 							</dl>
 						
 						
+						
+
+					<hr />
+				
+					<a name="twoscompl"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{string}</span>
+					<b>twoscompl</b>(bi)
+					
+					</div>
+					<div class="description">
+						get hexadecimal string of minimum two's complement of BigInteger<br/>
+This static method converts from a BigInteger object to a minimum length
+hexadecimal string of two's complement of the integer.
+<br/>
+NOTE: This function is a replacement of deprecated ASN1Util.bigIntToMinTwosComplementsHex method.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">twoscompl(new BigInteger("1", 10)) &rarr; "01"
+twoscompl(new BigInteger("-1", 10)) &rarr; "ff"</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{BigInteger}</span> <b>bi</b>
+									
+								</dt>
+								<dd>BigInteger object</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 10.9.0 base64x 1.1.34</dd>
+							</dl>
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> hexadecimal string of two's complement of the integer</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/global__.html#inttohex">inttohex</a></dd>
+							
+							</dl>
 						
 
 					<hr />

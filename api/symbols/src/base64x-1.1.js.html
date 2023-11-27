@@ -5,7 +5,7 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* base64x-1.1.33 (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/* base64x-1.1.34 (c) 2012-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
 <span class='line'>  2</span>  */</span><span class="WHIT">
 <span class='line'>  3</span> </span><span class="COMM">/*
 <span class='line'>  4</span>  * base64x.js - Base64url and supplementary functions for Tom Wu's base64.js library
@@ -23,7 +23,7 @@
 <span class='line'> 16</span>  * @fileOverview
 <span class='line'> 17</span>  * @name base64x-1.1.js
 <span class='line'> 18</span>  * @author Kenji Urushima kenji.urushima@gmail.com
-<span class='line'> 19</span>  * @version jsrsasign 10.8.4 base64x 1.1.33 (2023-Apr-26)
+<span class='line'> 19</span>  * @version jsrsasign 10.9.0 base64x 1.1.34 (2023-Nov-27)
 <span class='line'> 20</span>  * @since jsrsasign 2.1
 <span class='line'> 21</span>  * @license &lt;a href="https://kjur.github.io/jsrsasign/license/">MIT License&lt;/a>
 <span class='line'> 22</span>  */</span><span class="WHIT">
@@ -1752,315 +1752,394 @@
 <span class='line'>1745</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>1746</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>1747</span> 
-<span class='line'>1748</span> </span><span class="COMM">/**
-<span class='line'>1749</span>  * string padding&lt;br/>
-<span class='line'>1750</span>  * @name strpad
-<span class='line'>1751</span>  * @function
-<span class='line'>1752</span>  * @param {String} s input string
-<span class='line'>1753</span>  * @param {Number} len output string length
-<span class='line'>1754</span>  * @param {String} padchar padding character (default is "0")
-<span class='line'>1755</span>  * @return {String} padded string
-<span class='line'>1756</span>  * @since jsrsasign 10.1.0 base64x 1.1.18
-<span class='line'>1757</span>  * @example
-<span class='line'>1758</span>  * strpad("1234", 10, "0") &rarr; "0000001234"
-<span class='line'>1759</span>  * strpad("1234", 10, " ") &rarr; "      1234"
-<span class='line'>1760</span>  * strpad("1234", 10)      &rarr; "0000001234"
-<span class='line'>1761</span>  */</span><span class="WHIT">
-<span class='line'>1762</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">strpad</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">len</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">padchar</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1763</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">padchar</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">padchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1764</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">len</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1765</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="NAME">len</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">join</span><span class="PUNC">(</span><span class="NAME">padchar</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1766</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1767</span> 
-<span class='line'>1768</span> </span><span class="COMM">// ==== bitstr hex / int =================================</span><span class="WHIT">
-<span class='line'>1769</span> 
-<span class='line'>1770</span> </span><span class="COMM">/**
-<span class='line'>1771</span>  * convert from hexadecimal string of ASN.1 BitString value with unused bit to integer value&lt;br/>
-<span class='line'>1772</span>  * @name bitstrtoint
-<span class='line'>1773</span>  * @function
-<span class='line'>1774</span>  * @param {String} h hexadecimal string of ASN.1 BitString value with unused bit
-<span class='line'>1775</span>  * @return {Number} positive integer value of the BitString
-<span class='line'>1776</span>  * @since jsrsasign 10.1.3 base64x 1.1.19
-<span class='line'>1777</span>  * @see inttobitstr
-<span class='line'>1778</span>  * @see KJUR.asn1.DERBitString
-<span class='line'>1779</span>  * @see ASN1HEX.getInt
-<span class='line'>1780</span>  * 
-<span class='line'>1781</span>  * @description
-<span class='line'>1782</span>  * This function converts from hexadecimal string of ASN.1 BitString
-<span class='line'>1783</span>  * value with unused bit to its integer value. &lt;br/>
-<span class='line'>1784</span>  * When an improper hexadecimal string of BitString value
-<span class='line'>1785</span>  * is applied, this returns -1.
-<span class='line'>1786</span>  * 
-<span class='line'>1787</span>  * @example
-<span class='line'>1788</span>  * // "03c8" &rarr; 0xc8 unusedbit=03 &rarr; 11001000b unusedbit=03 &rarr; 11001b &rarr; 25
-<span class='line'>1789</span>  * bitstrtoint("03c8") &rarr; 25
-<span class='line'>1790</span>  * // "02fff8" &rarr; 0xfff8 unusedbit=02 &rarr; 1111111111111000b unusedbit=02
-<span class='line'>1791</span>  * //   11111111111110b &rarr; 16382
-<span class='line'>1792</span>  * bitstrtoint("02fff8") &rarr; 16382
-<span class='line'>1793</span>  * bitstrtoint("05a0") &rarr; 5 (=101b)
-<span class='line'>1794</span>  * bitstrtoint("ff00") &rarr; -1 // for improper BitString value
-<span class='line'>1795</span>  * bitstrtoint("05a0").toString(2) &rarr; "101"
-<span class='line'>1796</span>  * bitstrtoint("07a080").toString(2) &rarr; "101000001"
-<span class='line'>1797</span>  */</span><span class="WHIT">
-<span class='line'>1798</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">bitstrtoint</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1799</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT"> 
-<span class='line'>1800</span>     </span><span class="NAME">h</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">h.toLowerCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1801</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9a-f]+$/</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1802</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1803</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hUnusedbit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1804</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hUnusedbit</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"00"</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>1805</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1806</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iUnusedbit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">hUnusedbit</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1807</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">iUnusedbit</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">7</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1808</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1809</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">hValue</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1810</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">bValue</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">bValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"00000000"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1811</span> </span><span class="WHIT">	</span><span class="NAME">bValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">bValue.slice</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">iUnusedbit</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1812</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">bValue</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1813</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">iValue</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">NaN</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1814</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">iValue</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1815</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1816</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1817</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1818</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1819</span> 
-<span class='line'>1820</span> </span><span class="COMM">/**
-<span class='line'>1821</span>  * convert from integer value to hexadecimal string of ASN.1 BitString value with unused bit&lt;br/>
-<span class='line'>1822</span>  * @name inttobitstr
-<span class='line'>1823</span>  * @function
-<span class='line'>1824</span>  * @param {Number} n integer value of ASN.1 BitString
-<span class='line'>1825</span>  * @return {String} hexadecimal string of ASN.1 BitString value with unused bit
-<span class='line'>1826</span>  * @since jsrsasign 10.1.3 base64x 1.1.19
-<span class='line'>1827</span>  * @see bitstrtoint
-<span class='line'>1828</span>  * @see KJUR.asn1.DERBitString
-<span class='line'>1829</span>  * @see ASN1HEX.getInt
-<span class='line'>1830</span>  * 
-<span class='line'>1831</span>  * @description
-<span class='line'>1832</span>  * This function converts from an integer value to 
-<span class='line'>1833</span>  * hexadecimal string of ASN.1 BitString value
-<span class='line'>1834</span>  * with unused bit. &lt;br/>
-<span class='line'>1835</span>  * When "n" is not non-negative number, this returns null
-<span class='line'>1836</span>  * 
-<span class='line'>1837</span>  * @example
-<span class='line'>1838</span>  * // 25 &rarr; 11001b &rarr; 11001000b unusedbit=03 &rarr; 0xc8 unusedbit=03 &rarr; "03c8"
-<span class='line'>1839</span>  * inttobitstr(25) &rarr; "03c8"
-<span class='line'>1840</span>  * inttobitstr(-3) &rarr; null
-<span class='line'>1841</span>  * inttobitstr("abc") &rarr; null
-<span class='line'>1842</span>  * inttobitstr(parseInt("11001", 2)) &rarr; "03c8"
-<span class='line'>1843</span>  * inttobitstr(parseInt("101", 2)) &rarr; "05a0"
-<span class='line'>1844</span>  * inttobitstr(parseInt("101000001", 2)) &rarr; "07a080"
-<span class='line'>1845</span>  */</span><span class="WHIT">
-<span class='line'>1846</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">inttobitstr</span><span class="PUNC">(</span><span class="NAME">n</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1847</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"number"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1848</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1849</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Number</span><span class="PUNC">(</span><span class="NAME">n</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1850</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iUnusedbit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">8</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">bValue.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">8</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1851</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">iUnusedbit</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">8</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">iUnusedbit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1852</span> </span><span class="WHIT">    </span><span class="NAME">bValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">bValue</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">strpad</span><span class="PUNC">(</span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iUnusedbit</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1853</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">bValue</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1854</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hValue.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">hValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">hValue</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1855</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hUnusedbit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">iUnusedbit</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1856</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">hUnusedbit</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">hValue</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1857</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1858</span> 
-<span class='line'>1859</span> </span><span class="COMM">// ==== bitstr hex / binary string =======================</span><span class="WHIT">
-<span class='line'>1860</span> 
-<span class='line'>1861</span> </span><span class="COMM">/**
-<span class='line'>1862</span>  * convert from hexadecimal string of ASN.1 BitString value with unused bit to binary string&lt;br/>
-<span class='line'>1863</span>  * @name bitstrtobinstr
-<span class='line'>1864</span>  * @function
-<span class='line'>1865</span>  * @param {string} h hexadecimal string of ASN.1 BitString value with unused bit
-<span class='line'>1866</span>  * @return {string} binary string
-<span class='line'>1867</span>  * @since jsrsasign 10.5.4 base64x 1.1.21
-<span class='line'>1868</span>  * @see binstrtobitstr
-<span class='line'>1869</span>  * @see inttobitstr
-<span class='line'>1870</span>  * 
-<span class='line'>1871</span>  * @description
-<span class='line'>1872</span>  * This function converts from hexadecimal string of ASN.1 BitString
-<span class='line'>1873</span>  * value with unused bit to its integer value. &lt;br/>
-<span class='line'>1874</span>  * When an improper hexadecimal string of BitString value
-<span class='line'>1875</span>  * is applied, this returns null.
-<span class='line'>1876</span>  * 
-<span class='line'>1877</span>  * @example
-<span class='line'>1878</span>  * bitstrtobinstr("05a0") &rarr; "101"
-<span class='line'>1879</span>  * bitstrtobinstr("0520") &rarr; "001"
-<span class='line'>1880</span>  * bitstrtobinstr("07a080") &rarr; "101000001"
-<span class='line'>1881</span>  * bitstrtobinstr(502) &rarr; null // non ASN.1 BitString value
-<span class='line'>1882</span>  * bitstrtobinstr("ff00") &rarr; null // for improper BitString value
-<span class='line'>1883</span>  */</span><span class="WHIT">
-<span class='line'>1884</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">bitstrtobinstr</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1885</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">h</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1886</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1887</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">h.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9a-f]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1888</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1889</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">unusedBits</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1890</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">unusedBits</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">7</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">unusedBits</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT">
-<span class='line'>1891</span> 
-<span class='line'>1892</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1893</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bin</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1894</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">value.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1895</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hi</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value.substr</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1896</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bi</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">hi</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1897</span> </span><span class="WHIT">	    </span><span class="NAME">bi</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">"0000000"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">bi</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">8</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1898</span> </span><span class="WHIT">	    </span><span class="NAME">bin</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">bi</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1899</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1900</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT">  </span><span class="NAME">bin.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">bin.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">unusedBits</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1901</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1902</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1903</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1904</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1905</span> 
-<span class='line'>1906</span> </span><span class="COMM">/**
-<span class='line'>1907</span>  * convert from binary string to hexadecimal string of ASN.1 BitString value with unused bit&lt;br/>
-<span class='line'>1908</span>  * @name binstrtobitstr
-<span class='line'>1909</span>  * @function
-<span class='line'>1910</span>  * @param {string} s binary string (ex. "101")
-<span class='line'>1911</span>  * @return {string} hexadecimal string of ASN.1 BitString value with unused bit
-<span class='line'>1912</span>  * @since jsrsasign 10.5.4 base64x 1.1.21
-<span class='line'>1913</span>  * @see bitstrtobinstr
-<span class='line'>1914</span>  * @see inttobitstr
-<span class='line'>1915</span>  * @see KJUR.asn1.DERBitString
-<span class='line'>1916</span>  * 
-<span class='line'>1917</span>  * @description
-<span class='line'>1918</span>  * This function converts from an binary string (ex. "101") to 
-<span class='line'>1919</span>  * hexadecimal string of ASN.1 BitString value
-<span class='line'>1920</span>  * with unused bit (ex. "05a0"). &lt;br/>
-<span class='line'>1921</span>  * When "s" is not binary string, this returns null.
-<span class='line'>1922</span>  * 
-<span class='line'>1923</span>  * @example
-<span class='line'>1924</span>  * binstrtobitstr("101") &rarr; "05a0"
-<span class='line'>1925</span>  * binstrtobitstr("001") &rarr; "0520"
-<span class='line'>1926</span>  * binstrtobitstr("11001") &rarr; "03c8"
-<span class='line'>1927</span>  * binstrtobitstr("101000001") &rarr; "07a080"
-<span class='line'>1928</span>  * binstrtobitstr(101) &rarr; null // not number
-<span class='line'>1929</span>  * binstrtobitstr("xyz") &rarr; null // not binary string
-<span class='line'>1930</span>  */</span><span class="WHIT">
-<span class='line'>1931</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">binstrtobitstr</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1932</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1933</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[01]+$/</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1934</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1935</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1936</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">inttobitstr</span><span class="PUNC">(</span><span class="NAME">n</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1937</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1938</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1939</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1940</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1941</span> 
-<span class='line'>1942</span> </span><span class="COMM">// =======================================================</span><span class="WHIT">
-<span class='line'>1943</span> </span><span class="COMM">/**
-<span class='line'>1944</span>  * convert array of names to bit string&lt;br/>
-<span class='line'>1945</span>  * @name namearraytobinstr
-<span class='line'>1946</span>  * @function
-<span class='line'>1947</span>  * @param {array} namearray array of name string
-<span class='line'>1948</span>  * @param {object} namedb associative array of name and value
-<span class='line'>1949</span>  * @return {string} binary string (ex. "110001")
-<span class='line'>1950</span>  * @since jsrsasign 10.5.21 base64x 1.1.27
-<span class='line'>1951</span>  * @see KJUR.asn1.x509.KeyUsage
-<span class='line'>1952</span>  * @see KJUR.asn1.tsp.PKIFailureInfo
-<span class='line'>1953</span>  * 
-<span class='line'>1954</span>  * @description
-<span class='line'>1955</span>  * This function converts from an array of names to
-<span class='line'>1956</span>  * a binary string. DB value bit will be set.
-<span class='line'>1957</span>  * Note that ordering of namearray items
-<span class='line'>1958</span>  * will be ignored.
-<span class='line'>1959</span>  *
-<span class='line'>1960</span>  * @example
-<span class='line'>1961</span>  * db = { a: 0, b: 3, c: 8, d: 9, e: 17, f: 19 };
-<span class='line'>1962</span>  * namearraytobinstr(['a', 'c', 'd'], db) &rarr: '1000000011'
-<span class='line'>1963</span>  * namearraytobinstr(['c', 'b'], db) &rarr: '000100001'
-<span class='line'>1964</span>  */</span><span class="WHIT">
-<span class='line'>1965</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">namearraytobinstr</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">namearray</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">namedb</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1966</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1967</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">namearray.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1968</span> </span><span class="WHIT">	</span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">|</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">&lt;&lt;</span><span class="WHIT"> </span><span class="NAME">namedb</span><span class="PUNC">[</span><span class="NAME">namearray</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1969</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1748</span> </span><span class="COMM">// ==== int / hex =================================</span><span class="WHIT">
+<span class='line'>1749</span> </span><span class="COMM">/**
+<span class='line'>1750</span>  * get hexadecimal string of minimum two's complement of integer&lt;br/>
+<span class='line'>1751</span>  * @name inttohex
+<span class='line'>1752</span>  * @function
+<span class='line'>1753</span>  * @param {number} i integer value
+<span class='line'>1754</span>  * @return {string} hexadecimal string of two's complement of the integer
+<span class='line'>1755</span>  * @since jsrsasign 10.9.0 base64x 1.1.34
+<span class='line'>1756</span>  * @see twoscompl
+<span class='line'>1757</span>  * @see DERInteger
+<span class='line'>1758</span>  *
+<span class='line'>1759</span>  * @description
+<span class='line'>1760</span>  * This static method converts from integer value to a minimum length 
+<span class='line'>1761</span>  * hexadecimal string of two's complement of the integer.
+<span class='line'>1762</span>  * This method is useful for {@link DERInteger}.
+<span class='line'>1763</span>  *
+<span class='line'>1764</span>  * @example
+<span class='line'>1765</span>  * inttohex(1) &rarr; "01"
+<span class='line'>1766</span>  * inttohex(-1) &rarr; "ff"
+<span class='line'>1767</span>  * inttohex(2048) &rarr; "0800"
+<span class='line'>1768</span>  * inttohex(-2048) &rarr; "f800"
+<span class='line'>1769</span>  */</span><span class="WHIT">
+<span class='line'>1770</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">inttohex</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1771</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bi</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">BigInteger</span><span class="PUNC">(</span><span class="NAME">String</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1772</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">twoscompl</span><span class="PUNC">(</span><span class="NAME">bi</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1773</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1774</span> 
+<span class='line'>1775</span> </span><span class="COMM">/**
+<span class='line'>1776</span>  * get hexadecimal string of minimum two's complement of BigInteger&lt;br/>
+<span class='line'>1777</span>  * @name twoscompl
+<span class='line'>1778</span>  * @function
+<span class='line'>1779</span>  * @param {BigInteger} bi BigInteger object
+<span class='line'>1780</span>  * @return {string} hexadecimal string of two's complement of the integer
+<span class='line'>1781</span>  * @since jsrsasign 10.9.0 base64x 1.1.34
+<span class='line'>1782</span>  * @see inttohex
+<span class='line'>1783</span>  *
+<span class='line'>1784</span>  * @description
+<span class='line'>1785</span>  * This static method converts from a BigInteger object to a minimum length
+<span class='line'>1786</span>  * hexadecimal string of two's complement of the integer.
+<span class='line'>1787</span>  * &lt;br/>
+<span class='line'>1788</span>  * NOTE: This function is a replacement of deprecated ASN1Util.bigIntToMinTwosComplementsHex method.
+<span class='line'>1789</span>  *
+<span class='line'>1790</span>  * @example
+<span class='line'>1791</span>  * twoscompl(new BigInteger("1", 10)) &rarr; "01"
+<span class='line'>1792</span>  * twoscompl(new BigInteger("-1", 10)) &rarr; "ff"
+<span class='line'>1793</span>  */</span><span class="WHIT">
+<span class='line'>1794</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">twoscompl</span><span class="PUNC">(</span><span class="NAME">bi</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1795</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">h</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">bi.toString</span><span class="PUNC">(</span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1796</span> </span><span class="WHIT">    </span><span class="COMM">// positive</span><span class="WHIT">
+<span class='line'>1797</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">'-'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1798</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1799</span> </span><span class="WHIT">	    </span><span class="NAME">h</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'0'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">h</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1800</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1801</span> </span><span class="WHIT">	    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">h.match</span><span class="PUNC">(</span><span class="REGX">/^[0-7]/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1802</span> </span><span class="WHIT">		</span><span class="NAME">h</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'00'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">h</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1803</span> </span><span class="WHIT">	    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1804</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1805</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">h</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1806</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1807</span> </span><span class="WHIT">    </span><span class="COMM">// negative</span><span class="WHIT">
+<span class='line'>1808</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hPos</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1809</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">xorLen</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hPos.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1810</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">xorLen</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1811</span> </span><span class="WHIT">        </span><span class="NAME">xorLen</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1812</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1813</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">h.match</span><span class="PUNC">(</span><span class="REGX">/^[0-7]/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1814</span> </span><span class="WHIT">            </span><span class="NAME">xorLen</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1815</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1816</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1817</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hMask</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1818</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">xorLen</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1819</span> </span><span class="WHIT">        </span><span class="NAME">hMask</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'f'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1820</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1821</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">biMask</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">BigInteger</span><span class="PUNC">(</span><span class="NAME">hMask</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1822</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">biNeg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">biMask.xor</span><span class="PUNC">(</span><span class="NAME">bi</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">add</span><span class="PUNC">(</span><span class="NAME">BigInteger.ONE</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1823</span> </span><span class="WHIT">    </span><span class="NAME">h</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">biNeg.toString</span><span class="PUNC">(</span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">replace</span><span class="PUNC">(</span><span class="REGX">/^-/</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1824</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">h</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1825</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1826</span> 
+<span class='line'>1827</span> </span><span class="COMM">/**
+<span class='line'>1828</span>  * string padding&lt;br/>
+<span class='line'>1829</span>  * @name strpad
+<span class='line'>1830</span>  * @function
+<span class='line'>1831</span>  * @param {String} s input string
+<span class='line'>1832</span>  * @param {Number} len output string length
+<span class='line'>1833</span>  * @param {String} padchar padding character (default is "0")
+<span class='line'>1834</span>  * @return {String} padded string
+<span class='line'>1835</span>  * @since jsrsasign 10.1.0 base64x 1.1.18
+<span class='line'>1836</span>  * @example
+<span class='line'>1837</span>  * strpad("1234", 10, "0") &rarr; "0000001234"
+<span class='line'>1838</span>  * strpad("1234", 10, " ") &rarr; "      1234"
+<span class='line'>1839</span>  * strpad("1234", 10)      &rarr; "0000001234"
+<span class='line'>1840</span>  */</span><span class="WHIT">
+<span class='line'>1841</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">strpad</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">len</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">padchar</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1842</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">padchar</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">padchar</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1843</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">len</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1844</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Array</span><span class="PUNC">(</span><span class="NAME">len</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">join</span><span class="PUNC">(</span><span class="NAME">padchar</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1845</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1846</span> 
+<span class='line'>1847</span> </span><span class="COMM">// ==== bitstr hex / int =================================</span><span class="WHIT">
+<span class='line'>1848</span> 
+<span class='line'>1849</span> </span><span class="COMM">/**
+<span class='line'>1850</span>  * convert from hexadecimal string of ASN.1 BitString value with unused bit to integer value&lt;br/>
+<span class='line'>1851</span>  * @name bitstrtoint
+<span class='line'>1852</span>  * @function
+<span class='line'>1853</span>  * @param {String} h hexadecimal string of ASN.1 BitString value with unused bit
+<span class='line'>1854</span>  * @return {Number} positive integer value of the BitString
+<span class='line'>1855</span>  * @since jsrsasign 10.1.3 base64x 1.1.19
+<span class='line'>1856</span>  * @see inttobitstr
+<span class='line'>1857</span>  * @see KJUR.asn1.DERBitString
+<span class='line'>1858</span>  * @see ASN1HEX.getInt
+<span class='line'>1859</span>  * 
+<span class='line'>1860</span>  * @description
+<span class='line'>1861</span>  * This function converts from hexadecimal string of ASN.1 BitString
+<span class='line'>1862</span>  * value with unused bit to its integer value. &lt;br/>
+<span class='line'>1863</span>  * When an improper hexadecimal string of BitString value
+<span class='line'>1864</span>  * is applied, this returns -1.
+<span class='line'>1865</span>  * 
+<span class='line'>1866</span>  * @example
+<span class='line'>1867</span>  * // "03c8" &rarr; 0xc8 unusedbit=03 &rarr; 11001000b unusedbit=03 &rarr; 11001b &rarr; 25
+<span class='line'>1868</span>  * bitstrtoint("03c8") &rarr; 25
+<span class='line'>1869</span>  * // "02fff8" &rarr; 0xfff8 unusedbit=02 &rarr; 1111111111111000b unusedbit=02
+<span class='line'>1870</span>  * //   11111111111110b &rarr; 16382
+<span class='line'>1871</span>  * bitstrtoint("02fff8") &rarr; 16382
+<span class='line'>1872</span>  * bitstrtoint("05a0") &rarr; 5 (=101b)
+<span class='line'>1873</span>  * bitstrtoint("ff00") &rarr; -1 // for improper BitString value
+<span class='line'>1874</span>  * bitstrtoint("05a0").toString(2) &rarr; "101"
+<span class='line'>1875</span>  * bitstrtoint("07a080").toString(2) &rarr; "101000001"
+<span class='line'>1876</span>  */</span><span class="WHIT">
+<span class='line'>1877</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">bitstrtoint</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1878</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT"> 
+<span class='line'>1879</span>     </span><span class="NAME">h</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">h.toLowerCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1880</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9a-f]+$/</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1881</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1882</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hUnusedbit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1883</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hUnusedbit</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"00"</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>1884</span> </span><span class="WHIT">	    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1885</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iUnusedbit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">hUnusedbit</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1886</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">iUnusedbit</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">7</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1887</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1888</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">hValue</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1889</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">bValue</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">bValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"00000000"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1890</span> </span><span class="WHIT">	</span><span class="NAME">bValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">bValue.slice</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">iUnusedbit</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1891</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">bValue</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1892</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">iValue</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">NaN</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1893</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">iValue</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1894</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1895</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1896</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1897</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1898</span> 
+<span class='line'>1899</span> </span><span class="COMM">/**
+<span class='line'>1900</span>  * convert from integer value to hexadecimal string of ASN.1 BitString value with unused bit&lt;br/>
+<span class='line'>1901</span>  * @name inttobitstr
+<span class='line'>1902</span>  * @function
+<span class='line'>1903</span>  * @param {Number} n integer value of ASN.1 BitString
+<span class='line'>1904</span>  * @return {String} hexadecimal string of ASN.1 BitString value with unused bit
+<span class='line'>1905</span>  * @since jsrsasign 10.1.3 base64x 1.1.19
+<span class='line'>1906</span>  * @see bitstrtoint
+<span class='line'>1907</span>  * @see KJUR.asn1.DERBitString
+<span class='line'>1908</span>  * @see ASN1HEX.getInt
+<span class='line'>1909</span>  * 
+<span class='line'>1910</span>  * @description
+<span class='line'>1911</span>  * This function converts from an integer value to 
+<span class='line'>1912</span>  * hexadecimal string of ASN.1 BitString value
+<span class='line'>1913</span>  * with unused bit. &lt;br/>
+<span class='line'>1914</span>  * When "n" is not non-negative number, this returns null
+<span class='line'>1915</span>  * 
+<span class='line'>1916</span>  * @example
+<span class='line'>1917</span>  * // 25 &rarr; 11001b &rarr; 11001000b unusedbit=03 &rarr; 0xc8 unusedbit=03 &rarr; "03c8"
+<span class='line'>1918</span>  * inttobitstr(25) &rarr; "03c8"
+<span class='line'>1919</span>  * inttobitstr(-3) &rarr; null
+<span class='line'>1920</span>  * inttobitstr("abc") &rarr; null
+<span class='line'>1921</span>  * inttobitstr(parseInt("11001", 2)) &rarr; "03c8"
+<span class='line'>1922</span>  * inttobitstr(parseInt("101", 2)) &rarr; "05a0"
+<span class='line'>1923</span>  * inttobitstr(parseInt("101000001", 2)) &rarr; "07a080"
+<span class='line'>1924</span>  */</span><span class="WHIT">
+<span class='line'>1925</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">inttobitstr</span><span class="PUNC">(</span><span class="NAME">n</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1926</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"number"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1927</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1928</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Number</span><span class="PUNC">(</span><span class="NAME">n</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1929</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">iUnusedbit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">8</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">bValue.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">8</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1930</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">iUnusedbit</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">8</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">iUnusedbit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1931</span> </span><span class="WHIT">    </span><span class="NAME">bValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">bValue</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">strpad</span><span class="PUNC">(</span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">iUnusedbit</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1932</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">bValue</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1933</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">hValue.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">hValue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">hValue</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1934</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hUnusedbit</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"0"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">iUnusedbit</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1935</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">hUnusedbit</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">hValue</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1936</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1937</span> 
+<span class='line'>1938</span> </span><span class="COMM">// ==== bitstr hex / binary string =======================</span><span class="WHIT">
+<span class='line'>1939</span> 
+<span class='line'>1940</span> </span><span class="COMM">/**
+<span class='line'>1941</span>  * convert from hexadecimal string of ASN.1 BitString value with unused bit to binary string&lt;br/>
+<span class='line'>1942</span>  * @name bitstrtobinstr
+<span class='line'>1943</span>  * @function
+<span class='line'>1944</span>  * @param {string} h hexadecimal string of ASN.1 BitString value with unused bit
+<span class='line'>1945</span>  * @return {string} binary string
+<span class='line'>1946</span>  * @since jsrsasign 10.5.4 base64x 1.1.21
+<span class='line'>1947</span>  * @see binstrtobitstr
+<span class='line'>1948</span>  * @see inttobitstr
+<span class='line'>1949</span>  * 
+<span class='line'>1950</span>  * @description
+<span class='line'>1951</span>  * This function converts from hexadecimal string of ASN.1 BitString
+<span class='line'>1952</span>  * value with unused bit to its integer value. &lt;br/>
+<span class='line'>1953</span>  * When an improper hexadecimal string of BitString value
+<span class='line'>1954</span>  * is applied, this returns null.
+<span class='line'>1955</span>  * 
+<span class='line'>1956</span>  * @example
+<span class='line'>1957</span>  * bitstrtobinstr("05a0") &rarr; "101"
+<span class='line'>1958</span>  * bitstrtobinstr("0520") &rarr; "001"
+<span class='line'>1959</span>  * bitstrtobinstr("07a080") &rarr; "101000001"
+<span class='line'>1960</span>  * bitstrtobinstr(502) &rarr; null // non ASN.1 BitString value
+<span class='line'>1961</span>  * bitstrtobinstr("ff00") &rarr; null // for improper BitString value
+<span class='line'>1962</span>  */</span><span class="WHIT">
+<span class='line'>1963</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">bitstrtobinstr</span><span class="PUNC">(</span><span class="NAME">h</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1964</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">h</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1965</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">h.length</span><span class="WHIT"> </span><span class="PUNC">%</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1966</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="WHIT"> </span><span class="NAME">h.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9a-f]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1967</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1968</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">unusedBits</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1969</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">unusedBits</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">7</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">unusedBits</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT">
 <span class='line'>1970</span> 
-<span class='line'>1971</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">d.toString</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1972</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">r</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1973</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">--</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>1974</span> </span><span class="WHIT">	</span><span class="NAME">r</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1975</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1976</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">r</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1977</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>1978</span> 
-<span class='line'>1979</span> </span><span class="COMM">/**
-<span class='line'>1980</span>  * get value of array by key name list&lt;br/>
-<span class='line'>1981</span>  * @function
-<span class='line'>1982</span>  * @param {object} val array of associative array
-<span class='line'>1983</span>  * @param {string} keys concatinated key list with dot (ex. 'type.name.0.info')
-<span class='line'>1984</span>  * @param {object} def default value if value is not found (OPTIONAL)
-<span class='line'>1985</span>  * @return {object} value if found otherwise returns def
-<span class='line'>1986</span>  * @since jsrsasign 10.8.0 base64x 1.1.32
-<span class='line'>1987</span>  *
-<span class='line'>1988</span>  * @description
-<span class='line'>1989</span>  * This function returns the value of an array or associative array 
-<span class='line'>1990</span>  * which referred by a concatinated key list string.
-<span class='line'>1991</span>  * If a value for key is not defined, it returns 'undefined' by default.
-<span class='line'>1992</span>  * When an optional argument 'def' is specified and a value for key is
-<span class='line'>1993</span>  * not defined, it returns a value of 'def'.
-<span class='line'>1994</span>  * 
-<span class='line'>1995</span>  * @example
-<span class='line'>1996</span>  * let p = {
-<span class='line'>1997</span>  *   fruit: apple,
-<span class='line'>1998</span>  *   info: [
-<span class='line'>1999</span>  *     { toy: 4 },
-<span class='line'>2000</span>  *     { pen: 6 }
-<span class='line'>2001</span>  *   ]
-<span class='line'>2002</span>  * };
-<span class='line'>2003</span>  * aryval(p, 'fruit') &rarr "apple"
-<span class='line'>2004</span>  * aryval(p, 'info') &rarr [{toy: 4},{pen: 6}]
-<span class='line'>2005</span>  * aryval(p, 'info.1') &rarr {pen: 6}
-<span class='line'>2006</span>  * aryval(p, 'info.1.pen') &rarr 6
-<span class='line'>2007</span>  * aryval(p, 'money.amount') &rarr undefined
-<span class='line'>2008</span>  * aryval(p, 'money.amount', null) &rarr null
+<span class='line'>1971</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">h.substr</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1972</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bin</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1973</span> </span><span class="WHIT">	</span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">value.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1974</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hi</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value.substr</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1975</span> </span><span class="WHIT">	    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">bi</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">hi</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">16</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1976</span> </span><span class="WHIT">	    </span><span class="NAME">bi</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="STRN">"0000000"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">bi</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">slice</span><span class="PUNC">(</span><span class="PUNC">-</span><span class="NUMB">8</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1977</span> </span><span class="WHIT">	    </span><span class="NAME">bin</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">bi</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1978</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1979</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT">  </span><span class="NAME">bin.substr</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">bin.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">unusedBits</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1980</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>1981</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1982</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1983</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>1984</span> 
+<span class='line'>1985</span> </span><span class="COMM">/**
+<span class='line'>1986</span>  * convert from binary string to hexadecimal string of ASN.1 BitString value with unused bit&lt;br/>
+<span class='line'>1987</span>  * @name binstrtobitstr
+<span class='line'>1988</span>  * @function
+<span class='line'>1989</span>  * @param {string} s binary string (ex. "101")
+<span class='line'>1990</span>  * @return {string} hexadecimal string of ASN.1 BitString value with unused bit
+<span class='line'>1991</span>  * @since jsrsasign 10.5.4 base64x 1.1.21
+<span class='line'>1992</span>  * @see bitstrtobinstr
+<span class='line'>1993</span>  * @see inttobitstr
+<span class='line'>1994</span>  * @see KJUR.asn1.DERBitString
+<span class='line'>1995</span>  * 
+<span class='line'>1996</span>  * @description
+<span class='line'>1997</span>  * This function converts from an binary string (ex. "101") to 
+<span class='line'>1998</span>  * hexadecimal string of ASN.1 BitString value
+<span class='line'>1999</span>  * with unused bit (ex. "05a0"). &lt;br/>
+<span class='line'>2000</span>  * When "s" is not binary string, this returns null.
+<span class='line'>2001</span>  * 
+<span class='line'>2002</span>  * @example
+<span class='line'>2003</span>  * binstrtobitstr("101") &rarr; "05a0"
+<span class='line'>2004</span>  * binstrtobitstr("001") &rarr; "0520"
+<span class='line'>2005</span>  * binstrtobitstr("11001") &rarr; "03c8"
+<span class='line'>2006</span>  * binstrtobitstr("101000001") &rarr; "07a080"
+<span class='line'>2007</span>  * binstrtobitstr(101) &rarr; null // not number
+<span class='line'>2008</span>  * binstrtobitstr("xyz") &rarr; null // not binary string
 <span class='line'>2009</span>  */</span><span class="WHIT">
-<span class='line'>2010</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">aryval</span><span class="PUNC">(</span><span class="NAME">val</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keys</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">def</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2011</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"object"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT">
-<span class='line'>2012</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">keys</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">String</span><span class="PUNC">(</span><span class="NAME">keys</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">split</span><span class="PUNC">(</span><span class="STRN">'.'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2013</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">keys.length</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">val</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2014</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">key</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">keys</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2015</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">key.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">key</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2016</span> </span><span class="WHIT">        </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">val</span><span class="PUNC">[</span><span class="NAME">key</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2017</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>2018</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">def</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2010</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">binstrtobitstr</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2011</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"string"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2012</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">s.match</span><span class="PUNC">(</span><span class="REGX">/^[01]+$/</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2013</span> </span><span class="WHIT">    </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2014</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">s</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2015</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">inttobitstr</span><span class="PUNC">(</span><span class="NAME">n</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2016</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="PUNC">(</span><span class="NAME">ex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2017</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2018</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>2019</span> </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>2020</span> 
-<span class='line'>2021</span> 
-<span class='line'>2022</span> </span><span class="COMM">// =======================================================</span><span class="WHIT">
-<span class='line'>2023</span> </span><span class="COMM">/**
-<span class='line'>2024</span>  * set class inheritance&lt;br/>
-<span class='line'>2025</span>  * @name extendClass
-<span class='line'>2026</span>  * @function
-<span class='line'>2027</span>  * @param {Function} subClass sub class to set inheritance
-<span class='line'>2028</span>  * @param {Function} superClass super class to inherit
-<span class='line'>2029</span>  * @since jsrsasign 10.3.0 base64x 1.1.21
-<span class='line'>2030</span>  *
-<span class='line'>2031</span>  * @description
-<span class='line'>2032</span>  * This function extends a class and set an inheritance
-<span class='line'>2033</span>  * for member variables and methods.
-<span class='line'>2034</span>  *
-<span class='line'>2035</span>  * @example
-<span class='line'>2036</span>  * var Animal = function() {
-<span class='line'>2037</span>  *   this.hello = function(){console.log("Hello")};
-<span class='line'>2038</span>  *   this.name="Ani";
-<span class='line'>2039</span>  * };
-<span class='line'>2040</span>  * var Dog = function() {
-<span class='line'>2041</span>  *   Dog.superclass.constructor.call(this);
-<span class='line'>2042</span>  *   this.vow = function(){console.log("Vow wow")};
-<span class='line'>2043</span>  *   this.tail=true;
-<span class='line'>2044</span>  * };
-<span class='line'>2045</span>  * extendClass(Dog, Animal);
-<span class='line'>2046</span>  */</span><span class="WHIT">
-<span class='line'>2047</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">extendClass</span><span class="PUNC">(</span><span class="NAME">subClass</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">superClass</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2048</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">F</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2049</span> </span><span class="WHIT">    </span><span class="NAME">F.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">superClass.prototype</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2050</span> </span><span class="WHIT">    </span><span class="NAME">subClass.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">F</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2051</span> </span><span class="WHIT">    </span><span class="NAME">subClass.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">subClass</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2052</span> </span><span class="WHIT">    </span><span class="NAME">subClass.superclass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">superClass.prototype</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2053</span> </span><span class="WHIT">     
-<span class='line'>2054</span>     </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">superClass.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">Object.prototype.constructor</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>2055</span> </span><span class="WHIT">        </span><span class="NAME">superClass.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">superClass</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2056</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>2057</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>2058</span> 
-<span class='line'>2059</span> </span></pre></body></html>
+<span class='line'>2021</span> </span><span class="COMM">// =======================================================</span><span class="WHIT">
+<span class='line'>2022</span> </span><span class="COMM">/**
+<span class='line'>2023</span>  * convert array of names to bit string&lt;br/>
+<span class='line'>2024</span>  * @name namearraytobinstr
+<span class='line'>2025</span>  * @function
+<span class='line'>2026</span>  * @param {array} namearray array of name string
+<span class='line'>2027</span>  * @param {object} namedb associative array of name and value
+<span class='line'>2028</span>  * @return {string} binary string (ex. "110001")
+<span class='line'>2029</span>  * @since jsrsasign 10.5.21 base64x 1.1.27
+<span class='line'>2030</span>  * @see KJUR.asn1.x509.KeyUsage
+<span class='line'>2031</span>  * @see KJUR.asn1.tsp.PKIFailureInfo
+<span class='line'>2032</span>  * 
+<span class='line'>2033</span>  * @description
+<span class='line'>2034</span>  * This function converts from an array of names to
+<span class='line'>2035</span>  * a binary string. DB value bit will be set.
+<span class='line'>2036</span>  * Note that ordering of namearray items
+<span class='line'>2037</span>  * will be ignored.
+<span class='line'>2038</span>  *
+<span class='line'>2039</span>  * @example
+<span class='line'>2040</span>  * db = { a: 0, b: 3, c: 8, d: 9, e: 17, f: 19 };
+<span class='line'>2041</span>  * namearraytobinstr(['a', 'c', 'd'], db) &rarr: '1000000011'
+<span class='line'>2042</span>  * namearraytobinstr(['c', 'b'], db) &rarr: '000100001'
+<span class='line'>2043</span>  */</span><span class="WHIT">
+<span class='line'>2044</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">namearraytobinstr</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">namearray</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">namedb</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2045</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2046</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">namearray.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2047</span> </span><span class="WHIT">	</span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">|</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">&lt;&lt;</span><span class="WHIT"> </span><span class="NAME">namedb</span><span class="PUNC">[</span><span class="NAME">namearray</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2048</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2049</span> 
+<span class='line'>2050</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">s</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">d.toString</span><span class="PUNC">(</span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2051</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">r</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2052</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">--</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2053</span> </span><span class="WHIT">	</span><span class="NAME">r</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">s</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2054</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2055</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">r</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2056</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2057</span> 
+<span class='line'>2058</span> </span><span class="COMM">/**
+<span class='line'>2059</span>  * get value of array by key name list&lt;br/>
+<span class='line'>2060</span>  * @function
+<span class='line'>2061</span>  * @param {object} val array of associative array
+<span class='line'>2062</span>  * @param {string} keys concatinated key list with dot (ex. 'type.name.0.info')
+<span class='line'>2063</span>  * @param {object} def default value if value is not found (OPTIONAL)
+<span class='line'>2064</span>  * @return {object} value if found otherwise returns def
+<span class='line'>2065</span>  * @since jsrsasign 10.8.0 base64x 1.1.32
+<span class='line'>2066</span>  *
+<span class='line'>2067</span>  * @description
+<span class='line'>2068</span>  * This function returns the value of an array or associative array 
+<span class='line'>2069</span>  * which referred by a concatinated key list string.
+<span class='line'>2070</span>  * If a value for key is not defined, it returns 'undefined' by default.
+<span class='line'>2071</span>  * When an optional argument 'def' is specified and a value for key is
+<span class='line'>2072</span>  * not defined, it returns a value of 'def'.
+<span class='line'>2073</span>  * 
+<span class='line'>2074</span>  * @example
+<span class='line'>2075</span>  * let p = {
+<span class='line'>2076</span>  *   fruit: apple,
+<span class='line'>2077</span>  *   info: [
+<span class='line'>2078</span>  *     { toy: 4 },
+<span class='line'>2079</span>  *     { pen: 6 }
+<span class='line'>2080</span>  *   ]
+<span class='line'>2081</span>  * };
+<span class='line'>2082</span>  * aryval(p, 'fruit') &rarr "apple"
+<span class='line'>2083</span>  * aryval(p, 'info') &rarr [{toy: 4},{pen: 6}]
+<span class='line'>2084</span>  * aryval(p, 'info.1') &rarr {pen: 6}
+<span class='line'>2085</span>  * aryval(p, 'info.1.pen') &rarr 6
+<span class='line'>2086</span>  * aryval(p, 'money.amount') &rarr undefined
+<span class='line'>2087</span>  * aryval(p, 'money.amount', null) &rarr null
+<span class='line'>2088</span>  */</span><span class="WHIT">
+<span class='line'>2089</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">aryval</span><span class="PUNC">(</span><span class="NAME">val</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">keys</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">def</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2090</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"object"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT">
+<span class='line'>2091</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">keys</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">String</span><span class="PUNC">(</span><span class="NAME">keys</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">split</span><span class="PUNC">(</span><span class="STRN">'.'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2092</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">keys.length</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">val</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2093</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">key</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">keys</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2094</span> </span><span class="WHIT">	</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">key.match</span><span class="PUNC">(</span><span class="REGX">/^[0-9]+$/</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">key</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">parseInt</span><span class="PUNC">(</span><span class="NAME">key</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2095</span> </span><span class="WHIT">        </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">val</span><span class="PUNC">[</span><span class="NAME">key</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2096</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2097</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">val</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">def</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2098</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2099</span> 
+<span class='line'>2100</span> 
+<span class='line'>2101</span> </span><span class="COMM">// =======================================================</span><span class="WHIT">
+<span class='line'>2102</span> </span><span class="COMM">/**
+<span class='line'>2103</span>  * set class inheritance&lt;br/>
+<span class='line'>2104</span>  * @name extendClass
+<span class='line'>2105</span>  * @function
+<span class='line'>2106</span>  * @param {Function} subClass sub class to set inheritance
+<span class='line'>2107</span>  * @param {Function} superClass super class to inherit
+<span class='line'>2108</span>  * @since jsrsasign 10.3.0 base64x 1.1.21
+<span class='line'>2109</span>  *
+<span class='line'>2110</span>  * @description
+<span class='line'>2111</span>  * This function extends a class and set an inheritance
+<span class='line'>2112</span>  * for member variables and methods.
+<span class='line'>2113</span>  *
+<span class='line'>2114</span>  * @example
+<span class='line'>2115</span>  * var Animal = function() {
+<span class='line'>2116</span>  *   this.hello = function(){console.log("Hello")};
+<span class='line'>2117</span>  *   this.name="Ani";
+<span class='line'>2118</span>  * };
+<span class='line'>2119</span>  * var Dog = function() {
+<span class='line'>2120</span>  *   Dog.superclass.constructor.call(this);
+<span class='line'>2121</span>  *   this.vow = function(){console.log("Vow wow")};
+<span class='line'>2122</span>  *   this.tail=true;
+<span class='line'>2123</span>  * };
+<span class='line'>2124</span>  * extendClass(Dog, Animal);
+<span class='line'>2125</span>  */</span><span class="WHIT">
+<span class='line'>2126</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">extendClass</span><span class="PUNC">(</span><span class="NAME">subClass</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">superClass</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2127</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">F</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2128</span> </span><span class="WHIT">    </span><span class="NAME">F.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">superClass.prototype</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2129</span> </span><span class="WHIT">    </span><span class="NAME">subClass.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">F</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2130</span> </span><span class="WHIT">    </span><span class="NAME">subClass.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">subClass</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2131</span> </span><span class="WHIT">    </span><span class="NAME">subClass.superclass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">superClass.prototype</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2132</span> </span><span class="WHIT">     
+<span class='line'>2133</span>     </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">superClass.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">Object.prototype.constructor</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>2134</span> </span><span class="WHIT">        </span><span class="NAME">superClass.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">superClass</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2135</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>2136</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>2137</span> 
+<span class='line'>2138</span> </span></pre></body></html>

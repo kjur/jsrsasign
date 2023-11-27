@@ -155,6 +155,38 @@ test("KJUR.crypto.Cipher.encrypt/decrypt RSAOAEP maleability test", function() {
   );
 });
 
+test("Cipher.encrypt/decrypt des-EDE3-CBC", function() {
+var _decrypt = KJUR.crypto.Cipher.decrypt;
+var _encrypt = KJUR.crypto.Cipher.encrypt;
+var k = "c540389de62486834ff3a208a9ab457291df38f4372ad920";
+var iv = "5d35af642dc9b2c1";
+var hEnc = "d19f6c5ae0c36e33";
+equal(_encrypt("616161", k, "des-EDE3-CBC", { iv: "5d35af642dc9b2c1" }), hEnc, "encrypt aaa");
+equal(_decrypt(hEnc, k, "des-EDE3-CBC", { iv: "5d35af642dc9b2c1" }), "616161", "decrypt aaa");
+});
+
+test("Cipher.encrypt/decrypt aes128-CBC", function() {
+var _decrypt = KJUR.crypto.Cipher.decrypt;
+var _encrypt = KJUR.crypto.Cipher.encrypt;
+// t1.p8eaes128h256.prv
+var k = "674950b41894b5e2d5f6704acee4bbc5";
+var iv = "35aec8eb35b87dce9bf846a186ff8517";
+var hEnc = "0a75e063914164ffe10b0cf07391cb79";
+equal(_encrypt("616161", k, "aes128-CBC", { iv: iv }), hEnc, "encrypt aaa");
+equal(_decrypt(hEnc, k, "aes128-CBC", { iv: iv }), "616161", "decrypt aaa");
+});
+
+test("Cipher.encrypt/decrypt aes256-CBC", function() {
+var _decrypt = KJUR.crypto.Cipher.decrypt;
+var _encrypt = KJUR.crypto.Cipher.encrypt;
+// t1.p8eaes128h256.prv
+var k = "f305c553ff811197110f6b84541687fe51ba922d4da508fc222316ba4f010a6c";
+var iv = "3cb8611d0fb0931b370bf982ecf06300";
+var hEnc = "6cb7ff729cb5e8681769b243311a643d";
+equal(_encrypt("616161", k, "aes256-CBC", { iv: iv }), hEnc, "encrypt aaa");
+equal(_decrypt(hEnc, k, "aes256-CBC", { iv: iv }), "616161", "decrypt aaa");
+});
+
 });
 </script>
   
