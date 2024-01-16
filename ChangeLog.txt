@@ -1,6 +1,14 @@
 
 ChangeLog for jsrsasign
 
+remove RSA and RSAOAEP encryption for Marvin attack
+* Changes from 10.9.0 to 11.0.0 (2024-Jan-16)
+  - remove RSA PKCS#1.5 end OAEP encryption/decryption for Marvin attack (#598)
+  - src/crypto.js
+    - remove KJUR.crypto.Cipher class for RSA and RSAOAEP encryption/decryption
+  - ext/{rsa,rsa2}.js
+    remove encrypt/decrypt/encryptOAEP/decryptOAEP for RSAKey class
+
 enhanced support for encrypted PKCS8
 * Changes from 10.8.6 to 10.9.0 (2023-Nov-27)
   - KEYUTIL.getPEM is updated not to use weak ciphers (#599)

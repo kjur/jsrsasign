@@ -1,4 +1,4 @@
-/* crypto-1.3.0.js (c) 2013-2021 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* crypto-2.0.0.js (c) 2013-2024 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 10.9.0 crypto 1.3.0 (2023-Nov-27)
+ * @version jsrsasign 11.0.0 crypto 2.0.0 (2024-Jan-16)
  * @since jsrsasign 2.2
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -34,7 +34,6 @@ if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
  * <ul>
  * <li>{@link KJUR.crypto.MessageDigest} - Java JCE(cryptograhic extension) style MessageDigest class</li>
  * <li>{@link KJUR.crypto.Signature} - Java JCE(cryptograhic extension) style Signature class</li>
- * <li>{@link KJUR.crypto.Cipher} - class for encrypting and decrypting data</li>
  * <li>{@link KJUR.crypto.Util} - cryptographic utility functions and properties</li>
  * </ul>
  * NOTE: Please ignore method summary and document of this namespace. This caused by a bug of jsdoc2.
@@ -1374,7 +1373,7 @@ KJUR.crypto.Signature = function(params) {
 };
 
 // ====== Cipher class ============================================================
-/**
+/*
  * Cipher class to encrypt and decrypt data<br/>
  * @name KJUR.crypto.Cipher
  * @class Cipher class to encrypt and decrypt data<br/>
@@ -1394,10 +1393,11 @@ KJUR.crypto.Signature = function(params) {
  * Currently this class supports only RSA encryption and decryption 
  * based on RSAES-OAEP and RSAES-PKCS1-v1_5 scheme. 
  * However it is planning to implement also symmetric ciphers near in the future */
+/*
 KJUR.crypto.Cipher = function(params) {
 };
-
-/**
+ */
+/*
  * encrypt raw string by specified key and algorithm<br/>
  * @name encrypt
  * @memberOf KJUR.crypto.Cipher
@@ -1424,6 +1424,7 @@ KJUR.crypto.Cipher = function(params) {
  * KJUR.crypto.Cipher.encrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." }) 
  * KJUR.crypto.Cipher.encrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41...", enc: "12abcd..." }) 
  */
+/*
 KJUR.crypto.Cipher.encrypt = function(s, keyObj, algName, param) {
     if (aryval(param, "enclag") != undefined) algName = param.encalg;
 
@@ -1457,8 +1458,9 @@ KJUR.crypto.Cipher.encrypt = function(s, keyObj, algName, param) {
 	throw "Cipher.encrypt: unsupported key or algorithm";
     }
 };
+ */
 
-/**
+/*
  * decrypt encrypted hexadecimal string with specified key and algorithm<br/>
  * @name decrypt
  * @memberOf KJUR.crypto.Cipher
@@ -1485,6 +1487,7 @@ KJUR.crypto.Cipher.encrypt = function(s, keyObj, algName, param) {
  * KJUR.crypto.Cipher.decrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." }) 
  * KJUR.crypto.Cipher.decrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41...", enc: "12abcd..." }) 
  */
+/*
 KJUR.crypto.Cipher.decrypt = function(hex, keyObj, algName, param) {
     if (aryval(param, "enclag") != undefined) algName = param.encalg;
 
@@ -1518,8 +1521,9 @@ KJUR.crypto.Cipher.decrypt = function(hex, keyObj, algName, param) {
 	throw "Cipher.decrypt: unsupported key or algorithm";
     }
 };
+ */
 
-/**
+/*
  * get canonicalized encrypt/decrypt algorithm name by key and short/long algorithm name<br/>
  * @name getAlgByKeyAndName
  * @memberOf KJUR.crypto.Cipher
@@ -1543,6 +1547,7 @@ KJUR.crypto.Cipher.decrypt = function(hex, keyObj, algName, param) {
  * KJUR.crypto.Cipher.getAlgByKeyAndName(objRSAKey) &rarr; "RSA"
  * KJUR.crypto.Cipher.getAlgByKeyAndName(objRSAKey, "RSAOAEP") &rarr; "RSAOAEP"
  */
+/*
 KJUR.crypto.Cipher.getAlgByKeyAndName = function(keyObj, algName) {
     if (keyObj instanceof RSAKey) {
 	if (":RSA:RSAOAEP:RSAOAEP224:RSAOAEP256:RSAOAEP384:RSAOAEP512:".indexOf(algName) != -1)
@@ -1552,6 +1557,7 @@ KJUR.crypto.Cipher.getAlgByKeyAndName = function(keyObj, algName) {
     }
     throw "getAlgByKeyAndName: not supported algorithm name: " + algName;
 }
+ */
 
 // ====== Other Utility class =====================================================
 
