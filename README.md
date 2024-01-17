@@ -33,6 +33,7 @@ The "jsrsasign" library is a long lived JavaScript library from 2010 developed w
 
 NEWS
 ----
+- 2024-Jan-16: [Security advisory](https://github.com/kjur/jsrsasign/security/advisories/GHSA-rh63-9qcf-83gf) and [update](https://github.com/kjur/jsrsasign/releases/tag/11.0.0) for Marvin attack vulnerability published. Due to this vulnerability, RSA PKCS#1.5 and RSAOAEP encryption/decryption no longer be supported.
 - 2023-Mar-12: [10.7.0 Release](https://github.com/kjur/jsrsasign/releases/tag/10.7.0). Now supports custom X.509 extension and custom OIDs by new "Add-on" architecture. ([See here in detail](https://github.com/kjur/jsrsasign/wiki/jsrsasign-Add-On2))
 - 2021-Nov-21: [10.5.0 Release](https://github.com/kjur/jsrsasign/releases/tag/10.5.0). Now supports secp521r1(P-521) ECDSA.
 - 2021-Apr-14: [Security advisory](https://github.com/kjur/jsrsasign/security/advisories/GHSA-27fj-mc8w-j9wg) and [update](https://github.com/kjur/jsrsasign/releases/tag/10.2.0) for CVE-2021-30246 RSA signature validation vulnerability published
@@ -93,6 +94,7 @@ MORE TUTORIALS AND SAMPLES
 
 |published|fixed version|title/advisory|CVE|CVSS|
 |:---|:---|:---|:---|:---|
+|2024Jan16|11.0.0|[Marvin attack vulnerability for RSA and RSAOAEP decryption](https://github.com/kjur/jsrsasign/security/advisories/GHSA-rh63-9qcf-83gf)|CVE-2024-?|7.5|
 |2022Jun24|10.5.25|[JWS and JWT signature validation vulnerability with special characters](https://github.com/kjur/jsrsasign/security/advisories/GHSA-3fvg-4v2m-98jf)|CVE-2022-25898|?|
 |2021Apr14|10.2.0|[RSA signature validation vulnerability on maleable encoded message](https://github.com/kjur/jsrsasign/security/advisories/GHSA-27fj-mc8w-j9wg)|CVE-2021-30246|9.1|
 |2020Jun22|8.0.19|[ECDSA signature validation vulnerability by accepting wrong ASN.1 encoding](https://github.com/kjur/jsrsasign/security/advisories/GHSA-p8c3-7rj8-q963)|CVE-2020-14966|5.5|
