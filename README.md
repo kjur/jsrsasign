@@ -2,7 +2,6 @@ jsrsasign
 =========
 
 [![license](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/kjur/jsrsasign/blob/master/LICENSE.txt)
-[![bower](https://img.shields.io/bower/v/jsrsasign.svg?maxAge=2592000)](https://libraries.io/bower/jsrsasign)
 [![npm version](https://badge.fury.io/js/jsrsasign.svg)](https://badge.fury.io/js/jsrsasign)
 [![npm downloads](https://img.shields.io/npm/dm/jsrsasign.svg)](https://www.npmjs.com/package/jsrsasign)
 [![jsdeliver downloads](https://data.jsdelivr.com/v1/package/npm/jsrsasign/badge)](https://www.jsdelivr.com/package/npm/jsrsasign)
@@ -94,7 +93,7 @@ MORE TUTORIALS AND SAMPLES
 
 |published|fixed version|title/advisory|CVE|CVSS|
 |:---|:---|:---|:---|:---|
-|2024Jan16|11.0.0|[Marvin attack vulnerability for RSA and RSAOAEP decryption](https://github.com/kjur/jsrsasign/security/advisories/GHSA-rh63-9qcf-83gf)|CVE-2024-?|7.5|
+|2024Jan16|11.0.0|[Marvin attack vulnerability for RSA and RSAOAEP decryption](https://github.com/kjur/jsrsasign/security/advisories/GHSA-rh63-9qcf-83gf)|CVE-2024-21484|7.5|
 |2022Jun24|10.5.25|[JWS and JWT signature validation vulnerability with special characters](https://github.com/kjur/jsrsasign/security/advisories/GHSA-3fvg-4v2m-98jf)|CVE-2022-25898|?|
 |2021Apr14|10.2.0|[RSA signature validation vulnerability on maleable encoded message](https://github.com/kjur/jsrsasign/security/advisories/GHSA-27fj-mc8w-j9wg)|CVE-2021-30246|9.1|
 |2020Jun22|8.0.19|[ECDSA signature validation vulnerability by accepting wrong ASN.1 encoding](https://github.com/kjur/jsrsasign/security/advisories/GHSA-p8c3-7rj8-q963)|CVE-2020-14966|5.5|
