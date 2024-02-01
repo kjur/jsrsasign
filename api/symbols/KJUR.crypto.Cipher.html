@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>jsrsasign JavaScript API Reference - KJUR.asn1.cades</title>
+		<title>jsrsasign JavaScript API Reference - KJUR.crypto.Cipher</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -530,7 +530,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Namespace KJUR.asn1.cades
+				Class KJUR.crypto.Cipher
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -538,17 +538,17 @@ ul.inheritsList
 				
 				
 			
+				Cipher class to encrypt and decrypt data<br/>
 				
 				
-				
-					<br /><i>Defined in: </i> <a href="../symbols/src/asn1cades-1.0.js.html">asn1cades-1.0.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/crypto-1.1.js.html">crypto-1.1.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.asn1.cades.">
-				<caption>Namespace Summary</caption>
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class KJUR.crypto.Cipher.">
+				<caption>Class Summary</caption>
 				<thead>
 					<tr>
 						<th scope="col">Constructor Attributes</th>
@@ -560,13 +560,17 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/KJUR.asn1.cades.html#constructor">KJUR.asn1.cades</a></b>
+								<b><a href="../symbols/KJUR.crypto.Cipher.html#constructor">KJUR.crypto.Cipher</a></b>(params)
 							</div>
-							<div class="description">kjur's ASN.1 class for RFC 5126 CAdES long term signature
-<p>
-This name space provides 
-<a href="https://tools.ietf.org/html/rfc5126">RFC 5126
-CAdES(CMS Advanced Electronic Signature)</a> generator.</div>
+							<div class="description">Cipher class to encrypt and decrypt data<br/>
+Here is supported canonicalized cipher algorithm names and its standard names:
+<ul>
+<li>aes256-CBC</li>
+<li>aes128-CBC</li>
+<li>des-EDE3-CBC</li>
+</ul>
+NOTE: From jsrsasign 11.0.0, RSA and RSAOAEP encryption/decryption support is removed
+because of Marvin attack vulnerability.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -580,7 +584,7 @@ CAdES(CMS Advanced Electronic Signature)</a> generator.</div>
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.asn1.cades.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class KJUR.crypto.Cipher.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -593,36 +597,20 @@ CAdES(CMS Advanced Electronic Signature)</a> generator.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.cades.<b>getEncodedHex</b>()
+								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.decrypt">decrypt</a></b>(hex, hexadecimal, algName, param)
 								</div>
-								<div class="description"></div>
+								<div class="description">decrypt encrypted hexadecimal string with specified key and algorithm<br/>
+This static method decrypts encrypted hexadecimal string with specified key and algorithm.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.cades.<b>getValueArray</b>()
+								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.encrypt">encrypt</a></b>(s, hexadecimal, algName, param)
 								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.cades.<b>setByParam</b>(params)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.asn1.cades.<b>tohex</b>()
-								</div>
-								<div class="description"></div>
+								<div class="description">encrypt raw string by specified key and algorithm<br/>
+This static method encrypts raw string with specified key and algorithm.</div>
 							</td>
 						</tr>
 					
@@ -639,159 +627,23 @@ CAdES(CMS Advanced Electronic Signature)</a> generator.</div>
 			
 			<div class="details"><a name="constructor"> </a>
 				<div class="sectionTitle">
-					Namespace Detail
+					Class Detail
 				</div>
 				
 				<div class="fixedFont">
-						<b>KJUR.asn1.cades</b>
+						<b>KJUR.crypto.Cipher</b>(params)
 				</div>
 				
 				<div class="description">
-					kjur's ASN.1 class for RFC 5126 CAdES long term signature
-<p>
-This name space provides 
-<a href="https://tools.ietf.org/html/rfc5126">RFC 5126
-CAdES(CMS Advanced Electronic Signature)</a> generator.
-
-<h4>SUPPORTED FORMATS</h4>
-Following CAdES formats is supported by this library.
+					Cipher class to encrypt and decrypt data<br/>
+Here is supported canonicalized cipher algorithm names and its standard names:
 <ul>
-<li>CAdES-BES - CAdES Basic Electronic Signature</li>
-<li>CAdES-EPES - CAdES Explicit Policy-based Electronic Signature</li>
-<li>CAdES-T - Electronic Signature with Time</li>
+<li>aes256-CBC</li>
+<li>aes128-CBC</li>
+<li>des-EDE3-CBC</li>
 </ul>
-</p>
-
-<h4>PROVIDED ATTRIBUTE CLASSES</h4>
-<ul>
-<li><a href="../symbols/KJUR.asn1.cades.SignaturePolicyIdentifier.html">KJUR.asn1.cades.SignaturePolicyIdentifier</a> - for CAdES-EPES
-  <ul>
-  <li><a href="../symbols/KJUR.asn1.cades.SignaturePolicyId.html">KJUR.asn1.cades.SignaturePolicyId</a></li>
-  </ul>
-</li>
-<li><a href="../symbols/KJUR.asn1.cades.SignatureTimeStamp.html">KJUR.asn1.cades.SignatureTimeStamp</a> - for CAdES-T</li>
-<li><a href="../symbols/KJUR.asn1.cades.CompleteCertificateRefs.html">KJUR.asn1.cades.CompleteCertificateRefs</a> - for CAdES-C(for future use)
-  <ul>
-  <li><a href="../symbols/KJUR.asn1.cades.OtherCertID.html">KJUR.asn1.cades.OtherCertID</a></li>
-  <li><a href="../symbols/KJUR.asn1.cades.OtherHash.html">KJUR.asn1.cades.OtherHash</a></li>
-  <li><a href="../symbols/KJUR.asn1.cades.OtherHashAlgAndValue.html">KJUR.asn1.cades.OtherHashAlgAndValue</a></li>
-  <li><a href="../symbols/KJUR.asn1.cades.OtherHashValue.html">KJUR.asn1.cades.OtherHashValue</a></li>
-  </ul>
-</li>
-</ul>
-NOTE: Currntly CAdES-C is not supported since parser can't
-handle unsigned attribute.
-
-<h4>OTHER CLASSES</h4>
-<ul>
-<li><a href="../symbols/KJUR.asn1.cades.CAdESUtil.html">KJUR.asn1.cades.CAdESUtil</a> - utilities for CAdES</li>
-</ul>
-
-<h4>GENERATE CAdES-BES</h4>
-To generate CAdES-BES, KJUR.asn.cades namespace 
-classes are not required and already KJUR.asn.cms namespace 
-provides attributes for CAdES-BES.
-Create <a href="../symbols/KJUR.asn1.cms.SignedData.html">KJUR.asn1.cms.SignedData</a> with following
-mandatory attribute in CAdES-BES:
-<ul>
-<li><a href="../symbols/KJUR.asn1.cms.ContentType.html">KJUR.asn1.cms.ContentType</a></li>
-<li><a href="../symbols/KJUR.asn1.cms.MessageDigest.html">KJUR.asn1.cms.MessageDigest</a></li>
-<li><a href="../symbols/KJUR.asn1.cms.SigningCertificate.html">KJUR.asn1.cms.SigningCertificate</a> or </li>
-<li><a href="../symbols/KJUR.asn1.cms.SigningCertificateV2.html">KJUR.asn1.cms.SigningCertificateV2</a></li>
-</ul>
-CMSUtil.newSignedData method is very useful to generate CAdES-BES.
-<pre>
-sd = KJUR.asn1.cms.CMSUtil.newSignedData({
-  content: {str: "aaa"},
-  certs: [certPEM],
-  signerInfos: [{
-    hashAlg: 'sha256',
-    sAttr: {SigningCertificateV2: {array: [certPEM]}},
-    signerCert: certPEM,
-    sigAlg: 'SHA256withRSA',
-    signerPrvKey: pkcs8PrvKeyPEM
-  }]
-});
-signedDataHex = sd.getContentInfoEncodedHex();
-</pre>
-NOTE: ContentType and MessageDigest signed attributes
-are automatically added by default.
-
-<h4>GENERATE CAdES-BES with multiple signers</h4>
-If you need signature by multiple signers, you can 
-specify one or more items in 'signerInfos' property as below.
-<pre>
-sd = KJUR.asn1.cms.CMSUtil.newSignedData({
-  content: {str: "aaa"},
-  certs: [certPEM1, certPEM2],
-  signerInfos: [{
-    hashAlg: 'sha256',
-    sAttr: {SigningCertificateV2: {array: [certPEM1]}},
-    signerCert: certPEM1,
-    sigAlg: 'SHA256withRSA',
-    signerPrvKey: pkcs8PrvKeyPEM1
-  },{
-    hashAlg: 'sha1',
-    sAttr: {SigningCertificateV2: {array: [certPEM2]}},
-    signerCert: certPEM2,
-    sigAlg: 'SHA1withRSA',
-    signerPrvKey: pkcs8PrvKeyPEM2
-  }]
-});
-signedDataHex = sd.getContentInfoEncodedHex();
-</pre>
-
-<h4>GENERATE CAdES-EPES</h4>
-When you need a CAdES-EPES signature,
-you just need to add 'SignaturePolicyIdentifier'
-attribute as below.
-<pre>
-sd = KJUR.asn1.cms.CMSUtil.newSignedData({
-  content: {str: "aaa"},
-  certs: [certPEM],
-  signerInfos: [{
-    hashAlg: 'sha256',
-    sAttr: {
-      SigningCertificateV2: {array: [certPEM]},
-      SignaturePolicyIdentifier: {
-        oid: '1.2.3.4.5',
-        hash: {alg: 'sha1', hash: 'b1b2b3b4b...'}
-      },
-    },
-    signerCert: certPEM,
-    sigAlg: 'SHA256withRSA',
-    signerPrvKey: pkcs8PrvKeyPEM
-  }]
-});
-signedDataHex = sd.getContentInfoEncodedHex();
-</pre>
-
-<h4>GENERATE CAdES-T</h4>
-After a signed CAdES-BES or CAdES-EPES signature have been generated,
-you can generate CAdES-T by adding SigningTimeStamp unsigned attribute.
-<pre>
-beshex = "30..."; // hex of CAdES-BES or EPES data 
-info = KJUR.asn1.cades.CAdESUtil.parseSignedDataForAddingUnsigned(beshex);
-// You can refer a hexadecimal string of signature value 
-// in the first signerInfo in the CAdES-BES/EPES with a variable:
-// 'info.si[0].sigval'. You need to get RFC 3161 TimeStampToken
-// from a trusted time stamp authority. Otherwise you can also 
-// get it by 'KJUR.asn1.tsp' module. We suppose that we could 
-// get proper time stamp.
-tsthex0 = "30..."; // hex of TimeStampToken for signerInfo[0] sigval
-si0 = info.obj.signerInfoList[0];
-si0.addUnsigned(new KJUR.asn1.cades.SignatureTimeStamp({tst: tsthex0});
-esthex = info.obj.getContentInfoEncodedHex(); // CAdES-T
-</pre>
-</p>
-
-<h4>SAMPLE CODES</h4>
-<ul>
-<li><a href="../../tool_cades.html">demo program for CAdES-BES/EPES/T generation</a></li>
-<li><a href="../../test/qunit-do-asn1cades.html">Unit test code for KJUR.asn1.cades package</a></li>
-<li><a href="../../test/qunit-do-asn1tsp.html">Unit test code for KJUR.asn1.tsp package (See SimpleTSAAdaptor test)</a></li>
-<li><a href="../../test/qunit-do-asn1cms.html">Unit test code for KJUR.asn1.cms package (See newSignedData test)</a></li>
-</ul>
+NOTE: From jsrsasign 11.0.0, RSA and RSAOAEP encryption/decryption support is removed
+because of Marvin attack vulnerability.
 					
 				</div>
 				
@@ -799,7 +651,23 @@ esthex = info.obj.getContentInfoEncodedHex(); // CAdES-T
 				
 				
 					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Array}</span>  <b>params</b>
+								
+							</dt>
+								<dd>parameters for constructor</dd>
+						
+						</dl>
 					
+					
+					
+						<dl class="detailList">
+						<dt class="heading">Since:</dt>
+							<dd>jsrsasign 6.2.0 crypto 1.1.10</dd>
+						</dl>
 					
 					
 					
@@ -818,68 +686,31 @@ esthex = info.obj.getContentInfoEncodedHex(); // CAdES-T
 					Method Detail
 				</div>
 				
-					<a name=".getEncodedHex"> </a>
+					<a name=".decrypt"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					
-					<span class="light">KJUR.asn1.cades.</span><b>getEncodedHex</b>()
+					<span class="light">{string}</span>
+					<span class="light">KJUR.crypto.Cipher.</span><b>decrypt</b>(hex, hexadecimal, algName, param)
 					
 					</div>
 					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getValueArray"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.cades.</span><b>getValueArray</b>()
-					
-					</div>
-					<div class="description">
-						
+						decrypt encrypted hexadecimal string with specified key and algorithm<br/>
+This static method decrypts encrypted hexadecimal string with specified key and algorithm.
+<br/>
+NOTE: From jsrsasign 10.9.0, asymmetric cipher ({des-EDE3,aes{128,256}}-CBCis also supported.
+NOTE2: From jsrsasign 11.0.0, RSA and RSAOAEP encryption/decryption support is removed
+because of Marvin attack vulnerability.
 						
 						
 					</div>
 					
 					
 					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name=".setByParam"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					
-					<span class="light">KJUR.asn1.cades.</span><b>setByParam</b>(params)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
+					<pre class="code">
+KJUR.crypto.Cipher.decrypt("12abcd...", "5a7d...", "aes256-CBC", { iv: "1b3c..." }) 
+KJUR.crypto.Cipher.decrypt("12abcd...", "5a7d...", any, { encalg: "aes128-CBC", iv: "1b3c..." }) 
+KJUR.crypto.Cipher.decrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." }) 
+KJUR.crypto.Cipher.decrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41...", enc: "12abcd..." })</pre>
 					
 					
 					
@@ -888,41 +719,127 @@ esthex = info.obj.getContentInfoEncodedHex(); // CAdES-T
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>params</b>
+									<span class="light fixedFont">{string}</span> <b>hex</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>hexadecimal string of encrypted message</dd>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>hexadecimal</b>
+									
+								</dt>
+								<dd>string of symmetric cipher key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>algName</b>
+									
+								</dt>
+								<dd>short/long algorithm name for encryption/decryption (OPTION)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>param</b>
+									
+								</dt>
+								<dd>parameters for synchronous cipher such as initial vector (OPTION)</dd>
 							
 							</dl>
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.2.0 crypto 1.1.10</dd>
+							</dl>
+							</dl>
 						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> decrypted raw string</dd>
+							
+							</dl>
 						
 						
 						
 
 					<hr />
 				
-					<a name=".tohex"> </a>
+					<a name=".encrypt"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					
-					<span class="light">KJUR.asn1.cades.</span><b>tohex</b>()
+					<span class="light">{string}</span>
+					<span class="light">KJUR.crypto.Cipher.</span><b>encrypt</b>(s, hexadecimal, algName, param)
 					
 					</div>
 					<div class="description">
-						
+						encrypt raw string by specified key and algorithm<br/>
+This static method encrypts raw string with specified key and algorithm.
+<br/>
+NOTE: From jsrsasign 10.9.0, asymmetric cipher ({des-EDE3,aes{128,256}}-CBC) is also supported.
+NOTE2: From jsrsasign 11.0.0, RSA and RSAOAEP encryption/decryption support is removed
+because of Marvin attack vulnerability.
 						
 						
 					</div>
 					
 					
 					
+					<pre class="code">
+KJUR.crypto.Cipher.encrypt("12abcd...", "5a7d...", "aes256-CBC", { iv: "1b3c..." }) 
+KJUR.crypto.Cipher.encrypt("12abcd...", "5a7d...", any, { encalg: "aes128-CBC", iv: "1b3c..." }) 
+KJUR.crypto.Cipher.encrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." }) 
+KJUR.crypto.Cipher.encrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41...", enc: "12abcd..." })</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>s</b>
+									
+								</dt>
+								<dd>input string to encrypt</dd>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>hexadecimal</b>
+									
+								</dt>
+								<dd>string of symmetric cipher key</dd>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>algName</b>
+									
+								</dt>
+								<dd>short/long algorithm name for encryption/decryption (OPTION)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>param</b>
+									
+								</dt>
+								<dd>parameters for synchronous cipher such as initial vector (OPTION)</dd>
+							
+							</dl>
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 6.2.0 crypto 1.1.10</dd>
+							</dl>
+							</dl>
 						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> hexadecimal encrypted string</dd>
+							
+							</dl>
 						
 						
 						

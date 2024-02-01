@@ -1,9 +1,9 @@
-/* crypto-2.0.0.js (c) 2013-2024 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* crypto-2.1.0.js (c) 2013-2024 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * crypto.js - Cryptographic Algorithm Provider class
  *
- * Copyright (c) 2013-2021 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2024 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -16,7 +16,7 @@
  * @fileOverview
  * @name crypto-1.1.js
  * @author Kenji Urushima kenji.urushima@gmail.com
- * @version jsrsasign 11.0.0 crypto 2.0.0 (2024-Jan-16)
+ * @version jsrsasign 11.1.0 crypto 2.1.0 (2024-Feb-01)
  * @since jsrsasign 2.2
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
@@ -1373,7 +1373,7 @@ KJUR.crypto.Signature = function(params) {
 };
 
 // ====== Cipher class ============================================================
-/*
+/**
  * Cipher class to encrypt and decrypt data<br/>
  * @name KJUR.crypto.Cipher
  * @class Cipher class to encrypt and decrypt data<br/>
@@ -1382,49 +1382,41 @@ KJUR.crypto.Signature = function(params) {
  * @description
  * Here is supported canonicalized cipher algorithm names and its standard names:
  * <ul>
- * <li>RSA - RSA/ECB/PKCS1Padding (default for RSAKey)</li>
- * <li>RSAOAEP - RSA/ECB/OAEPWithSHA-1AndMGF1Padding</li>
- * <li>RSAOAEP224 - RSA/ECB/OAEPWithSHA-224AndMGF1Padding(*)</li>
- * <li>RSAOAEP256 - RSA/ECB/OAEPWithSHA-256AndMGF1Padding</li>
- * <li>RSAOAEP384 - RSA/ECB/OAEPWithSHA-384AndMGF1Padding(*)</li>
- * <li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
+ * <li>aes256-CBC</li>
+ * <li>aes128-CBC</li>
+ * <li>des-EDE3-CBC</li>
  * </ul>
- * NOTE: (*) is not supported in Java JCE.<br/>
- * Currently this class supports only RSA encryption and decryption 
- * based on RSAES-OAEP and RSAES-PKCS1-v1_5 scheme. 
- * However it is planning to implement also symmetric ciphers near in the future */
-/*
+ * NOTE: From jsrsasign 11.0.0, RSA and RSAOAEP encryption/decryption support is removed
+ * because of Marvin attack vulnerability.
+ */
 KJUR.crypto.Cipher = function(params) {
 };
- */
-/*
+
+/**
  * encrypt raw string by specified key and algorithm<br/>
  * @name encrypt
  * @memberOf KJUR.crypto.Cipher
  * @function
- * @param {String} s input string to encrypt
- * @param {Object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
- * @param {String} algName short/long algorithm name for encryption/decryption (OPTION)
+ * @param {string} s input string to encrypt
+ * @param {string} hexadecimal string of symmetric cipher key
+ * @param {string} algName short/long algorithm name for encryption/decryption (OPTION)
  * @param {object} param parameters for synchronous cipher such as initial vector (OPTION)
- * @return {String} hexadecimal encrypted string
+ * @return {string} hexadecimal encrypted string
  * @since jsrsasign 6.2.0 crypto 1.1.10
  *
  * @description
  * This static method encrypts raw string with specified key and algorithm.
  * <br/>
  * NOTE: From jsrsasign 10.9.0, asymmetric cipher ({des-EDE3,aes{128,256}}-CBC) is also supported.
+ * NOTE2: From jsrsasign 11.0.0, RSA and RSAOAEP encryption/decryption support is removed
+ * because of Marvin attack vulnerability.
  *
  * @example 
- * // asynchronous cipher
- * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj) &rarr; "1abc2d..."
- * KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj, "RSAOAEP") &rarr; "23ab02..."
- * // synchronous cipher
  * KJUR.crypto.Cipher.encrypt("12abcd...", "5a7d...", "aes256-CBC", { iv: "1b3c..." }) 
  * KJUR.crypto.Cipher.encrypt("12abcd...", "5a7d...", any, { encalg: "aes128-CBC", iv: "1b3c..." }) 
  * KJUR.crypto.Cipher.encrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." }) 
  * KJUR.crypto.Cipher.encrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41...", enc: "12abcd..." }) 
  */
-/*
 KJUR.crypto.Cipher.encrypt = function(s, keyObj, algName, param) {
     if (aryval(param, "enclag") != undefined) algName = param.encalg;
 
@@ -1445,49 +1437,36 @@ KJUR.crypto.Cipher.encrypt = function(s, keyObj, algName, param) {
 	    throw new Error("unsupported algorithm: " + algName);
 	}
 	return wEnc + "";
-    } else if (keyObj instanceof RSAKey && keyObj.isPublic) {
-	var algName2 = KJUR.crypto.Cipher.getAlgByKeyAndName(keyObj, algName);
-	if (algName2 === "RSA") return keyObj.encrypt(s);
-	if (algName2 === "RSAOAEP") return keyObj.encryptOAEP(s, "sha1");
-
-	var a = algName2.match(/^RSAOAEP(\d+)$/);
-	if (a !== null) return keyObj.encryptOAEP(s, "sha" + a[1]);
-
-	throw "Cipher.encrypt: unsupported algorithm for RSAKey: " + algName;
     } else {
-	throw "Cipher.encrypt: unsupported key or algorithm";
+	throw new Error("Cipher.encrypt: unsupported key or algorithm");
     }
 };
- */
 
-/*
+/**
  * decrypt encrypted hexadecimal string with specified key and algorithm<br/>
  * @name decrypt
  * @memberOf KJUR.crypto.Cipher
  * @function
  * @param {string} hex hexadecimal string of encrypted message
- * @param {object} keyObj RSAKey object or hexadecimal string of symmetric cipher key
+ * @param {object} hexadecimal string of symmetric cipher key
  * @param {string} algName short/long algorithm name for encryption/decryption (OPTION)
  * @param {object} param parameters for synchronous cipher such as initial vector (OPTION)
- * @return {String} decrypted raw string
+ * @return {string} decrypted raw string
  * @since jsrsasign 6.2.0 crypto 1.1.10
  *
  * @description
  * This static method decrypts encrypted hexadecimal string with specified key and algorithm.
  * <br/>
  * NOTE: From jsrsasign 10.9.0, asymmetric cipher ({des-EDE3,aes{128,256}}-CBCis also supported.
+ * NOTE2: From jsrsasign 11.0.0, RSA and RSAOAEP encryption/decryption support is removed
+ * because of Marvin attack vulnerability.
  *
  * @example 
- * // asynchronous cipher
- * KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj) &rarr; "1abc2d..."
- * KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."
- * // synchronous cipher
  * KJUR.crypto.Cipher.decrypt("12abcd...", "5a7d...", "aes256-CBC", { iv: "1b3c..." }) 
  * KJUR.crypto.Cipher.decrypt("12abcd...", "5a7d...", any, { encalg: "aes128-CBC", iv: "1b3c..." }) 
  * KJUR.crypto.Cipher.decrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." }) 
  * KJUR.crypto.Cipher.decrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41...", enc: "12abcd..." }) 
  */
-/*
 KJUR.crypto.Cipher.decrypt = function(hex, keyObj, algName, param) {
     if (aryval(param, "enclag") != undefined) algName = param.encalg;
 
@@ -1508,20 +1487,10 @@ KJUR.crypto.Cipher.decrypt = function(hex, keyObj, algName, param) {
 	    throw new Error("unsupported algorithm: " + algName);
 	}
 	return CryptoJS.enc.Hex.stringify(wDec);
-    } else if (keyObj instanceof RSAKey && keyObj.isPrivate) {
-	var algName2 = KJUR.crypto.Cipher.getAlgByKeyAndName(keyObj, algName);
-	if (algName2 === "RSA") return keyObj.decrypt(hex);
-	if (algName2 === "RSAOAEP") return keyObj.decryptOAEP(hex, "sha1");
-
-	var a = algName2.match(/^RSAOAEP(\d+)$/);
-	if (a !== null) return keyObj.decryptOAEP(hex, "sha" + a[1]);
-
-	throw "Cipher.decrypt: unsupported algorithm for RSAKey: " + algName;
     } else {
-	throw "Cipher.decrypt: unsupported key or algorithm";
+	throw new Error("Cipher.decrypt: unsupported key or algorithm");
     }
 };
- */
 
 /*
  * get canonicalized encrypt/decrypt algorithm name by key and short/long algorithm name<br/>

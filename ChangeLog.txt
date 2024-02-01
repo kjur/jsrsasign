@@ -1,6 +1,11 @@
 
 ChangeLog for jsrsasign
 
+restore KJUR.crypto.Cipher class without RSA/RSAOAEP support
+* Changes from 11.0.0 to 11.1.0 (2024-Feb-01)
+  - src/crypto.js
+    - restore KJUR.crypto.Cipher class without RSA and RSAOAEP encryption/decryption support
+
 remove RSA and RSAOAEP encryption for Marvin attack
 * Changes from 10.9.0 to 11.0.0 (2024-Jan-16)
   - remove RSA PKCS#1.5 end OAEP encryption/decryption for Marvin attack (#598)
