@@ -87,7 +87,7 @@ var AAAENCZ4 = "a0a2cc4570c2887c9125b983df8be8ee807168761f9d2a171c84504bec086e97
 
 // aaa RSAOAEP encrypted by z4prv (b000)
 var AAAOAEPENCZ4 = "6249fb5dbcd9bdfc8f8b92878f9c2ea10efad01341ab91475cf0245cb8b83e5cd222f3568e232a983590e8193718d004c8d7d2b4fc6c631f6b05d2590439025eba83ce50a7eaa2a39c91eabe70900017d2e9adb72633b285db6b2953b0da121719f1f00d4bab2c4be655aa510eebc9a2b2a084fa7e9859093d9ae9a99d4d48953b7fa871b80e617b237e267563fb7b6ab4562cdccb12e8146a547d4ca80719059ea7aad18e36a9741141d86ba02afebaaf17aa6878a27b0a7683804f10211c656da9d7e74b44630a5cc36ab1aa838d8af0493d1e4168b10b2380e165de6744e317274f64f3aff8b285be56e5f7049eafc2ea58a58cdb0e3da8e6427c45c1e2b5";
-
+/*
 test("KJUR.crypto.Cipher.getAlgByKeyAndName", function() {
   var CY = KJUR.crypto.Cipher;
   var kp = KEYUTIL.generateKeypair("RSA", 1024);
@@ -101,14 +101,16 @@ test("KJUR.crypto.Cipher.getAlgByKeyAndName", function() {
   equal(CY.getAlgByKeyAndName(prv, "RSAOAEP384"), "RSAOAEP384", "prv RSAKey, RSAOAEP384");
   equal(CY.getAlgByKeyAndName(prv, "RSAOAEP512"), "RSAOAEP512", "prv RSAKey, RSAOAEP512");
 });
-
+ */
+/*
 test("RSAKey.oaep_pad/oaep_unpad", function() {
   var bi1 = oaep_pad("aaa", 128);
   var h1 = bi1.toString(16);
   var bi2 = new BigInteger(h1, 16);
   equal(oaep_unpad(bi2, 128), "aaa", "aaa");
 });
-
+ */
+/*
 test("RSAKey.decryptOAEP/encryptOAEP", function() {
   var kp = KEYUTIL.generateKeypair("RSA", 1024);
   var pub = kp.pubKeyObj;
@@ -116,7 +118,8 @@ test("RSAKey.decryptOAEP/encryptOAEP", function() {
   equal(prv.decryptOAEP(pub.encryptOAEP("aaa")), "aaa", "aaa");
   equal(prv.decryptOAEP(pub.encryptOAEP("aaa", "sha256"), "sha256"), "aaa", "aaa");
 });
-
+ */
+/*
 test("KJUR.crypto.Cipher.encrypt/decrypt", function() {
   var CY = KJUR.crypto.Cipher;
   var kp = KEYUTIL.generateKeypair("RSA", 1024);
@@ -128,7 +131,8 @@ test("KJUR.crypto.Cipher.encrypt/decrypt", function() {
   equal(CY.decrypt(CY.encrypt("aaa", pub, "RSAOAEP"), prv, "RSAOAEP"), "aaa", "aaa");
   equal(CY.decrypt(CY.encrypt("aaa", pub, "RSAOAEP256"), prv, "RSAOAEP256"), "aaa", "aaa");
 });
-
+ */
+/*
 test("KJUR.crypto.Cipher.encrypt/decrypt RSA maleability test", function() {
   var prv = KEYUTIL.getKey(Z4PRVPEM);
 
@@ -141,7 +145,8 @@ test("KJUR.crypto.Cipher.encrypt/decrypt RSA maleability test", function() {
   "raise error for wrong ctext length"
   );
 });
-
+ */
+/*
 test("KJUR.crypto.Cipher.encrypt/decrypt RSAOAEP maleability test", function() {
   var prv = KEYUTIL.getKey(Z4PRVPEM);
 
@@ -154,7 +159,7 @@ test("KJUR.crypto.Cipher.encrypt/decrypt RSAOAEP maleability test", function() {
   "raise error for wrong ctext length"
   );
 });
-
+ */
 test("Cipher.encrypt/decrypt des-EDE3-CBC", function() {
 var _decrypt = KJUR.crypto.Cipher.decrypt;
 var _encrypt = KJUR.crypto.Cipher.encrypt;

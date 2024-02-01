@@ -565,14 +565,12 @@ ul.inheritsList
 							<div class="description">Cipher class to encrypt and decrypt data<br/>
 Here is supported canonicalized cipher algorithm names and its standard names:
 <ul>
-<li>RSA - RSA/ECB/PKCS1Padding (default for RSAKey)</li>
-<li>RSAOAEP - RSA/ECB/OAEPWithSHA-1AndMGF1Padding</li>
-<li>RSAOAEP224 - RSA/ECB/OAEPWithSHA-224AndMGF1Padding(*)</li>
-<li>RSAOAEP256 - RSA/ECB/OAEPWithSHA-256AndMGF1Padding</li>
-<li>RSAOAEP384 - RSA/ECB/OAEPWithSHA-384AndMGF1Padding(*)</li>
-<li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
+<li>aes256-CBC</li>
+<li>aes128-CBC</li>
+<li>des-EDE3-CBC</li>
 </ul>
-NOTE: (*) is not supported in Java JCE.</div>
+NOTE: From jsrsasign 11.0.0, RSA and RSAOAEP encryption/decryption support is removed
+because of Marvin attack vulnerability.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -599,7 +597,7 @@ NOTE: (*) is not supported in Java JCE.</div>
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.decrypt">decrypt</a></b>(hex, keyObj, algName, param)
+								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.decrypt">decrypt</a></b>(hex, hexadecimal, algName, param)
 								</div>
 								<div class="description">decrypt encrypted hexadecimal string with specified key and algorithm<br/>
 This static method decrypts encrypted hexadecimal string with specified key and algorithm.</div>
@@ -609,29 +607,10 @@ This static method decrypts encrypted hexadecimal string with specified key and 
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.encrypt">encrypt</a></b>(s, keyObj, algName, param)
+								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.encrypt">encrypt</a></b>(s, hexadecimal, algName, param)
 								</div>
 								<div class="description">encrypt raw string by specified key and algorithm<br/>
 This static method encrypts raw string with specified key and algorithm.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">KJUR.crypto.Cipher.<b><a href="../symbols/KJUR.crypto.Cipher.html#.getAlgByKeyAndName">getAlgByKeyAndName</a></b>(keyObj, algName)
-								</div>
-								<div class="description">get canonicalized encrypt/decrypt algorithm name by key and short/long algorithm name<br/>
-Here is supported canonicalized cipher algorithm names and its standard names:
-<ul>
-<li>RSA - RSA/ECB/PKCS1Padding (default for RSAKey)</li>
-<li>RSAOAEP - RSA/ECB/OAEPWithSHA-1AndMGF1Padding</li>
-<li>RSAOAEP224 - RSA/ECB/OAEPWithSHA-224AndMGF1Padding(*)</li>
-<li>RSAOAEP256 - RSA/ECB/OAEPWithSHA-256AndMGF1Padding</li>
-<li>RSAOAEP384 - RSA/ECB/OAEPWithSHA-384AndMGF1Padding(*)</li>
-<li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
-</ul>
-NOTE: (*) is not supported in Java JCE.</div>
 							</td>
 						</tr>
 					
@@ -659,17 +638,12 @@ NOTE: (*) is not supported in Java JCE.</div>
 					Cipher class to encrypt and decrypt data<br/>
 Here is supported canonicalized cipher algorithm names and its standard names:
 <ul>
-<li>RSA - RSA/ECB/PKCS1Padding (default for RSAKey)</li>
-<li>RSAOAEP - RSA/ECB/OAEPWithSHA-1AndMGF1Padding</li>
-<li>RSAOAEP224 - RSA/ECB/OAEPWithSHA-224AndMGF1Padding(*)</li>
-<li>RSAOAEP256 - RSA/ECB/OAEPWithSHA-256AndMGF1Padding</li>
-<li>RSAOAEP384 - RSA/ECB/OAEPWithSHA-384AndMGF1Padding(*)</li>
-<li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
+<li>aes256-CBC</li>
+<li>aes128-CBC</li>
+<li>des-EDE3-CBC</li>
 </ul>
-NOTE: (*) is not supported in Java JCE.<br/>
-Currently this class supports only RSA encryption and decryption 
-based on RSAES-OAEP and RSAES-PKCS1-v1_5 scheme. 
-However it is planning to implement also symmetric ciphers near in the future
+NOTE: From jsrsasign 11.0.0, RSA and RSAOAEP encryption/decryption support is removed
+because of Marvin attack vulnerability.
 					
 				</div>
 				
@@ -715,8 +689,8 @@ However it is planning to implement also symmetric ciphers near in the future
 					<a name=".decrypt"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					<span class="light">{String}</span>
-					<span class="light">KJUR.crypto.Cipher.</span><b>decrypt</b>(hex, keyObj, algName, param)
+					<span class="light">{string}</span>
+					<span class="light">KJUR.crypto.Cipher.</span><b>decrypt</b>(hex, hexadecimal, algName, param)
 					
 					</div>
 					<div class="description">
@@ -724,6 +698,8 @@ However it is planning to implement also symmetric ciphers near in the future
 This static method decrypts encrypted hexadecimal string with specified key and algorithm.
 <br/>
 NOTE: From jsrsasign 10.9.0, asymmetric cipher ({des-EDE3,aes{128,256}}-CBCis also supported.
+NOTE2: From jsrsasign 11.0.0, RSA and RSAOAEP encryption/decryption support is removed
+because of Marvin attack vulnerability.
 						
 						
 					</div>
@@ -731,10 +707,6 @@ NOTE: From jsrsasign 10.9.0, asymmetric cipher ({des-EDE3,aes{128,256}}-CBCis al
 					
 					
 					<pre class="code">
-// asynchronous cipher
-KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj) &rarr; "1abc2d..."
-KJUR.crypto.Cipher.decrypt("aaa", prvRSAKeyObj, "RSAOAEP) &rarr; "23ab02..."
-// synchronous cipher
 KJUR.crypto.Cipher.decrypt("12abcd...", "5a7d...", "aes256-CBC", { iv: "1b3c..." }) 
 KJUR.crypto.Cipher.decrypt("12abcd...", "5a7d...", any, { encalg: "aes128-CBC", iv: "1b3c..." }) 
 KJUR.crypto.Cipher.decrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." }) 
@@ -753,10 +725,10 @@ KJUR.crypto.Cipher.decrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...
 								<dd>hexadecimal string of encrypted message</dd>
 							
 								<dt>
-									<span class="light fixedFont">{object}</span> <b>keyObj</b>
+									<span class="light fixedFont">{object}</span> <b>hexadecimal</b>
 									
 								</dt>
-								<dd>RSAKey object or hexadecimal string of symmetric cipher key</dd>
+								<dd>string of symmetric cipher key</dd>
 							
 								<dt>
 									<span class="light fixedFont">{string}</span> <b>algName</b>
@@ -785,7 +757,7 @@ KJUR.crypto.Cipher.decrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{String}</span> decrypted raw string</dd>
+								<dd><span class="light fixedFont">{string}</span> decrypted raw string</dd>
 							
 							</dl>
 						
@@ -797,8 +769,8 @@ KJUR.crypto.Cipher.decrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...
 					<a name=".encrypt"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					<span class="light">{String}</span>
-					<span class="light">KJUR.crypto.Cipher.</span><b>encrypt</b>(s, keyObj, algName, param)
+					<span class="light">{string}</span>
+					<span class="light">KJUR.crypto.Cipher.</span><b>encrypt</b>(s, hexadecimal, algName, param)
 					
 					</div>
 					<div class="description">
@@ -806,6 +778,8 @@ KJUR.crypto.Cipher.decrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...
 This static method encrypts raw string with specified key and algorithm.
 <br/>
 NOTE: From jsrsasign 10.9.0, asymmetric cipher ({des-EDE3,aes{128,256}}-CBC) is also supported.
+NOTE2: From jsrsasign 11.0.0, RSA and RSAOAEP encryption/decryption support is removed
+because of Marvin attack vulnerability.
 						
 						
 					</div>
@@ -813,10 +787,6 @@ NOTE: From jsrsasign 10.9.0, asymmetric cipher ({des-EDE3,aes{128,256}}-CBC) is 
 					
 					
 					<pre class="code">
-// asynchronous cipher
-KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj) &rarr; "1abc2d..."
-KJUR.crypto.Cipher.encrypt("aaa", pubRSAKeyObj, "RSAOAEP") &rarr; "23ab02..."
-// synchronous cipher
 KJUR.crypto.Cipher.encrypt("12abcd...", "5a7d...", "aes256-CBC", { iv: "1b3c..." }) 
 KJUR.crypto.Cipher.encrypt("12abcd...", "5a7d...", any, { encalg: "aes128-CBC", iv: "1b3c..." }) 
 KJUR.crypto.Cipher.encrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." }) 
@@ -829,19 +799,19 @@ KJUR.crypto.Cipher.encrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>s</b>
+									<span class="light fixedFont">{string}</span> <b>s</b>
 									
 								</dt>
 								<dd>input string to encrypt</dd>
 							
 								<dt>
-									<span class="light fixedFont">{Object}</span> <b>keyObj</b>
+									<span class="light fixedFont">{string}</span> <b>hexadecimal</b>
 									
 								</dt>
-								<dd>RSAKey object or hexadecimal string of symmetric cipher key</dd>
+								<dd>string of symmetric cipher key</dd>
 							
 								<dt>
-									<span class="light fixedFont">{String}</span> <b>algName</b>
+									<span class="light fixedFont">{string}</span> <b>algName</b>
 									
 								</dt>
 								<dd>short/long algorithm name for encryption/decryption (OPTION)</dd>
@@ -867,78 +837,7 @@ KJUR.crypto.Cipher.encrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{String}</span> hexadecimal encrypted string</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name=".getAlgByKeyAndName"> </a>
-					<div class="fixedFont">&lt;static&gt; 
-					
-					<span class="light">{String}</span>
-					<span class="light">KJUR.crypto.Cipher.</span><b>getAlgByKeyAndName</b>(keyObj, algName)
-					
-					</div>
-					<div class="description">
-						get canonicalized encrypt/decrypt algorithm name by key and short/long algorithm name<br/>
-Here is supported canonicalized cipher algorithm names and its standard names:
-<ul>
-<li>RSA - RSA/ECB/PKCS1Padding (default for RSAKey)</li>
-<li>RSAOAEP - RSA/ECB/OAEPWithSHA-1AndMGF1Padding</li>
-<li>RSAOAEP224 - RSA/ECB/OAEPWithSHA-224AndMGF1Padding(*)</li>
-<li>RSAOAEP256 - RSA/ECB/OAEPWithSHA-256AndMGF1Padding</li>
-<li>RSAOAEP384 - RSA/ECB/OAEPWithSHA-384AndMGF1Padding(*)</li>
-<li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
-</ul>
-NOTE: (*) is not supported in Java JCE.
-						
-						
-					</div>
-					
-					
-					
-					<pre class="code">
-KJUR.crypto.Cipher.getAlgByKeyAndName(objRSAKey) &rarr; "RSA"
-KJUR.crypto.Cipher.getAlgByKeyAndName(objRSAKey, "RSAOAEP") &rarr; "RSAOAEP"</pre>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>keyObj</b>
-									
-								</dt>
-								<dd>RSAKey object or hexadecimal string of symmetric cipher key</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>algName</b>
-									
-								</dt>
-								<dd>short/long algorithm name for encryption/decryption</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Since:</dt>
-								<dd>jsrsasign 6.2.0 crypto 1.1.10</dd>
-							</dl>
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{String}</span> canonicalized algorithm name for encryption/decryption</dd>
+								<dd><span class="light fixedFont">{string}</span> hexadecimal encrypted string</dd>
 							
 							</dl>
 						

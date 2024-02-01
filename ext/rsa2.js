@@ -252,6 +252,7 @@ function RSADoPrivate(x) {
 
 // Return the PKCS#1 RSA decryption of "ctext".
 // "ctext" is an even-length hex string and the output is a plain string.
+/*
 function RSADecrypt(ctext) {
   if (ctext.length != Math.ceil(this.n.bitLength() / 4.0)) {
     throw new Error("wrong ctext length");
@@ -262,9 +263,11 @@ function RSADecrypt(ctext) {
   if(m == null) return null;
   return pkcs1unpad2(m, (this.n.bitLength()+7)>>3);
 }
+ */
 
 // Return the PKCS#1 OAEP RSA decryption of "ctext".
 // "ctext" is an even-length hex string and the output is a plain string.
+/*
 function RSADecryptOAEP(ctext, hash, hashLen) {
   if (ctext.length != Math.ceil(this.n.bitLength() / 4.0)) {
     throw new Error("wrong ctext length");
@@ -275,6 +278,7 @@ function RSADecryptOAEP(ctext, hash, hashLen) {
   if(m == null) return null;
   return oaep_unpad(m, (this.n.bitLength()+7)>>3, hash, hashLen);
 }
+ */
 
 // Return the PKCS#1 RSA decryption of "ctext".
 // "ctext" is a Base64-encoded string and the output is a plain string.
@@ -290,6 +294,6 @@ RSAKey.prototype.doPrivate = RSADoPrivate;
 RSAKey.prototype.setPrivate = RSASetPrivate;
 RSAKey.prototype.setPrivateEx = RSASetPrivateEx;
 RSAKey.prototype.generate = RSAGenerate;
-RSAKey.prototype.decrypt = RSADecrypt;
-RSAKey.prototype.decryptOAEP = RSADecryptOAEP;
+//RSAKey.prototype.decrypt = RSADecrypt;
+//RSAKey.prototype.decryptOAEP = RSADecryptOAEP;
 //RSAKey.prototype.b64_decrypt = RSAB64Decrypt;
