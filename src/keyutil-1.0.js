@@ -996,6 +996,11 @@ var KEYUTIL = function() {
             var result = {};
             result.algparam = null;
 
+            let obj = ASN1HEX.parse(pkcs8PrvHex);
+            // Sort out ED25519 keys here
+            if (obj.seq[1].seq[0].oid == "id-Ed25519")
+                 return { algoid: "id-Ed25519", keyidx: obj.seq[2].octstr.obj.octstr.hex };
+ 
             // 1. sequence
             if (pkcs8PrvHex.substr(0, 2) != "30")
                 throw new Error("malformed plain PKCS8 private key(code:001)");
@@ -1072,6 +1077,8 @@ var KEYUTIL = function() {
 		key = new KJUR.crypto.DSA();
             } else if (p8.algoid == "2a8648ce3d0201") { // ECC
                 key = new KJUR.crypto.ECDSA();
+            } else if (p8.algoid == "id-Ed25519") { // EdDSA
+                key = new KJUR.crypto.EdDSA();
             } else {
                 throw new Error("unsupported private key algorithm");
             }
@@ -1088,7 +1095,7 @@ var KEYUTIL = function() {
          * @memberOf KEYUTIL
          * @function
          * @param {String} pkcsPub8Hex hexadecimal string of PKCS#8 public key
-         * @return {Object} RSAKey or KJUR.crypto.{ECDSA,DSA} private key object
+         * @return {Object} RSAKey or KJUR.crypto.{DSA,ECDSA,EdDSA} private key object
          * @since pkcs5pkey 1.0.5
          */
         _getKeyFromPublicPKCS8Hex: function(h) {
@@ -1101,6 +1108,8 @@ var KEYUTIL = function() {
 		key = new KJUR.crypto.DSA();
 	    } else if (hOID === "2a8648ce3d0201") { // oid=ECPUB
 		key = new KJUR.crypto.ECDSA();
+            } else if (hOID === "2b6570") { // oid=id-Ed25519
+                key = new KJUR.crypto.EdDSA();
 	    } else {
 		throw new Error("unsupported PKCS#8 public key hex");
 	    }
@@ -1296,6 +1305,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	_getVbyList = _ASN1HEX.getVbyList,
 	_KJUR_crypto = KJUR.crypto,
 	_KJUR_crypto_ECDSA = _KJUR_crypto.ECDSA,
+        _KJUR_crypto_EdDSA = _KJUR_crypto.EdDSA,
 	_KJUR_crypto_DSA = _KJUR_crypto.DSA,
 	_RSAKey = RSAKey,
 	_pemtohex = pemtohex,
@@ -1308,6 +1318,8 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
         return param;
     if (typeof _KJUR_crypto_DSA != 'undefined' && param instanceof _KJUR_crypto_DSA)
         return param;
+    if (typeof _KJUR_crypto_EdDSA != 'undefined' && param instanceof _KJUR_crypto_EdDSA)
+       return param;
 
     // 2. by parameters of key
 
@@ -1675,6 +1687,16 @@ KEYUTIL.generateKeypair = function(alg, keylenOrCurve) {
         result.prvKeyObj = prvKey;
         result.pubKeyObj = pubKey;
         return result;
+    } else if (alg = "EdDSA") {
+        const prvKeyObj = new KJUR.crypto.EdDSA({curve});
+        const keypairHex = prvKeyObj.generateKeyPairHex();
+
+        const pubKeyObj = new KJUR.crypto.EdDSA({curve});
+        pubKeyObj.setPublicKeyHex(keypairHex.pubhex);
+        pubKeyObj.isPrivate = false;
+        pubKeyObj.isPublic = true;
+
+        return { prvKeyObj, pubKeyObj };
     } else {
         throw new Error("unknown algorithm: " + alg);
     }
@@ -1731,6 +1753,7 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
 	_KJUR_crypto = _KJUR.crypto,
 	_DSA = _KJUR_crypto.DSA,
 	_ECDSA = _KJUR_crypto.ECDSA,
+        _EdDSA = _KJUR_crypto.EdDSA,
 	_RSAKey = RSAKey;
 
     function _rsaprv2asn1obj(keyObjOrHex) {
@@ -1776,12 +1799,26 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         return asn1Obj;
     };
 
+    function _eddsaprv2asn1obj(keyObjOrHex) {
+        var asn1Obj2 = _newObject({
+            "seq": [
+                {"int": 0 },
+               {"seq": [
+                    {'oid': {'name': keyObjOrHex.curveName}},
+               ]},
+                {'octstr': {'hex': '0420' + keyObjOrHex.prvKeyHex}}
+            ]
+        });
+        return asn1Obj2;
+    };
+ 
     // 1. public key
 
     // x. PEM PKCS#8 public key of RSA/ECDSA/DSA public key object
     if (((_RSAKey !== undefined && keyObjOrHex instanceof _RSAKey) ||
          (_DSA !== undefined    && keyObjOrHex instanceof _DSA) ||
-         (_ECDSA !== undefined  && keyObjOrHex instanceof _ECDSA)) &&
+         (_ECDSA !== undefined  && keyObjOrHex instanceof _ECDSA) ||
+         (_EdDSA !== undefined  && keyObjOrHex instanceof _EdDSA)) &&
         keyObjOrHex.isPublic == true &&
         (formatType === undefined || formatType == "PKCS8PUB")) {
         var asn1Obj = new _SubjectPublicKeyInfo(keyObjOrHex);
@@ -1834,6 +1871,17 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         return hextopem(asn1Hex, "DSA PRIVATE KEY");
     }
 
+    if (formatType == "PKCS1PRV" &&
+        _EdDSA !== undefined &&
+        keyObjOrHex instanceof _EdDSA &&
+        (passwd === undefined || passwd == null) &&
+        keyObjOrHex.isPrivate === true) {
+
+        var asn1Obj = _eddsaprv2asn1obj(keyObjOrHex);
+        var asn1Hex = asn1Obj.tohex();
+        return hextopem(asn1Hex, "PRIVATE KEY");
+    }
+ 
     // 3. private
 
     // x. PEM PKCS#5 encrypted private key of RSA private key object
@@ -1878,6 +1926,19 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         return this.getEncryptedPKCS5PEMFromPrvKeyHex("DSA", asn1Hex, passwd, encAlg, ivsaltHex);
     }
 
+    // x. PEM PKCS#5 encrypted private key of EdDSA private key object
+    if (formatType == "PKCS5PRV" &&
+        _EdDSA !== undefined &&
+        keyObjOrHex instanceof _EdDSA &&
+        (passwd !== undefined && passwd != null) &&
+        keyObjOrHex.isPrivate == true) {
+        const asn1Obj = _eddsaprv2asn1obj(keyObjOrHex);
+        const asn1Hex = asn1Obj.tohex();
+
+        if (encAlg === undefined) encAlg = "AES-256-CBC";
+        return this.getEncryptedPKCS5PEMFromPrvKeyHex("EdDSA", asn1Hex, passwd, encAlg, ivsaltHex);
+    }
+ 
     // x. ======================================================================
     
     var _getEncryptedPKCS8PEM = function(plainKeyHex, passcodeOrParam) {
@@ -1983,6 +2044,21 @@ KEYUTIL.getPEM = function(keyObjOrHex, formatType, passwd, encAlg, hexType, ivsa
         } else {
             return _getEncryptedPKCS8PEM(asn1Hex, passwd);
         }
+    }
+
+    // x. PEM PKCS#8 plain private key of EdDSA private key object
+    if (formatType == "PKCS8PRV" &&
+        _EdDSA !== undefined &&
+        keyObjOrHex instanceof _EdDSA &&
+        keyObjOrHex.isPrivate == true) {
+
+        let asn1Obj = _eddsaprv2asn1obj(keyObjOrHex);
+        let asn1Hex = asn1Obj.tohex();
+        if (passwd === undefined || passwd == null) {
+            return hextopem(asn1Hex, "PRIVATE KEY");
+        } else {
+            return _getEncryptedPKCS8PEM(asn1Hex, passwd);
+       }
     }
 
     throw new Error("unsupported object nor format");
@@ -2228,6 +2304,21 @@ KEYUTIL.getJWK = function(keyinfo, nokid, nox5c, nox5t, nox5t2) {
 	jwk.crv =  name;
 	jwk.x = hextob64u(xy.x);
 	jwk.y = hextob64u(xy.y);
+    } else if (keyObj instanceof KJUR.crypto.EdDSA && keyObj.isPrivate) {
+       if (keyObj.curveName !== "id-Ed25519")
+           throw new Error("unsupported curve name for JWT: " + keyObj.curveName);
+       jwk.kty = "OKP";
+       jwk.alg = "EdDSA";
+       jwk.crv = "Ed25519";
+       jwk.d = hextob64u(keyObj.prvKeyHex);
+       jwk.x = hextob64u(keyObj.pubKeyHex);
+    } else if (keyObj instanceof KJUR.crypto.EdDSA && keyObj.isPublic) {
+       if (keyObj.curveName !== "id-Ed25519")
+           throw new Error("unsupported curve name for JWT: " + keyObj.curveName);
+       jwk.kty = "OKP";
+       jwk.crv = "Ed25519";
+       jwk.x = hextob64u(keyObj.pubKeyHex);
+       jwk.alg = "EdDSA";
     }
     if (jwk.kty == undefined) throw new Error("unsupported keyinfo");
 
