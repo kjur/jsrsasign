@@ -249,7 +249,7 @@ KJUR.crypto.Util = new function() {
     };
 
     /**
-     * check if key object (RSA/DSA/ECDSA) or not
+     * check if key object (RSA/DSA/ECDSA/EdDSA) or not
      * @name isKey
      * @memberOf KJUR.crypto.Util
      * @function
@@ -260,6 +260,7 @@ KJUR.crypto.Util = new function() {
     this.isKey = function(obj) {
 	if (obj instanceof RSAKey ||
 	    obj instanceof KJUR.crypto.DSA ||
+	    obj instanceof KJUR.crypto.EdDSA ||
 	    obj instanceof KJUR.crypto.ECDSA) {
 	    return true;
 	} else {
@@ -1044,8 +1045,8 @@ KJUR.crypto.Mac = function(params) {
  * var isValid = sig.verify(sigValueHex);
  */
 KJUR.crypto.Signature = function(params) {
-    var prvKey = null; // RSAKey/KJUR.crypto.{ECDSA,DSA} object for signing
-    var pubKey = null; // RSAKey/KJUR.crypto.{ECDSA,DSA} object for verifying
+    var prvKey = null; // RSAKey/KJUR.crypto.{ECDSA,DSA,EdDSA} object for signing
+    var pubKey = null; // RSAKey/KJUR.crypto.{ECDSA,DSA,EdDSA} object for verifying
 
     var md = null; // KJUR.crypto.MessageDigest object
     var sig = null;
