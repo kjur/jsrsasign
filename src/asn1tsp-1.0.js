@@ -777,7 +777,7 @@ KJUR.asn1.tsp.PKIFreeText = function(params) {
     this.tohex = function() {
 	var params = this.params;
 
-	if (! params instanceof Array)
+	if (! (params instanceof Array))
 	    throw new _Error("wrong params: not array");
 
 	var a = [];
