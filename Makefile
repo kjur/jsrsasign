@@ -14,6 +14,7 @@ FILES_MIN = \
 	min/ecdsa-modified-1.0.min.js \
 	min/ecparam-1.0.min.js \
 	min/dsa-2.0.min.js \
+	min/eddsa-modified-3.0.min.js \
 	min/keyutil-1.0.min.js \
 	min/rsapem-1.1.min.js \
 	min/rsasign-1.2.min.js \
@@ -40,6 +41,7 @@ JSDOC_SRC = \
 	ecdsa-modified-1.0.js \
 	ecparam-1.0.js \
 	dsa-2.0.js \
+	eddsa-modified-3.0.js \
 	base64x-1.1.js \
 	jws-3.3.js \
 	jwsjs-2.0.js \

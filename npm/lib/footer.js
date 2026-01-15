@@ -5,6 +5,7 @@ exports.BigInteger = BigInteger;
 exports.RSAKey = RSAKey;
 exports.ECDSA = KJUR.crypto.ECDSA;
 exports.DSA = KJUR.crypto.DSA;
+exports.EdDSA = KJUR.crypto.EdDSA;
 exports.Signature = KJUR.crypto.Signature;
 exports.MessageDigest = KJUR.crypto.MessageDigest;
 exports.Mac = KJUR.crypto.Mac;

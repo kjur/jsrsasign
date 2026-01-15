@@ -3787,6 +3787,7 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
 	_AlgorithmIdentifier = _KJUR_asn1_x509.AlgorithmIdentifier,
 	_KJUR_crypto = _KJUR.crypto,
 	_KJUR_crypto_ECDSA = _KJUR_crypto.ECDSA,
+        _KJUR_crypto_EdDSA = _KJUR_crypto.EdDSA,
 	_KJUR_crypto_DSA = _KJUR_crypto.DSA;
 
     /*
@@ -3856,6 +3857,15 @@ KJUR.asn1.x509.SubjectPublicKeyInfo = function(params) {
 		    new _DERBitString({'hex': '00' + pubInt.tohex()});
 	    }
 	} catch(ex) {};
+
+        try {
+             if (key instanceof KJUR.crypto.EdDSA) {
+                 this.asn1AlgId =
+                     new _AlgorithmIdentifier({'name': 'id-Ed25519'});
+                this.asn1SubjPKey =
+                     new _DERBitString({'hex': '00' + key.pubKeyHex});
+            }
+        } catch(ex) {};
     };
 
     if (params !== undefined) {
@@ -4116,7 +4126,8 @@ KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
 	var lcNameAlg = this.nameAlg.toLowerCase();
 
 	if (lcNameAlg.substr(-7, 7) !== "withdsa" &&
-	    lcNameAlg.substr(-9, 9) !== "withecdsa") {
+	    lcNameAlg.substr(-9, 9) !== "withecdsa" &&
+            lcNameAlg.substr(-11, 11) !== "id-ed25519") {
             this.asn1Params = new _KJUR_asn1.DERNull();
 	}
     }
@@ -4525,6 +4536,14 @@ KJUR.asn1.x509.OID = new function() {
         'SHA256withDSA':        '2.16.840.1.101.3.4.3.2',
 
         'rsaEncryption':        '1.2.840.113549.1.1.1',
+
+        // defined in RFC8410
+        'id-X25519':            '1.3.101.110',
+        'id-X448':              '1.3.101.111',
+        'id-Ed25519':           '1.3.101.112',
+        'id-Ed448':             '1.3.101.113',
+
+        'EdDSAwithEd25519':     '1.3.101.112',
 
 	// X.500 AttributeType defined in RFC 4514
         'commonName':			'2.5.4.3',
