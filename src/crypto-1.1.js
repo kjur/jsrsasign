@@ -1271,7 +1271,12 @@ KJUR.crypto.Signature = function(params) {
                 // EdDSA
                 if (KJUR.crypto.EdDSA !== undefined &&
                            this.pubKey instanceof KJUR.crypto.EdDSA) {
-                    return this.pubKey.verifyHex(this.sHashHex, hSigVal);
+                    try {
+                        return this.pubKey.verifyHex(this.sHashHex, hSigVal);
+                    }
+                    catch {
+                        return false;
+                    }
                 } else {
                     throw new Error("Signature: unsupported public key alg: " + this.pubkeyAlgName);
                 }
