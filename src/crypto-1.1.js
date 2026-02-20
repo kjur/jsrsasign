@@ -391,7 +391,7 @@ KJUR.crypto.Util.getRandomBigIntegerZeroToMax = function(biMax) {
     var bitLenMax = biMax.bitLength();
     while (1) {
 	var biRand = KJUR.crypto.Util.getRandomBigIntegerOfNbits(bitLenMax);
-	if (biMax.compareTo(biRand) != -1) return biRand;
+	if (biMax.compareTo(biRand) >= 0) return biRand;
     }
 };
 
@@ -415,7 +415,7 @@ KJUR.crypto.Util.getRandomBigIntegerZeroToMax = function(biMax) {
  */
 KJUR.crypto.Util.getRandomBigIntegerMinToMax = function(biMin, biMax) {
     var flagCompare = biMin.compareTo(biMax);
-    if (flagCompare == 1) throw "biMin is greater than biMax";
+    if (flagCompare > 0) throw "biMin is greater than biMax";
     if (flagCompare == 0) return biMin;
 
     var biDiff = biMax.subtract(biMin);
