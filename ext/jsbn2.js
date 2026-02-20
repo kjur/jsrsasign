@@ -411,6 +411,9 @@ Barrett.prototype.sqrTo = barrettSqrTo;
 
 // (public) this^e % m (HAC 14.85)
 function bnModPow(e,m) {
+  if(e.signum() < 0) {
+    return this.modInverse(m).modPow(e.negate(), m);
+  }
   var i = e.bitLength(), k, r = nbv(1), z;
   if(i <= 0) return r;
   else if(i < 18) k = 1;
@@ -668,4 +671,3 @@ BigInteger.prototype.sqrt = function() {
 	div = y;
     }
 }
-

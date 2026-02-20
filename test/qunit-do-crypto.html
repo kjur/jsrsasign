@@ -232,6 +232,23 @@ test("Util.getRandomBigIntegerMinToMax", function() {
   equal(n, 100, "100 times success:" + n0 + ":" + n1 + ":" + n2 + ":" + n3);
 });
 
+test("BigInteger.modPow handles negative exponent -1", function() {
+  var a = new BigInteger("7", 10);
+  var m = new BigInteger("19", 10);
+  var got = a.modPow(new BigInteger("-1", 10), m);
+  var expected = a.modInverse(m);
+  equal(got.toString(10), expected.toString(10), "a^-1 mod m");
+});
+
+test("BigInteger.modPow handles negative exponent -k", function() {
+  var a = new BigInteger("3", 10);
+  var m = new BigInteger("23", 10);
+  var e = new BigInteger("-3", 10);
+  var got = a.modPow(e, m);
+  var expected = a.modInverse(m).modPow(e.negate(), m);
+  equal(got.toString(10), expected.toString(10), "a^-k mod m");
+});
+
 test("MessageDigest test", function() {
   expect(10);
   var md1 = new KJUR.crypto.MessageDigest({"alg": "sha1", "prov": "cryptojs"});
@@ -419,4 +436,3 @@ ECC related QUnit test pages:
 </p>
 </body>
 </html>
-
