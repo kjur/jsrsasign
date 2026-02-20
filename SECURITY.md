@@ -10,7 +10,7 @@ The jsrsasign library is a cryptography library used in many production applicat
 
 Instead, please report them via:
 1. GitHub's private vulnerability reporting feature
-2. Direct email to the maintainer
+2. Direct email to the maintainer (kenji.urushima at gmail.com)
 
 ### What to Include
 

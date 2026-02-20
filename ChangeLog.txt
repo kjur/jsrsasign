@@ -1,6 +1,12 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 11.1.0 to 11.1.1 (2026-Feb-20)
+  - security fix for DSA and BigInteger
+    - PR #651, #650, #649, #648, #647, #646, #645. Thank you @Kr0remer
+    - After assigned CVE number reports will be added.
+  - SECURITY.md added. Thank you @njg7194 
+
 restore KJUR.crypto.Cipher class without RSA/RSAOAEP support
 * Changes from 11.0.0 to 11.1.0 (2024-Feb-01)
   - src/crypto.js
