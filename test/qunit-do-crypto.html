@@ -465,6 +465,23 @@ var result = sig2.verify(hSig);
 equal(result, true, "SHA1withRSA(x1234) sign/verify key2prv/key2pub");
 });
 
+test("BigInteger.modPow handles negative exponent -1", function() {
+  var a = new BigInteger("7", 10);
+  var m = new BigInteger("19", 10);
+  var got = a.modPow(new BigInteger("-1", 10), m);
+  var expected = a.modInverse(m);
+  equal(got.toString(10), expected.toString(10), "a^-1 mod m");
+});
+
+test("BigInteger.modPow handles negative exponent -k", function() {
+  var a = new BigInteger("3", 10);
+  var m = new BigInteger("23", 10);
+  var e = new BigInteger("-3", 10);
+  var got = a.modPow(e, m);
+  var expected = a.modInverse(m).modPow(e.negate(), m);
+  equal(got.toString(10), expected.toString(10), "a^-k mod m");
+});
+
 });
 -->
 </script>
