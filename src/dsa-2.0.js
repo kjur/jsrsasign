@@ -183,21 +183,24 @@ KJUR.crypto.DSA = function() {
 	var y = this.y; // public key (p q g y)
 	var x = this.x; // private key
 
-	// NIST FIPS 186-4 4.5 DSA Per-Message Secret Number (p18)
-	// 1. get random k where 0 < k < q
-	var k = KJUR.crypto.Util.getRandomBigIntegerMinToMax(BigInteger.ONE.add(BigInteger.ONE),
-							     q.subtract(BigInteger.ONE));
-
 	// NIST FIPS 186-4 4.6 DSA Signature Generation (p19)
 	// 2. get z where the left most min(N, outlen) bits of Hash(M)
 	var hZ = sHashHex.substr(0, q.bitLength() / 4);
 	var z = new BigInteger(hZ, 16);
 
-	// 3. get r where (g^k mod p) mod q, r != 0
-	var r = (g.modPow(k,p)).mod(q); 
+	var k, r, s;
+	do {
+	    // NIST FIPS 186-4 4.5 DSA Per-Message Secret Number (p18)
+	    // 1. get random k where 0 < k < q
+	    k = KJUR.crypto.Util.getRandomBigIntegerMinToMax(BigInteger.ONE.add(BigInteger.ONE),
+							 q.subtract(BigInteger.ONE));
 
-	// 4. get s where k^-1 (z + xr) mod q, s != 0
-	var s = (k.modInverse(q).multiply(z.add(x.multiply(r)))).mod(q);
+	    // 3. get r where (g^k mod p) mod q, r != 0
+	    r = (g.modPow(k,p)).mod(q); 
+
+	    // 4. get s where k^-1 (z + xr) mod q, s != 0
+	    s = (k.modInverse(q).multiply(z.add(x.multiply(r)))).mod(q);
+	} while (r.compareTo(BigInteger.ZERO) == 0 || s.compareTo(BigInteger.ZERO) == 0);
 
 	// 5. signature (r, s)
 	var result = KJUR.asn1.ASN1Util.jsonToASN1HEX({

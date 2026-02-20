@@ -508,15 +508,17 @@ function bnpModInt(n) {
 
 // (public) 1/this % m (HAC 14.61)
 function bnModInverse(m) {
+  if(m.signum() == 0) return BigInteger.ZERO;
+  var x = this.mod(m);
   var ac = m.isEven();
-  if((this.isEven() && ac) || m.signum() == 0) return BigInteger.ZERO;
-  var u = m.clone(), v = this.clone();
+  if((x.isEven() && ac) || x.signum() == 0) return BigInteger.ZERO;
+  var u = m.clone(), v = x.clone();
   var a = nbv(1), b = nbv(0), c = nbv(0), d = nbv(1);
   while(u.signum() != 0) {
     while(u.isEven()) {
       u.rShiftTo(1,u);
       if(ac) {
-        if(!a.isEven() || !b.isEven()) { a.addTo(this,a); b.subTo(m,b); }
+        if(!a.isEven() || !b.isEven()) { a.addTo(x,a); b.subTo(m,b); }
         a.rShiftTo(1,a);
       }
       else if(!b.isEven()) b.subTo(m,b);
@@ -525,7 +527,7 @@ function bnModInverse(m) {
     while(v.isEven()) {
       v.rShiftTo(1,v);
       if(ac) {
-        if(!c.isEven() || !d.isEven()) { c.addTo(this,c); d.subTo(m,d); }
+        if(!c.isEven() || !d.isEven()) { c.addTo(x,c); d.subTo(m,d); }
         c.rShiftTo(1,c);
       }
       else if(!d.isEven()) d.subTo(m,d);
