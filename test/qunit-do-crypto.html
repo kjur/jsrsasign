@@ -232,6 +232,19 @@ test("Util.getRandomBigIntegerMinToMax", function() {
   equal(n, 100, "100 times success:" + n0 + ":" + n1 + ":" + n2 + ":" + n3);
 });
 
+test("BigInteger.modInverse returns quickly for zero input", function() {
+  var biM = new BigInteger("97", 10);
+  var biR = new BigInteger("0", 10).modInverse(biM);
+  equal(biR.compareTo(BigInteger.ZERO), 0, "0 has no inverse");
+});
+
+test("BigInteger.modInverse normalizes negative input", function() {
+  var biM1 = new BigInteger("7", 10);
+  var biM2 = new BigInteger("97", 10);
+  equal(new BigInteger("-1", 10).modInverse(biM1).toString(10), "6", "-1 mod 7");
+  equal(new BigInteger("-13", 10).modInverse(biM2).toString(10), "82", "-13 mod 97");
+});
+
 test("MessageDigest test", function() {
   expect(10);
   var md1 = new KJUR.crypto.MessageDigest({"alg": "sha1", "prov": "cryptojs"});
