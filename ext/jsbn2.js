@@ -555,6 +555,7 @@ var lplim = (1<<26)/lowprimes[lowprimes.length-1];
 
 // (public) test primality with certainty >= 1-.5^t
 function bnIsProbablePrime(t) {
+  if(this.signum() <= 0) return false;
   var i, x = this.abs();
   if(x.t == 1 && x[0] <= lowprimes[lowprimes.length-1]) {
     for(i = 0; i < lowprimes.length; ++i)
@@ -574,6 +575,7 @@ function bnIsProbablePrime(t) {
 
 // (protected) true if probably prime (HAC 4.24, Miller-Rabin)
 function bnpMillerRabin(t) {
+  if(this.signum() <= 0) return false;
   var n1 = this.subtract(BigInteger.ONE);
   var k = n1.getLowestSetBit();
   if(k <= 0) return false;
@@ -670,4 +672,3 @@ BigInteger.prototype.sqrt = function() {
 	div = y;
     }
 }
-
