@@ -129,6 +129,41 @@ test("sign and verifyWithMessageHash test1", function() {
   ok(dsa2.verifyWithMessageHash(sHashHex, hSigVal), "");
 });
 
+test("signWithMessageHash retries when s is zero", function() {
+  var pSmall = new BigInteger("17", 16);
+  var qSmall = new BigInteger("0b", 16);
+  var gSmall = new BigInteger("04", 16);
+  var xSmall = new BigInteger("03", 16);
+  var ySmall = gSmall.modPow(xSmall, pSmall);
+  var dsaPrv = new KJUR.crypto.DSA();
+  dsaPrv.setPrivate(pSmall, qSmall, gSmall, null, xSmall);
+  var dsaPub = new KJUR.crypto.DSA();
+  dsaPub.setPublic(pSmall, qSmall, gSmall, ySmall);
+
+  var kList = [new BigInteger("2", 10), new BigInteger("3", 10)];
+  var kIdx = 0;
+  var fOrig = KJUR.crypto.Util.getRandomBigIntegerMinToMax;
+
+  var r0 = gSmall.modPow(kList[0], pSmall).mod(qSmall);
+  var z = qSmall.subtract(xSmall.multiply(r0).mod(qSmall)).mod(qSmall);
+  var sHashHex = z.toString(16);
+
+  KJUR.crypto.Util.getRandomBigIntegerMinToMax = function() {
+    return kList[kIdx++];
+  };
+
+  try {
+    var hSigVal = dsaPrv.signWithMessageHash(sHashHex);
+    var rs = dsaPrv.parseASN1Signature(hSigVal);
+    ok(kIdx >= 2, "retry with a new k");
+    ok(rs[0].compareTo(BigInteger.ZERO) != 0, "r != 0");
+    ok(rs[1].compareTo(BigInteger.ZERO) != 0, "s != 0");
+    ok(dsaPub.verifyWithMessageHash(sHashHex, hSigVal), "signature verifies");
+  } finally {
+    KJUR.crypto.Util.getRandomBigIntegerMinToMax = fOrig;
+  }
+});
+
 test("readPKCS5PrvKeyHex d1", function() {
   var key = new KJUR.crypto.DSA();
   key.readPKCS5PrvKeyHex(D1PRVP5HEX);

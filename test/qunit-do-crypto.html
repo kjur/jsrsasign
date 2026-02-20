@@ -232,6 +232,31 @@ test("Util.getRandomBigIntegerMinToMax", function() {
   equal(n, 100, "100 times success:" + n0 + ":" + n1 + ":" + n2 + ":" + n3);
 });
 
+test("RSASetPublic rejects zero modulus", function() {
+  throws(function() {
+    var pub = new RSAKey();
+    pub.setPublic("00", "10001");
+  },
+  "Invalid RSA public key",
+  "reject zero modulus");
+});
+
+test("KEYUTIL.getKey rejects JWK with zero modulus", function() {
+  throws(function() {
+    KEYUTIL.getKey({kty: "RSA", n: "AA", e: "AQAB"});
+  },
+  "Invalid RSA public key",
+  "reject JWK n=0");
+});
+
+test("BigInteger.modPowInt throws when modulus is zero", function() {
+  throws(function() {
+    new BigInteger("deadbeef", 16).modPowInt(65537, BigInteger.ZERO);
+  },
+  "BigInteger divide by zero",
+  "reject mod(0)");
+});
+
 test("BigInteger.modInverse returns quickly for zero input", function() {
   var biM = new BigInteger("97", 10);
   var biR = new BigInteger("0", 10).modInverse(biM);
@@ -432,4 +457,3 @@ ECC related QUnit test pages:
 </p>
 </body>
 </html>
-
