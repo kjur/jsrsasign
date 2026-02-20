@@ -47,7 +47,24 @@ KJUR.crypto.DSA = function() {
         _getVbyList = _ASN1HEX.getVbyList,
         _getVbyListEx = _ASN1HEX.getVbyListEx,
 	_isASN1HEX = _ASN1HEX.isASN1HEX,
-	_BigInteger = BigInteger;
+	_BigInteger = BigInteger,
+	_BI_ONE = BigInteger.ONE;
+
+    var _validatePublicArgs = function(p, q, g, y) {
+	if (p == null || q == null || g == null || y == null)
+	    throw new Error("invalid DSA public key");
+
+	// FIPS 186-4 4.7: domain parameters and public key shall be validated.
+	if (_BI_ONE.compareTo(q) >= 0 || q.compareTo(p) >= 0)
+	    throw new Error("invalid DSA public key");
+	if (_BI_ONE.compareTo(g) >= 0 || g.compareTo(p) >= 0)
+	    throw new Error("invalid DSA public key");
+	if (_BI_ONE.compareTo(y) >= 0 || y.compareTo(p) >= 0)
+	    throw new Error("invalid DSA public key");
+	if (g.modPow(q, p).compareTo(_BI_ONE) != 0)
+	    throw new Error("invalid DSA public key");
+    };
+
     this.p = null;
     this.q = null;
     this.g = null;
@@ -120,6 +137,8 @@ KJUR.crypto.DSA = function() {
      * @since jsrsasign 7.0.0 dsa 2.0.0
      */
     this.setPublic = function(p, q, g, y) {
+	_validatePublicArgs(p, q, g, y);
+
 	this.isPublic = true;
 	this.p = p;
 	this.q = q;

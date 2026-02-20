@@ -129,6 +129,17 @@ test("sign and verifyWithMessageHash test1", function() {
   ok(dsa2.verifyWithMessageHash(sHashHex, hSigVal), "");
 });
 
+test("setPublicHex rejects invalid domain parameter g=1", function() {
+  var dsa = new KJUR.crypto.DSA();
+  var f = false;
+  try {
+    dsa.setPublicHex("17", "0b", "01", "01");
+  } catch (ex) {
+    f = true;
+  }
+  ok(f, "invalid dsa public key rejected");
+});
+
 test("signWithMessageHash retries when s is zero", function() {
   var pSmall = new BigInteger("17", 16);
   var qSmall = new BigInteger("0b", 16);
