@@ -1066,14 +1066,14 @@ ASN1HEX.parse = function(h) {
 	    if (hV.substr(0, 2) != "00") throw "not encap";
 	    var hV1 = hV.substr(2);
 	    if (! _isASN1HEX(hV1)) throw "not encap";
-	    return {bitstr: {obj: _parse(hV1)}};
+	    return {bitstr: {obj: _parse(hV1), hex: hV}};
 	} catch(ex) {
 	    var bV = null;
 	    if (hV.length <= 10) bV = bitstrtobinstr(hV);
 	    if (bV == null) {
 		return {bitstr: {hex: hV}};
 	    } else {
-		return {bitstr: {bin: bV}};
+		return {bitstr: {bin: bV, hex: hV}};
 	    }
 	}
     } else if (tag == "04") {
