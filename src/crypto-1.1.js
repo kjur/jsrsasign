@@ -102,6 +102,9 @@ KJUR.crypto.Util = new function() {
 	'SHA224withDSA':	'cryptojs/jsrsa',
 	'SHA256withDSA':	'cryptojs/jsrsa',
 
+        'id-ed25519':           'cryptojs/jsrsa',
+        'EdDSAwithEd25519':     'cryptojs/jsrsa',
+
 	'MD5withRSAandMGF1':		'cryptojs/jsrsa',
 	'SHAwithRSAandMGF1':		'cryptojs/jsrsa',
 	'SHA1withRSAandMGF1':		'cryptojs/jsrsa',
@@ -246,7 +249,7 @@ KJUR.crypto.Util = new function() {
     };
 
     /**
-     * check if key object (RSA/DSA/ECDSA) or not
+     * check if key object (RSA/DSA/ECDSA/EdDSA) or not
      * @name isKey
      * @memberOf KJUR.crypto.Util
      * @function
@@ -257,6 +260,7 @@ KJUR.crypto.Util = new function() {
     this.isKey = function(obj) {
 	if (obj instanceof RSAKey ||
 	    obj instanceof KJUR.crypto.DSA ||
+	    obj instanceof KJUR.crypto.EdDSA ||
 	    obj instanceof KJUR.crypto.ECDSA) {
 	    return true;
 	} else {
@@ -1041,8 +1045,8 @@ KJUR.crypto.Mac = function(params) {
  * var isValid = sig.verify(sigValueHex);
  */
 KJUR.crypto.Signature = function(params) {
-    var prvKey = null; // RSAKey/KJUR.crypto.{ECDSA,DSA} object for signing
-    var pubKey = null; // RSAKey/KJUR.crypto.{ECDSA,DSA} object for verifying
+    var prvKey = null; // RSAKey/KJUR.crypto.{ECDSA,DSA,EdDSA} object for signing
+    var pubKey = null; // RSAKey/KJUR.crypto.{ECDSA,DSA,EdDSA} object for verifying
 
     var md = null; // KJUR.crypto.MessageDigest object
     var sig = null;
@@ -1211,7 +1215,74 @@ KJUR.crypto.Signature = function(params) {
 		}
 	    };
 	}
-    };
+        else if (this.mdAlgName === undefined || this.mdAlgName === "eddsa") {
+            this.init = function(keyparam, pass) {
+                var keyObj = null;
+                if (pass === undefined) {
+                    keyObj = KEYUTIL.getKey(keyparam);
+                } else {
+                    keyObj = KEYUTIL.getKey(keyparam, pass);
+                }
+
+                if (keyObj.isPrivate === true) {
+                    this.prvKey = keyObj;
+                    this.state = "SIGN";
+                } else if (keyObj.isPublic === true) {
+                    this.pubKey = keyObj;
+                    this.state = "VERIFY";
+                } else {
+                    throw new Error("init failed.:") + keyObj;
+                }
+            };
+
+            this.updateString = function(str) {
+                if (this.sHashHex === undefined)
+                    this.sHashHex = '';
+                this.sHashHex += Buffer.from(str, 'binary').toString('hex');
+            };
+
+            this.updateHex = function(hex) {
+                if (this.sHashHex === undefined)
+                    this.sHashHex = '';
+                this.sHashHex += hex;
+            };
+
+            this.sign = function() {
+                // EdDSA
+                if (this.prvKey instanceof KJUR.crypto.EdDSA) {
+                    this.hSign = this.prvKey.signHex(this.sHashHex);
+                } else {
+                    throw new Error("Signature: unsupported private key alg: " + this.pubkeyAlgName);
+                }
+                return this.hSign;
+            };
+
+            this.signString = function(str) {
+                this.sHashHex = Buffer.from(str, 'binary').toString('hex');
+                return this.sign();
+            };
+
+            this.signHex = function(str) {
+                this.sHashHex = str;
+                return this.sign();
+            };
+
+            this.verify = function(hSigVal) {
+                // EdDSA
+                if (KJUR.crypto.EdDSA !== undefined &&
+                           this.pubKey instanceof KJUR.crypto.EdDSA) {
+                    try {
+                        return this.pubKey.verifyHex(this.sHashHex, hSigVal);
+                    }
+                    catch {
+                        return false;
+                    }
+                } else {
+                    throw new Error("Signature: unsupported public key alg: " + this.pubkeyAlgName);
+                }
+            };
+	}
+    }
 
     /**
      * Initialize this object for signing or verifying depends on key
@@ -1553,5 +1624,6 @@ KJUR.crypto.OID = new function() {
 	'2a8648ce380403': 'SHA1withDSA', // 1.2.840.10040.4.3
 	'608648016503040301': 'SHA224withDSA', // 2.16.840.1.101.3.4.3.1
 	'608648016503040302': 'SHA256withDSA', // 2.16.840.1.101.3.4.3.2
+        '2b6570': 'id-Ed25519', //
     };
 };

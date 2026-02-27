@@ -821,6 +821,7 @@ KJUR.jws.JWS.jwsalg2sigalg = {
     "PS256":	"SHA256withRSAandMGF1",
     "PS384":	"SHA384withRSAandMGF1",
     "PS512":	"SHA512withRSAandMGF1",
+    "Ed25519":  "EdDSAwithEd25519",
     "none":	"none",
 };
 
@@ -916,8 +917,9 @@ KJUR.jws.JWS.getEncodedSignatureValueFromJWS = function(sJWS) {
 KJUR.jws.JWS.getJWKthumbprint = function(o) {
     if (o.kty !== "RSA" &&
 	o.kty !== "EC" &&
-	o.kty !== "oct")
-	throw "unsupported algorithm for JWK Thumprint";
+        o.kty !== "oct" &&
+        o.kty !== "OKP")
+        throw new Error("unsupported algorithm for JWK Thumprint");
 
     // 1. get canonically ordered json string
     var s = '{';
@@ -941,6 +943,13 @@ KJUR.jws.JWS.getJWKthumbprint = function(o) {
 	    throw "wrong k value for oct(symmetric) key";
 	s += '"' + 'kty' + '":"' + o.kty + '",';
 	s += '"' + 'k' + '":"' + o.k + '"}';
+    } else if (o.kty === "OKP") {
+        if (typeof o.crv != "string" ||
+            typeof o.x != "string")
+            throw new Error("wrong crv, and x value for OKP key");
+        s += '"crv":"' + o.crv + '",';
+        s += '"kty":"OKP",';
+        s += '"x":"' + o.x + '"}';
     }
     //alert(s);
 
