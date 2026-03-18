@@ -29,20 +29,34 @@ if (rng_pool == null) {
   rng_pool = new Array();
   rng_pptr = 0;
   var t;
-  if (typeof window !== "undefined" &&
+  if (typeof require === "function" &&
+      typeof process !== "undefined" &&
+      process.versions !== undefined &&
+      process.versions.node !== undefined) {
+    try {
+      var nodeCrypto = require("crypto");
+      if (nodeCrypto !== undefined && nodeCrypto.randomBytes !== undefined) {
+        var buf = nodeCrypto.randomBytes(rng_psize);
+        for (t = 0; t < buf.length; ++t)
+          rng_pool[rng_pptr++] = buf[t];
+      }
+    } catch (ex) {}
+  }
+  if (rng_pptr < rng_psize &&
+      typeof window !== "undefined" &&
       (window.crypto !== undefined ||
        window.msCrypto !== undefined)) {
     var crypto = window.crypto || window.msCrypto;
     if (crypto.getRandomValues) {
-      // Use webcrypto if available
-      var ua = new Uint8Array(32);
+      // Use webcrypto to fill any pool bytes not already provided by Node.
+      var ua = new Uint8Array(rng_psize - rng_pptr);
       crypto.getRandomValues(ua);
-      for(t = 0; t < 32; ++t)
+      for(t = 0; t < ua.length; ++t)
         rng_pool[rng_pptr++] = ua[t];
     } else if (navigator.appName == "Netscape" && navigator.appVersion < "5") {
-      // Extract entropy (256 bits) from NS4 RNG if available
-      var z = window.crypto.random(32);
-      for(t = 0; t < z.length; ++t)
+      // Extract entropy from NS4 RNG if available
+      var z = window.crypto.random(rng_psize - rng_pptr);
+      for(t = 0; t < z.length && rng_pptr < rng_psize; ++t)
         rng_pool[rng_pptr++] = z.charCodeAt(t) & 255;
     }
   }  
