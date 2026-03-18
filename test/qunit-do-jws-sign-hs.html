@@ -148,6 +148,13 @@ test("verify test for algorithm HS512", function() {
   equal(result, true, "");
 });
 
+test("constant time helper for HMAC signature comparison", function() {
+  equal(KJUR.jws.JWS._constantTimeEqual("abcd", "abcd"), true, "same string");
+  equal(KJUR.jws.JWS._constantTimeEqual("abcd", "abce"), false, "different same length");
+  equal(KJUR.jws.JWS._constantTimeEqual("abcd", "abc"), false, "different length");
+  equal(KJUR.jws.JWS._constantTimeEqual(null, "abcd"), false, "invalid input");
+});
+
 // *** ALGORITHM ACCEPTANCE TESTS *****************************************
 test("arg acceptAlgs test (HS256 not in [HS512])", function() {
   expect(1);
@@ -191,4 +198,3 @@ test("arg acceptAlgs test (HS256 in [HS256])", function() {
 </p>
 </body>
 </html>
-

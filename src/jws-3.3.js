@@ -165,6 +165,17 @@ KJUR.jws.JWS = function() {
     };
 };
 
+KJUR.jws.JWS._constantTimeEqual = function(a, b) {
+    if (typeof a != "string" || typeof b != "string") return false;
+    if (a.length !== b.length) return false;
+
+    var diff = 0;
+    for (var i = 0; i < a.length; i++) {
+	diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+    }
+    return diff === 0;
+};
+
 // === major static method ========================================================
 
 /**
@@ -394,6 +405,7 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
 	_KJUR_jws = _KJUR.jws,
 	_KJUR_jws_JWS = _KJUR_jws.JWS,
 	_readSafeJSONString = _KJUR_jws_JWS.readSafeJSONString,
+	_constantTimeEqual = _KJUR_jws_JWS._constantTimeEqual,
 	_KJUR_crypto = _KJUR.crypto,
 	_ECDSA = _KJUR_crypto.ECDSA,
 	_Mac = _KJUR_crypto.Mac,
@@ -486,7 +498,7 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
 	    mac.updateString(uSignatureInput);
 	    hSig2 = mac.doFinal();
 	//} catch(ex) {};
-	return hSig == hSig2;
+	return _constantTimeEqual(hSig, hSig2);
     } else if (sigAlg.indexOf("withECDSA") != -1) {
 	var hASN1Sig = null;
         try {
@@ -1095,4 +1107,3 @@ KJUR.jws.IntDate.intDate2Zulu = function(intDate) {
         sec =  ("00" + d.getUTCSeconds()).slice(-2);
     return year + mon + day + hour + min + sec + "Z";
 };
-
