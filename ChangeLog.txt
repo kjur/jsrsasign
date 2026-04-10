@@ -1,0 +1,2498 @@
+
+ChangeLog for jsrsasign
+
+* Changes from 11.1.0 to 11.1.1 (2026-Feb-20)
+  - security fix for DSA and BigInteger
+    - PR #651, #650, #649, #648, #647, #646, #645. Thank you @Kr0remer
+    - After assigned CVE number reports will be added.
+  - SECURITY.md added. Thank you @njg7194 
+
+restore KJUR.crypto.Cipher class without RSA/RSAOAEP support
+* Changes from 11.0.0 to 11.1.0 (2024-Feb-01)
+  - src/crypto.js
+    - restore KJUR.crypto.Cipher class without RSA and RSAOAEP encryption/decryption support
+
+remove RSA and RSAOAEP encryption for Marvin attack
+* Changes from 10.9.0 to 11.0.0 (2024-Jan-16)
+  - Major Changes:
+    - Stop to support Internet Explorer.
+    - Stop to support bower.
+    - Modern ECMA functions will be introduced such as Promise, let, Array methods or class.
+    - API document generator will be changed from Jsdoc Toolkit to JSDoc3.
+    - Module bandler will be used such as browserify or webpack.
+    - Not to use YUI compressor.
+    - Unit test framework will be changed from QUnit and mocha to jest.
+    - W3C Web Crypto API support.
+    - split into some modules besides jsrsasign have been all in package before 11.0.0.
+  - remove RSA PKCS#1.5 end OAEP encryption/decryption for Marvin attack (#598)
+  - src/crypto.js
+    - remove KJUR.crypto.Cipher class for RSA and RSAOAEP encryption/decryption
+  - ext/{rsa,rsa2}.js
+    remove encrypt/decrypt/encryptOAEP/decryptOAEP for RSAKey class
+
+enhanced support for encrypted PKCS8
+* Changes from 10.8.6 to 10.9.0 (2023-Nov-27)
+  - KEYUTIL.getPEM is updated not to use weak ciphers (#599)
+    - default encryptionScheme is changed from des-EDE3-CBC to aes256-CBC
+    - default prf is changed from hmacWithSHA1 to hmacWithSHA256
+  - src/keyutil.js
+    - more encrypted PKCS#8 private key support
+      - KEYUTIL.getKey now supports encrypted PKCS#8 private key with
+        aes128-CBC, aes256-CBC encrypted and using hmacWithSHA224/256/384/512 as
+        psudorandom function.
+      - KEYUTIL.getPEM now supports such as above encrypted PKCS#8 PEM 
+        priavte key.
+  - src/crypto.js
+    - Cipher.decrypt/encrypt now supports symmetric ciphers (des-EDE3-CBC,aes128-CBC,aes256-CBC)
+  - src/base64x.js
+    - function inttohex and twoscompl are added
+  - src/asn1.js
+    - ASN1Util.bigIntToMinTwosComplementsHex is now DEPRECATED. use twoscompl.
+  - src/asn1x509.js
+    - aes*-CBC and hmacWithSHA* OIDs are added
+  - test/qunit-do-{base64x,crypto-cipher,keyutil-eprv,keyutil,keyutil-p8egen}.html
+    - update and add some test cases for above
+  - stop bower support (bower.json removed)
+
+X509.getExtSubjectDirectoryAttributes another bugfix
+* Changes from 10.8.5 to 10.8.6 (2023-Apr-26)
+  - src/x509.js
+    - another bugfix X509.getExtSubjectDirectoryAttributes method
+
+X509.getExtSubjectDirectoryAttributes bugfix
+* Changes from 10.8.4 to 10.8.5 (2023-Apr-26)
+  - src/x509.js
+    - bugfix X509.getExtSubjectDirectoryAttributes method
+
+more SubjectDirectoryExtension support
+* Changes from 10.8.3 to 10.8.4 (2023-Apr-26)
+  - src/asn1x509.js
+    - SubjectDirectoryAttributes class
+      - add array of array support for arbitrary attribute value
+  - src/x509.js
+    - add X509.getExtSubjectDirectoryAttributes method for 
+      ExtSubjectDirectoryAttributes extension
+    - update X509.getExtParam method
+      - support SubjectDirectoryAttributes
+      - parse unknown extension as ASN.1
+  - src/base64x.js
+    - bugfix foldnl function: when length of s is multiple of n,
+      result has unnecessary new line in the end of string.
+  - qunit-do-{asn1x509,x509-ext,base64x,x500-param}.html
+    - update and add some test cases for above
+
+CABF SMIMEBR OID support
+* Changes from 10.8.2 to 10.8.3 (2023-Apr-20)
+  - src/asn1x509.js
+    - Add OIDs for CABR S/MIME BR policy OIDs and GN givenName attribute type
+
+RSA OAEP encryption fix
+* Changes from 10.8.1 to 10.8.2 (2023-Apr-15)
+  - ext/rsa.js
+    - fix RSAEncryptOAEP for RSA OAEP encryption #582 #583
+      In rare cases, it have been generated ciphertext that
+      could not be decrpyted.
+
+npm export missing fix
+* Changes from 10.8.0 to 10.8.1 (2023-Apr-09)
+  - npm/{package.json, lib/footer.js}
+
+UserNotice of CertificatePolicies support and more
+* Changes from 10.7.0 to 10.8.0 (2023-Apr-08)
+  - x509.js
+    - X509.getUserNotice supports NoticeReference
+    - add asn1ToDisplayText method
+  - base64x.js
+    - add function msectozulu
+    - add aryval for nested JSON value access
+  - asn1.js
+    - DERInteger refactoring
+  - test/qunit-do-{asn1,asn1x509,base64x,x509-ext}.html
+    - update and add some test cases for above
+
+custom X.509 extension support and utility functions
+* Changes from 10.6.1 to 10.7.0 (2023-Mar-12)
+  - x509.js
+    - add X509.registExtParser(): register custom extension parser
+  - base64x.js
+    - add utility functions
+      - b64topem() Base64 string to PEM
+      - pemtob64() PEM to Base64 string
+      - foldnl() wrap string to fit in specified width
+      - timetogen() align to UTCTime to GeneralizedTime
+  - test/qunit-do-{x509-ext,base64x}.html
+    - update and add some test cases for above
+
+Add PolicyMappings, PolicyConstraints and InhibitAnyPolicy extension support
+* Changes from 10.6.0 to 10.6.1 (2022-Nov-20)
+  - asn1x509.js
+    - KJUR.asn1.x509.{PolicyMappings,PolicyConstraints,InhibitAnyPolicy} class added
+    - KJUR.asn1.x509.Extension updated to support
+      PolicyMappings, PolicyConstraints and InhibitAnyPolicy
+  - x509.js
+    - X509.getExt{PolicyMappings,PolicyConstraints,InhibitAnyPolicy} method added
+    - X509.getCriticalExtV utility method added
+    - X509.getExtParam updated to support 
+      {PolicyMappings,PolicyConstraints,InhibitAnyPolicy}
+    - X509.getInfo updated to support
+      {PolicyMappings,PolicyConstraints,InhibitAnyPolicy}
+  - test/qunit-do-{asn1x509-tbscert,x509-ext,x509-getinfo,x509-param}.html
+    - update and add some test cases for above
+
+StringPrep DN canonicalization support and some fix
+* Changes from 10.5.27 to 10.6.0 (2022-Nov-04)
+  - x509.js
+    - X509.getParam
+      - add support for optional parameter "dncanon" and "dnhex"
+    - X509.getInfo
+      - update representation for AltName
+    - X509.{getIssuer,getSubect}
+      - add support for optional argument flagCanon, flagHex
+    - X509.c14RDNArray added to convert from RDN array to canonicalized 
+      DN name (a.k.a. StringPrep).
+    - X509.getX500Name 
+      - API document updated
+    - X509.getOtherName
+      - member name changed from "other" to "value" for
+        consistency with KJUR.asn1.x509.OtherName class constructor.
+      - Also oid member value in return object will be an oid name if defined.
+    - X509.setCanonicalizedDN added to set "canon" member value
+  - asn1x509.js
+    - smtpUTF8Mailbox oid added to OID class
+    - API document fix
+  - asn1.js
+    - DERTaggedObject API document update
+  - test/qunit-do-{asn1x509,x509-ext,x509-getinfo,x509-param,x509}.html
+    - update some test cases for above
+
+CSRUtil class enhancement
+* Changes from 10.5.25 to 10.5.26 (2022-Jul-14)
+  - src/asn1csr.js
+    - CSRUtil.verifySignature method added
+    - CSRUtil.getParam enhanced to support optional argument flagTBS
+  - test/qunit-do-asn1csr.html
+    - update some test cases for above
+
+CVE-2022-25898 Security fix in JWS and JWT validation
+* Changes from 10.5.24 to 10.5.25 (2022-Jun-23)
+  - src/jws.js
+    - JWS.verify and JWS.verifyJWT
+      - CVE-2022-25898 SECURITY FIX: 
+        verify and verifyJWT may accept signature with special characters 
+        or \number characters by mistake.
+        Please see security advisory:
+        https://github.com/kjur/jsrsasign/security/advisories/GHSA-3fvg-4v2m-98jf
+  - src/base64x.js
+    - function isBase64URLDot added
+  - test/qunit-do-jwt-veri.html
+
+X509.getParam bugfix for v1 certificate
+* Changes from 10.5.23 to 10.5.24 (2022-Jun-04)
+  - src/x509.js
+    - X509.getParam bugfix for X.509v1 certificate without extension
+
+BitString parsing bug fix
+* Changes from 10.5.22 to 10.5.23 (2022-May-27)
+  - src/base64x.js
+    - bitstrtobinstr bugfix fix
+  - src/asn1hex.js
+    - ASN1HEX.parse change for bin string range
+  - npm/lib/footers.js
+    - add missed exports (bitstrtobinstr, binstrtobitstr, 
+      namearraytobinstr, extendClass)
+  - test/qunit-do-{asn1hex-parse,base64x}.html
+    - add and fix some test cases for above
+
+DERBitString, KeyUsage and  tsp PKIFailureInfo critical bug fix
+* Changes from 10.5.21 to 10.5.22 (2022-May-24)
+  - src/asn1.js
+    - DERBitString critical bugfix
+  - src/asn1tsp.js
+    - PKIFailureInfo critical bugfix
+  - src/asn1x509.js
+    - KeyUsage critical bugfix
+  - src/base64.x
+    - namearraytobinstr critical bugfix
+  - test/qunit-do-{asn1,asn1tsp,asn1x509,base64x}.html
+    - add and fix some test cases for above
+
+DERBitString, KeyUsage and  tsp PKIFailureInfo fix
+* Changes from 10.5.20 to 10.5.21 (2022-May-23) *RELEASE RESIGNED*
+  - src/asn1x509.js
+    - KeyUsage bugfix, refactoring
+  - src/asn1tsp.js
+    - PKIFailureInfo bugfix, refactoring
+  - src/asn1.js
+    - DERBitString refactoring
+  - src/base64x.js
+    - new function namearraytobinstr added
+  - src/asn1ocsp.js
+    - ResponderID API document fix
+  - test/qunit-do-{asn1,asn1tsp,asn1x509,base64x,x509-ext}.html
+    - add and fix some test cases for above
+
+OCSP ResponderID object udpate
+* Changes from 10.5.19 to 10.5.20 (2022-Apr-25)
+  - src/asn1ocsp.js
+    - ResponderID class now also supports PEM certificate or
+      X509 object for key and name field.
+  - test/qunit-do-asn1ocsp.html
+    - add some test cases and fix for above
+  - remove silver sponsor
+
+Time stamp package update
+* Changes from 10.5.18 to 10.5.19 (2022-Apr-23)
+  - src/asn1tsp.js
+    - TimeStampResp class update to statusinfo member
+      will be optional. If omitted, it will be "granted" by default.
+    - API manual update for more detail
+
+Time stamp package update
+* Changes from 10.5.17 to 10.5.18 (2022-Apr-22)
+  - src/asn1tsp.js
+    - TSPParser.getTimeStampReq added
+    - TSPUtil.parse{TimeStampReq,MessageImprint} now *DEPRECATED*. Please use TSPParser.
+  - test/qunit-do-asn1tsp.html
+    - add some test cases and fix for above
+
+CIDR subnet mask support in iptohex and hextoip
+* Changes from 10.5.16 to 10.5.17 (2022-Apr-14)
+  - src/asn1x509.js
+    - add IP address support in NameConstraints class
+    - bugfix in NameConstraints ip address
+    - wrong ASN.1 encoder in NameConstraints class bug fix (wrong explicit tag)
+  - src/base64x.js
+    - add CIDR subnet mask support in iptohex and hextoip
+    - iptohex, hextoip refactoring
+  - test/qunit-do-{x509-ext,base64x,asn1x509-tbscert,asn1x509}.html
+    - add some test cases and fix for above
+
+Add NameConstraints extension and modify getEncodedHex to tohex
+* Changes from 10.5.15 to 10.5.16 (2022-Apr-08)
+  - src/asn1x509.js
+    - NameConstraints and GeneralSubtree class added
+    - add support for nameConstraints in Extensions class
+    - remove old GeneralName code
+  - src/x509.js
+    - getExtNameConstraints and getGeneralSubbtree method added
+    - add support for nameConstraints in getParam method
+    - X509.getParam supports optional arguments:
+      - tbshex: to return hexadecimal tbsCertificate value
+      - nodnarray: delete array member of subject and issuer 
+        in the result.
+  - src/x509crl.js
+    - X509CRL.getParam supports optional arguments:
+      - tbshex: to return hexadecimal tbsCertList value
+      - nodnarray: delete array member of subject and issuer 
+        in the result.
+  - src/asn1.js
+    - ASN1Object.tohex() method added
+    - ASN1Object.getEncodedHex() method is now DEPRECATED.
+      Please use ASN1Object.tohex() instead.
+    - clean up some codes
+  - src/*.js
+    - update for ASN1Object.tohex()
+  - test/qunit-do-x509-ext.html
+    - getExtNameConstraints and getGeneralSubtree method test added
+  - test/qunit-do-asn1x509.html
+    - NameConstraints and GeneralSubtree class test added
+  - test/qunit-do-asn1-newobj.html
+    - int and tag test refactoring
+    - bugfix
+
+X509.getExtCRLDistributionPointsURI small fix
+* Changes from 10.5.14 to 10.5.15 (2022-Apr-06)
+  - src/x509.js
+    - fix X509.getExtCRLDistributionPointsURI. This returns 
+      undefined when no CDP extension as specified in document
+      even though it is deprecated method.
+
+KEYUTIL.getPEM small fix
+* Changes from 10.5.13 to 10.5.14 (2022-Mar-28)
+  - src/keyutil.js
+    - fix KEYUTIL.getPEM when public key is not specified for ECDSA object.
+      optional public key field will be omitted in such case. (#549)
+  - test/qunit-do-*.html
+    - test case added for above updates.
+
+RSA key private generation fix
+* Changes from 10.5.12 to 10.5.13 (2022-Mar-18)
+  - ext/rsa2.js
+    - fix RSAGenerate for checking |p - q| (#546)
+
+support ISO 8859-1 TeletexString and BMPString for X500Name
+* Changes from 10.5.11 to 10.5.12 (2022-Mar-13)
+  - src/asn1hex.js
+    - ASN1HEX.parse fixed for TeletexString and BMPString
+    - ASN1HEX.parse TeletexString supports non-ASCII 
+      ISO 8859-1 Latin1 characters. Before this version,
+      only supports ASCII characters.
+    - hextoipv6 bug fix raised in some of enviroment
+  - src/base64x.js
+    - iso88591hextoutf8/utf8toiso88591hex added
+    - iso88591hextoutf8hex/utf8hextoiso88591hex added
+    - hextoipv6 fixed
+  - src/x509.js
+    - refactoring for X509.get{X500NameArray,RDN,AttrTypeAndValue}.
+      Add support for Teletex/BMPString and more attrTypes
+  - test/qunit-do-*.html
+    - test case added for above updates.
+      - qunit-do-base64x: add iso8859-1 / utf-8 converter tests
+      - qunit-do-asn1hex-parse: add TeletexString parse tests
+      - qunit-do-x509-ext: add NumericString/TeletexString X500Name tests
+
+asn1hex update
+* Changes from 10.5.10 to 10.5.11 (2022-Mar-12)
+  - src/ash1hex.js
+    - ASN1HEX.parse add NumericStiring(x12) support
+    - ASN1HEX.parse fix for "8x" tag (non structured tag)
+  - test/qunit-do-asn1hex.html
+    - test case added for above updates.
+
+hextoipv6 fix
+* Changes from 10.5.9 to 10.5.10 (2022-Mar-10)
+  - src/base64x.js
+    - fix hextoipv6 for shrinking leading zeros (#536)
+  - test/qunit-do-base64x.html
+    - test case added for above updates.
+
+small fix
+* Changes from 10.5.8 to 10.5.9 (2022-Mar-10)
+  - src/base64x.js
+    - fix zulutosec (#538)
+  - src/asn1csr.js
+    - fix CSRUtil.getParam (#544)
+  - test/qunit-do-{base64x,asn1csr}.html
+    - test case update for above updates.
+
+OCSP CertID and X509 class update
+* Changes from 10.5.7 to 10.5.8 (2022-Feb-25)
+  - src/asn1ocsp.js
+    - CertID class refactoring
+    - CertID.getParamByCerts method added
+  - src/x509.js
+    - DEPRECATED getPublicKeyHex method (use getSPKI instead)
+    - getSPKI, getSPKIValue method added
+    - getExtCRLDistributionPointsURI bugfix
+    - API document fix
+  - test/qunit-do-{asn1ocsp,x509-ext,x509,x509-v1}.html
+    - test case update and bugfix for above updates.
+
+X509CRL.findRevCert bugfix for empty revCerts
+* Changes from 10.5.6 to 10.5.7 (2022-Feb-19)
+  - src/x509crl.js 
+    - X509CRL.{findRevCert,findRevCertBySN} method fix for empty revCerts
+
+X509CRL.findRevCert bugfix
+* Changes from 10.5.5 to 10.5.6 (2022-Feb-17)
+  - src/x509crl.js X509CRL class
+    - fix sn error in findRevCert 
+
+CRL parser update
+* Changes from 10.5.4 to 10.5.5 (2022-Feb-17)
+  - src/x509crl.js X509CRL class
+    - add getIssuerHex method
+    - add findRevCert method
+    - add findRevCertBySN method
+  - test/x509crl.html update
+
+ASN.1 parser update and fix
+* Changes from 10.5.3 to 10.5.4 (2022-Feb-15)
+  - src/asn1.js
+    - DERTaggedObject
+      - refactoring
+      - add {tag: xx, str:"aaa"} parameter support
+      - add {tag: xx, hex:"616161"} parameter support
+      - setASN1Object method now *deprecated*. Please use setByParam
+  - src/asn1hex.js
+    - ASN1HEX.parse
+      - add encapsulated OctetString, BitString support
+      - add encapsulated structured TaggedObject support
+      - changed to return binary string for 3byte or less BitString value
+      - ObjectIdentifier fix when undefined OID name
+  - src/base64x.js
+    - added bitstrtobinstr/binstrtobitstr 
+    - utf8tohex fix for lower case hexadecimal string
+    - hextoutf8 fix for improper hexadecimal string for UTF-8
+    - bitstrtoint/inttobitstr fix for error case return
+  - test/qunit-do-asn1.html 
+    - TaggedObject test case update
+  - test/qunit-do-asn1hex-parse.html
+    - BitString, TaggedObject test case update
+  - test/qunit-do-base64x.html
+    - hextoutf8/utf8tohex testcase update
+    - bitstrtobinstr/binstrtobitstr testcase added
+
+add OtherName support in GeneralName
+* Changes from 10.5.2 to 10.5.3 (2022-Feb-10)
+  - add otherName support in GeneralName by PR
+    with small update (#535)
+  - src/asn1x509.js
+    - add otherName of GeneralName support (#535)
+    - GeneralName class refactoring
+    - add OtherName class
+  - src/x509.js
+    - add otherName of GeneralName support
+  - src/asn1hex.js
+    - add ASN1HEX.parse method
+  - src/asn1.js
+    - API doc and error exception fix 
+  - test/qunit-do-{asn1x509,x509-ext}.html
+    - test case added
+  - test/qunit-do-asn1hex-parse.html added
+
+small update for OID and JWK
+* Changes from 10.5.1 to 10.5.2 (2022-Feb-08)
+  - src/asn1x509.js
+    - add OID.{registerOIDs,checkOIDs} method
+  - src/keyutil.js
+    - getJWK, getJWKFromKey API doc update
+  - test/qunit-do-asn1x509.html updated
+    - test case added
+
+add KEYUTIL.getJWK, fix EC P-521 concat signature value and add support for P-521 JWS JWK
+* Changes from 10.5.0 to 10.5.1 (2021-Dec-01)
+  - fix ECC P-521 curve issues (#528)
+    - src/ecdsa-modified.js
+      - asn1SigToConcatSig fix P-521 issue
+      - concatSigToASN1Sig fix P-521 issue
+    - src/jws.js
+      - add ES512 support
+    - src/keyutil.js
+      - fix P-521 issue in getKey,getJWKFromKey,
+    - tool/tool_jwt.html
+      - add ES512 support
+    - test/qunit-do-ecdsamod-s.html
+      - add P-521 asn1SigToConcatSig tests
+      - add P-521 concatSigToASN1Sig tests
+    - test/qunit-do-ecdsamod.html
+      - add sha512 tests
+    - test/qunit-do-jws-sign.html
+      - add signing and verification ES512 test
+    - test/qunit-do-keyutil-ec.html
+      - add P-521 key test
+    - test/qunit-do-keyutil-jwk.html
+      - add P-521 private key test
+    - test/qunit-do-x509-key.html
+      - add P-521 certificate test
+  - JWK from X509 certificate (#529)
+    - this PR was merged but 
+      - X509.getPublicKeyJWK was moved to KEYUTIL.getJWK
+      - some tests in qunit-do-x509-jwk was moved to
+        qunit-do-keyutil-jwk
+      - readCertJWK was removed
+  - src/keyutil
+    - KEYUTIL.getJWK added and x5c/x5t/x5t#S256/kid member support
+    - KEYUTIL.getJWKFromKey now deprecated
+  - src/ecdsa-modified.js
+    - missing variable definition fix (#527)
+  - test/qunit-do-x509.html test error fix
+  - Great appreciate for @cplussharp 's contribution.
+
+Add EC support for secp521r1 secp224r1 secp192r1
+* Changes from 10.4.1 to 10.5.0 (2021-Nov-21)
+  - Add EC support for secp521r1 secp224r1 secp192r1 (#521 #519)
+    Thank you indeed for @cplussharp 's great work.
+    - EC key length bugs for newly supported curves are fixed.
+      - src/ecdsa-modified: key length fixes
+      - src/ecparam.js: add keycharlen property
+      - src/asn1x509.js: add secp521r1 OID
+      - test/qunit-do-ecdsamod.html: all test code passed
+      - test/qunit-do-ecdsamod-unsupport.html: all test code passed
+      - test/qunit-do-ecdsamod-s.html: all test code passed
+      - test/qunit-do-ecdsamod-nisttv.html: added for NIST EC keygen test
+      - sample/sample-ecdsa.html: add P-521
+  - sample/sample-rsasign.html
+    - fix to trim non hexadecimal strings (#517)
+
+GeneralizedTime, UTCTime refactoring and some bug fix
+* Changes from 10.4.0 to 10.4.1 release (2021-Sep-30)
+  - src/asn1.js
+    - refactoring of DERUTCTime, DERGeneralizedTime and DERAbstractTime
+    - now DERUTCTime support fraction of second
+  - src/asn1x509.js
+    - update Time class to follow DER{UTC,Generalized}Time update
+  - tool/tool_tsreq.html
+    - messageImprint bug fix (#504)
+  - tool/tool_tsres.html
+    - serialNumber bug fix (#505)
+  - jsrsasign-*-min.js
+    - header URL fix to kjur.github.io (#503)
+      (will be fixed in next release while rebuild)
+  - test/qunit-do-{asn1,asn1x509}.html updated 
+    - KJUR.asn1.DER{UTC,Generalized}Time, KJUR.asn1.x509.Time class
+      test case added and updated.
+
+Full support for parsing OCSP response
+* Changes from 10.3.2 to 10.4.0 (2021-08-17)
+  - asn1ocsp.js
+    - add OCSP response parser support in OCSPParser class (request #501)
+    - OCSPParser.get{OCSPResponse,ResponseBytes,BasicOCSPResponse,ResponseData,ResponderID,SingleResponseList,SingleResponse,CertStatus} methods added
+    - DEPRECATED: OCSPUtil.getOCSPResponseInfo
+  - test/qunit-do-asn1ocsp.html updated
+    - add test for OCSP response parser
+
+fix wrong OCSPRequest for EC public key certificate
+* Changes from 10.3.1 to 10.3.2 (2021-08-15)
+  - asn1ocsp.js
+    - CertID.setByCert fixed for issuer EC public key (issue #500)
+
+document fix for deprecated kjur.github.com domain
+* Changes from 10.3.0 to 10.3.1
+  - kjur.github.com domain is deprecated after Apr 15, 2021. So all kjur.github.com domain shall be updated to kjur.github.io. (#490)
+  - There is no bundled library (-all-min.js) nor npm update on this. license URL will be fixed in next release.
+
+remove all YUI dependency
+* Changes from 10.2.0 to 10.3.0 (2021-07-04)
+  - remove YUI library dependency
+  - LICENSE.txt
+    - remove YUI license
+  - src/base64x.js
+    - add extendClass function to replace YUI class extend
+  - src/*.js
+    - replace YAHOO.lang.extend to extendClass all
+  - src/keyutil.js
+    - change to raise exception in KEYUTIL class with Error class
+  - src/asn1x509.js
+    - API document update for Extesions and CRLReason class
+  - npm_util/package.json
+    - fix dependencies (#482)
+  - test/qunit-do-*.html
+    - updated to follow above
+  - test/qunit-do-base64x-class.html added
+    - test for extendClass function
+
+CVE-2021-30246 RSAKey.verify issue fix
+* Changes from 10.1.13 to 10.2.0 (2021-04-14)
+  - src/rsasign.js
+    - CVE-2021-30246 RSAKey.verify issue was fixed (#478)
+  - src/asn1cms.js
+    - IssuerSerial, IsseruAndSerialNumber API document update
+  - sample_node/asn1extract2
+    - change to "/usr/bin/env node"
+
+add non-ascii BMPString support
+* Changes from 10.1.12 to 10.1.13 (2021-03-08)
+  - src/base64x.js
+    - add ucs2hextoutf8 function
+  - src/x509.js
+    - X509.getAttrTypeAndValue supports non-ascii BMPString (#474)
+  - src/asn1hex.js
+    - ASN1HEX.dump supports non-ascii BMPString
+  - test/qunit-do-{asn1hex-dump,x509-ext,base64x}.html
+    - updated to follow above
+
+fix for wrong UTF-8 encoding in distinguished name parser
+* Changes from 10.1.11 to 10.1.12 (2021-02-25)
+  - src/x509.js
+    - fix X509.getAttrTypeValue (#473)
+      - attribute value is converted by hextoutf8 not hextorstr
+    - X509.getIssuerString update to use getIssuer
+    - X509.getSubjectString update to use getSubject
+    - X509.dnarraytostr fix to escape "+" and "/"
+    - X509.hex2dn update to use getX500Name
+  - test/qunit-do-x509-ext.html
+    - updated to follow above
+
+update X509.getVersion and add jsrsasign-util saveFileJSON
+* Changes from 10.1.10 to 10.1.11 (2021-02-19)
+  - src/x509.js
+    - X509.getVersion supports other than 
+      empty(DEFAULT =v1) and [0] {INTEGER 2} (=v3).
+      Thus version checking is relaxed. (#471)
+  - src/nodeutil.js (jsrsasign-util 1.0.4)
+    - add saveFileUTF8
+    - saveFileJSON API document fix
+
+extend support for distinguished name
+* Changes from 10.1.9 to 10.1.10 release (2021-02-14)
+  - src/asn1x509.js
+    - AttributeTypeAndValue
+      - add support for OID and oid name constructor 
+        AttributeTypeAndValue({str: "/streetAddress=foo"})
+        AttributeTypeAndValue({str: "/2.5.4.9=foo"})
+    - OID.name2oidList
+      - add givenName
+  - test/qunit-do-asn1x509.html
+    - updated to follow above
+
+Add SubjectDirectoryAttributes extension support
+* Changes from 10.1.8 to 10.1.9 release (2021-02-12)
+  - src/asn1x509.js
+    - SubjectDirectoryAttributes class added
+    - Extensions class updated to support
+      SubjectDirectoryAttributes
+    - OID class update to support OIDs
+      such as gender, placeOfBirth et.al. for
+      SubjectDirectoryAttributes.
+    - SubjectDirectoryAttributes parser is
+      needed to be implemented in X509.js future.
+  - test/qunit-do-asn1x509.html
+    - updated to follow above
+
+KEYUTIL supports PKCS8 private key with extension
+* Changes from 10.1.5 to 10.1.8 release (2021-02-08)
+  - src/keyutil.js
+    - KEYUTIL.parsePlainPrivatePKCS8Hex now supports
+      private key extsion and and issue #454 fixed.
+  - test/qunit-do-keyutil-eprv.html
+    - updated to follow above
+
+CAdES-T support update and fix
+* Changes from 10.1.4 to 10.1.5 release (2021-01-17)
+  - tool/tool_cades.html fix (#465)
+    - now works fine again for CAdES-T demo
+  - src/asn1cms.js
+    - SignerInfo class
+      - unsigned attribute support again
+    - Attribute class 
+      - add signaturePolicyIdentifier support
+      - add signatureTimeStamp support
+    - CMSParser class
+      - add signaturePolicyIdentifier support
+      - add setSignaturePolicyIdentifier method
+  - src/asn1cades.js
+    - CAdESUtil class
+      - parseSignedDataForAddingUnsigned modified to use CMSParser
+      - addSigTS removed since it was empty method
+      - parseSignerInfoForAddingUnsigned is deprecated since
+        parseSignedDataForAddingUnsigned will not call it.
+  - src/crypto.js
+    - Mac API document fix (#466)
+
+getPKIStatusInfo bugfix
+* Changes from 10.1.3 to 10.1.4 release (2020-11-23)
+  - asn1tsp.js
+    - TSPParser class
+      - getPKIStatusInfo out parameter name bugfix
+  - test/qunit-do-asn1hex.html
+    - updated to follow above
+
+TSPParser.getPKIStatusInfo update
+* Changes from 10.1.2 to 10.1.3 release (2020-11-22)
+  - asn1tsp.js
+    - TSPParser class
+      - getPKIStatusInfo updated to
+        supports PKIFreeText and PKIFailureInfo
+      - getPKIFreeText added
+      - getPKIFailureInfo added
+  - asn1hex.js
+    - ASN1HEX class
+      - getString added
+      - getInt method updated to supports ASN.1 BitString
+  - base64x.js
+    - function bitstrtoint, inttobitstr added
+  - test/qunit-do-{asn1hex,asn1tsp,base64x}.html
+    - updated to follow above
+
+add SigningCertificateV2 for CMSParser and issue fix
+* Changes from 10.1.1 to 10.1.2 release (2020-11-21)
+  - src/asn1cms.js
+    - CMSParser
+      - getAttribute updated to support
+        SigningCertificateV2
+      - add setSigningCertificateV2 method
+      - add getESSCertIDv2 method
+      - change sortflag of result parameter to true in 
+        CMSParser.getCertificateSet 
+  - test/qunit-do-asn1cms.html
+    - updated to follow above
+
+CMSSignedData and TimeStamp parser bugfix
+* Changes from 10.1.0 to 10.1.1 release (2020-11-20)
+  - src/asn1tsp.js
+    - "serialNumber" parameter was changed to
+      "serial" in TSTInfo class and TSPParser.getTSTInfo
+      method.
+  - src/asn1cms.js
+    - change method name CMSParser.getAttributeArray to 
+      CMSParser.getAttributeList to align to the name
+      AttributeList class.
+    - getAttributeList returns JSON parameter which
+      can be accepted by AttributeList constructor.
+    - wrong sighex value for signature value
+      by getSignerInfo method was fixed.
+  - test/qunit-do-asn1tsp.html
+    - updated to follow above
+
+add new CMSSignedData and TimeStamp parser and X500Name update
+* Changes from 10.0.5 to 10.1.0 release (2020-11-19)
+  - add new CMSSignedData and TimeStamp parser
+  - X500.get{X500Name,GeneralName,GeneralNames} result change
+  - src/asn1cms.js
+    - new CMSParser class for CMS SignedData
+      - get{CMSSignedData,SignedData,HashAlgArray,
+        EContent,SignerInfos,SignerInfo,SignerIdentifier,
+	IssuerAndSerialNumber,AttributeArray,
+	Attribute,ESSCertID,IssuerSerial,CertificateSet}
+      - set{ContentType,SigningTime,MessageDigest,
+        SigningCertificate}
+  - src/asn1tsp.js
+      - new TSPParser class to parser RFC 3161 TSP protocol
+      - get{Response,Token,TSTInfo,Accuracy,MessageImprint,
+        PKIStatusInfo}
+      - setTSTInfo
+  - src/asn1.js
+    - DERObjectIdentifier class update to use new oidtohex
+  - src/asn1hex.js
+    - add ASN1HEX.{getInt,getOID,getOIDName}
+  - src/asn1csr.js
+    - CSRUtil.getParam result "subject" parameter result is changed
+      because of X509.getX500Name update.
+  - src/asn1x509.js
+    - small update for Time class
+    - small update for Certificate.sign method
+    - document fix (issue #463)
+  - src/base64x.js
+    - function "oidtohex" and "hextooid" added.
+    - function "ishex" added
+    - KJUR.lang.String.isHex now *DEPRECATED*. Please use "ishex".
+  - src/x509.js
+    - X509.getX500Name update
+      - X509.get{Issuer,Subject,GeneralNames,GeneralName}
+    - add X509.{getX500NameArray,dnarraytostr}
+  - src/x509crl.js
+    - X509CRL.getIssuer update for X509.getX500Name update
+  - test/qunit-do-{asn1tsp,asn1cms,asn1hex,asn1x509-newcert-veri,
+    base64x,x509-ext,x509crl}.html
+    - updated to follow above
+
+small issue fixes and updates
+* Changes from 10.0.4 to 10.0.5 release
+  - src/base64x.js
+    - utf8tob64u, b64utoutf8 
+      replace new Buffer() to Buffer.from() for 
+      Node.JS deprecation (issue #460)
+  - src/asn1x509.js
+    - P-256 oid added in OID class (PR #461 #333)
+  - src/x509.js
+    - document fix
+  - tool/tool_csr.html
+    - update to show ASN.1 dump of CSR
+  - test/qunit-do-base64x.html, npm/test/t_base64x.js
+    - update test code to follow above
+
+add methods to modify some extension parameters
+* Changes from 10.0.3 to 10.0.4 (2020-Oct-23)
+  - src/x509.js
+    - add X509.updateExt{CDPFullURI,AIAOCSP,AIACAIssuer} method
+  - src/nodeutil.js
+    - add read{JSON,JSONC},saveJSON,printJSON method added
+    - jrsasign-util npm package updated
+  - test/qunit-do-x509-param.html
+    - updated to follow above
+
+add findExt method in X509 class
+* Changes from 10.0.2 to 10.0.3 (2020-Oct-21)
+  - src/x509.js
+    - add X509.findExt method
+  - test/qunit-do-x509-param.html
+    - updated to follow above
+
+AdobeTimeStamp X.509v3 extension parser bugfix
+* Changes from 10.0.1 to 10.0.2 (2020-Oct-14)
+  - src/x509.js
+    - X509.getExtAdobeTimeStamp method bugfix
+
+AdobeTimeStamp X.509v3 certificate extension added
+* Changes from 10.0.0 to 10.0.1 (2020-Oct-13)
+  - src/asn1x509.js
+    - AdobeTimeStamp class added
+    - add AdobeTimeStamp support in Extension class
+    - add "adobeTimeStamp" OID in OID class
+  - src/x509.js
+    - add getExtAdobeTimeStamp method to X509 class  
+    - add "adobeTimeStamp" support in getExtParam
+  - src/asn1.js
+    - DERBoolean add support for "false" value.
+  - test/qunit-do-{asn1,asn1x509,x509}.html
+    - updated to follow above
+
+Major update for CMS SigneData TimeStamp and CAdES
+* Changes from 9.1.9 to 10.0.0 (2020-Sep-24)
+  - major update for CMS SignedData related classes
+    to allow more simple ASN.1 generation
+  - src/asn1cms.js
+    - new architecture updates in
+      SignedData, Attribute
+      - all implemented Attributes such as
+        ContentType, SigningTime are also
+        updated.
+    - new class added
+      - ESSCertID
+      - ESSCertIDv2
+      - SignerIdentifier
+      - SubjectKeyIdentifier
+      - CertificateSet
+      - RevocationInfoChoices
+      - RevocationInfoChoice
+      - OtherRevocationFormat
+    - following class/methods are now *deprecated*
+      - CMSUtil.newSignedData
+  - src/asn1tsp.js
+    - aligned to new architecture:
+      - TSTInfo, Accuracy, PKIStatusInfo,
+        PKIStatus, PKIFreeText, PKIFailureInfo,
+    - new class added
+      - TimeStampToken
+    - following class/methods are now *deprecated*
+      - SimpleTSAAdapter, FixedTSAAdapter,
+        TSPUtil.newTimeStampToken
+  - src/asn1cades.js
+     - aligned to new architecture
+      - SignaturePolicyIdentifier, OtherHashAlgAndValue,
+        SignatureTimeStamp, CompleteCertificateRefs,
+        OtherCertID, OtherHash
+     - new class added
+      - SignaturePolicyId, OtherHashValue
+  - src/asn1.js
+    - DERTaggedObject add support for simple
+      argument for explicit "tage" and implicit "tagi"
+    - newObject add support for "asn1" property
+    - DERObjectIdentifier constructor argument
+      now accepts name and OID. method
+      setValueNameOrOid added.
+  - src/x509.js
+    - X509(certPemOrHex)
+      X509 class constructor add support for
+      PEM or hex string of certificate as 
+      argument.
+  - src/asn1x509.js
+    - OID class: signaturePolicyIdentifier attribute
+      OID added.
+
+wrong encoding in CRLReason in OCSP CertStatus fixed
+* Changes from 9.1.8 to 9.1.9 (2020-Sep-08)
+  - src/asn1ocsp.js
+    - BUGFIX: wrong encoding in CRLeason in OCSP CertStatus fixed
+  - test/qunit-do-asn1ocsp.html
+    - follow to above update
+
+wrong encoding in byKey of OCSP ResponderID fixed
+* Changes from 9.1.7 to 9.1.8 (2020-Sep-08)
+  - src/asn1ocsp.js
+    - BUGFIX: wrong encoding in byKey of OCSP ResponderID fixed
+  - test/qunit-do-asn1ocsp.html
+    - follow to above update
+
+nextUpdate encoding bugfix in ocsp SingleResponse
+* Changes from 9.1.6 to 9.1.7 (2020-Sep-08)
+  - src/asn1ocsp.js
+    - BUGFIX: nextUpdate encoding fix in SingleResponse
+    - CertStatus document fix
+  - test/qunit-do-asn1ocsp.html
+    - follow to above update
+
+add OCSP response and request encoder
+* Changes from 9.1.5 to 9.1.6 (2020-Sep-05)
+  - src/asn1ocsp.js
+    - OCSPResponse class added
+    - ResponseBytes class added
+    - BasicOCSPResponse class added
+    - ResponseData class added
+    - ResponderID class added
+    - SingleResponseList class added
+    - SingleResponse class added
+    - CertID class updated
+      - changed properties to specify 
+        isserNameHash, issuerKeyHash and serialNumber
+        without backward compatibility
+    - CertStatus class added
+    - OCSPParser class added
+      - only OCSP request parser methods are available
+  - src/asn1x509.js
+    - OCSPNonce class OCSP extension added
+    - OCSPNoCheck class certificate extension added
+    - Extensios class supports OCSPNonce and OCSPNoCheck
+    - OID clas supports ocspNonce, ocspNoCheck and ocspBasic
+  - src/x509.js
+    - X509.getExtParam supports OCSPNonce and OCSPNoCheck
+    - X509.getExtOCSPNoCheck added
+    - X509.getExtOCSPNonce added
+  - src/asn1.js
+    - ASN1Object class: add tlv parameter support 
+  - src/asn1hex.js
+    - ASN1HEX.dump: enable to show tagged primitive
+
+ASN1HEX getChildIdx bug for too many children
+* Changes from 9.1.4 to 9.1.5 (2020-Aug-29)
+  - src/asn1hex.js
+    - BUGFIX: ASN1HEX.getChildIdx didn't returns
+      proper result when too many child items
+      such as over 200 children.
+    - add ASN1HEX.getTLVblen method
+    - DEPRECATED: getNextSiblingIdx. Please
+      use getTLVblen instead.
+
+X509CRL parser revokedCertificate bugfix
+* Changes from 9.1.3 to 9.1.4 (2020-Aug-28)
+  - src/asn1hex.js
+    - get{Idx,V,TLV}byList return value aligned to 
+      get{Idx,V,TLV}byListEx.
+  - src/x509crl.js
+    - BUGFIX: error when nextUpdate exists and 
+      no revokedCertificates
+
+missed to export X509CRL in npm package
+* Changes from 9.1.2 to 9.1.3 (2020-Aug-28)
+  - npm/lib/footer.js
+    - export X509CRL
+  - NOTE: only npm package released
+
+add private extension support for Cert CRL and CSR
+* Changes from 9.1.1 to 9.1.2 (2020-Aug-27)
+  - undefined extension regarded as private extesion
+    in extension parser X509.getExtParam.
+    Thus certificate, CRL and CSR parser will
+    not raise error when undefined extension
+    is parsed.
+  - src/x509.js
+    - unknown extension is parsed as
+      private extension.
+  - test/qunit-do-{x509-param}.html
+    - add test case to follow above update
+
+new CRL parser and private extension encoder support
+* Changes from 9.1.0 to 9.1.1 (2020-Aug-27)
+  - add new X509CRL class for CRL parser
+  - add Certificate, CSR and CRL private extension support
+  - src/x509crl.js (new)
+    - X509CRL class
+  - src/x509.js
+    - new X509.getExtCRLNumber method for extension parser
+    - new X509.getExtCRLReason method for extension parser
+    - new X509.getExtParam method for parsing one extension 
+      - NOTE: not yet support for private extension
+  - src/asn1x509.js
+    - Extensions class: add support for private extension
+    - PrivateExtension class added
+    - OID.name2oid: add support OID (ex. "1.2.3.4") as argument
+  - src/asn1csr.js
+    - CSRUtil.getParam update to support X509.getExtParamArray and
+      not using X509.parseExt
+  - src/asn1.js
+    - getLengthHexFromValue small update for exception
+  - test/qunit-do-{asn1x509,asn1x509-tbscert,x509}.html
+    - update to follow above updates
+  - test/x509csr.html (new)
+
+new CRL APIs and other updates
+* Changes from 9.0.3 to 9.1.0 (2020-Aug-24)
+  - CRL constructor update to align Certificate
+    class without backward compatibility.
+  - BUGFIX: SigningCertificate{,V2} encoding bugifx
+  - src/asn1cms.js
+    - BUGFIX: SigningCertificate{,V2} encoding have been
+      missign SEQUENCE. (#448)
+  - src/asn1csr.js
+    - CertificationRequestInfo class updated to
+      new KJUR.asn1.x509.Extension class.
+  - src/asn1x509.js
+    - CRL and TBSCertList class constructor have 
+      been updated to align Certificate and
+      CertificationRequestInfo style in 9.0.0
+      without backward compatibility.
+      - this update makes more extension and
+        entry extension support in the future.
+      - CRLEntry class is *deprecated* since
+        no more used in updated TBSCertList.
+    - new CRLNumber extension class added
+    - new CRLReason entry extension class added
+    - OID class updated to support 
+      cRLNumber and cRLReason oids
+    - TBSCertificate.getExtDERSequence method
+      was moved to new Extensions class.
+    - ASN1HEX.dump updated to support ENUMERATED
+  - test/qunit-do-{asn1cms,asn1tsp,asn1x509-tbscert,
+    asn1x509} updated to follow above updates.
+
+TimeStampToken ASN.1 encoding error fix
+* Changes from 9.0.2 to 9.0.3 (2020-Aug-22)
+  - BUGFIX: tsa field of TSTInfo was not encoded properly. (#450)
+  - BUGFIX: CMSSignedData version of TimestampToken was not 3. (#448)
+  - src/asn1tsp.js
+    - TSTInfo tsa field fix
+    - TSTUtil.newTimeStampToken method to set
+      CMSVersion 3.
+
+PolicyInformation named policy OID bug fix
+* Changes from 9.0.1 to 9.0.2 (2020-Aug-22)
+  - BUGFIX: KJUR.asn1.tsp.PolicyInformation class constructor
+    have not been accepted named policy OID such as "anyPolicy".
+    The issue was fixed.
+  - src/asn1x509.js
+    - PolicyInformation bugfix for above.
+  - test/qunit-do-asn1x509.html
+    - updated to follow above.
+
+TimeStampToken contentType attribute bug fix
+* Changes from 9.0.0 to 9.0.1 (2020-Aug-21)
+  - BUGFIX: KJUR.asn1.tsp.TimeStampToken class generates have 
+    generated with wrong contentType attribute
+    with value "data". (#448)
+  - src/asn1tsp.js
+    - TimeStampToken class constructor will add
+      contentType attribute with "tstinfo" for bugfix. (#448).
+  - src/asn1cms.js
+    - SignerInfo.setForContentAndHash class constructor
+      parameter can have "contentType" property additionaly
+      to set "tstinfo" as above.
+  - src/asn1x509.js
+    - some attribute type oids for CMS signedData are
+      added to OID.name2oidList.
+
+Certificate and CSR generator and parser API major updates
+* Changes from 8.0.24 to 9.0.0 (2020-Aug-19)
+  - Please see migration notes in wiki:
+    https://github.com/kjur/jsrsasign/wiki/NOTE-jsrsasign-8.0.x-to-9.0.0-Certificate-and-CSR-API-migration-guide
+  - CAUTION: some certificate and CSR APIs are missing
+    backward compatibility so you may need to change your code
+    to upgrade jsrsasign 9.0.0.
+  - src/asn1x509.js
+    - JSON argument format of Certificate and all certificate
+      extension class were changed without backward compatibility.
+      - They can accept JSON objects from ASN.1 parser methods 
+        in X509 class as an parameter arguments.
+      - Certificate class constructor can automatically 
+        generate TBSCertificate and sign by params argument.
+        So no need to call sign method or TBSCertificate 
+        constructor.
+      - JSON argument format are aligned to the same manner
+        among all certificate extension class.
+      - For CRLDistributionPoints class, JSON argument format
+        of DistributionPoint and DistributionPointName
+        was changed.
+    - Extension.appendByNameToArray method was removed.
+    - "array" key was added to X500Name class constructor
+      JSON argument.
+      - AttributeTypeAndValue constructor argument also
+        extended to support {type:"CN",value:"Test",ds:"prn"}
+        style JSON object.
+    - X509Util.newCertPEM argument format is updated to
+      align Certificate class and is *deprecated*.
+  - src/x509.js
+    - returned JSON object format by all "get*" parser method 
+      was changed to accept by related class defined in asn1x509.js
+      without backward compatibility.
+    - all certificate extension parsing methods are
+      changed to have "hExtV" and "critical" as arguments.
+    - following methods are added:
+      getAlgorithmIdentifierName, getIssuer, getSubject,
+      getGeneralNames, getGeneralName, getDistributionPoint,
+      getDistributionPointName, getExtAuthorityInfoAccess,
+      getPolicyInformation, getPolicyQualifierInfo,
+      getUserNotice, getDisplayText, getX500NameRule,
+      getX500Name, getRDN, getAttrTypeAndValue, getParam,
+      getExtParamArray
+    - following methods are *deprecated*:
+      getExtSubjectAltName2, getExtAIAInfo, 
+      getExtCRLDistributionPointsURI.
+    - X509Util.newCertPEM bugfix. 
+      Got error when cakey is PKCS#5 plain PEM key string
+  - src/asn1csr.js
+    - JSON argument format was changed in CertificationRequest, 
+      CertificationRequestInfo, CSRUtil.netCSRPEM without
+      backward compatibility.
+    - CSRUtil.getInfo was renamed to CSRUtil.getParam
+    - CSRUtil.netCSRPEM is now *deprecated*
+  - src/asn1.js
+    - ASN1Util.newObject can also conclude ASN1Object
+      as well as JSON parameter.
+  - tool/tool_{ca,ca2}.html
+    - changed to follow above updates.
+  - test/*.html
+    - following test pages are updated to follow above:
+      qunit-do-{asn1csr,asn1tsp,asn1x509-newcrt,asn1x509,base64x,
+      ecdsmod-s,keyutil-getpem,package-jwths,x509-ext,
+      x509-key,x509-kid,x509}.html
+    - following test pages are added:
+      qunit-do-{asn1x509-tbscert,x509-param}.html
+
+fix SigningCertificate v1 v2 attribute ASN.1 encoding
+* Changes from 8.0.23 to 8.0.24 (2020-Aug-18)
+  - KJUR.asn1.cms.{SigningCertificate,SigningCertificateV2}
+    wrong ASN.1 encoding issue was fixed (#448)
+  - src/asn1cms.js
+    - KJUR.asn1.cms.{SigningCertificate,SigningCertificateV2}
+      ASN.1 encoding issue fixed (#448)
+    - added KJUR.asn1.cms.IssuerSerial
+  - src/base64x.js
+    - String.{isPritable,isIA5,isMail} methods added
+  - test/qunit-do-asn1{cms,tsp}.html
+    - updated for above issue
+
+add CertificatePolicies BMPString and VisibleString support
+* Changes from 8.0.22 to 8.0.23 (2020-Aug-06)
+  - src/asn1x509.js
+    - CertificatePolicies class added
+    - update Estension.appendByNameToArray for
+      CertificatePolicies
+    - PolicyInformation, PolicyQualifierInfo, UserNotice,
+      NoticeReference and DisplayText class added
+  - src/asn1.js
+    - BMPString and VisibleString class added
+    - update ASN1Util.newObject for {BMP,Visible}String
+  - src/asn1hex.js
+    - update ASN1HEX.dump for {BMP,Visible}String
+  - test qunit-do-{asn1,asn1-newobj,asn1x509,asn1hex-dump}.html
+
+ASN1HEX and X509 class minior bug fix
+* Changes from 8.0.21 to 8.0.22 (2020-Aug-05)
+  - src/asn1hex.js
+    - dump method update for BitString encapsulated
+  - src/x509.js
+    - getKeyUsageBin bugfix for such keyCertSign and cRLSign only 
+    - fix to stop raising error when X509 constructor called and
+      asn1x509 doesn't loaded
+    - TODO: getKeyUsageBin still has bug when decipherOnly(8) bit exists
+  - test
+    - qunit-do-{asn1hex-dump,x509-{ext,key}}.html to follow above updates
+
+Donation program started, more RSA-PSS support and add ASN1HEX.get{Idx,TLV,V}byListEx
+* Changes from 8.0.20 to 8.0.21 (2020-Aug-01)
+  - *donation program* have been started.
+    Please consider donation to sustain this project
+    https://github.com/kjur/jsrsasign#donations    
+  - RSA-PSS support in AlgorithmIdentifier, Signature, 
+    X509 and newCertPEM
+  - new method to access ASN.1 decendant object 
+    ASN1HEX.get{Idx,TLV,V}byListEx added
+    Its tutorial page will be provided by following URL near in future
+    https://github.com/kjur/jsrsasign/wiki/Tutorial-for-accessing-deep-inside-of-ASN.1-structure-by-using-new-ASN1HEX.getIdxbyListEx
+  - src/x509.js
+    - update getSignatureAlgorithmField to support
+      RSA-PSS(SHA{,256,384,512}withRSAandMGF1) algorithms
+    - update verifySignature to support
+      RSA-PSS(SHA{,256,384,512}withRSAandMGF1) algorithms
+  - src/crypto.js
+    - Signature class
+      - SHAwithRSAandMGF1 supported (the same as SHA1withRSAandMGF1)
+  - src/asn1hex.js
+    - ASN1HEX.getIdxbyList
+    - add get{Idx,TLV,V}byListEx for context specific tag
+    - add ASN1HEX.isContextTag to check context
+      specific tag
+    - get{Idx,TLV,V} will be deprecated near in the future version
+      Please consider to move get{Idx,TLV,V}byListEx.
+  - src/{asn1csr,dsa,rsapem,ecdsa-modified}.js
+    - replace to use get{Idx,TLV,V}byListEx
+  - test/qunit-do-asn1x509.html
+    - add Certificate class test for RSA-PSS
+    - add TBSCertificate class test for RSA-PSS
+    - add AlgorithmIdentifier class test for
+      SHA{,256,384,512}withRSAandMGF1
+  - test/qunit-do-crypto-pss.html
+    - add Signature class test for 
+      SHAwithRSAandMGF1.
+  - test/qunit-do-asn1x509-newcrt.html
+    - add newCertPEM test for RSA-PSS
+  - test/qunit-do-x509.html
+    - add getSignatureAlgorithmField test for
+      SHA{,256,384,512}withRSAandMGF1
+  - sample_node/asn1extract2
+    - bug fix for -v(--vonly) option
+  - test/qunit-do-asn1hex.html
+    - add test for ASN1HEX.isContextTag
+
+add CSR support for subjectAltName
+* Changes From 8.0.19 to 8.0.20
+  - src/asn1csr.js
+    - CSRUtil.getInfo
+      - add ext parameter to show subjectAltName property
+      - change not to raise error when subject name is empty in CSR
+  - src/x509.js
+    - X509.parseExt
+      - add support for CSR extension request field
+  - src/asn1hex.js
+    - ASN1HEX.getIdxbyList
+      - small update for exception
+  - test/
+    - qunit-do-{asn1csr, x509}.html to add tests for above.
+
+ECDSA signature validation maleability fix and others
+* Changes from 8.0.18 to 8.0.19
+  - src/ecdsa-mod.js
+    - ECDSA.verifyHex fixed for some types of maleability (#437)
+  - src/asn1hex.js
+    - ASN1HEX.checkStrictDER added
+  - src/asn1x509.js
+    - It's founded that OpenSSL's DN representation like
+      "/C=US/O=test" is "compat" format. So those methods
+      are added and existing method is now deprecated.
+      - X500Name.{ldapToOneline, onelineToLdap} are now deprecated.
+      - X500Name.{ldapToCompat, compatToLdap} are added.
+  - src/x509.js
+    - update for compatToLdap and ldapToCompat
+  - src/crypto.js
+    - document update
+
+RSA decryption and RSA signature validation maleability fix
+* Changes from 8.0.17 to 8.0.18
+  - ext/rsa2.js
+    - CVE-2020-14967 RSADecrypt fixed for zero prepending maleability (#439)
+    - RSADecryptOAEP fixed for zero prepending maleability
+  - src/rsasign.js
+    - verifyWithMessageHash fixed for zero prepending maleability
+  - test
+    - qunit-do-crypto-cipher.html: some test case added for above    
+
+* Changes from 8.0.16 to 8.0.17
+  - src/rsasign.js
+    - CVE-2020-14968
+      verifyWithMessageHashPSS fixed for prepending zeros maleability (#438)
+  - src/asn1x509.js
+    - allow alternative algorithms to sign CRLs (#440)
+  - src/asn1cms.js
+    - improve CMSUtil.newSignedData helper with detached signatures (#441)
+  - ext/rsa2.js
+    - RSAGenerate fixed for not having requesting key length (#442)
+  - sample_node
+    - pemtobin was fixed for pemtohex function
+  - test
+    - qunit-do-rsagenkeylen.html new test code for (#442)
+    - qunit-do-rsasign-pss.html add maleability test code (#438)
+    - index.html, qunit-do-x509.html link update
+
+extended Authority/SubjectKeyIdentifier support
+* Changes from 8.0.15 to 8.0.16 (2020-Mar-29)
+  - src/asn1x509.js
+    - AuthorityKeyIdentifier class
+      - issuerDN ASN.1 encoding bug fixed
+      - now keyIdentifier is automatically calculated
+        by certificate or key
+      - issuer dn and serial number can be set
+        by certificate
+    - SubjectKeyIdentifier class
+      - now keyIdentifier is automatically calculated
+        by certificate or key
+    - X500Name class
+      - certissuer and certsubject parameter is added
+        to set value by issuer or subject of certificate.
+    - GeneralName class
+      - dn parameter support was updated.
+  - src/keyutil.js
+    - getKeyID method added to calcalate a key identifier 
+      for certificate.
+  - crypto.js
+    - Util.isKey static method added
+    - Signature.{sign,verify} method bug fix for ECDSA
+    - code refactoring
+  - src/asn1csr.js
+    - strict mode fix (pull #410)
+  - src/jws.js
+    - strict mode fix (pull #347)
+  - src/jwsjs.js
+    - readJWSJS fix (pull #373)
+  - sample_node/asn1extract2
+    - sample added. more flexible use than asn1extract.
+  - test/qunit-do-crypto.html
+    - getRandom test fix
+  - test/qunit-do-asn1x509-newcrt.html
+    - test case expected value fix
+
+SHA384/512withECDSA wrong signature fix and add some curves support
+* Changes from 8.0.14 to 8.0.15 (2020-Apr-13)
+  - src/ecdsa-modified.js
+    - SHA384withECDSA, SHA512withECDSA signature
+      wrong validation result issue was fixed (issue #394)
+    - secp192k1, secp224r1 curve are now supported
+    - test/qunit-do-ecdsamod.html
+      testcase added for SHA1/SHA384/SHA512 and 
+      secp192k1/secp224r1
+  - sample_node command added
+    - genkey: keypair generation
+    - eckey2hex: show EC PKCS#1/8 private/public key in hex format
+
+* Changes from 8.0.13 to 8.0.14 (2020-Apr-03)
+  - src/asn1x509-1.0.js
+    - add SubjectKeyIdentifier class (issue #402)
+      - add SubjectKeyIdentifier support in 
+        TBSCertificate.appendExtensionByName method
+      - test/qunit-do-asn1x509.html
+        SubjectKeyIdentifier test added
+  - src/base64x.js
+    - add multi section support for pemtohex
+      such as EC PRIVATE KEY and EC PARAMETRS
+    - test/qunit-do-base64x.html 
+      pemtohex testcase added
+  - src/keyutil.js (pull #415)
+    - add support for multi section plain PKCS#5 EC PRIVATE KEY
+    - test/qunit-do-keyutil-ec.html
+      plain PKCS#5 EC PRIVATE KEY testcase added
+  - src/asn1csr-1.0.js
+    document fix (pull #356)
+  - npm_util/Makefile
+    merged (pull #216)
+  - src/rsasign-1.2.js
+    merged for RegExp (pull #419)
+  - src/asn1-1.0.js
+    merged for strict fix (pull #389)
+  - src/crypto-1.0.js
+    document fix in return of decrypt method (issue #383)
+  - src/x509-1.1.js
+    onelineToLDAP sample added in document (issue #428)
+
+* Changes from 8.0.12 to 8.0.13 (2020-Mar-31)
+  - LICENSE.txt
+    - fixed wrong description from BSD to MIT License
+  - ext/ec.js
+    - mitigate Minerva timing attack in ECPointFp.multiply method
+　　　https://minerva.crocs.fi.muni.cz/
+      https://www.npmjs.com/advisories/1505
+  - test/qunit-do-crypto-ecdsa.html
+    - testcase fix
+  - sample_node/tsr2certs added
+    - script to extract certificates from timestamp response or token
+  - npm
+    - ECPointFp, ECCurveFp and ECFieldElementFp are now exported.
+
+* Changes from 8.0.11 to 8.0.12 (2018-Apr-22)
+  - base64x 1.1.13 to 1.1.14
+    - function iptohex added
+    - fix hextoipv6 for wrong "::" shrinking
+  - asn1x509 1.1.5 to 1.1.6
+    - KeyUsage class now supports names parameter such as
+      ['digitalSignature', 'nonRepudiation'].
+    - some refactoring
+  - tool/tool_ca2.html added for
+    yet another certificate generation tool by.
+  - testcase added for above methods/functions
+    - qunit-do-base64x.html
+    - qunit-do-asn1x509.html
+
+* Changes from 8.0.10 to 8.0.11 (2018-Apr-17)
+  - asn1x509 1.1.4 to 1.1.5
+    - X500Name.setByString fix for attribute value with slash.
+  - testcase added to confirm above fixes.
+    - qunit-do-asn1x509.html
+
+* Changes from 8.0.9 to 8.0.10 (2018-Apr-09)
+  - IPv6 address support in certificate
+  - LICENSE.txt
+    - conclude third party licenses.
+  - asn1x509 1.1.3 to 1.1.4
+    - IPv4/v6 iPAddress support in GeneralName
+  - base64x 1.1.2 to 1.1.3
+    - ipv6tohex, hextoipv6 and hextoip functions
+      added for IPv6 string conversion.
+  - x509 1.1.19 to 1.1.20
+    - add IPAddress support in getExtSubjectAltName2
+  - testcase added for above methods/functions
+    - qunit-do-asn1x509.html
+    - qunit-do-base64x.html
+    - qunit-do-x509-ext.html
+  - tool/tool_ca.html
+    - use SHA256withRSA and RSA 2048bit key
+      by default.
+    - add IPAddress support in subjectAltName
+
+* Changes from 8.0.8 to 8.0.9 (2018-Apr-04)
+  - critical bug fix for ASN.1 string class.
+    When UTF-8 string is set to ASN.1 object,
+    string has been garbled.
+  - src/asn1 1.0.13 to 1.0.14
+    - DERAbstractString.setString fixed for utf8.
+  - src/asn1 1.1.2 to 1.1.3
+    - following OIDs are added:
+      T/title (2.5.4.12)
+      description (2.5.4.13)
+      organizationIdentifier (2.5.4.97)
+
+* Changes from 8.0.7 to 8.0.8 (2018-Apr-02)
+  - src/asn1x509 1.1.1 to 1.1.2
+    - GeneralName fix for dn and ldapdn of explicit.
+      This have caused wrong GeneralName dn/ldapdn ASN.1
+      encoding.
+    - CRL.sign fix for init
+  - tool/tool_ca.html
+    - subjectAltName extension support added.
+    - subjectPublicKeyInfo setting fix.
+  - test/qunit-do-asn1x509
+    - fix for CRL and GeneralName dn/ldapdn test
+  - npm/test/t_sig_rsasha1.js added
+
+* Changes from 8.0.6 to 8.0.7 (2018-Mar-25)
+  - src/jws 3.3.10 to 3.3.11
+    - verify method returns false in case of
+      without all of head, payload and signature
+      to fix issue #332.
+  - src/jwsjs 2.2.0 to 2.2.1
+    - readJWSJS fix for wrong initialization as #336
+  - src/asn1x509 1.1.0 to 1.1.1
+    - add DN uniqueIdentifier(2.5.4.45) and
+      description(2.5.4.13) attribute type by PR #335.
+  - ext/{rsa,rsa2}
+    - OAEP fix by PR #303.
+
+* Changes from 8.0.5 to 8.0.6 (2018-Feb-10)
+  - src/x509 1.1.18 to 1.1.19
+    - fix getSubjectAltName for IP addr of PR #317
+  - test/qunit-do-x509-ext
+    - add test getSubjectAltName for DNS and IP
+  - src/rsa, rsa2
+    - fix for alert function for issue #325
+  - src/ecdsa-modified
+    - fix asn1SigToConcatSig for issue #315
+  - npm/lib
+    - jsrsasign-{all,jwths,rsa}-min.js are added
+      per requested issue #314, #313
+
+* Changes from 8.0.4 to 8.0.5 (2018-Jan-27)
+  - tool/tool_asn1dumper.html
+    - #304 pemtohex issue fix
+  - tool/tool_roca.html added to check ROCA vulnerablity for public key
+  - src/asn1csr 1.0.6 to 1.0.7
+    - fix init of fix #308
+  - src/jws 3.3.10
+    - fix aud verification in vertifyJWT document #318
+
+* Changes from 8.0.3 to 8.0.4 (2017-Sep-15)
+  - asn1cms 1.0.4 to 1.0.5
+    - add KJUR.asn1.cms.CMSUtil.verifySignedData method to
+      verify CMS signed data.
+  - crypto 1.2.0 to 1.2.1
+    - small refactoring
+  - x509 1.1.17 to 1.1.18
+    - fix getInfo() to support no extension.
+  - add sample_node/cmssign
+  - fix sample/sample-ecdsa.html in sig.init.
+  - fix sample_node/asn1extract in ASN1HEX method call
+  - merge PR #292 for https
+  - merge PR #283 to fix document and example
+  - merge PR #281 to fix JWK Thumbprint RFC number
+
+* Changes from 8.0.2 to 8.0.3 (2017-Jul-11)
+  - jws 3.3.9 to 3.3.10
+    - fix JWS.verify fail for #276
+
+* Changes from 8.0.1 to 8.0.2 (2017-Jul-08)
+  - jws 3.3.8 to 3.3.9
+    - fix for jsrsasign-jwths-min.js
+  - sample/sample-rsasign.html fix for #274.
+  - test qunit-do-package-rsa.html fix
+
+* Changes from 8.0.0 to 8.0.1 (2017-Ju1-01)
+  - x509 1.1.16 to 1.1.17
+    - add getExtSubjectAltName2 which supports
+      GeneralName type
+    - make getExtSubjectAltName deprecated
+    - fix getExtCRLDistributionPointsURI() for #269.
+      caused error if CDP containts directory name.
+      now fixed.
+    - getInfo now supports certificatePolicies
+  - tool/tool_certview.html
+    - SHA1 fingerprint issue fixed for #273
+
+* Changes from 7.2.2 to 8.0.0 (2017-Jun-30)
+  - all of deprecated classes, methods and files are
+    removed.
+    - get smaller all-min.js than before.
+    - following files are refactored:
+    - asn1hex, asn1x509, crypto, jwsjs, keyutil,
+      rsapem, rsasign, x509.
+  - npm/lib/footer.js fix for issue #270.
+
+* Changes from 7.2.1 to 7.2.2 (2017-Jun-23)
+  - jws 3.3.7 to 3.3.8
+    - merge pull request #266
+  - x509 1.1.15 to 1.1.16
+    - read X.509v3 certificate without any extension
+      supported in readCertHex.
+  - ext/yahoo.js
+    - remove most of codes and keep YAHOO.lang.extend only.
+      So all of Yahoo YUI vulnerabilities are removed.
+
+* Changes from 7.2.0 to 7.2.1 (2017-Jun-04)
+  - base64x 1.1.11 to 1.1.12
+    - function hextopem, pemtohex added
+  - asn1hex 1.1.11 to 1.1.12
+    - make ASN1HEX.pemToHex deprecated
+  - asn1 1.0.12 to 1.0.13
+    - make KJUR.asn1.ASN1Util.getPEMStringFromHex deprecated
+  - rsapem 1.2.1 to 1.2.2
+    - make RSAKey.pemToBase64 deprecated
+  - x509 1.1.14 to 1.1.15
+    - make X509.pemToBase64 deprecated
+  - further refactoring. reducing min.js size by refactoring
+    - asn1 1.0.12 to 1.0.13
+    - asn1cades 1.0.2 to 1.0.3
+    - asn1cms 1.0.3 to 1.0.4
+    - asn1csr 1.0.4 to 1.0.5
+    - asn1ocsp 1.0.2 to 1.0.3
+    - asn1tsp 1.0.2 to 1.0.3
+    - asn1x509 1.0.23 to 1.0.24
+    - jws 3.3.6 to 3.3.7
+    - jwsjs 2.1.0 to 2.1.1
+    - keyutil 1.1.1 to 1.1.2
+    - pkcs5pkey 1.1.1 to 1.1.2
+    - x509 1.1.14 to 1.1.15
+
+* Changes from 7.1.4 to 7.2.0 (2017-May-21)
+  - major refactoring before reducing file size
+  - major refactoring for ASN1HEX
+    - asn1hex 1.1.10 to 1.1.11
+      - make most of long method name deprecated and
+        provide new short names.
+      - DEPRECATED: getHexOf{TLV/V/L}_AtObj
+                    getIntOfL}_AtObj
+                    get{StartPosOfV/ByteLengthOfL}_AtObj
+      - NEW: get{TLV/V/Vlen/Vidx/L/Lblen}
+             getChildIdx, getTLVbyList, oidname
+    - asn1cades 1.0.1 to 1.0.2
+    - asn1csr 1.0.3 to 1.0.4
+    - asn1tsp 1.0.1 to 1.0.2
+    - ecdsa-modified 1.1.0 to 1.1.1
+    - keyutil 1.1.0 to 1.1.1
+    - pkcs5key 1.1.0 to 1.1.1
+    - rsapem 1.2.0 to 1.2.1
+  - major refactoring for X509
+    - x509 1.1.13 to 1.1.14
+    - make most of static method deprecated and
+      new non-static methods are defined.
+    - parseExt/getExtInfo method added
+  - base64x 1.0.10 to 1.0.11
+    - datetozulu added
+  - sample/sample*.html tool/tool*.html test/qunit*.html link fixed
+  - npm jsrsasign@7.1.4 had wrong reference in navigator.
+    So jsrsasign@7.1.4 has been unpublished.
+  - ext/rng.js
+    - msCrypto fallback for IE11 to prevent error 
+      when calling window.crypto. (pull/254)
+      Thanks @mike-w-kelly.
+  - dsa 2.1.0 to 2.1.1
+    - verifyWithMessageHash infinite loop bug
+      fix #238. Thanks @nemesv.
+
+* Changes from 7.1.3 to 7.1.4 (2017-May-06)
+  - all source codes are moved to src directory
+  - x509 1.1.12 to 1.1.13
+    - refactoring codes
+    - X509v1 certificate support in all methods
+    - new methods and properties for X509 class
+      - readCertHex
+      - getVersion
+      - getPublicKey
+      - getPublicKeyHex
+      - getPublicKeyIdx
+      - version property
+      - foffset property
+    - make following methods and properties deprecated in X509 class
+      - readCertPEMWithoutRSAInit
+      - getSubjectPublicKeyPosFromCertHex
+      - getSubjectPublicKeyInfoPosFromCertHex
+      - getPublicKeyInfoPosOfCertHEX
+      - getSerialNumberHex static method
+      - subjectPublicKeyRSA property
+      - subjectPublicKeyRSA_hN property
+      - subjectPublicKeyRSA_hE property
+  - asn1hex 1.1.9 to 1.1.10
+    - refactoring codes
+    - new methods
+      - getIdxbyList
+      - getTLVbyList
+    - make following methods deprecated
+      - getDecendantIndexByNthList (> getIdxbyList)
+  - asn1x509 1.0.22 to 1.0.23
+    - serialNumber(2.5.4.5) parameter added OID attribute type
+  - base64x 1.1.9 to 1.1.10
+    - hextoposhex function added
+
+* Changes from 7.1.2 to 7.1.3 (2017-Apr-15)
+  - jsrsasign-latest-all-min.js was moved to
+    jsrsasign-all-min.js in master. 
+    In gh-page, both are provided for backword
+    compatibity. 
+  - base64x 1.1.8 to 1.1.9
+    - zuluto{date,msec,int} are added
+  - jws 3.3.5 to 3.3.6
+    - modified IntDate.getZulu to use zulutosec;
+
+* Changes from 7.1.1 to 7.1.2 (2017-Mar-20)
+  - CRITICAL BUG FIX: KJUR.asn1.x509.AlgorithmIdentifier
+    default was wrong in algorithm parameter field.
+    For example "SHA1" AlgorithmIdentifier object
+    will be missing algorithm parameter field by
+    bug. This issue raised just only in 7.1.1 and
+    the issue was fixed.
+    - asn1x509 1.0.21 to 1.0.22
+      - AlgorithmIdentifier bug fix
+
+* Changes from 7.1.0 to 7.1.1 (2017-Mar-10)
+  - CRITICAL BUG FIX: KJUR.asn1.x509.Certificate.sign() and
+    KJUR.asn1.x509.X509Util.newCertPEM() have always 
+    signed signatures with SHA1withRSA algorithm regardless
+    of any specified signature algorithm. This issue was 
+    fixed in this release.
+  - asn1x509 1.0.19 to 1.0.20
+    - Certificate
+      - sign() critical bug fix
+        sign() was always sign with SHA1withRSA regardless of
+        specified any other signature algorithm.
+        This fixes #240 and #241 by @helfloryd.
+    - AlgorithmIdentifier
+      - set algorithm parameter to NULL automatically by default 
+        for "*withRSA" algorithm.
+      - document update
+    - newCertPEM
+      - fix document
+  - x509 1.1.11 to 1.1.12
+    - X509.verifySignature static method added
+  - ext/rng.js
+    - fix #228 from @dzaman. window.crypto.random fix
+  - crypto 1.1.11 to 1.1.12
+    - minor document fix
+
+* Changes from 7.0.0 to 7.1.0 (2017-Jan-21)
+  - minor update for loading private/public key
+    - support added: PKCS#5 DSA/ECC hexacedimal string of private key
+  - keyutil 1.0.14 to 1.1.0
+    - BUGFIX: KEYUTIL.getKey for PKCS#5 PEM ECC private key 
+      was not set curve name properly and now it's fixed.
+      (issue #227).
+    - make KEYUTIL.getHexFromPEM deprecated
+    - move from KEYUTIL.getHexFromPEM to ASN1HEX.pemToHex
+  - pkcs5pkey 1.0.7 to 1.1.0
+    - make PKCS5PKEY.getHexFromPEM deprecated
+    - move from getHexFromPEM to ASN1HEX.pemToHex
+  - rsapem 1.1.1 to 1.2.0
+    - refactoring codes
+    - readPKCS5PubKeyHex added
+    - readPKCS8PubKeyHex added
+    - readCertPubKeyHex added
+  - ecdsa-modified 1.0.5 to 1.1.0
+    - readCertPubKeyHex added
+  - dsa 2.0.1 to 2.1.0
+    - setPrivateHex, setPublicHex added
+    - readPKCS5PrvKeyHex added
+    - readPKCS8PrvKeyHex added
+    - readPKCS8PubKeyHex added
+    - readCertPubKeyHex added
+  - asn1hex 1.1.8 to 1.1.9
+    - ASN1HEX.pemToHex added
+    - move from {KEYUTIL,PKCS5PRV}.getHexFromPEM, 
+      X509.pemToHex to ASN1HEX.pemToHex
+  - x509 1.1.10 to 1.1.11
+    - now X509.pemToHex deprecated and is planed to 
+      remove in jsrsasign 8.0.0.
+  - asn1cades 1.0.0 to 1.0.1
+    - move to ASN1HEX.pemToHex
+  - asn1cms 1.0.2 to 1.0.3
+    - move from KEYUTIL.getHexFromPEM to ASN1HEX.pemToHex
+  - asn1csr 1.0.2 to 1.0.3
+    - move from KEYUTIL.getHexFromPEM to ASN1HEX.pemToHex
+
+* Changes from 6.2.3 to 7.0.0 (2016-Dec-26)
+  - LGPL license for openpgpjs was removed.
+  - asn1hex 1.1.7 to 1.1.8
+    - ASN1HEX.dump also supports ASN1Object as argument
+  - asn1x509
+    - API document update
+  - pkcs5pkey 1.0.7
+    - merge @machinewu's pull request for API doc fix
+  - dsa 2.0.0
+    - some of my own codes are moved from dsa-modified-1.0.js 
+      to dsa-2.0.0 and old openpgpjs codes are re-writed with
+      my own codes and all of openpgpjs codes are removed from
+      jsrsasign.
+  - crypto 1.1.10 to 1.1.11
+    - some static random number generator methods are
+      added to KJUR.crypto.Util class for new dsa-2.0:
+      getRandomHexOfNbytes, getRandomBigIntegerOfNbytes, 
+      getRandomHexOfNbits, getRandomBigIntegerOfNbits, 
+      getRandomBigIntegerZeroToMax, getRandomBigIntegerMinToMax
+  - REMOVED
+    - dsa-modified-1.0.js, ext/THIRDPARTY_LICENSE.pgp.txt
+  - test/qunit-do-*.html
+    - most of test codes are updated.
+
+* Changes from 6.2.2 to 6.2.3 (2016-Nov-29)
+  - asn1x509 1.0.18 to 1.0.19
+    - GeneralName and GeneralNames class supports dn and ldapdn parameters
+    - SubjectAltName and IssuerAltName extension added
+    - Extension.appendByNameToArray method added
+  - asn1csr 1.0.1 to 1.0.2
+    - CertificationRequestInfo.appendExtensionByName method added
+    - CertificationRequestInfo extensionRequest encoding critical bugfix
+    - CSRUtil.newCSRPEM "ext" parameter for extensionRequest supported
+  - sample_node
+    - datasing and dataverify script added
+  - base64x
+    - API document update
+  - asn1
+    - API document update
+
+* Changes from 6.2.1 to 6.2.2 (2016-Nov-19)
+  - x509 1.1.9 to 1.1.10
+    - X509 class
+      - multi-valued RDN support in hex2dn and hex2rdn method.
+      - optional string index argument added to hex2dn and hex2rdn method.
+      - hex2attrTypeAndValue static method added
+    - API document update
+  - asn1x509 1.0.17 to 1.0.18
+    - X500Name class
+      - LDAP(RFC 2253) name support
+      - setByLdapString method added
+      - onelineToLDAP static method added
+      - ldapToOneline static method added
+      - 'ldapstr& constructor parameter is supported
+      - more AttributeType name supported in atype2oidList
+    - OID static class
+      - oid2atype static method added
+    - API document update
+  - asn1 1.0.11 to 1.0.12
+    - refactoring in DERObjectIdentifier
+    - API document update
+
+* Changes from 6.2.0 to 6.2.1 (2016-Nov-18)
+  - asn1x509 1.0.16 to 1.0.17
+    - multi-valued RDN supported in X500Name and RDN class.
+      - KJUR.asn1.x509.RDN.parseString() static method added
+      - API document update
+  - x509 1.1.9 to 1.1.9 (same)
+    - X509.readCertPEMWithoutRSAInit fix by @lionello . Thanks.
+  - crypto 1.1.10 to 1.1.10
+    - API document fix
+  - sample_node scripts
+    - dataencrypt, datadecrypt and jwsview added
+
+* Changes from 6.1.4 to 6.2.0 (2016-Nov-03)
+  - RSAKey
+    - CRITICAL BUGFIX: RSA-PSS and RSA-OAEP not working from jsrsasign 5.0.0
+      because rstr_sha1 function is missingand. Now it was fixed.
+      (oaep_pad, oeap_unpad)
+    - API document added.
+  - crypto 1.1.9 to 1.1.10
+    - KJUR.crypto.Cipher class added to encrypt/decrypt data.
+      Currently only RSA, RSAOAEP supported. Other ciphers like
+      AES, 3DES will be supported near in the future.
+    - KJUR.crypto.MessageDigest class
+      - HASHLENGTH, getCanonicalAlgName, getHashLength
+  - asn1x509 1.0.15 to 1.0.16
+    - AuthorityInfoAccess class added by @lionello 's pull request. Thanks.
+  - base64x
+    - fix API document
+  - npm
+    - missing exports of some global string converter were fixed
+
+* Changes from 6.1.3 to 6.1.4 (2016-Oct-16)
+  - base64x 1.1.7 to 1.1.8
+    - function hextoArrayBuffer and ArrayBuffertohex added
+    - some API documents added
+
+* Changes from 6.1.2 to 6.1.3 (2016-Oct-15)
+  - asn1csr 1.0.0 to 1.0.1
+    - CSRUtil.getInfo method added to parse CSR
+  - asn1ocsp
+    - OCSPUtil.getOCSPResponseInfo API document added
+
+* Changes from 6.1.1 to 6.1.2 (2016-Oct-08)
+  - OCSP Response support
+  - asn1hex 1.1.6 to 1.1.7
+    - refactoring for static methods
+    - encapsulated BitString support
+    - more API documents
+  - asn1ocsp 1.0.0 to 1.0.1
+    - OCSPUtil.getOCSPResponseInfo added
+  - merge RegExp fix pull request from @huokko.
+    Thank you @huokko.
+    (asn1x509, crypto, jws, keyutil, pkcs5pkey)
+
+* Changes from 6.1.0 to 6.1.1 (2016-Sep-25)
+  - asn1 1.0.10 to 1.0.11
+    - encapsulated ASN.1 structure supported
+      in DEROctetString and DERBitString.
+    - API document update
+  - tool_asn1encoder.html added
+
+* Changes from 6.0.1 to 6.1.0 (2016-Sep-24)
+  - asn1ocsp 1.0.0
+    - now start to add OCSP protocol support
+    - OCSP request ASN.1 classes are added
+  - fix API document in x509 and asn1
+  - test/qunit-do-{asn1,asn1ocsp}.html added or updated
+
+* Changes from 6.0.0 to 6.0.1 (2016-Sep-12)
+  - old jsrsasign.js is used in npm package. now fixed.
+
+* Changes from 5.1.0 to 6.0.0 (2016-Sep-11)
+  - As of so much request to remove Node functions
+    in nodeutil.js, nodeutil.js have been removed from
+    jsrsasign.js package. Then it is moved to
+    new "jsrsasign-util" npm package.
+    Now "jsrsasign" will be CommonJS, Purescript,
+    Webpack and Browserify safe package.
+    Some sample Node.js scripts in "sample_node"
+    will be updated later.
+
+* Changes from 5.0.15 to 5.1.0 (2016-Sep-07)
+  - jwsjs 2.0.15 to 2.1.0
+    - refactoring and API document update
+    - addSignature, verifyAll, verifyNth method added
+    - make addSignatureByHeaderKey, 
+      addSignatureByHeaderPayloadKey and verifyWithCerts
+      deprecated.
+  - sample_*.html
+    - review all to work. reference fix. make list in Wiki.
+  - index*.html
+    - update
+
+* Changes from 5.0.14 to 5.0.15 (2016-Aug-26)
+  - pemtojwk and jwktopkcs8 added to sample node scripts
+  - asn1 1.0.9 to 1.0.10
+    - ASN1Util.getPEMStringFromHex modified not to use
+      CryptoJS.
+  - test/qunit-do-*.html
+    - test case reference fix
+  - remove ext/{md5,ripemd160,sha1,sha256,sha512}.js,
+    ext/THIRDPARTY_LICENSE.pjhash.txt for
+    Paul Johnston's Hash Algorithm JavaScript
+
+* Changes from 5.0.13 to 5.0.14
+  - keyutil 1.0.12 to 1.0.13
+    - KEYUTIL.getJWKFromKey() method added to get
+      RFC 7517 JSON Web Key(JWK) object from RSAKey or
+      KJUR.crypto.ECDSA public/private key object.
+    - KEYUTIL.generateKeypair() 
+      do also setPublicKeyHex for EC private key in
+      as aligned to PEM private key
+      loading.
+    - KEYUTIL.getKey(JWK_EC_PRV)
+      made change to set public x y too.
+  - ecdsa-modified 1.0.4 to 1.0.5
+    - getPublicKeyXYHex() method added
+    - getShortNISTPCurveName() method added
+  - npm
+    - missed to export KJUR.lang now fixed
+  - sample_node/genjwk added to generate keypair and save as JWK
+  - tool_certview.html
+    - loading script fix
+
+* Changes from 5.0.12 to 5.0.13
+  - base64x.js
+    - KJUR.lang.String class added and its some static
+      methods isHex, isInteger, isBase64, isBase64URL and
+      isIntegerArray also defined.
+    - KJUR.lang added to npm package namespace.
+  - tool_string.html added to provide string converter tool.
+  - jws.js
+    API document updated.
+  - CryptoJS codes in code.google.com seem to be removed and
+    404 not found so that CryptoJS references in all test
+    were moved to local files.
+  - CryptoJS codes were moved to ext/cj directory.
+  - tool_b64u{enc,dec}.html script URL fix
+
+* Changes from 5.0.11 to 5.0.12
+  - jws between 3.3.3 to 3.3.4
+    - support grace period for verifyJWT method.
+      This is to allow time difference between 
+      JWT generator and verifier.
+  - asn1hex
+    - API document update
+
+* Changes from 5.0.10 to 5.0.11
+  - X509v1 certificate support in KEYUTIL.getKey and
+    X509.getPublicKeyInfoPropOfCertPEM
+  - sample_node/showcert added
+  - x509.js 1.1.8 to 1.1.9
+    - X509.DN_ATTRHEX added to show EV cert DN
+    - X509v1 certificate support in X509.getPublicKeyInfoPropOfCertPEM.
+      This makes KEYUTIL.getKey support X509v1 certificate.
+  - test/qunit-do-x509-getinfo.html
+    - test case added for EV cert DN
+  - tool_{jwt,jwtveri}.html
+    - fix typo. Thanks @ParkinT.
+  - ext/{rsa,rsa2}.js
+    - allow hash func to be passed to OAEP. Thanks @davedoesdev.
+  - asn1x509.js 1.0.13 to 1.0.14
+    - add 'SN' (i.e. SurName) support in distinguished name.
+      Thanks @kurtsson.
+
+* Changes from 5.0.9 to 5.0.10
+  - sample_node/jwtverify bugfix
+  - x509 1.1.7 to 1.1.8
+    - following methods are added:
+      - getInfo()
+      - getExtSubjectKeyIdentifier()
+      - getExtAuthorityKeyIdentifier()
+      - getExtExtKeyUsageName()
+      - getExtSubjectAltName()
+      - getExtCRLDistributionPointsURI()
+
+* Changes from 5.0.8 to 5.0.9 (2016-Apr-19)
+  - ext/rng.js
+    - use window.crypto.getRandomValues for SecureRandom
+      if available. (ToDo also for Node.js)
+
+* Changes from 5.0.7 to 5.0.8 (2016-Apr-14)
+  - LICENSE.txt small update for years of copyright.
+  - ext/x64-core*.js was missed and added
+  - x509 1.1.6 to 1.1.7
+    - X509.{getHexOfTLV_V3ExtValue,getHexOfV_V3ExtValue} 
+      are chageed to return null instead of '' if there 
+      is no extension specified by name or oid.
+    - X509.getBasicConstraints added
+    - X509.getSignatureAlgorithmName added
+    - X509.getSignatureValueHex added
+    - API document update
+  - each *.min.js files are moved to min/ folder.
+  - clean up old *-all-min.js
+
+* Changes from 5.0.6 to 5.0.7 (2016-Mar-05)
+  - tool_csr.html fix for subject parameter.
+  - jsrsasign-latest-all-min wrong order in concatination.
+    This raise wrong PKCS#5/8 encrypted PEM private key 
+    generation in KEYUTIL.getPEM().
+  - sample_node/asn1extract added
+
+* Changes from 5.0.5 to 5.0.6 (2016-Feb-28)
+  - bower.json name space fix
+  - crypto-1.0 1.0.4 to 1.0.5
+    - file removed
+  - crypto-1.1 1.1.7 to 1.1.8
+    - remove unnecessary evals for strict mode.
+
+* Changes from 5.0.4 to 5.0.5
+  - node sample 'jwssign', 'jwtverify', 'asn1dump'
+    and 'pemtobin'  added.
+  - base64x 1.1.5 to 1.1.6
+    - license URL small fix
+  - asn1 1.0.8 to 1.0.9
+    - DERGeneralizedTime withMillis fix
+    - DERGeneralizedTime and DERUTCTime refactoring
+  - jws 3.3.2 to 3.3.3
+    - JWS.parse method added
+    - IntDate.getZulu UTCTime(YY) support added
+  - jsrsasign-x.x.x-all-min.js move to lib directory from this version
+  - jsrsasign-{1.2,1.2.1,1.3,1.3.1,2.0.0}.tgz are removed
+    since they can get from github release/tags.
+
+* Changes from 5.0.2 to 5.0.4 (2015-Nov-23)
+  - jwtverify, asn1dump and pemtobin sample Node script in 
+    sample_node directory. 
+    There is a bower release but not in npm.
+
+* Changes from 5.0.1 to 5.0.2 (2015-Nov-11)
+  - jws 3.3.1 to 3.3.2
+    - RFC 7638 getJWKthumbprint method added
+  - base64x 1.1.5 to 1.1.6
+    - function intarystrtohex added
+  - nodeutil 1.0.0 newly added
+    - utils for file I/O in Node.js
+  - npm
+    - add reference to intarystrtohex and CryptoJS
+
+* Changes from 5.0.0 to 5.0.1 (2015-Oct-17)
+  - keyutil 1.0.10 to 1.0.11
+    - add support for bare RSA NED hexadecimal key in KEYUTIL.getKey
+
+* Changes from 4.9.2 to 5.0.0 (2015-Oct-14)
+  - *NOTICE* release 4.10.0 declined since API semver violation
+  - some JWS HS* and Crypto Mac signature issue was fixed.
+  - crypto 1.1.6 to 1.1.7
+    - add support for various password providing method
+      such as base64, base64url, hexadecimal or utf8 string
+      for Mac.
+  - jws 3.2.4 to 3.3.0
+    - add support for various password providing method
+      such as base64, base64url, hexadecimal or utf8 string
+      for HS* JWS signing and validation
+    - remove some old fashoned functions and methods
+      which marked as "deprecated". Followings are removed:
+      - JWS.generateJWSByP1PrvKey
+      - JWS.generateJWSByKey
+      - JWS.generateJWSByNED
+      - JWS.verifyJWSByPemX509Cert
+    - JWS.sign can handle header and payload
+      JSON object not JSON string.
+    - JWS.verify bugfix in 4.10.0 which only 
+      accepts hexacedimal string key for HS*.
+  - keyutil 1.0.10 to 1.0.11
+    - add support for RSA private key without
+      P/Q/DP/DQ/COEFF of JWK
+
+* Changes from 4.9.1 to 4.9.2 (2015-Oct-02)
+  - latest asn1x509 1.0.13 was missed in the latest-min.js and
+    it was fixed.
+
+* Changes from 4.9.0 to 4.9.1
+  - asn1x509 1.0.12 t 1.0.13
+    - setByObject method added to X500Name class
+    - {C: "US", O: "test"} representation now can be used
+      in newCertPEM method in X509Util class.
+
+* Changes from 4.8.6 to 4.9.0 (2013-Sep-13)
+  - certificate signing request(CSR/PKCS#10) generation support
+    asn1csr-1.0.js added
+  - asn1 1.0.7 to 1.0.8
+    - small API document update
+  - base64x 1.1.4 to 1.1.5
+    - function strdiffidx added
+  - keyutil 1.0.9 to 1.0.10
+    - fix and small program comment update
+  - jws: small API document update
+
+* Changes from 4.8.5 to 4.8.6
+  - npm package and bower fix
+
+* Changes from 4.8.4 to 4.8.5
+  - some of small fix release for npm and jsrsasign-latest-all-min.
+  - jwt 3.2.3 to 3.2.4
+    - jws.js update for validation of jti confirming to RFC 7519
+      as optional in verifyJWT method. Thanks @stephanbacheller.
+
+* Changes from 4.8.3 to 4.8.4
+  - some of small fix release for npm.
+
+* Changes from 4.8.2 to 4.8.3
+  - crypto 1.1.5 to 1.1.6
+    - Signature.sign method fix in automatic detection of private key
+  - asn1 1.0.6 to 1.0.7
+    - ASN1Util.oidHexToInt() added
+    - ASN1Util.oidIntToHex() added
+  - asn1hex 1.1.5 to 1.1.6
+    - ASN1HEX.dump() simple ASN.1 dump functionality added
+    - ASN1HEX.isASN1HEX() added
+  - tool_asn1dumper.html - Online ASN.1 dump tool added for demo
+  - ** 4.8.3 updated files
+    - ChangeLog.txt
+    - asn1-1.0*.js
+    - asn1hex-1.1*.js
+    - crypto-1.1*.js
+    - test/qunit-do-asn1-oidhex.html
+    - test/qunit-do-asn1hex-dump.html
+
+* Changes from 4.8.1 to 4.8.2
+  - keyutil 1.0.8 to 1.0.9
+    - getKey EC private/public key bug #69 fix
+  - node npm module officially released at npmjs.com
+  - ** 4.8.2 updated files
+    - ChangeLog.txt
+    - keyutil-1.0*.js
+
+* Changes from 4.8.0 to 4.8.1
+  - keyutil 1.0.7 to 1.0.8
+    - RFC 7517 JSON Web Key(JWK) support 
+      for RSA/ECC private/public key added in KEYUTIL.getKey method
+  - ** 4.8.1 updated files
+    - ChangeLog.txt
+    - ecdsa-modified-1.0*.js (jsdoc fix)
+    - keyutil-1.0*.js
+    - base64x-1.1.js (b64utohex zero padding added)
+    - test/qunit-do-base64x.html
+    - test/qunit-do-keyutil-jwk.html
+    - test/qunit-do-keyutil-pairpem.html
+
+* Changes from 4.7.2 to 4.8.0 (2015-Jun-01)
+  - Now jsjws JSON Web Signtaure library is merged into
+    jsrsasign.
+  - RFC 7519 JWT JSON Web Token full validation support.
+  - jws 3.2.2 to 3.2.3
+    - JWS.verifyJWT added to do full validation for JWT
+    - JWS.inArray added
+    - JWS.includedArray added
+    - ChangeLogs for jws and jwsjs before jws 3.2.2
+      please see ChangeLog_jws322.txt
+  - asn1x509 1.0.11 to 1.0.12
+    - subjectKeyIdentifier OID duplicate definition fix
+  - JSON Web Token(JWT) full validation demo is available.
+  - tool_jwt.html update to add 'aud' claim
+  - ** 4.8.0 updated files
+    - ChangeLog*.txt
+    - jws-3.2.*
+    - jwsjs-2.0.*
+    - index_jws*.*
+    - sample_jws*
+    - tool_b64u*
+    - tool_{jws,jwt}*.html
+    - ext/json-sans-eval*.js
+    - test/qunit-do-jws*.html
+
+* Changes from 4.7.1 to 4.7.2 (2015-May-18)
+  - x509 1.1.4 to 1.1.6
+    - add some X.509v3 extension parsing methods.
+      following methods are added:
+      - getV3ExtInfoListOfCertHex
+      - getV3ExtItemInfo_AtObj
+      - getHexOfTLV_V3ExtValue
+      - getHexOfV_V3ExtValue
+      - getPosOfTLV_V3ExtValue
+      - getExtKeyUsageBin
+      - getExtKeyUsageString
+      - getExtAIAInfo
+  - asn1x509 1.0.10 to 1.0.11
+    - OID.name2oidList updated for X.509v3 extension OIDs
+    - OID.name2oid method added
+    - OID.oid2name method added
+  - ** 4.7.2 updated files **
+    - ChangeLog.txt
+    - asn1x509-1.0.js
+    - test/qunit-do-x509-ext.html
+    - test/qunit-do-asn1x509.html
+    - x509-1.1
+    - test/index.html
+    - tool_httpscfg.html
+    - ext/yahoo-min.js
+    - ext/yahoo.js
+
+* Changes from 4.7.0 to 4.7.1 (2015-May-14)
+  - asn1x509 1.0.9 to 1.0.10
+    - certissuer and certsubj supported in GeneralName class
+  - x509 1.1.3 to 1.1.4
+    - getPublicKeyInfoPosOfCertHEX added
+  - tool_httpscfg.html added
+
+* Changes from 4.6.0 to 4.7.0 (2014-Jul-07)
+  - RFC 5126 CAdES format supported
+    - CAdES-BES/EPES/T support in this version.
+  - asn1cades (NEW)
+  - asn1tsp 1.0.0 to 1.0.1
+    - AbstractTSAAdapter, Fixed/SimpleTSAAdapter class added
+  - asn1cms 1.0.1 to 1.0.2
+    - SigningCertificate and SigningCertificateV2
+      attributes are added.
+    - IssuerAndSerialNumber class constructor now 
+      supports PEM string of certificate.
+    - properties dDigestAlgs and dCerts of SignedData object
+      are added for object preservation.
+    - CMSUtil.newSignedData now supports
+      SigningCertificate/V2 attributes.
+  - asn1
+    - add DEREnumerate class
+  - x509
+    - fix for strict mode
+  - crypto
+    - fix for Signature.signHex/Str
+
+* Changes from 4.5.0 to 4.6.0 (2014-May-25)
+  - RFC 3161 Time Stamp Protocol generator is now supported.
+  - asn1tsp 1.0.0 (NEW)
+  - asn1 1.0.5 to 1.0.6
+    - AbstractTime/GeneralizedTime: millisecond support
+  - asn1cms 1.0.0 to 1.0.1
+    - IssuerAndSerialNumber: setByCertPEM method added
+    - SigningCertificate attribute added
+    - SigningCertificate attributeV2 added
+  - asn1x509 1.0.8 to 1.0.9
+    - OID.oid2name added
+    - X500Name
+      - add certissuer, certsubject parameter support
+  - base64x 1.1.2 to 1.1.3
+    - function hextob64, hextob64nl, b64nltohex added
+  - tool_tsreq.html for TimeStamp Request demo (NEW)
+  - tool_tsres.html for making TimeStampToken demo (NEW)
+  - tool_ca.html
+    - fix signing key bug
+    - support ExtKeyUsage
+
+* Changes from 4.2.3 to 4.5.0 (2014-May-17)
+  - RFC 5652 CMS SignedData generator is now supported.
+  - asn1cms 1.0.0 (NEW)
+  - asn1 1.0.4 to 1.0.5
+    - unsorted DERSet is now supported for ASN.1 BER
+    - DERUTCTime/GeneralizedTime provides current time
+      if arguments is not specified.
+  - asn1x509 1.0.8 to 1.0.9
+    - x509.Time: automatic detection for UTC/Gen by length
+    - OID: some oids are added.
+  - keyutil 1.0.6 to 1.0.7
+    - KEYUTIL.getHexFromPEM can omit sHead now.
+
+* Changes from 4.2.2 to 4.2.3 (2014-May-14) minor update
+  - keyutil 1.0.6
+    - isPublic and isPrivate flag fix for generateKey method.
+  - tool_ca.html
+    - fix keyutil.js reference
+
+* Changes from 4.2.1 to 4.2.2 (2014-Apr-19)
+  - asn1x509 1.0.7 to 1.0.8
+    - add setSignatureHex method for Certificate class
+    - modify newCertPEM method to support to specify signature
+      by value.
+    - add AuthorityKeyIdentifier X.509v3 extension class
+  - keyutil 1.0.4 to 1.0.5
+    - PKCS#10 CSR support. Following methods are added:
+      - KEYUTIL.getKeyFromCSRPEM
+      - KEYUTIL.getKeyFromCSRHex
+      - KEYUTIL.parseCSRHex
+  - Tool:
+    - tool_forfact.html:
+      CSR to fake certificate converter for factorable.net
+      key weakness check.
+  - Test codes:
+    - add test/qunit-do-keyutil-csr.html
+
+* Changes from 4.2.0 to 4.2.1 (2013-Oct-11)
+  - keyutil 1.0.3 to 1.0.4
+    - new getPEM method for exporting keys
+    - exporting PKCS#8 encrypted private key also supported.
+    - DES-CBC support for PKCS#5 encrypted private key
+    - additional DSA support
+    - make old methods are marked as deprecated.
+
+* Changes from 4.1.6 to 4.2.0 (2013-Oct-06)
+  - DSA support added to most of classes.
+  - now RSAKey/KJUR.crypto.{ECDSA,DSA} class has new properties
+    isPrivate and isPublic
+  - asn1x509 1.0.5 to 1.0.6
+    - new X509Util.newCertPEM method is added to provate
+      easy certificate issuance by JSON object.
+    - DSA/ECDSA support added to Signature, TBSCertificate, 
+      AlgorithmIdentifier and SubjectPublicKeyInfo classes
+  - keyutil 1.0.2 to 1.0.3
+    - provide support for DSA
+      - getKey
+      - getKeyFromPublicPKCS8Hex,parsePublicPKCS8Hex
+  - x509 1.1.1 to 1.1.2
+    - ECDSA,DSA support added in X509.getPublicKeyFromCertPEM
+  - dsa-modified 1.0.0 to 1.0.1
+    - method setPrivateKey, setPublicKey are changed to
+      setPrivate and setPublic respectively to align RSA/ECDSA class.
+
+* Changes from 4.1.5 to 4.1.6 (2013-Oct-02)
+  - newly dsa-modified 1.0.0 added
+    - This is a DSA algorithm ported from github.com/openpgpjs
+    - However Signature and KEYUTIL doesn't support DSA yet.
+  - asn1 1.0.3 to 1.0.4
+    - ASN1Util.jsonToASN1HEX method added.
+  - asn1hex 1.1.3 to 1.1.4
+    - ASN1HEX.getVbyList with tag checking method added.
+  - keyutil 1.0.1 to 1.0.2
+    - fix typo in newEncryptedPKCS5PEM method.
+
+* Changes from 4.1.4 to 4.1.5 (2013-Sep-29)
+  - keyutil 1.0.0 to 1.0.1
+    - new generateKeypair method added
+    - fix getKey method
+  - add LICENSE file for YUI.
+  - name jsrsasign-4.1.4-all-min.js is the same but updated.
+
+* Changes from 4.1.3 to 4.1.4 (2013-Sep-24)
+  - ext/cryptojs-312-core-fix*.js added to fix HmacSHA224/384 issue.
+    Please use 
+      'https://kjur.github.io/jsrsasign/ext/cryptojs-312-core-fix.js' or 
+      'https://kjur.github.io/jsrsasign/ext/cryptojs-312-core-fix-min.js' or 
+      'https://kjur.github.io/jsrsasign/jsrsasign-4.1.4-all-min.js'
+    instead of orignal 'core.js' of CryptoJS.
+
+* Changes from 4.1.2 to 4.1.3 (2013-Sep-23)
+  - keyutil 1.0.0
+    - PKCS5PKEY class is moved to KEYUTIL class.
+      PKCS5PKEY is now deprecated and backward compatibility purpose only.
+    - KEYUTIL.getKey() method added to private more generic access to
+      private and public keys.
+  - asn1 1.0.3 to 1.0.4
+    - ASN1Util.newObject method now supports more simple 
+      representation of tagged object like:
+      newObject({tag: ['a1', true, {seq: [{int: 3}, {int: 4}]}]});
+  - ext/base64.js
+      fix for "var v;" for strict
+
+* Changes from 4.1.1 to 4.1.2 (2013-Sep-12)
+  - asn1 1.0.2 to 1.0.3
+    - new method ASN1Util.newObject added.
+  - all in one script 'jsrsasign-4.1.2-all-min.js' added.
+
+* Changes from 4.1.0 to 4.1.1 (2013-Aug-27)
+  - crypto 1.1.3 to 1.1.4
+    - add hmacmd5, hmacripemd160 support and test code
+  - ecdsa-modified 1.0.2 to 1.0.3
+    - new static method added
+      - parseSigHex
+      - parseSigHexInHexRS
+      - asn1SigToConcatSig
+      - concatSigToASN1Sig
+      - hexRSSigToASN1Sig
+      - biRSSigToASN1Sig
+  - all QUnit test code is moved for latest QUnit 1.12
+
+* Changes from 4.0.5 to 4.1.0 (2013-Aug-25)
+  - crypto 1.1.2 to 1.1.3
+    - RSAPSS(*withRSAandMGF1) support in Signature class
+    - powerful init method to specify any type of key and
+      certificate and automatic initialization.
+    - KJUR.crypto.OID class added for OID and hex conversion
+  - pkcs5pkey 1.0.4 to 1.0.5
+    - to support for KJUR.crypto.ECDSA:
+      - getKeyFromEncryptedPKCS8PEM, parsePlainPrivetePKCS8Hex,
+        getKeyFromPublicPKCS8PEM, getKeyFromPublicPKCS8Hex,
+        parsePublicRawRSAKeyHex, parsePrivateRawRSAKeyHexAtObj,
+        parsePrivateRawECKeyHexAtObj and parsePublicPKCS8Hex
+        method added.
+  - rsasign 1.2.5 to 1.2.7
+    - RSAPSS saltlen default was changed from -2 to -1
+    - add API document description about PSS salt length.
+    - signWithMessageHashPSS, verifyWithMessageHashPSS 
+      method added.
+  - ecdsa-modified 1.0.1 to 1.0.2
+    - method setNamedCurve, setPrivateKeyHex, setPublicKeyHex added
+    - sign/verifyWithMessageHash method added to align RSAKey class
+  - x509 1.1.0 to 1.1.1
+    - encapsulated as class
+    - getPublicKeyInfoPropOfCertPEM method added.
+  - asn1hex 1.1.1 to 1.1.2
+    - encapsulated as class
+
+* Changes from 4.0.4 to 4.0.5 (2013-Aug-16)
+  - crypto 1.1.1 to 1.1.2
+    - KJUR.crypto.Mac (message authentication code) class added
+
+* Changes from 4.0.3 to 4.0.4 (2013-Jul-30)
+  - rsasign 1.2.4 to 1.2.5
+    - verifyStringPSS argument change from BigInteger object biSig 
+      to hexadecimal string hSig
+      
+* Changes from 4.0.2 to 4.0.3 (2013-Jul-29)
+  - crypto.js 1.1.0 to 1.1.1
+    - Signature and MessageDigest class supports default provider.
+      So no need to specify provider.
+    - DEFAULTPROVIDER property
+    - add Util.hashString, Util.hashHex functions
+  - pkcs5pkey 1.0.3 to 1.0.4 
+    - add getRSAKeyFromPublicPKCS8PEM
+    - add getRSAKeyFromPublicPKCS8Hex
+  - rsasign 1.2.3 to 1.2.4
+    - delete _RSASIGN_HASHHEXFUNC property
+    - now rsasign supports any hash algorithm
+      which is supported by KJUR.crypto.Util.hashString
+  - add some QUnit test code
+    - test/qunit-do-{pkcs5-pub, rsasign-pss}.html 
+
+* Changes from 4.0.1 to 4.0.2 (2013-Jul-23)
+  - RSAPSS signing and validation fix by Dave(github.com/davedoesdev)
+    (base64x,crypto,rsasign)
+
+* Changes from 4.0.0 to 4.0.1
+  - rsasign-1.2.js
+    - small fix for PSS by Dave's contribution (github.com/davedoesdev)
+    - However still having issue in PSS
+  - NEW base64x-1.1.js 
+    - moved from github.com/kjur/jsjws
+
+* Changes from 3.1.5 and 4.0.0 (2013-Jul-18)
+  - newly added ECC key and ECDSA support
+    - MODIFY crypto-1.1.js - Signature class now supports ECDSA
+    - NEW ecdsa-modified-1.0.js - modifed version of Bitcoin ecdsa.js
+    - NEW ecparam-1.0.js - ECC curve parameters definition
+    - NEW ext/ec.js - Tom Wu's EC library
+    - NEW ext/ec-patch.js - patch to Tom Wu's EC library by Bitcoin
+    - supported curves are secp{256r1,256k1,384r1}
+
+* Changes from 3.1.4 and 3.1.5 (2013-Jun-11)
+  - move third party library to ext directory.
+  - fix script URLs in sample-rsasign.html 
+
+* Changes from 3.1.3 and 3.1.4 (2013-May-31)
+  - asn1-1.0.js update 1.0.1 to 1.0.2
+    - method ASN1Util.getPEMStringFromHex added
+  - asn1x509-1.0.js update 1.0.3 to 1.0.4
+    - mehtod X509Util.getPKCS8PubKeyPEMfromRSAKey added
+
+* Changes from 3.1.2 and 3.1.3 (2013-May-28)
+  - crypto-1.0.js update 1.0.3 to 1.0.4
+    - support "sjcl" (i.e. Stanford JavaScript Crypto Library) 
+      provider with sha256 in MessageDigest class
+
+* Changes from 3.1.1 and 3.1.2 (2013-May-27)
+  - pkcs5pkey-1.0.js update 1.0.2 to 1.0.3
+    - following method added to support loading encrypted PKCS#8 priavte key
+      - getRSAKeyFromEncryptedPKCS8PEM
+      - getPlainPKCS8HexFromEncryptedPKCS8PEM
+      - getPBKDF2KeyHexFromParam
+      - parseHexOfEncryptedPKCS8
+      - getRSAKeyFromPlainPKCS8Hex
+
+* Changes from 3.1.0 and 3.1.1
+  - pkcs5pkey-1.0.js update 1.0.1 to 1.0.2
+    - method 'getRSAKeyFromEncryptedPKCS5PEM', 'getEryptedPKCS5PEMFromPrvKeyHex'
+      'getEryptedPKCS5PEMFromRSAKey' and 'newEncryptedPKCS5PEM'
+      added to PKCS5PKEY to get encrypted PEM key.
+
+* Changes from 3.0.5 and 3.1.0
+  - asn1x509-1.0.js update 1.0.2 to 1.0.3
+    CRL, TBSCertList and CRLEntry class added to KJUR.asn1.x509
+    to issue CRL.
+
+* Changes from 3.0.4 and 3.0.5
+  - pkcs5peky-1.0 update 1.0.0 to 1.0.1
+    method getRSAKeyFromPlainPKCS8PEM added to PKCS5PKEY class to load
+    unencrypted PEM formatted PKCS#8 private key.
+
+* Changes from 3.0.3 and 3.0.4
+  - rsasign-1.2.js update 1.2.1 to 1.2.2
+    - hash algs used were changed from  to MessageDigest(CryptoJS base). 
+      So now jsrsasign doesn't use Paul Johnston's
+      hash library(http://pajhome.org.uk/crypt/md5/md5.html).
+      Paul's scripts will be concluded approx. one year for know then
+      their scripts and LICENSE notice will be removed then.
+  - crypto-1.0.js update 1.0.2 to 1.0.3
+    - add static hash functions {md5,sha1,sha256,sha512,ripemd160} to KJUR.crypto.Util
+
+* Changes from 3.0.2 and 3.0.3
+  - asn1x509-1.0.js update to 1.0.1
+    - ExtKeyUsage extension class added.
+
+* Changes from 3.0.1 and 3.0.2
+  - crypto-1.0.js update to 1.0.2
+    - Signature now supports signature verification:
+      - initVerifyByPublicKey and initVerifyByCertificatePEM method
+        added.
+
+* Changes from 3.0.0 and 3.0.1
+  - crypto-1.0.js update to 1.0.1
+    - MessageDigest class now support md5, sha224, sha256, sha384, 
+      sha512 and ripemd160 of 'cryptojs' provider.
+    - Signature class now support {MD5,SHA224,SHA256,SHA384,
+      SHA512,RIPEMD160}withRSA of 'cryptojs/jsrsa' provider.
+    - Signature class constructor now supports 
+      'prvkeypem' parameter to specify signing private key.
+  - asn1x509-1.0.js update to 1.0.1
+    - Certificate.setRsaPrvKeyByPEMandPass(pem,pass) method added and
+      supports new constructor property 'rsaprvpem' and 'rsaprvpas'.
+
+* Changes from 2.0.0 and 3.0.0
+  - New features:
+    - crypto-1.0.js: MessageDigest and Signature class like Java JCE
+    - asn1-1.0.js  : ASN.1 Primitive Encoder class
+    - asn1x509-1.0.js: ASN.1 class for X.509 certificate
+  - merge David Halls's contribution. 
+    (https://github.com/davedoesdev, Thanks! Dave.)
+    - rsa.js: update for PKCS#1 OAEP support
+    - rsa2.js: update for PKCS#1 OAEP support
+    - rsasign-1.2.js: add PSS support (1.2.1)
+    - jsbn.js: small fix
+    - jsbn2.js: update for probable prime fix, bnSquare
+    - base64.js: small fix
+  - gradually moving to CryptoJS library from other hash library
+
+* Changes from 1.3.1 and 2.0.0 [Apr 14, 2013]0
+  - newly added pkcs5pkey.js and PKCS5PKEY class to support 
+    passcode encrypted PKCS#5 private key.
+
+* Changes from 1.3 and 1.3.1 [Apr 14, 2013]
+  - rsapem.js updated to 1.1 to 1.1.1
+    - method RSAKey.readPrivateKeyFromASN1HexString added.
+
+* Changes from 1.2.1 and 1.3 [May 10, 2012]
+  - ASN1HEX class defined in asn1hex.js
+  - update x509.js and rsapem.js for ASN1HEX class.
+  - enhance ASN1HEX and X509class.
+  - JavaScript API document is available.
+
+* Changes from 1.2 and 1.2.1 [May 03, 2012]
+  - now minified files also provided
+
+* Changes from 1.1 and 1.2 [Apr 30, 2012]
+  - fixed critial signature generation and verification bug related to
+    zero padding of big integer.
+  - add MD5, SHA512 and RIPEMD-160 support
+  - default hash libraries were changed which was developed by
+    Paul Johnston (See http://pajhome.org.uk/crypt/md5/md5.html).
+  - now download site is hosted on github.
+
+* Changes from 1.0 and 1.1 [Sep 25, 2010]
+  - some web contents update
+
+* 1.0 Initial Relasse [Jun 03, 2010]
+
+
