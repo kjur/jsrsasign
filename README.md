@@ -17,9 +17,15 @@ Public page is https://kjur.github.io/jsrsasign .
 
 Your bugfix and pull request contribution are always welcomed :)
 
-NOTICE FOR COMMING 11.0.0 RELEASE
+ADVANCE NOTICE OF END-OF-SUPPORT (2026-APR-10)
+----------------------------------------------
+The "jsrsasign" will reach end-of-support in a few months. Some unfixed vulnerabilities have been reported for now. Hopefully most of them are fixed until the end of support. GitHub Support for this project will also be closed in a few week. Thank you for your long-standing support of this project.
+
+We will announce the end-of-support date here as soon as it is determined.
+
+NOTICE FOR 11.0.0 RELEASE
 ---------------------------------
-The "jsrsasign" library is a long lived JavaScript library from 2010 developed with old JavaScript style and backword compatibility. From coming release 11.0.0, following are planed and suport them gradually:
+The "jsrsasign" library is a long lived JavaScript library from 2010 developed with old JavaScript style and backword compatibility. From coming release 11.0.0, following changes have been applied:
 - Stop to support Internet Explorer.
 - Stop to support bower.
 - Modern ECMA functions will be introduced such as Promise, let, Array methods or class.
