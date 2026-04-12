@@ -61,6 +61,7 @@ test("verifyJWT alg ", function() {
         true, "HS256 in [HS256]");
   equal(KJUR.jws.JWS.verifyJWT(jwtHS256AUD2, "616161", {alg: ["RS256"]}),
         false, "HS256 not in [RS256]");
+  //equal(KJUR.jws.JWS.verifyJWT("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJsdWtlQGx1a2UuY29tIiwicGVybWlzc2lvbnMiOiJ1c2VyIiwiZXhwIjoxNzEwMzQ0OTg4fQ.vrPkZ1Nh6_4qyRn7gQ3N7frpl-JS3XGhOc_gxQNc8zg", {utf8: "super_secret"}, {alg: ["HS256"]}), true, "luke");
 });
 
 test("verifyJWT iss ", function() {

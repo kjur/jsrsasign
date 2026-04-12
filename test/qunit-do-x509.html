@@ -611,6 +611,56 @@ x.readCertPEM(D1SELFSHA256CER);
 equal(x.verifySignature(pubkey), false, "false");
 });
 
+test("verifySignature DSA forged cert with g=1 shall be rejected", function() {
+var DERSeq = function(arr) { return new KJUR.asn1.DERSequence({array: arr}); };
+var DERSet = function(arr) { return new KJUR.asn1.DERSet({array: arr}); };
+var DERInt = function(v) {
+    if (typeof v == "string") return new KJUR.asn1.DERInteger({hex: v});
+    return new KJUR.asn1.DERInteger({"int": v});
+};
+var DEROid = function(o) { return new KJUR.asn1.DERObjectIdentifier({oid: o}); };
+var DERUtf8 = function(s) { return new KJUR.asn1.DERUTF8String({str: s}); };
+var DERBits = function(hex) { return new KJUR.asn1.DERBitString({hex: "00" + hex}); };
+var DERUtcT = function(s) { return new KJUR.asn1.DERUTCTime({str: s}); };
+var DERTag = function(t, o) {
+    return new KJUR.asn1.DERTaggedObject({tag: t, explicit: true, obj: o});
+};
+var rdnCN = function(cn) { return DERSeq([DERSet([DERSeq([DEROid("2.5.4.3"), DERUtf8(cn)])])]); };
+
+var pHex = "17";
+var qHex = "0b";
+var gHex = "01";
+var yHex = "01";
+
+var dsaParams = DERSeq([DERInt(pHex), DERInt(qHex), DERInt(gHex)]);
+var spki = DERSeq([DERSeq([DEROid("1.2.840.10040.4.1"), dsaParams]),
+		   DERBits(DERInt(yHex).getEncodedHex())]);
+
+var tbs = DERSeq([
+    DERTag("a0", DERInt(2)),
+    DERInt(1),
+    DERSeq([DEROid("1.2.840.10040.4.3")]),
+    rdnCN("Malicious CA"),
+    DERSeq([DERUtcT("250101000000Z"), DERUtcT("351231235959Z")]),
+    rdnCN("Malicious CA"),
+    spki
+]);
+var forgedSigHex = DERSeq([DERInt(1), DERInt(7)]).getEncodedHex();
+var certHex = DERSeq([tbs, DERSeq([DEROid("1.2.840.10040.4.3")]), DERBits(forgedSigHex)]).getEncodedHex();
+var certPEM = KJUR.asn1.ASN1Util.getPEMStringFromHex(certHex, "CERTIFICATE");
+
+var accepted = false;
+try {
+    var x = new X509();
+    x.readCertPEM(certPEM);
+    var pubkey = x.getPublicKey();
+    accepted = x.verifySignature(pubkey);
+} catch (ex) {
+    accepted = false;
+}
+equal(accepted, false, "forged certificate rejected");
+});
+
 test("verifySignature ECDSA k1.self.sha1.cer with k1.pub.p8 VALID", function() {
 var pubkey = KEYUTIL.getKey(K1PUBP8);
 var x = new X509();
@@ -691,4 +741,3 @@ deepEqual(p, pExpect, "hoge2");
 
 </body>
 </html>
-

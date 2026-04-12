@@ -274,6 +274,7 @@ ASN1HEX.getNextSiblingIdx = function(s, idx) {
  * ASN1HEX.getChildIdx("1303616161", 0) &rArr; [4] // PrintableString aaa
  * ASN1HEX.getChildIdx("030300ffff", 0) &rArr; [6] // BITSTRING ffff (unusedbits=00a)
  * ASN1HEX.getChildIdx("3006020104020105", 0) &rArr; [4, 10] // SEQUENCE(INT4,INT5)
+ * ASN1HEX.getChildIdx("30841084107730030101ff", 0) &rArr; raise error for lacking vaule
  */
 ASN1HEX.getChildIdx = function(h, idx) {
     var _ASN1HEX = ASN1HEX;
@@ -282,6 +283,11 @@ ASN1HEX.getChildIdx = function(h, idx) {
 
     idxStart = _ASN1HEX.getVidx(h, idx);
     totalChildBlen = _ASN1HEX.getVblen(h, idx) * 2;
+
+    if (idxStart + totalChildBlen > h.length) {
+        throw new Error("too short ASN.1 value");
+    }
+
     if (h.substr(idx, 2) == "03") {  // BITSTRING without unusedbits
 	idxStart += 2;
 	totalChildBlen -= 2;
@@ -291,6 +297,7 @@ ASN1HEX.getChildIdx = function(h, idx) {
     var i = idxStart;
     while (currentChildBlen <= totalChildBlen) {
 	var tlvBlen = _ASN1HEX.getTLVblen(h, i);
+        if (tlvBlen <= 0) throw new Error("malformed ASN.1: invalid TLV length");
 	currentChildBlen += tlvBlen;
 	if (currentChildBlen <= totalChildBlen) a.push(i);
 	i += tlvBlen;

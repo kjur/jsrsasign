@@ -167,6 +167,15 @@ function RSASetPublic(N, E) {
     } else {
 	throw "Invalid RSA public key";
     }
+
+    if (this.n == null ||
+	typeof this.n.compareTo !== "function" ||
+	this.n.compareTo(BigInteger.ONE) <= 0 ||
+	this.e == null ||
+	isNaN(this.e) ||
+	this.e <= 0) {
+	throw "Invalid RSA public key";
+    }
 }
 
 // Perform raw public operation on "x": return x^e (mod n)

@@ -411,6 +411,9 @@ Barrett.prototype.sqrTo = barrettSqrTo;
 
 // (public) this^e % m (HAC 14.85)
 function bnModPow(e,m) {
+  if(e.signum() < 0) {
+    return this.modInverse(m).modPow(e.negate(), m);
+  }
   var i = e.bitLength(), k, r = nbv(1), z;
   if(i <= 0) return r;
   else if(i < 18) k = 1;
@@ -508,15 +511,17 @@ function bnpModInt(n) {
 
 // (public) 1/this % m (HAC 14.61)
 function bnModInverse(m) {
+  if(m.signum() == 0) return BigInteger.ZERO;
+  var x = this.mod(m);
   var ac = m.isEven();
-  if((this.isEven() && ac) || m.signum() == 0) return BigInteger.ZERO;
-  var u = m.clone(), v = this.clone();
+  if((x.isEven() && ac) || x.signum() == 0) return BigInteger.ZERO;
+  var u = m.clone(), v = x.clone();
   var a = nbv(1), b = nbv(0), c = nbv(0), d = nbv(1);
   while(u.signum() != 0) {
     while(u.isEven()) {
       u.rShiftTo(1,u);
       if(ac) {
-        if(!a.isEven() || !b.isEven()) { a.addTo(this,a); b.subTo(m,b); }
+        if(!a.isEven() || !b.isEven()) { a.addTo(x,a); b.subTo(m,b); }
         a.rShiftTo(1,a);
       }
       else if(!b.isEven()) b.subTo(m,b);
@@ -525,7 +530,7 @@ function bnModInverse(m) {
     while(v.isEven()) {
       v.rShiftTo(1,v);
       if(ac) {
-        if(!c.isEven() || !d.isEven()) { c.addTo(this,c); d.subTo(m,d); }
+        if(!c.isEven() || !d.isEven()) { c.addTo(x,c); d.subTo(m,d); }
         c.rShiftTo(1,c);
       }
       else if(!d.isEven()) d.subTo(m,d);
@@ -553,6 +558,7 @@ var lplim = (1<<26)/lowprimes[lowprimes.length-1];
 
 // (public) test primality with certainty >= 1-.5^t
 function bnIsProbablePrime(t) {
+  if(this.signum() <= 0) return false;
   var i, x = this.abs();
   if(x.t == 1 && x[0] <= lowprimes[lowprimes.length-1]) {
     for(i = 0; i < lowprimes.length; ++i)
@@ -572,6 +578,7 @@ function bnIsProbablePrime(t) {
 
 // (protected) true if probably prime (HAC 4.24, Miller-Rabin)
 function bnpMillerRabin(t) {
+  if(this.signum() <= 0) return false;
   var n1 = this.subtract(BigInteger.ONE);
   var k = n1.getLowestSetBit();
   if(k <= 0) return false;
@@ -668,4 +675,3 @@ BigInteger.prototype.sqrt = function() {
 	div = y;
     }
 }
-

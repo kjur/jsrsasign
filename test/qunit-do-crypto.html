@@ -211,6 +211,22 @@ test("Util.getRandomBigIntegerZeroToMax", function() {
   equal(n, 1000, "1000 times success:" + n0 + ":" + n1 + ":" + n2 + ":" + n3);
 });
 
+test("Util.getRandomBigIntegerZeroToMax rejects out-of-range candidate", function() {
+  var fOrig = KJUR.crypto.Util.getRandomBigIntegerOfNbits;
+  var aBiRand = [new BigInteger("200", 10), new BigInteger("42", 10)];
+  var idx = 0;
+  KJUR.crypto.Util.getRandomBigIntegerOfNbits = function(n) {
+    return aBiRand[idx++];
+  };
+  try {
+    var bi = KJUR.crypto.Util.getRandomBigIntegerZeroToMax(new BigInteger("100", 10));
+    equal(bi.toString(10), "42", "returns in-range value");
+    equal(idx >= 2, true, "retries when out-of-range candidate appears");
+  } finally {
+    KJUR.crypto.Util.getRandomBigIntegerOfNbits = fOrig;
+  }
+});
+
 test("Util.getRandomBigIntegerMinToMax", function() {
   var bi15 = new BigInteger("15", 10);
   var bi18 = new BigInteger("18", 10);
@@ -230,6 +246,71 @@ test("Util.getRandomBigIntegerMinToMax", function() {
     if (ii == 18) n3++;
   }
   equal(n, 100, "100 times success:" + n0 + ":" + n1 + ":" + n2 + ":" + n3);
+});
+
+test("BigInteger.isProbablePrime rejects negative values", function() {
+  equal(new BigInteger("-2", 10).isProbablePrime(20), false, "-2 is not prime");
+  equal(new BigInteger("-7", 10).isProbablePrime(20), false, "-7 is not prime");
+  equal(new BigInteger("-97", 10).isProbablePrime(20), false, "-97 is not prime");
+});
+
+test("BigInteger.isProbablePrime control values", function() {
+  equal(new BigInteger("7", 10).isProbablePrime(20), true, "7 is prime");
+  equal(new BigInteger("4", 10).isProbablePrime(20), false, "4 is composite");
+});
+
+test("RSASetPublic rejects zero modulus", function() {
+  throws(function() {
+    var pub = new RSAKey();
+    pub.setPublic("00", "10001");
+  },
+  "Invalid RSA public key",
+  "reject zero modulus");
+});
+
+test("KEYUTIL.getKey rejects JWK with zero modulus", function() {
+  throws(function() {
+    KEYUTIL.getKey({kty: "RSA", n: "AA", e: "AQAB"});
+  },
+  "Invalid RSA public key",
+  "reject JWK n=0");
+});
+
+test("BigInteger.modPowInt throws when modulus is zero", function() {
+  throws(function() {
+    new BigInteger("deadbeef", 16).modPowInt(65537, BigInteger.ZERO);
+  },
+  "BigInteger divide by zero",
+  "reject mod(0)");
+});
+
+test("BigInteger.modInverse returns quickly for zero input", function() {
+  var biM = new BigInteger("97", 10);
+  var biR = new BigInteger("0", 10).modInverse(biM);
+  equal(biR.compareTo(BigInteger.ZERO), 0, "0 has no inverse");
+});
+
+test("BigInteger.modInverse normalizes negative input", function() {
+  var biM1 = new BigInteger("7", 10);
+  var biM2 = new BigInteger("97", 10);
+  equal(new BigInteger("-1", 10).modInverse(biM1).toString(10), "6", "-1 mod 7");
+  equal(new BigInteger("-13", 10).modInverse(biM2).toString(10), "82", "-13 mod 97");
+});
+
+test("Util.getRandomBigIntegerMinToMax throws for any positive compareTo", function() {
+  var biMin = {
+    compareTo: function(a) { return 2; }
+  };
+  var biMax = {
+    subtract: function(a) { throw "subtract must not be called"; }
+  };
+  var ex = null;
+  try {
+    KJUR.crypto.Util.getRandomBigIntegerMinToMax(biMin, biMax);
+  } catch (err) {
+    ex = err;
+  }
+  equal(ex, "biMin is greater than biMax", "throws before subtraction");
 });
 
 test("MessageDigest test", function() {
@@ -395,6 +476,23 @@ var result = sig2.verify(hSig);
 equal(result, true, "SHA1withRSA(x1234) sign/verify key2prv/key2pub");
 });
 
+test("BigInteger.modPow handles negative exponent -1", function() {
+  var a = new BigInteger("7", 10);
+  var m = new BigInteger("19", 10);
+  var got = a.modPow(new BigInteger("-1", 10), m);
+  var expected = a.modInverse(m);
+  equal(got.toString(10), expected.toString(10), "a^-1 mod m");
+});
+
+test("BigInteger.modPow handles negative exponent -k", function() {
+  var a = new BigInteger("3", 10);
+  var m = new BigInteger("23", 10);
+  var e = new BigInteger("-3", 10);
+  var got = a.modPow(e, m);
+  var expected = a.modInverse(m).modPow(e.negate(), m);
+  equal(got.toString(10), expected.toString(10), "a^-k mod m");
+});
+
 });
 -->
 </script>
@@ -419,4 +517,3 @@ ECC related QUnit test pages:
 </p>
 </body>
 </html>
-

@@ -354,7 +354,7 @@ function bnpSquareTo(r) {
 // r != q, this != m.  q or r may be null.
 function bnpDivRemTo(m,q,r) {
   var pm = m.abs();
-  if(pm.t <= 0) return;
+  if(pm.t <= 0) throw "BigInteger divide by zero";
   var pt = this.abs();
   if(pt.t < pm.t) {
     if(q != null) q.fromInt(0);

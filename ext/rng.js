@@ -45,7 +45,14 @@ if (rng_pool == null) {
       for(t = 0; t < z.length; ++t)
         rng_pool[rng_pptr++] = z.charCodeAt(t) & 255;
     }
-  }  
+  }
+  // for Node>=19 and modern browsers support globalThis.crypto.getRandomValues
+  if (rng_pptr < rng_psize && typeof globalThis !== "undefined" &&
+      globalThis.crypto && globalThis.crypto.getRandomValues) {
+    var ga = new Uint8Array(rng_psize - rng_pptr);
+    globalThis.crypto.getRandomValues(ga);
+    for (t = 0; t < ga.length; ++t) rng_pool[rng_pptr++] = ga[t];
+  }
   while (rng_pptr < rng_psize) {  // extract some randomness from Math.random()
     t = Math.floor(65536 * Math.random());
     rng_pool[rng_pptr++] = t >>> 8;

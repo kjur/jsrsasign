@@ -94,27 +94,57 @@ raises(function() {
 });
 
 test("JWS sign header and/or payload by object test", function() {
-var sJWS, pHeader, pPayload;
+  var sJWS, pHeader, pPayload;
 
-equal(JSON.stringify({alg: "HS256", cty: "JWT"}), '{"alg":"HS256","cty":"JWT"}', 
-      "if this sub test fails, there is NO PROBLEM that all of following sub test fail.");
+  equal(JSON.stringify({alg: "HS256", cty: "JWT"}), '{"alg":"HS256","cty":"JWT"}', 
+	"if this sub test fails, there is NO PROBLEM that all of following sub test fail.");
 
-sJWS = KJUR.jws.JWS.sign(null, {"alg":"HS256", "cty":"JWT"}, {"age": 21}, "aaa");
-equal(sJWS, 'eyJhbGciOiJIUzI1NiIsImN0eSI6IkpXVCJ9.eyJhZ2UiOjIxfQ.pLem30ReEpeXgMt6e3gjZ6QYSpLBbhd_NB-Afud1m4A', 'by header, payload object {}');
+  sJWS = KJUR.jws.JWS.sign(null, {"alg":"HS256", "cty":"JWT"}, {"age": 21}, "aaa");
+  equal(sJWS, 'eyJhbGciOiJIUzI1NiIsImN0eSI6IkpXVCJ9.eyJhZ2UiOjIxfQ.pLem30ReEpeXgMt6e3gjZ6QYSpLBbhd_NB-Afud1m4A', 'by header, payload object {}');
 
-pHeader = {};
-pHeader.alg = "HS256";
-pHeader.cty = "JWT";
-pPayload = {};
-pPayload.age = 21;
-sJWS = KJUR.jws.JWS.sign(null, pHeader, pPayload, "aaa");
-equal(sJWS, 'eyJhbGciOiJIUzI1NiIsImN0eSI6IkpXVCJ9.eyJhZ2UiOjIxfQ.pLem30ReEpeXgMt6e3gjZ6QYSpLBbhd_NB-Afud1m4A', 'by header, payload object p.age=21');
+  pHeader = {};
+  pHeader.alg = "HS256";
+  pHeader.cty = "JWT";
+  pPayload = {};
+  pPayload.age = 21;
+  sJWS = KJUR.jws.JWS.sign(null, pHeader, pPayload, "aaa");
+  equal(sJWS, 'eyJhbGciOiJIUzI1NiIsImN0eSI6IkpXVCJ9.eyJhZ2UiOjIxfQ.pLem30ReEpeXgMt6e3gjZ6QYSpLBbhd_NB-Afud1m4A', 'by header, payload object p.age=21');
+});
 
+var sJWSCrit = "eyJhbGciOiJIUzI1NiIsImNyaXQiOlsiZXhwIl0sImV4cCI6MTM2MzI4NDAwMH0.eyJhZ2UiOjIxfQ.3_roBzrGN7T9_MgqwNIW-ei-v1r77okBoYXHby2IAwY";
+var sJWSCritPW = "aaa";
+test("JWS sign with crit", function() {
+  var sJWS, pHeader, pPayload;
+  pHeader = { alg: "HS256", crit: ["exp"], exp: 1363284000 };
+  //pHeader = { alg: "HS256", crit: [], exp: 1363284000 };
+  //pHeader = { alg: "HS256", crit: "foo", exp: 1363284000 };
+  //pHeader = { alg: "HS256", crit: [123], exp: 1363284000 };
+  //pHeader = { alg: "HS256", crit: ["noSuchParam"], exp: 1363284000 };
+  pPayload = { age: 21 };
+  sJWS = KJUR.jws.JWS.sign(null, pHeader, pPayload, sJWSCritPW);
+  equal(sJWS, sJWSCrit, "JWS with crit");
 });
 
 var hJWSHSPass = "616161";
 var sJWSHS256 = 'eyJhbGciOiJIUzI1NiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.vcimDRCLttYBHsO7M0S_tCvUIOGz26Ti5nkRuj1QcHc';
 var sJWSHS512 = 'eyJhbGciOiJIUzUxMiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.b6HuF_CTLldXzQwAVhsnpEGkbrtquQfjdr8ie_UyqjPFNnGOz-rEvOvfDC_ex4zvVgsARAixM-6Ug9WcnweTgA';
+
+test("verify test for JWS with crit parameter", function() {
+  var _verify = KJUR.jws.JWS.verify;
+  equal(_verify("eyJhbGciOiJIUzI1NiIsImNyaXQiOlsiZXhwIl0sImV4cCI6MTM2MzI4NDAwMH0.eyJhZ2UiOjIxfQ.3_roBzrGN7T9_MgqwNIW-ei-v1r77okBoYXHby2IAwY", "aaa"), true, "crit[exp]");
+  raises(function() {
+    _verify("eyJhbGciOiJIUzI1NiIsImNyaXQiOltdLCJleHAiOjEzNjMyODQwMDB9.eyJhZ2UiOjIxfQ.JsX52l78nfgPfiPTz8LZPWAA93U9aYNSlehQq9Khr0c", "aaa");
+  }, "crit=[] -> raise error");
+  raises(function() {
+    _verify("eyJhbGciOiJIUzI1NiIsImNyaXQiOiJmb28iLCJleHAiOjEzNjMyODQwMDB9.eyJhZ2UiOjIxfQ.p-lhWSLvIfZ4_RYR2sTBI9lbumcS-4XsRxs3WyB6ZW8", "aaa");
+  }, "crit=not Array -> raise error");
+  raises(function() {
+    _verify("eyJhbGciOiJIUzI1NiIsImNyaXQiOlsxMjNdLCJleHAiOjEzNjMyODQwMDB9.eyJhZ2UiOjIxfQ.PMhTUPChvkkeVGnccpE-iEjDBQDwrTtM-q0uHhBqX2Q", "aaa");
+  }, "crit=[123] -> raise error");
+  raises(function() {
+    _verify("eyJhbGciOiJIUzI1NiIsImNyaXQiOlsibm9TdWNoUGFyYW0iXSwiZXhwIjoxMzYzMjg0MDAwfQ.eyJhZ2UiOjIxfQ.OJ10f7QrXRH0Exe83-G-ILKaAx7pz59EhOEeUdt9aTY", "aaa");
+  }, "crit=[noSuchParam] -> raise error");
+});
 
 // *** VERIFICATION TESTS *****************************************
 test("verify test for algorithm HS256", function() {

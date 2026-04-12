@@ -1765,7 +1765,7 @@ function hextooid(h) {
  * inttohex(1) &rarr; "01"
  * inttohex(-1) &rarr; "ff"
  * inttohex(2048) &rarr; "0800"
- * inttohex(-2048) &rarr; "f800"
+ * inttohex(-2048) &rarr; "f800ff"
  */
 function inttohex(i) {
     var bi = new BigInteger(String(i), 10);

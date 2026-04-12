@@ -47,7 +47,24 @@ KJUR.crypto.DSA = function() {
         _getVbyList = _ASN1HEX.getVbyList,
         _getVbyListEx = _ASN1HEX.getVbyListEx,
 	_isASN1HEX = _ASN1HEX.isASN1HEX,
-	_BigInteger = BigInteger;
+	_BigInteger = BigInteger,
+	_BI_ONE = BigInteger.ONE;
+
+    var _validatePublicArgs = function(p, q, g, y) {
+	if (p == null || q == null || g == null || y == null)
+	    throw new Error("invalid DSA public key");
+
+	// FIPS 186-4 4.7: domain parameters and public key shall be validated.
+	if (_BI_ONE.compareTo(q) >= 0 || q.compareTo(p) >= 0)
+	    throw new Error("invalid DSA public key");
+	if (_BI_ONE.compareTo(g) >= 0 || g.compareTo(p) >= 0)
+	    throw new Error("invalid DSA public key");
+	if (_BI_ONE.compareTo(y) >= 0 || y.compareTo(p) >= 0)
+	    throw new Error("invalid DSA public key");
+	if (g.modPow(q, p).compareTo(_BI_ONE) != 0)
+	    throw new Error("invalid DSA public key");
+    };
+
     this.p = null;
     this.q = null;
     this.g = null;
@@ -120,6 +137,8 @@ KJUR.crypto.DSA = function() {
      * @since jsrsasign 7.0.0 dsa 2.0.0
      */
     this.setPublic = function(p, q, g, y) {
+	_validatePublicArgs(p, q, g, y);
+
 	this.isPublic = true;
 	this.p = p;
 	this.q = q;
@@ -164,21 +183,24 @@ KJUR.crypto.DSA = function() {
 	var y = this.y; // public key (p q g y)
 	var x = this.x; // private key
 
-	// NIST FIPS 186-4 4.5 DSA Per-Message Secret Number (p18)
-	// 1. get random k where 0 < k < q
-	var k = KJUR.crypto.Util.getRandomBigIntegerMinToMax(BigInteger.ONE.add(BigInteger.ONE),
-							     q.subtract(BigInteger.ONE));
-
 	// NIST FIPS 186-4 4.6 DSA Signature Generation (p19)
 	// 2. get z where the left most min(N, outlen) bits of Hash(M)
 	var hZ = sHashHex.substr(0, q.bitLength() / 4);
 	var z = new BigInteger(hZ, 16);
 
-	// 3. get r where (g^k mod p) mod q, r != 0
-	var r = (g.modPow(k,p)).mod(q); 
+	var k, r, s;
+	do {
+	    // NIST FIPS 186-4 4.5 DSA Per-Message Secret Number (p18)
+	    // 1. get random k where 0 < k < q
+	    k = KJUR.crypto.Util.getRandomBigIntegerMinToMax(BigInteger.ONE.add(BigInteger.ONE),
+							 q.subtract(BigInteger.ONE));
 
-	// 4. get s where k^-1 (z + xr) mod q, s != 0
-	var s = (k.modInverse(q).multiply(z.add(x.multiply(r)))).mod(q);
+	    // 3. get r where (g^k mod p) mod q, r != 0
+	    r = (g.modPow(k,p)).mod(q); 
+
+	    // 4. get s where k^-1 (z + xr) mod q, s != 0
+	    s = (k.modInverse(q).multiply(z.add(x.multiply(r)))).mod(q);
+	} while (r.compareTo(BigInteger.ZERO) == 0 || s.compareTo(BigInteger.ZERO) == 0);
 
 	// 5. signature (r, s)
 	var result = KJUR.asn1.ASN1Util.jsonToASN1HEX({
@@ -214,12 +236,12 @@ KJUR.crypto.DSA = function() {
 	var z = new BigInteger(hZ, 16);
 
 	// NIST FIPS 186-4 4.7 DSA Signature Validation (p19)
-	// 3.1. 0 < r < q
-	if (BigInteger.ZERO.compareTo(r) > 0 || r.compareTo(q) > 0)
+	// 3.1. 0 =< r =< q
+	if (BigInteger.ZERO.compareTo(r) >= 0 || r.compareTo(q) >= 0)
 	    throw "invalid DSA signature";
 
-	// 3.2. 0 < s < q
-	if (BigInteger.ZERO.compareTo(s) >= 0 || s.compareTo(q) > 0)
+	// 3.2. 0 =< s =< q
+	if (BigInteger.ZERO.compareTo(s) >= 0 || s.compareTo(q) >= 0)
 	    throw "invalid DSA signature";
 
 	// 4. get w where w = s^-1 mod q

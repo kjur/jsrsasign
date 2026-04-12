@@ -1547,6 +1547,10 @@ As for backword compatibility, if key is a string, has even length and
 0..9, A-F or a-f characters, key string is treated as a hexadecimal
 otherwise it is treated as a raw string.
 </p>
+NOTE3: From jsrsasign 11.1.2, "crit" header parameter 
+existance check processing is supported as defined in RFC 7515 section  4.1.11.
+However, you must implement the validation of the header parameter values 
+specified as “crit” yourself.
 						
 						
 					</div>
