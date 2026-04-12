@@ -120,14 +120,27 @@ test("ASN1HEX.getChildIdx bitstr0055", function() {
   equal(a.join("/"), "6", "bitstr 00555>[6]");
 });
 
+test("ASN1HEX.getChildIdx raise too short value", function() { 
+  raises(function() {
+    var a = ASN1HEX.getChildIdx("30841084107730030101ff", 0);
+  }, "30841084107730030101ff, 0 -> exception for short value");
+});
+
 test("ASN1HEX.getNthChildIdx", function() { 
   var h = "300902012a02012b02012c";
+  //           ^0
+  //                 ^1    
+  //                       ^2
   var h2 = "ff300902012a02012b02012c";
+  //              ^0
+  //                    ^1    
+  //                          ^2
+  //          
   expect(4);
   equal(ASN1HEX.getNthChildIdx(h, 0, 0), 4,  "nth = 1");
   equal(ASN1HEX.getNthChildIdx(h, 0, 1), 10, "nth = 2");
   equal(ASN1HEX.getNthChildIdx(h, 0, 2), 16, "nth = 3");
-  equal(ASN1HEX.getNthChildIdx(h2, 0, 1), 12, "h2 nth = 2");
+  equal(ASN1HEX.getNthChildIdx(h2, 2, 1), 12, "h2 nth = 2");
 });
 
 test("ASN1HEX.getIdxbyList", function() { 
@@ -226,6 +239,12 @@ test("ASN1HEX.getTLVbyList", function() {
   equal(ASN1HEX.getTLVbyList(h, 0, [1, 1]), "02012b", "(1,1)=02012b");
   equal(ASN1HEX.getTLVbyList(h2, 0, [0, 3]), h3, "issuer");
   equal(ASN1HEX.getTLVbyList(h2, 0, [0, 5]), h3, "subject");
+});
+
+test("ASN1HEX.getTLVbyList raise error for short value", function() {
+  raises(function() {
+    ASN1HEX.getTLVbyList("3064025096d0", 0, [0]);
+  }, "3064025096d0, 0, [0] -> exception for short value");
 });
 
 /*

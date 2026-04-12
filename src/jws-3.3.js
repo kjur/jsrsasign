@@ -374,6 +374,11 @@ KJUR.jws.JWS.sign = function(alg, spHeader, spPayload, key, pass) {
  * 0..9, A-F or a-f characters, key string is treated as a hexadecimal
  * otherwise it is treated as a raw string.
  * </p>
+ * NOTE3: From jsrsasign 11.1.2, "crit" header parameter 
+ * existance check processing is supported as defined in RFC 7515 section  4.1.11.
+ * However, you must implement the validation of the header parameter values 
+ * specified as “crit” yourself.
+ * 
  * @example
  * // 1) verify a RS256 JWS signature by a certificate string.
  * isValid = KJUR.jws.JWS.verify('eyJh...', '-----BEGIN...', ['RS256']);
@@ -469,18 +474,31 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
     // 4. check whether alg is supported alg in jsjws.
     var sigAlg = null;
     if (_KJUR_jws_JWS.jwsalg2sigalg[pHeader.alg] === undefined) {
-	throw "unsupported alg name: " + alg;
+	throw new Error("unsupported alg name: " + alg);
     } else {
 	sigAlg = _KJUR_jws_JWS.jwsalg2sigalg[alg];
     }
 
-    // 5. verify
+    // 5. check critical header
+    if (pHeader.crit !== undefined) {
+        if (! Array.isArray(pHeader.crit) || pHeader.crit.length === 0)
+            throw new Error("wrong critical header");
+        for (var i = 0; i < pHeader.crit.length; i++) {
+	    var p = pHeader.crit[i];
+	    if (typeof p !== "string" || p.length === 0)
+                throw new Error("wrong critical header");
+	    if (pHeader[p] === undefined)
+                throw new Error("critical header '" + p + "' missing");
+	}
+    }
+
+    // 6. verify signature
     if (sigAlg == "none") {
-        throw "not supported";
+        throw new Error("not supported");
     } else if (sigAlg.substr(0, 4) == "Hmac") {
 	var hSig2 = null;
 	if (key === undefined)
-	    throw "hexadecimal key shall be specified for HMAC";
+	    throw new Error("hexadecimal key shall be specified for HMAC");
 	//try {
 	    var mac = new _Mac({'alg': sigAlg, 'pass': key});
 	    mac.updateString(uSignatureInput);
@@ -738,7 +756,7 @@ KJUR.jws.JWS.verifyJWT = function(sJWT, key, acceptField) {
 
     // 9 JWT id 'jti' check
     if (pPayload.jti !== undefined && acceptField.jti !== undefined) {
-      if (pPayload.jti !== acceptField.jti) return false;
+        if (pPayload.jti !== acceptField.jti) return false;
     }
 
     // 10 JWS signature check

@@ -2,7 +2,6 @@ jsrsasign
 =========
 
 [![license](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/kjur/jsrsasign/blob/master/LICENSE.txt)
-[![bower](https://img.shields.io/bower/v/jsrsasign.svg?maxAge=2592000)](https://libraries.io/bower/jsrsasign)
 [![npm version](https://badge.fury.io/js/jsrsasign.svg)](https://badge.fury.io/js/jsrsasign)
 [![npm downloads](https://img.shields.io/npm/dm/jsrsasign.svg)](https://www.npmjs.com/package/jsrsasign)
 [![jsdeliver downloads](https://data.jsdelivr.com/v1/package/npm/jsrsasign/badge)](https://www.jsdelivr.com/package/npm/jsrsasign)
@@ -18,9 +17,15 @@ Public page is https://kjur.github.io/jsrsasign .
 
 Your bugfix and pull request contribution are always welcomed :)
 
-NOTICE FOR COMMING 11.0.0 RELEASE
+ADVANCE NOTICE OF END-OF-SUPPORT (2026-APR-10)
+----------------------------------------------
+The "jsrsasign" will reach end-of-support in a few months. Some unfixed vulnerabilities have been reported for now. Hopefully most of them are fixed until the end of support. GitHub Support for this project will also be closed in a few week. Thank you for your long-standing support of this project.
+
+We will announce the end-of-support date here as soon as it is determined.
+
+NOTICE FOR 11.0.0 RELEASE
 ---------------------------------
-The "jsrsasign" library is a long lived JavaScript library from 2010 developed with old JavaScript style and backword compatibility. From coming release 11.0.0, following are planed and suport them gradually:
+The "jsrsasign" library is a long lived JavaScript library from 2010 developed with old JavaScript style and backword compatibility. From coming release 11.0.0, following changes have been applied:
 - Stop to support Internet Explorer.
 - Stop to support bower.
 - Modern ECMA functions will be introduced such as Promise, let, Array methods or class.
@@ -33,6 +38,7 @@ The "jsrsasign" library is a long lived JavaScript library from 2010 developed w
 
 NEWS
 ----
+- 2024-Jan-16: [Security advisory](https://github.com/kjur/jsrsasign/security/advisories/GHSA-rh63-9qcf-83gf) and [update](https://github.com/kjur/jsrsasign/releases/tag/11.0.0) for Marvin attack vulnerability published. Due to this vulnerability, RSA PKCS#1.5 and RSAOAEP encryption/decryption no longer be supported.
 - 2023-Mar-12: [10.7.0 Release](https://github.com/kjur/jsrsasign/releases/tag/10.7.0). Now supports custom X.509 extension and custom OIDs by new "Add-on" architecture. ([See here in detail](https://github.com/kjur/jsrsasign/wiki/jsrsasign-Add-On2))
 - 2021-Nov-21: [10.5.0 Release](https://github.com/kjur/jsrsasign/releases/tag/10.5.0). Now supports secp521r1(P-521) ECDSA.
 - 2021-Apr-14: [Security advisory](https://github.com/kjur/jsrsasign/security/advisories/GHSA-27fj-mc8w-j9wg) and [update](https://github.com/kjur/jsrsasign/releases/tag/10.2.0) for CVE-2021-30246 RSA signature validation vulnerability published
@@ -93,6 +99,7 @@ MORE TUTORIALS AND SAMPLES
 
 |published|fixed version|title/advisory|CVE|CVSS|
 |:---|:---|:---|:---|:---|
+|2024Jan16|11.0.0|[Marvin attack vulnerability for RSA and RSAOAEP decryption](https://github.com/kjur/jsrsasign/security/advisories/GHSA-rh63-9qcf-83gf)|CVE-2024-21484|7.5|
 |2022Jun24|10.5.25|[JWS and JWT signature validation vulnerability with special characters](https://github.com/kjur/jsrsasign/security/advisories/GHSA-3fvg-4v2m-98jf)|CVE-2022-25898|?|
 |2021Apr14|10.2.0|[RSA signature validation vulnerability on maleable encoded message](https://github.com/kjur/jsrsasign/security/advisories/GHSA-27fj-mc8w-j9wg)|CVE-2021-30246|9.1|
 |2020Jun22|8.0.19|[ECDSA signature validation vulnerability by accepting wrong ASN.1 encoding](https://github.com/kjur/jsrsasign/security/advisories/GHSA-p8c3-7rj8-q963)|CVE-2020-14966|5.5|
@@ -100,19 +107,4 @@ MORE TUTORIALS AND SAMPLES
 |2020Jun22|8.0.17|[RSA-PSS signature validation vulnerability by prepending zeros](https://github.com/kjur/jsrsasign/security/advisories/GHSA-q3gh-5r98-j4h3)|CVE-2020-14968|4.2|
 
 Here is [full published security advisory list](https://github.com/kjur/jsrsasign/security/advisories?state=published).
-
-## DONATIONS
-
-If you like jsrsasign and my other project, you can support their development by donation through any of the platform/services below. Thank you as always.
-
-### Github Sponsors
-You can sponsor jsrsasign with the [GitHub Sponsors](https://github.com/sponsors/kjur) program.
-
-### Cryptocurrency
-You can donate cryptocurrency to jsrsasign using the following addresses:
-- Bitcoin(BTC): [34vSRe7XHoMy78HKgps9YJ5BrBLYJLeM22](https://en.cryptobadges.io/donate/34vSRe7XHoMy78HKgps9YJ5BrBLYJLeM22)
-- Ethereum(ETH): [0x9c4cdbb531e5b84796ff5f91a9f652704761e64e](https://en.cryptobadges.io/donate/0x9c4cdbb531e5b84796ff5f91a9f652704761e64e)
-- Litecoin(LTC): [LPf3VDJVamwPcNJNjjVtrUQuJQ17ZyWzeU](https://en.cryptobadges.io/donate/LPf3VDJVamwPcNJNjjVtrUQuJQ17ZyWzeU)
-- Bitcoin Cash(BCH): bitcoincash:pq3hy08pc9vm57q6ddgsc06cqdffmfzwwqxd9yejyf
-
 

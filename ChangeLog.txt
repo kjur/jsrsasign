@@ -1,6 +1,22 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 11.1.1 to 11.1.2 (2026-Apr-12)
+  - Security fixes:
+    - HIGH: wrong random for for Node.JS >= 19 and modern browsers (ext/rng.js SecureRandom)
+      reported by Bronson Yen of Calif.io and @Kr0emer #655.
+    - HIGH: ASN.1 Parser Infinite Loop (asn1hex.js)
+      getChildIdx fix to avoid infinite loop reported by Koda Reef.
+    - HIGH: DSA Universal Signature Forgery (dsa.js)
+      FIPS 186-4 section 4.7 wrong boundary checking in verifyWithMessageHash
+      reported by Koda Reef, Nicholas Carlini and @Kr0emer.
+    - ASN1HEX.getChildIdx DoS (asn1hex.js)
+      getChildIdx may raise DoS because of lacking value length check
+      reported by Yt(yutengsun) and Franciny S Roj.
+    - missing JWS crit header parameter validation (jws.js)
+      as reported by Franciny S Roj.
+    Thank you indeed for those vulnerability reports and/or patches.
+
 * Changes from 11.1.0 to 11.1.1 (2026-Feb-20)
   - security fix for DSA and BigInteger
     - PR #651, #650, #649, #648, #647, #646, #645. Thank you @Kr0remer

@@ -236,12 +236,12 @@ KJUR.crypto.DSA = function() {
 	var z = new BigInteger(hZ, 16);
 
 	// NIST FIPS 186-4 4.7 DSA Signature Validation (p19)
-	// 3.1. 0 < r < q
-	if (BigInteger.ZERO.compareTo(r) > 0 || r.compareTo(q) > 0)
+	// 3.1. 0 =< r =< q
+	if (BigInteger.ZERO.compareTo(r) >= 0 || r.compareTo(q) >= 0)
 	    throw "invalid DSA signature";
 
-	// 3.2. 0 < s < q
-	if (BigInteger.ZERO.compareTo(s) >= 0 || s.compareTo(q) > 0)
+	// 3.2. 0 =< s =< q
+	if (BigInteger.ZERO.compareTo(s) >= 0 || s.compareTo(q) >= 0)
 	    throw "invalid DSA signature";
 
 	// 4. get w where w = s^-1 mod q

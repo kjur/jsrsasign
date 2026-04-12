@@ -1183,7 +1183,8 @@ NOTE: Since asn1hex 1.1.7 of jsrsasign 6.1.2, Encapsulated BitString is supporte
 					<pre class="code">ASN1HEX.getChildIdx("0203012345", 0) &rArr; [4] // INTEGER 012345
 ASN1HEX.getChildIdx("1303616161", 0) &rArr; [4] // PrintableString aaa
 ASN1HEX.getChildIdx("030300ffff", 0) &rArr; [6] // BITSTRING ffff (unusedbits=00a)
-ASN1HEX.getChildIdx("3006020104020105", 0) &rArr; [4, 10] // SEQUENCE(INT4,INT5)</pre>
+ASN1HEX.getChildIdx("3006020104020105", 0) &rArr; [4, 10] // SEQUENCE(INT4,INT5)
+ASN1HEX.getChildIdx("30841084107730030101ff", 0) &rArr; raise error for lacking vaule</pre>
 					
 					
 					
