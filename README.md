@@ -38,6 +38,7 @@ The "jsrsasign" library is a long lived JavaScript library from 2010 developed w
 
 NEWS
 ----
+- 2026-Apr-14: We have disabled GitHub Sponsors for this project and will no longer be accepting sponsorships. Thank you very much for your long-standing support.
 - 2024-Jan-16: [Security advisory](https://github.com/kjur/jsrsasign/security/advisories/GHSA-rh63-9qcf-83gf) and [update](https://github.com/kjur/jsrsasign/releases/tag/11.0.0) for Marvin attack vulnerability published. Due to this vulnerability, RSA PKCS#1.5 and RSAOAEP encryption/decryption no longer be supported.
 - 2023-Mar-12: [10.7.0 Release](https://github.com/kjur/jsrsasign/releases/tag/10.7.0). Now supports custom X.509 extension and custom OIDs by new "Add-on" architecture. ([See here in detail](https://github.com/kjur/jsrsasign/wiki/jsrsasign-Add-On2))
 - 2021-Nov-21: [10.5.0 Release](https://github.com/kjur/jsrsasign/releases/tag/10.5.0). Now supports secp521r1(P-521) ECDSA.
