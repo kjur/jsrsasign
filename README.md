@@ -15,11 +15,11 @@ Public page is https://kjur.github.io/jsrsasign .
 
 Your bugfix and pull request contribution are always welcomed :)
 
-ADVANCE NOTICE OF END-OF-SUPPORT (2026-APR-10)
-----------------------------------------------
-The "jsrsasign" will reach end-of-support in a few months. Some unfixed vulnerabilities have been reported for now. Hopefully most of them are fixed until the end of support. GitHub Support for this project will also be closed in a few week. Thank you for your long-standing support of this project.
+End of Support Announcement for jsrsasign
+-----------------------------------------
+On 14 April 2026, we announce end of support for jsrsasign. 
 
-We will announce the end-of-support date here as soon as it is determined.
+Effective 3 Jun 2026, support is no longer provided for jsrsasign and all version of "npm" packages of jsrsasign is deprecated. Thank you very much for using jsrsasign since the release of its first version, 1.0, on June 3, 2010.
 
 NOTICE FOR 11.0.0 RELEASE
 ---------------------------------
