@@ -1214,6 +1214,26 @@ This function converts UTCTime string (i.e.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#timingSafeEqual">timingSafeEqual</a></b>(s1, s2)
+								</div>
+								<div class="description">string comparision with constant time against timing attacks
+This function verifies strings are the same with constant time
+againt timing attacks.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/global__.html#timingSafeEqualImpl">timingSafeEqualImpl</a></b>(s1, s2)
+								</div>
+								<div class="description">string comparision with constant time against timing attacks implemented in JavaScript</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/global__.html#twoscompl">twoscompl</a></b>(bi)
 								</div>
 								<div class="description">get hexadecimal string of minimum two's complement of BigInteger<br/>
@@ -5221,6 +5241,203 @@ timetogen(  "971231235959.123Z") &rarr; "19971231235959.123Z"</pre>
 
 					<hr />
 				
+					<a name="timingSafeEqual"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Boolean}</span>
+					<b>timingSafeEqual</b>(s1, s2)
+					
+					</div>
+					<div class="description">
+						string comparision with constant time against timing attacks
+This function verifies strings are the same with constant time
+againt timing attacks. When crypto.timingSafeEqual or
+crypto.subtle.timingSafeEqual is available, it will be used.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">s1 = "aaa...aaa"; // long "a"s
+s1ref = s1;
+s2 = "aaa...aaa"; // same contents
+s3 = "1aa...aaa"; // starts with "1"
+s4 = "aaa...aa1"; // ends with "1";
+These are almost the same processing time.
+timingSafeEqual(s1, s1ref) -> true
+timingSafeEqual(s1, s2) -> true
+timingSafeEqual(s1, s3) -> false
+timingSafeEqual(s1, s4) -> false</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s1</b>
+									
+								</dt>
+								<dd>string to compare</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s2</b>
+									
+								</dt>
+								<dd>string to compare</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 11.1.3</dd>
+							</dl>
+							</dl>
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Throws:</dt>
+							
+								<dt>
+									 <b></b>
+								</dt>
+								<dd>"inputs shall be string"</dd>
+							
+								<dt>
+									 <b></b>
+								</dt>
+								<dd>"inputs must have the same length"</dd>
+							
+							</dl>
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> return true if strings are the same.</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/global__.html#timingSafeEqualImpl">timingSafeEqualImpl</a></dd>
+							
+								<dd><a href="https://nodejs.org/api/crypto.html#cryptotimingsafeequala-b">Node timingSafeEqual</a></dd>
+							
+								<dd><a href="https://docs.deno.com/api/node/crypto/~/timingSafeEqual">Deno timingSafeEqual</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="timingSafeEqualImpl"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Boolean}</span>
+					<b>timingSafeEqualImpl</b>(s1, s2)
+					
+					</div>
+					<div class="description">
+						string comparision with constant time against timing attacks implemented in JavaScript
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/base64x-1.1.js.html">base64x-1.1.js</a>.
+						
+						
+					</div>
+					
+					
+					
+					<pre class="code">s1 = "aaa...aaa"; // long "a"s
+s1ref = s1;
+s2 = "aaa...aaa"; // same contents
+s3 = "1aa...aaa"; // starts with "1"
+s4 = "aaa...aa1"; // ends with "1";
+These are almost the same processing time.
+timingSafeEqualImpl(s1, s1ref) -> true
+timingSafeEqualImpl(s1, s2) -> true
+timingSafeEqualImpl(s1, s3) -> false
+timingSafeEqualImpl(s1, s4) -> false</pre>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s1</b>
+									
+								</dt>
+								<dd>string to compare</dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>s2</b>
+									
+								</dt>
+								<dd>string to compare</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Since:</dt>
+								<dd>jsrsasign 11.1.3</dd>
+							</dl>
+							</dl>
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Throws:</dt>
+							
+								<dt>
+									 <b></b>
+								</dt>
+								<dd>"inputs shall be string"</dd>
+							
+								<dt>
+									 <b></b>
+								</dt>
+								<dd>"inputs must have the same length"</dd>
+							
+							</dl>
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> return true if strings are the same.</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/global__.html#timingSafeEqual">timingSafeEqual</a></dd>
+							
+								<dd><a href="https://nodejs.org/api/crypto.html#cryptotimingsafeequala-b">Node timingSafeEqual</a></dd>
+							
+								<dd><a href="https://docs.deno.com/api/node/crypto/~/timingSafeEqual">Deno timingSafeEqual</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
 					<a name="twoscompl"> </a>
 					<div class="fixedFont">
 					
@@ -5895,7 +6112,7 @@ zulutosec("20071231235959Z")       &rarr; 1199145599 #Mon, 31 Dec 2007 23:59:59 
 		
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
-                        &copy; 2012-2023 Kenji Urushima, All rights reserved<br/>
+                        &copy; 2012-2026 Kenji Urushima, All rights reserved<br/>
 			
 			Documentation generated by <a href="https://code.google.com/archive/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 
 		</div>

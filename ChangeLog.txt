@@ -1,6 +1,18 @@
 
 ChangeLog for jsrsasign
 
+* Changes from 11.1.2 to 11.1.3 (2026-Apr-18)
+  - base64x.js
+    - timingSafeEqual and timingSafeEqualImpl added
+  - jws.js
+    - modified to use timingSafeEqual for HS* signature verification
+  - Security fixes:
+    - JWS hmac signature validation timing attack fix #654 by @Kr0emer 
+  - bugfix
+    - jws.js
+      - wrong thumbprint calculation for symmetric key (KJUR.jws.JWS.getJWKthumbprint) 
+        reported in issue #656 by @e3stpavel.
+
 * Changes from 11.1.1 to 11.1.2 (2026-Apr-12)
   - Security fixes:
     - HIGH: wrong random for for Node.JS >= 19 and modern browsers (ext/rng.js SecureRandom)

@@ -17,4 +17,16 @@ describe("base64x", function() {
 	    assert.equal(rs.b64utoutf8("YWFh"), "aaa");
 	});
     });
+    describe("timingSafeEqualImpl", function() {
+	it('should compare equal and unequal digests safely', function() {
+	    assert.equal(rs.timingSafeEqual("abcd", "abcd"), true);
+	    assert.equal(rs.timingSafeEqual("abcd", "abce"), false);
+	    assert.throws(
+                () => {rs.rs.timingSafeEqual("abcd", "abc");}, Error
+            );
+	    assert.throws(
+                () => {rs.rs.timingSafeEqual("abcd", null);}, Error
+            );
+	});
+    });
 });

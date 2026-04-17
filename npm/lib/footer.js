@@ -87,6 +87,8 @@ exports.timeogen = timetogen;
 exports.aryval = aryval;
 exports.inttohex = inttohex;
 exports.twoscompl = twoscompl;
+exports.timingSafeEqual = timingSafeEqual;
+exports.timingSafeEqualImpl = timingSafeEqualImpl;
 
 // name spaces
 exports.KJUR = KJUR;
