@@ -1630,6 +1630,101 @@ var strdiffidx = function(s1, s2) {
     return -1; // same
 };
 
+/**
+ * string comparision with constant time against timing attacks
+ * @name timingSafeEqual
+ * @function
+ * @param {String} s1 string to compare
+ * @param {String} s2 string to compare
+ * @return {Boolean} return true if strings are the same.
+ * @since jsrsasign 11.1.3
+ *
+ * @description
+ * This function verifies strings are the same with constant time
+ * againt timing attacks. When crypto.timingSafeEqual or
+ * crypto.subtle.timingSafeEqual is available, it will be used.
+ * 
+ * @throws "inputs shall be string"
+ * @throws "inputs must have the same length"
+ * 
+ * @see timingSafeEqualImpl
+ * @see <a href="https://nodejs.org/api/crypto.html#cryptotimingsafeequala-b">Node timingSafeEqual</a>
+ * @see <a href="https://docs.deno.com/api/node/crypto/~/timingSafeEqual">Deno timingSafeEqual</a>
+ *
+ * @example
+ * s1 = "aaa...aaa"; // long "a"s
+ * s1ref = s1;
+ * s2 = "aaa...aaa"; // same contents
+ * s3 = "1aa...aaa"; // starts with "1"
+ * s4 = "aaa...aa1"; // ends with "1";
+ * These are almost the same processing time.
+ * timingSafeEqual(s1, s1ref) -> true
+ * timingSafeEqual(s1, s2) -> true
+ * timingSafeEqual(s1, s3) -> false
+ * timingSafeEqual(s1, s4) -> false
+ */
+function timingSafeEqual(s1, s2) {
+    if (typeof s1 != "string" || typeof s2 != "string") {
+        throw new Error("arguments shall be string");
+    }
+    if (s1.length !== s2.length) {
+        throw new Error("input strings must have the same length");
+    }
+    if (typeof Buffer === 'function' && typeof crypto !== 'undefined') {
+	if (crypto.timingSafeEqual !== undefined) {
+            return crypto.timingSafeEqual(Buffer.from(s1), Buffer.from(s2));
+	}
+        if (crypto.subtle !== undefined && crypto.subtle.timingSafeEqual) {
+            return crypto.subtle.timingSafeEqual(Buffer.from(s1), Buffer.from(s2));
+	}
+    }
+    return timingSafeEqualImpl(s1, s2);
+}
+
+/**
+ * string comparision with constant time against timing attacks implemented in JavaScript
+ * @name timingSafeEqualImpl
+ * @function
+ * @param {String} s1 string to compare
+ * @param {String} s2 string to compare
+ * @return {Boolean} return true if strings are the same.
+ * @since jsrsasign 11.1.3
+ *
+ * @see timingSafeEqual
+ * @see <a href="https://nodejs.org/api/crypto.html#cryptotimingsafeequala-b">Node timingSafeEqual</a>
+ * @see <a href="https://docs.deno.com/api/node/crypto/~/timingSafeEqual">Deno timingSafeEqual</a>
+ *
+ * @throws "inputs shall be string"
+ * @throws "inputs must have the same length"
+ * 
+ * @example
+ * s1 = "aaa...aaa"; // long "a"s
+ * s1ref = s1;
+ * s2 = "aaa...aaa"; // same contents
+ * s3 = "1aa...aaa"; // starts with "1"
+ * s4 = "aaa...aa1"; // ends with "1";
+ * These are almost the same processing time.
+ * timingSafeEqualImpl(s1, s1ref) -> true
+ * timingSafeEqualImpl(s1, s2) -> true
+ * timingSafeEqualImpl(s1, s3) -> false
+ * timingSafeEqualImpl(s1, s4) -> false
+ */
+function timingSafeEqualImpl(s1, s2) {
+    if (typeof s1 != "string" || typeof s2 != "string") {
+        throw new Error("arguments shall be string");
+    }
+    if (s1.length !== s2.length) {
+        throw new Error("input strings must have the same length");
+    }
+    const s2copy = s2.slice();
+
+    var diff = 0;
+    for (var i = 0; i < s1.length; i++) {
+	diff |= s1.charCodeAt(i) ^ s2copy.charCodeAt(i);
+    }
+    return diff === 0;
+}
+
 // ==== hex / oid =================================
 
 /**
@@ -2096,7 +2191,6 @@ function aryval(val, keys, def) {
     }
     return val || val === false ? val : def;
 }
-
 
 // =======================================================
 /**

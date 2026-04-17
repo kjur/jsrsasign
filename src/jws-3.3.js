@@ -499,12 +499,10 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
 	var hSig2 = null;
 	if (key === undefined)
 	    throw new Error("hexadecimal key shall be specified for HMAC");
-	//try {
-	    var mac = new _Mac({'alg': sigAlg, 'pass': key});
-	    mac.updateString(uSignatureInput);
-	    hSig2 = mac.doFinal();
-	//} catch(ex) {};
-	return hSig == hSig2;
+	var mac = new _Mac({'alg': sigAlg, 'pass': key});
+	mac.updateString(uSignatureInput);
+	hSig2 = mac.doFinal();
+	return timingSafeEqual(hSig, hSig2);
     } else if (sigAlg.indexOf("withECDSA") != -1) {
 	var hASN1Sig = null;
         try {
@@ -935,13 +933,13 @@ KJUR.jws.JWS.getJWKthumbprint = function(o) {
     if (o.kty !== "RSA" &&
 	o.kty !== "EC" &&
 	o.kty !== "oct")
-	throw "unsupported algorithm for JWK Thumprint";
+	throw new Error("unsupported algorithm for JWK Thumprint");
 
     // 1. get canonically ordered json string
     var s = '{';
     if (o.kty === "RSA") {
 	if (typeof o.n != "string" || typeof o.e != "string")
-	    throw "wrong n and e value for RSA key";
+	    throw new Error("wrong n and e value for RSA key");
 	s += '"' + 'e' + '":"' + o.e + '",';
 	s += '"' + 'kty' + '":"' + o.kty + '",';
 	s += '"' + 'n' + '":"' + o.n + '"}';
@@ -949,18 +947,17 @@ KJUR.jws.JWS.getJWKthumbprint = function(o) {
 	if (typeof o.crv != "string" || 
 	    typeof o.x != "string" ||
 	    typeof o.y != "string")
-	    throw "wrong crv, x and y value for EC key";
+	    throw new Error("wrong crv, x and y value for EC key");
 	s += '"' + 'crv' + '":"' + o.crv + '",';
 	s += '"' + 'kty' + '":"' + o.kty + '",';
 	s += '"' + 'x' + '":"' + o.x + '",';
 	s += '"' + 'y' + '":"' + o.y + '"}';
     } else if (o.kty === "oct") {
 	if (typeof o.k != "string")
-	    throw "wrong k value for oct(symmetric) key";
-	s += '"' + 'kty' + '":"' + o.kty + '",';
-	s += '"' + 'k' + '":"' + o.k + '"}';
+	    throw new Error("wrong k value for oct(symmetric) key");
+	s += '"' + 'k' + '":"' + o.k + '",';
+	s += '"' + 'kty' + '":"' + o.kty + '"}';
     }
-    //alert(s);
 
     // 2. get thumb print
     var hJWK = rstrtohex(s);
