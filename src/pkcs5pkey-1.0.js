@@ -362,7 +362,7 @@ var PKCS5PKEY = function() {
         getRSAKeyFromEncryptedPKCS5PEM: function(sEncryptedP5PEM, passcode) {
             var hPKey = this.getDecryptedKeyHex(sEncryptedP5PEM, passcode);
             var rsaKey = new RSAKey();
-            rsaKey.readPrivateKeyFromASN1HexString(hPKey);
+            rsaKey.readPKCS5PrvKeyHex(hPKey);
             return rsaKey;
         },
 
