@@ -194,14 +194,14 @@ test("getEncryptedPKCS5PEMFromPrvKeyHex/4 alg check", function() {
 
 test("getEncryptedPKCS5PEMFromRSAKey/1 key encryption", function() {
   var k = new RSAKey();
-  k.readPrivateKeyFromASN1HexString(sk10dechex);
+  k.readPKCS5PrvKeyHex(sk10dechex);
   var p = PKCS5PKEY.getEncryptedPKCS5PEMFromRSAKey(k, "hogehoge", "AES-256-CBC", "40555967F759530864FE022E257DE34E");
   equal(p, sk10pem, "encrypted");
 });
 
 test("getEncryptedPKCS5PEMFromRSAKey/2 without IV", function() {
   var k = new RSAKey();
-  k.readPrivateKeyFromASN1HexString(sk10dechex);
+  k.readPKCS5PrvKeyHex(sk10dechex);
   var pem = PKCS5PKEY.getEncryptedPKCS5PEMFromRSAKey(k, "moge", "AES-256-CBC");
   // when AES-256-CBC, iv shall be 16 bytes (i.e. 32 chars)
   equal(pem.match(/DEK-Info: AES-256-CBC,([0-9A-F]{32})\s+/) != null, true, "iv len match: iv=" + RegExp.$1 );
@@ -209,7 +209,7 @@ test("getEncryptedPKCS5PEMFromRSAKey/2 without IV", function() {
 
 test("getEncryptedPKCS5PEMFromRSAKey/3 without Alg and IV", function() {
   var k = new RSAKey();
-  k.readPrivateKeyFromASN1HexString(sk10dechex);
+  k.readPKCS5PrvKeyHex(sk10dechex);
   var pem = PKCS5PKEY.getEncryptedPKCS5PEMFromRSAKey(k, "moge");
   // when AES-256-CBC, iv shall be 16 bytes (i.e. 32 chars)
   equal(pem.match(/DEK-Info: AES-256-CBC,([0-9A-F]{32})\s+/) != null, true, "iv len match: iv=" + RegExp.$1 );
