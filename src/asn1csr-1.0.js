@@ -601,7 +601,7 @@ KJUR.asn1.csr.CSRUtil.verifySignature = function(csr) {
 	sig.updateHex(pCSR.tbs);
 	return sig.verify(pCSR.sighex);
     } catch(ex) {
-	alert(ex);
+	//alert(ex);
 	return false;
     }
 };
