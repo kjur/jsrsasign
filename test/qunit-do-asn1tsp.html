@@ -690,7 +690,7 @@ var parser = new KJUR.asn1.tsp.TSPParser();
 deepEqual(parser.getPKIStatusInfo("3003020100"), {status: "granted"}, "granted");
 
 deepEqual(
-parser.getPKIStatusInfo("3028020100300f0c036161610c036161610c03616161"),
+parser.getPKIStatusInfo("3014020100300f0c036161610c036161610c03616161"),
 {status: "granted", statusstr: ["aaa", "aaa", "aaa"]},
 "granted [aaa,aaa,aaa]");
 
