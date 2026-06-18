@@ -314,7 +314,6 @@ const SHA3 = createHash({ allowedSizes: [224, 256, 384, 512], defaultSize: 512, 
  */
 const SHAKE = createHash({ allowedSizes: [128, 256], defaultSize: 256, padding: 0x1F });
 
-
 if (typeof NodeSha3 == "undefined" || !NodeSha3) NodeSha3 = {};
 NodeSha3.SHA3_224 = () => { return new SHA3(224); };
 NodeSha3.SHA3_256 = () => { return new SHA3(256); };
@@ -327,4 +326,4 @@ NodeSha3.SHAKE256 = () => { return new SHAKE(256); };
 
 if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
 if (typeof KJUR.crypto == "undefined" || !KJUR.crypto) KJUR.crypto = {};
-if (typeof KJUR.crypto.NodeSha3 == "undefined" || !KJUR.crypto.NodeSha3) KJUR.crypto.NodeSha3;
+if (typeof KJUR.crypto.NodeSha3 == "undefined" || !KJUR.crypto.NodeSha3) KJUR.crypto.NodeSha3 = NodeSha3;
