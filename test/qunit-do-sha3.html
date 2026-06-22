@@ -10,7 +10,6 @@
 <script type="text/javascript" src="qunit.js"></script>
 
 <script language="JavaScript" type="text/javascript" src="../jsrsasign-all-min.js"></script>
-<script language="JavaScript" type="text/javascript" src="../src/sha3-modified-2.1.4.js"></script>
 
 <script src="sha_testvectors.js"></script>
 
@@ -64,7 +63,8 @@ for (let hmac of hmacs ) {
         for (const group of hmac.testGroups) {
             for (const testCase of group.tests) {
                 test(`${hmac.algorithm}-${testCase.tcId}: ${testCase.comment}`, function() {
-                    let mac = new KJUR.crypto.Mac({alg: `${hmac.algorithm}`, pass: testCase.key});
+                    const alg = hmac.algorithm.replaceAll('-', '_');
+                    let mac = new KJUR.crypto.Mac({alg, pass: testCase.key});
                     mac.updateHex(testCase.msg);
                     let tag = mac.doFinal().substring(0, group.tagSize / 4);
                     if (testCase.result == "valid")
