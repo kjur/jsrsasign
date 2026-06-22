@@ -155,17 +155,18 @@ const xorWords = (I, O) => {
 };
 
 // eslint-disable-next-line max-statements
-const readWords = (I, O) => {
-  for (let o = 0; o < O.length; o += 8) {
+const readWords = (I, O, offset, queueSize) => {
+  for (let o = 0; o < queueSize; o += 8) {
     const i = o / 4;
-    O[o] = I[i + 1];
-    O[o + 1] = I[i + 1] >>> 8;
-    O[o + 2] = I[i + 1] >>> 16;
-    O[o + 3] = I[i + 1] >>> 24;
-    O[o + 4] = I[i];
-    O[o + 5] = I[i] >>> 8;
-    O[o + 6] = I[i] >>> 16;
-    O[o + 7] = I[i] >>> 24;
+    const x = o + offset;
+    O[x] = I[i + 1];
+    O[x + 1] = I[i + 1] >>> 8;
+    O[x + 2] = I[i + 1] >>> 16;
+    O[x + 3] = I[i + 1] >>> 24;
+    O[x + 4] = I[i];
+    O[x + 5] = I[i] >>> 8;
+    O[x + 6] = I[i] >>> 16;
+    O[x + 7] = I[i] >>> 24;
   }
 
   return O;
@@ -181,7 +182,7 @@ const Sponge = function({ capacity, padding }) {
   let queueOffset = 0;
 
   const state = new Uint32Array(stateSize / 4);
-  const queue = Buffer.allocUnsafe(queueSize);
+  const queue = new Uint8Array(queueSize);
 
   this.absorb = (buffer) => {
     for (let i = 0; i < buffer.length; i++) {
@@ -200,18 +201,21 @@ const Sponge = function({ capacity, padding }) {
   // eslint-disable-next-line max-statements
   this.squeeze = (options = {}) => {
     const output = {
-      buffer: options.buffer || Buffer.allocUnsafe(blockSize),
+      buffer: options.buffer || new Uint8Array(blockSize),
       padding: options.padding || padding,
-      queue: Buffer.allocUnsafe(queue.length),
+      queue: new Uint8Array(queue.length),
       state: new Uint32Array(state.length)
     };
 
-    queue.copy(output.queue);
+    for (let j = 0; j < queue.length; j++) {
+      output.queue[j] = queue[j];
+    }
     for (let i = 0; i < state.length; i++) {
       output.state[i] = state[i];
     }
-
-    output.queue.fill(0, queueOffset);
+    for (let k = queueOffset; k < output.queue.length; k++) {
+      output.queue[k] = 0;
+    }
 
     output.queue[queueOffset] |= output.padding;
     output.queue[queueSize - 1] |= 0x80;
@@ -220,7 +224,7 @@ const Sponge = function({ capacity, padding }) {
 
     for (let offset = 0; offset < output.buffer.length; offset += queueSize) {
       keccak(output.state);
-      readWords(output.state, output.buffer.slice(offset, offset + queueSize));
+      readWords(output.state, output.buffer, offset, queueSize);
     }
 
     return output.buffer;
@@ -248,16 +252,26 @@ const createHash = ({ allowedSizes, defaultSize, padding }) => function Hash(siz
   const sponge = new Sponge({ capacity: size });
 
   this.update = (input, encoding = 'utf8') => {
-    if (Buffer.isBuffer(input)) {
+    if (input instanceof Uint8Array) {
       sponge.absorb(input);
       return this;
     }
 
     if (typeof input === 'string') {
-      return this.update(Buffer.from(input, encoding));
+      switch (encoding) {
+        case 'utf8': {
+		let te = new TextEncoder();
+		return this.update(te.encode(input));
+	}
+        case 'hex': return this.update(Uint8Array.fromHex(input));
+        case 'base64': return this.update(Uint8Array.fromBase64(input));
+        case 'base64url': return this.update(Uint8Array.fromBase64(input, 'base64url'));
+        default:
+          throw new TypeError('Unknown encoding (use utf8, hex, base64, or base64url');
+      }
     }
 
-    throw new TypeError('Not a string or buffer');
+    throw new TypeError('Not a string or Uint8Array');
   };
 
   this.digest = (formatOrOptions = 'binary') => {
@@ -268,7 +282,7 @@ const createHash = ({ allowedSizes, defaultSize, padding }) => function Hash(siz
     });
 
     if (options.format && options.format !== 'binary') {
-      return buffer.toString(options.format);
+      return buffer.toHex();
     }
 
     return buffer;
@@ -314,6 +328,7 @@ const SHA3 = createHash({ allowedSizes: [224, 256, 384, 512], defaultSize: 512, 
  */
 const SHAKE = createHash({ allowedSizes: [128, 256], defaultSize: 256, padding: 0x1F });
 
+var NodeSha3;
 if (typeof NodeSha3 == "undefined" || !NodeSha3) NodeSha3 = {};
 NodeSha3.SHA3_224 = () => { return new SHA3(224); };
 NodeSha3.SHA3_256 = () => { return new SHA3(256); };
