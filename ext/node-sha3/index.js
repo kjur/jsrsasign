@@ -1,0 +1,101 @@
+import { Buffer } from 'buffer';
+import Sponge from './sponge';
+
+const createHash = ({ allowedSizes, defaultSize, padding }) => function Hash(size = defaultSize) {
+  if (!this || this.constructor !== Hash) {
+    return new Hash(size);
+  }
+
+  if (allowedSizes && !allowedSizes.includes(size)) {
+    throw new Error('Unsupported hash length');
+  }
+
+  const sponge = new Sponge({ capacity: size });
+
+  this.update = (input, encoding = 'utf8') => {
+    if (Buffer.isBuffer(input)) {
+      sponge.absorb(input);
+      return this;
+    }
+
+    if (typeof input === 'string') {
+      return this.update(Buffer.from(input, encoding));
+    }
+
+    throw new TypeError('Not a string or buffer');
+  };
+
+  this.digest = (formatOrOptions = 'binary') => {
+    const options = typeof formatOrOptions === 'string' ? { format: formatOrOptions } : formatOrOptions;
+    const buffer = sponge.squeeze({
+      buffer: options.buffer,
+      padding: options.padding || padding
+    });
+
+    if (options.format && options.format !== 'binary') {
+      return buffer.toString(options.format);
+    }
+
+    return buffer;
+  };
+
+  this.reset = () => {
+    sponge.reset();
+    return this;
+  };
+
+  return this;
+};
+
+/**
+ * The Keccak reference implementation uses the simplest possible padding scheme,
+ * described as follows:
+ *
+ * > Definition 1. Multi-rate padding, denoted by pad10*1, appends a single bit 1
+ * > followed by the minimum number of bits 0 followed by a single bit 1 such that
+ * > the length of the result is a multiple of the block length.
+ *
+ * @see {@link https://keccak.team/files/Keccak-reference-3.0.pdf}, Section 1.1.2
+ */
+const Keccak = createHash({ allowedSizes: [224, 256, 384, 512], defaultSize: 512, padding: 0x01 });
+
+/**
+ * The SHA-3 specification requires that the input message be appended with a
+ * two-bit suffix, `01`. For byte-aligned messages, this results in an extra
+ * `0x02` byte (bits fill in from the right).
+ *
+ * Then, the standard Keccak padding scheme is applied (pad10*1), placing an
+ * additional bit at the `0x04` position, resulting in `0x06`.
+ *
+ * @see {@link https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf}, Section B.2
+ */
+const SHA3 = createHash({ allowedSizes: [224, 256, 384, 512], defaultSize: 512, padding: 0x06 });
+
+/**
+ * SHAKE is an 128-bit or 256-bit extendable output function (XOF) variant of
+ * Keccak that uses `0x1F` padding. (SHAKE = Secure Hash Algorithm KEccak)
+ *
+ * @see {@link https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.202.pdf}, Section 6.3
+ */
+const SHAKE = createHash({ allowedSizes: [128, 256], defaultSize: 256, padding: 0x1F });
+
+/**
+ * Provided for historical purposes. This is an alias for the *Keccak* algorithm,
+ * which an early version of SHA3 with different padding.
+ *
+ * @deprecated
+ */
+const SHA3Hash = Keccak;
+
+/**
+ * For backwards-compatibility, sprinkle SHA3Hash into the default export.
+ *
+ * @deprecated
+ */
+SHA3.SHA3Hash = SHA3Hash;
+
+// Named exports for all hashes included by this library.
+export { Keccak, SHA3, SHA3Hash, SHAKE };
+
+// Make the default export useful as-is.
+export default SHA3;

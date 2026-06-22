@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta charset="utf-8">
+<title>QUnit SHA3 hash tests</title>
+<link rel="stylesheet" href="qunit.css" type="text/css" media="screen" />
+
+<script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="qunit.js"></script>
+
+<script language="JavaScript" type="text/javascript" src="../jsrsasign-all-min.js"></script>
+
+<script src="sha_testvectors.js"></script>
+
+<script src="wycheproof/testvectors_v1/hmac_sha1_test.js"></script>
+<script src="wycheproof/testvectors_v1/hmac_sha224_test.js"></script>
+<script src="wycheproof/testvectors_v1/hmac_sha256_test.js"></script>
+<script src="wycheproof/testvectors_v1/hmac_sha384_test.js"></script>
+<script src="wycheproof/testvectors_v1/hmac_sha512_test.js"></script>
+
+<script src="wycheproof/testvectors_v1/hmac_sha3_224_test.js"></script>
+<script src="wycheproof/testvectors_v1/hmac_sha3_256_test.js"></script>
+<script src="wycheproof/testvectors_v1/hmac_sha3_384_test.js"></script>
+<script src="wycheproof/testvectors_v1/hmac_sha3_512_test.js"></script>
+
+<script type="text/javascript">
+$(document).ready(async function() {
+
+/* Repository for testvectors */
+/* const repository = 'https://github.com/C2SP/wycheproof'; */
+
+let digests = ['SHA1'];
+[224, 256, 384, 512].map((length) => digests.push(`SHA${length}`, `SHA3_${length}`));
+for (let alg of digests) {
+   for (const testCase of SHA_TESTVECTORS[1]) {
+       test(`${alg}: ${testCase.message.note}`, function() {
+           expect(1);
+           let hash = new KJUR.crypto.MessageDigest({alg: `${alg}`});
+           for (let i=0; i<testCase.message.count; i++)
+               hash.updateString(testCase.message.data);
+           let expected = testCase[`${alg}`];
+           let digest = hash.digest();
+           equal(`${digest}`, expected);
+       });
+    }
+}
+
+let hmacs = [
+    HMAC_SHA1_TESTVECTORS,
+    HMAC_SHA224_TESTVECTORS,
+    HMAC_SHA256_TESTVECTORS,
+    HMAC_SHA384_TESTVECTORS,
+    HMAC_SHA512_TESTVECTORS,
+    HMAC_SHA3_224_TESTVECTORS,
+    HMAC_SHA3_256_TESTVECTORS,
+    HMAC_SHA3_384_TESTVECTORS,
+    HMAC_SHA3_512_TESTVECTORS
+];
+for (let hmac of hmacs ) {
+    test(`Testing ${hmac.algorithm} ...`, function() {
+        expect(0);
+        for (const group of hmac.testGroups) {
+            for (const testCase of group.tests) {
+                test(`${hmac.algorithm}-${testCase.tcId}: ${testCase.comment}`, function() {
+                    const alg = hmac.algorithm.replaceAll('-', '_');
+                    let mac = new KJUR.crypto.Mac({alg, pass: testCase.key});
+                    mac.updateHex(testCase.msg);
+                    let tag = mac.doFinal().substring(0, group.tagSize / 4);
+                    if (testCase.result == "valid")
+                        equal(tag, testCase.tag);
+                    else
+                        notEqual(tag, testCase.tag);
+                });
+            }
+        }
+   });
+}
+
+});
+</script>
+  
+</head>
+<body>
+<div id="qunit"></div>
+<div id="qunit-fixture">test markup</div>
+<p>
+<a href="../">TOP</a> | 
+<a href="index.html">TEST INDEX</a>
+</p>
+</body>
+</html>
+

@@ -10,6 +10,7 @@ FILES_MIN = \
 	min/asn1csr-1.0.min.js \
 	min/asn1ocsp-1.0.min.js \
 	min/base64x-1.1.min.js \
+        min/sha3-modified-2.1.4.min.js \
 	min/crypto-1.1.min.js \
 	min/ecdsa-modified-1.0.min.js \
 	min/ecparam-1.0.min.js \
@@ -36,6 +37,7 @@ JSDOC_SRC = \
 	asn1cades-1.0.js \
 	asn1csr-1.0.js \
 	asn1ocsp-1.0.js \
+        sha3-modified-2.1.4.js \
 	crypto-1.1.js \
 	ecdsa-modified-1.0.js \
 	ecparam-1.0.js \

@@ -8,7 +8,7 @@
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
  *
- * The above copyright and license notice shall be 
+ * The above copyright and license notice shall be
  * included in all copies or substantial portions of the Software.
  */
 
@@ -21,7 +21,7 @@
  * @license <a href="https://kjur.github.io/jsrsasign/license/">MIT License</a>
  */
 
-/** 
+/**
  * kjur's class library name space
  * @name KJUR
  * @namespace kjur's class library name space
@@ -61,6 +61,12 @@ KJUR.crypto.Util = new function() {
 	'md2':       "3020300c06082a864886f70d020205000410",
 	'md5':       "3020300c06082a864886f70d020505000410",
 	'ripemd160': "3021300906052b2403020105000414",
+        'sha3_224':  "302d" + "300d06090806480165030402070500" + "041c",
+        'sha3_256':  "3031" + "300d06096086480165030402080500" + "0420",
+        'sha3_384':  "3041" + "300d06096086480165030402090500" + "0430",
+        'sha3_512':  "3051" + "300d060960864801650304020a0500" + "0440",
+        'shake128':  "3031" + "300d060960864801650304020b0500" + "0420",
+        'shake256':  "3051" + "300d060960864801650304020c0500" + "0440",
     };
 
     /*
@@ -81,6 +87,18 @@ KJUR.crypto.Util = new function() {
 	'hmacsha384':		'cryptojs',
 	'hmacsha512':		'cryptojs',
 	'hmacripemd160':	'cryptojs',
+
+        'sha3_224':             'node-sha3',
+        'sha3_256':             'node-sha3',
+        'sha3_384':             'node-sha3',
+        'sha3_512':             'node-sha3',
+        'shake128':             'node-sha3',
+        'shake256':             'node-sha3',
+
+	'hmacsha3_224':		'node-sha3',
+	'hmacsha3_256':		'node-sha3',
+	'hmacsha3_384':		'node-sha3',
+	'hmacsha3_512':		'node-sha3',
 
 	'MD5withRSA':		'cryptojs/jsrsa',
 	'SHA1withRSA':		'cryptojs/jsrsa',
@@ -110,6 +128,21 @@ KJUR.crypto.Util = new function() {
 	'SHA384withRSAandMGF1':		'cryptojs/jsrsa',
 	'SHA512withRSAandMGF1':		'cryptojs/jsrsa',
 	'RIPEMD160withRSAandMGF1':	'cryptojs/jsrsa',
+
+        'SHA3_224withRSA':      'cryptojs/jsrsa',
+        'SHA3_256withRSA':      'cryptojs/jsrsa',
+        'SHA3_384withRSA':      'cryptojs/jsrsa',
+        'SHA3_512withRSA':      'cryptojs/jsrsa',
+
+        'SHA3_224withECDSA':    'cryptojs/jsrsa',
+        'SHA3_256withECDSA':    'cryptojs/jsrsa',
+        'SHA3_384withECDSA':    'cryptojs/jsrsa',
+        'SHA3_512withECDSA':    'cryptojs/jsrsa',
+
+        'SHAKE128withECDSA':    'cryptojs/jsrsa',
+        'SHAKE256withECDSA':    'cryptojs/jsrsa',
+        'SHAKE128withRSA':      'cryptojs/jsrsa',
+        'SHAKE256withRSA':      'cryptojs/jsrsa',
     };
 
     /*
@@ -122,7 +155,13 @@ KJUR.crypto.Util = new function() {
 	'sha256':	CryptoJS.algo.SHA256,
 	'sha384':	CryptoJS.algo.SHA384,
 	'sha512':	CryptoJS.algo.SHA512,
-	'ripemd160':	CryptoJS.algo.RIPEMD160
+	'ripemd160':	CryptoJS.algo.RIPEMD160,
+        'sha3_224':     NodeSha3.SHA3_224,
+        'sha3_256':     NodeSha3.SHA3_256,
+        'sha3_384':     NodeSha3.SHA3_384,
+        'sha3_512':     NodeSha3.SHA3_512,
+        'shake128':     NodeSha3.SHAKE128,
+        'shake256':     NodeSha3.SHAKE256
     };
 
     /**
@@ -310,7 +349,7 @@ KJUR.crypto.Util.SECURERANDOMGEN = new SecureRandom();
  * @since jsrsasign 7.0.0 crypto 1.1.11
  * @example
  * KJUR.crypto.Util.getRandomHexOfNbytes(3) &rarr; "6314af", "000000" or "001fb4"
- * KJUR.crypto.Util.getRandomHexOfNbytes(128) &rarr; "8fbc..." in 1024bits 
+ * KJUR.crypto.Util.getRandomHexOfNbytes(128) &rarr; "8fbc..." in 1024bits
  */
 KJUR.crypto.Util.getRandomHexOfNbytes = function(n) {
     var ba = new Array(n);
@@ -344,7 +383,7 @@ KJUR.crypto.Util.getRandomBigIntegerOfNbytes = function(n) {
  * @since jsrsasign 7.0.0 crypto 1.1.11
  * @example
  * KJUR.crypto.Util.getRandomHexOfNbits(24) &rarr; "6314af", "000000" or "001fb4"
- * KJUR.crypto.Util.getRandomHexOfNbits(1024) &rarr; "8fbc..." in 1024bits 
+ * KJUR.crypto.Util.getRandomHexOfNbits(1024) &rarr; "8fbc..." in 1024bits
  */
 KJUR.crypto.Util.getRandomHexOfNbits = function(n) {
     var n_remainder = n % 8;
@@ -482,6 +521,12 @@ KJUR.crypto.MessageDigest = function(params) {
      * <li>SHA384</li>
      * <li>SHA512</li>
      * <li>RIPEMD160</li>
+     * <li>SHA3_224</li>
+     * <li>SHA3_256</li>
+     * <li>SHA3_384</li>
+     * <li>SHA3_512</li>
+     * <li>SHAKE128</li>
+     * <li>SHAKE256</li>
      * </ul>
      * NOTE: Since jsrsasign 6.2.0 crypto 1.1.10, this method ignores
      * upper or lower cases. Also any hyphens (i.e. "-") will be ignored
@@ -526,7 +571,33 @@ KJUR.crypto.MessageDigest = function(params) {
 		return this.digest();
 	    };
 	}
-	if (':sha256:'.indexOf(alg) != -1 &&
+	// for node-sha3
+	else if (':sha3_224:sha3_256:sha3_384:sha3_512:shake128:shake256:'.indexOf(alg) != -1 &&
+	    prov == 'node-sha3') {
+	    try {
+		this.md = KJUR.crypto.Util.CRYPTOJSMESSAGEDIGESTNAME[alg]();
+	    } catch (ex) {
+		throw "setAlgAndProvider hash alg set fail alg=" + alg + "/" + ex;
+	    }
+	    this.updateString = function(str) {
+		this.md.update(str);
+	    };
+	    this.updateHex = function(hex) {
+		this.md.update(Buffer.from(hex, 'hex'));
+	    };
+	    this.digest = function() {
+		return this.md.digest('hex');
+	    };
+	    this.digestString = function(str) {
+		this.updateString(str);
+		return this.digest();
+	    };
+	    this.digestHex = function(hex) {
+		this.updateHex(hex);
+		return this.digest();
+	    };
+	}
+	else if (':sha256:'.indexOf(alg) != -1 &&
 	    prov == 'sjcl') {
 	    try {
 		this.md = new sjcl.hash.sha256();
@@ -688,13 +759,19 @@ KJUR.crypto.MessageDigest.HASHLENGTH = {
     'sha256':		32,
     'sha384':		48,
     'sha512':		64,
-    'ripemd160':	20
+    'ripemd160':	20,
+    'sha3_224':         28,
+    'sha3_256':         32,
+    'sha3_384':         48,
+    'sha3_512':         64,
+    'shake128':         32,
+    'shake256':         64
 };
 
 // === Mac ===============================================================
 
 /**
- * Mac(Message Authentication Code) class which is very similar to java.security.Mac class 
+ * Mac(Message Authentication Code) class which is very similar to java.security.Mac class
  * @name KJUR.crypto.Mac
  * @class Mac class which is very similar to java.security.Mac class
  * @param {Array} params parameters for constructor
@@ -723,7 +800,7 @@ KJUR.crypto.MessageDigest.HASHLENGTH = {
  * mac.updateString('aaa')
  * mac.doFinal() &rarr; "5737da..."
  *
- * // other password representation 
+ * // other password representation
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"hex":  "6161"}});
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"utf8": "aa"}});
  * var mac = new KJUR.crypto.Mac({alg: "HmacSHA256", "pass": {"rstr": "\x61\x61"}});
@@ -759,7 +836,7 @@ KJUR.crypto.Mac = function(params) {
 		var mdObj = KJUR.crypto.Util.CRYPTOJSMESSAGEDIGESTNAME[hashAlg];
 		this.mac = CryptoJS.algo.HMAC.create(mdObj, this.pass);
 	    } catch (ex) {
-		throw "setAlgAndProvider hash alg set fail hashAlg=" + hashAlg + "/" + ex;
+		throw new Error("setAlgAndProvider hash alg set fail hashAlg=" + hashAlg + "/" + ex);
 	    }
 	    this.updateString = function(str) {
 		this.mac.update(str);
@@ -781,6 +858,74 @@ KJUR.crypto.Mac = function(params) {
 		return this.doFinal();
 	    };
 	}
+	// for node-sha3
+        else if (':sha3_224:sha3_256:sha3_384:sha3_512:'.indexOf(hashAlg) != -1 &&
+	    prov == 'node-sha3') {
+
+            let BITRATES = {
+                'sha3_224': 144,
+                'sha3_256': 136,
+                'sha3_384': 104,
+                'sha3_512': 72
+            };
+            this.bitrate = BITRATES[hashAlg];
+	    this.mac = KJUR.crypto.Util.CRYPTOJSMESSAGEDIGESTNAME[hashAlg]();
+
+            // Convert string to WordArray, else assume WordArray already
+            if (typeof this.pass == 'string') {
+                this.pass = Utf8.parse(key);
+            }
+
+            // Allow arbitrary length keys
+            if (this.pass.sigBytes > this.bitrate) {
+                this.mac.update(Buffer.from(this.pass.toString(), 'hex'));
+                const hex = this.mac.digest('hex');
+                this.mac.reset();
+	        this.pass = CryptoJS.enc.Hex.parse(hex);
+            }
+
+            // Clamp excess bits
+            this.pass.clamp();
+
+            const passStr = this.pass.toString();
+            const key = Buffer.concat([
+                Buffer.from(passStr, 'hex'),
+                Buffer.alloc(this.bitrate - passStr.length/2)
+            ]);
+            // XOR key with ipad constant
+            let iKey = key.map((b) => b ^ 0x36);
+	    this.mac.update(iKey);
+
+	    this.updateString = function(str) {
+		this.mac.update(str);
+	    };
+	    this.updateHex = function(hex) {
+		this.mac.update(Buffer.from(hex, 'hex'));
+	    };
+	    this.doFinal = function() {
+                const inner = this.mac.digest('hex');
+                this.mac.reset();
+                const passStr = this.pass.toString();
+                const key = Buffer.concat([
+                    Buffer.from(passStr, 'hex'),
+                    Buffer.alloc(this.bitrate - passStr.length/2)
+                ]);
+                // XOR key with opad constant
+                let oKey = key.map((b) => b ^ 0x5c);
+
+                this.mac.update(oKey);
+                this.mac.update(Buffer.from(inner, 'hex'));
+		return this.mac.digest('hex');
+	    };
+	    this.doFinalString = function(str) {
+		this.updateString(str);
+		return this.doFinal();
+	    };
+	    this.doFinalHex = function(hex) {
+		this.updateHex(hex);
+		return this.doFinal();
+	    };
+        }
     };
 
     /**
@@ -888,7 +1033,7 @@ KJUR.crypto.Mac = function(params) {
      * <li>{b64u: "Mi7-_"}: explicitly specified as Base64URL string</li>
      * </ul>
      * It is *STRONGLY RECOMMENDED* that explicit representation of password argument
-     * to avoid ambiguity. For example string  "6161" can mean a string "6161" or 
+     * to avoid ambiguity. For example string  "6161" can mean a string "6161" or
      * a hexadecimal string of "aa" (i.e. \x61\x61).
      * @example
      * mac = KJUR.crypto.Mac({'alg': 'hmacsha256'});
@@ -982,6 +1127,10 @@ KJUR.crypto.Mac = function(params) {
  * <li>SHA256withRSA - cryptojs/jsrsa</li>
  * <li>SHA384withRSA - cryptojs/jsrsa</li>
  * <li>SHA512withRSA - cryptojs/jsrsa</li>
+ * <li>SHA3_224withRSA - cryptojs/jsrsa</li>
+ * <li>SHA3_256withRSA - cryptojs/jsrsa</li>
+ * <li>SHA3_384withRSA - cryptojs/jsrsa</li>
+ * <li>SHA3_512withRSA - cryptojs/jsrsa</li>
  * <li>RIPEMD160withRSA - cryptojs/jsrsa</li>
  * <li>MD5withECDSA - cryptojs/jsrsa</li>
  * <li>SHA1withECDSA - cryptojs/jsrsa</li>
@@ -989,6 +1138,10 @@ KJUR.crypto.Mac = function(params) {
  * <li>SHA256withECDSA - cryptojs/jsrsa</li>
  * <li>SHA384withECDSA - cryptojs/jsrsa</li>
  * <li>SHA512withECDSA - cryptojs/jsrsa</li>
+ * <li>SHA3_224withECDSA - cryptojs/jsrsa</li>
+ * <li>SHA3_256withECDSA - cryptojs/jsrsa</li>
+ * <li>SHA3_384withECDSA - cryptojs/jsrsa</li>
+ * <li>SHA3_512withECDSA - cryptojs/jsrsa</li>
  * <li>RIPEMD160withECDSA - cryptojs/jsrsa</li>
  * <li>MD5withRSAandMGF1 - cryptojs/jsrsa</li>
  * <li>SHAwithRSAandMGF1 - cryptojs/jsrsa</li>
@@ -1002,7 +1155,7 @@ KJUR.crypto.Mac = function(params) {
  * <li>SHA224withDSA - cryptojs/jsrsa</li>
  * <li>SHA256withDSA - cryptojs/jsrsa</li>
  * </ul>
- * As for RSA-PSS signature algorithm names and signing parameters 
+ * As for RSA-PSS signature algorithm names and signing parameters
  * such as MGF function and salt length, please see
  * {@link KJUR.asn1.x509.AlgorithmIdentifier} class.
  *
@@ -1027,7 +1180,7 @@ KJUR.crypto.Mac = function(params) {
  * sig2.init(certPEM);
  * sig.updateString('aaa');
  * var isValid = sig2.verify(hSigVal);
- * 
+ *
  * // ECDSA signing
  * var sig = new KJUR.crypto.Signature({'alg':'SHA1withECDSA'});
  * sig.init(prvKeyPEM);
@@ -1097,14 +1250,14 @@ KJUR.crypto.Signature = function(params) {
 	if (prov != 'cryptojs/jsrsa')
 	    throw new Error("provider not supported: " + prov);
 
-	if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(this.mdAlgName) != -1) {
+	if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:sha3_224:sha3_256:sha3_384:sha3_512:shake128:shake256:'.indexOf(this.mdAlgName) != -1) {
 	    try {
 		this.md = new KJUR.crypto.MessageDigest({'alg':this.mdAlgName});
 	    } catch (ex) {
 		throw new Error("setAlgAndProvider hash alg set fail alg=" +
 				this.mdAlgName + "/" + ex);
 	    }
-	    
+	
 	    this.init = function(keyparam, pass) {
 		var keyObj = null;
 		try {
@@ -1191,7 +1344,7 @@ KJUR.crypto.Signature = function(params) {
 		// RSAPSS
 		if (this.pubKey instanceof RSAKey &&
 		    this.pubkeyAlgName === "rsaandmgf1") {
-		    return this.pubKey.verifyWithMessageHashPSS(this.sHashHex, hSigVal, 
+		    return this.pubKey.verifyWithMessageHashPSS(this.sHashHex, hSigVal,
 								this.mdAlgName,
 								this.pssSaltLen);
 		// RSA
@@ -1411,11 +1564,11 @@ KJUR.crypto.Cipher = function(params) {
  * NOTE2: From jsrsasign 11.0.0, RSA and RSAOAEP encryption/decryption support is removed
  * because of Marvin attack vulnerability.
  *
- * @example 
- * KJUR.crypto.Cipher.encrypt("12abcd...", "5a7d...", "aes256-CBC", { iv: "1b3c..." }) 
- * KJUR.crypto.Cipher.encrypt("12abcd...", "5a7d...", any, { encalg: "aes128-CBC", iv: "1b3c..." }) 
- * KJUR.crypto.Cipher.encrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." }) 
- * KJUR.crypto.Cipher.encrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41...", enc: "12abcd..." }) 
+ * @example
+ * KJUR.crypto.Cipher.encrypt("12abcd...", "5a7d...", "aes256-CBC", { iv: "1b3c..." })
+ * KJUR.crypto.Cipher.encrypt("12abcd...", "5a7d...", any, { encalg: "aes128-CBC", iv: "1b3c..." })
+ * KJUR.crypto.Cipher.encrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." })
+ * KJUR.crypto.Cipher.encrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41...", enc: "12abcd..." })
  */
 KJUR.crypto.Cipher.encrypt = function(s, keyObj, algName, param) {
     if (aryval(param, "enclag") != undefined) algName = param.encalg;
@@ -1461,11 +1614,11 @@ KJUR.crypto.Cipher.encrypt = function(s, keyObj, algName, param) {
  * NOTE2: From jsrsasign 11.0.0, RSA and RSAOAEP encryption/decryption support is removed
  * because of Marvin attack vulnerability.
  *
- * @example 
- * KJUR.crypto.Cipher.decrypt("12abcd...", "5a7d...", "aes256-CBC", { iv: "1b3c..." }) 
- * KJUR.crypto.Cipher.decrypt("12abcd...", "5a7d...", any, { encalg: "aes128-CBC", iv: "1b3c..." }) 
- * KJUR.crypto.Cipher.decrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." }) 
- * KJUR.crypto.Cipher.decrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41...", enc: "12abcd..." }) 
+ * @example
+ * KJUR.crypto.Cipher.decrypt("12abcd...", "5a7d...", "aes256-CBC", { iv: "1b3c..." })
+ * KJUR.crypto.Cipher.decrypt("12abcd...", "5a7d...", any, { encalg: "aes128-CBC", iv: "1b3c..." })
+ * KJUR.crypto.Cipher.decrypt("12abcd...", any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41..." })
+ * KJUR.crypto.Cipher.decrypt(any, any, any, { encalg: "des-EDE3-CBC", iv: "1b3c...", key: "3d41...", enc: "12abcd..." })
  */
 KJUR.crypto.Cipher.decrypt = function(hex, keyObj, algName, param) {
     if (aryval(param, "enclag") != undefined) algName = param.encalg;
@@ -1512,7 +1665,7 @@ KJUR.crypto.Cipher.decrypt = function(hex, keyObj, algName, param) {
  * <li>RSAOAEP512 - RSA/ECB/OAEPWithSHA-512AndMGF1Padding(*)</li>
  * </ul>
  * NOTE: (*) is not supported in Java JCE.
- * @example 
+ * @example
  * KJUR.crypto.Cipher.getAlgByKeyAndName(objRSAKey) &rarr; "RSA"
  * KJUR.crypto.Cipher.getAlgByKeyAndName(objRSAKey, "RSAOAEP") &rarr; "RSAOAEP"
  */
