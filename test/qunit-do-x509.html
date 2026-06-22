@@ -38,6 +38,7 @@
 <script src="../src/base64x-1.1.js"></script>
 <script src="../src/rsapem-1.1.js"></script>
 <script src="../src/rsasign-1.2.js"></script>
+<script src="../src/sha3-modified-2.1.4.js"></script>
 <script src="../src/x509-1.1.js"></script>
 <script src="../src/asn1-1.0.js"></script>
 <script src="../src/asn1x509-1.0.js"></script>
@@ -365,6 +366,32 @@ q0gq
 // datasign aaa z4.prv.p5p.pem xxx SHA1withRSA
 var Z4SHA1AAASIG = "2f3705127a4a748fee37ef92e8beca3d17fd22c6cadf004d315c5144fc00dc47c983441d6ad55c2f98d378b0d2b362f876ab8d5207331264931388d05cbc96814a70c8e2cd8c047b0008db71cdf5ead5b33bd3606285f6cbf05a86282c710ddf21a439dde79af3d2f2f10ce3cbf273d81893b11506d43dfb292f343d39e6324a130741d5bf4db64bf9c004ba7f857b6c81b2d9502fbca97644a4f7f661f02c4c295502b54e46fdee7e543ac7dab2dff585e9067ca576fb71a8e1b93cc7305263aca99fbb01f9e599125f0642e9ab71cc1973482ecc26f3d1b75409d936eed1ade353abdbdc7602f7c8c78763fcd6d254e73ae57ef5602f5a5ad5be267ef01755";
 
+var Z5CERVALID = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIBdTCCAR+gAwIBAgIUMQ2W70tUAcgryLJc5ftao3IfGDowDQYJYIZIAWUDBAMO
+BQAwDzENMAsGA1UEAwwEc2hhMzAeFw0yNjA2MTgxMDM5NDVaFw0yNzA2MTgxMDM5
+NDVaMA8xDTALBgNVBAMMBHNoYTMwXDANBgkqhkiG9w0BAQEFAANLADBIAkEAwy3e
+oeeEngthilxcebuFQYvKYc/VGBk7lrc3NXgSwCstinvvMm9vlf3S4VkphOce2Ubc
+p8nLKBFUapr5TRKoswIDAQABo1MwUTAdBgNVHQ4EFgQUBpW9E9ZLUL5ujt3+rNRU
+li0MIR0wHwYDVR0jBBgwFoAUBpW9E9ZLUL5ujt3+rNRUli0MIR0wDwYDVR0TAQH/
+BAUwAwEB/zANBglghkgBZQMEAw4FAANBAME47ngTQltV+pBYupDmPklx1fROK7TC
+5w0PXiqNPvQBoZZMBZV+RlT7P5fuNicm4BLB43DmgCaifhe1NuWXq4g=
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+var Z5CERINVALID = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIBdTCCAR+gAwIBAgIUMQ2W70tUAcgryLJc5ftao3IfGDowDQYJYIZIAWUDBAMO
+BQAwDzENMAsGA1UEAwwEc2hhMzAeFw0yNjA2MTgxMDM5NDVaFw0yNzA2MTgxMDM5
+NDVaMA8xDTALBgNVBAMMBHNoYTMwXDANBgkqhkiG9w0BAQEFAANLADBIAkEAwy3e
+oeeEngthilxcebuFQYvKYc/VGBk7lrc3NXgSwCstinvvMm9vlf3S4VkphOce2Ubc
+p8nLKBFUapr5TRKoswIDAQABo1MwUTAdBgNVHQ4EFgQUBpW9E9ZLUL5ujt3+rNRU
+li0MIR0wHwYDVR0jBBgwFoAUBpW9E9ZLUL5ujt3+rNRUli0MIR0wDwYDVR0TAQH/
+BAUwAwEB/zANBglghkgBZQMEAw4FAANBAME47ngTQltV+pBYupDmPklx1fROK7TC
+5w0PXiqNPvQBoZZMBZV+RlT7P5fuNicm4BLB43DmgCaifhe1NuWXq5g=
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
 // **** TEST **********
 
 test("getSPKI", function() {
@@ -581,6 +608,20 @@ var pubkey = KEYUTIL.getKey(Z2PUBP8);
 var x = new X509();
 x.readCertPEM(Z1SELFSHA256CER);
 equal(x.verifySignature(pubkey), false, "false");
+});
+
+test("verifySignature RSA and SHA3-256 VALID", function() {
+let cert = new X509();
+cert.readCertPEM(Z5CERVALID);
+const key = cert.getPublicKey();
+ok(cert.verifySignature(key));
+});
+
+test("verifySignature RSA and SHA3-256 INVALID", function() {
+let cert = new X509();
+cert.readCertPEM(Z5CERINVALID);
+const key = cert.getPublicKey();
+ok(!cert.verifySignature(key));
 });
 
 test("verifySignature DSA d1.self.sha1.cer with d1.pub.p8 VALID", function() {
