@@ -102,7 +102,7 @@ KJUR.crypto.Util = new function() {
 	'SHA224withDSA':	'cryptojs/jsrsa',
 	'SHA256withDSA':	'cryptojs/jsrsa',
 
-        'id-ed25519':           'cryptojs/jsrsa',
+        'id-Ed25519':           'cryptojs/jsrsa',
         'EdDSAwithEd25519':     'cryptojs/jsrsa',
 
 	'MD5withRSAandMGF1':		'cryptojs/jsrsa',
@@ -1169,7 +1169,7 @@ KJUR.crypto.Signature = function(params) {
 		} else if (this.prvKey instanceof KJUR.crypto.DSA) {
 		    this.hSign = this.prvKey.signWithMessageHash(this.sHashHex);
 		} else {
-		    throw "Signature: unsupported private key alg: " + this.pubkeyAlgName;
+		    throw new Error("Signature: unsupported private key alg: " + this.pubkeyAlgName);
 		}
 		return this.hSign;
 	    };
@@ -1211,11 +1211,11 @@ KJUR.crypto.Signature = function(params) {
 			   this.pubKey instanceof KJUR.crypto.DSA) {
 		    return this.pubKey.verifyWithMessageHash(this.sHashHex, hSigVal);
 		} else {
-		    throw "Signature: unsupported public key alg: " + this.pubkeyAlgName;
+		    throw new Error("Signature: xxx unsupported public key alg: " + this.pubkeyAlgName);
 		}
 	    };
 	}
-        else if (this.mdAlgName === undefined || this.mdAlgName === "eddsa") {
+        else if (this.mdAlgName === undefined || this.mdAlgName === "ed25519" || this.mdAlgName === "eddsa") {
             this.init = function(keyparam, pass) {
                 var keyObj = null;
                 if (pass === undefined) {
@@ -1231,14 +1231,14 @@ KJUR.crypto.Signature = function(params) {
                     this.pubKey = keyObj;
                     this.state = "VERIFY";
                 } else {
-                    throw new Error("init failed.:") + keyObj;
+                    throw new Error("init failed:" + keyObj);
                 }
             };
 
             this.updateString = function(str) {
                 if (this.sHashHex === undefined)
                     this.sHashHex = '';
-                this.sHashHex += Buffer.from(str, 'binary').toString('hex');
+                this.sHashHex += rstrtohex(str);
             };
 
             this.updateHex = function(hex) {
@@ -1258,7 +1258,7 @@ KJUR.crypto.Signature = function(params) {
             };
 
             this.signString = function(str) {
-                this.sHashHex = Buffer.from(str, 'binary').toString('hex');
+                this.sHashHex = rstrtohex(str);
                 return this.sign();
             };
 
@@ -1278,7 +1278,7 @@ KJUR.crypto.Signature = function(params) {
                         return false;
                     }
                 } else {
-                    throw new Error("Signature: unsupported public key alg: " + this.pubkeyAlgName);
+                    throw new Error("Signature: xyz unsupported public key alg: " + this.pubkeyAlgName);
                 }
             };
 	}

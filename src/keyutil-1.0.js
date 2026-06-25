@@ -1319,7 +1319,7 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
     if (typeof _KJUR_crypto_DSA != 'undefined' && param instanceof _KJUR_crypto_DSA)
         return param;
     if (typeof _KJUR_crypto_EdDSA != 'undefined' && param instanceof _KJUR_crypto_EdDSA)
-       return param;
+        return param;
 
     // 2. by parameters of key
 
@@ -1471,7 +1471,25 @@ KEYUTIL.getKey = function(param, passcode, hextype) {
 	ec.setPrivateKeyHex(hPrv);
 	return ec;
     }
-    
+
+    // 3.2.3 JWK Ed private key
+    if (param.kty === "OKP" &&
+        param.crv === "Ed25519" &&
+        param.d !== undefined) {
+        var ed = new _KJUR_crypto_EdDSA();
+        ed.setPrivateKeyHex(b64utohex(param.d));
+        return ed;
+    }
+
+    // 3.2.4. JWK Ed public key
+    if (param.kty === "OKP" &&
+        param.crv === "Ed25519" &&
+        param.x !== undefined) {
+        var ed = new _KJUR_crypto_EdDSA();
+        ed.setPublicKeyHex(b64utohex(param.x));
+        return ed;
+    }
+
     // 4. (plain) hexadecimal data
     // 4.1. get private key by PKCS#5 plain RSA/DSA/ECDSA hexadecimal string
     if (hextype === "pkcs5prv") {
@@ -1693,6 +1711,7 @@ KEYUTIL.generateKeypair = function(alg, keylenOrCurve) {
 
         const pubKeyObj = new KJUR.crypto.EdDSA({curve});
         pubKeyObj.setPublicKeyHex(keypairHex.pubhex);
+        prvKeyObj.setPrivateKeyHex(keypairHex.prvhex);
         pubKeyObj.isPrivate = false;
         pubKeyObj.isPublic = true;
 

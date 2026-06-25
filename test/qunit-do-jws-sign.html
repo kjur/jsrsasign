@@ -43,6 +43,7 @@
 <script src="../src/crypto-1.1.js"></script>
 <script src="../src/ecdsa-modified-1.0.js"></script>
 <script src="../src/ecparam-1.0.js"></script>
+<script src="../src/eddsa-modified-3.0.js"></script>
 <script src="../src/asn1-1.0.js"></script>
 <script src="../src/asn1x509-1.0.js"></script>
 <script src="../src/keyutil-1.0.js"></script>
@@ -268,6 +269,20 @@ test("algorithm test: none", function() {
   equal(sJWS, 'eyJhbGciOiJub25lIiwgImN0eSI6IkpXVCJ9.eyJhZ2UiOiAyMX0.', "1");
 });
 
+/* Key from RFC8037 */
+var jwtEd25519Key = {
+  "kty":"OKP",
+  "crv":"Ed25519",
+  "d":"nWGxne_9WmC6hEr0kuwsxERJxWl7MmkZcDusAxyuf2A",
+  "x":"11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo"
+};
+
+test("algorithm test: EdDSA", function() {
+  expect(1);
+  var sJWS = KJUR.jws.JWS.sign(null, '{"alg":"EdDSA", "cty":"JWT"}', '{"age": 21}', jwtEd25519Key);
+  equal(sJWS, 'eyJhbGciOiJFZERTQSIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.U5x4vzEx2rVlTH-1ZEuXTStv7KhcCKr2u2qTBs688pBO-t0CuXVrKQl6nlyaHhrLOw6QHRA6YB1toS-oITv6BQ', "1");
+});
+
 var sJWSRS256 = 'eyJhbGciOiJSUzI1NiIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.inTO81veA1R6x_MYP9Y3HBY7AlJ5H_QYZPzCJTEMu7md4fVm_AwBY-uNqxnM31JUVWYazX1htv2KES_VXievD8qVxez6-S7K8y-oQ462rCENrko_GVHBm9C7SgkZEgsnZ2IlhYhcYOmBUESfAHJKak9gP6_azu6Vr8Nvwtx8Qjk';
 test("algorithm test: RS256", function() {
   expect(1);
@@ -383,6 +398,15 @@ test("verify test for algorithm RS512 z3", function() {
   expect(1);
   var result = KJUR.jws.JWS.verify(sJWSRS512, z3PubPemP8);
   equal(result, true, "");
+});
+
+test("verify test for algorithm EdDSA", function() {
+  expect(1);
+
+  delete jwtEd25519Key.d;
+  const key = KEYUTIL.getKey(jwtEd25519Key);
+  const result = KJUR.jws.JWS.verify('eyJhbGciOiJFZERTQSIsICJjdHkiOiJKV1QifQ.eyJhZ2UiOiAyMX0.U5x4vzEx2rVlTH-1ZEuXTStv7KhcCKr2u2qTBs688pBO-t0CuXVrKQl6nlyaHhrLOw6QHRA6YB1toS-oITv6BQ', key);
+  equal(result, true, "EdDSAverification");
 });
 
 test("verify test for algorithm ES256(NIST P-256 k1)", function() {

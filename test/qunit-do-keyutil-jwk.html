@@ -28,6 +28,7 @@
 <script src="../src/base64x-1.1.js"></script>
 <script src="../src/asn1-1.0.js"></script>
 <script src="../src/ecdsa-modified-1.0.js"></script>
+<script src="../src/eddsa-modified-3.0.js"></script>
 <script src="../src/ecparam-1.0.js"></script>
 <script src="../src/keyutil-1.0.js"></script>
 <script src="../src/jws-3.3.js"></script>
@@ -221,6 +222,20 @@ var k6CertJwk = {
   "x5t#S256": "Jg6rIIYsbkuh641caFsEXhwXQB-km3MtQZUG5dnkuWE",
   kid: "ABAUUfNSONFsZYvZ_o_0bsPT3qeG3jttXB09VC_ETWQ"
 };
+
+/* From RFC8037 */
+var k7Ed25519JwkPriv = {
+  "kty":"OKP",
+  "crv":"Ed25519",
+  "d":"nWGxne_9WmC6hEr0kuwsxERJxWl7MmkZcDusAxyuf2A",
+  "x":"11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo"
+}
+
+var k7Ed25519JwkPub = {
+  "kty":"OKP",
+  "crv":"Ed25519",
+  "x":"11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo"
+}
 
 // === getKey JWK =======================================================
 
@@ -427,6 +442,20 @@ test("getJWK() - EC certificate k6 X509 object", function() {
 var x509obj = new X509(k6CertPEM);
 var jwk = KEYUTIL.getJWK(x509obj);
 deepEqual(jwk, k6CertJwk, "EC certificate");
+});
+
+test("getKey JWK k7Ed25519JwkPriv", function() {
+  const ed = KEYUTIL.getKey(k7Ed25519JwkPriv);
+  equal(ed.isPrivate, true, "is private key");
+  equal(ed.curveName, "id-Ed25519", "id-E25519");
+  equal(ed.prvKeyHex, "9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60", "04xy");
+});
+
+test("getKey JWK k7Ed25519JwkPub", function() {
+  const ed = KEYUTIL.getKey(k7Ed25519JwkPub);
+  equal(ed.isPublic, true, "is public key");
+  equal(ed.curveName, "id-Ed25519", "id-E25519");
+  equal(ed.pubKeyHex, "d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a", "04xy");
 });
 
 // == getJWKFromKey ===============================

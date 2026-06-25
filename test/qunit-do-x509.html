@@ -42,6 +42,7 @@
 <script src="../src/asn1-1.0.js"></script>
 <script src="../src/asn1x509-1.0.js"></script>
 <script src="../src/keyutil-1.0.js"></script>
+<script src="../src/eddsa-modified-3.0.js"></script>
 <script src="../src/crypto-1.1.js"></script>
 <script src="../src/dsa-2.0.js"></script>
 <script src="../src/ecdsa-modified-1.0.js"></script>
@@ -365,6 +366,30 @@ q0gq
 // datasign aaa z4.prv.p5p.pem xxx SHA1withRSA
 var Z4SHA1AAASIG = "2f3705127a4a748fee37ef92e8beca3d17fd22c6cadf004d315c5144fc00dc47c983441d6ad55c2f98d378b0d2b362f876ab8d5207331264931388d05cbc96814a70c8e2cd8c047b0008db71cdf5ead5b33bd3606285f6cbf05a86282c710ddf21a439dde79af3d2f2f10ce3cbf273d81893b11506d43dfb292f343d39e6324a130741d5bf4db64bf9c004ba7f857b6c81b2d9502fbca97644a4f7f661f02c4c295502b54e46fdee7e543ac7dab2dff585e9067ca576fb71a8e1b93cc7305263aca99fbb01f9e599125f0642e9ab71cc1973482ecc26f3d1b75409d936eed1ade353abdbdc7602f7c8c78763fcd6d254e73ae57ef5602f5a5ad5be267ef01755";
 
+var Z6CERVALID = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIBSDCB+6ADAgECAhQYaauob6uZy8Oqmki2oLLrQfeR3zAFBgMrZXAwEjEQMA4G
+A1UEAwwHZWQyNTUxOTAeFw0yNjA2MjIxOTExMzJaFw0yNjA3MjIxOTExMzJaMBIx
+EDAOBgNVBAMMB2VkMjU1MTkwKjAFBgMrZXADIQB/spfqjOrcQaaDgHYHRnf5jn7G
+v3lYdiSEwu4KH6IfQ6NjMGEwHQYDVR0OBBYEFDpTYihHfN5WtYaziaCQNKfpdid/
+MB8GA1UdIwQYMBaAFDpTYihHfN5WtYaziaCQNKfpdid/MA8GA1UdEwEB/wQFMAMB
+Af8wDgYDVR0PAQH/BAQDAgGGMAUGAytlcANBAFw5O+NVrS2pO508mEGlVJLnyaev
+fjQhHTf9djw7eovKK1MxvqZMiEqMhFQ5hzcGXZSnxVfT1pLl3PeARebfjgY=
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
+var Z6CERINVALID = (function() {/*
+-----BEGIN CERTIFICATE-----
+MIIBSDCB+6ADAgECAhQYaauob6uZy8Oqmki2oLLrQfeR3zAFBgMrZXAwEjEQMA4G
+A1UEAwwHZWQyNTUxOTAeFw0yNjA2MjIxOTExMzJaFw0yNjA3MjIxOTExMzJaMBIx
+EDAOBgNVBAMMB2VkMjU1MTkwKjAFBgMrZXADIQB/spfqjOrcQaaDgHYHRnf5jn7G
+v3lYdiSEwu4KH6IfQ6NjMGEwHQYDVR0OBBYEFDpTYihHfN5WtYaziaCQNKfpdid/
+MB8GA1UdIwQYMBaAFDpTYihHfN5WtYaziaCQNKfpdid/MA8GA1UdEwEB/wQFMAMB
+Af8wDgYDVR0PAQH/BAQDAgGGMAUGAytlcANBAFw5O+NVrS2pO508mEGlVJLnyaev
+fjQhHTf9djw7eovKK1MxvqZMiEqMhFQ5hzcGXZSnxVfT1pLl2PeARebfjgY=
+-----END CERTIFICATE-----
+*/}).toString().match(/\/\*([^]*)\*\//)[1];
+
 // **** TEST **********
 
 test("getSPKI", function() {
@@ -667,6 +692,20 @@ canon: "/c=jp/o=test 1234/ou=hr 45"
 x.setCanonicalizedDN(p);
 deepEqual(p, pExpect, "hoge2");
 
+});
+
+test("verifySignature ED25519 VALID", function() {
+  let cert = new X509();
+  cert.readCertPEM(Z6CERVALID);
+  const key = cert.getPublicKey();
+  ok(cert.verifySignature(key));
+});
+
+test("verifySignature ED25519 INVALID", function() {
+  let cert = new X509();
+  cert.readCertPEM(Z6CERINVALID);
+  const key = cert.getPublicKey();
+  ok(!cert.verifySignature(key));
 });
 
 });

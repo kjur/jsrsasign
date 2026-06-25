@@ -537,11 +537,11 @@ const hashes = {
         return u8n(await s.digest('SHA-512', m.buffer));
     },
     sha512: (message) => {
-        const hex = Buffer.from(message).toString('hex');
+        const hex = message.toHex();
         const md = new KJUR.crypto.MessageDigest({alg: 'sha512'});
         md.updateHex(hex);
         const dgst = md.digest(message);
-        return Buffer.from(dgst, 'hex');
+        return Uint8Array.fromHex(dgst);
     }
 };
 // FIPS 186 B.4.1 compliant key generation produces private keys
@@ -672,8 +672,8 @@ this.generateKeyPairHex = function() {
 };
 
 this.generatePublicKeyHex = function() {
-    const pubKey = getPublicKey(Buffer.from(this.prvKeyHex, 'hex'));
-    const hPub = Buffer.from(pubKey).toString('hex');
+    const pubKey = getPublicKey(Uint8Array.fromHex(this.prvKeyHex));
+    const hPub = pubKey.toHex();
     this.setPublicKeyHex(hPub);
     return hPub;
 }
@@ -683,12 +683,12 @@ this.signWithMessageHash = function(msgHex) {
 };
 
 this.signHex = function (msgHex) {
-    return this.sign(Buffer.from(msgHex, 'hex'));
+    return this.sign(Uint8Array.fromHex(msgHex));
 };
 
 this.sign = function (msg) {
-    let buf = sign(msg, Buffer.from(this.prvKeyHex, 'hex'));
-    return Buffer.from(buf).toString('hex');
+    let buf = sign(msg, Uint8Array.fromHex(this.prvKeyHex));
+    return buf.toHex();
 };
 
 this.verifyWithMessageHash = function(msgHex, sigHex) {
@@ -697,13 +697,13 @@ this.verifyWithMessageHash = function(msgHex, sigHex) {
 
 this.verifyHex = function(msgHex, sigHex) {
     return this.verify(
-        Buffer.from(msgHex, 'hex'),
-        Buffer.from(sigHex, 'hex')
+        Uint8Array.fromHex(msgHex),
+        Uint8Array.fromHex(sigHex)
     );
 };
 
 this.verify = function (hash, sig) {
-    return verify(sig, hash, Buffer.from(this.pubKeyHex, 'hex'));
+    return verify(sig, hash, Uint8Array.fromHex(this.pubKeyHex));
 };
 
 this.readPKCS8PrvKeyHex = function(h) {

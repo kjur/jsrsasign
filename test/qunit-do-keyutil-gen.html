@@ -11,6 +11,21 @@
 <script src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
 <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="screen"/>
 
+<script src="../ext/cj/cryptojs-312-core-fix.js"></script>
+<script src="../ext/cj/x64-core.js"></script>
+<script src="../ext/cj/cipher-core_min.js"></script>
+<script src="../ext/cj/aes_min.js"></script>
+<script src="../ext/cj/tripledes_min.js"></script>
+<script src="../ext/cj/enc-base64_min.js"></script>
+<script src="../ext/cj/md5_min.js"></script>
+<script src="../ext/cj/sha1_min.js"></script>
+<script src="../ext/cj/sha256_min.js"></script>
+<script src="../ext/cj/sha224_min.js"></script>
+<script src="../ext/cj/sha512_min.js"></script>
+<script src="../ext/cj/sha384_min.js"></script>
+<script src="../ext/cj/ripemd160_min.js"></script>
+<script src="../ext/cj/hmac_min.js"></script>
+<script src="../ext/cj/pbkdf2_min.js"></script>
 
 <script src="../ext/jsbn.js"></script>
 <script src="../ext/jsbn2.js"></script>
@@ -27,9 +42,11 @@
 <script src="../src/rsapem-1.1.js"></script>
 <script src="../src/rsasign-1.2.js"></script>
 <script src="../src/asn1-1.0.js"></script>
+<script src="../src/crypto-1.1.js"></script>
 <script src="../src/ecdsa-modified-1.0.js"></script>
 <script src="../src/ecparam-1.0.js"></script>
 <script src="../src/keyutil-1.0.js"></script>
+<script src="../src/eddsa-modified-3.0.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -71,16 +88,73 @@ test("generate RSA 1024", function() {
   checkRSA(keypair, keyLen);
 });
 
-test("generate EC", function() {
+test("generate RSA 2048", function() {
+  var keyLen = 2048;
+  var keypair = KEYUTIL.generateKeypair("RSA", keyLen);
+  checkRSA(keypair, keyLen);
+});
+
+test("generate EC (secp256r1)", function() {
   var curve = "secp256r1";
   var keypair = KEYUTIL.generateKeypair("EC", curve);
 
-  expect(4);
+  expect(8);
   equal(keypair.prvKeyObj.curveName, curve, "prv curve " + curve);
   equal(keypair.prvKeyObj.prvKeyHex !== undefined, true, "prv keyhex not undefined:" + keypair.prvKeyObj.prvKeyHex);
+  ok(keypair.prvKeyObj.isPrivate, "isPrivate");
+  ok(!keypair.prvKeyObj.isPublic, "isPublic");
+
+  equal(keypair.pubKeyObj.curveName, curve, "pub curve " + curve);
+  equal(keypair.pubKeyObj.pubKeyHex !== undefined, true, "pub keyhex not undefined:" + keypair.pubKeyObj.pubKeyHex);
+  ok(!keypair.pubKeyObj.isPrivate, "isPrivate");
+  ok(keypair.pubKeyObj.isPublic, "isPublic");
+});
+
+test("generate EC (secp384r1)", function() {
+  var curve = "secp384r1";
+  var keypair = KEYUTIL.generateKeypair("EC", curve);
+
+  expect(8);
+  equal(keypair.prvKeyObj.curveName, curve, "prv curve " + curve);
+  equal(keypair.prvKeyObj.prvKeyHex !== undefined, true, "prv keyhex not undefined:" + keypair.prvKeyObj.prvKeyHex);
+  ok(keypair.prvKeyObj.isPrivate, "isPrivate");
+  ok(!keypair.prvKeyObj.isPublic, "isPublic");
 
   equal(keypair.pubKeyObj.curveName, curve, "pub curve " + curve);
   equal(keypair.pubKeyObj.pubKeyHex !== undefined, true, "pub keyhex undefined:" + keypair.pubKeyObj.pubKeyHex);
+  ok(!keypair.pubKeyObj.isPrivate, "isPrivate");
+  ok(keypair.pubKeyObj.isPublic, "isPublic");
+});
+
+test("generate EC (secp521r1)", function() {
+  var curve = "secp521r1";
+  var keypair = KEYUTIL.generateKeypair("EC", curve);
+
+  expect(8);
+  equal(keypair.prvKeyObj.curveName, curve, "prv curve " + curve);
+  equal(keypair.prvKeyObj.prvKeyHex !== undefined, true, "prv keyhex not undefined:" + keypair.prvKeyObj.prvKeyHex);
+  ok(keypair.prvKeyObj.isPrivate, "isPrivate");
+  ok(!keypair.prvKeyObj.isPublic, "isPublic");
+
+  equal(keypair.pubKeyObj.curveName, curve, "pub curve " + curve);
+  equal(keypair.pubKeyObj.pubKeyHex !== undefined, true, "pub keyhex undefined:" + keypair.pubKeyObj.pubKeyHex);
+  ok(!keypair.pubKeyObj.isPrivate, "isPrivate");
+  ok(keypair.pubKeyObj.isPublic, "isPublic");
+});
+
+test("generate EdDSA (id-Ed25519)", function() {
+  var keypair = KEYUTIL.generateKeypair("EdDSA", "id-Ed25519");
+
+  expect(8);
+  equal(keypair.prvKeyObj.type, "EdDSA");
+  equal(keypair.prvKeyObj.prvKeyHex !== undefined, true);
+  ok(keypair.prvKeyObj.isPrivate, "isPrivate");
+  ok(!keypair.prvKeyObj.isPublic, "isPublic");
+
+  equal(keypair.pubKeyObj.type, "EdDSA");
+  equal(keypair.pubKeyObj.pubKeyHex !== undefined, true);
+  ok(!keypair.pubKeyObj.isPrivate, "isPrivate");
+  ok(keypair.pubKeyObj.isPublic, "isPublic");
 });
 
 });
@@ -95,9 +169,9 @@ test("generate EC", function() {
 <a href="index.html">TEST INDEX</a> | 
 <a href="qunit-do-keyutil.html">keyutil</a> | 
 <a href="qunit-do-keyutil-eprv.html">keyutil-eprv</a> | 
+<a href="qunit-do-keyutil-jwk.html">keyutil-jwk</a> | 
 <a href="qunit-do-keyutil-pub.html">keyutil-pub</a> | 
-<a href="qunit-do-keyutil-pub.html">keyutil-gen</a> | 
+<a href="qunit-do-keyutil-gen.html">keyutil-gen</a> | 
 </body>
 </html>
-
 

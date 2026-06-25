@@ -25,6 +25,29 @@ test("getJWKthumbprint RSA sample in RFC7638", function() {
   equal(KJUR.jws.JWS.getJWKthumbprint(k), "NzbLsXh8uDCcd-6MNwXF4W_7noWXFZAfHkxZsRGC9Xs", "ok");
 });
 
+/* From RFC8037 */
+var k7Ed25519JwkPriv = {
+  "kty":"OKP",
+  "crv":"Ed25519",
+  "d":"nWGxne_9WmC6hEr0kuwsxERJxWl7MmkZcDusAxyuf2A",
+  "x":"11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo"
+}
+
+var k7Ed25519JwkPub = {
+  "kty":"OKP",
+  "crv":"Ed25519",
+  "x":"11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo"
+}
+
+var k7Ed25519JwkThumbprintHex = "90facafea9b1556698540f70c0117a22ea37bd5cf3ed3c47093c1707282b4b89";
+var k7Ed25519JwkThumbprintB64 = "kPrK_qmxVWaYVA9wwBF6Iuo3vVzz7TxHCTwXBygrS4k";
+
+test("getJWKthumbprint Ed25519 sample in RFC8037", function() {
+  equal(KJUR.jws.JWS.getJWKthumbprint(k7Ed25519JwkPub), k7Ed25519JwkThumbprintB64, "ok");
+  equal(KJUR.jws.JWS.getJWKthumbprint(k7Ed25519JwkPriv), k7Ed25519JwkThumbprintB64, "ok");
+});
+
+
 });
 </script>
   

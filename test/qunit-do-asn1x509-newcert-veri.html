@@ -41,6 +41,7 @@
 <script src="../src/crypto-1.1.js"></script>
 <script src="../src/asn1-1.0.js"></script>
 <script src="../src/ecdsa-modified-1.0.js"></script>
+<script src="../src/eddsa-modified-3.0.js"></script>
 <script src="../src/ecparam-1.0.js"></script>
 <script src="../src/asn1x509-1.0.js"></script>
 <script src="../src/x509-1.1.js"></script>
@@ -120,6 +121,36 @@ x.readCertHex(hCert);
 equal(x.verifySignature(kpEC.pubKeyObj), true, "VALID");
 });
 
+test("newCertPEM Ed25519 signature value verify (VALID)", function() {
+  let pem = "-----BEGIN CERTIFICATE-----\r\n" +
+            "MIIBSDCB+6ADAgECAhQvS7IkdBEI5PBETyFXvqDCJQe4yjAFBgMrZXAwEjEQMA4G\r\n" +
+            "A1UEAwwHRWQyNTUxOTAeFw0yNjA2MjMxMjQ3MzhaFw0yNjA3MjMxMjQ3MzhaMBIx\r\n" +
+            "EDAOBgNVBAMMB0VkMjU1MTkwKjAFBgMrZXADIQBqHM6sqKXdWbxlfVFTyU0ovipM\r\n" +
+            "7JiSBQkTXCbJkWc01qNjMGEwHQYDVR0OBBYEFNcxeJ0PDSQJBOuHMm89wcclH1a7\r\n" +
+            "MB8GA1UdIwQYMBaAFNcxeJ0PDSQJBOuHMm89wcclH1a7MA8GA1UdEwEB/wQFMAMB\r\n" +
+            "Af8wDgYDVR0PAQH/BAQDAgGGMAUGAytlcANBAG0ZI3kg2G2DiaTFfLIcIhwnZXws\r\n" +
+            "dN/tnDg4ddXvz4zGBM9qfcE6wKgjLwcdFm8Bs4PslosRYSCPvhLLtxRs2Ac=\r\n" +
+            "-----END CERTIFICATE-----\r\n";
+  const cert = new X509();
+  cert.readCertPEM(pem);
+  equal(cert.verifySignature(cert.getPublicKey()), true, "VALID");
+});
+
+test("newCertPEM Ed25519 signature value verify (INVALID)", function() {
+  let pem = "-----BEGIN CERTIFICATE-----\r\n" +
+            "MIIBSDCB+6ADAgECAhQvS7IkdBEI5PBETyFXvqDCJQe4yjAFBgMrZXAwEjEQMA4G\r\n" +
+            "A1UEAwwHRWQyNTUxOTAeFw0yNjA2MjMxMjQ3MzhaFw0yNjA3MjMxMjQ3MzhaMBIx\r\n" +
+            "EDAOBgNVBAMMB0VkMjU1MTkwKjAFBgMrZXADIQBqHM6sqKXdWbxlfVFTyU0ovipM\r\n" +
+            "7JiSBQkTXCbJkWc01qNjMGEwHQYDVR0OBBYEFNcxeJ0PDSQJBOuHMm89wcclH1a7\r\n" +
+            "MB8GA1UdIwQYMBaAFNcxeJ0PDSQJBOuHMm89wcclH1a7MA8GA1UdEwEB/wQFMAMB\r\n" +
+            "Af8wDgYDVR0PAQH/BAQDAgGGMAUGAytlcANBAG0ZI3kg2G2DiaTFfLIcIhwnZXws\r\n" +
+            "dN/tnDg4ddXvz4zGBM9qfcE6wKgjLwcdFm8Bs4PslosRYTCPvhLLtxRs2Ac=\r\n" +
+            "-----END CERTIFICATE-----\r\n";
+  const cert = new X509();
+  cert.readCertPEM(pem);
+  equal(cert.verifySignature(cert.getPublicKey()), false, "VALID");
+});
+
 });
 -->
 </script>
@@ -133,6 +164,7 @@ equal(x.verifySignature(kpEC.pubKeyObj), true, "VALID");
 <a href="qunit-do-asn1x509.html">asn1x509</a> |
 <a href="qunit-do-asn1x509-newcrt.html">asn1x509-newcrt</a> |
 <a href="qunit-do-asn1x509-multirdn.html">asn1x509-multirdn</a> |
+<a href="qunit-do-asn1x509-tbscert.html">asn1x509-tbscert</a> |
 <a href="qunit-do-asn1csr.html">asn1csr</a> |
 </body>
 </html>

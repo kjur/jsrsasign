@@ -38,12 +38,15 @@
 <script src="../ext/ec-patch.js"></script>
 
 <script src="../src/base64x-1.1.js"></script>
+<script src="../src/asn1-1.0.js"></script>
 <script src="../src/asn1hex-1.1.js"></script>
+<script src="../src/asn1x509-1.0.js"></script>
 <script src="../src/keyutil-1.0.js"></script>
-<script src="../src/crypto-1.1.js"></script>
 <script src="../src/ecdsa-modified-1.0.js"></script>
+<script src="../src/crypto-1.1.js"></script>
 <script src="../src/ecparam-1.0.js"></script>
 <script src="../src/rsapem-1.1.js"></script>
+<script src="../src/eddsa-modified-3.0.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -66,6 +69,15 @@ var rsacsr1pem = "" +
 "LNgyk3WCWqvwIcw1iuP4vD5HLMBwBKRtjtgdfAz+yjgrcrQ=\r\n" + 
 "-----END CERTIFICATE REQUEST-----\r\n";
 
+
+var ed25519csr1pem = "" +
+"-----BEGIN CERTIFICATE REQUEST-----\r\n" +
+"MIGRMEUCAQAwEjEQMA4GA1UEAwwHZWQyNTUxOTAqMAUGAytlcAMhANSu61X3VntC\r\n" +
+"tCXYH+cvI8mnnYqqiHSDuZLCib1CrlMxoAAwBQYDK2VwA0EAJwx0PHUU57V7n+YC\r\n" +
+"DwIO4i1Y+uV58HOy/jvccPZjHZxsfBtJCdhieTTv1OfHK3NRGYyjKStGkQwY5jpw\r\n" +
+"eUXkDg==\r\n" +
+"-----END CERTIFICATE REQUEST-----\r\n";
+
 // ======= TEST ===================================================================================
 
 // 
@@ -85,6 +97,13 @@ test("getKeyFromCSRHex test/eckey/rsacsr1.csr", function() {
 test("getKeyFromCSRPEM test/eckey/rsacsr1.csr", function() {
   var key = KEYUTIL.getKeyFromCSRPEM(rsacsr1pem);
   equal(key.e.toString(16), "10001", "e of key");
+});
+
+test("getKeyFromCSRPEM ed25519csr1pem", function() {
+  var key = KEYUTIL.getKeyFromCSRPEM(ed25519csr1pem);
+  ok(key.isPublic, "public key");
+  equal(key.curveName, "id-Ed25519");
+  equal(key.pubKeyHex, "d4aeeb55f7567b42b425d81fe72f23c9a79d8aaa887483b992c289bd42ae5331", "public key value");
 });
 
 });

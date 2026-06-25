@@ -4127,7 +4127,7 @@ KJUR.asn1.x509.AlgorithmIdentifier = function(params) {
 
 	if (lcNameAlg.substr(-7, 7) !== "withdsa" &&
 	    lcNameAlg.substr(-9, 9) !== "withecdsa" &&
-            lcNameAlg.substr(-11, 11) !== "id-ed25519") {
+            lcNameAlg.substr(-7, 7) !== "ed25519") {
             this.asn1Params = new _KJUR_asn1.DERNull();
 	}
     }

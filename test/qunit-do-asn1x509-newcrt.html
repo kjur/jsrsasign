@@ -47,6 +47,7 @@
 <script src="../src/ecdsa-modified-1.0.js"></script>
 <script src="../src/ecparam-1.0.js"></script>
 <script src="../src/dsa-2.0.js"></script>
+<script src="../src/eddsa-modified-3.0.js"></script>
 
 <script type="text/javascript">
 <!--
@@ -383,6 +384,29 @@ equal(tbsHex, "3081cda003020102020101300d06092a864886f70d0101050500301a310b30090
 equal(hex, "3081ea3081cda003020102020101300d06092a864886f70d0101050500301a310b3009060355040613025553310b3009060355040a0c027231301e170d3133303530343233353935395a170d3134303530343233353935395a301a310b3009060355040613025553310b3009060355040a0c027231305c300d06092a864886f70d0101010500034b003048024100e8664dd2b40529121568f3b39bc97a62e7ba3c09babdc4f0dcd8df90eb790b9bb645a2b70e3112747b4d3c41b51424895115fef88f79d43eae5b1a4e3518fd590203010001300d06092a864886f70d01010505000309000102030405060708", "fake cert");
 });
 
+test("newCertPEM by Ed25519", function() {
+  expect(2);
+  const caKey = KEYUTIL.generateKeypair('id-ed25519');
+  var pem = KJUR.asn1.x509.X509Util.newCertPEM(
+    {
+      serial: {int: 2},
+      sigalg: "EdDSAwithEd25519",
+      issuer: {str: '/C=GR/O=r2'},
+      notbefore: '20260630235959Z',
+      notafter:  '20360630235959Z',
+      subject: {str: '/C=GR/O=r2'},
+      sbjpubkey: caKey.pubKeyObj,
+      cakey: caKey.prvKeyObj
+    });
+  ok(pem !== undefined);
+
+  let cert = new X509();
+  cert.readCertPEM(pem);
+  let param = cert.getParam();
+  // console.log(cert.getParam());
+  equal(param.sigalg, 'id-Ed25519', 'Signature algorithm');
+});
+
 });
 
 -->
@@ -395,8 +419,9 @@ equal(hex, "3081ea3081cda003020102020101300d06092a864886f70d0101050500301a310b30
 <a href="index.html">TEST INDEX</a> |
 <a href="qunit-do-x509-hex2dn.html">x509-hex2dn</a> |
 <a href="qunit-do-asn1x509.html">asn1x509</a> |
-<a href="qunit-do-asn1x509-newcrt.html">asn1x509-newcrt</a> |
+<a href="qunit-do-asn1x509-newcert-veri.html">asn1x509-newcert-veri</a> |
 <a href="qunit-do-asn1x509-multirdn.html">asn1x509-multirdn</a> |
+<a href="qunit-do-asn1x509-tbscert.html">asn1x509-tbscert</a> |
 </body>
 </html>
 

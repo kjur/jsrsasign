@@ -241,6 +241,7 @@ KJUR.jws.JWS.sign = function(alg, spHeader, spPayload, key, pass) {
 	_isSafeJSONString = _KJUR_jws_JWS.isSafeJSONString,
 	_KJUR_crypto = _KJUR.crypto,
 	_ECDSA = _KJUR_crypto.ECDSA,
+	_EdDSA = _KJUR_crypto.EdDSA,
 	_Mac = _KJUR_crypto.Mac,
 	_Signature = _KJUR_crypto.Signature,
 	_JSON = JSON;
@@ -310,6 +311,11 @@ KJUR.jws.JWS.sign = function(alg, spHeader, spPayload, key, pass) {
 	sig.updateString(uSignatureInput);
 	var hASN1Sig = sig.sign();
 	hSig = KJUR.crypto.ECDSA.asn1SigToConcatSig(hASN1Sig);
+    } else if (sigAlg.indexOf("withEdDSA") != -1) {
+        var sig = new _Signature({'alg': sigAlg});
+        sig.init(key, pass);
+        sig.updateString(uSignatureInput);
+        hsig = sign.sign();
     } else if (sigAlg != "none") {
 	var sig = new _Signature({'alg': sigAlg});
 	sig.init(key, pass);
@@ -396,6 +402,7 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
 	_readSafeJSONString = _KJUR_jws_JWS.readSafeJSONString,
 	_KJUR_crypto = _KJUR.crypto,
 	_ECDSA = _KJUR_crypto.ECDSA,
+	_EdDSA = _KJUR_crypto.EdDSA,
 	_Mac = _KJUR_crypto.Mac,
 	_Signature = _KJUR_crypto.Signature,
 	_RSAKey;
@@ -459,6 +466,12 @@ KJUR.jws.JWS.verify = function(sJWS, key, acceptAlgs) {
     if (algType == "ES") {
 	if (!(key instanceof _ECDSA)) {
 	    throw "key shall be a ECDSA obj for ES* algs";
+	}
+    }
+
+    if (algType == "Ed") {
+	if (!(key instanceof _EdDSA)) {
+	    throw new Error("key shall be a EdDSA obj for Ed25519 alg");
 	}
     }
 
@@ -821,7 +834,7 @@ KJUR.jws.JWS.jwsalg2sigalg = {
     "PS256":	"SHA256withRSAandMGF1",
     "PS384":	"SHA384withRSAandMGF1",
     "PS512":	"SHA512withRSAandMGF1",
-    "Ed25519":  "EdDSAwithEd25519",
+    "EdDSA":    "EdDSAwithEd25519",
     "none":	"none",
 };
 
