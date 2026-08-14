@@ -1,8 +1,8 @@
 /*
- * jsrsasign(jwths) 11.1.3 (2026-04-18) (c) 2010-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
+ * jsrsasign(jwths) 11.1.4 (2026-08-14) (c) 2010-2023 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
-var VERSION = "11.1.3";
-var VERSION_FULL = "jsrsasign(jwths) 11.1.3 (2026-04-18) (c) 2010-2023 Kenji Urushima | kjur.github.io/jsrsasign/license";
+var VERSION = "11.1.4";
+var VERSION_FULL = "jsrsasign(jwths) 11.1.4 (2026-08-14) (c) 2010-2023 Kenji Urushima | kjur.github.io/jsrsasign/license";
 
 /*! CryptoJS v3.1.2 core-fix.js
  * code.google.com/p/crypto-js

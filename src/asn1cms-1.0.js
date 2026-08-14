@@ -1,9 +1,9 @@
-/* asn1cms-2.0.5.js (c) 2013-2020 Kenji Urushima | kjur.github.io/jsrsasign/license
+/* asn1cms-2.0.6.js (c) 2013-2026 Kenji Urushima | kjur.github.io/jsrsasign/license
  */
 /*
  * asn1cms.js - ASN.1 DER encoder and verifier classes for Cryptographic Message Syntax(CMS)
  *
- * Copyright (c) 2013-2020 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2013-2026 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -1674,7 +1674,7 @@ KJUR.asn1.cms.SignedData = function(params) {
     this.getEncodedHex = function() { return this.tohex(); };
 
     /**
-     * get CotentInfo ASN.1 object concluding CMS SignedData<br/>
+     * get ContentInfo ASN.1 object concluding CMS SignedData<br/>
      * @name getContentInfo
      * @memberOf KJUR.asn1.cms.SignedData#
      * @function
@@ -2035,6 +2035,9 @@ KJUR.asn1.cms.CMSUtil.newSignedData = function(param) {
  * <li>cms - hexadecimal data of DER CMS SignedData (aka. PKCS#7 or p7s)</li>
  *     to verify (OPTION)</li>
  * </ul>
+ *
+ * If signerInfos is empty, "isValid" value of result will be false.
+ *
  * @example
  * KJUR.asn1.cms.CMSUtil.verifySignedData({ cms: "3082058a..." }) 
  * &rarr;
@@ -2163,14 +2166,18 @@ KJUR.asn1.cms.CMSUtil.verifySignedData = function(param) {
     var _verify = function(hCMS, result) {
 	var aSI = result.parse.signerInfos;
 	var n = aSI.length;
-	var isValid = true;
-	for (var i = 0; i < n; i++) {
+        if (n > 0) {
+	  var isValid = true;
+	  for (var i = 0; i < n; i++) {
 	    var si = aSI[i];
 	    _verifySignerInfo(hCMS, result, si, i);
 	    if (! si.isValid)
-		isValid = false;
+	      isValid = false;
+	  }
+	  result.isValid = isValid;
+	} else {
+	  result.isValid = false;
 	}
-	result.isValid = isValid;
     };
 
     /*

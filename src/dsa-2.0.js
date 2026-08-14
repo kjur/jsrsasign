@@ -1,9 +1,9 @@
-/* dsa-2.1.2.js (c) 2016-2020 Kenji Urushimma | kjur.github.io/jsrsasign/license
+/* dsa-2.1.3.js (c) 2016-2026 Kenji Urushimma | kjur.github.io/jsrsasign/license
  */
 /*
  * dsa.js - new DSA class
  *
- * Copyright (c) 2016-2020 Kenji Urushima (kenji.urushima@gmail.com)
+ * Copyright (c) 2016-2026 Kenji Urushima (kenji.urushima@gmail.com)
  *
  * This software is licensed under the terms of the MIT License.
  * https://kjur.github.io/jsrsasign/license
@@ -50,16 +50,17 @@ KJUR.crypto.DSA = function() {
 	_BigInteger = BigInteger,
 	_BI_ONE = BigInteger.ONE;
 
-    var _validatePublicArgs = function(p, q, g, y) {
-	if (p == null || q == null || g == null || y == null)
+    var _validatePublicArgs = function(p, q, g, y, bYOptional) {
+	if (p == null || q == null || g == null ||
+	    (y == null && bYOptional !== true))
 	    throw new Error("invalid DSA public key");
 
 	// FIPS 186-4 4.7: domain parameters and public key shall be validated.
+	if (y != null && (_BI_ONE.compareTo(y) >= 0 || y.compareTo(p) >= 0))
+	    throw new Error("invalid DSA public key");
 	if (_BI_ONE.compareTo(q) >= 0 || q.compareTo(p) >= 0)
 	    throw new Error("invalid DSA public key");
 	if (_BI_ONE.compareTo(g) >= 0 || g.compareTo(p) >= 0)
-	    throw new Error("invalid DSA public key");
-	if (_BI_ONE.compareTo(y) >= 0 || y.compareTo(p) >= 0)
 	    throw new Error("invalid DSA public key");
 	if (g.modPow(q, p).compareTo(_BI_ONE) != 0)
 	    throw new Error("invalid DSA public key");
@@ -91,6 +92,11 @@ KJUR.crypto.DSA = function() {
      * @since jsrsasign 7.0.0 dsa 2.0.0
      */
     this.setPrivate = function(p, q, g, y, x) {
+	// y is optional for a private key (e.g. PKCS#8 private keys have no
+	// public key Y), but domain parameters and the public key shall be
+	// validated (FIPS 186-4 4.7) to prevent universal signature forgery.
+	_validatePublicArgs(p, q, g, y, true);
+
 	this.isPrivate = true;
 	this.p = p;
 	this.q = q;
