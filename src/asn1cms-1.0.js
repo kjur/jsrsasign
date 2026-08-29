@@ -1007,6 +1007,10 @@ extendClass(KJUR.asn1.cms.SubjectKeyIdentifier, KJUR.asn1.ASN1Object);
  *   array: [{
  *     attr: "contentType",
  *     type: "data"
+ *   },{
+ *     attr: "oid",
+ *     oid: "1.2.840.113549.1.9.16.2.80",
+ *     value: { set: [{ set: [{enum: int 1}] }] }
  *   }],
  *   sortflag: false
  * })
@@ -1056,6 +1060,10 @@ KJUR.asn1.cms.AttributeList = function(params) {
 	    } else if (attrName == "signatureTimeStamp" ||
 		       attrName == "timeStampToken") {
 		a.push(new KJUR.asn1.cades.SignatureTimeStamp(pAttr));
+	    } else if (attrName == "oid") {
+		if (pAttr.oid == undefined || pAttr.value == undefined)
+    throw new _Error("missing oid or value attribute");
+		a.push(KJUR.asn1.ASN1Util.newObject({seq: [{"oid": pAttr.oid, pAttr.value}]));
 	    } else {
 		throw new _Error("unknown attr: " + attrName);
 	    }
