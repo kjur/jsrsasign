@@ -95,11 +95,15 @@ KJUR.crypto.ECDSA = function(params) {
     //===========================
     // PUBLIC METHODS
     //===========================
+    /*
+     * Generate uniformly distributed big random integer in 0 <= x < limit
+     */
     this.getBigRandom = function (limit) {
-	return new _BigInteger(limit.bitLength(), rng)
-	.mod(limit.subtract(_BigInteger.ONE))
-	.add(_BigInteger.ONE)
-	;
+        var bitLength = limit.subtract(_BigInteger.ONE).bitLength();
+        do {
+            var result = new _BigInteger(bitLength, rng);
+        } while (result.compareTo(limit) >= 0);
+        return result;
     };
 
     this.setNamedCurve = function(curveName) {
