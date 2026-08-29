@@ -1279,13 +1279,15 @@ ASN1HEX.checkStrictDER = function(h, idx, maxHexLen, maxByteLen, maxLbyteLen) {
 	if (maxByteLen < 0x80) {
 	    maxLbyteLen = 1;
 	} else {
-	    maxLbyteLen = Math.ceil(maxByteLen.toString(16)) + 1;
+	    maxLbyteLen = Math.ceil(maxByteLen.toString(16).length / 2) + 1;
 	}
     }
     //console.log(maxHexLen + ":" + maxByteLen + ":" + maxLbyteLen);
 
     // 3. check if L(length) string not exceeds maxLbyteLen
     var hL = _ASN1HEX.getL(h, idx);
+    if (hL === "")
+	throw new Error("malformed L of TLV: idx=" + idx);
     if (hL.length > maxLbyteLen * 2)
 	throw new Error("L of TLV too long: idx=" + idx);
 
@@ -1294,6 +1296,18 @@ ASN1HEX.checkStrictDER = function(h, idx, maxHexLen, maxByteLen, maxLbyteLen) {
     var vblen = _ASN1HEX.getVblen(h, idx);
     if (vblen > maxByteLen) 
 	throw new Error("value of L too long than hex: idx=" + idx);
+
+    // 4a. DER requires shortest length encoding.
+    if (hL.length > 2) {
+	var hLenValue = hL.substr(2);
+	if (vblen < 128)
+	    throw new Error("not shortest length encoding: idx=" + idx);
+	if (hLenValue.substr(0, 2) === "00")
+	    throw new Error("leading zero in L of TLV: idx=" + idx);
+	var minLbyteLen = Math.ceil(vblen.toString(16).length / 2) + 1;
+	if ((hL.length / 2) > minLbyteLen)
+	    throw new Error("L of TLV too long: idx=" + idx);
+    }
 
     // 5. check V string length and L's value are the same
     var hTLV = _ASN1HEX.getTLV(h, idx);
