@@ -118,6 +118,22 @@ for (const curve in SIGNATURES) {
   });
 }
 
+test("P-521 strict DER rejects non-shortest length encodings", function() {
+  const sig = SIGNATURES["P-521"][0].asn1;
+  const r = sig.substr(10, 130);
+  const s = sig.substr(144, 130);
+
+  equal(ASN1HEX.checkStrictDER(sig, 0, sig.length / 2), undefined, "valid P-521 signature accepted");
+
+  throws(function() {
+    ASN1HEX.checkStrictDER("30820086" + sig.substr(6), 0, sig.length / 2 + 2);
+  }, Error, "sequence length with a leading zero is rejected");
+
+  throws(function() {
+    ASN1HEX.checkStrictDER("308187028141" + r + "0241" + s, 0, sig.length / 2 + 1);
+  }, Error, "integer length in unnecessary long form is rejected");
+});
+
 });
 </script>
   
