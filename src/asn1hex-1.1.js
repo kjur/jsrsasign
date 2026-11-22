@@ -734,40 +734,7 @@ ASN1HEX.getString = function(h, idx, errorReturn) {
  * ASN1HEX.hextooidstr("550406") &rarr; "2.5.4.6"
  */
 ASN1HEX.hextooidstr = function(hex) {
-    var zeroPadding = function(s, len) {
-        if (s.length >= len) return s;
-        return new Array(len - s.length + 1).join('0') + s;
-    };
-
-    var a = [];
-
-    // a[0], a[1]
-    var hex0 = hex.substr(0, 2);
-    var i0 = parseInt(hex0, 16);
-    a[0] = new String(Math.floor(i0 / 40));
-    a[1] = new String(i0 % 40);
-
-    // a[2]..a[n]
-   var hex1 = hex.substr(2);
-    var b = [];
-    for (var i = 0; i < hex1.length / 2; i++) {
-    b.push(parseInt(hex1.substr(i * 2, 2), 16));
-    }
-    var c = [];
-    var cbin = "";
-    for (var i = 0; i < b.length; i++) {
-        if (b[i] & 0x80) {
-            cbin = cbin + zeroPadding((b[i] & 0x7f).toString(2), 7);
-        } else {
-            cbin = cbin + zeroPadding((b[i] & 0x7f).toString(2), 7);
-            c.push(new String(parseInt(cbin, 2)));
-            cbin = "";
-        }
-    }
-
-    var s = a.join(".");
-    if (c.length > 0) s = s + "." + c.join(".");
-    return s;
+    return hextooid(hex);
 };
 
 /**

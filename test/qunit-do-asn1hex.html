@@ -333,6 +333,8 @@ test("hextooidstr", function() {
         "2.16.840.1.101.3.4.2.1", "sha256");
   equal(ASN1HEX.hextooidstr("2a864886f70d010105"),
         "1.2.840.113549.1.1.5", "SHA1withRSA");
+  equal(ASN1HEX.hextooidstr("883703"), "2.999.3", "883703->2.999.3");
+  equal(ASN1HEX.hextooidstr("8100"), "2.48", "8100->2.48");
 });
 
 /*

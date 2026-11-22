@@ -1753,7 +1753,7 @@ function oidtohex(oidString) {
 
     var roidtox = function(roid) {
         var h = '';
-        var bi = parseInt(roid, 10);
+        var bi = new BigInteger(roid, 10);
         var b = bi.toString(2);
 
         var padLen = 7 - b.length % 7;
@@ -1774,8 +1774,10 @@ function oidtohex(oidString) {
     
 	var h = '';
 	var a = oidString.split('.');
-	var i0 = parseInt(a[0], 10) * 40 + parseInt(a[1], 10);
-	h += itox(i0);
+	// first two arcs share one subidentifier (X.690 8.19.4); for arc 2
+	// it can be 128 or more (ex. 2.999) so it needs base-128 encoding too
+	var i0 = new BigInteger(a[1], 10).add(new BigInteger(String(parseInt(a[0], 10) * 40), 10));
+	h += roidtox(i0.toString());
 	a.splice(0, 2);
 	for (var i = 0; i < a.length; i++) {
             h += roidtox(a[i]);
@@ -1806,35 +1808,33 @@ function oidtohex(oidString) {
 function hextooid(h) {
     if (! ishex(h)) return null;
     try {
-	var a = [];
-
-	// a[0], a[1]
-	var hex0 = h.substr(0, 2);
-	var i0 = parseInt(hex0, 16);
-	a[0] = new String(Math.floor(i0 / 40));
-	a[1] = new String(i0 % 40);
-
-	// a[2]..a[n]
-	var hex1 = h.substr(2);
 	var b = [];
-	for (var i = 0; i < hex1.length / 2; i++) {
-	    b.push(parseInt(hex1.substr(i * 2, 2), 16));
+	for (var i = 0; i < h.length / 2; i++) {
+	    b.push(parseInt(h.substr(i * 2, 2), 16));
 	}
 	var c = [];
 	var cbin = "";
 	for (var i = 0; i < b.length; i++) {
-            if (b[i] & 0x80) {
-		cbin = cbin + strpad((b[i] & 0x7f).toString(2), 7);
-            } else {
-		cbin = cbin + strpad((b[i] & 0x7f).toString(2), 7);
-		c.push(new String(parseInt(cbin, 2)));
+	    cbin = cbin + strpad((b[i] & 0x7f).toString(2), 7);
+            if (! (b[i] & 0x80)) {
+		c.push(new BigInteger(cbin, 2));
 		cbin = "";
             }
 	}
 
-	var s = a.join(".");
-	if (c.length > 0) s = s + "." + c.join(".");
-	return s;
+	// first subidentifier holds the first two arcs (X.690 8.19.4).
+	// it may take more than one byte when the first arc is 2 (ex. 2.999)
+	var i0 = c.shift();
+	var a;
+	if (i0.compareTo(new BigInteger("40", 10)) < 0) {
+	    a = ["0", i0.toString()];
+	} else if (i0.compareTo(new BigInteger("80", 10)) < 0) {
+	    a = ["1", i0.subtract(new BigInteger("40", 10)).toString()];
+	} else {
+	    a = ["2", i0.subtract(new BigInteger("80", 10)).toString()];
+	}
+	for (var i = 0; i < c.length; i++) a.push(c[i].toString());
+	return a.join(".");
     } catch(ex) {
 	return null;
     }
