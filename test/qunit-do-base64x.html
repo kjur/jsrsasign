@@ -407,12 +407,26 @@ equal(oidtohex("1.2.840.113549.1.1.5"), "2a864886f70d010105", "SHA1withRSA");
 equal(oidtohex("2.5.4.6"), "550406", "2.5.4.6=550406");
 equal(oidtohex("2.5.12345"), "55e039", "2.5.12345=55e039");
 equal(oidtohex("2.5.b30="), null, "2.5.b30==null");
+equal(oidtohex("2.47"), "7f", "2.47=7f");
+equal(oidtohex("2.48"), "8100", "2.48=8100");
+equal(oidtohex("2.999.3"), "883703", "2.999.3=883703");
+equal(oidtohex("2.25.329800735698586629295641978511506172918"),
+      "6983f09da7ebcfdee0c7a1a7b2c0948cc8f9d776", "2.25.<uuid>");
+equal(oidtohex("1.3.6.1.4.1.9007199254740993"), "2b060104019080808080808001",
+      "arc over 2^53");
 });
 
 test("hextooid", function() {
 equal(hextooid("608648016503040201"), "2.16.840.1.101.3.4.2.1", "sha256");
 equal(hextooid("2a864886f70d010105"), "1.2.840.113549.1.1.5", "SHA1withRSA");
 equal(hextooid("=-=-"), null, "=-=- > null");
+equal(hextooid("7f"), "2.47", "7f > 2.47");
+equal(hextooid("8100"), "2.48", "8100 > 2.48");
+equal(hextooid("883703"), "2.999.3", "883703 > 2.999.3");
+equal(hextooid("6983f09da7ebcfdee0c7a1a7b2c0948cc8f9d776"),
+      "2.25.329800735698586629295641978511506172918", "2.25.<uuid>");
+equal(hextooid("2b060104019080808080808001"), "1.3.6.1.4.1.9007199254740993",
+      "arc over 2^53");
 });
 
 test("inttohex", function() {
